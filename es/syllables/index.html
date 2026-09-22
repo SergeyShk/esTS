@@ -11,32 +11,30 @@
       
       
       
-        <link rel="prev" href="../words/">
+        <link rel="prev" href="../extractors/char_ngrams/">
       
-      
-        <link rel="next" href="../../syllables/">
       
       
         
-          <link rel="alternate" href="../../../extractors/char_ngrams/" hreflang="en">
+          <link rel="alternate" href="../../syllables/" hreflang="en">
         
           <link rel="alternate" href="./" hreflang="es">
         
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Extracción de N-gramas de caracteres - esTS</title>
+        <title>Sílabas y acento - esTS</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -55,9 +53,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../css/extra.css">
+      <link rel="stylesheet" href="../../css/extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#extraccion-de-n-gramas-de-caracteres" class="md-skip">
+        <a href="#silabas-y-acento" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -94,7 +92,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Cabecera">
-    <a href="../../" title="esTS" class="md-header__button md-logo" aria-label="esTS" data-md-component="logo">
+    <a href="../" title="esTS" class="md-header__button md-logo" aria-label="esTS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -114,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Extracción de N-gramas de caracteres
+              Sílabas y acento
             
           </span>
         </div>
@@ -135,7 +133,7 @@
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="../../../extractors/char_ngrams/" hreflang="en" class="md-select__link">
+            <a href="../../syllables/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
@@ -227,7 +225,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../" class="md-tabs__link">
+        <a href="../" class="md-tabs__link">
           
   
   
@@ -243,13 +241,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../sentences/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../extractors/sentences/" class="md-tabs__link">
           
   
   
@@ -265,9 +261,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="../../syllables/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -302,7 +300,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../" title="esTS" class="md-nav__button md-logo" aria-label="esTS" data-md-component="logo">
+    <a href="../" title="esTS" class="md-nav__button md-logo" aria-label="esTS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -382,7 +380,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   
@@ -410,7 +408,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../installation/" class="md-nav__link">
+      <a href="../installation/" class="md-nav__link">
         
   
   
@@ -438,7 +436,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../exceptions/" class="md-nav__link">
+      <a href="../exceptions/" class="md-nav__link">
         
   
   
@@ -470,29 +468,24 @@
       
   
   
-    
   
   
-  
     
     
     
     
       
-        
-        
-      
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
   
@@ -510,7 +503,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -528,7 +521,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../sentences/" class="md-nav__link">
+      <a href="../extractors/sentences/" class="md-nav__link">
         
   
   
@@ -556,7 +549,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../words/" class="md-nav__link">
+      <a href="../extractors/words/" class="md-nav__link">
         
   
   
@@ -581,6 +574,41 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../extractors/char_ngrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracción de N-gramas de caracteres
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -600,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    Extracción de N-gramas de caracteres
+    Sílabas y acento
   
 
     
@@ -618,7 +646,7 @@
   <span class="md-ellipsis">
     
   
-    Extracción de N-gramas de caracteres
+    Sílabas y acento
   
 
     
@@ -655,10 +683,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#parametros" class="md-nav__link">
+  <a href="#syllabify" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parámetros
+        Silabificación
       
     </span>
   </a>
@@ -666,41 +694,46 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#metodos" class="md-nav__link">
+  <a href="#count_syllables" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Métodos
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Métodos">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#extract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        extract
+        Recuento de sílabas
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#get_most_common" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#word_stress" class="md-nav__link">
     <span class="md-ellipsis">
       
-        get_most_common
+        Acento de la palabra
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#word_stresses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Todos los acentos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stress_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tipo de acentuación
+      
+    </span>
+  </a>
   
 </li>
       
@@ -708,41 +741,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../syllables/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Sílabas y acento
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -785,10 +783,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#parametros" class="md-nav__link">
+  <a href="#syllabify" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parámetros
+        Silabificación
       
     </span>
   </a>
@@ -796,41 +794,46 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#metodos" class="md-nav__link">
+  <a href="#count_syllables" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Métodos
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Métodos">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#extract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        extract
+        Recuento de sílabas
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#get_most_common" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#word_stress" class="md-nav__link">
     <span class="md-ellipsis">
       
-        get_most_common
+        Acento de la palabra
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#word_stresses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Todos los acentos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stress_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tipo de acentuación
+      
+    </span>
+  </a>
   
 </li>
       
@@ -854,57 +857,78 @@
   
 
 
-<h1 id="extraccion-de-n-gramas-de-caracteres">Extracción de N-gramas de caracteres<a class="headerlink" href="#extraccion-de-n-gramas-de-caracteres" title="Permanent link">&para;</a></h1>
+<h1 id="silabas-y-acento">Sílabas y acento<a class="headerlink" href="#silabas-y-acento" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.extractors.CharNgramsExtractor</strong></p>
+<p><strong>ests.syllables</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Módulo para extraer N-gramas de caracteres de un texto: secuencias de N caracteres tomadas con una ventana deslizante sobre la cadena. Los N-gramas de caracteres son un rasgo clásico de la estilometría y la atribución de autoría (Stamatatos 2009): recogen morfología, puntuación y combinaciones de letras típicas sin lematizar. La lista de N-gramas se pasa a la Delta de Burrows como unidades del texto en lugar de las palabras.</p>
-<p>Las secuencias de espacios se reducen antes a un solo espacio y los signos de puntuación se conservan: un espacio o un signo dentro de un N-grama también es una señal de estilo. Con <code>within_words=True</code> los N-gramas no cruzan los límites de las palabras: el texto se divide en palabras con el tokenizador, la puntuación se descarta y las palabras más cortas que N no producen N-gramas.</p>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>El tokenizador de palabras por defecto para <code>within_words</code> es el de la clase de idioma español de <a href="https://github.com/explosion/spaCy">spaCy</a> (<code>ests.utils.tokenize</code>).</p>
+<p>Módulo que divide una palabra española en sílabas y localiza su sílaba tónica a partir de la escritura. La ortografía española codifica ambas cosas: los límites silábicos se deducen de las vocales y de los grupos consonánticos, y el acento se deduce de la tilde o, en su ausencia, de la terminación de la palabra. No hace falta ningún diccionario ni modelo entrenado. Estas funciones son la base de las estadísticas básicas (recuento de sílabas), las fórmulas de legibilidad, la fonoestadística y la métrica.</p>
+<p>Las reglas siguen la <em>Ortografía de la lengua española</em> (RAE, 2010). Conviene conocer dos convenciones: dos vocales débiles forman siempre diptongo, como exigen las reglas ortográficas (<code>huir</code>, <code>cons-truir</code>, <code>je-sui-ta</code>, <code>guion</code> tienen una sílaba menos que en algunos silabeadores fonéticos), y <code>tl</code> se separa como en España (<code>at-las</code>).</p>
+<h2 id="syllabify">Silabificación<a class="headerlink" href="#syllabify" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.syllables.syllabify()</strong></p>
 </div>
-<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<p>División de una palabra en sílabas. Cada sílaba se construye alrededor de un núcleo vocálico: una vocal, un diptongo o un triptongo.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Regla</th>
+<th style="text-align: center;">Ejemplo</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>2</code></td>
-<td style="text-align: center;">Longitud del N-grama en caracteres</td>
+<td style="text-align: left;">una vocal débil (<code>i</code>, <code>u</code>, <code>ü</code> sin tilde) junto a otra vocal forma diptongo</td>
+<td style="text-align: center;">ai-re, puen-te, rui-do, ciu-dad</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>lowercase</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Convertir el texto a minúsculas</td>
+<td style="text-align: left;">dos vocales fuertes forman hiato, igual que dos débiles idénticas</td>
+<td style="text-align: center;">po-e-ta, le-er, a-é-re-o, chi-i-ta</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>within_words</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Tomar los N-gramas solo dentro de las palabras</td>
+<td style="text-align: left;">una vocal débil con tilde es fuerte</td>
+<td style="text-align: center;">dí-a, pa-ís, ba-úl</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>tokenizer</code></td>
-<td style="text-align: center;">Pattern/Callable</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Tokenizador de palabras para <code>within_words</code> o expresión regular</td>
+<td style="text-align: left;">una vocal débil entre otras dos da un triptongo</td>
+<td style="text-align: center;">a-ve-ri-guáis, buey</td>
+</tr>
+<tr>
+<td style="text-align: left;">una vocal débil ante una fuerte se une a esa vocal</td>
+<td style="text-align: center;">chi-hua-hua, ca-ca-hue-te</td>
+</tr>
+<tr>
+<td style="text-align: left;">una <code>h</code> entre vocales no rompe el diptongo</td>
+<td style="text-align: center;">ahu-ma-do, prohi-bir, de-sahu-cio</td>
+</tr>
+<tr>
+<td style="text-align: left;">la <code>u</code> de <code>qu</code>, y la de <code>gu</code> ante <code>e</code> e <code>i</code>, es muda; <code>ü</code> es vocal</td>
+<td style="text-align: center;">que-so, gue-rra, pin-güi-no</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>y</code> es vocal a final de palabra y consonante ante vocal</td>
+<td style="text-align: center;">rey, U-ru-guay, ma-yo</td>
+</tr>
+<tr>
+<td style="text-align: left;">una consonante o dígrafo aislado pasa a la sílaba siguiente</td>
+<td style="text-align: center;">ca-sa, mu-cho, pe-rro</td>
+</tr>
+<tr>
+<td style="text-align: left;">una obstruyente con <code>l</code> o <code>r</code> pasa a la sílaba siguiente</td>
+<td style="text-align: center;">ha-blar, o-tro</td>
+</tr>
+<tr>
+<td style="text-align: left;">los demás pares de consonantes se separan</td>
+<td style="text-align: center;">ac-to, is-la, at-las, rit-mo</td>
+</tr>
+<tr>
+<td style="text-align: left;">de tres o más consonantes, las dos últimas pasan a la sílaba siguiente cuando forman uno de esos grupos; si no, se quedan las dos primeras</td>
+<td style="text-align: center;">com-pra, cons-truir, ins-ti-tu-to, obs-tá-cu-lo</td>
 </tr>
 </tbody>
 </table>
-<h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
-<h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
-<p>Extrae los N-gramas de un texto.</p>
+<p>La palabra se normaliza a NFC (un acento descompuesto pasa a ser una sola letra con su base) y se pasa a minúsculas. Se divide en partes por cifras, guiones y otros caracteres que no son letras, cada parte se silabifica por separado (<code>te-ó-ri-co-prác-ti-co</code>), y una parte sin vocales (una abreviatura como <code>sh</code>) no produce sílabas. Las vocales con diacríticos extranjeros cuentan como vocales fuertes con tilde (<code>Björk</code>); una diéresis distinta de <code>ü</code> marca hiato (<code>Llu-ï-sa</code>, <code>Ci-tro-ën</code>) y los portugueses <code>ão</code> y <code>õe</code> son diptongos (<code>São</code>, <code>Ca-mões</code>).</p>
+<p>Parámetros:</p>
 <table>
 <thead>
 <tr>
@@ -916,33 +940,30 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;"><code>word</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Cadena de texto</td>
+<td style="text-align: center;">Palabra</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharNgramsExtractor</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">syllabify</span>
 
-<span class="n">text</span> <span class="o">=</span> <span class="s2">"El gato dormía  en la ventana, y el perro - en el suelo."</span>
+<span class="n">syllabify</span><span class="p">(</span><span class="s2">"murciélago"</span><span class="p">)</span>
+<span class="c1"># ['mur', 'cié', 'la', 'go']</span>
 
-<span class="n">ce</span> <span class="o">=</span> <span class="n">CharNgramsExtractor</span><span class="p">()</span>
-<span class="n">ce</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)[:</span><span class="mi">8</span><span class="p">]</span>
-<span class="c1"># ('El', 'l ', ' g', 'ga', 'at', 'to', 'o ', ' d')</span>
-
-<span class="n">ce</span> <span class="o">=</span> <span class="n">CharNgramsExtractor</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">ce</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)[:</span><span class="mi">6</span><span class="p">]</span>
-<span class="c1"># ('el ', 'l g', ' ga', 'gat', 'ato', 'to ')</span>
-
-<span class="n">CharNgramsExtractor</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">within_words</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-<span class="c1"># ('gato', 'dorm', 'ormí', 'rmía', 'vent', 'enta', 'ntan', 'tana', 'perr', 'erro', 'suel', 'uelo')</span>
+<span class="n">syllabify</span><span class="p">(</span><span class="s2">"averiguáis"</span><span class="p">)</span>
+<span class="c1"># ['a', 've', 'ri', 'guáis']</span>
 </code></pre></div>
 </div>
-<h3 id="get_most_common">get_most_common<a class="headerlink" href="#get_most_common" title="Permanent link">&para;</a></h3>
-<p>Devuelve los N-gramas más frecuentes de la última extracción.</p>
+<h2 id="count_syllables">Recuento de sílabas<a class="headerlink" href="#count_syllables" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.syllables.count_syllables()</strong></p>
+</div>
+<p>El número de sílabas según <code>syllabify</code>, con caché por forma de palabra.</p>
+<p>Parámetros:</p>
 <table>
 <thead>
 <tr>
@@ -954,19 +975,143 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Número de N-gramas</td>
+<td style="text-align: center;"><code>word</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Palabra</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
-<div class="highlight"><pre><span></span><code><span class="n">ce</span> <span class="o">=</span> <span class="n">CharNgramsExtractor</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">ce</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-<span class="n">ce</span><span class="o">.</span><span class="n">get_most_common</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="c1"># [('el ', 3), (' en', 2)]</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_syllables</span>
+
+<span class="n">count_syllables</span><span class="p">(</span><span class="s2">"Uruguay"</span><span class="p">)</span>
+<span class="c1"># 3</span>
+</code></pre></div>
+</div>
+<h2 id="word_stress">Acento de la palabra<a class="headerlink" href="#word_stress" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.syllables.word_stress()</strong></p>
+</div>
+<p>El índice de la sílaba tónica, contado desde cero como en <code>syllabify</code>; <code>None</code> para una palabra sin vocales.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Regla</th>
+<th style="text-align: center;">Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">la tilde marca la sílaba tónica</td>
+<td style="text-align: center;">ca-<strong>mión</strong>, <strong>ár</strong>-bol, mur-<strong>cié</strong>-la-go</td>
+</tr>
+<tr>
+<td style="text-align: left;">una palabra terminada en vocal, en <code>n</code> o <code>s</code> tras vocal, o en <code>y</code> tras consonante lleva el acento en la penúltima sílaba</td>
+<td style="text-align: center;"><strong>ca</strong>-sa, <strong>jo</strong>-ven, <strong>lu</strong>-nes, <strong>whis</strong>-ky</td>
+</tr>
+<tr>
+<td style="text-align: left;">cualquier otra palabra lleva el acento en la última sílaba</td>
+<td style="text-align: center;">pa-<strong>pel</strong>, re-<strong>loj</strong>, ro-<strong>bots</strong>, U-ru-<strong>guay</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">un monosílabo lleva el acento en su única sílaba</td>
+<td style="text-align: center;">rey, y</td>
+</tr>
+</tbody>
+</table>
+<p>Los pronombres enclíticos no necesitan tratamiento aparte: sus formas llevan la tilde según las mismas reglas (<code>dí-ga-me-lo</code>, <code>de-cír-se-lo</code>). En un adverbio en <code>-mente</code> y en un compuesto con guion el acento principal es el último de <code>word_stresses</code> (<code>fá-cil-men-te</code> - 2).</p>
+<p>Parámetros:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>word</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Palabra</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">word_stress</span>
+
+<span class="n">word_stress</span><span class="p">(</span><span class="s2">"camión"</span><span class="p">),</span> <span class="n">word_stress</span><span class="p">(</span><span class="s2">"casa"</span><span class="p">),</span> <span class="n">word_stress</span><span class="p">(</span><span class="s2">"murciélago"</span><span class="p">)</span>
+<span class="c1"># (1, 0, 1)</span>
+</code></pre></div>
+</div>
+<h2 id="word_stresses">Todos los acentos<a class="headerlink" href="#word_stresses" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.syllables.word_stresses()</strong></p>
+</div>
+<p>Todas las sílabas tónicas de una palabra en orden ascendente. Un solo índice para la mayoría de las palabras. Dos índices para un adverbio en <code>-mente</code>, que conserva el acento de su adjetivo (<code>fá-cil-men-te</code> - 0 y 2, <code>fe-liz-men-te</code> - 1 y 2), y un índice por cada parte de un compuesto con guion (<code>te-ó-ri-co-prác-ti-co</code> - 1 y 4).</p>
+<p>El adverbio se reconoce por su forma: una base de al menos una sílaba antes de <code>-mente</code> que termina como un adjetivo (en vocal, <code>l</code>, <code>r</code>, <code>z</code>, <code>n</code> o <code>s</code>) o lleva tilde, así que <code>cruel-men-te</code> también cuenta. Las palabras con la misma forma que no son adverbios están en <code>NON_ADVERBS_MENTE</code>: adjetivos y sustantivos (<code>demente</code>, <code>vehemente</code>) y subjuntivos de verbos en <code>-mentar</code> (<code>fundamente</code>, <code>complemente</code>); un subjuntivo de ese tipo que no esté en la lista recibe un segundo acento.</p>
+<p>Parámetros:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>word</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Palabra</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">word_stresses</span>
+
+<span class="n">word_stresses</span><span class="p">(</span><span class="s2">"fácilmente"</span><span class="p">)</span>
+<span class="c1"># [0, 2]</span>
+</code></pre></div>
+</div>
+<h2 id="stress_type">Tipo de acentuación<a class="headerlink" href="#stress_type" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.syllables.stress_type()</strong></p>
+</div>
+<p>La clase de la palabra según la posición de su acento principal: <code>aguda</code> en la última sílaba (<code>ca-mión</code>), <code>llana</code> en la penúltima (<code>ca-sa</code>), <code>esdrújula</code> en la antepenúltima (<code>mur-cié-la-go</code>), <code>sobresdrújula</code> antes (<code>dí-ga-me-lo</code>); <code>None</code> para una palabra sin vocales.</p>
+<p>Parámetros:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>word</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Palabra</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">stress_type</span>
+
+<span class="n">stress_type</span><span class="p">(</span><span class="s2">"dígamelo"</span><span class="p">)</span>
+<span class="c1"># 'sobresdrújula'</span>
 </code></pre></div>
 </div>
 
@@ -1045,12 +1190,12 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
-        <script src="../../../js/config.js"></script>
+        <script src="../../js/config.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
       

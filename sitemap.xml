@@ -22,6 +22,13 @@
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/installation/"/>
     </url>
     <url>
+        <loc>Nonesyllables/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonesyllables/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/syllables/"/>
+    </url>
+    <url>
         <loc>Noneextractors/char_ngrams/</loc>
         <lastmod>2026-09-22</lastmod>
         <changefreq>daily</changefreq>
@@ -62,6 +69,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/installation/"/>
         <xhtml:link rel="alternate" hreflang="en" href="Noneinstallation/"/>
+    </url>
+    <url>
+        <loc>Nonees/syllables/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/syllables/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonesyllables/"/>
     </url>
     <url>
         <loc>Nonees/extractors/char_ngrams/</loc>

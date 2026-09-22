@@ -11,32 +11,30 @@
       
       
       
-        <link rel="prev" href="../../exceptions/">
+        <link rel="prev" href="../extractors/char_ngrams/">
       
-      
-        <link rel="next" href="../words/">
       
       
         
           <link rel="alternate" href="./" hreflang="en">
         
-          <link rel="alternate" href="../../es/extractors/sentences/" hreflang="es">
+          <link rel="alternate" href="../es/syllables/" hreflang="es">
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Sentence extraction - esTS</title>
+        <title>Syllables and stress - esTS</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -55,9 +53,9 @@
       
     
     
-      <link rel="stylesheet" href="../../css/extra.css">
+      <link rel="stylesheet" href="../css/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#sentence-extraction" class="md-skip">
+        <a href="#syllables-and-stress" class="md-skip">
           Skip to content
         </a>
       
@@ -94,7 +92,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="esTS" class="md-header__button md-logo" aria-label="esTS" data-md-component="logo">
+    <a href=".." title="esTS" class="md-header__button md-logo" aria-label="esTS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -114,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Sentence extraction
+              Syllables and stress
             
           </span>
         </div>
@@ -141,7 +139,7 @@
           </li>
         
           <li class="md-select__item">
-            <a href="../../es/extractors/sentences/" hreflang="es" class="md-select__link">
+            <a href="../es/syllables/" hreflang="es" class="md-select__link">
               Español
             </a>
           </li>
@@ -227,7 +225,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../.." class="md-tabs__link">
+        <a href=".." class="md-tabs__link">
           
   
   
@@ -243,13 +241,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../extractors/sentences/" class="md-tabs__link">
           
   
   
@@ -265,9 +261,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="../../syllables/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -302,7 +300,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="esTS" class="md-nav__button md-logo" aria-label="esTS" data-md-component="logo">
+    <a href=".." title="esTS" class="md-nav__button md-logo" aria-label="esTS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -382,7 +380,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         
   
   
@@ -410,7 +408,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../installation/" class="md-nav__link">
+      <a href="../installation/" class="md-nav__link">
         
   
   
@@ -438,7 +436,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../exceptions/" class="md-nav__link">
+      <a href="../exceptions/" class="md-nav__link">
         
   
   
@@ -470,29 +468,24 @@
       
   
   
-    
   
   
-  
     
     
     
     
       
-        
-        
-      
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
   
@@ -510,7 +503,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -523,6 +516,97 @@
             
               
                 
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extractors/sentences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sentence extraction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extractors/words/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Word extraction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extractors/char_ngrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Character N-gram extraction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
   
   
     
@@ -544,7 +628,7 @@
   <span class="md-ellipsis">
     
   
-    Sentence extraction
+    Syllables and stress
   
 
     
@@ -562,7 +646,7 @@
   <span class="md-ellipsis">
     
   
-    Sentence extraction
+    Syllables and stress
   
 
     
@@ -599,10 +683,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
+  <a href="#syllabify" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parameters
+        Syllabification
       
     </span>
   </a>
@@ -610,30 +694,46 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#methods" class="md-nav__link">
+  <a href="#count_syllables" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Methods
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Methods">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#extract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        extract
+        Syllable count
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#word_stress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Word stress
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#word_stresses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        All stresses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stress_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stress type
+      
+    </span>
+  </a>
   
 </li>
       
@@ -641,97 +741,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../words/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Word extraction
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../char_ngrams/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Character N-gram extraction
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../syllables/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Syllables and stress
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -774,10 +783,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
+  <a href="#syllabify" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parameters
+        Syllabification
       
     </span>
   </a>
@@ -785,30 +794,46 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#methods" class="md-nav__link">
+  <a href="#count_syllables" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Methods
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Methods">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#extract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        extract
+        Syllable count
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#word_stress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Word stress
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#word_stresses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        All stresses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stress_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stress type
+      
+    </span>
+  </a>
   
 </li>
       
@@ -832,54 +857,77 @@
   
 
 
-<h1 id="sentence-extraction">Sentence extraction<a class="headerlink" href="#sentence-extraction" title="Permanent link">&para;</a></h1>
+<h1 id="syllables-and-stress">Syllables and stress<a class="headerlink" href="#syllables-and-stress" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.extractors.SentsExtractor</strong></p>
+<p><strong>ests.syllables</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A module for extracting sentences from a text. It allows using different tokenizers and setting the minimum and maximum length of extracted sentences.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The default tokenizer is the rule-based function <code>sentenize</code> from <code>ests.utils</code>. A sentence ends with a period, an exclamation or question mark or an ellipsis, optionally followed by closing quotes or brackets, when the next word starts with an upper-case letter, a digit, an inverted mark <code>¿ ¡</code>, an opening quote or bracket or a dash; a blank line ends a sentence too. Abbreviations (<code>Sr.</code>, <code>Dra.</code>, <code>p. ej.</code>, <code>EE. UU.</code>, <code>a. m.</code>), capital initials (<code>J. L. Borges</code>) and list markers at the start of a sentence or a line (<code>1.</code>, <code>2.1.</code>, <code>IV.</code>) do not end a sentence, a lower-case word after an ellipsis or an exclamation mark continues it, and a single line break does not split it, so hard-wrapped texts are handled. The sentences are returned without surrounding whitespace.</p>
+<p>A module that divides a Spanish word into syllables and finds its stressed syllable from the spelling alone. Spanish orthography encodes both: syllable boundaries follow from the vowels and consonant clusters, and the stress follows from the written accent or, without one, from the ending of the word. No dictionary or trained model is needed. The functions are the foundation of the basic statistics (syllable counts), readability formulas, phonostatistics and metre.</p>
+<p>The rules follow the <em>Ortografía de la lengua española</em> (RAE, 2010). Two conventions are worth knowing: two weak vowels always form a diphthong, as the spelling rules require (<code>huir</code>, <code>cons-truir</code>, <code>je-sui-ta</code>, <code>guion</code> are one syllable shorter than in some phonetic syllabifiers), and <code>tl</code> is split as in Spain (<code>at-las</code>).</p>
+<h2 id="syllabify">Syllabification<a class="headerlink" href="#syllabify" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.syllables.syllabify()</strong></p>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The <code>sentencizer</code> of spaCy is not used on purpose: it attaches <code>¡</code> and <code>«</code> to the previous sentence and does not split at <code>...</code>. A spaCy pipeline can still be passed as the tokenizer: <code>tokenizer=lambda text: (sent.text for sent in nlp(text).sents)</code>.</p>
-</div>
-<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
+<p>Division of a word into syllables. A syllable is built around a vowel nucleus: a single vowel, a diphthong or a triphthong.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Rule</th>
+<th style="text-align: center;">Example</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>tokenizer</code></td>
-<td style="text-align: center;">Pattern/Callable</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Tokenizer or regular expression</td>
+<td style="text-align: left;">a weak vowel (unaccented <code>i</code>, <code>u</code>, <code>ü</code>) next to another vowel forms a diphthong</td>
+<td style="text-align: center;">ai-re, puen-te, rui-do, ciu-dad</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>min_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Minimum length of an extracted sentence</td>
+<td style="text-align: left;">two strong vowels form a hiatus, as do two identical weak ones</td>
+<td style="text-align: center;">po-e-ta, le-er, a-é-re-o, chi-i-ta</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>max_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Maximum length of an extracted sentence</td>
+<td style="text-align: left;">an accented weak vowel is strong</td>
+<td style="text-align: center;">dí-a, pa-ís, ba-úl</td>
+</tr>
+<tr>
+<td style="text-align: left;">a weak vowel between two others gives a triphthong</td>
+<td style="text-align: center;">a-ve-ri-guáis, buey</td>
+</tr>
+<tr>
+<td style="text-align: left;">a weak vowel before a strong one goes with that vowel</td>
+<td style="text-align: center;">chi-hua-hua, ca-ca-hue-te</td>
+</tr>
+<tr>
+<td style="text-align: left;">an <code>h</code> between vowels does not break a diphthong</td>
+<td style="text-align: center;">ahu-ma-do, prohi-bir, de-sahu-cio</td>
+</tr>
+<tr>
+<td style="text-align: left;">the <code>u</code> of <code>qu</code>, and of <code>gu</code> before <code>e</code> and <code>i</code>, is silent; <code>ü</code> is a vowel</td>
+<td style="text-align: center;">que-so, gue-rra, pin-güi-no</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>y</code> is a vowel at the end of a word and a consonant before a vowel</td>
+<td style="text-align: center;">rey, U-ru-guay, ma-yo</td>
+</tr>
+<tr>
+<td style="text-align: left;">a single consonant or digraph goes to the next syllable</td>
+<td style="text-align: center;">ca-sa, mu-cho, pe-rro</td>
+</tr>
+<tr>
+<td style="text-align: left;">an obstruent with <code>l</code> or <code>r</code> goes to the next syllable</td>
+<td style="text-align: center;">ha-blar, o-tro</td>
+</tr>
+<tr>
+<td style="text-align: left;">other consonant pairs are split</td>
+<td style="text-align: center;">ac-to, is-la, at-las, rit-mo</td>
+</tr>
+<tr>
+<td style="text-align: left;">of three or more consonants the last two go to the next syllable when they form such a cluster, otherwise the first two stay</td>
+<td style="text-align: center;">com-pra, cons-truir, ins-ti-tu-to, obs-tá-cu-lo</td>
 </tr>
 </tbody>
 </table>
-<h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
-<h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
-<p>Extracts sentences from a text.</p>
+<p>The word is normalized to NFC (a decomposed accent becomes one letter with its base) and lower-cased. It is split into parts at digits, hyphens and other non-letters, each part is syllabified on its own (<code>te-ó-ri-co-prác-ti-co</code>), and a part without vowels (an abbreviation like <code>sh</code>) yields no syllables. Vowels with foreign diacritics count as accented strong vowels (<code>Björk</code>); a diaeresis other than <code>ü</code> marks a hiatus (<code>Llu-ï-sa</code>, <code>Ci-tro-ën</code>) and the Portuguese <code>ão</code> and <code>õe</code> are diphthongs (<code>São</code>, <code>Ca-mões</code>).</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -892,48 +940,178 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;"><code>word</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Text string</td>
+<td style="text-align: center;">Word</td>
 </tr>
 </tbody>
 </table>
-<p>An example of sentence extraction with the default tokenizer:</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p><em>Code</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Import the library</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">SentsExtractor</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">syllabify</span>
 
-<span class="c1"># Prepare the data</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">"¿No tienes cien euros? ¡Ten cien amigos! El Sr. García lo dijo... Y se fue."</span>
+<span class="n">syllabify</span><span class="p">(</span><span class="s2">"murciélago"</span><span class="p">)</span>
+<span class="c1"># ['mur', 'cié', 'la', 'go']</span>
 
-<span class="c1"># Extract sentences</span>
-<span class="n">se</span> <span class="o">=</span> <span class="n">SentsExtractor</span><span class="p">()</span>
-<span class="n">se</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-</code></pre></div>
-<p><em>Result</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">(</span><span class="s1">'¿No tienes cien euros?'</span>,<span class="w"> </span><span class="s1">'¡Ten cien amigos!'</span>,<span class="w"> </span><span class="s1">'El Sr. García lo dijo...'</span>,<span class="w"> </span><span class="s1">'Y se fue.'</span><span class="o">)</span>
+<span class="n">syllabify</span><span class="p">(</span><span class="s2">"averiguáis"</span><span class="p">)</span>
+<span class="c1"># ['a', 've', 'ri', 'guáis']</span>
 </code></pre></div>
 </div>
-<p>An example of sentence extraction with a regular expression as the tokenizer:</p>
+<h2 id="count_syllables">Syllable count<a class="headerlink" href="#count_syllables" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.syllables.count_syllables()</strong></p>
+</div>
+<p>The number of syllables by <code>syllabify</code>, cached by word form.</p>
+<p>Parameters:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>word</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Word</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<p><em>Code</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Import the libraries</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">SentsExtractor</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_syllables</span>
 
-<span class="c1"># Prepare the data</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">"No tengas 100 euros, ten 100 amigos"</span>
-
-<span class="c1"># Extract sentences</span>
-<span class="n">se</span> <span class="o">=</span> <span class="n">SentsExtractor</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">", "</span><span class="p">))</span>
-<span class="n">se</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="n">count_syllables</span><span class="p">(</span><span class="s2">"Uruguay"</span><span class="p">)</span>
+<span class="c1"># 3</span>
 </code></pre></div>
-<p><em>Result</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">(</span><span class="s1">'No tengas 100 euros'</span>,<span class="w"> </span><span class="s1">'ten 100 amigos'</span><span class="o">)</span>
+</div>
+<h2 id="word_stress">Word stress<a class="headerlink" href="#word_stress" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.syllables.word_stress()</strong></p>
+</div>
+<p>The index of the stressed syllable, counted from zero as in <code>syllabify</code>; <code>None</code> for a word without vowels.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Rule</th>
+<th style="text-align: center;">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">a written accent marks the stressed syllable</td>
+<td style="text-align: center;">ca-<strong>mión</strong>, <strong>ár</strong>-bol, mur-<strong>cié</strong>-la-go</td>
+</tr>
+<tr>
+<td style="text-align: left;">a word ending in a vowel, in <code>n</code> or <code>s</code> after a vowel, or in <code>y</code> after a consonant is stressed on the penultimate syllable</td>
+<td style="text-align: center;"><strong>ca</strong>-sa, <strong>jo</strong>-ven, <strong>lu</strong>-nes, <strong>whis</strong>-ky</td>
+</tr>
+<tr>
+<td style="text-align: left;">any other word is stressed on the last syllable</td>
+<td style="text-align: center;">pa-<strong>pel</strong>, re-<strong>loj</strong>, ro-<strong>bots</strong>, U-ru-<strong>guay</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;">a monosyllable is stressed on its only syllable</td>
+<td style="text-align: center;">rey, y</td>
+</tr>
+</tbody>
+</table>
+<p>Enclitic pronouns need no special treatment: their forms carry the accent by the same rules (<code>dí-ga-me-lo</code>, <code>de-cír-se-lo</code>). For an adverb in <code>-mente</code> and for a hyphenated compound the main stress is the last of <code>word_stresses</code> (<code>fá-cil-men-te</code> - 2).</p>
+<p>Parameters:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>word</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Word</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">word_stress</span>
+
+<span class="n">word_stress</span><span class="p">(</span><span class="s2">"camión"</span><span class="p">),</span> <span class="n">word_stress</span><span class="p">(</span><span class="s2">"casa"</span><span class="p">),</span> <span class="n">word_stress</span><span class="p">(</span><span class="s2">"murciélago"</span><span class="p">)</span>
+<span class="c1"># (1, 0, 1)</span>
+</code></pre></div>
+</div>
+<h2 id="word_stresses">All stresses<a class="headerlink" href="#word_stresses" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.syllables.word_stresses()</strong></p>
+</div>
+<p>All stressed syllables of a word in ascending order. A single index for most words. Two indices for an adverb in <code>-mente</code>, which keeps the stress of its adjective (<code>fá-cil-men-te</code> - 0 and 2, <code>fe-liz-men-te</code> - 1 and 2), and one index per part of a hyphenated compound (<code>te-ó-ri-co-prác-ti-co</code> - 1 and 4).</p>
+<p>An adverb is recognized by its shape: a stem of at least one syllable before <code>-mente</code> that ends like an adjective (in a vowel, <code>l</code>, <code>r</code>, <code>z</code>, <code>n</code> or <code>s</code>) or carries an accent, so <code>cruel-men-te</code> counts too. Words of the same shape that are not adverbs are listed in <code>NON_ADVERBS_MENTE</code>: adjectives and nouns (<code>demente</code>, <code>vehemente</code>) and subjunctives of verbs in <code>-mentar</code> (<code>fundamente</code>, <code>complemente</code>); an unlisted subjunctive of that kind gets a second stress.</p>
+<p>Parameters:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>word</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Word</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">word_stresses</span>
+
+<span class="n">word_stresses</span><span class="p">(</span><span class="s2">"fácilmente"</span><span class="p">)</span>
+<span class="c1"># [0, 2]</span>
+</code></pre></div>
+</div>
+<h2 id="stress_type">Stress type<a class="headerlink" href="#stress_type" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.syllables.stress_type()</strong></p>
+</div>
+<p>The class of a word by the position of its main stress: <code>aguda</code> on the last syllable (<code>ca-mión</code>), <code>llana</code> on the penultimate (<code>ca-sa</code>), <code>esdrújula</code> on the antepenultimate (<code>mur-cié-la-go</code>), <code>sobresdrújula</code> earlier (<code>dí-ga-me-lo</code>); <code>None</code> for a word without vowels.</p>
+<p>Parameters:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>word</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Word</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">stress_type</span>
+
+<span class="n">stress_type</span><span class="p">(</span><span class="s2">"dígamelo"</span><span class="p">)</span>
+<span class="c1"># 'sobresdrújula'</span>
 </code></pre></div>
 </div>
 
@@ -1012,12 +1190,12 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
       
-        <script src="../../js/config.js"></script>
+        <script src="../js/config.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
       
