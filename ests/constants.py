@@ -224,3 +224,100 @@ BASIC_STATS_DESC = {
     "n_syllables": "Syllables",
     "n_punctuations": "Punctuation marks",
 }
+
+# Readability: thresholds of the formulas that differ from the basic statistics
+LIX_LONG_WORD_LETTER_FACTOR = 7
+SMOG_COMPLEX_SYL_FACTOR = 3
+
+READABILITY_STATS_DESC = {
+    "flesch_reading_easy": "Flesch reading ease (Szigriszt-Pazos)",
+    "gutierrez_polini_index": "Gutiérrez de Polini comprehensibility",
+    "crawford_grade": "Crawford grade",
+    "mu_index": "Legibilidad µ",
+    "sol_grade": "SOL grade (SMOG for Spanish)",
+    "lix": "LIX readability index",
+    "rix": "RIX readability index",
+    "consensus_grade": "Consensus grade",
+    "reading_time": "Reading time (min)",
+}
+READABILITY_GRADE_STATS = ("crawford_grade", "sol_grade")
+
+# Coefficients (a, b, c) of the Flesch reading ease c - a * ASL - b * ASW for Spanish:
+# general - Szigriszt-Pazos (1993), classic - Fernández Huerta (1959)
+READABILITY_PRESETS: dict[str, dict[str, tuple[float, float, float]]] = {
+    "general": {"flesch_reading_easy": (1.0, 62.3, 206.835)},
+    "classic": {"flesch_reading_easy": (1.02, 60.0, 206.84)},
+}
+
+# Interpretation scales of the Flesch reading ease: lower bound of each band
+READING_EASE_SCALES: dict[str, tuple[tuple[float, str], ...]] = {
+    # Barrio-Cantalejo et al. (2008), for the Szigriszt-Pazos formula
+    "inflesz": (
+        (80, "muy fácil"),
+        (65, "bastante fácil"),
+        (55, "normal"),
+        (40, "algo difícil"),
+        (0, "muy difícil"),
+    ),
+    # Szigriszt-Pazos (1993): 0-15, 16-35, 36-50, 51-65, 66-75, 76-85, 86-100
+    "szigriszt": (
+        (86, "muy fácil"),
+        (76, "fácil"),
+        (66, "bastante fácil"),
+        (51, "normal"),
+        (36, "bastante difícil"),
+        (16, "árido"),
+        (0, "muy difícil"),
+    ),
+    # Fernández Huerta (1959)
+    "fernandez_huerta": (
+        (90, "muy fácil"),
+        (80, "fácil"),
+        (70, "bastante fácil"),
+        (60, "normal"),
+        (50, "bastante difícil"),
+        (30, "difícil"),
+        (0, "muy difícil"),
+    ),
+}
+# Muñoz Baquedano and Muñoz Urra (2006): lower bound of each band of Legibilidad µ
+MU_SCALE: tuple[tuple[float, str], ...] = (
+    (91, "muy fácil"),
+    (81, "fácil"),
+    (71, "un poco fácil"),
+    (61, "adecuado"),
+    (51, "un poco difícil"),
+    (31, "difícil"),
+    (0, "muy difícil"),
+)
+
+# School stages of Spain by years of schooling from the first year of primary school
+GRADE_AGE_LEVELS: tuple[tuple[int, int, str, str], ...] = (
+    (1, 3, "primary school, grades 1-3", "6-9 years"),
+    (4, 6, "primary school, grades 4-6", "9-12 years"),
+    (7, 10, "ESO", "12-16 years"),
+    (11, 12, "bachillerato", "16-18 years"),
+    (13, 16, "university", "18-22 years"),
+)
+POSTGRADUATE_LEVEL = ("postgraduate", "over 22 years")
+
+# Silent reading speed of adults in Spanish, words per minute: Brysbaert (2019),
+# mean of six studies; reading aloud - 191
+READING_SPEED_WPM = 278
+# Reading speed norms (aloud, silent) in words per minute: means by school year
+# from the meta-analysis of Ripoll, Tapia and Aguado (2020), grades 1-6 primary
+# school, 7-10 ESO, 11 bachillerato; adults - Brysbaert (2019)
+READING_SPEED_NORMS: dict[str, tuple[int, int]] = {
+    "grade_1": (49, 30),
+    "grade_2": (73, 79),
+    "grade_3": (85, 95),
+    "grade_4": (104, 125),
+    "grade_5": (114, 137),
+    "grade_6": (124, 155),
+    "grade_7": (134, 180),
+    "grade_8": (136, 176),
+    "grade_9": (143, 180),
+    "grade_10": (164, 200),
+    "grade_11": (161, 186),
+    "adult": (191, 278),
+}
