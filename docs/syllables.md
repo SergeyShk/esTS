@@ -19,7 +19,7 @@ Division of a word into syllables. A syllable is built around a vowel nucleus: a
 | Rule | Example |
 | :--- | :-----: |
 | a weak vowel (unaccented `i`, `u`, `ü`) next to another vowel forms a diphthong | ai-re, puen-te, rui-do, ciu-dad |
-| two strong vowels form a hiatus, as do two identical weak ones | po-e-ta, le-er, a-é-re-o, chi-i-ta |
+| two strong vowels form a hiatus, as do two close vowels of the same letter, with or without a tilde | po-e-ta, le-er, a-é-re-o, chi-i-ta, chi-í-es |
 | an accented weak vowel is strong | dí-a, pa-ís, ba-úl |
 | a weak vowel between two others gives a triphthong | a-ve-ri-guáis, buey |
 | a weak vowel before a strong one goes with that vowel | chi-hua-hua, ca-ca-hue-te |
@@ -29,7 +29,7 @@ Division of a word into syllables. A syllable is built around a vowel nucleus: a
 | a single consonant or digraph goes to the next syllable | ca-sa, mu-cho, pe-rro |
 | an obstruent with `l` or `r` goes to the next syllable | ha-blar, o-tro |
 | other consonant pairs are split | ac-to, is-la, at-las, rit-mo |
-| of three or more consonants the last two go to the next syllable when they form such a cluster, otherwise the first two stay | com-pra, cons-truir, ins-ti-tu-to, obs-tá-cu-lo |
+| of three or more consonants the last two go to the next syllable when they form such a cluster, otherwise only the last one does | com-pra, cons-truir, ins-ti-tu-to, obs-tá-cu-lo, tungs-te-no |
 
 The word is normalized to NFC (a decomposed accent becomes one letter with its base) and lower-cased. It is split into parts at digits, hyphens and other non-letters, each part is syllabified on its own (`te-ó-ri-co-prác-ti-co`), and a part without vowels (an abbreviation like `sh`) yields no syllables. Vowels with foreign diacritics count as accented strong vowels (`Björk`); a diaeresis other than `ü` marks a hiatus (`Llu-ï-sa`, `Ci-tro-ën`) and the Portuguese `ão` and `õe` are diphthongs (`São`, `Ca-mões`).
 

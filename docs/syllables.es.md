@@ -19,7 +19,7 @@ División de una palabra en sílabas. Cada sílaba se construye alrededor de un 
 | Regla | Ejemplo |
 | :--- | :-----: |
 | una vocal débil (`i`, `u`, `ü` sin tilde) junto a otra vocal forma diptongo | ai-re, puen-te, rui-do, ciu-dad |
-| dos vocales fuertes forman hiato, igual que dos débiles idénticas | po-e-ta, le-er, a-é-re-o, chi-i-ta |
+| dos vocales fuertes forman hiato, igual que dos vocales cerradas de la misma letra, con tilde o sin ella | po-e-ta, le-er, a-é-re-o, chi-i-ta, chi-í-es |
 | una vocal débil con tilde es fuerte | dí-a, pa-ís, ba-úl |
 | una vocal débil entre otras dos da un triptongo | a-ve-ri-guáis, buey |
 | una vocal débil ante una fuerte se une a esa vocal | chi-hua-hua, ca-ca-hue-te |
@@ -29,7 +29,7 @@ División de una palabra en sílabas. Cada sílaba se construye alrededor de un 
 | una consonante o dígrafo aislado pasa a la sílaba siguiente | ca-sa, mu-cho, pe-rro |
 | una obstruyente con `l` o `r` pasa a la sílaba siguiente | ha-blar, o-tro |
 | los demás pares de consonantes se separan | ac-to, is-la, at-las, rit-mo |
-| de tres o más consonantes, las dos últimas pasan a la sílaba siguiente cuando forman uno de esos grupos; si no, se quedan las dos primeras | com-pra, cons-truir, ins-ti-tu-to, obs-tá-cu-lo |
+| de tres o más consonantes, las dos últimas pasan a la sílaba siguiente cuando forman uno de esos grupos; si no, solo pasa la última | com-pra, cons-truir, ins-ti-tu-to, obs-tá-cu-lo, tungs-te-no |
 
 La palabra se normaliza a NFC (un acento descompuesto pasa a ser una sola letra con su base) y se pasa a minúsculas. Se divide en partes por cifras, guiones y otros caracteres que no son letras, cada parte se silabifica por separado (`te-ó-ri-co-prác-ti-co`), y una parte sin vocales (una abreviatura como `sh`) no produce sílabas. Las vocales con diacríticos extranjeros cuentan como vocales fuertes con tilde (`Björk`); una diéresis distinta de `ü` marca hiato (`Llu-ï-sa`, `Ci-tro-ën`) y los portugueses `ão` y `õe` son diptongos (`São`, `Ca-mões`).
 

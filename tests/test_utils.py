@@ -67,6 +67,16 @@ def test_is_punctuation(token, expected):
         ("«¡Hola!» dijo. \"Adiós.\" 'Fin.'", ["«¡Hola!» dijo.", '"Adiós."', "'Fin.'"]),
         ("—Hola —dijo—. ¿Qué tal? —Bien.", ["—Hola —dijo—.", "¿Qué tal?", "—Bien."]),
         ("- Hola. - Adiós.", ["- Hola.", "- Adiós."]),
+        # the remark of the narrator after a dash continues the line of dialogue
+        (
+            "—¿Vienes? —preguntó María. —Sí —dijo él.",
+            ["—¿Vienes? —preguntó María.", "—Sí —dijo él."],
+        ),
+        ("¡Ay! —gritó—. ¿Qué pasa? —dijo Juan.", ["¡Ay! —gritó—.", "¿Qué pasa? —dijo Juan."]),
+        ("-¿Vienes? -preguntó ella.", ["-¿Vienes? -preguntó ella."]),
+        ("–Ya está. –Bien.", ["–Ya está.", "–Bien."]),
+        ("¿Cuánto? —5 euros.", ["¿Cuánto?", "—5 euros."]),
+        ("Dijo: —Ven. —Ya voy.", ["Dijo: —Ven.", "—Ya voy."]),
         (
             "El Sr. García y la Dra. López llegaron. Vino Dña. María.",
             ["El Sr. García y la Dra. López llegaron.", "Vino Dña. María."],

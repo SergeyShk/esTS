@@ -5,7 +5,7 @@
 
 ## Description
 
-A module for extracting character N-grams from a text - sequences of N characters taken with a sliding window over the string. Character N-grams are a standard feature of stylometry and authorship attribution (Stamatatos 2009): they capture morphology, punctuation and typical letter combinations without lemmatization. The list of N-grams is passed to Burrows's Delta as text units instead of words.
+A module for extracting character N-grams from a text - sequences of N characters taken with a sliding window over the string. Character N-grams are a standard feature of stylometry and authorship attribution (Stamatatos 2009): they capture morphology, punctuation and typical letter combinations without lemmatization. The list of N-grams serves as the units of a text instead of words in stylometric measures such as Burrows's Delta.
 
 Whitespace runs are collapsed into a single space beforehand, punctuation marks are kept: a space or a mark inside an N-gram is a stylistic signal too. With `within_words=True` N-grams do not cross word boundaries: the text is split into words by the tokenizer, punctuation is dropped, and words shorter than N yield no N-grams.
 

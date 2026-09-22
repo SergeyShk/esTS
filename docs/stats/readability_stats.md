@@ -95,9 +95,9 @@ Fernández Huerta printed the last term as `1.02` times the number of sentences 
 
 ## Interpretation { #interpretation }
 
-The [`describe_level`](#describe_level) method places the reading ease on a scale: INFLESZ by default (`muy difícil` below 40, `algo difícil` 40-55, `normal` 55-65, `bastante fácil` 65-80, `muy fácil` above 80), the seven bands of Szigriszt-Pazos or of Fernández Huerta on request; Legibilidad µ has the seven bands of its authors (`muy difícil` 0-30, `difícil` 31-50, `un poco difícil` 51-60, `adecuado` 61-70, `un poco fácil` 71-80, `fácil` 81-90, `muy fácil` 91-100).
+The [`describe_level`](#describe_level) method places the reading ease on the scale of the preset: INFLESZ for `general` (`muy difícil` below 40, `algo difícil` 40-55, `normal` 55-65, `bastante fácil` 65-80, `muy fácil` above 80) and the seven bands of Fernández Huerta for `classic`, with the scales of Szigriszt-Pazos or of the other author on request; Legibilidad µ has the seven bands of its authors (`muy difícil` 0-30, `difícil` 31-50, `un poco difícil` 51-60, `adecuado` 61-70, `un poco fácil` 71-80, `fácil` 81-90, `muy fácil` 91-100).
 
-The formulas that yield years of schooling (Crawford, SOL) are summarized in the `consensus_grade` attribute - the median of the rounded values plus the reading ease converted to a grade through the text types of the INFLESZ bands. The [`describe_grade`](#describe_grade) method translates the consensus grade or an individual formula into a stage of the Spanish school system and reader age:
+The formulas that yield years of schooling (Crawford, SOL) are summarized in the `consensus_grade` attribute - the median of the rounded values plus the reading ease converted to a grade by the scale of the preset: through the text types of the INFLESZ bands for `general`, through the interpretation table of Flesch, whose bands Fernández Huerta kept, for `classic`. The [`describe_grade`](#describe_grade) method translates the consensus grade or an individual formula into a stage of the Spanish school system and reader age:
 
 | Grade | Stage | Age |
 | :---: | :---: | :-: |
@@ -124,7 +124,7 @@ Parameters:
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
 | `stat` | str | `flesch_reading_easy` | Name of the metric (`flesch_reading_easy`, `mu_index`) |
-| `scale` | str | `None` | Scale for the reading ease (`inflesz` by default, `szigriszt`, `fernandez_huerta`); Legibilidad µ has a single scale and accepts no other |
+| `scale` | str | `None` | Scale for the reading ease (`inflesz`, `szigriszt`, `fernandez_huerta`); without it the scale of the preset is used; Legibilidad µ has a single scale and accepts no other |
 
 !!! example "Example"
 
@@ -138,7 +138,7 @@ Parameters:
     rs.describe_level(scale="szigriszt")
     # 'normal'
     rs.describe_level("mu_index")
-    # 'un poco difícil'
+    # 'difícil'
     ```
 
 ### describe_grade
@@ -215,7 +215,7 @@ Returns a dictionary with the computed readability metrics.
     {'flesch_reading_easy': 53.545000000000016,
     'gutierrez_polini_index': 33.5,
     'crawford_grade': 5.812999999999999,
-    'mu_index': 56.60377358490566,
+    'mu_index': 50.943396226415096,
     'sol_grade': 9.258359866374562,
     'lix': 60.0,
     'rix': 5.0,
@@ -246,7 +246,7 @@ Prints a table with the computed readability metrics.
     Flesch reading ease (Szigriszt-Pazos)        |  53.55
     Gutiérrez de Polini comprehensibility        |  33.50
     Crawford grade                               |   5.81
-    Legibilidad µ                                |  56.60
+    Legibilidad µ                                |  50.94
     SOL grade (SMOG for Spanish)                 |   9.26
     LIX readability index                        |  60.00
     RIX readability index                        |   5.00

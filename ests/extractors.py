@@ -218,12 +218,14 @@ class WordsExtractor(Extractor):
             text (str): Text string
 
         Returns:
-            words (tuple[str]): Tuple of extracted words
+            words (tuple[str]): Tuple of extracted words without empty ones
+                (re.split leaves them after a final separator)
 
         Raises:
             SourceTypeError: If the tokenizer is set incorrectly
         """
-        words = self._tokenize(text)
+        # re.split leaves an empty string after a final separator, as for sentences
+        words = (word for word in self._tokenize(text) if word)
         if self.filter_punct:
             words = (word for word in words if not is_punctuation(word))
         if self.filter_nums:
@@ -296,7 +298,8 @@ class CharNgramsExtractor(Extractor):
         are kept (Stamatatos 2009); with within_words N-grams do not cross
         word boundaries: the text is split into words by the tokenizer,
         punctuation is dropped, words shorter than N yield no N-grams.
-        Character N-grams are a feature for stylometry (ests.corpus.delta)
+        Character N-grams are a feature for stylometry and authorship
+        attribution: they are taken as the units of a text instead of words
 
     Arguments:
         n (int): N-gram length in characters

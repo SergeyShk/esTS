@@ -10,15 +10,18 @@ All library exceptions inherit the base class `EstsError` and one of the built-i
 | Exception | Built-in class | When raised |
 | :-------- | :------------- | :---------- |
 | `EstsError` | `Exception` | Base class, never raised itself |
-| `SourceTypeError` | `TypeError` | The data source is neither a string nor a `Doc`, the frequency counter is not a `Counter`, the list of texts is not a list of lists, the path is neither a string nor a `Path`, the tokenizer is not callable or returns a non-iterable object |
-| `SourceError` | `ValueError` | The source has no words, sentences, texts or collocations, lacks a dependency parse, or nothing is left after culling |
-| `ParameterError` | `ValueError` | A threshold, window, segment size or number of items is out of range; an unknown measure, variant, preset, layer, stage or dataset category |
-| `UnknownStatError` | `ParameterError`, `KeyError` | An unknown statistic is requested by name |
+| `SourceTypeError` | `TypeError` | The data source is neither a string nor a `Doc`, the tokenizer is not callable or returns a non-iterable object |
+| `SourceError` | `ValueError` | The source has no words or no sentences |
+| `ParameterError` | `ValueError` | A threshold, window, segment size, number of items, logarithm base or confidence level is out of range; an unknown preset, scale or metric name |
+| `UnknownStatError` | `ParameterError`, `KeyError` | An unknown statistic is requested by name, as in `DiversityStats.windowed` |
 | `DatasetNotFoundError` | `OSError` | The dataset is not downloaded; the message shows the download command |
 | `DataFileError` | `ValueError` | A dataset file is corrupted, has an unexpected format or cannot be decoded |
 | `DownloadError` | `RuntimeError` | The file could not be downloaded or failed the checksum verification |
 
 The classes are available from `ests` and from `ests.exceptions`.
+
+!!! note "Note"
+    The last three are reserved for the dataset loaders of the coming releases; nothing in 0.1 raises them.
 
 !!! example "Example"
 

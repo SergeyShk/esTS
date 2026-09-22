@@ -10,9 +10,11 @@ from .constants import (
     LIX_LONG_WORD_LETTER_FACTOR,
     MU_SCALE,
     POSTGRADUATE_LEVEL,
+    PRESET_SCALES,
     READABILITY_GRADE_STATS,
     READABILITY_PRESETS,
     READABILITY_STATS_DESC,
+    READING_EASE_GRADES,
     READING_EASE_SCALES,
     READING_SPEED_NORMS,
     READING_SPEED_WPM,
@@ -54,7 +56,10 @@ class ReadabilityStats:
         The interpretation layer: the INFLESZ and other scales of the reading
         ease, the µ scale, a consensus grade by the median of the grade
         formulas, the school stage and reader age of Spain and the reading
-        time by the norms of Spanish-speaking readers
+        time by the norms of Spanish-speaking readers. The scale of the
+        reading ease follows the preset: INFLESZ for general, the bands of
+        Fernández Huerta for classic, both in describe_level and in the
+        conversion of the reading ease into the consensus grade
 
     Example:
         >>> from ests import ReadabilityStats
@@ -64,7 +69,7 @@ class ReadabilityStats:
         {'flesch_reading_easy': 53.545000000000016,
          'gutierrez_polini_index': 33.5,
          'crawford_grade': 5.812999999999999,
-         'mu_index': 56.60377358490566,
+         'mu_index': 50.943396226415096,
          'sol_grade': 9.258359866374562,
          'lix': 60.0,
          'rix': 5.0,
@@ -175,7 +180,7 @@ class ReadabilityStats:
     @property
     def consensus_grade(self) -> float:
         grades = [getattr(self, stat) for stat in READABILITY_GRADE_STATS]
-        return calc_consensus_grade(grades, self.flesch_reading_easy)
+        return calc_consensus_grade(grades, self.flesch_reading_easy, self.preset)
 
     @property
     def reading_time(self) -> float:
@@ -187,9 +192,10 @@ class ReadabilityStats:
 
         Arguments:
             stat (str): Name of the metric: flesch_reading_easy or mu_index
-            scale (str): Scale for the reading ease: inflesz (the default),
-                szigriszt or fernandez_huerta; the µ index has a single scale
-                of its own and accepts no other
+            scale (str): Scale for the reading ease: inflesz, szigriszt or
+                fernandez_huerta; without it the scale of the preset is used
+                (general - inflesz, classic - fernandez_huerta); the µ index
+                has a single scale of its own and accepts no other
 
         Returns:
             str: Band of the scale
@@ -199,7 +205,9 @@ class ReadabilityStats:
                 or a scale is given for the µ index
         """
         if stat == "flesch_reading_easy":
-            return flesch_reading_easy_to_level(self.flesch_reading_easy, scale or "inflesz")
+            return flesch_reading_easy_to_level(
+                self.flesch_reading_easy, scale or PRESET_SCALES[self.preset]
+            )
         if stat == "mu_index":
             if scale is not None:
                 raise ParameterError("Legibilidad µ has a single scale, scale must not be set")
@@ -393,14 +401,15 @@ def calc_mu_index(c_letters: Mapping[int, int]) -> float:
 
     Description:
         The index of Muñoz Baquedano and Muñoz Urra (2006) measures the
-        variability of word length: n / (n - 1) * mean / variance * 100,
-        where n is the number of words and the mean and the variance are
-        those of the number of letters per word. The variance is the sample
-        one, divided by n - 1, as in the worked example of the authors
-        (18 words, mean 6.9444, variance 13.5844), and the factor n / (n - 1)
-        multiplies the ratio, so the index equals the mean divided by the
-        population variance; on the example it gives 54.13, where the
-        manual prints 51.12. The higher the value, the easier the text;
+        variability of word length: the mean of the number of letters per
+        word divided by its variance, times 100. The variance is the sample
+        one, divided by n - 1, which is the "cuasivarianza" of the authors:
+        the population variance multiplied by the factor n / (n - 1) that
+        their printed formula carries. Read that way the worked example of
+        their manual comes out exactly (18 words, mean 6.9444, variance
+        13.5844, µ = 51.12); applying the factor once more, on top of the
+        sample variance, gives 54.13 instead and does not reproduce the
+        example. The higher the value, the easier the text;
         the scale (mu_to_level):
             91-100 - muy fácil
             81-90 - fácil
@@ -431,7 +440,7 @@ def calc_mu_index(c_letters: Mapping[int, int]) -> float:
     variance = sum(count * (letters - mean) ** 2 for letters, count in counts.items()) / (n - 1)
     if not variance:
         return float("nan")
-    return n / (n - 1) * mean / variance * 100
+    return mean / variance * 100
 
 
 def calc_smog_index(n_complex: int, n_sents: int, a: float = 1.043, b: float = 3.1291) -> float:
@@ -608,36 +617,46 @@ def _level(value: float, scale: tuple[tuple[float, str], ...]) -> str:
     return "" if isnan(value) else scale[-1][1]
 
 
-def flesch_reading_easy_to_grade(flesch_reading_easy: float) -> float:
+def flesch_reading_easy_to_grade(flesch_reading_easy: float, preset: str = "general") -> float:
     """
-    Converting the Flesch reading ease into a school grade
+    Converting the Flesch reading ease into years of schooling
 
     Description:
         Used to include the reading ease in the consensus grade by analogy
-        with text_standard of textstat, through the text types of the
-        INFLESZ bands and the school stages of Spain:
+        with text_standard of textstat. The thresholds belong to the scale
+        of the preset, since the same value means different things on the
+        two scales.
+        With the general preset, through the text types of the INFLESZ bands
+        and the school stages of Spain:
             80-100 - 3 (comics and children's books, primary school grades 1-3)
             65-80 - 5 (primary school textbooks, grades 4-6)
             55-65 - 8 (general press, ESO)
             40-55 - 11 (secondary school textbooks, bachillerato)
             below 40 - 13 (scientific texts, university)
-        Values above 100 belong to grade 3
+        With the classic preset, through the interpretation table of Flesch,
+        whose bands Fernández Huerta kept: 90-100 - 5, 80-90 - 6, 70-80 - 7,
+        60-70 - 8.5, 50-60 - 10, 40-50 - 11, 30-40 - 12, below 30 - 13
+        Values above 100 belong to the first grade of the scale
 
     Arguments:
         flesch_reading_easy (float): Value of the reading ease
+        preset (str): Coefficient preset whose scale is read
 
     Returns:
-        float: School grade
+        float: Years of schooling
+
+    Raises:
+        ParameterError: If the preset is unknown
     """
-    thresholds = ((80, 3), (65, 5), (55, 8), (40, 11))
-    for threshold, grade in thresholds:
+    check_preset(preset)
+    for threshold, grade in READING_EASE_GRADES[preset]:
         if flesch_reading_easy >= threshold:
             return grade
     return 13
 
 
 def calc_consensus_grade(
-    grades: Iterable[float], flesch_reading_easy: float | None = None
+    grades: Iterable[float], flesch_reading_easy: float | None = None, preset: str = "general"
 ) -> float:
     """
     Computing the consensus grade
@@ -647,21 +666,22 @@ def calc_consensus_grade(
         with text_standard of textstat, which uses the mode; the median
         is more robust to an outlying formula. The values are rounded half
         up. The reading ease is converted with flesch_reading_easy_to_grade
-        and added without rounding
+        by the scale of the preset and added without rounding
 
     Arguments:
         grades (list[float]): Values of the grade formulas
         flesch_reading_easy (float): Value of the reading ease
+        preset (str): Coefficient preset of the reading ease
 
     Returns:
         float: Consensus grade
 
     Raises:
-        ParameterError: If the list of values is empty
+        ParameterError: If the list of values is empty or the preset is unknown
     """
     values = [float(floor(grade + 0.5)) for grade in grades]
     if flesch_reading_easy is not None:
-        values.append(flesch_reading_easy_to_grade(flesch_reading_easy))
+        values.append(flesch_reading_easy_to_grade(flesch_reading_easy, preset))
     if not values:
         raise ParameterError("The list of grade formulas is empty")
     return float(median(values))

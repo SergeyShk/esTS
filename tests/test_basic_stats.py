@@ -370,6 +370,19 @@ def test_doc_words(nlp):
     }
 
 
+def test_doc_with_extractors(nlp):
+    """An extractor passed explicitly is used for a Doc too, on its text"""
+    from ests import SentsExtractor, WordsExtractor
+
+    doc = nlp("Los tesauros son una clase. Los TESAUROS son una clase.")
+    words_extractor = WordsExtractor(stopwords=["los", "una"], lowercase=True)
+    stats = BasicStats(doc, words_extractor=words_extractor)
+    assert stats.n_words == BasicStats(doc.text, words_extractor=words_extractor).n_words == 6
+    sents_extractor = SentsExtractor(min_len=1000)
+    assert BasicStats(doc, words_extractor=words_extractor, sents_extractor=sents_extractor)
+    assert BasicStats(doc, sents_extractor=SentsExtractor()).n_sents == 2
+
+
 def test_doc_without_words():
     with pytest.raises(ValueError):
         BasicStats(spacy.blank("es")("... !"))

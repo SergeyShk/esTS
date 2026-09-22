@@ -9,7 +9,7 @@ authors:
 repository-code: "https://github.com/SergeyShk/esTS"
 url: "https://sergeyshk.github.io/esTS/"
 license: MIT
-version: 0.1.0.dev8
+version: 0.1.0.dev9
 date-released: 2026-09-22
 keywords:
   - spanish
@@ -19,4 +19,4 @@ keywords:
   - lexical diversity
   - stylometry
   - corpus linguistics
-abstract: "esTS computes text statistics for Spanish: basic counts, readability formulas, lexical diversity and sophistication, morphological, syntactic, cohesion, phonetic and style statistics, metre and rhyme, corpus measures and stylometry, with spaCy components, datasets and visualizations."
+abstract: "esTS computes text statistics for Spanish: extraction of sentences, words and character N-grams, rule-based syllabification and stress, basic counts, readability formulas with the scales of their authors and lexical diversity measures."
