@@ -465,10 +465,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-it-computes" class="md-nav__link">
+  <a href="#features" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What it computes
+        Features
       
     </span>
   </a>
@@ -476,10 +476,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#links" class="md-nav__link">
+  <a href="#installation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Links
+        Installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick start
       
     </span>
   </a>
@@ -538,6 +549,34 @@
     
   
     Exceptions and logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="authors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Authors
   
 
     
@@ -1066,10 +1105,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#what-it-computes" class="md-nav__link">
+  <a href="#features" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What it computes
+        Features
       
     </span>
   </a>
@@ -1077,10 +1116,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#links" class="md-nav__link">
+  <a href="#installation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Links
+        Installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick start
       
     </span>
   </a>
@@ -1108,32 +1158,90 @@
 
 
 <h1 id="spanish-texts-statistics-ests">Spanish Texts Statistics (esTS)<a class="headerlink" href="#spanish-texts-statistics-ests" title="Permanent link">&para;</a></h1>
-<p><strong>esTS</strong> computes for Spanish text what usually requires assembling several separate tools: basic counts, readability formulas, lexical diversity and, in the releases to come, morphological, syntactic and cohesion statistics, style markers, phonostatistics, metre and rhyme, corpus measures and stylometry - by published formulas adapted to Spanish, with deterministic results and no neural networks inside.</p>
-<p>It is the Spanish sibling of <a href="https://github.com/SergeyShk/ruTS">ruTS</a>, the Russian text statistics library, and follows its structure and naming: every statistic is a class with <code>get_stats()</code>. Components for a <a href="https://github.com/explosion/spaCy">spaCy</a> pipeline come with the morphology and syntax of 0.2.</p>
-<div class="admonition note">
-<p class="admonition-title">Status</p>
-<p>0.1 is the first release. It covers text extraction, syllables and stress, basic statistics, readability and lexical diversity; morphology, syntax and cohesion on Universal Dependencies follow in 0.2.</p>
-</div>
-<h2 id="what-it-computes">What it computes<a class="headerlink" href="#what-it-computes" title="Permanent link">&para;</a></h2>
-<p>Release 0.1:</p>
+<p><strong>esTS</strong> computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability and lexical diversity - by published formulas with the coefficients and the scales of their authors, deterministically and without a neural network inside.</p>
+<p>The library works both with raw strings and with <code>Doc</code> objects of <a href="https://github.com/explosion/spaCy">spaCy</a>, and needs no trained model: sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography.</p>
+<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="extractors/sentences/"><strong>Extraction</strong></a> - sentences with Spanish punctuation (<code>¿ ¡</code>, dialogue dashes, abbreviations), words with clitics, lemmas via <code>simplemma</code>, character N-grams.</li>
-<li><a href="syllables/"><strong>Syllables and stress</strong></a> - rule-based syllabification (diphthongs, hiatus, consonant clusters) and stress derived from orthography.</li>
-<li><a href="stats/basic_stats/"><strong>Basic statistics</strong></a> - sentences, words, letters, syllables and punctuation by type, with distributions and normalized shares.</li>
-<li><a href="stats/readability_stats/"><strong>Readability</strong></a> - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad μ, SOL, LIX and RIX, with presets, school stages and reading time.</li>
-<li><a href="stats/diversity_stats/"><strong>Lexical diversity</strong></a> - TTR and its variants, MATTR, MSTTR, MTLD, HD-D, Yule, Herdan, Brunet, entropy, Zipf and Heaps fits, windowed computation.</li>
+<li>build tokenizers for <a href="extractors/sentences/">sentences</a>, <a href="extractors/words/">words</a> and <a href="extractors/char_ngrams/">character N-grams</a> that know the inverted marks, the dialogue dash and the abbreviations of Spanish</li>
+<li>divide a word into <a href="syllables/">syllables and find its stress</a> by the orthographic rules, with no dictionary</li>
+<li>compute <a href="stats/basic_stats/">basic text statistics</a> (numbers of sentences, words, letters, syllables, punctuation marks by type and their distributions)</li>
+<li>compute <a href="stats/readability_stats/">readability metrics</a> (Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX) with a consensus grade, the school stages of Spain and reading time</li>
+<li>compute <a href="stats/diversity_stats/">lexical diversity metrics</a> (Type-Token Ratio and its variations, MATTR, MSTTR, Measure of Textual Lexical Diversity, HD-D, the indices of Simpson and Yule, entropy, the laws of Zipf and Heaps), over the whole text or over windows with confidence intervals</li>
 </ul>
-<p>Planned:</p>
+<p>Morphology, syntax and cohesion on Universal Dependencies come in 0.2, corpus measures and stylometry in 0.3, style, phonostatistics, metre and rhyme in 0.4.</p>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<p>Requires Python 3.11 or newer.</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyests
+</code></pre></div>
+<p>The distribution on PyPI is <code>pyests</code>, the package it installs is <code>ests</code>. More on dependencies and installing from the repository - on the <a href="installation/">Installation</a> page.</p>
+<h2 id="quick-start">Quick start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">BasicStats</span><span class="p">,</span> <span class="n">DiversityStats</span><span class="p">,</span> <span class="n">ReadabilityStats</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">text</span> <span class="o">=</span> <span class="s2">"Hay tres clases de mentiras: mentiras, malditas mentiras y estadísticas"</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">BasicStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
+<span class="p">{</span><span class="s1">'c_letters'</span><span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">12</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+ <span class="s1">'c_syllables'</span><span class="p">:</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+ <span class="s1">'n_sents'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s1">'n_words'</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+ <span class="s1">'n_unique_words'</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+ <span class="s1">'n_long_words'</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+ <span class="s1">'n_complex_words'</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+ <span class="s1">'n_simple_words'</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+ <span class="s1">'n_monosyllable_words'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+ <span class="s1">'n_polysyllable_words'</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+ <span class="s1">'n_chars'</span><span class="p">:</span> <span class="mi">71</span><span class="p">,</span>
+ <span class="s1">'n_letters'</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+ <span class="s1">'n_spaces'</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+ <span class="s1">'n_syllables'</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span>
+ <span class="s1">'n_punctuations'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s1">'c_punctuations'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'comma'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'period'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'question'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'exclamation'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s1">'ellipsis'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'colon'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'semicolon'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'dash'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s1">'hyphen'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'angle_quotes'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'straight_quotes'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s1">'parentheses'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">'other'</span><span class="p">:</span> <span class="mi">0</span><span class="p">}}</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ReadabilityStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">flesch_reading_easy</span>
+<span class="mf">53.545000000000016</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">DiversityStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">ttr</span>
+<span class="mf">0.8</span>
+</code></pre></div>
+<p>Any statistic can be printed in a readable form:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">BasicStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
+     <span class="n">Statistic</span>      <span class="o">|</span>  <span class="n">Value</span>
+<span class="o">------------------------------</span>
+<span class="n">Sentences</span>           <span class="o">|</span>    <span class="mi">1</span>
+<span class="n">Words</span>               <span class="o">|</span>    <span class="mi">10</span>
+<span class="n">Unique</span> <span class="n">words</span>        <span class="o">|</span>    <span class="mi">8</span>
+<span class="n">Long</span> <span class="n">words</span>          <span class="o">|</span>    <span class="mi">5</span>
+<span class="n">Complex</span> <span class="n">words</span>       <span class="o">|</span>    <span class="mi">5</span>
+<span class="n">Simple</span> <span class="n">words</span>        <span class="o">|</span>    <span class="mi">5</span>
+<span class="n">Monosyllabic</span> <span class="n">words</span>  <span class="o">|</span>    <span class="mi">4</span>
+<span class="n">Polysyllabic</span> <span class="n">words</span>  <span class="o">|</span>    <span class="mi">6</span>
+<span class="n">Characters</span>          <span class="o">|</span>    <span class="mi">71</span>
+<span class="n">Letters</span>             <span class="o">|</span>    <span class="mi">60</span>
+<span class="n">Spaces</span>              <span class="o">|</span>    <span class="mi">9</span>
+<span class="n">Syllables</span>           <span class="o">|</span>    <span class="mi">23</span>
+<span class="n">Punctuation</span> <span class="n">marks</span>   <span class="o">|</span>    <span class="mi">2</span>
+</code></pre></div>
+<details class="note">
+<summary>Project structure</summary>
 <ul>
-<li><strong>Morphology, syntax and cohesion</strong> (0.2) - on Universal Dependencies features and relations from spaCy <code>es_core_news_*</code> models; Coh-Metrix style cohesion with a Spanish list of discourse markers; pipeline components.</li>
-<li><strong>Corpus measures and stylometry</strong> (0.3) - keywords, collocations, dispersion, KWIC, Burrows's Delta, Zeta, corpus comparison.</li>
-<li><strong>Style and sound</strong> (0.4) - SEO-style metrics, plain language (lenguaje claro) markers, phonostatistics, syllabic metre and rhyme (consonante and asonante).</li>
+<li><strong>docs</strong> - project documentation</li>
+<li><strong>ests</strong>:<ul>
+<li>basic_stats.py - basic text statistics</li>
+<li>constants.py - constants of the Spanish language and of the metrics</li>
+<li>diversity_stats.py - lexical diversity metrics</li>
+<li>exceptions.py - library exceptions</li>
+<li>extractors.py - tools for object extraction from a text</li>
+<li>readability_stats.py - readability metrics</li>
+<li>syllables.py - syllabification and stress</li>
+<li>utils.py - helper tools</li>
 </ul>
-<h2 id="links">Links<a class="headerlink" href="#links" title="Permanent link">&para;</a></h2>
-<ul>
-<li>Repository: <a href="https://github.com/SergeyShk/esTS">github.com/SergeyShk/esTS</a></li>
-<li>The Russian sibling: <a href="https://github.com/SergeyShk/ruTS">github.com/SergeyShk/ruTS</a></li>
+</li>
+<li><strong>tests</strong> - tests mirroring the package structure</li>
 </ul>
+</details>
 
 
 
