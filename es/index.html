@@ -465,10 +465,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#alcance-previsto" class="md-nav__link">
+  <a href="#que-calcula" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Alcance previsto
+        Qué calcula
       
     </span>
   </a>
@@ -1066,10 +1066,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#alcance-previsto" class="md-nav__link">
+  <a href="#que-calcula" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Alcance previsto
+        Qué calcula
       
     </span>
   </a>
@@ -1108,21 +1108,26 @@
 
 
 <h1 id="spanish-texts-statistics-ests">Spanish Texts Statistics (esTS)<a class="headerlink" href="#spanish-texts-statistics-ests" title="Permanent link">&para;</a></h1>
-<p><strong>esTS</strong> calculará para textos en español lo que normalmente exige juntar varias herramientas sueltas: recuentos básicos, fórmulas de legibilidad, diversidad y sofisticación léxica, estadísticas morfológicas, sintácticas y de cohesión, marcadores de estilo, fonoestadística, métrica y rima, medidas de corpus y estilometría - con fórmulas publicadas y adaptadas al español, resultados deterministas y sin redes neuronales dentro.</p>
-<p>Es la biblioteca hermana de <a href="https://github.com/SergeyShk/ruTS">ruTS</a>, la de estadísticas de textos en ruso, y sigue su estructura y sus nombres: cada estadística está disponible como clase con <code>get_stats()</code> y como componente de un pipeline de <a href="https://github.com/explosion/spaCy">spaCy</a>.</p>
-<div class="admonition warning">
+<p><strong>esTS</strong> calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: recuentos básicos, fórmulas de legibilidad, diversidad léxica y, en las versiones por venir, estadísticas morfológicas, sintácticas y de cohesión, marcadores de estilo, fonoestadística, métrica y rima, medidas de corpus y estilometría - con fórmulas publicadas y adaptadas al español, resultados deterministas y sin redes neuronales dentro.</p>
+<p>Es la biblioteca hermana de <a href="https://github.com/SergeyShk/ruTS">ruTS</a>, la de estadísticas de textos en ruso, y sigue su estructura y sus nombres: cada estadística es una clase con <code>get_stats()</code>. Los componentes para un pipeline de <a href="https://github.com/explosion/spaCy">spaCy</a> llegan con la morfología y la sintaxis de la 0.2.</p>
+<div class="admonition note">
 <p class="admonition-title">Estado</p>
-<p>Los módulos de la primera versión (0.1) están escritos: la extracción de oraciones, palabras y N-gramas de caracteres, la silabificación y el acento, las estadísticas básicas, la legibilidad con preajustes y la diversidad léxica. La versión en sí está pendiente de una revisión de calidad y de la publicación en PyPI.</p>
+<p>La 0.1 es la primera versión. Cubre la extracción de texto, las sílabas y el acento, las estadísticas básicas, la legibilidad y la diversidad léxica; la morfología, la sintaxis y la cohesión sobre Universal Dependencies llegan en la 0.2.</p>
 </div>
-<h2 id="alcance-previsto">Alcance previsto<a class="headerlink" href="#alcance-previsto" title="Permanent link">&para;</a></h2>
+<h2 id="que-calcula">Qué calcula<a class="headerlink" href="#que-calcula" title="Permanent link">&para;</a></h2>
+<p>Versión 0.1:</p>
 <ul>
-<li><strong>Extracción</strong> - oraciones y palabras con la puntuación española (<code>¿ ¡</code>), clíticos, lemas con spaCy o <code>simplemma</code>.</li>
-<li><strong>Sílabas y acento</strong> - silabificación por reglas (diptongos, hiatos, grupos consonánticos) y acento derivado de la ortografía.</li>
-<li><strong>Legibilidad</strong> - Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad μ, SOL, con preajustes.</li>
-<li><strong>Diversidad léxica</strong> - TTR y sus variantes, MTLD, HD-D, Yule, Herdan, Brunet, entropía, ajustes de Zipf y Heaps, cálculo por ventanas.</li>
-<li><strong>Morfología, sintaxis y cohesión</strong> - sobre rasgos y relaciones de Universal Dependencies de los modelos <code>es_core_news_*</code> de spaCy; cohesión al estilo de Coh-Metrix con una lista española de marcadores del discurso.</li>
-<li><strong>Medidas de corpus y estilometría</strong> - palabras clave, colocaciones, dispersión, KWIC, Delta de Burrows, Zeta, comparación de corpus.</li>
-<li><strong>Estilo y sonido</strong> - métricas de estilo SEO, marcadores de lenguaje claro, fonoestadística, métrica silábica y rima (consonante y asonante).</li>
+<li><a href="extractors/sentences/"><strong>Extracción</strong></a> - oraciones con la puntuación española (<code>¿ ¡</code>, rayas de diálogo, abreviaturas), palabras con clíticos, lemas con <code>simplemma</code>, N-gramas de caracteres.</li>
+<li><a href="syllables/"><strong>Sílabas y acento</strong></a> - silabificación por reglas (diptongos, hiatos, grupos consonánticos) y acento deducido de la ortografía.</li>
+<li><a href="stats/basic_stats/"><strong>Estadísticas básicas</strong></a> - oraciones, palabras, letras, sílabas y signos de puntuación por tipo, con distribuciones y proporciones normalizadas.</li>
+<li><a href="stats/readability_stats/"><strong>Legibilidad</strong></a> - Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad μ, SOL, LIX y RIX, con preajustes, etapas escolares y tiempo de lectura.</li>
+<li><a href="stats/diversity_stats/"><strong>Diversidad léxica</strong></a> - TTR y sus variantes, MATTR, MSTTR, MTLD, HD-D, Yule, Herdan, Brunet, entropía, ajustes de Zipf y Heaps, cálculo por ventanas.</li>
+</ul>
+<p>Previsto:</p>
+<ul>
+<li><strong>Morfología, sintaxis y cohesión</strong> (0.2) - sobre rasgos y relaciones de Universal Dependencies de los modelos <code>es_core_news_*</code> de spaCy; cohesión al estilo de Coh-Metrix con una lista española de marcadores del discurso; componentes de pipeline.</li>
+<li><strong>Medidas de corpus y estilometría</strong> (0.3) - palabras clave, colocaciones, dispersión, KWIC, Delta de Burrows, Zeta, comparación de corpus.</li>
+<li><strong>Estilo y sonido</strong> (0.4) - métricas de estilo SEO, marcadores de lenguaje claro, fonoestadística, métrica silábica y rima (consonante y asonante).</li>
 </ul>
 <h2 id="enlaces">Enlaces<a class="headerlink" href="#enlaces" title="Permanent link">&para;</a></h2>
 <ul>

@@ -1577,8 +1577,8 @@
 <p>Cada métrica puede calcularse por separado llamando a la función correspondiente. La información detallada sobre las métricas de legibilidad y las funciones que las calculan está en la <a href="../readability_stats_funcs/">sección</a> correspondiente.</p>
 </div>
 <h2 id="interpretation">Interpretación<a class="headerlink" href="#interpretation" title="Permanent link">&para;</a></h2>
-<p>El método <a href="#describe_level"><code>describe_level</code></a> sitúa la facilidad de lectura en una escala: INFLESZ por defecto (<code>muy difícil</code> por debajo de 40, <code>algo difícil</code> 40-55, <code>normal</code> 55-65, <code>bastante fácil</code> 65-80, <code>muy fácil</code> por encima de 80), y a petición los siete niveles de Szigriszt-Pazos o de Fernández Huerta; la Legibilidad µ tiene los siete niveles de sus autores (<code>muy difícil</code> 0-30, <code>difícil</code> 31-50, <code>un poco difícil</code> 51-60, <code>adecuado</code> 61-70, <code>un poco fácil</code> 71-80, <code>fácil</code> 81-90, <code>muy fácil</code> 91-100).</p>
-<p>Las fórmulas que dan años de escolaridad (Crawford, SOL) se resumen en el atributo <code>consensus_grade</code>: la mediana de los valores redondeados más la facilidad de lectura convertida en grado a través de los tipos de texto de los niveles INFLESZ. El método <a href="#describe_grade"><code>describe_grade</code></a> traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:</p>
+<p>El método <a href="#describe_level"><code>describe_level</code></a> sitúa la facilidad de lectura en la escala del preajuste: INFLESZ para <code>general</code> (<code>muy difícil</code> por debajo de 40, <code>algo difícil</code> 40-55, <code>normal</code> 55-65, <code>bastante fácil</code> 65-80, <code>muy fácil</code> por encima de 80) y los siete niveles de Fernández Huerta para <code>classic</code>, y a petición las escalas de Szigriszt-Pazos o del otro autor; la Legibilidad µ tiene los siete niveles de sus autores (<code>muy difícil</code> 0-30, <code>difícil</code> 31-50, <code>un poco difícil</code> 51-60, <code>adecuado</code> 61-70, <code>un poco fácil</code> 71-80, <code>fácil</code> 81-90, <code>muy fácil</code> 91-100).</p>
+<p>Las fórmulas que dan años de escolaridad (Crawford, SOL) se resumen en el atributo <code>consensus_grade</code>: la mediana de los valores redondeados más la facilidad de lectura convertida en grado según la escala del preajuste: por los tipos de texto de los niveles INFLESZ para <code>general</code> y por la tabla de interpretación de Flesch, cuyos niveles conservó Fernández Huerta, para <code>classic</code>. El método <a href="#describe_grade"><code>describe_grade</code></a> traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:</p>
 <table>
 <thead>
 <tr>
@@ -1649,7 +1649,7 @@
 <td style="text-align: center;"><code>scale</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Escala para la facilidad de lectura (<code>inflesz</code> por defecto, <code>szigriszt</code>, <code>fernandez_huerta</code>); la Legibilidad µ tiene una sola escala y no admite otra</td>
+<td style="text-align: center;">Escala para la facilidad de lectura (<code>inflesz</code>, <code>szigriszt</code>, <code>fernandez_huerta</code>); sin ella se usa la escala del preajuste; la Legibilidad µ tiene una sola escala y no admite otra</td>
 </tr>
 </tbody>
 </table>
@@ -1664,7 +1664,7 @@
 <span class="n">rs</span><span class="o">.</span><span class="n">describe_level</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="s2">"szigriszt"</span><span class="p">)</span>
 <span class="c1"># 'normal'</span>
 <span class="n">rs</span><span class="o">.</span><span class="n">describe_level</span><span class="p">(</span><span class="s2">"mu_index"</span><span class="p">)</span>
-<span class="c1"># 'un poco difícil'</span>
+<span class="c1"># 'difícil'</span>
 </code></pre></div>
 </div>
 <h3 id="describe_grade">describe_grade<a class="headerlink" href="#describe_grade" title="Permanent link">&para;</a></h3>
@@ -1765,7 +1765,7 @@
 <div class="highlight"><pre><span></span><code><span class="o">{</span><span class="s1">'flesch_reading_easy'</span>:<span class="w"> </span><span class="m">53</span>.545000000000016,
 <span class="s1">'gutierrez_polini_index'</span>:<span class="w"> </span><span class="m">33</span>.5,
 <span class="s1">'crawford_grade'</span>:<span class="w"> </span><span class="m">5</span>.812999999999999,
-<span class="s1">'mu_index'</span>:<span class="w"> </span><span class="m">56</span>.60377358490566,
+<span class="s1">'mu_index'</span>:<span class="w"> </span><span class="m">50</span>.943396226415096,
 <span class="s1">'sol_grade'</span>:<span class="w"> </span><span class="m">9</span>.258359866374562,
 <span class="s1">'lix'</span>:<span class="w"> </span><span class="m">60</span>.0,
 <span class="s1">'rix'</span>:<span class="w"> </span><span class="m">5</span>.0,
@@ -1789,7 +1789,7 @@
 Flesch<span class="w"> </span>reading<span class="w"> </span>ease<span class="w"> </span><span class="o">(</span>Szigriszt-Pazos<span class="o">)</span><span class="w">        </span><span class="p">|</span><span class="w">  </span><span class="m">53</span>.55
 Gutiérrez<span class="w"> </span>de<span class="w"> </span>Polini<span class="w"> </span>comprehensibility<span class="w">        </span><span class="p">|</span><span class="w">  </span><span class="m">33</span>.50
 Crawford<span class="w"> </span>grade<span class="w">                               </span><span class="p">|</span><span class="w">   </span><span class="m">5</span>.81
-Legibilidad<span class="w"> </span>µ<span class="w">                                </span><span class="p">|</span><span class="w">  </span><span class="m">56</span>.60
+Legibilidad<span class="w"> </span>µ<span class="w">                                </span><span class="p">|</span><span class="w">  </span><span class="m">50</span>.94
 SOL<span class="w"> </span>grade<span class="w"> </span><span class="o">(</span>SMOG<span class="w"> </span><span class="k">for</span><span class="w"> </span>Spanish<span class="o">)</span><span class="w">                 </span><span class="p">|</span><span class="w">   </span><span class="m">9</span>.26
 LIX<span class="w"> </span>readability<span class="w"> </span>index<span class="w">                        </span><span class="p">|</span><span class="w">  </span><span class="m">60</span>.00
 RIX<span class="w"> </span>readability<span class="w"> </span>index<span class="w">                        </span><span class="p">|</span><span class="w">   </span><span class="m">5</span>.00

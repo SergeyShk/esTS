@@ -1282,7 +1282,7 @@
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
 <p>A module for computing basic text statistics. The data source can be either a text or a <code>Doc</code> object of the <a href="https://github.com/explosion/spaCy">spaCy</a> library.</p>
 <p>The module allows using pre-built <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> and <a href="../../extractors/words/"><code>WordsExtractor</code></a> objects for the sentence and word tokenization needed before computing the statistics. Syllables are counted by <a href="../../syllables/#count_syllables"><code>count_syllables</code></a>, letters by <code>str.isalpha</code>, so digits, hyphens and marks inside a word are not letters, while the ordinal indicators <code>º</code> and <code>ª</code> are (<code>3.º</code> is a one-letter word).</p>
-<p>For a <code>Doc</code> object words are taken from the tokens (punctuation marks and symbols such as <code>€</code> or <code>%</code> are dropped), sentences - from the annotation; without sentence boundaries (<code>spacy.blank</code>, a pipeline without <code>parser</code> and <code>senter</code>) sentences are extracted from the text by <code>SentsExtractor</code>.</p>
+<p>For a <code>Doc</code> object words are taken from the tokens (punctuation marks and symbols such as <code>€</code> or <code>%</code> are dropped), sentences - from the annotation; without sentence boundaries (<code>spacy.blank</code>, a pipeline without <code>parser</code> and <code>senter</code>) sentences are extracted from the text by <code>SentsExtractor</code>. An extractor passed explicitly is always used, on the text of the <code>Doc</code>, so that stop word filtering or a custom tokenizer works the same for both kinds of source.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The statistics are computed when the <code>BasicStats</code> object is initialized.</p>
@@ -1308,13 +1308,13 @@
 <td style="text-align: center;"><code>sents_extractor</code></td>
 <td style="text-align: center;">SentsExtractor</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Sentence extraction tool</td>
+<td style="text-align: center;">Sentence extraction tool; used for a Doc too, on its text</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>words_extractor</code></td>
 <td style="text-align: center;">WordsExtractor</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Word extraction tool</td>
+<td style="text-align: center;">Word extraction tool; used for a Doc too, on its text</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>normalize</code></td>

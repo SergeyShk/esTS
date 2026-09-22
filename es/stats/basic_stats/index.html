@@ -1282,7 +1282,7 @@
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
 <p>Módulo para calcular las estadísticas básicas de un texto. La fuente de datos puede ser un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>.</p>
 <p>El módulo permite usar objetos <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> y <a href="../../extractors/words/"><code>WordsExtractor</code></a> ya configurados para la segmentación en oraciones y palabras que precede al cálculo. Las sílabas se cuentan con <a href="../../syllables/#count_syllables"><code>count_syllables</code></a> y las letras con <code>str.isalpha</code>, así que las cifras, los guiones y los signos dentro de una palabra no son letras, mientras que los indicadores ordinales <code>º</code> y <code>ª</code> sí lo son (<code>3.º</code> es una palabra de una letra).</p>
-<p>Para un objeto <code>Doc</code> las palabras se toman de los tokens (los signos de puntuación y los símbolos como <code>€</code> o <code>%</code> se descartan) y las oraciones de la anotación; sin límites de oración (<code>spacy.blank</code>, un pipeline sin <code>parser</code> ni <code>senter</code>) las oraciones se extraen del texto con <code>SentsExtractor</code>.</p>
+<p>Para un objeto <code>Doc</code> las palabras se toman de los tokens (los signos de puntuación y los símbolos como <code>€</code> o <code>%</code> se descartan) y las oraciones de la anotación; sin límites de oración (<code>spacy.blank</code>, un pipeline sin <code>parser</code> ni <code>senter</code>) las oraciones se extraen del texto con <code>SentsExtractor</code>. Un extractor indicado explícitamente se usa siempre, sobre el texto del <code>Doc</code>, de modo que el filtro de palabras vacías o un tokenizador propio funcionan igual con las dos clases de fuente.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>Las estadísticas se calculan al inicializar el objeto <code>BasicStats</code>.</p>
@@ -1308,13 +1308,13 @@
 <td style="text-align: center;"><code>sents_extractor</code></td>
 <td style="text-align: center;">SentsExtractor</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Herramienta de extracción de oraciones</td>
+<td style="text-align: center;">Herramienta de extracción de oraciones; se usa también con un Doc, sobre su texto</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>words_extractor</code></td>
 <td style="text-align: center;">WordsExtractor</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Herramienta de extracción de palabras</td>
+<td style="text-align: center;">Herramienta de extracción de palabras; se usa también con un Doc, sobre su texto</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>normalize</code></td>

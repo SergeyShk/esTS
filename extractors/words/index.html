@@ -1270,7 +1270,7 @@
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The filters are applied in order: punctuation, numbers, lemmatization, lower case, stop words, word length. Stop words are compared case-insensitively, so a lower-case list also filters <code>Los</code> or <code>La</code> at the start of a sentence. A punctuation mark is a token consisting entirely of marks and symbols, including multi-character ones: <code>?!</code>, <code>!..</code>, <code>--</code>, <code>…</code>, <code>€</code>. A ready stop word list is <code>spacy.lang.es.stop_words.STOP_WORDS</code>; note that it also holds frequent verbs like <code>tener</code>.</p>
+<p>The filters are applied in order: punctuation, numbers, lemmatization, lower case, stop words, word length. Stop words are compared case-insensitively, so a lower-case list also filters <code>Los</code> or <code>La</code> at the start of a sentence. A punctuation mark is a token consisting entirely of marks and symbols, including multi-character ones: <code>?!</code>, <code>!..</code>, <code>--</code>, <code>…</code>, <code>€</code>. Empty tokens, which <code>re.split</code> leaves after a final separator, are dropped before the filters. A ready stop word list is <code>spacy.lang.es.stop_words.STOP_WORDS</code>; note that it also holds frequent verbs like <code>tener</code>.</p>
 </div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>

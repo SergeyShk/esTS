@@ -1559,7 +1559,7 @@ c-a\times\frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}}-b\ti
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_mu_index()</strong></p>
 </div>
-<p>Cálculo de la Legibilidad µ de Muñoz Baquedano y Muñoz Urra (2006), que mide la variabilidad de la longitud de las palabras: la media y la varianza del número de letras por palabra. La varianza es la muestral, dividida por <code>n − 1</code>, como en el ejemplo resuelto de los autores (18 palabras, media 6.9444, varianza 13.5844), y el factor <code>n / (n − 1)</code> multiplica el cociente, así que el índice equivale a la media dividida por la varianza poblacional; en el ejemplo da 54.13, donde el manual imprime 51.12. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (<code>nan</code>). Cuanto mayor es el valor, más fácil es el texto:</p>
+<p>Cálculo de la Legibilidad µ de Muñoz Baquedano y Muñoz Urra (2006), que mide la variabilidad de la longitud de las palabras: la media del número de letras por palabra dividida por su varianza. La varianza es la muestral, dividida por <code>n − 1</code>, que es la <em>cuasivarianza</em> de los autores: la varianza poblacional multiplicada por el factor <code>n / (n − 1)</code> que lleva su fórmula impresa. Leído así, el ejemplo resuelto de su manual sale exacto (18 palabras, media 6.9444, varianza 13.5844, µ = 51.12); aplicar el factor una segunda vez, sobre la varianza muestral, daría 54.13. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (<code>nan</code>). Cuanto mayor es el valor, más fácil es el texto:</p>
 <table>
 <thead>
 <tr>
@@ -1600,7 +1600,7 @@ c-a\times\frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}}-b\ti
 </table>
 <p>Fórmula:</p>
 <div class="arithmatex">\[
-\frac{n}{n-1}\times\frac{\bar{x}}{\sigma^2}\times100
+\frac{\bar{x}}{s^2}\times100
 \]</div>
 <p>Parámetros:</p>
 <table>
@@ -1900,7 +1900,7 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <td style="text-align: center;"><code>scale</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>inflesz</code></td>
-<td style="text-align: center;">Nombre de la escala</td>
+<td style="text-align: center;">Nombre de la escala; <code>ReadabilityStats.describe_level</code> pasa la escala del preajuste</td>
 </tr>
 </tbody>
 </table>
@@ -1940,7 +1940,8 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <div class="admonition info">
 <p><strong>ests.readability_stats.flesch_reading_easy_to_grade()</strong></p>
 </div>
-<p>Conversión de la facilidad de lectura de Flesch en un grado escolar, usada para incluir la facilidad de lectura en el grado de consenso por analogía con <code>text_standard</code> de textstat, a través de los tipos de texto de los niveles INFLESZ y las etapas escolares de España:</p>
+<p>Conversión de la facilidad de lectura de Flesch en años de escolaridad, usada para incluir la facilidad de lectura en el grado de consenso por analogía con <code>text_standard</code> de textstat. Los umbrales son los de la escala del preajuste, porque el mismo valor significa cosas distintas en cada escala.</p>
+<p>Con el preajuste <code>general</code>, a través de los tipos de texto de los niveles INFLESZ y las etapas escolares de España:</p>
 <table>
 <thead>
 <tr>
@@ -1977,7 +1978,8 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 </tr>
 </tbody>
 </table>
-<p>Los valores por encima de 100 corresponden al grado 3.</p>
+<p>Con el preajuste <code>classic</code>, a través de la tabla de interpretación de Flesch, cuyos niveles conservó Fernández Huerta: <code>90-100</code> - 5, <code>80-90</code> - 6, <code>70-80</code> - 7, <code>60-70</code> - 8.5, <code>50-60</code> - 10, <code>40-50</code> - 11, <code>30-40</code> - 12, por debajo de <code>30</code> - 13.</p>
+<p>Los valores por encima de 100 corresponden al primer grado de la escala.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -1995,13 +1997,19 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <td style="text-align: center;"><code>-</code></td>
 <td style="text-align: center;">Valor de la facilidad de lectura</td>
 </tr>
+<tr>
+<td style="text-align: center;"><code>preset</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>general</code></td>
+<td style="text-align: center;">Preajuste de coeficientes cuya escala se lee</td>
+</tr>
 </tbody>
 </table>
 <h2 id="calc_consensus_grade">Grado de consenso<a class="headerlink" href="#calc_consensus_grade" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_consensus_grade()</strong></p>
 </div>
-<p>Cálculo del grado de consenso: la mediana de los valores redondeados de las fórmulas de grado, por analogía con <code>text_standard</code> de textstat, que usa la moda; la mediana resiste mejor una fórmula desviada. Los valores se redondean con el medio hacia arriba. La facilidad de lectura se convierte con <code>flesch_reading_easy_to_grade</code> y se añade sin redondear.</p>
+<p>Cálculo del grado de consenso: la mediana de los valores redondeados de las fórmulas de grado, por analogía con <code>text_standard</code> de textstat, que usa la moda; la mediana resiste mejor una fórmula desviada. Los valores se redondean con el medio hacia arriba. La facilidad de lectura se convierte con <code>flesch_reading_easy_to_grade</code> según la escala del preajuste y se añade sin redondear.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -2024,6 +2032,12 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <td style="text-align: center;">float</td>
 <td style="text-align: center;"><code>None</code></td>
 <td style="text-align: center;">Valor de la facilidad de lectura</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>preset</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>general</code></td>
+<td style="text-align: center;">Preajuste de coeficientes de la facilidad de lectura</td>
 </tr>
 </tbody>
 </table>

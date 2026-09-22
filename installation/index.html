@@ -506,6 +506,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#from-pypi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From PyPI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#from-the-repository" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -517,10 +528,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#from-pypi" class="md-nav__link">
+  <a href="#model" class="md-nav__link">
     <span class="md-ellipsis">
       
-        From PyPI
+        The spaCy model
       
     </span>
   </a>
@@ -1090,6 +1101,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#from-pypi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        From PyPI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#from-the-repository" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1101,10 +1123,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#from-pypi" class="md-nav__link">
+  <a href="#model" class="md-nav__link">
     <span class="md-ellipsis">
       
-        From PyPI
+        The spaCy model
       
     </span>
   </a>
@@ -1132,24 +1154,23 @@
 
 
 <h1 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h1>
-<p>The library is not published yet. Until the first release it can be installed from the repository.</p>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>python</code> 3.11 or newer</li>
-<li><code>spaCy</code> 3.7 or newer with the <code>es_core_news_sm</code> model for morphology and syntax</li>
-<li><code>numpy</code>, <code>pandas</code>, <code>scipy</code>, <code>matplotlib</code></li>
+<li><code>spaCy</code> 3.7 or newer</li>
+<li><code>numpy</code>, <code>scipy</code>, <code>simplemma</code></li>
 </ul>
+<h2 id="from-pypi">From PyPI<a class="headerlink" href="#from-pypi" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>ests
+</code></pre></div>
 <h2 id="from-the-repository">From the repository<a class="headerlink" href="#from-the-repository" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/SergeyShk/esTS.git
 <span class="nb">cd</span><span class="w"> </span>esTS
 uv<span class="w"> </span>sync<span class="w"> </span>--all-groups
 </code></pre></div>
-<p>The spaCy model is installed together with the <code>test</code> dependency group; for a separate environment:</p>
+<h2 id="model">The spaCy model<a class="headerlink" href="#model" title="Permanent link">&para;</a></h2>
+<p>The statistics of release 0.1 need no trained model: sentences, words and character N-grams are extracted by rules and by the tokenizer of the blank Spanish pipeline, syllables and stress by the orthography. A model is needed only to build a <code>Doc</code> yourself and pass it to the statistics instead of a string, and to run the test suite, where it comes with the <code>test</code> dependency group:</p>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>spacy<span class="w"> </span>download<span class="w"> </span>es_core_news_sm
-</code></pre></div>
-<h2 id="from-pypi">From PyPI<a class="headerlink" href="#from-pypi" title="Permanent link">&para;</a></h2>
-<p>After the first release:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>ests
 </code></pre></div>
 
 

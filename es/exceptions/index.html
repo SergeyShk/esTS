@@ -1132,22 +1132,22 @@
 <tr>
 <td style="text-align: left;"><code>SourceTypeError</code></td>
 <td style="text-align: left;"><code>TypeError</code></td>
-<td style="text-align: left;">La fuente de datos no es una cadena ni un <code>Doc</code>, el contador de frecuencias no es un <code>Counter</code>, la lista de textos no es una lista de listas, la ruta no es una cadena ni un <code>Path</code>, el tokenizador no es invocable o devuelve un objeto no iterable</td>
+<td style="text-align: left;">La fuente de datos no es una cadena ni un <code>Doc</code>, el tokenizador no es invocable o devuelve un objeto no iterable</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>SourceError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">La fuente no tiene palabras, oraciones, textos ni colocaciones, carece de análisis de dependencias o no queda nada tras el filtrado</td>
+<td style="text-align: left;">La fuente no tiene palabras ni oraciones</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>ParameterError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">Un umbral, ventana, tamaño de segmento o número de elementos fuera de rango; una medida, variante, preajuste, capa, nivel o categoría de conjunto de datos desconocidos</td>
+<td style="text-align: left;">Un umbral, ventana, tamaño de segmento, número de elementos, base del logaritmo o nivel de confianza fuera de rango; un preajuste, escala o nombre de métrica desconocidos</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>UnknownStatError</code></td>
 <td style="text-align: left;"><code>ParameterError</code>, <code>KeyError</code></td>
-<td style="text-align: left;">Se pide por nombre una estadística desconocida</td>
+<td style="text-align: left;">Se pide por nombre una estadística desconocida, como en <code>DiversityStats.windowed</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>DatasetNotFoundError</code></td>
@@ -1167,6 +1167,10 @@
 </tbody>
 </table>
 <p>Las clases están disponibles desde <code>ests</code> y desde <code>ests.exceptions</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Las tres últimas están reservadas para los cargadores de conjuntos de datos de las próximas versiones; nada en la 0.1 las lanza.</p>
+</div>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">EstsError</span><span class="p">,</span> <span class="n">ParameterError</span><span class="p">,</span> <span class="n">WordsExtractor</span>

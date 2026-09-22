@@ -465,10 +465,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#planned-scope" class="md-nav__link">
+  <a href="#what-it-computes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Planned scope
+        What it computes
       
     </span>
   </a>
@@ -1066,10 +1066,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#planned-scope" class="md-nav__link">
+  <a href="#what-it-computes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Planned scope
+        What it computes
       
     </span>
   </a>
@@ -1108,21 +1108,26 @@
 
 
 <h1 id="spanish-texts-statistics-ests">Spanish Texts Statistics (esTS)<a class="headerlink" href="#spanish-texts-statistics-ests" title="Permanent link">&para;</a></h1>
-<p><strong>esTS</strong> will compute for Spanish text what usually requires assembling several separate tools: basic counts, readability formulas, lexical diversity and sophistication, morphological, syntactic and cohesion statistics, style markers, phonostatistics, metre and rhyme, corpus measures and stylometry - by published formulas adapted to Spanish, with deterministic results and no neural networks inside.</p>
-<p>It is the Spanish sibling of <a href="https://github.com/SergeyShk/ruTS">ruTS</a>, the Russian text statistics library, and follows its structure and naming: every statistic is available as a class with <code>get_stats()</code> and as a <a href="https://github.com/explosion/spaCy">spaCy</a> pipeline component.</p>
-<div class="admonition warning">
+<p><strong>esTS</strong> computes for Spanish text what usually requires assembling several separate tools: basic counts, readability formulas, lexical diversity and, in the releases to come, morphological, syntactic and cohesion statistics, style markers, phonostatistics, metre and rhyme, corpus measures and stylometry - by published formulas adapted to Spanish, with deterministic results and no neural networks inside.</p>
+<p>It is the Spanish sibling of <a href="https://github.com/SergeyShk/ruTS">ruTS</a>, the Russian text statistics library, and follows its structure and naming: every statistic is a class with <code>get_stats()</code>. Components for a <a href="https://github.com/explosion/spaCy">spaCy</a> pipeline come with the morphology and syntax of 0.2.</p>
+<div class="admonition note">
 <p class="admonition-title">Status</p>
-<p>The modules of the first release (0.1) are written: extraction of sentences, words and character N-grams, syllabification and stress, basic statistics, readability with presets and lexical diversity. The release itself is pending a QA pass and publication on PyPI.</p>
+<p>0.1 is the first release. It covers text extraction, syllables and stress, basic statistics, readability and lexical diversity; morphology, syntax and cohesion on Universal Dependencies follow in 0.2.</p>
 </div>
-<h2 id="planned-scope">Planned scope<a class="headerlink" href="#planned-scope" title="Permanent link">&para;</a></h2>
+<h2 id="what-it-computes">What it computes<a class="headerlink" href="#what-it-computes" title="Permanent link">&para;</a></h2>
+<p>Release 0.1:</p>
 <ul>
-<li><strong>Extraction</strong> - sentences and words with Spanish punctuation (<code>¿ ¡</code>), clitics, lemmas via spaCy or <code>simplemma</code>.</li>
-<li><strong>Syllables and stress</strong> - rule-based syllabification (diphthongs, hiatus, consonant clusters) and stress derived from orthography.</li>
-<li><strong>Readability</strong> - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad μ, SOL, with presets.</li>
-<li><strong>Lexical diversity</strong> - TTR and its variants, MTLD, HD-D, Yule, Herdan, Brunet, entropy, Zipf and Heaps fits, windowed computation.</li>
-<li><strong>Morphology, syntax and cohesion</strong> - on Universal Dependencies features and relations from spaCy <code>es_core_news_*</code> models; Coh-Metrix style cohesion with a Spanish list of discourse markers.</li>
-<li><strong>Corpus measures and stylometry</strong> - keywords, collocations, dispersion, KWIC, Burrows's Delta, Zeta, corpus comparison.</li>
-<li><strong>Style and sound</strong> - SEO-style metrics, plain language (lenguaje claro) markers, phonostatistics, syllabic metre and rhyme (consonante and asonante).</li>
+<li><a href="extractors/sentences/"><strong>Extraction</strong></a> - sentences with Spanish punctuation (<code>¿ ¡</code>, dialogue dashes, abbreviations), words with clitics, lemmas via <code>simplemma</code>, character N-grams.</li>
+<li><a href="syllables/"><strong>Syllables and stress</strong></a> - rule-based syllabification (diphthongs, hiatus, consonant clusters) and stress derived from orthography.</li>
+<li><a href="stats/basic_stats/"><strong>Basic statistics</strong></a> - sentences, words, letters, syllables and punctuation by type, with distributions and normalized shares.</li>
+<li><a href="stats/readability_stats/"><strong>Readability</strong></a> - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad μ, SOL, LIX and RIX, with presets, school stages and reading time.</li>
+<li><a href="stats/diversity_stats/"><strong>Lexical diversity</strong></a> - TTR and its variants, MATTR, MSTTR, MTLD, HD-D, Yule, Herdan, Brunet, entropy, Zipf and Heaps fits, windowed computation.</li>
+</ul>
+<p>Planned:</p>
+<ul>
+<li><strong>Morphology, syntax and cohesion</strong> (0.2) - on Universal Dependencies features and relations from spaCy <code>es_core_news_*</code> models; Coh-Metrix style cohesion with a Spanish list of discourse markers; pipeline components.</li>
+<li><strong>Corpus measures and stylometry</strong> (0.3) - keywords, collocations, dispersion, KWIC, Burrows's Delta, Zeta, corpus comparison.</li>
+<li><strong>Style and sound</strong> (0.4) - SEO-style metrics, plain language (lenguaje claro) markers, phonostatistics, syllabic metre and rhyme (consonante and asonante).</li>
 </ul>
 <h2 id="links">Links<a class="headerlink" href="#links" title="Permanent link">&para;</a></h2>
 <ul>

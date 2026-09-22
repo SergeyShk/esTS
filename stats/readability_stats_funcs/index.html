@@ -1559,7 +1559,7 @@ c-a\times\frac{\textrm{Number of words}}{\textrm{Number of sentences}}-b\times\f
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_mu_index()</strong></p>
 </div>
-<p>Computation of Legibilidad µ of Muñoz Baquedano and Muñoz Urra (2006), which measures the variability of word length: the mean and the variance of the number of letters per word. The variance is the sample one, divided by <code>n − 1</code>, as in the worked example of the authors (18 words, mean 6.9444, variance 13.5844), and the factor <code>n / (n − 1)</code> multiplies the ratio, so the index equals the mean divided by the population variance; on the example it gives 54.13, where the manual prints 51.12. Words without letters (numbers) are left out; with fewer than two words or without variability the index is undefined (<code>nan</code>). The higher the value, the easier the text:</p>
+<p>Computation of Legibilidad µ of Muñoz Baquedano and Muñoz Urra (2006), which measures the variability of word length: the mean of the number of letters per word divided by its variance. The variance is the sample one, divided by <code>n − 1</code>, which is the <em>cuasivarianza</em> of the authors: the population variance multiplied by the factor <code>n / (n − 1)</code> that their printed formula carries. Read that way the worked example of their manual comes out exactly (18 words, mean 6.9444, variance 13.5844, µ = 51.12); applying the factor once more, on top of the sample variance, gives 54.13 instead. Words without letters (numbers) are left out; with fewer than two words or without variability the index is undefined (<code>nan</code>). The higher the value, the easier the text:</p>
 <table>
 <thead>
 <tr>
@@ -1600,7 +1600,7 @@ c-a\times\frac{\textrm{Number of words}}{\textrm{Number of sentences}}-b\times\f
 </table>
 <p>Formula:</p>
 <div class="arithmatex">\[
-\frac{n}{n-1}\times\frac{\bar{x}}{\sigma^2}\times100
+\frac{\bar{x}}{s^2}\times100
 \]</div>
 <p>Parameters:</p>
 <table>
@@ -1900,7 +1900,7 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 <td style="text-align: center;"><code>scale</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>inflesz</code></td>
-<td style="text-align: center;">Name of the scale</td>
+<td style="text-align: center;">Name of the scale; <code>ReadabilityStats.describe_level</code> passes the scale of the preset</td>
 </tr>
 </tbody>
 </table>
@@ -1940,7 +1940,8 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 <div class="admonition info">
 <p><strong>ests.readability_stats.flesch_reading_easy_to_grade()</strong></p>
 </div>
-<p>Conversion of the Flesch reading ease into a school grade, used to include the reading ease in the consensus grade by analogy with <code>text_standard</code> of textstat, through the text types of the INFLESZ bands and the school stages of Spain:</p>
+<p>Conversion of the Flesch reading ease into years of schooling, used to include the reading ease in the consensus grade by analogy with <code>text_standard</code> of textstat. The thresholds belong to the scale of the preset, since the same value means different things on the two scales.</p>
+<p>With the <code>general</code> preset, through the text types of the INFLESZ bands and the school stages of Spain:</p>
 <table>
 <thead>
 <tr>
@@ -1977,7 +1978,8 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 </tr>
 </tbody>
 </table>
-<p>Values above 100 belong to grade 3.</p>
+<p>With the <code>classic</code> preset, through the interpretation table of Flesch, whose bands Fernández Huerta kept: <code>90-100</code> - 5, <code>80-90</code> - 6, <code>70-80</code> - 7, <code>60-70</code> - 8.5, <code>50-60</code> - 10, <code>40-50</code> - 11, <code>30-40</code> - 12, below <code>30</code> - 13.</p>
+<p>Values above 100 belong to the first grade of the scale.</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -1995,13 +1997,19 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 <td style="text-align: center;"><code>-</code></td>
 <td style="text-align: center;">Value of the reading ease</td>
 </tr>
+<tr>
+<td style="text-align: center;"><code>preset</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>general</code></td>
+<td style="text-align: center;">Coefficient preset whose scale is read</td>
+</tr>
 </tbody>
 </table>
 <h2 id="calc_consensus_grade">Consensus grade<a class="headerlink" href="#calc_consensus_grade" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_consensus_grade()</strong></p>
 </div>
-<p>Computation of the consensus grade: the median of the rounded values of the grade formulas by analogy with <code>text_standard</code> of textstat, which uses the mode; the median is more robust to an outlying formula. The values are rounded half up. The reading ease is converted with <code>flesch_reading_easy_to_grade</code> and added without rounding.</p>
+<p>Computation of the consensus grade: the median of the rounded values of the grade formulas by analogy with <code>text_standard</code> of textstat, which uses the mode; the median is more robust to an outlying formula. The values are rounded half up. The reading ease is converted with <code>flesch_reading_easy_to_grade</code> by the scale of the preset and added without rounding.</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -2024,6 +2032,12 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 <td style="text-align: center;">float</td>
 <td style="text-align: center;"><code>None</code></td>
 <td style="text-align: center;">Value of the reading ease</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>preset</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>general</code></td>
+<td style="text-align: center;">Coefficient preset of the reading ease</td>
 </tr>
 </tbody>
 </table>

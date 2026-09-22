@@ -506,6 +506,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#desde-pypi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Desde PyPI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#desde-el-repositorio" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -517,10 +528,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#desde-pypi" class="md-nav__link">
+  <a href="#model" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Desde PyPI
+        El modelo de spaCy
       
     </span>
   </a>
@@ -1090,6 +1101,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#desde-pypi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Desde PyPI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#desde-el-repositorio" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1101,10 +1123,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#desde-pypi" class="md-nav__link">
+  <a href="#model" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Desde PyPI
+        El modelo de spaCy
       
     </span>
   </a>
@@ -1132,24 +1154,23 @@
 
 
 <h1 id="instalacion">Instalación<a class="headerlink" href="#instalacion" title="Permanent link">&para;</a></h1>
-<p>La biblioteca todavía no está publicada. Hasta la primera versión se instala desde el repositorio.</p>
 <h2 id="requisitos">Requisitos<a class="headerlink" href="#requisitos" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>python</code> 3.11 o superior</li>
-<li><code>spaCy</code> 3.7 o superior con el modelo <code>es_core_news_sm</code> para morfología y sintaxis</li>
-<li><code>numpy</code>, <code>pandas</code>, <code>scipy</code>, <code>matplotlib</code></li>
+<li><code>spaCy</code> 3.7 o superior</li>
+<li><code>numpy</code>, <code>scipy</code>, <code>simplemma</code></li>
 </ul>
+<h2 id="desde-pypi">Desde PyPI<a class="headerlink" href="#desde-pypi" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>ests
+</code></pre></div>
 <h2 id="desde-el-repositorio">Desde el repositorio<a class="headerlink" href="#desde-el-repositorio" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/SergeyShk/esTS.git
 <span class="nb">cd</span><span class="w"> </span>esTS
 uv<span class="w"> </span>sync<span class="w"> </span>--all-groups
 </code></pre></div>
-<p>El modelo de spaCy se instala junto con el grupo de dependencias <code>test</code>; para un entorno aparte:</p>
+<h2 id="model">El modelo de spaCy<a class="headerlink" href="#model" title="Permanent link">&para;</a></h2>
+<p>Las estadísticas de la versión 0.1 no necesitan ningún modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas y con el tokenizador del pipeline español vacío, y las sílabas y el acento por la ortografía. El modelo solo hace falta para construir un <code>Doc</code> y pasarlo a las estadísticas en lugar de una cadena, y para ejecutar las pruebas, donde viene con el grupo de dependencias <code>test</code>:</p>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>spacy<span class="w"> </span>download<span class="w"> </span>es_core_news_sm
-</code></pre></div>
-<h2 id="desde-pypi">Desde PyPI<a class="headerlink" href="#desde-pypi" title="Permanent link">&para;</a></h2>
-<p>Tras la primera versión:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>ests
 </code></pre></div>
 
 

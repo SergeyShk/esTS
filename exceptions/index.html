@@ -1132,22 +1132,22 @@
 <tr>
 <td style="text-align: left;"><code>SourceTypeError</code></td>
 <td style="text-align: left;"><code>TypeError</code></td>
-<td style="text-align: left;">The data source is neither a string nor a <code>Doc</code>, the frequency counter is not a <code>Counter</code>, the list of texts is not a list of lists, the path is neither a string nor a <code>Path</code>, the tokenizer is not callable or returns a non-iterable object</td>
+<td style="text-align: left;">The data source is neither a string nor a <code>Doc</code>, the tokenizer is not callable or returns a non-iterable object</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>SourceError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">The source has no words, sentences, texts or collocations, lacks a dependency parse, or nothing is left after culling</td>
+<td style="text-align: left;">The source has no words or no sentences</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>ParameterError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">A threshold, window, segment size or number of items is out of range; an unknown measure, variant, preset, layer, stage or dataset category</td>
+<td style="text-align: left;">A threshold, window, segment size, number of items, logarithm base or confidence level is out of range; an unknown preset, scale or metric name</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>UnknownStatError</code></td>
 <td style="text-align: left;"><code>ParameterError</code>, <code>KeyError</code></td>
-<td style="text-align: left;">An unknown statistic is requested by name</td>
+<td style="text-align: left;">An unknown statistic is requested by name, as in <code>DiversityStats.windowed</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>DatasetNotFoundError</code></td>
@@ -1167,6 +1167,10 @@
 </tbody>
 </table>
 <p>The classes are available from <code>ests</code> and from <code>ests.exceptions</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The last three are reserved for the dataset loaders of the coming releases; nothing in 0.1 raises them.</p>
+</div>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">EstsError</span><span class="p">,</span> <span class="n">ParameterError</span><span class="p">,</span> <span class="n">WordsExtractor</span>
