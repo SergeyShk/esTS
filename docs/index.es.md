@@ -1,29 +1,95 @@
 # Spanish Texts Statistics (esTS)
 
-**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: recuentos básicos, fórmulas de legibilidad, diversidad léxica y, en las versiones por venir, estadísticas morfológicas, sintácticas y de cohesión, marcadores de estilo, fonoestadística, métrica y rima, medidas de corpus y estilometría - con fórmulas publicadas y adaptadas al español, resultados deterministas y sin redes neuronales dentro.
+**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad y diversidad léxica, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, de forma determinista y sin ninguna red neuronal dentro.
 
-Es la biblioteca hermana de [ruTS](https://github.com/SergeyShk/ruTS), la de estadísticas de textos en ruso, y sigue su estructura y sus nombres: cada estadística es una clase con `get_stats()`. Los componentes para un pipeline de [spaCy](https://github.com/explosion/spaCy) llegan con la morfología y la sintaxis de la 0.2.
+La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy) y no necesita ningún modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, y las sílabas y el acento se deducen de la ortografía.
 
-!!! note "Estado"
-    La 0.1 es la primera versión. Cubre la extracción de texto, las sílabas y el acento, las estadísticas básicas, la legibilidad y la diversidad léxica; la morfología, la sintaxis y la cohesión sobre Universal Dependencies llegan en la 0.2.
+## Funcionalidad
 
-## Qué calcula
+*   construir tokenizadores de [oraciones](extractors/sentences.md), [palabras](extractors/words.md) y [N-gramas de caracteres](extractors/char_ngrams.md) que conocen los signos de apertura, la raya de diálogo y las abreviaturas del español
+*   dividir una palabra en [sílabas y hallar su acento](syllables.md) por las reglas ortográficas, sin diccionario
+*   calcular [estadísticas básicas del texto](stats/basic_stats.md) (número de oraciones, palabras, letras, sílabas, signos de puntuación por tipo y sus distribuciones)
+*   calcular [métricas de legibilidad](stats/readability_stats.md) (Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX) con grado de consenso, etapas escolares de España y tiempo de lectura
+*   calcular [métricas de diversidad léxica](stats/diversity_stats.md) (Type-Token Ratio y sus variantes, MATTR, MSTTR, Measure of Textual Lexical Diversity, HD-D, los índices de Simpson y de Yule, la entropía, las leyes de Zipf y de Heaps), sobre todo el texto o por ventanas con intervalos de confianza
 
-Versión 0.1:
+La morfología, la sintaxis y la cohesión sobre Universal Dependencies llegan en la 0.2, las medidas de corpus y la estilometría en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
 
-*   [**Extracción**](extractors/sentences.md) - oraciones con la puntuación española (`¿ ¡`, rayas de diálogo, abreviaturas), palabras con clíticos, lemas con `simplemma`, N-gramas de caracteres.
-*   [**Sílabas y acento**](syllables.md) - silabificación por reglas (diptongos, hiatos, grupos consonánticos) y acento deducido de la ortografía.
-*   [**Estadísticas básicas**](stats/basic_stats.md) - oraciones, palabras, letras, sílabas y signos de puntuación por tipo, con distribuciones y proporciones normalizadas.
-*   [**Legibilidad**](stats/readability_stats.md) - Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad μ, SOL, LIX y RIX, con preajustes, etapas escolares y tiempo de lectura.
-*   [**Diversidad léxica**](stats/diversity_stats.md) - TTR y sus variantes, MATTR, MSTTR, MTLD, HD-D, Yule, Herdan, Brunet, entropía, ajustes de Zipf y Heaps, cálculo por ventanas.
+## Instalación
 
-Previsto:
+Se requiere Python 3.11 o superior.
 
-*   **Morfología, sintaxis y cohesión** (0.2) - sobre rasgos y relaciones de Universal Dependencies de los modelos `es_core_news_*` de spaCy; cohesión al estilo de Coh-Metrix con una lista española de marcadores del discurso; componentes de pipeline.
-*   **Medidas de corpus y estilometría** (0.3) - palabras clave, colocaciones, dispersión, KWIC, Delta de Burrows, Zeta, comparación de corpus.
-*   **Estilo y sonido** (0.4) - métricas de estilo SEO, marcadores de lenguaje claro, fonoestadística, métrica silábica y rima (consonante y asonante).
+``` bash
+pip install pyests
+```
 
-## Enlaces
+El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Más sobre las dependencias y la instalación desde el repositorio, en la página de [Instalación](installation.md).
 
-*   Repositorio: [github.com/SergeyShk/esTS](https://github.com/SergeyShk/esTS)
-*   La hermana rusa: [github.com/SergeyShk/ruTS](https://github.com/SergeyShk/ruTS)
+## Primeros pasos
+
+``` python
+>>> from ests import BasicStats, DiversityStats, ReadabilityStats
+
+>>> text = "Hay tres clases de mentiras: mentiras, malditas mentiras y estadísticas"
+
+>>> BasicStats(text).get_stats()
+{'c_letters': {1: 1, 2: 1, 3: 1, 4: 1, 6: 1, 8: 4, 12: 1},
+ 'c_syllables': {1: 4, 2: 1, 3: 4, 5: 1},
+ 'n_sents': 1,
+ 'n_words': 10,
+ 'n_unique_words': 8,
+ 'n_long_words': 5,
+ 'n_complex_words': 5,
+ 'n_simple_words': 5,
+ 'n_monosyllable_words': 4,
+ 'n_polysyllable_words': 6,
+ 'n_chars': 71,
+ 'n_letters': 60,
+ 'n_spaces': 9,
+ 'n_syllables': 23,
+ 'n_punctuations': 2,
+ 'c_punctuations': {'comma': 1, 'period': 0, 'question': 0, 'exclamation': 0,
+                    'ellipsis': 0, 'colon': 1, 'semicolon': 0, 'dash': 0,
+                    'hyphen': 0, 'angle_quotes': 0, 'straight_quotes': 0,
+                    'parentheses': 0, 'other': 0}}
+
+>>> ReadabilityStats(text).flesch_reading_easy
+53.545000000000016
+
+>>> DiversityStats(text).ttr
+0.8
+```
+
+Cualquier estadística puede mostrarse en forma legible:
+
+``` python
+>>> BasicStats(text).print_stats()
+     Statistic      |  Value
+------------------------------
+Sentences           |    1
+Words               |    10
+Unique words        |    8
+Long words          |    5
+Complex words       |    5
+Simple words        |    5
+Monosyllabic words  |    4
+Polysyllabic words  |    6
+Characters          |    71
+Letters             |    60
+Spaces              |    9
+Syllables           |    23
+Punctuation marks   |    2
+```
+
+??? note "Estructura del proyecto"
+
+    *   **docs** - documentación del proyecto
+    *   **ests**:
+        *   basic_stats.py - estadísticas básicas del texto
+        *   constants.py - constantes de la lengua española y de las métricas
+        *   diversity_stats.py - métricas de diversidad léxica
+        *   exceptions.py - excepciones de la biblioteca
+        *   extractors.py - herramientas de extracción de objetos del texto
+        *   readability_stats.py - métricas de legibilidad
+        *   syllables.py - silabificación y acento
+        *   utils.py - herramientas auxiliares
+    *   **tests** - pruebas que reproducen la estructura del paquete

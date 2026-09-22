@@ -1,29 +1,95 @@
 # Spanish Texts Statistics (esTS)
 
-**esTS** computes for Spanish text what usually requires assembling several separate tools: basic counts, readability formulas, lexical diversity and, in the releases to come, morphological, syntactic and cohesion statistics, style markers, phonostatistics, metre and rhyme, corpus measures and stylometry - by published formulas adapted to Spanish, with deterministic results and no neural networks inside.
+**esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability and lexical diversity - by published formulas with the coefficients and the scales of their authors, deterministically and without a neural network inside.
 
-It is the Spanish sibling of [ruTS](https://github.com/SergeyShk/ruTS), the Russian text statistics library, and follows its structure and naming: every statistic is a class with `get_stats()`. Components for a [spaCy](https://github.com/explosion/spaCy) pipeline come with the morphology and syntax of 0.2.
+The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy), and needs no trained model: sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography.
 
-!!! note "Status"
-    0.1 is the first release. It covers text extraction, syllables and stress, basic statistics, readability and lexical diversity; morphology, syntax and cohesion on Universal Dependencies follow in 0.2.
+## Features
 
-## What it computes
+*   build tokenizers for [sentences](extractors/sentences.md), [words](extractors/words.md) and [character N-grams](extractors/char_ngrams.md) that know the inverted marks, the dialogue dash and the abbreviations of Spanish
+*   divide a word into [syllables and find its stress](syllables.md) by the orthographic rules, with no dictionary
+*   compute [basic text statistics](stats/basic_stats.md) (numbers of sentences, words, letters, syllables, punctuation marks by type and their distributions)
+*   compute [readability metrics](stats/readability_stats.md) (Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX) with a consensus grade, the school stages of Spain and reading time
+*   compute [lexical diversity metrics](stats/diversity_stats.md) (Type-Token Ratio and its variations, MATTR, MSTTR, Measure of Textual Lexical Diversity, HD-D, the indices of Simpson and Yule, entropy, the laws of Zipf and Heaps), over the whole text or over windows with confidence intervals
 
-Release 0.1:
+Morphology, syntax and cohesion on Universal Dependencies come in 0.2, corpus measures and stylometry in 0.3, style, phonostatistics, metre and rhyme in 0.4.
 
-*   [**Extraction**](extractors/sentences.md) - sentences with Spanish punctuation (`¿ ¡`, dialogue dashes, abbreviations), words with clitics, lemmas via `simplemma`, character N-grams.
-*   [**Syllables and stress**](syllables.md) - rule-based syllabification (diphthongs, hiatus, consonant clusters) and stress derived from orthography.
-*   [**Basic statistics**](stats/basic_stats.md) - sentences, words, letters, syllables and punctuation by type, with distributions and normalized shares.
-*   [**Readability**](stats/readability_stats.md) - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad μ, SOL, LIX and RIX, with presets, school stages and reading time.
-*   [**Lexical diversity**](stats/diversity_stats.md) - TTR and its variants, MATTR, MSTTR, MTLD, HD-D, Yule, Herdan, Brunet, entropy, Zipf and Heaps fits, windowed computation.
+## Installation
 
-Planned:
+Requires Python 3.11 or newer.
 
-*   **Morphology, syntax and cohesion** (0.2) - on Universal Dependencies features and relations from spaCy `es_core_news_*` models; Coh-Metrix style cohesion with a Spanish list of discourse markers; pipeline components.
-*   **Corpus measures and stylometry** (0.3) - keywords, collocations, dispersion, KWIC, Burrows's Delta, Zeta, corpus comparison.
-*   **Style and sound** (0.4) - SEO-style metrics, plain language (lenguaje claro) markers, phonostatistics, syllabic metre and rhyme (consonante and asonante).
+``` bash
+pip install pyests
+```
 
-## Links
+The distribution on PyPI is `pyests`, the package it installs is `ests`. More on dependencies and installing from the repository - on the [Installation](installation.md) page.
 
-*   Repository: [github.com/SergeyShk/esTS](https://github.com/SergeyShk/esTS)
-*   The Russian sibling: [github.com/SergeyShk/ruTS](https://github.com/SergeyShk/ruTS)
+## Quick start
+
+``` python
+>>> from ests import BasicStats, DiversityStats, ReadabilityStats
+
+>>> text = "Hay tres clases de mentiras: mentiras, malditas mentiras y estadísticas"
+
+>>> BasicStats(text).get_stats()
+{'c_letters': {1: 1, 2: 1, 3: 1, 4: 1, 6: 1, 8: 4, 12: 1},
+ 'c_syllables': {1: 4, 2: 1, 3: 4, 5: 1},
+ 'n_sents': 1,
+ 'n_words': 10,
+ 'n_unique_words': 8,
+ 'n_long_words': 5,
+ 'n_complex_words': 5,
+ 'n_simple_words': 5,
+ 'n_monosyllable_words': 4,
+ 'n_polysyllable_words': 6,
+ 'n_chars': 71,
+ 'n_letters': 60,
+ 'n_spaces': 9,
+ 'n_syllables': 23,
+ 'n_punctuations': 2,
+ 'c_punctuations': {'comma': 1, 'period': 0, 'question': 0, 'exclamation': 0,
+                    'ellipsis': 0, 'colon': 1, 'semicolon': 0, 'dash': 0,
+                    'hyphen': 0, 'angle_quotes': 0, 'straight_quotes': 0,
+                    'parentheses': 0, 'other': 0}}
+
+>>> ReadabilityStats(text).flesch_reading_easy
+53.545000000000016
+
+>>> DiversityStats(text).ttr
+0.8
+```
+
+Any statistic can be printed in a readable form:
+
+``` python
+>>> BasicStats(text).print_stats()
+     Statistic      |  Value
+------------------------------
+Sentences           |    1
+Words               |    10
+Unique words        |    8
+Long words          |    5
+Complex words       |    5
+Simple words        |    5
+Monosyllabic words  |    4
+Polysyllabic words  |    6
+Characters          |    71
+Letters             |    60
+Spaces              |    9
+Syllables           |    23
+Punctuation marks   |    2
+```
+
+??? note "Project structure"
+
+    *   **docs** - project documentation
+    *   **ests**:
+        *   basic_stats.py - basic text statistics
+        *   constants.py - constants of the Spanish language and of the metrics
+        *   diversity_stats.py - lexical diversity metrics
+        *   exceptions.py - library exceptions
+        *   extractors.py - tools for object extraction from a text
+        *   readability_stats.py - readability metrics
+        *   syllables.py - syllabification and stress
+        *   utils.py - helper tools
+    *   **tests** - tests mirroring the package structure
