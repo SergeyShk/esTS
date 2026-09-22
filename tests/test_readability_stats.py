@@ -45,6 +45,11 @@ def rs():
     return ReadabilityStats(TEXT)
 
 
+@pytest.fixture(scope="module")
+def quote():
+    return ReadabilityStats(QUOTE)
+
+
 def test_init_value_error():
     with pytest.raises(ValueError):
         ReadabilityStats("+ _")
@@ -105,10 +110,6 @@ def test_presets(preset, flesch_reading_easy):
 class TestQuoteByHand:
     """The docstring example: 10 words, 1 sentence, 23 syllables, 60 letters, 5 words of
     three or more syllables and 5 words of seven or more letters, checked by hand"""
-
-    @pytest.fixture(scope="class")
-    def quote(self):
-        return ReadabilityStats(QUOTE)
 
     def test_flesch_reading_easy(self, quote):
         assert quote.flesch_reading_easy == pytest.approx(206.835 - 62.3 * 2.3 - 10)
