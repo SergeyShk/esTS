@@ -1,5 +1,5 @@
 # Spanish stop words of spaCy with syllables and the stressed syllable (from zero).
-# Values agreed by the module and silabeador 1.2.4 on 2026-09-22; paìs (a typo of the
+# Values agreed by the module and silabeador 1.2.4.post1 on 2026-09-22; paìs (a typo of the
 # spaCy list with a grave accent) is left out. Columns: word, syllables, stress
 a	a	0
 acuerdo	a-cuer-do	1
