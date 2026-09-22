@@ -1,13 +1,3 @@
-"""
-Language-specific constants of Spanish
-
-Description:
-    Everything the library knows about Spanish as a language is collected
-    here: punctuation, sentence openers, abbreviations. The rest of the code
-    only imports from this module, so that the language-independent part
-    can later be moved into a shared core
-"""
-
 import string
 
 # Punctuation marks and symbols, including the Spanish inverted marks,

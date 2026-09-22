@@ -18,7 +18,7 @@ Todas las excepciones de la biblioteca heredan de la clase base `EstsError` y de
 | `DataFileError` | `ValueError` | Un archivo del conjunto de datos está dañado, tiene un formato inesperado o no se puede decodificar |
 | `DownloadError` | `RuntimeError` | El archivo no se pudo descargar o no superó la comprobación de la suma de verificación |
 
-Las clases están disponibles desde `ests` y desde `ests.exceptions`. La jerarquía es la misma que en [ruTS](https://github.com/SergeyShk/ruTS), de modo que el código escrito para una biblioteca se lee igual en la otra.
+Las clases están disponibles desde `ests` y desde `ests.exceptions`.
 
 !!! example "Ejemplo"
 

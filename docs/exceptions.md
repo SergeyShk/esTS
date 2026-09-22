@@ -18,7 +18,7 @@ All library exceptions inherit the base class `EstsError` and one of the built-i
 | `DataFileError` | `ValueError` | A dataset file is corrupted, has an unexpected format or cannot be decoded |
 | `DownloadError` | `RuntimeError` | The file could not be downloaded or failed the checksum verification |
 
-The classes are available from `ests` and from `ests.exceptions`. The hierarchy is the same as in [ruTS](https://github.com/SergeyShk/ruTS), so code written for one library reads the same for the other.
+The classes are available from `ests` and from `ests.exceptions`.
 
 !!! example "Example"
 
