@@ -30,8 +30,10 @@ Planned:
 ## Installation
 
 ``` bash
-pip install ests
+pip install pyests
 ```
+
+The distribution on PyPI is `pyests`, the package it installs is `ests`.
 
 Python 3.11 or newer. The statistics of 0.1 need no trained spaCy model; a model is needed only to pass a parsed `Doc` instead of a string.
 

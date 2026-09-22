@@ -30,8 +30,10 @@ Previsto:
 ## Instalación
 
 ``` bash
-pip install ests
+pip install pyests
 ```
+
+El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`.
 
 Python 3.11 o superior. Las estadísticas de la 0.1 no necesitan ningún modelo entrenado de spaCy; el modelo solo hace falta para pasar un `Doc` analizado en lugar de una cadena.
 
