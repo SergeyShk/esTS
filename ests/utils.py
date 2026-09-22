@@ -7,7 +7,7 @@ import simplemma
 import spacy
 from spacy.tokenizer import Tokenizer
 
-from .lang import ABBREVIATIONS, PUNCTUATIONS, SENTENCE_OPENERS
+from .constants import ABBREVIATIONS, PUNCTUATIONS, SENTENCE_OPENERS
 
 # End of a sentence: terminal marks, optionally closing quotes or brackets,
 # before whitespace or the end of the text
