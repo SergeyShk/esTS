@@ -20,10 +20,11 @@ from .syllables import count_syllables
 from .utils import count_letters, iter_doc_words
 
 ELLIPSIS_PATTERN = re.compile(r"…|\.{3,}|(?<=[?!])\.{2}")
-# A hyphen with whitespace or a line boundary on at least one side is a dash,
-# the way the raya is typed in plain-text corpora (-Hola -dijo Juan); a hyphen
-# before a digit is a sign
-DASH_PATTERN = re.compile(r"(?:(?<=\s)|^)-(?!\d)|-(?=\s|$)", re.MULTILINE)
+# A hyphen after whitespace or at the start of a line, or before a space, is
+# a dash, the way the raya is typed in plain-text corpora (-Hola -dijo Juan);
+# a hyphen before a digit is a sign, a hyphen at the end of a line inside
+# a word (pala-\nbra) is a hyphen
+DASH_PATTERN = re.compile(r"(?:(?<=\s)|^)-(?!\d)|-(?=[ \t]|\Z)", re.MULTILINE)
 _DELETE_SPACES = str.maketrans("", "", "".join(SPACES))
 PUNCTUATION_CHARS = {
     ",": "comma",
@@ -256,11 +257,12 @@ def count_punctuations(text: str) -> dict[str, int]:
         question marks), ellipses (the character …, three or more periods,
         or two periods after ? and ! count as one mark whose periods are not
         periods: "¿Quién?.." is a question and an ellipsis), colons,
-        semicolons, dashes (— and –, as well as a hyphen with whitespace or
-        a line boundary on at least one side, the way the raya is typed in
-        plain-text corpora: "-Hola -dijo Juan", "- Se fueron - dijo"),
-        hyphens inside words and before digits (teórico-práctico, 1990-1995,
-        -5), guillemets «», straight and curly quotes "“”‘’ of the three
+        semicolons, dashes (— and –, as well as a hyphen after whitespace
+        or at the start of a line, or before a space, the way the raya is
+        typed in plain-text corpora: "-Hola -dijo Juan", "- Se fueron -
+        dijo"), hyphens inside words, before digits and at the end of
+        a line inside a word (teórico-práctico, 1990-1995, -5, pala-\nbra),
+        guillemets «», straight and curly quotes "“”‘’ of the three
         levels of the orthography, parentheses and the other marks: every
         remaining character of PUNCTUATIONS or of the Unicode categories P
         and S, the same set that is_punctuation removes from the words,

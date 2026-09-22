@@ -203,6 +203,11 @@ def test_count_punctuations_spaced_hyphen_as_dash():
         ("-5 grados y -3", 0, 2),
         ("1990-1995", 0, 1),
         ("teórico-práctico", 0, 1),
+        ("Madrid - Barcelona 2-1", 1, 1),
+        ("pala-\nbra", 0, 1),
+        ("un texto jus-\ntificado con dos pala-\nbras", 0, 2),
+        ("todo -\nnada", 1, 0),
+        ("fin-", 1, 0),
     ],
 )
 def test_count_punctuations_attached_raya(text, dashes, hyphens):
