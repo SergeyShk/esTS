@@ -29,7 +29,9 @@ def syllabify(word: str) -> list[str]:
         next to another vowel joins it into a diphthong (ai-re, puen-te,
         rui-do, ciu-dad), a strong vowel next to a strong one forms
         a hiatus (po-e-ta, le-er, a-é-re-o), and an accented weak vowel
-        is strong (dí-a, pa-ís, ba-úl); a weak vowel between two others
+        is strong (dí-a, pa-ís, ba-úl), while two close vowels of the same
+        letter are a hiatus with or without a tilde (chi-i-ta, chi-í-es);
+        a weak vowel between two others
         gives a triphthong (a-ve-ri-guáis, buey). An h between vowels does
         not break a diphthong (ahu-ma-do, prohi-bir). The u of qu and of
         gu before e and i is silent (que-so, gue-rra) and ü is a vowel
@@ -41,7 +43,7 @@ def syllabify(word: str) -> list[str]:
             other pairs are split: ac-to, is-la, at-las, rit-mo
             of three or more consonants the last two go to the next syllable
                 when they form such a cluster: com-pra, cons-truir; otherwise
-                the first two stay: ins-ti-tu-to, obs-tá-cu-lo
+                only the last one goes: ins-ti-tu-to, obs-tá-cu-lo, tungs-te-no
         The rules follow the Ortografía de la lengua española (RAE, 2010),
         where two weak vowels always form a diphthong (huir, cons-truir,
         je-sui-ta, guion) and tl is split as in Spain (at-las).
@@ -236,6 +238,16 @@ def _is_vowel(part: str, index: int) -> bool:
     return letter in VOWELS
 
 
+def _base(letter: str) -> str:
+    """The letter without its diacritic: í - i, ü - u"""
+    return unicodedata.normalize("NFD", letter)[0]
+
+
+def _is_close(letter: str) -> bool:
+    """Whether the letter is a close vowel, with or without a diacritic"""
+    return _base(letter) in WEAK_VOWELS
+
+
 def _is_weak(part: str, index: int) -> bool:
     """Whether the vowel at the index is weak: an unaccented i, u, ü or a vocalic y"""
     return part[index] in WEAK_VOWELS or part[index] == "y"
@@ -251,8 +263,9 @@ def _joins(part: str, vowels: list[int], index: int) -> bool:
     Whether the vowel at the index forms a diphthong with the next one
 
     Description:
-        Two weak vowels join unless they are the same letter (chi-i-ta),
-        a weak and a strong vowel join, two strong vowels do not. A weak
+        Two close vowels join unless they are the same letter, with or
+        without a tilde (chi-i-ta, chi-í-es), a weak and a strong vowel
+        join, two strong vowels do not. A weak
         vowel followed by a strong one is left to that vowel
         (chi-hua-hua, ca-ca-hue-te). The same check adds the third vowel
         of a triphthong (buey, a-ve-ri-guáis). A vowel with a diaeresis
@@ -269,7 +282,11 @@ def _joins(part: str, vowels: list[int], index: int) -> bool:
     first_weak, second_weak = _is_weak(part, first), _is_weak(part, second)
     if not first_weak and not second_weak:
         return False
-    if first_weak and second_weak and part[first] == part[second]:
+    if (
+        _is_close(part[first])
+        and _is_close(part[second])
+        and _base(part[first]) == _base(part[second])
+    ):
         return False
     if second_weak and index + 2 < len(vowels):
         third = vowels[index + 2]
@@ -283,10 +300,8 @@ def _boundary(part: str, end: int, start: int) -> int:
     units = _consonant_units(part[end:start])
     if len(units) < 2:
         return end
-    if units[-2] + units[-1] in ONSET_CLUSTERS:
-        cut = len(units) - 2
-    else:
-        cut = 1 if len(units) == 2 else 2
+    # an onset cluster goes to the next syllable whole, otherwise only the last unit does
+    cut = len(units) - 2 if units[-2] + units[-1] in ONSET_CLUSTERS else len(units) - 1
     return end + sum(len(unit) for unit in units[:cut])
 
 

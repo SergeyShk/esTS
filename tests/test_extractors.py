@@ -221,6 +221,16 @@ class TestWordsExtractor:
             "euros",
         )
 
+    def test_extract_drops_empty(self):
+        """re.split leaves an empty string after a final separator"""
+        we = WordsExtractor(tokenizer=re.compile(r"\W+"), filter_punct=False)
+        assert we.extract("Hola, mundo.") == ("Hola", "mundo")
+        assert WordsExtractor(tokenizer=re.compile(r"\W+")).extract("Hola, mundo.") == (
+            "Hola",
+            "mundo",
+        )
+        assert WordsExtractor(tokenizer=re.compile(r"\W+"), filter_punct=False).extract("") == ()
+
     def test_extract_filter_punct(self, text):
         we = WordsExtractor(filter_punct=False)
         assert len(we.extract(text)) == 104

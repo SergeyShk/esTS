@@ -95,9 +95,9 @@ Fernández Huerta imprimió el último término como `1.02` por el número de fr
 
 ## Interpretación { #interpretation }
 
-El método [`describe_level`](#describe_level) sitúa la facilidad de lectura en una escala: INFLESZ por defecto (`muy difícil` por debajo de 40, `algo difícil` 40-55, `normal` 55-65, `bastante fácil` 65-80, `muy fácil` por encima de 80), y a petición los siete niveles de Szigriszt-Pazos o de Fernández Huerta; la Legibilidad µ tiene los siete niveles de sus autores (`muy difícil` 0-30, `difícil` 31-50, `un poco difícil` 51-60, `adecuado` 61-70, `un poco fácil` 71-80, `fácil` 81-90, `muy fácil` 91-100).
+El método [`describe_level`](#describe_level) sitúa la facilidad de lectura en la escala del preajuste: INFLESZ para `general` (`muy difícil` por debajo de 40, `algo difícil` 40-55, `normal` 55-65, `bastante fácil` 65-80, `muy fácil` por encima de 80) y los siete niveles de Fernández Huerta para `classic`, y a petición las escalas de Szigriszt-Pazos o del otro autor; la Legibilidad µ tiene los siete niveles de sus autores (`muy difícil` 0-30, `difícil` 31-50, `un poco difícil` 51-60, `adecuado` 61-70, `un poco fácil` 71-80, `fácil` 81-90, `muy fácil` 91-100).
 
-Las fórmulas que dan años de escolaridad (Crawford, SOL) se resumen en el atributo `consensus_grade`: la mediana de los valores redondeados más la facilidad de lectura convertida en grado a través de los tipos de texto de los niveles INFLESZ. El método [`describe_grade`](#describe_grade) traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:
+Las fórmulas que dan años de escolaridad (Crawford, SOL) se resumen en el atributo `consensus_grade`: la mediana de los valores redondeados más la facilidad de lectura convertida en grado según la escala del preajuste: por los tipos de texto de los niveles INFLESZ para `general` y por la tabla de interpretación de Flesch, cuyos niveles conservó Fernández Huerta, para `classic`. El método [`describe_grade`](#describe_grade) traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:
 
 | Grado | Etapa | Edad |
 | :---: | :---: | :--: |
@@ -124,7 +124,7 @@ Parámetros:
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `stat` | str | `flesch_reading_easy` | Nombre de la métrica (`flesch_reading_easy`, `mu_index`) |
-| `scale` | str | `None` | Escala para la facilidad de lectura (`inflesz` por defecto, `szigriszt`, `fernandez_huerta`); la Legibilidad µ tiene una sola escala y no admite otra |
+| `scale` | str | `None` | Escala para la facilidad de lectura (`inflesz`, `szigriszt`, `fernandez_huerta`); sin ella se usa la escala del preajuste; la Legibilidad µ tiene una sola escala y no admite otra |
 
 !!! example "Ejemplo"
 
@@ -138,7 +138,7 @@ Parámetros:
     rs.describe_level(scale="szigriszt")
     # 'normal'
     rs.describe_level("mu_index")
-    # 'un poco difícil'
+    # 'difícil'
     ```
 
 ### describe_grade
@@ -215,7 +215,7 @@ Devuelve un diccionario con las métricas de legibilidad calculadas.
     {'flesch_reading_easy': 53.545000000000016,
     'gutierrez_polini_index': 33.5,
     'crawford_grade': 5.812999999999999,
-    'mu_index': 56.60377358490566,
+    'mu_index': 50.943396226415096,
     'sol_grade': 9.258359866374562,
     'lix': 60.0,
     'rix': 5.0,
@@ -246,7 +246,7 @@ Muestra una tabla con las métricas de legibilidad calculadas.
     Flesch reading ease (Szigriszt-Pazos)        |  53.55
     Gutiérrez de Polini comprehensibility        |  33.50
     Crawford grade                               |   5.81
-    Legibilidad µ                                |  56.60
+    Legibilidad µ                                |  50.94
     SOL grade (SMOG for Spanish)                 |   9.26
     LIX readability index                        |  60.00
     RIX readability index                        |   5.00

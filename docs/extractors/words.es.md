@@ -28,7 +28,7 @@ Módulo para extraer palabras de un texto. Permite usar distintos tokenizadores,
 | `max_len` | int | `0` | Longitud máxima de la palabra extraída |
 
 !!! note "Nota"
-    Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Las palabras vacías se comparan sin distinguir mayúsculas de minúsculas, así que una lista en minúsculas también filtra `Los` o `La` al principio de una oración. Un signo de puntuación es un token formado solo por signos y símbolos, también de varios caracteres: `?!`, `!..`, `--`, `…`, `€`. Una lista de palabras vacías ya hecha es `spacy.lang.es.stop_words.STOP_WORDS`; téngase en cuenta que incluye verbos frecuentes como `tener`.
+    Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Las palabras vacías se comparan sin distinguir mayúsculas de minúsculas, así que una lista en minúsculas también filtra `Los` o `La` al principio de una oración. Un signo de puntuación es un token formado solo por signos y símbolos, también de varios caracteres: `?!`, `!..`, `--`, `…`, `€`. Los tokens vacíos, que `re.split` deja tras un separador final, se descartan antes de los filtros. Una lista de palabras vacías ya hecha es `spacy.lang.es.stop_words.STOP_WORDS`; téngase en cuenta que incluye verbos frecuentes como `tener`.
 
 ## Métodos
 

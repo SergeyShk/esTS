@@ -9,7 +9,7 @@ Módulo para calcular las estadísticas básicas de un texto. La fuente de datos
 
 El módulo permite usar objetos [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) ya configurados para la segmentación en oraciones y palabras que precede al cálculo. Las sílabas se cuentan con [`count_syllables`](../syllables.md#count_syllables) y las letras con `str.isalpha`, así que las cifras, los guiones y los signos dentro de una palabra no son letras, mientras que los indicadores ordinales `º` y `ª` sí lo son (`3.º` es una palabra de una letra).
 
-Para un objeto `Doc` las palabras se toman de los tokens (los signos de puntuación y los símbolos como `€` o `%` se descartan) y las oraciones de la anotación; sin límites de oración (`spacy.blank`, un pipeline sin `parser` ni `senter`) las oraciones se extraen del texto con `SentsExtractor`.
+Para un objeto `Doc` las palabras se toman de los tokens (los signos de puntuación y los símbolos como `€` o `%` se descartan) y las oraciones de la anotación; sin límites de oración (`spacy.blank`, un pipeline sin `parser` ni `senter`) las oraciones se extraen del texto con `SentsExtractor`. Un extractor indicado explícitamente se usa siempre, sobre el texto del `Doc`, de modo que el filtro de palabras vacías o un tokenizador propio funcionan igual con las dos clases de fuente.
 
 !!! note "Nota"
     Las estadísticas se calculan al inicializar el objeto `BasicStats`.
@@ -19,8 +19,8 @@ Para un objeto `Doc` las palabras se toman de los tokens (los signos de puntuaci
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `source` | str/Doc | `-` | Fuente de datos (cadena u objeto Doc) |
-| `sents_extractor` | SentsExtractor | `None` | Herramienta de extracción de oraciones |
-| `words_extractor` | WordsExtractor | `None` | Herramienta de extracción de palabras |
+| `sents_extractor` | SentsExtractor | `None` | Herramienta de extracción de oraciones; se usa también con un Doc, sobre su texto |
+| `words_extractor` | WordsExtractor | `None` | Herramienta de extracción de palabras; se usa también con un Doc, sobre su texto |
 | `normalize` | bool | `False` | Calcular las estadísticas normalizadas |
 | `complex_syl_factor` | int | `3` | Número mínimo de sílabas de una palabra compleja |
 | `long_word_letter_factor` | int | `7` | Número mínimo de letras de una palabra larga |

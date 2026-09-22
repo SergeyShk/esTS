@@ -5,7 +5,7 @@
 
 ## Descripción
 
-Módulo para extraer N-gramas de caracteres de un texto: secuencias de N caracteres tomadas con una ventana deslizante sobre la cadena. Los N-gramas de caracteres son un rasgo clásico de la estilometría y la atribución de autoría (Stamatatos 2009): recogen morfología, puntuación y combinaciones de letras típicas sin lematizar. La lista de N-gramas se pasa a la Delta de Burrows como unidades del texto en lugar de las palabras.
+Módulo para extraer N-gramas de caracteres de un texto: secuencias de N caracteres tomadas con una ventana deslizante sobre la cadena. Los N-gramas de caracteres son un rasgo clásico de la estilometría y la atribución de autoría (Stamatatos 2009): recogen morfología, puntuación y combinaciones de letras típicas sin lematizar. La lista de N-gramas sirve como unidades del texto en lugar de las palabras en medidas estilométricas como la Delta de Burrows.
 
 Las secuencias de espacios se reducen antes a un solo espacio y los signos de puntuación se conservan: un espacio o un signo dentro de un N-grama también es una señal de estilo. Con `within_words=True` los N-gramas no cruzan los límites de las palabras: el texto se divide en palabras con el tokenizador, la puntuación se descarta y las palabras más cortas que N no producen N-gramas.
 

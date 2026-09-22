@@ -89,7 +89,7 @@ Source: Crawford, A. N. Fórmula y gráfico para determinar la comprensibilidad 
 !!! info ""
     **ests.readability_stats.calc_mu_index()**
 
-Computation of Legibilidad µ of Muñoz Baquedano and Muñoz Urra (2006), which measures the variability of word length: the mean and the variance of the number of letters per word. The variance is the sample one, divided by `n − 1`, as in the worked example of the authors (18 words, mean 6.9444, variance 13.5844), and the factor `n / (n − 1)` multiplies the ratio, so the index equals the mean divided by the population variance; on the example it gives 54.13, where the manual prints 51.12. Words without letters (numbers) are left out; with fewer than two words or without variability the index is undefined (`nan`). The higher the value, the easier the text:
+Computation of Legibilidad µ of Muñoz Baquedano and Muñoz Urra (2006), which measures the variability of word length: the mean of the number of letters per word divided by its variance. The variance is the sample one, divided by `n − 1`, which is the *cuasivarianza* of the authors: the population variance multiplied by the factor `n / (n − 1)` that their printed formula carries. Read that way the worked example of their manual comes out exactly (18 words, mean 6.9444, variance 13.5844, µ = 51.12); applying the factor once more, on top of the sample variance, gives 54.13 instead. Words without letters (numbers) are left out; with fewer than two words or without variability the index is undefined (`nan`). The higher the value, the easier the text:
 
 | Value | Level |
 | :---: | :---: |
@@ -104,7 +104,7 @@ Computation of Legibilidad µ of Muñoz Baquedano and Muñoz Urra (2006), which 
 Formula:
 
 $$
-\frac{n}{n-1}\times\frac{\bar{x}}{\sigma^2}\times100
+\frac{\bar{x}}{s^2}\times100
 $$
 
 Parameters:
@@ -228,7 +228,7 @@ Parameters:
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
 | `flesch_reading_easy` | float | `-` | Value of the reading ease |
-| `scale` | str | `inflesz` | Name of the scale |
+| `scale` | str | `inflesz` | Name of the scale; `ReadabilityStats.describe_level` passes the scale of the preset |
 
 !!! example "Example"
 
@@ -257,7 +257,9 @@ Parameters:
 !!! info ""
     **ests.readability_stats.flesch_reading_easy_to_grade()**
 
-Conversion of the Flesch reading ease into a school grade, used to include the reading ease in the consensus grade by analogy with `text_standard` of textstat, through the text types of the INFLESZ bands and the school stages of Spain:
+Conversion of the Flesch reading ease into years of schooling, used to include the reading ease in the consensus grade by analogy with `text_standard` of textstat. The thresholds belong to the scale of the preset, since the same value means different things on the two scales.
+
+With the `general` preset, through the text types of the INFLESZ bands and the school stages of Spain:
 
 | Value | Grade | Text type |
 | :---: | :---: | :-------- |
@@ -267,20 +269,23 @@ Conversion of the Flesch reading ease into a school grade, used to include the r
 | `40-55` | 11 | secondary school textbooks, bachillerato |
 | `below 40` | 13 | scientific texts, university |
 
-Values above 100 belong to grade 3.
+With the `classic` preset, through the interpretation table of Flesch, whose bands Fernández Huerta kept: `90-100` - 5, `80-90` - 6, `70-80` - 7, `60-70` - 8.5, `50-60` - 10, `40-50` - 11, `30-40` - 12, below `30` - 13.
+
+Values above 100 belong to the first grade of the scale.
 
 Parameters:
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
 | `flesch_reading_easy` | float | `-` | Value of the reading ease |
+| `preset` | str | `general` | Coefficient preset whose scale is read |
 
 ## Consensus grade { #calc_consensus_grade }
 
 !!! info ""
     **ests.readability_stats.calc_consensus_grade()**
 
-Computation of the consensus grade: the median of the rounded values of the grade formulas by analogy with `text_standard` of textstat, which uses the mode; the median is more robust to an outlying formula. The values are rounded half up. The reading ease is converted with `flesch_reading_easy_to_grade` and added without rounding.
+Computation of the consensus grade: the median of the rounded values of the grade formulas by analogy with `text_standard` of textstat, which uses the mode; the median is more robust to an outlying formula. The values are rounded half up. The reading ease is converted with `flesch_reading_easy_to_grade` by the scale of the preset and added without rounding.
 
 Parameters:
 
@@ -288,6 +293,7 @@ Parameters:
 | :-------: | :--: | :-----: | :---------: |
 | `grades` | list[float] | `-` | Values of the grade formulas |
 | `flesch_reading_easy` | float | `None` | Value of the reading ease |
+| `preset` | str | `general` | Coefficient preset of the reading ease |
 
 !!! example "Example"
 

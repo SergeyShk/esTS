@@ -89,7 +89,7 @@ Fuente: Crawford, A. N. Fórmula y gráfico para determinar la comprensibilidad 
 !!! info ""
     **ests.readability_stats.calc_mu_index()**
 
-Cálculo de la Legibilidad µ de Muñoz Baquedano y Muñoz Urra (2006), que mide la variabilidad de la longitud de las palabras: la media y la varianza del número de letras por palabra. La varianza es la muestral, dividida por `n − 1`, como en el ejemplo resuelto de los autores (18 palabras, media 6.9444, varianza 13.5844), y el factor `n / (n − 1)` multiplica el cociente, así que el índice equivale a la media dividida por la varianza poblacional; en el ejemplo da 54.13, donde el manual imprime 51.12. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (`nan`). Cuanto mayor es el valor, más fácil es el texto:
+Cálculo de la Legibilidad µ de Muñoz Baquedano y Muñoz Urra (2006), que mide la variabilidad de la longitud de las palabras: la media del número de letras por palabra dividida por su varianza. La varianza es la muestral, dividida por `n − 1`, que es la *cuasivarianza* de los autores: la varianza poblacional multiplicada por el factor `n / (n − 1)` que lleva su fórmula impresa. Leído así, el ejemplo resuelto de su manual sale exacto (18 palabras, media 6.9444, varianza 13.5844, µ = 51.12); aplicar el factor una segunda vez, sobre la varianza muestral, daría 54.13. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (`nan`). Cuanto mayor es el valor, más fácil es el texto:
 
 | Valor | Nivel |
 | :---: | :---: |
@@ -104,7 +104,7 @@ Cálculo de la Legibilidad µ de Muñoz Baquedano y Muñoz Urra (2006), que mide
 Fórmula:
 
 $$
-\frac{n}{n-1}\times\frac{\bar{x}}{\sigma^2}\times100
+\frac{\bar{x}}{s^2}\times100
 $$
 
 Parámetros:
@@ -228,7 +228,7 @@ Parámetros:
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `flesch_reading_easy` | float | `-` | Valor de la facilidad de lectura |
-| `scale` | str | `inflesz` | Nombre de la escala |
+| `scale` | str | `inflesz` | Nombre de la escala; `ReadabilityStats.describe_level` pasa la escala del preajuste |
 
 !!! example "Ejemplo"
 
@@ -257,7 +257,9 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.flesch_reading_easy_to_grade()**
 
-Conversión de la facilidad de lectura de Flesch en un grado escolar, usada para incluir la facilidad de lectura en el grado de consenso por analogía con `text_standard` de textstat, a través de los tipos de texto de los niveles INFLESZ y las etapas escolares de España:
+Conversión de la facilidad de lectura de Flesch en años de escolaridad, usada para incluir la facilidad de lectura en el grado de consenso por analogía con `text_standard` de textstat. Los umbrales son los de la escala del preajuste, porque el mismo valor significa cosas distintas en cada escala.
+
+Con el preajuste `general`, a través de los tipos de texto de los niveles INFLESZ y las etapas escolares de España:
 
 | Valor | Grado | Tipo de texto |
 | :---: | :---: | :------------ |
@@ -267,20 +269,23 @@ Conversión de la facilidad de lectura de Flesch en un grado escolar, usada para
 | `40-55` | 11 | libros de texto de secundaria, bachillerato |
 | `menos de 40` | 13 | textos científicos, universidad |
 
-Los valores por encima de 100 corresponden al grado 3.
+Con el preajuste `classic`, a través de la tabla de interpretación de Flesch, cuyos niveles conservó Fernández Huerta: `90-100` - 5, `80-90` - 6, `70-80` - 7, `60-70` - 8.5, `50-60` - 10, `40-50` - 11, `30-40` - 12, por debajo de `30` - 13.
+
+Los valores por encima de 100 corresponden al primer grado de la escala.
 
 Parámetros:
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `flesch_reading_easy` | float | `-` | Valor de la facilidad de lectura |
+| `preset` | str | `general` | Preajuste de coeficientes cuya escala se lee |
 
 ## Grado de consenso { #calc_consensus_grade }
 
 !!! info ""
     **ests.readability_stats.calc_consensus_grade()**
 
-Cálculo del grado de consenso: la mediana de los valores redondeados de las fórmulas de grado, por analogía con `text_standard` de textstat, que usa la moda; la mediana resiste mejor una fórmula desviada. Los valores se redondean con el medio hacia arriba. La facilidad de lectura se convierte con `flesch_reading_easy_to_grade` y se añade sin redondear.
+Cálculo del grado de consenso: la mediana de los valores redondeados de las fórmulas de grado, por analogía con `text_standard` de textstat, que usa la moda; la mediana resiste mejor una fórmula desviada. Los valores se redondean con el medio hacia arriba. La facilidad de lectura se convierte con `flesch_reading_easy_to_grade` según la escala del preajuste y se añade sin redondear.
 
 Parámetros:
 
@@ -288,6 +293,7 @@ Parámetros:
 | :-------: | :--: | :---------: | :---------: |
 | `grades` | list[float] | `-` | Valores de las fórmulas de grado |
 | `flesch_reading_easy` | float | `None` | Valor de la facilidad de lectura |
+| `preset` | str | `general` | Preajuste de coeficientes de la facilidad de lectura |
 
 !!! example "Ejemplo"
 

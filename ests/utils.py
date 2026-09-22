@@ -8,7 +8,7 @@ import spacy
 from spacy.tokenizer import Tokenizer
 from spacy.tokens import Doc, Span
 
-from .constants import ABBREVIATIONS, PUNCTUATIONS, SENTENCE_OPENERS
+from .constants import ABBREVIATIONS, DASHES, PUNCTUATIONS, SENTENCE_OPENERS
 
 # End of a sentence: terminal marks, optionally closing quotes or brackets,
 # before whitespace or the end of the text; or a blank line
@@ -46,6 +46,26 @@ def is_punctuation(token: str) -> bool:
     return all(char in PUNCTUATIONS or unicodedata.category(char)[0] in "PS" for char in token)
 
 
+def _opens_remark(text: str, position: int) -> bool:
+    """
+    Whether the dash before the position opens the remark of the narrator
+
+    Description:
+        In a dialogue the narrator's remark follows the dash in lower case
+        and belongs to the sentence of the line ("-Si -dijo el"), while
+        a new line of dialogue opens with an upper-case word
+
+    Arguments:
+        text (str): Text string
+        position (int): Position right after the dash
+
+    Returns:
+        bool: Result of the check
+    """
+    following = NON_SPACE.search(text, position)
+    return following is not None and following.group().islower()
+
+
 def _ends_sentence(text: str, start: int, match: re.Match[str]) -> bool:
     """
     Checking whether the terminal marks found in a text end a sentence
@@ -54,6 +74,8 @@ def _ends_sentence(text: str, start: int, match: re.Match[str]) -> bool:
         The next non-space character must open a sentence: an upper-case
         letter, a digit or one of SENTENCE_OPENERS; a lower-case continuation
         after an ellipsis or an exclamation mark keeps the sentence going.
+        A dash followed by a lower-case word opens the remark of the narrator
+        of a dialogue rather than a sentence ("-¿Vienes? -preguntó ella").
         A single period does not end a sentence after an abbreviation from
         ABBREVIATIONS, after a capital initial or after a list marker that
         opens the sentence or a line. Opening quotes and brackets are
@@ -74,6 +96,8 @@ def _ends_sentence(text: str, start: int, match: re.Match[str]) -> bool:
         return True
     first = following.group()
     if not (first.isupper() or first.isdigit() or first in SENTENCE_OPENERS):
+        return False
+    if first in DASHES and _opens_remark(text, following.end()):
         return False
     if match.group("marks") != "." or match.group("closers"):
         return True
@@ -99,7 +123,9 @@ def sentenize(text: str) -> Iterator[str]:
         an ellipsis, possibly followed by closing quotes or brackets, when
         the next word starts with an upper-case letter, a digit, an inverted
         mark, an opening quote or bracket or a dash; a blank line ends
-        a sentence too. Abbreviations (Sr., Dra., p. ej., EE. UU., a. m.),
+        a sentence too. A dash followed by a lower-case word opens the remark
+        of the narrator of a dialogue and keeps the sentence going.
+        Abbreviations (Sr., Dra., p. ej., EE. UU., a. m.),
         capital initials and list markers at the start of a sentence or
         a line (1. 2.1. IV.) do not end a sentence. A single line break
         does not split a sentence, so hard-wrapped texts are handled.

@@ -10,15 +10,18 @@ Todas las excepciones de la biblioteca heredan de la clase base `EstsError` y de
 | Excepción | Clase integrada | Cuándo se lanza |
 | :-------- | :-------------- | :-------------- |
 | `EstsError` | `Exception` | Clase base, nunca se lanza directamente |
-| `SourceTypeError` | `TypeError` | La fuente de datos no es una cadena ni un `Doc`, el contador de frecuencias no es un `Counter`, la lista de textos no es una lista de listas, la ruta no es una cadena ni un `Path`, el tokenizador no es invocable o devuelve un objeto no iterable |
-| `SourceError` | `ValueError` | La fuente no tiene palabras, oraciones, textos ni colocaciones, carece de análisis de dependencias o no queda nada tras el filtrado |
-| `ParameterError` | `ValueError` | Un umbral, ventana, tamaño de segmento o número de elementos fuera de rango; una medida, variante, preajuste, capa, nivel o categoría de conjunto de datos desconocidos |
-| `UnknownStatError` | `ParameterError`, `KeyError` | Se pide por nombre una estadística desconocida |
+| `SourceTypeError` | `TypeError` | La fuente de datos no es una cadena ni un `Doc`, el tokenizador no es invocable o devuelve un objeto no iterable |
+| `SourceError` | `ValueError` | La fuente no tiene palabras ni oraciones |
+| `ParameterError` | `ValueError` | Un umbral, ventana, tamaño de segmento, número de elementos, base del logaritmo o nivel de confianza fuera de rango; un preajuste, escala o nombre de métrica desconocidos |
+| `UnknownStatError` | `ParameterError`, `KeyError` | Se pide por nombre una estadística desconocida, como en `DiversityStats.windowed` |
 | `DatasetNotFoundError` | `OSError` | El conjunto de datos no está descargado; el mensaje muestra el comando de descarga |
 | `DataFileError` | `ValueError` | Un archivo del conjunto de datos está dañado, tiene un formato inesperado o no se puede decodificar |
 | `DownloadError` | `RuntimeError` | El archivo no se pudo descargar o no superó la comprobación de la suma de verificación |
 
 Las clases están disponibles desde `ests` y desde `ests.exceptions`.
+
+!!! note "Nota"
+    Las tres últimas están reservadas para los cargadores de conjuntos de datos de las próximas versiones; nada en la 0.1 las lanza.
 
 !!! example "Ejemplo"
 

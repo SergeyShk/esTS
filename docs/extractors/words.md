@@ -28,7 +28,7 @@ A module for extracting words from a text. It allows using different tokenizers,
 | `max_len` | int | `0` | Maximum length of an extracted word |
 
 !!! note "Note"
-    The filters are applied in order: punctuation, numbers, lemmatization, lower case, stop words, word length. Stop words are compared case-insensitively, so a lower-case list also filters `Los` or `La` at the start of a sentence. A punctuation mark is a token consisting entirely of marks and symbols, including multi-character ones: `?!`, `!..`, `--`, `…`, `€`. A ready stop word list is `spacy.lang.es.stop_words.STOP_WORDS`; note that it also holds frequent verbs like `tener`.
+    The filters are applied in order: punctuation, numbers, lemmatization, lower case, stop words, word length. Stop words are compared case-insensitively, so a lower-case list also filters `Los` or `La` at the start of a sentence. A punctuation mark is a token consisting entirely of marks and symbols, including multi-character ones: `?!`, `!..`, `--`, `…`, `€`. Empty tokens, which `re.split` leaves after a final separator, are dropped before the filters. A ready stop word list is `spacy.lang.es.stop_words.STOP_WORDS`; note that it also holds frequent verbs like `tener`.
 
 ## Methods
 

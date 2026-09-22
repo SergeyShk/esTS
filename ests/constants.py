@@ -9,6 +9,10 @@ PUNCTUATIONS = string.punctuation + "¿¡—–…«»“”‘’·"
 # dashes of a dialogue line
 SENTENCE_OPENERS = "¿¡«“\"'([—–-"
 
+# Dashes that open a line of dialogue; one followed by a lower-case word opens
+# the remark of the narrator inside the same sentence (-¿Vienes? -preguntó ella)
+DASHES = "—–-"
+
 # Abbreviations after which a sentence does not end even before an upper-case
 # word or a number: forms of address, references, times and eras; compared in
 # lower case with the last one or two space-separated tokens before the period.
@@ -247,6 +251,17 @@ READABILITY_GRADE_STATS = ("crawford_grade", "sol_grade")
 READABILITY_PRESETS: dict[str, dict[str, tuple[float, float, float]]] = {
     "general": {"flesch_reading_easy": (1.0, 62.3, 206.835)},
     "classic": {"flesch_reading_easy": (1.02, 60.0, 206.84)},
+}
+
+# Interpretation of each preset: the scale of describe_level and the thresholds
+# that convert the reading ease into years of schooling for the consensus grade.
+# The INFLESZ bands are read through their text types and the school stages of
+# Spain; the bands of Fernández Huerta are those of Flesch, so his own
+# interpretation table gives the grades
+PRESET_SCALES: dict[str, str] = {"general": "inflesz", "classic": "fernandez_huerta"}
+READING_EASE_GRADES: dict[str, tuple[tuple[float, float], ...]] = {
+    "general": ((80, 3), (65, 5), (55, 8), (40, 11)),
+    "classic": ((90, 5), (80, 6), (70, 7), (60, 8.5), (50, 10), (40, 11), (30, 12)),
 }
 
 # Interpretation scales of the Flesch reading ease: lower bound of each band

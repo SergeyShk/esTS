@@ -92,8 +92,10 @@ class BasicStats:
         source (str|Doc): Data source (a string or a Doc object); for a Doc the
             words come from the tokens and the sentences from the annotation,
             without sentence boundaries they come from sents_extractor
-        sents_extractor (SentsExtractor): Sentence extraction tool
-        words_extractor (WordsExtractor): Word extraction tool
+        sents_extractor (SentsExtractor): Sentence extraction tool; an extractor
+            passed explicitly is used whatever the source, on the text of a Doc
+        words_extractor (WordsExtractor): Word extraction tool; an extractor
+            passed explicitly is used whatever the source, on the text of a Doc
         normalize (bool): Compute the normalized statistics
         complex_syl_factor (int): Minimum number of syllables in a complex word
         long_word_letter_factor (int): Minimum number of letters in a long word
@@ -148,19 +150,20 @@ class BasicStats:
         sents: Iterable[Span] | Iterable[str]
         if isinstance(source, Doc):
             text = source.text
-            if source.has_annotation("SENT_START"):
+            if sents_extractor is not None:
+                sents = sents_extractor.extract(text)
+            elif source.has_annotation("SENT_START"):
                 sents = source.sents
             else:
-                sents = (sents_extractor or SentsExtractor()).extract(text)
-            words = tuple(word for _, _, word in iter_doc_words(source))
+                sents = SentsExtractor().extract(text)
+            if words_extractor is not None:
+                words = words_extractor.extract(text)
+            else:
+                words = tuple(word for _, _, word in iter_doc_words(source))
         elif isinstance(source, str):
             text = source
-            if not sents_extractor:
-                sents_extractor = SentsExtractor()
-            sents = sents_extractor.extract(text)
-            if not words_extractor:
-                words_extractor = WordsExtractor()
-            words = words_extractor.extract(text)
+            sents = (sents_extractor or SentsExtractor()).extract(text)
+            words = (words_extractor or WordsExtractor()).extract(text)
         else:
             raise SourceTypeError("The data source is set incorrectly")
         if not words:

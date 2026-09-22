@@ -7,6 +7,7 @@ from spacy.lang.es.stop_words import STOP_WORDS
 
 from ests import BasicStats, ReadabilityStats, SentsExtractor, WordsExtractor
 from ests.constants import (
+    PRESET_SCALES,
     READABILITY_GRADE_STATS,
     READABILITY_PRESETS,
     READABILITY_STATS_DESC,
@@ -127,8 +128,8 @@ class TestQuoteByHand:
 
     def test_mu_index(self, quote):
         # letters per word 3, 4, 6, 2, 8, 8, 8, 8, 1, 12: mean 6, sample variance 106 / 9
-        assert quote.mu_index == pytest.approx(10 / 9 * 6 / (106 / 9) * 100)
-        assert quote.mu_index == pytest.approx(56.60377358490566)
+        assert quote.mu_index == pytest.approx(6 / (106 / 9) * 100)
+        assert quote.mu_index == pytest.approx(50.943396226415096)
 
     def test_sol_grade(self, quote):
         smog = 1.043 * (5 * 30) ** 0.5 + 3.1291
@@ -148,7 +149,11 @@ class TestQuoteByHand:
     def test_descriptions(self, quote):
         assert quote.describe_level() == "algo difícil"
         assert quote.describe_level(scale="szigriszt") == "normal"
-        assert quote.describe_level("mu_index") == "un poco difícil"
+        # the classic preset is read on the scale of its own author
+        classic = ReadabilityStats(QUOTE, preset="classic")
+        assert classic.describe_level() == "bastante difícil"
+        assert classic.describe_level(scale="inflesz") == "normal"
+        assert quote.describe_level("mu_index") == "difícil"
         assert quote.describe_grade() == "ESO (12-16 years)"
         assert quote.describe_grade("crawford_grade") == "primary school, grades 4-6 (9-12 years)"
 
@@ -180,12 +185,12 @@ def test_gutierrez_polini_index_with_word_filter():
 
 
 def test_mu_index(rs):
-    assert rs.mu_index == pytest.approx(41.53802927227987)
+    assert rs.mu_index == pytest.approx(41.096135343851365)
     # the worked example of the authors' manual: 18 words, mean 6.9444, sample variance 13.5844
-    # (sum 125, sum of squares 1099); the formula gives 54.13 where the manual prints 51.12
+    # (sum 125, sum of squares 1099), µ = 51.12
     manual = Counter([4, 6, 5, 5, 8, 14, 11, 11, 6, 1, 4, 10, 9, 11, 7, 3, 9, 1])
-    assert calc_mu_index(manual) == pytest.approx(54.13, abs=0.01)
-    assert calc_mu_index({3: 5, 5: 5}) == pytest.approx(400.0)
+    assert calc_mu_index(manual) == pytest.approx(51.12, abs=0.01)
+    assert calc_mu_index({3: 5, 5: 5}) == pytest.approx(360.0)
     assert calc_mu_index({0: 4, 3: 5, 5: 5}) == calc_mu_index({3: 5, 5: 5})
     assert isnan(calc_mu_index({3: 1}))
     assert isnan(calc_mu_index({3: 5}))
@@ -213,11 +218,16 @@ def test_rix(rs):
 def test_consensus_grade(rs):
     assert rs.consensus_grade == 13.0
     grades = [getattr(rs, stat) for stat in READABILITY_GRADE_STATS]
-    assert rs.consensus_grade == calc_consensus_grade(grades, rs.flesch_reading_easy)
+    assert rs.consensus_grade == calc_consensus_grade(grades, rs.flesch_reading_easy, rs.preset)
 
 
 def test_calc_consensus_grade():
     assert calc_consensus_grade([5.813, 9.258], 53.545) == 9.0
+    # the same reading ease is grade 11 on the INFLESZ bands and 10 on those of Flesch
+    assert calc_consensus_grade([12.0], 53.545) == 11.5
+    assert calc_consensus_grade([12.0], 53.545, "classic") == 11.0
+    with pytest.raises(ValueError):
+        calc_consensus_grade([1.0], 50.0, "unknown")
     assert calc_consensus_grade([2.5, 2.5, 3.4]) == 3.0
     assert calc_consensus_grade([7.0]) == 7.0
     assert calc_consensus_grade([], 60) == 8.0
@@ -244,6 +254,33 @@ def test_calc_consensus_grade():
 )
 def test_flesch_reading_easy_to_grade(flesch_reading_easy, grade):
     assert flesch_reading_easy_to_grade(flesch_reading_easy) == grade
+    assert flesch_reading_easy_to_grade(flesch_reading_easy, "general") == grade
+
+
+@pytest.mark.parametrize(
+    ("flesch_reading_easy", "grade"),
+    [
+        (120, 5),
+        (90, 5),
+        (89.9, 6),
+        (80, 6),
+        (75, 7),
+        (65, 8.5),
+        (55, 10),
+        (45, 11),
+        (35, 12),
+        (29.9, 13),
+        (-50, 13),
+    ],
+)
+def test_flesch_reading_easy_to_grade_classic(flesch_reading_easy, grade):
+    """The bands of Fernández Huerta are those of Flesch, with his own grades"""
+    assert flesch_reading_easy_to_grade(flesch_reading_easy, "classic") == grade
+
+
+def test_flesch_reading_easy_to_grade_preset_error():
+    with pytest.raises(ValueError):
+        flesch_reading_easy_to_grade(50.0, "unknown")
 
 
 @pytest.mark.parametrize(
@@ -345,6 +382,7 @@ def test_describe_grade(rs):
 
 def test_describe_level(rs):
     assert rs.describe_level() == "muy difícil"
+    assert rs.describe_level() == rs.describe_level(scale=PRESET_SCALES[rs.preset])
     assert rs.describe_level(scale="szigriszt") == "árido"
     assert rs.describe_level(scale="fernandez_huerta") == "muy difícil"
     assert rs.describe_level("mu_index") == "difícil"

@@ -9,7 +9,7 @@ A module for computing basic text statistics. The data source can be either a te
 
 The module allows using pre-built [`SentsExtractor`](../extractors/sentences.md) and [`WordsExtractor`](../extractors/words.md) objects for the sentence and word tokenization needed before computing the statistics. Syllables are counted by [`count_syllables`](../syllables.md#count_syllables), letters by `str.isalpha`, so digits, hyphens and marks inside a word are not letters, while the ordinal indicators `º` and `ª` are (`3.º` is a one-letter word).
 
-For a `Doc` object words are taken from the tokens (punctuation marks and symbols such as `€` or `%` are dropped), sentences - from the annotation; without sentence boundaries (`spacy.blank`, a pipeline without `parser` and `senter`) sentences are extracted from the text by `SentsExtractor`.
+For a `Doc` object words are taken from the tokens (punctuation marks and symbols such as `€` or `%` are dropped), sentences - from the annotation; without sentence boundaries (`spacy.blank`, a pipeline without `parser` and `senter`) sentences are extracted from the text by `SentsExtractor`. An extractor passed explicitly is always used, on the text of the `Doc`, so that stop word filtering or a custom tokenizer works the same for both kinds of source.
 
 !!! note "Note"
     The statistics are computed when the `BasicStats` object is initialized.
@@ -19,8 +19,8 @@ For a `Doc` object words are taken from the tokens (punctuation marks and symbol
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
 | `source` | str/Doc | `-` | Data source (a string or a Doc object) |
-| `sents_extractor` | SentsExtractor | `None` | Sentence extraction tool |
-| `words_extractor` | WordsExtractor | `None` | Word extraction tool |
+| `sents_extractor` | SentsExtractor | `None` | Sentence extraction tool; used for a Doc too, on its text |
+| `words_extractor` | WordsExtractor | `None` | Word extraction tool; used for a Doc too, on its text |
 | `normalize` | bool | `False` | Compute normalized statistics |
 | `complex_syl_factor` | int | `3` | Minimum number of syllables in a complex word |
 | `long_word_letter_factor` | int | `7` | Minimum number of letters in a long word |

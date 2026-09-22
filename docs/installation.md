@@ -1,12 +1,16 @@
 # Installation
 
-The library is not published yet. Until the first release it can be installed from the repository.
-
 ## Requirements
 
 *   `python` 3.11 or newer
-*   `spaCy` 3.7 or newer with the `es_core_news_sm` model for morphology and syntax
-*   `numpy`, `pandas`, `scipy`, `matplotlib`
+*   `spaCy` 3.7 or newer
+*   `numpy`, `scipy`, `simplemma`
+
+## From PyPI
+
+``` bash
+pip install ests
+```
 
 ## From the repository
 
@@ -16,16 +20,10 @@ cd esTS
 uv sync --all-groups
 ```
 
-The spaCy model is installed together with the `test` dependency group; for a separate environment:
+## The spaCy model { #model }
+
+The statistics of release 0.1 need no trained model: sentences, words and character N-grams are extracted by rules and by the tokenizer of the blank Spanish pipeline, syllables and stress by the orthography. A model is needed only to build a `Doc` yourself and pass it to the statistics instead of a string, and to run the test suite, where it comes with the `test` dependency group:
 
 ``` bash
 python -m spacy download es_core_news_sm
-```
-
-## From PyPI
-
-After the first release:
-
-``` bash
-pip install ests
 ```
