@@ -1,6 +1,6 @@
 [project]
 name = "ests"
-version = "0.1.0.dev2"
+version = "0.1.0.dev3"
 description = "Spanish Texts Statistics"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -73,7 +73,12 @@ explicit = true
 es-core-news-sm = { url = "https://github.com/explosion/spacy-models/releases/download/es_core_news_sm-3.8.0/es_core_news_sm-3.8.0-py3-none-any.whl" }
 
 [dependency-groups]
-test = ["pytest>=8.3", "pytest-cov>=6.0", "es-core-news-sm"]
+test = [
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "es-core-news-sm",
+    "silabeador>=1.2",
+]
 lint = ["mypy>=1.14", "pre-commit>=4.0", "ruff>=0.9"]
 docs = [
     "mkdocs>=1.6",

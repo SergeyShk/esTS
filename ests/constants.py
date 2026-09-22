@@ -132,3 +132,21 @@ ABBREVIATIONS = frozenset(
         "d. j. c.",
     }
 )
+
+# Vowels: every accented vowel is strong, an unaccented i, u, ü and a vocalic y
+# are weak; a weak vowel next to another vowel forms a diphthong, two strong
+# vowels a hiatus. Grave accents occur in Catalan and French names
+VOWELS = "aeiouáéíóúüàèìòù"
+WEAK_VOWELS = "iuü"
+ACCENTED_VOWELS = "áéíóúàèìòù"
+
+# Two-letter consonant units that are never split (digraphs and the silent u)
+DIGRAPHS = ("ch", "ll", "rr", "qu", "gu")
+
+# Consonant pairs that open a syllable together: an obstruent with l or r
+ONSET_CLUSTERS = frozenset(
+    {"bl", "br", "cl", "cr", "dr", "fl", "fr", "gl", "gr", "kl", "kr", "pl", "pr", "tr"}
+)
+
+# Words in -mente that are not adverbs, so they carry a single stress
+NON_ADVERBS_MENTE = frozenset({"vehemente", "inclemente"})
