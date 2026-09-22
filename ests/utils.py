@@ -221,3 +221,20 @@ def count_letters(word: str) -> int:
         int: Number of letters
     """
     return sum(map(str.isalpha, word))
+
+
+def safe_divide(num: float | int, den: float | int, default: float | int = 0) -> float:
+    """
+    Dividing two numbers safely
+
+    Arguments:
+        num (float|int): Numerator
+        den (float|int): Denominator
+        default (float|int): Value returned for a zero denominator
+
+    Returns:
+        float: Result of the division
+    """
+    if not den:
+        return default
+    return num / den
