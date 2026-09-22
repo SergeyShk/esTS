@@ -19,16 +19,16 @@ A module for extracting words from a text. It allows using different tokenizers,
 | :-------: | :--: | :-----: | :---------: |
 | `tokenizer` | Pattern/Callable | `None` | Tokenizer or regular expression |
 | `filter_punct` | bool | `True` | Filter punctuation marks |
-| `filter_nums` | bool | `False` | Filter numbers, including ranges, fractions, dates, times, percentages and ordinals (1990-1995, 1.500,50, 12/03/2020, 3:30, 10%, 3.º, 1.ª, 2do) |
+| `filter_nums` | bool | `False` | Filter numbers, including signed numbers, ranges, fractions, dates, times, percentages and ordinals (-5, +7, 1990-1995, 1.500,50, 12/03/2020, 3:30, 10%, 3.º, 1.ª, 2do) |
 | `use_lexemes` | bool | `False` | Use word lemmas |
-| `stopwords` | Collection[str] | `None` | Stop words |
+| `stopwords` | Collection[str] | `None` | Stop words, compared case-insensitively |
 | `lowercase` | bool | `False` | Convert words to lower case |
 | `ngram_range` | Tuple[int, int] | `(1, 1)` | Lower and upper bound of the N-gram size |
 | `min_len` | int | `0` | Minimum length of an extracted word |
 | `max_len` | int | `0` | Maximum length of an extracted word |
 
 !!! note "Note"
-    The filters are applied in order: punctuation, numbers, lemmatization, lower case, stop words, word length. Stop words are compared after lowercasing, so with `lowercase=True` the stop word list only needs to be in lower case. A punctuation mark is a token consisting entirely of marks and symbols, including multi-character ones: `?!`, `!..`, `--`, `…`, `€`. A ready stop word list is `spacy.lang.es.stop_words.STOP_WORDS`; note that it also holds frequent verbs like `tener`.
+    The filters are applied in order: punctuation, numbers, lemmatization, lower case, stop words, word length. Stop words are compared case-insensitively, so a lower-case list also filters `Los` or `La` at the start of a sentence. A punctuation mark is a token consisting entirely of marks and symbols, including multi-character ones: `?!`, `!..`, `--`, `…`, `€`. A ready stop word list is `spacy.lang.es.stop_words.STOP_WORDS`; note that it also holds frequent verbs like `tener`.
 
 ## Methods
 

@@ -10,11 +10,21 @@ from spacy.tokenizer import Tokenizer
 from .constants import ABBREVIATIONS, PUNCTUATIONS, SENTENCE_OPENERS
 
 # End of a sentence: terminal marks, optionally closing quotes or brackets,
-# before whitespace or the end of the text
-SENTENCE_END = re.compile(r"(?P<marks>[.!?…]+)(?P<closers>[»”’\"')\]]*)(?=\s|$)")
-PARAGRAPH_BREAK = re.compile(r"\n[ \t\r\f\v]*\n")
+# before whitespace or the end of the text; or a blank line
+SENTENCE_END = re.compile(
+    r"(?P<marks>[.!?…]+)(?P<closers>[»”’\"')\]]*)(?=\s|$)|(?P<break>\n[ \t\r\f\v]*\n)"
+)
+NON_SPACE = re.compile(r"\S")
 INITIAL = re.compile(r"[A-ZÁÉÍÓÚÜÑ]\.")
+# Marker of a numbered or lettered list (1. 2.1. b. IV.) that opens a sentence
+# or a line, at the end of the examined window
+LIST_MARKER = re.compile(r"(?:^|\n)[ \t]*(?:\d+(?:\.\d+)*|[a-z]|[IVXLC]+)\.\Z")
 OPENING_CHARS = "(«“\"'["
+# Characters looked back from a period for an abbreviation: enough for the two
+# tokens that are checked, so that the scan stays linear in the text length.
+# A token cut by the window is at least 61 characters long and matches
+# neither an abbreviation nor an initial
+LOOKBACK = 64
 
 
 def is_punctuation(token: str) -> bool:
@@ -35,38 +45,49 @@ def is_punctuation(token: str) -> bool:
     return all(char in PUNCTUATIONS or unicodedata.category(char)[0] in "PS" for char in token)
 
 
-def _ends_sentence(paragraph: str, match: re.Match[str]) -> bool:
+def _ends_sentence(text: str, start: int, match: re.Match[str]) -> bool:
     """
-    Checking whether the terminal marks found in a paragraph end a sentence
+    Checking whether the terminal marks found in a text end a sentence
 
     Description:
         The next non-space character must open a sentence: an upper-case
         letter, a digit or one of SENTENCE_OPENERS; a lower-case continuation
         after an ellipsis or an exclamation mark keeps the sentence going.
-        A single period after an abbreviation from ABBREVIATIONS or after
-        a capital initial does not end a sentence either
+        A single period does not end a sentence after an abbreviation from
+        ABBREVIATIONS, after a capital initial or after a list marker that
+        opens the sentence or a line. Opening quotes and brackets are
+        stripped from the tokens before the check, so "(EE. UU. Es grande)"
+        stays together. Only the last LOOKBACK characters before the period
+        are examined
 
     Arguments:
-        paragraph (str): Paragraph of text
-        match (Match): Match of SENTENCE_END in the paragraph
+        text (str): Text string
+        start (int): Position where the current sentence starts
+        match (Match): Match of SENTENCE_END in the text
 
     Returns:
         bool: Result of the check
     """
-    after = paragraph[match.end() :].lstrip()
-    if not after:
+    following = NON_SPACE.search(text, match.end())
+    if following is None:
         return True
-    first = after[0]
+    first = following.group()
     if not (first.isupper() or first.isdigit() or first in SENTENCE_OPENERS):
         return False
     if match.group("marks") != "." or match.group("closers"):
         return True
-    tokens = paragraph[: match.end()].split()[-2:]
-    last = tokens[-1].lstrip(OPENING_CHARS)
+    window_start = max(start, match.end() - LOOKBACK)
+    window = text[window_start : match.end()]
+    if LIST_MARKER.search(window):
+        return False
+    tokens = [stripped for token in window.split() if (stripped := token.lstrip(OPENING_CHARS))]
+    if not tokens:
+        return True
+    last = tokens[-1]
     return not (
         INITIAL.fullmatch(last)
         or last.lower() in ABBREVIATIONS
-        or " ".join(tokens).lower() in ABBREVIATIONS
+        or " ".join(tokens[-2:]).lower() in ABBREVIATIONS
     )
 
 
@@ -79,10 +100,12 @@ def sentenize(text: str) -> Iterator[str]:
         an ellipsis, possibly followed by closing quotes or brackets, when
         the next word starts with an upper-case letter, a digit, an inverted
         mark, an opening quote or bracket or a dash; a blank line ends
-        a sentence too. Abbreviations (Sr., Dra., p. ej., EE. UU., a. m.)
-        and capital initials do not end a sentence. A single line break
+        a sentence too. Abbreviations (Sr., Dra., p. ej., EE. UU., a. m.),
+        capital initials and list markers at the start of a sentence or
+        a line (1. 2.1. IV.) do not end a sentence. A single line break
         does not split a sentence, so hard-wrapped texts are handled.
-        The sentences are returned stripped of surrounding whitespace
+        The text is scanned once, the sentences are yielded as they are
+        found, stripped of surrounding whitespace
 
     Arguments:
         text (str): Text string
@@ -90,16 +113,17 @@ def sentenize(text: str) -> Iterator[str]:
     Returns:
         iterator[str]: Iterator of sentences
     """
-    for paragraph in PARAGRAPH_BREAK.split(text):
-        start = 0
-        for match in SENTENCE_END.finditer(paragraph):
-            if not _ends_sentence(paragraph, match):
-                continue
-            yield paragraph[start : match.end()].strip()
-            start = match.end()
-        tail = paragraph[start:].strip()
-        if tail:
-            yield tail
+    start = 0
+    for match in SENTENCE_END.finditer(text):
+        if match.group("break") is None and not _ends_sentence(text, start, match):
+            continue
+        sent = text[start : match.end()].strip()
+        if sent:
+            yield sent
+        start = match.end()
+    tail = text[start:].strip()
+    if tail:
+        yield tail
 
 
 @lru_cache(maxsize=1)

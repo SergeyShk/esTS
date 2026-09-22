@@ -10,7 +10,7 @@ from .utils import is_punctuation, lemmatize, sentenize, tokenize
 
 Tokenizer = Pattern[str] | Callable[[str], Iterable[str]]
 NUMBER_PATTERN = re.compile(
-    r"\d+(?:[.,:/-]\d+)*"
+    r"[+\-−]?\d+(?:[.,:/-]\d+)*"
     r"(?:\.?(?:[ºª°]|[ᵃᵉᵒʳˢ]+|(?:er|d[oa]|r[oa]|t[oa]|v[oa]|n[oa]|m[oa])s?))?%?"
 )
 
@@ -148,18 +148,20 @@ class WordsExtractor(Extractor):
         Spanish language class (ests.utils.tokenize), which needs no trained
         model; lemmas come from simplemma (ests.utils.lemmatize).
         The filters are applied in order: punctuation, numbers, lemmatization,
-        lower case, stop words, word length; stop words are compared after
-        lowercasing (a ready list is spacy.lang.es.stop_words.STOP_WORDS,
-        which also holds frequent verbs like tener). Numbers include ranges, fractions, dates, times,
-        percentages and ordinals: 1990-1995, 1.500,50, 12/03/2020, 3:30,
-        10%, 3.º, 1.ª, 2do
+        lower case, stop words, word length. Stop words are compared
+        case-insensitively, so a lower-case list also filters "Los" or "La"
+        at the start of a sentence (a ready list is
+        spacy.lang.es.stop_words.STOP_WORDS, which also holds frequent verbs
+        like tener). Numbers include signed numbers, ranges, fractions,
+        dates, times, percentages and ordinals: -5, +7, 1990-1995, 1.500,50,
+        12/03/2020, 3:30, 10%, 3.º, 1.ª, 2do
 
     Arguments:
         tokenizer (pattern|callable): Tokenizer or regular expression
         filter_punct (bool): Filter punctuation marks
         filter_nums (bool): Filter numbers
         use_lexemes (bool): Use word lemmas
-        stopwords (collection[str]): Stop words
+        stopwords (collection[str]): Stop words, compared case-insensitively
         lowercase (bool): Convert words to lower case
         ngram_range (tuple[int, int]): Lower and upper bound of the N-gram size
         min_len (int): Minimum length of an extracted word
@@ -190,7 +192,7 @@ class WordsExtractor(Extractor):
         self.filter_punct = filter_punct
         self.filter_nums = filter_nums
         self.use_lexemes = use_lexemes
-        self.stopwords = stopwords
+        self.stopwords = frozenset(word.lower() for word in stopwords) if stopwords else None
         self.lowercase = lowercase
         self.ngram_range = ngram_range
         if self.ngram_range[0] < 1:
@@ -231,7 +233,7 @@ class WordsExtractor(Extractor):
         if self.lowercase:
             words = (word.lower() for word in words)
         if self.stopwords:
-            words = (word for word in words if word not in self.stopwords)
+            words = (word for word in words if word.lower() not in self.stopwords)
         if self.min_len > 0:
             words = (word for word in words if len(word) >= self.min_len)
         if self.max_len > 0:

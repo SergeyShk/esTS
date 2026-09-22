@@ -132,6 +132,25 @@ class TestWordsExtractor:
         text = "No tengas cien euros, y ten cien amigos. Y no así."
         assert we.extract(text) == ("tengas", "cien", "euros", "ten", "cien", "amigos", "así")
 
+    def test_extract_stopwords_case_insensitive(self):
+        text = "Los tesauros. La diferencia entre los tesauros."
+        assert WordsExtractor(stopwords=STOP_WORDS).extract(text) == (
+            "tesauros",
+            "diferencia",
+            "tesauros",
+        )
+        assert WordsExtractor(stopwords=["LOS", "La"]).extract(text) == (
+            "tesauros",
+            "diferencia",
+            "entre",
+            "tesauros",
+        )
+
+    def test_stopwords_stored_as_frozenset(self):
+        assert WordsExtractor(stopwords=["A", "b"]).stopwords == frozenset({"a", "b"})
+        assert WordsExtractor(stopwords=[]).stopwords is None
+        assert WordsExtractor().stopwords is None
+
     @pytest.mark.parametrize(
         ("token", "is_number"),
         [
@@ -151,6 +170,11 @@ class TestWordsExtractor:
             ("2do", True),
             ("3ro", True),
             ("4TA", True),
+            ("-5", True),
+            ("+7", True),
+            ("−5", True),
+            ("-5,5%", True),
+            ("-x", False),
             ("palabra", False),
             ("teórico-práctico", False),
             ("n.º", False),
@@ -214,8 +238,8 @@ class TestWordsExtractor:
     @pytest.mark.parametrize(
         "stopwords, expected",
         [
-            (STOP_WORDS, 40),
-            (["de", "la", "los", "y"], 70),
+            (STOP_WORDS, 38),
+            (["de", "la", "los", "y"], 68),
         ],
     )
     def test_extract_stopwords(self, text, stopwords, expected):

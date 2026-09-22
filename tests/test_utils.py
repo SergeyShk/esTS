@@ -101,10 +101,35 @@ def test_is_punctuation(token, expected):
         ("Él vino. Ñandú corrió. Ángel durmió.", ["Él vino.", "Ñandú corrió.", "Ángel durmió."]),
         ("¿Qué?!! ¡¿Cómo?! Así...  ¿Sí?", ["¿Qué?!!", "¡¿Cómo?!", "Así...", "¿Sí?"]),
         ("Bueno...¿qué? Nada.", ["Bueno...¿qué?", "Nada."]),
+        # Abbreviations wrapped in brackets and quotes
+        ("Vivo en (EE. UU. Es grande) desde 2020.", ["Vivo en (EE. UU. Es grande) desde 2020."]),
+        ("Llegó a las 3 (a. m. Comimos bien).", ["Llegó a las 3 (a. m. Comimos bien)."]),
+        ("Frutas («p. ej. Manzanas»). Fin.", ["Frutas («p. ej. Manzanas»).", "Fin."]),
+        ("Dijo: «(Sr. García) vino». Sí.", ["Dijo: «(Sr. García) vino».", "Sí."]),
+        # List markers at the start of a sentence or a line
+        ("1. Primero. 2. Segundo.", ["1. Primero.", "2. Segundo."]),
+        ("1.1. Introducción. 1.2. Método.", ["1.1. Introducción.", "1.2. Método."]),
+        ("IV. Capítulo. Fue Felipe IV. Luego.", ["IV. Capítulo.", "Fue Felipe IV.", "Luego."]),
+        ("b. Dos.", ["b. Dos."]),
+        ("1. Primero\n2. Segundo", ["1. Primero\n2. Segundo"]),
+        ("1. Primero.\n2. Segundo.", ["1. Primero.", "2. Segundo."]),
+        ("Índice:\n1. Uno\n2. Dos\n3. Tres. Fin.", ["Índice:\n1. Uno\n2. Dos\n3. Tres.", "Fin."]),
+        ("Página 1. Luego.", ["Página 1.", "Luego."]),
+        ("1990. Luego.", ["1990. Luego."]),
     ],
 )
 def test_sentenize(text, expected):
     assert list(sentenize(text)) == expected
+
+
+def test_sentenize_long_token():
+    text = "El " + "a" * 70 + "p. Mañana."
+    assert list(sentenize(text)) == ["El " + "a" * 70 + "p.", "Mañana."]
+
+
+def test_sentenize_long_paragraph():
+    text = "El Sr. García llegó a las 3 p. m. y compró 1.500,50 kilos. ¿No? ¡Sí! " * 10000
+    assert sum(1 for _ in sentenize(text)) == 30000
 
 
 def test_tokenize():
