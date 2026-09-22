@@ -8,8 +8,10 @@
 
 ## Desde PyPI
 
+El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`:
+
 ``` bash
-pip install ests
+pip install pyests
 ```
 
 ## Desde el repositorio

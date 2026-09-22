@@ -63,5 +63,5 @@ def test_logging():
 
 
 def test_version():
-    assert ests.__version__ == version("ests")
+    assert ests.__version__ == version("pyests")
     assert "__version__" in ests.__all__

@@ -8,8 +8,10 @@
 
 ## From PyPI
 
+The distribution on PyPI is `pyests`, the package it installs is `ests`:
+
 ``` bash
-pip install ests
+pip install pyests
 ```
 
 ## From the repository

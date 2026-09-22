@@ -26,8 +26,9 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 # Metadata
 
+# The distribution is pyests, the package it installs is ests
 try:
-    __version__ = version("ests")
+    __version__ = version("pyests")
 except PackageNotFoundError:
     __version__ = "0.0.0"
 __description__ = (
