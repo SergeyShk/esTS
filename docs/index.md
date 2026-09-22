@@ -5,7 +5,7 @@
 It is the Spanish sibling of [ruTS](https://github.com/SergeyShk/ruTS), the Russian text statistics library, and follows its structure and naming: every statistic is available as a class with `get_stats()` and as a [spaCy](https://github.com/explosion/spaCy) pipeline component.
 
 !!! warning "Status"
-    The project is in development towards 0.1: the repository, tooling, CI and documentation are in place, and the first modules are written - extraction of sentences, words and character N-grams, syllabification and stress, basic statistics, readability with presets. The first release (0.1) will also cover lexical diversity.
+    The modules of the first release (0.1) are written: extraction of sentences, words and character N-grams, syllabification and stress, basic statistics, readability with presets and lexical diversity. The release itself is pending a QA pass and publication on PyPI.
 
 ## Planned scope
 

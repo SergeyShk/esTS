@@ -9,7 +9,7 @@ English version: [README.md](README.md)
 
 Es la biblioteca hermana de [ruTS](https://github.com/SergeyShk/ruTS), la de estadísticas de textos en ruso, y sigue su estructura y sus nombres: cada estadística está disponible como clase con `get_stats()` y como componente de un pipeline de [spaCy](https://github.com/explosion/spaCy).
 
-> **Estado:** en desarrollo hacia la 0.1. El repositorio, las herramientas, la integración continua y la documentación existen, y los primeros módulos están escritos: la extracción de oraciones, palabras y N-gramas de caracteres, la silabificación y el acento, las estadísticas básicas, la legibilidad con preajustes. La primera versión (0.1) cubrirá además la diversidad léxica.
+> **Estado:** los módulos de la primera versión (0.1) están escritos: la extracción de oraciones, palabras y N-gramas de caracteres, la silabificación y el acento, las estadísticas básicas, la legibilidad con preajustes y la diversidad léxica. La versión en sí está pendiente de una revisión de calidad y de la publicación en PyPI.
 
 ## Alcance previsto
 

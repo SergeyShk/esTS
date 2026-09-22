@@ -17,6 +17,9 @@ nav:
       - Readability metrics:
         - Metrics module: stats/readability_stats.md
         - Metric functions: stats/readability_stats_funcs.md
+      - Lexical diversity metrics:
+        - Metrics module: stats/diversity_stats.md
+        - Metric functions: stats/diversity_stats_funcs.md
 
 theme:
   name: material
@@ -63,6 +66,7 @@ plugins:
             Readability metrics: Métricas de legibilidad
             Metrics module: Módulo de las métricas
             Metric functions: Funciones de las métricas
+            Lexical diversity metrics: Métricas de diversidad léxica
 
 extra:
   social:
