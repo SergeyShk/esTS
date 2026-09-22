@@ -1,4 +1,5 @@
 import re
+import unicodedata
 from collections import Counter
 from collections.abc import Iterable
 from typing import Any
@@ -19,7 +20,10 @@ from .syllables import count_syllables
 from .utils import count_letters, iter_doc_words
 
 ELLIPSIS_PATTERN = re.compile(r"…|\.{3,}|(?<=[?!])\.{2}")
-DASH_PATTERN = re.compile(r"(?:(?<=\s)|^)-(?=\s|$)|(?<=\s)-(?:(?=\s)|$)", re.MULTILINE)
+# A hyphen with whitespace or a line boundary on at least one side is a dash,
+# the way the raya is typed in plain-text corpora (-Hola -dijo Juan); a hyphen
+# before a digit is a sign
+DASH_PATTERN = re.compile(r"(?:(?<=\s)|^)-(?!\d)|-(?=\s|$)", re.MULTILINE)
 _DELETE_SPACES = str.maketrans("", "", "".join(SPACES))
 PUNCTUATION_CHARS = {
     ",": "comma",
@@ -36,9 +40,10 @@ PUNCTUATION_CHARS = {
     "«": "angle_quotes",
     "»": "angle_quotes",
     '"': "straight_quotes",
-    "„": "straight_quotes",
     "“": "straight_quotes",
     "”": "straight_quotes",
+    "‘": "straight_quotes",
+    "’": "straight_quotes",
     "(": "parentheses",
     ")": "parentheses",
 }
@@ -236,8 +241,9 @@ class BasicStats:
         """Printing the computed statistics of the text with descriptions"""
         print(f"{'Statistic':^20}|{'Value':^10}")
         print("-" * 30)
+        stats = self.get_stats()
         for stat, value in BASIC_STATS_DESC.items():
-            print(f"{value:20}|{self.get_stats().get(stat):^10}")
+            print(f"{value:20}|{stats[stat]:^10}")
 
 
 def count_punctuations(text: str) -> dict[str, int]:
@@ -250,11 +256,15 @@ def count_punctuations(text: str) -> dict[str, int]:
         question marks), ellipses (the character …, three or more periods,
         or two periods after ? and ! count as one mark whose periods are not
         periods: "¿Quién?.." is a question and an ellipsis), colons,
-        semicolons, dashes (— and –, as well as a hyphen with spaces on both
-        sides or at the start of a line, the way dashes are typed in text
-        corpora: "- Se fueron - dijo"), hyphens between letters, guillemets
-        «», straight and curly quotes "„“”, parentheses and the other marks
-        of PUNCTUATIONS
+        semicolons, dashes (— and –, as well as a hyphen with whitespace or
+        a line boundary on at least one side, the way the raya is typed in
+        plain-text corpora: "-Hola -dijo Juan", "- Se fueron - dijo"),
+        hyphens inside words and before digits (teórico-práctico, 1990-1995,
+        -5), guillemets «», straight and curly quotes "“”‘’ of the three
+        levels of the orthography, parentheses and the other marks: every
+        remaining character of PUNCTUATIONS or of the Unicode categories P
+        and S, the same set that is_punctuation removes from the words,
+        so that no mark is lost between the words and the types
 
     Arguments:
         text (str): Text string
@@ -268,7 +278,12 @@ def count_punctuations(text: str) -> dict[str, int]:
     chars = Counter(rest)
     for char, kind in PUNCTUATION_CHARS.items():
         counts[kind] += chars[char]
-    counts["other"] = sum(chars[char] for char in PUNCTUATIONS if char not in PUNCTUATION_CHARS)
+    counts["other"] = sum(
+        count
+        for char, count in chars.items()
+        if char not in PUNCTUATION_CHARS
+        and (char in PUNCTUATIONS or unicodedata.category(char)[0] in "PS")
+    )
     return counts
 
 

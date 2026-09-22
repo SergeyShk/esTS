@@ -137,7 +137,7 @@ def test_c_punctuations(bs):
 
 def test_count_punctuations():
     text = (
-        "El gato — «fiera»... El perro, claro, - amigo; y „alguien“ (el que vive) – ¡no!"
+        "El gato — «fiera»... El perro, claro, - amigo; y “alguien” (el que vive) – ¡no!"
         ' ¿Así? "Sí". ‘Ya’ 5…'
     )
     assert count_punctuations(text) == {
@@ -151,9 +151,9 @@ def test_count_punctuations():
         "dash": 3,
         "hyphen": 0,
         "angle_quotes": 2,
-        "straight_quotes": 4,
+        "straight_quotes": 6,
         "parentheses": 2,
-        "other": 2,
+        "other": 0,
     }
     assert count_punctuations("Hola.... Adiós....... Sí") == {
         **dict.fromkeys(PUNCTUATION_TYPES, 0),
@@ -174,15 +174,40 @@ def test_count_punctuations_inverted_marks():
     assert count_punctuations("¿¡Qué!?")["exclamation"] == 2
 
 
+def test_count_punctuations_other_marks():
+    """Every mark that is_punctuation removes from the words lands in a type"""
+    counts = count_punctuations("Dijo ‹así› y «así» § 5 € 20° ‰ † „así“")
+    assert (counts["angle_quotes"], counts["straight_quotes"], counts["other"]) == (2, 1, 8)
+    for char in "‹›§€°‰†„":
+        assert count_punctuations(f"a {char} b")["other"] == 1
+    assert count_punctuations("Dijo: ‘Ya está’")["straight_quotes"] == 2
+
+
 def test_count_punctuations_spaced_hyphen_as_dash():
-    counts = count_punctuations(
-        "- Se fueron, - dijo él.\n- Sí-sí, - contestó alguien - y todo.\n-"
-    )
+    text = "- Se fueron, - dijo él.\n- Sí-sí, - contestó alguien - y todo.\n-"
+    counts = count_punctuations(text)
     assert (counts["dash"], counts["hyphen"]) == (6, 1)
     counts = count_punctuations("Qué joven soy - y no conozco el miedo.")
     assert (counts["dash"], counts["hyphen"]) == (1, 0)
     assert count_punctuations("teórico-práctico")["hyphen"] == 1
     assert count_punctuations("casa -\nmuseo")["dash"] == 1
+
+
+@pytest.mark.parametrize(
+    ("text", "dashes", "hyphens"),
+    [
+        ("-Hola -dijo Juan.", 2, 0),
+        ("-¿Vienes? -preguntó ella.", 2, 0),
+        ("Sí -dijo- claro.", 2, 0),
+        ("—Hola —dijo Juan—.", 3, 0),
+        ("-5 grados y -3", 0, 2),
+        ("1990-1995", 0, 1),
+        ("teórico-práctico", 0, 1),
+    ],
+)
+def test_count_punctuations_attached_raya(text, dashes, hyphens):
+    counts = count_punctuations(text)
+    assert (counts["dash"], counts["hyphen"]) == (dashes, hyphens)
 
 
 def test_punctuation_profile():
@@ -277,8 +302,9 @@ def test_custom_factors():
 def test_multichar_punctuation():
     bs = BasicStats("¡¡¡Hurra!!! ¿¡Hurra!? Hurra... Palabra – palabra… y §1")
     assert bs.n_words == 7
-    assert bs.n_punctuations == 13 == sum(bs.c_punctuations.values())
+    assert bs.n_punctuations == 14 == sum(bs.c_punctuations.values())
     assert bs.c_punctuations["exclamation"] == 8
+    assert bs.c_punctuations["other"] == 1
     assert BasicStats(text := "¡¡¡Hurra!!! ¿¡Hurra!? Hurra...", normalize=True).p_punctuations == (
         11 / BasicStats(text).n_chars
     )
@@ -329,13 +355,13 @@ def test_doc_words(nlp):
     # the ordinal indicator of 3.º is a letter for str.isalpha, EE. UU. has four
     assert doc_stats.c_letters == {0: 2, 1: 1, 2: 1, 4: 1, 5: 1, 15: 1}
     # marks are counted in the text, so the periods of 3.º, 1.500,50 and EE. UU. count
-    assert doc_stats.n_punctuations == 9
+    assert doc_stats.n_punctuations == 10
     assert {kind: count for kind, count in doc_stats.c_punctuations.items() if count} == {
         "comma": 1,
         "period": 5,
         "semicolon": 1,
         "hyphen": 1,
-        "other": 1,
+        "other": 2,
     }
 
 
@@ -354,8 +380,17 @@ def test_get_stats(bs):
     assert bs.n_words > 0 and bs.c_letters[1] == 4
 
 
-def test_print_stats(capsys, bs):
+def test_print_stats(capsys, bs, monkeypatch):
+    calls = []
+    original = BasicStats.get_stats
+
+    def counting(self):
+        calls.append(1)
+        return original(self)
+
+    monkeypatch.setattr(BasicStats, "get_stats", counting)
     bs.print_stats()
     captured = capsys.readouterr()
     assert captured.out.count("|") == 14
     assert "Sentences" in captured.out
+    assert len(calls) == 1

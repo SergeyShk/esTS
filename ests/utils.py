@@ -211,7 +211,8 @@ def count_letters(word: str) -> int:
 
     Description:
         Letters of any alphabet (str.isalpha), without digits, hyphens
-        and marks
+        and marks; the ordinal indicators º and ª are letters for
+        str.isalpha, so 3.º is a one-letter word
 
     Arguments:
         word (str): Word form
