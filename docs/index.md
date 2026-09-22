@@ -1,5 +1,9 @@
 # Spanish Texts Statistics (esTS)
 
+![esTS](img/ests.svg)
+
+*¿Cómo esTáS, texto?*
+
 **esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability and lexical diversity - by published formulas with the coefficients and the scales of their authors, deterministically and without a neural network inside.
 
 The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy), and needs no trained model: sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography.

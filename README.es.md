@@ -1,4 +1,12 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/SergeyShk/esTS/master/docs/img/ests.png" alt="esTS" width="340">
+</p>
+
 <h1 align="center">esTS</h1>
+
+<p align="center">
+  <i>¿Cómo esTáS, texto?</i>
+</p>
 
 <p align="center">
   <b>Spanish Texts Statistics</b> - biblioteca para extraer estadísticas de textos en español
