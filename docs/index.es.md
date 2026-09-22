@@ -1,5 +1,9 @@
 # Spanish Texts Statistics (esTS)
 
+![esTS](img/ests.svg)
+
+*¿Cómo esTáS, texto?*
+
 **esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad y diversidad léxica, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, de forma determinista y sin ninguna red neuronal dentro.
 
 La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy) y no necesita ningún modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, y las sílabas y el acento se deducen de la ortografía.
