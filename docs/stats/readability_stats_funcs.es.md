@@ -89,7 +89,7 @@ Fuente: Crawford, A. N. Fórmula y gráfico para determinar la comprensibilidad 
 !!! info ""
     **ests.readability_stats.calc_mu_index()**
 
-Cálculo de la Legibilidad µ de Muñoz Baquedano y Muñoz Urra (2006), que mide la variabilidad de la longitud de las palabras: la media y la varianza del número de letras por palabra. La varianza es la poblacional, que el factor `n / (n − 1)` corrige, como explican los autores. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (`nan`). Cuanto mayor es el valor, más fácil es el texto:
+Cálculo de la Legibilidad µ de Muñoz Baquedano y Muñoz Urra (2006), que mide la variabilidad de la longitud de las palabras: la media y la varianza del número de letras por palabra. La varianza es la muestral, dividida por `n − 1`, como en el ejemplo resuelto de los autores (18 palabras, media 6.9444, varianza 13.5844), y el factor `n / (n − 1)` multiplica el cociente, así que el índice equivale a la media dividida por la varianza poblacional; en el ejemplo da 54.13, donde el manual imprime 51.12. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (`nan`). Cuanto mayor es el valor, más fácil es el texto:
 
 | Valor | Nivel |
 | :---: | :---: |
@@ -221,7 +221,7 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.flesch_reading_easy_to_level()**
 
-El nivel de una escala para la facilidad de lectura de Flesch. Las escalas de `ests.constants.READING_EASE_SCALES`: `inflesz` (Barrio-Cantalejo et al., 2008, cinco niveles para los coeficientes de Szigriszt-Pazos), `szigriszt` (Szigriszt-Pazos, 1993: `muy difícil` por debajo de 15, `árido` 15-35, `bastante difícil` 35-50, `normal` 50-65, `bastante fácil` 65-75, `fácil` 75-85, `muy fácil` por encima de 85) y `fernandez_huerta` (Fernández Huerta, 1959: `muy difícil` por debajo de 30, `difícil` 30-50, `bastante difícil` 50-60, `normal` 60-70, `bastante fácil` 70-80, `fácil` 80-90, `muy fácil` por encima de 90).
+El nivel de una escala para la facilidad de lectura de Flesch. Las escalas de `ests.constants.READING_EASE_SCALES`: `inflesz` (Barrio-Cantalejo et al., 2008, cinco niveles para los coeficientes de Szigriszt-Pazos), `szigriszt` (Szigriszt-Pazos, 1993, niveles enteros: `muy difícil` 0-15, `árido` 16-35, `bastante difícil` 36-50, `normal` 51-65, `bastante fácil` 66-75, `fácil` 76-85, `muy fácil` 86-100) y `fernandez_huerta` (Fernández Huerta, 1959: `muy difícil` por debajo de 30, `difícil` 30-50, `bastante difícil` 50-60, `normal` 60-70, `bastante fácil` 70-80, `fácil` 80-90, `muy fácil` por encima de 90).
 
 Parámetros:
 

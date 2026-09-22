@@ -89,7 +89,7 @@ Source: Crawford, A. N. Fórmula y gráfico para determinar la comprensibilidad 
 !!! info ""
     **ests.readability_stats.calc_mu_index()**
 
-Computation of Legibilidad µ of Muñoz Baquedano and Muñoz Urra (2006), which measures the variability of word length: the mean and the variance of the number of letters per word. The variance is the population one, which the factor `n / (n − 1)` corrects, as the authors explain. Words without letters (numbers) are left out; with fewer than two words or without variability the index is undefined (`nan`). The higher the value, the easier the text:
+Computation of Legibilidad µ of Muñoz Baquedano and Muñoz Urra (2006), which measures the variability of word length: the mean and the variance of the number of letters per word. The variance is the sample one, divided by `n − 1`, as in the worked example of the authors (18 words, mean 6.9444, variance 13.5844), and the factor `n / (n − 1)` multiplies the ratio, so the index equals the mean divided by the population variance; on the example it gives 54.13, where the manual prints 51.12. Words without letters (numbers) are left out; with fewer than two words or without variability the index is undefined (`nan`). The higher the value, the easier the text:
 
 | Value | Level |
 | :---: | :---: |
@@ -221,7 +221,7 @@ Parameters:
 !!! info ""
     **ests.readability_stats.flesch_reading_easy_to_level()**
 
-The band of a scale for the Flesch reading ease. The scales of `ests.constants.READING_EASE_SCALES`: `inflesz` (Barrio-Cantalejo et al., 2008, five bands for the Szigriszt-Pazos coefficients), `szigriszt` (Szigriszt-Pazos, 1993: `muy difícil` below 15, `árido` 15-35, `bastante difícil` 35-50, `normal` 50-65, `bastante fácil` 65-75, `fácil` 75-85, `muy fácil` above 85) and `fernandez_huerta` (Fernández Huerta, 1959: `muy difícil` below 30, `difícil` 30-50, `bastante difícil` 50-60, `normal` 60-70, `bastante fácil` 70-80, `fácil` 80-90, `muy fácil` above 90).
+The band of a scale for the Flesch reading ease. The scales of `ests.constants.READING_EASE_SCALES`: `inflesz` (Barrio-Cantalejo et al., 2008, five bands for the Szigriszt-Pazos coefficients), `szigriszt` (Szigriszt-Pazos, 1993, integer bands: `muy difícil` 0-15, `árido` 16-35, `bastante difícil` 36-50, `normal` 51-65, `bastante fácil` 66-75, `fácil` 76-85, `muy fácil` 86-100) and `fernandez_huerta` (Fernández Huerta, 1959: `muy difícil` below 30, `difícil` 30-50, `bastante difícil` 50-60, `normal` 60-70, `bastante fácil` 70-80, `fácil` 80-90, `muy fácil` above 90).
 
 Parameters:
 

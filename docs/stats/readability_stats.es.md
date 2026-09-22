@@ -124,7 +124,7 @@ Parámetros:
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `stat` | str | `flesch_reading_easy` | Nombre de la métrica (`flesch_reading_easy`, `mu_index`) |
-| `scale` | str | `inflesz` | Escala para la facilidad de lectura (`inflesz`, `szigriszt`, `fernandez_huerta`) |
+| `scale` | str | `None` | Escala para la facilidad de lectura (`inflesz` por defecto, `szigriszt`, `fernandez_huerta`); la Legibilidad µ tiene una sola escala y no admite otra |
 
 !!! example "Ejemplo"
 
@@ -138,7 +138,7 @@ Parámetros:
     rs.describe_level(scale="szigriszt")
     # 'normal'
     rs.describe_level("mu_index")
-    # 'adecuado'
+    # 'un poco difícil'
     ```
 
 ### describe_grade
@@ -215,7 +215,7 @@ Devuelve un diccionario con las métricas de legibilidad calculadas.
     {'flesch_reading_easy': 53.545000000000016,
     'gutierrez_polini_index': 33.5,
     'crawford_grade': 5.812999999999999,
-    'mu_index': 62.8930817610063,
+    'mu_index': 56.60377358490566,
     'sol_grade': 9.258359866374562,
     'lix': 60.0,
     'rix': 5.0,
@@ -246,7 +246,7 @@ Muestra una tabla con las métricas de legibilidad calculadas.
     Flesch reading ease (Szigriszt-Pazos)        |  53.55
     Gutiérrez de Polini comprehensibility        |  33.50
     Crawford grade                               |   5.81
-    Legibilidad µ                                |  62.89
+    Legibilidad µ                                |  56.60
     SOL grade (SMOG for Spanish)                 |   9.26
     LIX readability index                        |  60.00
     RIX readability index                        |   5.00

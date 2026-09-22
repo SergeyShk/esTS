@@ -1,9 +1,11 @@
+from collections import Counter
 from math import isnan
 
 import pytest
 import spacy
+from spacy.lang.es.stop_words import STOP_WORDS
 
-from ests import BasicStats, ReadabilityStats, SentsExtractor
+from ests import BasicStats, ReadabilityStats, SentsExtractor, WordsExtractor
 from ests.constants import (
     READABILITY_GRADE_STATS,
     READABILITY_PRESETS,
@@ -124,8 +126,9 @@ class TestQuoteByHand:
         assert quote.crawford_grade == pytest.approx(-0.205 * 10 + 0.049 * 230 - 3.407)
 
     def test_mu_index(self, quote):
-        # letters per word 3, 4, 6, 2, 8, 8, 8, 8, 1, 12: mean 6, population variance 10.6
-        assert quote.mu_index == pytest.approx(10 / 9 * 6 / 10.6 * 100)
+        # letters per word 3, 4, 6, 2, 8, 8, 8, 8, 1, 12: mean 6, sample variance 106 / 9
+        assert quote.mu_index == pytest.approx(10 / 9 * 6 / (106 / 9) * 100)
+        assert quote.mu_index == pytest.approx(56.60377358490566)
 
     def test_sol_grade(self, quote):
         smog = 1.043 * (5 * 30) ** 0.5 + 3.1291
@@ -145,7 +148,7 @@ class TestQuoteByHand:
     def test_descriptions(self, quote):
         assert quote.describe_level() == "algo difícil"
         assert quote.describe_level(scale="szigriszt") == "normal"
-        assert quote.describe_level("mu_index") == "adecuado"
+        assert quote.describe_level("mu_index") == "un poco difícil"
         assert quote.describe_grade() == "ESO (12-16 years)"
         assert quote.describe_grade("crawford_grade") == "primary school, grades 4-6 (9-12 years)"
 
@@ -164,14 +167,25 @@ def test_gutierrez_polini_index(rs):
 def test_crawford_grade(rs):
     assert rs.crawford_grade == pytest.approx(7.260021276595744)
     assert calc_crawford_grade(23, 10, 1) == pytest.approx(5.813)
-    assert calc_crawford_grade(150, 100, 5) == pytest.approx(-0.205 * 5 + 0.049 * 150 - 3.407)
+    assert calc_crawford_grade(150, 100, 5) == pytest.approx(2.918)
+
+
+def test_gutierrez_polini_index_with_word_filter():
+    """The mean word length comes from the extracted words, not from the whole text"""
+    rs = ReadabilityStats(TEXT, words_extractor=WordsExtractor(stopwords=STOP_WORDS))
+    letters = sum(letters * count for letters, count in rs.bs.c_letters.items())
+    assert (rs.bs.n_words, letters) == (38, 356)
+    assert rs.gutierrez_polini_index == pytest.approx(95.2 - 9.7 * 356 / 38 - 0.35 * 38 / 2)
+    assert rs.gutierrez_polini_index > 95.2 - 9.7 * 519 / 38 - 0.35 * 38 / 2
 
 
 def test_mu_index(rs):
-    assert rs.mu_index == pytest.approx(41.984674748325894)
-    # the example of the authors' manual: 18 words, mean 6.9444, variance 13.5844
-    assert pytest.approx(54.13, abs=0.01) == 18 / 17 * 6.9444 / 13.5844 * 100
-    assert calc_mu_index({3: 5, 5: 5}) == pytest.approx(10 / 9 * 4 / 1 * 100)
+    assert rs.mu_index == pytest.approx(41.53802927227987)
+    # the worked example of the authors' manual: 18 words, mean 6.9444, sample variance 13.5844
+    # (sum 125, sum of squares 1099); the formula gives 54.13 where the manual prints 51.12
+    manual = Counter([4, 6, 5, 5, 8, 14, 11, 11, 6, 1, 4, 10, 9, 11, 7, 3, 9, 1])
+    assert calc_mu_index(manual) == pytest.approx(54.13, abs=0.01)
+    assert calc_mu_index({3: 5, 5: 5}) == pytest.approx(400.0)
     assert calc_mu_index({0: 4, 3: 5, 5: 5}) == calc_mu_index({3: 5, 5: 5})
     assert isnan(calc_mu_index({3: 1}))
     assert isnan(calc_mu_index({3: 5}))
@@ -181,11 +195,9 @@ def test_mu_index(rs):
 def test_sol_grade(rs):
     assert rs.sol_grade == pytest.approx(17.74101003761885)
     assert calc_smog_index(0, 1) == pytest.approx(3.1291)
-    assert calc_smog_index(30, 30) == pytest.approx(1.043 * 30**0.5 + 3.1291)
-    # Table 5 of Contreras et al. (1999): SMOG 15 in Spanish is grade 8.59, 25 is 15.99
-    assert pytest.approx(8.59) == -2.51 + 0.74 * 15
-    assert pytest.approx(15.99) == -2.51 + 0.74 * 25
-    assert calc_sol_grade(5, 1) == pytest.approx(-2.51 + 0.74 * calc_smog_index(5, 1))
+    assert calc_smog_index(30, 30) == pytest.approx(8.8418, abs=0.0001)
+    assert calc_sol_grade(30, 30) == pytest.approx(4.033, abs=0.001)
+    assert calc_sol_grade(0, 1) == pytest.approx(-0.194466, abs=0.000001)
 
 
 def test_lix(rs):
@@ -248,12 +260,19 @@ def test_flesch_reading_easy_to_grade(flesch_reading_easy, grade):
         (39.9, "inflesz", "muy difícil"),
         (-10, "inflesz", "muy difícil"),
         (90, "szigriszt", "muy fácil"),
-        (80, "szigriszt", "fácil"),
-        (70, "szigriszt", "bastante fácil"),
-        (60, "szigriszt", "normal"),
-        (40, "szigriszt", "bastante difícil"),
-        (20, "szigriszt", "árido"),
-        (10, "szigriszt", "muy difícil"),
+        (86, "szigriszt", "muy fácil"),
+        (85, "szigriszt", "fácil"),
+        (76, "szigriszt", "fácil"),
+        (75, "szigriszt", "bastante fácil"),
+        (66, "szigriszt", "bastante fácil"),
+        (65, "szigriszt", "normal"),
+        (51, "szigriszt", "normal"),
+        (50, "szigriszt", "bastante difícil"),
+        (36, "szigriszt", "bastante difícil"),
+        (35, "szigriszt", "árido"),
+        (16, "szigriszt", "árido"),
+        (15, "szigriszt", "muy difícil"),
+        (-5, "szigriszt", "muy difícil"),
         (95, "fernandez_huerta", "muy fácil"),
         (85, "fernandez_huerta", "fácil"),
         (75, "fernandez_huerta", "bastante fácil"),
@@ -329,10 +348,13 @@ def test_describe_level(rs):
     assert rs.describe_level(scale="szigriszt") == "árido"
     assert rs.describe_level(scale="fernandez_huerta") == "muy difícil"
     assert rs.describe_level("mu_index") == "difícil"
+    assert rs.describe_level(scale="inflesz") == rs.describe_level()
     with pytest.raises(ValueError):
         rs.describe_level("lix")
     with pytest.raises(ValueError):
         rs.describe_level(scale="unknown")
+    with pytest.raises(ValueError, match="single scale"):
+        rs.describe_level("mu_index", scale="szigriszt")
 
 
 def test_reading_time(rs):

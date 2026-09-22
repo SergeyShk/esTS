@@ -259,14 +259,14 @@ READING_EASE_SCALES: dict[str, tuple[tuple[float, str], ...]] = {
         (40, "algo difícil"),
         (0, "muy difícil"),
     ),
-    # Szigriszt-Pazos (1993)
+    # Szigriszt-Pazos (1993): 0-15, 16-35, 36-50, 51-65, 66-75, 76-85, 86-100
     "szigriszt": (
-        (85, "muy fácil"),
-        (75, "fácil"),
-        (65, "bastante fácil"),
-        (50, "normal"),
-        (35, "bastante difícil"),
-        (15, "árido"),
+        (86, "muy fácil"),
+        (76, "fácil"),
+        (66, "bastante fácil"),
+        (51, "normal"),
+        (36, "bastante difícil"),
+        (16, "árido"),
         (0, "muy difícil"),
     ),
     # Fernández Huerta (1959)

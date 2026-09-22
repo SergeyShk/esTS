@@ -64,7 +64,7 @@ class ReadabilityStats:
         {'flesch_reading_easy': 53.545000000000016,
          'gutierrez_polini_index': 33.5,
          'crawford_grade': 5.812999999999999,
-         'mu_index': 62.8930817610063,
+         'mu_index': 56.60377358490566,
          'sol_grade': 9.258359866374562,
          'lix': 60.0,
          'rix': 5.0,
@@ -139,7 +139,10 @@ class ReadabilityStats:
 
     @property
     def gutierrez_polini_index(self) -> float:
-        return calc_gutierrez_polini_index(self.bs.n_letters, self.bs.n_words, self.bs.n_sents)
+        # letters of the extracted words, not of the whole text, so that the mean word
+        # length stays on the same token set as the word count with any extractor
+        n_letters = sum(letters * count for letters, count in self.bs.c_letters.items())
+        return calc_gutierrez_polini_index(n_letters, self.bs.n_words, self.bs.n_sents)
 
     @property
     def crawford_grade(self) -> float:
@@ -178,24 +181,28 @@ class ReadabilityStats:
     def reading_time(self) -> float:
         return calc_reading_time(self.bs.n_words)
 
-    def describe_level(self, stat: str = "flesch_reading_easy", scale: str = "inflesz") -> str:
+    def describe_level(self, stat: str = "flesch_reading_easy", scale: str | None = None) -> str:
         """
         Getting the band of a readability scale for a metric
 
         Arguments:
             stat (str): Name of the metric: flesch_reading_easy or mu_index
-            scale (str): Scale for the reading ease: inflesz, szigriszt or
-                fernandez_huerta; the µ index has its own scale
+            scale (str): Scale for the reading ease: inflesz (the default),
+                szigriszt or fernandez_huerta; the µ index has a single scale
+                of its own and accepts no other
 
         Returns:
             str: Band of the scale
 
         Raises:
-            ParameterError: If the metric has no scale or the scale is unknown
+            ParameterError: If the metric has no scale, the scale is unknown
+                or a scale is given for the µ index
         """
         if stat == "flesch_reading_easy":
-            return flesch_reading_easy_to_level(self.flesch_reading_easy, scale)
+            return flesch_reading_easy_to_level(self.flesch_reading_easy, scale or "inflesz")
         if stat == "mu_index":
+            if scale is not None:
+                raise ParameterError("Legibilidad µ has a single scale, scale must not be set")
             return mu_to_level(self.mu_index)
         raise ParameterError(
             f"The metric {stat} has no interpretation scale. "
@@ -388,9 +395,12 @@ def calc_mu_index(c_letters: Mapping[int, int]) -> float:
         The index of Muñoz Baquedano and Muñoz Urra (2006) measures the
         variability of word length: n / (n - 1) * mean / variance * 100,
         where n is the number of words and the mean and the variance are
-        those of the number of letters per word; the variance is the
-        population one, which the factor n / (n - 1) corrects, as the
-        authors explain. The higher the value, the easier the text;
+        those of the number of letters per word. The variance is the sample
+        one, divided by n - 1, as in the worked example of the authors
+        (18 words, mean 6.9444, variance 13.5844), and the factor n / (n - 1)
+        multiplies the ratio, so the index equals the mean divided by the
+        population variance; on the example it gives 54.13, where the
+        manual prints 51.12. The higher the value, the easier the text;
         the scale (mu_to_level):
             91-100 - muy fácil
             81-90 - fácil
@@ -418,7 +428,7 @@ def calc_mu_index(c_letters: Mapping[int, int]) -> float:
     if n < 2:
         return float("nan")
     mean = sum(letters * count for letters, count in counts.items()) / n
-    variance = sum(count * (letters - mean) ** 2 for letters, count in counts.items()) / n
+    variance = sum(count * (letters - mean) ** 2 for letters, count in counts.items()) / (n - 1)
     if not variance:
         return float("nan")
     return n / (n - 1) * mean / variance * 100
