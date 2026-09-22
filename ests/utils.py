@@ -81,8 +81,6 @@ def _ends_sentence(text: str, start: int, match: re.Match[str]) -> bool:
     if LIST_MARKER.search(window):
         return False
     tokens = [stripped for token in window.split() if (stripped := token.lstrip(OPENING_CHARS))]
-    if not tokens:
-        return True
     last = tokens[-1]
     return not (
         INITIAL.fullmatch(last)
