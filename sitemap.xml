@@ -50,6 +50,13 @@
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/extractors/words/"/>
     </url>
     <url>
+        <loc>Nonestats/basic_stats/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/basic_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/basic_stats/"/>
+    </url>
+    <url>
         <loc>Nonees/</loc>
         <lastmod>2026-09-22</lastmod>
         <changefreq>daily</changefreq>
@@ -97,5 +104,12 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/extractors/words/"/>
         <xhtml:link rel="alternate" hreflang="en" href="Noneextractors/words/"/>
+    </url>
+    <url>
+        <loc>Nonees/stats/basic_stats/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/basic_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/basic_stats/"/>
     </url>
 </urlset>
