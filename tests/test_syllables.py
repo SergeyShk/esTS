@@ -1,10 +1,18 @@
-import warnings
+import unicodedata
+from pathlib import Path
 
 import pytest
-import silabeador
-from spacy.lang.es.stop_words import STOP_WORDS
 
-from ests.syllables import count_syllables, stress_type, syllabify, word_stress, word_stresses
+from ests.syllables import (
+    _analyze,
+    count_syllables,
+    stress_type,
+    syllabify,
+    word_stress,
+    word_stresses,
+)
+
+DATA = Path(__file__).parent / "data" / "syllables.tsv"
 
 # Word, syllables, stressed syllables; checked by hand against the RAE rules
 WORDS = [
@@ -151,12 +159,29 @@ WORDS = [
     ("vehemente", "ve-he-men-te", [2]),
     ("lamente", "la-men-te", [1]),
     ("mente", "men-te", [0]),
-    ("fundamente", "fun-da-men-te", [0, 2]),
+    ("cruelmente", "cruel-men-te", [0, 1]),
+    ("fielmente", "fiel-men-te", [0, 1]),
+    ("vilmente", "vil-men-te", [0, 1]),
+    ("clemente", "cle-men-te", [1]),
+    ("fundamente", "fun-da-men-te", [2]),
+    ("complemente", "com-ple-men-te", [2]),
+    ("atormente", "a-tor-men-te", [2]),
+    ("sedimente", "se-di-men-te", [2]),
+    ("comente", "co-men-te", [1]),
     # Compounds, foreign letters, case
     ("teórico-práctico", "te-ó-ri-co-prác-ti-co", [1, 4]),
     ("socio-económico", "so-cio-e-co-nó-mi-co", [0, 4]),
     ("d'Alcalà", "al-ca-là", [2]),
     ("François", "fran-çois", [0]),
+    ("Björk", "björk", [0]),
+    ("Lluïsa", "llu-ï-sa", [1]),
+    ("Montjuïc", "mont-ju-ïc", [2]),
+    ("Citroën", "ci-tro-ën", [2]),
+    ("Schäuble", "schäu-ble", [0]),
+    ("São", "são", [0]),
+    ("Camões", "ca-mões", [1]),
+    ("João", "jo-ão", [1]),
+    ("naïve", "na-ï-ve", [1]),
     ("CASA", "ca-sa", [0]),
     # No vowels
     ("sh", "", []),
@@ -165,9 +190,6 @@ WORDS = [
     ("n.º", "", []),
     ("", "", []),
 ]
-
-# Where silabeador departs from the RAE rules that the module follows
-KNOWN_DIFFERENCES = {"paìs"}
 
 
 @pytest.mark.parametrize(("word", "syllables", "stresses"), WORDS, ids=[w[0] for w in WORDS])
@@ -202,14 +224,35 @@ def test_results_are_copies():
     assert word_stresses("fácilmente") == [0, 2]
 
 
-def test_against_silabeador():
-    differences = []
-    for word in sorted(STOP_WORDS - KNOWN_DIFFERENCES):
-        with warnings.catch_warnings():
-            # silabeador reads its resources through the legacy importlib API
-            warnings.simplefilter("ignore", DeprecationWarning)
-            theirs = [syllable.lower() for syllable in silabeador.syllabify(word)]
-            their_stress = len(theirs) + silabeador.tonica(word)
-        if syllabify(word) != theirs or word_stress(word) != their_stress:
-            differences.append((word, syllabify(word), word_stress(word), theirs, their_stress))
+@pytest.mark.parametrize("word", ["camión", "día", "país", "ñandú", "pingüino", "fácilmente"])
+def test_decomposed_input(word):
+    decomposed = unicodedata.normalize("NFD", word)
+    assert decomposed != word
+    assert syllabify(decomposed) == syllabify(word)
+    assert word_stresses(decomposed) == word_stresses(word)
+    assert stress_type(decomposed) == stress_type(word)
+
+
+def test_single_analysis_cache():
+    _analyze.cache_clear()
+    count_syllables("murciélago")
+    word_stress("murciélago")
+    stress_type("murciélago")
+    assert _analyze.cache_info().misses == 1
+    assert _analyze.cache_info().hits == 3
+
+
+def test_stop_words():
+    """Syllables and stress of the spaCy stop words, frozen in tests/data/syllables.tsv"""
+    rows = [
+        line.split("\t")
+        for line in DATA.read_text(encoding="utf-8").splitlines()
+        if not line.startswith("#")
+    ]
+    assert len(rows) == 520
+    differences = [
+        (word, syllabify(word), word_stress(word), syllables, int(stress))
+        for word, syllables, stress in rows
+        if syllabify(word) != syllables.split("-") or word_stress(word) != int(stress)
+    ]
     assert not differences, differences

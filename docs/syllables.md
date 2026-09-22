@@ -31,7 +31,7 @@ Division of a word into syllables. A syllable is built around a vowel nucleus: a
 | other consonant pairs are split | ac-to, is-la, at-las, rit-mo |
 | of three or more consonants the last two go to the next syllable when they form such a cluster, otherwise the first two stay | com-pra, cons-truir, ins-ti-tu-to, obs-tá-cu-lo |
 
-Letters are lower-cased. A word is split into parts at digits, hyphens and other non-letters, each part is syllabified on its own (`te-ó-ri-co-prác-ti-co`), and a part without vowels (an abbreviation like `sh`) yields no syllables.
+The word is normalized to NFC (a decomposed accent becomes one letter with its base) and lower-cased. It is split into parts at digits, hyphens and other non-letters, each part is syllabified on its own (`te-ó-ri-co-prác-ti-co`), and a part without vowels (an abbreviation like `sh`) yields no syllables. Vowels with foreign diacritics count as accented strong vowels (`Björk`); a diaeresis other than `ü` marks a hiatus (`Llu-ï-sa`, `Ci-tro-ën`) and the Portuguese `ão` and `õe` are diphthongs (`São`, `Ca-mões`).
 
 Parameters:
 
@@ -111,7 +111,7 @@ Parameters:
 
 All stressed syllables of a word in ascending order. A single index for most words. Two indices for an adverb in `-mente`, which keeps the stress of its adjective (`fá-cil-men-te` - 0 and 2, `fe-liz-men-te` - 1 and 2), and one index per part of a hyphenated compound (`te-ó-ri-co-prác-ti-co` - 1 and 4).
 
-An adverb is recognized by its shape: at least two syllables before `-mente` and a stem that ends like an adjective (in a vowel, `l`, `r`, `z`, `n` or `s`) or carries an accent. Words listed in `NON_ADVERBS_MENTE` (`vehemente`) are excluded, while a rare subjunctive of the same shape (`fundamente`) gets a second stress too.
+An adverb is recognized by its shape: a stem of at least one syllable before `-mente` that ends like an adjective (in a vowel, `l`, `r`, `z`, `n` or `s`) or carries an accent, so `cruel-men-te` counts too. Words of the same shape that are not adverbs are listed in `NON_ADVERBS_MENTE`: adjectives and nouns (`demente`, `vehemente`) and subjunctives of verbs in `-mentar` (`fundamente`, `complemente`); an unlisted subjunctive of that kind gets a second stress.
 
 Parameters:
 

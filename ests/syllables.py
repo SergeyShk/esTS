@@ -1,10 +1,13 @@
 import re
+import unicodedata
 from functools import lru_cache
 from itertools import pairwise
 
 from .constants import (
     ACCENTED_VOWELS,
     DIGRAPHS,
+    HIATUS_VOWELS,
+    NASAL_VOWELS,
     NON_ADVERBS_MENTE,
     ONSET_CLUSTERS,
     VOWELS,
@@ -42,10 +45,14 @@ def syllabify(word: str) -> list[str]:
         The rules follow the Ortografía de la lengua española (RAE, 2010),
         where two weak vowels always form a diphthong (huir, cons-truir,
         je-sui-ta, guion) and tl is split as in Spain (at-las).
-        Letters are lower-cased; a word is split into parts at digits,
+        The word is normalized to NFC (a decomposed accent is one letter
+        with its base) and lower-cased; it is split into parts at digits,
         hyphens and other non-letters, each part is syllabified on its
         own (te-ó-ri-co-prác-ti-co), and a part without vowels
-        (an abbreviation like sh) yields no syllables
+        (an abbreviation like sh) yields no syllables. Vowels with foreign
+        diacritics count as accented strong vowels (Björk); a diaeresis
+        other than ü marks a hiatus (Llu-ï-sa, Ci-tro-ën) and the
+        Portuguese ão and õe are diphthongs (São, Ca-mões)
 
     References:
         Real Academia Española. Ortografía de la lengua española. 2010, §§ 2.2, 4.1
@@ -111,11 +118,13 @@ def word_stresses(word: str) -> list[int]:
         an adverb in -mente, which keeps the stress of its adjective
         (fá-cil-men-te - 0 and 2, fe-liz-men-te - 1 and 2), and one index
         per part of a hyphenated compound (te-ó-ri-co-prác-ti-co - 1 and 4).
-        An adverb is recognized by its shape: at least two syllables before
-        -mente and a stem that ends like an adjective (in a vowel, l, r, z,
-        n or s) or carries an accent; words listed in NON_ADVERBS_MENTE
-        (vehemente) are excluded, while a rare subjunctive of the same
-        shape (fundamente) gets a second stress too
+        An adverb is recognized by its shape: a stem of at least one
+        syllable before -mente that ends like an adjective (in a vowel, l,
+        r, z, n or s) or carries an accent, so cruel-men-te counts too.
+        Words of the same shape that are not adverbs are listed in
+        NON_ADVERBS_MENTE: adjectives and nouns (demente, vehemente) and
+        subjunctives of verbs in -mentar (fundamente, complemente); an
+        unlisted subjunctive of that kind gets a second stress
 
     Arguments:
         word (str): Word
@@ -149,12 +158,33 @@ def stress_type(word: str) -> str | None:
     return STRESS_TYPES[min(len(syllables) - stress - 1, 3)]
 
 
-@lru_cache(maxsize=CACHE_SIZE)
 def _syllables(word: str) -> tuple[str, ...]:
-    """Syllables of a word as a tuple, cached - see syllabify"""
-    return tuple(
-        syllable for part in WORD_PARTS.findall(word.lower()) for syllable in _syllabify_part(part)
-    )
+    """Syllables of a word as a tuple - see syllabify"""
+    return _analyze(word)[0]
+
+
+def _stresses(word: str) -> tuple[int, ...]:
+    """Stressed syllables of a word - see word_stresses"""
+    return _analyze(word)[1]
+
+
+@lru_cache(maxsize=CACHE_SIZE)
+def _analyze(word: str) -> tuple[tuple[str, ...], tuple[int, ...]]:
+    """Syllables and stressed syllables of a word, cached by word form"""
+    syllables: list[str] = []
+    stresses: list[int] = []
+    for part in WORD_PARTS.findall(unicodedata.normalize("NFC", word).lower()):
+        part_syllables = _syllabify_part(part)
+        if not part_syllables:
+            continue
+        offset = len(syllables)
+        if _is_adverb(part, part_syllables):
+            stresses.append(offset + _part_stress(part_syllables[:-2]))
+            stresses.append(offset + len(part_syllables) - 2)
+        else:
+            stresses.append(offset + _part_stress(part_syllables))
+        syllables.extend(part_syllables)
+    return tuple(syllables), tuple(stresses)
 
 
 def _syllabify_part(part: str) -> list[str]:
@@ -225,11 +255,17 @@ def _joins(part: str, vowels: list[int], index: int) -> bool:
         a weak and a strong vowel join, two strong vowels do not. A weak
         vowel followed by a strong one is left to that vowel
         (chi-hua-hua, ca-ca-hue-te). The same check adds the third vowel
-        of a triphthong (buey, a-ve-ri-guáis)
+        of a triphthong (buey, a-ve-ri-guáis). A vowel with a diaeresis
+        other than ü never joins (Llu-ï-sa), a Portuguese nasal vowel
+        joins a following o or e (São, Ca-mões)
     """
     first, second = vowels[index], vowels[index + 1]
     if not _adjacent(part, first, second):
         return False
+    if part[first] in HIATUS_VOWELS or part[second] in HIATUS_VOWELS:
+        return False
+    if part[first] in NASAL_VOWELS:
+        return part[second] in "oe"
     first_weak, second_weak = _is_weak(part, first), _is_weak(part, second)
     if not first_weak and not second_weak:
         return False
@@ -269,24 +305,6 @@ def _consonant_units(consonants: str) -> list[str]:
     return units
 
 
-@lru_cache(maxsize=CACHE_SIZE)
-def _stresses(word: str) -> tuple[int, ...]:
-    """Stressed syllables of a word, cached - see word_stresses"""
-    stresses: list[int] = []
-    offset = 0
-    for part in WORD_PARTS.findall(word.lower()):
-        syllables = _syllabify_part(part)
-        if not syllables:
-            continue
-        if _is_adverb(part, syllables):
-            stresses.append(offset + _part_stress(syllables[:-2]))
-            stresses.append(offset + len(syllables) - 2)
-        else:
-            stresses.append(offset + _part_stress(syllables))
-        offset += len(syllables)
-    return tuple(stresses)
-
-
 def _part_stress(syllables: list[str]) -> int:
     """Stressed syllable of a run of letters by its written accent or ending"""
     for index, syllable in enumerate(syllables):
@@ -304,7 +322,7 @@ def _part_stress(syllables: list[str]) -> int:
 
 def _is_adverb(part: str, syllables: list[str]) -> bool:
     """Whether a run of letters is an adverb in -mente with the stress of its adjective"""
-    if not part.endswith("mente") or len(syllables) < 4 or part in NON_ADVERBS_MENTE:
+    if not part.endswith("mente") or len(syllables) < 3 or part in NON_ADVERBS_MENTE:
         return False
     stem = part[:-5]
     return stem[-1] in "aelrzns" or any(letter in ACCENTED_VOWELS for letter in stem)

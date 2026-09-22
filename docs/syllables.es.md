@@ -31,7 +31,7 @@ División de una palabra en sílabas. Cada sílaba se construye alrededor de un 
 | los demás pares de consonantes se separan | ac-to, is-la, at-las, rit-mo |
 | de tres o más consonantes, las dos últimas pasan a la sílaba siguiente cuando forman uno de esos grupos; si no, se quedan las dos primeras | com-pra, cons-truir, ins-ti-tu-to, obs-tá-cu-lo |
 
-Las letras se pasan a minúsculas. La palabra se divide en partes por cifras, guiones y otros caracteres que no son letras, cada parte se silabifica por separado (`te-ó-ri-co-prác-ti-co`), y una parte sin vocales (una abreviatura como `sh`) no produce sílabas.
+La palabra se normaliza a NFC (un acento descompuesto pasa a ser una sola letra con su base) y se pasa a minúsculas. Se divide en partes por cifras, guiones y otros caracteres que no son letras, cada parte se silabifica por separado (`te-ó-ri-co-prác-ti-co`), y una parte sin vocales (una abreviatura como `sh`) no produce sílabas. Las vocales con diacríticos extranjeros cuentan como vocales fuertes con tilde (`Björk`); una diéresis distinta de `ü` marca hiato (`Llu-ï-sa`, `Ci-tro-ën`) y los portugueses `ão` y `õe` son diptongos (`São`, `Ca-mões`).
 
 Parámetros:
 
@@ -111,7 +111,7 @@ Parámetros:
 
 Todas las sílabas tónicas de una palabra en orden ascendente. Un solo índice para la mayoría de las palabras. Dos índices para un adverbio en `-mente`, que conserva el acento de su adjetivo (`fá-cil-men-te` - 0 y 2, `fe-liz-men-te` - 1 y 2), y un índice por cada parte de un compuesto con guion (`te-ó-ri-co-prác-ti-co` - 1 y 4).
 
-El adverbio se reconoce por su forma: al menos dos sílabas antes de `-mente` y una base que termina como un adjetivo (en vocal, `l`, `r`, `z`, `n` o `s`) o lleva tilde. Las palabras de `NON_ADVERBS_MENTE` (`vehemente`) quedan excluidas, mientras que un subjuntivo raro con la misma forma (`fundamente`) también recibe un segundo acento.
+El adverbio se reconoce por su forma: una base de al menos una sílaba antes de `-mente` que termina como un adjetivo (en vocal, `l`, `r`, `z`, `n` o `s`) o lleva tilde, así que `cruel-men-te` también cuenta. Las palabras con la misma forma que no son adverbios están en `NON_ADVERBS_MENTE`: adjetivos y sustantivos (`demente`, `vehemente`) y subjuntivos de verbos en `-mentar` (`fundamente`, `complemente`); un subjuntivo de ese tipo que no esté en la lista recibe un segundo acento.
 
 Parámetros:
 

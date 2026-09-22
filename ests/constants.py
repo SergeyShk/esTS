@@ -135,10 +135,17 @@ ABBREVIATIONS = frozenset(
 
 # Vowels: every accented vowel is strong, an unaccented i, u, ü and a vocalic y
 # are weak; a weak vowel next to another vowel forms a diphthong, two strong
-# vowels a hiatus. Grave accents occur in Catalan and French names
-VOWELS = "aeiouáéíóúüàèìòù"
+# vowels a hiatus. Vowels with a grave, a circumflex, a tilde or a diaeresis
+# other than ü come from Catalan, French, Portuguese and German names
+# (Lluïsa, Citroën, São, Björk); they count as accented, so they are strong
+# and take the stress. A diaeresis marks a hiatus in Catalan and French
+# (Llu-ï-sa, Ci-tro-ën); the Portuguese nasal ã and õ join a following
+# o or e into a diphthong (São, Ca-mões)
+VOWELS = "aeiouáéíóúüàèìòùâêîôûãõäëïöå"
 WEAK_VOWELS = "iuü"
-ACCENTED_VOWELS = "áéíóúàèìòù"
+ACCENTED_VOWELS = "áéíóúàèìòùâêîôûãõäëïöå"
+HIATUS_VOWELS = "ïë"
+NASAL_VOWELS = "ãõ"
 
 # Two-letter consonant units that are never split (digraphs and the silent u)
 DIGRAPHS = ("ch", "ll", "rr", "qu", "gu")
@@ -148,5 +155,29 @@ ONSET_CLUSTERS = frozenset(
     {"bl", "br", "cl", "cr", "dr", "fl", "fr", "gl", "gr", "kl", "kr", "pl", "pr", "tr"}
 )
 
-# Words in -mente that are not adverbs, so they carry a single stress
-NON_ADVERBS_MENTE = frozenset({"vehemente", "inclemente"})
+# Words in -mente that look like adverbs but are not, so they carry a single
+# stress: adjectives and nouns, and subjunctives of verbs in -mentar whose stem
+# ends like an adjective
+NON_ADVERBS_MENTE = frozenset(
+    {
+        "clemente",
+        "demente",
+        "inclemente",
+        "vehemente",
+        "atormente",
+        "cemente",
+        "complemente",
+        "fermente",
+        "fundamente",
+        "implemente",
+        "incremente",
+        "juramente",
+        "lamente",
+        "medicamente",
+        "ornamente",
+        "parlamente",
+        "reglamente",
+        "sacramente",
+        "suplemente",
+    }
+)
