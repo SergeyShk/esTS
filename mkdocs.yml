@@ -11,6 +11,7 @@ nav:
       - Sentence extraction: extractors/sentences.md
       - Word extraction: extractors/words.md
       - Character N-gram extraction: extractors/char_ngrams.md
+    - Syllables and stress: syllables.md
 
 theme:
   name: material
@@ -51,6 +52,7 @@ plugins:
             Sentence extraction: Extracción de oraciones
             Word extraction: Extracción de palabras
             Character N-gram extraction: Extracción de N-gramas de caracteres
+            Syllables and stress: Sílabas y acento
 
 extra:
   social:
