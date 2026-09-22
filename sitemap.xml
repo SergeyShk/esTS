@@ -57,6 +57,20 @@
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/basic_stats/"/>
     </url>
     <url>
+        <loc>Nonestats/readability_stats/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/readability_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/readability_stats/"/>
+    </url>
+    <url>
+        <loc>Nonestats/readability_stats_funcs/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/readability_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/readability_stats_funcs/"/>
+    </url>
+    <url>
         <loc>Nonees/</loc>
         <lastmod>2026-09-22</lastmod>
         <changefreq>daily</changefreq>
@@ -111,5 +125,19 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/basic_stats/"/>
         <xhtml:link rel="alternate" hreflang="en" href="Nonestats/basic_stats/"/>
+    </url>
+    <url>
+        <loc>Nonees/stats/readability_stats/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/readability_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/readability_stats/"/>
+    </url>
+    <url>
+        <loc>Nonees/stats/readability_stats_funcs/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/readability_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/readability_stats_funcs/"/>
     </url>
 </urlset>

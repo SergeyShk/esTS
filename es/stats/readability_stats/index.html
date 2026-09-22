@@ -11,14 +11,14 @@
       
       
       
-        <link rel="prev" href="../../syllables/">
+        <link rel="prev" href="../basic_stats/">
       
       
-        <link rel="next" href="../readability_stats/">
+        <link rel="next" href="../readability_stats_funcs/">
       
       
         
-          <link rel="alternate" href="../../../stats/basic_stats/" hreflang="en">
+          <link rel="alternate" href="../../../stats/readability_stats/" hreflang="en">
         
           <link rel="alternate" href="./" hreflang="es">
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Estadísticas básicas - esTS</title>
+        <title>Módulo de las métricas - esTS</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#estadisticas-basicas" class="md-skip">
+        <a href="#metricas-de-legibilidad" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Estadísticas básicas
+              Módulo de las métricas
             
           </span>
         </div>
@@ -135,7 +135,7 @@
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="../../../stats/basic_stats/" hreflang="en" class="md-select__link">
+            <a href="../../../stats/readability_stats/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
@@ -288,7 +288,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../basic_stats/" class="md-tabs__link">
           
   
   
@@ -713,6 +713,86 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../basic_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas básicas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Métricas de legibilidad
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Métricas de legibilidad
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
     
   
   
@@ -732,7 +812,7 @@
   <span class="md-ellipsis">
     
   
-    Estadísticas básicas
+    Módulo de las métricas
   
 
     
@@ -750,7 +830,7 @@
   <span class="md-ellipsis">
     
   
-    Estadísticas básicas
+    Módulo de las métricas
   
 
     
@@ -809,6 +889,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#presets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preajustes de coeficientes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interpretation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interpretación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#metodos" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -821,10 +923,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#count_words_by_syllables" class="md-nav__link">
+  <a href="#describe_level" class="md-nav__link">
     <span class="md-ellipsis">
       
-        count_words_by_syllables
+        describe_level
       
     </span>
   </a>
@@ -832,10 +934,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#count_words_by_letters" class="md-nav__link">
+  <a href="#describe_grade" class="md-nav__link">
     <span class="md-ellipsis">
       
-        count_words_by_letters
+        describe_grade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading_time_by_speed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        reading_time_by_speed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading_time_by_norm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        reading_time_by_norm
       
     </span>
   </a>
@@ -869,99 +993,10 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#punctuation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Perfil de puntuación
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Métricas de legibilidad
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_2">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Métricas de legibilidad
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../readability_stats/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Módulo de las métricas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1070,6 +1105,28 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#presets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Preajustes de coeficientes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interpretation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interpretación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#metodos" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1082,10 +1139,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#count_words_by_syllables" class="md-nav__link">
+  <a href="#describe_level" class="md-nav__link">
     <span class="md-ellipsis">
       
-        count_words_by_syllables
+        describe_level
       
     </span>
   </a>
@@ -1093,10 +1150,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#count_words_by_letters" class="md-nav__link">
+  <a href="#describe_grade" class="md-nav__link">
     <span class="md-ellipsis">
       
-        count_words_by_letters
+        describe_grade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading_time_by_speed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        reading_time_by_speed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reading_time_by_norm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        reading_time_by_norm
       
     </span>
   </a>
@@ -1130,17 +1209,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#punctuation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Perfil de puntuación
-      
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -1161,17 +1229,87 @@
   
 
 
-<h1 id="estadisticas-basicas">Estadísticas básicas<a class="headerlink" href="#estadisticas-basicas" title="Permanent link">&para;</a></h1>
+<h1 id="metricas-de-legibilidad">Métricas de legibilidad<a class="headerlink" href="#metricas-de-legibilidad" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.basic_stats.BasicStats</strong></p>
+<p><strong>ests.readability_stats.ReadabilityStats</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Módulo para calcular las estadísticas básicas de un texto. La fuente de datos puede ser un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>.</p>
-<p>El módulo permite usar objetos <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> y <a href="../../extractors/words/"><code>WordsExtractor</code></a> ya configurados para la segmentación en oraciones y palabras que precede al cálculo. Las sílabas se cuentan con <a href="../../syllables/#count_syllables"><code>count_syllables</code></a> y las letras con <code>str.isalpha</code>, así que las cifras, los guiones y los signos dentro de una palabra no son letras, mientras que los indicadores ordinales <code>º</code> y <code>ª</code> sí lo son (<code>3.º</code> es una palabra de una letra).</p>
-<p>Para un objeto <code>Doc</code> las palabras se toman de los tokens (los signos de puntuación y los símbolos como <code>€</code> o <code>%</code> se descartan) y las oraciones de la anotación; sin límites de oración (<code>spacy.blank</code>, un pipeline sin <code>parser</code> ni <code>senter</code>) las oraciones se extraen del texto con <code>SentsExtractor</code>.</p>
+<p>Módulo para calcular las principales métricas de <a href="https://es.wikipedia.org/wiki/Legibilidad">legibilidad</a> de la tradición española. La fuente de datos puede ser un texto, un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a> o unas <a href="../basic_stats/">estadísticas básicas</a> <code>BasicStats</code> ya calculadas; en ese caso el texto no se vuelve a analizar.</p>
+<div class="admonition quote">
+<p class="admonition-title">Definición</p>
+<p>La legibilidad es la propiedad de un texto que caracteriza la facilidad con que una persona lo percibe al leerlo.</p>
+<p>Conviene distinguir la legibilidad desde dos puntos de vista:</p>
+<ul>
+<li>el diseño tipográfico del texto;</li>
+<li>los rasgos lingüísticos del material textual (complejidad de las construcciones sintácticas, vocabulario difícil de percibir, etc.).</li>
+</ul>
+</div>
+<p>La legibilidad en este módulo se calcula a partir de medidas lingüísticas: la longitud media de la oración en palabras, la longitud media de la palabra en sílabas o letras, la proporción de palabras largas y de palabras de tres o más sílabas, y la variabilidad de la longitud de las palabras. Las fórmulas son las publicadas para el español, con los coeficientes de sus fuentes:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Fórmula</th>
+<th style="text-align: center;">Año</th>
+<th style="text-align: left;">Resultado</th>
+<th style="text-align: left;">Interpretación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Fernández Huerta</td>
+<td style="text-align: center;">1959</td>
+<td style="text-align: left;">facilidad de lectura de Flesch, 0-100</td>
+<td style="text-align: left;">siete niveles del autor</td>
+</tr>
+<tr>
+<td style="text-align: left;">Szigriszt-Pazos (fórmula de perspicuidad)</td>
+<td style="text-align: center;">1993</td>
+<td style="text-align: left;">facilidad de lectura de Flesch, 0-100</td>
+<td style="text-align: left;">escala INFLESZ (Barrio-Cantalejo et al., 2008), cinco niveles</td>
+</tr>
+<tr>
+<td style="text-align: left;">Gutiérrez de Polini (fórmula de comprensibilidad)</td>
+<td style="text-align: center;">1972</td>
+<td style="text-align: left;">0-100, más alto es más fácil</td>
+<td style="text-align: left;">sin escala propia; ajustada con textos de sexto grado</td>
+</tr>
+<tr>
+<td style="text-align: left;">Crawford</td>
+<td style="text-align: center;">1989</td>
+<td style="text-align: left;">años de escolaridad</td>
+<td style="text-align: left;">primaria española, cursos 1-6</td>
+</tr>
+<tr>
+<td style="text-align: left;">Legibilidad µ (Muñoz Baquedano y Muñoz Urra)</td>
+<td style="text-align: center;">2006</td>
+<td style="text-align: left;">0-100, más alto es más fácil</td>
+<td style="text-align: left;">siete niveles de los autores</td>
+</tr>
+<tr>
+<td style="text-align: left;">SOL (Contreras et al.)</td>
+<td style="text-align: center;">1999</td>
+<td style="text-align: left;">años de escolaridad</td>
+<td style="text-align: left;">SMOG convertido al español</td>
+</tr>
+<tr>
+<td style="text-align: left;">LIX, RIX</td>
+<td style="text-align: center;">1968, 1983</td>
+<td style="text-align: left;">índice, palabras largas por oración</td>
+<td style="text-align: left;">niveles y cursos independientes de la lengua</td>
+</tr>
+</tbody>
+</table>
+<p>La familia de Flesch se fija con un preajuste (véase <a href="#presets">más abajo</a>): por defecto los coeficientes de Szigriszt-Pazos, validados con la escala INFLESZ, y como alternativa los de Fernández Huerta. Las demás fórmulas no dependen del preajuste.</p>
+<p>Los supuestos principales de las métricas de legibilidad:</p>
+<ul>
+<li>las oraciones cortas se leen con más facilidad que las largas;</li>
+<li>las palabras largas dificultan la lectura;</li>
+<li>el lector se frena ante palabras poco frecuentes o desconocidas.</li>
+</ul>
+<p>El módulo permite usar objetos <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> y <a href="../../extractors/words/"><code>WordsExtractor</code></a> ya configurados para la segmentación en oraciones y palabras que precede al cálculo.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>Las estadísticas se calculan al inicializar el objeto <code>BasicStats</code>.</p>
+<p>Las métricas se calculan al acceder al atributo correspondiente o al llamar al método <code>get_stats</code> del objeto <code>ReadabilityStats</code>.</p>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
 <table>
@@ -1186,9 +1324,9 @@
 <tbody>
 <tr>
 <td style="text-align: center;"><code>source</code></td>
-<td style="text-align: center;">str/Doc</td>
+<td style="text-align: center;">str/Doc/BasicStats</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Fuente de datos (cadena u objeto Doc)</td>
+<td style="text-align: center;">Fuente de datos (cadena, objeto Doc o estadísticas básicas ya calculadas)</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>sents_extractor</code></td>
@@ -1203,29 +1341,13 @@
 <td style="text-align: center;">Herramienta de extracción de palabras</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>normalize</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Calcular las estadísticas normalizadas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>complex_syl_factor</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>3</code></td>
-<td style="text-align: center;">Número mínimo de sílabas de una palabra compleja</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>long_word_letter_factor</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>7</code></td>
-<td style="text-align: center;">Número mínimo de letras de una palabra larga</td>
+<td style="text-align: center;"><code>preset</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>general</code></td>
+<td style="text-align: center;">Preajuste de coeficientes (<code>general</code>, <code>classic</code>)</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Los umbrales por defecto siguen la tradición española de la legibilidad: una palabra compleja tiene tres o más sílabas, como en las adaptaciones españolas de SMOG y de la niebla de Gunning, y una palabra larga siete o más letras, como en LIX y RIX.</p>
-</div>
 <h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1237,139 +1359,161 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>c_letters</code></td>
-<td style="text-align: center;">dict[int, int]</td>
-<td style="text-align: center;">Distribución de las palabras por número de letras</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>c_syllables</code></td>
-<td style="text-align: center;">dict[int, int]</td>
-<td style="text-align: center;">Distribución de las palabras por número de sílabas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_sents</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de oraciones</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de palabras</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_unique_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de palabras únicas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_long_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de palabras largas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_complex_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de palabras complejas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_simple_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de palabras simples</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_monosyllable_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de palabras monosílabas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_polysyllable_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de palabras polisílabas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_chars</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de caracteres</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_letters</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de letras</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_spaces</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de espacios</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_syllables</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de sílabas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_punctuations</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de signos de puntuación</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>c_punctuations</code></td>
-<td style="text-align: center;">dict[str, int]</td>
-<td style="text-align: center;">Distribución de los signos de puntuación por tipo</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_unique_words</code></td>
+<td style="text-align: center;"><code>flesch_reading_easy</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de palabras únicas</td>
+<td style="text-align: center;">Facilidad de lectura de Flesch con los coeficientes del preajuste</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>p_long_words</code></td>
+<td style="text-align: center;"><code>gutierrez_polini_index</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de palabras largas</td>
+<td style="text-align: center;">Fórmula de comprensibilidad de Gutiérrez de Polini</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>p_complex_words</code></td>
+<td style="text-align: center;"><code>crawford_grade</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de palabras complejas</td>
+<td style="text-align: center;">Fórmula de Crawford, años de escolaridad</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>p_simple_words</code></td>
+<td style="text-align: center;"><code>mu_index</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de palabras simples</td>
+<td style="text-align: center;">Legibilidad µ</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>p_monosyllable_words</code></td>
+<td style="text-align: center;"><code>sol_grade</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de palabras monosílabas</td>
+<td style="text-align: center;">Grado SOL, SMOG convertido al español</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>p_polysyllable_words</code></td>
+<td style="text-align: center;"><code>lix</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de palabras polisílabas</td>
+<td style="text-align: center;">Índice de legibilidad LIX</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>p_letters</code></td>
+<td style="text-align: center;"><code>rix</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de letras</td>
+<td style="text-align: center;">Índice de legibilidad RIX</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>p_spaces</code></td>
+<td style="text-align: center;"><code>consensus_grade</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de espacios</td>
+<td style="text-align: center;">Grado de consenso entre las fórmulas de grado y la facilidad de lectura</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>p_punctuations</code></td>
+<td style="text-align: center;"><code>reading_time</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de signos de puntuación</td>
+<td style="text-align: center;">Tiempo de lectura en minutos a 278 palabras por minuto</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>bs</code></td>
+<td style="text-align: center;">BasicStats</td>
+<td style="text-align: center;">Estadísticas básicas del texto</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>preset</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">Nombre del preajuste de coeficientes</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>coefficients</code></td>
+<td style="text-align: center;">dict[str, tuple[float, float, float]]</td>
+<td style="text-align: center;">Coeficientes de las fórmulas del preajuste</td>
+</tr>
+</tbody>
+</table>
+<h2 id="presets">Preajustes de coeficientes<a class="headerlink" href="#presets" title="Permanent link">&para;</a></h2>
+<p>Un preajuste fija los coeficientes <code>a</code>, <code>b</code>, <code>c</code> de la facilidad de lectura de Flesch <code>c − a·ASL − b·ASW</code>, donde ASL es el número medio de palabras por oración y ASW el número medio de sílabas por palabra. Las demás fórmulas no dependen del preajuste.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Preajuste</th>
+<th style="text-align: center;">Fuente</th>
+<th style="text-align: center;">Fórmula</th>
+<th style="text-align: center;">Escala</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>general</code></td>
+<td style="text-align: center;">Szigriszt-Pazos (1993), fórmula de perspicuidad</td>
+<td style="text-align: center;"><code>206.835 − 1.0·ASL − 62.3·ASW</code></td>
+<td style="text-align: center;">INFLESZ (Barrio-Cantalejo et al., 2008), validada con textos para pacientes</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>classic</code></td>
+<td style="text-align: center;">Fernández Huerta (1959), la primera adaptación de Flesch al español</td>
+<td style="text-align: center;"><code>206.84 − 1.02·ASL − 60·ASW</code></td>
+<td style="text-align: center;">los siete niveles del autor</td>
+</tr>
+</tbody>
+</table>
+<p>Fernández Huerta imprimió el último término como <code>1.02</code> por el número de frases por cada 100 palabras. Law (2011) mostró que eso invierte la fracción de la fórmula de Flesch en la que se basó la adaptación, así que aquí se usa la longitud media de la oración, como hacen koRpus, textstat y legible.es. La tabla de todos los coeficientes está disponible como <code>ests.constants.READABILITY_PRESETS</code>.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReadabilityStats</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"Hay tres clases de mentiras: mentiras, malditas mentiras y estadísticas"</span>
+<span class="n">ReadabilityStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">flesch_reading_easy</span>
+<span class="c1"># 53.545000000000016</span>
+<span class="n">ReadabilityStats</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">preset</span><span class="o">=</span><span class="s2">"classic"</span><span class="p">)</span><span class="o">.</span><span class="n">flesch_reading_easy</span>
+<span class="c1"># 58.640000000000015</span>
+</code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Cada métrica puede calcularse por separado llamando a la función correspondiente. La información detallada sobre las métricas de legibilidad y las funciones que las calculan está en la <a href="../readability_stats_funcs/">sección</a> correspondiente.</p>
+</div>
+<h2 id="interpretation">Interpretación<a class="headerlink" href="#interpretation" title="Permanent link">&para;</a></h2>
+<p>El método <a href="#describe_level"><code>describe_level</code></a> sitúa la facilidad de lectura en una escala: INFLESZ por defecto (<code>muy difícil</code> por debajo de 40, <code>algo difícil</code> 40-55, <code>normal</code> 55-65, <code>bastante fácil</code> 65-80, <code>muy fácil</code> por encima de 80), y a petición los siete niveles de Szigriszt-Pazos o de Fernández Huerta; la Legibilidad µ tiene los siete niveles de sus autores (<code>muy difícil</code> 0-30, <code>difícil</code> 31-50, <code>un poco difícil</code> 51-60, <code>adecuado</code> 61-70, <code>un poco fácil</code> 71-80, <code>fácil</code> 81-90, <code>muy fácil</code> 91-100).</p>
+<p>Las fórmulas que dan años de escolaridad (Crawford, SOL) se resumen en el atributo <code>consensus_grade</code>: la mediana de los valores redondeados más la facilidad de lectura convertida en grado a través de los tipos de texto de los niveles INFLESZ. El método <a href="#describe_grade"><code>describe_grade</code></a> traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Grado</th>
+<th style="text-align: center;">Etapa</th>
+<th style="text-align: center;">Edad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1-3</td>
+<td style="text-align: center;">primaria, cursos 1-3</td>
+<td style="text-align: center;">6-9 años</td>
+</tr>
+<tr>
+<td style="text-align: center;">4-6</td>
+<td style="text-align: center;">primaria, cursos 4-6</td>
+<td style="text-align: center;">9-12 años</td>
+</tr>
+<tr>
+<td style="text-align: center;">7-10</td>
+<td style="text-align: center;">ESO</td>
+<td style="text-align: center;">12-16 años</td>
+</tr>
+<tr>
+<td style="text-align: center;">11-12</td>
+<td style="text-align: center;">bachillerato</td>
+<td style="text-align: center;">16-18 años</td>
+</tr>
+<tr>
+<td style="text-align: center;">13-16</td>
+<td style="text-align: center;">universidad</td>
+<td style="text-align: center;">18-22 años</td>
+</tr>
+<tr>
+<td style="text-align: center;">más de 16</td>
+<td style="text-align: center;">posgrado</td>
+<td style="text-align: center;">más de 22 años</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
-<p>Los atributos de estadísticas normalizadas <code>p_*</code> solo existen cuando el objeto se inicializa con <code>normalize=True</code>.</p>
+<p>Crawford se ajustó con lecturas de primaria y se satura en los textos para adultos; SOL se ajustó con materiales de educación sanitaria. El grado de consenso de un texto técnico refleja sobre todo el nivel de la facilidad de lectura.</p>
 </div>
+<p>El atributo <code>reading_time</code> estima el tiempo de lectura silenciosa a 278 palabras por minuto, la media de seis estudios con lectores adultos de español en el metaanálisis de Brysbaert (2019). El método <a href="#reading_time_by_speed"><code>reading_time_by_speed</code></a> acepta otra velocidad, y el método <a href="#reading_time_by_norm"><code>reading_time_by_norm</code></a> calcula el tiempo en voz alta y en silencio según las normas de la tabla <code>ests.constants.READING_SPEED_NORMS</code>: las velocidades medias del alumnado hispanohablante por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) y las de los adultos según Brysbaert (2019).</p>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
-<h3 id="count_words_by_syllables">count_words_by_syllables<a class="headerlink" href="#count_words_by_syllables" title="Permanent link">&para;</a></h3>
-<p>Devuelve el número de palabras con al menos el número de sílabas indicado.</p>
+<h3 id="describe_level">describe_level<a class="headerlink" href="#describe_level" title="Permanent link">&para;</a></h3>
+<p>Devuelve el nivel de una escala de legibilidad para la facilidad de lectura o la Legibilidad µ.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -1382,15 +1526,35 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>min_syllables</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Número mínimo de sílabas de la palabra</td>
+<td style="text-align: center;"><code>stat</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>flesch_reading_easy</code></td>
+<td style="text-align: center;">Nombre de la métrica (<code>flesch_reading_easy</code>, <code>mu_index</code>)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>scale</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Escala para la facilidad de lectura (<code>inflesz</code> por defecto, <code>szigriszt</code>, <code>fernandez_huerta</code>); la Legibilidad µ tiene una sola escala y no admite otra</td>
 </tr>
 </tbody>
 </table>
-<h3 id="count_words_by_letters">count_words_by_letters<a class="headerlink" href="#count_words_by_letters" title="Permanent link">&para;</a></h3>
-<p>Devuelve el número de palabras con al menos el número de letras indicado.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReadabilityStats</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"Hay tres clases de mentiras: mentiras, malditas mentiras y estadísticas"</span>
+<span class="n">rs</span> <span class="o">=</span> <span class="n">ReadabilityStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="n">rs</span><span class="o">.</span><span class="n">describe_level</span><span class="p">()</span>
+<span class="c1"># 'algo difícil'</span>
+<span class="n">rs</span><span class="o">.</span><span class="n">describe_level</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="s2">"szigriszt"</span><span class="p">)</span>
+<span class="c1"># 'normal'</span>
+<span class="n">rs</span><span class="o">.</span><span class="n">describe_level</span><span class="p">(</span><span class="s2">"mu_index"</span><span class="p">)</span>
+<span class="c1"># 'un poco difícil'</span>
+</code></pre></div>
+</div>
+<h3 id="describe_grade">describe_grade<a class="headerlink" href="#describe_grade" title="Permanent link">&para;</a></h3>
+<p>Devuelve la etapa escolar y la edad del lector para el grado de consenso o una fórmula de grado concreta.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -1403,110 +1567,120 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>min_letters</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Número mínimo de letras de la palabra</td>
+<td style="text-align: center;"><code>stat</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>consensus_grade</code></td>
+<td style="text-align: center;">Nombre de la fórmula de grado (<code>consensus_grade</code>, <code>crawford_grade</code>, <code>sol_grade</code>)</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Estos métodos vuelven a contar las palabras complejas y largas con un umbral distinto del fijado al inicializar, que es lo que necesitan las fórmulas de legibilidad con umbrales propios.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="n">rs</span><span class="o">.</span><span class="n">describe_grade</span><span class="p">()</span>
+<span class="c1"># 'ESO (12-16 years)'</span>
+<span class="n">rs</span><span class="o">.</span><span class="n">describe_grade</span><span class="p">(</span><span class="s2">"crawford_grade"</span><span class="p">)</span>
+<span class="c1"># 'primary school, grades 4-6 (9-12 years)'</span>
+</code></pre></div>
+</div>
+<h3 id="reading_time_by_speed">reading_time_by_speed<a class="headerlink" href="#reading_time_by_speed" title="Permanent link">&para;</a></h3>
+<p>Devuelve el tiempo de lectura del texto en minutos a la velocidad indicada.</p>
+<p>Parámetros:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>wpm</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Velocidad de lectura, palabras por minuto</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reading_time_by_norm">reading_time_by_norm<a class="headerlink" href="#reading_time_by_norm" title="Permanent link">&para;</a></h3>
+<p>Devuelve el tiempo de lectura del texto en minutos en voz alta y en silencio según una norma de la tabla <code>ests.constants.READING_SPEED_NORMS</code>: de <code>grade_1</code> a <code>grade_11</code> (años de escolaridad: primaria 1-6, ESO 7-10, bachillerato 11) o <code>adult</code>.</p>
+<p>Parámetros:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>norm</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Nombre de la norma de velocidad de lectura</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="n">rs</span><span class="o">.</span><span class="n">reading_time_by_speed</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="c1"># 0.05</span>
+<span class="n">rs</span><span class="o">.</span><span class="n">reading_time_by_norm</span><span class="p">(</span><span class="s2">"grade_4"</span><span class="p">)</span>
+<span class="c1"># (0.09615384615384616, 0.08)</span>
+</code></pre></div>
 </div>
 <h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
-<p>Devuelve un diccionario con las estadísticas calculadas del texto.</p>
-<p>Ejemplo de cálculo de las estadísticas básicas con normalización:</p>
+<p>Devuelve un diccionario con las métricas de legibilidad calculadas.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <p><em>Código</em>:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Importar la biblioteca</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">BasicStats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReadabilityStats</span>
 
 <span class="c1"># Preparar los datos</span>
 <span class="n">text</span> <span class="o">=</span> <span class="s2">"Hay tres clases de mentiras: mentiras, malditas mentiras y estadísticas"</span>
 
-<span class="c1"># Calcular las estadísticas</span>
-<span class="n">bs</span> <span class="o">=</span> <span class="n">BasicStats</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">bs</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
+<span class="c1"># Calcular las métricas</span>
+<span class="n">rs</span> <span class="o">=</span> <span class="n">ReadabilityStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="n">rs</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
 </code></pre></div>
 <p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">{</span><span class="s1">'c_letters'</span>:<span class="w"> </span><span class="o">{</span><span class="m">1</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">2</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">3</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">4</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">6</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">8</span>:<span class="w"> </span><span class="m">4</span>,<span class="w"> </span><span class="m">12</span>:<span class="w"> </span><span class="m">1</span><span class="o">}</span>,
-<span class="s1">'c_punctuations'</span>:<span class="w"> </span><span class="o">{</span><span class="s1">'comma'</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="s1">'period'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'question'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'exclamation'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'ellipsis'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'colon'</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="s1">'semicolon'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'dash'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'hyphen'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'angle_quotes'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'straight_quotes'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'parentheses'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'other'</span>:<span class="w"> </span><span class="m">0</span><span class="o">}</span>,
-<span class="s1">'c_syllables'</span>:<span class="w"> </span><span class="o">{</span><span class="m">1</span>:<span class="w"> </span><span class="m">4</span>,<span class="w"> </span><span class="m">2</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">3</span>:<span class="w"> </span><span class="m">4</span>,<span class="w"> </span><span class="m">5</span>:<span class="w"> </span><span class="m">1</span><span class="o">}</span>,
-<span class="s1">'n_chars'</span>:<span class="w"> </span><span class="m">71</span>,
-<span class="s1">'n_complex_words'</span>:<span class="w"> </span><span class="m">5</span>,
-<span class="s1">'n_letters'</span>:<span class="w"> </span><span class="m">60</span>,
-<span class="s1">'n_long_words'</span>:<span class="w"> </span><span class="m">5</span>,
-<span class="s1">'n_monosyllable_words'</span>:<span class="w"> </span><span class="m">4</span>,
-<span class="s1">'n_polysyllable_words'</span>:<span class="w"> </span><span class="m">6</span>,
-<span class="s1">'n_punctuations'</span>:<span class="w"> </span><span class="m">2</span>,
-<span class="s1">'n_sents'</span>:<span class="w"> </span><span class="m">1</span>,
-<span class="s1">'n_simple_words'</span>:<span class="w"> </span><span class="m">5</span>,
-<span class="s1">'n_spaces'</span>:<span class="w"> </span><span class="m">9</span>,
-<span class="s1">'n_syllables'</span>:<span class="w"> </span><span class="m">23</span>,
-<span class="s1">'n_unique_words'</span>:<span class="w"> </span><span class="m">8</span>,
-<span class="s1">'n_words'</span>:<span class="w"> </span><span class="m">10</span>,
-<span class="s1">'p_complex_words'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'p_letters'</span>:<span class="w"> </span><span class="m">0</span>.8450704225352113,
-<span class="s1">'p_long_words'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'p_monosyllable_words'</span>:<span class="w"> </span><span class="m">0</span>.4,
-<span class="s1">'p_polysyllable_words'</span>:<span class="w"> </span><span class="m">0</span>.6,
-<span class="s1">'p_punctuations'</span>:<span class="w"> </span><span class="m">0</span>.028169014084507043,
-<span class="s1">'p_simple_words'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'p_spaces'</span>:<span class="w"> </span><span class="m">0</span>.1267605633802817,
-<span class="s1">'p_unique_words'</span>:<span class="w"> </span><span class="m">0</span>.8<span class="o">}</span>
+<div class="highlight"><pre><span></span><code><span class="o">{</span><span class="s1">'flesch_reading_easy'</span>:<span class="w"> </span><span class="m">53</span>.545000000000016,
+<span class="s1">'gutierrez_polini_index'</span>:<span class="w"> </span><span class="m">33</span>.5,
+<span class="s1">'crawford_grade'</span>:<span class="w"> </span><span class="m">5</span>.812999999999999,
+<span class="s1">'mu_index'</span>:<span class="w"> </span><span class="m">56</span>.60377358490566,
+<span class="s1">'sol_grade'</span>:<span class="w"> </span><span class="m">9</span>.258359866374562,
+<span class="s1">'lix'</span>:<span class="w"> </span><span class="m">60</span>.0,
+<span class="s1">'rix'</span>:<span class="w"> </span><span class="m">5</span>.0,
+<span class="s1">'consensus_grade'</span>:<span class="w"> </span><span class="m">9</span>.0,
+<span class="s1">'reading_time'</span>:<span class="w"> </span><span class="m">0</span>.03597122302158273<span class="o">}</span>
 </code></pre></div>
 </div>
 <h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
-<p>Muestra una tabla con las estadísticas calculadas del texto.</p>
-<p>Para ilustrar el método reutilizamos el código del ejemplo anterior:</p>
+<p>Muestra una tabla con las métricas de legibilidad calculadas.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <p><em>Código</em>:</p>
 <div class="highlight"><pre><span></span><code><span class="o">...</span>
 
-<span class="c1"># Mostrar la tabla de estadísticas calculadas</span>
-<span class="n">bs</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
+<span class="c1"># Mostrar la tabla de métricas calculadas</span>
+<span class="n">rs</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
 </code></pre></div>
 <p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="w">     </span>Statistic<span class="w">      </span><span class="p">|</span><span class="w">  </span>Value
-------------------------------
-Sentences<span class="w">           </span><span class="p">|</span><span class="w">    </span><span class="m">1</span>
-Words<span class="w">               </span><span class="p">|</span><span class="w">    </span><span class="m">10</span>
-Unique<span class="w"> </span>words<span class="w">        </span><span class="p">|</span><span class="w">    </span><span class="m">8</span>
-Long<span class="w"> </span>words<span class="w">          </span><span class="p">|</span><span class="w">    </span><span class="m">5</span>
-Complex<span class="w"> </span>words<span class="w">       </span><span class="p">|</span><span class="w">    </span><span class="m">5</span>
-Simple<span class="w"> </span>words<span class="w">        </span><span class="p">|</span><span class="w">    </span><span class="m">5</span>
-Monosyllabic<span class="w"> </span>words<span class="w">  </span><span class="p">|</span><span class="w">    </span><span class="m">4</span>
-Polysyllabic<span class="w"> </span>words<span class="w">  </span><span class="p">|</span><span class="w">    </span><span class="m">6</span>
-Characters<span class="w">          </span><span class="p">|</span><span class="w">    </span><span class="m">71</span>
-Letters<span class="w">             </span><span class="p">|</span><span class="w">    </span><span class="m">60</span>
-Spaces<span class="w">              </span><span class="p">|</span><span class="w">    </span><span class="m">9</span>
-Syllables<span class="w">           </span><span class="p">|</span><span class="w">    </span><span class="m">23</span>
-Punctuation<span class="w"> </span>marks<span class="w">   </span><span class="p">|</span><span class="w">    </span><span class="m">2</span>
-</code></pre></div>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Aviso</p>
-<p>El método no muestra los atributos de estadísticas normalizadas <code>p_*</code>.</p>
-</div>
-<h2 id="punctuation">Perfil de puntuación<a class="headerlink" href="#punctuation" title="Permanent link">&para;</a></h2>
-<div class="admonition info">
-<p><strong>ests.basic_stats.count_punctuations()</strong>, <strong>ests.basic_stats.punctuation_profile()</strong></p>
-</div>
-<p><code>count_punctuations(text)</code> cuenta los signos de puntuación por los tipos de <code>PUNCTUATION_TYPES</code>, la misma distribución que guarda el atributo <code>c_punctuations</code>: comas, puntos, signos de interrogación y de exclamación (incluidos los de apertura <code>¿</code> y <code>¡</code>, así que <code>¿Qué?</code> lleva dos signos de interrogación), puntos suspensivos (el carácter <code>…</code>, tres o más puntos, o dos puntos tras <code>?</code> y <code>!</code>: un solo signo cuyos puntos no cuentan como puntos, <code>¿Quién?..</code> es una interrogación y unos puntos suspensivos), dos puntos, puntos y comas, rayas (<code>—</code> y <code>–</code>, y también un guion tras espacio o al principio de línea, o ante un espacio, como se escribe la raya en los corpus de texto plano: <code>-Hola -dijo Juan</code>, <code>- Se fueron - dijo</code>), guiones dentro de palabras, ante cifras y al final de línea dentro de una palabra (<code>teórico-práctico</code>, <code>1990-1995</code>, <code>-5</code>, <code>pala-</code> en un salto de línea), comillas latinas <code>«»</code>, comillas rectas, inglesas y simples <code>"“”‘’</code> de los tres niveles de la ortografía, paréntesis y los demás signos: cualquier otro carácter de <code>PUNCTUATIONS</code> o de las categorías Unicode P y S (<code>‹›</code>, <code>§</code>, <code>€</code>, <code>°</code>), el mismo conjunto que <code>is_punctuation</code> descarta de las palabras, de modo que ningún signo se pierde entre las palabras y los tipos. <code>punctuation_profile(text, n_words=None)</code> los convierte en frecuencias por cada 1000 palabras y añade <code>inverted_share</code>, la proporción de signos de apertura entre todos los signos de interrogación y exclamación: <code>0.5</code> cuando toda pregunta y exclamación empieza con <code>¿</code> o <code>¡</code> como exige la ortografía, menos cuando quien escribe los omite, como en textos informales y mensajes.</p>
-<p>El perfil es un rasgo editorial y estilométrico. Depende del formato del texto (comillas y rayas tipográficas, signos de apertura) y es fácil de falsear, así que conviene leerlo aparte de los rasgos lingüísticos.</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.basic_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_punctuations</span><span class="p">,</span> <span class="n">punctuation_profile</span>
-
-<span class="n">text</span> <span class="o">=</span> <span class="s2">"El gato — «fiera»... El perro, claro, - amigo; y alguien (el que vive) — ¡no!"</span>
-<span class="p">{</span><span class="n">kind</span><span class="p">:</span> <span class="n">count</span> <span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">count_punctuations</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">count</span><span class="p">}</span>
-<span class="c1"># {'comma': 2, 'exclamation': 2, 'ellipsis': 1, 'semicolon': 1, 'dash': 3, 'angle_quotes': 2, 'parentheses': 2}</span>
-
-<span class="nb">round</span><span class="p">(</span><span class="n">punctuation_profile</span><span class="p">(</span><span class="n">text</span><span class="p">)[</span><span class="s2">"dash"</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span> <span class="n">punctuation_profile</span><span class="p">(</span><span class="n">text</span><span class="p">)[</span><span class="s2">"inverted_share"</span><span class="p">]</span>
-<span class="c1"># (230.8, 0.5)</span>
+<div class="highlight"><pre><span></span><code><span class="w">                   </span>Metric<span class="w">                    </span><span class="p">|</span><span class="w">  </span>Value
+-------------------------------------------------------
+Flesch<span class="w"> </span>reading<span class="w"> </span>ease<span class="w"> </span><span class="o">(</span>Szigriszt-Pazos<span class="o">)</span><span class="w">        </span><span class="p">|</span><span class="w">  </span><span class="m">53</span>.55
+Gutiérrez<span class="w"> </span>de<span class="w"> </span>Polini<span class="w"> </span>comprehensibility<span class="w">        </span><span class="p">|</span><span class="w">  </span><span class="m">33</span>.50
+Crawford<span class="w"> </span>grade<span class="w">                               </span><span class="p">|</span><span class="w">   </span><span class="m">5</span>.81
+Legibilidad<span class="w"> </span>µ<span class="w">                                </span><span class="p">|</span><span class="w">  </span><span class="m">56</span>.60
+SOL<span class="w"> </span>grade<span class="w"> </span><span class="o">(</span>SMOG<span class="w"> </span><span class="k">for</span><span class="w"> </span>Spanish<span class="o">)</span><span class="w">                 </span><span class="p">|</span><span class="w">   </span><span class="m">9</span>.26
+LIX<span class="w"> </span>readability<span class="w"> </span>index<span class="w">                        </span><span class="p">|</span><span class="w">  </span><span class="m">60</span>.00
+RIX<span class="w"> </span>readability<span class="w"> </span>index<span class="w">                        </span><span class="p">|</span><span class="w">   </span><span class="m">5</span>.00
+Consensus<span class="w"> </span>grade<span class="w">                              </span><span class="p">|</span><span class="w">   </span><span class="m">9</span>.00
+Reading<span class="w"> </span><span class="nb">time</span><span class="w"> </span><span class="o">(</span>min<span class="o">)</span><span class="w">                           </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.04
 </code></pre></div>
 </div>
 
