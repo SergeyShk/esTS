@@ -6,6 +6,11 @@ nav:
     - Home:
       - About: index.md
       - Installation: installation.md
+      - Exceptions and logging: exceptions.md
+    - Extraction:
+      - Sentence extraction: extractors/sentences.md
+      - Word extraction: extractors/words.md
+      - Character N-gram extraction: extractors/char_ngrams.md
 
 theme:
   name: material
@@ -41,6 +46,11 @@ plugins:
             Home: Inicio
             About: Acerca de
             Installation: Instalación
+            Exceptions and logging: Excepciones y registro
+            Extraction: Extracción
+            Sentence extraction: Extracción de oraciones
+            Word extraction: Extracción de palabras
+            Character N-gram extraction: Extracción de N-gramas de caracteres
 
 extra:
   social:

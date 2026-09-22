@@ -10,7 +10,8 @@ def test_version():
 
 def test_metadata():
     assert "Spanish" in ests.__description__
-    assert ests.__all__ == ["__version__"]
+    assert "__version__" in ests.__all__
+    assert ests.__all__ == sorted(ests.__all__)
 
 
 def test_version_fallback(monkeypatch):
