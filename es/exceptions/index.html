@@ -11,14 +11,14 @@
       
       
       
-        <link rel="prev" href="../">
+        <link rel="prev" href="../installation/">
       
       
-        <link rel="next" href="../exceptions/">
+        <link rel="next" href="../extractors/sentences/">
       
       
         
-          <link rel="alternate" href="../../installation/" hreflang="en">
+          <link rel="alternate" href="../../exceptions/" hreflang="en">
         
           <link rel="alternate" href="./" hreflang="es">
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Instalación - esTS</title>
+        <title>Excepciones y registro - esTS</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#instalacion" class="md-skip">
+        <a href="#excepciones-y-registro" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Instalación
+              Excepciones y registro
             
           </span>
         </div>
@@ -135,7 +135,7 @@
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="../../installation/" hreflang="en" class="md-select__link">
+            <a href="../../exceptions/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
@@ -393,6 +393,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instalación
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -412,7 +440,7 @@
   <span class="md-ellipsis">
     
   
-    Instalación
+    Excepciones y registro
   
 
     
@@ -430,7 +458,7 @@
   <span class="md-ellipsis">
     
   
-    Instalación
+    Excepciones y registro
   
 
     
@@ -456,10 +484,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#requisitos" class="md-nav__link">
+  <a href="#excepciones" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Requisitos
+        Excepciones
       
     </span>
   </a>
@@ -467,21 +495,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#desde-el-repositorio" class="md-nav__link">
+  <a href="#registro" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Desde el repositorio
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#desde-pypi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Desde PyPI
+        Registro
       
     </span>
   </a>
@@ -492,34 +509,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../exceptions/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Excepciones y registro
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -700,10 +689,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#requisitos" class="md-nav__link">
+  <a href="#excepciones" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Requisitos
+        Excepciones
       
     </span>
   </a>
@@ -711,21 +700,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#desde-el-repositorio" class="md-nav__link">
+  <a href="#registro" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Desde el repositorio
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#desde-pypi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Desde PyPI
+        Registro
       
     </span>
   </a>
@@ -752,26 +730,91 @@
   
 
 
-<h1 id="instalacion">Instalación<a class="headerlink" href="#instalacion" title="Permanent link">&para;</a></h1>
-<p>La biblioteca todavía no está publicada. Hasta la primera versión se instala desde el repositorio.</p>
-<h2 id="requisitos">Requisitos<a class="headerlink" href="#requisitos" title="Permanent link">&para;</a></h2>
-<ul>
-<li><code>python</code> 3.11 o superior</li>
-<li><code>spaCy</code> 3.7 o superior con el modelo <code>es_core_news_sm</code> para morfología y sintaxis</li>
-<li><code>numpy</code>, <code>pandas</code>, <code>scipy</code>, <code>matplotlib</code></li>
-</ul>
-<h2 id="desde-el-repositorio">Desde el repositorio<a class="headerlink" href="#desde-el-repositorio" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/SergeyShk/esTS.git
-<span class="nb">cd</span><span class="w"> </span>esTS
-uv<span class="w"> </span>sync<span class="w"> </span>--all-groups
+<h1 id="excepciones-y-registro">Excepciones y registro<a class="headerlink" href="#excepciones-y-registro" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p><strong>ests.exceptions</strong></p>
+</div>
+<h2 id="excepciones">Excepciones<a class="headerlink" href="#excepciones" title="Permanent link">&para;</a></h2>
+<p>Todas las excepciones de la biblioteca heredan de la clase base <code>EstsError</code> y de una de las clases integradas de Python, así que pueden capturarse tanto por su nombre en esTS como por el tipo integrado habitual: el código existente con <code>except ValueError</code> sigue funcionando.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Excepción</th>
+<th style="text-align: left;">Clase integrada</th>
+<th style="text-align: left;">Cuándo se lanza</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>EstsError</code></td>
+<td style="text-align: left;"><code>Exception</code></td>
+<td style="text-align: left;">Clase base, nunca se lanza directamente</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>SourceTypeError</code></td>
+<td style="text-align: left;"><code>TypeError</code></td>
+<td style="text-align: left;">La fuente de datos no es una cadena ni un <code>Doc</code>, el contador de frecuencias no es un <code>Counter</code>, la lista de textos no es una lista de listas, la ruta no es una cadena ni un <code>Path</code>, el tokenizador no es invocable o devuelve un objeto no iterable</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>SourceError</code></td>
+<td style="text-align: left;"><code>ValueError</code></td>
+<td style="text-align: left;">La fuente no tiene palabras, oraciones, textos ni colocaciones, carece de análisis de dependencias o no queda nada tras el filtrado</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ParameterError</code></td>
+<td style="text-align: left;"><code>ValueError</code></td>
+<td style="text-align: left;">Un umbral, ventana, tamaño de segmento o número de elementos fuera de rango; una medida, variante, preajuste, capa, nivel o categoría de conjunto de datos desconocidos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>UnknownStatError</code></td>
+<td style="text-align: left;"><code>ParameterError</code>, <code>KeyError</code></td>
+<td style="text-align: left;">Se pide por nombre una estadística desconocida</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>DatasetNotFoundError</code></td>
+<td style="text-align: left;"><code>OSError</code></td>
+<td style="text-align: left;">El conjunto de datos no está descargado; el mensaje muestra el comando de descarga</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>DataFileError</code></td>
+<td style="text-align: left;"><code>ValueError</code></td>
+<td style="text-align: left;">Un archivo del conjunto de datos está dañado, tiene un formato inesperado o no se puede decodificar</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>DownloadError</code></td>
+<td style="text-align: left;"><code>RuntimeError</code></td>
+<td style="text-align: left;">El archivo no se pudo descargar o no superó la comprobación de la suma de verificación</td>
+</tr>
+</tbody>
+</table>
+<p>Las clases están disponibles desde <code>ests</code> y desde <code>ests.exceptions</code>.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">EstsError</span><span class="p">,</span> <span class="n">ParameterError</span><span class="p">,</span> <span class="n">WordsExtractor</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="k">except</span> <span class="n">ParameterError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="c1"># The lower N-gram bound is greater than the upper</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s2">"El gato duerme."</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">EstsError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="c1"># SourceTypeError</span>
 </code></pre></div>
-<p>El modelo de spaCy se instala junto con el grupo de dependencias <code>test</code>; para un entorno aparte:</p>
-<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>spacy<span class="w"> </span>download<span class="w"> </span>es_core_news_sm
+</div>
+<h2 id="registro">Registro<a class="headerlink" href="#registro" title="Permanent link">&para;</a></h2>
+<p>La biblioteca no imprime nada por su cuenta: sus mensajes van al logger <code>ests</code>, que por defecto tiene un <code>NullHandler</code>, así que quedan en silencio. Para verlos, configure el registro en su aplicación:</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"</span><span class="si">%(name)s</span><span class="s2">: </span><span class="si">%(message)s</span><span class="s2">"</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="desde-pypi">Desde PyPI<a class="headerlink" href="#desde-pypi" title="Permanent link">&para;</a></h2>
-<p>Tras la primera versión:</p>
-<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>ests
-</code></pre></div>
+</div>
+<p>Los métodos que imprimen a propósito, como los métodos <code>print_stats()</code> de las clases de estadísticas, escriben en la salida estándar; el registro no les afecta.</p>
 
 
 

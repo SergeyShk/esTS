@@ -8,11 +8,39 @@
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/"/>
     </url>
     <url>
+        <loc>Noneexceptions/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneexceptions/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/exceptions/"/>
+    </url>
+    <url>
         <loc>Noneinstallation/</loc>
         <lastmod>2026-09-22</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="Noneinstallation/"/>
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/installation/"/>
+    </url>
+    <url>
+        <loc>Noneextractors/char_ngrams/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneextractors/char_ngrams/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/extractors/char_ngrams/"/>
+    </url>
+    <url>
+        <loc>Noneextractors/sentences/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneextractors/sentences/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/extractors/sentences/"/>
+    </url>
+    <url>
+        <loc>Noneextractors/words/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneextractors/words/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/extractors/words/"/>
     </url>
     <url>
         <loc>Nonees/</loc>
@@ -22,10 +50,38 @@
         <xhtml:link rel="alternate" hreflang="en" href="None"/>
     </url>
     <url>
+        <loc>Nonees/exceptions/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/exceptions/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneexceptions/"/>
+    </url>
+    <url>
         <loc>Nonees/installation/</loc>
         <lastmod>2026-09-22</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/installation/"/>
         <xhtml:link rel="alternate" hreflang="en" href="Noneinstallation/"/>
+    </url>
+    <url>
+        <loc>Nonees/extractors/char_ngrams/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/extractors/char_ngrams/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneextractors/char_ngrams/"/>
+    </url>
+    <url>
+        <loc>Nonees/extractors/sentences/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/extractors/sentences/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneextractors/sentences/"/>
+    </url>
+    <url>
+        <loc>Nonees/extractors/words/</loc>
+        <lastmod>2026-09-22</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/extractors/words/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Noneextractors/words/"/>
     </url>
 </urlset>
