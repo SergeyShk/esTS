@@ -181,3 +181,46 @@ NON_ADVERBS_MENTE = frozenset(
         "suplemente",
     }
 )
+
+# Whitespace counted as spaces by the basic statistics
+SPACES = [" ", "\t"]
+
+# Thresholds of the basic statistics: a complex word has three or more syllables,
+# as in the Spanish readability formulas, a long word seven or more letters,
+# as in LIX and RIX
+COMPLEX_SYL_FACTOR = 3
+LONG_WORD_LETTER_FACTOR = 7
+
+# Types of punctuation marks; the inverted marks ¿ and ¡ count as question
+# and exclamation marks, so a Spanish question carries two of them
+PUNCTUATION_TYPES = {
+    "comma": "Commas",
+    "period": "Periods",
+    "question": "Question marks",
+    "exclamation": "Exclamation marks",
+    "ellipsis": "Ellipses",
+    "colon": "Colons",
+    "semicolon": "Semicolons",
+    "dash": "Dashes",
+    "hyphen": "Hyphens",
+    "angle_quotes": "Guillemets",
+    "straight_quotes": "Straight and curly quotes",
+    "parentheses": "Parentheses",
+    "other": "Other marks",
+}
+
+BASIC_STATS_DESC = {
+    "n_sents": "Sentences",
+    "n_words": "Words",
+    "n_unique_words": "Unique words",
+    "n_long_words": "Long words",
+    "n_complex_words": "Complex words",
+    "n_simple_words": "Simple words",
+    "n_monosyllable_words": "Monosyllabic words",
+    "n_polysyllable_words": "Polysyllabic words",
+    "n_chars": "Characters",
+    "n_letters": "Letters",
+    "n_spaces": "Spaces",
+    "n_syllables": "Syllables",
+    "n_punctuations": "Punctuation marks",
+}

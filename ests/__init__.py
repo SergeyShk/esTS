@@ -7,6 +7,7 @@
 import logging
 from importlib.metadata import PackageNotFoundError, version
 
+from .basic_stats import BasicStats
 from .exceptions import (
     DataFileError,
     DatasetNotFoundError,
@@ -34,6 +35,7 @@ __author__ = "Sergey Shkarin"
 __author_email__ = "kouki.sergey@gmail.com"
 
 __all__ = [
+    "BasicStats",
     "CharNgramsExtractor",
     "DataFileError",
     "DatasetNotFoundError",
