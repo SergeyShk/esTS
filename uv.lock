@@ -764,7 +764,7 @@ wheels = [
 
 [[package]]
 name = "ests"
-version = "0.1.0.dev8"
+version = "0.1.0.dev7"
 source = { editable = "." }
 dependencies = [
     { name = "matplotlib" },
