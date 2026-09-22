@@ -5,7 +5,7 @@
 Es la biblioteca hermana de [ruTS](https://github.com/SergeyShk/ruTS), la de estadísticas de textos en ruso, y sigue su estructura y sus nombres: cada estadística está disponible como clase con `get_stats()` y como componente de un pipeline de [spaCy](https://github.com/explosion/spaCy).
 
 !!! warning "Estado"
-    El proyecto está en la fase de andamiaje: el repositorio, las herramientas, la integración continua y el esqueleto de la documentación existen, los módulos todavía no. La primera versión (0.1) cubrirá la extracción de texto, la silabificación y el acento, las estadísticas básicas, la legibilidad con preajustes y la diversidad léxica.
+    El proyecto está en desarrollo hacia la 0.1: el repositorio, las herramientas, la integración continua y la documentación existen, y el primer módulo está escrito: la extracción de oraciones, palabras y N-gramas de caracteres. La primera versión (0.1) cubrirá además la silabificación y el acento, las estadísticas básicas, la legibilidad con preajustes y la diversidad léxica.
 
 ## Alcance previsto
 
