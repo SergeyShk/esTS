@@ -6,6 +6,7 @@ from functools import lru_cache
 import simplemma
 import spacy
 from spacy.tokenizer import Tokenizer
+from spacy.tokens import Doc, Span
 
 from .constants import ABBREVIATIONS, PUNCTUATIONS, SENTENCE_OPENERS
 
@@ -178,3 +179,45 @@ def lemmatize(word: str) -> str:
         str: Lemma
     """
     return simplemma.lemmatize(word, lang="es")
+
+
+def iter_doc_words(source: Doc | Span) -> Iterator[tuple[int, int, str]]:
+    """
+    Extracting words with positions from a Doc or Span object
+
+    Description:
+        Whitespace tokens are skipped, punctuation marks and symbols are
+        dropped by the same is_punctuation check as for a string (%, €, §
+        and other symbols of the category S are not words, although spaCy
+        does not treat them as punctuation). The Spanish tokenizer keeps
+        hyphenated words (teórico-práctico) and abbreviations (EE. UU.)
+        as single tokens, so a word is always one token
+
+    Arguments:
+        source (Doc|Span): Doc or Span object
+
+    Returns:
+        generator[tuple[int, int, str]]: Position of the first character,
+            position after the last character and text of each word
+    """
+    for token in source:
+        if not token.is_space and not is_punctuation(token.text):
+            yield token.idx, token.idx + len(token), token.text
+
+
+def count_letters(word: str) -> int:
+    """
+    Counting the letters of a string
+
+    Description:
+        Letters of any alphabet (str.isalpha), without digits, hyphens
+        and marks; the ordinal indicators º and ª are letters for
+        str.isalpha, so 3.º is a one-letter word
+
+    Arguments:
+        word (str): Word form
+
+    Returns:
+        int: Number of letters
+    """
+    return sum(map(str.isalpha, word))

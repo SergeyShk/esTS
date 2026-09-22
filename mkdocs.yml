@@ -12,6 +12,8 @@ nav:
       - Word extraction: extractors/words.md
       - Character N-gram extraction: extractors/char_ngrams.md
     - Syllables and stress: syllables.md
+    - Statistics:
+      - Basic statistics: stats/basic_stats.md
 
 theme:
   name: material
@@ -53,6 +55,8 @@ plugins:
             Word extraction: Extracción de palabras
             Character N-gram extraction: Extracción de N-gramas de caracteres
             Syllables and stress: Sílabas y acento
+            Statistics: Estadísticas
+            Basic statistics: Estadísticas básicas
 
 extra:
   social:
