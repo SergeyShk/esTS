@@ -7,7 +7,7 @@ import pytest
 import spacy
 from scipy.special import comb
 
-from ests import DiversityStats, diversity_stats
+from ests import DiversityStats, WordsExtractor, diversity_stats
 from ests.constants import DIVERSITY_STATS_DESC
 from ests.diversity_stats import (
     WindowStats,
@@ -16,6 +16,8 @@ from ests.diversity_stats import (
     calc_alpha2,
     calc_baayen_p,
     calc_brunet_w,
+    calc_cttr,
+    calc_dttr,
     calc_dugast_k,
     calc_entropy,
     calc_evenness,
@@ -27,6 +29,7 @@ from ests.diversity_stats import (
     calc_heaps_beta,
     calc_herdan_vm,
     calc_honore_r,
+    calc_httr,
     calc_inverse_simpson_index,
     calc_mamtld,
     calc_mattr,
@@ -36,6 +39,7 @@ from ests.diversity_stats import (
     calc_mtldw,
     calc_mttr,
     calc_perplexity,
+    calc_rttr,
     calc_sichel_s,
     calc_simpson_index,
     calc_sttr,
@@ -46,7 +50,7 @@ from ests.diversity_stats import (
     calc_zipf_alpha,
     fit_zipf_mandelbrot,
 )
-from ests.exceptions import ParameterError
+from ests.exceptions import ParameterError, UnknownStatError
 
 TEXT = (
     "Los tesauros son una clase especial de recursos lexicográficos que se caracterizan por"
@@ -117,6 +121,58 @@ def test_init_doc_lowercase():
     assert DiversityStats(doc).ttr == DiversityStats(RIDDLE_TEXT).ttr
 
 
+def test_init_extractor_lowercase():
+    """Words are lower-cased whatever the extractor, so the metrics stay case-insensitive"""
+    text = "Los tesauros son una clase especial. Los TESAUROS son Una clase."
+    default = DiversityStats(text)
+    custom = DiversityStats(text, WordsExtractor())
+    assert custom.words == default.words
+    assert custom.ttr == default.ttr == pytest.approx(6 / 11)
+
+
+def test_init_doc_with_extractor():
+    """A given extractor is applied to the text of a Doc instead of its tokens"""
+    doc = spacy.blank("es")(RIDDLE_TEXT)
+    extractor = WordsExtractor(stopwords=["no", "cuándo"])
+    assert DiversityStats(doc, extractor).words == DiversityStats(RIDDLE_TEXT, extractor).words
+    assert "no" not in DiversityStats(doc, extractor).words
+
+
+def test_init_params_checked_first():
+    with pytest.raises(ParameterError):
+        DiversityStats("+ _", window_len=0)
+
+
+def test_params_are_live_attributes():
+    ds = DiversityStats(TEXT)
+    ds.window_len = 20
+    ds.log_base = e
+    ds.mtld_threshold = 0.9
+    ds.hdd_sample_size = 30
+    assert ds.mattr == pytest.approx(calc_mattr(ds.words, 20))
+    assert ds.mttr == pytest.approx(calc_mttr(ds.words, e))
+    assert ds.mtld == pytest.approx(calc_mtld(ds.words, 10, 0.9))
+    assert ds.hdd == pytest.approx(calc_hdd(ds.words, 30))
+    assert ds.windowed("mattr", window_len=40).mean == pytest.approx(
+        calc_windowed(ds.words, lambda words: calc_mattr(words, 20), window_len=40).mean
+    )
+
+
+def test_get_stats_uses_properties():
+    class Clamped(DiversityStats):
+        @property
+        def mtld(self) -> float:
+            return 1.0
+
+    assert Clamped(TEXT).get_stats()["mtld"] == 1.0
+
+
+def test_metrics_declared_consistently(ds):
+    assert set(ds._calculators) == set(DIVERSITY_STATS_DESC)
+    for stat in DIVERSITY_STATS_DESC:
+        assert isinstance(getattr(type(ds), stat), property)
+
+
 def test_single_word_nan():
     ds = DiversityStats("palabra")
     for stat in ("simpson_index", "inverse_simpson_index", "gini_simpson_index", "hapax_index"):
@@ -130,6 +186,21 @@ def test_single_word_nan():
 def test_short_text_nan(func):
     assert isnan(func(["palabra"]))
     assert isnan(func([]))
+
+
+@pytest.mark.parametrize(
+    "func", [calc_ttr, calc_rttr, calc_cttr, calc_httr, calc_sttr, calc_mttr, calc_dttr]
+)
+def test_empty_text_zero(func):
+    assert func([]) == 0
+    assert calc_windowed([], func).mean == 0
+
+
+@pytest.mark.parametrize("func", [calc_sttr, calc_mttr, calc_dttr, calc_dugast_k])
+@pytest.mark.parametrize("base", [1, 0, 0.5, -2])
+def test_log_base_validation(func, base):
+    with pytest.raises(ParameterError):
+        func(riddle, base)
 
 
 def test_words(ds):
@@ -523,6 +594,10 @@ def test_windowed_inf_windows():
 
 
 def test_windowed_errors(ds):
+    with pytest.raises(UnknownStatError):
+        ds.windowed("unknown")
+    with pytest.raises(KeyError):
+        ds.windowed("unknown")
     with pytest.raises(ValueError):
         ds.windowed("unknown")
     with pytest.raises(ValueError):
@@ -573,8 +648,16 @@ def test_entropy_empty():
 
 
 def test_fit_zipf_mandelbrot_divergence(monkeypatch):
-    def failing(*args, **kwargs):
-        raise RuntimeError("Optimal parameters not found")
+    words = ["a"] * 3 + ["b"] * 2 + ["c"]
 
-    monkeypatch.setattr(diversity_stats, "curve_fit", failing)
-    assert all(isnan(value) for value in fit_zipf_mandelbrot(["a"] * 3 + ["b"] * 2 + ["c"]))
+    def failing(*args, **kwargs):
+        raise ValueError("Residuals are not finite in the initial point")
+
+    monkeypatch.setattr(diversity_stats, "least_squares", failing)
+    assert all(isnan(value) for value in fit_zipf_mandelbrot(words))
+
+    class Unconverged:
+        success = False
+
+    monkeypatch.setattr(diversity_stats, "least_squares", lambda *args, **kwargs: Unconverged())
+    assert all(isnan(value) for value in fit_zipf_mandelbrot(words))

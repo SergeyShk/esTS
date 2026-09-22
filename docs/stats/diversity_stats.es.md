@@ -7,7 +7,7 @@
 
 Módulo para calcular las principales métricas de [diversidad léxica](https://en.wikipedia.org/wiki/Lexical_diversity) de un texto. La fuente de datos puede ser un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy).
 
-El módulo permite usar un objeto [`WordsExtractor`](../extractors/words.md) ya configurado para la segmentación en palabras que precede al cálculo.
+El módulo permite usar un objeto [`WordsExtractor`](../extractors/words.md) ya configurado para la segmentación en palabras que precede al cálculo; para un `Doc`, el extractor indicado se aplica al texto del `Doc`, y sin él las palabras salen de sus tokens. Sea cual sea la fuente y el extractor, las palabras se pasan a minúsculas, porque todas las métricas cuentan lexemas.
 
 !!! note "Nota"
     Las métricas se calculan al acceder al atributo correspondiente o al llamar al método `get_stats` del objeto `DiversityStats`.
@@ -17,7 +17,7 @@ El módulo permite usar un objeto [`WordsExtractor`](../extractors/words.md) ya 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `source` | str/Doc | `-` | Fuente de datos (cadena u objeto Doc) |
-| `words_extractor` | WordsExtractor | `None` | Herramienta de extracción de palabras |
+| `words_extractor` | WordsExtractor | `None` | Herramienta de extracción de palabras; para un Doc se aplica a su texto cuando se indica |
 | `window_len` | int | `50` | Tamaño de la ventana para MATTR y del segmento para MSTTR |
 | `mtld_threshold` | float | `0.72` | Umbral de TTR para MTLD, MA-MTLD y MTLD-W |
 | `mtld_min_len` | int | `10` | Longitud mínima del factor para MTLD, MA-MTLD y MTLD-W |
@@ -43,7 +43,8 @@ Según Zenker y Kyle (2021), MATTR, MTLD y HD-D son estables en textos de 50-200
 
 | Atributo | Tipo | Descripción |
 | :------: | :--: | :---------: |
-| `words` | tuple[str] | Tupla de las palabras extraídas |
+| `words` | tuple[str] | Tupla de las palabras extraídas en minúsculas |
+| `window_len`, `mtld_threshold`, `mtld_min_len`, `hdd_sample_size`, `log_base` | int/float | Los parámetros de las métricas; cambiarlos en el objeto cambia las métricas |
 | `frequency_spectrum` | dict[int, int] | Espectro de frecuencias: número de lexemas con una frecuencia dada |
 | `ttr` | float | Type-Token Ratio (TTR) |
 | `rttr` | float | Root Type-Token Ratio (RTTR) |
@@ -97,7 +98,7 @@ Parámetros:
 | `step` | int | `None` | Paso de la ventana, por defecto igual a su tamaño (las ventanas no se solapan) |
 | `confidence` | float | `0.95` | Nivel de confianza |
 
-Devuelve una tupla con nombre `WindowStats` con los campos `mean`, `std`, `lower`, `upper` y `n_windows`.
+Devuelve una tupla con nombre `WindowStats` con los campos `mean`, `std`, `lower`, `upper` y `n_windows`. Un nombre de métrica desconocido lanza `UnknownStatError`.
 
 !!! example "Ejemplo"
 

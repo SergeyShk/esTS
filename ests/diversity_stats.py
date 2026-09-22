@@ -1,4 +1,3 @@
-import warnings
 from collections import Counter
 from collections.abc import Callable, Mapping, Sequence
 from functools import partial
@@ -7,7 +6,7 @@ from typing import NamedTuple
 
 import numpy as np
 from numpy.lib.stride_tricks import sliding_window_view
-from scipy.optimize import OptimizeWarning, curve_fit
+from scipy.optimize import least_squares
 from scipy.special import gammaln
 from scipy.stats import t as student_t
 from spacy.tokens import Doc
@@ -18,10 +17,12 @@ from .constants import (
     DIVERSITY_STATS_DESC,
     HDD_SAMPLE_SIZE,
     MATTR_WINDOW_LEN,
+    MTLD_BLOCK_SIZE,
     MTLD_MIN_LEN,
     MTLD_TTR_THRESHOLD,
+    MTLD_WINDOW_LEN,
 )
-from .exceptions import ParameterError, SourceError, SourceTypeError
+from .exceptions import ParameterError, SourceError, SourceTypeError, UnknownStatError
 from .extractors import WordsExtractor
 from .utils import iter_doc_words, safe_divide
 
@@ -72,7 +73,12 @@ def check_params(
     _check_mtld_params(mtld_threshold, mtld_min_len)
     if hdd_sample_size < 1:
         raise ParameterError("The HD-D sample size must be greater than 0")
-    if log_base <= 1:
+    _check_log_base(log_base)
+
+
+def _check_log_base(base: float) -> None:
+    """Checking the logarithm base of the Summer, Maas and Dugast metrics"""
+    if base <= 1:
         raise ParameterError("The logarithm base must be greater than 1")
 
 
@@ -112,8 +118,12 @@ class DiversityStats:
         WindowStats(mean=0.9333333333333332, std=0.11547005383792512, lower=0.6464898180167025, upper=1.220176848649964, n_windows=3)
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
-        words_extractor (WordsExtractor): Word extraction tool
+        source (str|Doc): Data source (a string or a Doc object); words are
+            lower-cased whatever the source and the extractor, since the metrics
+            count lexemes
+        words_extractor (WordsExtractor): Word extraction tool; for a Doc it is
+            applied to the text of the Doc when given, otherwise the words come
+            from the tokens
         window_len (int): Window size for MATTR and segment size for MSTTR
         mtld_threshold (float): TTR threshold for MTLD, MA-MTLD and MTLD-W
         mtld_min_len (int): Minimum factor length for MTLD, MA-MTLD and MTLD-W
@@ -121,7 +131,13 @@ class DiversityStats:
         log_base (float): Logarithm base for the Summer, Maas and Dugast metrics
 
     Attributes:
-        words (tuple[str]): Tuple of extracted words
+        words (tuple[str]): Tuple of extracted words in lower case
+        window_len (int): Window size for MATTR and segment size for MSTTR
+        mtld_threshold (float): TTR threshold for MTLD, MA-MTLD and MTLD-W
+        mtld_min_len (int): Minimum factor length for MTLD, MA-MTLD and MTLD-W
+        hdd_sample_size (int): Sample size for HD-D
+        log_base (float): Logarithm base for the Summer, Maas and Dugast metrics;
+            the five parameters can be changed on the object, the metrics follow
         frequency_spectrum (dict[int, int]): Frequency spectrum - the number of lexemes with a given frequency
         ttr (float): Type-Token Ratio (TTR)
         rttr (float): Root Type-Token Ratio (RTTR)
@@ -178,38 +194,42 @@ class DiversityStats:
         hdd_sample_size: int = HDD_SAMPLE_SIZE,
         log_base: float = DIVERSITY_LOG_BASE,
     ):
-        if isinstance(source, Doc):
-            text = source.text
-            self.words = tuple(word.lower() for _, _, word in iter_doc_words(source))
-        elif isinstance(source, str):
-            text = source
-            if not words_extractor:
-                words_extractor = WordsExtractor(lowercase=True)
-            self.words = words_extractor.extract(text)
+        check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)
+        if isinstance(source, Doc) and words_extractor is None:
+            words: Sequence[str] = [word for _, _, word in iter_doc_words(source)]
+        elif isinstance(source, Doc | str):
+            text = source.text if isinstance(source, Doc) else source
+            words = (words_extractor or WordsExtractor()).extract(text)
         else:
             raise SourceTypeError("The data source is set incorrectly")
+        self.words = tuple(word.lower() for word in words)
         if not self.words:
             raise SourceError("The data source has no words")
-        check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)
         self.window_len = window_len
         self.mtld_threshold = mtld_threshold
         self.mtld_min_len = mtld_min_len
         self.hdd_sample_size = hdd_sample_size
         self.log_base = log_base
-        self._calculators: dict[str, Calculator] = {
+
+    @property
+    def _calculators(self) -> dict[str, Calculator]:
+        """Functions of the metrics with the current parameters of the object"""
+        return {
             "ttr": calc_ttr,
             "rttr": calc_rttr,
             "cttr": calc_cttr,
             "httr": calc_httr,
-            "sttr": partial(calc_sttr, base=log_base),
-            "mttr": partial(calc_mttr, base=log_base),
-            "dttr": partial(calc_dttr, base=log_base),
-            "mattr": partial(calc_mattr, window_len=window_len),
-            "msttr": partial(calc_msttr, segment_len=window_len),
-            "mtld": partial(calc_mtld, min_len=mtld_min_len, threshold=mtld_threshold),
-            "mamtld": partial(calc_mamtld, min_len=mtld_min_len, threshold=mtld_threshold),
-            "mtldw": partial(calc_mtldw, min_len=mtld_min_len, threshold=mtld_threshold),
-            "hdd": partial(calc_hdd, sample_size=hdd_sample_size),
+            "sttr": partial(calc_sttr, base=self.log_base),
+            "mttr": partial(calc_mttr, base=self.log_base),
+            "dttr": partial(calc_dttr, base=self.log_base),
+            "mattr": partial(calc_mattr, window_len=self.window_len),
+            "msttr": partial(calc_msttr, segment_len=self.window_len),
+            "mtld": partial(calc_mtld, min_len=self.mtld_min_len, threshold=self.mtld_threshold),
+            "mamtld": partial(
+                calc_mamtld, min_len=self.mtld_min_len, threshold=self.mtld_threshold
+            ),
+            "mtldw": partial(calc_mtldw, min_len=self.mtld_min_len, threshold=self.mtld_threshold),
+            "hdd": partial(calc_hdd, sample_size=self.hdd_sample_size),
             "simpson_index": calc_simpson_index,
             "inverse_simpson_index": calc_inverse_simpson_index,
             "gini_simpson_index": calc_gini_simpson_index,
@@ -220,7 +240,7 @@ class DiversityStats:
             "sichel_s": calc_sichel_s,
             "michea_m": calc_michea_m,
             "brunet_w": calc_brunet_w,
-            "dugast_k": partial(calc_dugast_k, base=log_base),
+            "dugast_k": partial(calc_dugast_k, base=self.log_base),
             "baayen_p": calc_baayen_p,
             "hapax_ratio": calc_hapax_ratio,
             "alpha2": calc_alpha2,
@@ -399,13 +419,15 @@ class DiversityStats:
             WindowStats: Mean, standard deviation, bounds of the interval and number of windows
 
         Raises:
-            ParameterError: If the metric is unknown
+            UnknownStatError: If the metric is unknown
+            ParameterError: If the window size, the step or the confidence level are set incorrectly
         """
-        if stat not in self._calculators:
-            raise ParameterError(
-                f"Unknown metric: {stat}. Available metrics: {tuple(self._calculators)}"
+        calculators = self._calculators
+        if stat not in calculators:
+            raise UnknownStatError(
+                f"Unknown metric: {stat}. Available metrics: {tuple(calculators)}"
             )
-        return calc_windowed(self.words, self._calculators[stat], window_len, step, confidence)
+        return calc_windowed(self.words, calculators[stat], window_len, step, confidence)
 
     def get_stats(self) -> dict[str, float]:
         """
@@ -414,7 +436,7 @@ class DiversityStats:
         Returns:
             dict[str, float]: Dictionary of the computed lexical diversity metrics
         """
-        return {stat: self._calc(stat) for stat in DIVERSITY_STATS_DESC}
+        return {stat: getattr(self, stat) for stat in DIVERSITY_STATS_DESC}
 
     def print_stats(self):
         """Printing the computed lexical diversity metrics with descriptions"""
@@ -510,9 +532,11 @@ def calc_httr(text: Sequence[str]) -> float:
         text (list[str]): List of words
 
     Returns:
-        float: Value of the metric
+        float: Value of the metric, 0 for an empty text
     """
     n_words = len(text)
+    if not n_words:
+        return 0
     n_lexemes = len(set(text))
     return safe_divide(log(n_lexemes), log(n_words))
 
@@ -531,11 +555,15 @@ def calc_sttr(text: Sequence[str], base: float = DIVERSITY_LOG_BASE) -> float:
         base (float): Logarithm base
 
     Returns:
-        float: Value of the metric
+        float: Value of the metric, 0 for an empty text
+
+    Raises:
+        ParameterError: If the logarithm base is not greater than 1
     """
+    _check_log_base(base)
     n_words = len(text)
     n_lexemes = len(set(text))
-    if n_words == 1 or n_lexemes == 1:
+    if n_words < 2 or n_lexemes == 1:
         return 0
     return safe_divide(log(log(n_lexemes, base), base), log(log(n_words, base), base))
 
@@ -555,9 +583,15 @@ def calc_mttr(text: Sequence[str], base: float = DIVERSITY_LOG_BASE) -> float:
         base (float): Logarithm base
 
     Returns:
-        float: Value of the metric
+        float: Value of the metric, 0 for an empty text
+
+    Raises:
+        ParameterError: If the logarithm base is not greater than 1
     """
+    _check_log_base(base)
     n_words = len(text)
+    if not n_words:
+        return 0
     n_lexemes = len(set(text))
     log_words = log(n_words, base)
     return safe_divide(log_words - log(n_lexemes, base), log_words**2)
@@ -578,9 +612,15 @@ def calc_dttr(text: Sequence[str], base: float = DIVERSITY_LOG_BASE) -> float:
         base (float): Logarithm base
 
     Returns:
-        float: Value of the metric
+        float: Value of the metric, 0 for an empty text
+
+    Raises:
+        ParameterError: If the logarithm base is not greater than 1
     """
+    _check_log_base(base)
     n_words = len(text)
+    if not n_words:
+        return 0
     n_lexemes = len(set(text))
     log_words = log(n_words, base)
     return safe_divide(log_words**2, log_words - log(n_lexemes, base))
@@ -719,10 +759,6 @@ def calc_mtld(
     forward = safe_divide(n_words, _count_mtld_factors(text, threshold, min_len), inf)
     backward = safe_divide(n_words, _count_mtld_factors(text[::-1], threshold, min_len), inf)
     return (forward + backward) / 2
-
-
-MTLD_BLOCK_SIZE = 4096
-MTLD_WINDOW_LEN = 32
 
 
 def _previous_positions(text: Sequence[str], wrap: bool) -> np.ndarray:
@@ -1163,7 +1199,11 @@ def calc_dugast_k(text: Sequence[str], base: float = DIVERSITY_LOG_BASE) -> floa
 
     Returns:
         float: Value of the measure, nan for short texts
+
+    Raises:
+        ParameterError: If the logarithm base is not greater than 1
     """
+    _check_log_base(base)
     n_words = len(text)
     n_lexemes = len(set(text))
     if not n_words or log(n_words, base) <= 1:
@@ -1344,8 +1384,8 @@ def fit_zipf_mandelbrot(text: Sequence[str] | Mapping[str, int]) -> ZipfMandelbr
     Description:
         The law f(r) = C / (r + q)^s, where r is the frequency rank of a lexeme; with q = 0
         it reduces to Zipf's law with exponent s. The parameters are fitted by least
-        squares in logarithmic coordinates (scipy.optimize.curve_fit) with the initial
-        guess C = f(1), q = 1, s = 1 and the constraints q ≥ 0, s ≥ 0; the shift q
+        squares in logarithmic coordinates (scipy.optimize.least_squares) with the
+        initial guess C = f(1), q = 1, s = 1 and the constraints q ≥ 0, s ≥ 0; the shift q
         describes the flattening of the curve on the most frequent words
 
     References:
@@ -1370,18 +1410,23 @@ def fit_zipf_mandelbrot(text: Sequence[str] | Mapping[str, int]) -> ZipfMandelbr
     def model(rank: np.ndarray, log_c: float, q: float, s: float) -> np.ndarray:
         return log_c - s * np.log(rank + q)
 
+    def residuals(params: np.ndarray) -> np.ndarray:
+        log_c, q, s = (float(value) for value in params)
+        return np.asarray(model(ranks, log_c, q, s) - log_frequencies)
+
+    # least_squares rather than curve_fit: the same trust-region fit with bounds,
+    # without the covariance estimate and its warnings
     try:
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", OptimizeWarning)
-            (log_c, q, s), _ = curve_fit(
-                model,
-                ranks,
-                log_frequencies,
-                p0=(log_frequencies[0], 1.0, 1.0),
-                bounds=([-np.inf, 0.0, 0.0], [np.inf, np.inf, np.inf]),
-            )
-    except (RuntimeError, ValueError):
+        result = least_squares(
+            residuals,
+            x0=(log_frequencies[0], 1.0, 1.0),
+            bounds=([-np.inf, 0.0, 0.0], [np.inf, np.inf, np.inf]),
+        )
+    except ValueError:
         return ZipfMandelbrot(nan, nan, nan, nan)
+    if not result.success:
+        return ZipfMandelbrot(nan, nan, nan, nan)
+    log_c, q, s = (float(value) for value in result.x)
     residual = float(((log_frequencies - model(ranks, log_c, q, s)) ** 2).sum())
     total = float(((log_frequencies - log_frequencies.mean()) ** 2).sum())
     return ZipfMandelbrot(float(np.exp(log_c)), float(q), float(s), 1 - residual / total)
@@ -1521,14 +1566,9 @@ def calc_windowed(
         raise ParameterError("The window step must be greater than 0")
     if not 0 < confidence < 1:
         raise ParameterError("The confidence level must lie in the interval (0, 1)")
-    n_words = len(text)
-    if n_words <= window_len:
-        windows = [text]
-    else:
-        windows = [
-            text[start : start + window_len] for start in range(0, n_words - window_len + 1, step)
-        ]
-    values = np.array([func(window) for window in windows], dtype=float)
+    # one window is sliced at a time: a text shorter than the window is its only window
+    starts = range(0, max(len(text) - window_len, 0) + 1, step)
+    values = np.array([func(text[start : start + window_len]) for start in starts], dtype=float)
     values = values[~np.isnan(values)]
     n_windows = int(values.size)
     if not n_windows:

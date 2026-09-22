@@ -7,7 +7,7 @@
 
 A module for computing the main [lexical diversity](https://en.wikipedia.org/wiki/Lexical_diversity) metrics of a text. The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library.
 
-The module allows using a pre-built [`WordsExtractor`](../extractors/words.md) object for the word tokenization needed before computing the statistics.
+The module allows using a pre-built [`WordsExtractor`](../extractors/words.md) object for the word tokenization needed before computing the statistics; for a `Doc` a given extractor is applied to the text of the `Doc`, without one the words come from its tokens. Whatever the source and the extractor, the words are lower-cased, since every metric counts lexemes.
 
 !!! note "Note"
     The metrics are computed by accessing the corresponding attribute or by calling the `get_stats` method of the `DiversityStats` object.
@@ -17,7 +17,7 @@ The module allows using a pre-built [`WordsExtractor`](../extractors/words.md) o
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
 | `source` | str/Doc | `-` | Data source (a string or a Doc object) |
-| `words_extractor` | WordsExtractor | `None` | Word extraction tool |
+| `words_extractor` | WordsExtractor | `None` | Word extraction tool; for a Doc it is applied to its text when given |
 | `window_len` | int | `50` | Window size for MATTR and segment size for MSTTR |
 | `mtld_threshold` | float | `0.72` | TTR threshold for MTLD, MA-MTLD and MTLD-W |
 | `mtld_min_len` | int | `10` | Minimum factor length for MTLD, MA-MTLD and MTLD-W |
@@ -43,7 +43,8 @@ By Zenker and Kyle (2021) MATTR, MTLD and HD-D are stable on texts of 50-200 wor
 
 | Attribute | Type | Description |
 | :-------: | :--: | :---------: |
-| `words` | tuple[str] | Tuple of extracted words |
+| `words` | tuple[str] | Tuple of extracted words in lower case |
+| `window_len`, `mtld_threshold`, `mtld_min_len`, `hdd_sample_size`, `log_base` | int/float | The parameters of the metrics; changing them on the object changes the metrics |
 | `frequency_spectrum` | dict[int, int] | Frequency spectrum - the number of lexemes with a given frequency |
 | `ttr` | float | Type-Token Ratio (TTR) |
 | `rttr` | float | Root Type-Token Ratio (RTTR) |
@@ -97,7 +98,7 @@ Parameters:
 | `step` | int | `None` | Window step, by default equal to the window size (windows do not overlap) |
 | `confidence` | float | `0.95` | Confidence level |
 
-Returns a `WindowStats` named tuple with the fields `mean`, `std`, `lower`, `upper` and `n_windows`.
+Returns a `WindowStats` named tuple with the fields `mean`, `std`, `lower`, `upper` and `n_windows`. An unknown metric name raises `UnknownStatError`.
 
 !!! example "Example"
 

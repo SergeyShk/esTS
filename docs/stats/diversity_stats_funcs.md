@@ -695,7 +695,7 @@ Parameters:
 !!! info ""
     **ests.diversity_stats.fit_zipf_mandelbrot()**, **ests.diversity_stats.ZipfMandelbrot**
 
-Fitting the [Zipf-Mandelbrot law](https://en.wikipedia.org/wiki/Zipf–Mandelbrot_law) $f(r) = C / (r + q)^s$ to the rank-frequency distribution. With $q = 0$ the law reduces to Zipf's law with exponent $s$; the shift $q$ describes the flattening of the curve on the most frequent words that Zipf's law does not capture. The parameters are fitted by least squares in logarithmic coordinates (`scipy.optimize.curve_fit`) with the initial guess $C = f(1)$, $q = 1$, $s = 1$ and the constraints $q \ge 0$, $s \ge 0$. Returns a `ZipfMandelbrot` named tuple with the fields `c`, `q`, `s` and `r2` - the coefficient of determination of the fit in logarithmic coordinates.
+Fitting the [Zipf-Mandelbrot law](https://en.wikipedia.org/wiki/Zipf–Mandelbrot_law) $f(r) = C / (r + q)^s$ to the rank-frequency distribution. With $q = 0$ the law reduces to Zipf's law with exponent $s$; the shift $q$ describes the flattening of the curve on the most frequent words that Zipf's law does not capture. The parameters are fitted by least squares in logarithmic coordinates (`scipy.optimize.least_squares`) with the initial guess $C = f(1)$, $q = 1$, $s = 1$ and the constraints $q \ge 0$, $s \ge 0$. Returns a `ZipfMandelbrot` named tuple with the fields `c`, `q`, `s` and `r2` - the coefficient of determination of the fit in logarithmic coordinates.
 
 !!! note "Note"
     For texts of fewer than three lexemes, with identical frequencies of all lexemes and when the fit diverges all fields are `nan`. On short texts the parameters are unstable: the law describes the frequency distribution of large corpora.
