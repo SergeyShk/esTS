@@ -1,0 +1,68 @@
+site_name: esTS
+site_description: "A library for extracting statistics from texts in Spanish"
+repo_url: https://github.com/SergeyShk/esTS
+
+nav:
+    - Home:
+      - About: index.md
+      - Installation: installation.md
+
+theme:
+  name: material
+  language: en
+  palette:
+    primary: red
+    accent: red
+  font:
+    text: Source Sans Pro
+  features:
+    - navigation.tabs
+
+plugins:
+  - search:
+      lang:
+        - en
+        - es
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: en
+          name: English
+          default: true
+          build: true
+        - locale: es
+          name: Español
+          build: true
+          site_description: "Biblioteca para extraer estadísticas de textos en español"
+          nav_translations:
+            Home: Inicio
+            About: Acerca de
+            Installation: Instalación
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/SergeyShk
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/kouki91/
+
+extra_css:
+  - css/extra.css
+
+extra_javascript:
+  - js/config.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js
+
+markdown_extensions:
+  - toc:
+      permalink: True
+  - attr_list
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: True

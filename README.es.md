@@ -1,0 +1,43 @@
+# Spanish Texts Statistics (esTS)
+
+[![Build](https://github.com/SergeyShk/esTS/actions/workflows/ci.yml/badge.svg)](https://github.com/SergeyShk/esTS/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+English version: [README.md](README.md)
+
+**esTS** calculará para textos en español lo que normalmente exige juntar varias herramientas sueltas: recuentos básicos, fórmulas de legibilidad, diversidad y sofisticación léxica, estadísticas morfológicas, sintácticas y de cohesión, marcadores de estilo, fonoestadística, métrica y rima, medidas de corpus y estilometría - con fórmulas publicadas y adaptadas al español, resultados deterministas y sin redes neuronales dentro.
+
+Es la biblioteca hermana de [ruTS](https://github.com/SergeyShk/ruTS), la de estadísticas de textos en ruso, y sigue su estructura y sus nombres: cada estadística está disponible como clase con `get_stats()` y como componente de un pipeline de [spaCy](https://github.com/explosion/spaCy).
+
+> **Estado:** andamiaje. El repositorio, las herramientas, la integración continua y el esqueleto de la documentación existen; los módulos todavía no. La primera versión (0.1) cubrirá la extracción de texto, la silabificación y el acento, las estadísticas básicas, la legibilidad con preajustes y la diversidad léxica.
+
+## Alcance previsto
+
+* **Extracción** - oraciones y palabras con la puntuación española (`¿ ¡`), clíticos, lemas con spaCy o `simplemma`
+* **Sílabas y acento** - silabificación por reglas y acento derivado de la ortografía, sin diccionario
+* **Legibilidad** - Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad μ, SOL, con preajustes
+* **Diversidad léxica** - TTR y sus variantes, MTLD, HD-D, Yule, Herdan, Brunet, entropía, ajustes de Zipf y Heaps, cálculo por ventanas
+* **Morfología, sintaxis y cohesión** - sobre rasgos y relaciones de Universal Dependencies de los modelos `es_core_news_*` de spaCy
+* **Medidas de corpus y estilometría** - palabras clave, colocaciones, dispersión, KWIC, Delta de Burrows, Zeta, comparación de corpus
+* **Estilo y sonido** - métricas de estilo SEO, marcadores de lenguaje claro, fonoestadística, métrica silábica y rima
+
+## Desarrollo
+
+El proyecto usa [uv](https://docs.astral.sh/uv/) para las dependencias y [ruff](https://docs.astral.sh/ruff/) para el análisis y el formato del código. Se requiere Python 3.11 o superior.
+
+```bash
+git clone https://github.com/SergeyShk/esTS.git
+cd esTS
+
+make deps                   # crear el entorno e instalar todas las dependencias
+uv run pre-commit install   # hooks: linters al hacer commit, tests al hacer push
+make lint                   # ruff check, ruff format --check, mypy
+make test                   # pytest con doctests
+make docs-build             # mkdocs build --strict
+```
+
+La lista completa de comandos está en `make help`. Las pautas de contribución están en [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Licencia
+
+[MIT](LICENSE.txt)

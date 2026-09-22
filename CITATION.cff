@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use esTS in research or software, please cite it."
+title: "esTS, a library for statistics extraction from texts in Spanish"
+type: software
+authors:
+  - family-names: Shkarin
+    given-names: Sergey
+    email: kouki.sergey@gmail.com
+repository-code: "https://github.com/SergeyShk/esTS"
+url: "https://sergeyshk.github.io/esTS/"
+license: MIT
+version: 0.1.0.dev0
+date-released: 2026-09-22
+keywords:
+  - spanish
+  - nlp
+  - text statistics
+  - readability
+  - lexical diversity
+  - stylometry
+  - corpus linguistics
+abstract: "esTS computes text statistics for Spanish: basic counts, readability formulas, lexical diversity and sophistication, morphological, syntactic, cohesion, phonetic and style statistics, metre and rhyme, corpus measures and stylometry, with spaCy components, datasets and visualizations."

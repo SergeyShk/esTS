@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.egg-info/
+dist/
+build/
+target/
+
+# Environments
+.venv/
+venv/
+.env
+
+# Tools
+.coverage
+coverage.xml
+.mypy_cache
+.pytest_cache
+.ruff_cache
+.ipynb_checkpoints
+
+# Data and documentation
+ests_data
+site/
+
+# Editors and OS
+.vscode
+.idea
+.DS_Store

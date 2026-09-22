@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://sergeyshk.github.io/esTS/
+    about: Description of all statistics with formulas and examples
+  - name: ruTS, the Russian sibling
+    url: https://github.com/SergeyShk/ruTS
+    about: The library esTS follows in structure and naming
