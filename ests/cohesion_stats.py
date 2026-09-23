@@ -5,6 +5,7 @@ from itertools import combinations, pairwise
 from math import nan
 from pathlib import Path
 from statistics import fmean
+from types import MappingProxyType
 from typing import NamedTuple
 
 import numpy as np
@@ -13,6 +14,9 @@ from spacy.tokens import Doc, Token
 
 from .constants import (
     COHESION_STATS_DESC,
+    CONNECTOR_BLOCKED_AFTER,
+    CONNECTOR_BLOCKED_AFTER_POS,
+    CONNECTOR_BLOCKED_BEFORE,
     CONNECTOR_CLASSES,
     CONNECTOR_POS,
     CONNECTOR_POS_EXTRA,
@@ -251,8 +255,8 @@ class CohesionStats:
         self.n_content_words = sum(len(sent) for sent in content)
         self.n_given = count_given(content)
 
-        noun_overlap = calc_overlaps(nouns)
-        argument_overlap = calc_overlaps(arguments)
+        noun_overlap = calc_overlaps(nouns, proportional=False)
+        argument_overlap = calc_overlaps(arguments, proportional=False)
         content_overlap = calc_overlaps(content_sets)
         self.noun_overlap_adjacent = noun_overlap.adjacent
         self.noun_overlap_all = noun_overlap.all
@@ -314,7 +318,7 @@ class CohesionStats:
 
 
 @cache
-def load_connectors() -> dict[str, tuple[str, str]]:
+def load_connectors() -> Mapping[str, tuple[str, str]]:
     """
     Loading the dictionary of the connectors
 
@@ -325,7 +329,8 @@ def load_connectors() -> dict[str, tuple[str, str]]:
         the markers of the Spanish RST corpus and the index of Coh-Metrix-Esp
 
     Returns:
-        dict[str, tuple[str, str]]: Class and kind by connector
+        Mapping[str, tuple[str, str]]: Class and kind by connector, read-only:
+            the dictionary is cached and shared by every caller
     """
     connectors: dict[str, tuple[str, str]] = {}
     with CONNECTORS_FILE.open(encoding="utf-8") as file:
@@ -333,7 +338,7 @@ def load_connectors() -> dict[str, tuple[str, str]]:
         for line in file:
             connector, cls, kind = line.rstrip("\n").split("\t")
             connectors[connector] = (cls, kind)
-    return connectors
+    return MappingProxyType(connectors)
 
 
 class ConnectorIndex(NamedTuple):
@@ -400,13 +405,15 @@ def _find(
             end = position + len(pattern)
             if tuple(normalized[position:end]) != pattern:
                 continue
+            text, cls, kind = index.entries[" ".join(pattern)]
+            if _is_phrase(text, normalized, position, end, pos):
+                continue
             if (
                 len(pattern) == 1
                 and pos is not None
-                and not _is_connector_pos(pattern[0], pos[position])
+                and not _is_connector_pos(pattern[0], pos, position)
             ):
                 continue
-            text, cls, kind = index.entries[" ".join(pattern)]
             found.append(Connector(sent_index, position, end, text, cls, kind))
             position = end
             break
@@ -415,8 +422,34 @@ def _find(
     return found
 
 
-def _is_connector_pos(word: str, pos: str | None) -> bool:
-    return pos is None or pos in CONNECTOR_POS or pos in CONNECTOR_POS_EXTRA.get(word, frozenset())
+def _is_connector_pos(word: str, pos: Sequence[str | None], position: int) -> bool:
+    if pos[position] is None:
+        return True
+    if position and pos[position - 1] == "DET":
+        return False
+    if pos[position] == "PROPN":
+        return position == 0
+    return pos[position] in CONNECTOR_POS or pos[position] in CONNECTOR_POS_EXTRA.get(
+        word, frozenset()
+    )
+
+
+def _is_phrase(
+    text: str,
+    words: Sequence[str],
+    position: int,
+    end: int,
+    pos: Sequence[str | None] | None,
+) -> bool:
+    """Whether the words of a marker are a phrase of their own here, antes de la reunión"""
+    following = words[end] if end < len(words) else ""
+    if following in CONNECTOR_BLOCKED_AFTER.get(text, frozenset()):
+        return True
+    if position and words[position - 1] in CONNECTOR_BLOCKED_BEFORE.get(text, frozenset()):
+        return True
+    if pos is None or end >= len(pos):
+        return False
+    return pos[end] in CONNECTOR_BLOCKED_AFTER_POS.get(text, frozenset())
 
 
 def find_connectors(
@@ -464,10 +497,13 @@ def token_info(token: Token) -> WordInfo:
     Getting the features of a token by the annotation of Universal Dependencies
 
     Description:
-        A noun is NOUN or PROPN, a pronoun is PRON or a determiner that is not an
-        article (PronType=Art), so that el libro is no pronoun while mi libro and
-        este libro are; a demonstrative carries PronType=Dem; an argument is NOUN,
-        PROPN or PRON; a content word is one of CONTENT_UD_POS and no demonstrative
+        A noun is NOUN or PROPN, a pronoun is PRON or a determiner that points at
+        something - a possessive (Poss=Yes) or a demonstrative or personal one
+        (PronType=Dem, Prs) - so that mi libro and este libro hold a pronoun while
+        el libro and cada libro do not; a demonstrative carries PronType=Dem; an
+        argument is NOUN, PROPN or PRON, the determiners left out, as the argument
+        overlap of Coh-Metrix counts nouns and pronouns proper; a content word is
+        one of CONTENT_UD_POS and no demonstrative
 
     Arguments:
         token (Token): Token
@@ -482,13 +518,22 @@ def token_info(token: Token) -> WordInfo:
     return WordInfo(
         lemma=token.lemma_.lower(),
         noun=token.pos_ in ("NOUN", "PROPN"),
-        pronoun=token.pos_ == "PRON" or (token.pos_ == "DET" and "Art" not in pron_type),
+        pronoun=token.pos_ == "PRON" or _is_pronominal_det(token, pron_type),
         demonstrative=demonstrative,
         argument=token.pos_ in ("NOUN", "PROPN", "PRON"),
         content=not demonstrative and token.pos_ in CONTENT_UD_POS,
         tense=tense[0] if tense else None,
         mood=mood[0] if mood else None,
     )
+
+
+def _is_pronominal_det(token: Token, pron_type: list[str]) -> bool:
+    """Whether a determiner points at something: mi libro, su libro, este libro"""
+    if token.pos_ != "DET":
+        return False
+    if "Yes" in token.morph.get("Poss", []):
+        return True
+    return bool({"Dem", "Prs"} & set(pron_type))
 
 
 def split_doc_sents(source: Doc, sents_extractor: SentsExtractor) -> list[list[Token]]:
@@ -598,7 +643,7 @@ def dice(first: frozenset[str], second: frozenset[str]) -> float:
     return safe_divide(2 * len(first & second), len(first) + len(second))
 
 
-def calc_overlaps(sets: Sequence[Collection[str]]) -> Overlap:
+def calc_overlaps(sets: Sequence[Collection[str]], proportional: bool = True) -> Overlap:
     """
     Computing the binary and the proportional overlap over adjacent and all pairs
 
@@ -615,6 +660,9 @@ def calc_overlaps(sets: Sequence[Collection[str]]) -> Overlap:
 
     Arguments:
         sets (list[set[str]]): Elements of every sentence
+        proportional (bool): Compute the proportional overlap as well; without it
+            prop_adjacent and prop_all are nan and the Dice coefficients, about a
+            third of the work, are not computed
 
     Returns:
         Overlap: Shares of the pairs with a shared element and the mean Dice
@@ -629,8 +677,10 @@ def calc_overlaps(sets: Sequence[Collection[str]]) -> Overlap:
         sum(1 for first, second in pairwise(frozen) if not first.isdisjoint(second))
         / (n_sents - 1),
         _count_sharing_pairs(frozen) / n_all,
-        sum(dice(first, second) for first, second in pairwise(frozen)) / (n_sents - 1),
-        _sum_dice(frozen) / n_all,
+        sum(dice(first, second) for first, second in pairwise(frozen)) / (n_sents - 1)
+        if proportional
+        else nan,
+        _sum_dice(frozen) / n_all if proportional else nan,
     )
 
 

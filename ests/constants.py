@@ -670,6 +670,21 @@ CONNECTOR_POS_EXTRA = {
     "concluyendo": frozenset({"VERB"}),
     "verbigracia": frozenset({"NOUN"}),
 }
+# Words that turn a marker into a part of a prepositional phrase: antes de la
+# reunión, por encima de 80, al final de la línea are no discourse markers
+CONNECTOR_BLOCKED_AFTER = {
+    "antes": frozenset({"de", "del"}),
+    "después": frozenset({"de", "del"}),
+    "encima": frozenset({"de", "del"}),
+    "al final": frozenset({"de", "del"}),
+    "al principio": frozenset({"de", "del"}),
+    "al comienzo": frozenset({"de", "del"}),
+    "luego": frozenset({"de", "del"}),
+}
+CONNECTOR_BLOCKED_BEFORE = {"encima": frozenset({"por"})}
+# Parts of speech of the following word that turn a marker into a phrase of its own:
+# sobre todo el texto is sobre + todo el texto, sobre todo cuando is the marker
+CONNECTOR_BLOCKED_AFTER_POS = {"sobre todo": frozenset({"DET"})}
 
 COHESION_STATS_DESC = {
     "noun_overlap_adjacent": "Noun overlap in adjacent sentences",

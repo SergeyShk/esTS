@@ -45,7 +45,9 @@ La repetición de Coh-Metrix: un par de oraciones es cohesivo cuando comparten e
 | `mood_repetition` | float | Proporción de pares contiguos con el mismo modo dominante |
 | `temporal_cohesion` | float | Media de la repetición del tiempo y del modo |
 
-Un sustantivo es `NOUN` o `PROPN`, un argumento es un sustantivo o un `PRON`, y una palabra con contenido es un `NOUN`, `PROPN`, `ADJ`, `VERB` o `ADV`. Un pronombre es un `PRON` o un determinante que no sea artículo, de modo que `el libro` no lleva ninguno mientras que `mi libro` y `este libro` sí; un demostrativo lleva `PronType=Dem`.
+Un sustantivo es `NOUN` o `PROPN` y una palabra con contenido es un `NOUN`, `PROPN`, `ADJ`, `VERB` o `ADV`. Un pronombre es un `PRON` o un determinante que señala algo - un posesivo (`Poss=Yes`) o uno demostrativo o personal (`PronType=Dem`, `Prs`) -, de modo que `mi libro` y `este libro` llevan un pronombre y `el libro` y `cada libro` no: los cuantificadores y los indefinidos (`cada`, `todos`, `ningún`, `otro`, `cualquier`) no señalan nada e inflarían alrededor de un quinto una medida de densidad anafórica. Un demostrativo lleva `PronType=Dem`.
+
+Un argumento es un `NOUN`, `PROPN` o `PRON`, dejando fuera los determinantes aunque cuenten como pronombres: la repetición de argumentos de Coh-Metrix se hace con sustantivos y pronombres propiamente dichos, y el lema de `este` en dos oraciones no remite a la misma cosa.
 
 La cohesión temporal sigue el SMTEMP de Coh-Metrix: de cada oración se toma el valor dominante del rasgo de sus verbos, y un par de oraciones contiguas cuenta como cohesivo cuando los valores coinciden. El español no tiene aspecto en Universal Dependencies, así que el modo ocupa su lugar junto al tiempo: el paso del indicativo al subjuntivo es lo que rompe el marco temporal de un texto español. Los pares en los que una de las oraciones no tiene ningún verbo con el rasgo se omiten, y un texto de menos de dos oraciones deja en `nan` todas las medidas de esta sección.
 
@@ -66,7 +68,9 @@ Los marcadores del discurso de la clasificación de Martín Zorraquino y Portol�
 | `connectors_primary` | float | Conectores primarios por 1000 palabras |
 | `connectors_secondary` | float | Conectores secundarios por 1000 palabras |
 
-Los conectores se buscan por sus formas en minúscula: en cada posición se toma el más largo, de modo que `sin embargo` no se rompe en `sin`, y los hallados no se solapan. Un conector de una palabra cuenta solo con una categoría de `CONNECTOR_POS` - conjunción, partícula, adverbio, adposición, interjección -, así que `el antes y el después` lleva un conector, `y`, y no tres. Las apariciones están en el atributo `connector_spans` y su distribución en `c_connectors`.
+Los conectores se buscan por sus formas en minúscula: en cada posición se toma el más largo, de modo que `sin embargo` no se rompe en `sin`, y los hallados no se solapan. Las apariciones están en el atributo `connector_spans` y su distribución en `c_connectors`.
+
+Dos reglas dejan fuera los usos corrientes de esas palabras. Un conector de una palabra cuenta solo con una categoría de `CONNECTOR_POS` - conjunción, partícula, adverbio, adposición, interjección - y nunca tras un determinante, así que `el antes y el después` lleva un conector, `y`, y no tres; un nombre propio cuenta solo al principio de la oración, donde los modelos leen así un marcador (`Primeramente`, `Concluyendo`), de modo que el apellido de `Ana, Luego y Mas firmaron` no es conector. Y un marcador que además encabeza un sintagma preposicional se descarta ahí: `antes de la reunión`, `después del informe`, `por encima de 80`, `al final de la línea`, `al principio de la oración`, `luego de la sesión` y `sobre todo el texto` no cuentan nada, mientras que `antes, firmó el acta`, `encima, no vino`, `al final, no vino` y `sobre todo cuando llueve` cuentan su marcador.
 
 En `connectors` puede pasarse un diccionario propio: del conector a su clase de `CONNECTOR_CLASSES` y su tipo de `CONNECTOR_TYPES`, y uno desconocido levanta `ParameterError`.
 
@@ -209,7 +213,7 @@ Para ilustrar el método reutilizamos el código del ejemplo anterior:
 !!! info ""
     **ests.cohesion_stats.find_connectors()**, **ests.cohesion_stats.load_connectors()**
 
-`find_connectors(words, connectors=None, sent_index=0, pos=None)` halla los conectores de una sola oración y devuelve sus apariciones, y `load_connectors()` devuelve el diccionario de la biblioteca, la clase y el tipo por conector.
+`find_connectors(words, connectors=None, sent_index=0, pos=None)` halla los conectores de una sola oración y devuelve sus apariciones, y `load_connectors()` devuelve el diccionario de la biblioteca, la clase y el tipo por conector; el diccionario está en caché y es de solo lectura, así que un cambio se hace por el parámetro `connectors` y no sobre el objeto devuelto.
 
 !!! example "Ejemplo"
 

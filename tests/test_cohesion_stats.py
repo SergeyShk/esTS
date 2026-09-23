@@ -87,6 +87,11 @@ def test_pronouns_exclude_articles():
     cs = CohesionStats("El libro es mío. Este libro me gusta. Yo lo leí.")
     assert cs.n_pronouns == 5
     assert cs.n_demonstratives == 1
+
+
+def test_pronouns_exclude_quantifiers():
+    cs = CohesionStats("Cada libro tiene su autor. Todos los libros son suyos. Este libro es mío.")
+    assert cs.n_pronouns == 4
     assert cs.p_demonstratives == pytest.approx(1 / cs.n_words)
 
 
@@ -199,6 +204,11 @@ def test_load_connectors_cached():
     assert load_connectors() is load_connectors()
 
 
+def test_load_connectors_is_read_only():
+    with pytest.raises(TypeError):
+        load_connectors()["ojalá"] = ("temporal", "primary")  # type: ignore[index]
+
+
 def test_find_connectors_longest_match():
     assert [c.text for c in find_connectors(["Sin", "embargo", "no", "vino"])] == ["sin embargo"]
 
@@ -218,9 +228,55 @@ def test_find_connectors_period_variant():
 
 def test_find_connectors_pos_filter():
     words = ["El", "antes", "y", "el", "después"]
-    pos = ["DET", "NOUN", "CCONJ", "DET", "NOUN"]
+    pos = ["DET", "ADV", "CCONJ", "DET", "ADV"]
     assert [c.text for c in find_connectors(words, pos=pos)] == ["y"]
     assert [c.text for c in find_connectors(words)] == ["antes", "y", "después"]
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("El antes y el después no importan.", ["y"]),
+        ("Ana, Luego y Mas firmaron el acta.", ["luego", "y"]),
+        ("Resumiendo, el texto es claro.", ["resumiendo"]),
+        ("Primeramente, hay que leer.", ["primeramente"]),
+    ],
+)
+def test_connector_spans_of_a_parsed_text(text, expected):
+    assert [connector.text for connector in CohesionStats(text).connector_spans] == expected
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("Antes de la reunión firmó el acta.", []),
+        ("Antes, firmó el acta.", ["antes"]),
+        ("Por encima de 80 casos.", []),
+        ("Encima, no vino.", ["encima"]),
+        ("Al final de la línea hay un guion.", []),
+        ("Al final, no vino.", ["al final"]),
+        ("La métrica se calcula sobre todo el texto.", []),
+        ("Sobre todo cuando el texto es largo.", ["sobre todo", "cuando"]),
+        ("Luego de la reunión firmó.", []),
+        ("Luego firmó el acta.", ["luego"]),
+    ],
+)
+def test_connectors_inside_a_prepositional_phrase(text, expected):
+    assert [connector.text for connector in CohesionStats(text).connector_spans] == expected
+
+
+def test_find_connectors_blocked_without_pos():
+    assert find_connectors(["antes", "de", "la", "reunión"]) == []
+    assert [c.text for c in find_connectors(["por", "encima", "de", "todo"])] == []
+
+
+def test_find_connectors_blocked_by_the_preceding_word():
+    assert find_connectors(["por", "encima", "no", "vino"]) == []
+    assert [c.text for c in find_connectors(["encima", "no", "vino"])] == ["encima"]
+
+
+def test_find_connectors_of_a_word_without_pos():
+    assert [c.text for c in find_connectors(["además"], pos=[None])] == ["además"]
 
 
 def test_find_connectors_pos_extra():
@@ -321,6 +377,15 @@ def test_calc_overlaps_matches_the_direct_computation():
     assert overlap.all == pytest.approx(calc_overlap(sets, adjacent=False))
     assert overlap.prop_adjacent == pytest.approx(calc_proportional_overlap(sets))
     assert overlap.prop_all == pytest.approx(calc_proportional_overlap(sets, adjacent=False))
+
+
+def test_calc_overlaps_without_the_proportional_half():
+    sets = [{"a", "b"}, {"b", "c"}, {"d"}]
+    overlap = calc_overlaps(sets, proportional=False)
+    assert overlap.adjacent == calc_overlaps(sets).adjacent
+    assert overlap.all == calc_overlaps(sets).all
+    assert isnan(overlap.prop_adjacent)
+    assert isnan(overlap.prop_all)
 
 
 def test_calc_overlaps_of_a_single_sentence():
