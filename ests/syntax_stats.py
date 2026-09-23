@@ -887,10 +887,11 @@ def find_split_predicates(tokens: Iterable[Token]) -> list[tuple[Token, Token]]:
         nsubj (only with the se of the passive: se llevó a cabo la revisión),
         iobj, nmod, obl
         A complement with a preposition is left out - llevó el asunto a la
-        comisión is no split predicate - unless its noun is one of the fixed
-        ones (poner de manifiesto) or the verb takes its nominal part with a
-        preposition (PREPOSITIONAL_LIGHT_VERBS: se procedió a la votación),
-        whichever of obj and obl the model chooses for it. The agent of a
+        comisión is no split predicate - unless the pair is a fixed expression
+        of SPLIT_PREDICATE_NOUNS, the verb included (poner de manifiesto, but
+        not llevó el proyecto al comienzo de su carrera), or the verb takes its
+        nominal part with a preposition (PREPOSITIONAL_LIGHT_VERBS: se procedió
+        a la votación), whichever of obj and obl the model chooses for it. The agent of a
         passive is left out as well
 
     Arguments:
@@ -922,7 +923,7 @@ def _is_nominal_part(child: Token, verb: Token) -> bool:
     if is_agent(child):
         return False
     if (
-        child.lemma_.lower() in SPLIT_PREDICATE_NOUNS
+        verb.lemma_.lower() in SPLIT_PREDICATE_NOUNS.get(child.lemma_.lower(), ())
         or verb.lemma_.lower() in PREPOSITIONAL_LIGHT_VERBS
     ):
         return True

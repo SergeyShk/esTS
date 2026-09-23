@@ -335,6 +335,8 @@ def test_gerund_of_a_periphrasis_is_not_a_clause(nlp, text):
         ("Se procedió a la notificación de la resolución", ["procedió notificación"]),
         ("Llevó el asunto a la comisión", []),
         ("La reunión tuvo lugar en Madrid", ["tuvo lugar"]),
+        ("El director llevó el proyecto al comienzo de su carrera", []),
+        ("El tren llevó a los viajeros al comienzo de la ruta", []),
     ],
 )
 def test_split_predicates(nlp, text, expected):
