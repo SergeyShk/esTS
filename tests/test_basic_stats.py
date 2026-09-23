@@ -4,9 +4,9 @@ import pytest
 import spacy
 
 from ests import BasicStats
-from ests.basic_stats import count_punctuations, has_words, punctuation_profile
+from ests.basic_stats import count_punctuations, punctuation_profile
 from ests.constants import BASIC_STATS_DESC, PUNCTUATION_TYPES
-from ests.utils import get_nlp
+from ests.utils import get_nlp, has_words
 
 TEXT = (
     "Los tesauros son una clase especial de recursos lexicográficos que se caracterizan por"
