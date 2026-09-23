@@ -1,0 +1,256 @@
+connector	class	type
+porque	causal	primary
+pues	causal	primary
+puesto que	causal	primary
+ya que	causal	primary
+dado que	causal	primary
+visto que	causal	primary
+supuesto que	causal	primary
+toda vez que	causal	primary
+en vista de que	causal	primary
+habida cuenta de que	causal	primary
+debido a que	causal	primary
+gracias a que	causal	primary
+por cuanto	causal	primary
+a causa de	causal	secondary
+debido a	causal	secondary
+gracias a	causal	secondary
+por culpa de	causal	secondary
+por razón de	causal	secondary
+en razón de	causal	secondary
+en virtud de	causal	secondary
+a fuerza de	causal	secondary
+a consecuencia de	causal	secondary
+como consecuencia de	causal	secondary
+como resultado de	causal	secondary
+de resultas de	causal	secondary
+por eso	causal	secondary
+por ello	causal	secondary
+por esto	causal	secondary
+por tanto	causal	secondary
+por lo tanto	causal	secondary
+por consiguiente	causal	secondary
+por ende	causal	secondary
+en consecuencia	causal	secondary
+de ahí que	causal	primary
+de ahí	causal	secondary
+así pues	causal	secondary
+así que	causal	primary
+conque	causal	primary
+de modo que	causal	primary
+de manera que	causal	primary
+de forma que	causal	primary
+de suerte que	causal	primary
+de tal modo que	causal	primary
+de tal manera que	causal	primary
+por lo cual	causal	secondary
+por lo que	causal	secondary
+razón por la cual	causal	secondary
+motivo por el cual	causal	secondary
+pero	adversative	primary
+mas	adversative	primary
+sino	adversative	primary
+sino que	adversative	primary
+empero	adversative	primary
+sin embargo	adversative	secondary
+no obstante	adversative	secondary
+ahora bien	adversative	secondary
+antes bien	adversative	secondary
+por el contrario	adversative	secondary
+al contrario	adversative	secondary
+todo lo contrario	adversative	secondary
+en cambio	adversative	secondary
+por contra	adversative	secondary
+en contraste	adversative	secondary
+mientras que	adversative	primary
+en lugar de eso	adversative	secondary
+lejos de eso	adversative	secondary
+eso sí	adversative	secondary
+aunque	concessive	primary
+aun cuando	concessive	primary
+si bien	concessive	primary
+a pesar de que	concessive	primary
+pese a que	concessive	primary
+por más que	concessive	primary
+por mucho que	concessive	primary
+por muy que	concessive	primary
+por poco que	concessive	primary
+aun a riesgo de	concessive	secondary
+a pesar de	concessive	secondary
+pese a	concessive	secondary
+con todo	concessive	secondary
+con todo y con eso	concessive	secondary
+aun así	concessive	secondary
+así y todo	concessive	secondary
+de todos modos	concessive	secondary
+de todas formas	concessive	secondary
+de todas maneras	concessive	secondary
+de cualquier modo	concessive	secondary
+de cualquier forma	concessive	secondary
+de cualquier manera	concessive	secondary
+en todo caso	concessive	secondary
+en cualquier caso	concessive	secondary
+después de todo	concessive	secondary
+bien es verdad que	concessive	secondary
+cierto es que	concessive	secondary
+cuando	temporal	primary
+mientras	temporal	primary
+mientras tanto	temporal	secondary
+entretanto	temporal	primary
+entre tanto	temporal	secondary
+antes de que	temporal	primary
+después de que	temporal	primary
+luego que	temporal	primary
+después que	temporal	primary
+tan pronto como	temporal	primary
+en cuanto	temporal	primary
+apenas	temporal	primary
+nada más	temporal	secondary
+una vez que	temporal	primary
+cada vez que	temporal	primary
+siempre que	temporal	primary
+hasta que	temporal	primary
+desde que	temporal	primary
+al mismo tiempo	temporal	secondary
+a la vez	temporal	secondary
+simultáneamente	temporal	primary
+previamente	temporal	primary
+anteriormente	temporal	primary
+posteriormente	temporal	primary
+seguidamente	temporal	primary
+enseguida	temporal	primary
+en seguida	temporal	secondary
+acto seguido	temporal	secondary
+acto continuo	temporal	secondary
+a continuación	temporal	secondary
+más tarde	temporal	secondary
+más adelante	temporal	secondary
+antes	temporal	primary
+después	temporal	primary
+luego	temporal	primary
+entonces	temporal	primary
+finalmente	temporal	primary
+por fin	temporal	secondary
+al fin	temporal	secondary
+por último	temporal	secondary
+en último lugar	temporal	secondary
+al principio	temporal	secondary
+al comienzo	temporal	secondary
+al final	temporal	secondary
+en primer lugar	temporal	secondary
+en segundo lugar	temporal	secondary
+en tercer lugar	temporal	secondary
+primeramente	temporal	primary
+desde entonces	temporal	secondary
+a partir de entonces	temporal	secondary
+hasta ahora	temporal	secondary
+por ahora	temporal	secondary
+de momento	temporal	secondary
+por el momento	temporal	secondary
+y	additive	primary
+e	additive	primary
+ni	additive	primary
+también	additive	primary
+tampoco	additive	primary
+además	additive	primary
+asimismo	additive	primary
+igualmente	additive	primary
+encima	additive	primary
+incluso	additive	primary
+inclusive	additive	primary
+así mismo	additive	secondary
+del mismo modo	additive	secondary
+de igual modo	additive	secondary
+de igual forma	additive	secondary
+de igual manera	additive	secondary
+de la misma manera	additive	secondary
+de la misma forma	additive	secondary
+al igual que	additive	secondary
+lo mismo que	additive	secondary
+así como	additive	primary
+es más	additive	secondary
+más aún	additive	secondary
+aún más	additive	secondary
+ni siquiera	additive	secondary
+por añadidura	additive	secondary
+por otra parte	additive	secondary
+por otro lado	additive	secondary
+de otra parte	additive	secondary
+además de eso	additive	secondary
+aparte de eso	additive	secondary
+aparte de ello	additive	secondary
+junto a ello	additive	secondary
+sumado a ello	additive	secondary
+a su vez	additive	secondary
+por lo demás	additive	secondary
+si	conditional	primary
+solo si	conditional	secondary
+salvo si	conditional	secondary
+siempre y cuando	conditional	primary
+a condición de que	conditional	primary
+con tal de que	conditional	primary
+con tal que	conditional	primary
+a menos que	conditional	primary
+a no ser que	conditional	primary
+salvo que	conditional	primary
+excepto que	conditional	primary
+en caso de que	conditional	primary
+en el caso de que	conditional	primary
+caso de que	conditional	primary
+suponiendo que	conditional	primary
+en el supuesto de que	conditional	primary
+como no sea que	conditional	primary
+a poco que	conditional	primary
+de lo contrario	conditional	secondary
+de no ser así	conditional	secondary
+de otro modo	conditional	secondary
+de otra manera	conditional	secondary
+en ese caso	conditional	secondary
+en tal caso	conditional	secondary
+es decir	reformulative	secondary
+o sea	reformulative	secondary
+esto es	reformulative	secondary
+a saber	reformulative	secondary
+dicho de otro modo	reformulative	secondary
+dicho de otra manera	reformulative	secondary
+dicho en otros términos	reformulative	secondary
+en otras palabras	reformulative	secondary
+con otras palabras	reformulative	secondary
+en otros términos	reformulative	secondary
+mejor dicho	reformulative	secondary
+más bien	reformulative	secondary
+por mejor decir	reformulative	secondary
+en resumen	reformulative	secondary
+en síntesis	reformulative	secondary
+en suma	reformulative	secondary
+en conclusión	reformulative	secondary
+en definitiva	reformulative	secondary
+en fin	reformulative	secondary
+a fin de cuentas	reformulative	secondary
+al fin y al cabo	reformulative	secondary
+en resumidas cuentas	reformulative	secondary
+en pocas palabras	reformulative	secondary
+resumiendo	reformulative	primary
+recapitulando	reformulative	primary
+concluyendo	reformulative	primary
+para concluir	reformulative	secondary
+para terminar	reformulative	secondary
+para finalizar	reformulative	secondary
+en líneas generales	reformulative	secondary
+grosso modo	reformulative	secondary
+por ejemplo	reformulative	secondary
+p. ej.	reformulative	secondary
+verbigracia	reformulative	primary
+pongamos por caso	reformulative	secondary
+a modo de ejemplo	reformulative	secondary
+como por ejemplo	reformulative	secondary
+tal como	reformulative	secondary
+en particular	reformulative	secondary
+en concreto	reformulative	secondary
+concretamente	reformulative	primary
+específicamente	reformulative	primary
+sobre todo	reformulative	secondary
+especialmente	reformulative	primary
+particularmente	reformulative	primary
+principalmente	reformulative	primary
+en especial	reformulative	secondary

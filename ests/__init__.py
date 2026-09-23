@@ -8,6 +8,7 @@ import logging
 from importlib.metadata import PackageNotFoundError, version
 
 from .basic_stats import BasicStats
+from .cohesion_stats import CohesionStats
 from .diversity_stats import DiversityStats
 from .exceptions import (
     DataFileError,
@@ -42,6 +43,7 @@ __author_email__ = "kouki.sergey@gmail.com"
 __all__ = [
     "BasicStats",
     "CharNgramsExtractor",
+    "CohesionStats",
     "DataFileError",
     "DatasetNotFoundError",
     "DiversityStats",

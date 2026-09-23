@@ -642,3 +642,74 @@ SYNTAX_STATS_DESC = {
     "split_predicates_per_sent": "Split predicates per sentence",
     "noun_verb_ratio": "Ratio of nouns to verbs",
 }
+
+
+# Parts of speech of a content word, as Universal Dependencies names them
+CONTENT_UD_POS = frozenset({"NOUN", "PROPN", "ADJ", "VERB", "ADV"})
+# Classes of the discourse markers, by Martín Zorraquino and Portolés
+CONNECTOR_CLASSES = {
+    "causal": "causal",
+    "adversative": "adversative",
+    "concessive": "concessive",
+    "temporal": "temporal",
+    "additive": "additive",
+    "conditional": "conditional",
+    "reformulative": "reformulative",
+}
+# Kinds of the discourse markers: conjunctions, conjunctive locutions and adverbs
+# against the lexicalized phrases (sin embargo, por lo tanto, es decir)
+CONNECTOR_TYPES = {"primary": "primary", "secondary": "secondary"}
+# Parts of speech a one-word marker may carry. PROPN is among them because the models
+# read a marker that opens a sentence as a proper noun (Primeramente, Concluyendo)
+CONNECTOR_POS = frozenset({"CCONJ", "SCONJ", "PART", "ADV", "ADP", "INTJ", "PROPN", "X"})
+# Parts of speech allowed for single markers on top of CONNECTOR_POS
+CONNECTOR_POS_EXTRA = {
+    "pues": frozenset({"NOUN"}),
+    "resumiendo": frozenset({"VERB"}),
+    "recapitulando": frozenset({"VERB"}),
+    "concluyendo": frozenset({"VERB"}),
+    "verbigracia": frozenset({"NOUN"}),
+}
+# Words that turn a marker into a part of a prepositional phrase: antes de la
+# reunión, por encima de 80, al final de la línea are no discourse markers
+CONNECTOR_BLOCKED_AFTER = {
+    "antes": frozenset({"de", "del"}),
+    "después": frozenset({"de", "del"}),
+    "encima": frozenset({"de", "del"}),
+    "al final": frozenset({"de", "del"}),
+    "al principio": frozenset({"de", "del"}),
+    "al comienzo": frozenset({"de", "del"}),
+    "luego": frozenset({"de", "del"}),
+}
+CONNECTOR_BLOCKED_BEFORE = {"encima": frozenset({"por"})}
+# Parts of speech of the following word that turn a marker into a phrase of its own:
+# sobre todo el texto is sobre + todo el texto, sobre todo cuando is the marker
+CONNECTOR_BLOCKED_AFTER_POS = {"sobre todo": frozenset({"DET"})}
+
+COHESION_STATS_DESC = {
+    "noun_overlap_adjacent": "Noun overlap in adjacent sentences",
+    "noun_overlap_all": "Noun overlap in all pairs of sentences",
+    "argument_overlap_adjacent": "Argument overlap in adjacent sentences",
+    "argument_overlap_all": "Argument overlap in all pairs of sentences",
+    "content_overlap_adjacent": "Content word overlap in adjacent sentences",
+    "content_overlap_all": "Content word overlap in all pairs of sentences",
+    "content_overlap_prop_adjacent": "Share of shared content words in adjacent sentences",
+    "content_overlap_prop_all": "Share of shared content words in all pairs of sentences",
+    "p_pronouns": "Share of pronouns",
+    "pronoun_noun_ratio": "Ratio of pronouns to nouns",
+    "p_demonstratives": "Share of demonstratives",
+    "p_given": "Share of content words seen before",
+    "tense_repetition": "Repetition of the tense in adjacent sentences",
+    "mood_repetition": "Repetition of the mood in adjacent sentences",
+    "temporal_cohesion": "Temporal cohesion",
+    "connectors": "Connectors per 1000 words",
+    "connectors_causal": "Causal connectors per 1000 words",
+    "connectors_adversative": "Adversative connectors per 1000 words",
+    "connectors_concessive": "Concessive connectors per 1000 words",
+    "connectors_temporal": "Temporal connectors per 1000 words",
+    "connectors_additive": "Additive connectors per 1000 words",
+    "connectors_conditional": "Conditional connectors per 1000 words",
+    "connectors_reformulative": "Reformulative connectors per 1000 words",
+    "connectors_primary": "Primary connectors per 1000 words",
+    "connectors_secondary": "Secondary connectors per 1000 words",
+}

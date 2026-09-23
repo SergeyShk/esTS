@@ -23,6 +23,7 @@ nav:
         - Metric functions: stats/diversity_stats_funcs.md
       - Morphological statistics: stats/morph_stats.md
       - Syntactic statistics: stats/syntax_stats.md
+      - Cohesion statistics: stats/cohesion_stats.md
 
 theme:
   name: material
@@ -73,6 +74,7 @@ plugins:
             Lexical diversity metrics: Métricas de diversidad léxica
             Morphological statistics: Estadísticas morfológicas
             Syntactic statistics: Estadísticas sintácticas
+            Cohesion statistics: Estadísticas de cohesión
 
 extra:
   social:
