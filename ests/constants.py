@@ -381,3 +381,120 @@ DIVERSITY_STATS_DESC = {
     "zipf_alpha": "Zipf's law slope (α)",
     "heaps_beta": "Heaps' law exponent (β)",
 }
+
+
+# Model of spaCy that the statistics on Universal Dependencies fall back to
+SPACY_MODEL = "es_core_news_sm"
+
+# Morphological features counted by the statistics, by the name of the statistic.
+# The Spanish models annotate 23 features; the ones left out are either marginal
+# (AdvType, Foreign, NumForm, Number[psor], PrepCase, Typo) or live on punctuation
+# (PunctSide, PunctType), which is not a word. They all stay inside the tags string
+MORPHOLOGY_FEATURES = {
+    "case": "Case",
+    "definite": "Definite",
+    "degree": "Degree",
+    "gender": "Gender",
+    "mood": "Mood",
+    "num_type": "NumType",
+    "number": "Number",
+    "person": "Person",
+    "polarity": "Polarity",
+    "polite": "Polite",
+    "poss": "Poss",
+    "pron_type": "PronType",
+    "reflex": "Reflex",
+    "tense": "Tense",
+    "verb_form": "VerbForm",
+}
+
+MORPHOLOGY_STATS_DESC: dict[str, dict[str, object]] = {
+    "pos": {
+        "name": "Part of speech",
+        "values": {
+            "NOUN": "Noun",
+            "PROPN": "Proper noun",
+            "ADJ": "Adjective",
+            "ADV": "Adverb",
+            "VERB": "Verb",
+            "AUX": "Auxiliary verb",
+            "PRON": "Pronoun",
+            "DET": "Determiner",
+            "NUM": "Numeral",
+            "ADP": "Adposition",
+            "CCONJ": "Coordinating conjunction",
+            "SCONJ": "Subordinating conjunction",
+            "PART": "Particle",
+            "INTJ": "Interjection",
+            "SYM": "Symbol",
+            "X": "Other",
+        },
+    },
+    "case": {
+        "name": "Case",
+        "values": {"Nom": "Nominative", "Acc": "Accusative", "Dat": "Dative", "Com": "Comitative"},
+    },
+    "definite": {"name": "Definiteness", "values": {"Def": "Definite", "Ind": "Indefinite"}},
+    "degree": {
+        "name": "Degree",
+        "values": {"Cmp": "Comparative", "Sup": "Superlative", "Abs": "Absolute superlative"},
+    },
+    "gender": {"name": "Gender", "values": {"Masc": "Masculine", "Fem": "Feminine"}},
+    "mood": {
+        "name": "Mood",
+        "values": {
+            "Ind": "Indicative",
+            "Sub": "Subjunctive",
+            "Imp": "Imperative",
+            "Cnd": "Conditional",
+        },
+    },
+    "num_type": {
+        "name": "Numeral type",
+        "values": {"Card": "Cardinal", "Ord": "Ordinal", "Frac": "Fraction"},
+    },
+    "number": {"name": "Number", "values": {"Sing": "Singular", "Plur": "Plural"}},
+    "person": {"name": "Person", "values": {"1": "First", "2": "Second", "3": "Third"}},
+    "polarity": {"name": "Polarity", "values": {"Neg": "Negative"}},
+    "polite": {"name": "Politeness", "values": {"Form": "Formal"}},
+    "poss": {"name": "Possessive", "values": {"Yes": "Possessive"}},
+    "pron_type": {
+        "name": "Pronoun type",
+        "values": {
+            "Art": "Article",
+            "Prs": "Personal",
+            "Dem": "Demonstrative",
+            "Ind": "Indefinite",
+            "Int": "Interrogative",
+            "Rel": "Relative",
+            "Neg": "Negative",
+            "Tot": "Total",
+            "Exc": "Exclamative",
+        },
+    },
+    "reflex": {"name": "Reflexive", "values": {"Yes": "Reflexive"}},
+    "tense": {
+        "name": "Tense",
+        "values": {"Pres": "Present", "Past": "Past", "Imp": "Imperfect", "Fut": "Future"},
+    },
+    "verb_form": {
+        "name": "Verb form",
+        "values": {"Fin": "Finite", "Inf": "Infinitive", "Part": "Participle", "Ger": "Gerund"},
+    },
+}
+
+# Spanish markers computed on top of the features, each a share of its own base
+MORPHOLOGY_MARKERS_DESC = {
+    "p_indicative": "Indicative among the finite forms",
+    "p_subjunctive": "Subjunctive among the finite forms",
+    "p_conditional": "Conditional among the finite forms",
+    "p_imperative": "Imperative among the finite forms",
+    "p_infinitive": "Infinitive among the verb forms",
+    "p_gerund": "Gerund among the verb forms",
+    "p_participle": "Participle among the verb forms",
+    "p_ser": "ser among the copulas ser and estar",
+    "p_mente_adverbs": "Adverbs in -mente among the adverbs",
+}
+
+# The two copulas of Spanish, by lemma
+COPULAS = ("ser", "estar")

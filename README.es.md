@@ -28,17 +28,18 @@
 
 ---
 
-**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad y diversidad léxica, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, de forma determinista y sin ninguna red neuronal dentro.
+**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica y morfología, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
 
-La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy) y no necesita ningún modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, y las sílabas y el acento se deducen de la ortografía.
+La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy): las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, las sílabas y el acento se deducen de la ortografía, y solo las estadísticas morfológicas necesitan un modelo entrenado.
 
 * **[Extracción de objetos](https://sergeyshk.github.io/esTS/es/extractors/sentences/)** - tokenizadores configurables de oraciones, palabras y N-gramas de caracteres que conocen los signos de apertura, la raya de diálogo y las abreviaturas del español
 * **[Sílabas y acento](https://sergeyshk.github.io/esTS/es/syllables/)** - silabificación por reglas y sílaba tónica deducida de la escritura, sin diccionario
 * **[Estadísticas básicas](https://sergeyshk.github.io/esTS/es/stats/basic_stats/)** - recuentos de oraciones, palabras, letras, sílabas y signos de puntuación por tipo, con distribuciones y proporciones normalizadas
 * **[Métricas de legibilidad](https://sergeyshk.github.io/esTS/es/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX, con grado de consenso, etapas escolares de España y tiempo de lectura
 * **[Métricas de diversidad léxica](https://sergeyshk.github.io/esTS/es/stats/diversity_stats/)** - TTR y sus variantes, MATTR, MSTTR, MTLD, HD-D, índices de Simpson y de Yule, entropía, leyes de Zipf y de Heaps
+* **[Estadísticas morfológicas](https://sergeyshk.github.io/esTS/es/stats/morph_stats/)** - categorías gramaticales y quince rasgos morfológicos de Universal Dependencies, con los marcadores del español: los modos, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
 
-La morfología, la sintaxis y la cohesión sobre Universal Dependencies llegan en la 0.2, las medidas de corpus y la estilometría en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
+La sintaxis y la cohesión llegan en el resto de la 0.2, las medidas de corpus y la estilometría en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
 
 ## Instalación
 
@@ -54,7 +55,7 @@ O con [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas de la 0.1 no necesitan ningún modelo de spaCy; solo hace falta para analizar un texto por su cuenta y pasar el `Doc` en lugar de una cadena:
+El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad y la diversidad léxica no necesitan ningún modelo de spaCy; las estadísticas morfológicas sí, igual que analizar un texto por su cuenta para pasar el `Doc` en lugar de una cadena:
 
 ```bash
 python -m spacy download es_core_news_sm
@@ -297,6 +298,41 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/diversity_
 
 </details>
 
+<details>
+<summary><b>Estadísticas morfológicas</b></summary>
+
+<br>
+
+La biblioteca anota el texto con las categorías gramaticales y los rasgos morfológicos de Universal Dependencies, tal como los dan los modelos españoles de spaCy, y los cuenta:
+
+*   la categoría gramatical y quince rasgos: caso, definitud, grado, género, modo, tipo de numeral, número, persona, polaridad, cortesía, posesivo, tipo de pronombre, reflexivo, tiempo verbal y forma verbal
+*   la distribución de las palabras por los valores de cualquier rasgo y el análisis del texto palabra por palabra
+*   los marcadores del español: los modos entre las formas personales, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
+
+```python
+>>> from ests import MorphStats
+
+>>> ms = MorphStats("Si tuviera tiempo, leería el libro que me recomendaste ayer")
+
+>>> ms.get_stats("mood", "tense", filter_none=True)
+{'mood': {'Sub': 1, 'Cnd': 1, 'Ind': 1}, 'tense': {'Imp': 1, 'Pres': 1}}
+
+>>> ms.tags[1]
+'Mood=Sub|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin'
+
+>>> ms.explain_text("pos", "mood", filter_none=True)[1]
+('tuviera', {'pos': 'VERB', 'mood': 'Sub'})
+
+>>> MorphStats("Ella es alta pero hoy está cansada y habla lentamente").get_markers()["p_ser"]
+0.5
+```
+
+Las estadísticas necesitan un modelo de spaCy: el texto se analiza con `es_core_news_sm`, y en `nlp` puede indicarse cualquier otro pipeline.
+
+Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/morph_stats/).
+
+</details>
+
 ## Desarrollo
 
 El proyecto usa [uv](https://docs.astral.sh/uv/) para gestionar las dependencias y [ruff](https://docs.astral.sh/ruff/) para el análisis y el formato del código.
@@ -338,6 +374,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos: las [iss
     *   diversity_stats.py - métricas de diversidad léxica
     *   exceptions.py - excepciones de la biblioteca
     *   extractors.py - herramientas de extracción de objetos del texto
+    *   morph_stats.py - estadísticas morfológicas
     *   readability_stats.py - métricas de legibilidad
     *   syllables.py - silabificación y acento
     *   utils.py - herramientas auxiliares

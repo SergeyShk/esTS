@@ -24,7 +24,7 @@ uv sync --all-groups
 
 ## The spaCy model { #model }
 
-The statistics of release 0.1 need no trained model: sentences, words and character N-grams are extracted by rules and by the tokenizer of the blank Spanish pipeline, syllables and stress by the orthography. A model is needed only to build a `Doc` yourself and pass it to the statistics instead of a string, and to run the test suite, where it comes with the `test` dependency group:
+Basic statistics, readability and lexical diversity need no trained model: sentences, words and character N-grams are extracted by rules and by the tokenizer of the blank Spanish pipeline, syllables and stress by the orthography. The [morphological statistics](stats/morph_stats.md) need one, and so does building a `Doc` yourself to pass it to the statistics instead of a string; the test suite needs it too, where it comes with the `test` dependency group:
 
 ``` bash
 python -m spacy download es_core_news_sm

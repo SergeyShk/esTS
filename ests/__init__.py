@@ -20,6 +20,7 @@ from .exceptions import (
     UnknownStatError,
 )
 from .extractors import CharNgramsExtractor, SentsExtractor, WordsExtractor
+from .morph_stats import MorphStats
 from .readability_stats import ReadabilityStats
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
@@ -45,6 +46,7 @@ __all__ = [
     "DiversityStats",
     "DownloadError",
     "EstsError",
+    "MorphStats",
     "ParameterError",
     "ReadabilityStats",
     "SentsExtractor",
