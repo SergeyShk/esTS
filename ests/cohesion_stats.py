@@ -111,9 +111,13 @@ class CohesionStats:
         given in nlp, and a Doc must carry the parts of speech. Without sentence
         boundaries (a pipeline with a tagger but no parser) the sentences are
         taken from the text by sents_extractor
-        A noun is NOUN or PROPN, a pronoun is PRON or a determiner that is not
-        an article (mi libro, este libro, but not el libro), a demonstrative
-        carries PronType=Dem, and a content word is one of CONTENT_UD_POS
+        A noun is NOUN or PROPN, a pronoun is PRON or a determiner that points
+        at something - a possessive or a demonstrative or personal one, so mi
+        libro and este libro hold a pronoun while el libro and cada libro do
+        not - a demonstrative carries PronType=Dem, and a content word is one of
+        CONTENT_UD_POS. An argument is NOUN, PROPN or PRON, the determiners left
+        out, as the argument overlap of Coh-Metrix counts nouns and pronouns
+        proper
         Connectors (porque, sin embargo, es decir, por ejemplo) are looked for
         by their word forms in every sentence, in the dictionary of
         resources/connectors.tsv: 255 discourse markers in the classes of
@@ -121,8 +125,12 @@ class CohesionStats:
         conjunctive locution or an adverb - or secondary, a lexicalized phrase;
         the density is given per 1000 words
         A one-word connector counts only with a part of speech of CONNECTOR_POS
-        or of CONNECTOR_POS_EXTRA for that word, so that the noun el antes y el
-        después is not a connector
+        or of CONNECTOR_POS_EXTRA for that word, never after a determiner, and,
+        for a proper noun, only at the start of a sentence, where the models read
+        a marker as one: el antes y el después holds one connector, y, and the
+        surname of Ana, Luego y Mas firmaron is none. A marker that heads a
+        prepositional phrase is dropped there as well - antes de la reunión, por
+        encima de 80, al final de la línea, sobre todo el texto
 
     References:
         https://doi.org/10.1017/CBO9780511894664 (McNamara et al. 2014, Coh-Metrix)
@@ -465,17 +473,24 @@ def find_connectors(
         The connectors are looked for by their word forms in lower case: at every
         position the longest one is taken (sin embargo does not fall apart into
         sin), and the ones found do not overlap; the period inside a connector
-        (p. ej.) may be separated by the tokenizer. With the parts of speech of
-        Universal Dependencies given, a one-word connector counts only with a
-        part of speech of CONNECTOR_POS or of CONNECTOR_POS_EXTRA for that word
+        (p. ej.) may be separated by the tokenizer
+        A marker that heads a prepositional phrase here is dropped, by the words
+        around it: antes de la reunión, por encima de 80, al final de la línea.
+        This holds with or without the parts of speech, the one rule of it that
+        reads a tag being sobre todo before a determiner
+        With the parts of speech of Universal Dependencies given, a one-word
+        connector counts only with a part of speech of CONNECTOR_POS or of
+        CONNECTOR_POS_EXTRA for that word, never after a determiner, and, for a
+        proper noun, only at the start of the sentence
 
     Arguments:
         words (list[str]): Words of the sentence
         connectors (dict[str, tuple[str, str]]): Dictionary of the connectors -
             class and kind by connector; without it the dictionary of resources is used
         sent_index (int): Number of the sentence, written into the occurrences
-        pos (list[str]): Parts of speech of the words; without them the parts of
-            speech are not checked
+        pos (list[str]): Parts of speech of the words; without them only the
+            rules that read a tag are skipped, the guard on the surrounding
+            words holding either way
 
     Returns:
         list[Connector]: Occurrences of the connectors in the order of the words
