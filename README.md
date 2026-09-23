@@ -327,7 +327,7 @@ The library annotates a text with the parts of speech and the grammatical featur
 0.5
 ```
 
-The statistics need a spaCy model: a text is parsed with `es_core_news_sm`, and a bigger model can be passed in `nlp`.
+The statistics need a spaCy model: a text is parsed with `es_core_news_sm`, and any other pipeline can be passed in `nlp`.
 
 More in the [documentation](https://sergeyshk.github.io/esTS/stats/morph_stats/).
 

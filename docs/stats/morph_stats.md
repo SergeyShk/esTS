@@ -70,7 +70,9 @@ The Spanish models annotate the features of the table below; the value `Unknown`
 | `verb_form` | Verb form | Fin, Inf, Part, Ger |
 
 !!! warning "Warning"
-    The statistics are as good as the annotation of the model. `es_core_news_sm` mis-analyses verbs with enclitic pronouns - `dámelo`, `decírselo`, `vámonos` are often tagged as nouns or proper nouns - and the imperative is the mood that suffers most from it. A bigger model (`es_core_news_md`, `es_core_news_lg`, `es_dep_news_trf`) can be passed in `nlp`.
+    The statistics are as good as the annotation of the model. `es_core_news_sm` mis-analyses verbs with enclitic pronouns: `dámelo`, `decírselo`, `vámonos`, `cuéntamelo` come out as nouns or proper nouns and get invented lemmas (`dámelir`, `siéntatir`). The imperative suffers most of all: the models carry the value `Mood=Imp` in their label set, but in practice they tag the imperatives of `tú` as indicative - `Habla más despacio` and `Abre la ventana` get `Mood=Ind` - so `p_imperative` under-reports and `p_indicative` absorbs the orders.
+
+    Passing a bigger model in `nlp` does not fix that. Measured on the same examples, `es_core_news_md` leaves the enclitic lemmas and the moods exactly where `es_core_news_sm` leaves them, and agrees with it on every part of speech and every feature of modern prose. What it brings is the rare and the old vocabulary - in the opening of the *Quijote* it reads `rocín`, `salpicón`, `lentejas` and `carnero` as nouns, where the small model sees verbs and adjectives - for 54 MB against 16 MB and at the same speed.
 
 ## Methods
 

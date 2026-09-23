@@ -327,7 +327,7 @@ La biblioteca anota el texto con las categorías gramaticales y los rasgos morfo
 0.5
 ```
 
-Las estadísticas necesitan un modelo de spaCy: el texto se analiza con `es_core_news_sm`, y en `nlp` puede indicarse un modelo mayor.
+Las estadísticas necesitan un modelo de spaCy: el texto se analiza con `es_core_news_sm`, y en `nlp` puede indicarse cualquier otro pipeline.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/morph_stats/).
 

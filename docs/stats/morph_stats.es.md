@@ -70,7 +70,9 @@ Los modelos españoles anotan los rasgos de la tabla siguiente; el valor `Unknow
 | `verb_form` | Forma verbal | Fin, Inf, Part, Ger |
 
 !!! warning "Advertencia"
-    Las estadísticas valen lo que vale la anotación del modelo. `es_core_news_sm` analiza mal los verbos con pronombres enclíticos - `dámelo`, `decírselo`, `vámonos` se etiquetan a menudo como sustantivos o nombres propios - y el imperativo es el modo que más lo sufre. En `nlp` puede indicarse un modelo mayor (`es_core_news_md`, `es_core_news_lg`, `es_dep_news_trf`).
+    Las estadísticas valen lo que vale la anotación del modelo. `es_core_news_sm` analiza mal los verbos con pronombres enclíticos: `dámelo`, `decírselo`, `vámonos`, `cuéntamelo` salen como sustantivos o nombres propios y reciben lemas inventados (`dámelir`, `siéntatir`). El imperativo es el que más lo sufre: los modelos llevan el valor `Mood=Imp` en su juego de etiquetas, pero en la práctica etiquetan los imperativos de `tú` como indicativo - `Habla más despacio` y `Abre la ventana` reciben `Mood=Ind` -, de modo que `p_imperative` se queda corto y `p_indicative` absorbe las órdenes.
+
+    Indicar un modelo mayor en `nlp` no lo arregla. Medido sobre los mismos ejemplos, `es_core_news_md` deja los lemas de los enclíticos y los modos donde los deja `es_core_news_sm`, y coincide con él en todas las categorías y todos los rasgos de la prosa moderna. Lo que aporta es el vocabulario raro y antiguo - en el comienzo del *Quijote* lee `rocín`, `salpicón`, `lentejas` y `carnero` como sustantivos, donde el modelo pequeño ve verbos y adjetivos - por 54 MB frente a 16 MB y a la misma velocidad.
 
 ## Métodos
 
