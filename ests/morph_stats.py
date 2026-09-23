@@ -157,7 +157,7 @@ class MorphStats:
             >>> ms.get_stats("number", filter_none=True)
             {'number': {'Plur': 3}}
         """
-        args = self.__check_stats(args)
+        args = self.__check_stat(args)
         stats: dict[str, dict[str, int]] = {}
         for arg in args:
             counts = dict(Counter(getattr(self, arg)))
@@ -263,7 +263,7 @@ class MorphStats:
             >>> ms.explain_text("pos", "number", filter_none=True)[2]
             ('juegan', {'pos': 'VERB', 'number': 'Plur'})
         """
-        args = self.__check_stats(args)
+        args = self.__check_stat(args)
         values = tuple(zip(*(getattr(self, arg) for arg in args), strict=True))
         explains = tuple(
             {
@@ -293,7 +293,7 @@ class MorphStats:
             Plural                        |    3
             Unknown                       |    1
         """
-        args = self.__check_stats(args)
+        args = self.__check_stat(args)
         for stat, values in self.get_stats(*args).items():
             desc: Any = MORPHOLOGY_STATS_DESC[stat]
             print(f"{desc['name'].center(40, '-')}")
@@ -308,7 +308,7 @@ class MorphStats:
             print()
 
     @staticmethod
-    def __check_stats(args: tuple[str, ...]) -> tuple[str, ...]:
+    def __check_stat(args: tuple[str, ...]) -> tuple[str, ...]:
         """
         Checking the names of the selected statistics
 
