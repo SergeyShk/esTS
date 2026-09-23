@@ -3,7 +3,7 @@ from math import nan
 from typing import Any
 
 from spacy.language import Language
-from spacy.tokens import Doc
+from spacy.tokens import Doc, Token
 
 from .constants import (
     COPULAS,
@@ -25,11 +25,38 @@ VERB_FORMS = {"p_infinitive": "Inf", "p_gerund": "Ger", "p_participle": "Part"}
 # model annotates as adjectives (cansada, escrita) stay out of the markers
 VERBAL_POS = ("VERB", "AUX")
 # Dependency of an auxiliary: aux for the progressive (está cantando) and the
-# compound tenses (ha sido leído), aux:pass for the passive (fue escrito)
+# compound tenses (ha sido leído), aux:pass for the passive (fue escrito). In the
+# present the models often give the auxiliary of a passive the dependency of a
+# copula instead (el proyecto es financiado), which its head gives away
 AUXILIARY_DEP = "aux"
+COPULA_DEP = "cop"
 # Components a parse of the text does not need: the entities are never read, and
 # the parse is, for the dependency of the copulas
 UNUSED_COMPONENTS = ["ner"]
+
+
+def is_auxiliary(token: Token) -> bool:
+    """
+    Checking whether a token is an auxiliary and not a copula
+
+    Description:
+        An auxiliary carries a dependency of aux - aux for the compound tenses
+        and the progressive, aux:pass for the passive - or, in the present of
+        a passive, the dependency of a copula over a participle: el proyecto es
+        financiado has the same es as ella es alta, and only its head tells
+        them apart
+
+    Arguments:
+        token (Token): Token
+
+    Returns:
+        bool: Result of the check
+    """
+    if token.dep_.startswith(AUXILIARY_DEP):
+        return True
+    if token.dep_ != COPULA_DEP:
+        return False
+    return token.head.pos_ == "VERB" and "Part" in token.head.morph.get("VerbForm", [])
 
 
 class MorphStats:
@@ -158,7 +185,7 @@ class MorphStats:
         self.tense = self.__feature(features, "tense")
         self.verb_form = self.__feature(features, "verb_form")
         self.__parsed = source.has_annotation("DEP")
-        self.__deps = tuple(token.dep_ for token in tokens)
+        self.__auxiliary = tuple(is_auxiliary(token) for token in tokens)
 
     @staticmethod
     def __feature(features: list[dict[str, str]], stat: str) -> tuple[str | None, ...]:
@@ -206,10 +233,10 @@ class MorphStats:
             (cansada, escrita) stay out of the base; the moods sum to one
             wherever the model leaves no finite form without a mood
             The base of p_ser is the copular uses of ser and estar, read
-            from the dependency of the token: the auxiliaries of the passive
-            (fue escrito) and of the progressive (está cantando) are not a
-            choice between the two copulas. For a Doc with no parse the
-            marker is nan
+            from the dependency of the token and from what it depends on: the
+            auxiliaries of the passive (fue escrito, es financiado) and of the
+            progressive (está cantando) are not a choice between the two
+            copulas. For a Doc with no parse the marker is nan
             A marker whose base is empty is nan
 
         Returns:
@@ -233,8 +260,8 @@ class MorphStats:
         n_forms = sum(forms.values())
         copulas = Counter(
             lemma
-            for lemma, pos, dep in zip(self.lemmas, self.pos, self.__deps, strict=True)
-            if pos in VERBAL_POS and lemma in COPULAS and not dep.startswith(AUXILIARY_DEP)
+            for lemma, pos, auxiliary in zip(self.lemmas, self.pos, self.__auxiliary, strict=True)
+            if pos in VERBAL_POS and lemma in COPULAS and not auxiliary
         )
         adverbs = [word for word, pos in zip(self.words, self.pos, strict=True) if pos == "ADV"]
         markers = {

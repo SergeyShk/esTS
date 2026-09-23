@@ -25,7 +25,7 @@ from .constants import (
     VALENCY_IGNORED_DEPS,
 )
 from .exceptions import SourceError, SourceTypeError
-from .utils import get_nlp, is_verbal_noun, safe_divide
+from .utils import get_nlp, is_punctuation, is_verbal_noun, safe_divide
 
 # Dependencies of the nominal part of a split predicate, in the order of preference
 SPLIT_PREDICATE_DEPS = ("compound", "obj", "nsubj", "iobj", "nmod", "obl")
@@ -279,13 +279,18 @@ def is_word(token: Token) -> bool:
     """
     Checking whether a token is a word - not a punctuation mark and not whitespace
 
+    Description:
+        The same check the other statistics use for the words of a Doc object:
+        the symbols of the Unicode categories P and S (%, €, +, §) are no words
+        either, so every class of the library counts the same words of a text
+
     Arguments:
         token (Token): Token
 
     Returns:
         bool: Result of the check
     """
-    return not token.is_punct and not token.is_space
+    return not token.is_space and not is_punctuation(token.text)
 
 
 def get_words(tokens: Iterable[Token]) -> list[Token]:

@@ -18,7 +18,10 @@ DASHES = "—–-"
 # lower case with the last one or two space-separated tokens before the period.
 # Single capital initials (J. L. Borges) are recognized separately.
 # Abbreviations that usually do end a sentence (etc.) or coincide with
-# a word (mar., no.) are not listed
+# a word (mar., no.) are not listed. The ones of time (a. m., p. m.) are listed
+# although they often close a sentence: no rule tells Llegó a las 5 p. m. Luego
+# se fue from a las 5 p. m. del jueves, and joining two sentences costs less
+# than cutting one in half
 ABBREVIATIONS = frozenset(
     {
         # Forms of address and titles

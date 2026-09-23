@@ -35,6 +35,8 @@ Sin `name` el paso y la extensión conservan el nombre de la fábrica (`doc._.es
 | `SyntaxStatsComponent` | `ests_syntax` | [SyntaxStats](stats/syntax_stats.md) | análisis sintáctico y lemas |
 | `CohesionStatsComponent` | `ests_cohesion` | [CohesionStats](stats/cohesion_stats.md) | categorías gramaticales y lemas |
 
+Un documento sin palabras - una cadena vacía, espacios, solo puntuación - pasa por cada componente sin tocarse, con su extensión en `None`, de modo que un documento así en un corpus no detiene `nlp.pipe`. Una anotación que falta es otra cosa: eso es un error del pipeline y se levanta.
+
 En el pipeline de `es_core_news_sm` las categorías gramaticales vienen del `morphologizer` (un `tagger` solo da la etiqueta del corpus y no la categoría de Universal Dependencies; con un `attribute_ruler` sí la da), el análisis del `parser` y los lemas del `lemmatizer`. Un componente al que le falta la anotación levanta `SourceError` cuando el documento pasa por él, también con componentes `excluded`: sin el `lemmatizer` todos los lemas son cadenas vacías, y eso haría que todos los sustantivos de un texto se repitieran entre sí.
 
 ## BasicStatsComponent
@@ -175,7 +177,7 @@ Un parámetro fuera de su rango levanta `ParameterError` al añadir el component
 !!! info ""
     **ests.components.MorphStatsComponent**
 
-El componente de las estadísticas morfológicas de un texto. Las categorías gramaticales y los rasgos se leen de la anotación del modelo, así que el pipeline necesita un etiquetador antes del componente.
+El componente de las estadísticas morfológicas de un texto. Las categorías gramaticales y los rasgos se leen de la anotación del modelo, así que el pipeline necesita un `morphologizer` (o un `tagger` con un `attribute_ruler`) y un `lemmatizer` antes del componente.
 
 Parámetros:
 
@@ -210,7 +212,7 @@ Parámetros:
 !!! info ""
     **ests.components.SyntaxStatsComponent**
 
-El componente de las estadísticas sintácticas de un texto. Las estadísticas se calculan sobre el árbol de dependencias, así que el pipeline necesita un analizador antes del componente.
+El componente de las estadísticas sintácticas de un texto. Las estadísticas se calculan sobre el árbol de dependencias, así que el pipeline necesita un `parser` y un `lemmatizer` antes del componente.
 
 Parámetros:
 
@@ -245,7 +247,7 @@ Parámetros:
 !!! info ""
     **ests.components.CohesionStatsComponent**
 
-El componente de las estadísticas de cohesión de un texto. Los rasgos se leen de la anotación del modelo, así que el pipeline necesita un etiquetador antes del componente.
+El componente de las estadísticas de cohesión de un texto. Los rasgos se leen de la anotación del modelo, así que el pipeline necesita un `morphologizer` (o un `tagger` con un `attribute_ruler`) y un `lemmatizer` antes del componente.
 
 Parámetros:
 

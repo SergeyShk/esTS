@@ -17,7 +17,7 @@ from .constants import (
 from .exceptions import SourceError, SourceTypeError
 from .extractors import SentsExtractor, WordsExtractor
 from .syllables import count_syllables
-from .utils import count_letters, iter_doc_words
+from .utils import count_letters, is_punctuation, iter_doc_words
 
 ELLIPSIS_PATTERN = re.compile(r"…|\.{3,}|(?<=[?!])\.{2}")
 # A hyphen after whitespace or at the start of a line, or before a space, is
@@ -173,7 +173,7 @@ class BasicStats:
         syllables_per_word = tuple(count_syllables(word) for word in words)
         self.c_letters = dict(sorted(Counter(letters_per_word).items()))
         self.c_syllables = dict(sorted(Counter(syllables_per_word).items()))
-        self.n_sents = sum(1 for sent in sents)
+        self.n_sents = sum(1 for sent in sents if has_words(sent))
         self.n_words = len(words)
         self.n_unique_words = len({word.lower() for word in words})
         self.n_long_words = self.count_words_by_letters(long_word_letter_factor)
@@ -248,6 +248,30 @@ class BasicStats:
         stats = self.get_stats()
         for stat, value in BASIC_STATS_DESC.items():
             print(f"{value:20}|{stats[stat]:^10}")
+
+
+def has_words(sent: Span | str) -> bool:
+    """
+    Checking whether a sentence holds a word
+
+    Description:
+        A sentence of punctuation alone (¿?, ..., a line of dots between
+        paragraphs) is no sentence for the statistics: it has no word, and the
+        formulas of readability divide by the number of sentences
+
+    Arguments:
+        sent (Span|str): Sentence
+
+    Returns:
+        bool: Result of the check
+
+    Example:
+        >>> from ests.basic_stats import has_words
+        >>> has_words("El gato duerme"), has_words("¿?")
+        (True, False)
+    """
+    text = sent if isinstance(sent, str) else sent.text
+    return any(not char.isspace() and not is_punctuation(char) for char in text)
 
 
 def count_punctuations(text: str) -> dict[str, int]:

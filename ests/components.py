@@ -16,6 +16,11 @@ Description:
     The factories are declared as entry points of spacy_factories, so a
     pipeline saved with these components loads with spacy.load() in a process
     that never imports this package
+    A document with no words - an empty string, whitespace, punctuation alone -
+    passes through every component untouched, its extension left at None, so
+    that one such document in a corpus does not stop nlp.pipe. A pipeline that
+    gives no annotation a component needs is another matter: that is an error
+    of the pipeline, and it is raised
 """
 
 from spacy.language import Language
@@ -36,6 +41,7 @@ from .exceptions import SourceError
 from .morph_stats import MorphStats
 from .readability_stats import ReadabilityStats, check_preset
 from .syntax_stats import SyntaxStats
+from .utils import iter_doc_tokens
 
 
 @Language.factory("ests_basic")
@@ -68,12 +74,18 @@ class BasicStatsComponent:
         """
         Adding the computed statistics to the component
 
+        Description:
+            A document with no words is returned untouched, its extension
+            left at None
+
         Arguments:
             doc (Doc): Doc object
 
         Returns:
             doc (Doc): Modified Doc object
         """
+        if not has_words(doc):
+            return doc
         bs = BasicStats(doc)
         doc._.set(self.name, bs)
         return doc
@@ -144,12 +156,18 @@ class ReadabilityStatsComponent:
         """
         Adding the computed metrics to the component
 
+        Description:
+            A document with no words is returned untouched, its extension
+            left at None
+
         Arguments:
             doc (Doc): Doc object
 
         Returns:
             doc (Doc): Modified Doc object
         """
+        if not has_words(doc):
+            return doc
         rs = ReadabilityStats(self.__source(doc), preset=self.preset)
         doc._.set(self.name, rs)
         return doc
@@ -239,12 +257,18 @@ class DiversityStatsComponent:
         """
         Adding the computed metrics to the component
 
+        Description:
+            A document with no words is returned untouched, its extension
+            left at None
+
         Arguments:
             doc (Doc): Doc object
 
         Returns:
             doc (Doc): Modified Doc object
         """
+        if not has_words(doc):
+            return doc
         ds = DiversityStats(
             doc,
             window_len=self.window_len,
@@ -294,12 +318,18 @@ class MorphStatsComponent:
         """
         Adding the computed statistics to the component
 
+        Description:
+            A document with no words is returned untouched, its extension
+            left at None
+
         Arguments:
             doc (Doc): Doc object
 
         Returns:
             doc (Doc): Modified Doc object
         """
+        if not has_words(doc):
+            return doc
         ms = MorphStats(doc)
         doc._.set(self.name, ms)
         return doc
@@ -341,12 +371,18 @@ class SyntaxStatsComponent:
         """
         Adding the computed statistics to the component
 
+        Description:
+            A document with no words is returned untouched, its extension
+            left at None
+
         Arguments:
             doc (Doc): Doc object
 
         Returns:
             doc (Doc): Modified Doc object
         """
+        if not has_words(doc):
+            return doc
         ss = SyntaxStats(doc)
         doc._.set(self.name, ss)
         return doc
@@ -389,12 +425,44 @@ class CohesionStatsComponent:
         """
         Adding the computed statistics to the component
 
+        Description:
+            A document with no words is returned untouched, its extension
+            left at None
+
         Arguments:
             doc (Doc): Doc object
 
         Returns:
             doc (Doc): Modified Doc object
         """
+        if not has_words(doc):
+            return doc
         cs = CohesionStats(doc)
         doc._.set(self.name, cs)
         return doc
+
+
+def has_words(doc: Doc) -> bool:
+    """
+    Checking whether a document holds a word
+
+    Description:
+        The statistics need a word, and an empty document, one of whitespace
+        or one of punctuation alone has none; spaCy builds such a document
+        without complaint, and a component of a pipeline has no business
+        stopping a corpus on it
+
+    Arguments:
+        doc (Doc): Doc object
+
+    Returns:
+        bool: Result of the check
+
+    Example:
+        >>> import spacy
+        >>> from ests.components import has_words
+        >>> nlp = spacy.blank("es")
+        >>> has_words(nlp("El gato duerme")), has_words(nlp("¿?")), has_words(nlp(""))
+        (True, False, False)
+    """
+    return any(True for _ in iter_doc_tokens(doc))

@@ -110,8 +110,9 @@ class CohesionStats:
         a string is parsed with the model es_core_news_sm or with the pipeline
         given in nlp, and a Doc must carry the parts of speech, which come from
         a morphologizer or from a tagger with an attribute ruler, and the lemmas,
-        which come from a lemmatizer. Without sentence boundaries (a pipeline
-        with no parser) the sentences are taken from the text by sents_extractor
+        which come from a lemmatizer. The sentences come from the annotation,
+        and from sents_extractor over the text when one is given or when the
+        pipeline sets no sentence boundaries
         A noun is NOUN or PROPN, a pronoun is PRON or a determiner that points
         at something - a possessive or a demonstrative or personal one, so mi
         libro and este libro hold a pronoun while el libro and cada libro do
@@ -153,8 +154,9 @@ class CohesionStats:
 
     Arguments:
         source (str|Doc): Data source (a string or a Doc object)
-        sents_extractor (SentsExtractor): Sentence extraction tool, used for a Doc
-            with no sentence boundaries
+        sents_extractor (SentsExtractor): Sentence extraction tool; an extractor
+            given here is used whatever the source, and without one a Doc with no
+            sentence boundaries is split by the rules of the default extractor
         connectors (dict[str, tuple[str, str]]): Dictionary of the connectors - class
             and kind by connector; without it the dictionary of resources is used
         nlp (Language): Pipeline of spaCy that parses a string; without it
@@ -234,10 +236,10 @@ class CohesionStats:
             source = pipeline(source, disable=UNUSED_COMPONENTS)
         elif not isinstance(source, Doc):
             raise SourceTypeError("The data source is set incorrectly")
-        if source.has_annotation("SENT_START"):
-            sents = [list(iter_doc_tokens(sent)) for sent in source.sents]
-        else:
+        if sents_extractor is not None or not source.has_annotation("SENT_START"):
             sents = split_doc_sents(source, sents_extractor or SentsExtractor())
+        else:
+            sents = [list(iter_doc_tokens(sent)) for sent in source.sents]
         sents = [sent for sent in sents if sent]
         if not sents:
             raise SourceError("The data source has no words")
