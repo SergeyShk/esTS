@@ -30,7 +30,7 @@
 
 **esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity, morphology and syntax - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
 
-The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography, and only the morphological statistics need a trained model.
+The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography, and only the morphological and the syntactic statistics need a trained model.
 
 * **[Object extraction](https://sergeyshk.github.io/esTS/extractors/sentences/)** - configurable sentence, word and character N-gram tokenizers that know the inverted marks, the dialogue dash and the abbreviations of Spanish
 * **[Syllables and stress](https://sergeyshk.github.io/esTS/syllables/)** - rule-based syllabification and the stressed syllable derived from the spelling, with no dictionary
@@ -56,7 +56,7 @@ Or with [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, the readability and the lexical diversity metrics need no spaCy model; the morphological statistics do, and so does parsing a text yourself to pass the `Doc` instead of a string:
+The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, the readability and the lexical diversity metrics need no spaCy model; the morphological and the syntactic statistics do, and so does parsing a text yourself to pass the `Doc` instead of a string:
 
 ```bash
 python -m spacy download es_core_news_sm

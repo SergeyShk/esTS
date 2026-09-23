@@ -29,12 +29,12 @@ Las medidas del árbol siguen el trabajo de Ivanov, Solnyshkina y Solovyev sobre
 | :------: | :--: | :---------: |
 | `mean_dependency_distance` | float | Distancia media de dependencia |
 | `std_dependency_distance` | float | Desviación típica de la distancia de dependencia |
-| `max_dependency_distance` | float | Distancia máxima de dependencia en una oración, sobre las oraciones que tienen dependencias |
+| `max_dependency_distance` | float | Media de las dependencias más largas de las oraciones, sobre las oraciones que tienen dependencias |
 | `p_adjacent_dependencies` | float | Proporción de dependencias contiguas, de longitud 1 |
 | `tree_depth` | float | Profundidad del árbol de dependencias |
 | `leaves_per_sent` | float | Hojas por oración |
 | `subtrees_per_sent` | float | Subárboles por oración |
-| `nodes_per_leaf` | float | Razón entre el número de palabras y el de hojas |
+| `nodes_per_leaf` | float | Media por oración de las palabras por hoja |
 | `verb_valency` | float | Número medio de dependientes de un verbo personal |
 | `coordination_chains_per_sent` | float | Cadenas de coordinación por oración |
 | `mean_coordination_chain_len` | float | Longitud media de una cadena de coordinación |
@@ -68,9 +68,9 @@ Las construcciones son las que advierten las guías españolas de lenguaje claro
 | `split_predicates_per_sent` | float | Predicados escindidos por oración |
 
 *   Una **cadena de `de`** son dos o más complementos encajados introducidos por `de` o su contracción `del`: `el aumento de la eficiencia del uso de los recursos` es una cadena de longitud 3. Un complemento suelto (`el uso del agua`) no es una cadena.
-*   Una **cláusula de participio** es un participio con al menos un dependiente que no es el predicado de su cláusula: `la casa, construida por los obreros, se vendió` tiene una, `el autor ha escrito el libro` ninguna, porque el participio de un tiempo compuesto lleva auxiliar. Una **cláusula de gerundio** es lo mismo para un gerundio, dejando fuera la perífrasis `está cantando`.
-*   La **pasiva** es un participio con el auxiliar `ser` (`la casa fue construida`) o un verbo con el `se` de la pasiva (`se construyó la casa`). Los modelos españoles dan al auxiliar de la pasiva la relación `aux` sin más y a su sujeto el `nsubj` sin más, así que es el lema del auxiliar lo que distingue `fue construida` de `ha construido`. Una pasiva es **sin agente** cuando ningún complemento suyo va introducido por `por`.
-*   Un **predicado escindido** es un verbo soporte (`hacer`, `dar`, `tomar`, `tener`, `poner`, `llevar`, `prestar`, `efectuar`, `realizar`, `proceder`, `proporcionar`, `ejercer`) con una parte nominal derivada de un verbo (`revisión`, `decisión`, `uso`) o una de las fijas (`cabo`, `cuenta`, `manifiesto`, `parte`): `hacer una revisión` en lugar de `revisar`, `llevar a cabo la reforma` en lugar de `reformar`. Los pares hallados están en el atributo `split_predicates`.
+*   Una **cláusula de participio** es un participio con al menos un dependiente que no es el predicado de su cláusula: `la casa, construida por los obreros, se vendió` tiene una, `el autor ha escrito el libro` ninguna, porque el participio de un tiempo compuesto lleva auxiliar. Una **cláusula de gerundio** es lo mismo para un gerundio, dejando fuera las perífrasis: las que los modelos construyen con auxiliar (`está cantando`, `va aumentando`) y las que cuelgan de su verbo como `xcomp` o `advcl` (`sigue trabajando`, `lleva años estudiando`, `acabó reconociendo`).
+*   La **pasiva** es un participio con el auxiliar `ser` (`la casa fue construida`) o un verbo con el `se` de la pasiva (`se construyó la casa`). Los modelos españoles dan al auxiliar de la pasiva la relación `aux` sin más y a su sujeto el `nsubj` sin más, así que es el lema del auxiliar lo que distingue `fue construida` de `ha construido`; en presente leen a menudo el auxiliar como cópula (`el proyecto es financiado`), y cuentan las dos relaciones. Una pasiva es **sin agente** cuando ningún complemento suyo va introducido por `por`.
+*   Un **predicado escindido** es un verbo soporte (`hacer`, `dar`, `tomar`, `tener`, `poner`, `llevar`, `prestar`, `efectuar`, `realizar`, `proceder`, `proporcionar`, `ejercer`) con una parte nominal derivada de un verbo (`revisión`, `decisión`, `uso`): `hacer una revisión` en lugar de `revisar`. Los sustantivos de las expresiones fijas - `cabo`, `manifiesto`, `parte`, `lugar`, `cuenta` - cuentan solo con el verbo con el que están fijados, de modo que `llevar a cabo` y `tomar parte` son predicados escindidos y `dar traslado a las partes` o `poner en primer lugar la seguridad` no lo son. Un complemento con preposición es la parte nominal solo en una expresión fija (`poner de manifiesto`) o con un verbo que la toma así (`proceder a la votación`); el agente de una pasiva nunca lo es. Los pares hallados están en el atributo `split_predicates`.
 *   Una **palabra de negación** lleva `Polarity=Neg`, que los modelos dan solo a `no`, o es una de `nunca`, `jamás`, `nada`, `nadie`, `ninguno` y `tampoco`; la conjunción `ni` de `ni... ni` no lo es. Cuenta cada una de esas palabras, así que la concordancia negativa del español, donde una negación se escribe dos veces (`no vino nadie`), da dos.
 
 !!! warning "Advertencia"
@@ -198,12 +198,12 @@ Para ilustrar el método reutilizamos el código del ejemplo anterior:
     ------------------------------------------------------------
     Mean dependency distance                          |   2.26
     Standard deviation of the dependency distance     |   2.15
-    Maximum dependency distance                       |   9.00
+    Mean of the longest dependencies of the sentences |   9.00
     Share of adjacent dependencies                    |   0.48
     Depth of the dependency tree                      |   4.00
     Leaves per sentence                               |   8.00
     Subtrees per sentence                             |   6.50
-    Nodes per leaf                                    |   1.80
+    Mean of the nodes per leaf of the sentences       |   1.80
     Valency of the finite verbs                       |   4.00
     Coordination chains per sentence                  |   0.00
     Mean length of a coordination chain               |   nan

@@ -29,12 +29,12 @@ The measures of the tree follow the work of Ivanov, Solnyshkina and Solovyev on 
 | :-------: | :--: | :---------: |
 | `mean_dependency_distance` | float | Mean dependency distance |
 | `std_dependency_distance` | float | Standard deviation of the dependency distance |
-| `max_dependency_distance` | float | Maximum dependency distance in a sentence, over the sentences that have dependencies |
+| `max_dependency_distance` | float | Mean of the longest dependencies of the sentences, over the sentences that have dependencies |
 | `p_adjacent_dependencies` | float | Share of adjacent dependencies - of length 1 |
 | `tree_depth` | float | Depth of the dependency tree |
 | `leaves_per_sent` | float | Leaves per sentence |
 | `subtrees_per_sent` | float | Subtrees per sentence |
-| `nodes_per_leaf` | float | Ratio of the number of words to the number of leaves |
+| `nodes_per_leaf` | float | Mean over the sentences of the words per leaf |
 | `verb_valency` | float | Mean number of dependents of a finite verb |
 | `coordination_chains_per_sent` | float | Coordination chains per sentence |
 | `mean_coordination_chain_len` | float | Mean length of a coordination chain |
@@ -68,9 +68,9 @@ The constructions are the ones the Spanish guides to clear language (*lenguaje c
 | `split_predicates_per_sent` | float | Split predicates per sentence |
 
 *   A **chain of `de`** is two or more nested complements introduced by `de` or its contraction `del`: `el aumento de la eficiencia del uso de los recursos` is a chain of length 3. A single complement (`el uso del agua`) is not a chain.
-*   A **participial clause** is a participle with at least one dependent that is not the predicate of its clause: `la casa, construida por los obreros, se vendió` has one, `el autor ha escrito el libro` has none, because the participle of a compound tense carries an auxiliary. A **gerund clause** is the same for a gerund, the periphrasis `está cantando` left out.
-*   The **passive** is a participle with the auxiliary `ser` (`la casa fue construida`) or a verb with the `se` of the passive (`se construyó la casa`). The Spanish models give the auxiliary of the passive the plain relation `aux` and its subject the plain `nsubj`, so it is the lemma of the auxiliary that tells `fue construida` from `ha construido`. A passive is **agentless** when no complement of it is introduced by `por`.
-*   A **split predicate** is a light verb (`hacer`, `dar`, `tomar`, `tener`, `poner`, `llevar`, `prestar`, `efectuar`, `realizar`, `proceder`, `proporcionar`, `ejercer`) with a nominal part derived from a verb (`revisión`, `decisión`, `uso`) or one of the fixed ones (`cabo`, `cuenta`, `manifiesto`, `parte`): `hacer una revisión` instead of `revisar`, `llevar a cabo la reforma` instead of `reformar`. The pairs found are in the attribute `split_predicates`.
+*   A **participial clause** is a participle with at least one dependent that is not the predicate of its clause: `la casa, construida por los obreros, se vendió` has one, `el autor ha escrito el libro` has none, because the participle of a compound tense carries an auxiliary. A **gerund clause** is the same for a gerund, the periphrases left out: the ones the models build with an auxiliary (`está cantando`, `va aumentando`) and the ones they attach to their verb as `xcomp` or `advcl` (`sigue trabajando`, `lleva años estudiando`, `acabó reconociendo`).
+*   The **passive** is a participle with the auxiliary `ser` (`la casa fue construida`) or a verb with the `se` of the passive (`se construyó la casa`). The Spanish models give the auxiliary of the passive the plain relation `aux` and its subject the plain `nsubj`, so it is the lemma of the auxiliary that tells `fue construida` from `ha construido`; in the present they often read the auxiliary as a copula instead (`el proyecto es financiado`), and both relations count. A passive is **agentless** when no complement of it is introduced by `por`.
+*   A **split predicate** is a light verb (`hacer`, `dar`, `tomar`, `tener`, `poner`, `llevar`, `prestar`, `efectuar`, `realizar`, `proceder`, `proporcionar`, `ejercer`) with a nominal part derived from a verb (`revisión`, `decisión`, `uso`): `hacer una revisión` instead of `revisar`. The nouns of the fixed expressions - `cabo`, `manifiesto`, `parte`, `lugar`, `cuenta` - count only with the verb they are fixed with, `llevar a cabo` and `tomar parte` being split predicates while `dar traslado a las partes` and `poner en primer lugar la seguridad` are not. A complement with a preposition is the nominal part only in a fixed expression (`poner de manifiesto`) or with a verb that takes it that way (`proceder a la votación`); the agent of a passive never is. The pairs found are in the attribute `split_predicates`.
 *   A **word of negation** carries `Polarity=Neg`, which the models give to `no` alone, or is one of `nunca`, `jamás`, `nada`, `nadie`, `ninguno` and `tampoco`; the conjunction `ni` of `ni... ni` is not one. Every such word counts, so the negative concord of Spanish, where one negation is written twice (`no vino nadie`), gives two.
 
 !!! warning "Warning"
@@ -198,12 +198,12 @@ To illustrate the method, we reuse the code from the previous example:
     ------------------------------------------------------------
     Mean dependency distance                          |   2.26
     Standard deviation of the dependency distance     |   2.15
-    Maximum dependency distance                       |   9.00
+    Mean of the longest dependencies of the sentences |   9.00
     Share of adjacent dependencies                    |   0.48
     Depth of the dependency tree                      |   4.00
     Leaves per sentence                               |   8.00
     Subtrees per sentence                             |   6.50
-    Nodes per leaf                                    |   1.80
+    Mean of the nodes per leaf of the sentences       |   1.80
     Valency of the finite verbs                       |   4.00
     Coordination chains per sentence                  |   0.00
     Mean length of a coordination chain               |   nan

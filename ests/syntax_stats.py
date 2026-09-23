@@ -10,10 +10,12 @@ from .constants import (
     AGENT_PREPOSITION,
     CLAUSE_DEPS,
     DE_PREPOSITIONS,
+    GERUND_PERIPHRASIS_VERBS,
     LIGHT_VERBS,
     NEGATION_WORDS,
     NOUN_MODIFIER_DEPS,
     PASSIVE_AUX,
+    PREPOSITIONAL_LIGHT_VERBS,
     SE_IMPERSONAL_DEP,
     SE_PASSIVE_DEP,
     SPLIT_PREDICATE_NOUNS,
@@ -27,6 +29,11 @@ from .utils import get_nlp, is_verbal_noun, safe_divide
 
 # Dependencies of the nominal part of a split predicate, in the order of preference
 SPLIT_PREDICATE_DEPS = ("compound", "obj", "nsubj", "iobj", "nmod", "obl")
+# Relations of an auxiliary and of a copula: the models use both for the auxiliary
+# of a passive in the present, and both keep a participle out of the clauses
+AUXILIARY_DEPS = ("aux", "cop")
+# Relations by which the models attach the gerund of a periphrasis to its verb
+PERIPHRASIS_DEPS = ("xcomp", "advcl")
 # Components a parse of the text does not need: the entities are never read
 UNUSED_COMPONENTS = ["ner"]
 
@@ -100,13 +107,13 @@ class SyntaxStats:
         c_deps (dict[str, int]): Distribution of words by syntactic relation
         mean_dependency_distance (float): Mean dependency distance
         std_dependency_distance (float): Standard deviation of the dependency distance
-        max_dependency_distance (float): Maximum dependency distance in a sentence,
-            over the sentences that have dependencies
+        max_dependency_distance (float): Mean of the longest dependencies of the
+            sentences, over the sentences that have dependencies
         p_adjacent_dependencies (float): Share of adjacent dependencies - of length 1
         tree_depth (float): Depth of the dependency tree
         leaves_per_sent (float): Leaves per sentence
         subtrees_per_sent (float): Subtrees per sentence
-        nodes_per_leaf (float): Ratio of the number of words to the number of leaves
+        nodes_per_leaf (float): Mean over the sentences of the words per leaf
         verb_valency (float): Mean number of dependents of a finite verb
         coordination_chains_per_sent (float): Coordination chains per sentence
         mean_coordination_chain_len (float): Mean length of a coordination chain
@@ -718,8 +725,10 @@ def is_gerund_clause(token: Token) -> bool:
 
     Description:
         A gerund with at least one dependent, the coordinating and the
-        parenthetical relations left out, which is not part of a periphrasis
-        with an auxiliary (está cantando)
+        parenthetical relations left out, which is not part of a periphrasis:
+        with an auxiliary (está cantando, va aumentando) or under a verb of
+        GERUND_PERIPHRASIS_VERBS, which the models attach as xcomp or advcl
+        instead (sigue trabajando, lleva años estudiando)
 
     Arguments:
         token (Token): Token
@@ -728,6 +737,8 @@ def is_gerund_clause(token: Token) -> bool:
         bool: Result of the check
     """
     if not is_gerund(token) or is_root(token) or has_auxiliary(token):
+        return False
+    if token.dep_ in PERIPHRASIS_DEPS and token.head.lemma_.lower() in GERUND_PERIPHRASIS_VERBS:
         return False
     return calc_valency(token) > 0
 
@@ -742,7 +753,7 @@ def has_auxiliary(token: Token) -> bool:
     Returns:
         bool: Result of the check
     """
-    return any(base_dep(child) in ("aux", "cop") for child in token.children)
+    return any(base_dep(child) in AUXILIARY_DEPS for child in token.children)
 
 
 def is_passive(token: Token) -> bool:
@@ -754,10 +765,11 @@ def is_passive(token: Token) -> bool:
         construida) or carries the se of the passive (se construyó la casa);
         a participle that modifies a noun (la casa construida por los obreros)
         is an adjective for the models and is counted as a participial clause
-        instead. The Spanish models
-        give the auxiliary of the passive the plain relation aux and the subject
-        the plain relation nsubj, so the lemma of the auxiliary is what tells
-        the passive from a compound tense (ha construido)
+        instead. The Spanish models give the auxiliary of the passive the plain
+        relation aux and the subject the plain relation nsubj, so the lemma of
+        the auxiliary is what tells the passive from a compound tense (ha
+        construido); in the present the models often read the auxiliary as a
+        copula (el proyecto es financiado), and both relations count
 
     Arguments:
         token (Token): Token
@@ -772,7 +784,8 @@ def is_passive(token: Token) -> bool:
     if not is_participle(token):
         return False
     return any(
-        base_dep(child) == "aux" and child.lemma_ == PASSIVE_AUX for child in token.children
+        base_dep(child) in AUXILIARY_DEPS and child.lemma_ == PASSIVE_AUX
+        for child in token.children
     )
 
 
@@ -833,17 +846,21 @@ def is_light_verb(token: Token) -> bool:
     return token.pos_ == "VERB" and token.lemma_.lower() in LIGHT_VERBS
 
 
-def is_split_predicate_noun(token: Token) -> bool:
+def is_split_predicate_noun(token: Token, verb: Token) -> bool:
     """
     Checking whether a token can be the nominal part of a split predicate
 
     Description:
         A noun with a lemma derived from a verb (is_verbal_noun: revisión,
-        decisión, uso) or with a lemma of SPLIT_PREDICATE_NOUNS (cabo, cuenta,
-        manifiesto, lugar)
+        decisión, uso), or one of the nouns of the fixed expressions of
+        SPLIT_PREDICATE_NOUNS with the verb it is fixed with: cabo with llevar,
+        manifiesto with poner, parte with tomar. Outside its expression such a
+        noun is an ordinary one - dar traslado a las partes, poner en primer
+        lugar la seguridad - which is why the verb is checked as well
 
     Arguments:
         token (Token): Token
+        verb (Token): Verb the token depends on
 
     Returns:
         bool: Result of the check
@@ -851,7 +868,9 @@ def is_split_predicate_noun(token: Token) -> bool:
     if token.pos_ != "NOUN":
         return False
     lemma = token.lemma_.lower()
-    return is_verbal_noun(lemma) or lemma in SPLIT_PREDICATE_NOUNS
+    if is_verbal_noun(lemma):
+        return True
+    return verb.lemma_.lower() in SPLIT_PREDICATE_NOUNS.get(lemma, ())
 
 
 def find_split_predicates(tokens: Iterable[Token]) -> list[tuple[Token, Token]]:
@@ -866,9 +885,13 @@ def find_split_predicates(tokens: Iterable[Token]) -> list[tuple[Token, Token]]:
         compound (the fixed dar comienzo, llevar a cabo, tomar parte, where the
         object is the complement of the whole: dio comienzo a la sesión), obj,
         nsubj (only with the se of the passive: se llevó a cabo la revisión),
-        iobj, nmod, obl; a prepositional complement (obl with a
-        dependent case) is left out unless its noun is one of the fixed ones,
-        and so is the agent of a passive
+        iobj, nmod, obl
+        A complement with a preposition is left out - llevó el asunto a la
+        comisión is no split predicate - unless its noun is one of the fixed
+        ones (poner de manifiesto) or the verb takes its nominal part with a
+        preposition (PREPOSITIONAL_LIGHT_VERBS: se procedió a la votación),
+        whichever of obj and obl the model chooses for it. The agent of a
+        passive is left out as well
 
     Arguments:
         tokens (Doc|Span|list[Token]): Sequence of tokens
@@ -883,7 +906,7 @@ def find_split_predicates(tokens: Iterable[Token]) -> list[tuple[Token, Token]]:
         candidates = [
             child
             for child in get_children(token)
-            if is_split_predicate_noun(child) and _is_nominal_part(child, token)
+            if is_split_predicate_noun(child, token) and _is_nominal_part(child, token)
         ]
         if candidates:
             pairs.append((token, min(candidates, key=_nominal_part_rank)))
@@ -896,13 +919,14 @@ def _is_nominal_part(child: Token, verb: Token) -> bool:
         return False
     if dep == "nsubj":
         return any(grandchild.dep_ == SE_PASSIVE_DEP for grandchild in verb.children)
-    if dep != "obl":
-        return True
     if is_agent(child):
         return False
-    return child.lemma_.lower() in SPLIT_PREDICATE_NOUNS or not any(
-        grandchild.dep_ == "case" for grandchild in child.children
-    )
+    if (
+        child.lemma_.lower() in SPLIT_PREDICATE_NOUNS
+        or verb.lemma_.lower() in PREPOSITIONAL_LIGHT_VERBS
+    ):
+        return True
+    return not any(grandchild.dep_ == "case" for grandchild in child.children)
 
 
 def _nominal_part_rank(child: Token) -> int:

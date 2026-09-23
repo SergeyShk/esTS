@@ -550,12 +550,19 @@ VERBAL_NOUN_LEMMAS = frozenset(
         "control",
         "desarrollo",
         "empleo",
+        "consulta",
+        "entrega",
         "envío",
         "estudio",
         "intento",
+        "lectura",
+        "mejora",
         "olvido",
         "pago",
+        "prueba",
         "rechazo",
+        "reforma",
+        "respuesta",
         "traslado",
         "uso",
     }
@@ -577,33 +584,41 @@ LIGHT_VERBS = frozenset(
         "tomar",
     }
 )
-# Nouns of the fixed split predicates that no suffix gives away
-SPLIT_PREDICATE_NOUNS = frozenset(
-    {
-        "cabo",
-        "cargo",
-        "caso",
-        "cuenta",
-        "efecto",
-        "fin",
-        "gala",
-        "hincapié",
-        "lugar",
-        "manifiesto",
-        "marcha",
-        "parte",
-    }
+# Nouns of the fixed split predicates that no suffix gives away, by the verbs they
+# are fixed with: parte, lugar, caso and cuenta are ordinary nouns with any other
+# verb (dar traslado a las partes, poner en primer lugar la seguridad)
+SPLIT_PREDICATE_NOUNS = {
+    "cabo": ("llevar",),
+    "cargo": ("hacer", "tener"),
+    "caso": ("hacer",),
+    "comienzo": ("dar",),
+    "cuenta": ("dar", "tener"),
+    "efecto": ("hacer", "tener"),
+    "fin": ("dar", "poner"),
+    "gala": ("hacer",),
+    "hincapié": ("hacer",),
+    "lugar": ("tener", "dar"),
+    "manifiesto": ("poner",),
+    "marcha": ("poner",),
+    "parte": ("tomar", "formar"),
+}
+# Light verbs whose nominal part comes with a preposition: se procedió a la votación
+PREPOSITIONAL_LIGHT_VERBS = frozenset({"proceder"})
+# Verbs of the periphrases with a gerund: sigue trabajando, lleva años estudiando.
+# The models attach the gerund of these as xcomp or advcl instead of an auxiliary
+GERUND_PERIPHRASIS_VERBS = frozenset(
+    {"seguir", "continuar", "ir", "venir", "andar", "llevar", "quedar", "acabar"}
 )
 
 SYNTAX_STATS_DESC = {
     "mean_dependency_distance": "Mean dependency distance",
     "std_dependency_distance": "Standard deviation of the dependency distance",
-    "max_dependency_distance": "Maximum dependency distance",
+    "max_dependency_distance": "Mean of the longest dependencies of the sentences",
     "p_adjacent_dependencies": "Share of adjacent dependencies",
     "tree_depth": "Depth of the dependency tree",
     "leaves_per_sent": "Leaves per sentence",
     "subtrees_per_sent": "Subtrees per sentence",
-    "nodes_per_leaf": "Nodes per leaf",
+    "nodes_per_leaf": "Mean of the nodes per leaf of the sentences",
     "verb_valency": "Valency of the finite verbs",
     "coordination_chains_per_sent": "Coordination chains per sentence",
     "mean_coordination_chain_len": "Mean length of a coordination chain",

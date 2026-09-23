@@ -6,7 +6,7 @@
 
 **esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica y morfología, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
 
-La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy) y solo las estadísticas morfológicas necesitan un modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, y las sílabas y el acento se deducen de la ortografía.
+La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy) y solo las estadísticas morfológicas y las sintácticas necesitan un modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, y las sílabas y el acento se deducen de la ortografía.
 
 ## Funcionalidad
 

@@ -248,6 +248,8 @@ def test_de_chains_single(nlp):
         ("El libro ha sido leído por todos", ["leído"]),
         ("El autor ha escrito el libro", []),
         ("Se construyó la casa", ["construyó"]),
+        ("El proyecto es financiado por la Unión Europea", ["financiado"]),
+        ("La casa está construida", []),
         ("Los niños juegan", []),
     ],
 )
@@ -298,9 +300,18 @@ def test_gerund_clause(nlp):
     assert [token.text for token in tokens if is_gerund_clause(token)] == ["Hablando"]
 
 
-def test_gerund_of_a_periphrasis_is_not_a_clause(nlp):
-    tokens = words(nlp, "Está cantando una canción")
-    assert [token.text for token in tokens if is_gerund_clause(token)] == []
+@pytest.mark.parametrize(
+    "text",
+    [
+        "Está cantando una canción",
+        "Sigue trabajando en el proyecto",
+        "Continúa creciendo la demanda",
+        "Lleva años estudiando el problema",
+        "Acabó reconociendo el error",
+    ],
+)
+def test_gerund_of_a_periphrasis_is_not_a_clause(nlp, text):
+    assert [token.text for token in words(nlp, text) if is_gerund_clause(token)] == []
 
 
 @pytest.mark.parametrize(
@@ -318,6 +329,12 @@ def test_gerund_of_a_periphrasis_is_not_a_clause(nlp):
         ("Se hizo por decisión del comité", []),
         ("Hizo el trabajo con dedicación", []),
         ("La decisión tomó forma", []),
+        ("El tribunal dio traslado a las partes", []),
+        ("La empresa puso en primer lugar la seguridad", []),
+        ("El secretario dio lectura al acuerdo", ["dio lectura"]),
+        ("Se procedió a la notificación de la resolución", ["procedió notificación"]),
+        ("Llevó el asunto a la comisión", []),
+        ("La reunión tuvo lugar en Madrid", ["tuvo lugar"]),
     ],
 )
 def test_split_predicates(nlp, text, expected):
@@ -367,8 +384,27 @@ def test_light_verb(nlp):
 
 
 def test_split_predicate_noun(nlp):
-    tokens = words(nlp, "La revisión de la casa")
-    assert [token.text for token in tokens if is_split_predicate_noun(token)] == ["revisión"]
+    verb, noun = words(nlp, "Hizo una revisión")[0], words(nlp, "Hizo una revisión")[2]
+    assert is_split_predicate_noun(noun, verb)
+
+
+@pytest.mark.parametrize(
+    ("noun_text", "verb_text", "expected"),
+    [
+        ("cabo", "llevó", True),
+        ("cabo", "dio", False),
+        ("parte", "tomó", True),
+        ("parte", "dio", False),
+    ],
+)
+def test_split_predicate_noun_of_a_fixed_expression(nlp, noun_text, verb_text, expected):
+    noun = next(
+        token for token in words(nlp, f"Se llevó a {noun_text} el plan") if token.text == noun_text
+    )
+    verb = next(
+        token for token in words(nlp, f"El juez {verb_text} el plan") if token.text == verb_text
+    )
+    assert is_split_predicate_noun(noun, verb) is expected
 
 
 def test_split_predicates_attribute():

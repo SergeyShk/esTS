@@ -30,7 +30,7 @@
 
 **esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica, morfología y sintaxis, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
 
-La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy): las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, las sílabas y el acento se deducen de la ortografía, y solo las estadísticas morfológicas necesitan un modelo entrenado.
+La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy): las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, las sílabas y el acento se deducen de la ortografía, y solo las estadísticas morfológicas y las sintácticas necesitan un modelo entrenado.
 
 * **[Extracción de objetos](https://sergeyshk.github.io/esTS/es/extractors/sentences/)** - tokenizadores configurables de oraciones, palabras y N-gramas de caracteres que conocen los signos de apertura, la raya de diálogo y las abreviaturas del español
 * **[Sílabas y acento](https://sergeyshk.github.io/esTS/es/syllables/)** - silabificación por reglas y sílaba tónica deducida de la escritura, sin diccionario
@@ -56,7 +56,7 @@ O con [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad y la diversidad léxica no necesitan ningún modelo de spaCy; las estadísticas morfológicas sí, igual que analizar un texto por su cuenta para pasar el `Doc` en lugar de una cadena:
+El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad y la diversidad léxica no necesitan ningún modelo de spaCy; las estadísticas morfológicas y las sintácticas sí, igual que analizar un texto por su cuenta para pasar el `Doc` en lugar de una cadena:
 
 ```bash
 python -m spacy download es_core_news_sm
