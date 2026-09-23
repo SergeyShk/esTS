@@ -7,7 +7,7 @@
 
 A module for computing the morphological statistics of a text. The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library.
 
-Parts of speech and grammatical features are given in the terms of [Universal Dependencies](https://universaldependencies.org/u/feat/), as the Spanish models of spaCy annotate them. A text is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, without the entity recognizer, which nothing here reads; a `Doc` is taken as it is and must carry the annotation of the parts of speech, so a `Doc` of `spacy.blank("es")` is not a valid source. Words are taken from the tokens, punctuation marks and symbols are dropped.
+Parts of speech and grammatical features are given in the terms of [Universal Dependencies](https://universaldependencies.org/u/feat/), as the Spanish models of spaCy annotate them. A text is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, without the entity recognizer, which nothing here reads; a `Doc` is taken as it is and must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer` - a `Doc` of `spacy.blank("es")` or of a pipeline with the `lemmatizer` excluded is not a valid source and raises `SourceError`. Words are taken from the tokens, punctuation marks and symbols are dropped.
 
 A text longer than the `max_length` of the pipeline - a million characters by default, a long novel - raises `SourceError` instead of reaching spaCy: split it into parts, or raise `max_length` on a pipeline of your own and pass it in `nlp`.
 

@@ -18,8 +18,9 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 *   calcular [estadísticas morfológicas](stats/morph_stats.md) sobre Universal Dependencies (categorías gramaticales y quince rasgos morfológicos) con los marcadores del español: los modos, las formas no personales, las cópulas `ser` y `estar`, los adverbios en `-mente`
 *   calcular [estadísticas sintácticas](stats/syntax_stats.md) sobre el árbol de dependencias (distancias, profundidad, cláusulas, coordinación) con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
 *   calcular [estadísticas de cohesión](stats/cohesion_stats.md) a la manera de Coh-Metrix (repetición de sustantivos, argumentos y palabras con contenido entre oraciones, información dada, cohesión temporal) con la densidad de 255 marcadores del discurso por clase
+*   añadir las estadísticas a un [pipeline de spaCy](components.md) como componentes, de modo que el texto se anote y se mida en una sola pasada y las estadísticas viajen con el `Doc`
 
-Los componentes de spaCy cierran la 0.2, las medidas de corpus y la estilometría llegan en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
+Las medidas de corpus y la estilometría llegan en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
 
 ## Instalación
 
@@ -93,6 +94,7 @@ Punctuation marks   |    2
     *   **ests**:
         *   basic_stats.py - estadísticas básicas del texto
         *   cohesion_stats.py - estadísticas de cohesión
+        *   components.py - componentes de un pipeline de spaCy
         *   constants.py - constantes de la lengua española y de las métricas
         *   diversity_stats.py - métricas de diversidad léxica
         *   exceptions.py - excepciones de la biblioteca

@@ -9,6 +9,14 @@ from importlib.metadata import PackageNotFoundError, version
 
 from .basic_stats import BasicStats
 from .cohesion_stats import CohesionStats
+from .components import (
+    BasicStatsComponent,
+    CohesionStatsComponent,
+    DiversityStatsComponent,
+    MorphStatsComponent,
+    ReadabilityStatsComponent,
+    SyntaxStatsComponent,
+)
 from .diversity_stats import DiversityStats
 from .exceptions import (
     DataFileError,
@@ -42,20 +50,26 @@ __author_email__ = "kouki.sergey@gmail.com"
 
 __all__ = [
     "BasicStats",
+    "BasicStatsComponent",
     "CharNgramsExtractor",
     "CohesionStats",
+    "CohesionStatsComponent",
     "DataFileError",
     "DatasetNotFoundError",
     "DiversityStats",
+    "DiversityStatsComponent",
     "DownloadError",
     "EstsError",
     "MorphStats",
+    "MorphStatsComponent",
     "ParameterError",
     "ReadabilityStats",
+    "ReadabilityStatsComponent",
     "SentsExtractor",
     "SourceError",
     "SourceTypeError",
     "SyntaxStats",
+    "SyntaxStatsComponent",
     "UnknownStatError",
     "WordsExtractor",
     "__version__",
