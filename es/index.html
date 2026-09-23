@@ -1071,6 +1071,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="stats/morph_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas morfológicas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1160,8 +1188,8 @@
 <h1 id="spanish-texts-statistics-ests">Spanish Texts Statistics (esTS)<a class="headerlink" href="#spanish-texts-statistics-ests" title="Permanent link">&para;</a></h1>
 <p><img alt="esTS" src="../img/ests.svg" /></p>
 <p><em>¿Cómo esTáS, texto?</em></p>
-<p><strong>esTS</strong> calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad y diversidad léxica, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, de forma determinista y sin ninguna red neuronal dentro.</p>
-<p>La biblioteca trabaja tanto con cadenas como con objetos <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> y no necesita ningún modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, y las sílabas y el acento se deducen de la ortografía.</p>
+<p><strong>esTS</strong> calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica y morfología, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.</p>
+<p>La biblioteca trabaja tanto con cadenas como con objetos <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> y solo las estadísticas morfológicas necesitan un modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, y las sílabas y el acento se deducen de la ortografía.</p>
 <h2 id="funcionalidad">Funcionalidad<a class="headerlink" href="#funcionalidad" title="Permanent link">&para;</a></h2>
 <ul>
 <li>construir tokenizadores de <a href="extractors/sentences/">oraciones</a>, <a href="extractors/words/">palabras</a> y <a href="extractors/char_ngrams/">N-gramas de caracteres</a> que conocen los signos de apertura, la raya de diálogo y las abreviaturas del español</li>
@@ -1169,8 +1197,9 @@
 <li>calcular <a href="stats/basic_stats/">estadísticas básicas del texto</a> (número de oraciones, palabras, letras, sílabas, signos de puntuación por tipo y sus distribuciones)</li>
 <li>calcular <a href="stats/readability_stats/">métricas de legibilidad</a> (Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX) con grado de consenso, etapas escolares de España y tiempo de lectura</li>
 <li>calcular <a href="stats/diversity_stats/">métricas de diversidad léxica</a> (Type-Token Ratio y sus variantes, MATTR, MSTTR, Measure of Textual Lexical Diversity, HD-D, los índices de Simpson y de Yule, la entropía, las leyes de Zipf y de Heaps), sobre todo el texto o por ventanas con intervalos de confianza</li>
+<li>calcular <a href="stats/morph_stats/">estadísticas morfológicas</a> sobre Universal Dependencies (categorías gramaticales y quince rasgos morfológicos) con los marcadores del español: los modos, las formas no personales, las cópulas <code>ser</code> y <code>estar</code>, los adverbios en <code>-mente</code></li>
 </ul>
-<p>La morfología, la sintaxis y la cohesión sobre Universal Dependencies llegan en la 0.2, las medidas de corpus y la estilometría en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.</p>
+<p>La sintaxis y la cohesión llegan en el resto de la 0.2, las medidas de corpus y la estilometría en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.</p>
 <h2 id="instalacion">Instalación<a class="headerlink" href="#instalacion" title="Permanent link">&para;</a></h2>
 <p>Se requiere Python 3.11 o superior.</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyests
@@ -1236,6 +1265,7 @@
 <li>diversity_stats.py - métricas de diversidad léxica</li>
 <li>exceptions.py - excepciones de la biblioteca</li>
 <li>extractors.py - herramientas de extracción de objetos del texto</li>
+<li>morph_stats.py - estadísticas morfológicas</li>
 <li>readability_stats.py - métricas de legibilidad</li>
 <li>syllables.py - silabificación y acento</li>
 <li>utils.py - herramientas auxiliares</li>

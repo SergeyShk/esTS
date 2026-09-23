@@ -1084,6 +1084,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats/morph_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Morphological statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1198,7 +1226,7 @@
 uv<span class="w"> </span>sync<span class="w"> </span>--all-groups
 </code></pre></div>
 <h2 id="model">The spaCy model<a class="headerlink" href="#model" title="Permanent link">&para;</a></h2>
-<p>The statistics of release 0.1 need no trained model: sentences, words and character N-grams are extracted by rules and by the tokenizer of the blank Spanish pipeline, syllables and stress by the orthography. A model is needed only to build a <code>Doc</code> yourself and pass it to the statistics instead of a string, and to run the test suite, where it comes with the <code>test</code> dependency group:</p>
+<p>Basic statistics, readability and lexical diversity need no trained model: sentences, words and character N-grams are extracted by rules and by the tokenizer of the blank Spanish pipeline, syllables and stress by the orthography. The <a href="../stats/morph_stats/">morphological statistics</a> need one, and so does building a <code>Doc</code> yourself to pass it to the statistics instead of a string; the test suite needs it too, where it comes with the <code>test</code> dependency group:</p>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>spacy<span class="w"> </span>download<span class="w"> </span>es_core_news_sm
 </code></pre></div>
 
