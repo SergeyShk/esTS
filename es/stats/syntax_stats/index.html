@@ -1,0 +1,1881 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Biblioteca para extraer estadísticas de textos en español">
+      
+      
+      
+      
+        <link rel="prev" href="../morph_stats/">
+      
+      
+      
+        
+          <link rel="alternate" href="../../../stats/syntax_stats/" hreflang="en">
+        
+          <link rel="alternate" href="./" hreflang="es">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Estadísticas sintácticas - esTS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#estadisticas-sintacticas" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../../" title="esTS" class="md-header__button md-logo" aria-label="esTS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            esTS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Estadísticas sintácticas
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Seleccionar idioma">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../../stats/syntax_stats/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="es" class="md-select__link">
+              Español
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/SergeyShk/esTS" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+  Inicio
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../extractors/sentences/" class="md-tabs__link">
+          
+  
+  
+  Extracción
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../syllables/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Sílabas y acento
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../basic_stats/" class="md-tabs__link">
+          
+  
+  
+  Estadísticas
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../" title="esTS" class="md-nav__button md-logo" aria-label="esTS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    esTS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/SergeyShk/esTS" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inicio
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acerca de
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instalación
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Excepciones y registro
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../authors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracción
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Extracción
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extractors/sentences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracción de oraciones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extractors/words/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracción de palabras
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extractors/char_ngrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracción de N-gramas de caracteres
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../syllables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sílabas y acento
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Estadísticas
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../basic_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas básicas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Métricas de legibilidad
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Métricas de legibilidad
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readability_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../readability_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Métricas de diversidad léxica
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Métricas de diversidad léxica
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diversity_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diversity_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../morph_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas morfológicas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas sintácticas
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas sintácticas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#descripcion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Descripción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parametros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parámetros
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Medidas de complejidad
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#constructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Construcciones del estilo administrativo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#counts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recuentos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metodos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métodos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Métodos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#print_stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        print_stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#descripcion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Descripción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parametros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parámetros
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Medidas de complejidad
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#constructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Construcciones del estilo administrativo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#counts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recuentos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metodos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métodos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Métodos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#print_stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        print_stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="estadisticas-sintacticas">Estadísticas sintácticas<a class="headerlink" href="#estadisticas-sintacticas" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p><strong>ests.syntax_stats.SyntaxStats</strong></p>
+</div>
+<h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
+<p>Módulo para calcular las estadísticas sintácticas de un texto sobre el árbol de dependencias de <a href="https://universaldependencies.org/u/dep/">Universal Dependencies</a>. La fuente de datos puede ser un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>, pero tiene que estar analizada: una cadena se analiza con <a href="../../installation/#model"><code>es_core_news_sm</code></a> o con el pipeline indicado en <code>nlp</code>, y un <code>Doc</code> debe llevar las dependencias, de modo que un <code>Doc</code> de <code>spacy.blank("es")</code> o de un pipeline sin analizador no es una fuente válida.</p>
+<p>Los signos de puntuación y los espacios no son nodos del árbol: lo son las palabras, y las distancias se cuentan en posiciones de palabras. Las medidas de una oración - la dependencia más larga, la profundidad del árbol, el número de hojas y de subárboles, los nodos por hoja - se promedian sobre las oraciones, las construcciones se dan por oración, y la pasiva y los modificadores son proporciones sobre los verbos y sobre los sustantivos.</p>
+<p>Un texto más largo que el <code>max_length</code> del pipeline - un millón de caracteres por defecto - levanta <code>SourceError</code>: divídalo en partes o suba <code>max_length</code> en un pipeline propio y páselo en <code>nlp</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Las estadísticas se calculan al inicializar el objeto <code>SyntaxStats</code>.</p>
+</div>
+<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>source</code></td>
+<td style="text-align: center;">str/Doc</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Fuente de datos (cadena u objeto Doc)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>nlp</code></td>
+<td style="text-align: center;">Language</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Pipeline de spaCy que analiza una cadena; sin él se carga el modelo <code>es_core_news_sm</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="complexity">Medidas de complejidad<a class="headerlink" href="#complexity" title="Permanent link">&para;</a></h2>
+<p>Las medidas del árbol siguen el trabajo de Ivanov, Solnyshkina y Solovyev sobre la complejidad sintáctica de un texto: la distancia de dependencia de Liu (2008) - la distancia entre una palabra y su núcleo en posiciones de palabras -, la profundidad del árbol, las hojas y los subárboles, la valencia de los verbos personales, las cadenas de coordinación, las cláusulas y los modificadores del sustantivo.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Atributo</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>mean_dependency_distance</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Distancia media de dependencia</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>std_dependency_distance</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Desviación típica de la distancia de dependencia</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>max_dependency_distance</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Media de las dependencias más largas de las oraciones, sobre las oraciones que tienen dependencias</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>p_adjacent_dependencies</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Proporción de dependencias contiguas, de longitud 1</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>tree_depth</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Profundidad del árbol de dependencias</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>leaves_per_sent</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Hojas por oración</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>subtrees_per_sent</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Subárboles por oración</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>nodes_per_leaf</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Media por oración de las palabras por hoja</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>verb_valency</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Número medio de dependientes de un verbo personal</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>coordination_chains_per_sent</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Cadenas de coordinación por oración</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>mean_coordination_chain_len</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Longitud media de una cadena de coordinación</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>clauses_per_sent</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Cláusulas por oración</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>mean_clause_len</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Longitud media de una cláusula en palabras</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>subordinate_clauses_per_sent</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Cláusulas subordinadas por oración</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>p_complex_sents</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Proporción de oraciones con al menos una subordinada</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>modifiers_per_noun</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Número medio de modificadores de un sustantivo</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>noun_verb_ratio</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Razón entre el número de sustantivos y el de formas verbales</td>
+</tr>
+</tbody>
+</table>
+<p>Una cláusula la encabeza el núcleo de una oración o una palabra con la relación <code>ccomp</code>, <code>advcl</code>, <code>acl</code> o <code>csubj</code>; los modelos españoles no usan subtipos, así que una oración de relativo lleva el <code>acl</code> sin más. Los participios y los gerundios no encabezan una cláusula de esa clase - se cuentan aparte -, ni tampoco un infinitivo bajo <code>acl</code> (<code>el deseo de irse</code>). Un inciso (<code>parataxis</code>) y un predicado coordinado (<code>conj</code> del núcleo de una cláusula) cuentan solo cuando son un verbo o llevan sujeto propio.</p>
+<h2 id="constructions">Construcciones del estilo administrativo<a class="headerlink" href="#constructions" title="Permanent link">&para;</a></h2>
+<p>Las construcciones son las que advierten las guías españolas de lenguaje claro: la pasiva, las cláusulas de participio y de gerundio, las cadenas de <code>de</code>, los predicados escindidos.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Atributo</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>de_chains_per_sent</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Cadenas de <code>de</code> por oración</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>max_de_chain_len</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Longitud máxima de una cadena de <code>de</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>participle_clauses_per_sent</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Cláusulas de participio por oración</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>mean_participle_clause_len</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Longitud media de una cláusula de participio en palabras</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>gerund_clauses_per_sent</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Cláusulas de gerundio por oración</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>mean_gerund_clause_len</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Longitud media de una cláusula de gerundio en palabras</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>p_passive</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Proporción de formas pasivas entre las formas verbales</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>p_agentless_passive</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Proporción de formas sin agente entre las pasivas</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>se_passives_per_sent</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Pasivas con <code>se</code> por oración</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>impersonal_se_per_sent</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Oraciones impersonales con <code>se</code> por oración</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>infinitives_per_sent</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Infinitivos por oración</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>negations_per_sent</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Palabras de negación por oración</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>split_predicates_per_sent</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Predicados escindidos por oración</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Una <strong>cadena de <code>de</code></strong> son dos o más complementos encajados introducidos por <code>de</code> o su contracción <code>del</code>: <code>el aumento de la eficiencia del uso de los recursos</code> es una cadena de longitud 3. Un complemento suelto (<code>el uso del agua</code>) no es una cadena.</li>
+<li>Una <strong>cláusula de participio</strong> es un participio con al menos un dependiente que no es el predicado de su cláusula: <code>la casa, construida por los obreros, se vendió</code> tiene una, <code>el autor ha escrito el libro</code> ninguna, porque el participio de un tiempo compuesto lleva auxiliar. Una <strong>cláusula de gerundio</strong> es lo mismo para un gerundio, dejando fuera las perífrasis: las que los modelos construyen con auxiliar (<code>está cantando</code>, <code>va aumentando</code>) y las que cuelgan de su verbo como <code>xcomp</code> o <code>advcl</code> (<code>sigue trabajando</code>, <code>lleva años estudiando</code>, <code>acabó reconociendo</code>).</li>
+<li>La <strong>pasiva</strong> es un participio con el auxiliar <code>ser</code> (<code>la casa fue construida</code>) o un verbo con el <code>se</code> de la pasiva (<code>se construyó la casa</code>). Los modelos españoles dan al auxiliar de la pasiva la relación <code>aux</code> sin más y a su sujeto el <code>nsubj</code> sin más, así que es el lema del auxiliar lo que distingue <code>fue construida</code> de <code>ha construido</code>; en presente leen a menudo el auxiliar como cópula (<code>el proyecto es financiado</code>), y cuentan las dos relaciones. Una pasiva es <strong>sin agente</strong> cuando ningún complemento suyo va introducido por <code>por</code>.</li>
+<li>Un <strong>predicado escindido</strong> es un verbo soporte (<code>hacer</code>, <code>dar</code>, <code>tomar</code>, <code>tener</code>, <code>poner</code>, <code>llevar</code>, <code>prestar</code>, <code>efectuar</code>, <code>realizar</code>, <code>proceder</code>, <code>proporcionar</code>, <code>ejercer</code>) con una parte nominal derivada de un verbo (<code>revisión</code>, <code>decisión</code>, <code>uso</code>): <code>hacer una revisión</code> en lugar de <code>revisar</code>. Los sustantivos de las expresiones fijas - <code>cabo</code>, <code>manifiesto</code>, <code>parte</code>, <code>lugar</code>, <code>cuenta</code> - cuentan solo con el verbo con el que están fijados, de modo que <code>llevar a cabo</code> y <code>tomar parte</code> son predicados escindidos y <code>dar traslado a las partes</code> o <code>poner en primer lugar la seguridad</code> no lo son. Un complemento con preposición es la parte nominal solo en una expresión fija (<code>poner de manifiesto</code>) o con un verbo que la toma así (<code>proceder a la votación</code>); el agente de una pasiva nunca lo es. Los pares hallados están en el atributo <code>split_predicates</code>.</li>
+<li>Una <strong>palabra de negación</strong> lleva <code>Polarity=Neg</code>, que los modelos dan solo a <code>no</code>, o es una de <code>nunca</code>, <code>jamás</code>, <code>nada</code>, <code>nadie</code>, <code>ninguno</code> y <code>tampoco</code>; la conjunción <code>ni</code> de <code>ni... ni</code> no lo es. Cuenta cada una de esas palabras, así que la concordancia negativa del español, donde una negación se escribe dos veces (<code>no vino nadie</code>), da dos.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Advertencia</p>
+<p>Las estadísticas valen lo que vale el análisis sintáctico. <code>es_core_news_sm</code> distingue mal los tres <code>se</code> del español: en las páginas españolas de este sitio marca 60 como <code>se</code> de pasiva, 51 como de verbo pronominal y solo 2 como impersonal, y lee <code>se fue dando un portazo</code> como una pasiva. Lea <code>se_passives_per_sent</code> e <code>impersonal_se_per_sent</code> juntas y no por separado. El agente de la pasiva es otro punto débil - los modelos no tienen la relación <code>obl:agent</code> y anotan <code>por los obreros</code> tanto como objeto como como oblicuo -, y por eso el agente se busca por su preposición y no por su relación.</p>
+</div>
+<h2 id="counts">Recuentos<a class="headerlink" href="#counts" title="Permanent link">&para;</a></h2>
+<p>Además de las estadísticas, el objeto guarda los recuentos con los que están hechas, útiles por sí mismos.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Atributo</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>n_sents</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de oraciones con palabras</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_words</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de palabras</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_leaves</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de hojas, palabras sin ninguna dependiente</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_subtrees</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de subárboles, palabras con dependientes</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_coordination_chains</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de cadenas de coordinación</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_clauses</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de cláusulas</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_subordinate_clauses</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de cláusulas subordinadas</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_complex_sents</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de oraciones con subordinada</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_nouns</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de sustantivos</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_de_chains</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de cadenas de <code>de</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_participle_clauses</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de cláusulas de participio</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_gerund_clauses</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de cláusulas de gerundio</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_verbs</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de formas verbales</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_passive</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de formas verbales pasivas</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_agentless_passive</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de formas pasivas sin agente</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_se_passives</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de pasivas con <code>se</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_impersonal_se</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de oraciones impersonales con <code>se</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_infinitives</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de infinitivos</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_negations</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de palabras de negación</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_split_predicates</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Número de predicados escindidos</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>split_predicates</code></td>
+<td style="text-align: center;">tuple[str]</td>
+<td style="text-align: center;">Tupla de los predicados escindidos (verbo y sustantivo)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>c_children</code></td>
+<td style="text-align: center;">dict[int, int]</td>
+<td style="text-align: center;">Distribución de las palabras por número de dependientes</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>c_deps</code></td>
+<td style="text-align: center;">dict[str, int]</td>
+<td style="text-align: center;">Distribución de las palabras por relación sintáctica</td>
+</tr>
+</tbody>
+</table>
+<h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
+<h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
+<p>Devuelve un diccionario con las estadísticas sintácticas calculadas.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<p><em>Código</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Importar la biblioteca</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">SyntaxStats</span>
+
+<span class="c1"># Preparar los datos</span>
+<span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"La revisión de las cuentas del organismo fue realizada por el comité. "</span>
+    <span class="s2">"Se llevó a cabo la reforma, aprobada en 1998, sin que nadie hiciera "</span>
+    <span class="s2">"mención de los problemas."</span>
+<span class="p">)</span>
+
+<span class="c1"># Calcular las estadísticas</span>
+<span class="n">ss</span> <span class="o">=</span> <span class="n">SyntaxStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="n">ss</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
+</code></pre></div>
+<p><em>Resultado</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="o">{</span><span class="s1">'mean_dependency_distance'</span>:<span class="w"> </span><span class="m">2</span>.259259259259259,
+<span class="s1">'std_dependency_distance'</span>:<span class="w"> </span><span class="m">2</span>.1532506449997975,
+<span class="s1">'max_dependency_distance'</span>:<span class="w"> </span><span class="m">9</span>.0,
+<span class="s1">'p_adjacent_dependencies'</span>:<span class="w"> </span><span class="m">0</span>.48148148148148145,
+<span class="s1">'tree_depth'</span>:<span class="w"> </span><span class="m">4</span>.0,
+<span class="s1">'leaves_per_sent'</span>:<span class="w"> </span><span class="m">8</span>.0,
+<span class="s1">'subtrees_per_sent'</span>:<span class="w"> </span><span class="m">6</span>.5,
+<span class="s1">'nodes_per_leaf'</span>:<span class="w"> </span><span class="m">1</span>.8015873015873014,
+<span class="s1">'verb_valency'</span>:<span class="w"> </span><span class="m">4</span>.0,
+<span class="s1">'coordination_chains_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.0,
+<span class="s1">'mean_coordination_chain_len'</span>:<span class="w"> </span>nan,
+<span class="s1">'clauses_per_sent'</span>:<span class="w"> </span><span class="m">1</span>.5,
+<span class="s1">'mean_clause_len'</span>:<span class="w"> </span><span class="m">9</span>.666666666666666,
+<span class="s1">'subordinate_clauses_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
+<span class="s1">'p_complex_sents'</span>:<span class="w"> </span><span class="m">0</span>.5,
+<span class="s1">'modifiers_per_noun'</span>:<span class="w"> </span><span class="m">1</span>.0,
+<span class="s1">'de_chains_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
+<span class="s1">'max_de_chain_len'</span>:<span class="w"> </span><span class="m">2</span>,
+<span class="s1">'participle_clauses_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
+<span class="s1">'mean_participle_clause_len'</span>:<span class="w"> </span><span class="m">3</span>.0,
+<span class="s1">'gerund_clauses_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.0,
+<span class="s1">'mean_gerund_clause_len'</span>:<span class="w"> </span>nan,
+<span class="s1">'p_passive'</span>:<span class="w"> </span><span class="m">0</span>.6666666666666666,
+<span class="s1">'p_agentless_passive'</span>:<span class="w"> </span><span class="m">0</span>.5,
+<span class="s1">'se_passives_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
+<span class="s1">'impersonal_se_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.0,
+<span class="s1">'infinitives_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.0,
+<span class="s1">'negations_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
+<span class="s1">'split_predicates_per_sent'</span>:<span class="w"> </span><span class="m">1</span>.0,
+<span class="s1">'noun_verb_ratio'</span>:<span class="w"> </span><span class="m">3</span>.0<span class="o">}</span>
+</code></pre></div>
+<p>Los predicados escindidos del texto están en un atributo propio:</p>
+<div class="highlight"><pre><span></span><code><span class="n">ss</span><span class="o">.</span><span class="n">split_predicates</span>
+<span class="c1"># ('llevó cabo', 'hiciera mención')</span>
+</code></pre></div>
+</div>
+<h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
+<p>Muestra una tabla con las estadísticas sintácticas calculadas.</p>
+<p>Para ilustrar el método reutilizamos el código del ejemplo anterior:</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<p><em>Código</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+
+<span class="c1"># Mostrar la tabla de las estadísticas calculadas</span>
+<span class="n">ss</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
+</code></pre></div>
+<p><em>Resultado</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="w">                    </span>Statistic<span class="w">                     </span><span class="p">|</span><span class="w">  </span>Value
+------------------------------------------------------------
+Mean<span class="w"> </span>dependency<span class="w"> </span>distance<span class="w">                          </span><span class="p">|</span><span class="w">   </span><span class="m">2</span>.26
+Standard<span class="w"> </span>deviation<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>dependency<span class="w"> </span>distance<span class="w">     </span><span class="p">|</span><span class="w">   </span><span class="m">2</span>.15
+Mean<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>longest<span class="w"> </span>dependencies<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>sentences<span class="w"> </span><span class="p">|</span><span class="w">   </span><span class="m">9</span>.00
+Share<span class="w"> </span>of<span class="w"> </span>adjacent<span class="w"> </span>dependencies<span class="w">                    </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.48
+Depth<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>dependency<span class="w"> </span>tree<span class="w">                      </span><span class="p">|</span><span class="w">   </span><span class="m">4</span>.00
+Leaves<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                               </span><span class="p">|</span><span class="w">   </span><span class="m">8</span>.00
+Subtrees<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                             </span><span class="p">|</span><span class="w">   </span><span class="m">6</span>.50
+Mean<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>nodes<span class="w"> </span>per<span class="w"> </span>leaf<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>sentences<span class="w">       </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.80
+Valency<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>finite<span class="w"> </span>verbs<span class="w">                       </span><span class="p">|</span><span class="w">   </span><span class="m">4</span>.00
+Coordination<span class="w"> </span>chains<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                  </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
+Mean<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>coordination<span class="w"> </span>chain<span class="w">               </span><span class="p">|</span><span class="w">   </span>nan
+Clauses<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                              </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.50
+Mean<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>clause<span class="w"> </span><span class="o">(</span>words<span class="o">)</span><span class="w">                   </span><span class="p">|</span><span class="w">   </span><span class="m">9</span>.67
+Subordinate<span class="w"> </span>clauses<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                  </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
+Share<span class="w"> </span>of<span class="w"> </span>sentences<span class="w"> </span>with<span class="w"> </span>a<span class="w"> </span>subordinate<span class="w"> </span>clause<span class="w">      </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
+Modifiers<span class="w"> </span>per<span class="w"> </span>noun<span class="w"> </span>phrase<span class="w">                         </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.00
+Chains<span class="w"> </span>of<span class="w"> </span>de<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                         </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
+Maximum<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>chain<span class="w"> </span>of<span class="w"> </span>de<span class="w">                   </span><span class="p">|</span><span class="w">   </span><span class="m">2</span>.00
+Participial<span class="w"> </span>clauses<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                  </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
+Mean<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>participial<span class="w"> </span>clause<span class="w"> </span><span class="o">(</span>words<span class="o">)</span><span class="w">       </span><span class="p">|</span><span class="w">   </span><span class="m">3</span>.00
+Gerund<span class="w"> </span>clauses<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                       </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
+Mean<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>gerund<span class="w"> </span>clause<span class="w"> </span><span class="o">(</span>words<span class="o">)</span><span class="w">            </span><span class="p">|</span><span class="w">   </span>nan
+Share<span class="w"> </span>of<span class="w"> </span>passive<span class="w"> </span>forms<span class="w"> </span>among<span class="w"> </span>the<span class="w"> </span>verbs<span class="w">            </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.67
+Share<span class="w"> </span>of<span class="w"> </span>agentless<span class="w"> </span>forms<span class="w"> </span>among<span class="w"> </span>the<span class="w"> </span>passive<span class="w"> </span>ones<span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
+Passives<span class="w"> </span>with<span class="w"> </span>se<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                     </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
+Impersonal<span class="w"> </span>sentences<span class="w"> </span>with<span class="w"> </span>se<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">         </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
+Infinitives<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                          </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
+Words<span class="w"> </span>of<span class="w"> </span>negation<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                    </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
+Split<span class="w"> </span>predicates<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                     </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.00
+Ratio<span class="w"> </span>of<span class="w"> </span>nouns<span class="w"> </span>to<span class="w"> </span>verbs<span class="w">                           </span><span class="p">|</span><span class="w">   </span><span class="m">3</span>.00
+</code></pre></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/SergeyShk" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/kouki91/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../../js/config.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+      
+    
+  </body>
+</html>
