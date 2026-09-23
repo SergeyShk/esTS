@@ -15,6 +15,13 @@
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/authors/"/>
     </url>
     <url>
+        <loc>Nonecomponents/</loc>
+        <lastmod>2026-09-23</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonecomponents/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/components/"/>
+    </url>
+    <url>
         <loc>Noneexceptions/</loc>
         <lastmod>2026-09-23</lastmod>
         <changefreq>daily</changefreq>
@@ -125,6 +132,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/authors/"/>
         <xhtml:link rel="alternate" hreflang="en" href="Noneauthors/"/>
+    </url>
+    <url>
+        <loc>Nonees/components/</loc>
+        <lastmod>2026-09-23</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/components/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonecomponents/"/>
     </url>
     <url>
         <loc>Nonees/exceptions/</loc>

@@ -283,6 +283,25 @@
   
   
   
+    <li class="md-tabs__item">
+      <a href="components/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  spaCy components
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
     
     
       <li class="md-tabs__item">
@@ -771,6 +790,33 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    spaCy components
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     
     
     
@@ -783,10 +829,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
             
   
   
@@ -804,8 +850,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -861,10 +907,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
         
           
-          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
             
   
   
@@ -882,8 +928,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -975,10 +1021,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
         
           
-          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
             
   
   
@@ -996,8 +1042,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_3">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1256,8 +1302,9 @@
 <li>compute <a href="stats/morph_stats/">morphological statistics</a> on Universal Dependencies (parts of speech and fifteen grammatical features) with the markers of Spanish: the moods, the non-finite forms, the copulas <code>ser</code> and <code>estar</code>, the adverbs in <code>-mente</code></li>
 <li>compute <a href="stats/syntax_stats/">syntactic statistics</a> on the dependency tree (dependency distances, depth, clauses, coordination) with the constructions of the administrative style: the passive with <code>ser</code> and with <code>se</code>, the participial and the gerund clauses, the chains of <code>de</code>, the split predicates</li>
 <li>compute <a href="stats/cohesion_stats/">cohesion statistics</a> in the manner of Coh-Metrix (the overlap of nouns, arguments and content words between sentences, givenness, temporal cohesion) with the density of 255 Spanish discourse markers by class</li>
+<li>add the statistics to a <a href="components/">spaCy pipeline</a> as components, so that a text is annotated and measured in one pass and the statistics travel with the <code>Doc</code></li>
 </ul>
-<p>The spaCy components close 0.2, corpus measures and stylometry come in 0.3, style, phonostatistics, metre and rhyme in 0.4.</p>
+<p>Corpus measures and stylometry come in 0.3, style, phonostatistics, metre and rhyme in 0.4.</p>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <p>Requires Python 3.11 or newer.</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyests
@@ -1320,6 +1367,7 @@
 <li><strong>ests</strong>:<ul>
 <li>basic_stats.py - basic text statistics</li>
 <li>cohesion_stats.py - cohesion statistics</li>
+<li>components.py - components of a spaCy pipeline</li>
 <li>constants.py - constants of the Spanish language and of the metrics</li>
 <li>diversity_stats.py - lexical diversity metrics</li>
 <li>exceptions.py - library exceptions</li>

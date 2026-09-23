@@ -280,6 +280,25 @@
   
   
   
+  
+    <li class="md-tabs__item">
+      <a href="../../components/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  spaCy components
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
     
   
   
@@ -684,6 +703,33 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    spaCy components
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -703,10 +749,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -724,8 +770,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -781,10 +827,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
         
           
-          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
             
   
   
@@ -802,8 +848,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -895,10 +941,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
         
           
-          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
             
   
   
@@ -916,8 +962,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_3">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1391,7 +1437,7 @@
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
 <p>A module for computing the cohesion statistics of a text in the manner of <a href="https://doi.org/10.1017/CBO9780511894664">Coh-Metrix</a> and of its Spanish adaptation <a href="https://aclanthology.org/W16-4105/">Coh-Metrix-Esp</a>: the overlap of nouns, of arguments and of content words between sentences, givenness, temporal cohesion and the density of the discourse markers.</p>
-<p>Sentences are compared by lemmas, and the features come from the annotation of <a href="https://universaldependencies.org/u/feat/">Universal Dependencies</a>, so the source has to be tagged: a string is parsed with <a href="../../installation/#model"><code>es_core_news_sm</code></a> or with the pipeline passed in <code>nlp</code>, and a <code>Doc</code> must carry the parts of speech. Without sentence boundaries - a pipeline with a tagger but no parser - the sentences are taken from the text by <a href="../../extractors/sentences/"><code>SentsExtractor</code></a>.</p>
+<p>Sentences are compared by lemmas, and the features come from the annotation of <a href="https://universaldependencies.org/u/feat/">Universal Dependencies</a>, so the source has to be annotated: a string is parsed with <a href="../../installation/#model"><code>es_core_news_sm</code></a> or with the pipeline passed in <code>nlp</code>, and a <code>Doc</code> must carry the parts of speech, which come from a <code>morphologizer</code> (or a <code>tagger</code> with an <code>attribute_ruler</code>), and the lemmas, which come from a <code>lemmatizer</code>; a source without either raises <code>SourceError</code>, and without the lemmas the overlaps would be computed on empty strings, where every noun overlaps with every other. Without sentence boundaries - a pipeline with no parser - the sentences are taken from the text by <a href="../../extractors/sentences/"><code>SentsExtractor</code></a>.</p>
 <p>A text longer than the <code>max_length</code> of the pipeline - a million characters by default - raises <code>SourceError</code>: split it into parts, or raise <code>max_length</code> on a pipeline of your own and pass it in <code>nlp</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>

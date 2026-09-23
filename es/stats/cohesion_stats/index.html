@@ -280,6 +280,25 @@
   
   
   
+  
+    <li class="md-tabs__item">
+      <a href="../../components/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Componentes de spaCy
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
     
   
   
@@ -684,6 +703,33 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Componentes de spaCy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -703,10 +749,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -724,8 +770,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -781,10 +827,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
         
           
-          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
             
   
   
@@ -802,8 +848,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -895,10 +941,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
         
           
-          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
             
   
   
@@ -916,8 +962,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_3">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1391,7 +1437,7 @@
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
 <p>Módulo para calcular las estadísticas de cohesión de un texto a la manera de <a href="https://doi.org/10.1017/CBO9780511894664">Coh-Metrix</a> y de su adaptación española <a href="https://aclanthology.org/W16-4105/">Coh-Metrix-Esp</a>: la repetición de sustantivos, de argumentos y de palabras con contenido entre oraciones, la información dada, la cohesión temporal y la densidad de los marcadores del discurso.</p>
-<p>Las oraciones se comparan por lemas, y los rasgos vienen de la anotación de <a href="https://universaldependencies.org/u/feat/">Universal Dependencies</a>, así que la fuente tiene que estar etiquetada: una cadena se analiza con <a href="../../installation/#model"><code>es_core_news_sm</code></a> o con el pipeline indicado en <code>nlp</code>, y un <code>Doc</code> debe llevar las categorías gramaticales. Sin límites de oración - un pipeline con etiquetador pero sin analizador - las oraciones se toman del texto con <a href="../../extractors/sentences/"><code>SentsExtractor</code></a>.</p>
+<p>Las oraciones se comparan por lemas, y los rasgos vienen de la anotación de <a href="https://universaldependencies.org/u/feat/">Universal Dependencies</a>, así que la fuente tiene que estar anotada: una cadena se analiza con <a href="../../installation/#model"><code>es_core_news_sm</code></a> o con el pipeline indicado en <code>nlp</code>, y un <code>Doc</code> debe llevar las categorías gramaticales, que vienen de un <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>), y los lemas, que vienen de un <code>lemmatizer</code>; una fuente sin unas u otros levanta <code>SourceError</code>, y sin los lemas las repeticiones se calcularían sobre cadenas vacías, donde cada sustantivo se repite con todos los demás. Sin límites de oración - un pipeline sin analizador - las oraciones se toman del texto con <a href="../../extractors/sentences/"><code>SentsExtractor</code></a>.</p>
 <p>Un texto más largo que el <code>max_length</code> del pipeline - un millón de caracteres por defecto - levanta <code>SourceError</code>: divídalo en partes o suba <code>max_length</code> en un pipeline propio y páselo en <code>nlp</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
