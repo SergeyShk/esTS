@@ -21,6 +21,7 @@ nav:
       - Lexical diversity metrics:
         - Metrics module: stats/diversity_stats.md
         - Metric functions: stats/diversity_stats_funcs.md
+      - Morphological statistics: stats/morph_stats.md
 
 theme:
   name: material
@@ -69,6 +70,7 @@ plugins:
             Metrics module: Módulo de las métricas
             Metric functions: Funciones de las métricas
             Lexical diversity metrics: Métricas de diversidad léxica
+            Morphological statistics: Estadísticas morfológicas
 
 extra:
   social:

@@ -28,17 +28,18 @@
 
 ---
 
-**esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability and lexical diversity - by published formulas with the coefficients and the scales of their authors, deterministically and without a neural network inside.
+**esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity and morphology - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
 
-The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy), and needs no trained model: sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography.
+The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography, and only the morphological statistics need a trained model.
 
 * **[Object extraction](https://sergeyshk.github.io/esTS/extractors/sentences/)** - configurable sentence, word and character N-gram tokenizers that know the inverted marks, the dialogue dash and the abbreviations of Spanish
 * **[Syllables and stress](https://sergeyshk.github.io/esTS/syllables/)** - rule-based syllabification and the stressed syllable derived from the spelling, with no dictionary
 * **[Basic statistics](https://sergeyshk.github.io/esTS/stats/basic_stats/)** - counts of sentences, words, letters, syllables and punctuation marks by type, with distributions and normalized shares
 * **[Readability metrics](https://sergeyshk.github.io/esTS/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX, with a consensus grade, the school stages of Spain and reading time
 * **[Lexical diversity metrics](https://sergeyshk.github.io/esTS/stats/diversity_stats/)** - TTR and its variations, MATTR, MSTTR, MTLD, HD-D, Simpson's and Yule's indices, entropy, Zipf's and Heaps' laws
+* **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fourteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
 
-Morphology, syntax and cohesion on Universal Dependencies come in 0.2, corpus measures and stylometry in 0.3, style, phonostatistics, metre and rhyme in 0.4.
+Syntax and cohesion come in the rest of 0.2, corpus measures and stylometry in 0.3, style, phonostatistics, metre and rhyme in 0.4.
 
 ## Installation
 
@@ -54,7 +55,7 @@ Or with [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-The distribution on PyPI is `pyests`, the package it installs is `ests`. No spaCy model is needed for the statistics of 0.1; one is needed only to parse a text yourself and pass the `Doc` instead of a string:
+The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, the readability and the lexical diversity metrics need no spaCy model; the morphological statistics do, and so does parsing a text yourself to pass the `Doc` instead of a string:
 
 ```bash
 python -m spacy download es_core_news_sm
@@ -297,6 +298,41 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/diversity_sta
 
 </details>
 
+<details>
+<summary><b>Morphological statistics</b></summary>
+
+<br>
+
+The library annotates a text with the parts of speech and the grammatical features of Universal Dependencies, as the Spanish models of spaCy give them, and counts them:
+
+*   the part of speech and fourteen features: case, definiteness, degree, gender, mood, numeral type, number, person, polarity, possessive, pronoun type, reflexive, tense and verb form
+*   the distribution of the words by the values of any feature, and the parse of the text word by word
+*   the markers of Spanish: the moods among the finite forms, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
+
+```python
+>>> from ests import MorphStats
+
+>>> ms = MorphStats("Si tuviera tiempo, leería el libro que me recomendaste ayer")
+
+>>> ms.get_stats("mood", "tense", filter_none=True)
+{'mood': {'Sub': 1, 'Cnd': 1, 'Ind': 1}, 'tense': {'Imp': 1, 'Pres': 1}}
+
+>>> ms.tags[1]
+'Mood=Sub|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin'
+
+>>> ms.explain_text("pos", "mood", filter_none=True)[1]
+('tuviera', {'pos': 'VERB', 'mood': 'Sub'})
+
+>>> MorphStats("Ella es alta pero hoy está cansada y habla lentamente").get_markers()["p_ser"]
+0.5
+```
+
+The statistics need a spaCy model: a text is parsed with `es_core_news_sm`, and a bigger model can be passed in `nlp`.
+
+More in the [documentation](https://sergeyshk.github.io/esTS/stats/morph_stats/).
+
+</details>
+
 ## Development
 
 The project uses [uv](https://docs.astral.sh/uv/) for dependency management and [ruff](https://docs.astral.sh/ruff/) for linting and formatting.
@@ -338,6 +374,7 @@ Bug reports, ideas and pull requests are welcome - [issues](https://github.com/S
     *   diversity_stats.py - lexical diversity metrics
     *   exceptions.py - library exceptions
     *   extractors.py - tools for object extraction from a text
+    *   morph_stats.py - morphological statistics
     *   readability_stats.py - readability metrics
     *   syllables.py - syllabification and stress
     *   utils.py - helper tools

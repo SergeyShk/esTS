@@ -1,6 +1,17 @@
 import pytest
+import spacy
 
-from ests.utils import get_tokenizer, is_punctuation, lemmatize, sentenize, tokenize
+from ests.exceptions import DatasetNotFoundError
+from ests.utils import (
+    get_nlp,
+    get_tokenizer,
+    is_punctuation,
+    iter_doc_tokens,
+    iter_doc_words,
+    lemmatize,
+    sentenize,
+    tokenize,
+)
 
 
 @pytest.mark.parametrize(
@@ -192,3 +203,40 @@ def test_lemmatize_cached():
     assert lemmatize("amigos") == "amigo"
     assert lemmatize.cache_info().hits == 1
     assert lemmatize.cache_info().misses == 1
+
+
+def test_iter_doc_tokens():
+    doc = spacy.blank("es")("El 50 % de los libros, ¡vaya!")
+    assert [token.text for token in iter_doc_tokens(doc)] == [
+        "El",
+        "50",
+        "de",
+        "los",
+        "libros",
+        "vaya",
+    ]
+
+
+def test_iter_doc_tokens_span():
+    doc = spacy.blank("es")("El gato duerme. Los niños juegan")
+    assert [token.text for token in iter_doc_tokens(doc[4:])] == ["Los", "niños", "juegan"]
+
+
+def test_iter_doc_words():
+    doc = spacy.blank("es")("El gato duerme")
+    assert list(iter_doc_words(doc)) == [(0, 2, "El"), (3, 7, "gato"), (8, 14, "duerme")]
+
+
+def test_get_nlp():
+    nlp = get_nlp()
+    assert nlp.lang == "es"
+    assert nlp("Los niños juegan")[2].pos_ == "VERB"
+
+
+def test_get_nlp_cached():
+    assert get_nlp() is get_nlp()
+
+
+def test_get_nlp_not_installed():
+    with pytest.raises(DatasetNotFoundError, match="spacy download"):
+        get_nlp("es_core_news_xxl")

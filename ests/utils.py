@@ -5,10 +5,12 @@ from functools import lru_cache
 
 import simplemma
 import spacy
+from spacy.language import Language
 from spacy.tokenizer import Tokenizer
-from spacy.tokens import Doc, Span
+from spacy.tokens import Doc, Span, Token
 
-from .constants import ABBREVIATIONS, DASHES, PUNCTUATIONS, SENTENCE_OPENERS
+from .constants import ABBREVIATIONS, DASHES, PUNCTUATIONS, SENTENCE_OPENERS, SPACY_MODEL
+from .exceptions import DatasetNotFoundError
 
 # End of a sentence: terminal marks, optionally closing quotes or brackets,
 # before whitespace or the end of the text; or a blank line
@@ -207,9 +209,9 @@ def lemmatize(word: str) -> str:
     return simplemma.lemmatize(word, lang="es")
 
 
-def iter_doc_words(source: Doc | Span) -> Iterator[tuple[int, int, str]]:
+def iter_doc_tokens(source: Doc | Span) -> Iterator[Token]:
     """
-    Extracting words with positions from a Doc or Span object
+    Extracting the tokens of the words from a Doc or Span object
 
     Description:
         Whitespace tokens are skipped, punctuation marks and symbols are
@@ -223,12 +225,56 @@ def iter_doc_words(source: Doc | Span) -> Iterator[tuple[int, int, str]]:
         source (Doc|Span): Doc or Span object
 
     Returns:
-        generator[tuple[int, int, str]]: Position of the first character,
-            position after the last character and text of each word
+        generator[Token]: Token of each word
     """
     for token in source:
         if not token.is_space and not is_punctuation(token.text):
-            yield token.idx, token.idx + len(token), token.text
+            yield token
+
+
+def iter_doc_words(source: Doc | Span) -> Iterator[tuple[int, int, str]]:
+    """
+    Extracting words with positions from a Doc or Span object
+
+    Description:
+        The words of iter_doc_tokens with the positions of their tokens
+
+    Arguments:
+        source (Doc|Span): Doc or Span object
+
+    Returns:
+        generator[tuple[int, int, str]]: Position of the first character,
+            position after the last character and text of each word
+    """
+    for token in iter_doc_tokens(source):
+        yield token.idx, token.idx + len(token), token.text
+
+
+@lru_cache(maxsize=4)
+def get_nlp(model: str = SPACY_MODEL) -> Language:
+    """
+    Loading a spaCy pipeline, once per process
+
+    Description:
+        The statistics on Universal Dependencies need a trained model.
+        The default one is es_core_news_sm; a pipeline loaded by the caller
+        can be passed to those statistics instead
+
+    Arguments:
+        model (str): Name of the model
+
+    Returns:
+        Language: Loaded pipeline
+
+    Raises:
+        DatasetNotFoundError: If the model is not installed
+    """
+    try:
+        return spacy.load(model)
+    except OSError as error:
+        raise DatasetNotFoundError(
+            f"The spaCy model {model} is not installed: python -m spacy download {model}"
+        ) from error
 
 
 def count_letters(word: str) -> int:

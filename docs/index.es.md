@@ -4,9 +4,9 @@
 
 *¿Cómo esTáS, texto?*
 
-**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad y diversidad léxica, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, de forma determinista y sin ninguna red neuronal dentro.
+**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica y morfología, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
 
-La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy) y no necesita ningún modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, y las sílabas y el acento se deducen de la ortografía.
+La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy) y solo las estadísticas morfológicas necesitan un modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, y las sílabas y el acento se deducen de la ortografía.
 
 ## Funcionalidad
 
@@ -15,8 +15,9 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 *   calcular [estadísticas básicas del texto](stats/basic_stats.md) (número de oraciones, palabras, letras, sílabas, signos de puntuación por tipo y sus distribuciones)
 *   calcular [métricas de legibilidad](stats/readability_stats.md) (Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX) con grado de consenso, etapas escolares de España y tiempo de lectura
 *   calcular [métricas de diversidad léxica](stats/diversity_stats.md) (Type-Token Ratio y sus variantes, MATTR, MSTTR, Measure of Textual Lexical Diversity, HD-D, los índices de Simpson y de Yule, la entropía, las leyes de Zipf y de Heaps), sobre todo el texto o por ventanas con intervalos de confianza
+*   calcular [estadísticas morfológicas](stats/morph_stats.md) sobre Universal Dependencies (categorías gramaticales y catorce rasgos morfológicos) con los marcadores del español: los modos, las formas no personales, las cópulas `ser` y `estar`, los adverbios en `-mente`
 
-La morfología, la sintaxis y la cohesión sobre Universal Dependencies llegan en la 0.2, las medidas de corpus y la estilometría en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
+La sintaxis y la cohesión llegan en el resto de la 0.2, las medidas de corpus y la estilometría en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
 
 ## Instalación
 
@@ -93,6 +94,7 @@ Punctuation marks   |    2
         *   diversity_stats.py - métricas de diversidad léxica
         *   exceptions.py - excepciones de la biblioteca
         *   extractors.py - herramientas de extracción de objetos del texto
+        *   morph_stats.py - estadísticas morfológicas
         *   readability_stats.py - métricas de legibilidad
         *   syllables.py - silabificación y acento
         *   utils.py - herramientas auxiliares
