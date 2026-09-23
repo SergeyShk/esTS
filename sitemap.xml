@@ -64,6 +64,13 @@
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/basic_stats/"/>
     </url>
     <url>
+        <loc>Nonestats/cohesion_stats/</loc>
+        <lastmod>2026-09-23</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/cohesion_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/cohesion_stats/"/>
+    </url>
+    <url>
         <loc>Nonestats/diversity_stats/</loc>
         <lastmod>2026-09-23</lastmod>
         <changefreq>daily</changefreq>
@@ -167,6 +174,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/basic_stats/"/>
         <xhtml:link rel="alternate" hreflang="en" href="Nonestats/basic_stats/"/>
+    </url>
+    <url>
+        <loc>Nonees/stats/cohesion_stats/</loc>
+        <lastmod>2026-09-23</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/cohesion_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/cohesion_stats/"/>
     </url>
     <url>
         <loc>Nonees/stats/diversity_stats/</loc>

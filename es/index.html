@@ -1127,6 +1127,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="stats/cohesion_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas de cohesión
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1217,7 +1245,7 @@
 <p><img alt="esTS" src="../img/ests.svg" /></p>
 <p><em>¿Cómo esTáS, texto?</em></p>
 <p><strong>esTS</strong> calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica y morfología, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.</p>
-<p>La biblioteca trabaja tanto con cadenas como con objetos <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> y solo las estadísticas morfológicas y las sintácticas necesitan un modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, y las sílabas y el acento se deducen de la ortografía.</p>
+<p>La biblioteca trabaja tanto con cadenas como con objetos <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> y solo las estadísticas morfológicas, las sintácticas y las de cohesión necesitan un modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, y las sílabas y el acento se deducen de la ortografía.</p>
 <h2 id="funcionalidad">Funcionalidad<a class="headerlink" href="#funcionalidad" title="Permanent link">&para;</a></h2>
 <ul>
 <li>construir tokenizadores de <a href="extractors/sentences/">oraciones</a>, <a href="extractors/words/">palabras</a> y <a href="extractors/char_ngrams/">N-gramas de caracteres</a> que conocen los signos de apertura, la raya de diálogo y las abreviaturas del español</li>
@@ -1227,8 +1255,9 @@
 <li>calcular <a href="stats/diversity_stats/">métricas de diversidad léxica</a> (Type-Token Ratio y sus variantes, MATTR, MSTTR, Measure of Textual Lexical Diversity, HD-D, los índices de Simpson y de Yule, la entropía, las leyes de Zipf y de Heaps), sobre todo el texto o por ventanas con intervalos de confianza</li>
 <li>calcular <a href="stats/morph_stats/">estadísticas morfológicas</a> sobre Universal Dependencies (categorías gramaticales y quince rasgos morfológicos) con los marcadores del español: los modos, las formas no personales, las cópulas <code>ser</code> y <code>estar</code>, los adverbios en <code>-mente</code></li>
 <li>calcular <a href="stats/syntax_stats/">estadísticas sintácticas</a> sobre el árbol de dependencias (distancias, profundidad, cláusulas, coordinación) con las construcciones del estilo administrativo: la pasiva con <code>ser</code> y con <code>se</code>, las cláusulas de participio y de gerundio, las cadenas de <code>de</code>, los predicados escindidos</li>
+<li>calcular <a href="stats/cohesion_stats/">estadísticas de cohesión</a> a la manera de Coh-Metrix (repetición de sustantivos, argumentos y palabras con contenido entre oraciones, información dada, cohesión temporal) con la densidad de 255 marcadores del discurso por clase</li>
 </ul>
-<p>La cohesión llega en el resto de la 0.2, las medidas de corpus y la estilometría en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.</p>
+<p>Los componentes de spaCy cierran la 0.2, las medidas de corpus y la estilometría llegan en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.</p>
 <h2 id="instalacion">Instalación<a class="headerlink" href="#instalacion" title="Permanent link">&para;</a></h2>
 <p>Se requiere Python 3.11 o superior.</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyests
@@ -1290,6 +1319,7 @@
 <li><strong>docs</strong> - documentación del proyecto</li>
 <li><strong>ests</strong>:<ul>
 <li>basic_stats.py - estadísticas básicas del texto</li>
+<li>cohesion_stats.py - estadísticas de cohesión</li>
 <li>constants.py - constantes de la lengua española y de las métricas</li>
 <li>diversity_stats.py - métricas de diversidad léxica</li>
 <li>exceptions.py - excepciones de la biblioteca</li>

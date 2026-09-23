@@ -11,16 +11,14 @@
       
       
       
-        <link rel="prev" href="../morph_stats/">
+        <link rel="prev" href="../syntax_stats/">
       
-      
-        <link rel="next" href="../cohesion_stats/">
       
       
         
           <link rel="alternate" href="./" hreflang="en">
         
-          <link rel="alternate" href="../../es/stats/syntax_stats/" hreflang="es">
+          <link rel="alternate" href="../../es/stats/cohesion_stats/" hreflang="es">
         
       
       
@@ -29,7 +27,7 @@
     
     
       
-        <title>Syntactic statistics - esTS</title>
+        <title>Cohesion statistics - esTS</title>
       
     
     
@@ -80,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#syntactic-statistics" class="md-skip">
+        <a href="#cohesion-statistics" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Syntactic statistics
+              Cohesion statistics
             
           </span>
         </div>
@@ -141,7 +139,7 @@
           </li>
         
           <li class="md-select__item">
-            <a href="../../es/stats/syntax_stats/" hreflang="es" class="md-select__link">
+            <a href="../../es/stats/cohesion_stats/" hreflang="es" class="md-select__link">
               Español
             </a>
           </li>
@@ -1025,6 +1023,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../syntax_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Syntactic statistics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1044,7 +1070,7 @@
   <span class="md-ellipsis">
     
   
-    Syntactic statistics
+    Cohesion statistics
   
 
     
@@ -1062,7 +1088,7 @@
   <span class="md-ellipsis">
     
   
-    Syntactic statistics
+    Cohesion statistics
   
 
     
@@ -1110,10 +1136,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#complexity" class="md-nav__link">
+  <a href="#reference" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Measures of complexity
+        Referential cohesion
       
     </span>
   </a>
@@ -1121,10 +1147,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#constructions" class="md-nav__link">
+  <a href="#connectors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Constructions of the administrative style
+        Connectors
       
     </span>
   </a>
@@ -1181,38 +1207,21 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#find_connectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connector search
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../cohesion_stats/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Cohesion statistics
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -1274,10 +1283,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#complexity" class="md-nav__link">
+  <a href="#reference" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Measures of complexity
+        Referential cohesion
       
     </span>
   </a>
@@ -1285,10 +1294,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#constructions" class="md-nav__link">
+  <a href="#connectors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Constructions of the administrative style
+        Connectors
       
     </span>
   </a>
@@ -1345,6 +1354,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#find_connectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connector search
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1365,17 +1385,17 @@
   
 
 
-<h1 id="syntactic-statistics">Syntactic statistics<a class="headerlink" href="#syntactic-statistics" title="Permanent link">&para;</a></h1>
+<h1 id="cohesion-statistics">Cohesion statistics<a class="headerlink" href="#cohesion-statistics" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.syntax_stats.SyntaxStats</strong></p>
+<p><strong>ests.cohesion_stats.CohesionStats</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A module for computing the syntactic statistics of a text on the dependency tree of <a href="https://universaldependencies.org/u/dep/">Universal Dependencies</a>. The data source can be either a text or a <code>Doc</code> object of the <a href="https://github.com/explosion/spaCy">spaCy</a> library, but it has to be parsed: a string is parsed with <a href="../../installation/#model"><code>es_core_news_sm</code></a> or with the pipeline passed in <code>nlp</code>, and a <code>Doc</code> must carry the dependencies, so a <code>Doc</code> of <code>spacy.blank("es")</code> or of a pipeline without a parser is not a valid source.</p>
-<p>Punctuation marks and whitespace are not nodes of the tree: the words are, and the distances are counted in positions of words. The measures of a sentence - the longest dependency, the depth of the tree, the number of leaves and of subtrees, the nodes per leaf - are averaged over the sentences, the constructions are given per sentence, and the passive and the modifiers are shares of the verbs and of the nouns.</p>
+<p>A module for computing the cohesion statistics of a text in the manner of <a href="https://doi.org/10.1017/CBO9780511894664">Coh-Metrix</a> and of its Spanish adaptation <a href="https://aclanthology.org/W16-4105/">Coh-Metrix-Esp</a>: the overlap of nouns, of arguments and of content words between sentences, givenness, temporal cohesion and the density of the discourse markers.</p>
+<p>Sentences are compared by lemmas, and the features come from the annotation of <a href="https://universaldependencies.org/u/feat/">Universal Dependencies</a>, so the source has to be tagged: a string is parsed with <a href="../../installation/#model"><code>es_core_news_sm</code></a> or with the pipeline passed in <code>nlp</code>, and a <code>Doc</code> must carry the parts of speech. Without sentence boundaries - a pipeline with a tagger but no parser - the sentences are taken from the text by <a href="../../extractors/sentences/"><code>SentsExtractor</code></a>.</p>
 <p>A text longer than the <code>max_length</code> of the pipeline - a million characters by default - raises <code>SourceError</code>: split it into parts, or raise <code>max_length</code> on a pipeline of your own and pass it in <code>nlp</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The statistics are computed when the <code>SyntaxStats</code> object is initialized.</p>
+<p>The statistics are computed when the <code>CohesionStats</code> object is initialized.</p>
 </div>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
@@ -1395,6 +1415,18 @@
 <td style="text-align: center;">Data source (a string or a Doc object)</td>
 </tr>
 <tr>
+<td style="text-align: center;"><code>sents_extractor</code></td>
+<td style="text-align: center;">SentsExtractor</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Sentence extraction tool, used for a Doc with no sentence boundaries</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>connectors</code></td>
+<td style="text-align: center;">dict[str, tuple[str, str]]</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Dictionary of the connectors - class and kind by connector; without it the dictionary of the library is used</td>
+</tr>
+<tr>
 <td style="text-align: center;"><code>nlp</code></td>
 <td style="text-align: center;">Language</td>
 <td style="text-align: center;"><code>None</code></td>
@@ -1402,8 +1434,8 @@
 </tr>
 </tbody>
 </table>
-<h2 id="complexity">Measures of complexity<a class="headerlink" href="#complexity" title="Permanent link">&para;</a></h2>
-<p>The measures of the tree follow the work of Ivanov, Solnyshkina and Solovyev on the syntactic complexity of a text: the dependency distance of Liu (2008) - the distance between a word and its head in positions of words - the depth of the tree, the leaves and the subtrees, the valency of the finite verbs, the coordination chains, the clauses and the modifiers of a noun.</p>
+<h2 id="reference">Referential cohesion<a class="headerlink" href="#reference" title="Permanent link">&para;</a></h2>
+<p>The overlap of Coh-Metrix: a pair of sentences is cohesive when they share the lemma of a noun (CRFNO), of an argument - a noun or a pronoun - (CRFAO) or of a content word (CRFSO). The binary measures give the share of such pairs among the adjacent sentences and among all the pairs of the text; the proportional ones (CRFCWO) give the mean Dice coefficient of the sets of lemmas, <code>2·|A ∩ B| / (|A| + |B|)</code>.</p>
 <table>
 <thead>
 <tr>
@@ -1414,95 +1446,87 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>mean_dependency_distance</code></td>
+<td style="text-align: center;"><code>noun_overlap_adjacent</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean dependency distance</td>
+<td style="text-align: center;">Share of adjacent pairs of sentences sharing a noun</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>std_dependency_distance</code></td>
+<td style="text-align: center;"><code>noun_overlap_all</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Standard deviation of the dependency distance</td>
+<td style="text-align: center;">Share of all pairs of sentences sharing a noun</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>max_dependency_distance</code></td>
+<td style="text-align: center;"><code>argument_overlap_adjacent</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean of the longest dependencies of the sentences, over the sentences that have dependencies</td>
+<td style="text-align: center;">Share of adjacent pairs sharing a noun or a pronoun</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>p_adjacent_dependencies</code></td>
+<td style="text-align: center;"><code>argument_overlap_all</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Share of adjacent dependencies - of length 1</td>
+<td style="text-align: center;">Share of all pairs sharing a noun or a pronoun</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>tree_depth</code></td>
+<td style="text-align: center;"><code>content_overlap_adjacent</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Depth of the dependency tree</td>
+<td style="text-align: center;">Share of adjacent pairs sharing a content word</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>leaves_per_sent</code></td>
+<td style="text-align: center;"><code>content_overlap_all</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Leaves per sentence</td>
+<td style="text-align: center;">Share of all pairs sharing a content word</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>subtrees_per_sent</code></td>
+<td style="text-align: center;"><code>content_overlap_prop_adjacent</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Subtrees per sentence</td>
+<td style="text-align: center;">Mean share of shared content words in adjacent pairs</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>nodes_per_leaf</code></td>
+<td style="text-align: center;"><code>content_overlap_prop_all</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean over the sentences of the words per leaf</td>
+<td style="text-align: center;">Mean share of shared content words in all pairs</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>verb_valency</code></td>
+<td style="text-align: center;"><code>p_pronouns</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean number of dependents of a finite verb</td>
+<td style="text-align: center;">Share of pronouns among the words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>coordination_chains_per_sent</code></td>
+<td style="text-align: center;"><code>pronoun_noun_ratio</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Coordination chains per sentence</td>
+<td style="text-align: center;">Ratio of the number of pronouns to the number of nouns</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>mean_coordination_chain_len</code></td>
+<td style="text-align: center;"><code>p_demonstratives</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean length of a coordination chain</td>
+<td style="text-align: center;">Share of demonstratives among the words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>clauses_per_sent</code></td>
+<td style="text-align: center;"><code>p_given</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Clauses per sentence</td>
+<td style="text-align: center;">Share of content words whose lemma was used before in the text</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>mean_clause_len</code></td>
+<td style="text-align: center;"><code>tense_repetition</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean length of a clause in words</td>
+<td style="text-align: center;">Share of adjacent pairs with the same dominant tense</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>subordinate_clauses_per_sent</code></td>
+<td style="text-align: center;"><code>mood_repetition</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Subordinate clauses per sentence</td>
+<td style="text-align: center;">Share of adjacent pairs with the same dominant mood</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>p_complex_sents</code></td>
+<td style="text-align: center;"><code>temporal_cohesion</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Share of sentences with at least one subordinate clause</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>modifiers_per_noun</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean number of modifiers of a noun</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>noun_verb_ratio</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Ratio of the number of nouns to the number of verb forms</td>
+<td style="text-align: center;">Mean of the repetition of the tense and of the mood</td>
 </tr>
 </tbody>
 </table>
-<p>A clause is headed by the head of a sentence or by a word with the relation <code>ccomp</code>, <code>advcl</code>, <code>acl</code> or <code>csubj</code>; the Spanish models use no subtypes, so a relative clause carries the plain <code>acl</code>. The participles and the gerunds head no clause of that kind - they are counted apart - and neither does an infinitive under <code>acl</code> (<code>el deseo de irse</code>). A parenthetical (<code>parataxis</code>) and a coordinated predicate (<code>conj</code> of the head of a clause) count only when they are a verb or carry a subject of their own.</p>
-<h2 id="constructions">Constructions of the administrative style<a class="headerlink" href="#constructions" title="Permanent link">&para;</a></h2>
-<p>The constructions are the ones the Spanish guides to clear language (<em>lenguaje claro</em>) warn about: the passive, the participial and the gerund clauses, the chains of <code>de</code>, the split predicates.</p>
+<p>A noun is <code>NOUN</code> or <code>PROPN</code> and a content word is a <code>NOUN</code>, <code>PROPN</code>, <code>ADJ</code>, <code>VERB</code> or <code>ADV</code>. A pronoun is a <code>PRON</code> or a determiner that points at something - a possessive (<code>Poss=Yes</code>) or a demonstrative or personal one (<code>PronType=Dem</code>, <code>Prs</code>) - so <code>mi libro</code> and <code>este libro</code> hold a pronoun while <code>el libro</code> and <code>cada libro</code> do not: the quantifiers and the indefinites (<code>cada</code>, <code>todos</code>, <code>ningún</code>, <code>otro</code>, <code>cualquier</code>) point at nothing and would inflate a measure of anaphoric density by about a fifth. A demonstrative carries <code>PronType=Dem</code>.</p>
+<p>An argument is a <code>NOUN</code>, <code>PROPN</code> or <code>PRON</code>, the determiners left out even when they count as pronouns: the argument overlap of Coh-Metrix is built on nouns and pronouns proper, and the lemma of <code>este</code> in two sentences is no reference to the same thing.</p>
+<p>Temporal cohesion follows SMTEMP of Coh-Metrix: for every sentence the dominant value of the feature of its verbs is taken, and a pair of adjacent sentences counts as cohesive when the values are equal. Spanish has no aspect in Universal Dependencies, so the mood takes its place next to the tense - the shift from the indicative to the subjunctive is what breaks the temporal frame of a Spanish text. Pairs where one of the sentences has no verb with the feature are skipped, and a text shorter than two sentences leaves every measure of this section <code>nan</code>.</p>
+<h2 id="connectors">Connectors<a class="headerlink" href="#connectors" title="Permanent link">&para;</a></h2>
+<p>The discourse markers (<em>marcadores del discurso</em>) of the classification of Martín Zorraquino and Portolés, 255 of them in <code>ests/resources/connectors.tsv</code>, in seven classes and two kinds: primary - conjunctions, conjunctive locutions and adverbs (<code>porque</code>, <code>aunque</code>, <code>además</code>) - and secondary, the lexicalized phrases (<code>sin embargo</code>, <code>por lo tanto</code>, <code>es decir</code>). The density is given per 1000 words.</p>
 <table>
 <thead>
 <tr>
@@ -1513,85 +1537,65 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>de_chains_per_sent</code></td>
+<td style="text-align: center;"><code>connectors</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Chains of <code>de</code> per sentence</td>
+<td style="text-align: center;">Connectors per 1000 words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>max_de_chain_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Maximum length of a chain of <code>de</code></td>
+<td style="text-align: center;"><code>connectors_causal</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Causal connectors (<code>porque</code>, <code>por lo tanto</code>, <code>así que</code>)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>participle_clauses_per_sent</code></td>
+<td style="text-align: center;"><code>connectors_adversative</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Participial clauses per sentence</td>
+<td style="text-align: center;">Adversative connectors (<code>pero</code>, <code>sin embargo</code>, <code>en cambio</code>)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>mean_participle_clause_len</code></td>
+<td style="text-align: center;"><code>connectors_concessive</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean length of a participial clause in words</td>
+<td style="text-align: center;">Concessive connectors (<code>aunque</code>, <code>a pesar de</code>, <code>de todos modos</code>)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>gerund_clauses_per_sent</code></td>
+<td style="text-align: center;"><code>connectors_temporal</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Gerund clauses per sentence</td>
+<td style="text-align: center;">Temporal connectors (<code>cuando</code>, <code>a continuación</code>, <code>por último</code>)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>mean_gerund_clause_len</code></td>
+<td style="text-align: center;"><code>connectors_additive</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean length of a gerund clause in words</td>
+<td style="text-align: center;">Additive connectors (<code>y</code>, <code>además</code>, <code>por otra parte</code>)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>p_passive</code></td>
+<td style="text-align: center;"><code>connectors_conditional</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Share of passive forms among the verb forms</td>
+<td style="text-align: center;">Conditional connectors (<code>si</code>, <code>a menos que</code>, <code>de lo contrario</code>)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>p_agentless_passive</code></td>
+<td style="text-align: center;"><code>connectors_reformulative</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Share of forms with no agent among the passive ones</td>
+<td style="text-align: center;">Reformulative connectors (<code>es decir</code>, <code>en resumen</code>, <code>por ejemplo</code>)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>se_passives_per_sent</code></td>
+<td style="text-align: center;"><code>connectors_primary</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Passives with <code>se</code> per sentence</td>
+<td style="text-align: center;">Primary connectors per 1000 words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>impersonal_se_per_sent</code></td>
+<td style="text-align: center;"><code>connectors_secondary</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Impersonal sentences with <code>se</code> per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>infinitives_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Infinitives per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>negations_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Words of negation per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>split_predicates_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Split predicates per sentence</td>
+<td style="text-align: center;">Secondary connectors per 1000 words</td>
 </tr>
 </tbody>
 </table>
-<ul>
-<li>A <strong>chain of <code>de</code></strong> is two or more nested complements introduced by <code>de</code> or its contraction <code>del</code>: <code>el aumento de la eficiencia del uso de los recursos</code> is a chain of length 3. A single complement (<code>el uso del agua</code>) is not a chain.</li>
-<li>A <strong>participial clause</strong> is a participle with at least one dependent that is not the predicate of its clause: <code>la casa, construida por los obreros, se vendió</code> has one, <code>el autor ha escrito el libro</code> has none, because the participle of a compound tense carries an auxiliary. A <strong>gerund clause</strong> is the same for a gerund, the periphrases left out: the ones the models build with an auxiliary (<code>está cantando</code>, <code>va aumentando</code>) and the ones they attach to their verb as <code>xcomp</code> or <code>advcl</code> (<code>sigue trabajando</code>, <code>lleva años estudiando</code>, <code>acabó reconociendo</code>).</li>
-<li>The <strong>passive</strong> is a participle with the auxiliary <code>ser</code> (<code>la casa fue construida</code>) or a verb with the <code>se</code> of the passive (<code>se construyó la casa</code>). The Spanish models give the auxiliary of the passive the plain relation <code>aux</code> and its subject the plain <code>nsubj</code>, so it is the lemma of the auxiliary that tells <code>fue construida</code> from <code>ha construido</code>; in the present they often read the auxiliary as a copula instead (<code>el proyecto es financiado</code>), and both relations count. A passive is <strong>agentless</strong> when no complement of it is introduced by <code>por</code>.</li>
-<li>A <strong>split predicate</strong> is a light verb (<code>hacer</code>, <code>dar</code>, <code>tomar</code>, <code>tener</code>, <code>poner</code>, <code>llevar</code>, <code>prestar</code>, <code>efectuar</code>, <code>realizar</code>, <code>proceder</code>, <code>proporcionar</code>, <code>ejercer</code>) with a nominal part derived from a verb (<code>revisión</code>, <code>decisión</code>, <code>uso</code>): <code>hacer una revisión</code> instead of <code>revisar</code>. The nouns of the fixed expressions - <code>cabo</code>, <code>manifiesto</code>, <code>parte</code>, <code>lugar</code>, <code>cuenta</code> - count only with the verb they are fixed with, <code>llevar a cabo</code> and <code>tomar parte</code> being split predicates while <code>dar traslado a las partes</code> and <code>poner en primer lugar la seguridad</code> are not. A complement with a preposition is the nominal part only in a fixed expression (<code>poner de manifiesto</code>) or with a verb that takes it that way (<code>proceder a la votación</code>); the agent of a passive never is. The pairs found are in the attribute <code>split_predicates</code>.</li>
-<li>A <strong>word of negation</strong> carries <code>Polarity=Neg</code>, which the models give to <code>no</code> alone, or is one of <code>nunca</code>, <code>jamás</code>, <code>nada</code>, <code>nadie</code>, <code>ninguno</code> and <code>tampoco</code>; the conjunction <code>ni</code> of <code>ni... ni</code> is not one. Every such word counts, so the negative concord of Spanish, where one negation is written twice (<code>no vino nadie</code>), gives two.</li>
-</ul>
+<p>The connectors are looked for by their word forms in lower case: at every position the longest one is taken, so <code>sin embargo</code> does not fall apart into <code>sin</code>, and the ones found do not overlap. The occurrences are in the attribute <code>connector_spans</code> and their distribution in <code>c_connectors</code>.</p>
+<p>Two rules keep the ordinary uses of those words out. A one-word connector counts only with a part of speech of <code>CONNECTOR_POS</code> - a conjunction, a particle, an adverb, an adposition, an interjection - and never after a determiner, so <code>el antes y el después</code> holds one connector, <code>y</code>, and not three; a proper noun counts only at the start of a sentence, where the models read a marker as one (<code>Primeramente</code>, <code>Concluyendo</code>), so the surname of <code>Ana, Luego y Mas firmaron</code> is no connector. And a marker that is also the head of a prepositional phrase is dropped there: <code>antes de la reunión</code>, <code>después del informe</code>, <code>por encima de 80</code>, <code>al final de la línea</code>, <code>al principio de la oración</code>, <code>luego de la sesión</code> and <code>sobre todo el texto</code> count nothing, while <code>antes, firmó el acta</code>, <code>encima, no vino</code>, <code>al final, no vino</code> and <code>sobre todo cuando llueve</code> count their marker.</p>
+<p>Your own dictionary can be passed in <code>connectors</code>: a mapping from the connector to its class of <code>CONNECTOR_CLASSES</code> and its kind of <code>CONNECTOR_TYPES</code>, an unknown one raising <code>ParameterError</code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>The statistics are as good as the parse. <code>es_core_news_sm</code> tells the three <code>se</code> of Spanish apart poorly: on the Spanish pages of this site it marks 60 as the <code>se</code> of a passive, 51 as the one of a pronominal verb and only 2 as impersonal, and it reads <code>se fue dando un portazo</code> as a passive. Read <code>se_passives_per_sent</code> and <code>impersonal_se_per_sent</code> together rather than apart. The agent of a passive is another weak spot - the models have no relation <code>obl:agent</code> and annotate <code>por los obreros</code> as an object as readily as an oblique - which is why the agent is looked for by its preposition and not by its relation.</p>
+<p>A Spanish marker is most often a phrase built of ordinary words, and those words are counted as words like any other: the noun <code>embargo</code> of <code>sin embargo</code> and the noun <code>ejemplo</code> of <code>por ejemplo</code> are nouns and content words of their sentence, and a text that repeats a marker gains a little overlap from it. Measured on the Spanish pages of this site the difference is below 0.002 for every overlap, but on a text built of markers it would be larger.</p>
 </div>
 <h2 id="counts">Counts<a class="headerlink" href="#counts" title="Permanent link">&para;</a></h2>
-<p>Besides the statistics the object keeps the counts they are built from, which are useful on their own.</p>
 <table>
 <thead>
 <tr>
@@ -1601,6 +1605,16 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td style="text-align: center;"><code>words</code></td>
+<td style="text-align: center;">tuple[tuple[str, ...], ...]</td>
+<td style="text-align: center;">Tuple of the words of every sentence</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>lemmas</code></td>
+<td style="text-align: center;">tuple[tuple[str, ...], ...]</td>
+<td style="text-align: center;">Tuple of the lemmas of every sentence</td>
+</tr>
 <tr>
 <td style="text-align: center;"><code>n_sents</code></td>
 <td style="text-align: center;">int</td>
@@ -1612,171 +1626,103 @@
 <td style="text-align: center;">Number of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_leaves</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of leaves - words with no dependent word</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_subtrees</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of subtrees - words with dependent words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_coordination_chains</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of coordination chains</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_clauses</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of clauses</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_subordinate_clauses</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of subordinate clauses</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_complex_sents</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of sentences with a subordinate clause</td>
-</tr>
-<tr>
 <td style="text-align: center;"><code>n_nouns</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;">Number of nouns</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_de_chains</code></td>
+<td style="text-align: center;"><code>n_pronouns</code></td>
 <td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of chains of <code>de</code></td>
+<td style="text-align: center;">Number of pronouns</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_participle_clauses</code></td>
+<td style="text-align: center;"><code>n_demonstratives</code></td>
 <td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of participial clauses</td>
+<td style="text-align: center;">Number of demonstratives</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_gerund_clauses</code></td>
+<td style="text-align: center;"><code>n_content_words</code></td>
 <td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of gerund clauses</td>
+<td style="text-align: center;">Number of content words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_verbs</code></td>
+<td style="text-align: center;"><code>n_given</code></td>
 <td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of verb forms</td>
+<td style="text-align: center;">Number of content words whose lemma was used before</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_passive</code></td>
+<td style="text-align: center;"><code>n_connectors</code></td>
 <td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of passive verb forms</td>
+<td style="text-align: center;">Number of connectors</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_agentless_passive</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of passive forms with no agent</td>
+<td style="text-align: center;"><code>connector_spans</code></td>
+<td style="text-align: center;">tuple[Connector]</td>
+<td style="text-align: center;">Tuple of the occurrences of the connectors</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_se_passives</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of passives with <code>se</code></td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_impersonal_se</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of impersonal sentences with <code>se</code></td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_infinitives</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of infinitives</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_negations</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of words of negation</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_split_predicates</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of split predicates</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>split_predicates</code></td>
-<td style="text-align: center;">tuple[str]</td>
-<td style="text-align: center;">Tuple of the split predicates (verb and noun)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>c_children</code></td>
-<td style="text-align: center;">dict[int, int]</td>
-<td style="text-align: center;">Distribution of words by number of dependent words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>c_deps</code></td>
+<td style="text-align: center;"><code>c_connectors</code></td>
 <td style="text-align: center;">dict[str, int]</td>
-<td style="text-align: center;">Distribution of words by syntactic relation</td>
+<td style="text-align: center;">Distribution of the occurrences by connector</td>
 </tr>
 </tbody>
 </table>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
-<p>Returns a dictionary with the computed syntactic statistics.</p>
+<p>Returns a dictionary with the computed cohesion statistics.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <p><em>Code</em>:</p>
 <div class="highlight"><pre><span></span><code><span class="c1"># Import the library</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">SyntaxStats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">CohesionStats</span>
 
 <span class="c1"># Prepare the data</span>
 <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">"La revisión de las cuentas del organismo fue realizada por el comité. "</span>
-    <span class="s2">"Se llevó a cabo la reforma, aprobada en 1998, sin que nadie hiciera "</span>
-    <span class="s2">"mención de los problemas."</span>
+    <span class="s2">"El informe fue aprobado por la comisión. Sin embargo, el informe no resuelve "</span>
+    <span class="s2">"el problema. Es decir, la comisión aplazó la decisión. Por lo tanto, el "</span>
+    <span class="s2">"problema sigue abierto."</span>
 <span class="p">)</span>
 
 <span class="c1"># Compute the statistics</span>
-<span class="n">ss</span> <span class="o">=</span> <span class="n">SyntaxStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-<span class="n">ss</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
+<span class="n">cs</span> <span class="o">=</span> <span class="n">CohesionStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
 </code></pre></div>
 <p><em>Result</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">{</span><span class="s1">'mean_dependency_distance'</span>:<span class="w"> </span><span class="m">2</span>.259259259259259,
-<span class="s1">'std_dependency_distance'</span>:<span class="w"> </span><span class="m">2</span>.1532506449997975,
-<span class="s1">'max_dependency_distance'</span>:<span class="w"> </span><span class="m">9</span>.0,
-<span class="s1">'p_adjacent_dependencies'</span>:<span class="w"> </span><span class="m">0</span>.48148148148148145,
-<span class="s1">'tree_depth'</span>:<span class="w"> </span><span class="m">4</span>.0,
-<span class="s1">'leaves_per_sent'</span>:<span class="w"> </span><span class="m">8</span>.0,
-<span class="s1">'subtrees_per_sent'</span>:<span class="w"> </span><span class="m">6</span>.5,
-<span class="s1">'nodes_per_leaf'</span>:<span class="w"> </span><span class="m">1</span>.8015873015873014,
-<span class="s1">'verb_valency'</span>:<span class="w"> </span><span class="m">4</span>.0,
-<span class="s1">'coordination_chains_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.0,
-<span class="s1">'mean_coordination_chain_len'</span>:<span class="w"> </span>nan,
-<span class="s1">'clauses_per_sent'</span>:<span class="w"> </span><span class="m">1</span>.5,
-<span class="s1">'mean_clause_len'</span>:<span class="w"> </span><span class="m">9</span>.666666666666666,
-<span class="s1">'subordinate_clauses_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'p_complex_sents'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'modifiers_per_noun'</span>:<span class="w"> </span><span class="m">1</span>.0,
-<span class="s1">'de_chains_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'max_de_chain_len'</span>:<span class="w"> </span><span class="m">2</span>,
-<span class="s1">'participle_clauses_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'mean_participle_clause_len'</span>:<span class="w"> </span><span class="m">3</span>.0,
-<span class="s1">'gerund_clauses_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.0,
-<span class="s1">'mean_gerund_clause_len'</span>:<span class="w"> </span>nan,
-<span class="s1">'p_passive'</span>:<span class="w"> </span><span class="m">0</span>.6666666666666666,
-<span class="s1">'p_agentless_passive'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'se_passives_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'impersonal_se_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.0,
-<span class="s1">'infinitives_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.0,
-<span class="s1">'negations_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'split_predicates_per_sent'</span>:<span class="w"> </span><span class="m">1</span>.0,
-<span class="s1">'noun_verb_ratio'</span>:<span class="w"> </span><span class="m">3</span>.0<span class="o">}</span>
+<div class="highlight"><pre><span></span><code><span class="o">{</span><span class="s1">'noun_overlap_adjacent'</span>:<span class="w"> </span><span class="m">0</span>.3333333333333333,
+<span class="s1">'noun_overlap_all'</span>:<span class="w"> </span><span class="m">0</span>.5,
+<span class="s1">'argument_overlap_adjacent'</span>:<span class="w"> </span><span class="m">0</span>.3333333333333333,
+<span class="s1">'argument_overlap_all'</span>:<span class="w"> </span><span class="m">0</span>.5,
+<span class="s1">'content_overlap_adjacent'</span>:<span class="w"> </span><span class="m">0</span>.3333333333333333,
+<span class="s1">'content_overlap_all'</span>:<span class="w"> </span><span class="m">0</span>.5,
+<span class="s1">'content_overlap_prop_adjacent'</span>:<span class="w"> </span><span class="m">0</span>.08333333333333333,
+<span class="s1">'content_overlap_prop_all'</span>:<span class="w"> </span><span class="m">0</span>.12037037037037039,
+<span class="s1">'p_pronouns'</span>:<span class="w"> </span><span class="m">0</span>.034482758620689655,
+<span class="s1">'pronoun_noun_ratio'</span>:<span class="w"> </span><span class="m">0</span>.09090909090909091,
+<span class="s1">'p_demonstratives'</span>:<span class="w"> </span><span class="m">0</span>.0,
+<span class="s1">'p_given'</span>:<span class="w"> </span><span class="m">0</span>.17647058823529413,
+<span class="s1">'tense_repetition'</span>:<span class="w"> </span><span class="m">0</span>.0,
+<span class="s1">'mood_repetition'</span>:<span class="w"> </span><span class="m">1</span>.0,
+<span class="s1">'temporal_cohesion'</span>:<span class="w"> </span><span class="m">0</span>.5,
+<span class="s1">'connectors'</span>:<span class="w"> </span><span class="m">103</span>.44827586206898,
+<span class="s1">'connectors_causal'</span>:<span class="w"> </span><span class="m">34</span>.48275862068966,
+<span class="s1">'connectors_adversative'</span>:<span class="w"> </span><span class="m">34</span>.48275862068966,
+<span class="s1">'connectors_concessive'</span>:<span class="w"> </span><span class="m">0</span>.0,
+<span class="s1">'connectors_temporal'</span>:<span class="w"> </span><span class="m">0</span>.0,
+<span class="s1">'connectors_additive'</span>:<span class="w"> </span><span class="m">0</span>.0,
+<span class="s1">'connectors_conditional'</span>:<span class="w"> </span><span class="m">0</span>.0,
+<span class="s1">'connectors_reformulative'</span>:<span class="w"> </span><span class="m">34</span>.48275862068966,
+<span class="s1">'connectors_primary'</span>:<span class="w"> </span><span class="m">0</span>.0,
+<span class="s1">'connectors_secondary'</span>:<span class="w"> </span><span class="m">103</span>.44827586206898<span class="o">}</span>
 </code></pre></div>
-<p>The split predicates of the text are in an attribute of their own:</p>
-<div class="highlight"><pre><span></span><code><span class="n">ss</span><span class="o">.</span><span class="n">split_predicates</span>
-<span class="c1"># ('llevó cabo', 'hiciera mención')</span>
+<p>The occurrences of the connectors are in an attribute of their own:</p>
+<div class="highlight"><pre><span></span><code><span class="n">cs</span><span class="o">.</span><span class="n">connector_spans</span>
+<span class="c1"># (Connector(sent=1, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary'),</span>
+<span class="c1">#  Connector(sent=2, start=0, end=2, text='es decir', cls='reformulative', kind='secondary'),</span>
+<span class="c1">#  Connector(sent=3, start=0, end=3, text='por lo tanto', cls='causal', kind='secondary'))</span>
 </code></pre></div>
 </div>
 <h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
-<p>Prints a table with the computed syntactic statistics.</p>
+<p>Prints a table with the computed cohesion statistics.</p>
 <p>To illustrate the method, we reuse the code from the previous example:</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
@@ -1784,41 +1730,55 @@
 <div class="highlight"><pre><span></span><code><span class="o">...</span>
 
 <span class="c1"># Print the table of computed statistics</span>
-<span class="n">ss</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
 </code></pre></div>
 <p><em>Result</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="w">                    </span>Statistic<span class="w">                     </span><span class="p">|</span><span class="w">  </span>Value
-------------------------------------------------------------
-Mean<span class="w"> </span>dependency<span class="w"> </span>distance<span class="w">                          </span><span class="p">|</span><span class="w">   </span><span class="m">2</span>.26
-Standard<span class="w"> </span>deviation<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>dependency<span class="w"> </span>distance<span class="w">     </span><span class="p">|</span><span class="w">   </span><span class="m">2</span>.15
-Mean<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>longest<span class="w"> </span>dependencies<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>sentences<span class="w"> </span><span class="p">|</span><span class="w">   </span><span class="m">9</span>.00
-Share<span class="w"> </span>of<span class="w"> </span>adjacent<span class="w"> </span>dependencies<span class="w">                    </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.48
-Depth<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>dependency<span class="w"> </span>tree<span class="w">                      </span><span class="p">|</span><span class="w">   </span><span class="m">4</span>.00
-Leaves<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                               </span><span class="p">|</span><span class="w">   </span><span class="m">8</span>.00
-Subtrees<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                             </span><span class="p">|</span><span class="w">   </span><span class="m">6</span>.50
-Mean<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>nodes<span class="w"> </span>per<span class="w"> </span>leaf<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>sentences<span class="w">       </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.80
-Valency<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>finite<span class="w"> </span>verbs<span class="w">                       </span><span class="p">|</span><span class="w">   </span><span class="m">4</span>.00
-Coordination<span class="w"> </span>chains<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                  </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
-Mean<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>coordination<span class="w"> </span>chain<span class="w">               </span><span class="p">|</span><span class="w">   </span>nan
-Clauses<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                              </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.50
-Mean<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>clause<span class="w"> </span><span class="o">(</span>words<span class="o">)</span><span class="w">                   </span><span class="p">|</span><span class="w">   </span><span class="m">9</span>.67
-Subordinate<span class="w"> </span>clauses<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                  </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
-Share<span class="w"> </span>of<span class="w"> </span>sentences<span class="w"> </span>with<span class="w"> </span>a<span class="w"> </span>subordinate<span class="w"> </span>clause<span class="w">      </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
-Modifiers<span class="w"> </span>per<span class="w"> </span>noun<span class="w"> </span>phrase<span class="w">                         </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.00
-Chains<span class="w"> </span>of<span class="w"> </span>de<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                         </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
-Maximum<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>chain<span class="w"> </span>of<span class="w"> </span>de<span class="w">                   </span><span class="p">|</span><span class="w">   </span><span class="m">2</span>.00
-Participial<span class="w"> </span>clauses<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                  </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
-Mean<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>participial<span class="w"> </span>clause<span class="w"> </span><span class="o">(</span>words<span class="o">)</span><span class="w">       </span><span class="p">|</span><span class="w">   </span><span class="m">3</span>.00
-Gerund<span class="w"> </span>clauses<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                       </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
-Mean<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>gerund<span class="w"> </span>clause<span class="w"> </span><span class="o">(</span>words<span class="o">)</span><span class="w">            </span><span class="p">|</span><span class="w">   </span>nan
-Share<span class="w"> </span>of<span class="w"> </span>passive<span class="w"> </span>forms<span class="w"> </span>among<span class="w"> </span>the<span class="w"> </span>verbs<span class="w">            </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.67
-Share<span class="w"> </span>of<span class="w"> </span>agentless<span class="w"> </span>forms<span class="w"> </span>among<span class="w"> </span>the<span class="w"> </span>passive<span class="w"> </span>ones<span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
-Passives<span class="w"> </span>with<span class="w"> </span>se<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                     </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
-Impersonal<span class="w"> </span>sentences<span class="w"> </span>with<span class="w"> </span>se<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">         </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
-Infinitives<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                          </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
-Words<span class="w"> </span>of<span class="w"> </span>negation<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                    </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
-Split<span class="w"> </span>predicates<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                     </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.00
-Ratio<span class="w"> </span>of<span class="w"> </span>nouns<span class="w"> </span>to<span class="w"> </span>verbs<span class="w">                           </span><span class="p">|</span><span class="w">   </span><span class="m">3</span>.00
+<div class="highlight"><pre><span></span><code><span class="w">                        </span>Statistic<span class="w">                         </span><span class="p">|</span><span class="w">  </span>Value
+--------------------------------------------------------------------
+Noun<span class="w"> </span>overlap<span class="w"> </span><span class="k">in</span><span class="w"> </span>adjacent<span class="w"> </span>sentences<span class="w">                        </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.33
+Noun<span class="w"> </span>overlap<span class="w"> </span><span class="k">in</span><span class="w"> </span>all<span class="w"> </span>pairs<span class="w"> </span>of<span class="w"> </span>sentences<span class="w">                    </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
+Argument<span class="w"> </span>overlap<span class="w"> </span><span class="k">in</span><span class="w"> </span>adjacent<span class="w"> </span>sentences<span class="w">                    </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.33
+Argument<span class="w"> </span>overlap<span class="w"> </span><span class="k">in</span><span class="w"> </span>all<span class="w"> </span>pairs<span class="w"> </span>of<span class="w"> </span>sentences<span class="w">                </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
+Content<span class="w"> </span>word<span class="w"> </span>overlap<span class="w"> </span><span class="k">in</span><span class="w"> </span>adjacent<span class="w"> </span>sentences<span class="w">                </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.33
+Content<span class="w"> </span>word<span class="w"> </span>overlap<span class="w"> </span><span class="k">in</span><span class="w"> </span>all<span class="w"> </span>pairs<span class="w"> </span>of<span class="w"> </span>sentences<span class="w">            </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
+Share<span class="w"> </span>of<span class="w"> </span>shared<span class="w"> </span>content<span class="w"> </span>words<span class="w"> </span><span class="k">in</span><span class="w"> </span>adjacent<span class="w"> </span>sentences<span class="w">       </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.08
+Share<span class="w"> </span>of<span class="w"> </span>shared<span class="w"> </span>content<span class="w"> </span>words<span class="w"> </span><span class="k">in</span><span class="w"> </span>all<span class="w"> </span>pairs<span class="w"> </span>of<span class="w"> </span>sentences<span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.12
+Share<span class="w"> </span>of<span class="w"> </span>pronouns<span class="w">                                         </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.03
+Ratio<span class="w"> </span>of<span class="w"> </span>pronouns<span class="w"> </span>to<span class="w"> </span>nouns<span class="w">                                </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.09
+Share<span class="w"> </span>of<span class="w"> </span>demonstratives<span class="w">                                   </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
+Share<span class="w"> </span>of<span class="w"> </span>content<span class="w"> </span>words<span class="w"> </span>seen<span class="w"> </span>before<span class="w">                        </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.18
+Repetition<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>tense<span class="w"> </span><span class="k">in</span><span class="w"> </span>adjacent<span class="w"> </span>sentences<span class="w">             </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
+Repetition<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>mood<span class="w"> </span><span class="k">in</span><span class="w"> </span>adjacent<span class="w"> </span>sentences<span class="w">              </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.00
+Temporal<span class="w"> </span>cohesion<span class="w">                                         </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
+Connectors<span class="w"> </span>per<span class="w"> </span><span class="m">1000</span><span class="w"> </span>words<span class="w">                                 </span><span class="p">|</span><span class="w">  </span><span class="m">103</span>.45
+Causal<span class="w"> </span>connectors<span class="w"> </span>per<span class="w"> </span><span class="m">1000</span><span class="w"> </span>words<span class="w">                          </span><span class="p">|</span><span class="w">  </span><span class="m">34</span>.48
+Adversative<span class="w"> </span>connectors<span class="w"> </span>per<span class="w"> </span><span class="m">1000</span><span class="w"> </span>words<span class="w">                     </span><span class="p">|</span><span class="w">  </span><span class="m">34</span>.48
+Concessive<span class="w"> </span>connectors<span class="w"> </span>per<span class="w"> </span><span class="m">1000</span><span class="w"> </span>words<span class="w">                      </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
+Temporal<span class="w"> </span>connectors<span class="w"> </span>per<span class="w"> </span><span class="m">1000</span><span class="w"> </span>words<span class="w">                        </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
+Additive<span class="w"> </span>connectors<span class="w"> </span>per<span class="w"> </span><span class="m">1000</span><span class="w"> </span>words<span class="w">                        </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
+Conditional<span class="w"> </span>connectors<span class="w"> </span>per<span class="w"> </span><span class="m">1000</span><span class="w"> </span>words<span class="w">                     </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
+Reformulative<span class="w"> </span>connectors<span class="w"> </span>per<span class="w"> </span><span class="m">1000</span><span class="w"> </span>words<span class="w">                   </span><span class="p">|</span><span class="w">  </span><span class="m">34</span>.48
+Primary<span class="w"> </span>connectors<span class="w"> </span>per<span class="w"> </span><span class="m">1000</span><span class="w"> </span>words<span class="w">                         </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
+Secondary<span class="w"> </span>connectors<span class="w"> </span>per<span class="w"> </span><span class="m">1000</span><span class="w"> </span>words<span class="w">                       </span><span class="p">|</span><span class="w">  </span><span class="m">103</span>.45
+</code></pre></div>
+</div>
+<h2 id="find_connectors">Connector search<a class="headerlink" href="#find_connectors" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.cohesion_stats.find_connectors()</strong>, <strong>ests.cohesion_stats.load_connectors()</strong></p>
+</div>
+<p><code>find_connectors(words, connectors=None, sent_index=0, pos=None)</code> finds the connectors of a single sentence and returns their occurrences, and <code>load_connectors()</code> returns the dictionary of the library, the class and the kind by connector; the dictionary is cached and read-only, so a change of it goes through the <code>connectors</code> parameter and not through the object returned.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.cohesion_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_connectors</span><span class="p">,</span> <span class="n">load_connectors</span>
+
+<span class="n">find_connectors</span><span class="p">([</span><span class="s2">"Sin"</span><span class="p">,</span> <span class="s2">"embargo"</span><span class="p">,</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">"vino"</span><span class="p">])</span>
+<span class="c1"># [Connector(sent=0, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary')]</span>
+
+<span class="n">find_connectors</span><span class="p">([</span><span class="s2">"El"</span><span class="p">,</span> <span class="s2">"antes"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">,</span> <span class="s2">"el"</span><span class="p">,</span> <span class="s2">"después"</span><span class="p">],</span> <span class="n">pos</span><span class="o">=</span><span class="p">[</span><span class="s2">"DET"</span><span class="p">,</span> <span class="s2">"NOUN"</span><span class="p">,</span> <span class="s2">"CCONJ"</span><span class="p">,</span> <span class="s2">"DET"</span><span class="p">,</span> <span class="s2">"NOUN"</span><span class="p">])</span>
+<span class="c1"># [Connector(sent=0, start=2, end=3, text='y', cls='additive', kind='primary')]</span>
+
+<span class="n">load_connectors</span><span class="p">()[</span><span class="s2">"por lo tanto"</span><span class="p">]</span>
+<span class="c1"># ('causal', 'secondary')</span>
 </code></pre></div>
 </div>
 

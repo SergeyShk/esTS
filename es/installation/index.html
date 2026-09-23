@@ -1140,6 +1140,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats/cohesion_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas de cohesión
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1254,7 +1282,7 @@
 uv<span class="w"> </span>sync<span class="w"> </span>--all-groups
 </code></pre></div>
 <h2 id="model">El modelo de spaCy<a class="headerlink" href="#model" title="Permanent link">&para;</a></h2>
-<p>Las estadísticas básicas, la legibilidad y la diversidad léxica no necesitan ningún modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas y con el tokenizador del pipeline español vacío, y las sílabas y el acento por la ortografía. Las <a href="../stats/morph_stats/">estadísticas morfológicas</a> y las <a href="../stats/syntax_stats/">sintácticas</a> sí lo necesitan - las sintácticas, un pipeline con analizador -, igual que construir un <code>Doc</code> para pasarlo a las estadísticas en lugar de una cadena; las pruebas también lo necesitan, donde viene con el grupo de dependencias <code>test</code>:</p>
+<p>Las estadísticas básicas, la legibilidad y la diversidad léxica no necesitan ningún modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas y con el tokenizador del pipeline español vacío, y las sílabas y el acento por la ortografía. Las <a href="../stats/morph_stats/">estadísticas morfológicas</a>, las <a href="../stats/syntax_stats/">sintácticas</a> y las <a href="../stats/cohesion_stats/">de cohesión</a> sí lo necesitan - las sintácticas, un pipeline con analizador -, igual que construir un <code>Doc</code> para pasarlo a las estadísticas en lugar de una cadena; las pruebas también lo necesitan, donde viene con el grupo de dependencias <code>test</code>:</p>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>spacy<span class="w"> </span>download<span class="w"> </span>es_core_news_sm
 </code></pre></div>
 
