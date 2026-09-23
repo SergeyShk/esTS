@@ -251,6 +251,16 @@ def iter_doc_words(source: Doc | Span) -> Iterator[tuple[int, int, str]]:
 
 
 @lru_cache(maxsize=4)
+def _load_nlp(model: str) -> Language:
+    """Loading a pipeline by the name of its model, once per name"""
+    try:
+        return spacy.load(model)
+    except OSError as error:
+        raise DatasetNotFoundError(
+            f"The spaCy model {model} is not installed: python -m spacy download {model}"
+        ) from error
+
+
 def get_nlp(model: str = SPACY_MODEL) -> Language:
     """
     Loading a spaCy pipeline, once per process
@@ -258,7 +268,9 @@ def get_nlp(model: str = SPACY_MODEL) -> Language:
     Description:
         The statistics on Universal Dependencies need a trained model.
         The default one is es_core_news_sm; a pipeline loaded by the caller
-        can be passed to those statistics instead
+        can be passed to those statistics instead. The default is resolved
+        before the cache, so that get_nlp() and get_nlp(SPACY_MODEL) are
+        the same pipeline and not two copies of it
 
     Arguments:
         model (str): Name of the model
@@ -268,13 +280,13 @@ def get_nlp(model: str = SPACY_MODEL) -> Language:
 
     Raises:
         DatasetNotFoundError: If the model is not installed
+
+    Example:
+        >>> from ests.utils import get_nlp
+        >>> get_nlp() is get_nlp("es_core_news_sm")
+        True
     """
-    try:
-        return spacy.load(model)
-    except OSError as error:
-        raise DatasetNotFoundError(
-            f"The spaCy model {model} is not installed: python -m spacy download {model}"
-        ) from error
+    return _load_nlp(model)
 
 
 def count_letters(word: str) -> int:

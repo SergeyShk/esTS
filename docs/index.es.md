@@ -15,7 +15,7 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 *   calcular [estadísticas básicas del texto](stats/basic_stats.md) (número de oraciones, palabras, letras, sílabas, signos de puntuación por tipo y sus distribuciones)
 *   calcular [métricas de legibilidad](stats/readability_stats.md) (Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX) con grado de consenso, etapas escolares de España y tiempo de lectura
 *   calcular [métricas de diversidad léxica](stats/diversity_stats.md) (Type-Token Ratio y sus variantes, MATTR, MSTTR, Measure of Textual Lexical Diversity, HD-D, los índices de Simpson y de Yule, la entropía, las leyes de Zipf y de Heaps), sobre todo el texto o por ventanas con intervalos de confianza
-*   calcular [estadísticas morfológicas](stats/morph_stats.md) sobre Universal Dependencies (categorías gramaticales y catorce rasgos morfológicos) con los marcadores del español: los modos, las formas no personales, las cópulas `ser` y `estar`, los adverbios en `-mente`
+*   calcular [estadísticas morfológicas](stats/morph_stats.md) sobre Universal Dependencies (categorías gramaticales y quince rasgos morfológicos) con los marcadores del español: los modos, las formas no personales, las cópulas `ser` y `estar`, los adverbios en `-mente`
 
 La sintaxis y la cohesión llegan en el resto de la 0.2, las medidas de corpus y la estilometría en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
 

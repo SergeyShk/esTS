@@ -15,7 +15,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 *   compute [basic text statistics](stats/basic_stats.md) (numbers of sentences, words, letters, syllables, punctuation marks by type and their distributions)
 *   compute [readability metrics](stats/readability_stats.md) (Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX) with a consensus grade, the school stages of Spain and reading time
 *   compute [lexical diversity metrics](stats/diversity_stats.md) (Type-Token Ratio and its variations, MATTR, MSTTR, Measure of Textual Lexical Diversity, HD-D, the indices of Simpson and Yule, entropy, the laws of Zipf and Heaps), over the whole text or over windows with confidence intervals
-*   compute [morphological statistics](stats/morph_stats.md) on Universal Dependencies (parts of speech and fourteen grammatical features) with the markers of Spanish: the moods, the non-finite forms, the copulas `ser` and `estar`, the adverbs in `-mente`
+*   compute [morphological statistics](stats/morph_stats.md) on Universal Dependencies (parts of speech and fifteen grammatical features) with the markers of Spanish: the moods, the non-finite forms, the copulas `ser` and `estar`, the adverbs in `-mente`
 
 Syntax and cohesion come in the rest of 0.2, corpus measures and stylometry in 0.3, style, phonostatistics, metre and rhyme in 0.4.
 

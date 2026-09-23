@@ -7,7 +7,9 @@
 
 A module for computing the morphological statistics of a text. The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library.
 
-Parts of speech and grammatical features are given in the terms of [Universal Dependencies](https://universaldependencies.org/u/feat/), as the Spanish models of spaCy annotate them. A text is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`; a `Doc` is taken as it is and must carry the annotation of the parts of speech, so a `Doc` of `spacy.blank("es")` is not a valid source. Words are taken from the tokens, punctuation marks and symbols are dropped.
+Parts of speech and grammatical features are given in the terms of [Universal Dependencies](https://universaldependencies.org/u/feat/), as the Spanish models of spaCy annotate them. A text is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, without the entity recognizer, which nothing here reads; a `Doc` is taken as it is and must carry the annotation of the parts of speech, so a `Doc` of `spacy.blank("es")` is not a valid source. Words are taken from the tokens, punctuation marks and symbols are dropped.
+
+A text longer than the `max_length` of the pipeline - a million characters by default, a long novel - raises `SourceError` instead of reaching spaCy: split it into parts, or raise `max_length` on a pipeline of your own and pass it in `nlp`.
 
 !!! note "Note"
     The statistics are computed when the `MorphStats` object is initialized.
@@ -36,6 +38,7 @@ Parts of speech and grammatical features are given in the terms of [Universal De
 | `number` | tuple[str] | Tuple of the values of number |
 | `person` | tuple[str] | Tuple of the values of person |
 | `polarity` | tuple[str] | Tuple of the values of polarity |
+| `polite` | tuple[str] | Tuple of the values of politeness |
 | `poss` | tuple[str] | Tuple of the values of the possessive |
 | `pron_type` | tuple[str] | Tuple of the values of the pronoun type |
 | `reflex` | tuple[str] | Tuple of the values of the reflexive |
@@ -45,11 +48,13 @@ Parts of speech and grammatical features are given in the terms of [Universal De
 Every attribute has the length of `words`, and a word that the model gives the feature no value for holds `None`. The names of the attributes are the names of the statistics accepted by the methods; `tags` and `lemmas` are not statistics.
 
 !!! note "Note"
-    A feature with several values keeps the form of CoNLL-U: the interrogative and relative `qué`, `quién`, `cuál`, which the models do not disambiguate, has `pron_type` equal to `Int,Rel`.
+    A feature with several values keeps the form of CoNLL-U: the interrogative and relative `qué`, `quién`, `cuál`, which the models do not disambiguate, has `pron_type` equal to `Int,Rel`, and `usted` has `case` equal to `Acc,Nom`. `print_stats` describes such a value by the descriptions of its parts - "Interrogative or relative", "Accusative or nominative".
 
 ## Features { #features }
 
-The Spanish models annotate the features of the table below; the value `Unknown` in the printed tables and `None` in the attributes mean that the model gave the word no value of the feature.
+The statistics count the fifteen features of the table below; the value `Unknown` in the printed tables and `None` in the attributes mean that the model gave the word no value of the feature.
+
+They are a subset: the Spanish models annotate 23 features, and the ones left out are either marginal (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`) or live on punctuation (`PunctSide`, `PunctType`), which this module does not treat as words. Whatever the model annotates stays in `tags`, counted or not.
 
 | Statistic | Feature | Values |
 | :-------: | :-----: | :----: |
@@ -63,8 +68,9 @@ The Spanish models annotate the features of the table below; the value `Unknown`
 | `number` | Number | Sing, Plur |
 | `person` | Person | 1, 2, 3 |
 | `polarity` | Polarity | Neg |
+| `polite` | Politeness | Form |
 | `poss` | Possessive | Yes |
-| `pron_type` | Pronoun type | Art, Prs, Dem, Ind, Int,Rel, Neg, Tot, Exc |
+| `pron_type` | Pronoun type | Art, Prs, Dem, Ind, Int, Rel, Neg, Tot, Exc |
 | `reflex` | Reflexive | Yes |
 | `tense` | Tense | Pres, Past, Imp, Fut |
 | `verb_form` | Verb form | Fin, Inf, Part, Ger |
@@ -127,7 +133,11 @@ Returns a dictionary with the markers of Spanish computed from the features. Eve
 | `p_ser` | `ser` among the copulas `ser` and `estar` |
 | `p_mente_adverbs` | Adverbs in `-mente` among the adverbs |
 
-The first four markers share the base of the finite forms and sum to one; the next three share the base of all the verb forms. Verb forms are counted on verbs and auxiliaries, so that the participles that the model annotates as adjectives (`la casa pintada`) stay out of the base, while the ones of the compound tenses and the passive (`he leído`, `fue escrito`) stay in. A marker whose base is empty - a text without verbs, without a copula, without adverbs - is `nan`.
+The first four markers share the base of the finite forms and sum to one wherever the model leaves no finite form without a mood - five of its 433 labels carry `VerbForm=Fin` and no `Mood`, and each such form is missing from all four shares. The next three markers share the base of all the verb forms, counted on verbs and auxiliaries, so that the participles that the model annotates as adjectives (`la casa pintada`) stay out of the base, while the ones of the compound tenses and the passive (`he leído`, `fue escrito`) stay in.
+
+The base of `p_ser` is the copular uses alone, read from the dependency of the token: `fue escrito` and `está cantando` are the auxiliaries of the passive and of the progressive, not a choice between the two copulas, while `es alta`, `está cansada` and `lo importante es que vengas` are. The parse is what tells them apart, so for a `Doc` that carries none the marker is `nan`.
+
+A marker whose base is empty - a text without verbs, without a copula, without adverbs - is `nan`.
 
 !!! note "Note"
     The subjunctive, the choice between `ser` and `estar` and the adverbs in `-mente` are the traits of Spanish that the readability formulas do not see: the subjunctive marks hypothesis and subordination, `estar` a state against the property of `ser`, and the adverbs in `-mente` a formal, written register.

@@ -37,7 +37,7 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Estadísticas básicas](https://sergeyshk.github.io/esTS/es/stats/basic_stats/)** - recuentos de oraciones, palabras, letras, sílabas y signos de puntuación por tipo, con distribuciones y proporciones normalizadas
 * **[Métricas de legibilidad](https://sergeyshk.github.io/esTS/es/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX, con grado de consenso, etapas escolares de España y tiempo de lectura
 * **[Métricas de diversidad léxica](https://sergeyshk.github.io/esTS/es/stats/diversity_stats/)** - TTR y sus variantes, MATTR, MSTTR, MTLD, HD-D, índices de Simpson y de Yule, entropía, leyes de Zipf y de Heaps
-* **[Estadísticas morfológicas](https://sergeyshk.github.io/esTS/es/stats/morph_stats/)** - categorías gramaticales y catorce rasgos morfológicos de Universal Dependencies, con los marcadores del español: los modos, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
+* **[Estadísticas morfológicas](https://sergeyshk.github.io/esTS/es/stats/morph_stats/)** - categorías gramaticales y quince rasgos morfológicos de Universal Dependencies, con los marcadores del español: los modos, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
 
 La sintaxis y la cohesión llegan en el resto de la 0.2, las medidas de corpus y la estilometría en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
 
@@ -305,7 +305,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/diversity_
 
 La biblioteca anota el texto con las categorías gramaticales y los rasgos morfológicos de Universal Dependencies, tal como los dan los modelos españoles de spaCy, y los cuenta:
 
-*   la categoría gramatical y catorce rasgos: caso, definitud, grado, género, modo, tipo de numeral, número, persona, polaridad, posesivo, tipo de pronombre, reflexivo, tiempo verbal y forma verbal
+*   la categoría gramatical y quince rasgos: caso, definitud, grado, género, modo, tipo de numeral, número, persona, polaridad, cortesía, posesivo, tipo de pronombre, reflexivo, tiempo verbal y forma verbal
 *   la distribución de las palabras por los valores de cualquier rasgo y el análisis del texto palabra por palabra
 *   los marcadores del español: los modos entre las formas personales, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
 

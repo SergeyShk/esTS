@@ -24,6 +24,12 @@ VERB_FORMS = {"p_infinitive": "Inf", "p_gerund": "Ger", "p_participle": "Part"}
 # Parts of speech whose forms make the verbal system: the participles that the
 # model annotates as adjectives (cansada, escrita) stay out of the markers
 VERBAL_POS = ("VERB", "AUX")
+# Dependency of an auxiliary: aux for the progressive (está cantando) and the
+# compound tenses (ha sido leído), aux:pass for the passive (fue escrito)
+AUXILIARY_DEP = "aux"
+# Components a parse of the text does not need: the entities are never read, and
+# the parse is, for the dependency of the copulas
+UNUSED_COMPONENTS = ["ner"]
 
 
 class MorphStats:
@@ -35,13 +41,17 @@ class MorphStats:
         Universal Dependencies, as the Spanish models of spaCy annotate them:
         pos - NOUN, VERB, ADJ, PRON, DET and the others, mood - Ind, Sub,
         Imp, Cnd, tense - Pres, Past, Imp, Fut, and likewise case, definite,
-        degree, gender, num_type, number, person, polarity, poss, pron_type,
-        reflex and verb_form. A feature with several values keeps the form
-        of CoNLL-U, PronType=Int,Rel
+        degree, gender, num_type, number, person, polarity, polite, poss,
+        pron_type, reflex and verb_form: the fifteen features of
+        MORPHOLOGY_FEATURES, chosen among the ones the models annotate.
+        A feature with several values keeps the form of CoNLL-U,
+        PronType=Int,Rel, and the whole annotation of a word, the features
+        left uncounted included, stays in tags
         A string is parsed with the model es_core_news_sm, or with the
-        pipeline given in nlp; a Doc is taken as it is and must carry the
-        annotation of the parts of speech. Punctuation marks and symbols
-        are not words and are left out
+        pipeline given in nlp, without the entity recognizer, which nothing
+        here reads; a Doc is taken as it is and must carry the annotation of
+        the parts of speech. Punctuation marks and symbols are not words and
+        are left out
         On top of the features the class computes the markers of Spanish:
         the moods of the finite forms, the non-finite forms, the choice
         between the copulas ser and estar and the adverbs in -mente
@@ -78,6 +88,7 @@ class MorphStats:
         number (tuple[str]): Tuple of the values of number
         person (tuple[str]): Tuple of the values of person
         polarity (tuple[str]): Tuple of the values of polarity
+        polite (tuple[str]): Tuple of the values of politeness
         poss (tuple[str]): Tuple of the values of the possessive
         pron_type (tuple[str]): Tuple of the values of the pronoun type
         reflex (tuple[str]): Tuple of the values of the reflexive
@@ -93,13 +104,21 @@ class MorphStats:
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc object
-        SourceError: If the source has no words or no annotation of the parts of speech
+        SourceError: If the source has no words, has no annotation of the parts
+            of speech, or is a string longer than the max_length of the pipeline
         DatasetNotFoundError: If a string is passed and the model is not installed
     """
 
     def __init__(self, source: str | Doc, nlp: Language | None = None):
         if isinstance(source, str):
-            source = (nlp or get_nlp())(source)
+            pipeline = nlp or get_nlp()
+            if len(source) > pipeline.max_length:
+                raise SourceError(
+                    f"The text of {len(source)} characters is longer than the limit of the "
+                    f"pipeline ({pipeline.max_length}): split it into parts or raise "
+                    "max_length on a pipeline of your own and pass it in nlp"
+                )
+            source = pipeline(source, disable=UNUSED_COMPONENTS)
         elif not isinstance(source, Doc):
             raise SourceTypeError("The data source is set incorrectly")
         tokens = list(iter_doc_tokens(source))
@@ -125,11 +144,14 @@ class MorphStats:
         self.number = self.__feature(features, "number")
         self.person = self.__feature(features, "person")
         self.polarity = self.__feature(features, "polarity")
+        self.polite = self.__feature(features, "polite")
         self.poss = self.__feature(features, "poss")
         self.pron_type = self.__feature(features, "pron_type")
         self.reflex = self.__feature(features, "reflex")
         self.tense = self.__feature(features, "tense")
         self.verb_form = self.__feature(features, "verb_form")
+        self.__parsed = source.has_annotation("DEP")
+        self.__deps = tuple(token.dep_ for token in tokens)
 
     @staticmethod
     def __feature(features: list[dict[str, str]], stat: str) -> tuple[str | None, ...]:
@@ -174,8 +196,14 @@ class MorphStats:
             ser among the two copulas and the adverbs in -mente among the
             adverbs. Verb forms are counted on verbs and auxiliaries, so
             that the participles that the model annotates as adjectives
-            (cansada, escrita) stay out of the base. A marker whose base
-            is empty is nan
+            (cansada, escrita) stay out of the base; the moods sum to one
+            wherever the model leaves no finite form without a mood
+            The base of p_ser is the copular uses of ser and estar, read
+            from the dependency of the token: the auxiliaries of the passive
+            (fue escrito) and of the progressive (está cantando) are not a
+            choice between the two copulas. For a Doc with no parse the
+            marker is nan
+            A marker whose base is empty is nan
 
         Returns:
             dict[str, float]: Dictionary of the markers in the order of
@@ -198,8 +226,8 @@ class MorphStats:
         n_forms = sum(forms.values())
         copulas = Counter(
             lemma
-            for lemma, pos in zip(self.lemmas, self.pos, strict=True)
-            if pos in VERBAL_POS and lemma in COPULAS
+            for lemma, pos, dep in zip(self.lemmas, self.pos, self.__deps, strict=True)
+            if pos in VERBAL_POS and lemma in COPULAS and not dep.startswith(AUXILIARY_DEP)
         )
         adverbs = [word for word, pos in zip(self.words, self.pos, strict=True) if pos == "ADV"]
         markers = {
@@ -209,7 +237,9 @@ class MorphStats:
         markers.update(
             {marker: safe_divide(forms[form], n_forms, nan) for marker, form in VERB_FORMS.items()}
         )
-        markers["p_ser"] = safe_divide(copulas["ser"], sum(copulas.values()), nan)
+        markers["p_ser"] = (
+            safe_divide(copulas["ser"], sum(copulas.values()), nan) if self.__parsed else nan
+        )
         markers["p_mente_adverbs"] = safe_divide(
             sum(1 for adverb in adverbs if adverb.lower().endswith("mente")), len(adverbs), nan
         )
@@ -302,10 +332,35 @@ class MorphStats:
             ).items():
                 if filter_none and not value:
                     continue
-                print(
-                    f"{desc['values'].get(value, value) if value else 'Unknown':30}|{number!s:^10}"
-                )
+                print(f"{self.__describe(desc['values'], value):30}|{number!s:^10}")
             print()
+
+    @staticmethod
+    def __describe(values: dict[str, str], value: str | None) -> str:
+        """
+        Description of a value of a statistic
+
+        Description:
+            A value of several values, which the models write in the form of
+            CoNLL-U (Case=Acc,Nom of usted, PronType=Int,Rel of qué), is
+            described by the descriptions of its parts joined with or; a value
+            with no description at all is printed as the model gives it
+
+        Arguments:
+            values (dict[str, str]): Descriptions of the values of the statistic
+            value (str|None): Value of the statistic
+
+        Returns:
+            str: Description of the value
+        """
+        if not value:
+            return "Unknown"
+        if value in values:
+            return values[value]
+        if "," in value:
+            parts = [values.get(part, part) for part in value.split(",")]
+            return " or ".join([parts[0]] + [part.lower() for part in parts[1:]])
+        return value
 
     @staticmethod
     def __check_stat(args: tuple[str, ...]) -> tuple[str, ...]:

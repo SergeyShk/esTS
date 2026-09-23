@@ -46,6 +46,11 @@ def test_pos(short):
     assert short.pos == ("DET", "NOUN", "VERB", "ADV")
 
 
+def test_polite():
+    ms = MorphStats("Pase usted primero")
+    assert "Form" in ms.polite
+
+
 def test_features(short):
     assert short.number == ("Plur", "Plur", "Plur", None)
     assert short.person == (None, None, "3", None)
@@ -107,6 +112,12 @@ def test_source_type_error(source):
 def test_source_without_words(source):
     with pytest.raises(SourceError, match="no words"):
         MorphStats(source)
+
+
+def test_source_too_long():
+    nlp = get_nlp()
+    with pytest.raises(SourceError, match="longer than the limit"):
+        MorphStats("hola " * (nlp.max_length // 4), nlp=nlp)
 
 
 def test_source_without_annotation():
@@ -210,6 +221,29 @@ def test_markers_without_base(text, marker):
     assert isnan(MorphStats(text).get_markers()[marker])
 
 
+@pytest.mark.parametrize(
+    "text",
+    [
+        "El libro fue escrito por Cervantes y ha sido leído por todos",
+        "Ella está cantando y él está comiendo",
+    ],
+)
+def test_markers_auxiliaries_are_not_copulas(text):
+    ms = MorphStats(text)
+    assert "ser" in ms.lemmas or "estar" in ms.lemmas
+    assert isnan(ms.get_markers()["p_ser"])
+
+
+def test_markers_copulas():
+    assert MorphStats("Ella es alta pero hoy está cansada").get_markers()["p_ser"] == 0.5
+
+
+def test_markers_ser_without_parse():
+    doc = get_nlp()("Ella es alta pero hoy está cansada", disable=["parser"])
+    assert not doc.has_annotation("DEP")
+    assert isnan(MorphStats(doc).get_markers()["p_ser"])
+
+
 def test_print_stats(short, capsys):
     short.print_stats("pos")
     assert capsys.readouterr().out == (
@@ -225,6 +259,18 @@ def test_print_stats(short, capsys):
 def test_print_stats_filter_none(short, capsys):
     short.print_stats("number", filter_none=True)
     assert "Unknown" not in capsys.readouterr().out
+
+
+@pytest.mark.parametrize(
+    ("text", "stat", "expected"),
+    [
+        ("No sé qué quieres", "pron_type", "Interrogative or relative"),
+        ("Usted lo ve", "case", "Accusative or nominative"),
+    ],
+)
+def test_print_stats_combined_value(text, stat, expected, capsys):
+    MorphStats(text).print_stats(stat, filter_none=True)
+    assert expected in capsys.readouterr().out
 
 
 def test_print_stats_unknown_value(short, capsys):

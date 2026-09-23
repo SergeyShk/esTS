@@ -37,7 +37,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Basic statistics](https://sergeyshk.github.io/esTS/stats/basic_stats/)** - counts of sentences, words, letters, syllables and punctuation marks by type, with distributions and normalized shares
 * **[Readability metrics](https://sergeyshk.github.io/esTS/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX, with a consensus grade, the school stages of Spain and reading time
 * **[Lexical diversity metrics](https://sergeyshk.github.io/esTS/stats/diversity_stats/)** - TTR and its variations, MATTR, MSTTR, MTLD, HD-D, Simpson's and Yule's indices, entropy, Zipf's and Heaps' laws
-* **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fourteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
+* **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
 
 Syntax and cohesion come in the rest of 0.2, corpus measures and stylometry in 0.3, style, phonostatistics, metre and rhyme in 0.4.
 
@@ -305,7 +305,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/diversity_sta
 
 The library annotates a text with the parts of speech and the grammatical features of Universal Dependencies, as the Spanish models of spaCy give them, and counts them:
 
-*   the part of speech and fourteen features: case, definiteness, degree, gender, mood, numeral type, number, person, polarity, possessive, pronoun type, reflexive, tense and verb form
+*   the part of speech and fifteen features: case, definiteness, degree, gender, mood, numeral type, number, person, polarity, politeness, possessive, pronoun type, reflexive, tense and verb form
 *   the distribution of the words by the values of any feature, and the parse of the text word by word
 *   the markers of Spanish: the moods among the finite forms, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
 

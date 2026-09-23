@@ -7,7 +7,9 @@
 
 Módulo para calcular las estadísticas morfológicas de un texto. La fuente de datos puede ser un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy).
 
-Las categorías gramaticales y los rasgos morfológicos se dan en los términos de [Universal Dependencies](https://universaldependencies.org/u/feat/), tal como los anotan los modelos españoles de spaCy. Un texto se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`; un `Doc` se toma tal cual y debe llevar la anotación de las categorías gramaticales, de modo que un `Doc` de `spacy.blank("es")` no es una fuente válida. Las palabras se toman de los tokens y los signos de puntuación y los símbolos se descartan.
+Las categorías gramaticales y los rasgos morfológicos se dan en los términos de [Universal Dependencies](https://universaldependencies.org/u/feat/), tal como los anotan los modelos españoles de spaCy. Un texto se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, sin el reconocedor de entidades, que aquí no se lee; un `Doc` se toma tal cual y debe llevar la anotación de las categorías gramaticales, de modo que un `Doc` de `spacy.blank("es")` no es una fuente válida. Las palabras se toman de los tokens y los signos de puntuación y los símbolos se descartan.
+
+Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto, una novela larga - levanta `SourceError` en lugar de llegar a spaCy: divídalo en partes o suba `max_length` en un pipeline propio y páselo en `nlp`.
 
 !!! note "Nota"
     Las estadísticas se calculan al inicializar el objeto `MorphStats`.
@@ -36,6 +38,7 @@ Las categorías gramaticales y los rasgos morfológicos se dan en los términos 
 | `number` | tuple[str] | Tupla de los valores del número |
 | `person` | tuple[str] | Tupla de los valores de la persona |
 | `polarity` | tuple[str] | Tupla de los valores de la polaridad |
+| `polite` | tuple[str] | Tupla de los valores de la cortesía |
 | `poss` | tuple[str] | Tupla de los valores del posesivo |
 | `pron_type` | tuple[str] | Tupla de los valores del tipo de pronombre |
 | `reflex` | tuple[str] | Tupla de los valores del reflexivo |
@@ -45,11 +48,13 @@ Las categorías gramaticales y los rasgos morfológicos se dan en los términos 
 Cada atributo tiene la longitud de `words`, y una palabra a la que el modelo no da ningún valor del rasgo lleva `None`. Los nombres de los atributos son los nombres de las estadísticas que aceptan los métodos; `tags` y `lemmas` no son estadísticas.
 
 !!! note "Nota"
-    Un rasgo con varios valores conserva la forma de CoNLL-U: el interrogativo y relativo `qué`, `quién`, `cuál`, que los modelos no desambiguan, tiene `pron_type` igual a `Int,Rel`.
+    Un rasgo con varios valores conserva la forma de CoNLL-U: el interrogativo y relativo `qué`, `quién`, `cuál`, que los modelos no desambiguan, tiene `pron_type` igual a `Int,Rel`, y `usted` tiene `case` igual a `Acc,Nom`. `print_stats` describe un valor así con las descripciones de sus partes: «Interrogative or relative», «Accusative or nominative».
 
 ## Rasgos { #features }
 
-Los modelos españoles anotan los rasgos de la tabla siguiente; el valor `Unknown` de las tablas impresas y `None` de los atributos significan que el modelo no dio a la palabra ningún valor del rasgo.
+Las estadísticas cuentan los quince rasgos de la tabla siguiente; el valor `Unknown` de las tablas impresas y `None` de los atributos significan que el modelo no dio a la palabra ningún valor del rasgo.
+
+Son un subconjunto: los modelos españoles anotan 23 rasgos, y los que quedan fuera son marginales (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`) o viven en la puntuación (`PunctSide`, `PunctType`), que este módulo no trata como palabras. Todo lo que el modelo anota queda en `tags`, se cuente o no.
 
 | Estadística | Rasgo | Valores |
 | :---------: | :---: | :-----: |
@@ -63,8 +68,9 @@ Los modelos españoles anotan los rasgos de la tabla siguiente; el valor `Unknow
 | `number` | Número | Sing, Plur |
 | `person` | Persona | 1, 2, 3 |
 | `polarity` | Polaridad | Neg |
+| `polite` | Cortesía | Form |
 | `poss` | Posesivo | Yes |
-| `pron_type` | Tipo de pronombre | Art, Prs, Dem, Ind, Int,Rel, Neg, Tot, Exc |
+| `pron_type` | Tipo de pronombre | Art, Prs, Dem, Ind, Int, Rel, Neg, Tot, Exc |
 | `reflex` | Reflexivo | Yes |
 | `tense` | Tiempo verbal | Pres, Past, Imp, Fut |
 | `verb_form` | Forma verbal | Fin, Inf, Part, Ger |
@@ -127,7 +133,11 @@ Devuelve un diccionario con los marcadores del español calculados a partir de l
 | `p_ser` | `ser` entre las cópulas `ser` y `estar` |
 | `p_mente_adverbs` | Adverbios en `-mente` entre los adverbios |
 
-Los cuatro primeros marcadores comparten la base de las formas personales y suman uno; los tres siguientes comparten la base de todas las formas verbales. Las formas verbales se cuentan sobre verbos y auxiliares, de modo que los participios que el modelo anota como adjetivos (`la casa pintada`) quedan fuera de la base, mientras que los de los tiempos compuestos y la pasiva (`he leído`, `fue escrito`) quedan dentro. Un marcador cuya base está vacía - un texto sin verbos, sin cópula, sin adverbios - es `nan`.
+Los cuatro primeros marcadores comparten la base de las formas personales y suman uno siempre que el modelo no deje ninguna forma personal sin modo: cinco de sus 433 etiquetas llevan `VerbForm=Fin` y ningún `Mood`, y cada forma así falta en las cuatro proporciones. Los tres siguientes comparten la base de todas las formas verbales, contadas sobre verbos y auxiliares, de modo que los participios que el modelo anota como adjetivos (`la casa pintada`) quedan fuera de la base, mientras que los de los tiempos compuestos y la pasiva (`he leído`, `fue escrito`) quedan dentro.
+
+La base de `p_ser` son solo los usos copulativos, leídos de la dependencia del token: `fue escrito` y `está cantando` son los auxiliares de la pasiva y de la perífrasis progresiva, no una elección entre las dos cópulas, mientras que `es alta`, `está cansada` y `lo importante es que vengas` sí lo son. El análisis sintáctico es lo que los distingue, así que para un `Doc` que no lo lleva el marcador es `nan`.
+
+Un marcador cuya base está vacía - un texto sin verbos, sin cópula, sin adverbios - es `nan`.
 
 !!! note "Nota"
     El subjuntivo, la elección entre `ser` y `estar` y los adverbios en `-mente` son los rasgos del español que las fórmulas de legibilidad no ven: el subjuntivo marca la hipótesis y la subordinación, `estar` un estado frente a la propiedad de `ser`, y los adverbios en `-mente` un registro formal y escrito.

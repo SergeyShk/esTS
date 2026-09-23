@@ -386,8 +386,10 @@ DIVERSITY_STATS_DESC = {
 # Model of spaCy that the statistics on Universal Dependencies fall back to
 SPACY_MODEL = "es_core_news_sm"
 
-# Morphological features of Universal Dependencies that the Spanish models give,
-# by the name of the statistic
+# Morphological features counted by the statistics, by the name of the statistic.
+# The Spanish models annotate 23 features; the ones left out are either marginal
+# (AdvType, Foreign, NumForm, Number[psor], PrepCase, Typo) or live on punctuation
+# (PunctSide, PunctType), which is not a word. They all stay inside the tags string
 MORPHOLOGY_FEATURES = {
     "case": "Case",
     "definite": "Definite",
@@ -398,6 +400,7 @@ MORPHOLOGY_FEATURES = {
     "number": "Number",
     "person": "Person",
     "polarity": "Polarity",
+    "polite": "Polite",
     "poss": "Poss",
     "pron_type": "PronType",
     "reflex": "Reflex",
@@ -453,6 +456,7 @@ MORPHOLOGY_STATS_DESC: dict[str, dict[str, object]] = {
     "number": {"name": "Number", "values": {"Sing": "Singular", "Plur": "Plural"}},
     "person": {"name": "Person", "values": {"1": "First", "2": "Second", "3": "Third"}},
     "polarity": {"name": "Polarity", "values": {"Neg": "Negative"}},
+    "polite": {"name": "Politeness", "values": {"Form": "Formal"}},
     "poss": {"name": "Possessive", "values": {"Yes": "Possessive"}},
     "pron_type": {
         "name": "Pronoun type",
@@ -461,7 +465,6 @@ MORPHOLOGY_STATS_DESC: dict[str, dict[str, object]] = {
             "Prs": "Personal",
             "Dem": "Demonstrative",
             "Ind": "Indefinite",
-            "Int,Rel": "Interrogative or relative",
             "Int": "Interrogative",
             "Rel": "Relative",
             "Neg": "Negative",
