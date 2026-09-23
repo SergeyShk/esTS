@@ -1440,6 +1440,7 @@
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
 <p>Módulo para calcular las estadísticas básicas de un texto. La fuente de datos puede ser un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>.</p>
 <p>El módulo permite usar objetos <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> y <a href="../../extractors/words/"><code>WordsExtractor</code></a> ya configurados para la segmentación en oraciones y palabras que precede al cálculo. Las sílabas se cuentan con <a href="../../syllables/#count_syllables"><code>count_syllables</code></a> y las letras con <code>str.isalpha</code>, así que las cifras, los guiones y los signos dentro de una palabra no son letras, mientras que los indicadores ordinales <code>º</code> y <code>ª</code> sí lo son (<code>3.º</code> es una palabra de una letra).</p>
+<p>Una oración de pura puntuación (<code>¿?</code>, una línea de puntos entre dos párrafos) no lleva ninguna palabra y no se cuenta: las fórmulas de legibilidad dividen por el número de oraciones.</p>
 <p>Para un objeto <code>Doc</code> las palabras se toman de los tokens (los signos de puntuación y los símbolos como <code>€</code> o <code>%</code> se descartan) y las oraciones de la anotación; sin límites de oración (<code>spacy.blank</code>, un pipeline sin <code>parser</code> ni <code>senter</code>) las oraciones se extraen del texto con <code>SentsExtractor</code>. Un extractor indicado explícitamente se usa siempre, sobre el texto del <code>Doc</code>, de modo que el filtro de palabras vacías o un tokenizador propio funcionan igual con las dos clases de fuente.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
@@ -1521,7 +1522,7 @@
 <tr>
 <td style="text-align: center;"><code>n_sents</code></td>
 <td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de oraciones</td>
+<td style="text-align: center;">Número de oraciones con palabras</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>n_words</code></td>
@@ -1704,30 +1705,30 @@
 </code></pre></div>
 <p><em>Resultado</em>:</p>
 <div class="highlight"><pre><span></span><code><span class="o">{</span><span class="s1">'c_letters'</span>:<span class="w"> </span><span class="o">{</span><span class="m">1</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">2</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">3</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">4</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">6</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">8</span>:<span class="w"> </span><span class="m">4</span>,<span class="w"> </span><span class="m">12</span>:<span class="w"> </span><span class="m">1</span><span class="o">}</span>,
-<span class="s1">'c_punctuations'</span>:<span class="w"> </span><span class="o">{</span><span class="s1">'comma'</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="s1">'period'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'question'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'exclamation'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'ellipsis'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'colon'</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="s1">'semicolon'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'dash'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'hyphen'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'angle_quotes'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'straight_quotes'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'parentheses'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'other'</span>:<span class="w"> </span><span class="m">0</span><span class="o">}</span>,
-<span class="s1">'c_syllables'</span>:<span class="w"> </span><span class="o">{</span><span class="m">1</span>:<span class="w"> </span><span class="m">4</span>,<span class="w"> </span><span class="m">2</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">3</span>:<span class="w"> </span><span class="m">4</span>,<span class="w"> </span><span class="m">5</span>:<span class="w"> </span><span class="m">1</span><span class="o">}</span>,
-<span class="s1">'n_chars'</span>:<span class="w"> </span><span class="m">71</span>,
-<span class="s1">'n_complex_words'</span>:<span class="w"> </span><span class="m">5</span>,
-<span class="s1">'n_letters'</span>:<span class="w"> </span><span class="m">60</span>,
-<span class="s1">'n_long_words'</span>:<span class="w"> </span><span class="m">5</span>,
-<span class="s1">'n_monosyllable_words'</span>:<span class="w"> </span><span class="m">4</span>,
-<span class="s1">'n_polysyllable_words'</span>:<span class="w"> </span><span class="m">6</span>,
-<span class="s1">'n_punctuations'</span>:<span class="w"> </span><span class="m">2</span>,
-<span class="s1">'n_sents'</span>:<span class="w"> </span><span class="m">1</span>,
-<span class="s1">'n_simple_words'</span>:<span class="w"> </span><span class="m">5</span>,
-<span class="s1">'n_spaces'</span>:<span class="w"> </span><span class="m">9</span>,
-<span class="s1">'n_syllables'</span>:<span class="w"> </span><span class="m">23</span>,
-<span class="s1">'n_unique_words'</span>:<span class="w"> </span><span class="m">8</span>,
-<span class="s1">'n_words'</span>:<span class="w"> </span><span class="m">10</span>,
-<span class="s1">'p_complex_words'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'p_letters'</span>:<span class="w"> </span><span class="m">0</span>.8450704225352113,
-<span class="s1">'p_long_words'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'p_monosyllable_words'</span>:<span class="w"> </span><span class="m">0</span>.4,
-<span class="s1">'p_polysyllable_words'</span>:<span class="w"> </span><span class="m">0</span>.6,
-<span class="s1">'p_punctuations'</span>:<span class="w"> </span><span class="m">0</span>.028169014084507043,
-<span class="s1">'p_simple_words'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'p_spaces'</span>:<span class="w"> </span><span class="m">0</span>.1267605633802817,
-<span class="s1">'p_unique_words'</span>:<span class="w"> </span><span class="m">0</span>.8<span class="o">}</span>
+<span class="w"> </span><span class="s1">'c_syllables'</span>:<span class="w"> </span><span class="o">{</span><span class="m">1</span>:<span class="w"> </span><span class="m">4</span>,<span class="w"> </span><span class="m">2</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">3</span>:<span class="w"> </span><span class="m">4</span>,<span class="w"> </span><span class="m">5</span>:<span class="w"> </span><span class="m">1</span><span class="o">}</span>,
+<span class="w"> </span><span class="s1">'n_sents'</span>:<span class="w"> </span><span class="m">1</span>,
+<span class="w"> </span><span class="s1">'n_words'</span>:<span class="w"> </span><span class="m">10</span>,
+<span class="w"> </span><span class="s1">'n_unique_words'</span>:<span class="w"> </span><span class="m">8</span>,
+<span class="w"> </span><span class="s1">'n_long_words'</span>:<span class="w"> </span><span class="m">5</span>,
+<span class="w"> </span><span class="s1">'n_complex_words'</span>:<span class="w"> </span><span class="m">5</span>,
+<span class="w"> </span><span class="s1">'n_simple_words'</span>:<span class="w"> </span><span class="m">5</span>,
+<span class="w"> </span><span class="s1">'n_monosyllable_words'</span>:<span class="w"> </span><span class="m">4</span>,
+<span class="w"> </span><span class="s1">'n_polysyllable_words'</span>:<span class="w"> </span><span class="m">6</span>,
+<span class="w"> </span><span class="s1">'n_chars'</span>:<span class="w"> </span><span class="m">71</span>,
+<span class="w"> </span><span class="s1">'n_letters'</span>:<span class="w"> </span><span class="m">60</span>,
+<span class="w"> </span><span class="s1">'n_spaces'</span>:<span class="w"> </span><span class="m">9</span>,
+<span class="w"> </span><span class="s1">'n_syllables'</span>:<span class="w"> </span><span class="m">23</span>,
+<span class="w"> </span><span class="s1">'n_punctuations'</span>:<span class="w"> </span><span class="m">2</span>,
+<span class="w"> </span><span class="s1">'c_punctuations'</span>:<span class="w"> </span><span class="o">{</span><span class="s1">'comma'</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="s1">'period'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'question'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'exclamation'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'ellipsis'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'colon'</span>:<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="s1">'semicolon'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'dash'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'hyphen'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'angle_quotes'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'straight_quotes'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'parentheses'</span>:<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="s1">'other'</span>:<span class="w"> </span><span class="m">0</span><span class="o">}</span>,
+<span class="w"> </span><span class="s1">'p_unique_words'</span>:<span class="w"> </span><span class="m">0</span>.8,
+<span class="w"> </span><span class="s1">'p_long_words'</span>:<span class="w"> </span><span class="m">0</span>.5,
+<span class="w"> </span><span class="s1">'p_complex_words'</span>:<span class="w"> </span><span class="m">0</span>.5,
+<span class="w"> </span><span class="s1">'p_simple_words'</span>:<span class="w"> </span><span class="m">0</span>.5,
+<span class="w"> </span><span class="s1">'p_monosyllable_words'</span>:<span class="w"> </span><span class="m">0</span>.4,
+<span class="w"> </span><span class="s1">'p_polysyllable_words'</span>:<span class="w"> </span><span class="m">0</span>.6,
+<span class="w"> </span><span class="s1">'p_letters'</span>:<span class="w"> </span><span class="m">0</span>.8450704225352113,
+<span class="w"> </span><span class="s1">'p_spaces'</span>:<span class="w"> </span><span class="m">0</span>.1267605633802817,
+<span class="w"> </span><span class="s1">'p_punctuations'</span>:<span class="w"> </span><span class="m">0</span>.028169014084507043<span class="o">}</span>
 </code></pre></div>
 </div>
 <h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>

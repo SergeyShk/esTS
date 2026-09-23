@@ -1295,7 +1295,7 @@
 <tr>
 <td style="text-align: left;"><code>SourceError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">The source has no words or no sentences</td>
+<td style="text-align: left;">The source has no words or no sentences, lacks the annotation a statistic needs (the parts of speech, the lemmas, the dependency parse), or is a string longer than the <code>max_length</code> of the pipeline</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>ParameterError</code></td>
@@ -1310,7 +1310,7 @@
 <tr>
 <td style="text-align: left;"><code>DatasetNotFoundError</code></td>
 <td style="text-align: left;"><code>OSError</code></td>
-<td style="text-align: left;">The dataset is not downloaded; the message shows the download command</td>
+<td style="text-align: left;">The model of spaCy is not installed or a dataset is not downloaded; the message shows the command that brings what is missing</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>DataFileError</code></td>
@@ -1327,7 +1327,7 @@
 <p>The classes are available from <code>ests</code> and from <code>ests.exceptions</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The last three are reserved for the dataset loaders of the coming releases; nothing in 0.1 raises them.</p>
+<p><code>DatasetNotFoundError</code> is what a statistic of Universal Dependencies raises when the model <code>es_core_news_sm</code> is not installed, which is the first thing a new reader meets: <code>MorphStats("El gato duerme")</code> without the model says how to download it. <code>DataFileError</code> and <code>DownloadError</code> are reserved for the dataset loaders of the coming releases; nothing raises them yet.</p>
 </div>
 <div class="admonition example">
 <p class="admonition-title">Example</p>

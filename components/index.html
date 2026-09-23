@@ -1484,6 +1484,7 @@
 </tr>
 </tbody>
 </table>
+<p>A document with no words - an empty string, whitespace, punctuation alone - passes through every component untouched, its extension left at <code>None</code>, so that one such document in a corpus does not stop <code>nlp.pipe</code>. A missing annotation is another matter: that is an error of the pipeline and it is raised.</p>
 <p>In the pipeline of <code>es_core_news_sm</code> the parts of speech come from the <code>morphologizer</code> (a <code>tagger</code> alone gives the tag of the corpus and not the part of speech of Universal Dependencies; with an <code>attribute_ruler</code> it does give it), the parse from the <code>parser</code> and the lemmas from the <code>lemmatizer</code>. A component whose annotation is missing raises <code>SourceError</code> when the document goes through it, <code>excluded</code> components included: without the <code>lemmatizer</code> every lemma is an empty string, which would make every noun of a text overlap with every other.</p>
 <h2 id="basicstatscomponent">BasicStatsComponent<a class="headerlink" href="#basicstatscomponent" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
@@ -1687,7 +1688,7 @@
 <div class="admonition info">
 <p><strong>ests.components.MorphStatsComponent</strong></p>
 </div>
-<p>The component of the morphological statistics of a text. The parts of speech and the features are read from the annotation of the model, so the pipeline needs a tagger before the component.</p>
+<p>The component of the morphological statistics of a text. The parts of speech and the features are read from the annotation of the model, so the pipeline needs a <code>morphologizer</code> (or a <code>tagger</code> with an <code>attribute_ruler</code>) and a <code>lemmatizer</code> before the component.</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -1733,7 +1734,7 @@
 <div class="admonition info">
 <p><strong>ests.components.SyntaxStatsComponent</strong></p>
 </div>
-<p>The component of the syntactic statistics of a text. The statistics are computed on the dependency tree, so the pipeline needs a parser before the component.</p>
+<p>The component of the syntactic statistics of a text. The statistics are computed on the dependency tree, so the pipeline needs a <code>parser</code> and a <code>lemmatizer</code> before the component.</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -1779,7 +1780,7 @@
 <div class="admonition info">
 <p><strong>ests.components.CohesionStatsComponent</strong></p>
 </div>
-<p>The component of the cohesion statistics of a text. The features are read from the annotation of the model, so the pipeline needs a tagger before the component.</p>
+<p>The component of the cohesion statistics of a text. The features are read from the annotation of the model, so the pipeline needs a <code>morphologizer</code> (or a <code>tagger</code> with an <code>attribute_ruler</code>) and a <code>lemmatizer</code> before the component.</p>
 <p>Parameters:</p>
 <table>
 <thead>
