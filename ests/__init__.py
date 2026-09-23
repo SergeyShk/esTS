@@ -22,6 +22,7 @@ from .exceptions import (
 from .extractors import CharNgramsExtractor, SentsExtractor, WordsExtractor
 from .morph_stats import MorphStats
 from .readability_stats import ReadabilityStats
+from .syntax_stats import SyntaxStats
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
@@ -52,6 +53,7 @@ __all__ = [
     "SentsExtractor",
     "SourceError",
     "SourceTypeError",
+    "SyntaxStats",
     "UnknownStatError",
     "WordsExtractor",
     "__version__",

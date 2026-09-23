@@ -24,7 +24,7 @@ uv sync --all-groups
 
 ## The spaCy model { #model }
 
-Basic statistics, readability and lexical diversity need no trained model: sentences, words and character N-grams are extracted by rules and by the tokenizer of the blank Spanish pipeline, syllables and stress by the orthography. The [morphological statistics](stats/morph_stats.md) need one, and so does building a `Doc` yourself to pass it to the statistics instead of a string; the test suite needs it too, where it comes with the `test` dependency group:
+Basic statistics, readability and lexical diversity need no trained model: sentences, words and character N-grams are extracted by rules and by the tokenizer of the blank Spanish pipeline, syllables and stress by the orthography. The [morphological](stats/morph_stats.md) and the [syntactic statistics](stats/syntax_stats.md) need one - the syntactic ones need a pipeline with a parser - and so does building a `Doc` yourself to pass it to the statistics instead of a string; the test suite needs it too, where it comes with the `test` dependency group:
 
 ``` bash
 python -m spacy download es_core_news_sm
