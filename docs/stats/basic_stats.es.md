@@ -9,6 +9,8 @@ Módulo para calcular las estadísticas básicas de un texto. La fuente de datos
 
 El módulo permite usar objetos [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) ya configurados para la segmentación en oraciones y palabras que precede al cálculo. Las sílabas se cuentan con [`count_syllables`](../syllables.md#count_syllables) y las letras con `str.isalpha`, así que las cifras, los guiones y los signos dentro de una palabra no son letras, mientras que los indicadores ordinales `º` y `ª` sí lo son (`3.º` es una palabra de una letra).
 
+Una oración de pura puntuación (`¿?`, una línea de puntos entre dos párrafos) no lleva ninguna palabra y no se cuenta: las fórmulas de legibilidad dividen por el número de oraciones.
+
 Para un objeto `Doc` las palabras se toman de los tokens (los signos de puntuación y los símbolos como `€` o `%` se descartan) y las oraciones de la anotación; sin límites de oración (`spacy.blank`, un pipeline sin `parser` ni `senter`) las oraciones se extraen del texto con `SentsExtractor`. Un extractor indicado explícitamente se usa siempre, sobre el texto del `Doc`, de modo que el filtro de palabras vacías o un tokenizador propio funcionan igual con las dos clases de fuente.
 
 !!! note "Nota"
@@ -34,7 +36,7 @@ Para un objeto `Doc` las palabras se toman de los tokens (los signos de puntuaci
 | :-------: | :--: | :---------: |
 | `c_letters` | dict[int, int] | Distribución de las palabras por número de letras |
 | `c_syllables` | dict[int, int] | Distribución de las palabras por número de sílabas |
-| `n_sents` | int | Número de oraciones |
+| `n_sents` | int | Número de oraciones con palabras |
 | `n_words` | int | Número de palabras |
 | `n_unique_words` | int | Número de palabras únicas |
 | `n_long_words` | int | Número de palabras largas |

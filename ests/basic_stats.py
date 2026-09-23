@@ -17,7 +17,7 @@ from .constants import (
 from .exceptions import SourceError, SourceTypeError
 from .extractors import SentsExtractor, WordsExtractor
 from .syllables import count_syllables
-from .utils import count_letters, is_punctuation, iter_doc_words
+from .utils import count_letters, has_words, iter_doc_words
 
 ELLIPSIS_PATTERN = re.compile(r"…|\.{3,}|(?<=[?!])\.{2}")
 # A hyphen after whitespace or at the start of a line, or before a space, is
@@ -103,7 +103,7 @@ class BasicStats:
     Attributes:
         c_letters (dict[int, int]): Distribution of words by number of letters
         c_syllables (dict[int, int]): Distribution of words by number of syllables
-        n_sents (int): Number of sentences
+        n_sents (int): Number of sentences containing words
         n_words (int): Number of words
         n_unique_words (int): Number of unique words
         n_long_words (int): Number of long words
@@ -248,30 +248,6 @@ class BasicStats:
         stats = self.get_stats()
         for stat, value in BASIC_STATS_DESC.items():
             print(f"{value:20}|{stats[stat]:^10}")
-
-
-def has_words(sent: Span | str) -> bool:
-    """
-    Checking whether a sentence holds a word
-
-    Description:
-        A sentence of punctuation alone (¿?, ..., a line of dots between
-        paragraphs) is no sentence for the statistics: it has no word, and the
-        formulas of readability divide by the number of sentences
-
-    Arguments:
-        sent (Span|str): Sentence
-
-    Returns:
-        bool: Result of the check
-
-    Example:
-        >>> from ests.basic_stats import has_words
-        >>> has_words("El gato duerme"), has_words("¿?")
-        (True, False)
-    """
-    text = sent if isinstance(sent, str) else sent.text
-    return any(not char.isspace() and not is_punctuation(char) for char in text)
 
 
 def count_punctuations(text: str) -> dict[str, int]:

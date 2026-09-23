@@ -41,7 +41,7 @@ from .exceptions import SourceError
 from .morph_stats import MorphStats
 from .readability_stats import ReadabilityStats, check_preset
 from .syntax_stats import SyntaxStats
-from .utils import iter_doc_tokens
+from .utils import has_words
 
 
 @Language.factory("ests_basic")
@@ -440,29 +440,3 @@ class CohesionStatsComponent:
         cs = CohesionStats(doc)
         doc._.set(self.name, cs)
         return doc
-
-
-def has_words(doc: Doc) -> bool:
-    """
-    Checking whether a document holds a word
-
-    Description:
-        The statistics need a word, and an empty document, one of whitespace
-        or one of punctuation alone has none; spaCy builds such a document
-        without complaint, and a component of a pipeline has no business
-        stopping a corpus on it
-
-    Arguments:
-        doc (Doc): Doc object
-
-    Returns:
-        bool: Result of the check
-
-    Example:
-        >>> import spacy
-        >>> from ests.components import has_words
-        >>> nlp = spacy.blank("es")
-        >>> has_words(nlp("El gato duerme")), has_words(nlp("¿?")), has_words(nlp(""))
-        (True, False, False)
-    """
-    return any(True for _ in iter_doc_tokens(doc))

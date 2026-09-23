@@ -297,6 +297,31 @@ def get_nlp(model: str = SPACY_MODEL) -> Language:
     return _load_nlp(model)
 
 
+def has_words(source: str | Doc | Span) -> bool:
+    """
+    Checking whether a text holds a word
+
+    Description:
+        A text of punctuation alone (¿?, ..., a line of dots between two
+        paragraphs) and an empty one hold no word: the statistics have nothing
+        to count in them, the formulas of readability would divide by them, and
+        a component of a pipeline meets them in any corpus
+
+    Arguments:
+        source (str|Doc|Span): Text, Doc or Span object
+
+    Returns:
+        bool: Result of the check
+
+    Example:
+        >>> from ests.utils import has_words
+        >>> has_words("El gato duerme"), has_words("¿?"), has_words("")
+        (True, False, False)
+    """
+    text = source if isinstance(source, str) else source.text
+    return any(not char.isspace() and not is_punctuation(char) for char in text)
+
+
 def is_verbal_noun(lemma: str) -> bool:
     """
     Checking whether a lemma is a noun derived from a verb, by its suffix

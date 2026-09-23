@@ -9,6 +9,8 @@ A module for computing basic text statistics. The data source can be either a te
 
 The module allows using pre-built [`SentsExtractor`](../extractors/sentences.md) and [`WordsExtractor`](../extractors/words.md) objects for the sentence and word tokenization needed before computing the statistics. Syllables are counted by [`count_syllables`](../syllables.md#count_syllables), letters by `str.isalpha`, so digits, hyphens and marks inside a word are not letters, while the ordinal indicators `º` and `ª` are (`3.º` is a one-letter word).
 
+A sentence of punctuation alone (`¿?`, a line of dots between two paragraphs) holds no word and is not counted: the formulas of readability divide by the number of sentences.
+
 For a `Doc` object words are taken from the tokens (punctuation marks and symbols such as `€` or `%` are dropped), sentences - from the annotation; without sentence boundaries (`spacy.blank`, a pipeline without `parser` and `senter`) sentences are extracted from the text by `SentsExtractor`. An extractor passed explicitly is always used, on the text of the `Doc`, so that stop word filtering or a custom tokenizer works the same for both kinds of source.
 
 !!! note "Note"
@@ -34,7 +36,7 @@ For a `Doc` object words are taken from the tokens (punctuation marks and symbol
 | :-------: | :--: | :---------: |
 | `c_letters` | dict[int, int] | Distribution of words by number of letters |
 | `c_syllables` | dict[int, int] | Distribution of words by number of syllables |
-| `n_sents` | int | Number of sentences |
+| `n_sents` | int | Number of sentences containing words |
 | `n_words` | int | Number of words |
 | `n_unique_words` | int | Number of unique words |
 | `n_long_words` | int | Number of long words |

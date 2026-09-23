@@ -135,7 +135,7 @@ Returns a dictionary with the markers of Spanish computed from the features. Eve
 
 The first four markers share the base of the finite forms and sum to one wherever the model leaves no finite form without a mood - five of its 433 labels carry `VerbForm=Fin` and no `Mood`, and each such form is missing from all four shares. The next three markers share the base of all the verb forms, counted on verbs and auxiliaries, so that the participles that the model annotates as adjectives (`la casa pintada`) stay out of the base, while the ones of the compound tenses and the passive (`he leído`, `fue escrito`) stay in.
 
-The base of `p_ser` is the copular uses alone, read from the dependency of the token: `fue escrito` and `está cantando` are the auxiliaries of the passive and of the progressive, not a choice between the two copulas, while `es alta`, `está cansada` and `lo importante es que vengas` are. The parse is what tells them apart, so for a `Doc` that carries none the marker is `nan`.
+The base of `p_ser` is the copular uses alone, read from the dependency of the token and from what it depends on: `fue escrito` and `está cantando` are the auxiliaries of the passive and of the progressive, and so is the `es` of `es financiado`, which the models tag as a copula in the present - none of the three is a choice between the two copulas, while `es alta`, `está cansada` and `lo importante es que vengas` are. The parse is what tells them apart, so for a `Doc` that carries none the marker is `nan`.
 
 A marker whose base is empty - a text without verbs, without a copula, without adverbs - is `nan`.
 

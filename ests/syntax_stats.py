@@ -49,8 +49,9 @@ class SyntaxStats:
         must carry the dependencies, which come from a parser, and the lemmas,
         which come from a lemmatizer and tell a passive from a compound tense
         and a light verb from any other
-        Punctuation marks and whitespace are not nodes of the tree: the words
-        are, and the distances are counted in positions of words
+        Punctuation marks, symbols and whitespace are not nodes of the tree:
+        the words are, the same words the other statistics count, and the
+        distances are counted in positions of words
         The measures of a sentence - the longest dependency, the depth of the
         tree, the number of leaves and of subtrees, the nodes per leaf - are
         averaged over the sentences, the constructions are given per sentence,

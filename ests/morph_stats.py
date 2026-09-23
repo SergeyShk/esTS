@@ -10,6 +10,7 @@ from .constants import (
     MORPHOLOGY_FEATURES,
     MORPHOLOGY_MARKERS_DESC,
     MORPHOLOGY_STATS_DESC,
+    PASSIVE_AUX,
 )
 from .exceptions import SourceError, SourceTypeError, UnknownStatError
 from .utils import get_nlp, iter_doc_tokens, safe_divide
@@ -44,7 +45,9 @@ def is_auxiliary(token: Token) -> bool:
         and the progressive, aux:pass for the passive - or, in the present of
         a passive, the dependency of a copula over a participle: el proyecto es
         financiado has the same es as ella es alta, and only its head tells
-        them apart
+        them apart. The copula of a passive is ser, as it is for is_passive of
+        the syntactic statistics, so that the two modules read the same token
+        the same way
 
     Arguments:
         token (Token): Token
@@ -54,7 +57,7 @@ def is_auxiliary(token: Token) -> bool:
     """
     if token.dep_.startswith(AUXILIARY_DEP):
         return True
-    if token.dep_ != COPULA_DEP:
+    if token.dep_ != COPULA_DEP or token.lemma_ != PASSIVE_AUX:
         return False
     return token.head.pos_ == "VERB" and "Part" in token.head.morph.get("VerbForm", [])
 

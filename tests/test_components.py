@@ -19,8 +19,8 @@ from ests import (
     SyntaxStats,
     SyntaxStatsComponent,
 )
-from ests.components import has_words
 from ests.exceptions import ParameterError, SourceError
+from ests.utils import has_words
 
 COMPONENTS = (
     ("ests_basic", BasicStatsComponent, BasicStats),
