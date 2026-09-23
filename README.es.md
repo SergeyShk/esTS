@@ -38,10 +38,11 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Métricas de legibilidad](https://sergeyshk.github.io/esTS/es/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX, con grado de consenso, etapas escolares de España y tiempo de lectura
 * **[Métricas de diversidad léxica](https://sergeyshk.github.io/esTS/es/stats/diversity_stats/)** - TTR y sus variantes, MATTR, MSTTR, MTLD, HD-D, índices de Simpson y de Yule, entropía, leyes de Zipf y de Heaps
 * **[Estadísticas morfológicas](https://sergeyshk.github.io/esTS/es/stats/morph_stats/)** - categorías gramaticales y quince rasgos morfológicos de Universal Dependencies, con los marcadores del español: los modos, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
+* **[Componentes de spaCy](https://sergeyshk.github.io/esTS/es/components/)** - cada clase de estadísticas como componente de un pipeline, con las estadísticas puestas en el `Doc` en una sola pasada
 * **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, con la densidad de 255 marcadores del discurso españoles
 * **[Estadísticas sintácticas](https://sergeyshk.github.io/esTS/es/stats/syntax_stats/)** - el árbol de dependencias por distancias, profundidad, cláusulas y coordinación, con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
 
-Los componentes de spaCy cierran la 0.2, las medidas de corpus y la estilometría llegan en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
+Las medidas de corpus y la estilometría llegan en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
 
 ## Instalación
 
@@ -409,6 +410,35 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/cohesion_s
 
 </details>
 
+<details>
+<summary><b>Componentes de spaCy</b></summary>
+
+<br>
+
+Cada clase de estadísticas es también un componente de un pipeline, de modo que el texto se anota y se mide en una sola pasada y las estadísticas viajan con el `Doc`:
+
+```python
+>>> import ests
+>>> import spacy
+
+>>> nlp = spacy.load("es_core_news_sm")
+>>> for factory in ("basic", "morph", "syntax"):
+...     _ = nlp.add_pipe(f"ests_{factory}", name=factory, last=True)
+
+>>> nlp.pipe_names[-3:]
+['basic', 'morph', 'syntax']
+
+>>> doc = nlp("El gato duerme en la ventana. Los niños juegan en el parque.")
+>>> doc._.basic.n_words, doc._.morph.pos[:2], doc._.syntax.tree_depth
+(12, ('DET', 'NOUN'), 2.0)
+```
+
+Las fábricas son `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax` y `ests_cohesion`; el nombre del paso del pipeline es libre y es como se llama la extensión.
+
+Más en la [documentación](https://sergeyshk.github.io/esTS/es/components/).
+
+</details>
+
 ## Desarrollo
 
 El proyecto usa [uv](https://docs.astral.sh/uv/) para gestionar las dependencias y [ruff](https://docs.astral.sh/ruff/) para el análisis y el formato del código.
@@ -447,6 +477,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos: las [iss
 *   **ests**:
     *   basic_stats.py - estadísticas básicas del texto
     *   cohesion_stats.py - estadísticas de cohesión
+    *   components.py - componentes de un pipeline de spaCy
     *   constants.py - constantes de la lengua española y de las métricas
     *   diversity_stats.py - métricas de diversidad léxica
     *   exceptions.py - excepciones de la biblioteca

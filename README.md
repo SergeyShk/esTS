@@ -38,10 +38,11 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Readability metrics](https://sergeyshk.github.io/esTS/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX, with a consensus grade, the school stages of Spain and reading time
 * **[Lexical diversity metrics](https://sergeyshk.github.io/esTS/stats/diversity_stats/)** - TTR and its variations, MATTR, MSTTR, MTLD, HD-D, Simpson's and Yule's indices, entropy, Zipf's and Heaps' laws
 * **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
+* **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
 * **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 255 Spanish discourse markers
 * **[Syntactic statistics](https://sergeyshk.github.io/esTS/stats/syntax_stats/)** - the dependency tree by distances, depth, clauses and coordination, with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
 
-The spaCy components close 0.2, corpus measures and stylometry come in 0.3, style, phonostatistics, metre and rhyme in 0.4.
+Corpus measures and stylometry come in 0.3, style, phonostatistics, metre and rhyme in 0.4.
 
 ## Installation
 
@@ -409,6 +410,35 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/cohesion_stat
 
 </details>
 
+<details>
+<summary><b>spaCy components</b></summary>
+
+<br>
+
+Every statistics class is also a component of a pipeline, so a text is annotated and measured in one pass and the statistics travel with the `Doc`:
+
+```python
+>>> import ests
+>>> import spacy
+
+>>> nlp = spacy.load("es_core_news_sm")
+>>> for factory in ("basic", "morph", "syntax"):
+...     _ = nlp.add_pipe(f"ests_{factory}", name=factory, last=True)
+
+>>> nlp.pipe_names[-3:]
+['basic', 'morph', 'syntax']
+
+>>> doc = nlp("El gato duerme en la ventana. Los niños juegan en el parque.")
+>>> doc._.basic.n_words, doc._.morph.pos[:2], doc._.syntax.tree_depth
+(12, ('DET', 'NOUN'), 2.0)
+```
+
+The factories are `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax` and `ests_cohesion`; the name of the pipe is free and is what the extension is called.
+
+More in the [documentation](https://sergeyshk.github.io/esTS/components/).
+
+</details>
+
 ## Development
 
 The project uses [uv](https://docs.astral.sh/uv/) for dependency management and [ruff](https://docs.astral.sh/ruff/) for linting and formatting.
@@ -447,6 +477,7 @@ Bug reports, ideas and pull requests are welcome - [issues](https://github.com/S
 *   **ests**:
     *   basic_stats.py - basic text statistics
     *   cohesion_stats.py - cohesion statistics
+    *   components.py - components of a spaCy pipeline
     *   constants.py - constants of the Spanish language and of the metrics
     *   diversity_stats.py - lexical diversity metrics
     *   exceptions.py - library exceptions

@@ -18,8 +18,9 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 *   compute [morphological statistics](stats/morph_stats.md) on Universal Dependencies (parts of speech and fifteen grammatical features) with the markers of Spanish: the moods, the non-finite forms, the copulas `ser` and `estar`, the adverbs in `-mente`
 *   compute [syntactic statistics](stats/syntax_stats.md) on the dependency tree (dependency distances, depth, clauses, coordination) with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
 *   compute [cohesion statistics](stats/cohesion_stats.md) in the manner of Coh-Metrix (the overlap of nouns, arguments and content words between sentences, givenness, temporal cohesion) with the density of 255 Spanish discourse markers by class
+*   add the statistics to a [spaCy pipeline](components.md) as components, so that a text is annotated and measured in one pass and the statistics travel with the `Doc`
 
-The spaCy components close 0.2, corpus measures and stylometry come in 0.3, style, phonostatistics, metre and rhyme in 0.4.
+Corpus measures and stylometry come in 0.3, style, phonostatistics, metre and rhyme in 0.4.
 
 ## Installation
 
@@ -93,6 +94,7 @@ Punctuation marks   |    2
     *   **ests**:
         *   basic_stats.py - basic text statistics
         *   cohesion_stats.py - cohesion statistics
+        *   components.py - components of a spaCy pipeline
         *   constants.py - constants of the Spanish language and of the metrics
         *   diversity_stats.py - lexical diversity metrics
         *   exceptions.py - library exceptions
