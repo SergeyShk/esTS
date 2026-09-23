@@ -9,7 +9,15 @@ from spacy.language import Language
 from spacy.tokenizer import Tokenizer
 from spacy.tokens import Doc, Span, Token
 
-from .constants import ABBREVIATIONS, DASHES, PUNCTUATIONS, SENTENCE_OPENERS, SPACY_MODEL
+from .constants import (
+    ABBREVIATIONS,
+    DASHES,
+    PUNCTUATIONS,
+    SENTENCE_OPENERS,
+    SPACY_MODEL,
+    VERBAL_NOUN_LEMMAS,
+    VERBAL_NOUN_SUFFIXES,
+)
 from .exceptions import DatasetNotFoundError
 
 # End of a sentence: terminal marks, optionally closing quotes or brackets,
@@ -287,6 +295,33 @@ def get_nlp(model: str = SPACY_MODEL) -> Language:
         True
     """
     return _load_nlp(model)
+
+
+def is_verbal_noun(lemma: str) -> bool:
+    """
+    Checking whether a lemma is a noun derived from a verb, by its suffix
+
+    Description:
+        The suffixes of VERBAL_NOUN_SUFFIXES - -ción, -sión, -miento, -anza,
+        -encia, -ancia, -aje, -dura, -azgo (revisión, nombramiento, aprendizaje)
+        - or a lemma of VERBAL_NOUN_LEMMAS, the nouns whose derivation leaves no
+        suffix behind (uso, pago, comienzo, envío). The rule catches nouns of
+        other origins with the same endings (ciencia, distancia), as any suffix
+        rule does
+
+    Arguments:
+        lemma (str): Lemma of a noun
+
+    Returns:
+        bool: Result of the check
+
+    Example:
+        >>> from ests.utils import is_verbal_noun
+        >>> is_verbal_noun("revisión"), is_verbal_noun("uso"), is_verbal_noun("casa")
+        (True, True, False)
+    """
+    lemma = lemma.lower()
+    return lemma.endswith(VERBAL_NOUN_SUFFIXES) or lemma in VERBAL_NOUN_LEMMAS
 
 
 def count_letters(word: str) -> int:

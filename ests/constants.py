@@ -498,3 +498,132 @@ MORPHOLOGY_MARKERS_DESC = {
 
 # The two copulas of Spanish, by lemma
 COPULAS = ("ser", "estar")
+
+
+# Dependencies that head a clause: the subtypes of Universal Dependencies are not
+# used by the Spanish models, which give acl for a relative clause as well
+CLAUSE_DEPS = frozenset({"ccomp", "advcl", "acl", "csubj", "parataxis"})
+SUBORDINATE_CLAUSE_DEPS = frozenset({"ccomp", "advcl", "acl", "csubj"})
+SUBJECT_DEPS = frozenset({"nsubj", "csubj"})
+VALENCY_IGNORED_DEPS = frozenset({"cc", "conj", "parataxis", "punct"})
+NOUN_MODIFIER_DEPS = frozenset({"amod", "det", "nmod", "nummod", "acl"})
+# Prepositions of a chain of complements (el aumento de la eficiencia del uso) and
+# of the agent of a passive (construida por los obreros); the contractions del and al
+# keep their own lemma in the models, so they are listed as they are written
+DE_PREPOSITIONS = frozenset({"de", "del"})
+AGENT_PREPOSITION = "por"
+# Auxiliary of the periphrastic passive (fue construida), the se of the passive
+# (se construyó la casa) and the se of an impersonal sentence (se vive bien)
+PASSIVE_AUX = "ser"
+SE_PASSIVE_DEP = "expl:pass"
+SE_IMPERSONAL_DEP = "expl:impers"
+# Words of negation: only no carries Polarity=Neg in the models, the others are
+# recognized by their form; ni is left to the conjunctions of ni... ni
+NEGATION_WORDS = frozenset(
+    {
+        "no",
+        "nunca",
+        "jamás",
+        "nada",
+        "nadie",
+        "ningún",
+        "ninguno",
+        "ninguna",
+        "ningunos",
+        "ningunas",
+        "tampoco",
+    }
+)
+# Suffixes and lemmas of the nouns derived from a verb, the nominal part of a split
+# predicate (hacer una revisión, tomar una decisión). The heuristic catches nouns of
+# other origins with the same endings (ciencia, distancia), as any suffix rule does
+VERBAL_NOUN_SUFFIXES = ("ción", "sión", "miento", "anza", "encia", "ancia", "aje", "dura", "azgo")
+VERBAL_NOUN_LEMMAS = frozenset(
+    {
+        "abandono",
+        "análisis",
+        "apoyo",
+        "ataque",
+        "aviso",
+        "cambio",
+        "comienzo",
+        "control",
+        "desarrollo",
+        "empleo",
+        "envío",
+        "estudio",
+        "intento",
+        "olvido",
+        "pago",
+        "rechazo",
+        "traslado",
+        "uso",
+    }
+)
+# Verbs that carry only the grammar of a split predicate, the meaning being in the noun
+LIGHT_VERBS = frozenset(
+    {
+        "dar",
+        "efectuar",
+        "ejercer",
+        "hacer",
+        "llevar",
+        "poner",
+        "prestar",
+        "proceder",
+        "proporcionar",
+        "realizar",
+        "tener",
+        "tomar",
+    }
+)
+# Nouns of the fixed split predicates that no suffix gives away
+SPLIT_PREDICATE_NOUNS = frozenset(
+    {
+        "cabo",
+        "cargo",
+        "caso",
+        "cuenta",
+        "efecto",
+        "fin",
+        "gala",
+        "hincapié",
+        "lugar",
+        "manifiesto",
+        "marcha",
+        "parte",
+    }
+)
+
+SYNTAX_STATS_DESC = {
+    "mean_dependency_distance": "Mean dependency distance",
+    "std_dependency_distance": "Standard deviation of the dependency distance",
+    "max_dependency_distance": "Maximum dependency distance",
+    "p_adjacent_dependencies": "Share of adjacent dependencies",
+    "tree_depth": "Depth of the dependency tree",
+    "leaves_per_sent": "Leaves per sentence",
+    "subtrees_per_sent": "Subtrees per sentence",
+    "nodes_per_leaf": "Nodes per leaf",
+    "verb_valency": "Valency of the finite verbs",
+    "coordination_chains_per_sent": "Coordination chains per sentence",
+    "mean_coordination_chain_len": "Mean length of a coordination chain",
+    "clauses_per_sent": "Clauses per sentence",
+    "mean_clause_len": "Mean length of a clause (words)",
+    "subordinate_clauses_per_sent": "Subordinate clauses per sentence",
+    "p_complex_sents": "Share of sentences with a subordinate clause",
+    "modifiers_per_noun": "Modifiers per noun phrase",
+    "de_chains_per_sent": "Chains of de per sentence",
+    "max_de_chain_len": "Maximum length of a chain of de",
+    "participle_clauses_per_sent": "Participial clauses per sentence",
+    "mean_participle_clause_len": "Mean length of a participial clause (words)",
+    "gerund_clauses_per_sent": "Gerund clauses per sentence",
+    "mean_gerund_clause_len": "Mean length of a gerund clause (words)",
+    "p_passive": "Share of passive forms among the verbs",
+    "p_agentless_passive": "Share of agentless forms among the passive ones",
+    "se_passives_per_sent": "Passives with se per sentence",
+    "impersonal_se_per_sent": "Impersonal sentences with se per sentence",
+    "infinitives_per_sent": "Infinitives per sentence",
+    "negations_per_sent": "Words of negation per sentence",
+    "split_predicates_per_sent": "Split predicates per sentence",
+    "noun_verb_ratio": "Ratio of nouns to verbs",
+}

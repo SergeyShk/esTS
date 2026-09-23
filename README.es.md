@@ -28,7 +28,7 @@
 
 ---
 
-**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica y morfología, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
+**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica, morfología y sintaxis, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
 
 La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy): las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, las sílabas y el acento se deducen de la ortografía, y solo las estadísticas morfológicas necesitan un modelo entrenado.
 
@@ -38,8 +38,9 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Métricas de legibilidad](https://sergeyshk.github.io/esTS/es/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX, con grado de consenso, etapas escolares de España y tiempo de lectura
 * **[Métricas de diversidad léxica](https://sergeyshk.github.io/esTS/es/stats/diversity_stats/)** - TTR y sus variantes, MATTR, MSTTR, MTLD, HD-D, índices de Simpson y de Yule, entropía, leyes de Zipf y de Heaps
 * **[Estadísticas morfológicas](https://sergeyshk.github.io/esTS/es/stats/morph_stats/)** - categorías gramaticales y quince rasgos morfológicos de Universal Dependencies, con los marcadores del español: los modos, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
+* **[Estadísticas sintácticas](https://sergeyshk.github.io/esTS/es/stats/syntax_stats/)** - el árbol de dependencias por distancias, profundidad, cláusulas y coordinación, con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
 
-La sintaxis y la cohesión llegan en el resto de la 0.2, las medidas de corpus y la estilometría en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
+La cohesión llega en el resto de la 0.2, las medidas de corpus y la estilometría en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
 
 ## Instalación
 
@@ -333,6 +334,42 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/morph_stat
 
 </details>
 
+<details>
+<summary><b>Estadísticas sintácticas</b></summary>
+
+<br>
+
+La biblioteca mide el árbol de dependencias de Universal Dependencies y las construcciones que advierten las guías españolas de lenguaje claro:
+
+*   la complejidad del árbol: distancias de dependencia, profundidad, hojas y subárboles, valencia de los verbos personales, cadenas de coordinación, cláusulas y subordinadas, modificadores por sustantivo
+*   las construcciones: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos, el `se` impersonal, las palabras de negación, la razón entre sustantivos y verbos
+
+```python
+>>> from ests import SyntaxStats
+
+>>> text = ("La revisión de las cuentas fue realizada por el comité. "
+...         "Se llevó a cabo la reforma sin que nadie hiciera mención de los problemas.")
+>>> ss = SyntaxStats(text)
+
+>>> ss.n_sents, ss.n_words
+(2, 24)
+
+>>> ss.p_passive, ss.noun_verb_ratio
+(0.6666666666666666, 2.3333333333333335)
+
+>>> ss.split_predicates
+('llevó cabo', 'hiciera mención')
+
+>>> round(ss.mean_dependency_distance, 2)
+2.05
+```
+
+Las estadísticas necesitan el análisis sintáctico: el texto se analiza con `es_core_news_sm`, y en `nlp` puede indicarse cualquier otro pipeline.
+
+Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/syntax_stats/).
+
+</details>
+
 ## Desarrollo
 
 El proyecto usa [uv](https://docs.astral.sh/uv/) para gestionar las dependencias y [ruff](https://docs.astral.sh/ruff/) para el análisis y el formato del código.
@@ -376,6 +413,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos: las [iss
     *   extractors.py - herramientas de extracción de objetos del texto
     *   morph_stats.py - estadísticas morfológicas
     *   readability_stats.py - métricas de legibilidad
+    *   syntax_stats.py - estadísticas sintácticas
     *   syllables.py - silabificación y acento
     *   utils.py - herramientas auxiliares
 *   **tests** - pruebas que reproducen la estructura del paquete
