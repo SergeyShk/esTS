@@ -123,6 +123,18 @@ def test_nlp_parameter(cs, nlp):
     assert CohesionStats(TEXT, nlp=nlp).get_stats() == cs.get_stats()
 
 
+def test_sents_extractor_of_a_string():
+    text = "El gato duerme. Los niños juegan."
+    assert CohesionStats(text).n_sents == 2
+    assert CohesionStats(text, sents_extractor=SentsExtractor(min_len=16)).n_sents == 1
+
+
+def test_sents_extractor_of_a_parsed_doc(nlp):
+    doc = nlp("El gato duerme. Los niños juegan.")
+    assert CohesionStats(doc).n_sents == 2
+    assert CohesionStats(doc, sents_extractor=SentsExtractor(min_len=16)).n_sents == 1
+
+
 def test_doc_without_sentence_boundaries():
     tagged = spacy.load("es_core_news_sm", exclude=["parser"])
     doc = tagged("El gato duerme. Los niños juegan mucho.")
@@ -134,7 +146,7 @@ def test_doc_without_sentence_boundaries():
 def test_doc_without_sentence_boundaries_and_extractor():
     tagged = spacy.load("es_core_news_sm", exclude=["parser"])
     doc = tagged("El gato duerme. Los niños juegan mucho.")
-    cs = CohesionStats(doc, sents_extractor=SentsExtractor(min_len=20))
+    cs = CohesionStats(doc, sents_extractor=SentsExtractor(min_len=16))
     assert cs.n_sents == 1
 
 

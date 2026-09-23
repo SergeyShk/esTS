@@ -5,6 +5,7 @@ from ests.exceptions import DatasetNotFoundError
 from ests.utils import (
     get_nlp,
     get_tokenizer,
+    has_words,
     is_punctuation,
     iter_doc_tokens,
     iter_doc_words,
@@ -240,3 +241,31 @@ def test_get_nlp_cached():
 def test_get_nlp_not_installed():
     with pytest.raises(DatasetNotFoundError, match="spacy download"):
         get_nlp("es_core_news_xxl")
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("El gato duerme", True),
+        ("5 %", True),
+        ("3.º", True),
+        ("¿?", False),
+        ("...", False),
+        ("«»", False),
+        ("€ + %", False),
+        ("   ", False),
+        ("", False),
+    ],
+)
+def test_has_words(text, expected):
+    assert has_words(text) is expected
+
+
+@pytest.mark.parametrize("text", ["El gato duerme", "¿?", ""])
+def test_has_words_of_a_doc(text):
+    assert has_words(spacy.blank("es")(text)) is has_words(text)
+
+
+def test_has_words_of_a_span():
+    doc = spacy.blank("es")("El gato duerme. ¿?")
+    assert [has_words(sent) for sent in (doc[0:3], doc[4:])] == [True, False]

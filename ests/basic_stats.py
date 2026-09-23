@@ -17,7 +17,7 @@ from .constants import (
 from .exceptions import SourceError, SourceTypeError
 from .extractors import SentsExtractor, WordsExtractor
 from .syllables import count_syllables
-from .utils import count_letters, iter_doc_words
+from .utils import count_letters, has_words, iter_doc_words
 
 ELLIPSIS_PATTERN = re.compile(r"…|\.{3,}|(?<=[?!])\.{2}")
 # A hyphen after whitespace or at the start of a line, or before a space, is
@@ -103,7 +103,7 @@ class BasicStats:
     Attributes:
         c_letters (dict[int, int]): Distribution of words by number of letters
         c_syllables (dict[int, int]): Distribution of words by number of syllables
-        n_sents (int): Number of sentences
+        n_sents (int): Number of sentences containing words
         n_words (int): Number of words
         n_unique_words (int): Number of unique words
         n_long_words (int): Number of long words
@@ -173,7 +173,7 @@ class BasicStats:
         syllables_per_word = tuple(count_syllables(word) for word in words)
         self.c_letters = dict(sorted(Counter(letters_per_word).items()))
         self.c_syllables = dict(sorted(Counter(syllables_per_word).items()))
-        self.n_sents = sum(1 for sent in sents)
+        self.n_sents = sum(1 for sent in sents if has_words(sent))
         self.n_words = len(words)
         self.n_unique_words = len({word.lower() for word in words})
         self.n_long_words = self.count_words_by_letters(long_word_letter_factor)

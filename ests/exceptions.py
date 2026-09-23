@@ -26,9 +26,10 @@ class SourceError(EstsError, ValueError):
     Unusable data source
 
     Description:
-        The source has no words, sentences, texts or collocations, lacks
-        the needed annotation (a dependency parse) or nothing is left
-        after culling
+        The source has no words, sentences, texts or collocations, lacks the
+        annotation a statistic needs (the parts of speech, the lemmas, the
+        dependency parse), is a string longer than the max_length of the
+        pipeline, or nothing is left after culling
     """
 
 
@@ -58,8 +59,9 @@ class DatasetNotFoundError(EstsError, OSError):
     Dataset is not downloaded
 
     Description:
-        The dataset files are missing from the data directory; the message
-        shows the download command
+        The model of spaCy is not installed or the dataset files are missing
+        from the data directory; the message shows the command that brings
+        what is missing
     """
 
 

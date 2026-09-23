@@ -6,6 +6,7 @@ import spacy
 from ests import BasicStats
 from ests.basic_stats import count_punctuations, punctuation_profile
 from ests.constants import BASIC_STATS_DESC, PUNCTUATION_TYPES
+from ests.utils import get_nlp
 
 TEXT = (
     "Los tesauros son una clase especial de recursos lexicográficos que se caracterizan por"
@@ -27,6 +28,16 @@ def bs():
 @pytest.fixture(scope="module")
 def nlp():
     return spacy.load("es_core_news_sm")
+
+
+@pytest.mark.parametrize("source", ["Hola. ¿? Adiós.", "Hola.\n...\nAdiós."])
+def test_sentences_without_words_are_not_counted(source):
+    assert BasicStats(source).n_sents == 2
+
+
+def test_sentences_without_words_are_not_counted_in_a_doc():
+    doc = get_nlp()("Hola. ¿? Adiós.")
+    assert BasicStats(doc).n_sents == 2
 
 
 def test_init_value_error():

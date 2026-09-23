@@ -4,7 +4,7 @@
 
 *¿Cómo esTáS, texto?*
 
-**esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity and morphology - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
+**esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech, the features and the dependencies of Universal Dependencies.
 
 The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy), and only the morphological, the syntactic and the cohesion statistics need a trained model: sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography.
 

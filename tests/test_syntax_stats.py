@@ -4,7 +4,7 @@ import pytest
 import spacy
 from spacy.tokens import Doc
 
-from ests import SyntaxStats
+from ests import BasicStats, SyntaxStats
 from ests.constants import SYNTAX_STATS_DESC
 from ests.exceptions import SourceError, SourceTypeError
 from ests.syntax_stats import (
@@ -127,6 +127,12 @@ def test_source_too_long(nlp):
 def test_is_word(nlp):
     doc = nlp("La casa, blanca")
     assert [token.text for token in doc if is_word(token)] == ["La", "casa", "blanca"]
+
+
+def test_symbols_are_not_words(nlp):
+    doc = nlp("El 5 % de la gente paga 10 € o 3 $ + 2. Es así.")
+    assert SyntaxStats(doc).n_words == BasicStats(doc).n_words
+    assert "%" not in [token.text for token in get_words(doc)]
 
 
 def test_is_root(nlp):

@@ -11,17 +11,17 @@ Todas las excepciones de la biblioteca heredan de la clase base `EstsError` y de
 | :-------- | :-------------- | :-------------- |
 | `EstsError` | `Exception` | Clase base, nunca se lanza directamente |
 | `SourceTypeError` | `TypeError` | La fuente de datos no es una cadena ni un `Doc`, el tokenizador no es invocable o devuelve un objeto no iterable |
-| `SourceError` | `ValueError` | La fuente no tiene palabras ni oraciones |
+| `SourceError` | `ValueError` | La fuente no tiene palabras ni oraciones, le falta la anotación que una estadística necesita (las categorías gramaticales, los lemas, el análisis de dependencias) o es una cadena más larga que el `max_length` del pipeline |
 | `ParameterError` | `ValueError` | Un umbral, ventana, tamaño de segmento, número de elementos, base del logaritmo o nivel de confianza fuera de rango; un preajuste, escala o nombre de métrica desconocidos |
 | `UnknownStatError` | `ParameterError`, `KeyError` | Se pide por nombre una estadística desconocida, como en `DiversityStats.windowed` |
-| `DatasetNotFoundError` | `OSError` | El conjunto de datos no está descargado; el mensaje muestra el comando de descarga |
+| `DatasetNotFoundError` | `OSError` | El modelo de spaCy no está instalado o un conjunto de datos no está descargado; el mensaje muestra el comando que trae lo que falta |
 | `DataFileError` | `ValueError` | Un archivo del conjunto de datos está dañado, tiene un formato inesperado o no se puede decodificar |
 | `DownloadError` | `RuntimeError` | El archivo no se pudo descargar o no superó la comprobación de la suma de verificación |
 
 Las clases están disponibles desde `ests` y desde `ests.exceptions`.
 
 !!! note "Nota"
-    Las tres últimas están reservadas para los cargadores de conjuntos de datos de las próximas versiones; nada en la 0.1 las lanza.
+    `DatasetNotFoundError` es lo que levanta una estadística de Universal Dependencies cuando el modelo `es_core_news_sm` no está instalado, que es lo primero con lo que se topa un lector nuevo: `MorphStats("El gato duerme")` sin el modelo dice cómo descargarlo. `DataFileError` y `DownloadError` quedan reservadas para los cargadores de conjuntos de datos de las próximas versiones; todavía nada las lanza.
 
 !!! example "Ejemplo"
 

@@ -171,6 +171,30 @@ def test_pipeline_is_loaded_without_importing_the_package(tmp_path):
     assert result.stdout.strip() == "6"
 
 
+@pytest.mark.parametrize(("factory", "component", "stats"), COMPONENTS)
+@pytest.mark.parametrize("text", ["", "   ", "¿?", "..."])
+def test_component_of_a_document_without_words(factory, component, stats, text):
+    pipeline = spacy.load("es_core_news_sm")
+    pipeline.add_pipe(factory, name="stats", last=True)
+    assert pipeline(text)._.stats is None
+
+
+def test_pipe_over_a_corpus_with_empty_texts():
+    pipeline = spacy.load("es_core_news_sm")
+    for factory in ("ests_basic", "ests_morph", "ests_syntax", "ests_cohesion"):
+        pipeline.add_pipe(factory, name=factory.removeprefix("ests_"), last=True)
+    docs = list(pipeline.pipe(["Uno bueno.", "", "   ", "¿?", "Tres palabras aquí."]))
+    assert len(docs) == 5
+    assert [doc._.basic is None for doc in docs] == [False, True, True, True, False]
+    assert docs[-1]._.syntax.n_words == 3
+
+
+def test_component_without_the_annotation_of_a_document_without_words():
+    pipeline = spacy.blank("es")
+    pipeline.add_pipe("ests_morph", name="stats", last=True)
+    assert pipeline("¿?")._.stats is None
+
+
 def test_extension_is_set_by_the_name():
     pipeline = spacy.load("es_core_news_sm")
     pipeline.add_pipe("ests_basic", name="basic_stats", last=True)

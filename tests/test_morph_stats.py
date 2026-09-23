@@ -234,6 +234,20 @@ def test_markers_auxiliaries_are_not_copulas(text):
     assert isnan(ms.get_markers()["p_ser"])
 
 
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("El proyecto es financiado por el estado", None),
+        ("El libro fue escrito por Cervantes", None),
+        ("La puerta está cerrada", 0.0),
+        ("Ella es alta pero está cansada", 0.5),
+    ],
+)
+def test_markers_passive_auxiliary_is_not_a_copula(text, expected):
+    value = MorphStats(text).get_markers()["p_ser"]
+    assert isnan(value) if expected is None else value == expected
+
+
 def test_markers_copulas():
     assert MorphStats("Ella es alta pero hoy está cansada").get_markers()["p_ser"] == 0.5
 

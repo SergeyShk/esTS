@@ -35,6 +35,8 @@ Without `name` the pipe and the extension keep the name of the factory (`doc._.e
 | `SyntaxStatsComponent` | `ests_syntax` | [SyntaxStats](stats/syntax_stats.md) | a parse and lemmas |
 | `CohesionStatsComponent` | `ests_cohesion` | [CohesionStats](stats/cohesion_stats.md) | parts of speech and lemmas |
 
+A document with no words - an empty string, whitespace, punctuation alone - passes through every component untouched, its extension left at `None`, so that one such document in a corpus does not stop `nlp.pipe`. A missing annotation is another matter: that is an error of the pipeline and it is raised.
+
 In the pipeline of `es_core_news_sm` the parts of speech come from the `morphologizer` (a `tagger` alone gives the tag of the corpus and not the part of speech of Universal Dependencies; with an `attribute_ruler` it does give it), the parse from the `parser` and the lemmas from the `lemmatizer`. A component whose annotation is missing raises `SourceError` when the document goes through it, `excluded` components included: without the `lemmatizer` every lemma is an empty string, which would make every noun of a text overlap with every other.
 
 ## BasicStatsComponent
@@ -175,7 +177,7 @@ A parameter out of its range raises `ParameterError` when the component is added
 !!! info ""
     **ests.components.MorphStatsComponent**
 
-The component of the morphological statistics of a text. The parts of speech and the features are read from the annotation of the model, so the pipeline needs a tagger before the component.
+The component of the morphological statistics of a text. The parts of speech and the features are read from the annotation of the model, so the pipeline needs a `morphologizer` (or a `tagger` with an `attribute_ruler`) and a `lemmatizer` before the component.
 
 Parameters:
 
@@ -210,7 +212,7 @@ Parameters:
 !!! info ""
     **ests.components.SyntaxStatsComponent**
 
-The component of the syntactic statistics of a text. The statistics are computed on the dependency tree, so the pipeline needs a parser before the component.
+The component of the syntactic statistics of a text. The statistics are computed on the dependency tree, so the pipeline needs a `parser` and a `lemmatizer` before the component.
 
 Parameters:
 
@@ -245,7 +247,7 @@ Parameters:
 !!! info ""
     **ests.components.CohesionStatsComponent**
 
-The component of the cohesion statistics of a text. The features are read from the annotation of the model, so the pipeline needs a tagger before the component.
+The component of the cohesion statistics of a text. The features are read from the annotation of the model, so the pipeline needs a `morphologizer` (or a `tagger` with an `attribute_ruler`) and a `lemmatizer` before the component.
 
 Parameters:
 

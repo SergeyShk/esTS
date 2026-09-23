@@ -135,7 +135,7 @@ Devuelve un diccionario con los marcadores del español calculados a partir de l
 
 Los cuatro primeros marcadores comparten la base de las formas personales y suman uno siempre que el modelo no deje ninguna forma personal sin modo: cinco de sus 433 etiquetas llevan `VerbForm=Fin` y ningún `Mood`, y cada forma así falta en las cuatro proporciones. Los tres siguientes comparten la base de todas las formas verbales, contadas sobre verbos y auxiliares, de modo que los participios que el modelo anota como adjetivos (`la casa pintada`) quedan fuera de la base, mientras que los de los tiempos compuestos y la pasiva (`he leído`, `fue escrito`) quedan dentro.
 
-La base de `p_ser` son solo los usos copulativos, leídos de la dependencia del token: `fue escrito` y `está cantando` son los auxiliares de la pasiva y de la perífrasis progresiva, no una elección entre las dos cópulas, mientras que `es alta`, `está cansada` y `lo importante es que vengas` sí lo son. El análisis sintáctico es lo que los distingue, así que para un `Doc` que no lo lleva el marcador es `nan`.
+La base de `p_ser` son solo los usos copulativos, leídos de la dependencia del token y de aquello de lo que depende: `fue escrito` y `está cantando` son los auxiliares de la pasiva y de la perífrasis progresiva, y también lo es el `es` de `es financiado`, que en presente los modelos etiquetan como cópula - ninguno de los tres es una elección entre las dos cópulas, mientras que `es alta`, `está cansada` y `lo importante es que vengas` sí lo son. El análisis sintáctico es lo que los distingue, así que para un `Doc` que no lo lleva el marcador es `nan`.
 
 Un marcador cuya base está vacía - un texto sin verbos, sin cópula, sin adverbios - es `nan`.
 

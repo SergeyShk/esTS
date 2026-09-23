@@ -9,6 +9,8 @@ Módulo para calcular las estadísticas básicas de un texto. La fuente de datos
 
 El módulo permite usar objetos [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) ya configurados para la segmentación en oraciones y palabras que precede al cálculo. Las sílabas se cuentan con [`count_syllables`](../syllables.md#count_syllables) y las letras con `str.isalpha`, así que las cifras, los guiones y los signos dentro de una palabra no son letras, mientras que los indicadores ordinales `º` y `ª` sí lo son (`3.º` es una palabra de una letra).
 
+Una oración de pura puntuación (`¿?`, una línea de puntos entre dos párrafos) no lleva ninguna palabra y no se cuenta: las fórmulas de legibilidad dividen por el número de oraciones.
+
 Para un objeto `Doc` las palabras se toman de los tokens (los signos de puntuación y los símbolos como `€` o `%` se descartan) y las oraciones de la anotación; sin límites de oración (`spacy.blank`, un pipeline sin `parser` ni `senter`) las oraciones se extraen del texto con `SentsExtractor`. Un extractor indicado explícitamente se usa siempre, sobre el texto del `Doc`, de modo que el filtro de palabras vacías o un tokenizador propio funcionan igual con las dos clases de fuente.
 
 !!! note "Nota"
@@ -34,7 +36,7 @@ Para un objeto `Doc` las palabras se toman de los tokens (los signos de puntuaci
 | :-------: | :--: | :---------: |
 | `c_letters` | dict[int, int] | Distribución de las palabras por número de letras |
 | `c_syllables` | dict[int, int] | Distribución de las palabras por número de sílabas |
-| `n_sents` | int | Número de oraciones |
+| `n_sents` | int | Número de oraciones con palabras |
 | `n_words` | int | Número de palabras |
 | `n_unique_words` | int | Número de palabras únicas |
 | `n_long_words` | int | Número de palabras largas |
@@ -112,30 +114,30 @@ Ejemplo de cálculo de las estadísticas básicas con normalización:
 
     ``` bash
     {'c_letters': {1: 1, 2: 1, 3: 1, 4: 1, 6: 1, 8: 4, 12: 1},
-    'c_punctuations': {'comma': 1, 'period': 0, 'question': 0, 'exclamation': 0, 'ellipsis': 0, 'colon': 1, 'semicolon': 0, 'dash': 0, 'hyphen': 0, 'angle_quotes': 0, 'straight_quotes': 0, 'parentheses': 0, 'other': 0},
-    'c_syllables': {1: 4, 2: 1, 3: 4, 5: 1},
-    'n_chars': 71,
-    'n_complex_words': 5,
-    'n_letters': 60,
-    'n_long_words': 5,
-    'n_monosyllable_words': 4,
-    'n_polysyllable_words': 6,
-    'n_punctuations': 2,
-    'n_sents': 1,
-    'n_simple_words': 5,
-    'n_spaces': 9,
-    'n_syllables': 23,
-    'n_unique_words': 8,
-    'n_words': 10,
-    'p_complex_words': 0.5,
-    'p_letters': 0.8450704225352113,
-    'p_long_words': 0.5,
-    'p_monosyllable_words': 0.4,
-    'p_polysyllable_words': 0.6,
-    'p_punctuations': 0.028169014084507043,
-    'p_simple_words': 0.5,
-    'p_spaces': 0.1267605633802817,
-    'p_unique_words': 0.8}
+     'c_syllables': {1: 4, 2: 1, 3: 4, 5: 1},
+     'n_sents': 1,
+     'n_words': 10,
+     'n_unique_words': 8,
+     'n_long_words': 5,
+     'n_complex_words': 5,
+     'n_simple_words': 5,
+     'n_monosyllable_words': 4,
+     'n_polysyllable_words': 6,
+     'n_chars': 71,
+     'n_letters': 60,
+     'n_spaces': 9,
+     'n_syllables': 23,
+     'n_punctuations': 2,
+     'c_punctuations': {'comma': 1, 'period': 0, 'question': 0, 'exclamation': 0, 'ellipsis': 0, 'colon': 1, 'semicolon': 0, 'dash': 0, 'hyphen': 0, 'angle_quotes': 0, 'straight_quotes': 0, 'parentheses': 0, 'other': 0},
+     'p_unique_words': 0.8,
+     'p_long_words': 0.5,
+     'p_complex_words': 0.5,
+     'p_simple_words': 0.5,
+     'p_monosyllable_words': 0.4,
+     'p_polysyllable_words': 0.6,
+     'p_letters': 0.8450704225352113,
+     'p_spaces': 0.1267605633802817,
+     'p_punctuations': 0.028169014084507043}
     ```
 
 ### print_stats

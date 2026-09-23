@@ -9,6 +9,8 @@ A module for computing basic text statistics. The data source can be either a te
 
 The module allows using pre-built [`SentsExtractor`](../extractors/sentences.md) and [`WordsExtractor`](../extractors/words.md) objects for the sentence and word tokenization needed before computing the statistics. Syllables are counted by [`count_syllables`](../syllables.md#count_syllables), letters by `str.isalpha`, so digits, hyphens and marks inside a word are not letters, while the ordinal indicators `º` and `ª` are (`3.º` is a one-letter word).
 
+A sentence of punctuation alone (`¿?`, a line of dots between two paragraphs) holds no word and is not counted: the formulas of readability divide by the number of sentences.
+
 For a `Doc` object words are taken from the tokens (punctuation marks and symbols such as `€` or `%` are dropped), sentences - from the annotation; without sentence boundaries (`spacy.blank`, a pipeline without `parser` and `senter`) sentences are extracted from the text by `SentsExtractor`. An extractor passed explicitly is always used, on the text of the `Doc`, so that stop word filtering or a custom tokenizer works the same for both kinds of source.
 
 !!! note "Note"
@@ -34,7 +36,7 @@ For a `Doc` object words are taken from the tokens (punctuation marks and symbol
 | :-------: | :--: | :---------: |
 | `c_letters` | dict[int, int] | Distribution of words by number of letters |
 | `c_syllables` | dict[int, int] | Distribution of words by number of syllables |
-| `n_sents` | int | Number of sentences |
+| `n_sents` | int | Number of sentences containing words |
 | `n_words` | int | Number of words |
 | `n_unique_words` | int | Number of unique words |
 | `n_long_words` | int | Number of long words |
@@ -112,30 +114,30 @@ An example of computing basic text statistics with normalization:
 
     ``` bash
     {'c_letters': {1: 1, 2: 1, 3: 1, 4: 1, 6: 1, 8: 4, 12: 1},
-    'c_punctuations': {'comma': 1, 'period': 0, 'question': 0, 'exclamation': 0, 'ellipsis': 0, 'colon': 1, 'semicolon': 0, 'dash': 0, 'hyphen': 0, 'angle_quotes': 0, 'straight_quotes': 0, 'parentheses': 0, 'other': 0},
-    'c_syllables': {1: 4, 2: 1, 3: 4, 5: 1},
-    'n_chars': 71,
-    'n_complex_words': 5,
-    'n_letters': 60,
-    'n_long_words': 5,
-    'n_monosyllable_words': 4,
-    'n_polysyllable_words': 6,
-    'n_punctuations': 2,
-    'n_sents': 1,
-    'n_simple_words': 5,
-    'n_spaces': 9,
-    'n_syllables': 23,
-    'n_unique_words': 8,
-    'n_words': 10,
-    'p_complex_words': 0.5,
-    'p_letters': 0.8450704225352113,
-    'p_long_words': 0.5,
-    'p_monosyllable_words': 0.4,
-    'p_polysyllable_words': 0.6,
-    'p_punctuations': 0.028169014084507043,
-    'p_simple_words': 0.5,
-    'p_spaces': 0.1267605633802817,
-    'p_unique_words': 0.8}
+     'c_syllables': {1: 4, 2: 1, 3: 4, 5: 1},
+     'n_sents': 1,
+     'n_words': 10,
+     'n_unique_words': 8,
+     'n_long_words': 5,
+     'n_complex_words': 5,
+     'n_simple_words': 5,
+     'n_monosyllable_words': 4,
+     'n_polysyllable_words': 6,
+     'n_chars': 71,
+     'n_letters': 60,
+     'n_spaces': 9,
+     'n_syllables': 23,
+     'n_punctuations': 2,
+     'c_punctuations': {'comma': 1, 'period': 0, 'question': 0, 'exclamation': 0, 'ellipsis': 0, 'colon': 1, 'semicolon': 0, 'dash': 0, 'hyphen': 0, 'angle_quotes': 0, 'straight_quotes': 0, 'parentheses': 0, 'other': 0},
+     'p_unique_words': 0.8,
+     'p_long_words': 0.5,
+     'p_complex_words': 0.5,
+     'p_simple_words': 0.5,
+     'p_monosyllable_words': 0.4,
+     'p_polysyllable_words': 0.6,
+     'p_letters': 0.8450704225352113,
+     'p_spaces': 0.1267605633802817,
+     'p_punctuations': 0.028169014084507043}
     ```
 
 ### print_stats

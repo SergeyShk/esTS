@@ -11,17 +11,17 @@ All library exceptions inherit the base class `EstsError` and one of the built-i
 | :-------- | :------------- | :---------- |
 | `EstsError` | `Exception` | Base class, never raised itself |
 | `SourceTypeError` | `TypeError` | The data source is neither a string nor a `Doc`, the tokenizer is not callable or returns a non-iterable object |
-| `SourceError` | `ValueError` | The source has no words or no sentences |
+| `SourceError` | `ValueError` | The source has no words or no sentences, lacks the annotation a statistic needs (the parts of speech, the lemmas, the dependency parse), or is a string longer than the `max_length` of the pipeline |
 | `ParameterError` | `ValueError` | A threshold, window, segment size, number of items, logarithm base or confidence level is out of range; an unknown preset, scale or metric name |
 | `UnknownStatError` | `ParameterError`, `KeyError` | An unknown statistic is requested by name, as in `DiversityStats.windowed` |
-| `DatasetNotFoundError` | `OSError` | The dataset is not downloaded; the message shows the download command |
+| `DatasetNotFoundError` | `OSError` | The model of spaCy is not installed or a dataset is not downloaded; the message shows the command that brings what is missing |
 | `DataFileError` | `ValueError` | A dataset file is corrupted, has an unexpected format or cannot be decoded |
 | `DownloadError` | `RuntimeError` | The file could not be downloaded or failed the checksum verification |
 
 The classes are available from `ests` and from `ests.exceptions`.
 
 !!! note "Note"
-    The last three are reserved for the dataset loaders of the coming releases; nothing in 0.1 raises them.
+    `DatasetNotFoundError` is what a statistic of Universal Dependencies raises when the model `es_core_news_sm` is not installed, which is the first thing a new reader meets: `MorphStats("El gato duerme")` without the model says how to download it. `DataFileError` and `DownloadError` are reserved for the dataset loaders of the coming releases; nothing raises them yet.
 
 !!! example "Example"
 
