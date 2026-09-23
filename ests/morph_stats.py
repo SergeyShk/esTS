@@ -49,9 +49,10 @@ class MorphStats:
         left uncounted included, stays in tags
         A string is parsed with the model es_core_news_sm, or with the
         pipeline given in nlp, without the entity recognizer, which nothing
-        here reads; a Doc is taken as it is and must carry the annotation of
-        the parts of speech. Punctuation marks and symbols are not words and
-        are left out
+        here reads; a Doc is taken as it is and must carry the parts of speech,
+        which come from a morphologizer or from a tagger with an attribute
+        ruler, and the lemmas, which come from a lemmatizer. Punctuation marks
+        and symbols are not words and are left out
         On top of the features the class computes the markers of Spanish:
         the moods of the finite forms, the non-finite forms, the choice
         between the copulas ser and estar and the adverbs in -mente
@@ -104,8 +105,9 @@ class MorphStats:
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc object
-        SourceError: If the source has no words, has no annotation of the parts
-            of speech, or is a string longer than the max_length of the pipeline
+        SourceError: If the source has no words, no annotation of the parts of
+            speech or no lemmas, or is a string longer than the max_length of
+            the pipeline
         DatasetNotFoundError: If a string is passed and the model is not installed
     """
 
@@ -128,6 +130,11 @@ class MorphStats:
             raise SourceError(
                 "The data source has no annotation of the parts of speech: "
                 "parse the text with a model instead of a blank pipeline"
+            )
+        if not source.has_annotation("LEMMA"):
+            raise SourceError(
+                "The data source has no lemmas: parse the text with a pipeline that has "
+                "a lemmatizer"
             )
 
         self.words = tuple(token.text for token in tokens)

@@ -9,6 +9,8 @@ Conjunto de componentes para los pipelines de [spaCy](https://github.com/explosi
 
 Las fábricas llevan el prefijo de la biblioteca - `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion` - porque el registro de spaCy es uno para todo el proceso: un `basic` a secas chocaría con el componente de cualquier otra biblioteca que registre ese nombre, y spaCy responde a un segundo registro con `ValueError [E004]`.
 
+Están declaradas como entry points de `spacy_factories`, así que un pipeline guardado con estos componentes - `nlp.to_disk(path)`, `spacy package`, una configuración de entrenamiento - se carga con `spacy.load(path)` en un proceso que nunca importa la biblioteca.
+
 El nombre del paso del pipeline es libre y es como se llama la extensión, así que la forma corta está a un argumento de distancia:
 
 ``` python
@@ -29,11 +31,11 @@ Sin `name` el paso y la extensión conservan el nombre de la fábrica (`doc._.es
 | `BasicStatsComponent` | `ests_basic` | [BasicStats](stats/basic_stats.md) | nada |
 | `ReadabilityStatsComponent` | `ests_readability` | [ReadabilityStats](stats/readability_stats.md) | nada |
 | `DiversityStatsComponent` | `ests_diversity` | [DiversityStats](stats/diversity_stats.md) | nada |
-| `MorphStatsComponent` | `ests_morph` | [MorphStats](stats/morph_stats.md) | un etiquetador antes |
-| `SyntaxStatsComponent` | `ests_syntax` | [SyntaxStats](stats/syntax_stats.md) | un analizador antes |
-| `CohesionStatsComponent` | `ests_cohesion` | [CohesionStats](stats/cohesion_stats.md) | un etiquetador antes |
+| `MorphStatsComponent` | `ests_morph` | [MorphStats](stats/morph_stats.md) | categorías gramaticales y lemas |
+| `SyntaxStatsComponent` | `ests_syntax` | [SyntaxStats](stats/syntax_stats.md) | análisis sintáctico y lemas |
+| `CohesionStatsComponent` | `ests_cohesion` | [CohesionStats](stats/cohesion_stats.md) | categorías gramaticales y lemas |
 
-Un componente al que le falta la anotación - uno de los tres últimos en un pipeline de `spacy.blank("es")` - levanta `SourceError` cuando el documento pasa por él.
+En el pipeline de `es_core_news_sm` las categorías gramaticales vienen del `morphologizer` (un `tagger` solo da la etiqueta del corpus y no la categoría de Universal Dependencies; con un `attribute_ruler` sí la da), el análisis del `parser` y los lemas del `lemmatizer`. Un componente al que le falta la anotación levanta `SourceError` cuando el documento pasa por él, también con componentes `excluded`: sin el `lemmatizer` todos los lemas son cadenas vacías, y eso haría que todos los sustantivos de un texto se repitieran entre sí.
 
 ## BasicStatsComponent
 
@@ -89,8 +91,11 @@ Parámetros:
 | `nlp` | Language | `-` | Objeto Language |
 | `name` | str | `"ests_readability"` | Nombre del componente en el pipeline |
 | `preset` | str | `"general"` | Preset de los coeficientes (`general`, `classic`) |
+| `basic` | str | `None` | Nombre de la extensión de un componente de estadísticas básicas, cuyo objeto se usa en lugar de calcularlas otra vez |
 
 Un preset desconocido levanta `ParameterError` al añadir el componente, no al pasar un documento por él.
+
+Las métricas de legibilidad se calculan sobre las estadísticas básicas, así que un pipeline con los dos componentes las calcula dos veces salvo que `basic` nombre la extensión del primero: `nlp.add_pipe("ests_readability", config={"basic": "basic"})` después de un componente llamado `basic`. En las páginas españolas de este sitio eso lleva un documento de 0,025 s a 0,015 s, y el ahorro crece con cada preset añadido. Un nombre que no lleva estadísticas básicas, o un componente que corre después de este, levanta `SourceError`.
 
 !!! example "Ejemplo"
 

@@ -46,7 +46,9 @@ class SyntaxStats:
         The statistics are computed on the dependency tree of Universal
         Dependencies, so the source has to be parsed: a string is parsed with
         the model es_core_news_sm or with the pipeline given in nlp, and a Doc
-        must carry the dependencies
+        must carry the dependencies, which come from a parser, and the lemmas,
+        which come from a lemmatizer and tell a passive from a compound tense
+        and a light verb from any other
         Punctuation marks and whitespace are not nodes of the tree: the words
         are, and the distances are counted in positions of words
         The measures of a sentence - the longest dependency, the depth of the
@@ -143,8 +145,8 @@ class SyntaxStats:
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc object
-        SourceError: If the source has no words, no parse, or is a string longer
-            than the max_length of the pipeline
+        SourceError: If the source has no words, no parse or no lemmas, or is
+            a string longer than the max_length of the pipeline
         DatasetNotFoundError: If a string is passed and the model is not installed
     """
 
@@ -163,6 +165,11 @@ class SyntaxStats:
         if not source.has_annotation("DEP"):
             raise SourceError(
                 "The data source has no parse: parse the text with a model that has a parser"
+            )
+        if not source.has_annotation("LEMMA"):
+            raise SourceError(
+                "The data source has no lemmas: parse the text with a pipeline that has "
+                "a lemmatizer"
             )
         sents = [sent_words for sent in source.sents if (sent_words := get_words(sent))]
         if not sents:

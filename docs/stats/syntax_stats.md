@@ -5,7 +5,7 @@
 
 ## Description
 
-A module for computing the syntactic statistics of a text on the dependency tree of [Universal Dependencies](https://universaldependencies.org/u/dep/). The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library, but it has to be parsed: a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, and a `Doc` must carry the dependencies, so a `Doc` of `spacy.blank("es")` or of a pipeline without a parser is not a valid source.
+A module for computing the syntactic statistics of a text on the dependency tree of [Universal Dependencies](https://universaldependencies.org/u/dep/). The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library, but it has to be parsed: a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, and a `Doc` must carry the dependencies, which come from a `parser`, and the lemmas, which come from a `lemmatizer` and are what tells a passive from a compound tense and a light verb from any other - a `Doc` of `spacy.blank("es")`, of a pipeline without a parser or of one with the `lemmatizer` excluded is not a valid source and raises `SourceError`.
 
 Punctuation marks and whitespace are not nodes of the tree: the words are, and the distances are counted in positions of words. The measures of a sentence - the longest dependency, the depth of the tree, the number of leaves and of subtrees, the nodes per leaf - are averaged over the sentences, the constructions are given per sentence, and the passive and the modifiers are shares of the verbs and of the nouns.
 

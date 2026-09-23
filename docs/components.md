@@ -9,6 +9,8 @@ A set of components for [spaCy](https://github.com/explosion/spaCy) pipelines. E
 
 The factories carry the prefix of the library - `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion` - because the registry of spaCy is one for the whole process: a plain `basic` would collide with the component of any other library registering that name, and spaCy answers a second registration with `ValueError [E004]`.
 
+They are declared as entry points of `spacy_factories`, so a pipeline saved with these components - `nlp.to_disk(path)`, `spacy package`, a training config - loads with `spacy.load(path)` in a process that never imports the library.
+
 The name of the pipe is free and is what the extension is called, so the short form is one argument away:
 
 ``` python
@@ -29,11 +31,11 @@ Without `name` the pipe and the extension keep the name of the factory (`doc._.e
 | `BasicStatsComponent` | `ests_basic` | [BasicStats](stats/basic_stats.md) | nothing |
 | `ReadabilityStatsComponent` | `ests_readability` | [ReadabilityStats](stats/readability_stats.md) | nothing |
 | `DiversityStatsComponent` | `ests_diversity` | [DiversityStats](stats/diversity_stats.md) | nothing |
-| `MorphStatsComponent` | `ests_morph` | [MorphStats](stats/morph_stats.md) | a tagger before it |
-| `SyntaxStatsComponent` | `ests_syntax` | [SyntaxStats](stats/syntax_stats.md) | a parser before it |
-| `CohesionStatsComponent` | `ests_cohesion` | [CohesionStats](stats/cohesion_stats.md) | a tagger before it |
+| `MorphStatsComponent` | `ests_morph` | [MorphStats](stats/morph_stats.md) | parts of speech and lemmas |
+| `SyntaxStatsComponent` | `ests_syntax` | [SyntaxStats](stats/syntax_stats.md) | a parse and lemmas |
+| `CohesionStatsComponent` | `ests_cohesion` | [CohesionStats](stats/cohesion_stats.md) | parts of speech and lemmas |
 
-A component whose annotation is missing - one of the last three in a pipeline of `spacy.blank("es")` - raises `SourceError` when the document goes through it.
+In the pipeline of `es_core_news_sm` the parts of speech come from the `morphologizer` (a `tagger` alone gives the tag of the corpus and not the part of speech of Universal Dependencies; with an `attribute_ruler` it does give it), the parse from the `parser` and the lemmas from the `lemmatizer`. A component whose annotation is missing raises `SourceError` when the document goes through it, `excluded` components included: without the `lemmatizer` every lemma is an empty string, which would make every noun of a text overlap with every other.
 
 ## BasicStatsComponent
 
@@ -89,8 +91,11 @@ Parameters:
 | `nlp` | Language | `-` | Language object |
 | `name` | str | `"ests_readability"` | Name of the component in the pipeline |
 | `preset` | str | `"general"` | Preset of the coefficients (`general`, `classic`) |
+| `basic` | str | `None` | Name of the extension of a component of basic statistics, whose object is used instead of computing them again |
 
 An unknown preset raises `ParameterError` when the component is added, not when a document goes through it.
+
+The readability metrics are computed on the basic statistics, so a pipeline holding both components computes them twice unless `basic` names the extension of the first one - `nlp.add_pipe("ests_readability", config={"basic": "basic"})` after a component named `basic`. On the Spanish pages of this site that takes a document from 0.025 s to 0.015 s, and the saving grows with every further preset. A name that holds no basic statistics, or a component that runs after this one, raises `SourceError`.
 
 !!! example "Example"
 

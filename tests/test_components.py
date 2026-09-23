@@ -1,3 +1,6 @@
+import subprocess
+import sys
+
 import pytest
 import spacy
 from spacy.language import Language
@@ -119,6 +122,53 @@ def test_component_without_the_annotation(factory):
     pipeline.add_pipe(factory, name="stats", last=True)
     with pytest.raises(SourceError):
         pipeline("El gato duerme")
+
+
+def test_readability_reuses_the_basic_statistics(nlp):
+    pipeline = spacy.load("es_core_news_sm")
+    pipeline.add_pipe("ests_basic", name="basic", last=True)
+    pipeline.add_pipe("ests_readability", name="stats", config={"basic": "basic"}, last=True)
+    doc = pipeline(TEXT)
+    assert doc._.stats.get_stats() == ReadabilityStats(nlp(TEXT)).get_stats()
+    assert doc._.stats.get_stats() == ReadabilityStats(doc._.basic).get_stats()
+
+
+def test_readability_reuse_of_a_missing_component():
+    pipeline = spacy.load("es_core_news_sm")
+    pipeline.add_pipe("ests_readability", name="stats", config={"basic": "basic"}, last=True)
+    with pytest.raises(SourceError, match="holds no basic statistics"):
+        pipeline(TEXT)
+
+
+def test_readability_reuse_of_a_component_that_runs_later():
+    pipeline = spacy.load("es_core_news_sm")
+    pipeline.add_pipe("ests_readability", name="stats", config={"basic": "basic"}, last=True)
+    pipeline.add_pipe("ests_basic", name="basic", last=True)
+    with pytest.raises(SourceError, match="holds no basic statistics"):
+        pipeline(TEXT)
+
+
+@pytest.mark.parametrize("factory", ["ests_morph", "ests_syntax", "ests_cohesion"])
+def test_component_without_the_lemmas(factory):
+    pipeline = spacy.load("es_core_news_sm", exclude=["lemmatizer"])
+    pipeline.add_pipe(factory, name="stats", last=True)
+    with pytest.raises(SourceError, match="no lemmas"):
+        pipeline(TEXT)
+
+
+def test_pipeline_is_loaded_without_importing_the_package(tmp_path):
+    pipeline = spacy.load("es_core_news_sm")
+    pipeline.add_pipe("ests_basic", name="basic", last=True)
+    pipeline.to_disk(tmp_path)
+    code = (
+        "import spacy;"
+        f"nlp = spacy.load({str(tmp_path)!r});"
+        "print(nlp('El gato duerme en la ventana')._.basic.n_words)"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", code], capture_output=True, text=True, check=True
+    )
+    assert result.stdout.strip() == "6"
 
 
 def test_extension_is_set_by_the_name():

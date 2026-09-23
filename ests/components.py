@@ -13,6 +13,9 @@ Description:
     spaCy answers a second registration with an error. The name of the pipe,
     which is also the name of the extension, is free: add_pipe(name="basic")
     gives doc._.basic
+    The factories are declared as entry points of spacy_factories, so a
+    pipeline saved with these components loads with spacy.load() in a process
+    that never imports this package
 """
 
 from spacy.language import Language
@@ -29,6 +32,7 @@ from .constants import (
 )
 from .diversity_stats import DiversityStats
 from .diversity_stats import check_params as check_diversity_params
+from .exceptions import SourceError
 from .morph_stats import MorphStats
 from .readability_stats import ReadabilityStats, check_preset
 from .syntax_stats import SyntaxStats
@@ -101,18 +105,39 @@ class ReadabilityStatsComponent:
         >>> round(doc._.readability.flesch_reading_easy, 2)
         97.0
 
+    Taking the basic statistics from a component that already computed them,
+    instead of computing them a second time:
+        >>> _ = nlp.add_pipe("ests_basic", name="basic", before="readability")
+        >>> nlp.add_pipe(
+        ...     "ests_readability",
+        ...     name="readability_reuse",
+        ...     config={"basic": "basic"},
+        ...     last=True,
+        ... )
+        <ests.components.ReadabilityStatsComponent object at 0x...>
+
     Arguments:
         name (str): Name of the component in the pipeline
         preset (str): Preset of the coefficients (general, classic)
+        basic (str): Name of the extension of a component of basic statistics,
+            whose object is used instead of computing them again
 
     Raises:
         ParameterError: If the preset is unknown
+        SourceError: If the named extension holds no basic statistics
     """
 
-    def __init__(self, nlp: Language, name: str = "ests_readability", preset: str = "general"):
+    def __init__(
+        self,
+        nlp: Language,
+        name: str = "ests_readability",
+        preset: str = "general",
+        basic: str | None = None,
+    ):
         check_preset(preset)
         self.name = name
         self.preset = preset
+        self.basic = basic
         Doc.set_extension(self.name, default=None, force=True)
 
     def __call__(self, doc: Doc) -> Doc:
@@ -125,9 +150,32 @@ class ReadabilityStatsComponent:
         Returns:
             doc (Doc): Modified Doc object
         """
-        rs = ReadabilityStats(doc, preset=self.preset)
+        rs = ReadabilityStats(self.__source(doc), preset=self.preset)
         doc._.set(self.name, rs)
         return doc
+
+    def __source(self, doc: Doc) -> Doc | BasicStats:
+        """
+        Source of the metrics: the basic statistics of another component or the document
+
+        Arguments:
+            doc (Doc): Doc object
+
+        Returns:
+            Doc|BasicStats: Source of the metrics
+
+        Raises:
+            SourceError: If the named extension holds no basic statistics
+        """
+        if self.basic is None:
+            return doc
+        stats = doc._.get(self.basic) if Doc.has_extension(self.basic) else None
+        if not isinstance(stats, BasicStats):
+            raise SourceError(
+                f"The extension {self.basic} holds no basic statistics: add the component "
+                f"ests_basic with the name {self.basic} before {self.name}"
+            )
+        return stats
 
 
 @Language.factory("ests_diversity")
@@ -216,7 +264,8 @@ class MorphStatsComponent:
 
     Description:
         The parts of speech and the features are read from the annotation of
-        the model, so the pipeline needs a tagger before the component
+        the model, so the pipeline needs a morphologizer (or a tagger with an
+        attribute ruler) and a lemmatizer before the component
 
     Adding the component to a pipeline:
         >>> import ests
@@ -234,7 +283,7 @@ class MorphStatsComponent:
         name (str): Name of the component in the pipeline
 
     Raises:
-        SourceError: If the pipeline gives no annotation of the parts of speech
+        SourceError: If the pipeline gives no parts of speech or no lemmas
     """
 
     def __init__(self, nlp: Language, name: str = "ests_morph"):
@@ -263,7 +312,7 @@ class SyntaxStatsComponent:
 
     Description:
         The statistics are computed on the dependency tree, so the pipeline
-        needs a parser before the component
+        needs a parser and a lemmatizer before the component
 
     Adding the component to a pipeline:
         >>> import ests
@@ -281,7 +330,7 @@ class SyntaxStatsComponent:
         name (str): Name of the component in the pipeline
 
     Raises:
-        SourceError: If the pipeline gives no parse
+        SourceError: If the pipeline gives no parse or no lemmas
     """
 
     def __init__(self, nlp: Language, name: str = "ests_syntax"):
@@ -310,7 +359,8 @@ class CohesionStatsComponent:
 
     Description:
         The features are read from the annotation of the model, so the pipeline
-        needs a tagger before the component
+        needs a morphologizer (or a tagger with an attribute ruler) and a
+        lemmatizer before the component
 
     Adding the component to a pipeline:
         >>> import ests
@@ -328,7 +378,7 @@ class CohesionStatsComponent:
         name (str): Name of the component in the pipeline
 
     Raises:
-        SourceError: If the pipeline gives no annotation of the parts of speech
+        SourceError: If the pipeline gives no parts of speech or no lemmas
     """
 
     def __init__(self, nlp: Language, name: str = "ests_cohesion"):

@@ -106,11 +106,12 @@ class CohesionStats:
         demonstratives, lemmas already used) and temporal cohesion (repetition
         of the tense and of the mood of the verbs of adjacent sentences)
         Sentences are compared by lemmas, and the features come from the
-        annotation of Universal Dependencies, so the source has to be tagged:
+        annotation of Universal Dependencies, so the source has to be annotated:
         a string is parsed with the model es_core_news_sm or with the pipeline
-        given in nlp, and a Doc must carry the parts of speech. Without sentence
-        boundaries (a pipeline with a tagger but no parser) the sentences are
-        taken from the text by sents_extractor
+        given in nlp, and a Doc must carry the parts of speech, which come from
+        a morphologizer or from a tagger with an attribute ruler, and the lemmas,
+        which come from a lemmatizer. Without sentence boundaries (a pipeline
+        with no parser) the sentences are taken from the text by sents_extractor
         A noun is NOUN or PROPN, a pronoun is PRON or a determiner that points
         at something - a possessive or a demonstrative or personal one, so mi
         libro and este libro hold a pronoun while el libro and cada libro do
@@ -208,8 +209,9 @@ class CohesionStats:
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc object
-        SourceError: If the source has no words, has no annotation of the parts of
-            speech, or is a string longer than the max_length of the pipeline
+        SourceError: If the source has no words, no annotation of the parts of
+            speech or no lemmas, or is a string longer than the max_length of
+            the pipeline
         ParameterError: If the dictionary of connectors has an unknown class or kind
         DatasetNotFoundError: If a string is passed and the model is not installed
     """
@@ -243,6 +245,11 @@ class CohesionStats:
             raise SourceError(
                 "The data source has no annotation of the parts of speech: "
                 "parse the text with a model instead of a blank pipeline"
+            )
+        if not source.has_annotation("LEMMA"):
+            raise SourceError(
+                "The data source has no lemmas: parse the text with a pipeline that has "
+                "a lemmatizer"
             )
         infos = [[token_info(token) for token in sent] for sent in sents]
         self.words = tuple(tuple(token.text for token in sent) for sent in sents)
