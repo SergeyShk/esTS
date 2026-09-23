@@ -28,9 +28,9 @@
 
 ---
 
-**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica, morfología y sintaxis, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
+**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica, morfología, sintaxis y cohesión, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
 
-La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy): las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, las sílabas y el acento se deducen de la ortografía, y solo las estadísticas morfológicas y las sintácticas necesitan un modelo entrenado.
+La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy): las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, las sílabas y el acento se deducen de la ortografía, y solo las estadísticas morfológicas, las sintácticas y las de cohesión necesitan un modelo entrenado.
 
 * **[Extracción de objetos](https://sergeyshk.github.io/esTS/es/extractors/sentences/)** - tokenizadores configurables de oraciones, palabras y N-gramas de caracteres que conocen los signos de apertura, la raya de diálogo y las abreviaturas del español
 * **[Sílabas y acento](https://sergeyshk.github.io/esTS/es/syllables/)** - silabificación por reglas y sílaba tónica deducida de la escritura, sin diccionario
@@ -38,9 +38,10 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Métricas de legibilidad](https://sergeyshk.github.io/esTS/es/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX, con grado de consenso, etapas escolares de España y tiempo de lectura
 * **[Métricas de diversidad léxica](https://sergeyshk.github.io/esTS/es/stats/diversity_stats/)** - TTR y sus variantes, MATTR, MSTTR, MTLD, HD-D, índices de Simpson y de Yule, entropía, leyes de Zipf y de Heaps
 * **[Estadísticas morfológicas](https://sergeyshk.github.io/esTS/es/stats/morph_stats/)** - categorías gramaticales y quince rasgos morfológicos de Universal Dependencies, con los marcadores del español: los modos, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
+* **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, con la densidad de 255 marcadores del discurso españoles
 * **[Estadísticas sintácticas](https://sergeyshk.github.io/esTS/es/stats/syntax_stats/)** - el árbol de dependencias por distancias, profundidad, cláusulas y coordinación, con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
 
-La cohesión llega en el resto de la 0.2, las medidas de corpus y la estilometría en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
+Los componentes de spaCy cierran la 0.2, las medidas de corpus y la estilometría llegan en la 0.3, el estilo, la fonoestadística, la métrica y la rima en la 0.4.
 
 ## Instalación
 
@@ -56,7 +57,7 @@ O con [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad y la diversidad léxica no necesitan ningún modelo de spaCy; las estadísticas morfológicas y las sintácticas sí, igual que analizar un texto por su cuenta para pasar el `Doc` en lugar de una cadena:
+El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad y la diversidad léxica no necesitan ningún modelo de spaCy; las estadísticas morfológicas, las sintácticas y las de cohesión sí, igual que analizar un texto por su cuenta para pasar el `Doc` en lugar de una cadena:
 
 ```bash
 python -m spacy download es_core_news_sm
@@ -370,6 +371,44 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/syntax_sta
 
 </details>
 
+<details>
+<summary><b>Estadísticas de cohesión</b></summary>
+
+<br>
+
+La biblioteca mide la cohesión referencial a la manera de Coh-Metrix y de su adaptación española Coh-Metrix-Esp:
+
+*   la repetición de sustantivos, de argumentos y de palabras con contenido entre oraciones contiguas y entre todos los pares de oraciones, binaria y proporcional
+*   la información dada: pronombres, demostrativos y palabras con contenido cuyo lema ya se había usado
+*   la cohesión temporal: la repetición del tiempo y del modo de los verbos de oraciones contiguas
+*   la densidad de 255 marcadores del discurso españoles por clase - causales, adversativos, concesivos, temporales, aditivos, condicionales, reformulativos - y por tipo
+
+```python
+>>> from ests import CohesionStats
+
+>>> text = ("El informe fue aprobado por la comisión. Sin embargo, el informe no resuelve el problema. "
+...         "Por lo tanto, la comisión aplazó la decisión.")
+>>> cs = CohesionStats(text)
+
+>>> cs.n_sents, cs.n_words
+(3, 23)
+
+>>> cs.noun_overlap_adjacent, round(cs.p_given, 3)
+(0.5, 0.167)
+
+>>> cs.c_connectors
+{'por lo tanto': 1, 'sin embargo': 1}
+
+>>> round(cs.connectors, 2), round(cs.connectors_causal, 2)
+(86.96, 43.48)
+```
+
+Las estadísticas necesitan la anotación: el texto se analiza con `es_core_news_sm`, y en `nlp` puede indicarse cualquier otro pipeline.
+
+Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/).
+
+</details>
+
 ## Desarrollo
 
 El proyecto usa [uv](https://docs.astral.sh/uv/) para gestionar las dependencias y [ruff](https://docs.astral.sh/ruff/) para el análisis y el formato del código.
@@ -407,6 +446,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos: las [iss
 *   **docs** - documentación del proyecto
 *   **ests**:
     *   basic_stats.py - estadísticas básicas del texto
+    *   cohesion_stats.py - estadísticas de cohesión
     *   constants.py - constantes de la lengua española y de las métricas
     *   diversity_stats.py - métricas de diversidad léxica
     *   exceptions.py - excepciones de la biblioteca

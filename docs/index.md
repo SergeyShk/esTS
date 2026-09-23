@@ -6,7 +6,7 @@
 
 **esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity and morphology - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
 
-The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy), and only the morphological and the syntactic statistics need a trained model: sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography.
+The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy), and only the morphological, the syntactic and the cohesion statistics need a trained model: sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography.
 
 ## Features
 
@@ -17,8 +17,9 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 *   compute [lexical diversity metrics](stats/diversity_stats.md) (Type-Token Ratio and its variations, MATTR, MSTTR, Measure of Textual Lexical Diversity, HD-D, the indices of Simpson and Yule, entropy, the laws of Zipf and Heaps), over the whole text or over windows with confidence intervals
 *   compute [morphological statistics](stats/morph_stats.md) on Universal Dependencies (parts of speech and fifteen grammatical features) with the markers of Spanish: the moods, the non-finite forms, the copulas `ser` and `estar`, the adverbs in `-mente`
 *   compute [syntactic statistics](stats/syntax_stats.md) on the dependency tree (dependency distances, depth, clauses, coordination) with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
+*   compute [cohesion statistics](stats/cohesion_stats.md) in the manner of Coh-Metrix (the overlap of nouns, arguments and content words between sentences, givenness, temporal cohesion) with the density of 255 Spanish discourse markers by class
 
-Cohesion comes in the rest of 0.2, corpus measures and stylometry in 0.3, style, phonostatistics, metre and rhyme in 0.4.
+The spaCy components close 0.2, corpus measures and stylometry come in 0.3, style, phonostatistics, metre and rhyme in 0.4.
 
 ## Installation
 
@@ -91,6 +92,7 @@ Punctuation marks   |    2
     *   **docs** - project documentation
     *   **ests**:
         *   basic_stats.py - basic text statistics
+        *   cohesion_stats.py - cohesion statistics
         *   constants.py - constants of the Spanish language and of the metrics
         *   diversity_stats.py - lexical diversity metrics
         *   exceptions.py - library exceptions

@@ -28,9 +28,9 @@
 
 ---
 
-**esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity, morphology and syntax - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
+**esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
 
-The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography, and only the morphological and the syntactic statistics need a trained model.
+The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography, and only the morphological, the syntactic and the cohesion statistics need a trained model.
 
 * **[Object extraction](https://sergeyshk.github.io/esTS/extractors/sentences/)** - configurable sentence, word and character N-gram tokenizers that know the inverted marks, the dialogue dash and the abbreviations of Spanish
 * **[Syllables and stress](https://sergeyshk.github.io/esTS/syllables/)** - rule-based syllabification and the stressed syllable derived from the spelling, with no dictionary
@@ -38,9 +38,10 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Readability metrics](https://sergeyshk.github.io/esTS/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX, with a consensus grade, the school stages of Spain and reading time
 * **[Lexical diversity metrics](https://sergeyshk.github.io/esTS/stats/diversity_stats/)** - TTR and its variations, MATTR, MSTTR, MTLD, HD-D, Simpson's and Yule's indices, entropy, Zipf's and Heaps' laws
 * **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
+* **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 255 Spanish discourse markers
 * **[Syntactic statistics](https://sergeyshk.github.io/esTS/stats/syntax_stats/)** - the dependency tree by distances, depth, clauses and coordination, with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
 
-Cohesion comes in the rest of 0.2, corpus measures and stylometry in 0.3, style, phonostatistics, metre and rhyme in 0.4.
+The spaCy components close 0.2, corpus measures and stylometry come in 0.3, style, phonostatistics, metre and rhyme in 0.4.
 
 ## Installation
 
@@ -56,7 +57,7 @@ Or with [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, the readability and the lexical diversity metrics need no spaCy model; the morphological and the syntactic statistics do, and so does parsing a text yourself to pass the `Doc` instead of a string:
+The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, the readability and the lexical diversity metrics need no spaCy model; the morphological, the syntactic and the cohesion statistics do, and so does parsing a text yourself to pass the `Doc` instead of a string:
 
 ```bash
 python -m spacy download es_core_news_sm
@@ -370,6 +371,44 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/syntax_stats/
 
 </details>
 
+<details>
+<summary><b>Cohesion statistics</b></summary>
+
+<br>
+
+The library measures referential cohesion in the manner of Coh-Metrix and of its Spanish adaptation Coh-Metrix-Esp:
+
+*   the overlap of nouns, of arguments and of content words between adjacent sentences and between all pairs of sentences, binary and proportional
+*   givenness: pronouns, demonstratives and the content words whose lemma was already used
+*   temporal cohesion: the repetition of the tense and of the mood of the verbs of adjacent sentences
+*   the density of 255 Spanish discourse markers by class - causal, adversative, concessive, temporal, additive, conditional, reformulative - and by kind
+
+```python
+>>> from ests import CohesionStats
+
+>>> text = ("El informe fue aprobado por la comisión. Sin embargo, el informe no resuelve el problema. "
+...         "Por lo tanto, la comisión aplazó la decisión.")
+>>> cs = CohesionStats(text)
+
+>>> cs.n_sents, cs.n_words
+(3, 23)
+
+>>> cs.noun_overlap_adjacent, round(cs.p_given, 3)
+(0.5, 0.167)
+
+>>> cs.c_connectors
+{'por lo tanto': 1, 'sin embargo': 1}
+
+>>> round(cs.connectors, 2), round(cs.connectors_causal, 2)
+(86.96, 43.48)
+```
+
+The statistics need the annotation: a text is parsed with `es_core_news_sm`, and any other pipeline can be passed in `nlp`.
+
+More in the [documentation](https://sergeyshk.github.io/esTS/stats/cohesion_stats/).
+
+</details>
+
 ## Development
 
 The project uses [uv](https://docs.astral.sh/uv/) for dependency management and [ruff](https://docs.astral.sh/ruff/) for linting and formatting.
@@ -407,6 +446,7 @@ Bug reports, ideas and pull requests are welcome - [issues](https://github.com/S
 *   **docs** - project documentation
 *   **ests**:
     *   basic_stats.py - basic text statistics
+    *   cohesion_stats.py - cohesion statistics
     *   constants.py - constants of the Spanish language and of the metrics
     *   diversity_stats.py - lexical diversity metrics
     *   exceptions.py - library exceptions
