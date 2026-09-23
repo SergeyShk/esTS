@@ -20,7 +20,6 @@ from ests import (
     SyntaxStatsComponent,
 )
 from ests.exceptions import ParameterError, SourceError
-from ests.utils import has_words
 
 COMPONENTS = (
     ("ests_basic", BasicStatsComponent, BasicStats),
@@ -202,11 +201,3 @@ def test_extension_is_set_by_the_name():
     doc = pipeline("El gato duerme")
     assert doc._.basic_stats is not None
     assert doc.has_extension("basic_stats")
-
-
-@pytest.mark.parametrize(
-    ("text", "expected"),
-    [("El gato duerme", True), ("¿?", False), ("", False), ("   ", False), ("5 %", True)],
-)
-def test_has_words(nlp, text, expected):
-    assert has_words(nlp(text)) is expected
