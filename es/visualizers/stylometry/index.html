@@ -2249,36 +2249,35 @@
 </tbody>
 </table>
 <h2 id="ejemplo-de-uso">Ejemplo de uso<a class="headerlink" href="#ejemplo-de-uso" title="Permanent link">&para;</a></h2>
-<p>Seis novelas de <a href="https://www.gutenberg.org">Project Gutenberg</a>, tres de Galdós y tres de Unamuno.</p>
+<p>Seis novelas del <a href="../../datasets/spanishliterature/">corpus de literatura</a>, tres de Galdós y tres de Unamuno.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <p><em>Código</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">urllib.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlopen</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">delta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanishLiterature</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.visualizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">dendrogram_plot</span><span class="p">,</span> <span class="n">mds_plot</span><span class="p">,</span> <span class="n">mendenhall_plot</span><span class="p">,</span> <span class="n">pca_plot</span>
 
-
-<span class="k">def</span><span class="w"> </span><span class="nf">gutenberg</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"https://www.gutenberg.org/cache/epub/</span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">/pg</span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">.txt"</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"*** START OF"</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">text</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"*** END OF"</span><span class="p">)]</span>
-
-
+<span class="n">sl</span> <span class="o">=</span> <span class="n">SpanishLiterature</span><span class="p">()</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
+<span class="n">titles</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"Marianela"</span><span class="p">,</span>
+    <span class="s2">"Misericordia"</span><span class="p">,</span>
+    <span class="s2">"Torquemada en la hoguera"</span><span class="p">,</span>
+    <span class="s2">"Niebla"</span><span class="p">,</span>
+    <span class="s2">"Abel Sánchez"</span><span class="p">,</span>
+    <span class="s2">"La tía Tula"</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">novels</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"Marianela"</span><span class="p">:</span> <span class="mi">17340</span><span class="p">,</span>
-    <span class="s2">"Misericordia"</span><span class="p">:</span> <span class="mi">21831</span><span class="p">,</span>
-    <span class="s2">"Torquemada"</span><span class="p">:</span> <span class="mi">15206</span><span class="p">,</span>
-    <span class="s2">"Niebla"</span><span class="p">:</span> <span class="mi">49836</span><span class="p">,</span>
-    <span class="s2">"Abel Sánchez"</span><span class="p">:</span> <span class="mi">44512</span><span class="p">,</span>
-    <span class="s2">"La tía Tula"</span><span class="p">:</span> <span class="mi">44358</span><span class="p">,</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]:</span> <span class="n">record</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"galdos"</span><span class="p">,</span> <span class="s2">"unamuno"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">sl</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">author</span><span class="o">=</span><span class="n">author</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">record</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]</span> <span class="ow">in</span> <span class="n">titles</span>
 <span class="p">}</span>
 <span class="n">we</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">corpus</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">gutenberg</span><span class="p">(</span><span class="n">number</span><span class="p">))</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">number</span> <span class="ow">in</span> <span class="n">novels</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+<span class="n">corpus</span> <span class="o">=</span> <span class="p">{</span><span class="n">title</span><span class="p">:</span> <span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">novels</span><span class="p">[</span><span class="n">title</span><span class="p">])</span> <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">titles</span><span class="p">}</span>
 <span class="n">distances</span> <span class="o">=</span> <span class="n">delta</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">n_mfw</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="s2">"cosine"</span><span class="p">)</span>
 
 <span class="c1"># Dendrograma y componentes principales en una figura</span>
@@ -2289,13 +2288,15 @@
 <span class="c1"># Escalamiento multidimensional y curvas de Mendenhall</span>
 <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">"constrained"</span><span class="p">)</span>
 <span class="n">mds_plot</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">left</span><span class="p">)</span>
-<span class="n">mendenhall_plot</span><span class="p">({</span><span class="n">name</span><span class="p">:</span> <span class="n">corpus</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"Marianela"</span><span class="p">,</span> <span class="s2">"Niebla"</span><span class="p">,</span> <span class="s2">"La tía Tula"</span><span class="p">)},</span> <span class="n">ax</span><span class="o">=</span><span class="n">right</span><span class="p">)</span>
+<span class="n">mendenhall_plot</span><span class="p">(</span>
+    <span class="p">{</span><span class="n">title</span><span class="p">:</span> <span class="n">corpus</span><span class="p">[</span><span class="n">title</span><span class="p">]</span> <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"Marianela"</span><span class="p">,</span> <span class="s2">"Niebla"</span><span class="p">,</span> <span class="s2">"La tía Tula"</span><span class="p">)},</span> <span class="n">ax</span><span class="o">=</span><span class="n">right</span>
+<span class="p">)</span>
 </code></pre></div>
 <p><em>Resultado</em>:</p>
 <p><img alt="ests" class="center" src="../../../img/stylometry.png" /></p>
 <p><img alt="ests" class="center" src="../../../img/mds_mendenhall.png" /></p>
 </div>
-<p>La Delta coseno sobre las 100 palabras más frecuentes separa a los autores: el dendrograma une las novelas de cada autor antes de unir los dos grupos, y la primera componente principal, el 47.8% de la varianza, pone a Galdós a un lado y a Unamuno al otro. Las curvas de Mendenhall apenas difieren: la longitud de las palabras es un rasgo débil por sí sola.</p>
+<p>La Delta coseno sobre las 100 palabras más frecuentes separa a los autores: el dendrograma une las novelas de cada autor antes de unir los dos grupos, y la primera componente principal, el 43.9% de la varianza, pone a Galdós a un lado y a Unamuno al otro. Las curvas de Mendenhall apenas difieren: la longitud de las palabras es un rasgo débil por sí sola.</p>
 
 
 

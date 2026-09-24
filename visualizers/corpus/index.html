@@ -2219,35 +2219,42 @@
 </tbody>
 </table>
 <h2 id="usage-example">Usage example<a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h2>
-<p><em>Marianela</em> by Galdós and six novels from <a href="https://www.gutenberg.org">Project Gutenberg</a>: <em>Marianela</em>, <em>Misericordia</em> and <em>Torquemada en la hoguera</em> against <em>Niebla</em>, <em>Abel Sánchez</em> and <em>La tía Tula</em> by Unamuno.</p>
+<p><em>Marianela</em> by Galdós and six novels from the <a href="../../datasets/spanishliterature/">corpus of literature</a>: <em>Marianela</em>, <em>Misericordia</em> and <em>Torquemada en la hoguera</em> against <em>Niebla</em>, <em>Abel Sánchez</em> and <em>La tía Tula</em> by Unamuno.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <p><em>Code</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">urllib.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlopen</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">spacy.lang.es.stop_words</span><span class="w"> </span><span class="kn">import</span> <span class="n">STOP_WORDS</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">spacy.lang.es.stop_words</span><span class="w"> </span><span class="kn">import</span> <span class="n">STOP_WORDS</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">collocations</span><span class="p">,</span> <span class="n">keyness</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanishLiterature</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.visualizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">collocation_network</span><span class="p">,</span> <span class="n">dispersion_plot</span><span class="p">,</span> <span class="n">keyness_plot</span>
 
-
-<span class="k">def</span><span class="w"> </span><span class="nf">gutenberg</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"https://www.gutenberg.org/cache/epub/</span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">/pg</span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">.txt"</span>
-    <span class="n">text</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"*** START OF"</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">text</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"*** END OF"</span><span class="p">)]</span>
-
+<span class="n">sl</span> <span class="o">=</span> <span class="n">SpanishLiterature</span><span class="p">()</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
+<span class="n">titles</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"Marianela"</span><span class="p">,</span>
+    <span class="s2">"Misericordia"</span><span class="p">,</span>
+    <span class="s2">"Torquemada en la hoguera"</span><span class="p">,</span>
+    <span class="s2">"Niebla"</span><span class="p">,</span>
+    <span class="s2">"Abel Sánchez"</span><span class="p">,</span>
+    <span class="s2">"La tía Tula"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">novels</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]:</span> <span class="n">record</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">author</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"galdos"</span><span class="p">,</span> <span class="s2">"unamuno"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">sl</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">author</span><span class="o">=</span><span class="n">author</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">record</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]</span> <span class="ow">in</span> <span class="n">titles</span>
+<span class="p">}</span>
 
 <span class="c1"># Where the characters and the motifs of Marianela occur</span>
-<span class="n">marianela</span> <span class="o">=</span> <span class="n">gutenberg</span><span class="p">(</span><span class="mi">17340</span><span class="p">)</span>
-<span class="n">words</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">marianela</span><span class="p">)</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">novels</span><span class="p">[</span><span class="s2">"Marianela"</span><span class="p">])</span>
 <span class="n">dispersion_plot</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="p">[</span><span class="s2">"nela"</span><span class="p">,</span> <span class="s2">"pablo"</span><span class="p">,</span> <span class="s2">"florentina"</span><span class="p">,</span> <span class="s2">"golfín"</span><span class="p">,</span> <span class="s2">"ciego"</span><span class="p">,</span> <span class="s2">"luz"</span><span class="p">])</span>
 
 <span class="c1"># Keywords of Galdós against Unamuno, lemmas without stop words</span>
 <span class="n">we</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">use_lexemes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="n">STOP_WORDS</span><span class="p">)</span>
-<span class="n">galdos</span> <span class="o">=</span> <span class="p">[</span><span class="n">lemma</span> <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">17340</span><span class="p">,</span> <span class="mi">21831</span><span class="p">,</span> <span class="mi">15206</span><span class="p">)</span> <span class="k">for</span> <span class="n">lemma</span> <span class="ow">in</span> <span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">gutenberg</span><span class="p">(</span><span class="n">number</span><span class="p">))]</span>
-<span class="n">unamuno</span> <span class="o">=</span> <span class="p">[</span><span class="n">lemma</span> <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">49836</span><span class="p">,</span> <span class="mi">44512</span><span class="p">,</span> <span class="mi">44358</span><span class="p">)</span> <span class="k">for</span> <span class="n">lemma</span> <span class="ow">in</span> <span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">gutenberg</span><span class="p">(</span><span class="n">number</span><span class="p">))]</span>
+<span class="n">galdos</span> <span class="o">=</span> <span class="p">[</span><span class="n">lemma</span> <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">titles</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">lemma</span> <span class="ow">in</span> <span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">novels</span><span class="p">[</span><span class="n">title</span><span class="p">])]</span>
+<span class="n">unamuno</span> <span class="o">=</span> <span class="p">[</span><span class="n">lemma</span> <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">titles</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span> <span class="k">for</span> <span class="n">lemma</span> <span class="ow">in</span> <span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">novels</span><span class="p">[</span><span class="n">title</span><span class="p">])]</span>
 <span class="n">keyness_plot</span><span class="p">(</span>
     <span class="n">keyness</span><span class="p">(</span><span class="n">galdos</span><span class="p">,</span> <span class="n">unamuno</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
     <span class="n">keyness</span><span class="p">(</span><span class="n">galdos</span><span class="p">,</span> <span class="n">unamuno</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
@@ -2255,7 +2262,9 @@
 <span class="p">)</span>
 
 <span class="c1"># Network of collocations of Marianela</span>
-<span class="n">graph</span> <span class="o">=</span> <span class="n">collocation_network</span><span class="p">(</span><span class="n">collocations</span><span class="p">(</span><span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">marianela</span><span class="p">),</span> <span class="n">window</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">25</span><span class="p">))</span>
+<span class="n">graph</span> <span class="o">=</span> <span class="n">collocation_network</span><span class="p">(</span>
+    <span class="n">collocations</span><span class="p">(</span><span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">novels</span><span class="p">[</span><span class="s2">"Marianela"</span><span class="p">]),</span> <span class="n">window</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">25</span><span class="p">)</span>
+<span class="p">)</span>
 <span class="n">graph</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">"network"</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"png"</span><span class="p">)</span>
 </code></pre></div>
 <p><em>Result</em>:</p>
@@ -2263,7 +2272,7 @@
 <p><img alt="ests" class="center" src="../../img/keyness.png" /></p>
 <p><img alt="ests" class="center" src="../../img/network.png" /></p>
 </div>
-<p>Nela runs through the whole novel, Florentina enters in its second half, and the doctor Golfín opens and closes it; the blindness of Pablo (<code>ciego</code>) belongs mostly to the first half. Beside the names of the characters, the keywords show the spelling of the editions - <code>á</code> and <code>ó</code> with the accent of the old orthography in Galdós - and words of the themes of Unamuno: <code>acaso</code>, <code>hijo</code>, <code>mujer</code>. The network of collocations gathers the names and the places of <em>Marianela</em> around <code>d.</code>, the abbreviated <em>don</em>: Teodoro Golfín, Aldeacorba de Suso, the mines of Socartes.</p>
+<p>Nela runs through the whole novel, Florentina enters in its second half, and the doctor Golfín opens and closes it; the blindness of Pablo (<code>ciego</code>) belongs mostly to the first half. Beside the names of the characters, the keywords show the spelling of the editions - <code>á</code> with the accent of the old orthography, which of the novels of Galdós only the edition of <em>Torquemada en la hoguera</em> keeps, and <code>fué</code>, which all three editions of Unamuno keep - and words of the themes of Unamuno: <code>acaso</code>, <code>hijo</code>. The network of collocations gathers the names and the places of <em>Marianela</em> around <code>d.</code>, the abbreviated <em>don</em>: Teodoro Golfín, Aldeacorba de Suso, the mines of Socartes.</p>
 
 
 

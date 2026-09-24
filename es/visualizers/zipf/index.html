@@ -2127,19 +2127,21 @@
 </table>
 <p>La función devuelve los <code>Axes</code> con el gráfico; un <code>num_words</code> mayor que el número de tipos de palabra no alarga las curvas más allá de los datos, y un contador vacío lanza <code>SourceError</code>. <code>zipf_theory(size, num_ranks, alpha, ax)</code> dibuja solo la curva teórica, <span class="arithmatex">\(f(r) = size \cdot r^{-\alpha}\)</span> para los rangos de 1 a <code>num_ranks</code>.</p>
 <h2 id="ejemplo-de-uso">Ejemplo de uso<a class="headerlink" href="#ejemplo-de-uso" title="Permanent link">&para;</a></h2>
-<p>Los lemas de <em>Marianela</em> de Galdós de <a href="https://www.gutenberg.org">Project Gutenberg</a>.</p>
+<p>Los lemas de <em>Marianela</em> de Galdós del <a href="../../datasets/spanishliterature/">corpus de literatura</a>.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <p><em>Código</em>:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlopen</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanishLiterature</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.visualizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">zipf</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="s2">"https://www.gutenberg.org/cache/epub/17340/pg17340.txt"</span>
-<span class="n">text</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
-<span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"*** START OF"</span><span class="p">))</span> <span class="p">:</span> <span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"*** END OF"</span><span class="p">)]</span>
+<span class="n">sl</span> <span class="o">=</span> <span class="n">SpanishLiterature</span><span class="p">()</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
+<span class="n">text</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+    <span class="n">record</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">sl</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">author</span><span class="o">=</span><span class="s2">"galdos"</span><span class="p">)</span> <span class="k">if</span> <span class="n">record</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Marianela"</span>
+<span class="p">)</span>
 <span class="n">counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">WordsExtractor</span><span class="p">(</span><span class="n">use_lexemes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
 
 <span class="n">ax</span> <span class="o">=</span> <span class="n">zipf</span><span class="p">(</span><span class="n">counts</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">show_theory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">show_fit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -2148,7 +2150,7 @@
 <p><em>Resultado</em>:</p>
 <p><img alt="ests" class="center" src="../../../img/zipf.png" /></p>
 </div>
-<p>En ejes logarítmicos las frecuencias de los lemas caen a lo largo de una recta; el ajuste de Zipf-Mandelbrot, <span class="arithmatex">\(s = 1.14\)</span> con un desplazamiento <span class="arithmatex">\(q = 1.77\)</span>, las sigue más de cerca en la cabeza de la lista que la ley teórica con <span class="arithmatex">\(\alpha = 1\)</span>.</p>
+<p>En ejes logarítmicos las frecuencias de los lemas caen a lo largo de una recta; el ajuste de Zipf-Mandelbrot, <span class="arithmatex">\(s = 1.14\)</span> con un desplazamiento <span class="arithmatex">\(q = 1.78\)</span>, las sigue más de cerca en la cabeza de la lista que la ley teórica con <span class="arithmatex">\(\alpha = 1\)</span>.</p>
 
 
 
