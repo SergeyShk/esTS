@@ -54,7 +54,7 @@ Recursos:
 | `p_beyond_top10000` | float | Proporción de palabras con un lema fuera del top 10000 |
 | `lexical_density` | float | Proporción de palabras con contenido |
 
-Las medias según el diccionario se calculan solo sobre las palabras encontradas, `nan` sin ellas; léalas junto a `coverage`. La frecuencia media en ipm la dominan las palabras funcionales (`el` - 97 000 ipm, `de` - 71 000), así que para comparar textos conviene más la frecuencia logarítmica o la media sobre las palabras con contenido. El rango es el número de años, de 40, en que el lema aparece en los libros, no el número de partes de un corpus de 100.
+Las medias según el diccionario se calculan solo sobre las palabras encontradas, `nan` sin ellas; léalas junto a `coverage`. La frecuencia media en ipm la dominan las palabras funcionales (`el` - 98 000 ipm, `de` - 71 000), así que para comparar textos conviene más la frecuencia logarítmica o la media sobre las palabras con contenido. El rango es el número de años, de 40, en que el lema aparece en los libros, no el número de partes de un corpus de 100.
 
 !!! note "Nota"
     Cada estadística se puede calcular aparte llamando a su función. Las estadísticas y las funciones que las calculan se describen en la [sección](lexical_stats_funcs.md) correspondiente.

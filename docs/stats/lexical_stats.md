@@ -54,7 +54,7 @@ Resources:
 | `p_beyond_top10000` | float | Share of words with a lemma beyond the top 10000 |
 | `lexical_density` | float | Share of content words |
 
-The means by the dictionary are computed over the words found only, `nan` without them; read them next to `coverage`. The mean frequency in ipm is dominated by the function words (`el` - 97,000 ipm, `de` - 71,000), so to compare texts the log frequency or the mean over the content words suits better. The range is the number of years out of 40 in which the lemma occurs in the books, not the number of parts of a corpus out of 100.
+The means by the dictionary are computed over the words found only, `nan` without them; read them next to `coverage`. The mean frequency in ipm is dominated by the function words (`el` - 98,000 ipm, `de` - 71,000), so to compare texts the log frequency or the mean over the content words suits better. The range is the number of years out of 40 in which the lemma occurs in the books, not the number of parts of a corpus out of 100.
 
 !!! note "Note"
     Every statistic can be computed apart by calling its function. The statistics and the functions that compute them are described in the corresponding [section](lexical_stats_funcs.md).

@@ -29,9 +29,9 @@
 
 ---
 
-**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica, morfología, sintaxis y cohesión, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
+**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica, complejidad léxica, morfología, sintaxis y cohesión, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
 
-La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy): las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, las sílabas y el acento se deducen de la ortografía, y solo las estadísticas morfológicas, las sintácticas y las de cohesión necesitan un modelo entrenado.
+La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy): las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, las sílabas y el acento se deducen de la ortografía, y solo las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica, el perfil de las palabras funcionales y la comparación de corpus necesitan un modelo entrenado.
 
 * **[Extracción de objetos](https://sergeyshk.github.io/esTS/es/extractors/sentences/)** - tokenizadores configurables de oraciones, palabras y N-gramas de caracteres que conocen los signos de apertura, la raya de diálogo y las abreviaturas del español
 * **[Sílabas y acento](https://sergeyshk.github.io/esTS/es/syllables/)** - silabificación por reglas y sílaba tónica deducida de la escritura, sin diccionario
@@ -63,11 +63,13 @@ O con [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad y la diversidad léxica no necesitan ningún modelo de spaCy; las estadísticas morfológicas, las sintácticas y las de cohesión sí, igual que analizar un texto por su cuenta para pasar el `Doc` en lugar de una cadena:
+El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad y la diversidad léxica no necesitan ningún modelo de spaCy; las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica de una cadena sí, igual que el perfil de las palabras funcionales, los rasgos de un texto y la comparación de corpus, y analizar un texto por su cuenta para pasar el `Doc` en lugar de una cadena:
 
 ```bash
 python -m spacy download es_core_news_sm
 ```
+
+Las estadísticas según el diccionario de frecuencias lo necesitan descargado una vez con `FreqDict().download()`. Los conjuntos de datos van al directorio `ests_data` junto al paquete instalado; otro se pasa en `data_dir` o se define en la variable de entorno `ESTS_DATA_DIR` antes de importar el paquete.
 
 ## Primeros pasos
 
@@ -459,7 +461,7 @@ Cada clase de estadísticas es también un componente de un pipeline, de modo qu
 (12, ('DET', 'NOUN'), 2.0)
 ```
 
-Las fábricas son `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax` y `ests_cohesion`; el nombre del paso del pipeline es libre y es como se llama la extensión.
+Las fábricas son `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion` y `ests_lexical`; el nombre del paso del pipeline es libre y es como se llama la extensión.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/components/).
 
@@ -610,7 +612,7 @@ Ejecute `make help` para ver la lista completa de comandos.
 
 La documentación es bilingüe: las páginas en inglés son `docs/*.md` y las españolas `docs/*.es.md` junto a ellas ([mkdocs-static-i18n](https://github.com/ultrabug/mkdocs-static-i18n)); al editar una página, actualice las dos versiones.
 
-La versión instalada está en `ests.__version__`. Todas las excepciones heredan de `ests.EstsError` y de una de las clases integradas (`SourceError` y `ParameterError` de `ValueError`, `SourceTypeError` de `TypeError`, `UnknownStatError` de `KeyError`), así que `except ValueError` sigue funcionando. La biblioteca no imprime nada por su cuenta: sus mensajes van al logger `ests` (`logging.getLogger("ests")`) y están en silencio por defecto.
+La versión instalada está en `ests.__version__`. Todas las excepciones heredan de `ests.EstsError` y de una de las clases integradas (`SourceError`, `ParameterError` y `DataFileError` de `ValueError`, `SourceTypeError` de `TypeError`, `UnknownStatError` de `KeyError`, `DatasetNotFoundError` de `OSError`, `DownloadError` de `RuntimeError`), así que `except ValueError` sigue funcionando. La biblioteca no imprime nada por su cuenta: sus mensajes van al logger `ests` (`logging.getLogger("ests")`) y están en silencio por defecto.
 
 Antes de enviar cambios, instale los hooks que ejecutan los linters al hacer commit y las pruebas al hacer push:
 

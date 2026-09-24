@@ -153,13 +153,17 @@ def collocation_network(collocations: Sequence[Collocation], top_n: int | None =
         An undirected graph (textplot_network of quanteda): the nodes are the
         words with the size of the font by the frequency of the word, the
         edges the pairs with the width and the label by the value of the
-        measure; the neato layout. The nodes get generated identifiers and the
-        words go to their labels, as a colon in a word (10:30) would read as a
-        port of graphviz. Rendering needs the executables of Graphviz
+        measure; the neato layout. A pair of a word with itself - a word
+        repeated within the window (rojo rojo) - would be a loop and is left
+        out before the pairs are taken. The nodes get generated identifiers and
+        the words go to their labels, as a colon in a word (10:30) would read
+        as a port of graphviz. The format of the graph is png, as for the word
+        tree. Rendering needs the executables of Graphviz
 
     Arguments:
         collocations (list[Collocation]): Collocations (collocations)
-        top_n (int): Number of pairs from the start of the list; None - all of them
+        top_n (int): Number of pairs from the start of the list, the pairs of a word
+            with itself left out; None - all of them
 
     Returns:
         Graph: Graph of graphviz
@@ -185,7 +189,8 @@ def collocation_network(collocations: Sequence[Collocation], top_n: int | None =
     """
     if top_n is not None and top_n < 1:
         raise ParameterError("The number of pairs must be greater than 0")
-    pairs = list(collocations)[:top_n] if top_n else list(collocations)
+    pairs = [pair for pair in collocations if pair.left != pair.right]
+    pairs = pairs[:top_n] if top_n else pairs
     if not pairs:
         raise SourceError("The data source has no collocations")
     frequencies: Counter[str] = Counter()
@@ -195,7 +200,7 @@ def collocation_network(collocations: Sequence[Collocation], top_n: int | None =
     scores = [pair.score for pair in pairs if not isnan(pair.score)]
     min_score, max_score = (min(scores), max(scores)) if scores else (0.0, 0.0)
     min_freq, max_freq = min(frequencies.values()), max(frequencies.values())
-    graph = Graph("collocations", engine="neato")
+    graph = Graph("collocations", engine="neato", format="png")
     graph.attr("graph", overlap="false", splines="true")
     graph.attr("node", shape="plaintext", margin="0", fontname="Helvetica")
     graph.attr("edge", color="gray50", fontsize="9", fontname="Helvetica")

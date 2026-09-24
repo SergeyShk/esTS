@@ -6,9 +6,10 @@ import numpy as np
 from matplotlib.axes import Axes
 from matplotlib.cm import ScalarMappable
 from matplotlib.colors import Normalize
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from ..diversity_stats import calc_ttr
-from ..exceptions import ParameterError, SourceTypeError
+from ..exceptions import ParameterError, SourceError, SourceTypeError
 from ..utils import check_sequence
 
 # Size of a square and the margin between blocks, in the units of the drawing area
@@ -65,11 +66,14 @@ def fingerprinting(
     Raises:
         SourceTypeError: If the texts are not a list of lists of words or the
             measure is not callable
+        SourceError: If there are no texts or a text has no words
         ParameterError: If the size of a segment is below one
     """
     check_sequence(texts, "lists of words")
     if not all(isinstance(text, (list, tuple)) for text in texts):
         raise SourceTypeError("The texts must be a list of lists of words")
+    if not texts or any(not text for text in texts):
+        raise SourceError("The data source has no words")
     if metric is not None and not callable(metric):
         raise SourceTypeError("The measure must be callable")
     if segment_len < 1:
@@ -99,10 +103,13 @@ def fingerprinting(
         )
         x += n_cols * SQUARE + MARGIN
         row_height = max(row_height, n_rows * SQUARE)
-    ax.figure.colorbar(ScalarMappable(norm=norm, cmap=colormap), ax=ax)
     ax.set_xlim(-x_size, x_size)
     ax.set_ylim(min(-y_size, top - row_height - MARGIN), y_size)
     ax.set_aspect("equal")
+    # The colorbar follows the box of the axes that the equal aspect shrinks
+    colorbar_ax = make_axes_locatable(ax).append_axes("right", size="3%", pad=0.1)
+    colorbar_ax.set_label("<colorbar>")
+    ax.figure.colorbar(ScalarMappable(norm=norm, cmap=colormap), cax=colorbar_ax)
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
     ax.set_title("Literature fingerprinting")
@@ -112,12 +119,20 @@ def fingerprinting(
 def _segment_values(
     text: Sequence[str], segment_len: int, measure: Callable[[Sequence[str]], float]
 ) -> list[float]:
-    """Values of the measure over the sliding segments of a text and its tail"""
+    """
+    Values of the measure over the sliding segments of a text
+
+    Description:
+        The last segment starts one step after the last full one and is cut
+        short by the end of the text; a text shorter than a segment is one
+        short segment
+    """
     step = max(1, int(0.1 * segment_len))
     starts = range(0, len(text) - segment_len + 1, step)
     values = [float(measure(text[start : start + segment_len])) for start in starts]
     tail = len(starts) * step
-    values.append(float(measure(text[tail:])))
+    if tail < len(text):
+        values.append(float(measure(text[tail:])))
     return values
 
 

@@ -20,7 +20,7 @@ The archive (0.9 MB) is kept in the repository of the library, downloaded once i
 
 `ests.datasets.freq_dict.lemma_key(word, proper=False)` - the key by which a word is looked up in the dictionary, and by which the dictionary is built: the word goes to lower case and then to its lemma by `lemmatize`. simplemma tells the case apart and leaves an unknown capitalized word as it is, so a word at the start of a sentence would miss its lemma (`Miró`, `Déjame`); the lower case finds it (`mirar`, `dejar`). A proper noun keeps its form in lower case (`proper=True`): `París` is `parís`, not the verb `parir`.
 
-The lemmas depend on the version of simplemma: the dictionary is built with 2.0.0 (the constant `SIMPLEMMA_VERSION`), and the library requires simplemma 2.0 or newer; with 1.x about 4% of the words of a text would get other lemmas (`fue` - `ir` instead of `ser`, `usted` left as it is).
+The lemmas depend on the version of simplemma: the dictionary is built with 2.0.0 (the constant `SIMPLEMMA_VERSION`), and the library requires simplemma 2 (2.0 or newer, below 3); with 1.x about 4% of the words of a text would get other lemmas (`fue` - `ir` instead of `ser`, `usted` left as it is). A `FreqDict` warns once per process when the installed simplemma is not 2.0.0, as some words may then miss the dictionary.
 
 !!! example "Example"
 
@@ -37,19 +37,30 @@ The lemmas depend on the version of simplemma: the dictionary is built with 2.0.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
-| `data_dir` | str/Path | `DEFAULT_DATA_DIR.joinpath("dicts")` | Path to the dictionary directory |
+| `data_dir` | str/Path | `DEFAULT_DATA_DIR.joinpath("dicts")` | Path to the dictionary directory; the data directory is described in [Installation](../installation.md#datasets) |
 
 ## Attributes
 
 | Attribute | Type | Description |
 | :-------: | :--: | :---------: |
+| `name` | str | Name of the dataset, `freq_dict` |
+| `meta` | dict[str, str] | Reference information: the source, the description, the author, the licence and the citation |
+| `info` | dict[str, str] | The name and the reference information in one dictionary |
+| `data_dir` | Path | Absolute path to the dictionary directory |
+| `filepath` | str | Path to the file of the dictionary, `None` before the download |
 | `entries` | dict[str, Entry] | Entries by lemma, the parts of speech merged |
 | `min_ipm` | float | Minimum frequency in the dictionary (0.1) |
 | `word_ipm` | dict[str, float] | Frequencies by the key a word form reaches without a part of speech: the rows of the proper nouns go to `lemma_key` of their forms (`roma` to `romo`); the reference of [`keyness`](../corpus/keyness.md) |
 
 An `Entry` is a named tuple with the fields `lemma`, `pos` (tuple of parts of speech), `ipm`, `range`, `dispersion`, `docs`.
 
+The dictionary iterates over its records as `get_records()` without filters: `for record in fd` goes over the 109,178 rows of a lemma and a part of speech, while `len(fd)` counts the 83,785 lemmas with their parts of speech merged, as `lookup` and `in` see them.
+
 ## Methods
+
+### check_data
+
+Checks that the file of the dictionary is in place and returns `True`; a dictionary that is not downloaded raises `DatasetNotFoundError`. The other methods check it themselves.
 
 ### download
 
@@ -72,7 +83,7 @@ Downloads the archive with checksum verification and extracts the file. A corrup
 
 ### lookup
 
-Returns the entry of a lemma in any case, `None` for a lemma out of the dictionary. A word form is looked up by its key: `computadoras` by `lemma_key("computadoras")`, which is `computador`, not by `computadora`.
+Returns the entry of a lemma in any case, `None` for a lemma out of the dictionary. The argument is a key of the dictionary, not a word form, and a word form is looked up by its key: `computadoras` by `lemma_key("computadoras")`, which is `computador`, not by `computadora`; the lemma of `usted` in simplemma is `tú`, so `fd.lookup("usted")` is `None`. The same holds for `ipm` and `in`; [`LexicalStats`](../stats/lexical_stats.md) and [`keyness`](../corpus/keyness.md) go to the keys themselves.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
@@ -81,10 +92,14 @@ Returns the entry of a lemma in any case, `None` for a lemma out of the dictiona
 !!! example "Example"
 
     ``` python
+    from ests.datasets.freq_dict import lemma_key
+
     fd.lookup("Gato")
     # Entry(lemma='gato', pos=('NOUN', 'ADJ'), ipm=29.08, range=40, dispersion=95, docs=232841)
     fd.lookup("dios")
     # Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.42, range=40, dispersion=98, docs=566129)
+    fd.lookup("usted"), fd.ipm(lemma_key("usted"))
+    # (None, 1396.74)
     ```
 
 ### ipm
@@ -94,12 +109,10 @@ Returns the frequency of a lemma per million words, 0 for a lemma out of the dic
 !!! example "Example"
 
     ``` python
-    from ests.datasets.freq_dict import lemma_key
-
     fd.ipm("computadora"), fd.ipm(lemma_key("computadoras"))
     # (0.0, 20.07)
-    "gato" in fd, len(fd)
-    # (True, 83785)
+    "gato" in fd, len(fd), sum(1 for _ in fd)
+    # (True, 83785, 109178)
     ```
 
 ### get_records

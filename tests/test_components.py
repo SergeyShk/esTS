@@ -31,6 +31,8 @@ COMPONENTS = (
     ("ests_syntax", SyntaxStatsComponent, SyntaxStats),
     ("ests_cohesion", CohesionStatsComponent, CohesionStats),
 )
+# The lexical component needs the frequency dictionary, its statistics are tested apart
+ALL_COMPONENTS = (*COMPONENTS, ("ests_lexical", LexicalStatsComponent, LexicalStats))
 TEXT = "El gato duerme en la ventana. Los niños juegan en el parque."
 
 
@@ -39,7 +41,7 @@ def nlp():
     return spacy.load("es_core_news_sm")
 
 
-@pytest.mark.parametrize(("factory", "component", "stats"), COMPONENTS)
+@pytest.mark.parametrize(("factory", "component", "stats"), ALL_COMPONENTS)
 def test_factory_is_registered(factory, component, stats):
     assert Language.has_factory(factory)
 
@@ -53,7 +55,7 @@ def test_component_computes_the_statistics(nlp, factory, component, stats):
     assert doc._.stats.get_stats() == stats(nlp(TEXT)).get_stats()
 
 
-@pytest.mark.parametrize(("factory", "component", "stats"), COMPONENTS)
+@pytest.mark.parametrize(("factory", "component", "stats"), ALL_COMPONENTS)
 def test_component_type(factory, component, stats):
     pipeline = spacy.load("es_core_news_sm")
     assert isinstance(pipeline.add_pipe(factory, name="stats", last=True), component)
@@ -236,3 +238,18 @@ def test_lexical_component_without_the_annotation():
     pipeline.add_pipe("ests_lexical", name="stats", last=True)
     with pytest.raises(SourceError, match="parts of speech"):
         pipeline("El gato duerme")
+
+
+@pytest.mark.parametrize("factory", [factory for factory, _, _ in ALL_COMPONENTS])
+def test_component_adds_the_dash_rules(factory):
+    pipeline = spacy.load("es_core_news_sm")
+    assert [token.text for token in pipeline.make_doc("sí--dijo él")] == ["sí--dijo", "él"]
+    pipeline.add_pipe(factory, name="stats", last=True)
+    assert [token.text for token in pipeline.make_doc("sí--dijo él")] == ["sí", "--", "dijo", "él"]
+
+
+def test_component_words_are_the_words_of_the_string_api():
+    text = "-Hola -dijo Juan-. Y sí--dijo él."
+    pipeline = spacy.load("es_core_news_sm")
+    pipeline.add_pipe("ests_basic", name="basic", last=True)
+    assert pipeline(text)._.basic.n_words == BasicStats(text).n_words == 7

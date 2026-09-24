@@ -24,6 +24,9 @@ def test_wordtree_value_error(texts):
         wordtree(texts, "prueba")
     with pytest.raises(SourceError):
         wordtree([], "prueba")
+    # The keyword is in the text but has no word next to it
+    with pytest.raises(SourceError, match="has no word next to it"):
+        wordtree([["gato"]], "gato")
     with pytest.raises(ParameterError):
         wordtree(texts, "clase", max_n=1)
     with pytest.raises(ParameterError):

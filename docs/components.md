@@ -24,6 +24,8 @@ Without `name` the pipe and the extension keep the name of the factory (`doc._.e
 !!! warning "Serialization"
     A component keeps an object of statistics in `doc._.<name>`, and spaCy cannot serialize it: `Doc.to_bytes()`, `DocBin(store_user_data=True)` and `nlp.pipe(..., n_process>1)` fail with these components in the pipeline. To save a document, leave the user data out (`doc.to_bytes(exclude=["user_data"])`) or keep `doc._.<name>.get_stats()` on your own; for multiprocessing compute the statistics in the main process after `nlp.pipe`, without the components.
 
+Adding a component extends the tokenizer of its pipeline with the rules for the dashes of a dialogue glued to the words ([`add_dash_rules`](extractors/words.md)), which the string API has, so the words of a component are the words of the rest of the library: `sí--dijo` is two words and a dash, not one word. The rules only split such dashes off; a pipeline with a tokenizer of its own that is not the `Tokenizer` of spaCy is left as it is.
+
 ## What each component needs { #requirements }
 
 | Component | Factory | Statistics | Needs |

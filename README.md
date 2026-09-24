@@ -29,9 +29,9 @@
 
 ---
 
-**esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
+**esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity, lexical sophistication, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
 
-The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography, and only the morphological, the syntactic and the cohesion statistics need a trained model.
+The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography, and only the morphological, the syntactic, the cohesion and the lexical sophistication statistics, the profile of the function words and the comparison of corpora need a trained model.
 
 * **[Object extraction](https://sergeyshk.github.io/esTS/extractors/sentences/)** - configurable sentence, word and character N-gram tokenizers that know the inverted marks, the dialogue dash and the abbreviations of Spanish
 * **[Syllables and stress](https://sergeyshk.github.io/esTS/syllables/)** - rule-based syllabification and the stressed syllable derived from the spelling, with no dictionary
@@ -63,11 +63,13 @@ Or with [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, the readability and the lexical diversity metrics need no spaCy model; the morphological, the syntactic and the cohesion statistics do, and so does parsing a text yourself to pass the `Doc` instead of a string:
+The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, the readability and the lexical diversity metrics need no spaCy model; the morphological, the syntactic, the cohesion and the lexical sophistication statistics of a string do, and so do the profile of the function words, the features of a text and the comparison of corpora, and parsing a text yourself to pass the `Doc` instead of a string:
 
 ```bash
 python -m spacy download es_core_news_sm
 ```
+
+The statistics by the frequency dictionary need it downloaded once with `FreqDict().download()`. The datasets go to the directory `ests_data` next to the installed package; another one is passed in `data_dir` or set in the environment variable `ESTS_DATA_DIR` before the package is imported.
 
 ## Quick start
 
@@ -459,7 +461,7 @@ Every statistics class is also a component of a pipeline, so a text is annotated
 (12, ('DET', 'NOUN'), 2.0)
 ```
 
-The factories are `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax` and `ests_cohesion`; the name of the pipe is free and is what the extension is called.
+The factories are `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion` and `ests_lexical`; the name of the pipe is free and is what the extension is called.
 
 More in the [documentation](https://sergeyshk.github.io/esTS/components/).
 
@@ -610,7 +612,7 @@ Run `make help` for the full list of commands.
 
 The documentation is bilingual: English pages are `docs/*.md`, Spanish ones are `docs/*.es.md` next to them ([mkdocs-static-i18n](https://github.com/ultrabug/mkdocs-static-i18n)); when editing a page, update both versions.
 
-The installed version is `ests.__version__`. All exceptions inherit `ests.EstsError` and one of the built-in classes (`SourceError` and `ParameterError` - `ValueError`, `SourceTypeError` - `TypeError`, `UnknownStatError` - `KeyError`), so `except ValueError` keeps working. The library prints nothing on its own: its messages go to the `ests` logger (`logging.getLogger("ests")`) and are silent by default.
+The installed version is `ests.__version__`. All exceptions inherit `ests.EstsError` and one of the built-in classes (`SourceError`, `ParameterError` and `DataFileError` - `ValueError`, `SourceTypeError` - `TypeError`, `UnknownStatError` - `KeyError`, `DatasetNotFoundError` - `OSError`, `DownloadError` - `RuntimeError`), so `except ValueError` keeps working. The library prints nothing on its own: its messages go to the `ests` logger (`logging.getLogger("ests")`) and are silent by default.
 
 Before submitting changes, install the hooks that run the linters on commit and the tests on push:
 

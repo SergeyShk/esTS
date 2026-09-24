@@ -33,7 +33,7 @@ Barras horizontales divergentes (`textplot_keyness` de quanteda): las palabras d
 
 ## Red de colocaciones { #collocation_network }
 
-Un grafo no dirigido (`textplot_network` de quanteda): los nodos son las palabras con el tamaño de la letra según su frecuencia, las aristas son los pares con el grosor y la etiqueta según el valor de la medida; la disposición `neato`. Para dibujarlo hacen falta los ejecutables de [Graphviz](https://graphviz.org/download/); en Jupyter el grafo se muestra solo, y `graph.render("network", format="png")` guarda un archivo.
+Un grafo no dirigido (`textplot_network` de quanteda): los nodos son las palabras con el tamaño de la letra según su frecuencia, las aristas son los pares con el grosor y la etiqueta según el valor de la medida; la disposición `neato`. Un par de una palabra consigo misma - una palabra repetida dentro de la ventana (`rojo rojo`) - sería un bucle y se deja fuera antes de tomar los `top_n` pares. Para dibujarlo hacen falta los ejecutables de [Graphviz](https://graphviz.org/download/); en Jupyter el grafo se muestra solo, y `graph.render("network")` guarda un archivo png, como para el árbol de palabras.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |

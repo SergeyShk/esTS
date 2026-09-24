@@ -244,6 +244,9 @@ def test_tokenize():
         # A hyphen between letters or before a digit is left alone
         ("franco-alemán e-mail", ["franco-alemán", "e-mail"]),
         ("-5 grados, 1990-1995, 1990–1995", ["-5", "grados", ",", "1990-1995", ",", "1990–1995"]),
+        # The hyphens after the period of a number of a list
+        ("Artículo 1.- El objeto", ["Artículo", "1", ".", "-", "El", "objeto"]),
+        ("el 3.º piso", ["el", "3.º", "piso"]),
     ],
 )
 def test_tokenize_dialogue_dashes(text, expected):
@@ -567,3 +570,40 @@ def test_sha256(tmp_path):
     path.write_bytes(b"esTS")
     assert sha256(path) == hashlib.sha256(b"esTS").hexdigest()
     assert sha256(tmp_path / "missing.txt") == ""
+
+
+def test_extract_archive_empty(tmp_path):
+    empty_tar = tmp_path / "empty.tar.xz"
+    with tarfile.open(empty_tar, mode="w:xz"):
+        pass
+    with pytest.raises(DataFileError, match="has no files"):
+        extract_archive(empty_tar, tmp_path / "tar_out")
+    empty_zip = tmp_path / "empty.zip"
+    with zipfile.ZipFile(empty_zip, "w"):
+        pass
+    with pytest.raises(DataFileError, match="has no files"):
+        extract_archive(empty_zip, tmp_path / "zip_out")
+
+
+def test_extract_archive_without_the_data_filter(tar_archive, tmp_path, monkeypatch):
+    # Python 3.11 before 3.11.4 has no filter: the members are checked by hand
+    monkeypatch.setattr(utils_module, "TAR_DATA_FILTER", False)
+    extracted = extract_archive(tar_archive, tmp_path / "out")
+    assert (Path(extracted) / "prose" / "a.txt").read_text(encoding="utf-8") == "texto"
+    payload = tmp_path / "payload.txt"
+    payload.write_text("evil", encoding="utf-8")
+    outside = tmp_path / "outside.tar"
+    with tarfile.open(outside, mode="w") as tar_file:
+        tar_file.add(payload, arcname="../evil.txt")
+    with pytest.raises(DataFileError, match="outside"):
+        extract_archive(outside, tmp_path / "outside_out")
+    assert not (tmp_path / "evil.txt").exists()
+    linked = tmp_path / "linked.tar"
+    with tarfile.open(linked, mode="w") as tar_file:
+        link = tarfile.TarInfo("corpus/link")
+        link.type = tarfile.SYMTYPE
+        link.linkname = "/etc/passwd"
+        tar_file.addfile(link)
+    with pytest.raises(DataFileError, match="links"):
+        extract_archive(linked, tmp_path / "linked_out")
+    assert not (tmp_path / "linked_out" / "corpus" / "link").exists()

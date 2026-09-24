@@ -91,7 +91,9 @@ def test_keyness():
     assert keywords[0] == Keyword(
         "gato", 2, 0, 200000.0, 0.0, g2, calc_p_value(g2), calc_log_ratio(2, 0, 10, 8), g2
     )
+    # The frequencies in the reference are floats for the words in it and out of it
     assert keywords[-1].freq_reference == 1
+    assert {type(keyword.freq_reference) for keyword in keywords} == {float}
     assert keywords[-1].ipm_reference == 125000.0
     assert all(keyword.g2 > 0 for keyword in keywords)
     assert [keyword.p_value for keyword in keywords] == [

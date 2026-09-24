@@ -6,7 +6,7 @@ from typing import NamedTuple
 
 import numpy as np
 
-from ..exceptions import ParameterError
+from ..exceptions import ParameterError, SourceError
 from ..utils import check_sequence
 
 
@@ -71,6 +71,7 @@ def dispersion(
 
     Raises:
         SourceTypeError: If a string is passed instead of a list of words
+        SourceError: If there are no words
         ParameterError: If there are fewer than two parts or more parts than
             words, the number of parts is not an integer, or the sizes of the
             parts do not match the text
@@ -83,6 +84,8 @@ def dispersion(
         (2, 0.455)
     """
     check_sequence(words)
+    if not len(words):
+        raise SourceError("The data source has no words")
     sizes = _sizes(len(words), parts)
     total = Counter(words)
     targets = [word] if word is not None else [w for w, f in total.most_common() if f >= min_freq]
@@ -99,7 +102,7 @@ def dispersion(
         np.asarray(sizes, dtype=float),
     )
     return [
-        Dispersion(target, int(total[target]), *(float(column[index]) for column in measures))
+        Dispersion(str(target), int(total[target]), *(float(column[index]) for column in measures))
         for index, target in enumerate(targets)
     ]
 

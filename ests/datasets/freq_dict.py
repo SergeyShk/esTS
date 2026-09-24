@@ -1,7 +1,9 @@
 import csv
 import re
+import warnings
 from collections.abc import Iterator
 from functools import cache
+from importlib.metadata import version
 from itertools import islice
 from pathlib import Path
 from typing import Any, NamedTuple
@@ -166,6 +168,7 @@ class FreqDict(Dataset):
         self._archive = self.data_dir.joinpath(ARCHIVE)
         self._filepath = self.data_dir.joinpath(f"{NAME}_v{VERSION}", FILENAME)
         self._checked = False
+        check_simplemma()
 
     @property
     def filepath(self) -> str | None:
@@ -335,11 +338,24 @@ class FreqDict(Dataset):
         """
         Getting the entry of a lemma
 
+        Description:
+            The lemma is the key of the dictionary, the one lemma_key gives, not
+            a word form: the lemma of usted in simplemma is tú, so
+            lookup("usted") is None and a word of a text is looked up by
+            lookup(lemma_key(word)); the same holds for ipm and in
+
         Arguments:
             lemma (str): Lemma in any case
 
         Returns:
             Entry|None: Entry of the dictionary, None if the lemma is not in it
+
+        Example:
+            >>> from ests.datasets import FreqDict
+            >>> from ests.datasets.freq_dict import lemma_key
+            >>> fd = FreqDict()
+            >>> fd.lookup("usted"), fd.ipm(lemma_key("usted"))
+            (None, 1396.74)
         """
         return self.entries.get(lemma.lower())
 
@@ -348,7 +364,7 @@ class FreqDict(Dataset):
         Getting the frequency of a lemma
 
         Arguments:
-            lemma (str): Lemma in any case
+            lemma (str): Lemma in any case, the key lemma_key gives
 
         Returns:
             float: Occurrences per million words, 0 if the lemma is not in the dictionary
@@ -357,10 +373,38 @@ class FreqDict(Dataset):
         return entry.ipm if entry else 0.0
 
     def __len__(self) -> int:
+        """
+        Number of the lemmas of the dictionary
+
+        Description:
+            The lemmas with their parts of speech merged (83,785), fewer than
+            the rows of the iteration, a row for every lemma and part of speech
+            (109,178)
+        """
         return len(self.entries)
 
     def __contains__(self, lemma: object) -> bool:
         return isinstance(lemma, str) and lemma.lower() in self.entries
+
+
+@cache
+def check_simplemma() -> None:
+    """
+    Warning once if the installed simplemma is not the one of the dictionary
+
+    Description:
+        The keys of the dictionary are the lemmas of simplemma
+        SIMPLEMMA_VERSION; another version lemmatizes some words otherwise, and
+        they are missed in the dictionary
+    """
+    installed = version("simplemma")
+    if installed != SIMPLEMMA_VERSION:
+        warnings.warn(
+            f"The frequency dictionary is built with the lemmas of simplemma "
+            f"{SIMPLEMMA_VERSION}, simplemma {installed} is installed: "
+            "some words may be missed in the dictionary",
+            stacklevel=3,
+        )
 
 
 @cache

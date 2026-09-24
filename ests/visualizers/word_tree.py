@@ -327,7 +327,8 @@ def wordtree(
 
     Raises:
         SourceTypeError: If the texts are not a list of lists of words
-        SourceError: If there are no texts or the keyword occurs in none of them
+        SourceError: If there are no texts or the keyword has a word next to it
+            in none of them
         ParameterError: If the size of the context is below 2 or the number of
             examples below one
 
@@ -345,5 +346,5 @@ def wordtree(
     )
     wt.search()
     if not wt.ngrams:
-        raise SourceError("The keyword is not found")
+        raise SourceError("The keyword is not found or has no word next to it")
     return wt.draw(**kwargs)

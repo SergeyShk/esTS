@@ -1,6 +1,6 @@
 # Contributing
 
-Bug reports, ideas and pull requests are welcome, in English or Spanish. The library follows the structure and conventions of its Russian sibling [ruTS](https://github.com/SergeyShk/ruTS); when in doubt, look there.
+Bug reports, ideas and pull requests are welcome, in English or Spanish.
 
 ## Reporting a bug or proposing an idea
 

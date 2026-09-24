@@ -75,7 +75,7 @@ Una lista de tuplas con nombre `Keyword` por orden descendente de clave (los emp
     )
 
     keyness(target, reference, top_n=1)
-    # [Keyword(word='gato', freq_target=3, freq_reference=0, ipm_target=81081.08108108108,
+    # [Keyword(word='gato', freq_target=3, freq_reference=0.0, ipm_target=81081.08108108108,
     #  ipm_reference=0.0, g2=2.79971718756897, p_value=0.09428093556593176,
     #  log_ratio=1.8349407537295037, score=2.79971718756897)]
 

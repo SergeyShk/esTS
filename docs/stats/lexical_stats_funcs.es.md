@@ -2,7 +2,7 @@
 
 ## Frecuencia según el diccionario { #frequency }
 
-Los atributos `coverage`, `mean_ipm`, `mean_ipm_content`, `mean_log_ipm`, `mean_log_ipm_content`, `mean_range` y `mean_dispersion` de `LexicalStats` se calculan a partir de las entradas del [`FreqDict`](../datasets/freqdict.md) para las palabras del texto (`entries`), buscadas por [`lemma_key`](../datasets/freqdict.md#lemma_key): las medias se toman sobre las palabras encontradas en el diccionario, sobre todas ellas o solo sobre las palabras con contenido. La frecuencia media en ipm es sensible a las palabras funcionales (`el` - 97 000 ipm, `de` - 71 000), así que para comparar textos conviene más la frecuencia logarítmica o la media sobre las palabras con contenido.
+Los atributos `coverage`, `mean_ipm`, `mean_ipm_content`, `mean_log_ipm`, `mean_log_ipm_content`, `mean_range` y `mean_dispersion` de `LexicalStats` se calculan a partir de las entradas del [`FreqDict`](../datasets/freqdict.md) para las palabras del texto (`entries`), buscadas por [`lemma_key`](../datasets/freqdict.md#lemma_key): las medias se toman sobre las palabras encontradas en el diccionario, sobre todas ellas o solo sobre las palabras con contenido. La frecuencia media en ipm es sensible a las palabras funcionales (`el` - 98 000 ipm, `de` - 71 000), así que para comparar textos conviene más la frecuencia logarítmica o la media sobre las palabras con contenido.
 
 ## Sorpresa y perplejidad { #calc_surprisal }
 

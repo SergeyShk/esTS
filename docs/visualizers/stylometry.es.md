@@ -39,7 +39,7 @@ Escalamiento multidimensional clásico (Torgerson 1952) de cualquier matriz de d
 
 ## Curvas de Mendenhall { #mendenhall_plot }
 
-Las proporciones de las palabras por longitud en caracteres ([`mendenhall_curve`](../corpus/stylometry.md#mendenhall)) de cada texto en un mismo gráfico, una comparación de los perfiles de los autores.
+Las proporciones de las palabras por longitud en caracteres ([`mendenhall_curve`](../corpus/stylometry.md#mendenhall)) de cada texto en un mismo gráfico, una comparación de los perfiles de los autores. Una curva recorre todas las longitudes de uno a la palabra más larga de su texto, y una longitud que ninguna palabra tiene se dibuja en cero.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |

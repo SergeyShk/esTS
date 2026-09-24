@@ -43,14 +43,14 @@ def zipf(
     Raises:
         SourceTypeError: If the value is not a Counter object
         SourceError: If the counter is empty
-        ParameterError: If the number of words is negative
+        ParameterError: If the number of words is below one
     """
     if not isinstance(counter, Counter):
         raise SourceTypeError("The counter of the frequencies of words must be a Counter object")
     if not counter:
         raise SourceError("The data source has no words")
-    if num_words is not None and num_words < 0:
-        raise ParameterError("The number of words cannot be negative")
+    if num_words is not None and num_words < 1:
+        raise ParameterError("The number of words must be greater than 0")
     if ax is None:
         _, ax = plt.subplots()
     top_frequency = counter.most_common(1)[0][1]
@@ -59,10 +59,8 @@ def zipf(
     counts = np.array(tuple(frequencies_by_token.values()))
     tokens = np.array(tuple(frequencies_by_token.keys()))
     ranks = np.arange(1, counts.size + 1)
-    indices = counts.argsort()[::-1][:]
-    frequencies = counts[indices]
     plot = ax.loglog if log else ax.plot
-    plot(ranks, frequencies, marker=".", label="Experimental law")
+    plot(ranks, counts, marker=".", label="Experimental law")
     if num_labels > 0:
         positions = (
             np.logspace(-0.5, np.log10(len(counts) - 1), num_labels).astype(int)
@@ -72,8 +70,8 @@ def zipf(
         for n in np.unique(positions):
             ax.text(
                 ranks[n],
-                frequencies[n],
-                " " + tokens[indices[n]],
+                counts[n],
+                " " + tokens[n],
                 verticalalignment="bottom",
                 horizontalalignment="left",
             )
@@ -108,7 +106,7 @@ def zipf_theory(size: int, num_ranks: int, alpha: float = 1.5, ax: Axes | None =
         that the frequency of the first rank equals size
 
     Arguments:
-        size (int): Number of words
+        size (int): Frequency of the first rank, the coefficient of size · r^-alpha
         num_ranks (int): Number of ranks
         alpha (float): Exponent α
         ax (Axes): Axes for the plot; if not given, a new figure is created
