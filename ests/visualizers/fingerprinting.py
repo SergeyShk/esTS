@@ -119,7 +119,14 @@ def fingerprinting(
 def _segment_values(
     text: Sequence[str], segment_len: int, measure: Callable[[Sequence[str]], float]
 ) -> list[float]:
-    """Values of the measure over the sliding segments of a text and its tail, if it has one"""
+    """
+    Values of the measure over the sliding segments of a text
+
+    Description:
+        The last segment starts one step after the last full one and is cut
+        short by the end of the text; a text shorter than a segment is one
+        short segment
+    """
     step = max(1, int(0.1 * segment_len))
     starts = range(0, len(text) - segment_len + 1, step)
     values = [float(measure(text[start : start + segment_len])) for start in starts]

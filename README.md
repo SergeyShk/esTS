@@ -31,7 +31,7 @@
 
 **esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity, lexical sophistication, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
 
-The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography, and only the morphological, the syntactic and the cohesion statistics need a trained model.
+The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography, and only the morphological, the syntactic, the cohesion and the lexical sophistication statistics, the profile of the function words and the comparison of corpora need a trained model.
 
 * **[Object extraction](https://sergeyshk.github.io/esTS/extractors/sentences/)** - configurable sentence, word and character N-gram tokenizers that know the inverted marks, the dialogue dash and the abbreviations of Spanish
 * **[Syllables and stress](https://sergeyshk.github.io/esTS/syllables/)** - rule-based syllabification and the stressed syllable derived from the spelling, with no dictionary

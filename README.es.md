@@ -31,7 +31,7 @@
 
 **esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica, complejidad léxica, morfología, sintaxis y cohesión, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
 
-La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy): las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, las sílabas y el acento se deducen de la ortografía, y solo las estadísticas morfológicas, las sintácticas y las de cohesión necesitan un modelo entrenado.
+La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy): las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, las sílabas y el acento se deducen de la ortografía, y solo las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica, el perfil de las palabras funcionales y la comparación de corpus necesitan un modelo entrenado.
 
 * **[Extracción de objetos](https://sergeyshk.github.io/esTS/es/extractors/sentences/)** - tokenizadores configurables de oraciones, palabras y N-gramas de caracteres que conocen los signos de apertura, la raya de diálogo y las abreviaturas del español
 * **[Sílabas y acento](https://sergeyshk.github.io/esTS/es/syllables/)** - silabificación por reglas y sílaba tónica deducida de la escritura, sin diccionario
