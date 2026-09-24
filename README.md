@@ -40,6 +40,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Lexical diversity metrics](https://sergeyshk.github.io/esTS/stats/diversity_stats/)** - TTR and its variations, MATTR, MSTTR, MTLD, HD-D, Simpson's and Yule's indices, entropy, Zipf's and Heaps' laws
 * **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
 * **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text, a KWIC concordance and the stylometry of authorship: Burrows's Delta with its variants, Zeta, the Mendenhall curve, the profile of the function words; the comparison of two corpora by 132 features of a text with effect sizes
+* **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, vocabulary growth, sentence lengths
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
 * **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 255 Spanish discourse markers
 * **[Syntactic statistics](https://sergeyshk.github.io/esTS/stats/syntax_stats/)** - the dependency tree by distances, depth, clauses and coordination, with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
@@ -515,6 +516,44 @@ uv run pre-commit install
 Bug reports, ideas and pull requests are welcome - [issues](https://github.com/SergeyShk/esTS/issues) are open. The workflow, the checks to run before submitting a pull request and how to shape the changes are described in [CONTRIBUTING.md](https://github.com/SergeyShk/esTS/blob/master/CONTRIBUTING.md); the rules of conduct are in the [code of conduct](https://github.com/SergeyShk/esTS/blob/master/CODE_OF_CONDUCT.md).
 
 <details>
+<summary><b>Visualizers</b></summary>
+
+<br>
+
+*   [Zipf's law](https://sergeyshk.github.io/esTS/visualizers/zipf/) with the theoretical curve and the Zipf-Mandelbrot fit
+*   [Literature fingerprinting](https://sergeyshk.github.io/esTS/visualizers/fingerprinting/) (Literature Fingerprinting)
+*   [Word tree](https://sergeyshk.github.io/esTS/visualizers/word_tree/) (Word Tree)
+*   [Corpus plots](https://sergeyshk.github.io/esTS/visualizers/corpus/): lexical dispersion, a chart of keywords, a network of collocations
+*   [Stylometric plots](https://sergeyshk.github.io/esTS/visualizers/stylometry/): a dendrogram, the principal components and the multidimensional scaling by Delta, the Mendenhall curves
+*   [Vocabulary growth and frequency spectrum](https://sergeyshk.github.io/esTS/visualizers/vocabulary/), [sentence lengths](https://sergeyshk.github.io/esTS/visualizers/sentences/) with a moving average
+
+The matplotlib plots take the axes `ax` and return `Axes`, so they can be laid out on one figure; the network of collocations and the word tree are graphs of graphviz, whose executables render them. Cosine Delta separates three novels by Galdós from three by Unamuno:
+
+```python
+import matplotlib.pyplot as plt
+from ests import WordsExtractor
+from ests.corpus import delta
+from ests.visualizers import dendrogram_plot, pca_plot
+
+# six novels by Galdós and Unamuno from Project Gutenberg, as {title: text}
+we = WordsExtractor(lowercase=True)
+corpus = {title: we.extract(text) for title, text in novels.items()}
+distances = delta(corpus, n_mfw=100, variant="cosine")
+
+fig, (left, right) = plt.subplots(1, 2, figsize=(13, 5))
+dendrogram_plot(distances, ax=left)
+pca_plot(corpus, n_mfw=100, ax=right)
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/SergeyShk/esTS/master/docs/img/stylometry.png" alt="Stylometric plots" width="760">
+</p>
+
+More in the [documentation](https://sergeyshk.github.io/esTS/visualizers/zipf/).
+
+</details>
+
+<details>
 <summary><b>Project structure</b></summary>
 
 <br>
@@ -534,6 +573,7 @@ Bug reports, ideas and pull requests are welcome - [issues](https://github.com/S
     *   syntax_stats.py - syntactic statistics
     *   syllables.py - syllabification and stress
     *   utils.py - helper tools
+    *   visualizers - plots: Zipf's law, fingerprinting, word tree, corpus and stylometric plots, vocabulary growth, sentence lengths
 *   **tests** - tests mirroring the package structure
 
 </details>

@@ -19,6 +19,7 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 *   calcular [estadísticas sintácticas](stats/syntax_stats.md) sobre el árbol de dependencias (distancias, profundidad, cláusulas, coordinación) con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
 *   calcular [estadísticas de cohesión](stats/cohesion_stats.md) a la manera de Coh-Metrix (repetición de sustantivos, argumentos y palabras con contenido entre oraciones, información dada, cohesión temporal) con la densidad de 255 marcadores del discurso por clase
 *   comparar corpus con las medidas de la lingüística de corpus: [palabras clave](corpus/keyness.md) frente a un corpus de referencia, [colocaciones](corpus/collocations.md), la [dispersión](corpus/dispersion.md) de una palabra por las partes de un texto y una [concordancia KWIC](corpus/kwic.md), y atribuir la autoría por [estilometría](corpus/stylometry.md): la Delta de Burrows, Zeta, la curva de Mendenhall, las palabras funcionales; encontrar los rasgos que distinguen dos corpus [comparándolos](corpus/compare.md) por 132 rasgos de un texto
+*   visualizar textos y corpus: la [ley de Zipf](visualizers/zipf.md), la [huella literaria](visualizers/fingerprinting.md), un [árbol de palabras](visualizers/word_tree.md), gráficos [de corpus](visualizers/corpus.md) y [estilométricos](visualizers/stylometry.md), el [crecimiento del vocabulario](visualizers/vocabulary.md) y las [longitudes de las oraciones](visualizers/sentences.md)
 *   añadir las estadísticas a un [pipeline de spaCy](components.md) como componentes, de modo que el texto se anote y se mida en una sola pasada y las estadísticas viajen con el `Doc`
 
 La complejidad léxica y los primeros conjuntos de datos completan la 0.3; el estilo, la fonoestadística, la métrica y la rima llegan en la 0.4.
@@ -106,4 +107,5 @@ Punctuation marks   |    2
         *   syntax_stats.py - estadísticas sintácticas
         *   syllables.py - silabificación y acento
         *   utils.py - herramientas auxiliares
+        *   visualizers - gráficos: ley de Zipf, huella literaria, árbol de palabras, gráficos de corpus y estilométricos, crecimiento del vocabulario, longitudes de las oraciones
     *   **tests** - pruebas que reproducen la estructura del paquete
