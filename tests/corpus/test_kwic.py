@@ -74,9 +74,43 @@ def test_kwic_of_a_doc_with_lemmas():
     assert [(line.start, line.keyword) for line in kwic(doc, "venir", by_lemma=True)] == [
         (9, "vino")
     ]
-    assert [line.start for line in kwic(doc, "vino", by_lemma=True)] == [33]
-    assert len(kwic(doc.text, "vino", by_lemma=True)) == 2
+    assert [line.start for line in kwic(doc, "vino", by_lemma=True)] == [9, 33]
     assert kwic(doc.text, "venir", by_lemma=True) == []
+
+
+@pytest.mark.parametrize(
+    ("keyword", "expected"),
+    [
+        ("venir", ["vendrían", "vinieron"]),
+        ("vendrían", ["vendrían", "vinieron"]),
+        ("poner", ["pusiste"]),
+    ],
+)
+def test_kwic_of_a_doc_finds_what_the_model_misreads(keyword, expected):
+    text = "Ellas dijeron que vendrían mañana, pero no vinieron. ¿Dónde pusiste las llaves?"
+    doc = get_nlp()(text)
+    assert [line.keyword for line in kwic(doc, keyword, by_lemma=True)] == expected
+    assert {line.keyword for line in kwic(text, keyword, by_lemma=True)} <= set(expected)
+
+
+def test_kwic_of_a_doc_finds_every_word_by_its_own_form():
+    text = "Ellas dijeron que vendrían mañana, pero no vinieron. ¿Dónde pusiste las llaves?"
+    doc = get_nlp()(text)
+    for word in ("dijeron", "vendrían", "vinieron", "pusiste", "llaves"):
+        assert word in [line.keyword for line in kwic(doc, word, by_lemma=True)]
+
+
+@pytest.mark.parametrize(
+    ("text", "keyword", "expected"),
+    [
+        ("Viajó a EE. UU. en mayo.", "EE. UU.", "EE. UU."),
+        ("¿Dónde está?", "¿Dónde", "Dónde"),
+        ("Pagó 20 € por él.", "20 €", "20"),
+    ],
+)
+def test_kwic_splits_the_keyword_like_the_text(text, keyword, expected):
+    assert [line.keyword for line in kwic(text, keyword)] == [expected]
+    assert [line.keyword for line in kwic(get_nlp()(text), keyword)] == [expected]
 
 
 def test_kwic_of_a_wrong_source():
@@ -84,7 +118,7 @@ def test_kwic_of_a_wrong_source():
         kwic(["gato"], "gato")
 
 
-@pytest.mark.parametrize(("keyword", "window"), [("  ", 5), ("gato", -1)])
+@pytest.mark.parametrize(("keyword", "window"), [("  ", 5), ("¿?", 5), ("gato", -1)])
 def test_kwic_errors(keyword, window):
     with pytest.raises(ParameterError):
         kwic(text, keyword, window=window)

@@ -18,6 +18,7 @@ from ests.corpus.keyness import (
     calc_p_value,
 )
 from ests.exceptions import ParameterError, SourceError, SourceTypeError
+from ests.utils import get_nlp
 
 target = ["gato", "estaba", "en", "ventana", "y", "miraba", "en", "pájaros", "gato", "dormía"]
 reference = ["perro", "yacía", "en", "suelo", "y", "descansaba", "perro", "comía"]
@@ -172,3 +173,11 @@ def test_keyness_of_an_empty_corpus(first, second):
 def test_keyness_of_a_string():
     with pytest.raises(SourceTypeError):
         keyness("el gato duerme", reference)
+
+
+@pytest.mark.parametrize("span", [False, True])
+def test_refuses_a_doc(span):
+    doc = get_nlp()("El gato duerme y el gato come.")
+    source = doc[0:3] if span else doc
+    with pytest.raises(SourceTypeError, match="WordsExtractor"):
+        keyness(source, reference)

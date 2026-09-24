@@ -13,6 +13,7 @@ from ests.corpus.dispersion import (
     calc_rosengren_s,
 )
 from ests.exceptions import ParameterError, SourceTypeError
+from ests.utils import get_nlp
 
 words = [
     "gato", "estaba", "en", "ventana",
@@ -143,3 +144,11 @@ def test_dispersion_errors(parts):
 def test_dispersion_of_a_string():
     with pytest.raises(SourceTypeError):
         dispersion("el gato duerme", parts=2)
+
+
+@pytest.mark.parametrize("span", [False, True])
+def test_refuses_a_doc(span):
+    doc = get_nlp()("El gato duerme y el gato come.")
+    source = doc[0:3] if span else doc
+    with pytest.raises(SourceTypeError, match="WordsExtractor"):
+        dispersion(source, parts=2)

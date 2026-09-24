@@ -37,15 +37,18 @@ def kwic(
     Building a KWIC concordance (keyword in context)
 
     Description:
-        The occurrences of a word or a phrase (words separated by spaces) are
-        looked for among the words of the text: by the word form ignoring case,
-        respecting it, or by the lemma (gatos is found by gato). A string is
-        split into words by the tokenizer of the blank Spanish pipeline and
-        lemmatized by simplemma; a Doc keeps its tokens, and the lemmas of the
-        model when it carries them, so fue is found by ser where the model
-        reads it so; the keyword itself is lemmatized by simplemma. The context
-        is window words on each side as they are written in the text, with the
-        punctuation between them; whitespace in the contexts and in the
+        The occurrences of a word or a phrase are looked for among the words of
+        the text: by the word form ignoring case, respecting it, or by the lemma
+        (gatos is found by gato). The text and the keyword are split into words
+        the same way, by the tokenizer of the blank Spanish pipeline, so EE. UU.
+        is one word in both, and punctuation and symbols are words of neither
+        By lemma, a word of the text is found by its lemma of simplemma and, in
+        a Doc that carries lemmas, by the lemma of the model as well, while the
+        keyword is lemmatized by simplemma: the model tells the verb of vino
+        from the noun (venir finds the verb alone), and simplemma finds what the
+        model misreads (pusiste, which the model lemmatizes as pusistar). The
+        context is window words on each side as they are written in the text,
+        with the punctuation between them; whitespace in the contexts and in the
         occurrence collapses to one space; occurrences do not overlap
         Accents are part of the word form: solo and sólo are two forms
 
@@ -79,21 +82,22 @@ def kwic(
         lemmatized = False
     else:
         raise SourceTypeError("The data source is set incorrectly")
-    pattern = keyword.split()
+    pattern = [token.text for token in iter_doc_tokens(get_tokenizer()(keyword))]
     if not pattern:
         raise ParameterError("The keyword is not set")
     if window < 0:
         raise ParameterError("The window cannot be negative")
     words = [(token.idx, token.idx + len(token), token.text) for token in tokens]
-    normalized = [
-        _normalize(token.text, by_lemma, ignore_case, token.lemma_ if lemmatized else "")
+    readings = [
+        _readings(token.text, by_lemma, ignore_case, token.lemma_ if lemmatized else "")
         for token in tokens
     ]
-    target = [_normalize(word, by_lemma, ignore_case) for word in pattern]
+    target = [_readings(word, by_lemma, ignore_case) for word in pattern]
     found = []
     index = 0
     while index <= len(words) - len(target):
-        if normalized[index : index + len(target)] != target:
+        candidates = readings[index : index + len(target)]
+        if not all(wanted & met for wanted, met in zip(target, candidates, strict=True)):
             index += 1
             continue
         last = index + len(target) - 1
@@ -114,10 +118,11 @@ def kwic(
     return found
 
 
-def _normalize(word: str, by_lemma: bool, ignore_case: bool, lemma: str = "") -> str:
-    if by_lemma:
-        return (lemma or lemmatize(word)).lower()
-    return word.lower() if ignore_case else word
+def _readings(word: str, by_lemma: bool, ignore_case: bool, lemma: str = "") -> set[str]:
+    """Readings a word is matched by: its form, or its lemmas of simplemma and of the model"""
+    if not by_lemma:
+        return {word.lower() if ignore_case else word}
+    return {lemmatize(word).lower(), *([lemma.lower()] if lemma else [])}
 
 
 def format_kwic(concordances: Sequence[Concordance], width: int = 40) -> str:

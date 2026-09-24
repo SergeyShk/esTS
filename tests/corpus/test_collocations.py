@@ -17,6 +17,7 @@ from ests.corpus.collocations import (
     calc_t_score,
 )
 from ests.exceptions import ParameterError, SourceTypeError
+from ests.utils import get_nlp
 
 words = [
     "gato", "estaba", "en", "ventana",
@@ -153,3 +154,11 @@ def test_pair_of_a_word_with_itself():
         scores.append(next(c.score for c in found if c.left == c.right == "a"))
     assert scores[0] == pytest.approx(0.40271027101377704)
     assert all(isnan(score) for score in scores[1:])
+
+
+@pytest.mark.parametrize("span", [False, True])
+def test_refuses_a_doc(span):
+    doc = get_nlp()("El gato duerme y el gato come.")
+    source = doc[0:3] if span else doc
+    with pytest.raises(SourceTypeError, match="WordsExtractor"):
+        collocations(source)

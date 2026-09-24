@@ -324,19 +324,21 @@ def has_words(source: str | Doc | Span) -> bool:
 
 def check_sequence(value: object, what: str = "words") -> None:
     """
-    Checking that an argument is a sequence and not a string
+    Checking that an argument is a sequence of strings and not a text
 
     Description:
         A string satisfies Sequence[str] formally but is iterated character by
-        character; the functions that expect a list of words or of texts refuse
-        it explicitly
+        character, and a Doc or a Span of spaCy is iterated token by token,
+        where every token compares only with itself, so every one of them would
+        be a word of its own with a frequency of one; the functions that expect
+        a list of words or of texts refuse both explicitly
 
     Arguments:
         value (object): Value to check
         what (str): What is expected, for the message of the error
 
     Raises:
-        SourceTypeError: If a string is passed
+        SourceTypeError: If a string, a Doc or a Span is passed
 
     Example:
         >>> from ests.utils import check_sequence
@@ -348,6 +350,11 @@ def check_sequence(value: object, what: str = "words") -> None:
     """
     if isinstance(value, str):
         raise SourceTypeError(f"A list of {what} is expected, not a string")
+    if isinstance(value, Doc | Span):
+        raise SourceTypeError(
+            f"A list of {what} is expected, not a {type(value).__name__}: "
+            "extract the words with WordsExtractor"
+        )
 
 
 def is_verbal_noun(lemma: str) -> bool:
