@@ -38,11 +38,10 @@ class LexicalStats:
         Unidos, which the dictionary counts under estado, falls back to its
         lemma. The bands take the lower-case form of a proper noun, as the list
         alone cannot tell París from parir. The parts of speech come from the
-        annotation, so the
-        source has to be annotated: a string is parsed with the model
-        es_core_news_sm or with the pipeline given in nlp, and a Doc must carry
-        the parts of speech. A content word is one of CONTENT_UD_POS and no
-        demonstrative, as in CohesionStats
+        annotation, so the source has to be annotated: a string is parsed with
+        the model es_core_news_sm or with the pipeline given in nlp, and a Doc
+        must carry the parts of speech. A content word is one of CONTENT_UD_POS
+        and no demonstrative, as in CohesionStats
         Numbers (2020, 5,5, 3.º) are no words: the dictionary and the list do
         not have them, and they would look like the rarest words of the text.
         The statistics by the dictionary need a downloaded FreqDict, the bands
