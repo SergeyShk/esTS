@@ -1,0 +1,1923 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Biblioteca para extraer estadísticas de textos en español">
+      
+      
+      
+      
+        <link rel="prev" href="../stylometry/">
+      
+      
+      
+        
+          <link rel="alternate" href="../../../corpus/compare/" hreflang="en">
+        
+          <link rel="alternate" href="./" hreflang="es">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Comparación de corpus - esTS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#comparacion-de-corpus" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../../" title="esTS" class="md-header__button md-logo" aria-label="esTS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            esTS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Comparación de corpus
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Seleccionar idioma">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../../corpus/compare/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="es" class="md-select__link">
+              Español
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/SergeyShk/esTS" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+  Inicio
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../extractors/sentences/" class="md-tabs__link">
+          
+  
+  
+  Extracción
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../syllables/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Sílabas y acento
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../components/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Componentes de spaCy
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../stats/basic_stats/" class="md-tabs__link">
+          
+  
+  
+  Estadísticas
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../keyness/" class="md-tabs__link">
+          
+  
+  
+  Medidas de corpus
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../" title="esTS" class="md-nav__button md-logo" aria-label="esTS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    esTS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/SergeyShk/esTS" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inicio
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acerca de
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instalación
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Excepciones y registro
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../authors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracción
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Extracción
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extractors/sentences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracción de oraciones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extractors/words/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracción de palabras
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extractors/char_ngrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracción de N-gramas de caracteres
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../syllables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sílabas y acento
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Componentes de spaCy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Estadísticas
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/basic_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas básicas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Métricas de legibilidad
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Métricas de legibilidad
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/readability_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/readability_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Métricas de diversidad léxica
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Métricas de diversidad léxica
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/diversity_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/diversity_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/morph_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas morfológicas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/syntax_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas sintácticas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/cohesion_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas de cohesión
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Medidas de corpus
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Medidas de corpus
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../keyness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Palabras clave
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../collocations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Colocaciones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dispersion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dispersión de las palabras
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../kwic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concordancia KWIC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stylometry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estilometría
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comparación de corpus
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comparación de corpus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#descripcion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Descripción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rasgos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rasgos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estadisticas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estadísticas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parametros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parámetros
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejemplo-de-uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejemplo de uso
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#descripcion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Descripción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rasgos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rasgos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estadisticas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estadísticas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parametros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parámetros
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejemplo-de-uso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejemplo de uso
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="comparacion-de-corpus">Comparación de corpus<a class="headerlink" href="#comparacion-de-corpus" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p><strong>ests.corpus.compare_corpora()</strong>, <strong>ests.corpus.compare_features()</strong>, <strong>ests.corpus.corpus_features()</strong>, <strong>ests.corpus.text_features()</strong>, <strong>ests.corpus.split_windows()</strong>, <strong>ests.corpus.sentence_rhythm()</strong></p>
+</div>
+<h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
+<p>Comparación de dos corpus por todos los rasgos de un texto a la vez: qué estadísticas distinguen autores, géneros, traducciones, textos humanos y generados, y en qué medida. Para palabras sueltas hace lo mismo <a href="../keyness/"><code>keyness</code></a>, para las distancias entre textos, <a href="../stylometry/#delta"><code>delta</code></a>.</p>
+<p>Los textos de ambos corpus se dividen en ventanas de un tamaño parecido para que los rasgos no dependan de la longitud de un texto. En <code>split_windows</code> el número de ventanas es la razón del número de palabras al tamaño de una ventana redondeada al entero más próximo, al menos una, y las partes son iguales: un texto largo da ventanas a pocos puntos porcentuales del tamaño, un texto de una a dos ventanas da ventanas de 750 a 1499 palabras con una ventana de 1000, y un texto más corto que <code>min_words</code> - media ventana por defecto - no da ninguna, para que los textos cortos no enfrenten ventanas de tamaños muy distintos a las demás. Un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, los signos <code>¿</code> y <code>¡</code> - para que no se pierda ninguna puntuación, mientras que unas comillas rectas o una raya pegadas al final de la palabra anterior la cierran y se quedan con ella (<code>"cuatro"</code>, <code>—dijo Juan—</code>). Los rasgos se calculan para cada ventana (<code>text_features</code> o una función propia), y para cada rasgo se comparan los dos conjuntos de valores. El resultado es un <code>DataFrame</code> rasgo × estadísticas ordenado por el valor absoluto descendente de la delta de Cliff.</p>
+<h2 id="rasgos">Rasgos<a class="headerlink" href="#rasgos" title="Permanent link">&para;</a></h2>
+<p><code>text_features(text, nlp=None)</code> devuelve 132 rasgos con un prefijo según su fuente:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Prefijo</th>
+<th style="text-align: left;">Rasgos</th>
+<th style="text-align: left;">Fuente</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>basic_</code></td>
+<td style="text-align: left;">proporciones de palabras largas, complejas, simples, monosílabas y polisílabas, de letras, espacios y signos de puntuación; letras y sílabas por palabra</td>
+<td style="text-align: left;"><a href="../../stats/basic_stats/"><code>BasicStats</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>readability_</code></td>
+<td style="text-align: left;">todas las fórmulas de legibilidad y el grado de consenso</td>
+<td style="text-align: left;"><a href="../../stats/readability_stats/"><code>ReadabilityStats</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>diversity_</code></td>
+<td style="text-align: left;">todas las medidas de diversidad léxica</td>
+<td style="text-align: left;"><a href="../../stats/diversity_stats/"><code>DiversityStats</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>morph_</code></td>
+<td style="text-align: left;">proporciones de los valores de cada rasgo morfológico (<code>morph_pos_NOUN</code>, <code>morph_mood_Sub</code>, <code>morph_polarity_Neg</code>) y los marcadores del español (<code>morph_p_gerund</code>, <code>morph_p_mente_adverbs</code>)</td>
+<td style="text-align: left;"><a href="../../stats/morph_stats/"><code>MorphStats</code></a> con el modelo de spaCy</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>sents_</code></td>
+<td style="text-align: left;">longitud media de una oración en palabras, desviación típica, coeficiente de variación, autocorrelación de las longitudes vecinas (<code>sentence_rhythm</code>): el ritmo del texto</td>
+<td style="text-align: left;"><a href="../../extractors/sentences/"><code>SentsExtractor</code></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>punct_</code></td>
+<td style="text-align: left;">frecuencias de los signos de puntuación por tipo por cada 1000 palabras y la proporción de los signos de apertura</td>
+<td style="text-align: left;"><a href="../../stats/basic_stats/#punctuation"><code>punctuation_profile</code></a></td>
+</tr>
+</tbody>
+</table>
+<p>Cada rasgo se cuenta una sola vez. El tiempo de lectura solo sigue el número de palabras de una ventana y se deja fuera; la proporción de palabras únicas repite <code>diversity_ttr</code>, las palabras por oración repiten <code>sents_mean</code> y los marcadores de los modos repiten <code>morph_mood_*</code>, así que también se dejan fuera.</p>
+<p>Las categorías gramaticales y los rasgos de un solo valor - polaridad, cortesía, posesivo, reflexivo - son proporciones de todas las palabras (<code>morph_polarity_Neg</code> es la proporción de las negaciones), los demás rasgos, proporciones de las palabras que los llevan (<code>morph_mood_Sub</code> es el subjuntivo entre los modos). Un valor que no aparece en una ventana da 0; un rasgo ausente de la ventana por completo (sin verbos no hay tiempo) da <code>nan</code>. Un valor de varios valores, como el modelo escribe <code>PronType=Int,Rel</code> de <em>que</em> y <code>Case=Acc,Nom</code> de <em>usted</em>, se reparte a partes iguales entre sus partes, así que las proporciones de un rasgo siguen sumando uno.</p>
+<p>La morfología la analiza el modelo <a href="../../installation/#model"><code>es_core_news_sm</code></a> sin su analizador sintáctico, lo que se lleva la mayor parte del tiempo: una ventana de 1000 palabras tarda unos 0.07 s. El análisis de dependencias añadiría un tercio más para un solo marcador, <code>morph_p_ser</code>, que lee de él las cópulas; un pipeline pasado en <code>nlp</code> se ejecuta entero salvo el reconocedor de entidades, así que <code>functools.partial(text_features, nlp=get_nlp())</code> devuelve el analizador sintáctico y <code>morph_p_ser</code>, y otro modelo entra en la comparación del mismo modo. Un texto más largo que el <code>max_length</code> del pipeline lanza <code>SourceError</code>, así que una novela se compara por ventanas y no entera.</p>
+<p><code>corpus_features(texts, window, features)</code> devuelve la matriz de rasgos de las ventanas con el índice (número del texto, número de la ventana), para clasificadores propios, y <code>compare_features(table_a, table_b, labels, n_bootstrap, seed)</code> compara dos tablas así: <code>compare_corpora</code> es <code>corpus_features</code> para cada corpus seguido de <code>compare_features</code>. La división sirve cuando los rasgos se calculan una vez para varios corpus y hay que comparar pares, por ejemplo, todos los autores dos a dos.</p>
+<p>Las proporciones de espacios, letras y signos de puntuación (<code>basic_p_spaces</code>, <code>basic_p_letters</code>, <code>basic_p_punctuations</code>) cuentan los caracteres tal cual: las sangrías, los espacios dobles y los de no separación de los archivos reflejan la composición de una edición y no el texto. En un corpus de fuentes distintas conviene colapsarlos antes, por ejemplo, con <code>re.sub(r"[^\S\n]+", " ", text)</code>.</p>
+<h2 id="estadisticas">Estadísticas<a class="headerlink" href="#estadisticas" title="Permanent link">&para;</a></h2>
+<p>Para un rasgo con los valores <span class="arithmatex">\(x_1 \dots x_{n_A}\)</span> en el corpus A y <span class="arithmatex">\(y_1 \dots y_{n_B}\)</span> en el corpus B (sin los valores indefinidos e infinitos; con menos de dos valores en un lado, <code>nan</code>):</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Columna</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>mean_A</code>, <code>mean_B</code>, <code>median_A</code>, <code>median_B</code></td>
+<td style="text-align: left;">medias y medianas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>median_diff</code>, <code>ci_low</code>, <code>ci_high</code></td>
+<td style="text-align: left;">la diferencia de las medianas y su intervalo bootstrap de percentiles al 95%: ambos conjuntos se remuestrean <code>n_bootstrap</code> veces (<code>bootstrap_median_diff</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>cohen_d</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(d = (\bar{x} - \bar{y}) / s\)</span>, <span class="arithmatex">\(s\)</span> - la desviación típica combinada; 0.2 - un efecto pequeño, 0.5 - mediano, 0.8 - grande (<code>calc_cohen_d</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>cliff_delta</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(\delta = P(x &gt; y) - P(x &lt; y)\)</span> de −1 a 1; <span class="arithmatex">\(\lvert\delta\rvert\)</span> &lt; 0.147 - un efecto despreciable, &lt; 0.33 - pequeño, &lt; 0.474 - mediano, grande en otro caso (Romano et al. 2006; <code>calc_cliff_delta</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>auc</code></td>
+<td style="text-align: left;">el rasgo como clasificador por sí solo: la proporción de pares de ventanas en los que el valor en A es mayor que en B, con los empates a la mitad; <span class="arithmatex">\(\delta = 2 \cdot AUC - 1\)</span>, 0.5 - el rasgo no distingue los corpus</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>u</code>, <code>p_value</code></td>
+<td style="text-align: left;">el estadístico U de Mann-Whitney y el valor p bilateral (<code>scipy.stats.mannwhitneyu</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>p_holm</code></td>
+<td style="text-align: left;">el valor p con la corrección de Holm por el número de rasgos (<code>holm_correction</code>): una tabla de cien filas sin corrección invita a falsos descubrimientos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_A</code>, <code>n_B</code></td>
+<td style="text-align: left;">número de ventanas con un valor definido</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_texts_A</code>, <code>n_texts_B</code></td>
+<td style="text-align: left;">número de textos detrás de esas ventanas</td>
+</tr>
+</tbody>
+</table>
+<p>La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.</p>
+<div class="admonition warning">
+<p class="admonition-title">Las ventanas de un texto no son independientes</p>
+<p>La prueba y los tamaños del efecto toman cada ventana por una observación independiente, y las ventanas de un texto no lo son: comparten su trama, sus personajes, su narrador y su edición. Con pocos textos en un corpus los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus: en el ejemplo de abajo dos novelas de un mismo autor difieren en 40 rasgos según la misma prueba. El bootstrap, en cambio, remuestrea textos enteros, el nivel <code>text</code> del índice que pone <code>corpus_features</code> (un bootstrap por conglomerados), así que su intervalo tiene en cuenta la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con solo unos pocos. Una tabla propia sin ese nivel toma cada fila por un texto aparte.</p>
+</div>
+<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>a</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Textos del primer corpus</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>b</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Textos del segundo corpus</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>window</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>1000</code></td>
+<td style="text-align: center;">Tamaño de una ventana en palabras; <code>None</code> - los textos enteros</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>features</code></td>
+<td style="text-align: center;">callable</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Función de los rasgos de un texto; <code>None</code> - <code>text_features</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>labels</code></td>
+<td style="text-align: center;">tuple[str, str]</td>
+<td style="text-align: center;"><code>("A", "B")</code></td>
+<td style="text-align: center;">Nombres de los corpus para las columnas</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_bootstrap</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>1000</code></td>
+<td style="text-align: center;">Número de remuestras bootstrap</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>seed</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>0</code></td>
+<td style="text-align: center;">Semilla del generador de números aleatorios; <code>None</code> - una aleatoria</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>min_words</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Menor número de palabras de una ventana; <code>None</code> - media ventana, o una cuando <code>window</code> es <code>None</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="ejemplo-de-uso">Ejemplo de uso<a class="headerlink" href="#ejemplo-de-uso" title="Permanent link">&para;</a></h2>
+<p>Galdós frente a Unamuno, tres novelas de cada uno de <a href="https://www.gutenberg.org">Project Gutenberg</a>: <em>Marianela</em>, <em>Misericordia</em> y <em>Torquemada en la hoguera</em> frente a <em>Niebla</em>, <em>Abel Sánchez</em> y <em>La tía Tula</em>: 197 y 117 ventanas de 1000 palabras, menos de medio minuto tras la descarga.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<p><em>Código</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">urllib.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlopen</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">compare_corpora</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">gutenberg</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"https://www.gutenberg.org/cache/epub/</span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">/pg</span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2">.txt"</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"*** START OF"</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">text</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"*** END OF"</span><span class="p">)]</span>
+
+
+<span class="n">galdos</span> <span class="o">=</span> <span class="p">[</span><span class="n">gutenberg</span><span class="p">(</span><span class="n">number</span><span class="p">)</span> <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">17340</span><span class="p">,</span> <span class="mi">21831</span><span class="p">,</span> <span class="mi">15206</span><span class="p">)]</span>
+<span class="n">unamuno</span> <span class="o">=</span> <span class="p">[</span><span class="n">gutenberg</span><span class="p">(</span><span class="n">number</span><span class="p">)</span> <span class="k">for</span> <span class="n">number</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">49836</span><span class="p">,</span> <span class="mi">44512</span><span class="p">,</span> <span class="mi">44358</span><span class="p">)]</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">compare_corpora</span><span class="p">(</span><span class="n">galdos</span><span class="p">,</span> <span class="n">unamuno</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s2">"Galdós"</span><span class="p">,</span> <span class="s2">"Unamuno"</span><span class="p">))</span>
+<span class="n">columns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"median_Galdós"</span><span class="p">,</span>
+    <span class="s2">"median_Unamuno"</span><span class="p">,</span>
+    <span class="s2">"ci_low"</span><span class="p">,</span>
+    <span class="s2">"ci_high"</span><span class="p">,</span>
+    <span class="s2">"cohen_d"</span><span class="p">,</span>
+    <span class="s2">"cliff_delta"</span><span class="p">,</span>
+    <span class="s2">"auc"</span><span class="p">,</span>
+    <span class="s2">"p_holm"</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">result</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">features</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"basic_letters_per_word"</span><span class="p">,</span>
+    <span class="s2">"readability_lix"</span><span class="p">,</span>
+    <span class="s2">"morph_p_gerund"</span><span class="p">,</span>
+    <span class="s2">"morph_polarity_Neg"</span><span class="p">,</span>
+    <span class="s2">"sents_mean"</span><span class="p">,</span>
+    <span class="s2">"punct_dash"</span><span class="p">,</span>
+    <span class="s2">"punct_exclamation"</span><span class="p">,</span>
+    <span class="s2">"diversity_yule_k"</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">result</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">features</span><span class="p">,</span> <span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">result</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s2">"sents_mean"</span><span class="p">,</span> <span class="p">[</span><span class="s2">"n_Galdós"</span><span class="p">,</span> <span class="s2">"n_Unamuno"</span><span class="p">,</span> <span class="s2">"n_texts_Galdós"</span><span class="p">,</span> <span class="s2">"n_texts_Unamuno"</span><span class="p">]]</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+</code></pre></div>
+<p><em>Resultado</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="w">                    </span>median_Galdós<span class="w">  </span>median_Unamuno<span class="w">  </span>ci_low<span class="w">  </span>ci_high<span class="w">  </span>cohen_d<span class="w">  </span>cliff_delta<span class="w">    </span>auc<span class="w">  </span>p_holm
+diversity_ttr<span class="w">               </span><span class="m">0</span>.494<span class="w">           </span><span class="m">0</span>.420<span class="w">   </span><span class="m">0</span>.066<span class="w">    </span><span class="m">0</span>.088<span class="w">    </span><span class="m">3</span>.159<span class="w">        </span><span class="m">0</span>.976<span class="w">  </span><span class="m">0</span>.988<span class="w">     </span><span class="m">0</span>.0
+diversity_httr<span class="w">              </span><span class="m">0</span>.898<span class="w">           </span><span class="m">0</span>.874<span class="w">   </span><span class="m">0</span>.021<span class="w">    </span><span class="m">0</span>.028<span class="w">    </span><span class="m">3</span>.118<span class="w">        </span><span class="m">0</span>.975<span class="w">  </span><span class="m">0</span>.988<span class="w">     </span><span class="m">0</span>.0
+diversity_brunet_w<span class="w">         </span><span class="m">10</span>.775<span class="w">          </span><span class="m">11</span>.528<span class="w">  </span>-0.897<span class="w">   </span>-0.660<span class="w">   </span>-3.073<span class="w">       </span>-0.975<span class="w">  </span><span class="m">0</span>.012<span class="w">     </span><span class="m">0</span>.0
+diversity_dttr<span class="w">             </span><span class="m">29</span>.349<span class="w">          </span><span class="m">23</span>.840<span class="w">   </span><span class="m">4</span>.804<span class="w">    </span><span class="m">6</span>.488<span class="w">    </span><span class="m">3</span>.048<span class="w">        </span><span class="m">0</span>.975<span class="w">  </span><span class="m">0</span>.987<span class="w">     </span><span class="m">0</span>.0
+diversity_mttr<span class="w">              </span><span class="m">0</span>.034<span class="w">           </span><span class="m">0</span>.042<span class="w">  </span>-0.009<span class="w">   </span>-0.007<span class="w">   </span>-3.103<span class="w">       </span>-0.975<span class="w">  </span><span class="m">0</span>.013<span class="w">     </span><span class="m">0</span>.0
+
+<span class="w">                        </span>median_Galdós<span class="w">  </span>median_Unamuno<span class="w">  </span>ci_low<span class="w">  </span>ci_high<span class="w">  </span>cohen_d<span class="w">  </span>cliff_delta<span class="w">    </span>auc<span class="w">  </span>p_holm
+basic_letters_per_word<span class="w">          </span><span class="m">4</span>.499<span class="w">           </span><span class="m">4</span>.152<span class="w">   </span><span class="m">0</span>.272<span class="w">    </span><span class="m">0</span>.433<span class="w">    </span><span class="m">1</span>.734<span class="w">        </span><span class="m">0</span>.784<span class="w">  </span><span class="m">0</span>.892<span class="w">     </span><span class="m">0</span>.0
+readability_lix<span class="w">                </span><span class="m">40</span>.006<span class="w">          </span><span class="m">30</span>.074<span class="w">   </span><span class="m">7</span>.212<span class="w">   </span><span class="m">15</span>.156<span class="w">    </span><span class="m">1</span>.285<span class="w">        </span><span class="m">0</span>.743<span class="w">  </span><span class="m">0</span>.872<span class="w">     </span><span class="m">0</span>.0
+morph_p_gerund<span class="w">                  </span><span class="m">0</span>.069<span class="w">           </span><span class="m">0</span>.037<span class="w">   </span><span class="m">0</span>.030<span class="w">    </span><span class="m">0</span>.036<span class="w">    </span><span class="m">1</span>.458<span class="w">        </span><span class="m">0</span>.727<span class="w">  </span><span class="m">0</span>.864<span class="w">     </span><span class="m">0</span>.0
+morph_polarity_Neg<span class="w">              </span><span class="m">0</span>.016<span class="w">           </span><span class="m">0</span>.027<span class="w">  </span>-0.013<span class="w">   </span>-0.008<span class="w">   </span>-1.320<span class="w">       </span>-0.613<span class="w">  </span><span class="m">0</span>.193<span class="w">     </span><span class="m">0</span>.0
+sents_mean<span class="w">                     </span><span class="m">17</span>.386<span class="w">          </span><span class="m">11</span>.364<span class="w">   </span><span class="m">3</span>.195<span class="w">    </span><span class="m">8</span>.500<span class="w">    </span><span class="m">1</span>.016<span class="w">        </span><span class="m">0</span>.672<span class="w">  </span><span class="m">0</span>.836<span class="w">     </span><span class="m">0</span>.0
+punct_dash<span class="w">                      </span><span class="m">9</span>.045<span class="w">          </span><span class="m">39</span>.157<span class="w"> </span>-38.658<span class="w">  </span>-23.021<span class="w">   </span>-1.810<span class="w">       </span>-0.722<span class="w">  </span><span class="m">0</span>.139<span class="w">     </span><span class="m">0</span>.0
+punct_exclamation<span class="w">               </span><span class="m">9</span>.970<span class="w">          </span><span class="m">24</span>.096<span class="w"> </span>-25.033<span class="w">   </span>-5.744<span class="w">   </span>-1.323<span class="w">       </span>-0.634<span class="w">  </span><span class="m">0</span>.183<span class="w">     </span><span class="m">0</span>.0
+diversity_yule_k<span class="w">              </span><span class="m">104</span>.572<span class="w">         </span><span class="m">105</span>.919<span class="w">  </span>-9.766<span class="w">    </span><span class="m">6</span>.096<span class="w">   </span>-0.257<span class="w">       </span>-0.117<span class="w">  </span><span class="m">0</span>.442<span class="w">     </span><span class="m">1</span>.0
+
+<span class="o">{</span><span class="s1">'n_Galdós'</span>:<span class="w"> </span><span class="m">197</span>,<span class="w"> </span><span class="s1">'n_Unamuno'</span>:<span class="w"> </span><span class="m">117</span>,<span class="w"> </span><span class="s1">'n_texts_Galdós'</span>:<span class="w"> </span><span class="m">3</span>,<span class="w"> </span><span class="s1">'n_texts_Unamuno'</span>:<span class="w"> </span><span class="m">3</span><span class="o">}</span>
+</code></pre></div>
+</div>
+<p>Galdós tiene el vocabulario más rico: en el 99% de los pares de ventanas la suya tiene la mayor proporción de palabras distintas (AUC 0.988). Las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta por encima de 0.9, mientras que el índice de Simpson, la K de Yule y la Vm de Herdan, que ponderan las palabras frecuentes, apenas lo hacen (por debajo de 0.12): la diferencia está en el vocabulario raro y no en la repetición de las palabras frecuentes. Sus palabras y oraciones son más largas, y usa casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo y en negaciones: cuatro veces más rayas por cada 1000 palabras, más del doble de signos de exclamación y de interrogación y más negaciones entre las palabras.</p>
+<p>De los 132 rasgos, 91 tienen un valor p corregido por debajo de 0.01 y 62 muestran un efecto grande según la delta de Cliff, pero la prueba toma las 314 ventanas por independientes, y salen de seis novelas: según la misma prueba <em>Marianela</em> y <em>Torquemada en la hoguera</em>, dos novelas de Galdós, difieren en 40 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura - para la longitud de una oración va de 3.2 a 8.5 palabras, donde las ventanas solas darían de 4.9 a 7.5 -, aunque tres textos por lado también son pocos para un bootstrap, y una comparación de autores pide tantos textos como se puedan reunir.</p>
+<p>Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">SyntaxStats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">compare_corpora</span><span class="p">,</span> <span class="n">text_features</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">features</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="n">SyntaxStats</span><span class="p">(</span><span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">))</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="n">text_features</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">"syntax_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">"</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">()}}</span>
+
+
+<span class="n">compare_corpora</span><span class="p">(</span><span class="n">galdos</span><span class="p">,</span> <span class="n">unamuno</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s2">"Galdós"</span><span class="p">,</span> <span class="s2">"Unamuno"</span><span class="p">))</span>
+</code></pre></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/SergeyShk" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/kouki91/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../../js/config.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+      
+    
+  </body>
+</html>

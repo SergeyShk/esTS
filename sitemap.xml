@@ -50,6 +50,13 @@
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/collocations/"/>
     </url>
     <url>
+        <loc>Nonecorpus/compare/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/compare/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/compare/"/>
+    </url>
+    <url>
         <loc>Nonecorpus/dispersion/</loc>
         <lastmod>2026-09-24</lastmod>
         <changefreq>daily</changefreq>
@@ -202,6 +209,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/collocations/"/>
         <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/collocations/"/>
+    </url>
+    <url>
+        <loc>Nonees/corpus/compare/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/compare/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/compare/"/>
     </url>
     <url>
         <loc>Nonees/corpus/dispersion/</loc>
