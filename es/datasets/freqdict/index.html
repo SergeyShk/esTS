@@ -2285,6 +2285,11 @@
 <td style="text-align: center;">float</td>
 <td style="text-align: center;">Frecuencia mínima del diccionario (0,1)</td>
 </tr>
+<tr>
+<td style="text-align: center;"><code>word_ipm</code></td>
+<td style="text-align: center;">dict[str, float]</td>
+<td style="text-align: center;">Frecuencias por la clave a la que llega una forma sin categoría gramatical: las filas de los nombres propios van a <code>lemma_key</code> de sus formas (<code>roma</code> a <code>romo</code>); la referencia de <a href="../../corpus/keyness/"><code>keyness</code></a></td>
+</tr>
 </tbody>
 </table>
 <p>Un <code>Entry</code> es una tupla con nombre con los campos <code>lemma</code>, <code>pos</code> (tupla de categorías gramaticales), <code>ipm</code>, <code>range</code>, <code>dispersion</code>, <code>docs</code>.</p>

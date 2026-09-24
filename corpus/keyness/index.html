@@ -2105,8 +2105,8 @@
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
 <p>Keyword extraction (keyness) for a target corpus against a reference one: the words that occur significantly more often in the target corpus than in the reference. A standard tool of corpus linguistics for comparing genres, authors, translations and periods (<a href="https://www.laurenceanthony.net/software/antconc/">AntConc</a>, <a href="https://www.sketchengine.eu/">Sketch Engine</a>, quanteda <code>textstat_keyness</code>).</p>
 <p>For every word two values are computed that <a href="http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf">Gabrielatos and Marchi</a> and <a href="http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/">Hardie</a> recommend reading together: the log-likelihood <span class="arithmatex">\(G^2\)</span> with its p-value (the significance of the difference - whether there is one) and Log Ratio (the size of the effect - how large it is). The chosen measure <code>score</code> is computed as well and used for the sorting. The measures of significance (<span class="arithmatex">\(G^2\)</span>, chi-square, BIC, ELL) are signed: negative when the word is more frequent in the reference; the measures of effect (%DIFF, Log Ratio, odds ratio) are directional by construction.</p>
-<p>The reference may be a list of words or a mapping of frequencies - the counts of a frequency dictionary, for example; the size of the reference is then the sum of the counts.</p>
-<p>Words are compared as they are: case, lemmatization and stop words belong to <a href="../../extractors/words/"><code>WordsExtractor</code></a>.</p>
+<p>The reference may be a list of words or a mapping of frequencies, with the size of the reference taken as the sum of the counts, or the <a href="../../datasets/freqdict/">frequency dictionary</a> <code>FreqDict</code> of Google Books Ngram. Against the dictionary the target has to be counted the way the dictionary was: word forms, not lemmas - <a href="../../datasets/freqdict/#lemma_key"><code>lemma_key</code></a> is not idempotent, so a lemma may move on (<code>estado</code> - <code>estar</code>) and <code>WordsExtractor(use_lexemes=True)</code> does not fit - with the stop words kept, as the size of the corpus of the dictionary keeps them. The forms that are not made of the letters of <code>WORD_PATTERN</code> - numbers, words with a hyphen or a dot - are left out of the target and of its size, as the dictionary has none. A form goes to its key by <code>lemma_key</code>, and the rows of the proper nouns of the dictionary, which keep their forms, go to <code>lemma_key</code> of the forms as well (<code>FreqDict.word_ipm</code>), so both sides count the same forms under a key: the occurrences of <em>Roma</em> in the books are counted under the key <code>romo</code> that the word <code>Roma</code> reaches, and the label of another lemma (<code>romo</code>, <code>parir</code>) is all that is left of the missing parts of speech. The frequency of a key in the reference is its ipm times the size of the corpus of the dictionary (<code>CORPUS_SIZE</code>, 63 billion words of the books of 1980-2019). A word out of the dictionary gets its least frequency, 0.1 ipm (about 6300 occurrences): the dictionary leaves out the rarer words, so their true frequency lies somewhere below, and a zero would put every word out of the dictionary before the real keywords. That frequency is an upper bound: it backs a positive keyword and never a negative one, so a word out of the dictionary is no negative keyword - in a target of more than 10 million words a hapax falls below 0.1 ipm and would otherwise come out as more frequent in the books, which may not have it at all. The dictionary describes the register of the books, so the negative keywords of a text are the words of scholarly prose (<code>de</code>, <code>social</code>, <code>país</code>).</p>
+<p>Against a list or a mapping, words are compared as they are: case, lemmatization and stop words belong to <a href="../../extractors/words/"><code>WordsExtractor</code></a>, and both corpora have to be extracted the same way.</p>
 <h2 id="measures">Measures<a class="headerlink" href="#measures" title="Permanent link">&para;</a></h2>
 <p>For a word of frequency <span class="arithmatex">\(a\)</span> in a target corpus of size <span class="arithmatex">\(c\)</span> and of frequency <span class="arithmatex">\(b\)</span> in a reference corpus of size <span class="arithmatex">\(d\)</span>, <span class="arithmatex">\(N = c + d\)</span>:</p>
 <table>
@@ -2179,13 +2179,13 @@
 <td style="text-align: center;"><code>target</code></td>
 <td style="text-align: center;">list[str]/dict[str, int]</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Words of the target corpus or their frequencies</td>
+<td style="text-align: center;">Words of the target corpus or their frequencies; word forms against the frequency dictionary</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>reference</code></td>
-<td style="text-align: center;">list[str]/dict[str, float]</td>
+<td style="text-align: center;">list[str]/dict[str, float]/FreqDict</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Words of the reference corpus or their frequencies</td>
+<td style="text-align: center;">Words of the reference corpus, their frequencies or the frequency dictionary</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>measure</code></td>
@@ -2294,6 +2294,24 @@
 
 <span class="p">[(</span><span class="n">k</span><span class="o">.</span><span class="n">word</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">g2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keyness</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">2</span><span class="p">)]</span>
 <span class="c1"># [('perro', -5.92), ('comer', -1.97)]</span>
+</code></pre></div>
+</div>
+<p>Against the <a href="../../datasets/freqdict/">frequency dictionary</a> the words of a play of Lope de Vega from the <a href="../../datasets/spanishliterature/">corpus of literature</a> give its characters:</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">keyness</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">FreqDict</span><span class="p">,</span> <span class="n">SpanishLiterature</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">SpanishLiterature</span><span class="p">()</span><span class="o">.</span><span class="n">get_texts</span><span class="p">(</span><span class="n">author</span><span class="o">=</span><span class="s2">"lope"</span><span class="p">,</span> <span class="n">genre</span><span class="o">=</span><span class="s2">"drama"</span><span class="p">))</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keyness</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">FreqDict</span><span class="p">(),</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">word</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">freq_target</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">ipm_reference</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">g2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">log_ratio</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="c1"># laurencia 135 0.32 2528.7 14.96</span>
+<span class="c1"># mengo 105 0.13 2102.5 15.9</span>
+<span class="c1"># comendador 154 5.33 2059.9 11.09</span>
+<span class="c1"># frondoso 113 3.84 1515.6 11.12</span>
+<span class="c1"># barrildo 52 0.1 995.7 15.26</span>
 </code></pre></div>
 </div>
 
