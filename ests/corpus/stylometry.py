@@ -16,6 +16,12 @@ from ..utils import check_sequence, get_nlp, is_punctuation, iter_doc_tokens
 ZERO_SEGMENTS = 0.5
 # Components the parts of speech of a list of words do not need
 UNUSED_COMPONENTS = ["parser", "lemmatizer", "ner"]
+# A list of words is tagged in chunks, each with words of context on both sides:
+# the memory of the model stays bounded, and the context is four times what the
+# encoder of es_core_news_sm sees (depth 4, window 1), so the tags are those of
+# the whole list
+CHUNK_SIZE = 1000
+CHUNK_MARGIN = 16
 
 
 class ZetaScore(NamedTuple):
@@ -113,7 +119,11 @@ def z_scores(table: pd.DataFrame) -> pd.DataFrame:
 
     Description:
         z = (x − mean) / sd with the sample standard deviation, as scale() of R
-        and stylo; a column with the same frequency in every text gives zeros
+        and stylo; a column with the same frequency in every text gives zeros.
+        Such a column is found by its values and not by a zero deviation: the
+        rounding of the mean turns the deviation of equal frequencies into
+        noise (0.1 in three texts gives 1.7e-17), and dividing by it would blow
+        the column up
 
     Arguments:
         table (DataFrame): Table of relative frequencies
@@ -129,10 +139,15 @@ def z_scores(table: pd.DataFrame) -> pd.DataFrame:
         A  0.707  0.0
         B -0.707  0.0
     """
-    std = table.std(axis=0, ddof=1)
-    scaled = (table - table.mean(axis=0)) / std.where(std > 0, 1.0)
-    scaled.loc[:, std <= 0] = 0.0
+    constant = _constant_columns(table)
+    scaled = (table - table.mean(axis=0)) / table.std(axis=0, ddof=1).where(~constant, 1.0)
+    scaled.loc[:, constant] = 0.0
     return scaled
+
+
+def _constant_columns(table: pd.DataFrame) -> pd.Series:
+    """Columns with the same value in every row: equal relative frequencies are equal floats"""
+    return table.max(axis=0) == table.min(axis=0)
 
 
 def delta(
@@ -259,14 +274,13 @@ def delta_profiles(
     _check_corpus(samples, "tested")
     table = frequency_table(basis, n_mfw, culling)
     mean = table.mean(axis=0)
-    std = table.std(axis=0, ddof=1)
-    scale = std.where(std > 0, 1.0)
-    constant = (std <= 0).to_numpy()
+    constant = _constant_columns(table)
+    scale = table.std(axis=0, ddof=1).where(~constant, 1.0)
     scores = []
     for corpus in (reference, samples):
         frequencies = _relative_frequencies(corpus, table.columns)
         scaled = np.array((frequencies - mean) / scale)
-        scaled[:, constant] = 0.0
+        scaled[:, constant.to_numpy()] = 0.0
         scores.append(scaled)
     distances = _delta_distances(scores[1], scores[0], variant)
     return pd.DataFrame(distances, index=list(samples), columns=list(reference))
@@ -547,10 +561,13 @@ def function_words_profile(
         classic feature of authorship
         The parts of speech are those of the annotation of a Doc that carries
         them; the words of a list or of a Doc without them are tagged by the
-        model of nlp as one sequence, in their context, so they are to be
-        passed in the order of the text; the punctuation of the list helps the
-        tagging and is not counted. In Spanish Universal Dependencies the
-        negation no is an adverb and not a particle, so PART is rare
+        model of nlp in their context, so they are to be passed in the order
+        of the text; the punctuation of the list helps the tagging and is not
+        counted. The list goes through the model in chunks of CHUNK_SIZE words
+        with CHUNK_MARGIN words of context on each side, so the memory does not
+        grow with its length and the tags are those of one sequence. In Spanish
+        Universal Dependencies the negation no is an adverb and not a
+        particle, so PART is rare
 
     Arguments:
         source (list[str]|Doc): Words of the text or Doc object
@@ -591,7 +608,25 @@ def _tag_words(words: Sequence[str], nlp: Language | None) -> list[str]:
     if all(is_punctuation(word) for word in words):
         return []
     pipeline = nlp or get_nlp()
-    doc = pipeline(Doc(pipeline.vocab, words=list(words)), disable=UNUSED_COMPONENTS)
-    if not doc.has_annotation("POS"):
-        raise SourceError("The pipeline does not tag the parts of speech")
-    return [token.pos_ for token in doc if not is_punctuation(token.text)]
+    starts = range(0, len(words), CHUNK_SIZE)
+    chunks = (
+        Doc(
+            pipeline.vocab,
+            words=list(words[max(start - CHUNK_MARGIN, 0) : start + CHUNK_SIZE + CHUNK_MARGIN]),
+        )
+        for start in starts
+    )
+    tags: list[str] = []
+    # One chunk at a time: a larger batch holds the activations of all its chunks at once
+    for start, doc in zip(
+        starts, pipeline.pipe(chunks, disable=UNUSED_COMPONENTS, batch_size=1), strict=True
+    ):
+        if not doc.has_annotation("POS"):
+            raise SourceError("The pipeline does not tag the parts of speech")
+        offset = min(start, CHUNK_MARGIN)
+        tags.extend(
+            token.pos_
+            for token in doc[offset : offset + CHUNK_SIZE]
+            if not is_punctuation(token.text)
+        )
+    return tags

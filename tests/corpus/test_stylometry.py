@@ -1,6 +1,7 @@
 from math import isclose, log2, sqrt
 
 import numpy as np
+import pandas as pd
 import pytest
 import spacy
 from scipy.spatial.distance import jensenshannon
@@ -16,11 +17,12 @@ from ests.corpus import (
     kilgarriff_chi2,
     mendenhall_curve,
     mendenhall_distance,
+    stylometry,
     z_scores,
     zeta,
 )
 from ests.exceptions import ParameterError, SourceError, SourceTypeError
-from ests.utils import get_nlp
+from ests.utils import get_nlp, tokenize
 
 texts = {
     "A": (
@@ -63,6 +65,30 @@ def test_z_scores():
     constant = z_scores(frequency_table({"A": ["a", "b"], "B": ["a", "c"]}, n_mfw=None))
     assert constant["a"].tolist() == [0.0, 0.0]
     assert constant["b"].tolist() == pytest.approx([sqrt(2) / 2, -sqrt(2) / 2])
+
+
+def test_constant_column_with_float_noise():
+    # 0.1 in three texts: the rounding of the mean leaves a deviation of noise and not zero
+    reference = {
+        "A": ["el", "gato", "come", "pan", "y", "duerme", "mucho", "en", "casa", "hoy"],
+        "B": ["el", "perro", "ladra", "fuerte", "y", "corre", "poco", "por", "aquí", "ya"],
+        "C": ["el", "niño", "lee", "libros", "o", "juega", "solo", "en", "su", "cuarto"],
+    }
+    table = frequency_table(reference, n_mfw=3)
+    assert list(table.columns) == ["el", "en", "y"]
+    assert z_scores(table)["el"].tolist() == [0.0, 0.0, 0.0]
+    varying = table[["en", "y"]]
+    expected = (varying - varying.mean()) / varying.std(ddof=1)
+    a, b = expected.loc["A"], expected.loc["B"]
+    assert delta(reference, n_mfw=3, variant="cosine").loc["A", "B"] == pytest.approx(
+        1 - (a * b).sum() / sqrt((a**2).sum() * (b**2).sum())
+    )
+    # The tested text has el at 0.2: the constant column is zeroed for it as well
+    distances = delta_profiles(reference, {"?": ["el", *reference["A"][1:-1], "el"]}, n_mfw=3)
+    tested = (pd.Series({"en": 0.1, "y": 0.1}) - varying.mean()) / varying.std(ddof=1)
+    assert distances.loc["?"].tolist() == pytest.approx(
+        [(tested - expected.loc[name]).abs().sum() / 3 for name in reference]
+    )
 
 
 def test_delta():
@@ -264,6 +290,16 @@ def test_function_words_profile():
     assert not untagged.has_annotation("POS")
     assert function_words_profile(untagged) == function_words_profile(get_nlp()(texts["A"]))
     assert function_words_profile(words, nlp=get_nlp()) == profile
+
+
+def test_function_words_profile_chunks(monkeypatch):
+    # Chunks with a margin of context give the tags of one sequence, chunks without it do not
+    words = list(tokenize(" ".join(texts.values())))
+    whole = function_words_profile(words)
+    monkeypatch.setattr(stylometry, "CHUNK_SIZE", 4)
+    assert function_words_profile(words) == whole
+    monkeypatch.setattr(stylometry, "CHUNK_MARGIN", 0)
+    assert function_words_profile(words) != whole
 
 
 def test_function_words_profile_tagged():
