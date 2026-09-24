@@ -41,11 +41,12 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
 * **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text, a KWIC concordance and the stylometry of authorship: Burrows's Delta with its variants, Zeta, the Mendenhall curve, the profile of the function words; the comparison of two corpora by 132 features of a text with effect sizes
 * **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, vocabulary growth, sentence lengths
+* **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors from Spain, Latin America and the Philippines in prose, poems, drama and publicism, with the genre, the years and the country
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
 * **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 255 Spanish discourse markers
 * **[Syntactic statistics](https://sergeyshk.github.io/esTS/stats/syntax_stats/)** - the dependency tree by distances, depth, clauses and coordination, with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
 
-Lexical sophistication and the first datasets complete 0.3; style, phonostatistics, metre and rhyme come in 0.4.
+Lexical sophistication completes 0.3; style, phonostatistics, metre and rhyme come in 0.4.
 
 ## Installation
 
@@ -486,34 +487,33 @@ More in the [documentation](https://sergeyshk.github.io/esTS/corpus/keyness/).
 
 </details>
 
-## Development
+<details>
+<summary><b>Datasets</b></summary>
 
-The project uses [uv](https://docs.astral.sh/uv/) for dependency management and [ruff](https://docs.astral.sh/ruff/) for linting and formatting.
+<br>
 
-```bash
-git clone https://github.com/SergeyShk/esTS.git
-cd esTS
+*   [spanish_literature](https://sergeyshk.github.io/esTS/datasets/spanishliterature/) - Spanish-language literature in the public domain: 150 works by 33 authors from Spain, Latin America and the Philippines, from Cervantes to the 1920s, in prose, poems, drama and publicism; 65 million characters
 
-make deps        # create the environment and install dependencies
-make test        # run the tests and docstring examples (doctest)
-make lint        # ruff + mypy
+The texts are cut to the text of the author, without title pages, notes of the transcribers and the editors, tables of contents and footnotes, and come with the genre, the author, the title, the years of the first publication and the country; the records can be filtered by any of them and by the length of the text.
+
+```python
+>>> from ests.datasets import SpanishLiterature
+
+>>> sl = SpanishLiterature()
+>>> sl.download()
+>>> for record in sl.get_records(author="galdos", year_from=1880, year_to=1884):
+...     print(record["title"], record["year_from"], len(record["text"]))
+La desheredada 1881 820454
+El amigo Manso 1882 521156
+La de Bringas 1884 413730
+Tormento 1884 477286
 ```
 
-Run `make help` for the full list of commands.
+The archive (19 MB) is downloaded once by `download()` into the data directory and verified against its SHA-256 checksum; before the download `get_texts()` and `get_records()` raise `DatasetNotFoundError` with a hint.
 
-The documentation is bilingual: English pages are `docs/*.md`, Spanish ones are `docs/*.es.md` next to them ([mkdocs-static-i18n](https://github.com/ultrabug/mkdocs-static-i18n)); when editing a page, update both versions.
+More in the [documentation](https://sergeyshk.github.io/esTS/datasets/spanishliterature/).
 
-The installed version is `ests.__version__`. All exceptions inherit `ests.EstsError` and one of the built-in classes (`SourceError` and `ParameterError` - `ValueError`, `SourceTypeError` - `TypeError`, `UnknownStatError` - `KeyError`), so `except ValueError` keeps working. The library prints nothing on its own: its messages go to the `ests` logger (`logging.getLogger("ests")`) and are silent by default.
-
-Before submitting changes, install the hooks that run the linters on commit and the tests on push:
-
-```bash
-uv run pre-commit install
-```
-
-## Contributing
-
-Bug reports, ideas and pull requests are welcome - [issues](https://github.com/SergeyShk/esTS/issues) are open. The workflow, the checks to run before submitting a pull request and how to shape the changes are described in [CONTRIBUTING.md](https://github.com/SergeyShk/esTS/blob/master/CONTRIBUTING.md); the rules of conduct are in the [code of conduct](https://github.com/SergeyShk/esTS/blob/master/CODE_OF_CONDUCT.md).
+</details>
 
 <details>
 <summary><b>Visualizers</b></summary>
@@ -553,6 +553,35 @@ More in the [documentation](https://sergeyshk.github.io/esTS/visualizers/zipf/).
 
 </details>
 
+## Development
+
+The project uses [uv](https://docs.astral.sh/uv/) for dependency management and [ruff](https://docs.astral.sh/ruff/) for linting and formatting.
+
+```bash
+git clone https://github.com/SergeyShk/esTS.git
+cd esTS
+
+make deps        # create the environment and install dependencies
+make test        # run the tests and docstring examples (doctest)
+make lint        # ruff + mypy
+```
+
+Run `make help` for the full list of commands.
+
+The documentation is bilingual: English pages are `docs/*.md`, Spanish ones are `docs/*.es.md` next to them ([mkdocs-static-i18n](https://github.com/ultrabug/mkdocs-static-i18n)); when editing a page, update both versions.
+
+The installed version is `ests.__version__`. All exceptions inherit `ests.EstsError` and one of the built-in classes (`SourceError` and `ParameterError` - `ValueError`, `SourceTypeError` - `TypeError`, `UnknownStatError` - `KeyError`), so `except ValueError` keeps working. The library prints nothing on its own: its messages go to the `ests` logger (`logging.getLogger("ests")`) and are silent by default.
+
+Before submitting changes, install the hooks that run the linters on commit and the tests on push:
+
+```bash
+uv run pre-commit install
+```
+
+## Contributing
+
+Bug reports, ideas and pull requests are welcome - [issues](https://github.com/SergeyShk/esTS/issues) are open. The workflow, the checks to run before submitting a pull request and how to shape the changes are described in [CONTRIBUTING.md](https://github.com/SergeyShk/esTS/blob/master/CONTRIBUTING.md); the rules of conduct are in the [code of conduct](https://github.com/SergeyShk/esTS/blob/master/CODE_OF_CONDUCT.md).
+
 <details>
 <summary><b>Project structure</b></summary>
 
@@ -564,6 +593,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/visualizers/zipf/).
     *   cohesion_stats.py - cohesion statistics
     *   components.py - components of a spaCy pipeline
     *   corpus - measures of corpus linguistics: keywords, collocations, dispersion, concordance, stylometry, comparison of corpora
+    *   datasets - datasets: Spanish-language literature
     *   constants.py - constants of the Spanish language and of the metrics
     *   diversity_stats.py - lexical diversity metrics
     *   exceptions.py - library exceptions
@@ -574,6 +604,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/visualizers/zipf/).
     *   syllables.py - syllabification and stress
     *   utils.py - helper tools
     *   visualizers - plots: Zipf's law, fingerprinting, word tree, corpus and stylometric plots, vocabulary growth, sentence lengths
+*   **scripts** - scripts that build the archives of the datasets
 *   **tests** - tests mirroring the package structure
 
 </details>

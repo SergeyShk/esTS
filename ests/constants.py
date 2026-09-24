@@ -1,4 +1,5 @@
 import string
+from pathlib import Path
 
 # Punctuation marks and symbols, including the Spanish inverted marks,
 # dashes, ellipsis, guillemets, curly quotes and the middle dot
@@ -419,6 +420,9 @@ DIVERSITY_STATS_DESC = {
 
 # Model of spaCy that the statistics on Universal Dependencies fall back to
 SPACY_MODEL = "es_core_news_sm"
+
+# Directory where the datasets are downloaded by default: next to the package
+DEFAULT_DATA_DIR = Path(__file__).parent.parent.resolve() / "ests_data"
 
 # Morphological features counted by the statistics, by the name of the statistic.
 # The Spanish models annotate 23 features; the ones left out are either marginal
