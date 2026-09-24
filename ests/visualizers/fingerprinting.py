@@ -1,0 +1,133 @@
+from collections.abc import Callable, Sequence
+from math import ceil
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.axes import Axes
+from matplotlib.cm import ScalarMappable
+from matplotlib.colors import Normalize
+
+from ..diversity_stats import calc_ttr
+from ..exceptions import ParameterError, SourceTypeError
+from ..utils import check_sequence
+
+# Size of a square and the margin between blocks, in the units of the drawing area
+SQUARE = 15
+MARGIN = 25
+# Colour of the segments without a value: the empty cells of a block and the undefined measure
+MISSING_COLOR = "lightgray"
+
+
+def fingerprinting(
+    texts: list[list[str]],
+    segment_len: int = 10,
+    metric: Callable[[Sequence[str]], float] | None = None,
+    x_size: int = 800,
+    y_size: int = 600,
+    cmap: str = "viridis",
+    ax: Axes | None = None,
+) -> Axes:
+    """
+    Visualizing literature fingerprinting
+
+    Description:
+        Every text is cut into segments of segment_len words with a sliding
+        step of a tenth of a segment, and a measure of lexical diversity is
+        computed for every segment. A text is a block of squares in the order
+        of its segments, row by row, 8 rows high, or a single column when it
+        has at most 8 segments; a block wider than a row of the drawing area
+        wraps into rows of that width. The blocks are laid out left to right
+        and wrap between the rows of an area 2 · x_size wide, which grows
+        downwards from 2 · y_size when they need more height, so nothing is
+        cut off. The colour of a square is the value of the measure on the
+        scale of the colorbar, from its smallest to its greatest finite
+        value over all the texts; a sequential colour map suits a measure
+        whose middle means nothing. Segments where the measure is undefined
+        (nan on segments too short for it) and the empty cells of a block are
+        light grey, apart from every value, zero included. The axes get an
+        equal aspect, so that the squares stay square
+
+    References:
+        https://www.uni-konstanz.de/mmsp/pubsys/publishedFiles/KeOe07.pdf
+
+    Arguments:
+        texts (list[list[str]]): List of lists of words
+        segment_len (int): Size of a segment
+        metric (callable): Function of a measure of lexical diversity; calc_ttr by default
+        x_size (int): Half the width of the drawing area
+        y_size (int): Half the height of the drawing area, which grows when the blocks need more
+        cmap (str): Colour map
+        ax (Axes): Axes for the plot; if not given, a 15×10 figure is created
+
+    Returns:
+        Axes: Axes with the fingerprinting
+
+    Raises:
+        SourceTypeError: If the texts are not a list of lists of words or the
+            measure is not callable
+        ParameterError: If the size of a segment is below one
+    """
+    check_sequence(texts, "lists of words")
+    if not all(isinstance(text, (list, tuple)) for text in texts):
+        raise SourceTypeError("The texts must be a list of lists of words")
+    if metric is not None and not callable(metric):
+        raise SourceTypeError("The measure must be callable")
+    if segment_len < 1:
+        raise ParameterError("The size of a segment must be greater than 0")
+    measure = metric if metric is not None else calc_ttr
+    values = [_segment_values(text, segment_len, measure) for text in texts]
+    finite = [value for segments in values for value in segments if np.isfinite(value)]
+    norm = Normalize(min(finite), max(finite)) if finite else Normalize(0, 1)
+    colormap = plt.get_cmap(cmap).with_extremes(bad=MISSING_COLOR)
+    if ax is None:
+        _, ax = plt.subplots(figsize=(15, 10))
+    left = -x_size + MARGIN
+    width = 2 * x_size - 2 * MARGIN
+    max_cols = max(1, width // SQUARE)
+    x, top, row_height = left, y_size - MARGIN, 0
+    for segments in values:
+        grid = _block(segments, max_cols)
+        n_rows, n_cols = grid.shape
+        if x > left and x + n_cols * SQUARE > left + width:
+            x, top, row_height = left, top - row_height - MARGIN, 0
+        ax.pcolormesh(
+            x + SQUARE * np.arange(n_cols + 1),
+            top - SQUARE * np.arange(n_rows + 1),
+            np.ma.masked_invalid(grid),
+            cmap=colormap,
+            norm=norm,
+        )
+        x += n_cols * SQUARE + MARGIN
+        row_height = max(row_height, n_rows * SQUARE)
+    ax.figure.colorbar(ScalarMappable(norm=norm, cmap=colormap), ax=ax)
+    ax.set_xlim(-x_size, x_size)
+    ax.set_ylim(min(-y_size, top - row_height - MARGIN), y_size)
+    ax.set_aspect("equal")
+    ax.get_xaxis().set_visible(False)
+    ax.get_yaxis().set_visible(False)
+    ax.set_title("Literature fingerprinting")
+    return ax
+
+
+def _segment_values(
+    text: Sequence[str], segment_len: int, measure: Callable[[Sequence[str]], float]
+) -> list[float]:
+    """Values of the measure over the sliding segments of a text and its tail"""
+    step = max(1, int(0.1 * segment_len))
+    starts = range(0, len(text) - segment_len + 1, step)
+    values = [float(measure(text[start : start + segment_len])) for start in starts]
+    tail = len(starts) * step
+    values.append(float(measure(text[tail:])))
+    return values
+
+
+def _block(values: Sequence[float], max_cols: int) -> np.ndarray:
+    """Block of a text: its values row by row, 8 rows or one column, empty cells nan"""
+    n_values = len(values)
+    n_cols = ceil(n_values / 8)
+    n_rows = 8 if n_cols > 1 else n_values
+    if n_cols > max_cols:
+        n_cols, n_rows = max_cols, ceil(n_values / max_cols)
+    grid = np.full(n_rows * n_cols, np.nan)
+    grid[:n_values] = values
+    return grid.reshape(n_rows, n_cols)

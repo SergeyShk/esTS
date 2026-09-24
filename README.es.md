@@ -40,6 +40,7 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Métricas de diversidad léxica](https://sergeyshk.github.io/esTS/es/stats/diversity_stats/)** - TTR y sus variantes, MATTR, MSTTR, MTLD, HD-D, índices de Simpson y de Yule, entropía, leyes de Zipf y de Heaps
 * **[Estadísticas morfológicas](https://sergeyshk.github.io/esTS/es/stats/morph_stats/)** - categorías gramaticales y quince rasgos morfológicos de Universal Dependencies, con los marcadores del español: los modos, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
 * **[Medidas de corpus](https://sergeyshk.github.io/esTS/es/corpus/keyness/)** - palabras clave frente a un corpus de referencia, colocaciones, la dispersión de una palabra por las partes de un texto, una concordancia KWIC y la estilometría de autoría: la Delta de Burrows con sus variantes, Zeta, la curva de Mendenhall, el perfil de las palabras funcionales; la comparación de dos corpus por 132 rasgos de un texto con tamaños del efecto
+* **[Visualizaciones](https://sergeyshk.github.io/esTS/es/visualizers/zipf/)** - ley de Zipf, huella literaria, árbol de palabras, dispersión léxica y palabras clave, red de colocaciones, dendrograma, PCA y MDS por la Delta, crecimiento del vocabulario, longitudes de las oraciones
 * **[Componentes de spaCy](https://sergeyshk.github.io/esTS/es/components/)** - cada clase de estadísticas como componente de un pipeline, con las estadísticas puestas en el `Doc` en una sola pasada
 * **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, con la densidad de 255 marcadores del discurso españoles
 * **[Estadísticas sintácticas](https://sergeyshk.github.io/esTS/es/stats/syntax_stats/)** - el árbol de dependencias por distancias, profundidad, cláusulas y coordinación, con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
@@ -515,6 +516,44 @@ uv run pre-commit install
 Los informes de errores, las ideas y los pull requests son bienvenidos: las [issues](https://github.com/SergeyShk/esTS/issues) están abiertas. El flujo de trabajo, las comprobaciones previas a un pull request y la forma de presentar los cambios están descritos en [CONTRIBUTING.md](https://github.com/SergeyShk/esTS/blob/master/CONTRIBUTING.md); las normas de convivencia, en el [código de conducta](https://github.com/SergeyShk/esTS/blob/master/CODE_OF_CONDUCT.md).
 
 <details>
+<summary><b>Visualizaciones</b></summary>
+
+<br>
+
+*   [Ley de Zipf](https://sergeyshk.github.io/esTS/es/visualizers/zipf/) con la curva teórica y el ajuste de Zipf-Mandelbrot
+*   [Huella literaria](https://sergeyshk.github.io/esTS/es/visualizers/fingerprinting/) (Literature Fingerprinting)
+*   [Árbol de palabras](https://sergeyshk.github.io/esTS/es/visualizers/word_tree/) (Word Tree)
+*   [Gráficos de corpus](https://sergeyshk.github.io/esTS/es/visualizers/corpus/): dispersión léxica, un diagrama de palabras clave, una red de colocaciones
+*   [Gráficos estilométricos](https://sergeyshk.github.io/esTS/es/visualizers/stylometry/): un dendrograma, las componentes principales y el escalamiento multidimensional por la Delta, las curvas de Mendenhall
+*   [Crecimiento del vocabulario y espectro de frecuencias](https://sergeyshk.github.io/esTS/es/visualizers/vocabulary/), [longitudes de las oraciones](https://sergeyshk.github.io/esTS/es/visualizers/sentences/) con una media móvil
+
+Los gráficos de matplotlib reciben los ejes `ax` y devuelven `Axes`, así que se pueden disponer en una misma figura; la red de colocaciones y el árbol de palabras son grafos de graphviz, cuyos ejecutables los dibujan. La Delta coseno separa tres novelas de Galdós de tres de Unamuno:
+
+```python
+import matplotlib.pyplot as plt
+from ests import WordsExtractor
+from ests.corpus import delta
+from ests.visualizers import dendrogram_plot, pca_plot
+
+# seis novelas de Galdós y de Unamuno de Project Gutenberg, como {título: texto}
+we = WordsExtractor(lowercase=True)
+corpus = {title: we.extract(text) for title, text in novels.items()}
+distances = delta(corpus, n_mfw=100, variant="cosine")
+
+fig, (left, right) = plt.subplots(1, 2, figsize=(13, 5))
+dendrogram_plot(distances, ax=left)
+pca_plot(corpus, n_mfw=100, ax=right)
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/SergeyShk/esTS/master/docs/img/stylometry.png" alt="Gráficos estilométricos" width="760">
+</p>
+
+Más en la [documentación](https://sergeyshk.github.io/esTS/es/visualizers/zipf/).
+
+</details>
+
+<details>
 <summary><b>Estructura del proyecto</b></summary>
 
 <br>
@@ -534,6 +573,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos: las [iss
     *   syntax_stats.py - estadísticas sintácticas
     *   syllables.py - silabificación y acento
     *   utils.py - herramientas auxiliares
+    *   visualizers - gráficos: ley de Zipf, huella literaria, árbol de palabras, gráficos de corpus y estilométricos, crecimiento del vocabulario, longitudes de las oraciones
 *   **tests** - pruebas que reproducen la estructura del paquete
 
 </details>

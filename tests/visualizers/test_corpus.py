@@ -1,0 +1,140 @@
+from math import inf, log2, nan
+
+import matplotlib
+import matplotlib.pyplot as plt
+import pytest
+import spacy
+from matplotlib.axes import Axes
+
+from ests.corpus import Collocation, Keyword, collocations, keyness
+from ests.exceptions import ParameterError, SourceError, SourceTypeError
+from ests.visualizers import collocation_network, dispersion_plot, keyness_plot
+
+matplotlib.use("Agg")
+
+words = [
+    "gato", "estaba", "en", "ventana",
+    "gato", "estaba", "en", "suelo",
+    "gato", "dormía", "en", "ventana",
+]  # fmt: skip
+target = ["gato", "estaba", "en", "ventana", "y", "miraba", "los", "pájaros", "gato", "durmió"]
+reference = ["perro", "estaba", "en", "suelo", "y", "dormía", "perro", "comió"]
+
+
+def test_dispersion_plot():
+    ax = dispersion_plot(words, ["gato", "ventana", "perro"])
+    assert isinstance(ax, Axes)
+    assert [label.get_text() for label in ax.get_yticklabels()] == ["gato", "ventana", "perro"]
+    positions = [list(collection.get_positions()) for collection in ax.collections]
+    assert positions == [[0, 4, 8], [3, 11], []]
+    assert ax.get_xlim() == (0.0, 12.0)
+    assert ax.get_ylim()[0] > ax.get_ylim()[1]
+    assert ax.get_title() == "Lexical dispersion"
+    _, given = plt.subplots()
+    assert dispersion_plot(words, ["gato"], ax=given) is given
+    with pytest.raises(SourceError):
+        dispersion_plot([], ["gato"])
+    with pytest.raises(SourceError):
+        dispersion_plot(words, [])
+    # The text itself or a Doc in place of the words, a string in place of the targets
+    with pytest.raises(SourceTypeError):
+        dispersion_plot("el gato estaba en la ventana", ["gato"])
+    with pytest.raises(SourceTypeError):
+        dispersion_plot(spacy.blank("es")("el gato estaba"), ["gato"])
+    with pytest.raises(SourceTypeError):
+        dispersion_plot(words, "gato")
+    plt.close("all")
+
+
+def test_keyness_plot():
+    positive = keyness(target, reference)
+    negative = keyness(target, reference, positive=False)
+    ax = keyness_plot(positive, negative, top_n=3, labels=("gato", "perro"))
+    assert isinstance(ax, Axes)
+    labels = [label.get_text() for label in ax.get_yticklabels()]
+    assert labels[:3] == [keyword.word for keyword in positive[:3]]
+    assert labels[3:] == [keyword.word for keyword in negative[:3]][::-1]
+    widths = [patch.get_width() for patch in ax.patches]
+    assert widths[:3] == [keyword.score for keyword in positive[:3]]
+    assert widths[3:] == [keyword.score for keyword in negative[:3]][::-1]
+    assert all(width < 0 for width in widths[3:])
+    assert [text.get_text() for text in ax.get_legend().get_texts()] == ["gato", "perro"]
+    assert ax.get_title() == "Keywords"
+    assert ax.get_xlabel() == "|score|"
+    ax = keyness_plot(positive)
+    assert len(ax.patches) == len(positive)
+    assert [text.get_text() for text in ax.get_legend().get_texts()] == ["target corpus"]
+    _, given = plt.subplots()
+    assert keyness_plot(positive, ax=given) is given
+    ax = keyness_plot([], negative, top_n=2)
+    assert len(ax.patches) == 2
+    assert [text.get_text() for text in ax.get_legend().get_texts()] == ["reference corpus"]
+    plt.close("all")
+    for top_n in (0, -1):
+        with pytest.raises(ParameterError):
+            keyness_plot(positive, negative, top_n=top_n)
+    assert plt.get_fignums() == []
+    undefined = [Keyword("a", 1, 0, 1.0, 0.0, 1.0, 0.5, 1.0, nan)]
+    infinite = [Keyword("b", 1, 0, 1.0, 0.0, 1.0, 0.5, 1.0, inf)]
+    assert len(keyness_plot(positive + undefined + infinite).patches) == len(positive)
+    with pytest.raises(SourceError, match="no words"):
+        keyness_plot([])
+    with pytest.raises(SourceError, match="undefined"):
+        keyness_plot(undefined)
+    with pytest.raises(ParameterError):
+        keyness_plot(positive, field="word")
+    plt.close("all")
+
+
+def test_keyness_plot_sides():
+    positive = keyness(target, reference, measure="odds_ratio")
+    negative = keyness(target, reference, measure="odds_ratio", positive=False)
+    ax = keyness_plot(positive, negative, top_n=2, log=True)
+    widths = [patch.get_width() for patch in ax.patches]
+    assert widths[:2] == [pytest.approx(abs(log2(keyword.score))) for keyword in positive[:2]]
+    assert (
+        widths[2:] == [pytest.approx(-abs(log2(keyword.score))) for keyword in negative[:2]][::-1]
+    )
+    assert ax.get_xlabel() == "|log2(score)|"
+    ax = keyness_plot(positive, negative, top_n=2, field="log_ratio")
+    widths = [patch.get_width() for patch in ax.patches]
+    assert widths[:2] == [abs(keyword.log_ratio) for keyword in positive[:2]]
+    assert all(width < 0 for width in widths[2:])
+    weak = [Keyword("a", 1, 0, 1.0, 0.0, 1.0, 0.5, 1.0, -2.0)]
+    assert keyness_plot(weak, weak).patches[0].get_width() == 2.0
+    assert keyness_plot(weak, weak).patches[1].get_width() == -2.0
+    zero = [Keyword("a", 1, 0, 1.0, 0.0, 1.0, 0.5, 1.0, 0.0)]
+    with pytest.raises(SourceError):
+        keyness_plot(zero, log=True)
+    plt.close("all")
+
+
+def test_collocation_network():
+    found = collocations(words, window=2)
+    graph = collocation_network(found, top_n=3)
+    assert graph.engine == "neato"
+    assert graph.source.count("--") == 3
+    assert "\tn0 [label=gato fontsize=24]" in graph.source
+    assert "\tn3 [label=estaba fontsize=10]" in graph.source
+    assert "n0 -- n1 [label=13.00 penwidth=4.00]" in graph.source
+    assert graph.source.count("penwidth=0.50") == 2
+    assert collocation_network(found).source.count("--") == len(found)
+    single = collocation_network([Collocation("a", "b", 1, 1, 1, nan)])
+    assert "label=0.00 penwidth=2.25" in single.source
+    assert "\tn0 [label=a fontsize=17]" in single.source
+    with pytest.raises(SourceError):
+        collocation_network([])
+    html_like = collocation_network([Collocation("<b>", "gato", 2, 2, 2, 1.0)])
+    assert '\tn0 [label="<b>" fontsize=17]' in html_like.source
+    assert "n0 -- n1" in html_like.source
+    for top_n in (0, -1):
+        with pytest.raises(ParameterError):
+            collocation_network(found, top_n=top_n)
+
+
+def test_collocation_network_ports():
+    # A colon is a port in graphviz: the words go to the labels, the edges to the identifiers
+    graph = collocation_network([Collocation("10:30", "de", 2, 3, 2, 5.0)])
+    assert '\tn0 [label="10:30" fontsize=10]' in graph.source
+    assert "\tn0 -- n1 [label=5.00 penwidth=2.25]" in graph.source
+    assert "10:30 --" not in graph.source

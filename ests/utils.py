@@ -1,6 +1,6 @@
 import re
 import unicodedata
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 from functools import lru_cache
 
 import simplemma
@@ -308,6 +308,36 @@ def iter_text_words(text: str) -> Iterator[tuple[int, int, str]]:
         [(1, 5, 'Hola'), (7, 12, 'mundo')]
     """
     return iter_doc_words(get_tokenizer()(text))
+
+
+def count_words_by_spans(starts: Sequence[int], spans: Sequence[tuple[int, int]]) -> list[int]:
+    """
+    Counting the words in every span of a text by the positions of the words and the spans
+
+    Arguments:
+        starts (list[int]): Positions of the first characters of the words in order
+        spans (list[tuple[int, int]]): Spans in order - the start and the position
+            after the end
+
+    Returns:
+        list[int]: Number of words in every span; spans without words are skipped
+
+    Example:
+        >>> from ests.utils import count_words_by_spans, iter_text_sents, iter_text_words
+        >>> text = "El gato duerme. ¿Y el perro? Come."
+        >>> starts = [start for start, _, _ in iter_text_words(text)]
+        >>> count_words_by_spans(starts, [(start, stop) for start, stop, _ in iter_text_sents(text)])
+        [3, 3, 1]
+    """
+    lengths = []
+    index = 0
+    for start, stop in spans:
+        count = 0
+        while index < len(starts) and starts[index] < stop:
+            count += starts[index] >= start
+            index += 1
+        lengths.append(count)
+    return [length for length in lengths if length]
 
 
 @lru_cache(maxsize=4)

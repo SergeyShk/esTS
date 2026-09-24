@@ -32,6 +32,14 @@ nav:
       - KWIC concordance: corpus/kwic.md
       - Stylometry: corpus/stylometry.md
       - Corpus comparison: corpus/compare.md
+    - Visualizers:
+      - Zipf's law: visualizers/zipf.md
+      - Literature fingerprinting: visualizers/fingerprinting.md
+      - Word tree: visualizers/word_tree.md
+      - Corpus plots: visualizers/corpus.md
+      - Stylometric plots: visualizers/stylometry.md
+      - Vocabulary growth and frequency spectrum: visualizers/vocabulary.md
+      - Sentence lengths: visualizers/sentences.md
 
 theme:
   name: material
@@ -91,6 +99,14 @@ plugins:
             KWIC concordance: Concordancia KWIC
             Stylometry: Estilometría
             Corpus comparison: Comparación de corpus
+            Visualizers: Visualizaciones
+            Zipf's law: Ley de Zipf
+            Literature fingerprinting: Huella literaria
+            Word tree: Árbol de palabras
+            Corpus plots: Gráficos de corpus
+            Stylometric plots: Gráficos estilométricos
+            Vocabulary growth and frequency spectrum: Crecimiento del vocabulario y espectro de frecuencias
+            Sentence lengths: Longitudes de las oraciones
 
 extra:
   social:

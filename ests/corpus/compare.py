@@ -17,7 +17,13 @@ from ..exceptions import ParameterError, SourceError
 from ..extractors import SentsExtractor, WordsExtractor
 from ..morph_stats import FINITE_MOODS, MorphStats
 from ..readability_stats import ReadabilityStats
-from ..utils import check_sequence, get_nlp, iter_text_sents, iter_text_words
+from ..utils import (
+    check_sequence,
+    count_words_by_spans,
+    get_nlp,
+    iter_text_sents,
+    iter_text_words,
+)
 
 Features = Callable[[str], Mapping[str, float]]
 Values = Sequence[float] | np.ndarray[Any, Any]
@@ -213,7 +219,7 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
     doc = _parse(text, nlp)
     features.update(_morph_features(MorphStats(doc), doc.has_annotation("DEP")))
     features.update(
-        sentence_rhythm(_count_words_by_spans([start for start, _, _ in positions], spans))
+        sentence_rhythm(count_words_by_spans([start for start, _, _ in positions], spans))
     )
     features.update(
         (f"punct_{key}", float(value))
@@ -282,29 +288,6 @@ class _FixedSentsExtractor(SentsExtractor):
 
     def extract(self, text: str) -> tuple[str, ...]:
         return self.sents
-
-
-def _count_words_by_spans(starts: Sequence[int], spans: Sequence[tuple[int, int]]) -> list[int]:
-    """
-    Number of words in every span of a text by the positions of the words and the spans
-
-    Arguments:
-        starts (list[int]): Positions of the first characters of the words in order
-        spans (list[tuple[int, int]]): Spans in order - the start and the position
-            after the end
-
-    Returns:
-        list[int]: Number of words in every span; spans without words are skipped
-    """
-    lengths = []
-    index = 0
-    for start, stop in spans:
-        count = 0
-        while index < len(starts) and starts[index] < stop:
-            count += starts[index] >= start
-            index += 1
-        lengths.append(count)
-    return [length for length in lengths if length]
 
 
 def sentence_rhythm(lengths: Sequence[int]) -> dict[str, float]:
