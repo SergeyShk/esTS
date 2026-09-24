@@ -9,9 +9,9 @@ Extracción de palabras clave (keyness) de un corpus objetivo frente a uno de re
 
 Para cada palabra se calculan dos valores que [Gabrielatos y Marchi](http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf) y [Hardie](http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/) recomiendan leer juntos: la razón de verosimilitud $G^2$ con su valor p (la significación de la diferencia: si la hay) y Log Ratio (el tamaño del efecto: cuán grande es). Se calcula además la medida elegida `score`, que sirve para ordenar. Las medidas de significación ($G^2$, ji cuadrado, BIC, ELL) llevan signo: negativo cuando la palabra es más frecuente en la referencia; las medidas de efecto (%DIFF, Log Ratio, razón de momios) tienen dirección por construcción.
 
-La referencia puede ser una lista de palabras o una correspondencia de frecuencias, con el tamaño de la referencia tomado como la suma de los recuentos, o el [diccionario de frecuencias](../datasets/freqdict.md) `FreqDict` de Google Books Ngram. Con el diccionario las palabras del corpus objetivo pasan a sus claves por [`lemma_key`](../datasets/freqdict.md#lemma_key) - una forma a su lema, un lema se queda como está -, así que las palabras clave son lemas, y la frecuencia de un lema en la referencia es su ipm por el tamaño del corpus del diccionario (`CORPUS_SIZE`, 63 000 millones de palabras de los libros de 1980-2019); una palabra fuera del diccionario tiene ahí frecuencia cero. Sin las categorías gramaticales un nombre propio también va a su lema (`París` - `parir`), mientras que un nombre desconocido se queda como está (`Madrid` - `madrid`). El diccionario describe el registro de los libros, así que las palabras clave negativas de un texto son las de la prosa académica (`de`, `social`, `país`).
+La referencia puede ser una lista de palabras o una correspondencia de frecuencias, con el tamaño de la referencia tomado como la suma de los recuentos, o el [diccionario de frecuencias](../datasets/freqdict.md) `FreqDict` de Google Books Ngram. Frente al diccionario el corpus objetivo tiene que contarse como se contó el diccionario: formas, no lemas - [`lemma_key`](../datasets/freqdict.md#lemma_key) no es idempotente, así que un lema puede seguir moviéndose (`estado` - `estar`) y `WordsExtractor(use_lexemes=True)` no sirve -, con las palabras vacías, ya que el tamaño del corpus del diccionario las conserva. Las formas que no están hechas de las letras de `WORD_PATTERN` - números, palabras con guion o con punto - quedan fuera del objetivo y de su tamaño, ya que el diccionario no tiene ninguna. Una forma va a su clave por `lemma_key`, y las filas de los nombres propios del diccionario, que conservan sus formas, van también a `lemma_key` de las formas (`FreqDict.word_ipm`), así que los dos lados cuentan las mismas formas bajo una clave: las apariciones de *Roma* en los libros se cuentan bajo la clave `romo` a la que llega la palabra `Roma`, y la etiqueta de otro lema (`romo`, `parir`) es todo lo que queda de la falta de categorías gramaticales. La frecuencia de una clave en la referencia es su ipm por el tamaño del corpus del diccionario (`CORPUS_SIZE`, 63 000 millones de palabras de los libros de 1980-2019). Una palabra fuera del diccionario recibe su frecuencia mínima, 0,1 ipm (unas 6300 apariciones): el diccionario deja fuera las palabras más raras, así que su frecuencia real queda algo por debajo, y un cero pondría todas las palabras fuera del diccionario antes de las verdaderas palabras clave. El diccionario describe el registro de los libros, así que las palabras clave negativas de un texto son las de la prosa académica (`de`, `social`, `país`).
 
-Las palabras se comparan tal cual: la caja, la lematización y las palabras vacías corresponden a [`WordsExtractor`](../extractors/words.md).
+Frente a una lista o una correspondencia, las palabras se comparan tal cual: la caja, la lematización y las palabras vacías corresponden a [`WordsExtractor`](../extractors/words.md), y los dos corpus tienen que extraerse del mismo modo.
 
 ## Medidas
 
@@ -33,7 +33,7 @@ Una frecuencia nula en uno de los corpus se sustituye por 0.5 para %DIFF, Log Ra
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
-| `target` | list[str]/dict[str, int] | `-` | Palabras del corpus objetivo o sus frecuencias |
+| `target` | list[str]/dict[str, int] | `-` | Palabras del corpus objetivo o sus frecuencias; formas frente al diccionario de frecuencias |
 | `reference` | list[str]/dict[str, float]/FreqDict | `-` | Palabras del corpus de referencia, sus frecuencias o el diccionario de frecuencias |
 | `measure` | str | `log_likelihood` | Medida de `KEYNESS_MEASURES` para `score` y el orden |
 | `min_freq` | int | `1` | Frecuencia mínima de una palabra clave en su propio corpus |
@@ -96,9 +96,9 @@ Frente al [diccionario de frecuencias](../datasets/freqdict.md) las palabras de 
     words = WordsExtractor(lowercase=True).extract(text)
     for k in keyness(words, FreqDict(), top_n=5):
         print(k.word, k.freq_target, round(k.ipm_reference, 2), round(k.g2, 1), round(k.log_ratio, 2))
-    # laurencia 135 0.32 2528.4 14.96
-    # mengo 105 0.13 2102.3 15.89
-    # comendador 154 5.33 2059.6 11.09
-    # barrildo 52 0.0 1599.0 28.88
-    # frondoso 113 3.84 1515.4 11.12
+    # laurencia 135 0.32 2528.7 14.96
+    # mengo 105 0.13 2102.5 15.9
+    # comendador 154 5.33 2059.9 11.09
+    # frondoso 113 3.84 1515.6 11.12
+    # barrildo 52 0.1 995.7 15.26
     ```

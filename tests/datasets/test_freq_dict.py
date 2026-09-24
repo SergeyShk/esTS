@@ -7,7 +7,7 @@ import pytest
 
 from ests.datasets import FreqDict
 from ests.datasets import freq_dict as module
-from ests.datasets.freq_dict import Entry, lemma_key, load_entries
+from ests.datasets.freq_dict import Entry, lemma_key, load_entries, load_word_ipm
 from ests.exceptions import DatasetNotFoundError, ParameterError
 
 BUNDLED_ARCHIVE = Path(__file__).parents[2] / "ests" / "datasets" / "data" / module.ARCHIVE
@@ -73,6 +73,7 @@ def test_download_extracts_again(tmp_path):
     dictionary.download()
     # A new download reads the dictionary anew
     assert load_entries.cache_info().currsize == 0
+    assert load_word_ipm.cache_info().currsize == 0
     assert dictionary.ipm("gato") == 29.08
     readme = Path(dictionary.filepath).with_name("README.txt").read_text(encoding="utf-8")
     assert "Creative Commons Attribution 3.0" in readme
@@ -90,6 +91,21 @@ def test_lookup(dictionary):
     assert "Gato" in dictionary
     assert "gatx" not in dictionary
     assert 5 not in dictionary
+
+
+def test_word_ipm(dictionary, records):
+    word_ipm = dictionary.word_ipm
+    assert word_ipm["gato"] == dictionary.ipm("gato")
+    # The row of the proper noun París goes to parir, the key the word París reaches
+    parir = sum(r["ipm"] for r in records if r["lemma"] == "parir")
+    paris = next(r["ipm"] for r in records if r["lemma"] == "parís" and r["pos"] == "PROPN")
+    assert word_ipm["parir"] >= parir + paris
+    santo = sum(r["ipm"] for r in records if r["lemma"] == "santo")
+    proper = sum(
+        r["ipm"] for r in records if r["lemma"] in ("san", "santa") and r["pos"] == "PROPN"
+    )
+    assert word_ipm["santo"] == pytest.approx(santo + proper)
+    assert sum(word_ipm.values()) == pytest.approx(sum(r["ipm"] for r in records))
 
 
 def test_entries(dictionary, records):

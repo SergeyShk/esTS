@@ -140,9 +140,9 @@ def test_keyness_against_the_frequency_dictionary(freq_dict):
     assert gato.freq_reference == pytest.approx(reference)
     assert gato.ipm_reference == pytest.approx(freq_dict.ipm("gato"))
     assert gato.g2 == pytest.approx(calc_log_likelihood(3, reference, 6, CORPUS_SIZE))
-    # A word out of the dictionary has a zero frequency in the reference
+    # A word out of the dictionary gets the least frequency of the dictionary
     felinologo = next(keyword for keyword in keywords if keyword.word == "felinólogo")
-    assert felinologo.freq_reference == 0
+    assert felinologo.freq_reference == pytest.approx(freq_dict.min_ipm * CORPUS_SIZE / 1e6)
     assert [keyword.g2 for keyword in keywords] == sorted((k.g2 for k in keywords), reverse=True)
 
 
@@ -157,6 +157,30 @@ def test_keyness_against_the_frequency_dictionary_negative(freq_dict):
     keywords = keyness(["gato"] * 5, freq_dict, positive=False, top_n=3)
     assert [keyword.word for keyword in keywords] == ["el", "de", "y"]
     assert all(keyword.g2 < 0 for keyword in keywords)
+
+
+def test_keyness_against_the_frequency_dictionary_proper_nouns(freq_dict):
+    # The row of Roma goes to romo, the key the word Roma reaches with no part of speech
+    rows = {(r["lemma"], r["pos"]): r["ipm"] for r in freq_dict}
+    romo = (
+        sum(ipm for (lemma, pos), ipm in rows.items() if lemma == "romo") + rows["roma", "PROPN"]
+    )
+    assert freq_dict.word_ipm["romo"] == pytest.approx(romo)
+    assert "roma" not in freq_dict.word_ipm
+    words = ["Roma"] * 80 + ["el", "de", "la"] * 100
+    keyword = keyness(words, freq_dict, top_n=1)[0]
+    assert keyword.word == "romo"
+    assert keyword.freq_reference == pytest.approx(romo * CORPUS_SIZE / 1e6)
+    negative = keyness(words, freq_dict, positive=False)
+    assert all(k.word not in ("roma", "romo") for k in negative)
+
+
+def test_keyness_against_the_frequency_dictionary_alphabet(freq_dict):
+    words = ["Gato", "2020", "1.º", "ciudad-real", "etc.", "o[t]ras"]
+    keywords = keyness(words, freq_dict)
+    assert [keyword.word for keyword in keywords] == ["gato"]
+    # The words left out do not count in the size of the target either
+    assert keywords[0].ipm_target == 1e6
 
 
 def test_keyness_without_the_dictionary(tmp_path):

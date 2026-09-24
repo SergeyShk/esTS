@@ -7,7 +7,7 @@ import numpy as np
 from scipy.stats import chi2 as chi2_distribution
 
 from ..constants import KEYNESS_MEASURES
-from ..datasets.freq_dict import CORPUS_SIZE, FreqDict, lemma_key
+from ..datasets.freq_dict import CORPUS_SIZE, WORD_PATTERN, FreqDict, lemma_key
 from ..exceptions import ParameterError, SourceError
 from ..utils import check_sequence
 
@@ -63,13 +63,20 @@ def keyness(
         frequent in the reference
         The reference may be a list of words or their frequencies, with the
         size of the reference taken as their sum, or the frequency dictionary
-        FreqDict: then the words of the target corpus go to the keys of the
-        dictionary by lemma_key (a word form to its lemma, a lemma stays as it
-        is), so the keywords are lemmas, and the frequency of a lemma in the
-        reference is its ipm times the size of the corpus of the dictionary
-        (CORPUS_SIZE, 63 billion words of books of 1980-2019). Without the
-        parts of speech a proper noun goes to its lemma too (París - parir),
-        while an unknown name stays as it is (Madrid - madrid)
+        FreqDict. Then the target has to be counted the way the dictionary was:
+        word forms, not lemmas (lemma_key is not idempotent - estado goes on to
+        estar), with the stop words kept, as CORPUS_SIZE keeps them; the forms
+        that are not made of the letters of WORD_PATTERN - numbers, words with
+        a hyphen or a dot - are left out, as the dictionary has none. A form
+        goes to its key by lemma_key, and the rows of the proper nouns of the
+        dictionary go to lemma_key of their forms (FreqDict.word_ipm), so both
+        sides count the same forms under a key and the keywords are lemmas,
+        some of them with the label of another lemma (Roma - romo, París -
+        parir). The frequency of a key in the reference is its ipm times the
+        size of the corpus of the dictionary (CORPUS_SIZE, 63 billion words of
+        books of 1980-2019); a word out of the dictionary gets its least
+        frequency (0.1 ipm, about 6300 occurrences), as the dictionary leaves
+        out the rarer words and their true frequency lies below it
         A zero frequency in one of the corpora is replaced with 0.5 for %DIFF,
         Log Ratio and the odds ratio (Hardie 2014)
         Positive keywords are more frequent in the target corpus, negative ones
@@ -82,7 +89,8 @@ def keyness(
         http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/
 
     Arguments:
-        target (list[str]|dict[str, int]): Words of the target corpus or their frequencies
+        target (list[str]|dict[str, int]): Words of the target corpus or their
+            frequencies; word forms against the frequency dictionary
         reference (list[str]|dict[str, float]|FreqDict): Words of the reference
             corpus, their frequencies or the frequency dictionary
         measure (str): Measure of KEYNESS_MEASURES for score and the sorting
@@ -115,15 +123,17 @@ def keyness(
     check_sequence(reference)
     counts_reference: Mapping[str, float]
     if isinstance(reference, FreqDict):
-        counts_target = _count(target, key=lemma_key)
+        counts_target = _count(target, key=lemma_key, keep=_is_dictionary_word)
         size_reference = float(CORPUS_SIZE)
         counts_reference = {
-            lemma: entry.ipm * size_reference / 1e6 for lemma, entry in reference.entries.items()
+            key: ipm * size_reference / 1e6 for key, ipm in reference.word_ipm.items()
         }
+        missing = reference.min_ipm * size_reference / 1e6
     else:
         counts_target = _count(target)
         counts_reference = _count(reference)
         size_reference = float(sum(counts_reference.values()))
+        missing = 0.0
     size_target = float(sum(counts_target.values()))
     if not size_target or not size_reference:
         raise SourceError("The data source has no words")
@@ -132,7 +142,7 @@ def keyness(
     words = set(counts_target) | set(counts_reference)
     for word in words:
         a = counts_target.get(word, 0)
-        b = counts_reference.get(word, 0)
+        b = counts_reference.get(word, missing)
         ipm_target = a / size_target * 1e6
         ipm_reference = b / size_reference * 1e6
         if ipm_target == ipm_reference or (ipm_target > ipm_reference) != positive:
@@ -169,16 +179,24 @@ def keyness(
 
 
 def _count(
-    words: Sequence[str] | Mapping[str, float], key: Callable[[str], str] | None = None
+    words: Sequence[str] | Mapping[str, float],
+    key: Callable[[str], str] | None = None,
+    keep: Callable[[str], bool] | None = None,
 ) -> Mapping[str, float]:
-    """Frequencies of the words, summed by key when one is given"""
-    if key is None:
+    """Frequencies of the words that keep passes, summed by key when one is given"""
+    if key is None or keep is None:
         return words if isinstance(words, Mapping) else Counter(words)
     counts: dict[str, float] = {}
     pairs = words.items() if isinstance(words, Mapping) else ((word, 1) for word in words)
     for word, count in pairs:
-        counts[key(word)] = counts.get(key(word), 0) + count
+        if keep(word):
+            counts[key(word)] = counts.get(key(word), 0) + count
     return counts
+
+
+def _is_dictionary_word(word: str) -> bool:
+    """Whether a word is made of the letters of the forms the frequency dictionary counts"""
+    return WORD_PATTERN.fullmatch(word.lower()) is not None
 
 
 def _sign(a: float, b: float, c: float, d: float) -> int:
