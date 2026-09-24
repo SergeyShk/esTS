@@ -22,14 +22,14 @@ from .utils import count_letters, has_words, iter_doc_words
 ELLIPSIS_PATTERN = re.compile(r"…|\.{3,}|(?<=[?!])\.{2}")
 # A run of two or more hyphens, a hyphen after whitespace or at the start of
 # a line, after a closing mark (the underscore of the italics of Project
-# Gutenberg included), before a space or between a letter and an opening mark,
-# is a dash, the way the raya is typed in plain-text corpora (--Hola --dijo Juan,
-# sí--dijo, -Hola -dijo Juan, cuatro.-¿Cinco?, sí-¿y qué?); a hyphen before
-# a digit is a sign, a hyphen inside a word or at the end of a line inside
-# a word (pala-\nbra) is a hyphen
+# Gutenberg included), before a space, between a letter and an opening mark or
+# between a letter and a closing mark, is a dash, the way the raya is typed in
+# plain-text corpora (--Hola --dijo Juan, sí--dijo, -Hola -dijo Juan-.,
+# cuatro.-¿Cinco?, sí-¿y qué?); a hyphen before a digit is a sign, a hyphen
+# inside a word or at the end of a line inside a word (pala-\nbra) is a hyphen
 DASH_PATTERN = re.compile(
     r"-{2,}|(?:(?<=\s)|(?<=[.,;:!?…»”\"')\]_])|^)-(?!\d)|-(?=[ \t]|\Z)"
-    r"|(?<=[^\W\d_])-(?=[¿¡«“\"'(\[_])",
+    r"|(?<=[^\W\d_])-(?=[¿¡«“\"'(\[_])|(?<=[^\W\d_])-(?=[.,;:!?…»”\"')\]_])",
     re.MULTILINE,
 )
 _DELETE_SPACES = str.maketrans("", "", "".join(SPACES))
@@ -271,9 +271,9 @@ def count_punctuations(text: str) -> dict[str, int]:
         semicolons, dashes (—, – and the horizontal bar ―, as well as a run
         of two or more hyphens, a hyphen after whitespace, at the start of
         a line or after a closing mark, before a space or between a letter and
-        an opening mark, the way the raya is typed in plain-text corpora:
-        "--Hola --dijo Juan", "-Hola -dijo Juan", "- Se fueron - dijo",
-        "cuatro.-¿Cinco?", "sí-¿y qué?"), hyphens inside words, before
+        an opening or a closing mark, the way the raya is typed in plain-text
+        corpora: "--Hola --dijo Juan", "-Hola -dijo Juan-.", "- Se fueron -
+        dijo", "cuatro.-¿Cinco?", "sí-¿y qué?"), hyphens inside words, before
         digits and at the end of a line inside a word (teórico-práctico,
         1990-1995, -5, pala-\nbra),
         guillemets «», straight and curly quotes "“”‘’ of the three

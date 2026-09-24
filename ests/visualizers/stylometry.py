@@ -152,7 +152,9 @@ def mendenhall_plot(corpus: Mapping[str, Sequence[str]], ax: Axes | None = None)
 
     Description:
         The shares of the words by length in characters (mendenhall_curve)
-        of every text on one plot - a comparison of the profiles of authors
+        of every text on one plot - a comparison of the profiles of authors.
+        A curve runs over every length from one to the longest word of its
+        text, a length no word has at its share of zero
 
     Arguments:
         corpus (dict[str, list[str]]): Words of the texts by the names of the texts
@@ -170,7 +172,9 @@ def mendenhall_plot(corpus: Mapping[str, Sequence[str]], ax: Axes | None = None)
     if ax is None:
         _, ax = plt.subplots()
     for name, curve in curves.items():
-        ax.plot(list(curve), list(curve.values()), marker=".", label=str(name))
+        lengths = range(1, max(curve) + 1)
+        shares = [curve.get(length, 0.0) for length in lengths]
+        ax.plot(list(lengths), shares, marker=".", label=str(name))
     ax.set_xlabel("Length of the word, characters")
     ax.set_ylabel("Share of the words")
     ax.set_title("Mendenhall curves")

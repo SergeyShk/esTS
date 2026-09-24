@@ -1,3 +1,7 @@
+import os
+import subprocess
+import sys
+
 import pytest
 
 from ests.datasets.dataset import Dataset, check_limit, length_filters, substring_filter
@@ -92,3 +96,19 @@ def test_length_filters():
 def test_length_filters_errors(min_len, max_len):
     with pytest.raises(ParameterError):
         length_filters(min_len, max_len)
+
+
+def test_data_directory_of_the_environment(tmp_path):
+    code = (
+        "from ests.datasets import FreqDict, SpanishLiterature;"
+        "print(FreqDict().data_dir);"
+        "print(SpanishLiterature().data_dir)"
+    )
+    environment = {**os.environ, "ESTS_DATA_DIR": str(tmp_path)}
+    result = subprocess.run(
+        [sys.executable, "-c", code], capture_output=True, text=True, check=True, env=environment
+    )
+    assert result.stdout.splitlines() == [
+        str((tmp_path / "dicts").resolve()),
+        str((tmp_path / "texts").resolve()),
+    ]

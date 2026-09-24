@@ -411,13 +411,13 @@ def _segment_presence(
     texts: Sequence[str] | Sequence[Sequence[str]], segment_size: int
 ) -> tuple[Counter[str], int]:
     """Number of the segments every word occurs in and the number of the segments"""
-    if texts and all(isinstance(text, str) for text in texts):
+    if len(texts) and all(isinstance(text, str) for text in texts):
         texts = [texts]  # type: ignore[list-item]
     presence: Counter[str] = Counter()
     n_segments = 0
     for text in texts:
         check_sequence(text, "words of a text")
-        if not text:
+        if not len(text):
             continue
         for segment in np.array_split(
             np.asarray(text, dtype=object), max(1, floor(len(text) / segment_size + 0.5))
@@ -505,7 +505,7 @@ def mendenhall_curve(words: Sequence[str]) -> dict[int, float]:
         {1: 0.2, 2: 0.4, 4: 0.2, 5: 0.2}
     """
     check_sequence(words)
-    if not words:
+    if not len(words):
         raise SourceError("The data source has no words")
     counts = Counter(len(word) for word in words)
     return {length: counts[length] / len(words) for length in sorted(counts)}
@@ -612,7 +612,10 @@ def _tag_words(words: Sequence[str], nlp: Language | None) -> list[str]:
     chunks = (
         Doc(
             pipeline.vocab,
-            words=list(words[max(start - CHUNK_MARGIN, 0) : start + CHUNK_SIZE + CHUNK_MARGIN]),
+            words=[
+                str(word)
+                for word in words[max(start - CHUNK_MARGIN, 0) : start + CHUNK_SIZE + CHUNK_MARGIN]
+            ],
         )
         for start in starts
     )

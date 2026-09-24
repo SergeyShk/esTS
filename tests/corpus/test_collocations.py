@@ -16,7 +16,7 @@ from ests.corpus.collocations import (
     calc_npmi,
     calc_t_score,
 )
-from ests.exceptions import ParameterError, SourceTypeError
+from ests.exceptions import ParameterError, SourceError, SourceTypeError
 from ests.utils import get_nlp
 
 words = [
@@ -96,6 +96,8 @@ def test_collocations_of_a_node():
 
 def test_collocations_of_a_short_text():
     assert collocations(["gato"], window=3) == []
+    with pytest.raises(SourceError, match="has no words"):
+        collocations([])
     found = collocations(["a"] * 5, window=1, measure="log_likelihood", min_freq=1)
     assert isnan(found[0].score)
 

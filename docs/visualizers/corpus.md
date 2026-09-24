@@ -33,7 +33,7 @@ Diverging horizontal bars (`textplot_keyness` of quanteda): the words of `positi
 
 ## Network of collocations { #collocation_network }
 
-An undirected graph (`textplot_network` of quanteda): the nodes are the words with the size of the font by frequency, the edges the pairs with the width and the label by the value of the measure; the `neato` layout. Rendering needs the executables of [Graphviz](https://graphviz.org/download/); in Jupyter the graph displays itself, and `graph.render("network", format="png")` saves a file.
+An undirected graph (`textplot_network` of quanteda): the nodes are the words with the size of the font by frequency, the edges the pairs with the width and the label by the value of the measure; the `neato` layout. A pair of a word with itself - a word repeated within the window (`rojo rojo`) - would be a loop and is left out before `top_n` pairs are taken. Rendering needs the executables of [Graphviz](https://graphviz.org/download/); in Jupyter the graph displays itself, and `graph.render("network")` saves a png file, as for the word tree.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |

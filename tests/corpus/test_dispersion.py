@@ -1,5 +1,6 @@
 from math import isnan, log2, sqrt
 
+import numpy as np
 import pytest
 
 from ests.constants import DISPERSION_STATS_DESC
@@ -12,7 +13,7 @@ from ests.corpus.dispersion import (
     calc_kl_divergence,
     calc_rosengren_s,
 )
-from ests.exceptions import ParameterError, SourceTypeError
+from ests.exceptions import ParameterError, SourceError, SourceTypeError
 from ests.utils import get_nlp
 
 words = [
@@ -141,6 +142,13 @@ def test_dispersion_errors(parts):
         dispersion(words, parts=parts)
 
 
+def test_dispersion_of_an_empty_corpus():
+    with pytest.raises(SourceError, match="has no words"):
+        dispersion([], parts=2)
+    with pytest.raises(SourceError):
+        dispersion(np.array([], dtype=str), parts=2)
+
+
 def test_dispersion_of_a_string():
     with pytest.raises(SourceTypeError):
         dispersion("el gato duerme", parts=2)
@@ -152,3 +160,9 @@ def test_refuses_a_doc(span):
     source = doc[0:3] if span else doc
     with pytest.raises(SourceTypeError, match="WordsExtractor"):
         dispersion(source, parts=2)
+
+
+def test_dispersion_of_an_array():
+    result = dispersion(np.array(["luna", "sol", "luna", "mar"]), parts=2, word="luna")[0]
+    assert type(result.word) is str
+    assert result == dispersion(["luna", "sol", "luna", "mar"], parts=2, word="luna")[0]

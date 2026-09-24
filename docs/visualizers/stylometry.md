@@ -39,7 +39,7 @@ Classical multidimensional scaling (Torgerson 1952) of any matrix of distances: 
 
 ## Mendenhall curves { #mendenhall_plot }
 
-The shares of the words by length in characters ([`mendenhall_curve`](../corpus/stylometry.md#mendenhall)) of every text on one plot - a comparison of the profiles of authors.
+The shares of the words by length in characters ([`mendenhall_curve`](../corpus/stylometry.md#mendenhall)) of every text on one plot - a comparison of the profiles of authors. A curve runs over every length from one to the longest word of its text, and a length that no word has is drawn at zero.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |

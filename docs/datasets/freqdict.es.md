@@ -20,7 +20,7 @@ El archivo (0,9 MB) se guarda en el repositorio de la biblioteca, se descarga un
 
 `ests.datasets.freq_dict.lemma_key(word, proper=False)` - la clave por la que se busca una palabra en el diccionario y con la que se construye el diccionario: la palabra pasa a minúsculas y luego a su lema por `lemmatize`. simplemma distingue mayúsculas y minúsculas y deja tal cual una palabra desconocida con mayúscula, así que una palabra al principio de una oración perdería su lema (`Miró`, `Déjame`); en minúsculas lo encuentra (`mirar`, `dejar`). Un nombre propio conserva su forma en minúsculas (`proper=True`): `París` es `parís`, no el verbo `parir`.
 
-Los lemas dependen de la versión de simplemma: el diccionario se construye con la 2.0.0 (la constante `SIMPLEMMA_VERSION`), y la biblioteca requiere simplemma 2.0 o posterior; con la 1.x cerca del 4 % de las palabras de un texto tendrían otros lemas (`fue` - `ir` en lugar de `ser`, `usted` sin cambios).
+Los lemas dependen de la versión de simplemma: el diccionario se construye con la 2.0.0 (la constante `SIMPLEMMA_VERSION`), y la biblioteca requiere simplemma 2 (2.0 o posterior, anterior a la 3); con la 1.x cerca del 4 % de las palabras de un texto tendrían otros lemas (`fue` - `ir` en lugar de `ser`, `usted` sin cambios). Un `FreqDict` avisa una vez por proceso cuando la versión instalada de simplemma no es la 2.0.0, ya que entonces algunas palabras pueden no encontrarse en el diccionario.
 
 !!! example "Ejemplo"
 
@@ -37,19 +37,30 @@ Los lemas dependen de la versión de simplemma: el diccionario se construye con 
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
-| `data_dir` | str/Path | `DEFAULT_DATA_DIR.joinpath("dicts")` | Ruta al directorio del diccionario |
+| `data_dir` | str/Path | `DEFAULT_DATA_DIR.joinpath("dicts")` | Ruta al directorio del diccionario; el directorio de datos se describe en [Instalación](../installation.md#datasets) |
 
 ## Atributos
 
 | Atributo | Tipo | Descripción |
 | :------: | :--: | :---------: |
+| `name` | str | Nombre del conjunto de datos, `freq_dict` |
+| `meta` | dict[str, str] | Información de referencia: la fuente, la descripción, el autor, la licencia y la cita |
+| `info` | dict[str, str] | El nombre y la información de referencia en un diccionario |
+| `data_dir` | Path | Ruta absoluta al directorio del diccionario |
+| `filepath` | str | Ruta al fichero del diccionario, `None` antes de la descarga |
 | `entries` | dict[str, Entry] | Entradas por lema, con las categorías gramaticales unidas |
 | `min_ipm` | float | Frecuencia mínima del diccionario (0,1) |
 | `word_ipm` | dict[str, float] | Frecuencias por la clave a la que llega una forma sin categoría gramatical: las filas de los nombres propios van a `lemma_key` de sus formas (`roma` a `romo`); la referencia de [`keyness`](../corpus/keyness.md) |
 
 Un `Entry` es una tupla con nombre con los campos `lemma`, `pos` (tupla de categorías gramaticales), `ipm`, `range`, `dispersion`, `docs`.
 
+El diccionario se recorre por sus registros como `get_records()` sin filtros: `for record in fd` pasa por las 109 178 filas de un lema y una categoría gramatical, mientras que `len(fd)` cuenta los 83 785 lemas con sus categorías unidas, tal como los ven `lookup` e `in`.
+
 ## Métodos
+
+### check_data
+
+Comprueba que el fichero del diccionario está en su sitio y devuelve `True`; un diccionario sin descargar levanta `DatasetNotFoundError`. Los demás métodos lo comprueban por sí mismos.
 
 ### download
 
@@ -72,7 +83,7 @@ Descarga el archivo con verificación de la suma de comprobación y extrae el fi
 
 ### lookup
 
-Devuelve la entrada de un lema en cualquier combinación de mayúsculas y minúsculas, `None` para un lema que no está en el diccionario. Una forma se busca por su clave: `computadoras` por `lemma_key("computadoras")`, que es `computador`, no por `computadora`.
+Devuelve la entrada de un lema en cualquier combinación de mayúsculas y minúsculas, `None` para un lema que no está en el diccionario. El argumento es una clave del diccionario, no una forma, y una forma se busca por su clave: `computadoras` por `lemma_key("computadoras")`, que es `computador`, no por `computadora`; el lema de `usted` en simplemma es `tú`, así que `fd.lookup("usted")` es `None`. Lo mismo vale para `ipm` e `in`; [`LexicalStats`](../stats/lexical_stats.md) y [`keyness`](../corpus/keyness.md) pasan a las claves por sí mismos.
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
@@ -81,10 +92,14 @@ Devuelve la entrada de un lema en cualquier combinación de mayúsculas y minús
 !!! example "Ejemplo"
 
     ``` python
+    from ests.datasets.freq_dict import lemma_key
+
     fd.lookup("Gato")
     # Entry(lemma='gato', pos=('NOUN', 'ADJ'), ipm=29.08, range=40, dispersion=95, docs=232841)
     fd.lookup("dios")
     # Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.42, range=40, dispersion=98, docs=566129)
+    fd.lookup("usted"), fd.ipm(lemma_key("usted"))
+    # (None, 1396.74)
     ```
 
 ### ipm
@@ -94,12 +109,10 @@ Devuelve la frecuencia de un lema por millón de palabras, 0 para un lema que no
 !!! example "Ejemplo"
 
     ``` python
-    from ests.datasets.freq_dict import lemma_key
-
     fd.ipm("computadora"), fd.ipm(lemma_key("computadoras"))
     # (0.0, 20.07)
-    "gato" in fd, len(fd)
-    # (True, 83785)
+    "gato" in fd, len(fd), sum(1 for _ in fd)
+    # (True, 83785, 109178)
     ```
 
 ### get_records

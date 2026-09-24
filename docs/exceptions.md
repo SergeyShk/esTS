@@ -10,13 +10,13 @@ All library exceptions inherit the base class `EstsError` and one of the built-i
 | Exception | Built-in class | When raised |
 | :-------- | :------------- | :---------- |
 | `EstsError` | `Exception` | Base class, never raised itself |
-| `SourceTypeError` | `TypeError` | The data source is neither a string nor a `Doc`, a string or a `Doc` is passed where a list of words is expected, the tokenizer is not callable or returns a non-iterable object |
-| `SourceError` | `ValueError` | The source has no words, no sentences or no texts, lacks the annotation a statistic needs (the parts of speech, the lemmas, the dependency parse), is a string longer than the `max_length` of the pipeline, or no unit is left after culling |
-| `ParameterError` | `ValueError` | A threshold, window, segment size, number of items, logarithm base or confidence level is out of range; an unknown preset, scale, metric name, measure or variant |
+| `SourceTypeError` | `TypeError` | The data source is neither a string nor a `Doc`, a string or a `Doc` is passed where a list of words is expected, the texts of a visualizer are not a list of lists of words, the frequencies of `zipf` are not a `Counter`, the measure of `fingerprinting` or the tokenizer is not callable, the tokenizer returns a non-iterable object, a path is neither a string nor a `Path` |
+| `SourceError` | `ValueError` | The source has no words, no sentences, no texts or no collocations, lacks the annotation a statistic needs (the parts of speech, the lemmas, the dependency parse), is a string longer than the `max_length` of the pipeline, or no unit is left after culling; Delta and the principal components get fewer than three texts, a matrix of distances is not square or has an infinite distance, the pipeline of `function_words_profile` does not tag the parts of speech, no text of a comparison has a window of enough words, the keyword of `wordtree` is not found or has no word next to it |
+| `ParameterError` | `ValueError` | A threshold, window, segment size, number of items, logarithm base, confidence level, number of bootstrap samples or bound of a frequency band (1-10,000) is out of range, a limit of records is negative, the sizes of the parts of `dispersion` do not add up to the words, the keyword of `kwic` is empty; an unknown preset, scale, metric name, measure, variant, field of a keyword, genre or part of speech |
 | `UnknownStatError` | `ParameterError`, `KeyError` | An unknown statistic is requested by name, as in `DiversityStats.windowed` |
 | `DatasetNotFoundError` | `OSError` | The model of spaCy is not installed or a dataset is not downloaded; the message shows the command that brings what is missing |
-| `DataFileError` | `ValueError` | A dataset file is corrupted, has an unexpected format or cannot be decoded |
-| `DownloadError` | `RuntimeError` | The file could not be downloaded or failed the checksum verification |
+| `DataFileError` | `ValueError` | The archive of a dataset is not a ZIP or TAR archive, cannot be extracted, has no files or has paths outside its directory, or the directory to extract it into cannot be created |
+| `DownloadError` | `RuntimeError` | The file could not be downloaded, its directory could not be created, or it failed the checksum verification twice |
 
 The classes are available from `ests` and from `ests.exceptions`.
 

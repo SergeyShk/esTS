@@ -24,7 +24,7 @@ El gráfico de la [ley de Zipf](https://es.wikipedia.org/wiki/Ley_de_Zipf) a par
 | `show_fit` | bool | `False` | Dibujar el ajuste de Zipf-Mandelbrot $f(r) = C / (r + q)^s$ de [`fit_zipf_mandelbrot`](../stats/diversity_stats_funcs.md#fit_zipf_mandelbrot) |
 | `ax` | Axes | `None` | Ejes de matplotlib para el gráfico; si no se dan, se crea una figura nueva |
 
-La función devuelve los `Axes` con el gráfico; un `num_words` mayor que el número de tipos de palabra no alarga las curvas más allá de los datos, y un contador vacío lanza `SourceError`. `zipf_theory(size, num_ranks, alpha, ax)` dibuja solo la curva teórica, $f(r) = size \cdot r^{-\alpha}$ para los rangos de 1 a `num_ranks`.
+La función devuelve los `Axes` con el gráfico; un `num_words` mayor que el número de tipos de palabra no alarga las curvas más allá de los datos, un contador vacío lanza `SourceError`, y un `num_words` menor que uno lanza `ParameterError`. `zipf_theory(size, num_ranks, alpha, ax)` dibuja solo la curva teórica, $f(r) = size \cdot r^{-\alpha}$ para los rangos de 1 a `num_ranks`.
 
 ## Ejemplo de uso
 

@@ -24,7 +24,7 @@ Plotting [Zipf's law](https://en.wikipedia.org/wiki/Zipf%27s_law) from a counter
 | `show_fit` | bool | `False` | Plot the Zipf-Mandelbrot fit $f(r) = C / (r + q)^s$ of [`fit_zipf_mandelbrot`](../stats/diversity_stats_funcs.md#fit_zipf_mandelbrot) |
 | `ax` | Axes | `None` | Axes of matplotlib for the plot; if not given, a new figure is created |
 
-The function returns the `Axes` with the plot; a `num_words` greater than the number of word types does not extend the curves beyond the data, and an empty counter raises `SourceError`. `zipf_theory(size, num_ranks, alpha, ax)` plots the theoretical curve alone, $f(r) = size \cdot r^{-\alpha}$ for the ranks from 1 to `num_ranks`.
+The function returns the `Axes` with the plot; a `num_words` greater than the number of word types does not extend the curves beyond the data, an empty counter raises `SourceError`, and a `num_words` below one raises `ParameterError`. `zipf_theory(size, num_ranks, alpha, ax)` plots the theoretical curve alone, $f(r) = size \cdot r^{-\alpha}$ for the ranks from 1 to `num_ranks`.
 
 ## Usage example
 

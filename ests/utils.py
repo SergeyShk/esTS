@@ -665,12 +665,14 @@ def extract_archive(archive_file: str | Path, extract_dir: str | Path | None = N
     Description:
         A ZIP archive is extracted by ZipFile.extractall, as shutil.unpack_archive
         in some versions of Python skips the files with two dots in a row in
-        their names, not only the path components «..»; a TAR archive goes
-        through the data filter, which refuses links and paths outside the
-        directory. If the root of the archive differs from the name of the
-        archive without its extensions, it is renamed, and an earlier directory
-        with that name is removed first, otherwise a second extraction would
-        put a copy inside it
+        their names, not only the path components «..»; a TAR archive is read
+        once, through the data filter of tarfile, which refuses links and paths
+        outside the directory, or, on the versions of Python 3.11 before 3.11.4
+        that have no filter, through a check of its own that takes only files
+        and directories inside it. If the root of the archive differs from the
+        name of the archive without its extensions, it is renamed, and an
+        earlier directory with that name is removed first, otherwise a second
+        extraction would put a copy inside it
 
     Arguments:
         archive_file (str|Path): Path to the archive
@@ -681,7 +683,8 @@ def extract_archive(archive_file: str | Path, extract_dir: str | Path | None = N
 
     Raises:
         DataFileError: If the file is not a ZIP or TAR archive, the archive is
-            corrupted, has paths outside the directory or the directory cannot be created
+            corrupted, empty, has paths outside the directory or links, or the
+            directory cannot be created
     """
     archive_path = to_path(archive_file).resolve()
     extract_path = to_path(extract_dir) if extract_dir else archive_path.parent
@@ -704,11 +707,23 @@ def extract_archive(archive_file: str | Path, extract_dir: str | Path | None = N
                     )
                 zip_file.extractall(extract_path)
         else:
-            shutil.unpack_archive(archive_path, extract_dir=extract_path, filter="data")
             with tarfile.open(archive_path, mode="r") as tar_file:
+                if hasattr(tarfile, "data_filter"):
+                    tar_file.extractall(extract_path, filter="data")
+                else:
+                    for member in tar_file:
+                        if _is_outside(member.name) or not (member.isfile() or member.isdir()):
+                            raise DataFileError(
+                                f"The archive {archive_path} has paths outside the directory "
+                                "or links"
+                            )
+                        tar_file.extract(member, extract_path)
+                # The members are read by the extraction, the stream is not read again
                 members = tar_file.getnames()
-    except (OSError, zipfile.BadZipFile, tarfile.TarError, shutil.ReadError) as e:
+    except (OSError, zipfile.BadZipFile, tarfile.TarError) as e:
         raise DataFileError(f"Cannot extract the archive {archive_path}") from e
+    if not members:
+        raise DataFileError(f"The archive {archive_path} has no files")
     src_basename = os.path.commonpath(members)
     if src_basename and not (extract_path / src_basename).is_dir():
         src_basename = str(Path(src_basename).parent)

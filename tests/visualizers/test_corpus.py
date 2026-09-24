@@ -138,3 +138,19 @@ def test_collocation_network_ports():
     assert '\tn0 [label="10:30" fontsize=10]' in graph.source
     assert "\tn0 -- n1 [label=5.00 penwidth=2.25]" in graph.source
     assert "10:30 --" not in graph.source
+
+
+def test_collocation_network_pairs_of_a_word_with_itself():
+    # A word repeated within the window would be a loop: it is left out before top_n
+    pairs = [
+        Collocation("mata", "mata", 5, 5, 5, 11.9),
+        Collocation("rojo", "rojo", 7, 7, 7, 11.4),
+        Collocation("vino", "tinto", 2, 3, 2, 5.0),
+        Collocation("vino", "blanco", 2, 3, 1, 4.0),
+    ]
+    graph = collocation_network(pairs, top_n=1)
+    assert graph.source.count("--") == 1
+    assert "tinto" in graph.source and "mata" not in graph.source and "rojo" not in graph.source
+    assert graph.format == "png"
+    with pytest.raises(SourceError):
+        collocation_network(pairs[:2])

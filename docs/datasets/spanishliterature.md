@@ -179,7 +179,7 @@ The archive (19 MB) is kept in the repository of the library, is downloaded once
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
-| `data_dir` | str/Path | `DEFAULT_DATA_DIR.joinpath("texts")` | Path to the dataset directory |
+| `data_dir` | str/Path | `DEFAULT_DATA_DIR.joinpath("texts")` | Path to the dataset directory; the data directory is described in [Installation](../installation.md#datasets) |
 
 ## Attributes
 
@@ -187,8 +187,19 @@ The archive (19 MB) is kept in the repository of the library, is downloaded once
 | :-------: | :--: | :---------: |
 | `genres` | tuple[str] | Tuple of genres: `prose`, `poems`, `drama`, `publicism` |
 | `authors` | dict[str, str] | Names of the authors by the names of their folders |
+| `name` | str | Name of the dataset, `spanish_literature` |
+| `meta` | dict[str, str] | Reference information: the source, the description, the author and the licence |
+| `info` | dict[str, str] | The name and the reference information in one dictionary |
+| `data_dir` | Path | Absolute path to the dataset directory |
+| `filepath` | str | Path to the archive of the dataset, `None` before the download |
+
+The dataset iterates over its records as `get_records()` without filters: `for record in sl` goes over the works one at a time.
 
 ## Methods
+
+### check_data
+
+Checks that the list of works and the file of every work are in place and returns `True`; a dataset that is not downloaded or misses a file raises `DatasetNotFoundError`. The other methods check it themselves.
 
 ### download
 

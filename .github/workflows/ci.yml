@@ -56,7 +56,9 @@ jobs:
       - name: Install dependencies
         run: uv sync --locked --all-groups
       - name: Run tests
-        run: uv run pytest --cov ests --cov-fail-under 90 --cov-report xml
+        # The archives of the datasets are downloaded from master, where a new version
+        # of one exists only after the merge: the network tests run in their own job
+        run: uv run pytest -m "not network" --cov ests --cov-fail-under 90 --cov-report xml
       - name: Send report
         uses: codecov/codecov-action@v7
         with:
@@ -66,6 +68,22 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
           verbose: true
+
+  network:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v10.1.0
+        with:
+          enable-cache: true
+          python-version: "3.13"
+      - name: Install dependencies
+        run: uv sync --locked --all-groups
+      - name: Run the network tests
+        run: uv run pytest -m network
 
   docs:
     runs-on: ubuntu-latest

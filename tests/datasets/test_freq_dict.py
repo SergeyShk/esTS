@@ -1,5 +1,6 @@
 import hashlib
 import shutil
+import warnings
 from collections import Counter
 from pathlib import Path
 
@@ -181,3 +182,25 @@ def test_lemma_key_proper(dictionary):
     assert lemma_key("París") == "parir"
     assert lemma_key("París", proper=True) == "parís"
     assert dictionary.lookup(lemma_key("París", proper=True)).pos == ("PROPN",)
+
+
+def test_simplemma_version(monkeypatch, tmp_path):
+    module.check_simplemma.cache_clear()
+    monkeypatch.setattr(module, "version", lambda name: "2.1.0")
+    with pytest.warns(UserWarning, match=r"simplemma 2\.0\.0, simplemma 2\.1\.0 is installed"):
+        FreqDict(data_dir=tmp_path)
+    # The warning is given once per process
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        FreqDict(data_dir=tmp_path)
+    module.check_simplemma.cache_clear()
+    monkeypatch.setattr(module, "version", lambda name: module.SIMPLEMMA_VERSION)
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        FreqDict(data_dir=tmp_path)
+
+
+def test_lookup_by_key(dictionary):
+    assert dictionary.lookup("usted") is None
+    assert "usted" not in dictionary
+    assert dictionary.ipm(lemma_key("usted")) == dictionary.ipm("tú") > 1000

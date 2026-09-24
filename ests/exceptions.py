@@ -14,10 +14,11 @@ class SourceTypeError(EstsError, TypeError):
     Wrong type of the data source
 
     Description:
-        Something other than a string or a Doc was passed, the frequency
-        counter is not a Counter, the list of texts is not a list of word
-        lists, the path is neither a string nor a Path, the tokenizer
-        is not callable
+        Something other than a string or a Doc was passed, a string or a Doc
+        where a list of words is expected, the frequency counter is not a
+        Counter, the list of texts is not a list of word lists, the path is
+        neither a string nor a Path, the tokenizer or the measure is not
+        callable
     """
 
 
@@ -26,10 +27,13 @@ class SourceError(EstsError, ValueError):
     Unusable data source
 
     Description:
-        The source has no words, sentences, texts or collocations, lacks the
-        annotation a statistic needs (the parts of speech, the lemmas, the
-        dependency parse), is a string longer than the max_length of the
-        pipeline, or nothing is left after culling
+        The source has no words, sentences, texts, collocations or windows of
+        enough words, lacks the annotation a statistic needs (the parts of
+        speech, the lemmas, the dependency parse), is a string longer than the
+        max_length of the pipeline, has too few texts for the distances or the
+        principal components, the matrix of distances is not square or not
+        finite, the keyword of a word tree has no context, or nothing is left
+        after culling
     """
 
 
@@ -38,8 +42,11 @@ class ParameterError(EstsError, ValueError):
     Invalid parameter
 
     Description:
-        A threshold, window, segment size or number of items is out of range;
-        an unknown measure, variant, preset, layer, stage or dataset category
+        A threshold, window, segment size, number of items, bound of a
+        frequency band or number of bootstrap samples is out of range, the
+        sizes of the parts do not add up to the words, the keyword is empty;
+        an unknown measure, variant, preset, scale, field, genre or part of
+        speech
     """
 
 
@@ -70,8 +77,9 @@ class DataFileError(EstsError, ValueError):
     Dataset file cannot be read
 
     Description:
-        The file is corrupted, has an unexpected format or cannot be decoded
-        in any of the supported encodings
+        The archive is not a ZIP or TAR archive, cannot be extracted, has no
+        files or has paths outside its directory, or the directory to extract
+        it into cannot be created
     """
 
 
@@ -80,6 +88,6 @@ class DownloadError(EstsError, RuntimeError):
     Download failed
 
     Description:
-        The file could not be downloaded or failed the checksum verification
-        and was removed
+        The file could not be downloaded, its directory could not be
+        created, or it failed the checksum verification twice and was removed
     """

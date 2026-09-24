@@ -4,7 +4,7 @@ from math import isnan, log, log2, nan, sqrt
 from typing import NamedTuple
 
 from ..constants import COLLOCATION_MEASURES
-from ..exceptions import ParameterError
+from ..exceptions import ParameterError, SourceError
 from ..utils import check_sequence
 
 
@@ -73,6 +73,7 @@ def collocations(
 
     Raises:
         SourceTypeError: If a string is passed instead of a list of words
+        SourceError: If there are no words
         ParameterError: If the measure is unknown or the window or top_n is below one
 
     Example:
@@ -88,6 +89,8 @@ def collocations(
     if top_n is not None and top_n < 1:
         raise ParameterError("The number of collocations must be greater than 0")
     check_sequence(words)
+    if not len(words):
+        raise SourceError("The data source has no words")
     calc = MEASURES[measure]
     n_words = len(words)
     frequencies = Counter(words)

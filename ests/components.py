@@ -21,6 +21,10 @@ Description:
     that one such document in a corpus does not stop nlp.pipe. A pipeline that
     gives no annotation a component needs is another matter: that is an error
     of the pipeline, and it is raised
+    Adding a component extends the tokenizer of its pipeline with the rules for
+    the dashes of a dialogue (add_dash_rules), which the string API has, so the
+    words of a component are the words of the rest of the library: sí--dijo is
+    two words and a dash, not one word
 """
 
 from spacy.language import Language
@@ -43,7 +47,7 @@ from .lexical_stats import LexicalStats, is_number
 from .morph_stats import MorphStats
 from .readability_stats import ReadabilityStats, check_preset
 from .syntax_stats import SyntaxStats
-from .utils import has_words, iter_doc_tokens
+from .utils import add_dash_rules, has_words, iter_doc_tokens
 
 
 @Language.factory("ests_basic")
@@ -69,6 +73,7 @@ class BasicStatsComponent:
     """
 
     def __init__(self, nlp: Language, name: str = "ests_basic"):
+        add_dash_rules(nlp)
         self.name = name
         Doc.set_extension(self.name, default=None, force=True)
 
@@ -149,6 +154,7 @@ class ReadabilityStatsComponent:
         basic: str | None = None,
     ):
         check_preset(preset)
+        add_dash_rules(nlp)
         self.name = name
         self.preset = preset
         self.basic = basic
@@ -247,6 +253,7 @@ class DiversityStatsComponent:
         log_base: float = DIVERSITY_LOG_BASE,
     ):
         check_diversity_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)
+        add_dash_rules(nlp)
         self.name = name
         self.window_len = window_len
         self.mtld_threshold = mtld_threshold
@@ -313,6 +320,7 @@ class MorphStatsComponent:
     """
 
     def __init__(self, nlp: Language, name: str = "ests_morph"):
+        add_dash_rules(nlp)
         self.name = name
         Doc.set_extension(self.name, default=None, force=True)
 
@@ -366,6 +374,7 @@ class SyntaxStatsComponent:
     """
 
     def __init__(self, nlp: Language, name: str = "ests_syntax"):
+        add_dash_rules(nlp)
         self.name = name
         Doc.set_extension(self.name, default=None, force=True)
 
@@ -420,6 +429,7 @@ class CohesionStatsComponent:
     """
 
     def __init__(self, nlp: Language, name: str = "ests_cohesion"):
+        add_dash_rules(nlp)
         self.name = name
         Doc.set_extension(self.name, default=None, force=True)
 
@@ -482,6 +492,7 @@ class LexicalStatsComponent:
     """
 
     def __init__(self, nlp: Language, name: str = "ests_lexical", data_dir: str | None = None):
+        add_dash_rules(nlp)
         self.name = name
         self.freq_dict = FreqDict(data_dir) if data_dir else FreqDict()
         Doc.set_extension(self.name, default=None, force=True)

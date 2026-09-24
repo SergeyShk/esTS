@@ -232,6 +232,13 @@ def test_count_punctuations_spaced_hyphen_as_dash():
         ("―¿Qué? ―dijo él―.", 3, 0),
         ("lux_-dijo", 1, 0),
         ("Pues sí-¿y qué?", 1, 0),
+        # A closing dash between a letter and a closing mark
+        ("-Hola -dijo Juan-. Y se fue.", 3, 0),
+        ("-Hola -dijo Juan-, y se fue.", 3, 0),
+        ("-Sí -dijo él-; no.", 3, 0),
+        ("-¿Qué? -dijo Ana-! bien", 3, 0),
+        ("socio-económico.", 0, 1),
+        ("e-mail.", 0, 1),
     ],
 )
 def test_count_punctuations_attached_raya(text, dashes, hyphens):

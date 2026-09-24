@@ -2,15 +2,9 @@
 
 **Sergey Shkarin** - Data Scientist
 
-<a href="https://github.com/SergeyShk">
-    <img src="https://github.com/squidfunk/mkdocs-material/raw/master/material/.icons/fontawesome/brands/github.svg" width="40">
-</a>
-<a href="mailto:kouki.sergey@gmail.com">
-    <img src="https://github.com/squidfunk/mkdocs-material/raw/master/material/.icons/fontawesome/solid/envelope.svg" width="40">
-</a>
-<a href="https://www.linkedin.com/in/kouki91/">
-    <img src="https://github.com/squidfunk/mkdocs-material/raw/master/material/.icons/fontawesome/brands/linkedin.svg" width="40">
-</a>
+[:fontawesome-brands-github:{ .contact }](https://github.com/SergeyShk)
+[:fontawesome-solid-envelope:{ .contact }](mailto:kouki.sergey@gmail.com)
+[:fontawesome-brands-linkedin:{ .contact }](https://www.linkedin.com/in/kouki91/)
 
 ## Contributing
 

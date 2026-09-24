@@ -179,7 +179,7 @@ El archivo (19 MB) se guarda en el repositorio de la biblioteca, se descarga una
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
-| `data_dir` | str/Path | `DEFAULT_DATA_DIR.joinpath("texts")` | Ruta al directorio del conjunto de datos |
+| `data_dir` | str/Path | `DEFAULT_DATA_DIR.joinpath("texts")` | Ruta al directorio del conjunto de datos; el directorio de datos se describe en [Instalación](../installation.md#datasets) |
 
 ## Atributos
 
@@ -187,8 +187,19 @@ El archivo (19 MB) se guarda en el repositorio de la biblioteca, se descarga una
 | :------: | :--: | :---------: |
 | `genres` | tuple[str] | Tupla de géneros: `prose`, `poems`, `drama`, `publicism` |
 | `authors` | dict[str, str] | Nombres de los autores por los nombres de sus carpetas |
+| `name` | str | Nombre del conjunto de datos, `spanish_literature` |
+| `meta` | dict[str, str] | Información de referencia: la fuente, la descripción, el autor y la licencia |
+| `info` | dict[str, str] | El nombre y la información de referencia en un diccionario |
+| `data_dir` | Path | Ruta absoluta al directorio del conjunto de datos |
+| `filepath` | str | Ruta al archivo del conjunto de datos, `None` antes de la descarga |
+
+El conjunto de datos se recorre por sus registros como `get_records()` sin filtros: `for record in sl` pasa por las obras de una en una.
 
 ## Métodos
+
+### check_data
+
+Comprueba que la lista de obras y el fichero de cada obra están en su sitio y devuelve `True`; un conjunto sin descargar o al que le falta un fichero levanta `DatasetNotFoundError`. Los demás métodos lo comprueban por sí mismos.
 
 ### download
 

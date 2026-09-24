@@ -52,6 +52,8 @@ def test_zipf_type_error():
         zipf(1)
     with pytest.raises(ParameterError):
         zipf(Counter({"de": 1}), num_words=-1)
+    with pytest.raises(ParameterError):
+        zipf(Counter({"de": 1}), num_words=0)
 
 
 def test_zipf(tokens):
@@ -111,4 +113,11 @@ def test_zipf_ax(tokens):
     assert zipf_theory(10, 5, ax=right) is right
     assert len(left.get_lines()) == 1
     assert len(right.get_lines()) == 1
+    plt.close("all")
+
+
+def test_zipf_labels_of_equal_frequencies():
+    # A rank is labelled with its own word, whatever the ties of the frequencies
+    ax = zipf(Counter({"a": 2, "b": 2, "c": 2, "d": 2, "e": 1}), num_labels=5)
+    assert [text.get_text() for text in ax.texts] == [" a", " b", " c", " e"]
     plt.close("all")

@@ -148,7 +148,7 @@ def keyness(
         if not positive and word not in counts_reference:
             continue
         a = counts_target.get(word, 0)
-        b = counts_reference.get(word, missing)
+        b = float(counts_reference.get(word, missing))
         ipm_target = a / size_target * 1e6
         ipm_reference = b / size_reference * 1e6
         if ipm_target == ipm_reference or (ipm_target > ipm_reference) != positive:

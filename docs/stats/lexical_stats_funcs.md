@@ -2,7 +2,7 @@
 
 ## Frequency by the dictionary { #frequency }
 
-The attributes `coverage`, `mean_ipm`, `mean_ipm_content`, `mean_log_ipm`, `mean_log_ipm_content`, `mean_range` and `mean_dispersion` of `LexicalStats` are computed from the entries of the [`FreqDict`](../datasets/freqdict.md) for the words of the text (`entries`), looked up by [`lemma_key`](../datasets/freqdict.md#lemma_key): the means are taken over the words found in the dictionary, over all of them or over the content words alone. The mean frequency in ipm is sensitive to the function words (`el` - 97,000 ipm, `de` - 71,000), so to compare texts the log frequency or the mean over the content words suits better.
+The attributes `coverage`, `mean_ipm`, `mean_ipm_content`, `mean_log_ipm`, `mean_log_ipm_content`, `mean_range` and `mean_dispersion` of `LexicalStats` are computed from the entries of the [`FreqDict`](../datasets/freqdict.md) for the words of the text (`entries`), looked up by [`lemma_key`](../datasets/freqdict.md#lemma_key): the means are taken over the words found in the dictionary, over all of them or over the content words alone. The mean frequency in ipm is sensitive to the function words (`el` - 98,000 ipm, `de` - 71,000), so to compare texts the log frequency or the mean over the content words suits better.
 
 ## Surprisal and perplexity { #calc_surprisal }
 

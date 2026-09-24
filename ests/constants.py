@@ -1,3 +1,4 @@
+import os
 import string
 from pathlib import Path
 
@@ -24,7 +25,8 @@ DASHES = "—–―-"
 # opening mark, any dash after a closing mark, the closing marks before a dash
 # and an opening mark after one are split off, and the horizontal bar ― as the
 # raya and the en dash at the ends of a token, with the closing marks after it
-# (él―.). The underscores of the italics of
+# (él―.), and the hyphens after the period of a number that opens an item of a
+# list (Artículo 1.- El objeto). The underscores of the italics of
 # Project Gutenberg (--_Siguro_, lux_--dijo) count as opening and closing marks.
 # A single hyphen between two letters (franco-alemán) or before a digit (-5) is
 # left alone
@@ -33,7 +35,7 @@ _OPENING = r"[¿¡«“\"'(\[_]"
 _CLOSING = r"[.,;:!?…»”\"')\]_]"
 _DASH = r"(?:-+|[—–―])"
 TOKENIZER_PREFIXES = (rf"-+(?={_LETTER}|{_OPENING})", "―")
-TOKENIZER_SUFFIXES = (rf"(?<={_LETTER})-+", "―", rf"(?<=―){_CLOSING}")
+TOKENIZER_SUFFIXES = (rf"(?<={_LETTER})-+", "―", rf"(?<=―){_CLOSING}", r"(?<=\d\.)-+")
 TOKENIZER_INFIXES = (
     rf"(?<={_LETTER})(?:-{{2,}}|[—–―])(?={_LETTER}|{_OPENING})",
     rf"(?<={_LETTER})-(?={_OPENING})",
@@ -421,8 +423,14 @@ DIVERSITY_STATS_DESC = {
 # Model of spaCy that the statistics on Universal Dependencies fall back to
 SPACY_MODEL = "es_core_news_sm"
 
-# Directory where the datasets are downloaded by default: next to the package
-DEFAULT_DATA_DIR = Path(__file__).parent.parent.resolve() / "ests_data"
+# Directory where the datasets are downloaded by default: the one of the environment
+# variable ESTS_DATA_DIR, read when the package is imported, or ests_data next to the
+# package, which a read-only site-packages does not allow to write
+DEFAULT_DATA_DIR = (
+    Path(os.environ["ESTS_DATA_DIR"]).expanduser()
+    if os.environ.get("ESTS_DATA_DIR")
+    else Path(__file__).parent.parent.resolve() / "ests_data"
+)
 
 # Morphological features counted by the statistics, by the name of the statistic.
 # The Spanish models annotate 23 features; the ones left out are either marginal

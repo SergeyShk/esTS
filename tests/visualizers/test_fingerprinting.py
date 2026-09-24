@@ -6,9 +6,10 @@ import matplotlib.pyplot as plt
 import pytest
 from matplotlib.axes import Axes
 
-from ests.diversity_stats import calc_simpson_index
-from ests.exceptions import ParameterError, SourceTypeError
+from ests.diversity_stats import calc_simpson_index, calc_ttr
+from ests.exceptions import ParameterError, SourceError, SourceTypeError
 from ests.visualizers import fingerprinting
+from ests.visualizers.fingerprinting import _segment_values
 
 matplotlib.use("Agg")
 
@@ -123,4 +124,28 @@ def test_fingerprinting_scale():
     plt.close("all")
     ax = fingerprinting([["a"], ["b", "c"]], metric=lambda segment: nan)
     assert all(cells.mask.all() for cells in _cells(ax))
+    plt.close("all")
+
+
+@pytest.mark.parametrize("texts", [[], [[]], [["el", "gato"], []]])
+def test_fingerprinting_no_words(texts):
+    with pytest.raises(SourceError):
+        fingerprinting(texts)
+    assert plt.get_fignums() == []
+
+
+def test_segment_values_tail():
+    # A tail is added only when words are left after the last segment
+    assert _segment_values(["a", "b", "c"], 1, calc_ttr) == [1.0, 1.0, 1.0]
+    assert _segment_values(["a", "b", "c"], 5, calc_ttr) == [1.0]
+    assert _segment_values(["a", "a", "b"], 2, calc_ttr) == [0.5, 1.0, 1.0]
+
+
+def test_fingerprinting_colorbar_height():
+    # The colorbar is as high as the box of the axes that the equal aspect shrinks
+    ax = fingerprinting([["el", "gato", "come", "pan"] * 30] * 6, x_size=1000, y_size=330)
+    ax.figure.canvas.draw()
+    colorbar = ax.figure.axes[1]
+    assert colorbar.get_position().height == pytest.approx(ax.get_position().height)
+    assert ax.get_position().height < 0.5
     plt.close("all")

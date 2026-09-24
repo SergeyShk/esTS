@@ -93,13 +93,21 @@ def test_mds_plot_exact():
     plt.close("all")
 
 
+def test_mendenhall_plot_missing_lengths():
+    # A length that no word has is drawn at zero, not between its neighbours
+    ax = mendenhall_plot({"A": ["a", "abc", "abc"]})
+    assert ax.get_lines()[0].get_xydata().tolist() == [[1, 1 / 3], [2, 0.0], [3, 2 / 3]]
+    plt.close("all")
+
+
 def test_mendenhall_plot():
     ax = mendenhall_plot(corpus)
     assert isinstance(ax, Axes)
     assert [line.get_label() for line in ax.get_lines()] == ["A", "B", "C"]
     curve = mendenhall_curve(corpus["A"])
-    assert list(ax.get_lines()[0].get_xdata()) == list(curve)
-    assert list(ax.get_lines()[0].get_ydata()) == list(curve.values())
+    lengths = list(range(1, max(curve) + 1))
+    assert list(ax.get_lines()[0].get_xdata()) == lengths
+    assert list(ax.get_lines()[0].get_ydata()) == [curve.get(n, 0.0) for n in lengths]
     assert ax.get_legend() is not None
     _, given = plt.subplots()
     assert mendenhall_plot(corpus, ax=given) is given
