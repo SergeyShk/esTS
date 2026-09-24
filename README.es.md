@@ -24,6 +24,7 @@
   <a href="https://github.com/SergeyShk/esTS/actions/workflows/ci.yml"><img src="https://github.com/SergeyShk/esTS/actions/workflows/ci.yml/badge.svg" alt="Build"></a>
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
   <a href="https://github.com/SergeyShk/esTS/blob/master/LICENSE.txt"><img src="https://img.shields.io/github/license/sergeyshk/esTS.svg" alt="License"></a>
+  <a href="https://doi.org/10.5281/zenodo.22924655"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.22924655.svg" alt="DOI"></a>
 </p>
 
 ---
@@ -501,13 +502,14 @@ Los informes de errores, las ideas y los pull requests son bienvenidos: las [iss
 
 ## Cómo citar
 
-Si usa **esTS** en su investigación o en su software, cítelo con la siguiente entrada BibTeX. Las citas ayudan al desarrollo y al mantenimiento continuos de la biblioteca. Los mismos metadatos están en [CITATION.cff](https://github.com/SergeyShk/esTS/blob/master/CITATION.cff): GitHub los muestra bajo el botón «Cite this repository».
+Si usa **esTS** en su investigación o en su software, cítelo con la siguiente entrada BibTeX. Las citas ayudan al desarrollo y al mantenimiento continuos de la biblioteca. Los mismos metadatos están en [CITATION.cff](https://github.com/SergeyShk/esTS/blob/master/CITATION.cff): GitHub los muestra bajo el botón «Cite this repository». El Concept DOI [10.5281/zenodo.22924655](https://doi.org/10.5281/zenodo.22924655) en Zenodo apunta a todas las versiones de la biblioteca; el DOI de una versión concreta está en la página de su publicación.
 
 ```bibtex
 @software{esTS,
   author = {Sergey Shkarin},
   title = {{esTS, a library for statistics extraction from texts in Spanish}},
   year = 2026,
+  doi = {10.5281/zenodo.22924655},
   url = {https://github.com/SergeyShk/esTS}
 }
 ```
