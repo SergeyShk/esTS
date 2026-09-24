@@ -48,39 +48,38 @@ Las proporciones de las palabras por longitud en caracteres ([`mendenhall_curve`
 
 ## Ejemplo de uso
 
-Seis novelas de [Project Gutenberg](https://www.gutenberg.org), tres de Galdós y tres de Unamuno.
+Seis novelas del [corpus de literatura](../datasets/spanishliterature.md), tres de Galdós y tres de Unamuno.
 
 !!! example "Ejemplo"
 
     _Código_:
 
     ``` python
-    from urllib.request import urlopen
-
     import matplotlib.pyplot as plt
 
     from ests import WordsExtractor
     from ests.corpus import delta
+    from ests.datasets import SpanishLiterature
     from ests.visualizers import dendrogram_plot, mds_plot, mendenhall_plot, pca_plot
 
-
-    def gutenberg(number):
-        url = f"https://www.gutenberg.org/cache/epub/{number}/pg{number}.txt"
-        text = urlopen(url).read().decode("utf-8")
-        start = text.index("\n", text.index("*** START OF"))
-        return text[start : text.index("*** END OF")]
-
-
+    sl = SpanishLiterature()
+    sl.download()
+    titles = (
+        "Marianela",
+        "Misericordia",
+        "Torquemada en la hoguera",
+        "Niebla",
+        "Abel Sánchez",
+        "La tía Tula",
+    )
     novels = {
-        "Marianela": 17340,
-        "Misericordia": 21831,
-        "Torquemada": 15206,
-        "Niebla": 49836,
-        "Abel Sánchez": 44512,
-        "La tía Tula": 44358,
+        record["title"]: record["text"]
+        for author in ("galdos", "unamuno")
+        for record in sl.get_records(author=author)
+        if record["title"] in titles
     }
     we = WordsExtractor(lowercase=True)
-    corpus = {name: we.extract(gutenberg(number)) for name, number in novels.items()}
+    corpus = {title: we.extract(novels[title]) for title in titles}
     distances = delta(corpus, n_mfw=100, variant="cosine")
 
     # Dendrograma y componentes principales en una figura
@@ -91,7 +90,9 @@ Seis novelas de [Project Gutenberg](https://www.gutenberg.org), tres de Galdós 
     # Escalamiento multidimensional y curvas de Mendenhall
     fig, (left, right) = plt.subplots(1, 2, figsize=(13, 5), layout="constrained")
     mds_plot(distances, ax=left)
-    mendenhall_plot({name: corpus[name] for name in ("Marianela", "Niebla", "La tía Tula")}, ax=right)
+    mendenhall_plot(
+        {title: corpus[title] for title in ("Marianela", "Niebla", "La tía Tula")}, ax=right
+    )
     ```
 
     _Resultado_:
@@ -100,4 +101,4 @@ Seis novelas de [Project Gutenberg](https://www.gutenberg.org), tres de Galdós 
 
     ![ests](../img/mds_mendenhall.png){: .center }
 
-La Delta coseno sobre las 100 palabras más frecuentes separa a los autores: el dendrograma une las novelas de cada autor antes de unir los dos grupos, y la primera componente principal, el 47.8% de la varianza, pone a Galdós a un lado y a Unamuno al otro. Las curvas de Mendenhall apenas difieren: la longitud de las palabras es un rasgo débil por sí sola.
+La Delta coseno sobre las 100 palabras más frecuentes separa a los autores: el dendrograma une las novelas de cada autor antes de unir los dos grupos, y la primera componente principal, el 43.9% de la varianza, pone a Galdós a un lado y a Unamuno al otro. Las curvas de Mendenhall apenas difieren: la longitud de las palabras es un rasgo débil por sí sola.

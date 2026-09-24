@@ -556,11 +556,28 @@ Los gráficos de matplotlib reciben los ejes `ax` y devuelven `Axes`, así que s
 import matplotlib.pyplot as plt
 from ests import WordsExtractor
 from ests.corpus import delta
+from ests.datasets import SpanishLiterature
 from ests.visualizers import dendrogram_plot, pca_plot
 
-# seis novelas de Galdós y de Unamuno de Project Gutenberg, como {título: texto}
+# seis novelas de Galdós y de Unamuno del corpus de literatura
+titles = (
+    "Marianela",
+    "Misericordia",
+    "Torquemada en la hoguera",
+    "Niebla",
+    "Abel Sánchez",
+    "La tía Tula",
+)
+sl = SpanishLiterature()
+sl.download()
+novels = {
+    record["title"]: record["text"]
+    for author in ("galdos", "unamuno")
+    for record in sl.get_records(author=author)
+    if record["title"] in titles
+}
 we = WordsExtractor(lowercase=True)
-corpus = {title: we.extract(text) for title, text in novels.items()}
+corpus = {title: we.extract(novels[title]) for title in titles}
 distances = delta(corpus, n_mfw=100, variant="cosine")
 
 fig, (left, right) = plt.subplots(1, 2, figsize=(13, 5))

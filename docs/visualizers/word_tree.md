@@ -24,21 +24,22 @@ The function returns a `Digraph` of graphviz.
 
 ## Usage example
 
-The sentences of *Marianela* by Galdós from [Project Gutenberg](https://www.gutenberg.org).
+The sentences of *Marianela* by Galdós from the [corpus of literature](../datasets/spanishliterature.md).
 
 !!! example "Example"
 
     _Code_:
 
     ``` python
-    from urllib.request import urlopen
-
     from ests import SentsExtractor, WordsExtractor
+    from ests.datasets import SpanishLiterature
     from ests.visualizers import wordtree
 
-    url = "https://www.gutenberg.org/cache/epub/17340/pg17340.txt"
-    text = urlopen(url).read().decode("utf-8")
-    text = text[text.index("\n", text.index("*** START OF")) : text.index("*** END OF")]
+    sl = SpanishLiterature()
+    sl.download()
+    text = next(
+        record["text"] for record in sl.get_records(author="galdos") if record["title"] == "Marianela"
+    )
 
     we = WordsExtractor(lowercase=True)
     sentences = [we.extract(sentence) for sentence in SentsExtractor().extract(text)]

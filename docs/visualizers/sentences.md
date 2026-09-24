@@ -18,25 +18,26 @@ The curve of the lengths of the sentences - the rhythm of a text: the length of 
 
 ## Usage example
 
-The second window of 2000 words of *Niebla* by Unamuno from [Project Gutenberg](https://www.gutenberg.org).
+The second window of 2000 words of *Niebla* by Unamuno from the [corpus of literature](../datasets/spanishliterature.md); a window is cut by words, so it opens with the end of a sentence.
 
 !!! example "Example"
 
     _Code_:
 
     ``` python
-    from urllib.request import urlopen
-
     from ests.corpus import split_windows
+    from ests.datasets import SpanishLiterature
     from ests.visualizers import sentence_lengths, sentence_lengths_plot
 
-    url = "https://www.gutenberg.org/cache/epub/49836/pg49836.txt"
-    text = urlopen(url).read().decode("utf-8")
-    text = text[text.index("\n", text.index("*** START OF")) : text.index("*** END OF")]
+    sl = SpanishLiterature()
+    sl.download()
+    text = next(
+        record["text"] for record in sl.get_records(author="unamuno") if record["title"] == "Niebla"
+    )
     chapter = split_windows(text, 2000)[1]
 
     sentence_lengths(chapter)[:5]
-    # [54, 43, 26, 30, 41]
+    # [2, 26, 30, 41, 41]
 
     sentence_lengths_plot(chapter, window=10)
     ```

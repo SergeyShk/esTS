@@ -27,23 +27,24 @@ The number of word types $V(m)$ that occur exactly $m$ times ([`calc_frequency_s
 
 ## Usage example
 
-The lemmas of *Marianela* by Galdós from [Project Gutenberg](https://www.gutenberg.org).
+The lemmas of *Marianela* by Galdós from the [corpus of literature](../datasets/spanishliterature.md).
 
 !!! example "Example"
 
     _Code_:
 
     ``` python
-    from urllib.request import urlopen
-
     import matplotlib.pyplot as plt
 
     from ests import WordsExtractor
+    from ests.datasets import SpanishLiterature
     from ests.visualizers import frequency_spectrum_plot, heaps_plot
 
-    url = "https://www.gutenberg.org/cache/epub/17340/pg17340.txt"
-    text = urlopen(url).read().decode("utf-8")
-    text = text[text.index("\n", text.index("*** START OF")) : text.index("*** END OF")]
+    sl = SpanishLiterature()
+    sl.download()
+    text = next(
+        record["text"] for record in sl.get_records(author="galdos") if record["title"] == "Marianela"
+    )
     lemmas = WordsExtractor(use_lexemes=True, lowercase=True, filter_nums=True).extract(text)
 
     fig, (left, right) = plt.subplots(1, 2, figsize=(13, 4.5))

@@ -28,7 +28,7 @@ The function returns the `Axes` with the plot; a `num_words` greater than the nu
 
 ## Usage example
 
-The lemmas of *Marianela* by Galdós from [Project Gutenberg](https://www.gutenberg.org).
+The lemmas of *Marianela* by Galdós from the [corpus of literature](../datasets/spanishliterature.md).
 
 !!! example "Example"
 
@@ -36,14 +36,16 @@ The lemmas of *Marianela* by Galdós from [Project Gutenberg](https://www.gutenb
 
     ``` python
     from collections import Counter
-    from urllib.request import urlopen
 
     from ests import WordsExtractor
+    from ests.datasets import SpanishLiterature
     from ests.visualizers import zipf
 
-    url = "https://www.gutenberg.org/cache/epub/17340/pg17340.txt"
-    text = urlopen(url).read().decode("utf-8")
-    text = text[text.index("\n", text.index("*** START OF")) : text.index("*** END OF")]
+    sl = SpanishLiterature()
+    sl.download()
+    text = next(
+        record["text"] for record in sl.get_records(author="galdos") if record["title"] == "Marianela"
+    )
     counts = Counter(WordsExtractor(use_lexemes=True, lowercase=True, filter_nums=True).extract(text))
 
     ax = zipf(counts, num_labels=10, show_theory=True, alpha=1.0, show_fit=True)
@@ -54,4 +56,4 @@ The lemmas of *Marianela* by Galdós from [Project Gutenberg](https://www.gutenb
 
     ![ests](../img/zipf.png){: .center }
 
-On logarithmic axes the frequencies of the lemmas fall along a straight line; the Zipf-Mandelbrot fit, $s = 1.14$ with a shift $q = 1.77$, follows them closer than the theoretical law with $\alpha = 1$ at the head of the list.
+On logarithmic axes the frequencies of the lemmas fall along a straight line; the Zipf-Mandelbrot fit, $s = 1.14$ with a shift $q = 1.78$, follows them closer than the theoretical law with $\alpha = 1$ at the head of the list.

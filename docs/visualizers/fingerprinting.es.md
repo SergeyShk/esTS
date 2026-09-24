@@ -28,33 +28,39 @@ La función devuelve los `Axes` con la visualización, con una relación de aspe
 
 ## Ejemplo de uso
 
-Las cinco primeras ventanas de 1000 palabras de seis novelas de [Project Gutenberg](https://www.gutenberg.org), tres de Galdós y tres de Unamuno, según el índice de Simpson.
+Las cinco primeras ventanas de 1000 palabras de seis novelas del [corpus de literatura](../datasets/spanishliterature.md), tres de Galdós y tres de Unamuno, según el índice de Simpson.
 
 !!! example "Ejemplo"
 
     _Código_:
 
     ``` python
-    from urllib.request import urlopen
-
     from ests import WordsExtractor
     from ests.corpus import split_windows
+    from ests.datasets import SpanishLiterature
     from ests.diversity_stats import calc_simpson_index
     from ests.visualizers import fingerprinting
 
-
-    def gutenberg(number):
-        url = f"https://www.gutenberg.org/cache/epub/{number}/pg{number}.txt"
-        text = urlopen(url).read().decode("utf-8")
-        start = text.index("\n", text.index("*** START OF"))
-        return text[start : text.index("*** END OF")]
-
+    sl = SpanishLiterature()
+    sl.download()
+    titles = (
+        "Marianela",
+        "Misericordia",
+        "Torquemada en la hoguera",
+        "Niebla",
+        "Abel Sánchez",
+        "La tía Tula",
+    )
+    novels = {
+        record["title"]: record["text"]
+        for author in ("galdos", "unamuno")
+        for record in sl.get_records(author=author)
+        if record["title"] in titles
+    }
 
     we = WordsExtractor(lowercase=True)
     texts = [
-        we.extract(window)
-        for number in (17340, 21831, 15206, 49836, 44512, 44358)
-        for window in split_windows(gutenberg(number), 1000)[:5]
+        we.extract(window) for title in titles for window in split_windows(novels[title], 1000)[:5]
     ]
     fingerprinting(texts, segment_len=100, metric=calc_simpson_index, x_size=1000, y_size=330)
     ```
@@ -63,4 +69,4 @@ Las cinco primeras ventanas de 1000 palabras de seis novelas de [Project Gutenbe
 
     ![ests](../img/fingerprinting.png){: .center }
 
-Los quince primeros bloques son de Galdós, los quince últimos de Unamuno. El índice de Simpson - la probabilidad de que dos palabras tomadas al azar sean la misma - es más bajo en Galdós (una mediana de 0.0107 frente a 0.0127 sobre los segmentos), así que sus bloques son más oscuros y los de Unamuno, que repite más sus palabras, más verdes.
+Los quince primeros bloques son de Galdós, los quince últimos de Unamuno. El índice de Simpson - la probabilidad de que dos palabras tomadas al azar sean la misma - es más bajo en Galdós (una mediana de 0.0109 frente a 0.0127 sobre los segmentos), así que sus bloques son más oscuros y los de Unamuno, que repite más sus palabras, más verdes.

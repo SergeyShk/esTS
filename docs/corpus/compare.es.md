@@ -51,7 +51,7 @@ Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_
 La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.
 
 !!! warning "Las ventanas de un texto no son independientes"
-    La prueba y los tamaños del efecto toman cada ventana por una observación independiente, y las ventanas de un texto no lo son: comparten su trama, sus personajes, su narrador y su edición. Con pocos textos en un corpus los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus: en el ejemplo de abajo dos novelas de un mismo autor difieren en 42 rasgos según la misma prueba. El bootstrap, en cambio, remuestrea textos enteros, el nivel `text` del índice que pone `corpus_features` (un bootstrap por conglomerados), así que su intervalo tiene en cuenta la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con solo unos pocos. Una tabla propia sin ese nivel toma cada fila por un texto aparte.
+    La prueba y los tamaños del efecto toman cada ventana por una observación independiente, y las ventanas de un texto no lo son: comparten su trama, sus personajes, su narrador y su edición. Con pocos textos en un corpus los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus: en el ejemplo de abajo dos novelas de un mismo autor difieren en 32 rasgos según la misma prueba. El bootstrap, en cambio, remuestrea textos enteros, el nivel `text` del índice que pone `corpus_features` (un bootstrap por conglomerados), así que su intervalo tiene en cuenta la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con solo unos pocos. Una tabla propia sin ese nivel toma cada fila por un texto aparte.
 
 ## Parámetros
 
@@ -68,27 +68,28 @@ La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí
 
 ## Ejemplo de uso
 
-Galdós frente a Unamuno, tres novelas de cada uno de [Project Gutenberg](https://www.gutenberg.org): *Marianela*, *Misericordia* y *Torquemada en la hoguera* frente a *Niebla*, *Abel Sánchez* y *La tía Tula*: 197 y 118 ventanas de 1000 palabras, menos de medio minuto tras la descarga.
+Galdós frente a Unamuno, tres novelas de cada uno del [corpus de literatura](../datasets/spanishliterature.md): *Marianela*, *Misericordia* y *Torquemada en la hoguera* frente a *Niebla*, *Abel Sánchez* y *La tía Tula*: 157 y 117 ventanas de 1000 palabras, menos de medio minuto.
 
 !!! example "Ejemplo"
 
     _Código_:
 
     ``` python
-    from urllib.request import urlopen
-
     from ests.corpus import compare_corpora
+    from ests.datasets import SpanishLiterature
 
-
-    def gutenberg(number):
-        url = f"https://www.gutenberg.org/cache/epub/{number}/pg{number}.txt"
-        text = urlopen(url).read().decode("utf-8")
-        start = text.index("\n", text.index("*** START OF"))
-        return text[start : text.index("*** END OF")]
-
-
-    galdos = [gutenberg(number) for number in (17340, 21831, 15206)]
-    unamuno = [gutenberg(number) for number in (49836, 44512, 44358)]
+    sl = SpanishLiterature()
+    sl.download()
+    galdos = [
+        record["text"]
+        for record in sl.get_records(author="galdos")
+        if record["title"] in ("Marianela", "Misericordia", "Torquemada en la hoguera")
+    ]
+    unamuno = [
+        record["text"]
+        for record in sl.get_records(author="unamuno")
+        if record["title"] in ("Niebla", "Abel Sánchez", "La tía Tula")
+    ]
 
     result = compare_corpora(galdos, unamuno, window=1000, labels=("Galdós", "Unamuno"))
     columns = [
@@ -122,28 +123,28 @@ Galdós frente a Unamuno, tres novelas de cada uno de [Project Gutenberg](https:
 
     ``` bash
                       median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    diversity_mtldw         106.450          65.982  36.809   46.110    3.338        0.990  0.995     0.0
-    diversity_mamtld        104.846          64.544  36.425   45.306    3.235        0.986  0.993     0.0
-    diversity_mattr           0.819           0.769   0.046    0.054    3.196        0.984  0.992     0.0
-    diversity_mtld          104.833          64.280  36.841   45.884    3.103        0.982  0.991     0.0
-    diversity_msttr           0.818           0.771   0.046    0.051    2.952        0.975  0.988     0.0
+    diversity_mtldw         104.034          66.540  35.976   43.701    3.243        0.988  0.994     0.0
+    diversity_mamtld        102.044          64.410  36.302   44.519    3.130        0.982  0.991     0.0
+    diversity_mattr           0.816           0.769   0.045    0.053    2.964        0.981  0.991     0.0
+    diversity_mtld          103.668          63.774  37.093   44.947    2.978        0.979  0.989     0.0
+    diversity_msttr           0.817           0.770   0.045    0.054    2.839        0.973  0.987     0.0
 
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    basic_letters_per_word          4.474           4.127   0.264    0.444    1.808        0.811  0.906   0.000
-    readability_lix                39.707          29.664   7.377   14.943    1.276        0.738  0.869   0.000
-    morph_p_gerund                  0.069           0.036   0.030    0.035    1.452        0.725  0.862   0.000
-    morph_polarity_Neg              0.017           0.029  -0.016   -0.010   -1.314       -0.617  0.192   0.000
-    sents_mean                     17.362          11.438   3.301    8.697    1.002        0.660  0.830   0.000
-    punct_dash                     14.896          45.682 -45.745  -19.686   -1.461       -0.660  0.170   0.000
-    punct_exclamation               9.009          23.845 -24.826   -3.270   -1.317       -0.641  0.179   0.000
-    diversity_yule_k              106.152         112.396 -14.536   -1.802   -0.577       -0.292  0.354   0.001
+    basic_letters_per_word          4.437           4.132   0.255    0.356    1.676        0.782  0.891     0.0
+    readability_lix                38.221          29.469   7.443   10.806    1.085        0.700  0.850     0.0
+    morph_p_gerund                  0.068           0.036   0.028    0.036    1.503        0.736  0.868     0.0
+    morph_polarity_Neg              0.018           0.028  -0.013   -0.010   -1.130       -0.547  0.226     0.0
+    sents_mean                     16.650          11.409   3.129    7.173    0.841        0.618  0.809     0.0
+    punct_dash                     19.019          46.351 -40.474  -15.844   -1.315       -0.618  0.191     0.0
+    punct_exclamation               8.016          23.928 -23.896   -3.779   -1.271       -0.629  0.186     0.0
+    diversity_yule_k              104.859         110.355 -14.143   -1.203   -0.625       -0.318  0.341     0.0
 
-    {'n_Galdós': 197, 'n_Unamuno': 118, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
+    {'n_Galdós': 157, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós tiene el vocabulario más rico: en el 98.5% de los pares de ventanas la suya tiene la mayor proporción de palabras distintas (el AUC de `diversity_ttr` es 0.985). Las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta por encima de 0.9, mientras que el índice de Simpson y la K de Yule, que ponderan las palabras frecuentes, lo hacen mucho menos (0.29, un efecto pequeño) y la Vm de Herdan apenas (0.11): la diferencia está sobre todo en el vocabulario raro y no en la repetición de las palabras frecuentes. Sus palabras y oraciones son más largas, y usa casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo y en negaciones: tres veces más rayas por cada 1000 palabras, más del doble de signos de exclamación y de interrogación y más negaciones entre las palabras.
+Galdós tiene el vocabulario más rico: en el 98.4% de los pares de ventanas la suya tiene la mayor proporción de palabras distintas (el AUC de `diversity_ttr` es 0.984). Las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que el índice de Simpson y la K de Yule, que ponderan las palabras frecuentes, lo hacen mucho menos (0.32, un efecto pequeño) y la Vm de Herdan apenas (0.15): la diferencia está sobre todo en el vocabulario raro y no en la repetición de las palabras frecuentes. Sus palabras y oraciones son más largas, y usa casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo y en negaciones: dos veces y media más rayas por cada 1000 palabras, el triple de signos de exclamación y el doble de signos de interrogación, y más negaciones entre las palabras.
 
-De los 132 rasgos, 97 tienen un valor p corregido por debajo de 0.01 y 67 muestran un efecto grande según la delta de Cliff, pero la prueba toma las 315 ventanas por independientes, y salen de seis novelas: según la misma prueba *Marianela* y *Torquemada en la hoguera*, dos novelas de Galdós, difieren en 42 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura - para la longitud de una oración va de 3.3 a 8.7 palabras, donde las ventanas solas darían de 5.1 a 7.4 -, aunque tres textos por lado también son pocos para un bootstrap, y una comparación de autores pide tantos textos como se puedan reunir.
+De los 132 rasgos, 94 tienen un valor p corregido por debajo de 0.01 y 63 muestran un efecto grande según la delta de Cliff, pero la prueba toma las 274 ventanas por independientes, y salen de seis novelas: según la misma prueba *Marianela* y *Misericordia*, dos novelas de Galdós, difieren en 32 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura - para la longitud de una oración va de 3.1 a 7.2 palabras, donde las ventanas solas darían de 3.8 a 6.3 -, aunque tres textos por lado también son pocos para un bootstrap, y una comparación de autores pide tantos textos como se puedan reunir.
 
 Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:
 

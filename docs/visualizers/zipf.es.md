@@ -28,7 +28,7 @@ La función devuelve los `Axes` con el gráfico; un `num_words` mayor que el nú
 
 ## Ejemplo de uso
 
-Los lemas de *Marianela* de Galdós de [Project Gutenberg](https://www.gutenberg.org).
+Los lemas de *Marianela* de Galdós del [corpus de literatura](../datasets/spanishliterature.md).
 
 !!! example "Ejemplo"
 
@@ -36,14 +36,16 @@ Los lemas de *Marianela* de Galdós de [Project Gutenberg](https://www.gutenberg
 
     ``` python
     from collections import Counter
-    from urllib.request import urlopen
 
     from ests import WordsExtractor
+    from ests.datasets import SpanishLiterature
     from ests.visualizers import zipf
 
-    url = "https://www.gutenberg.org/cache/epub/17340/pg17340.txt"
-    text = urlopen(url).read().decode("utf-8")
-    text = text[text.index("\n", text.index("*** START OF")) : text.index("*** END OF")]
+    sl = SpanishLiterature()
+    sl.download()
+    text = next(
+        record["text"] for record in sl.get_records(author="galdos") if record["title"] == "Marianela"
+    )
     counts = Counter(WordsExtractor(use_lexemes=True, lowercase=True, filter_nums=True).extract(text))
 
     ax = zipf(counts, num_labels=10, show_theory=True, alpha=1.0, show_fit=True)
@@ -54,4 +56,4 @@ Los lemas de *Marianela* de Galdós de [Project Gutenberg](https://www.gutenberg
 
     ![ests](../img/zipf.png){: .center }
 
-En ejes logarítmicos las frecuencias de los lemas caen a lo largo de una recta; el ajuste de Zipf-Mandelbrot, $s = 1.14$ con un desplazamiento $q = 1.77$, las sigue más de cerca en la cabeza de la lista que la ley teórica con $\alpha = 1$.
+En ejes logarítmicos las frecuencias de los lemas caen a lo largo de una recta; el ajuste de Zipf-Mandelbrot, $s = 1.14$ con un desplazamiento $q = 1.78$, las sigue más de cerca en la cabeza de la lista que la ley teórica con $\alpha = 1$.
