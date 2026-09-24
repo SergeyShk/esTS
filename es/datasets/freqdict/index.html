@@ -1,42 +1,42 @@
 
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="es" class="no-js">
   <head>
     
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="A library for extracting statistics from texts in Spanish">
+        <meta name="description" content="Biblioteca para extraer estadísticas de textos en español">
       
       
       
       
-        <link rel="prev" href="../stylometry/">
+        <link rel="prev" href="../spanishliterature/">
       
       
-        <link rel="next" href="../sentences/">
+        <link rel="next" href="../../visualizers/zipf/">
       
       
         
-          <link rel="alternate" href="./" hreflang="en">
+          <link rel="alternate" href="../../../datasets/freqdict/" hreflang="en">
         
-          <link rel="alternate" href="../../es/visualizers/vocabulary/" hreflang="es">
+          <link rel="alternate" href="./" hreflang="es">
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Vocabulary growth and frequency spectrum - esTS</title>
+        <title>Diccionario de frecuencias - esTS</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -55,9 +55,9 @@
       
     
     
-      <link rel="stylesheet" href="../../css/extra.css">
+      <link rel="stylesheet" href="../../../css/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,8 +80,8 @@
     <div data-md-component="skip">
       
         
-        <a href="#vocabulary-growth-and-frequency-spectrum" class="md-skip">
-          Skip to content
+        <a href="#diccionario-de-frecuencias" class="md-skip">
+          Saltar a contenido
         </a>
       
     </div>
@@ -93,8 +93,8 @@
       
 
 <header class="md-header" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="esTS" class="md-header__button md-logo" aria-label="esTS" data-md-component="logo">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../../" title="esTS" class="md-header__button md-logo" aria-label="esTS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Vocabulary growth and frequency spectrum
+              Diccionario de frecuencias
             
           </span>
         </div>
@@ -128,20 +128,20 @@
       <div class="md-header__option">
   <div class="md-select">
     
-    <button class="md-header__button md-icon" aria-label="Select language">
+    <button class="md-header__button md-icon" aria-label="Seleccionar idioma">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
     </button>
     <div class="md-select__inner">
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="./" hreflang="en" class="md-select__link">
+            <a href="../../../datasets/freqdict/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
         
           <li class="md-select__item">
-            <a href="../../es/visualizers/vocabulary/" hreflang="es" class="md-select__link">
+            <a href="./" hreflang="es" class="md-select__link">
               Español
             </a>
           </li>
@@ -162,16 +162,16 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
-      <nav class="md-search__options" aria-label="Search">
+      <nav class="md-search__options" aria-label="Buscar">
         
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
@@ -182,7 +182,7 @@
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
-            Initializing search
+            Inicializando búsqueda
           </div>
           <ol class="md-search-result__list" role="presentation"></ol>
         </div>
@@ -194,7 +194,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/SergeyShk/esTS" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/SergeyShk/esTS" title="Ir al repositorio" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -215,7 +215,7 @@
         
           
             
-<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
   <div class="md-grid">
     <ul class="md-tabs__list">
       
@@ -227,11 +227,11 @@
     
     
       <li class="md-tabs__item">
-        <a href="../.." class="md-tabs__link">
+        <a href="../../" class="md-tabs__link">
           
   
   
-  Home
+  Inicio
 
         </a>
       </li>
@@ -251,7 +251,7 @@
           
   
   
-  Extraction
+  Extracción
 
         </a>
       </li>
@@ -271,7 +271,7 @@
   
     
   
-  Syllables and stress
+  Sílabas y acento
 
       </a>
     </li>
@@ -290,7 +290,7 @@
   
     
   
-  spaCy components
+  Componentes de spaCy
 
       </a>
     </li>
@@ -309,7 +309,7 @@
           
   
   
-  Statistics
+  Estadísticas
 
         </a>
       </li>
@@ -329,27 +329,7 @@
           
   
   
-  Corpus measures
-
-        </a>
-      </li>
-    
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../../datasets/spanishliterature/" class="md-tabs__link">
-          
-  
-  
-  Datasets
+  Medidas de corpus
 
         </a>
       </li>
@@ -367,11 +347,31 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../zipf/" class="md-tabs__link">
+        <a href="../spanishliterature/" class="md-tabs__link">
           
   
   
-  Visualizers
+  Conjuntos de datos
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../visualizers/zipf/" class="md-tabs__link">
+          
+  
+  
+  Visualizaciones
 
         </a>
       </li>
@@ -399,9 +399,9 @@
   
 
 
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="esTS" class="md-nav__button md-logo" aria-label="esTS" data-md-component="logo">
+    <a href="../../" title="esTS" class="md-nav__button md-logo" aria-label="esTS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -411,7 +411,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/SergeyShk/esTS" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/SergeyShk/esTS" title="Ir al repositorio" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -452,7 +452,7 @@
   <span class="md-ellipsis">
     
   
-    Home
+    Inicio
   
 
     
@@ -468,7 +468,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Home
+    Inicio
   
 
           </label>
@@ -481,14 +481,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    About
+    Acerca de
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    Installation
+    Instalación
   
 
     
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    Exceptions and logging
+    Excepciones y registro
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    Authors
+    Autores
   
 
     
@@ -621,7 +621,7 @@
   <span class="md-ellipsis">
     
   
-    Extraction
+    Extracción
   
 
     
@@ -637,7 +637,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Extraction
+    Extracción
   
 
           </label>
@@ -657,7 +657,7 @@
   <span class="md-ellipsis">
     
   
-    Sentence extraction
+    Extracción de oraciones
   
 
     
@@ -685,7 +685,7 @@
   <span class="md-ellipsis">
     
   
-    Word extraction
+    Extracción de palabras
   
 
     
@@ -713,7 +713,7 @@
   <span class="md-ellipsis">
     
   
-    Character N-gram extraction
+    Extracción de N-gramas de caracteres
   
 
     
@@ -748,7 +748,7 @@
   <span class="md-ellipsis">
     
   
-    Syllables and stress
+    Sílabas y acento
   
 
     
@@ -775,7 +775,7 @@
   <span class="md-ellipsis">
     
   
-    spaCy components
+    Componentes de spaCy
   
 
     
@@ -816,7 +816,7 @@
   <span class="md-ellipsis">
     
   
-    Statistics
+    Estadísticas
   
 
     
@@ -832,7 +832,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Statistics
+    Estadísticas
   
 
           </label>
@@ -852,7 +852,7 @@
   <span class="md-ellipsis">
     
   
-    Basic statistics
+    Estadísticas básicas
   
 
     
@@ -894,7 +894,7 @@
   <span class="md-ellipsis">
     
   
-    Readability metrics
+    Métricas de legibilidad
   
 
     
@@ -910,7 +910,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Readability metrics
+    Métricas de legibilidad
   
 
           </label>
@@ -930,7 +930,7 @@
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Módulo de las métricas
   
 
     
@@ -958,7 +958,7 @@
   <span class="md-ellipsis">
     
   
-    Metric functions
+    Funciones de las métricas
   
 
     
@@ -1008,7 +1008,7 @@
   <span class="md-ellipsis">
     
   
-    Lexical diversity metrics
+    Métricas de diversidad léxica
   
 
     
@@ -1024,7 +1024,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Lexical diversity metrics
+    Métricas de diversidad léxica
   
 
           </label>
@@ -1044,7 +1044,7 @@
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Módulo de las métricas
   
 
     
@@ -1072,7 +1072,7 @@
   <span class="md-ellipsis">
     
   
-    Metric functions
+    Funciones de las métricas
   
 
     
@@ -1108,7 +1108,7 @@
   <span class="md-ellipsis">
     
   
-    Morphological statistics
+    Estadísticas morfológicas
   
 
     
@@ -1136,7 +1136,7 @@
   <span class="md-ellipsis">
     
   
-    Syntactic statistics
+    Estadísticas sintácticas
   
 
     
@@ -1164,7 +1164,7 @@
   <span class="md-ellipsis">
     
   
-    Cohesion statistics
+    Estadísticas de cohesión
   
 
     
@@ -1213,7 +1213,7 @@
   <span class="md-ellipsis">
     
   
-    Corpus measures
+    Medidas de corpus
   
 
     
@@ -1229,7 +1229,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Corpus measures
+    Medidas de corpus
   
 
           </label>
@@ -1249,7 +1249,7 @@
   <span class="md-ellipsis">
     
   
-    Keywords
+    Palabras clave
   
 
     
@@ -1277,7 +1277,7 @@
   <span class="md-ellipsis">
     
   
-    Collocations
+    Colocaciones
   
 
     
@@ -1305,7 +1305,7 @@
   <span class="md-ellipsis">
     
   
-    Word dispersion
+    Dispersión de las palabras
   
 
     
@@ -1333,7 +1333,7 @@
   <span class="md-ellipsis">
     
   
-    KWIC concordance
+    Concordancia KWIC
   
 
     
@@ -1361,7 +1361,7 @@
   <span class="md-ellipsis">
     
   
-    Stylometry
+    Estilometría
   
 
     
@@ -1389,120 +1389,7 @@
   <span class="md-ellipsis">
     
   
-    Corpus comparison
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
-        
-          
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Datasets
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_7">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Datasets
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../datasets/spanishliterature/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Spanish-language literature
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../datasets/freqdict/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Frequency dictionary
+    Comparación de corpus
   
 
     
@@ -1546,17 +1433,17 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
         
           
-          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    Visualizers
+    Conjuntos de datos
   
 
     
@@ -1567,12 +1454,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_8">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Visualizers
+    Conjuntos de datos
   
 
           </label>
@@ -1585,126 +1472,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../zipf/" class="md-nav__link">
+      <a href="../spanishliterature/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Zipf's law
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../fingerprinting/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Literature fingerprinting
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../word_tree/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Word tree
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../corpus/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Corpus plots
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../stylometry/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Stylometric plots
+    Literatura en español
   
 
     
@@ -1741,7 +1516,7 @@
   <span class="md-ellipsis">
     
   
-    Vocabulary growth and frequency spectrum
+    Diccionario de frecuencias
   
 
     
@@ -1759,7 +1534,7 @@
   <span class="md-ellipsis">
     
   
-    Vocabulary growth and frequency spectrum
+    Diccionario de frecuencias
   
 
     
@@ -1771,7 +1546,7 @@
       
         
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
   
   
   
@@ -1780,15 +1555,15 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      Tabla de contenidos
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
+  <a href="#descripcion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Description
+        Descripción
       
     </span>
   </a>
@@ -1796,10 +1571,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#heaps_plot" class="md-nav__link">
+  <a href="#lemma_key" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Heaps' law
+        Clave de una palabra
       
     </span>
   </a>
@@ -1807,10 +1582,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#frequency_spectrum_plot" class="md-nav__link">
+  <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Frequency spectrum
+        Parámetros
       
     </span>
   </a>
@@ -1818,13 +1593,85 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-example" class="md-nav__link">
+  <a href="#atributos" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Usage example
+        Atributos
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metodos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métodos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Métodos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        download
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lookup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        lookup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ipm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ipm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_records" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_records
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_texts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_texts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1837,6 +1684,63 @@
 
               
             
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visualizaciones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Visualizaciones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
               
                 
   
@@ -1844,14 +1748,182 @@
   
   
     <li class="md-nav__item">
-      <a href="../sentences/" class="md-nav__link">
+      <a href="../../visualizers/zipf/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Sentence lengths
+    Ley de Zipf
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualizers/fingerprinting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huella literaria
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualizers/word_tree/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Árbol de palabras
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualizers/corpus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gráficos de corpus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualizers/stylometry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gráficos estilométricos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualizers/vocabulary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crecimiento del vocabulario y espectro de frecuencias
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualizers/sentences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Longitudes de las oraciones
   
 
     
@@ -1885,7 +1957,7 @@
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
   
   
   
@@ -1894,15 +1966,15 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      Tabla de contenidos
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
+  <a href="#descripcion" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Description
+        Descripción
       
     </span>
   </a>
@@ -1910,10 +1982,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#heaps_plot" class="md-nav__link">
+  <a href="#lemma_key" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Heaps' law
+        Clave de una palabra
       
     </span>
   </a>
@@ -1921,10 +1993,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#frequency_spectrum_plot" class="md-nav__link">
+  <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Frequency spectrum
+        Parámetros
       
     </span>
   </a>
@@ -1932,13 +2004,85 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-example" class="md-nav__link">
+  <a href="#atributos" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Usage example
+        Atributos
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metodos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métodos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Métodos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        download
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lookup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        lookup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ipm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ipm
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_records" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_records
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_texts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_texts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1962,87 +2106,197 @@
   
 
 
-<h1 id="vocabulary-growth-and-frequency-spectrum">Vocabulary growth and frequency spectrum<a class="headerlink" href="#vocabulary-growth-and-frequency-spectrum" title="Permanent link">&para;</a></h1>
+<h1 id="diccionario-de-frecuencias">Diccionario de frecuencias<a class="headerlink" href="#diccionario-de-frecuencias" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.visualizers.heaps_plot()</strong>, <strong>ests.visualizers.frequency_spectrum_plot()</strong></p>
+<p><strong>ests.datasets.FreqDict</strong></p>
 </div>
-<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>Two plots of the distribution of the words of a text that complement <a href="../zipf/">Zipf's law</a>: the growth of the vocabulary with the length of the text by Heaps' law and the frequency spectrum - how many word types occur exactly once, twice, three times. Both plots are in zipfR (<code>plot.vgc</code>, <code>plot.spc</code>). The functions take the axes <code>ax</code> and return <code>Axes</code>.</p>
-<h2 id="heaps_plot">Heaps' law<a class="headerlink" href="#heaps_plot" title="Permanent link">&para;</a></h2>
-<p>The size of the vocabulary <span class="arithmatex">\(V\)</span> after every word of the text and the fitted curve <span class="arithmatex">\(V(N) = K \cdot N^{\beta}\)</span> of <a href="../../stats/diversity_stats_funcs/#heaps_beta"><code>fit_heaps</code></a> with its parameters in the legend. On corpora of millions of words <span class="arithmatex">\(\beta\)</span> lies around 0.4-0.6; over the whole curve of a single text it comes out higher, 0.6-0.9, since almost every word is new at the start of a text; the curve depends on the order of the words.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>words</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Words of the text in order</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>ax</code></td>
-<td style="text-align: center;">Axes</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Axes for the plot</td>
-</tr>
-</tbody>
-</table>
-<h2 id="frequency_spectrum_plot">Frequency spectrum<a class="headerlink" href="#frequency_spectrum_plot" title="Permanent link">&para;</a></h2>
-<p>The number of word types <span class="arithmatex">\(V(m)\)</span> that occur exactly <span class="arithmatex">\(m\)</span> times (<a href="../../stats/diversity_stats_funcs/#frequency_spectrum"><code>calc_frequency_spectrum</code></a>) in logarithmic coordinates; the left edge is the hapaxes. The spectrum underlies the measures of diversity of Yule, Sichel, Michéa and Honoré, and its shape shows how far the vocabulary of the text is from being exhausted.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>words</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Words of the text</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>ax</code></td>
-<td style="text-align: center;">Axes</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Axes for the plot</td>
-</tr>
-</tbody>
-</table>
-<h2 id="usage-example">Usage example<a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h2>
-<p>The lemmas of <em>Marianela</em> by Galdós from <a href="https://www.gutenberg.org">Project Gutenberg</a>.</p>
+<h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
+<p>Un diccionario de frecuencias de lemas del español construido a partir de los libros en español de <a href="https://storage.googleapis.com/books/ngrams/books/datasetsv3.html">Google Books Ngram</a> (versión 20200217): 83 785 lemas (109 178 filas de un lema y una categoría gramatical) de los libros de 1980-2019, 63 000 millones de palabras. Cada fila tiene la frecuencia por millón de palabras (ipm), el rango (el número de años, de 40, en que aparece el lema), la D de Juilland por años (0-100) y el número de libros con la forma más extendida del lema. Las categorías gramaticales son las de Google, con los nombres de Universal Dependencies: <code>NOUN</code>, <code>PROPN</code>, <code>VERB</code>, <code>ADJ</code>, <code>ADV</code>, <code>PRON</code>, <code>DET</code>, <code>ADP</code>, <code>CONJ</code> (coordinantes y subordinantes juntas).</p>
+<p>El diccionario lo construye <code>scripts/build_freq_dict.py</code> a partir de los 1-gramas (3,2 GB): se cuentan solo las formas etiquetadas con una categoría gramatical y hechas de letras (se quitan los números, la puntuación y la etiqueta <code>X</code>); las formas pasan a sus claves por <a href="#lemma_key"><code>lemma_key</code></a>: minúsculas y luego el lema por simplemma 2.0.0, el lematizador de la biblioteca. Google no tiene etiqueta para los nombres propios, así que una forma de sustantivo escrita con mayúscula en el 90 % de sus apariciones es <code>PROPN</code> y conserva su forma. La decisión se toma para la forma entera, con las apariciones en minúsculas: la forma <code>dios</code> va con mayúscula en el 92 % de sus apariciones, así que toda ella, también <code>dios</code> en minúsculas, es <code>PROPN</code> (405,9 ipm), mientras que la fila <code>NOUN</code> de <code>dios</code> (37,3 ipm) viene sobre todo del plural <code>dioses</code>, con mayúscula en el 6 % de sus apariciones. Se dejan fuera las filas por debajo de 0,1 ipm o presentes en menos de 5 años (las malas lecturas de un solo lote de libros escaneados). La dispersión se calcula sobre la frecuencia relativa de cada año, para que los años de distinto tamaño pesen igual; el número de libros es una cota inferior, ya que un libro con varias formas del lema se cuenta una vez.</p>
+<p>Para buscar un lema se unen sus categorías gramaticales: las frecuencias se suman, el rango, la dispersión y el número de libros son los mayores. El lema se busca en minúsculas. El diccionario analizado se guarda en caché por la ruta del fichero y se lee una vez por proceso, así que un <code>FreqDict()</code> para cada texto es barato. El tamaño del diccionario es <code>CORPUS_SIZE</code>, 63 090 618 290 palabras.</p>
+<p>El archivo (0,9 MB) se guarda en el repositorio de la biblioteca, se descarga una vez en el directorio de datos, se verifica con su suma de comprobación SHA-256 y se extrae.</p>
+<div class="admonition quote">
+<p class="admonition-title">Licencia y atribución</p>
+<p>El diccionario deriva de Google Books Ngram, que se publica con la <a href="https://creativecommons.org/licenses/by/3.0/">licencia Creative Commons Reconocimiento 3.0 No adaptada</a>, y se distribuye con la misma licencia; el archivo lleva un <code>README.txt</code> con la fuente y los cambios. Cite la fuente así: Michel J.-B. et al. Quantitative analysis of culture using millions of digitized books. Science 331 (6014), 2011.</p>
+</div>
+<h2 id="lemma_key">Clave de una palabra<a class="headerlink" href="#lemma_key" title="Permanent link">&para;</a></h2>
+<p><code>ests.datasets.freq_dict.lemma_key(word, proper=False)</code> - la clave por la que se busca una palabra en el diccionario y con la que se construye el diccionario: la palabra pasa a minúsculas y luego a su lema por <code>lemmatize</code>. simplemma distingue mayúsculas y minúsculas y deja tal cual una palabra desconocida con mayúscula, así que una palabra al principio de una oración perdería su lema (<code>Miró</code>, <code>Déjame</code>); en minúsculas lo encuentra (<code>mirar</code>, <code>dejar</code>). Un nombre propio conserva su forma en minúsculas (<code>proper=True</code>): <code>París</code> es <code>parís</code>, no el verbo <code>parir</code>.</p>
+<p>Los lemas dependen de la versión de simplemma: el diccionario se construye con la 2.0.0 (la constante <code>SIMPLEMMA_VERSION</code>), y la biblioteca requiere simplemma 2.0 o posterior; con la 1.x cerca del 4 % de las palabras de un texto tendrían otros lemas (<code>fue</code> - <code>ir</code> en lugar de <code>ser</code>, <code>usted</code> sin cambios).</p>
 <div class="admonition example">
-<p class="admonition-title">Example</p>
-<p><em>Code</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">urllib.request</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlopen</span>
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets.freq_dict</span><span class="w"> </span><span class="kn">import</span> <span class="n">lemma_key</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.visualizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">frequency_spectrum_plot</span><span class="p">,</span> <span class="n">heaps_plot</span>
-
-<span class="n">url</span> <span class="o">=</span> <span class="s2">"https://www.gutenberg.org/cache/epub/17340/pg17340.txt"</span>
-<span class="n">text</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
-<span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"*** START OF"</span><span class="p">))</span> <span class="p">:</span> <span class="n">text</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"*** END OF"</span><span class="p">)]</span>
-<span class="n">lemmas</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">use_lexemes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">))</span>
-<span class="n">heaps_plot</span><span class="p">(</span><span class="n">lemmas</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">left</span><span class="p">)</span>
-<span class="n">frequency_spectrum_plot</span><span class="p">(</span><span class="n">lemmas</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">right</span><span class="p">)</span>
+<span class="n">lemma_key</span><span class="p">(</span><span class="s2">"Miró"</span><span class="p">),</span> <span class="n">lemma_key</span><span class="p">(</span><span class="s2">"computadoras"</span><span class="p">),</span> <span class="n">lemma_key</span><span class="p">(</span><span class="s2">"fue"</span><span class="p">)</span>
+<span class="c1"># ('mirar', 'computador', 'ser')</span>
+<span class="n">lemma_key</span><span class="p">(</span><span class="s2">"París"</span><span class="p">),</span> <span class="n">lemma_key</span><span class="p">(</span><span class="s2">"París"</span><span class="p">,</span> <span class="n">proper</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># ('parir', 'parís')</span>
 </code></pre></div>
-<p><em>Result</em>:</p>
-<p><img alt="ests" class="center" src="../../img/vocabulary.png" /></p>
+</div>
+<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>data_dir</code></td>
+<td style="text-align: center;">str/Path</td>
+<td style="text-align: center;"><code>DEFAULT_DATA_DIR.joinpath("dicts")</code></td>
+<td style="text-align: center;">Ruta al directorio del diccionario</td>
+</tr>
+</tbody>
+</table>
+<h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Atributo</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>entries</code></td>
+<td style="text-align: center;">dict[str, Entry]</td>
+<td style="text-align: center;">Entradas por lema, con las categorías gramaticales unidas</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>min_ipm</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Frecuencia mínima del diccionario (0,1)</td>
+</tr>
+</tbody>
+</table>
+<p>Un <code>Entry</code> es una tupla con nombre con los campos <code>lemma</code>, <code>pos</code> (tupla de categorías gramaticales), <code>ipm</code>, <code>range</code>, <code>dispersion</code>, <code>docs</code>.</p>
+<h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
+<h3 id="download">download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h3>
+<p>Descarga el archivo con verificación de la suma de comprobación y extrae el fichero. Un archivo dañado o sustituido se borra y se descarga de nuevo en la misma llamada; si el archivo está pero falta el fichero del diccionario, se extrae otra vez, y el diccionario analizado se vuelve a leer.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>force</code></td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;"><code>False</code></td>
+<td style="text-align: center;">Descargar el diccionario aunque ya esté descargado</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">FreqDict</span>
+
+<span class="n">fd</span> <span class="o">=</span> <span class="n">FreqDict</span><span class="p">()</span>
+<span class="n">fd</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
+<span class="n">fd</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">"license"</span><span class="p">]</span>
+<span class="c1"># 'CC BY 3.0'</span>
+</code></pre></div>
+</div>
+<h3 id="lookup">lookup<a class="headerlink" href="#lookup" title="Permanent link">&para;</a></h3>
+<p>Devuelve la entrada de un lema en cualquier combinación de mayúsculas y minúsculas, <code>None</code> para un lema que no está en el diccionario. Una forma se busca por su clave: <code>computadoras</code> por <code>lemma_key("computadoras")</code>, que es <code>computador</code>, no por <code>computadora</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>lemma</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Lema</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="n">fd</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">"Gato"</span><span class="p">)</span>
+<span class="c1"># Entry(lemma='gato', pos=('NOUN', 'ADJ'), ipm=29.08, range=40, dispersion=95, docs=232841)</span>
+<span class="n">fd</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">"dios"</span><span class="p">)</span>
+<span class="c1"># Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.42, range=40, dispersion=98, docs=566129)</span>
+</code></pre></div>
+</div>
+<h3 id="ipm">ipm<a class="headerlink" href="#ipm" title="Permanent link">&para;</a></h3>
+<p>Devuelve la frecuencia de un lema por millón de palabras, 0 para un lema que no está en el diccionario.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets.freq_dict</span><span class="w"> </span><span class="kn">import</span> <span class="n">lemma_key</span>
+
+<span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="s2">"computadora"</span><span class="p">),</span> <span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="n">lemma_key</span><span class="p">(</span><span class="s2">"computadoras"</span><span class="p">))</span>
+<span class="c1"># (0.0, 20.07)</span>
+<span class="s2">"gato"</span> <span class="ow">in</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+<span class="c1"># (True, 83785)</span>
+</code></pre></div>
+</div>
+<h3 id="get_records">get_records<a class="headerlink" href="#get_records" title="Permanent link">&para;</a></h3>
+<p>Devuelve los registros del diccionario - una fila por lema y categoría gramatical, por frecuencia - filtrados por la categoría gramatical y la frecuencia mínima. Una categoría desconocida y un límite negativo levantan <code>ParameterError</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>pos</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Categoría gramatical: <code>NOUN</code>, <code>PROPN</code>, <code>VERB</code>, <code>ADJ</code>, <code>ADV</code>, <code>PRON</code>, <code>DET</code>, <code>ADP</code> o <code>CONJ</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>min_ipm</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Frecuencia mínima</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>limit</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Número de registros</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">fd</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="s2">"PROPN"</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+<span class="c1"># {'lemma': 'méxico', 'pos': 'PROPN', 'ipm': 546.31, 'range': 40, 'dispersion': 94, 'docs': 535343}</span>
+<span class="c1"># {'lemma': 'san', 'pos': 'PROPN', 'ipm': 411.07, 'range': 40, 'dispersion': 94, 'docs': 645513}</span>
+<span class="c1"># {'lemma': 'dios', 'pos': 'PROPN', 'ipm': 405.93, 'range': 40, 'dispersion': 95, 'docs': 566129}</span>
+</code></pre></div>
+</div>
+<h3 id="get_texts">get_texts<a class="headerlink" href="#get_texts" title="Permanent link">&para;</a></h3>
+<p>Devuelve los lemas del diccionario con los mismos parámetros que <code>get_records</code>.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="nb">list</span><span class="p">(</span><span class="n">fd</span><span class="o">.</span><span class="n">get_texts</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="s2">"ADV"</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>
+<span class="c1"># ['no', 'más', 'mucho', 'ya', 'también']</span>
+</code></pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">El registro de los libros</p>
+<p>El diccionario describe la lengua escrita de los libros, buena parte de ellos académicos, y conserva lo que tienen los libros: las abreviaturas de las referencias son palabras frecuentes (<code>pp</code> 259,6 ipm, <code>cit</code> 110,5, <code>vol</code> 53,6), igual que las palabras inglesas de las bibliografías (<code>the</code> 320,3, <code>of</code> 262,4) y las grafías antiguas de las reediciones (<code>fué</code> 26,7). Los textos se reconocen a partir de escaneos y se etiquetan automáticamente, así que quedan malas lecturas y errores de etiquetado, sobre todo entre los lemas raros; el lematizador no ve el contexto, así que una forma compartida por dos lemas va a uno de ellos (<code>como</code> es siempre <code>como</code>, nunca <code>comer</code>), y una forma que no conoce se queda como está (<code>darle</code>, <code>verlo</code>).</p>
 </div>
 
 
@@ -2120,12 +2374,12 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
-        <script src="../../js/config.js"></script>
+        <script src="../../../js/config.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
       
