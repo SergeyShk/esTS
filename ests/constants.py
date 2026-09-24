@@ -754,6 +754,9 @@ DISPERSION_STATS_DESC = {
 # Marks that stay with the first word of a window of a text: quotes, brackets,
 # dashes of a dialogue and the inverted marks
 OPENING_MARKS = frozenset('«"„“‘([{—–-¿¡')
+# Opening marks that close as well - the straight quote and the dashes of an aside:
+# glued to the end of a word they close it and stay in its window
+SYMMETRIC_MARKS = frozenset('"—–-')
 DELTA_VARIANTS = {
     "burrows": "Burrows's Delta - Manhattan distance of the z-scores divided by the number of units",
     "quadratic": "Argamon's quadratic Delta - Euclidean distance of the z-scores divided by the number of units",

@@ -18,8 +18,9 @@ from ests.corpus import (
     split_windows,
     text_features,
 )
-from ests.corpus.compare import COMPARISON_COLUMNS, compare_values
+from ests.corpus.compare import COMPARISON_COLUMNS, _resampled_medians, compare_values
 from ests.exceptions import ParameterError, SourceError, SourceTypeError
+from ests.morph_stats import FINITE_MOODS
 from ests.utils import get_nlp
 
 text = (
@@ -54,7 +55,12 @@ def test_split_windows():
         "y mirará los pájaros.",
     ]
     assert split_windows(text, None) == [text]
-    assert split_windows(text, 100) == [text]
+    assert split_windows(text, 56) == [text]
+    # A text shorter than half a window gives no window by default
+    assert split_windows(text, 100) == []
+    assert split_windows(text, 100, min_words=1) == [text]
+    assert split_windows(text, 100, min_words=28) == [text]
+    assert split_windows(text, 100, min_words=29) == []
     assert split_windows(" \n" + text + "\n ", None) == [text]
     assert len(split_windows(text, 8)) == 4
     assert split_windows("¿Quién es?! Nadie… ¡¡Se fueron!!", None) == [
@@ -71,6 +77,20 @@ def test_split_windows():
         "—Todos se fueron.",
     ]
     assert split_windows("«Gato» duerme.\n¡Perro! come", 2) == ["«Gato» duerme.", "¡Perro! come"]
+    # A quote or a dash glued to the end of a word closes it and stays in its window
+    assert split_windows('uno dos tres "cuatro" cinco seis siete ocho', 4) == [
+        'uno dos tres "cuatro"',
+        "cinco seis siete ocho",
+    ]
+    assert split_windows("uno dos tres —dijo Juan— y se fue ya", 4) == [
+        "uno dos tres —dijo Juan—",
+        "y se fue ya",
+    ]
+    for glued in ("cuatro. —¿Cinco?", "cuatro.—¿Cinco?"):
+        assert split_windows(f"uno dos tres {glued} seis siete ocho", 4) == [
+            "uno dos tres cuatro.",
+            "—¿Cinco? seis siete ocho",
+        ]
     assert (
         text_features("—Se fueron —dijo él.")["punct_dash"]
         == corpus_features(["—Se fueron —dijo él."], None)["punct_dash"].iloc[0]
@@ -82,36 +102,64 @@ def test_split_windows():
     assert len(split_windows(" ".join(["a"] * 2500), 1000)) == 3
     assert len(split_windows(" ".join(["a"] * 3500), 1000)) == 4
     assert len(split_windows(" ".join(["a"] * 1499), 1000)) == 1
+    assert len(split_windows(" ".join(["a"] * 500), 1000)) == 1
+    assert split_windows(" ".join(["a"] * 499), 1000) == []
     assert split_windows("", 5) == []
     assert split_windows("... ¡!", 5) == []
     with pytest.raises(ParameterError):
         split_windows(text, 0)
+    with pytest.raises(ParameterError):
+        split_windows(text, 5, min_words=0)
 
 
 def test_text_features():
     features = text_features(text)
     prefixes = {key.split("_", 1)[0] for key in features}
     assert prefixes == {"basic", "readability", "diversity", "morph", "sents", "punct"}
-    assert features["basic_words_per_sent"] == 7.0
+    assert len(features) == 132
+    assert features["sents_mean"] == 7.0
     assert features["basic_letters_per_word"] == pytest.approx(4.5, rel=0.2)
     assert features["morph_pos_NOUN"] == pytest.approx(7 / 28)
     assert features["morph_pos_INTJ"] == 0.0
     assert features["morph_mood_Sub"] == 0.0
     assert isnan(text_features("El gato, el perro, la casa.")["morph_tense_Past"])
-    n_morph = sum(len(desc["values"]) for desc in MORPHOLOGY_STATS_DESC.values())
-    assert sum(1 for key in features if key.startswith("morph_")) == n_morph + len(
-        MORPHOLOGY_MARKERS_DESC
-    )
+    n_values = sum(len(desc["values"]) for desc in MORPHOLOGY_STATS_DESC.values())
+    # The markers of the moods repeat the shares of mood, p_ser needs the parser
+    markers = set(MORPHOLOGY_MARKERS_DESC) - set(FINITE_MOODS) - {"p_ser"}
+    assert {key for key in features if key.startswith("morph_p_")} == {
+        f"morph_{marker}" for marker in markers
+    }
+    assert sum(1 for key in features if key.startswith("morph_")) == n_values + len(markers)
     assert features["morph_number_Sing"] + features["morph_number_Plur"] == pytest.approx(1.0)
-    assert set(MORPHOLOGY_MARKERS_DESC) <= {key.removeprefix("morph_") for key in features}
-    assert features["sents_mean"] == 7.0
+    # Features that only follow the size of the window or repeat another one are left out
+    for repeated in ("readability_reading_time", "basic_p_unique_words", "basic_words_per_sent"):
+        assert repeated not in features
     assert features["punct_period"] == pytest.approx(4 / 28 * 1000)
     assert isnan(features["punct_inverted_share"])
     assert text_features("¿Vienes? ¡Ven!")["punct_inverted_share"] == 0.5
     assert all(isinstance(value, float) for value in features.values())
-    assert text_features(text, nlp=get_nlp()) == pytest.approx(features, nan_ok=True)
     with pytest.raises(SourceError):
         text_features("...")
+
+
+def test_text_features_morphology():
+    # A feature of a single value is a share of all the words, a value of several
+    # values is shared among its parts
+    features = text_features("No sé qué pasó.")
+    assert features["morph_polarity_Neg"] == 0.25
+    assert features["morph_pron_type_Int"] == features["morph_pron_type_Rel"] == 0.5
+    assert sum(features[f"morph_pron_type_{value}"] for value in ("Int", "Rel", "Dem")) == 1.0
+    assert isnan(text_features("Juan duerme.")["morph_pron_type_Int"])
+
+
+def test_text_features_parser():
+    features = text_features(text)
+    parsed = text_features(text, nlp=get_nlp())
+    assert set(parsed) - set(features) == {"morph_p_ser"}
+    assert {key: parsed[key] for key in features} == pytest.approx(features, nan_ok=True)
+    assert text_features("El gato es negro y está en casa.", nlp=get_nlp())["morph_p_ser"] == 0.5
+    with pytest.raises(SourceError, match="longer than the limit"):
+        text_features("El gato duerme. " * 70000)
 
 
 def test_sentence_rhythm():
@@ -133,7 +181,8 @@ def test_sentence_rhythm():
 def test_corpus_features():
     table = corpus_features([text, "El gato duerme."], window=8)
     assert table.index.names == ["text", "window"]
-    assert list(table.index) == [(0, 0), (0, 1), (0, 2), (0, 3), (1, 0)]
+    assert list(table.index) == [(0, 0), (0, 1), (0, 2), (0, 3)]
+    assert (1, 0) in corpus_features([text, "El gato duerme."], window=8, min_words=1).index
     assert "morph_pos_NOUN" in table.columns
     assert table.dtypes.eq(float).all()
     custom = corpus_features([text], window=None, features=lambda t: {"length": len(t)})
@@ -141,6 +190,8 @@ def test_corpus_features():
     assert corpus_features([text, "..."], window=None).shape[0] == 1
     with pytest.raises(SourceError):
         corpus_features(["...", ""])
+    with pytest.raises(SourceError):
+        corpus_features(["El gato duerme."], window=1000)
     with pytest.raises(SourceTypeError):
         corpus_features(text)
 
@@ -159,6 +210,7 @@ def test_compare_corpora():
     assert row["auc"] == 0.0
     assert row["ci_low"] <= row["median_diff"] <= row["ci_high"]
     assert row["n_cortos"] == 3 and row["n_largos"] == 3
+    assert row["n_texts_cortos"] == 3 and row["n_texts_largos"] == 3
     assert result["n_cortos"].dtype.kind == "i"
     assert result["cliff_delta"].abs().dropna().is_monotonic_decreasing
     assert (result["p_holm"].dropna() >= result["p_value"].dropna()).all()
@@ -213,6 +265,7 @@ def test_compare_corpora_options():
     assert result.equals(repeated)
     windowed = compare_corpora(short, long, window=5, features=lengths, n_bootstrap=50)
     assert windowed.loc["length", "n_A"] > 3
+    assert windowed.loc["length", "n_texts_A"] == 3
     with pytest.raises(ParameterError):
         compare_corpora(short, long, features=lengths, n_bootstrap=0)
     with pytest.raises(SourceError):
@@ -232,9 +285,11 @@ def test_compare_values():
     assert values[9] == pytest.approx(mannwhitneyu(a, b)[0] / 16)
     assert values[11] == pytest.approx(mannwhitneyu(a, b, alternative="two-sided")[1])
     assert isnan(values[12])
-    assert values[13:] == (4, 4)
+    assert values[13:] == (4, 4, 4, 4)
     assert all(isnan(value) for value in compare_values(np.array([1.0]), b)[:13])
-    assert compare_values(np.array([1.0]), b)[13:] == (1, 4)
+    assert compare_values(np.array([1.0]), b)[13:] == (1, 4, 1, 4)
+    texts = np.array([0, 0, 1, 1])
+    assert compare_values(a, b, 100, np.random.default_rng(0), texts, texts)[13:] == (4, 4, 2, 2)
 
 
 def test_effect_sizes():
@@ -255,6 +310,53 @@ def test_effect_sizes():
         bootstrap_median_diff(a, b, n_bootstrap=0)
     with pytest.raises(ParameterError):
         bootstrap_median_diff(a, b, confidence=1.0)
+
+
+def test_cluster_bootstrap():
+    # Windows alike within a text: resampling whole texts widens the interval
+    rng = np.random.default_rng(1)
+    texts = np.repeat(np.arange(4), 20)
+    a = np.repeat([10.0, 12.0, 14.0, 16.0], 20) + rng.normal(scale=0.1, size=80)
+    b = np.repeat([9.0, 11.0, 13.0, 15.0], 20) + rng.normal(scale=0.1, size=80)
+    windows = bootstrap_median_diff(a, b, n_bootstrap=500, rng=np.random.default_rng(0))
+    clusters = bootstrap_median_diff(
+        a, b, n_bootstrap=500, rng=np.random.default_rng(0), texts_a=texts, texts_b=texts
+    )
+    assert clusters[1] - clusters[0] > 1.5 * (windows[1] - windows[0])
+    assert clusters[0] <= 1.0 <= clusters[1]
+    assert all(
+        isnan(value) for value in bootstrap_median_diff(a, b, texts_a=np.zeros(80), texts_b=texts)
+    )
+    # The medians of the draws equal np.median of the drawn texts put together
+    values = rng.normal(size=40)
+    groups = rng.integers(0, 6, size=40)
+    medians = _resampled_medians(values, groups, 200, np.random.default_rng(0))
+    labels = np.unique(groups)
+    draws = np.random.default_rng(0).multinomial(
+        len(labels), np.full(len(labels), 1 / len(labels)), 200
+    )
+    expected = [
+        np.median(
+            np.concatenate(
+                [
+                    np.repeat(values[groups == label], n)
+                    for label, n in zip(labels, row, strict=True)
+                ]
+            )
+        )
+        for row in draws
+    ]
+    assert medians == pytest.approx(expected)
+
+
+def test_compare_features_texts():
+    # corpus_features marks the windows of a text, a table without the level takes rows as texts
+    table_a = corpus_features(short, window=3, features=lambda t: {"length": float(len(t))})
+    table_b = corpus_features(long, window=3, features=lambda t: {"length": float(len(t))})
+    result = compare_features(table_a, table_b, n_bootstrap=50)
+    assert result.loc["length", "n_texts_A"] == 3 < result.loc["length", "n_A"]
+    flat = compare_features(table_a.reset_index(drop=True), table_b, n_bootstrap=50)
+    assert flat.loc["length", "n_texts_A"] == flat.loc["length", "n_A"]
 
 
 def test_holm_correction():

@@ -39,7 +39,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Readability metrics](https://sergeyshk.github.io/esTS/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX, with a consensus grade, the school stages of Spain and reading time
 * **[Lexical diversity metrics](https://sergeyshk.github.io/esTS/stats/diversity_stats/)** - TTR and its variations, MATTR, MSTTR, MTLD, HD-D, Simpson's and Yule's indices, entropy, Zipf's and Heaps' laws
 * **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
-* **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text, a KWIC concordance and the stylometry of authorship: Burrows's Delta with its variants, Zeta, the Mendenhall curve, the profile of the function words; the comparison of two corpora by 140 features of a text with effect sizes
+* **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text, a KWIC concordance and the stylometry of authorship: Burrows's Delta with its variants, Zeta, the Mendenhall curve, the profile of the function words; the comparison of two corpora by 132 features of a text with effect sizes
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
 * **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 255 Spanish discourse markers
 * **[Syntactic statistics](https://sergeyshk.github.io/esTS/stats/syntax_stats/)** - the dependency tree by distances, depth, clauses and coordination, with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
@@ -453,7 +453,7 @@ The library compares corpora and describes the use of a word, with the measures 
 *   the dispersion of a word over the parts of a text: DP of Gries, normalized DP, Juilland's D, Carroll's D2, Rosengren's S and the Kullback-Leibler divergence
 *   a KWIC concordance by word form or by lemma
 *   stylometry: the distances between texts by Burrows's Delta and its variants, with the attribution of a text to reference authors, the markers of preferred and avoided words by Zeta, Kilgarriff's chi-square, the Mendenhall curve and the profile of the function words
-*   the comparison of two corpora by 140 features of a text over windows of equal size: Cliff's delta, Cohen's d and the AUC of every feature, the Mann-Whitney test with Holm's correction and a bootstrap interval of the difference of the medians
+*   the comparison of two corpora by 132 features of a text over windows of about the same size: Cliff's delta, Cohen's d and the AUC of every feature, the Mann-Whitney test with Holm's correction and a bootstrap interval of the difference of the medians that resamples whole texts
 
 ```python
 >>> from ests import WordsExtractor

@@ -7,22 +7,26 @@
 
 Comparación de dos corpus por todos los rasgos de un texto a la vez: qué estadísticas distinguen autores, géneros, traducciones, textos humanos y generados, y en qué medida. Para palabras sueltas hace lo mismo [`keyness`](keyness.md), para las distancias entre textos, [`delta`](stylometry.md#delta).
 
-Los textos de ambos corpus se dividen en ventanas del mismo tamaño para que los rasgos no dependan de la longitud de un texto (`split_windows`: el número de ventanas es la razón del número de palabras al tamaño de una ventana redondeada al entero más próximo, al menos una, y las partes son iguales; un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, los signos `¿` y `¡` - para que no se pierda ninguna puntuación). Los rasgos se calculan para cada ventana (`text_features` o una función propia), y para cada rasgo se comparan los dos conjuntos de valores. El resultado es un `DataFrame` rasgo × estadísticas ordenado por el valor absoluto descendente de la delta de Cliff.
+Los textos de ambos corpus se dividen en ventanas de un tamaño parecido para que los rasgos no dependan de la longitud de un texto. En `split_windows` el número de ventanas es la razón del número de palabras al tamaño de una ventana redondeada al entero más próximo, al menos una, y las partes son iguales: un texto largo da ventanas a pocos puntos porcentuales del tamaño, un texto de una a dos ventanas da ventanas de 750 a 1499 palabras con una ventana de 1000, y un texto más corto que `min_words` - media ventana por defecto - no da ninguna, para que los textos cortos no enfrenten ventanas de tamaños muy distintos a las demás. Un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, los signos `¿` y `¡` - para que no se pierda ninguna puntuación, mientras que unas comillas rectas o una raya pegadas al final de la palabra anterior la cierran y se quedan con ella (`"cuatro"`, `—dijo Juan—`). Los rasgos se calculan para cada ventana (`text_features` o una función propia), y para cada rasgo se comparan los dos conjuntos de valores. El resultado es un `DataFrame` rasgo × estadísticas ordenado por el valor absoluto descendente de la delta de Cliff.
 
 ## Rasgos
 
-`text_features(text, nlp=None)` devuelve 140 rasgos con un prefijo según su fuente:
+`text_features(text, nlp=None)` devuelve 132 rasgos con un prefijo según su fuente:
 
 | Prefijo | Rasgos | Fuente |
 | :------ | :----- | :----- |
-| `basic_` | proporciones de palabras únicas, largas, complejas, simples, monosílabas y polisílabas, de letras, espacios y signos de puntuación; letras y sílabas por palabra, palabras por oración | [`BasicStats`](../stats/basic_stats.md) |
-| `readability_` | todas las fórmulas de legibilidad, el grado de consenso, el tiempo de lectura | [`ReadabilityStats`](../stats/readability_stats.md) |
+| `basic_` | proporciones de palabras largas, complejas, simples, monosílabas y polisílabas, de letras, espacios y signos de puntuación; letras y sílabas por palabra | [`BasicStats`](../stats/basic_stats.md) |
+| `readability_` | todas las fórmulas de legibilidad y el grado de consenso | [`ReadabilityStats`](../stats/readability_stats.md) |
 | `diversity_` | todas las medidas de diversidad léxica | [`DiversityStats`](../stats/diversity_stats.md) |
-| `morph_` | proporciones de las categorías gramaticales entre las palabras (`morph_pos_NOUN`), proporciones de los valores dentro de cada rasgo (`morph_mood_Sub`, `morph_tense_Past`) y los marcadores del español (`morph_p_ser`, `morph_p_mente_adverbs`) | [`MorphStats`](../stats/morph_stats.md) con el modelo de spaCy |
+| `morph_` | proporciones de los valores de cada rasgo morfológico (`morph_pos_NOUN`, `morph_mood_Sub`, `morph_polarity_Neg`) y los marcadores del español (`morph_p_gerund`, `morph_p_mente_adverbs`) | [`MorphStats`](../stats/morph_stats.md) con el modelo de spaCy |
 | `sents_` | longitud media de una oración en palabras, desviación típica, coeficiente de variación, autocorrelación de las longitudes vecinas (`sentence_rhythm`): el ritmo del texto | [`SentsExtractor`](../extractors/sentences.md) |
 | `punct_` | frecuencias de los signos de puntuación por tipo por cada 1000 palabras y la proporción de los signos de apertura | [`punctuation_profile`](../stats/basic_stats.md#punctuation) |
 
-Un valor de un rasgo morfológico que no aparece en una ventana da 0; un rasgo ausente de la ventana por completo (sin verbos no hay tiempo) da `nan`. La morfología necesita el análisis del modelo [`es_core_news_sm`](../installation.md#model) o del pipeline de `nlp`, que se lleva la mayor parte del tiempo: una ventana de 1000 palabras tarda unos 0.1 s. Un texto más largo que el `max_length` del pipeline lanza `SourceError`, así que una novela se compara por ventanas y no entera. Otro pipeline entra en la comparación con `functools.partial(text_features, nlp=nlp)`.
+Cada rasgo se cuenta una sola vez. El tiempo de lectura solo sigue el número de palabras de una ventana y se deja fuera; la proporción de palabras únicas repite `diversity_ttr`, las palabras por oración repiten `sents_mean` y los marcadores de los modos repiten `morph_mood_*`, así que también se dejan fuera.
+
+Las categorías gramaticales y los rasgos de un solo valor - polaridad, cortesía, posesivo, reflexivo - son proporciones de todas las palabras (`morph_polarity_Neg` es la proporción de las negaciones), los demás rasgos, proporciones de las palabras que los llevan (`morph_mood_Sub` es el subjuntivo entre los modos). Un valor que no aparece en una ventana da 0; un rasgo ausente de la ventana por completo (sin verbos no hay tiempo) da `nan`. Un valor de varios valores, como el modelo escribe `PronType=Int,Rel` de *que* y `Case=Acc,Nom` de *usted*, se reparte a partes iguales entre sus partes, así que las proporciones de un rasgo siguen sumando uno.
+
+La morfología la analiza el modelo [`es_core_news_sm`](../installation.md#model) sin su analizador sintáctico, lo que se lleva la mayor parte del tiempo: una ventana de 1000 palabras tarda unos 0.07 s. El análisis de dependencias añadiría un tercio más para un solo marcador, `morph_p_ser`, que lee de él las cópulas; un pipeline pasado en `nlp` se ejecuta entero salvo el reconocedor de entidades, así que `functools.partial(text_features, nlp=get_nlp())` devuelve el analizador sintáctico y `morph_p_ser`, y otro modelo entra en la comparación del mismo modo. Un texto más largo que el `max_length` del pipeline lanza `SourceError`, así que una novela se compara por ventanas y no entera.
 
 `corpus_features(texts, window, features)` devuelve la matriz de rasgos de las ventanas con el índice (número del texto, número de la ventana), para clasificadores propios, y `compare_features(table_a, table_b, labels, n_bootstrap, seed)` compara dos tablas así: `compare_corpora` es `corpus_features` para cada corpus seguido de `compare_features`. La división sirve cuando los rasgos se calculan una vez para varios corpus y hay que comparar pares, por ejemplo, todos los autores dos a dos.
 
@@ -42,8 +46,12 @@ Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_
 | `u`, `p_value` | el estadístico U de Mann-Whitney y el valor p bilateral (`scipy.stats.mannwhitneyu`) |
 | `p_holm` | el valor p con la corrección de Holm por el número de rasgos (`holm_correction`): una tabla de cien filas sin corrección invita a falsos descubrimientos |
 | `n_A`, `n_B` | número de ventanas con un valor definido |
+| `n_texts_A`, `n_texts_B` | número de textos detrás de esas ventanas |
 
 La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.
+
+!!! warning "Las ventanas de un texto no son independientes"
+    La prueba y los tamaños del efecto toman cada ventana por una observación independiente, y las ventanas de un texto no lo son: comparten su trama, sus personajes, su narrador y su edición. Con pocos textos en un corpus los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus: en el ejemplo de abajo dos novelas de un mismo autor difieren en 40 rasgos según la misma prueba. El bootstrap, en cambio, remuestrea textos enteros, el nivel `text` del índice que pone `corpus_features` (un bootstrap por conglomerados), así que su intervalo tiene en cuenta la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con solo unos pocos. Una tabla propia sin ese nivel toma cada fila por un texto aparte.
 
 ## Parámetros
 
@@ -56,10 +64,11 @@ La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí
 | `labels` | tuple[str, str] | `("A", "B")` | Nombres de los corpus para las columnas |
 | `n_bootstrap` | int | `1000` | Número de remuestras bootstrap |
 | `seed` | int | `0` | Semilla del generador de números aleatorios; `None` - una aleatoria |
+| `min_words` | int | `None` | Menor número de palabras de una ventana; `None` - media ventana, o una cuando `window` es `None` |
 
 ## Ejemplo de uso
 
-Galdós frente a Unamuno, tres novelas de cada uno de [Project Gutenberg](https://www.gutenberg.org): *Marianela*, *Misericordia* y *Torquemada en la hoguera* frente a *Niebla*, *Abel Sánchez* y *La tía Tula*: 197 y 117 ventanas de 1000 palabras, alrededor de medio minuto tras la descarga.
+Galdós frente a Unamuno, tres novelas de cada uno de [Project Gutenberg](https://www.gutenberg.org): *Marianela*, *Misericordia* y *Torquemada en la hoguera* frente a *Niebla*, *Abel Sánchez* y *La tía Tula*: 197 y 117 ventanas de 1000 palabras, menos de medio minuto tras la descarga.
 
 !!! example "Ejemplo"
 
@@ -98,33 +107,43 @@ Galdós frente a Unamuno, tres novelas de cada uno de [Project Gutenberg](https:
         "basic_letters_per_word",
         "readability_lix",
         "morph_p_gerund",
+        "morph_polarity_Neg",
         "sents_mean",
         "punct_dash",
         "punct_exclamation",
+        "diversity_yule_k",
     ]
     result.loc[features, columns].round(3)
+
+    result.loc["sents_mean", ["n_Galdós", "n_Unamuno", "n_texts_Galdós", "n_texts_Unamuno"]].to_dict()
     ```
 
     _Resultado_:
 
     ``` bash
-                          median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    basic_p_unique_words          0.494           0.420   0.069    0.084    3.159        0.976  0.988     0.0
-    diversity_ttr                 0.494           0.420   0.069    0.084    3.159        0.976  0.988     0.0
-    diversity_httr                0.898           0.874   0.022    0.027    3.118        0.975  0.988     0.0
-    diversity_brunet_w           10.775          11.528  -0.857   -0.695   -3.073       -0.975  0.012     0.0
-    diversity_dttr               29.349          23.840   5.077    6.113    3.048        0.975  0.987     0.0
+                        median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
+    diversity_ttr               0.494           0.420   0.066    0.088    3.159        0.976  0.988     0.0
+    diversity_httr              0.898           0.874   0.021    0.028    3.118        0.975  0.988     0.0
+    diversity_brunet_w         10.775          11.528  -0.897   -0.660   -3.073       -0.975  0.012     0.0
+    diversity_dttr             29.349          23.840   4.804    6.488    3.048        0.975  0.987     0.0
+    diversity_mttr              0.034           0.042  -0.009   -0.007   -3.103       -0.975  0.013     0.0
 
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    basic_letters_per_word          4.499           4.152   0.290    0.383    1.734        0.784  0.892     0.0
-    readability_lix                40.006          30.074   8.446   11.936    1.285        0.743  0.872     0.0
-    morph_p_gerund                  0.070           0.037   0.027    0.040    1.475        0.734  0.867     0.0
-    sents_mean                     17.386          11.364   4.892    7.499    1.016        0.672  0.836     0.0
-    punct_dash                      9.045          39.157 -34.148  -26.955   -1.810       -0.722  0.139     0.0
-    punct_exclamation               9.970          24.096 -20.040  -11.960   -1.323       -0.634  0.183     0.0
+    basic_letters_per_word          4.499           4.152   0.272    0.433    1.734        0.784  0.892     0.0
+    readability_lix                40.006          30.074   7.212   15.156    1.285        0.743  0.872     0.0
+    morph_p_gerund                  0.069           0.037   0.030    0.036    1.458        0.727  0.864     0.0
+    morph_polarity_Neg              0.016           0.027  -0.013   -0.008   -1.320       -0.613  0.193     0.0
+    sents_mean                     17.386          11.364   3.195    8.500    1.016        0.672  0.836     0.0
+    punct_dash                      9.045          39.157 -38.658  -23.021   -1.810       -0.722  0.139     0.0
+    punct_exclamation               9.970          24.096 -25.033   -5.744   -1.323       -0.634  0.183     0.0
+    diversity_yule_k              104.572         105.919  -9.766    6.096   -0.257       -0.117  0.442     1.0
+
+    {'n_Galdós': 197, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós tiene el vocabulario más rico: en el 99% de los pares de ventanas la suya tiene la mayor proporción de palabras únicas (AUC 0.988). Las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta por encima de 0.9, mientras que el índice de Simpson, la K de Yule y la Vm de Herdan, que ponderan las palabras frecuentes, apenas lo hacen (por debajo de 0.12): la diferencia está en el vocabulario raro y no en la repetición de las palabras frecuentes. Sus palabras y oraciones son más largas, y usa casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: cuatro veces más rayas por cada 1000 palabras y más del doble de signos de exclamación y de interrogación. De los 140 rasgos, 92 tienen un valor p corregido por debajo de 0.01 y 63 muestran un efecto grande según la delta de Cliff: con cientos de ventanas la significación sale barata, y lo que importa es el tamaño del efecto.
+Galdós tiene el vocabulario más rico: en el 99% de los pares de ventanas la suya tiene la mayor proporción de palabras distintas (AUC 0.988). Las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta por encima de 0.9, mientras que el índice de Simpson, la K de Yule y la Vm de Herdan, que ponderan las palabras frecuentes, apenas lo hacen (por debajo de 0.12): la diferencia está en el vocabulario raro y no en la repetición de las palabras frecuentes. Sus palabras y oraciones son más largas, y usa casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo y en negaciones: cuatro veces más rayas por cada 1000 palabras, más del doble de signos de exclamación y de interrogación y más negaciones entre las palabras.
+
+De los 132 rasgos, 91 tienen un valor p corregido por debajo de 0.01 y 62 muestran un efecto grande según la delta de Cliff, pero la prueba toma las 314 ventanas por independientes, y salen de seis novelas: según la misma prueba *Marianela* y *Torquemada en la hoguera*, dos novelas de Galdós, difieren en 40 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura - para la longitud de una oración va de 3.2 a 8.5 palabras, donde las ventanas solas darían de 4.9 a 7.5 -, aunque tres textos por lado también son pocos para un bootstrap, y una comparación de autores pide tantos textos como se puedan reunir.
 
 Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:
 
