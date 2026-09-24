@@ -20,11 +20,18 @@ from .syllables import count_syllables
 from .utils import count_letters, has_words, iter_doc_words
 
 ELLIPSIS_PATTERN = re.compile(r"…|\.{3,}|(?<=[?!])\.{2}")
-# A hyphen after whitespace or at the start of a line, or before a space, is
-# a dash, the way the raya is typed in plain-text corpora (-Hola -dijo Juan);
-# a hyphen before a digit is a sign, a hyphen at the end of a line inside
+# A run of two or more hyphens, a hyphen after whitespace or at the start of
+# a line, after a closing mark (the underscore of the italics of Project
+# Gutenberg included), before a space or between a letter and an opening mark,
+# is a dash, the way the raya is typed in plain-text corpora (--Hola --dijo Juan,
+# sí--dijo, -Hola -dijo Juan, cuatro.-¿Cinco?, sí-¿y qué?); a hyphen before
+# a digit is a sign, a hyphen inside a word or at the end of a line inside
 # a word (pala-\nbra) is a hyphen
-DASH_PATTERN = re.compile(r"(?:(?<=\s)|^)-(?!\d)|-(?=[ \t]|\Z)", re.MULTILINE)
+DASH_PATTERN = re.compile(
+    r"-{2,}|(?:(?<=\s)|(?<=[.,;:!?…»”\"')\]_])|^)-(?!\d)|-(?=[ \t]|\Z)"
+    r"|(?<=[^\W\d_])-(?=[¿¡«“\"'(\[_])",
+    re.MULTILINE,
+)
 _DELETE_SPACES = str.maketrans("", "", "".join(SPACES))
 PUNCTUATION_CHARS = {
     ",": "comma",
@@ -37,6 +44,7 @@ PUNCTUATION_CHARS = {
     ";": "semicolon",
     "—": "dash",
     "–": "dash",
+    "―": "dash",
     "-": "hyphen",
     "«": "angle_quotes",
     "»": "angle_quotes",
@@ -260,11 +268,14 @@ def count_punctuations(text: str) -> dict[str, int]:
         question marks), ellipses (the character …, three or more periods,
         or two periods after ? and ! count as one mark whose periods are not
         periods: "¿Quién?.." is a question and an ellipsis), colons,
-        semicolons, dashes (— and –, as well as a hyphen after whitespace
-        or at the start of a line, or before a space, the way the raya is
-        typed in plain-text corpora: "-Hola -dijo Juan", "- Se fueron -
-        dijo"), hyphens inside words, before digits and at the end of
-        a line inside a word (teórico-práctico, 1990-1995, -5, pala-\nbra),
+        semicolons, dashes (—, – and the horizontal bar ―, as well as a run
+        of two or more hyphens, a hyphen after whitespace, at the start of
+        a line or after a closing mark, before a space or between a letter and
+        an opening mark, the way the raya is typed in plain-text corpora:
+        "--Hola --dijo Juan", "-Hola -dijo Juan", "- Se fueron - dijo",
+        "cuatro.-¿Cinco?", "sí-¿y qué?"), hyphens inside words, before
+        digits and at the end of a line inside a word (teórico-práctico,
+        1990-1995, -5, pala-\nbra),
         guillemets «», straight and curly quotes "“”‘’ of the three
         levels of the orthography, parentheses and the other marks: every
         remaining character of PUNCTUATIONS or of the Unicode categories P
@@ -278,8 +289,9 @@ def count_punctuations(text: str) -> dict[str, int]:
         dict[str, int]: Number of marks of each type in the order of PUNCTUATION_TYPES
     """
     counts = dict.fromkeys(PUNCTUATION_TYPES, 0)
-    rest, counts["ellipsis"] = ELLIPSIS_PATTERN.subn("", text)
-    rest, counts["dash"] = DASH_PATTERN.subn("", rest)
+    # The dashes first, so that one after an ellipsis still sees it (sé...-dijo)
+    rest, counts["dash"] = DASH_PATTERN.subn("", text)
+    rest, counts["ellipsis"] = ELLIPSIS_PATTERN.subn("", rest)
     chars = Counter(rest)
     for char, kind in PUNCTUATION_CHARS.items():
         counts[kind] += chars[char]

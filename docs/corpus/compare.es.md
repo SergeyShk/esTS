@@ -51,7 +51,7 @@ Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_
 La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.
 
 !!! warning "Las ventanas de un texto no son independientes"
-    La prueba y los tamaños del efecto toman cada ventana por una observación independiente, y las ventanas de un texto no lo son: comparten su trama, sus personajes, su narrador y su edición. Con pocos textos en un corpus los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus: en el ejemplo de abajo dos novelas de un mismo autor difieren en 40 rasgos según la misma prueba. El bootstrap, en cambio, remuestrea textos enteros, el nivel `text` del índice que pone `corpus_features` (un bootstrap por conglomerados), así que su intervalo tiene en cuenta la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con solo unos pocos. Una tabla propia sin ese nivel toma cada fila por un texto aparte.
+    La prueba y los tamaños del efecto toman cada ventana por una observación independiente, y las ventanas de un texto no lo son: comparten su trama, sus personajes, su narrador y su edición. Con pocos textos en un corpus los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus: en el ejemplo de abajo dos novelas de un mismo autor difieren en 42 rasgos según la misma prueba. El bootstrap, en cambio, remuestrea textos enteros, el nivel `text` del índice que pone `corpus_features` (un bootstrap por conglomerados), así que su intervalo tiene en cuenta la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con solo unos pocos. Una tabla propia sin ese nivel toma cada fila por un texto aparte.
 
 ## Parámetros
 
@@ -68,7 +68,7 @@ La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí
 
 ## Ejemplo de uso
 
-Galdós frente a Unamuno, tres novelas de cada uno de [Project Gutenberg](https://www.gutenberg.org): *Marianela*, *Misericordia* y *Torquemada en la hoguera* frente a *Niebla*, *Abel Sánchez* y *La tía Tula*: 197 y 117 ventanas de 1000 palabras, menos de medio minuto tras la descarga.
+Galdós frente a Unamuno, tres novelas de cada uno de [Project Gutenberg](https://www.gutenberg.org): *Marianela*, *Misericordia* y *Torquemada en la hoguera* frente a *Niebla*, *Abel Sánchez* y *La tía Tula*: 197 y 118 ventanas de 1000 palabras, menos de medio minuto tras la descarga.
 
 !!! example "Ejemplo"
 
@@ -121,29 +121,29 @@ Galdós frente a Unamuno, tres novelas de cada uno de [Project Gutenberg](https:
     _Resultado_:
 
     ``` bash
-                        median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    diversity_ttr               0.494           0.420   0.066    0.088    3.159        0.976  0.988     0.0
-    diversity_httr              0.898           0.874   0.021    0.028    3.118        0.975  0.988     0.0
-    diversity_brunet_w         10.775          11.528  -0.897   -0.660   -3.073       -0.975  0.012     0.0
-    diversity_dttr             29.349          23.840   4.804    6.488    3.048        0.975  0.987     0.0
-    diversity_mttr              0.034           0.042  -0.009   -0.007   -3.103       -0.975  0.013     0.0
+                      median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
+    diversity_mtldw         106.450          65.982  36.809   46.110    3.338        0.990  0.995     0.0
+    diversity_mamtld        104.846          64.544  36.425   45.306    3.235        0.986  0.993     0.0
+    diversity_mattr           0.819           0.769   0.046    0.054    3.196        0.984  0.992     0.0
+    diversity_mtld          104.833          64.280  36.841   45.884    3.103        0.982  0.991     0.0
+    diversity_msttr           0.818           0.771   0.046    0.051    2.952        0.975  0.988     0.0
 
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    basic_letters_per_word          4.499           4.152   0.272    0.433    1.734        0.784  0.892     0.0
-    readability_lix                40.006          30.074   7.212   15.156    1.285        0.743  0.872     0.0
-    morph_p_gerund                  0.069           0.037   0.030    0.036    1.458        0.727  0.864     0.0
-    morph_polarity_Neg              0.016           0.027  -0.013   -0.008   -1.320       -0.613  0.193     0.0
-    sents_mean                     17.386          11.364   3.195    8.500    1.016        0.672  0.836     0.0
-    punct_dash                      9.045          39.157 -38.658  -23.021   -1.810       -0.722  0.139     0.0
-    punct_exclamation               9.970          24.096 -25.033   -5.744   -1.323       -0.634  0.183     0.0
-    diversity_yule_k              104.572         105.919  -9.766    6.096   -0.257       -0.117  0.442     1.0
+    basic_letters_per_word          4.474           4.127   0.264    0.444    1.808        0.811  0.906   0.000
+    readability_lix                39.707          29.664   7.377   14.943    1.276        0.738  0.869   0.000
+    morph_p_gerund                  0.069           0.036   0.030    0.035    1.452        0.725  0.862   0.000
+    morph_polarity_Neg              0.017           0.029  -0.016   -0.010   -1.314       -0.617  0.192   0.000
+    sents_mean                     17.362          11.438   3.301    8.697    1.002        0.660  0.830   0.000
+    punct_dash                     14.896          45.682 -45.745  -19.686   -1.461       -0.660  0.170   0.000
+    punct_exclamation               9.009          23.845 -24.826   -3.270   -1.317       -0.641  0.179   0.000
+    diversity_yule_k              106.152         112.396 -14.536   -1.802   -0.577       -0.292  0.354   0.001
 
-    {'n_Galdós': 197, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
+    {'n_Galdós': 197, 'n_Unamuno': 118, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós tiene el vocabulario más rico: en el 99% de los pares de ventanas la suya tiene la mayor proporción de palabras distintas (AUC 0.988). Las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta por encima de 0.9, mientras que el índice de Simpson, la K de Yule y la Vm de Herdan, que ponderan las palabras frecuentes, apenas lo hacen (por debajo de 0.12): la diferencia está en el vocabulario raro y no en la repetición de las palabras frecuentes. Sus palabras y oraciones son más largas, y usa casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo y en negaciones: cuatro veces más rayas por cada 1000 palabras, más del doble de signos de exclamación y de interrogación y más negaciones entre las palabras.
+Galdós tiene el vocabulario más rico: en el 98.5% de los pares de ventanas la suya tiene la mayor proporción de palabras distintas (el AUC de `diversity_ttr` es 0.985). Las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta por encima de 0.9, mientras que el índice de Simpson y la K de Yule, que ponderan las palabras frecuentes, lo hacen mucho menos (0.29, un efecto pequeño) y la Vm de Herdan apenas (0.11): la diferencia está sobre todo en el vocabulario raro y no en la repetición de las palabras frecuentes. Sus palabras y oraciones son más largas, y usa casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo y en negaciones: tres veces más rayas por cada 1000 palabras, más del doble de signos de exclamación y de interrogación y más negaciones entre las palabras.
 
-De los 132 rasgos, 91 tienen un valor p corregido por debajo de 0.01 y 62 muestran un efecto grande según la delta de Cliff, pero la prueba toma las 314 ventanas por independientes, y salen de seis novelas: según la misma prueba *Marianela* y *Torquemada en la hoguera*, dos novelas de Galdós, difieren en 40 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura - para la longitud de una oración va de 3.2 a 8.5 palabras, donde las ventanas solas darían de 4.9 a 7.5 -, aunque tres textos por lado también son pocos para un bootstrap, y una comparación de autores pide tantos textos como se puedan reunir.
+De los 132 rasgos, 97 tienen un valor p corregido por debajo de 0.01 y 67 muestran un efecto grande según la delta de Cliff, pero la prueba toma las 315 ventanas por independientes, y salen de seis novelas: según la misma prueba *Marianela* y *Torquemada en la hoguera*, dos novelas de Galdós, difieren en 42 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura - para la longitud de una oración va de 3.3 a 8.7 palabras, donde las ventanas solas darían de 5.1 a 7.4 -, aunque tres textos por lado también son pocos para un bootstrap, y una comparación de autores pide tantos textos como se puedan reunir.
 
 Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:
 

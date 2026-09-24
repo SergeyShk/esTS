@@ -100,4 +100,4 @@ Six novels from [Project Gutenberg](https://www.gutenberg.org), three by Galdós
 
     ![ests](../img/mds_mendenhall.png){: .center }
 
-Cosine Delta over the 100 most frequent words separates the authors: the dendrogram joins the novels of each author before it joins the two groups, and the first principal component, 46.6% of the variance, puts Galdós on one side and Unamuno on the other. The Mendenhall curves hardly differ - word length is a weak feature on its own.
+Cosine Delta over the 100 most frequent words separates the authors: the dendrogram joins the novels of each author before it joins the two groups, and the first principal component, 47.8% of the variance, puts Galdós on one side and Unamuno on the other. The Mendenhall curves hardly differ - word length is a weak feature on its own.

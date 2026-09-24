@@ -51,7 +51,7 @@ For a feature with the values $x_1 \dots x_{n_A}$ in corpus A and $y_1 \dots y_{
 Cliff's delta and the AUC come from the same U statistic and agree with each other; Cohen's d is sensitive to outliers and to departures from normality, so it is best read next to the delta.
 
 !!! warning "Windows of one text are not independent"
-    The test and the effect sizes take every window for an independent observation, and the windows of one text are not: they share its plot, characters, narrator and edition. With few texts in a corpus the p-values are too small and reflect the texts chosen as much as the corpora - in the example below two novels of one author differ in 40 features by the same test. The bootstrap resamples whole texts instead, the level `text` of the index that `corpus_features` sets (a cluster bootstrap), so its interval accounts for the spread between the texts; it needs at least two texts on each side and is rough with only a few. A table of one's own without that level has every row taken for a text of its own.
+    The test and the effect sizes take every window for an independent observation, and the windows of one text are not: they share its plot, characters, narrator and edition. With few texts in a corpus the p-values are too small and reflect the texts chosen as much as the corpora - in the example below two novels of one author differ in 42 features by the same test. The bootstrap resamples whole texts instead, the level `text` of the index that `corpus_features` sets (a cluster bootstrap), so its interval accounts for the spread between the texts; it needs at least two texts on each side and is rough with only a few. A table of one's own without that level has every row taken for a text of its own.
 
 ## Parameters
 
@@ -68,7 +68,7 @@ Cliff's delta and the AUC come from the same U statistic and agree with each oth
 
 ## Usage example
 
-Galdós against Unamuno, three novels each from [Project Gutenberg](https://www.gutenberg.org): *Marianela*, *Misericordia* and *Torquemada en la hoguera* against *Niebla*, *Abel Sánchez* and *La tía Tula* - 197 and 117 windows of 1000 words, under half a minute after the download.
+Galdós against Unamuno, three novels each from [Project Gutenberg](https://www.gutenberg.org): *Marianela*, *Misericordia* and *Torquemada en la hoguera* against *Niebla*, *Abel Sánchez* and *La tía Tula* - 197 and 118 windows of 1000 words, under half a minute after the download.
 
 !!! example "Example"
 
@@ -121,29 +121,29 @@ Galdós against Unamuno, three novels each from [Project Gutenberg](https://www.
     _Result_:
 
     ``` bash
-                        median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    diversity_ttr               0.494           0.420   0.066    0.088    3.159        0.976  0.988     0.0
-    diversity_httr              0.898           0.874   0.021    0.028    3.118        0.975  0.988     0.0
-    diversity_brunet_w         10.775          11.528  -0.897   -0.660   -3.073       -0.975  0.012     0.0
-    diversity_dttr             29.349          23.840   4.804    6.488    3.048        0.975  0.987     0.0
-    diversity_mttr              0.034           0.042  -0.009   -0.007   -3.103       -0.975  0.013     0.0
+                      median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
+    diversity_mtldw         106.450          65.982  36.809   46.110    3.338        0.990  0.995     0.0
+    diversity_mamtld        104.846          64.544  36.425   45.306    3.235        0.986  0.993     0.0
+    diversity_mattr           0.819           0.769   0.046    0.054    3.196        0.984  0.992     0.0
+    diversity_mtld          104.833          64.280  36.841   45.884    3.103        0.982  0.991     0.0
+    diversity_msttr           0.818           0.771   0.046    0.051    2.952        0.975  0.988     0.0
 
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    basic_letters_per_word          4.499           4.152   0.272    0.433    1.734        0.784  0.892     0.0
-    readability_lix                40.006          30.074   7.212   15.156    1.285        0.743  0.872     0.0
-    morph_p_gerund                  0.069           0.037   0.030    0.036    1.458        0.727  0.864     0.0
-    morph_polarity_Neg              0.016           0.027  -0.013   -0.008   -1.320       -0.613  0.193     0.0
-    sents_mean                     17.386          11.364   3.195    8.500    1.016        0.672  0.836     0.0
-    punct_dash                      9.045          39.157 -38.658  -23.021   -1.810       -0.722  0.139     0.0
-    punct_exclamation               9.970          24.096 -25.033   -5.744   -1.323       -0.634  0.183     0.0
-    diversity_yule_k              104.572         105.919  -9.766    6.096   -0.257       -0.117  0.442     1.0
+    basic_letters_per_word          4.474           4.127   0.264    0.444    1.808        0.811  0.906   0.000
+    readability_lix                39.707          29.664   7.377   14.943    1.276        0.738  0.869   0.000
+    morph_p_gerund                  0.069           0.036   0.030    0.035    1.452        0.725  0.862   0.000
+    morph_polarity_Neg              0.017           0.029  -0.016   -0.010   -1.314       -0.617  0.192   0.000
+    sents_mean                     17.362          11.438   3.301    8.697    1.002        0.660  0.830   0.000
+    punct_dash                     14.896          45.682 -45.745  -19.686   -1.461       -0.660  0.170   0.000
+    punct_exclamation               9.009          23.845 -24.826   -3.270   -1.317       -0.641  0.179   0.000
+    diversity_yule_k              106.152         112.396 -14.536   -1.802   -0.577       -0.292  0.354   0.001
 
-    {'n_Galdós': 197, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
+    {'n_Galdós': 197, 'n_Unamuno': 118, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós has the richer vocabulary: in 99% of the pairs of windows his has the larger share of distinct words (AUC 0.988). The measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta above 0.9, while Simpson's index, Yule's K and Herdan's Vm, which weigh the frequent words, hardly do (below 0.12): the difference lies in the rare vocabulary and not in the repetition of the frequent words. His words and sentences are longer, and he uses nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue and in negations: four times as many dashes per 1000 words, more than twice as many exclamation and question marks, and more negations among the words.
+Galdós has the richer vocabulary: in 98.5% of the pairs of windows his has the larger share of distinct words (the AUC of `diversity_ttr` is 0.985). The measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta above 0.9, while Simpson's index and Yule's K, which weigh the frequent words, do far less (0.29, a small effect) and Herdan's Vm hardly at all (0.11): the difference lies mostly in the rare vocabulary and not in the repetition of the frequent words. His words and sentences are longer, and he uses nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue and in negations: three times as many dashes per 1000 words, more than twice as many exclamation and question marks, and more negations among the words.
 
-Of the 132 features, 91 have a corrected p-value below 0.01 and 62 show a large effect by Cliff's delta, but the test takes the 314 windows for independent, and they come from six novels: by the same test *Marianela* and *Torquemada en la hoguera*, two novels of Galdós, differ in 40 features. The interval of the difference of the medians resamples whole novels and is the safer guide - for the length of a sentence it spans 3.2 to 8.5 words, where the windows alone would give 4.9 to 7.5 - though three texts on a side are few for a bootstrap as well, and a comparison of authors wants as many texts as can be found.
+Of the 132 features, 97 have a corrected p-value below 0.01 and 67 show a large effect by Cliff's delta, but the test takes the 315 windows for independent, and they come from six novels: by the same test *Marianela* and *Torquemada en la hoguera*, two novels of Galdós, differ in 42 features. The interval of the difference of the medians resamples whole novels and is the safer guide - for the length of a sentence it spans 3.3 to 8.7 words, where the windows alone would give 5.1 to 7.4 - though three texts on a side are few for a bootstrap as well, and a comparison of authors wants as many texts as can be found.
 
 Features of one's own, for instance the syntactic ones, are passed as a function:
 

@@ -7,11 +7,39 @@ PUNCTUATIONS = string.punctuation + "¿¡—–…«»“”‘’·"
 # Characters that may open a sentence besides an upper-case letter or a digit:
 # inverted question and exclamation marks, opening quotes and brackets,
 # dashes of a dialogue line
-SENTENCE_OPENERS = "¿¡«“\"'([—–-"
+SENTENCE_OPENERS = "¿¡«“\"'([—–―-"
 
-# Dashes that open a line of dialogue; one followed by a lower-case word opens
-# the remark of the narrator inside the same sentence (-¿Vienes? -preguntó ella)
-DASHES = "—–-"
+# Dashes that open a line of dialogue - the raya, the en dash, the horizontal bar
+# of some digitized texts and the hyphen of plain text; one followed by a
+# lower-case word opens the remark of the narrator inside the same sentence
+# (-¿Vienes? -preguntó ella)
+DASHES = "—–―-"
+
+# Rules added to the tokenizer for the dashes of a dialogue glued to the words,
+# as plain-text corpora type them (--No, -dijo, Juan- y, sí--dijo, reírse—me decía,
+# dijo:—¡Mis, cuatro.-¿Cinco?, sí-¿y qué?): a run of hyphens before a letter or
+# an opening mark, a run of hyphens after a letter at the end of a token, two or
+# more hyphens or a long dash between letters, a hyphen between a letter and an
+# opening mark, any dash after a closing mark, the closing marks before a dash
+# and an opening mark after one are split off, and the horizontal bar ― as the
+# raya and the en dash at the ends of a token, with the closing marks after it
+# (él―.). The underscores of the italics of
+# Project Gutenberg (--_Siguro_, lux_--dijo) count as opening and closing marks.
+# A single hyphen between two letters (franco-alemán) or before a digit (-5) is
+# left alone
+_LETTER = r"[^\W\d_]"
+_OPENING = r"[¿¡«“\"'(\[_]"
+_CLOSING = r"[.,;:!?…»”\"')\]_]"
+_DASH = r"(?:-+|[—–―])"
+TOKENIZER_PREFIXES = (rf"-+(?={_LETTER}|{_OPENING})", "―")
+TOKENIZER_SUFFIXES = (rf"(?<={_LETTER})-+", "―", rf"(?<=―){_CLOSING}")
+TOKENIZER_INFIXES = (
+    rf"(?<={_LETTER})(?:-{{2,}}|[—–―])(?={_LETTER}|{_OPENING})",
+    rf"(?<={_LETTER})-(?={_OPENING})",
+    rf"(?<={_CLOSING}){_DASH}(?={_LETTER}|{_OPENING})",
+    rf"(?<={_LETTER}){_CLOSING}+(?={_DASH})",
+    rf"(?<=[-—–―]){_OPENING}",
+)
 
 # Abbreviations after which a sentence does not end even before an upper-case
 # word or a number: forms of address, references, times and eras; compared in
@@ -753,10 +781,10 @@ DISPERSION_STATS_DESC = {
 }
 # Marks that stay with the first word of a window of a text: quotes, brackets,
 # dashes of a dialogue and the inverted marks
-OPENING_MARKS = frozenset('«"„“‘([{—–-¿¡')
+OPENING_MARKS = frozenset('«"„“‘([{—–―-¿¡')
 # Opening marks that close as well - the straight quote and the dashes of an aside:
 # glued to the end of a word they close it and stay in its window
-SYMMETRIC_MARKS = frozenset('"—–-')
+SYMMETRIC_MARKS = frozenset('"—–―-')
 DELTA_VARIANTS = {
     "burrows": "Burrows's Delta - Manhattan distance of the z-scores divided by the number of units",
     "quadratic": "Argamon's quadratic Delta - Euclidean distance of the z-scores divided by the number of units",

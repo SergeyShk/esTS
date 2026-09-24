@@ -36,7 +36,7 @@ The second window of 2000 words of *Niebla* by Unamuno from [Project Gutenberg](
     chapter = split_windows(text, 2000)[1]
 
     sentence_lengths(chapter)[:5]
-    # [34, 26, 30, 41, 41]
+    # [54, 43, 26, 30, 41]
 
     sentence_lengths_plot(chapter, window=10)
     ```

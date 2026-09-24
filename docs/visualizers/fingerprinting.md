@@ -63,4 +63,4 @@ The first five windows of 1000 words of six novels from [Project Gutenberg](http
 
     ![ests](../img/fingerprinting.png){: .center }
 
-The first fifteen blocks are Galdós, the last fifteen Unamuno. Simpson's index - the probability that two words drawn at random are the same - is lower in Galdós (a median of 0.0107 against 0.0117 over the segments), so his blocks are darker and Unamuno's, who repeats his words more, greener.
+The first fifteen blocks are Galdós, the last fifteen Unamuno. Simpson's index - the probability that two words drawn at random are the same - is lower in Galdós (a median of 0.0107 against 0.0127 over the segments), so his blocks are darker and Unamuno's, who repeats his words more, greener.

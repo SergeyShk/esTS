@@ -1,8 +1,11 @@
 import pytest
 import spacy
+from spacy.tokens import Doc
+from spacy.util import compile_infix_regex
 
 from ests.exceptions import DatasetNotFoundError
 from ests.utils import (
+    add_dash_rules,
     get_nlp,
     get_tokenizer,
     has_words,
@@ -140,6 +143,7 @@ def test_is_punctuation(token, expected):
         ("Índice:\n1. Uno\n2. Dos\n3. Tres. Fin.", ["Índice:\n1. Uno\n2. Dos\n3. Tres.", "Fin."]),
         ("Página 1. Luego.", ["Página 1.", "Luego."]),
         ("1990. Luego.", ["1990. Luego."]),
+        ("―¿Vienes? ―preguntó ella. ―Sí.", ["―¿Vienes? ―preguntó ella.", "―Sí."]),
     ],
 )
 def test_sentenize(text, expected):
@@ -201,6 +205,82 @@ def test_tokenize():
     ]
     assert list(tokenize("")) == []
     assert list(tokenize("  \n ")) == []
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("--No --dijo él.", ["--", "No", "--", "dijo", "él", "."]),
+        ("-¿Qué? -dijo Nela.", ["-", "¿", "Qué", "?", "-", "dijo", "Nela", "."]),
+        ("sí--dijo", ["sí", "--", "dijo"]),
+        ("de----- -----Adiós", ["de", "-----", "-----", "Adiós"]),
+        ("Juan- y", ["Juan", "-", "y"]),
+        ("reírse—me decía", ["reírse", "—", "me", "decía"]),
+        ("dijo:—¡Mis ojos!", ["dijo", ":", "—", "¡", "Mis", "ojos", "!"]),
+        ("cuatro.-¿Cinco?", ["cuatro", ".", "-", "¿", "Cinco", "?"]),
+        ("capítulo -II-", ["capítulo", "-", "II", "-"]),
+        ("Pues sí-¿y qué?", ["Pues", "sí", "-", "¿", "y", "qué", "?"]),
+        # The horizontal bar of some digitized texts is a raya
+        ("―¿Qué? ―dijo él―.", ["―", "¿", "Qué", "?", "―", "dijo", "él", "―", "."]),
+        # The underscores of the italics of Project Gutenberg
+        ("--_Siguro_ lux_--dijo", ["--", "_", "Siguro", "_", "lux", "_", "--", "dijo"]),
+        (
+            "Pharsalia--_quiere nivolas_—concluyó",
+            ["Pharsalia", "--", "_", "quiere", "nivolas", "_", "—", "concluyó"],
+        ),
+        ("_e-mail_", ["_", "e-mail", "_"]),
+        # A hyphen between letters or before a digit is left alone
+        ("franco-alemán e-mail", ["franco-alemán", "e-mail"]),
+        ("-5 grados, 1990-1995, 1990–1995", ["-5", "grados", ",", "1990-1995", ",", "1990–1995"]),
+    ],
+)
+def test_tokenize_dialogue_dashes(text, expected):
+    assert list(tokenize(text)) == expected
+
+
+def test_add_dash_rules():
+    nlp = spacy.blank("es")
+    assert [token.text for token in nlp("--No")] == ["--No"]
+    add_dash_rules(nlp)
+    assert [token.text for token in nlp("--No")] == ["--", "No"]
+    # The model of get_nlp has the rules, so its words are the words of the tokenizer
+    text = "--No --dijo él. Y reírse—me decía:—¡Vete!"
+    assert [token.text for token in get_nlp()(text)] == list(tokenize(text))
+    # The rules a pipeline has already are kept, and a second call adds nothing
+    extended = spacy.blank("es")
+    extended.tokenizer.infix_finditer = compile_infix_regex(
+        (*extended.Defaults.infixes, "§")
+    ).finditer
+    add_dash_rules(extended)
+    assert [token.text for token in extended("a§b --No")] == ["a", "§", "b", "--", "No"]
+    rules = [
+        extended.tokenizer.prefix_search.__self__.pattern,
+        extended.tokenizer.suffix_search.__self__.pattern,
+        extended.tokenizer.infix_finditer.__self__.pattern,
+    ]
+    add_dash_rules(extended)
+    assert extended.tokenizer.prefix_search.__self__.pattern == rules[0]
+    assert extended.tokenizer.suffix_search.__self__.pattern == rules[1]
+    assert extended.tokenizer.infix_finditer.__self__.pattern == rules[2]
+    # A tokenizer without a rule gets the rules alone, one not read from a regular
+    # expression is left as it is
+    bare = spacy.blank("es")
+    bare.tokenizer.prefix_search = None
+    bare.tokenizer.suffix_search = None
+    bare.tokenizer.infix_finditer = lambda text: iter(())
+    add_dash_rules(bare)
+    assert [token.text for token in bare("--No sé--")] == ["--", "No", "sé", "--"]
+    unread = spacy.blank("es")
+    unread.tokenizer.prefix_search = lambda text: None
+    unread.tokenizer.suffix_search = lambda text: None
+    unread.tokenizer.infix_finditer = None
+    add_dash_rules(unread)
+    assert [token.text for token in unread("--No sí--dijo")] == ["--No", "sí", "--", "dijo"]
+    # A tokenizer of one's own is left as it is
+    custom = spacy.blank("es")
+    custom.tokenizer = lambda text: Doc(custom.vocab, words=text.split())
+    add_dash_rules(custom)
+    assert [token.text for token in custom("--No sé")] == ["--No", "sé"]
 
 
 def test_get_tokenizer_cached():

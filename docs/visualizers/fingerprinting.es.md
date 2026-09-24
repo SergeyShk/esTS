@@ -63,4 +63,4 @@ Las cinco primeras ventanas de 1000 palabras de seis novelas de [Project Gutenbe
 
     ![ests](../img/fingerprinting.png){: .center }
 
-Los quince primeros bloques son de Galdós, los quince últimos de Unamuno. El índice de Simpson - la probabilidad de que dos palabras tomadas al azar sean la misma - es más bajo en Galdós (una mediana de 0.0107 frente a 0.0117 sobre los segmentos), así que sus bloques son más oscuros y los de Unamuno, que repite más sus palabras, más verdes.
+Los quince primeros bloques son de Galdós, los quince últimos de Unamuno. El índice de Simpson - la probabilidad de que dos palabras tomadas al azar sean la misma - es más bajo en Galdós (una mediana de 0.0107 frente a 0.0127 sobre los segmentos), así que sus bloques son más oscuros y los de Unamuno, que repite más sus palabras, más verdes.
