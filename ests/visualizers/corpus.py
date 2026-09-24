@@ -10,6 +10,7 @@ from matplotlib.patches import Patch
 from ..corpus.collocations import Collocation
 from ..corpus.keyness import Keyword
 from ..exceptions import ParameterError, SourceError
+from ..utils import check_sequence
 
 
 def dispersion_plot(words: Sequence[str], targets: Sequence[str], ax: Axes | None = None) -> Axes:
@@ -31,8 +32,11 @@ def dispersion_plot(words: Sequence[str], targets: Sequence[str], ax: Axes | Non
         Axes: Axes with the plot
 
     Raises:
+        SourceTypeError: If a string or a Doc is passed instead of a list of words
         SourceError: If there are no words or no target words
     """
+    check_sequence(words)
+    check_sequence(targets, "target words")
     if not words or not targets:
         raise SourceError("The data source has no words")
     positions = [
@@ -149,7 +153,9 @@ def collocation_network(collocations: Sequence[Collocation], top_n: int | None =
         An undirected graph (textplot_network of quanteda): the nodes are the
         words with the size of the font by the frequency of the word, the
         edges the pairs with the width and the label by the value of the
-        measure; the neato layout. Rendering needs the executables of Graphviz
+        measure; the neato layout. The nodes get generated identifiers and the
+        words go to their labels, as a colon in a word (10:30) would read as a
+        port of graphviz. Rendering needs the executables of Graphviz
 
     Arguments:
         collocations (list[Collocation]): Collocations (collocations)
@@ -171,9 +177,9 @@ def collocation_network(collocations: Sequence[Collocation], top_n: int | None =
             graph [overlap=false splines=true]
             node [fontname=Helvetica margin=0 shape=plaintext]
             edge [color=gray50 fontname=Helvetica fontsize=9]
-            vino [fontsize=24]
-            tinto [fontsize=10]
-            vino -- tinto [label=13.68 penwidth=2.25]
+            n0 [label=vino fontsize=24]
+            n1 [label=tinto fontsize=10]
+            n0 -- n1 [label=13.68 penwidth=2.25]
         }
         <BLANKLINE>
     """
@@ -193,13 +199,18 @@ def collocation_network(collocations: Sequence[Collocation], top_n: int | None =
     graph.attr("graph", overlap="false", splines="true")
     graph.attr("node", shape="plaintext", margin="0", fontname="Helvetica")
     graph.attr("edge", color="gray50", fontsize="9", fontname="Helvetica")
+    nodes = {word: f"n{index}" for index, word in enumerate(frequencies)}
     for word, frequency in frequencies.items():
-        graph.node(nohtml(word), fontsize=f"{_scale(frequency, min_freq, max_freq, 10, 24):.0f}")
+        graph.node(
+            nodes[word],
+            label=nohtml(word),
+            fontsize=f"{_scale(frequency, min_freq, max_freq, 10, 24):.0f}",
+        )
     for pair in pairs:
         score = 0.0 if isnan(pair.score) else pair.score
         graph.edge(
-            nohtml(pair.left),
-            nohtml(pair.right),
+            nodes[pair.left],
+            nodes[pair.right],
             label=f"{score:.2f}",
             penwidth=f"{_scale(score, min_score, max_score, 0.5, 4):.2f}",
         )

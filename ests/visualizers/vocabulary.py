@@ -6,6 +6,7 @@ from matplotlib.axes import Axes
 
 from ..diversity_stats import calc_frequency_spectrum, fit_heaps, vocabulary_growth
 from ..exceptions import SourceError
+from ..utils import check_sequence
 
 
 def heaps_plot(words: Sequence[str], ax: Axes | None = None) -> Axes:
@@ -25,8 +26,10 @@ def heaps_plot(words: Sequence[str], ax: Axes | None = None) -> Axes:
         Axes: Axes with the plot
 
     Raises:
+        SourceTypeError: If a string or a Doc is passed instead of a list of words
         SourceError: If there are fewer than two words
     """
+    check_sequence(words)
     if len(words) < 2:
         raise SourceError("The growth of the vocabulary needs at least two words")
     if ax is None:
@@ -66,8 +69,10 @@ def frequency_spectrum_plot(words: Sequence[str], ax: Axes | None = None) -> Axe
         Axes: Axes with the plot
 
     Raises:
+        SourceTypeError: If a string or a Doc is passed instead of a list of words
         SourceError: If there are no words
     """
+    check_sequence(words)
     if not words:
         raise SourceError("The data source has no words")
     if ax is None:

@@ -5,7 +5,7 @@
 
 ## Description
 
-Building a [word tree](https://www.weblyzard.com/word-tree/) that shows the contexts of a keyword in a text: the N-grams of up to `max_n` words that start or end with the keyword are counted in every list of words - a sentence, for instance - the most frequent `max_per_n` of every size on each side are kept and joined into two trees, the words after the keyword and before it, with the size of the font by frequency.
+Building a [word tree](https://www.weblyzard.com/word-tree/) that shows the contexts of a keyword in a text: the N-grams of up to `max_n` words that start or end with the keyword are counted in every list of words - a sentence, for instance. On each side the sizes are taken in ascending order, and among the N-grams that continue a kept shorter one the most frequent `max_per_n` are kept, alphabetically when equal, so every level of the tree holds at most `max_per_n` words and every branch continues a kept one. The kept N-grams are joined into two trees, the words after the keyword and before it, with the size of the font by frequency; the words are only the labels of the nodes, so a colon or a hyphen in a word is safe.
 
 !!! note "Note"
     The word tree is described in detail in this [paper](https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/2011/Gruppe05/Homepage/Paper/wordtree-paper-wattenberg.pdf).

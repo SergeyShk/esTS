@@ -2,9 +2,9 @@ from collections import defaultdict
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from enum import Enum
+from itertools import count
 from typing import Any
 
-import pandas as pd
 from graphviz import Digraph, nohtml
 
 from ..exceptions import ParameterError, SourceError, SourceTypeError
@@ -44,6 +44,7 @@ class TreeDrawer:
 
     Methods:
         interpolate_fontsize: Computing the size of the font of a node of the tree
+        add_node: Adding a node with a generated identifier and the word as its label
         draw_subtree: Drawing a subtree of words
         draw: Drawing the word tree as a directed graph
     """
@@ -70,6 +71,7 @@ class TreeDrawer:
         self.graph = Digraph(nohtml(keyword), format="png")
         self.graph.attr("graph", rankdir="LR")
         self.graph.attr("node", shape="plaintext", margin="0")
+        self._ids = count()
 
     def interpolate_fontsize(self, freq: int) -> int:
         """
@@ -91,31 +93,43 @@ class TreeDrawer:
         font_interp = quad if self.font_interp is None else self.font_interp
         return int(font_interp(t) * (upper - lower) + lower)
 
-    def draw_subtree(
-        self, tree: FreqNode, direction: Direction, root: str, suffix: str, depth: int
-    ) -> None:
+    def add_node(self, word: str, fontsize: int) -> str:
+        """
+        Adding a node with a generated identifier and the word as its label
+
+        Description:
+            The identifier is n0, n1, ...: a word as an identifier would break
+            on a colon, which graphviz reads as a port (10:30), and paths of
+            words joined with a hyphen would merge different branches
+            (franco-alemán no, franco alemán no)
+
+        Arguments:
+            word (str): Word of the node
+            fontsize (int): Size of the font
+
+        Returns:
+            str: Identifier of the node
+        """
+        node = f"n{next(self._ids)}"
+        self.graph.node(node, label=nohtml(word), fontsize=str(fontsize))
+        return node
+
+    def draw_subtree(self, tree: FreqNode, direction: Direction, parent: str) -> None:
         """
         Drawing a subtree of words
 
         Arguments:
             tree (FreqNode): Subtree of words
             direction (Direction): Direction of the subtree
-            root (str): Root word
-            suffix (str): Suffix of the subtree
-            depth (int): Depth of the subtree
+            parent (str): Identifier of the node the subtree grows from
         """
-        if depth > 0:
-            fontsize = self.interpolate_fontsize(tree.freq)
-            self.graph.node(nohtml(root + suffix), label=nohtml(root), fontsize=str(fontsize))
         for word, subtree in tree.children.items():
-            new_suffix = f"{suffix}-{word}"
-            self.draw_subtree(subtree, direction, word, new_suffix, depth + 1)
-            src = root if depth == 0 else root + suffix
-            dst = word + new_suffix
+            node = self.add_node(word, self.interpolate_fontsize(subtree.freq))
             if direction == Direction.Forward:
-                self.graph.edge(nohtml(src), nohtml(dst))
+                self.graph.edge(parent, node)
             else:
-                self.graph.edge(nohtml(dst), nohtml(src))
+                self.graph.edge(node, parent)
+            self.draw_subtree(subtree, direction, node)
 
     def draw(self) -> Digraph:
         """
@@ -124,11 +138,9 @@ class TreeDrawer:
         Returns:
             Digraph: Word tree
         """
-        self.graph.node(
-            nohtml(self.keyword), label=nohtml(self.keyword), fontsize=str(self.max_font_size)
-        )
-        self.draw_subtree(self.bwd_tree, Direction.Backward, self.keyword, "-bwd", 0)
-        self.draw_subtree(self.fwd_tree, Direction.Forward, self.keyword, "-fwd", 0)
+        root = self.add_node(self.keyword, self.max_font_size)
+        self.draw_subtree(self.bwd_tree, Direction.Backward, root)
+        self.draw_subtree(self.fwd_tree, Direction.Forward, root)
         return self.graph
 
 
@@ -148,6 +160,7 @@ class WordTree:
 
     Methods:
         search: Finding the N-grams that start or end with the keyword and their frequencies
+        select: Selecting the N-grams of one side of the keyword
         build_tree: Building a subtree of words
         build_trees: Building the subtrees of words before and after the keyword
         draw: Drawing the word tree as a directed graph
@@ -219,6 +232,39 @@ class WordTree:
             subtree.freq = freq
         return tree
 
+    def select(self, forward: bool) -> tuple[list[tuple[str, ...]], list[int]]:
+        """
+        Selecting the N-grams of one side of the keyword
+
+        Description:
+            The sizes are taken in ascending order, and an N-gram is kept only
+            when its (N-1)-gram on the same side was kept, so that every level
+            of the tree holds at most max_per_n nodes and every branch
+            continues a kept one; among the candidates of a size the most
+            frequent are kept, alphabetically when equal
+
+        Arguments:
+            forward (bool): The side after the keyword; False - the side before it
+
+        Returns:
+            tuple[list[tuple[str, ...]], list[int]]: Kept N-grams and their frequencies
+        """
+        found = {
+            ngram: freq
+            for ngram, freq in zip(self.ngrams, self.frequencies, strict=True)
+            if (ngram[0] if forward else ngram[-1]) == self.keyword
+        }
+        kept: dict[tuple[str, ...], int] = {}
+        for n in range(2, self.max_n + 1):
+            candidates = [
+                ngram
+                for ngram in found
+                if len(ngram) == n and (n == 2 or (ngram[:-1] if forward else ngram[1:]) in kept)
+            ]
+            candidates.sort(key=lambda ngram: (-found[ngram], ngram))
+            kept.update((ngram, found[ngram]) for ngram in candidates[: self.max_per_n])
+        return list(kept), list(kept.values())
+
     def build_trees(self) -> tuple[FreqNode, FreqNode]:
         """
         Building the subtrees of words before and after the keyword
@@ -226,21 +272,14 @@ class WordTree:
         Returns:
             tuple[FreqNode, FreqNode]: Subtrees of words after and before the keyword
         """
-        forward_ngrams: list[Sequence[str]] = []
-        forward_frequencies: list[int] = []
-        backward_ngrams: list[Sequence[str]] = []
-        backward_frequencies: list[int] = []
-        for ngram, freq in zip(self.ngrams, self.frequencies, strict=False):
-            forward = ngram[0] == self.keyword
-            backward = ngram[-1] == self.keyword
-            if forward:
-                forward_ngrams.append(ngram[1:])
-                forward_frequencies.append(freq)
-            if backward:
-                backward_ngrams.append(list(reversed(ngram[:-1])))
-                backward_frequencies.append(freq)
-        forward_tree = self.build_tree(forward_ngrams, forward_frequencies)
-        backward_tree = self.build_tree(backward_ngrams, backward_frequencies)
+        forward_ngrams, forward_frequencies = self.select(forward=True)
+        backward_ngrams, backward_frequencies = self.select(forward=False)
+        forward_tree = self.build_tree(
+            [ngram[1:] for ngram in forward_ngrams], forward_frequencies
+        )
+        backward_tree = self.build_tree(
+            [ngram[-2::-1] for ngram in backward_ngrams], backward_frequencies
+        )
         return forward_tree, backward_tree
 
     def draw(self, **kwargs: Any) -> Digraph:
@@ -253,28 +292,8 @@ class WordTree:
         Returns:
             Digraph: Word tree
         """
-        df = pd.DataFrame(
-            [
-                {
-                    "ngram": ngram,
-                    "n": len(ngram),
-                    "forward": ngram[0] == self.keyword,
-                    "freq": freq,
-                }
-                for ngram, freq in zip(self.ngrams, self.frequencies, strict=False)
-            ]
-        )
-        filtered_df = (
-            df.sort_values("freq", ascending=False)
-            .groupby(["forward", "n"])
-            .head(self.max_per_n)
-            .reset_index()
-        )
-        self.ngrams = filtered_df.ngram.tolist()
-        self.frequencies = filtered_df.freq.tolist()
         forward_tree, backward_tree = self.build_trees()
-        td = TreeDrawer(self.keyword, forward_tree, backward_tree, **kwargs)
-        return td.draw()
+        return TreeDrawer(self.keyword, forward_tree, backward_tree, **kwargs).draw()
 
 
 def wordtree(
@@ -285,11 +304,13 @@ def wordtree(
 
     Description:
         The N-grams of up to max_n words that start or end with the keyword
-        are counted in every text (a sentence, for instance), the most frequent
-        max_per_n of every size on each side are kept and joined into two
-        trees - the words after the keyword and before it - with the size of
-        the font by frequency (Wattenberg and Viégas 2008). Rendering needs the
-        executables of Graphviz
+        are counted in every text (a sentence, for instance); on each side the
+        most frequent max_per_n of every size are kept among the ones that
+        continue a kept shorter N-gram, alphabetically when equal, and joined
+        into two trees - the words after the keyword and before it - with the
+        size of the font by frequency (Wattenberg and Viégas 2008). The nodes
+        get generated identifiers and the words go to their labels, so any
+        word is safe. Rendering needs the executables of Graphviz
 
     References:
         https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/2011/Gruppe05/Homepage/Paper/wordtree-paper-wattenberg.pdf

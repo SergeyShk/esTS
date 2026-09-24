@@ -5,7 +5,7 @@ import pytest
 from matplotlib.axes import Axes
 
 from ests.diversity_stats import fit_heaps, vocabulary_growth
-from ests.exceptions import SourceError
+from ests.exceptions import SourceError, SourceTypeError
 from ests.visualizers import frequency_spectrum_plot, heaps_plot
 
 matplotlib.use("Agg")
@@ -30,6 +30,8 @@ def test_heaps_plot():
     assert heaps_plot(words, ax=given) is given
     with pytest.raises(SourceError):
         heaps_plot(["gato"])
+    with pytest.raises(SourceTypeError):
+        heaps_plot("el gato estaba en la ventana")
     plt.close("all")
 
 
@@ -45,4 +47,6 @@ def test_frequency_spectrum_plot():
     assert frequency_spectrum_plot(words, ax=given) is given
     with pytest.raises(SourceError):
         frequency_spectrum_plot([])
+    with pytest.raises(SourceTypeError):
+        frequency_spectrum_plot("el gato")
     plt.close("all")

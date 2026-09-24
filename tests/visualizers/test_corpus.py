@@ -3,10 +3,11 @@ from math import inf, log2, nan
 import matplotlib
 import matplotlib.pyplot as plt
 import pytest
+import spacy
 from matplotlib.axes import Axes
 
 from ests.corpus import Collocation, Keyword, collocations, keyness
-from ests.exceptions import ParameterError, SourceError
+from ests.exceptions import ParameterError, SourceError, SourceTypeError
 from ests.visualizers import collocation_network, dispersion_plot, keyness_plot
 
 matplotlib.use("Agg")
@@ -35,6 +36,13 @@ def test_dispersion_plot():
         dispersion_plot([], ["gato"])
     with pytest.raises(SourceError):
         dispersion_plot(words, [])
+    # The text itself or a Doc in place of the words, a string in place of the targets
+    with pytest.raises(SourceTypeError):
+        dispersion_plot("el gato estaba en la ventana", ["gato"])
+    with pytest.raises(SourceTypeError):
+        dispersion_plot(spacy.blank("es")("el gato estaba"), ["gato"])
+    with pytest.raises(SourceTypeError):
+        dispersion_plot(words, "gato")
     plt.close("all")
 
 
@@ -106,19 +114,27 @@ def test_collocation_network():
     graph = collocation_network(found, top_n=3)
     assert graph.engine == "neato"
     assert graph.source.count("--") == 3
-    assert "\tgato [fontsize=24]" in graph.source
-    assert "\testaba [fontsize=10]" in graph.source
-    assert "gato -- en [label=13.00 penwidth=4.00]" in graph.source
+    assert "\tn0 [label=gato fontsize=24]" in graph.source
+    assert "\tn3 [label=estaba fontsize=10]" in graph.source
+    assert "n0 -- n1 [label=13.00 penwidth=4.00]" in graph.source
     assert graph.source.count("penwidth=0.50") == 2
     assert collocation_network(found).source.count("--") == len(found)
     single = collocation_network([Collocation("a", "b", 1, 1, 1, nan)])
     assert "label=0.00 penwidth=2.25" in single.source
-    assert "\ta [fontsize=17]" in single.source
+    assert "\tn0 [label=a fontsize=17]" in single.source
     with pytest.raises(SourceError):
         collocation_network([])
     html_like = collocation_network([Collocation("<b>", "gato", 2, 2, 2, 1.0)])
-    assert '"<b>" [fontsize=17]' in html_like.source
-    assert '"<b>" -- gato' in html_like.source
+    assert '\tn0 [label="<b>" fontsize=17]' in html_like.source
+    assert "n0 -- n1" in html_like.source
     for top_n in (0, -1):
         with pytest.raises(ParameterError):
             collocation_network(found, top_n=top_n)
+
+
+def test_collocation_network_ports():
+    # A colon is a port in graphviz: the words go to the labels, the edges to the identifiers
+    graph = collocation_network([Collocation("10:30", "de", 2, 3, 2, 5.0)])
+    assert '\tn0 [label="10:30" fontsize=10]' in graph.source
+    assert "\tn0 -- n1 [label=5.00 penwidth=2.25]" in graph.source
+    assert "10:30 --" not in graph.source

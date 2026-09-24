@@ -5,7 +5,7 @@
 
 ## Descripción
 
-La construcción de un [árbol de palabras](https://www.weblyzard.com/word-tree/) que muestra los contextos de una palabra clave en un texto: en cada lista de palabras - una oración, por ejemplo - se cuentan los N-gramas de hasta `max_n` palabras que empiezan o terminan en la palabra clave, se conservan los `max_per_n` más frecuentes de cada tamaño a cada lado y se unen en dos árboles, las palabras tras la palabra clave y ante ella, con el tamaño de la letra según la frecuencia.
+La construcción de un [árbol de palabras](https://www.weblyzard.com/word-tree/) que muestra los contextos de una palabra clave en un texto: en cada lista de palabras - una oración, por ejemplo - se cuentan los N-gramas de hasta `max_n` palabras que empiezan o terminan en la palabra clave. A cada lado los tamaños se recorren en orden ascendente, y entre los N-gramas que continúan uno más corto ya conservado se conservan los `max_per_n` más frecuentes, alfabéticamente si empatan, así que cada nivel del árbol tiene a lo sumo `max_per_n` palabras y cada rama continúa una conservada. Los N-gramas conservados se unen en dos árboles, las palabras tras la palabra clave y ante ella, con el tamaño de la letra según la frecuencia; las palabras son solo las etiquetas de los nodos, así que dos puntos o un guion en una palabra no dan problemas.
 
 !!! note "Nota"
     El árbol de palabras se describe en detalle en este [artículo](https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/2011/Gruppe05/Homepage/Paper/wordtree-paper-wattenberg.pdf).
