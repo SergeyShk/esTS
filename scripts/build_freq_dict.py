@@ -27,7 +27,8 @@ Usage:
 NGRAMS_DIR holds the files 1-0000N-of-00003.gz of
 http://storage.googleapis.com/books/ngrams/books/20200217/spa/; the counts of the
 forms are cached there in forms.tsv.gz after the first pass. The archive of the
-dictionary and the list of the most frequent lemmas go to OUTPUT_DIR.
+dictionary and the list of the most frequent lemmas go to OUTPUT_DIR; the list goes on to
+ests/resources, where LexicalStats reads it.
 """
 
 import gzip

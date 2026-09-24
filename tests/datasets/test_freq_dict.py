@@ -51,6 +51,16 @@ def test_bundled_archive_checksum():
         assert hashlib.file_digest(file, "sha256").hexdigest() == module.ARCHIVE_SHA256
 
 
+@pytest.mark.network
+def test_download(tmp_path):
+    dictionary = FreqDict(data_dir=tmp_path)
+    dictionary.download()
+    assert dictionary.filepath == str(
+        tmp_path / f"{module.NAME}_v{module.VERSION}" / "freq_dict.tsv"
+    )
+    assert len(dictionary) == 83785
+
+
 def test_download_extracts_again(tmp_path):
     shutil.copy(BUNDLED_ARCHIVE, tmp_path / module.ARCHIVE)
     dictionary = FreqDict(data_dir=tmp_path)

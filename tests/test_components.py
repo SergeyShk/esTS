@@ -12,6 +12,8 @@ from ests import (
     CohesionStatsComponent,
     DiversityStats,
     DiversityStatsComponent,
+    LexicalStats,
+    LexicalStatsComponent,
     MorphStats,
     MorphStatsComponent,
     ReadabilityStats,
@@ -201,3 +203,36 @@ def test_extension_is_set_by_the_name():
     doc = pipeline("El gato duerme")
     assert doc._.basic_stats is not None
     assert doc.has_extension("basic_stats")
+
+
+def test_lexical_component(nlp, freq_dict):
+    assert Language.has_factory("ests_lexical")
+    pipeline = spacy.load("es_core_news_sm")
+    component = pipeline.add_pipe(
+        "ests_lexical", name="stats", config={"data_dir": freq_dict.data_dir.as_posix()}, last=True
+    )
+    assert isinstance(component, LexicalStatsComponent)
+    doc = pipeline(TEXT)
+    assert isinstance(doc._.stats, LexicalStats)
+    assert doc._.stats.get_stats() == LexicalStats(nlp(TEXT), freq_dict).get_stats()
+
+
+def test_lexical_component_default_dictionary():
+    pipeline = spacy.load("es_core_news_sm")
+    component = pipeline.add_pipe("ests_lexical", last=True)
+    assert component.name == "ests_lexical"
+    assert component.freq_dict.data_dir.name == "dicts"
+
+
+@pytest.mark.parametrize("text", ["", "   ", "¿?", "2020", "3,5 - 1.º"])
+def test_lexical_component_of_a_document_without_words(text):
+    pipeline = spacy.load("es_core_news_sm")
+    pipeline.add_pipe("ests_lexical", name="stats", last=True)
+    assert pipeline(text)._.stats is None
+
+
+def test_lexical_component_without_the_annotation():
+    pipeline = spacy.blank("es")
+    pipeline.add_pipe("ests_lexical", name="stats", last=True)
+    with pytest.raises(SourceError, match="parts of speech"):
+        pipeline("El gato duerme")

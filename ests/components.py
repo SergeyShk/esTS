@@ -35,13 +35,15 @@ from .constants import (
     MTLD_MIN_LEN,
     MTLD_TTR_THRESHOLD,
 )
+from .datasets.freq_dict import FreqDict
 from .diversity_stats import DiversityStats
 from .diversity_stats import check_params as check_diversity_params
 from .exceptions import SourceError
+from .lexical_stats import LexicalStats, is_number
 from .morph_stats import MorphStats
 from .readability_stats import ReadabilityStats, check_preset
 from .syntax_stats import SyntaxStats
-from .utils import has_words
+from .utils import has_words, iter_doc_tokens
 
 
 @Language.factory("ests_basic")
@@ -439,4 +441,67 @@ class CohesionStatsComponent:
             return doc
         cs = CohesionStats(doc)
         doc._.set(self.name, cs)
+        return doc
+
+
+@Language.factory("ests_lexical")
+class LexicalStatsComponent:
+    """
+    Class for the component of the lexical sophistication statistics of a text
+
+    Description:
+        The words are looked up by their parts of speech, so the pipeline needs
+        a morphologizer (or a tagger with an attribute ruler) before the
+        component. The frequency dictionary is created once for the component;
+        the statistics by the dictionary need it downloaded
+
+    Adding the component to a pipeline:
+        >>> import ests
+        >>> import spacy
+        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp.add_pipe("ests_lexical", name="lexical", last=True)
+        <ests.components.LexicalStatsComponent object at 0x...>
+
+    The dictionary from another directory:
+        >>> nlp.add_pipe(
+        ...     "ests_lexical", name="lexical_dicts", config={"data_dir": "/path/to/dicts"}, last=True
+        ... )
+        <ests.components.LexicalStatsComponent object at 0x...>
+
+    Reading the computed statistics:
+        >>> doc = nlp("El gato estaba en la ventana y miraba a los pájaros")
+        >>> round(doc._.lexical.p_top1000, 3)
+        0.727
+
+    Arguments:
+        name (str): Name of the component in the pipeline
+        data_dir (str): Directory of the frequency dictionary; the default one if not given
+
+    Raises:
+        SourceError: If the pipeline gives no parts of speech
+    """
+
+    def __init__(self, nlp: Language, name: str = "ests_lexical", data_dir: str | None = None):
+        self.name = name
+        self.freq_dict = FreqDict(data_dir) if data_dir else FreqDict()
+        Doc.set_extension(self.name, default=None, force=True)
+
+    def __call__(self, doc: Doc) -> Doc:
+        """
+        Adding the computed statistics to the component
+
+        Description:
+            A document with no words - numbers are no words here - is
+            returned untouched, its extension left at None
+
+        Arguments:
+            doc (Doc): Doc object
+
+        Returns:
+            doc (Doc): Modified Doc object
+        """
+        if not any(not is_number(token.text) for token in iter_doc_tokens(doc)):
+            return doc
+        ls = LexicalStats(doc, freq_dict=self.freq_dict)
+        doc._.set(self.name, ls)
         return doc

@@ -752,6 +752,28 @@ COHESION_STATS_DESC = {
     "connectors_secondary": "Secondary connectors per 1000 words",
 }
 
+# Lexical sophistication: the statistics by the frequency dictionary and by the list
+# of the most frequent lemmas, in the manner of TAALES
+LEXICAL_STATS_DESC = {
+    "coverage": "Share of words found in the frequency dictionary",
+    "mean_ipm": "Mean frequency (ipm)",
+    "mean_ipm_content": "Mean frequency of content words (ipm)",
+    "mean_log_ipm": "Mean log frequency (lg ipm)",
+    "mean_log_ipm_content": "Mean log frequency of content words",
+    "mean_range": "Mean range (years out of 40)",
+    "mean_dispersion": "Mean dispersion (D)",
+    "surprisal": "Mean surprisal (bits)",
+    "perplexity": "Unigram perplexity",
+    "p_top1000": "Share of words in the top 1000",
+    "p_top2000": "Share of words in the top 2000",
+    "p_top5000": "Share of words in the top 5000",
+    "p_top10000": "Share of words in the top 10000",
+    "p_beyond_top10000": "Share of words beyond the top 10000",
+    "lexical_density": "Lexical density",
+}
+# Bounds of the frequency bands - the sizes of the lists of the most frequent lemmas
+FREQUENCY_BANDS = (1000, 2000, 5000, 10000)
+
 
 # Measures of keyness, of association of collocations, of dispersion of words and of stylometry
 KEYNESS_MEASURES = {

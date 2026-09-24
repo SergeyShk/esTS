@@ -25,6 +25,9 @@ nav:
       - Morphological statistics: stats/morph_stats.md
       - Syntactic statistics: stats/syntax_stats.md
       - Cohesion statistics: stats/cohesion_stats.md
+      - Lexical sophistication statistics:
+        - Metrics module: stats/lexical_stats.md
+        - Metric functions: stats/lexical_stats_funcs.md
     - Corpus measures:
       - Keywords: corpus/keyness.md
       - Collocations: corpus/collocations.md
@@ -95,6 +98,7 @@ plugins:
             Morphological statistics: Estadísticas morfológicas
             Syntactic statistics: Estadísticas sintácticas
             Cohesion statistics: Estadísticas de cohesión
+            Lexical sophistication statistics: Estadísticas de complejidad léxica
             Corpus measures: Medidas de corpus
             Keywords: Palabras clave
             Collocations: Colocaciones

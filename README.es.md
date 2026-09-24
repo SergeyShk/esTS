@@ -44,9 +44,10 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Conjuntos de datos](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/)** - literatura en español de dominio público: 150 obras de 33 autores de España, Hispanoamérica y Filipinas en prosa, poesía, teatro y ensayo, con el género, los años y el país; un diccionario de frecuencias de 83 785 lemas según Google Books Ngram con ipm, rango y dispersión
 * **[Componentes de spaCy](https://sergeyshk.github.io/esTS/es/components/)** - cada clase de estadísticas como componente de un pipeline, con las estadísticas puestas en el `Doc` en una sola pasada
 * **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, con la densidad de 255 marcadores del discurso españoles
+* **[Estadísticas de complejidad léxica](https://sergeyshk.github.io/esTS/es/stats/lexical_stats/)** - cuán raras son las palabras de un texto en la lengua: la frecuencia, el rango y la dispersión de los lemas según un diccionario de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la sorpresa, la perplejidad y la densidad léxica
 * **[Estadísticas sintácticas](https://sergeyshk.github.io/esTS/es/stats/syntax_stats/)** - el árbol de dependencias por distancias, profundidad, cláusulas y coordinación, con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
 
-La complejidad léxica completa la 0.3; el estilo, la fonoestadística, la métrica y la rima llegan en la 0.4.
+El estilo, la fonoestadística, la métrica y la rima llegan en la 0.4.
 
 ## Instalación
 
@@ -415,6 +416,27 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/cohesion_s
 </details>
 
 <details>
+<summary><b>Estadísticas de complejidad léxica</b></summary>
+
+<br>
+
+Cuán raras son las palabras de un texto en la lengua, a la manera de TAALES: la frecuencia media, el rango y la dispersión de los lemas según el diccionario de frecuencias de Google Books Ngram, las proporciones de palabras de las bandas de frecuencia top-1000, 2000, 5000 y 10000, la sorpresa y la perplejidad según el modelo de unigramas del diccionario, la densidad léxica. Las bandas y la densidad funcionan sin más; las estadísticas según el diccionario lo necesitan descargado una vez.
+
+```python
+>>> from ests import LexicalStats
+>>> from ests.datasets import FreqDict
+
+>>> FreqDict().download()
+>>> ls = LexicalStats("El felinólogo examinaba al minino con parsimonia")
+>>> ls.coverage, ls.p_top1000, round(ls.surprisal, 2)
+(0.8571428571428571, 0.42857142857142855, 13.71)
+```
+
+Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/lexical_stats/).
+
+</details>
+
+<details>
 <summary><b>Componentes de spaCy</b></summary>
 
 <br>
@@ -592,6 +614,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos: las [iss
 *   **ests**:
     *   basic_stats.py - estadísticas básicas del texto
     *   cohesion_stats.py - estadísticas de cohesión
+    *   lexical_stats.py - estadísticas de complejidad léxica
     *   components.py - componentes de un pipeline de spaCy
     *   corpus - medidas de la lingüística de corpus: palabras clave, colocaciones, dispersión, concordancia, estilometría, comparación de corpus
     *   datasets - conjuntos de datos: literatura en español, diccionario de frecuencias
