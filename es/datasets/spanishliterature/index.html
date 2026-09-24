@@ -1,0 +1,3393 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Biblioteca para extraer estadísticas de textos en español">
+      
+      
+      
+      
+        <link rel="prev" href="../../corpus/compare/">
+      
+      
+        <link rel="next" href="../../visualizers/zipf/">
+      
+      
+        
+          <link rel="alternate" href="../../../datasets/spanishliterature/" hreflang="en">
+        
+          <link rel="alternate" href="./" hreflang="es">
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Literatura en español - esTS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#literatura-en-espanol" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../../" title="esTS" class="md-header__button md-logo" aria-label="esTS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            esTS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Literatura en español
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Seleccionar idioma">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../../datasets/spanishliterature/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="es" class="md-select__link">
+              Español
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/SergeyShk/esTS" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+  Inicio
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../extractors/sentences/" class="md-tabs__link">
+          
+  
+  
+  Extracción
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../syllables/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Sílabas y acento
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../components/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Componentes de spaCy
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../stats/basic_stats/" class="md-tabs__link">
+          
+  
+  
+  Estadísticas
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../corpus/keyness/" class="md-tabs__link">
+          
+  
+  
+  Medidas de corpus
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Conjuntos de datos
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../visualizers/zipf/" class="md-tabs__link">
+          
+  
+  
+  Visualizaciones
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../" title="esTS" class="md-nav__button md-logo" aria-label="esTS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    esTS
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/SergeyShk/esTS" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Inicio
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Acerca de
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Instalación
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../exceptions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Excepciones y registro
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../authors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Autores
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracción
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Extracción
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extractors/sentences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracción de oraciones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extractors/words/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracción de palabras
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extractors/char_ngrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Extracción de N-gramas de caracteres
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../syllables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sílabas y acento
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Componentes de spaCy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Estadísticas
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/basic_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas básicas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Métricas de legibilidad
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Métricas de legibilidad
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/readability_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/readability_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Métricas de diversidad léxica
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Métricas de diversidad léxica
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/diversity_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/diversity_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/morph_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas morfológicas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/syntax_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas sintácticas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/cohesion_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas de cohesión
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Medidas de corpus
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Medidas de corpus
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../corpus/keyness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Palabras clave
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../corpus/collocations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Colocaciones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../corpus/dispersion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dispersión de las palabras
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../corpus/kwic/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Concordancia KWIC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../corpus/stylometry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estilometría
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../corpus/compare/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comparación de corpus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conjuntos de datos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Conjuntos de datos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Literatura en español
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Literatura en español
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#descripcion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Descripción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parametros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parámetros
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#atributos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Atributos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metodos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métodos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Métodos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        download
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_texts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_texts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_records" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_records
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Visualizaciones
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Visualizaciones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualizers/zipf/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ley de Zipf
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualizers/fingerprinting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Huella literaria
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualizers/word_tree/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Árbol de palabras
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualizers/corpus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gráficos de corpus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualizers/stylometry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Gráficos estilométricos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualizers/vocabulary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Crecimiento del vocabulario y espectro de frecuencias
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualizers/sentences/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Longitudes de las oraciones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#descripcion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Descripción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parametros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parámetros
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#atributos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Atributos
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metodos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métodos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Métodos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#download" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        download
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_texts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_texts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_records" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_records
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="literatura-en-espanol">Literatura en español<a class="headerlink" href="#literatura-en-espanol" title="Permanent link">&para;</a></h1>
+<div class="admonition info">
+<p><strong>ests.datasets.SpanishLiterature</strong></p>
+</div>
+<h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
+<p>Una colección de literatura en español de dominio público: 150 obras de 33 autores de España, Hispanoamérica y Filipinas, de Cervantes a los años veinte, 65 millones de caracteres (unos 11 millones de palabras) en cuatro géneros:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Género</th>
+<th style="text-align: left;">Clave</th>
+<th style="text-align: left;">Autores</th>
+<th style="text-align: center;">Obras</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Prosa</td>
+<td style="text-align: left;"><code>prose</code></td>
+<td style="text-align: left;">Pérez Galdós (21), Blasco Ibáñez (15), Palacio Valdés (13), Pardo Bazán (13), Pereda (8), Unamuno (6), Valera (6), Valle-Inclán (5), Clarín (3), Payró (3), Alarcón (2), Cervantes (2), Martí (2), Rizal (2), Darío, Larra, Lugones, Palma, Quevedo, Quiroga</td>
+<td style="text-align: center;">107</td>
+</tr>
+<tr>
+<td style="text-align: left;">Poesía</td>
+<td style="text-align: left;"><code>poems</code></td>
+<td style="text-align: left;">Darío (5), Hernández (2), Machado, Rosalía de Castro, Zorrilla</td>
+<td style="text-align: center;">10</td>
+</tr>
+<tr>
+<td style="text-align: left;">Teatro</td>
+<td style="text-align: left;"><code>drama</code></td>
+<td style="text-align: left;">Valle-Inclán (4), Arniches (3), Ruiz de Alarcón (3), Lope de Vega (2), Cervantes, Dicenta, Moratín, Zorrilla</td>
+<td style="text-align: center;">16</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ensayo</td>
+<td style="text-align: left;"><code>publicism</code></td>
+<td style="text-align: left;">Unamuno (3), Darío (2), Ingenieros (2), Ramón y Cajal (2), Alarcón, Blasco Ibáñez, Larra, Lugones, Rodó, Sarmiento, Valera, Zorrilla</td>
+<td style="text-align: center;">17</td>
+</tr>
+</tbody>
+</table>
+<p>Por país: España (122), Argentina (10), Nicaragua (8), México (3), Cuba (2), Uruguay (2), Filipinas (2), Perú (1); el país es el del autor, así que Juan Ruiz de Alarcón, nacido en México, cuenta para México. Todas las obras son de dominio público tanto en España, donde el autor murió antes de 1946, como en los Estados Unidos, donde se publicaron antes de 1931. La colección sirve para la atribución de autoría y para comparar géneros, épocas y el español de España y de América.</p>
+<p>Los textos son las transcripciones del <a href="https://www.gutenberg.org">Proyecto Gutenberg</a>, recortadas al texto del autor: se quitan las portadas, las notas de los transcriptores, las listas de otras obras y los anuncios, los índices, las introducciones, los prólogos y las notas de los editores, las fe de erratas y las notas al pie, así como el marcado de las transcripciones (los guiones bajos de la cursiva, las imágenes, los números de las estrofas). Los prólogos, las dedicatorias y las notas de los propios autores se quedan. Las obras en varios tomos se unen en un solo texto. Los años son los de la primera publicación (<code>1605</code>-<code>1615</code> para las dos partes del Quijote); los archivos de la colección llevan los números de los libros del Proyecto Gutenberg.</p>
+<p>El archivo (19 MB) se guarda en el repositorio de la biblioteca, se descarga una vez en el directorio de datos, se verifica con su suma de comprobación SHA-256 y se extrae; los textos se leen de uno en uno.</p>
+<details class="info">
+<summary>Las 150 obras</summary>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Autor</th>
+<th style="text-align: left;">Obra</th>
+<th style="text-align: center;">Género</th>
+<th style="text-align: center;">Años</th>
+<th style="text-align: left;">País</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Pedro Antonio de Alarcón</td>
+<td style="text-align: left;">El clavo</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1853</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Pedro Antonio de Alarcón</td>
+<td style="text-align: left;">El niño de la bola</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1880</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">Arroz y tartana</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1894</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">Flor de mayo</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1895</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">La barraca</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1898</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">Entre naranjos</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1900</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">La catedral</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1903</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">El intruso</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1904</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">La bodega</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1905</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">La horda</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1905</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">La maja desnuda</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1906</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">Sangre y arena</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1908</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">Los muertos mandan</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1909</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">Los argonautas</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1914</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">Los cuatro jinetes del Apocalipsis</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1916</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">Mare nostrum</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1918</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">Los enemigos de la mujer</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1919</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Miguel de Cervantes</td>
+<td style="text-align: left;">Don Quijote de la Mancha</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1605-1615</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Miguel de Cervantes</td>
+<td style="text-align: left;">Novelas ejemplares</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1613</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Leopoldo Alas «Clarín»</td>
+<td style="text-align: left;">La Regenta</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1884-1885</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Leopoldo Alas «Clarín»</td>
+<td style="text-align: left;">Su único hijo</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1890</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Leopoldo Alas «Clarín»</td>
+<td style="text-align: left;">El Señor y lo demás, son cuentos</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1893</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Rubén Darío</td>
+<td style="text-align: left;">Azul...</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1888</td>
+<td style="text-align: left;">Nicaragua</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">La Fontana de Oro</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1870</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Bailén</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1873</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Trafalgar</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1873</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Cádiz</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1874</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Zaragoza</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1874</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Gloria</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1876-1877</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Marianela</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1878</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">La familia de León Roch</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1878-1879</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">La desheredada</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1881</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">El amigo Manso</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1882</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">La de Bringas</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1884</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Tormento</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1884</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Fortunata y Jacinta</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1887</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Miau</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1888</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Torquemada en la hoguera</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1889</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Realidad</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1889</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">La incógnita</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1889</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Torquemada en la cruz</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1893</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Torquemada en el purgatorio</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1894</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Torquemada y San Pedro</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1895</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Benito Pérez Galdós</td>
+<td style="text-align: left;">Misericordia</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1897</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Mariano José de Larra</td>
+<td style="text-align: left;">El doncel de don Enrique el Doliente</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1834</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Leopoldo Lugones</td>
+<td style="text-align: left;">Las fuerzas extrañas</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1906</td>
+<td style="text-align: left;">Argentina</td>
+</tr>
+<tr>
+<td style="text-align: left;">José Martí</td>
+<td style="text-align: left;">Amistad funesta</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1885</td>
+<td style="text-align: left;">Cuba</td>
+</tr>
+<tr>
+<td style="text-align: left;">José Martí</td>
+<td style="text-align: left;">La Edad de Oro</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1889</td>
+<td style="text-align: left;">Cuba</td>
+</tr>
+<tr>
+<td style="text-align: left;">Armando Palacio Valdés</td>
+<td style="text-align: left;">El señorito Octavio</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1881</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Armando Palacio Valdés</td>
+<td style="text-align: left;">Marta y María</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1883</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Armando Palacio Valdés</td>
+<td style="text-align: left;">El idilio de un enfermo</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1884</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Armando Palacio Valdés</td>
+<td style="text-align: left;">Riverita</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1886</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Armando Palacio Valdés</td>
+<td style="text-align: left;">Maximina</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1887</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Armando Palacio Valdés</td>
+<td style="text-align: left;">El cuarto poder</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1888</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Armando Palacio Valdés</td>
+<td style="text-align: left;">La hermana San Sulpicio</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1889</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Armando Palacio Valdés</td>
+<td style="text-align: left;">La espuma</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1890</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Armando Palacio Valdés</td>
+<td style="text-align: left;">La fe</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1892</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Armando Palacio Valdés</td>
+<td style="text-align: left;">El maestrante</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1893</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Armando Palacio Valdés</td>
+<td style="text-align: left;">La alegría del capitán Ribot</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1899</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Armando Palacio Valdés</td>
+<td style="text-align: left;">La aldea perdida</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1903</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Armando Palacio Valdés</td>
+<td style="text-align: left;">Tristán o el pesimismo</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1906</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ricardo Palma</td>
+<td style="text-align: left;">Tradiciones peruanas</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1872-1910</td>
+<td style="text-align: left;">Perú</td>
+</tr>
+<tr>
+<td style="text-align: left;">Emilia Pardo Bazán</td>
+<td style="text-align: left;">Un viaje de novios</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1881</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Emilia Pardo Bazán</td>
+<td style="text-align: left;">La Tribuna</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1883</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Emilia Pardo Bazán</td>
+<td style="text-align: left;">El cisne de Vilamorta</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1885</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Emilia Pardo Bazán</td>
+<td style="text-align: left;">Los pazos de Ulloa</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1886</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Emilia Pardo Bazán</td>
+<td style="text-align: left;">La madre naturaleza</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1887</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Emilia Pardo Bazán</td>
+<td style="text-align: left;">Insolación y Morriña</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1889</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Emilia Pardo Bazán</td>
+<td style="text-align: left;">Una cristiana</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1890</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Emilia Pardo Bazán</td>
+<td style="text-align: left;">La prueba</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1890</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Emilia Pardo Bazán</td>
+<td style="text-align: left;">La piedra angular</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1891</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Emilia Pardo Bazán</td>
+<td style="text-align: left;">Cuentos de amor</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1898</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Emilia Pardo Bazán</td>
+<td style="text-align: left;">La quimera</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1905</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Emilia Pardo Bazán</td>
+<td style="text-align: left;">La sirena negra</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1908</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Emilia Pardo Bazán</td>
+<td style="text-align: left;">Dulce dueño</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1911</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Roberto J. Payró</td>
+<td style="text-align: left;">El casamiento de Laucha</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1906</td>
+<td style="text-align: left;">Argentina</td>
+</tr>
+<tr>
+<td style="text-align: left;">Roberto J. Payró</td>
+<td style="text-align: left;">Pago Chico</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1908</td>
+<td style="text-align: left;">Argentina</td>
+</tr>
+<tr>
+<td style="text-align: left;">Roberto J. Payró</td>
+<td style="text-align: left;">Divertidas aventuras del nieto de Juan Moreira</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1910</td>
+<td style="text-align: left;">Argentina</td>
+</tr>
+<tr>
+<td style="text-align: left;">José María de Pereda</td>
+<td style="text-align: left;">Escenas montañesas</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1864</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">José María de Pereda</td>
+<td style="text-align: left;">Los hombres de pro</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1872</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">José María de Pereda</td>
+<td style="text-align: left;">De tal palo, tal astilla</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1880</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">José María de Pereda</td>
+<td style="text-align: left;">El sabor de la tierruca</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1882</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">José María de Pereda</td>
+<td style="text-align: left;">Pedro Sánchez</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1883</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">José María de Pereda</td>
+<td style="text-align: left;">Sotileza</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1885</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">José María de Pereda</td>
+<td style="text-align: left;">La puchera</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1889</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">José María de Pereda</td>
+<td style="text-align: left;">Peñas arriba</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1895</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Francisco de Quevedo</td>
+<td style="text-align: left;">Historia de la vida del Buscón</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1626</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Horacio Quiroga</td>
+<td style="text-align: left;">Cuentos de amor de locura y de muerte</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1917</td>
+<td style="text-align: left;">Uruguay</td>
+</tr>
+<tr>
+<td style="text-align: left;">José Rizal</td>
+<td style="text-align: left;">Noli me tángere</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1887</td>
+<td style="text-align: left;">Filipinas</td>
+</tr>
+<tr>
+<td style="text-align: left;">José Rizal</td>
+<td style="text-align: left;">El filibusterismo</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1891</td>
+<td style="text-align: left;">Filipinas</td>
+</tr>
+<tr>
+<td style="text-align: left;">Miguel de Unamuno</td>
+<td style="text-align: left;">Amor y pedagogía</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1902</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Miguel de Unamuno</td>
+<td style="text-align: left;">El espejo de la muerte</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1913</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Miguel de Unamuno</td>
+<td style="text-align: left;">Niebla</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1914</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Miguel de Unamuno</td>
+<td style="text-align: left;">Abel Sánchez</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1917</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Miguel de Unamuno</td>
+<td style="text-align: left;">Tres novelas ejemplares y un prólogo</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1920</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Miguel de Unamuno</td>
+<td style="text-align: left;">La tía Tula</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1921</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Juan Valera</td>
+<td style="text-align: left;">Pepita Jiménez</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1874</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Juan Valera</td>
+<td style="text-align: left;">Las ilusiones del doctor Faustino</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1875</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Juan Valera</td>
+<td style="text-align: left;">El comendador Mendoza</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1877</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Juan Valera</td>
+<td style="text-align: left;">Doña Luz</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1879</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Juan Valera</td>
+<td style="text-align: left;">Juanita la Larga</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1895</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Juan Valera</td>
+<td style="text-align: left;">Genio y figura</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1897</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ramón del Valle-Inclán</td>
+<td style="text-align: left;">Sonata de otoño. Sonata de invierno</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1902-1905</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ramón del Valle-Inclán</td>
+<td style="text-align: left;">Sonata de estío</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1903</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ramón del Valle-Inclán</td>
+<td style="text-align: left;">Sonata de primavera</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1904</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ramón del Valle-Inclán</td>
+<td style="text-align: left;">La media noche</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1917</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ramón del Valle-Inclán</td>
+<td style="text-align: left;">Tirano Banderas</td>
+<td style="text-align: center;"><code>prose</code></td>
+<td style="text-align: center;">1926</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Rubén Darío</td>
+<td style="text-align: left;">Prosas profanas</td>
+<td style="text-align: center;"><code>poems</code></td>
+<td style="text-align: center;">1896</td>
+<td style="text-align: left;">Nicaragua</td>
+</tr>
+<tr>
+<td style="text-align: left;">Rubén Darío</td>
+<td style="text-align: left;">Cantos de vida y esperanza</td>
+<td style="text-align: center;"><code>poems</code></td>
+<td style="text-align: center;">1905</td>
+<td style="text-align: left;">Nicaragua</td>
+</tr>
+<tr>
+<td style="text-align: left;">Rubén Darío</td>
+<td style="text-align: left;">El canto errante</td>
+<td style="text-align: center;"><code>poems</code></td>
+<td style="text-align: center;">1907</td>
+<td style="text-align: left;">Nicaragua</td>
+</tr>
+<tr>
+<td style="text-align: left;">Rubén Darío</td>
+<td style="text-align: left;">Poema del otoño y otros poemas</td>
+<td style="text-align: center;"><code>poems</code></td>
+<td style="text-align: center;">1910</td>
+<td style="text-align: left;">Nicaragua</td>
+</tr>
+<tr>
+<td style="text-align: left;">Rubén Darío</td>
+<td style="text-align: left;">Canto a la Argentina y otros poemas</td>
+<td style="text-align: center;"><code>poems</code></td>
+<td style="text-align: center;">1914</td>
+<td style="text-align: left;">Nicaragua</td>
+</tr>
+<tr>
+<td style="text-align: left;">José Hernández</td>
+<td style="text-align: left;">El gaucho Martín Fierro</td>
+<td style="text-align: center;"><code>poems</code></td>
+<td style="text-align: center;">1872</td>
+<td style="text-align: left;">Argentina</td>
+</tr>
+<tr>
+<td style="text-align: left;">José Hernández</td>
+<td style="text-align: left;">La vuelta de Martín Fierro</td>
+<td style="text-align: center;"><code>poems</code></td>
+<td style="text-align: center;">1879</td>
+<td style="text-align: left;">Argentina</td>
+</tr>
+<tr>
+<td style="text-align: left;">Antonio Machado</td>
+<td style="text-align: left;">Poesías completas</td>
+<td style="text-align: center;"><code>poems</code></td>
+<td style="text-align: center;">1917</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Rosalía de Castro</td>
+<td style="text-align: left;">En las orillas del Sar</td>
+<td style="text-align: center;"><code>poems</code></td>
+<td style="text-align: center;">1884</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">José Zorrilla</td>
+<td style="text-align: left;">Granada. Poema oriental</td>
+<td style="text-align: center;"><code>poems</code></td>
+<td style="text-align: center;">1852</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Carlos Arniches</td>
+<td style="text-align: left;">La señorita de Trevélez</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1916</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Carlos Arniches</td>
+<td style="text-align: left;">Los caciques</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1920</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Carlos Arniches</td>
+<td style="text-align: left;">Es mi hombre</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1921</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Miguel de Cervantes</td>
+<td style="text-align: left;">Entremeses</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1615</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Joaquín Dicenta</td>
+<td style="text-align: left;">Juan José</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1895</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Lope de Vega</td>
+<td style="text-align: left;">Fuenteovejuna</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1619</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Lope de Vega</td>
+<td style="text-align: left;">El castigo sin venganza</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1634</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Leandro Fernández de Moratín</td>
+<td style="text-align: left;">El sí de las niñas</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1806</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Juan Ruiz de Alarcón</td>
+<td style="text-align: left;">Los favores del mundo</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1628</td>
+<td style="text-align: left;">México</td>
+</tr>
+<tr>
+<td style="text-align: left;">Juan Ruiz de Alarcón</td>
+<td style="text-align: left;">Las paredes oyen</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1628</td>
+<td style="text-align: left;">México</td>
+</tr>
+<tr>
+<td style="text-align: left;">Juan Ruiz de Alarcón</td>
+<td style="text-align: left;">La verdad sospechosa</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1634</td>
+<td style="text-align: left;">México</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ramón del Valle-Inclán</td>
+<td style="text-align: left;">El marqués de Bradomín</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1907</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ramón del Valle-Inclán</td>
+<td style="text-align: left;">Romance de lobos</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1908</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ramón del Valle-Inclán</td>
+<td style="text-align: left;">Luces de bohemia</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1920-1924</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Ramón del Valle-Inclán</td>
+<td style="text-align: left;">Divinas palabras</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1920</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">José Zorrilla</td>
+<td style="text-align: left;">Traidor, inconfeso y mártir</td>
+<td style="text-align: center;"><code>drama</code></td>
+<td style="text-align: center;">1849</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Pedro Antonio de Alarcón</td>
+<td style="text-align: left;">Viajes por España</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1883</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Vicente Blasco Ibáñez</td>
+<td style="text-align: left;">Oriente</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1907</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Rubén Darío</td>
+<td style="text-align: left;">Los raros</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1896</td>
+<td style="text-align: left;">Nicaragua</td>
+</tr>
+<tr>
+<td style="text-align: left;">Rubén Darío</td>
+<td style="text-align: left;">España contemporánea</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1901</td>
+<td style="text-align: left;">Nicaragua</td>
+</tr>
+<tr>
+<td style="text-align: left;">José Ingenieros</td>
+<td style="text-align: left;">La simulación en la lucha por la vida</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1903</td>
+<td style="text-align: left;">Argentina</td>
+</tr>
+<tr>
+<td style="text-align: left;">José Ingenieros</td>
+<td style="text-align: left;">El hombre mediocre</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1913</td>
+<td style="text-align: left;">Argentina</td>
+</tr>
+<tr>
+<td style="text-align: left;">Mariano José de Larra</td>
+<td style="text-align: left;">Fígaro. Artículos selectos</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1832-1837</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Leopoldo Lugones</td>
+<td style="text-align: left;">El payador</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1916</td>
+<td style="text-align: left;">Argentina</td>
+</tr>
+<tr>
+<td style="text-align: left;">Santiago Ramón y Cajal</td>
+<td style="text-align: left;">Reglas y consejos sobre investigación científica</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1897</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Santiago Ramón y Cajal</td>
+<td style="text-align: left;">Recuerdos de mi vida</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1901-1917</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">José Enrique Rodó</td>
+<td style="text-align: left;">Ariel</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1900</td>
+<td style="text-align: left;">Uruguay</td>
+</tr>
+<tr>
+<td style="text-align: left;">Domingo Faustino Sarmiento</td>
+<td style="text-align: left;">Facundo</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1845</td>
+<td style="text-align: left;">Argentina</td>
+</tr>
+<tr>
+<td style="text-align: left;">Miguel de Unamuno</td>
+<td style="text-align: left;">Vida de Don Quijote y Sancho</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1905</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Miguel de Unamuno</td>
+<td style="text-align: left;">Del sentimiento trágico de la vida</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1913</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Miguel de Unamuno</td>
+<td style="text-align: left;">Andanzas y visiones españolas</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1922</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">Juan Valera</td>
+<td style="text-align: left;">Cartas americanas</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1889</td>
+<td style="text-align: left;">España</td>
+</tr>
+<tr>
+<td style="text-align: left;">José Zorrilla</td>
+<td style="text-align: left;">Recuerdos del tiempo viejo I</td>
+<td style="text-align: center;"><code>publicism</code></td>
+<td style="text-align: center;">1880</td>
+<td style="text-align: left;">España</td>
+</tr>
+</tbody>
+</table>
+</details>
+<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>data_dir</code></td>
+<td style="text-align: center;">str/Path</td>
+<td style="text-align: center;"><code>DEFAULT_DATA_DIR.joinpath("texts")</code></td>
+<td style="text-align: center;">Ruta al directorio del conjunto de datos</td>
+</tr>
+</tbody>
+</table>
+<h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Atributo</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>genres</code></td>
+<td style="text-align: center;">tuple[str]</td>
+<td style="text-align: center;">Tupla de géneros: <code>prose</code>, <code>poems</code>, <code>drama</code>, <code>publicism</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>authors</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;">Nombres de los autores por los nombres de sus carpetas</td>
+</tr>
+</tbody>
+</table>
+<h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
+<h3 id="download">download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h3>
+<p>Descarga el archivo con verificación de la suma de comprobación y extrae los ficheros. Un archivo dañado o sustituido se borra y se descarga de nuevo en la misma llamada; si el archivo está pero faltan ficheros, se extrae otra vez. Una llamada repetida no descarga nada.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>force</code></td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;"><code>False</code></td>
+<td style="text-align: center;">Descargar el conjunto de datos aunque ya esté descargado</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanishLiterature</span>
+
+<span class="n">sl</span> <span class="o">=</span> <span class="n">SpanishLiterature</span><span class="p">()</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
+<span class="n">sl</span><span class="o">.</span><span class="n">info</span>
+<span class="c1"># {'name': 'spanish_literature',</span>
+<span class="c1">#  'url': 'https://www.gutenberg.org',</span>
+<span class="c1">#  'description': 'Spanish-language literature in the public domain',</span>
+<span class="c1">#  'author': 'Shkarin S.S.',</span>
+<span class="c1">#  'license': 'Public domain'}</span>
+</code></pre></div>
+</div>
+<h3 id="get_texts">get_texts<a class="headerlink" href="#get_texts" title="Permanent link">&para;</a></h3>
+<p>Extrae los textos (sin encabezados) del conjunto de datos.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>genre</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Género: <code>prose</code>, <code>poems</code>, <code>drama</code> o <code>publicism</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>author</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Autor: una subcadena del nombre, sin distinguir mayúsculas ni tildes</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>country</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">País: una subcadena del nombre en español, sin distinguir mayúsculas ni tildes</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>year_from</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Primer año de la primera publicación</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>year_to</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Último año de la primera publicación</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>min_len</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Longitud mínima del texto (en caracteres)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>max_len</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Longitud máxima del texto (en caracteres)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>limit</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Número de textos</td>
+</tr>
+</tbody>
+</table>
+<p>Los filtros se combinan; <code>author="galdos"</code> encuentra a Benito Pérez Galdós, <code>country="mexico"</code> encuentra <code>México</code>. Un género desconocido, un primer año posterior al último, una longitud menor que uno, una longitud mínima mayor que la máxima y un límite negativo levantan <code>ParameterError</code>.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanishLiterature</span>
+
+<span class="n">sl</span> <span class="o">=</span> <span class="n">SpanishLiterature</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">sl</span><span class="o">.</span><span class="n">get_texts</span><span class="p">(</span><span class="n">genre</span><span class="o">=</span><span class="s2">"poems"</span><span class="p">,</span> <span class="n">author</span><span class="o">=</span><span class="s2">"Rosalía"</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">text</span><span class="p">[:</span><span class="mi">107</span><span class="p">])</span>
+<span class="c1"># Aunque no alcancen gloria,</span>
+<span class="c1">#     Pensé escribiendo libro tan pequeño,</span>
+<span class="c1">#     Son fáciles y breves mis canciones,</span>
+</code></pre></div>
+</div>
+<h3 id="get_records">get_records<a class="headerlink" href="#get_records" title="Permanent link">&para;</a></h3>
+<p>Extrae los registros (con encabezados) del conjunto de datos. Campos del registro: <code>genre</code> - género, <code>author</code> - autor, <code>title</code> - título, <code>year_from</code> y <code>year_to</code> - los años de la primera publicación, <code>country</code> - el país del autor en español, <code>text</code> - texto, <code>file</code> - ruta al fichero. Los registros van por género en el orden de <code>genres</code>, dentro de un género por la carpeta del autor y por año.</p>
+<p>Los parámetros son los mismos que los de <code>get_texts</code>.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanishLiterature</span>
+
+<span class="n">sl</span> <span class="o">=</span> <span class="n">SpanishLiterature</span><span class="p">()</span>
+
+<span class="c1"># El teatro del siglo XX</span>
+<span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">sl</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">genre</span><span class="o">=</span><span class="s2">"drama"</span><span class="p">,</span> <span class="n">year_from</span><span class="o">=</span><span class="mi">1900</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">record</span><span class="p">[</span><span class="s2">"title"</span><span class="p">],</span> <span class="n">record</span><span class="p">[</span><span class="s2">"year_from"</span><span class="p">],</span> <span class="n">record</span><span class="p">[</span><span class="s2">"author"</span><span class="p">])</span>
+<span class="c1"># La señorita de Trevélez 1916 Carlos Arniches</span>
+<span class="c1"># Los caciques 1920 Carlos Arniches</span>
+<span class="c1"># Es mi hombre 1921 Carlos Arniches</span>
+<span class="c1"># El marqués de Bradomín 1907 Ramón del Valle-Inclán</span>
+<span class="c1"># Romance de lobos 1908 Ramón del Valle-Inclán</span>
+<span class="c1"># Luces de bohemia 1920 Ramón del Valle-Inclán</span>
+<span class="c1"># Divinas palabras 1920 Ramón del Valle-Inclán</span>
+</code></pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">La ortografía sigue a la edición</p>
+<p>Los textos conservan la ortografía de las ediciones transcritas. 62 de ellos tienen las tildes de su época (<code>á</code> como preposición, <code>fué</code>, <code>dió</code>), 87 tienen las modernas: las ediciones impresas después de las reformas de la Academia y una docena de textos que los transcriptores del Proyecto Gutenberg modernizaron según las normas de 2010 (entre ellos El castigo sin venganza, Las paredes oyen, Tirano Banderas, Luces de bohemia, Los caciques y Es mi hombre). Tres novelas vienen de ediciones de 1978-1982 con ortografía moderna (Arroz y tartana, La catedral, Juanita la Larga). Galdós tiene 12 textos del primer tipo y 9 del segundo. Como <code>á</code> y <code>a</code> son palabras distintas para una lista de frecuencias, la estilometría sobre las palabras más frecuentes puede separar los textos por su edición y no por su autor: quite la tilde de los monosílabos (<code>á</code>, <code>é</code>, <code>ó</code>, <code>ú</code>, <code>fué</code>, <code>dió</code>, <code>vió</code>) antes de una comparación así. A Abel Sánchez le faltan la mayoría de los <code>¿</code> y <code>¡</code> de apertura, como a su edición.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Ediciones y contenido</p>
+<p>Varias obras siguen ediciones revisadas por sus autores: la Opera Omnia de Valle-Inclán (1913-1924), las obras completas de Pereda, Palacio Valdés y Blasco Ibáñez, la sexta edición de Reglas y consejos sobre investigación científica (1923), muy ampliada respecto al discurso de 1897; los años siguen siendo los de la primera publicación. Algunos registros son selecciones o tomos sueltos: Tradiciones peruanas (27 tradiciones), Recuerdos del tiempo viejo I (el primero de tres tomos), El payador (el primer y único tomo publicado); los Entremeses son los ocho de la colección de 1615, sin los tres de atribución dudosa. Las Novelas ejemplares van sin La tía fingida. Dos registros contienen dos obras cada uno, como dicen sus títulos: Insolación y Morriña y Sonata de otoño. Sonata de invierno. En algunas comedias del Siglo de Oro quedan los corchetes de los editores alrededor de las acotaciones y de los nombres que añadieron.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/SergeyShk" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/kouki91/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77m282.1 320h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../../js/config.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+      
+    
+  </body>
+</html>

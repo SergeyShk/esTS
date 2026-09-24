@@ -85,6 +85,13 @@
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/stylometry/"/>
     </url>
     <url>
+        <loc>Nonedatasets/spanishliterature/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonedatasets/spanishliterature/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/datasets/spanishliterature/"/>
+    </url>
+    <url>
         <loc>Noneextractors/char_ngrams/</loc>
         <lastmod>2026-09-24</lastmod>
         <changefreq>daily</changefreq>
@@ -293,6 +300,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/stylometry/"/>
         <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/stylometry/"/>
+    </url>
+    <url>
+        <loc>Nonees/datasets/spanishliterature/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/datasets/spanishliterature/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonedatasets/spanishliterature/"/>
     </url>
     <url>
         <loc>Nonees/extractors/char_ngrams/</loc>
