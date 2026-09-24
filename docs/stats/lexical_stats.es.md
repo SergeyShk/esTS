@@ -7,7 +7,7 @@
 
 Un módulo para calcular las estadísticas de complejidad léxica de un texto a la manera de [TAALES](https://doi.org/10.3758/s13428-017-0924-4) - cuán raras son las palabras del texto en la lengua: la frecuencia media, el rango y la dispersión de los lemas según el [diccionario de frecuencias](../datasets/freqdict.md) de Google Books Ngram, las proporciones de palabras de las bandas de frecuencia top-1000, 2000, 5000 y 10000 según la lista integrada de los lemas más frecuentes, la sorpresa (surprisal) y la perplejidad según el modelo de unigramas del diccionario, la densidad léxica. A diferencia de las [métricas de diversidad léxica](diversity_stats.md), que comparan las palabras del texto entre sí, aquí las palabras se comparan con las frecuencias de la lengua.
 
-Una palabra se busca por [`lemma_key`](../datasets/freqdict.md#lemma_key), la clave con la que se construye el diccionario: el lema de simplemma de la palabra en minúsculas, y la forma en minúsculas para un nombre propio, así que `París` se encuentra como `parís` y no como el verbo `parir`. Si una palabra es un nombre propio, y si es una palabra con contenido, sale de la anotación, así que la fuente tiene que estar anotada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline pasado en `nlp`, y un `Doc` debe llevar las categorías gramaticales (un `morphologizer`, o un `tagger` con un `attribute_ruler`); una fuente sin ellas levanta `SourceError`. Los lemas del modelo no se usan. La última palabra sobre los nombres propios la tiene el etiquetador: un verbo con mayúscula al principio de una oración etiquetado `PROPN` se busca por su forma. Una palabra con contenido se define como en [`CohesionStats`](cohesion_stats.md): una de `CONTENT_UD_POS` (sustantivos, nombres propios, adjetivos, verbos, adverbios) y no demostrativa. Los números (`2020`, `5,5`, `3.º`) no son palabras: el diccionario y la lista no los tienen, y parecerían las palabras más raras del texto.
+Una palabra se busca por [`lemma_key`](../datasets/freqdict.md#lemma_key), la clave con la que se construye el diccionario: el lema de simplemma de la palabra en minúsculas, y para un nombre propio la forma en minúsculas cuando el diccionario la tiene, así que `París` se encuentra como `parís` y no como el verbo `parir`. Un nombre propio cuya forma no tiene fila propia vuelve a su lema, como lo contó el diccionario: una forma que no va con mayúscula en el 90 % de sus apariciones fue a su lema, así que `Estados` de *Estados Unidos* se encuentra en `estado` y `Nueva` de *Nueva York* en `nuevo` (el atributo `keys`). Si una palabra es un nombre propio, y si es una palabra con contenido, sale de la anotación, así que la fuente tiene que estar anotada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline pasado en `nlp`, y un `Doc` debe llevar las categorías gramaticales (un `morphologizer`, o un `tagger` con un `attribute_ruler`); una fuente sin ellas levanta `SourceError`. Los lemas del modelo no se usan. Un verbo con mayúscula al principio de una oración que el etiquetador llama `PROPN` tampoco tiene fila propia y se encuentra por su lema (`Miró` en `mirar`). Una palabra con contenido se define como en [`CohesionStats`](cohesion_stats.md): una de `CONTENT_UD_POS` (sustantivos, nombres propios, adjetivos, verbos, adverbios) y no demostrativa. Los números (`2020`, `5,5`, `3.º`) no son palabras: el diccionario y la lista no los tienen, y parecerían las palabras más raras del texto.
 
 Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto - levanta `SourceError`: divídalo en partes, o suba `max_length` en un pipeline propio y páselo en `nlp`.
 
@@ -31,7 +31,8 @@ Recursos:
 | Atributo | Tipo | Descripción |
 | :------: | :--: | :---------: |
 | `words` | tuple[str] | Tupla de las palabras |
-| `lemmas` | tuple[str] | Tupla de las claves de las palabras en el diccionario (`lemma_key`) |
+| `lemmas` | tuple[str] | Tupla de los lemas de las palabras por `lemma_key`, la forma en minúsculas para un nombre propio; las bandas se cuentan por ellos |
+| `keys` | tuple[str] | Tupla de las claves de las palabras en el diccionario: el lema de un nombre propio cuya forma no está en él |
 | `ranks` | tuple[int/None] | Tupla de los rangos de los lemas según la lista integrada, `None` fuera del top 10000 |
 | `entries` | tuple[Entry/None] | Tupla de las entradas del diccionario para cada palabra, `None` para una palabra fuera de él |
 | `n_words` | int | Número de palabras |
@@ -62,7 +63,7 @@ Las medias según el diccionario se calculan solo sobre las palabras encontradas
 
 ### band_coverage
 
-Devuelve las proporciones de palabras con un lema del top N para cada límite N.
+Devuelve las proporciones de palabras con un lema del top N para cada límite N. Un límite fuera de 1 y 10000 - el tamaño de la lista - levanta `ParameterError`.
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |

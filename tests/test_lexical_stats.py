@@ -6,7 +6,7 @@ import spacy
 from ests import LexicalStats
 from ests.constants import FREQUENCY_BANDS, LEXICAL_STATS_DESC
 from ests.datasets import FreqDict
-from ests.exceptions import DatasetNotFoundError, SourceError, SourceTypeError
+from ests.exceptions import DatasetNotFoundError, ParameterError, SourceError, SourceTypeError
 from ests.lexical_stats import calc_surprisal, get_rank, is_number, load_top_lemmas
 from ests.utils import get_nlp
 
@@ -70,6 +70,27 @@ def test_proper_nouns(freq_dict):
     assert ls.entries[0].pos == ("PROPN",)
     assert ls.lemmas[5] == "francia"
     assert ls.n_content_words == 6
+
+
+def test_proper_noun_falls_back_to_the_lemma(freq_dict):
+    ls = LexicalStats("Estados Unidos y Nueva York", freq_dict)
+    assert ls.lemmas[:2] == ("estados", "unidos")
+    assert ls.keys[:4] == ("estado", "unidos", "y", "nuevo")
+    assert ls.entries[0] == freq_dict.lookup("estado")
+    assert ls.coverage == 1.0
+    # The bands count the lower-case form of a proper noun
+    assert ls.ranks[0] is None
+
+
+def test_verb_tagged_as_proper_noun(freq_dict):
+    doc = spacy.blank("es")("Miró la ventana")
+    for token, pos in zip(doc, ["PROPN", "DET", "NOUN"], strict=True):
+        token.pos_ = pos
+    ls = LexicalStats(doc, freq_dict)
+    assert ls.lemmas[0] == "miró"
+    assert ls.keys[0] == "mirar"
+    assert ls.entries[0].ipm == freq_dict.ipm("mirar")
+    assert ls.surprisal == pytest.approx(calc_surprisal(ls.keys, freq_dict))
 
 
 def test_numbers_are_no_words(freq_dict):
@@ -143,6 +164,16 @@ def test_bands(ls):
     }
     unique = ls.band_coverage(unique=True)
     assert unique[1000] == pytest.approx(6 / 9)
+
+
+@pytest.mark.parametrize("bands", [(0,), (-5,), (10_001,), (1000, 20_000)])
+def test_band_bounds(ls, bands):
+    with pytest.raises(ParameterError):
+        ls.band_coverage(bands=bands)
+
+
+def test_band_bounds_limits(ls):
+    assert set(ls.band_coverage(bands=(1, 10_000))) == {1, 10_000}
 
 
 def test_top_lemmas():

@@ -10,7 +10,7 @@ from spacy.tokens import Doc
 from .cohesion_stats import token_info
 from .constants import FREQUENCY_BANDS, LEXICAL_STATS_DESC
 from .datasets.freq_dict import Entry, FreqDict, lemma_key
-from .exceptions import SourceError, SourceTypeError
+from .exceptions import ParameterError, SourceError, SourceTypeError
 from .extractors import NUMBER_PATTERN
 from .utils import get_nlp, iter_doc_tokens, safe_divide
 
@@ -32,9 +32,13 @@ class LexicalStats:
         surprisal and the perplexity by the unigram model of the dictionary,
         the lexical density
         A word is looked up by lemma_key, the key the dictionary is built with:
-        the lemma of simplemma of the word in lower case, and the lower-case
-        form for a proper noun (PROPN), so París is found as parís and not as
-        the verb parir. The parts of speech come from the annotation, so the
+        the lemma of simplemma of the word in lower case, and for a proper noun
+        (PROPN) the lower-case form when the dictionary has it, so París is
+        found as parís and not as the verb parir, while Estados of Estados
+        Unidos, which the dictionary counts under estado, falls back to its
+        lemma. The bands take the lower-case form of a proper noun, as the list
+        alone cannot tell París from parir. The parts of speech come from the
+        annotation, so the
         source has to be annotated: a string is parsed with the model
         es_core_news_sm or with the pipeline given in nlp, and a Doc must carry
         the parts of speech. A content word is one of CONTENT_UD_POS and no
@@ -68,7 +72,10 @@ class LexicalStats:
 
     Attributes:
         words (tuple[str]): Tuple of the words
-        lemmas (tuple[str]): Tuple of the keys of the words in the dictionary (lemma_key)
+        lemmas (tuple[str]): Tuple of the lemmas of the words by lemma_key, the
+            lower-case form for a proper noun; the bands are counted by them
+        keys (tuple[str]): Tuple of the keys of the words in the frequency
+            dictionary: the lemma of a proper noun when its form is not there
         n_words (int): Number of words
         n_content_words (int): Number of content words
         n_found (int): Number of words found in the frequency dictionary
@@ -133,7 +140,11 @@ class LexicalStats:
             )
         self.freq_dict = freq_dict if freq_dict is not None else FreqDict()
         self.words = tuple(token.text for token in tokens)
-        self.lemmas = tuple(lemma_key(token.text, token.pos_ == "PROPN") for token in tokens)
+        self._proper = tuple(token.pos_ == "PROPN" for token in tokens)
+        self.lemmas = tuple(
+            lemma_key(token.text, proper)
+            for token, proper in zip(tokens, self._proper, strict=True)
+        )
         self._content = tuple(token_info(token).content for token in tokens)
         self.n_words = len(self.words)
         self.n_content_words = sum(self._content)
@@ -147,11 +158,29 @@ class LexicalStats:
         self.p_beyond_top10000 = 1 - bands[10000]
 
     @cached_property
+    def keys(self) -> tuple[str, ...]:
+        """
+        Keys of the words in the frequency dictionary
+
+        Description:
+            A proper noun is looked up by its form when the dictionary has it
+            (París - parís) and by its lemma otherwise, as the dictionary was
+            built: a form that is not capitalized in 90% of its occurrences
+            is counted under its lemma, so Estados of Estados Unidos is in
+            estado, and a verb tagged PROPN at the start of a sentence (Miró)
+            is in mirar
+        """
+        return tuple(
+            lemma_key(word) if proper and lemma not in self.freq_dict else lemma
+            for word, lemma, proper in zip(self.words, self.lemmas, self._proper, strict=True)
+        )
+
+    @cached_property
     def entries(self) -> tuple[Entry | None, ...]:
         """
         Entries of the frequency dictionary for every word, None for the words out of it
         """
-        return tuple(self.freq_dict.lookup(lemma) for lemma in self.lemmas)
+        return tuple(self.freq_dict.lookup(key) for key in self.keys)
 
     @property
     def n_found(self) -> int:
@@ -187,7 +216,7 @@ class LexicalStats:
 
     @cached_property
     def surprisal(self) -> float:
-        return calc_surprisal(self.lemmas, self.freq_dict)
+        return calc_surprisal(self.keys, self.freq_dict)
 
     @property
     def perplexity(self) -> float:
@@ -213,7 +242,15 @@ class LexicalStats:
 
         Returns:
             dict[int, float]: Share of the words with a lemma of the top N for every bound N
+
+        Raises:
+            ParameterError: If a bound is out of 1 and the size of the list (10000):
+                beyond the list every share would be the one of the top 10000
         """
+        size = len(load_top_lemmas())
+        for band in bands:
+            if not 1 <= band <= size:
+                raise ParameterError(f"A bound of a band must be between 1 and {size} - {band}")
         ranks = [get_rank(lemma) for lemma in set(self.lemmas)] if unique else list(self.ranks)
         return {
             band: safe_divide(sum(1 for rank in ranks if rank and rank <= band), len(ranks))

@@ -7,7 +7,7 @@
 
 A module for computing the lexical sophistication statistics of a text in the manner of [TAALES](https://doi.org/10.3758/s13428-017-0924-4) - how rare the words of the text are in the language: the mean frequency, range and dispersion of the lemmas by the [frequency dictionary](../datasets/freqdict.md) of Google Books Ngram, the shares of the words of the frequency bands top-1000, 2000, 5000 and 10000 by the embedded list of the most frequent lemmas, the surprisal and the perplexity by the unigram model of the dictionary, the lexical density. Unlike the [lexical diversity metrics](diversity_stats.md), which compare the words of the text with each other, here the words are compared with the frequencies of the language.
 
-A word is looked up by [`lemma_key`](../datasets/freqdict.md#lemma_key), the key the dictionary is built with: the lemma of simplemma of the word in lower case, and the lower-case form for a proper noun, so `París` is found as `parís` and not as the verb `parir`. Whether a word is a proper noun, and whether it is a content word, comes from the annotation, so the source has to be annotated: a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, and a `Doc` must carry the parts of speech (a `morphologizer`, or a `tagger` with an `attribute_ruler`); a source without them raises `SourceError`. The lemmas of the model are not used. The tagger has the last word on the proper nouns: a capitalized verb at the start of a sentence tagged `PROPN` is looked up by its form. A content word is defined as in [`CohesionStats`](cohesion_stats.md): one of `CONTENT_UD_POS` (nouns, proper nouns, adjectives, verbs, adverbs) and no demonstrative. Numbers (`2020`, `5,5`, `3.º`) are no words: the dictionary and the list do not have them, and they would look like the rarest words of the text.
+A word is looked up by [`lemma_key`](../datasets/freqdict.md#lemma_key), the key the dictionary is built with: the lemma of simplemma of the word in lower case, and for a proper noun the lower-case form when the dictionary has it, so `París` is found as `parís` and not as the verb `parir`. A proper noun whose form has no row of its own falls back to its lemma, as the dictionary counted it there: a form not capitalized in 90% of its occurrences went to its lemma, so `Estados` of *Estados Unidos* is found in `estado` and `Nueva` of *Nueva York* in `nuevo` (the attribute `keys`). Whether a word is a proper noun, and whether it is a content word, comes from the annotation, so the source has to be annotated: a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, and a `Doc` must carry the parts of speech (a `morphologizer`, or a `tagger` with an `attribute_ruler`); a source without them raises `SourceError`. The lemmas of the model are not used. A capitalized verb at the start of a sentence that the tagger calls `PROPN` has no row of its own either and is found by its lemma (`Miró` in `mirar`). A content word is defined as in [`CohesionStats`](cohesion_stats.md): one of `CONTENT_UD_POS` (nouns, proper nouns, adjectives, verbs, adverbs) and no demonstrative. Numbers (`2020`, `5,5`, `3.º`) are no words: the dictionary and the list do not have them, and they would look like the rarest words of the text.
 
 A text longer than the `max_length` of the pipeline - a million characters by default - raises `SourceError`: split it into parts, or raise `max_length` on a pipeline of your own and pass it in `nlp`.
 
@@ -31,7 +31,8 @@ Resources:
 | Attribute | Type | Description |
 | :-------: | :--: | :---------: |
 | `words` | tuple[str] | Tuple of the words |
-| `lemmas` | tuple[str] | Tuple of the keys of the words in the dictionary (`lemma_key`) |
+| `lemmas` | tuple[str] | Tuple of the lemmas of the words by `lemma_key`, the lower-case form for a proper noun; the bands are counted by them |
+| `keys` | tuple[str] | Tuple of the keys of the words in the dictionary: the lemma of a proper noun whose form is not there |
 | `ranks` | tuple[int/None] | Tuple of the ranks of the lemmas by the embedded list, `None` beyond the top 10000 |
 | `entries` | tuple[Entry/None] | Tuple of the entries of the dictionary for every word, `None` for a word out of it |
 | `n_words` | int | Number of words |
@@ -62,7 +63,7 @@ The means by the dictionary are computed over the words found only, `nan` withou
 
 ### band_coverage
 
-Returns the shares of the words with a lemma of the top N for every bound N.
+Returns the shares of the words with a lemma of the top N for every bound N. A bound out of 1 and 10000 - the size of the list - raises `ParameterError`.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
