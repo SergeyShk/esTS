@@ -31,6 +31,7 @@ nav:
       - Word dispersion: corpus/dispersion.md
       - KWIC concordance: corpus/kwic.md
       - Stylometry: corpus/stylometry.md
+      - Corpus comparison: corpus/compare.md
 
 theme:
   name: material
@@ -89,6 +90,7 @@ plugins:
             Word dispersion: Dispersión de las palabras
             KWIC concordance: Concordancia KWIC
             Stylometry: Estilometría
+            Corpus comparison: Comparación de corpus
 
 extra:
   social:

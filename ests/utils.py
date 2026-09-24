@@ -148,17 +148,45 @@ def sentenize(text: str) -> Iterator[str]:
     Returns:
         iterator[str]: Iterator of sentences
     """
+    return (sent for _, _, sent in iter_text_sents(text))
+
+
+def iter_text_sents(text: str) -> Iterator[tuple[int, int, str]]:
+    """
+    Splitting a text into sentences with positions
+
+    Description:
+        The sentences of sentenize, by the same rules, with the positions of
+        their stripped text in the string
+
+    Arguments:
+        text (str): Text string
+
+    Returns:
+        iterator[tuple[int, int, str]]: Position of the first character,
+            position after the last character and text of each sentence
+
+    Example:
+        >>> from ests.utils import iter_text_sents
+        >>> list(iter_text_sents("Hola.  ¿Qué tal?"))
+        [(0, 5, 'Hola.'), (7, 16, '¿Qué tal?')]
+    """
     start = 0
     for match in SENTENCE_END.finditer(text):
         if match.group("break") is None and not _ends_sentence(text, start, match):
             continue
-        sent = text[start : match.end()].strip()
-        if sent:
-            yield sent
+        yield from _stripped_span(text, start, match.end())
         start = match.end()
-    tail = text[start:].strip()
-    if tail:
-        yield tail
+    yield from _stripped_span(text, start, len(text))
+
+
+def _stripped_span(text: str, start: int, stop: int) -> Iterator[tuple[int, int, str]]:
+    """The span of the text between the positions without surrounding whitespace, if any is left"""
+    chunk = text[start:stop]
+    sent = chunk.strip()
+    if sent:
+        begin = start + len(chunk) - len(chunk.lstrip())
+        yield begin, begin + len(sent), sent
 
 
 @lru_cache(maxsize=1)
@@ -256,6 +284,30 @@ def iter_doc_words(source: Doc | Span) -> Iterator[tuple[int, int, str]]:
     """
     for token in iter_doc_tokens(source):
         yield token.idx, token.idx + len(token), token.text
+
+
+def iter_text_words(text: str) -> Iterator[tuple[int, int, str]]:
+    """
+    Extracting words with positions from a string
+
+    Description:
+        The string is split by the tokenizer of the blank Spanish pipeline
+        (get_tokenizer), and punctuation marks and symbols are dropped, as in
+        WordsExtractor
+
+    Arguments:
+        text (str): Text string
+
+    Returns:
+        iterator[tuple[int, int, str]]: Position of the first character,
+            position after the last character and text of each word
+
+    Example:
+        >>> from ests.utils import iter_text_words
+        >>> list(iter_text_words("¡Hola, mundo!"))
+        [(1, 5, 'Hola'), (7, 12, 'mundo')]
+    """
+    return iter_doc_words(get_tokenizer()(text))
 
 
 @lru_cache(maxsize=4)

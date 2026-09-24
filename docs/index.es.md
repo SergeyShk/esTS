@@ -18,10 +18,10 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 *   calcular [estadísticas morfológicas](stats/morph_stats.md) sobre Universal Dependencies (categorías gramaticales y quince rasgos morfológicos) con los marcadores del español: los modos, las formas no personales, las cópulas `ser` y `estar`, los adverbios en `-mente`
 *   calcular [estadísticas sintácticas](stats/syntax_stats.md) sobre el árbol de dependencias (distancias, profundidad, cláusulas, coordinación) con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
 *   calcular [estadísticas de cohesión](stats/cohesion_stats.md) a la manera de Coh-Metrix (repetición de sustantivos, argumentos y palabras con contenido entre oraciones, información dada, cohesión temporal) con la densidad de 255 marcadores del discurso por clase
-*   comparar corpus con las medidas de la lingüística de corpus: [palabras clave](corpus/keyness.md) frente a un corpus de referencia, [colocaciones](corpus/collocations.md), la [dispersión](corpus/dispersion.md) de una palabra por las partes de un texto y una [concordancia KWIC](corpus/kwic.md), y atribuir la autoría por [estilometría](corpus/stylometry.md): la Delta de Burrows, Zeta, la curva de Mendenhall, las palabras funcionales
+*   comparar corpus con las medidas de la lingüística de corpus: [palabras clave](corpus/keyness.md) frente a un corpus de referencia, [colocaciones](corpus/collocations.md), la [dispersión](corpus/dispersion.md) de una palabra por las partes de un texto y una [concordancia KWIC](corpus/kwic.md), y atribuir la autoría por [estilometría](corpus/stylometry.md): la Delta de Burrows, Zeta, la curva de Mendenhall, las palabras funcionales; encontrar los rasgos que distinguen dos corpus [comparándolos](corpus/compare.md) por 132 rasgos de un texto
 *   añadir las estadísticas a un [pipeline de spaCy](components.md) como componentes, de modo que el texto se anote y se mida en una sola pasada y las estadísticas viajen con el `Doc`
 
-La comparación de corpus completa la 0.3; el estilo, la fonoestadística, la métrica y la rima llegan en la 0.4.
+La complejidad léxica y los primeros conjuntos de datos completan la 0.3; el estilo, la fonoestadística, la métrica y la rima llegan en la 0.4.
 
 ## Instalación
 
@@ -96,7 +96,7 @@ Punctuation marks   |    2
         *   basic_stats.py - estadísticas básicas del texto
         *   cohesion_stats.py - estadísticas de cohesión
         *   components.py - componentes de un pipeline de spaCy
-        *   corpus - medidas de la lingüística de corpus: palabras clave, colocaciones, dispersión, concordancia, estilometría
+        *   corpus - medidas de la lingüística de corpus: palabras clave, colocaciones, dispersión, concordancia, estilometría, comparación de corpus
         *   constants.py - constantes de la lengua española y de las métricas
         *   diversity_stats.py - métricas de diversidad léxica
         *   exceptions.py - excepciones de la biblioteca

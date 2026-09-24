@@ -9,6 +9,8 @@ from ests.utils import (
     is_punctuation,
     iter_doc_tokens,
     iter_doc_words,
+    iter_text_sents,
+    iter_text_words,
     lemmatize,
     sentenize,
     tokenize,
@@ -152,6 +154,33 @@ def test_sentenize_long_token():
 def test_sentenize_long_paragraph():
     text = "El Sr. García llegó a las 3 p. m. y compró 1.500,50 kilos. ¿No? ¡Sí! " * 10000
     assert sum(1 for _ in sentenize(text)) == 30000
+
+
+def test_iter_text_sents():
+    text = "  El Sr. García llegó.\n\n¿Vienes?  -Sí -dijo él-. Adiós.  "
+    sents = list(iter_text_sents(text))
+    assert [sent for _, _, sent in sents] == list(sentenize(text))
+    assert all(text[start:stop] == sent for start, stop, sent in sents)
+    assert sents[0][:2] == (2, 22)
+    assert list(iter_text_sents("")) == []
+    assert list(iter_text_sents(" \n ")) == []
+
+
+def test_iter_text_words():
+    text = "¡Hola, mundo! EE. UU. compró 1.500,50 € de café."
+    words = list(iter_text_words(text))
+    assert [word for _, _, word in words] == [
+        "Hola",
+        "mundo",
+        "EE. UU.",
+        "compró",
+        "1.500,50",
+        "de",
+        "café",
+    ]
+    assert [word for _, _, word in words] == [w for w in tokenize(text) if not is_punctuation(w)]
+    assert all(text[start:stop] == word for start, stop, word in words)
+    assert words[0] == (1, 5, "Hola")
 
 
 def test_tokenize():
