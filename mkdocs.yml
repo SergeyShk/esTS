@@ -34,6 +34,7 @@ nav:
       - Corpus comparison: corpus/compare.md
     - Datasets:
       - Spanish-language literature: datasets/spanishliterature.md
+      - Frequency dictionary: datasets/freqdict.md
     - Visualizers:
       - Zipf's law: visualizers/zipf.md
       - Literature fingerprinting: visualizers/fingerprinting.md
@@ -103,6 +104,7 @@ plugins:
             Corpus comparison: Comparación de corpus
             Datasets: Conjuntos de datos
             Spanish-language literature: Literatura en español
+            Frequency dictionary: Diccionario de frecuencias
             Visualizers: Visualizaciones
             Zipf's law: Ley de Zipf
             Literature fingerprinting: Huella literaria

@@ -21,7 +21,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 *   compare corpora with the measures of corpus linguistics: [keywords](corpus/keyness.md) against a reference corpus, [collocations](corpus/collocations.md), the [dispersion](corpus/dispersion.md) of a word over the parts of a text and a [KWIC concordance](corpus/kwic.md), and attribute authorship by [stylometry](corpus/stylometry.md): Burrows's Delta, Zeta, the Mendenhall curve, the function words; find the features that tell two corpora apart by [comparing](corpus/compare.md) them over 132 features of a text
 *   visualize texts and corpora: [Zipf's law](visualizers/zipf.md), [literature fingerprinting](visualizers/fingerprinting.md), a [word tree](visualizers/word_tree.md), [corpus](visualizers/corpus.md) and [stylometric](visualizers/stylometry.md) plots, [vocabulary growth](visualizers/vocabulary.md) and [sentence lengths](visualizers/sentences.md)
 *   add the statistics to a [spaCy pipeline](components.md) as components, so that a text is annotated and measured in one pass and the statistics travel with the `Doc`
-*   work with a [corpus of Spanish-language literature](datasets/spanishliterature.md) in the public domain: 150 works by 33 authors in four genres, filtered by the author, the genre, the country and the years
+*   work with a [corpus of Spanish-language literature](datasets/spanishliterature.md) in the public domain: 150 works by 33 authors in four genres, filtered by the author, the genre, the country and the years, and with a [frequency dictionary](datasets/freqdict.md) of 83,785 lemmas by Google Books Ngram
 
 Lexical sophistication completes 0.3; style, phonostatistics, metre and rhyme come in 0.4.
 
@@ -99,7 +99,7 @@ Punctuation marks   |    2
         *   cohesion_stats.py - cohesion statistics
         *   components.py - components of a spaCy pipeline
         *   corpus - measures of corpus linguistics: keywords, collocations, dispersion, concordance, stylometry, comparison of corpora
-        *   datasets - datasets: Spanish-language literature
+        *   datasets - datasets: Spanish-language literature, the frequency dictionary
         *   constants.py - constants of the Spanish language and of the metrics
         *   diversity_stats.py - lexical diversity metrics
         *   exceptions.py - library exceptions

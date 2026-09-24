@@ -41,7 +41,7 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Estadísticas morfológicas](https://sergeyshk.github.io/esTS/es/stats/morph_stats/)** - categorías gramaticales y quince rasgos morfológicos de Universal Dependencies, con los marcadores del español: los modos, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
 * **[Medidas de corpus](https://sergeyshk.github.io/esTS/es/corpus/keyness/)** - palabras clave frente a un corpus de referencia, colocaciones, la dispersión de una palabra por las partes de un texto, una concordancia KWIC y la estilometría de autoría: la Delta de Burrows con sus variantes, Zeta, la curva de Mendenhall, el perfil de las palabras funcionales; la comparación de dos corpus por 132 rasgos de un texto con tamaños del efecto
 * **[Visualizaciones](https://sergeyshk.github.io/esTS/es/visualizers/zipf/)** - ley de Zipf, huella literaria, árbol de palabras, dispersión léxica y palabras clave, red de colocaciones, dendrograma, PCA y MDS por la Delta, crecimiento del vocabulario, longitudes de las oraciones
-* **[Conjuntos de datos](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/)** - literatura en español de dominio público: 150 obras de 33 autores de España, Hispanoamérica y Filipinas en prosa, poesía, teatro y ensayo, con el género, los años y el país
+* **[Conjuntos de datos](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/)** - literatura en español de dominio público: 150 obras de 33 autores de España, Hispanoamérica y Filipinas en prosa, poesía, teatro y ensayo, con el género, los años y el país; un diccionario de frecuencias de 83 785 lemas según Google Books Ngram con ipm, rango y dispersión
 * **[Componentes de spaCy](https://sergeyshk.github.io/esTS/es/components/)** - cada clase de estadísticas como componente de un pipeline, con las estadísticas puestas en el `Doc` en una sola pasada
 * **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, con la densidad de 255 marcadores del discurso españoles
 * **[Estadísticas sintácticas](https://sergeyshk.github.io/esTS/es/stats/syntax_stats/)** - el árbol de dependencias por distancias, profundidad, cláusulas y coordinación, con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
@@ -493,6 +493,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/corpus/keyness/)
 <br>
 
 *   [spanish_literature](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/) - literatura en español de dominio público: 150 obras de 33 autores de España, Hispanoamérica y Filipinas, de Cervantes a los años veinte, en prosa, poesía, teatro y ensayo; 65 millones de caracteres
+*   [freq_dict](https://sergeyshk.github.io/esTS/es/datasets/freqdict/) - un diccionario de frecuencias de 83 785 lemas del español a partir de los libros de Google Books Ngram de 1980-2019 (63 000 millones de palabras): ipm, rango y D de Juilland por años, número de libros y categoría gramatical (CC BY 3.0)
 
 Los textos se recortan al texto del autor, sin portadas, notas de los transcriptores y de los editores, índices ni notas al pie, y llevan el género, el autor, el título, los años de la primera publicación y el país; los registros se pueden filtrar por cualquiera de ellos y por la longitud del texto.
 
@@ -593,7 +594,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos: las [iss
     *   cohesion_stats.py - estadísticas de cohesión
     *   components.py - componentes de un pipeline de spaCy
     *   corpus - medidas de la lingüística de corpus: palabras clave, colocaciones, dispersión, concordancia, estilometría, comparación de corpus
-    *   datasets - conjuntos de datos: literatura en español
+    *   datasets - conjuntos de datos: literatura en español, diccionario de frecuencias
     *   constants.py - constantes de la lengua española y de las métricas
     *   diversity_stats.py - métricas de diversidad léxica
     *   exceptions.py - excepciones de la biblioteca
