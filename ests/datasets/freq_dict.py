@@ -101,8 +101,10 @@ class FreqDict(Dataset):
         lower-cased and lemmatized by simplemma 2.0.0, the lemmatizer of the
         library, so a word is looked up by its lemma_key (computadoras -
         computador);
-        nouns written with a capital letter in 90% of their occurrences are
-        proper nouns (PROPN), as the tagset of Google has none. The rows below
+        a noun form written with a capital letter in 90% of its occurrences is
+        a proper noun (PROPN) as a whole, its lower-case occurrences included
+        (the form dios; the NOUN row of dios comes from dioses), as the tagset
+        of Google has none. The rows below
         0.1 ipm or found in fewer than 5 years are left out. The dictionary is
         derived from Google Books Ngram under CC BY 3.0 and is distributed
         under the same licence

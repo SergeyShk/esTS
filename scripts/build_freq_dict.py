@@ -16,8 +16,10 @@ For every lemma and part of speech the dictionary gives:
         of every year, so that the unequal years weigh the same);
     docs - the number of books with the most widespread form of the lemma (a
         lower bound: a book with several forms is not counted twice).
-A noun that is written with a capital letter in at least PROPER_SHARE of its
-occurrences is a proper noun (PROPN): the tagset of Google has no such tag.
+A noun form that is written with a capital letter in at least PROPER_SHARE of its
+occurrences is a proper noun (PROPN) as a whole, the lower-case occurrences
+included, since the case variants are merged in the first pass: the tagset of
+Google has no such tag.
 
 Usage:
     uv run python scripts/build_freq_dict.py NGRAMS_DIR OUTPUT_DIR
