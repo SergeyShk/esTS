@@ -1,42 +1,42 @@
 
 <!doctype html>
-<html lang="es" class="no-js">
+<html lang="en" class="no-js">
   <head>
     
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Biblioteca para extraer estadísticas de textos en español">
+        <meta name="description" content="A library for extracting statistics from texts in Spanish">
       
       
       
       
-        <link rel="prev" href="../sentences/">
+        <link rel="prev" href="../keyness/">
       
       
-        <link rel="next" href="../char_ngrams/">
+        <link rel="next" href="../dispersion/">
       
       
         
-          <link rel="alternate" href="../../../extractors/words/" hreflang="en">
+          <link rel="alternate" href="./" hreflang="en">
         
-          <link rel="alternate" href="./" hreflang="es">
+          <link rel="alternate" href="../../es/corpus/collocations/" hreflang="es">
         
       
       
-      <link rel="icon" href="../../../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Extracción de palabras - esTS</title>
+        <title>Collocations - esTS</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -55,9 +55,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../css/extra.css">
+      <link rel="stylesheet" href="../../css/extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,8 +80,8 @@
     <div data-md-component="skip">
       
         
-        <a href="#extraccion-de-palabras" class="md-skip">
-          Saltar a contenido
+        <a href="#collocations" class="md-skip">
+          Skip to content
         </a>
       
     </div>
@@ -93,8 +93,8 @@
       
 
 <header class="md-header" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Cabecera">
-    <a href="../../" title="esTS" class="md-header__button md-logo" aria-label="esTS" data-md-component="logo">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="esTS" class="md-header__button md-logo" aria-label="esTS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Extracción de palabras
+              Collocations
             
           </span>
         </div>
@@ -128,20 +128,20 @@
       <div class="md-header__option">
   <div class="md-select">
     
-    <button class="md-header__button md-icon" aria-label="Seleccionar idioma">
+    <button class="md-header__button md-icon" aria-label="Select language">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
     </button>
     <div class="md-select__inner">
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="../../../extractors/words/" hreflang="en" class="md-select__link">
+            <a href="./" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
         
           <li class="md-select__item">
-            <a href="./" hreflang="es" class="md-select__link">
+            <a href="../../es/corpus/collocations/" hreflang="es" class="md-select__link">
               Español
             </a>
           </li>
@@ -162,16 +162,16 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
-      <nav class="md-search__options" aria-label="Buscar">
+      <nav class="md-search__options" aria-label="Search">
         
-        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
@@ -182,7 +182,7 @@
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
-            Inicializando búsqueda
+            Initializing search
           </div>
           <ol class="md-search-result__list" role="presentation"></ol>
         </div>
@@ -194,7 +194,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/SergeyShk/esTS" title="Ir al repositorio" class="md-source" data-md-component="source">
+        <a href="https://github.com/SergeyShk/esTS" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -215,7 +215,7 @@
         
           
             
-<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
   <div class="md-grid">
     <ul class="md-tabs__list">
       
@@ -227,11 +227,11 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../" class="md-tabs__link">
+        <a href="../.." class="md-tabs__link">
           
   
   
-  Inicio
+  Home
 
         </a>
       </li>
@@ -243,17 +243,15 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../sentences/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../extractors/sentences/" class="md-tabs__link">
           
   
   
-  Extracción
+  Extraction
 
         </a>
       </li>
@@ -273,7 +271,7 @@
   
     
   
-  Sílabas y acento
+  Syllables and stress
 
       </a>
     </li>
@@ -292,7 +290,7 @@
   
     
   
-  Componentes de spaCy
+  spaCy components
 
       </a>
     </li>
@@ -311,7 +309,7 @@
           
   
   
-  Estadísticas
+  Statistics
 
         </a>
       </li>
@@ -323,15 +321,17 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../corpus/keyness/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../keyness/" class="md-tabs__link">
           
   
   
-  Medidas de corpus
+  Corpus measures
 
         </a>
       </li>
@@ -359,9 +359,9 @@
   
 
 
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../" title="esTS" class="md-nav__button md-logo" aria-label="esTS" data-md-component="logo">
+    <a href="../.." title="esTS" class="md-nav__button md-logo" aria-label="esTS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -371,7 +371,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/SergeyShk/esTS" title="Ir al repositorio" class="md-source" data-md-component="source">
+      <a href="https://github.com/SergeyShk/esTS" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -412,7 +412,7 @@
   <span class="md-ellipsis">
     
   
-    Inicio
+    Home
   
 
     
@@ -428,7 +428,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Inicio
+    Home
   
 
           </label>
@@ -441,14 +441,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../" class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Acerca de
+    About
   
 
     
@@ -476,7 +476,7 @@
   <span class="md-ellipsis">
     
   
-    Instalación
+    Installation
   
 
     
@@ -504,7 +504,7 @@
   <span class="md-ellipsis">
     
   
-    Excepciones y registro
+    Exceptions and logging
   
 
     
@@ -532,7 +532,7 @@
   <span class="md-ellipsis">
     
   
-    Autores
+    Authors
   
 
     
@@ -557,36 +557,31 @@
       
   
   
-    
   
   
-  
     
     
     
     
       
-        
-        
-      
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
   
   <span class="md-ellipsis">
     
   
-    Extracción
+    Extraction
   
 
     
@@ -597,12 +592,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Extracción
+    Extraction
   
 
           </label>
@@ -615,14 +610,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../sentences/" class="md-nav__link">
+      <a href="../../extractors/sentences/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Extracción de oraciones
+    Sentence extraction
   
 
     
@@ -631,142 +626,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Extracción de palabras
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Extracción de palabras
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Tabla de contenidos
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Descripción
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#parametros" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parámetros
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#metodos" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Métodos
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Métodos">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#extract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        extract
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_most_common" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_most_common
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -779,14 +638,42 @@
   
   
     <li class="md-nav__item">
-      <a href="../char_ngrams/" class="md-nav__link">
+      <a href="../../extractors/words/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Extracción de N-gramas de caracteres
+    Word extraction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../extractors/char_ngrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Character N-gram extraction
   
 
     
@@ -821,7 +708,7 @@
   <span class="md-ellipsis">
     
   
-    Sílabas y acento
+    Syllables and stress
   
 
     
@@ -848,7 +735,7 @@
   <span class="md-ellipsis">
     
   
-    Componentes de spaCy
+    spaCy components
   
 
     
@@ -889,7 +776,7 @@
   <span class="md-ellipsis">
     
   
-    Estadísticas
+    Statistics
   
 
     
@@ -905,7 +792,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Estadísticas
+    Statistics
   
 
           </label>
@@ -925,7 +812,7 @@
   <span class="md-ellipsis">
     
   
-    Estadísticas básicas
+    Basic statistics
   
 
     
@@ -967,7 +854,7 @@
   <span class="md-ellipsis">
     
   
-    Métricas de legibilidad
+    Readability metrics
   
 
     
@@ -983,7 +870,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Métricas de legibilidad
+    Readability metrics
   
 
           </label>
@@ -1003,7 +890,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Metrics module
   
 
     
@@ -1031,7 +918,7 @@
   <span class="md-ellipsis">
     
   
-    Funciones de las métricas
+    Metric functions
   
 
     
@@ -1081,7 +968,7 @@
   <span class="md-ellipsis">
     
   
-    Métricas de diversidad léxica
+    Lexical diversity metrics
   
 
     
@@ -1097,7 +984,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Métricas de diversidad léxica
+    Lexical diversity metrics
   
 
           </label>
@@ -1117,7 +1004,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Metrics module
   
 
     
@@ -1145,7 +1032,7 @@
   <span class="md-ellipsis">
     
   
-    Funciones de las métricas
+    Metric functions
   
 
     
@@ -1181,7 +1068,7 @@
   <span class="md-ellipsis">
     
   
-    Estadísticas morfológicas
+    Morphological statistics
   
 
     
@@ -1209,7 +1096,7 @@
   <span class="md-ellipsis">
     
   
-    Estadísticas sintácticas
+    Syntactic statistics
   
 
     
@@ -1237,7 +1124,7 @@
   <span class="md-ellipsis">
     
   
-    Estadísticas de cohesión
+    Cohesion statistics
   
 
     
@@ -1262,31 +1149,36 @@
       
   
   
+    
   
   
+  
     
     
     
     
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    Medidas de corpus
+    Corpus measures
   
 
     
@@ -1297,12 +1189,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Medidas de corpus
+    Corpus measures
   
 
           </label>
@@ -1315,14 +1207,172 @@
   
   
     <li class="md-nav__item">
-      <a href="../../corpus/keyness/" class="md-nav__link">
+      <a href="../keyness/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Palabras clave
+    Keywords
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Collocations
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Collocations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#measures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Measures
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Result
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dispersion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Word dispersion
   
 
     
@@ -1343,70 +1393,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../corpus/collocations/" class="md-nav__link">
+      <a href="../kwic/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Colocaciones
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../corpus/dispersion/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Dispersión de las palabras
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../corpus/kwic/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Concordancia KWIC
+    KWIC concordance
   
 
     
@@ -1440,7 +1434,7 @@
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
   
@@ -1449,15 +1443,15 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Tabla de contenidos
+      Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
+  <a href="#description" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Descripción
+        Description
       
     </span>
   </a>
@@ -1465,10 +1459,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#parametros" class="md-nav__link">
+  <a href="#measures" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parámetros
+        Measures
       
     </span>
   </a>
@@ -1476,41 +1470,35 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#metodos" class="md-nav__link">
+  <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Métodos
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Métodos">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#extract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        extract
+        Parameters
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#get_most_common" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#result" class="md-nav__link">
     <span class="md-ellipsis">
       
-        get_most_common
+        Result
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example
+      
+    </span>
+  </a>
   
 </li>
       
@@ -1534,148 +1522,189 @@
   
 
 
-<h1 id="extraccion-de-palabras">Extracción de palabras<a class="headerlink" href="#extraccion-de-palabras" title="Permanent link">&para;</a></h1>
+<h1 id="collocations">Collocations<a class="headerlink" href="#collocations" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.extractors.WordsExtractor</strong></p>
+<p><strong>ests.corpus.collocations()</strong>, <strong>ests.corpus.Collocation</strong></p>
 </div>
-<h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Módulo para extraer palabras de un texto. Permite usar distintos tokenizadores, filtrar palabras vacías, números y signos de puntuación, lematizar, construir N-gramas y fijar la longitud mínima y máxima de las palabras extraídas.</p>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>El tokenizador por defecto es el tokenizador por reglas de la clase de idioma español de <a href="https://github.com/explosion/spaCy">spaCy</a> (<code>ests.utils.tokenize</code>); no necesita un modelo entrenado. Los signos de puntuación, incluidos <code>¿</code> y <code>¡</code>, los números como <code>1.500,50</code>, <code>3.º</code>, <code>1990-1995</code> y las abreviaturas como <code>Sr.</code>, <code>EE. UU.</code> son tokens únicos; las palabras con pronombres enclíticos (<code>dámelo</code>, <code>decírselo</code>) no se separan.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Los lemas provienen de <a href="https://github.com/adbar/simplemma">simplemma</a> (<code>ests.utils.lemmatize</code>), que trabaja con un diccionario sin modelo entrenado: una forma conocida se convierte en su lema en minúsculas (<code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>), una forma desconocida se devuelve sin cambios (<code>Madrid</code>, <code>dámelo</code>).</p>
-</div>
-<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
+<p>Collocation extraction - pairs of words that occur together more often than independence would give: fixed expressions (<code>punto de vista</code>, <code>llevar a cabo</code>), terminology, the combinatorics of a word. The measures of association are those of <a href="https://www.sketchengine.eu/wp-content/uploads/ske-statistics.pdf">Sketch Engine</a> and of <a href="https://www.nltk.org/api/nltk.metrics.association.html"><code>nltk.metrics.association</code></a>, and the tests check them against NLTK.</p>
+<p>Pairs of words are ordered, as in NLTK: the right word occurs no more than <code>window</code> words after the left one, and every pair of positions is counted once; <code>window=1</code> gives bigrams. Inside the measure the frequency of a pair is divided by the size of the window (Church and Hanks 1990, as in NLTK), so that the expected frequency does not depend on the window and Dice and the minimum sensitivity do not exceed one; the field <code>freq_pair</code> keeps the undivided frequency. With <code>window &gt; 1</code> the scale of the Dice measures therefore shifts: a pair always side by side gets a logDice of <span class="arithmatex">\(14 - \log_2 window\)</span> - 13 at a window of 2, 11.68 at 5 - and not 14, as bigrams and Sketch Engine, which computes logDice from the raw co-occurrence, give it; the maximum of 14 is reached only by a pair that occurs at every distance within the window. The parameter <code>node</code> keeps the pairs with the given word on the left or on the right - the combinatorics of one word.</p>
+<p>Words are compared as they are: case, lemmatization and stop words belong to <a href="../../extractors/words/"><code>WordsExtractor</code></a>; lemmas suit fixed expressions, word forms suit grammatical constructions.</p>
+<h2 id="measures">Measures<a class="headerlink" href="#measures" title="Permanent link">&para;</a></h2>
+<p>For a pair of words of frequencies <span class="arithmatex">\(f_a\)</span> and <span class="arithmatex">\(f_b\)</span>, a pair frequency <span class="arithmatex">\(f_{ab}\)</span> and a number of words <span class="arithmatex">\(N\)</span>:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Measure</th>
+<th style="text-align: left;">Key</th>
+<th style="text-align: left;">Formula</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>tokenizer</code></td>
-<td style="text-align: center;">Pattern/Callable</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Tokenizador o expresión regular</td>
+<td style="text-align: left;">Mutual information</td>
+<td style="text-align: left;"><code>mi</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(\log_2 \frac{f_{ab} N}{f_a f_b}\)</span></td>
+<td style="text-align: left;">Church and Hanks (1990); overrates rare pairs</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>filter_punct</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>True</code></td>
-<td style="text-align: center;">Filtrar los signos de puntuación</td>
+<td style="text-align: left;">MI³</td>
+<td style="text-align: left;"><code>mi3</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(\log_2 \frac{f_{ab}^3 N}{f_a f_b}\)</span></td>
+<td style="text-align: left;">Oakes (1998); favours frequent pairs</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>filter_nums</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Filtrar los números, incluidos números con signo, rangos, fracciones, fechas, horas, porcentajes y ordinales (-5, +7, 1990-1995, 1.500,50, 12/03/2020, 3:30, 10%, 3.º, 1.ª, 2do)</td>
+<td style="text-align: left;">t-score</td>
+<td style="text-align: left;"><code>t_score</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(\frac{f_{ab} - f_a f_b / N}{\sqrt{f_{ab}}}\)</span></td>
+<td style="text-align: left;">Church et al. (1991); favours frequent pairs</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>use_lexemes</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Usar los lemas de las palabras</td>
+<td style="text-align: left;">Dice coefficient</td>
+<td style="text-align: left;"><code>dice</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(\frac{2 f_{ab}}{f_a + f_b}\)</span></td>
+<td style="text-align: left;">does not depend on the size of the text</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>stopwords</code></td>
-<td style="text-align: center;">Collection[str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Palabras vacías, comparadas sin distinguir mayúsculas</td>
+<td style="text-align: left;">logDice</td>
+<td style="text-align: left;"><code>logdice</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(14 + \log_2 \frac{2 f_{ab}}{f_a + f_b}\)</span></td>
+<td style="text-align: left;"><a href="https://www.sketchengine.eu/glossary/logdice/">Rychlý (2008)</a>; does not depend on the size of the text, at most 14 (for a window <span class="arithmatex">\(14 - \log_2 window\)</span>), below zero - a weak link; the default measure, as in Sketch Engine</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>lowercase</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Convertir las palabras a minúsculas</td>
+<td style="text-align: left;">Log-likelihood</td>
+<td style="text-align: left;"><code>log_likelihood</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(G^2 = 2 \sum O \ln \frac{O}{E}\)</span></td>
+<td style="text-align: left;">Dunning (1993); over the 2×2 contingency table, <code>nan</code> if one of the words fills the whole text</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>ngram_range</code></td>
-<td style="text-align: center;">Tuple[int, int]</td>
-<td style="text-align: center;"><code>(1, 1)</code></td>
-<td style="text-align: center;">Límite inferior y superior del tamaño de los N-gramas</td>
+<td style="text-align: left;">NPMI</td>
+<td style="text-align: left;"><code>npmi</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(\frac{MI}{-\log_2 (f_{ab} / N)}\)</span></td>
+<td style="text-align: left;">Bouma (2009); from −1 to 1, one means the words occur only together</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>min_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Longitud mínima de la palabra extraída</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>max_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Longitud máxima de la palabra extraída</td>
+<td style="text-align: left;">Minimum sensitivity</td>
+<td style="text-align: left;"><code>min_sensitivity</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(\min(\frac{f_{ab}}{f_a}, \frac{f_{ab}}{f_b})\)</span></td>
+<td style="text-align: left;">Pedersen (1998); from 0 to 1</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Las palabras vacías se comparan sin distinguir mayúsculas de minúsculas, así que una lista en minúsculas también filtra <code>Los</code> o <code>La</code> al principio de una oración. Un signo de puntuación es un token formado solo por signos y símbolos, también de varios caracteres: <code>?!</code>, <code>!..</code>, <code>--</code>, <code>…</code>, <code>€</code>. Los tokens vacíos, que <code>re.split</code> deja tras un separador final, se descartan antes de los filtros. Una lista de palabras vacías ya hecha es <code>spacy.lang.es.stop_words.STOP_WORDS</code>; téngase en cuenta que incluye verbos frecuentes como <code>tener</code>.</p>
-</div>
-<h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
-<h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
-<p>Extrae las palabras de un texto.</p>
+<p>The measures are available as the functions <code>calc_mi</code>, <code>calc_mi3</code>, <code>calc_t_score</code>, <code>calc_dice</code>, <code>calc_logdice</code>, <code>calc_log_likelihood</code>, <code>calc_npmi</code>, <code>calc_min_sensitivity</code> with the arguments <code>(freq_a, freq_b, freq_ab, n)</code> of the module <code>ests.corpus.collocations</code> (<code>from ests.corpus.collocations import calc_logdice</code>); their names and descriptions are in <code>ests.constants.COLLOCATION_MEASURES</code>.</p>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>words</code></td>
+<td style="text-align: center;">list[str]</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Cadena de texto</td>
+<td style="text-align: center;">Words of the text in order</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>window</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>5</code></td>
+<td style="text-align: center;">Greatest distance between the words of a pair</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>measure</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>logdice</code></td>
+<td style="text-align: center;">Measure of <code>COLLOCATION_MEASURES</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>min_freq</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>2</code></td>
+<td style="text-align: center;">Minimum frequency of a pair</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>node</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Word whose combinatorics is needed; <code>None</code> - every pair</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>top_n</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Number of collocations; <code>None</code> - all of them</td>
 </tr>
 </tbody>
 </table>
-<p>Ejemplo de extracción de palabras con bigramas como tokens, tras filtrar números y palabras vacías y lematizar:</p>
+<h2 id="result">Result<a class="headerlink" href="#result" title="Permanent link">&para;</a></h2>
+<p>A list of <code>Collocation</code> named tuples by descending measure and frequency of the pair (ties broken alphabetically); <code>pd.DataFrame(found)</code> gives a table.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Field</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>left</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: left;">Left word</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>right</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: left;">Right word, occurring within the window after the left one</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>freq_left</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: left;">Frequency of the left word</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>freq_right</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: left;">Frequency of the right word</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>freq_pair</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: left;">Frequency of the co-occurrence</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>score</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: left;">Value of the chosen measure</td>
+</tr>
+</tbody>
+</table>
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
 <div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<p><em>Código</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Importar la biblioteca</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">collocations</span>
 
-<span class="c1"># Preparar los datos</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">"No tengas 100 euros, ten 100 amigos"</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">use_lexemes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span>
+    <span class="s2">"El gato estaba en la ventana y miraba a los pájaros. Los pájaros se fueron y el gato "</span>
+    <span class="s2">"se durmió en la ventana. Mañana el gato volverá a estar en la ventana y mirará a los pájaros."</span>
+<span class="p">)</span>
 
-<span class="c1"># Extraer las palabras</span>
-<span class="n">we</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">use_lexemes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="p">[</span><span class="s2">"no"</span><span class="p">],</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-</code></pre></div>
-<p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">(</span><span class="s1">'tener'</span>,<span class="w"> </span><span class="s1">'euro'</span>,<span class="w"> </span><span class="s1">'tener'</span>,<span class="w"> </span><span class="s1">'amigo'</span>,<span class="w"> </span><span class="s1">'tener_euro'</span>,<span class="w"> </span><span class="s1">'euro_tener'</span>,<span class="w"> </span><span class="s1">'tener_amigo'</span><span class="o">)</span>
-</code></pre></div>
-</div>
-<h3 id="get_most_common">get_most_common<a class="headerlink" href="#get_most_common" title="Permanent link">&para;</a></h3>
-<p>Devuelve un contador de las palabras más frecuentes del texto. Recibe como parámetro el número de palabras a devolver.</p>
-<p>Para ilustrar el método reutilizamos el código del ejemplo anterior:</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<p><em>Código</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="n">collocations</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># [Collocation(left='en', right='ventana', freq_left=3, freq_right=3, freq_pair=3, score=13.0)]</span>
 
-<span class="c1"># Mostrar las palabras más frecuentes</span>
-<span class="n">we</span><span class="o">.</span><span class="n">get_most_common</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="p">[</span>
+    <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">score</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">collocations</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="s2">"gato"</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="s2">"mi"</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+<span class="p">]</span>
+<span class="c1"># [('gato', 'volver', 3.62), ('gato', 'estar', 2.62)]</span>
 </code></pre></div>
-<p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">[(</span><span class="s1">'tener'</span>,<span class="w"> </span><span class="m">2</span><span class="o">)</span>,<span class="w"> </span><span class="o">(</span><span class="s1">'euro'</span>,<span class="w"> </span><span class="m">1</span><span class="o">)</span>,<span class="w"> </span><span class="o">(</span><span class="s1">'amigo'</span>,<span class="w"> </span><span class="m">1</span><span class="o">)]</span>
-</code></pre></div>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Aviso</p>
-<p>El método debe llamarse después de extraer las palabras con <code>extract</code>.</p>
 </div>
 
 
@@ -1753,12 +1782,12 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
-        <script src="../../../js/config.js"></script>
+        <script src="../../js/config.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
       

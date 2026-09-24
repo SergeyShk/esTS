@@ -11,14 +11,14 @@
       
       
       
-        <link rel="prev" href="../sentences/">
+        <link rel="prev" href="../keyness/">
       
       
-        <link rel="next" href="../char_ngrams/">
+        <link rel="next" href="../dispersion/">
       
       
         
-          <link rel="alternate" href="../../../extractors/words/" hreflang="en">
+          <link rel="alternate" href="../../../corpus/collocations/" hreflang="en">
         
           <link rel="alternate" href="./" hreflang="es">
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Extracción de palabras - esTS</title>
+        <title>Colocaciones - esTS</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#extraccion-de-palabras" class="md-skip">
+        <a href="#colocaciones" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Extracción de palabras
+              Colocaciones
             
           </span>
         </div>
@@ -135,7 +135,7 @@
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="../../../extractors/words/" hreflang="en" class="md-select__link">
+            <a href="../../../corpus/collocations/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
@@ -243,13 +243,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../sentences/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../extractors/sentences/" class="md-tabs__link">
           
   
   
@@ -323,11 +321,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../corpus/keyness/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../keyness/" class="md-tabs__link">
           
   
   
@@ -557,29 +557,24 @@
       
   
   
-    
   
   
-  
     
     
     
     
       
-        
-        
-      
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
   
@@ -597,7 +592,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -615,7 +610,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../sentences/" class="md-nav__link">
+      <a href="../../extractors/sentences/" class="md-nav__link">
         
   
   
@@ -640,37 +635,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Extracción de palabras
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../extractors/words/" class="md-nav__link">
         
   
   
@@ -686,87 +654,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Tabla de contenidos
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Descripción
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#parametros" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parámetros
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#metodos" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Métodos
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Métodos">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#extract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        extract
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_most_common" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_most_common
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -779,7 +666,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../char_ngrams/" class="md-nav__link">
+      <a href="../../extractors/char_ngrams/" class="md-nav__link">
         
   
   
@@ -1262,24 +1149,29 @@
       
   
   
+    
   
   
+  
     
     
     
     
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
             
   
   
@@ -1297,7 +1189,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1315,7 +1207,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../corpus/keyness/" class="md-nav__link">
+      <a href="../keyness/" class="md-nav__link">
         
   
   
@@ -1340,10 +1232,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../corpus/collocations/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Colocaciones
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1359,6 +1278,81 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#descripcion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Descripción
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#medidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Medidas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parametros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parámetros
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#resultado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Resultado
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ejemplo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejemplo
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1371,7 +1365,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../corpus/dispersion/" class="md-nav__link">
+      <a href="../dispersion/" class="md-nav__link">
         
   
   
@@ -1399,7 +1393,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../corpus/kwic/" class="md-nav__link">
+      <a href="../kwic/" class="md-nav__link">
         
   
   
@@ -1465,6 +1459,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#medidas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Medidas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1476,41 +1481,24 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#metodos" class="md-nav__link">
+  <a href="#resultado" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Métodos
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Métodos">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#extract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        extract
+        Resultado
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#get_most_common" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#ejemplo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        get_most_common
+        Ejemplo
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1534,20 +1522,77 @@
   
 
 
-<h1 id="extraccion-de-palabras">Extracción de palabras<a class="headerlink" href="#extraccion-de-palabras" title="Permanent link">&para;</a></h1>
+<h1 id="colocaciones">Colocaciones<a class="headerlink" href="#colocaciones" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.extractors.WordsExtractor</strong></p>
+<p><strong>ests.corpus.collocations()</strong>, <strong>ests.corpus.Collocation</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Módulo para extraer palabras de un texto. Permite usar distintos tokenizadores, filtrar palabras vacías, números y signos de puntuación, lematizar, construir N-gramas y fijar la longitud mínima y máxima de las palabras extraídas.</p>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>El tokenizador por defecto es el tokenizador por reglas de la clase de idioma español de <a href="https://github.com/explosion/spaCy">spaCy</a> (<code>ests.utils.tokenize</code>); no necesita un modelo entrenado. Los signos de puntuación, incluidos <code>¿</code> y <code>¡</code>, los números como <code>1.500,50</code>, <code>3.º</code>, <code>1990-1995</code> y las abreviaturas como <code>Sr.</code>, <code>EE. UU.</code> son tokens únicos; las palabras con pronombres enclíticos (<code>dámelo</code>, <code>decírselo</code>) no se separan.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Los lemas provienen de <a href="https://github.com/adbar/simplemma">simplemma</a> (<code>ests.utils.lemmatize</code>), que trabaja con un diccionario sin modelo entrenado: una forma conocida se convierte en su lema en minúsculas (<code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>), una forma desconocida se devuelve sin cambios (<code>Madrid</code>, <code>dámelo</code>).</p>
-</div>
+<p>Extracción de colocaciones: pares de palabras que aparecen juntas más a menudo de lo que daría la independencia - expresiones fijas (<code>punto de vista</code>, <code>llevar a cabo</code>), terminología, la combinatoria de una palabra. Las medidas de asociación son las de <a href="https://www.sketchengine.eu/wp-content/uploads/ske-statistics.pdf">Sketch Engine</a> y de <a href="https://www.nltk.org/api/nltk.metrics.association.html"><code>nltk.metrics.association</code></a>, y las pruebas las contrastan con NLTK.</p>
+<p>Los pares de palabras son ordenados, como en NLTK: la palabra de la derecha aparece a no más de <code>window</code> palabras después de la de la izquierda, y cada par de posiciones se cuenta una vez; <code>window=1</code> da bigramas. Dentro de la medida la frecuencia del par se divide por el tamaño de la ventana (Church y Hanks 1990, como en NLTK), para que la frecuencia esperada no dependa de la ventana y Dice y la sensibilidad mínima no superen uno; el campo <code>freq_pair</code> guarda la frecuencia sin dividir. Con <code>window &gt; 1</code> la escala de las medidas de Dice se desplaza por ello: un par siempre contiguo recibe un logDice de <span class="arithmatex">\(14 - \log_2 window\)</span> - 13 con una ventana de 2, 11.68 con 5 - y no 14, como le dan los bigramas y Sketch Engine, que calcula logDice sobre la coocurrencia sin dividir; el máximo de 14 solo lo alcanza un par que aparece a todas las distancias dentro de la ventana. El parámetro <code>node</code> conserva los pares con la palabra dada a la izquierda o a la derecha: la combinatoria de una palabra.</p>
+<p>Las palabras se comparan tal cual: la caja, la lematización y las palabras vacías corresponden a <a href="../../extractors/words/"><code>WordsExtractor</code></a>; los lemas convienen a las expresiones fijas, las formas a las construcciones gramaticales.</p>
+<h2 id="medidas">Medidas<a class="headerlink" href="#medidas" title="Permanent link">&para;</a></h2>
+<p>Para un par de palabras de frecuencias <span class="arithmatex">\(f_a\)</span> y <span class="arithmatex">\(f_b\)</span>, una frecuencia del par <span class="arithmatex">\(f_{ab}\)</span> y un número de palabras <span class="arithmatex">\(N\)</span>:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Medida</th>
+<th style="text-align: left;">Clave</th>
+<th style="text-align: left;">Fórmula</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Información mutua</td>
+<td style="text-align: left;"><code>mi</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(\log_2 \frac{f_{ab} N}{f_a f_b}\)</span></td>
+<td style="text-align: left;">Church y Hanks (1990); sobrevalora los pares raros</td>
+</tr>
+<tr>
+<td style="text-align: left;">MI³</td>
+<td style="text-align: left;"><code>mi3</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(\log_2 \frac{f_{ab}^3 N}{f_a f_b}\)</span></td>
+<td style="text-align: left;">Oakes (1998); favorece los pares frecuentes</td>
+</tr>
+<tr>
+<td style="text-align: left;">t-score</td>
+<td style="text-align: left;"><code>t_score</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(\frac{f_{ab} - f_a f_b / N}{\sqrt{f_{ab}}}\)</span></td>
+<td style="text-align: left;">Church et al. (1991); favorece los pares frecuentes</td>
+</tr>
+<tr>
+<td style="text-align: left;">Coeficiente de Dice</td>
+<td style="text-align: left;"><code>dice</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(\frac{2 f_{ab}}{f_a + f_b}\)</span></td>
+<td style="text-align: left;">no depende del tamaño del texto</td>
+</tr>
+<tr>
+<td style="text-align: left;">logDice</td>
+<td style="text-align: left;"><code>logdice</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(14 + \log_2 \frac{2 f_{ab}}{f_a + f_b}\)</span></td>
+<td style="text-align: left;"><a href="https://www.sketchengine.eu/glossary/logdice/">Rychlý (2008)</a>; no depende del tamaño del texto, como máximo 14 (con ventana <span class="arithmatex">\(14 - \log_2 window\)</span>), por debajo de cero - un vínculo débil; la medida por defecto, como en Sketch Engine</td>
+</tr>
+<tr>
+<td style="text-align: left;">Razón de verosimilitud</td>
+<td style="text-align: left;"><code>log_likelihood</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(G^2 = 2 \sum O \ln \frac{O}{E}\)</span></td>
+<td style="text-align: left;">Dunning (1993); sobre la tabla de contingencia 2×2, <code>nan</code> si una de las palabras ocupa todo el texto</td>
+</tr>
+<tr>
+<td style="text-align: left;">NPMI</td>
+<td style="text-align: left;"><code>npmi</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(\frac{MI}{-\log_2 (f_{ab} / N)}\)</span></td>
+<td style="text-align: left;">Bouma (2009); de −1 a 1, uno significa que las palabras solo aparecen juntas</td>
+</tr>
+<tr>
+<td style="text-align: left;">Sensibilidad mínima</td>
+<td style="text-align: left;"><code>min_sensitivity</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(\min(\frac{f_{ab}}{f_a}, \frac{f_{ab}}{f_b})\)</span></td>
+<td style="text-align: left;">Pedersen (1998); de 0 a 1</td>
+</tr>
+</tbody>
+</table>
+<p>Las medidas están disponibles como las funciones <code>calc_mi</code>, <code>calc_mi3</code>, <code>calc_t_score</code>, <code>calc_dice</code>, <code>calc_logdice</code>, <code>calc_log_likelihood</code>, <code>calc_npmi</code>, <code>calc_min_sensitivity</code> con los argumentos <code>(freq_a, freq_b, freq_ab, n)</code> del módulo <code>ests.corpus.collocations</code> (<code>from ests.corpus.collocations import calc_logdice</code>); sus nombres y descripciones están en <code>ests.constants.COLLOCATION_MEASURES</code>.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1560,122 +1605,106 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>tokenizer</code></td>
-<td style="text-align: center;">Pattern/Callable</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Tokenizador o expresión regular</td>
+<td style="text-align: center;"><code>words</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Palabras del texto en orden</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>filter_punct</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>True</code></td>
-<td style="text-align: center;">Filtrar los signos de puntuación</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>filter_nums</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Filtrar los números, incluidos números con signo, rangos, fracciones, fechas, horas, porcentajes y ordinales (-5, +7, 1990-1995, 1.500,50, 12/03/2020, 3:30, 10%, 3.º, 1.ª, 2do)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>use_lexemes</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Usar los lemas de las palabras</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>stopwords</code></td>
-<td style="text-align: center;">Collection[str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Palabras vacías, comparadas sin distinguir mayúsculas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>lowercase</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Convertir las palabras a minúsculas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>ngram_range</code></td>
-<td style="text-align: center;">Tuple[int, int]</td>
-<td style="text-align: center;"><code>(1, 1)</code></td>
-<td style="text-align: center;">Límite inferior y superior del tamaño de los N-gramas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>min_len</code></td>
+<td style="text-align: center;"><code>window</code></td>
 <td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Longitud mínima de la palabra extraída</td>
+<td style="text-align: center;"><code>5</code></td>
+<td style="text-align: center;">Mayor distancia entre las palabras de un par</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>max_len</code></td>
+<td style="text-align: center;"><code>measure</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>logdice</code></td>
+<td style="text-align: center;">Medida de <code>COLLOCATION_MEASURES</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>min_freq</code></td>
 <td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Longitud máxima de la palabra extraída</td>
+<td style="text-align: center;"><code>2</code></td>
+<td style="text-align: center;">Frecuencia mínima de un par</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>node</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Palabra cuya combinatoria se busca; <code>None</code> - todos los pares</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>top_n</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Número de colocaciones; <code>None</code> - todas</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Las palabras vacías se comparan sin distinguir mayúsculas de minúsculas, así que una lista en minúsculas también filtra <code>Los</code> o <code>La</code> al principio de una oración. Un signo de puntuación es un token formado solo por signos y símbolos, también de varios caracteres: <code>?!</code>, <code>!..</code>, <code>--</code>, <code>…</code>, <code>€</code>. Los tokens vacíos, que <code>re.split</code> deja tras un separador final, se descartan antes de los filtros. Una lista de palabras vacías ya hecha es <code>spacy.lang.es.stop_words.STOP_WORDS</code>; téngase en cuenta que incluye verbos frecuentes como <code>tener</code>.</p>
-</div>
-<h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
-<h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
-<p>Extrae las palabras de un texto.</p>
+<h2 id="resultado">Resultado<a class="headerlink" href="#resultado" title="Permanent link">&para;</a></h2>
+<p>Una lista de tuplas con nombre <code>Collocation</code> por orden descendente de la medida y de la frecuencia del par (los empates, alfabéticamente); <code>pd.DataFrame(found)</code> da una tabla.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Campo</th>
 <th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;"><code>left</code></td>
 <td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Cadena de texto</td>
+<td style="text-align: left;">Palabra de la izquierda</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>right</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: left;">Palabra de la derecha, dentro de la ventana tras la de la izquierda</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>freq_left</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: left;">Frecuencia de la palabra de la izquierda</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>freq_right</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: left;">Frecuencia de la palabra de la derecha</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>freq_pair</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: left;">Frecuencia de la coocurrencia</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>score</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: left;">Valor de la medida elegida</td>
 </tr>
 </tbody>
 </table>
-<p>Ejemplo de extracción de palabras con bigramas como tokens, tras filtrar números y palabras vacías y lematizar:</p>
+<h2 id="ejemplo">Ejemplo<a class="headerlink" href="#ejemplo" title="Permanent link">&para;</a></h2>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
-<p><em>Código</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Importar la biblioteca</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">collocations</span>
 
-<span class="c1"># Preparar los datos</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">"No tengas 100 euros, ten 100 amigos"</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">use_lexemes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span>
+    <span class="s2">"El gato estaba en la ventana y miraba a los pájaros. Los pájaros se fueron y el gato "</span>
+    <span class="s2">"se durmió en la ventana. Mañana el gato volverá a estar en la ventana y mirará a los pájaros."</span>
+<span class="p">)</span>
 
-<span class="c1"># Extraer las palabras</span>
-<span class="n">we</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">use_lexemes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="p">[</span><span class="s2">"no"</span><span class="p">],</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-</code></pre></div>
-<p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">(</span><span class="s1">'tener'</span>,<span class="w"> </span><span class="s1">'euro'</span>,<span class="w"> </span><span class="s1">'tener'</span>,<span class="w"> </span><span class="s1">'amigo'</span>,<span class="w"> </span><span class="s1">'tener_euro'</span>,<span class="w"> </span><span class="s1">'euro_tener'</span>,<span class="w"> </span><span class="s1">'tener_amigo'</span><span class="o">)</span>
-</code></pre></div>
-</div>
-<h3 id="get_most_common">get_most_common<a class="headerlink" href="#get_most_common" title="Permanent link">&para;</a></h3>
-<p>Devuelve un contador de las palabras más frecuentes del texto. Recibe como parámetro el número de palabras a devolver.</p>
-<p>Para ilustrar el método reutilizamos el código del ejemplo anterior:</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<p><em>Código</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="n">collocations</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1"># [Collocation(left='en', right='ventana', freq_left=3, freq_right=3, freq_pair=3, score=13.0)]</span>
 
-<span class="c1"># Mostrar las palabras más frecuentes</span>
-<span class="n">we</span><span class="o">.</span><span class="n">get_most_common</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="p">[</span>
+    <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">score</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">collocations</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="s2">"gato"</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="s2">"mi"</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+<span class="p">]</span>
+<span class="c1"># [('gato', 'volver', 3.62), ('gato', 'estar', 2.62)]</span>
 </code></pre></div>
-<p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">[(</span><span class="s1">'tener'</span>,<span class="w"> </span><span class="m">2</span><span class="o">)</span>,<span class="w"> </span><span class="o">(</span><span class="s1">'euro'</span>,<span class="w"> </span><span class="m">1</span><span class="o">)</span>,<span class="w"> </span><span class="o">(</span><span class="s1">'amigo'</span>,<span class="w"> </span><span class="m">1</span><span class="o">)]</span>
-</code></pre></div>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Aviso</p>
-<p>El método debe llamarse después de extraer las palabras con <code>extract</code>.</p>
 </div>
 
 

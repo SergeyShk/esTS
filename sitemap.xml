@@ -43,6 +43,34 @@
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/syllables/"/>
     </url>
     <url>
+        <loc>Nonecorpus/collocations/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/collocations/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/collocations/"/>
+    </url>
+    <url>
+        <loc>Nonecorpus/dispersion/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/dispersion/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/dispersion/"/>
+    </url>
+    <url>
+        <loc>Nonecorpus/keyness/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/keyness/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/keyness/"/>
+    </url>
+    <url>
+        <loc>Nonecorpus/kwic/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/kwic/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/kwic/"/>
+    </url>
+    <url>
         <loc>Noneextractors/char_ngrams/</loc>
         <lastmod>2026-09-24</lastmod>
         <changefreq>daily</changefreq>
@@ -160,6 +188,34 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/syllables/"/>
         <xhtml:link rel="alternate" hreflang="en" href="Nonesyllables/"/>
+    </url>
+    <url>
+        <loc>Nonees/corpus/collocations/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/collocations/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/collocations/"/>
+    </url>
+    <url>
+        <loc>Nonees/corpus/dispersion/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/dispersion/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/dispersion/"/>
+    </url>
+    <url>
+        <loc>Nonees/corpus/keyness/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/keyness/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/keyness/"/>
+    </url>
+    <url>
+        <loc>Nonees/corpus/kwic/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/kwic/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/kwic/"/>
     </url>
     <url>
         <loc>Nonees/extractors/char_ngrams/</loc>
