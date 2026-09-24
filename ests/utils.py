@@ -1,7 +1,16 @@
+import hashlib
+import logging
+import os
 import re
+import shutil
+import tarfile
 import unicodedata
+import urllib.parse
+import urllib.request
+import zipfile
 from collections.abc import Iterator, Sequence
 from functools import lru_cache
+from pathlib import Path, PurePosixPath
 
 import simplemma
 import spacy
@@ -12,6 +21,7 @@ from spacy.tokens import Doc, Span, Token
 from .constants import (
     ABBREVIATIONS,
     DASHES,
+    DEFAULT_DATA_DIR,
     PUNCTUATIONS,
     SENTENCE_OPENERS,
     SPACY_MODEL,
@@ -21,7 +31,9 @@ from .constants import (
     VERBAL_NOUN_LEMMAS,
     VERBAL_NOUN_SUFFIXES,
 )
-from .exceptions import DatasetNotFoundError, SourceTypeError
+from .exceptions import DataFileError, DatasetNotFoundError, DownloadError, SourceTypeError
+
+logger = logging.getLogger(__name__)
 
 # End of a sentence: terminal marks, optionally closing quotes or brackets,
 # before whitespace or the end of the text; or a blank line
@@ -559,6 +571,175 @@ def count_letters(word: str) -> int:
         int: Number of letters
     """
     return sum(map(str.isalpha, word))
+
+
+def to_path(path: str | Path) -> Path:
+    """
+    Converting the string form of a path into a Path
+
+    Arguments:
+        path (str|Path): Path as a string or a Path
+
+    Returns:
+        Path: Path object
+
+    Raises:
+        SourceTypeError: If the value is neither a string nor a Path
+    """
+    if isinstance(path, str):
+        return Path(path)
+    if isinstance(path, Path):
+        return path
+    raise SourceTypeError("The path must be a string or a Path")
+
+
+# Seconds that a download waits for the server to answer
+DOWNLOAD_TIMEOUT = 60
+
+
+def download_file(
+    url: str,
+    filename: str | None = None,
+    dirpath: str | Path = DEFAULT_DATA_DIR,
+    force: bool = False,
+) -> str:
+    """
+    Downloading a file from the network
+
+    Description:
+        The file is written under a temporary name next to the target one and
+        renamed once it is complete, so a broken download leaves no partial
+        file that the next call would take for a downloaded one. The connection
+        waits for an answer no longer than DOWNLOAD_TIMEOUT seconds
+
+    Arguments:
+        url (str): Address of the file
+        filename (str): Name of the downloaded file; the last part of the address by default
+        dirpath (str|Path): Directory for the downloaded file
+        force (bool): Download the file even if it is already there
+
+    Returns:
+        str: Path to the downloaded file; an empty string if it was already there
+
+    Raises:
+        DownloadError: If the directory cannot be created or the file cannot be downloaded
+    """
+    dirpath = to_path(dirpath)
+    try:
+        dirpath.mkdir(parents=True, exist_ok=True)
+    except OSError as e:
+        raise DownloadError(f"Cannot create the directory {dirpath}") from e
+    if not filename:
+        filename = Path(urllib.parse.urlparse(urllib.parse.unquote_plus(url)).path).name
+    filepath = dirpath.resolve() / filename
+    if filepath.is_file() and not force:
+        logger.info("The file %s is already downloaded", filepath)
+        return ""
+    partial = filepath.with_name(filepath.name + ".part")
+    try:
+        logger.info("Downloading the file %s", url)
+        request = urllib.request.Request(url, headers={"User-Agent": "esTS"})
+        with (
+            urllib.request.urlopen(request, timeout=DOWNLOAD_TIMEOUT) as response,
+            partial.open("wb") as out_file,
+        ):
+            shutil.copyfileobj(response, out_file)
+        partial.replace(filepath)
+    except Exception as e:
+        partial.unlink(missing_ok=True)
+        raise DownloadError(f"Cannot download the file {url}") from e
+    logger.info("The file is downloaded: %s", filepath)
+    return str(filepath)
+
+
+def _is_outside(member: str) -> bool:
+    """Whether the path of an archive member leads outside the directory of extraction"""
+    parts = PurePosixPath(member.replace("\\", "/")).parts
+    return bool(parts) and (parts[0] in ("/", "..") or ".." in parts)
+
+
+def extract_archive(archive_file: str | Path, extract_dir: str | Path | None = None) -> str:
+    """
+    Extracting the files of a ZIP or TAR archive
+
+    Description:
+        A ZIP archive is extracted by ZipFile.extractall, as shutil.unpack_archive
+        in some versions of Python skips the files with two dots in a row in
+        their names, not only the path components «..»; a TAR archive goes
+        through the data filter, which refuses links and paths outside the
+        directory. If the root of the archive differs from the name of the
+        archive without its extensions, it is renamed, and an earlier directory
+        with that name is removed first, otherwise a second extraction would
+        put a copy inside it
+
+    Arguments:
+        archive_file (str|Path): Path to the archive
+        extract_dir (str|Path): Directory for the extracted files; the directory of the archive by default
+
+    Returns:
+        str: Path to the directory with the extracted files
+
+    Raises:
+        DataFileError: If the file is not a ZIP or TAR archive, the archive is
+            corrupted, has paths outside the directory or the directory cannot be created
+    """
+    archive_path = to_path(archive_file).resolve()
+    extract_path = to_path(extract_dir) if extract_dir else archive_path.parent
+    try:
+        extract_path.mkdir(parents=True, exist_ok=True)
+    except OSError as e:
+        raise DataFileError(f"Cannot create the directory {extract_path}") from e
+    is_zip = zipfile.is_zipfile(archive_path)
+    is_tar = tarfile.is_tarfile(archive_path)
+    if not is_zip and not is_tar:
+        raise DataFileError(f"The file {archive_path} is not a ZIP or TAR archive")
+    logger.info("Extracting the archive %s", archive_path)
+    try:
+        if is_zip:
+            with zipfile.ZipFile(archive_path, mode="r") as zip_file:
+                members = zip_file.namelist()
+                if any(_is_outside(member) for member in members):
+                    raise DataFileError(
+                        f"The archive {archive_path} has paths outside the directory"
+                    )
+                zip_file.extractall(extract_path)
+        else:
+            shutil.unpack_archive(archive_path, extract_dir=extract_path, filter="data")
+            with tarfile.open(archive_path, mode="r") as tar_file:
+                members = tar_file.getnames()
+    except (OSError, zipfile.BadZipFile, tarfile.TarError, shutil.ReadError) as e:
+        raise DataFileError(f"Cannot extract the archive {archive_path}") from e
+    src_basename = os.path.commonpath(members)
+    if src_basename and not (extract_path / src_basename).is_dir():
+        src_basename = str(Path(src_basename).parent)
+    if not src_basename or src_basename == ".":
+        return str(extract_path)
+    # All the extensions go: spanish_literature_v1.tar.xz -> spanish_literature_v1
+    dest_basename = archive_path.name
+    while (stem := Path(dest_basename).stem) != dest_basename:
+        dest_basename = stem
+    if src_basename != dest_basename:
+        destination = extract_path / dest_basename
+        if destination.is_dir():
+            shutil.rmtree(destination)
+        return str(shutil.move(extract_path / src_basename, destination))
+    return str(extract_path / src_basename)
+
+
+def sha256(path: Path) -> str:
+    """
+    Computing the SHA-256 checksum of a file
+
+    Arguments:
+        path (Path): Path to the file
+
+    Returns:
+        str: Hexadecimal checksum; an empty string for a missing file
+    """
+    if not path.is_file():
+        return ""
+    with path.open("rb") as file:
+        return hashlib.file_digest(file, "sha256").hexdigest()
 
 
 def safe_divide(num: float | int, den: float | int, default: float | int = 0) -> float:

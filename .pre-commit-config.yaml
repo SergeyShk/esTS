@@ -10,6 +10,7 @@ repos:
         exclude: ^mkdocs\.yml$
       - id: check-toml
       - id: check-added-large-files
+        exclude: ^ests/datasets/data/
       - id: check-merge-conflict
 
   - repo: https://github.com/astral-sh/ruff-pre-commit

@@ -32,6 +32,8 @@ nav:
       - KWIC concordance: corpus/kwic.md
       - Stylometry: corpus/stylometry.md
       - Corpus comparison: corpus/compare.md
+    - Datasets:
+      - Spanish-language literature: datasets/spanishliterature.md
     - Visualizers:
       - Zipf's law: visualizers/zipf.md
       - Literature fingerprinting: visualizers/fingerprinting.md
@@ -99,6 +101,8 @@ plugins:
             KWIC concordance: Concordancia KWIC
             Stylometry: Estilometría
             Corpus comparison: Comparación de corpus
+            Datasets: Conjuntos de datos
+            Spanish-language literature: Literatura en español
             Visualizers: Visualizaciones
             Zipf's law: Ley de Zipf
             Literature fingerprinting: Huella literaria

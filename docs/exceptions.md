@@ -21,7 +21,7 @@ All library exceptions inherit the base class `EstsError` and one of the built-i
 The classes are available from `ests` and from `ests.exceptions`.
 
 !!! note "Note"
-    `DatasetNotFoundError` is what a statistic of Universal Dependencies raises when the model `es_core_news_sm` is not installed, which is the first thing a new reader meets: `MorphStats("El gato duerme")` without the model says how to download it. `DataFileError` and `DownloadError` are reserved for the dataset loaders of the coming releases; nothing raises them yet.
+    `DatasetNotFoundError` is what a statistic of Universal Dependencies raises when the model `es_core_news_sm` is not installed, which is the first thing a new reader meets: `MorphStats("El gato duerme")` without the model says how to download it. The datasets raise it too while they are not downloaded (`SpanishLiterature().get_texts()` before `download()`); `DownloadError` comes from a download that failed or an archive that failed its SHA-256 checksum twice, `DataFileError` from an archive that cannot be extracted.
 
 !!! example "Example"
 

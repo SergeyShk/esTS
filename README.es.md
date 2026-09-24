@@ -41,11 +41,12 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Estadísticas morfológicas](https://sergeyshk.github.io/esTS/es/stats/morph_stats/)** - categorías gramaticales y quince rasgos morfológicos de Universal Dependencies, con los marcadores del español: los modos, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
 * **[Medidas de corpus](https://sergeyshk.github.io/esTS/es/corpus/keyness/)** - palabras clave frente a un corpus de referencia, colocaciones, la dispersión de una palabra por las partes de un texto, una concordancia KWIC y la estilometría de autoría: la Delta de Burrows con sus variantes, Zeta, la curva de Mendenhall, el perfil de las palabras funcionales; la comparación de dos corpus por 132 rasgos de un texto con tamaños del efecto
 * **[Visualizaciones](https://sergeyshk.github.io/esTS/es/visualizers/zipf/)** - ley de Zipf, huella literaria, árbol de palabras, dispersión léxica y palabras clave, red de colocaciones, dendrograma, PCA y MDS por la Delta, crecimiento del vocabulario, longitudes de las oraciones
+* **[Conjuntos de datos](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/)** - literatura en español de dominio público: 150 obras de 33 autores de España, Hispanoamérica y Filipinas en prosa, poesía, teatro y ensayo, con el género, los años y el país
 * **[Componentes de spaCy](https://sergeyshk.github.io/esTS/es/components/)** - cada clase de estadísticas como componente de un pipeline, con las estadísticas puestas en el `Doc` en una sola pasada
 * **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, con la densidad de 255 marcadores del discurso españoles
 * **[Estadísticas sintácticas](https://sergeyshk.github.io/esTS/es/stats/syntax_stats/)** - el árbol de dependencias por distancias, profundidad, cláusulas y coordinación, con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
 
-La complejidad léxica y los primeros conjuntos de datos completan la 0.3; el estilo, la fonoestadística, la métrica y la rima llegan en la 0.4.
+La complejidad léxica completa la 0.3; el estilo, la fonoestadística, la métrica y la rima llegan en la 0.4.
 
 ## Instalación
 
@@ -486,34 +487,33 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/corpus/keyness/)
 
 </details>
 
-## Desarrollo
+<details>
+<summary><b>Conjuntos de datos</b></summary>
 
-El proyecto usa [uv](https://docs.astral.sh/uv/) para gestionar las dependencias y [ruff](https://docs.astral.sh/ruff/) para el análisis y el formato del código.
+<br>
 
-```bash
-git clone https://github.com/SergeyShk/esTS.git
-cd esTS
+*   [spanish_literature](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/) - literatura en español de dominio público: 150 obras de 33 autores de España, Hispanoamérica y Filipinas, de Cervantes a los años veinte, en prosa, poesía, teatro y ensayo; 65 millones de caracteres
 
-make deps        # crear el entorno e instalar las dependencias
-make test        # ejecutar las pruebas y los ejemplos de los docstrings (doctest)
-make lint        # ruff + mypy
+Los textos se recortan al texto del autor, sin portadas, notas de los transcriptores y de los editores, índices ni notas al pie, y llevan el género, el autor, el título, los años de la primera publicación y el país; los registros se pueden filtrar por cualquiera de ellos y por la longitud del texto.
+
+```python
+>>> from ests.datasets import SpanishLiterature
+
+>>> sl = SpanishLiterature()
+>>> sl.download()
+>>> for record in sl.get_records(author="galdos", year_from=1880, year_to=1884):
+...     print(record["title"], record["year_from"], len(record["text"]))
+La desheredada 1881 820454
+El amigo Manso 1882 521156
+La de Bringas 1884 413730
+Tormento 1884 477286
 ```
 
-Ejecute `make help` para ver la lista completa de comandos.
+El archivo (19 MB) se descarga una vez con `download()` en el directorio de datos y se verifica con su suma de comprobación SHA-256; antes de la descarga `get_texts()` y `get_records()` levantan `DatasetNotFoundError` con una indicación.
 
-La documentación es bilingüe: las páginas en inglés son `docs/*.md` y las españolas `docs/*.es.md` junto a ellas ([mkdocs-static-i18n](https://github.com/ultrabug/mkdocs-static-i18n)); al editar una página, actualice las dos versiones.
+Más en la [documentación](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/).
 
-La versión instalada está en `ests.__version__`. Todas las excepciones heredan de `ests.EstsError` y de una de las clases integradas (`SourceError` y `ParameterError` de `ValueError`, `SourceTypeError` de `TypeError`, `UnknownStatError` de `KeyError`), así que `except ValueError` sigue funcionando. La biblioteca no imprime nada por su cuenta: sus mensajes van al logger `ests` (`logging.getLogger("ests")`) y están en silencio por defecto.
-
-Antes de enviar cambios, instale los hooks que ejecutan los linters al hacer commit y las pruebas al hacer push:
-
-```bash
-uv run pre-commit install
-```
-
-## Contribuir
-
-Los informes de errores, las ideas y los pull requests son bienvenidos: las [issues](https://github.com/SergeyShk/esTS/issues) están abiertas. El flujo de trabajo, las comprobaciones previas a un pull request y la forma de presentar los cambios están descritos en [CONTRIBUTING.md](https://github.com/SergeyShk/esTS/blob/master/CONTRIBUTING.md); las normas de convivencia, en el [código de conducta](https://github.com/SergeyShk/esTS/blob/master/CODE_OF_CONDUCT.md).
+</details>
 
 <details>
 <summary><b>Visualizaciones</b></summary>
@@ -553,6 +553,35 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/visualizers/zipf
 
 </details>
 
+## Desarrollo
+
+El proyecto usa [uv](https://docs.astral.sh/uv/) para gestionar las dependencias y [ruff](https://docs.astral.sh/ruff/) para el análisis y el formato del código.
+
+```bash
+git clone https://github.com/SergeyShk/esTS.git
+cd esTS
+
+make deps        # crear el entorno e instalar las dependencias
+make test        # ejecutar las pruebas y los ejemplos de los docstrings (doctest)
+make lint        # ruff + mypy
+```
+
+Ejecute `make help` para ver la lista completa de comandos.
+
+La documentación es bilingüe: las páginas en inglés son `docs/*.md` y las españolas `docs/*.es.md` junto a ellas ([mkdocs-static-i18n](https://github.com/ultrabug/mkdocs-static-i18n)); al editar una página, actualice las dos versiones.
+
+La versión instalada está en `ests.__version__`. Todas las excepciones heredan de `ests.EstsError` y de una de las clases integradas (`SourceError` y `ParameterError` de `ValueError`, `SourceTypeError` de `TypeError`, `UnknownStatError` de `KeyError`), así que `except ValueError` sigue funcionando. La biblioteca no imprime nada por su cuenta: sus mensajes van al logger `ests` (`logging.getLogger("ests")`) y están en silencio por defecto.
+
+Antes de enviar cambios, instale los hooks que ejecutan los linters al hacer commit y las pruebas al hacer push:
+
+```bash
+uv run pre-commit install
+```
+
+## Contribuir
+
+Los informes de errores, las ideas y los pull requests son bienvenidos: las [issues](https://github.com/SergeyShk/esTS/issues) están abiertas. El flujo de trabajo, las comprobaciones previas a un pull request y la forma de presentar los cambios están descritos en [CONTRIBUTING.md](https://github.com/SergeyShk/esTS/blob/master/CONTRIBUTING.md); las normas de convivencia, en el [código de conducta](https://github.com/SergeyShk/esTS/blob/master/CODE_OF_CONDUCT.md).
+
 <details>
 <summary><b>Estructura del proyecto</b></summary>
 
@@ -564,6 +593,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/visualizers/zipf
     *   cohesion_stats.py - estadísticas de cohesión
     *   components.py - componentes de un pipeline de spaCy
     *   corpus - medidas de la lingüística de corpus: palabras clave, colocaciones, dispersión, concordancia, estilometría, comparación de corpus
+    *   datasets - conjuntos de datos: literatura en español
     *   constants.py - constantes de la lengua española y de las métricas
     *   diversity_stats.py - métricas de diversidad léxica
     *   exceptions.py - excepciones de la biblioteca
@@ -574,6 +604,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/visualizers/zipf
     *   syllables.py - silabificación y acento
     *   utils.py - herramientas auxiliares
     *   visualizers - gráficos: ley de Zipf, huella literaria, árbol de palabras, gráficos de corpus y estilométricos, crecimiento del vocabulario, longitudes de las oraciones
+*   **scripts** - scripts que construyen los archivos de los conjuntos de datos
 *   **tests** - pruebas que reproducen la estructura del paquete
 
 </details>
