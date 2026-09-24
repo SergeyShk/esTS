@@ -10,9 +10,9 @@ All library exceptions inherit the base class `EstsError` and one of the built-i
 | Exception | Built-in class | When raised |
 | :-------- | :------------- | :---------- |
 | `EstsError` | `Exception` | Base class, never raised itself |
-| `SourceTypeError` | `TypeError` | The data source is neither a string nor a `Doc`, the tokenizer is not callable or returns a non-iterable object |
-| `SourceError` | `ValueError` | The source has no words or no sentences, lacks the annotation a statistic needs (the parts of speech, the lemmas, the dependency parse), or is a string longer than the `max_length` of the pipeline |
-| `ParameterError` | `ValueError` | A threshold, window, segment size, number of items, logarithm base or confidence level is out of range; an unknown preset, scale or metric name |
+| `SourceTypeError` | `TypeError` | The data source is neither a string nor a `Doc`, a string or a `Doc` is passed where a list of words is expected, the tokenizer is not callable or returns a non-iterable object |
+| `SourceError` | `ValueError` | The source has no words, no sentences or no texts, lacks the annotation a statistic needs (the parts of speech, the lemmas, the dependency parse), is a string longer than the `max_length` of the pipeline, or no unit is left after culling |
+| `ParameterError` | `ValueError` | A threshold, window, segment size, number of items, logarithm base or confidence level is out of range; an unknown preset, scale, metric name, measure or variant |
 | `UnknownStatError` | `ParameterError`, `KeyError` | An unknown statistic is requested by name, as in `DiversityStats.windowed` |
 | `DatasetNotFoundError` | `OSError` | The model of spaCy is not installed or a dataset is not downloaded; the message shows the command that brings what is missing |
 | `DataFileError` | `ValueError` | A dataset file is corrupted, has an unexpected format or cannot be decoded |
