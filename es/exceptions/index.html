@@ -1381,6 +1381,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../corpus/stylometry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estilometría
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1479,17 +1507,17 @@
 <tr>
 <td style="text-align: left;"><code>SourceTypeError</code></td>
 <td style="text-align: left;"><code>TypeError</code></td>
-<td style="text-align: left;">La fuente de datos no es una cadena ni un <code>Doc</code>, el tokenizador no es invocable o devuelve un objeto no iterable</td>
+<td style="text-align: left;">La fuente de datos no es una cadena ni un <code>Doc</code>, se pasa una cadena o un <code>Doc</code> donde se espera una lista de palabras, el tokenizador no es invocable o devuelve un objeto no iterable</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>SourceError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">La fuente no tiene palabras ni oraciones, le falta la anotación que una estadística necesita (las categorías gramaticales, los lemas, el análisis de dependencias) o es una cadena más larga que el <code>max_length</code> del pipeline</td>
+<td style="text-align: left;">La fuente no tiene palabras, oraciones ni textos, le falta la anotación que una estadística necesita (las categorías gramaticales, los lemas, el análisis de dependencias), es una cadena más larga que el <code>max_length</code> del pipeline o no queda ninguna unidad tras el filtrado</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>ParameterError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">Un umbral, ventana, tamaño de segmento, número de elementos, base del logaritmo o nivel de confianza fuera de rango; un preajuste, escala o nombre de métrica desconocidos</td>
+<td style="text-align: left;">Un umbral, ventana, tamaño de segmento, número de elementos, base del logaritmo o nivel de confianza fuera de rango; un preajuste, escala, nombre de métrica, medida o variante desconocidos</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>UnknownStatError</code></td>

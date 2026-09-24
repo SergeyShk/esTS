@@ -1390,6 +1390,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="corpus/stylometry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estilometría
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1491,10 +1519,10 @@
 <li>calcular <a href="stats/morph_stats/">estadísticas morfológicas</a> sobre Universal Dependencies (categorías gramaticales y quince rasgos morfológicos) con los marcadores del español: los modos, las formas no personales, las cópulas <code>ser</code> y <code>estar</code>, los adverbios en <code>-mente</code></li>
 <li>calcular <a href="stats/syntax_stats/">estadísticas sintácticas</a> sobre el árbol de dependencias (distancias, profundidad, cláusulas, coordinación) con las construcciones del estilo administrativo: la pasiva con <code>ser</code> y con <code>se</code>, las cláusulas de participio y de gerundio, las cadenas de <code>de</code>, los predicados escindidos</li>
 <li>calcular <a href="stats/cohesion_stats/">estadísticas de cohesión</a> a la manera de Coh-Metrix (repetición de sustantivos, argumentos y palabras con contenido entre oraciones, información dada, cohesión temporal) con la densidad de 255 marcadores del discurso por clase</li>
-<li>comparar corpus con las medidas de la lingüística de corpus: <a href="corpus/keyness/">palabras clave</a> frente a un corpus de referencia, <a href="corpus/collocations/">colocaciones</a>, la <a href="corpus/dispersion/">dispersión</a> de una palabra por las partes de un texto y una <a href="corpus/kwic/">concordancia KWIC</a></li>
+<li>comparar corpus con las medidas de la lingüística de corpus: <a href="corpus/keyness/">palabras clave</a> frente a un corpus de referencia, <a href="corpus/collocations/">colocaciones</a>, la <a href="corpus/dispersion/">dispersión</a> de una palabra por las partes de un texto y una <a href="corpus/kwic/">concordancia KWIC</a>, y atribuir la autoría por <a href="corpus/stylometry/">estilometría</a>: la Delta de Burrows, Zeta, la curva de Mendenhall, las palabras funcionales</li>
 <li>añadir las estadísticas a un <a href="components/">pipeline de spaCy</a> como componentes, de modo que el texto se anote y se mida en una sola pasada y las estadísticas viajen con el <code>Doc</code></li>
 </ul>
-<p>La estilometría y la comparación de corpus completan la 0.3; el estilo, la fonoestadística, la métrica y la rima llegan en la 0.4.</p>
+<p>La comparación de corpus completa la 0.3; el estilo, la fonoestadística, la métrica y la rima llegan en la 0.4.</p>
 <h2 id="instalacion">Instalación<a class="headerlink" href="#instalacion" title="Permanent link">&para;</a></h2>
 <p>Se requiere Python 3.11 o superior.</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyests
@@ -1558,7 +1586,7 @@
 <li>basic_stats.py - estadísticas básicas del texto</li>
 <li>cohesion_stats.py - estadísticas de cohesión</li>
 <li>components.py - componentes de un pipeline de spaCy</li>
-<li>corpus - medidas de la lingüística de corpus: palabras clave, colocaciones, dispersión, concordancia</li>
+<li>corpus - medidas de la lingüística de corpus: palabras clave, colocaciones, dispersión, concordancia, estilometría</li>
 <li>constants.py - constantes de la lengua española y de las métricas</li>
 <li>diversity_stats.py - métricas de diversidad léxica</li>
 <li>exceptions.py - excepciones de la biblioteca</li>

@@ -1381,6 +1381,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../corpus/stylometry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stylometry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1479,17 +1507,17 @@
 <tr>
 <td style="text-align: left;"><code>SourceTypeError</code></td>
 <td style="text-align: left;"><code>TypeError</code></td>
-<td style="text-align: left;">The data source is neither a string nor a <code>Doc</code>, the tokenizer is not callable or returns a non-iterable object</td>
+<td style="text-align: left;">The data source is neither a string nor a <code>Doc</code>, a string or a <code>Doc</code> is passed where a list of words is expected, the tokenizer is not callable or returns a non-iterable object</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>SourceError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">The source has no words or no sentences, lacks the annotation a statistic needs (the parts of speech, the lemmas, the dependency parse), or is a string longer than the <code>max_length</code> of the pipeline</td>
+<td style="text-align: left;">The source has no words, no sentences or no texts, lacks the annotation a statistic needs (the parts of speech, the lemmas, the dependency parse), is a string longer than the <code>max_length</code> of the pipeline, or no unit is left after culling</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>ParameterError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">A threshold, window, segment size, number of items, logarithm base or confidence level is out of range; an unknown preset, scale or metric name</td>
+<td style="text-align: left;">A threshold, window, segment size, number of items, logarithm base or confidence level is out of range; an unknown preset, scale, metric name, measure or variant</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>UnknownStatError</code></td>
