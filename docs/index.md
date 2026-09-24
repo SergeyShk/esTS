@@ -18,9 +18,10 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 *   compute [morphological statistics](stats/morph_stats.md) on Universal Dependencies (parts of speech and fifteen grammatical features) with the markers of Spanish: the moods, the non-finite forms, the copulas `ser` and `estar`, the adverbs in `-mente`
 *   compute [syntactic statistics](stats/syntax_stats.md) on the dependency tree (dependency distances, depth, clauses, coordination) with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
 *   compute [cohesion statistics](stats/cohesion_stats.md) in the manner of Coh-Metrix (the overlap of nouns, arguments and content words between sentences, givenness, temporal cohesion) with the density of 255 Spanish discourse markers by class
+*   compare corpora with the measures of corpus linguistics: [keywords](corpus/keyness.md) against a reference corpus, [collocations](corpus/collocations.md), the [dispersion](corpus/dispersion.md) of a word over the parts of a text and a [KWIC concordance](corpus/kwic.md)
 *   add the statistics to a [spaCy pipeline](components.md) as components, so that a text is annotated and measured in one pass and the statistics travel with the `Doc`
 
-Corpus measures and stylometry come in 0.3, style, phonostatistics, metre and rhyme in 0.4.
+Stylometry and the comparison of corpora complete 0.3; style, phonostatistics, metre and rhyme come in 0.4.
 
 ## Installation
 
@@ -95,6 +96,7 @@ Punctuation marks   |    2
         *   basic_stats.py - basic text statistics
         *   cohesion_stats.py - cohesion statistics
         *   components.py - components of a spaCy pipeline
+        *   corpus - measures of corpus linguistics: keywords, collocations, dispersion, concordance
         *   constants.py - constants of the Spanish language and of the metrics
         *   diversity_stats.py - lexical diversity metrics
         *   exceptions.py - library exceptions

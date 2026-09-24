@@ -25,6 +25,11 @@ nav:
       - Morphological statistics: stats/morph_stats.md
       - Syntactic statistics: stats/syntax_stats.md
       - Cohesion statistics: stats/cohesion_stats.md
+    - Corpus measures:
+      - Keywords: corpus/keyness.md
+      - Collocations: corpus/collocations.md
+      - Word dispersion: corpus/dispersion.md
+      - KWIC concordance: corpus/kwic.md
 
 theme:
   name: material
@@ -77,6 +82,11 @@ plugins:
             Morphological statistics: Estadísticas morfológicas
             Syntactic statistics: Estadísticas sintácticas
             Cohesion statistics: Estadísticas de cohesión
+            Corpus measures: Medidas de corpus
+            Keywords: Palabras clave
+            Collocations: Colocaciones
+            Word dispersion: Dispersión de las palabras
+            KWIC concordance: Concordancia KWIC
 
 extra:
   social:

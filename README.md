@@ -39,11 +39,12 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Readability metrics](https://sergeyshk.github.io/esTS/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX, with a consensus grade, the school stages of Spain and reading time
 * **[Lexical diversity metrics](https://sergeyshk.github.io/esTS/stats/diversity_stats/)** - TTR and its variations, MATTR, MSTTR, MTLD, HD-D, Simpson's and Yule's indices, entropy, Zipf's and Heaps' laws
 * **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
+* **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text and a KWIC concordance, by the measures of corpus linguistics
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
 * **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 255 Spanish discourse markers
 * **[Syntactic statistics](https://sergeyshk.github.io/esTS/stats/syntax_stats/)** - the dependency tree by distances, depth, clauses and coordination, with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
 
-Corpus measures and stylometry come in 0.3, style, phonostatistics, metre and rhyme in 0.4.
+Stylometry and the comparison of corpora complete 0.3; style, phonostatistics, metre and rhyme come in 0.4.
 
 ## Installation
 
@@ -440,6 +441,44 @@ More in the [documentation](https://sergeyshk.github.io/esTS/components/).
 
 </details>
 
+<details>
+<summary><b>Corpus measures</b></summary>
+
+<br>
+
+The library compares corpora and describes the use of a word, with the measures of corpus linguistics:
+
+*   keywords of a target corpus against a reference one: the log-likelihood with its p-value, Log Ratio, chi-square, %DIFF, BIC, ELL and the odds ratio
+*   collocations by logDice, MI, MI³, t-score, Dice, log-likelihood, NPMI and minimum sensitivity, checked against NLTK
+*   the dispersion of a word over the parts of a text: DP of Gries, normalized DP, Juilland's D, Carroll's D2, Rosengren's S and the Kullback-Leibler divergence
+*   a KWIC concordance by word form or by lemma
+
+```python
+>>> from ests import WordsExtractor
+>>> from ests.corpus import collocations, keyness, kwic
+
+>>> we = WordsExtractor(use_lexemes=True, lowercase=True)
+>>> target = we.extract("El gato estaba en la ventana y miraba a los pájaros. Los pájaros se fueron y el gato "
+...                     "se durmió en la ventana. Mañana el gato volverá a estar en la ventana y mirará a los pájaros.")
+>>> reference = we.extract("El perro estaba en el suelo y dormía. Después el perro comió y volvió a dormir. "
+...                        "Mañana el perro saldrá a pasear.")
+
+>>> [(k.word, round(k.g2, 2)) for k in keyness(target, reference, top_n=2)]
+[('gato', 2.8), ('pájaro', 2.8)]
+
+>>> [(c.left, c.right, round(c.score, 1)) for c in collocations(target, window=2, top_n=2)]
+[('en', 'ventana', 13.0), ('estar', 'en', 12.7)]
+
+>>> [line.keyword for line in kwic("Los gatos juegan y el gato duerme.", "gato", by_lemma=True)]
+['gatos', 'gato']
+```
+
+Words are compared as they are, so case, lemmas and stop words are chosen at the extraction.
+
+More in the [documentation](https://sergeyshk.github.io/esTS/corpus/keyness/).
+
+</details>
+
 ## Development
 
 The project uses [uv](https://docs.astral.sh/uv/) for dependency management and [ruff](https://docs.astral.sh/ruff/) for linting and formatting.
@@ -479,6 +518,7 @@ Bug reports, ideas and pull requests are welcome - [issues](https://github.com/S
     *   basic_stats.py - basic text statistics
     *   cohesion_stats.py - cohesion statistics
     *   components.py - components of a spaCy pipeline
+    *   corpus - measures of corpus linguistics: keywords, collocations, dispersion, concordance
     *   constants.py - constants of the Spanish language and of the metrics
     *   diversity_stats.py - lexical diversity metrics
     *   exceptions.py - library exceptions
