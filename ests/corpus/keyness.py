@@ -76,7 +76,9 @@ def keyness(
         size of the corpus of the dictionary (CORPUS_SIZE, 63 billion words of
         books of 1980-2019); a word out of the dictionary gets its least
         frequency (0.1 ipm, about 6300 occurrences), as the dictionary leaves
-        out the rarer words and their true frequency lies below it
+        out the rarer words and their true frequency lies below it. That is an
+        upper bound, so it backs a positive keyword and never a negative one:
+        a word out of the reference is no negative keyword
         A zero frequency in one of the corpora is replaced with 0.5 for %DIFF,
         Log Ratio and the odds ratio (Hardie 2014)
         Positive keywords are more frequent in the target corpus, negative ones
@@ -141,6 +143,10 @@ def keyness(
     rows = []
     words = set(counts_target) | set(counts_reference)
     for word in words:
+        # The least frequency of the dictionary is an upper bound for a word out of
+        # it: it can back a word more frequent in the target, never in the reference
+        if not positive and word not in counts_reference:
+            continue
         a = counts_target.get(word, 0)
         b = counts_reference.get(word, missing)
         ipm_target = a / size_target * 1e6

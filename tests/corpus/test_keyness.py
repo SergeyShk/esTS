@@ -183,6 +183,17 @@ def test_keyness_against_the_frequency_dictionary_alphabet(freq_dict):
     assert keywords[0].ipm_target == 1e6
 
 
+def test_keyness_against_the_frequency_dictionary_large_target(freq_dict):
+    # Beyond 10 million words a hapax out of the dictionary has less than 0.1 ipm,
+    # while the least frequency of the dictionary is only an upper bound for it
+    target = {"gato": 100_000_000, "felinólogo": 1}
+    negative = keyness(target, freq_dict, positive=False)
+    assert "felinólogo" not in {keyword.word for keyword in negative}
+    assert "el" in {keyword.word for keyword in negative}
+    positive = keyness({"gato": 10, "felinólogo": 1}, freq_dict)
+    assert "felinólogo" in {keyword.word for keyword in positive}
+
+
 def test_keyness_without_the_dictionary(tmp_path):
     with pytest.raises(DatasetNotFoundError):
         keyness(["gato"], FreqDict(data_dir=tmp_path))
