@@ -18,7 +18,7 @@ from .constants import (
     VERBAL_NOUN_LEMMAS,
     VERBAL_NOUN_SUFFIXES,
 )
-from .exceptions import DatasetNotFoundError
+from .exceptions import DatasetNotFoundError, SourceTypeError
 
 # End of a sentence: terminal marks, optionally closing quotes or brackets,
 # before whitespace or the end of the text; or a blank line
@@ -320,6 +320,41 @@ def has_words(source: str | Doc | Span) -> bool:
     """
     text = source if isinstance(source, str) else source.text
     return any(not char.isspace() and not is_punctuation(char) for char in text)
+
+
+def check_sequence(value: object, what: str = "words") -> None:
+    """
+    Checking that an argument is a sequence of strings and not a text
+
+    Description:
+        A string satisfies Sequence[str] formally but is iterated character by
+        character, and a Doc or a Span of spaCy is iterated token by token,
+        where every token compares only with itself, so every one of them would
+        be a word of its own with a frequency of one; the functions that expect
+        a list of words or of texts refuse both explicitly
+
+    Arguments:
+        value (object): Value to check
+        what (str): What is expected, for the message of the error
+
+    Raises:
+        SourceTypeError: If a string, a Doc or a Span is passed
+
+    Example:
+        >>> from ests.utils import check_sequence
+        >>> check_sequence(["el", "gato"])
+        >>> check_sequence("el gato")
+        Traceback (most recent call last):
+        ...
+        ests.exceptions.SourceTypeError: A list of words is expected, not a string
+    """
+    if isinstance(value, str):
+        raise SourceTypeError(f"A list of {what} is expected, not a string")
+    if isinstance(value, Doc | Span):
+        raise SourceTypeError(
+            f"A list of {what} is expected, not a {type(value).__name__}: "
+            "extract the words with WordsExtractor"
+        )
 
 
 def is_verbal_noun(lemma: str) -> bool:
