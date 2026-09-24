@@ -751,6 +751,9 @@ DISPERSION_STATS_DESC = {
     "rosengren_s": "Rosengren's S",
     "kl_divergence": "Kullback-Leibler divergence",
 }
+# Marks that stay with the first word of a window of a text: quotes, brackets,
+# dashes of a dialogue and the inverted marks
+OPENING_MARKS = frozenset('«"„“‘([{—–-¿¡')
 DELTA_VARIANTS = {
     "burrows": "Burrows's Delta - Manhattan distance of the z-scores divided by the number of units",
     "quadratic": "Argamon's quadratic Delta - Euclidean distance of the z-scores divided by the number of units",
