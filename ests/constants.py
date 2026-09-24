@@ -721,7 +721,7 @@ COHESION_STATS_DESC = {
 }
 
 
-# Measures of keyness, of association of collocations and of dispersion of words
+# Measures of keyness, of association of collocations, of dispersion of words and of stylometry
 KEYNESS_MEASURES = {
     "log_likelihood": "Log-likelihood G²",
     "chi2": "Chi-square with Yates's correction",
@@ -751,3 +751,12 @@ DISPERSION_STATS_DESC = {
     "rosengren_s": "Rosengren's S",
     "kl_divergence": "Kullback-Leibler divergence",
 }
+DELTA_VARIANTS = {
+    "burrows": "Burrows's Delta - Manhattan distance of the z-scores divided by the number of units",
+    "quadratic": "Argamon's quadratic Delta - Euclidean distance of the z-scores divided by the number of units",
+    "eder": "Eder's Delta - Manhattan distance of the z-scores weighted by rank",
+    "cosine": "Cosine Delta - cosine distance of the z-scores",
+}
+# Parts of speech of the function words: adpositions, conjunctions, particles,
+# pronouns, determiners and interjections
+FUNCTION_UD_POS = ("ADP", "CCONJ", "SCONJ", "PART", "PRON", "DET", "INTJ")

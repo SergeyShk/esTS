@@ -10,9 +10,9 @@ Todas las excepciones de la biblioteca heredan de la clase base `EstsError` y de
 | Excepción | Clase integrada | Cuándo se lanza |
 | :-------- | :-------------- | :-------------- |
 | `EstsError` | `Exception` | Clase base, nunca se lanza directamente |
-| `SourceTypeError` | `TypeError` | La fuente de datos no es una cadena ni un `Doc`, el tokenizador no es invocable o devuelve un objeto no iterable |
-| `SourceError` | `ValueError` | La fuente no tiene palabras ni oraciones, le falta la anotación que una estadística necesita (las categorías gramaticales, los lemas, el análisis de dependencias) o es una cadena más larga que el `max_length` del pipeline |
-| `ParameterError` | `ValueError` | Un umbral, ventana, tamaño de segmento, número de elementos, base del logaritmo o nivel de confianza fuera de rango; un preajuste, escala o nombre de métrica desconocidos |
+| `SourceTypeError` | `TypeError` | La fuente de datos no es una cadena ni un `Doc`, se pasa una cadena o un `Doc` donde se espera una lista de palabras, el tokenizador no es invocable o devuelve un objeto no iterable |
+| `SourceError` | `ValueError` | La fuente no tiene palabras, oraciones ni textos, le falta la anotación que una estadística necesita (las categorías gramaticales, los lemas, el análisis de dependencias), es una cadena más larga que el `max_length` del pipeline o no queda ninguna unidad tras el filtrado |
+| `ParameterError` | `ValueError` | Un umbral, ventana, tamaño de segmento, número de elementos, base del logaritmo o nivel de confianza fuera de rango; un preajuste, escala, nombre de métrica, medida o variante desconocidos |
 | `UnknownStatError` | `ParameterError`, `KeyError` | Se pide por nombre una estadística desconocida, como en `DiversityStats.windowed` |
 | `DatasetNotFoundError` | `OSError` | El modelo de spaCy no está instalado o un conjunto de datos no está descargado; el mensaje muestra el comando que trae lo que falta |
 | `DataFileError` | `ValueError` | Un archivo del conjunto de datos está dañado, tiene un formato inesperado o no se puede decodificar |
