@@ -617,6 +617,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conjuntos de datos
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2056,6 +2067,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conjuntos de datos
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2081,8 +2103,10 @@
 <ul>
 <li><code>python</code> 3.11 o superior</li>
 <li><code>spaCy</code> 3.7 o superior</li>
-<li><code>numpy</code>, <code>scipy</code>, <code>simplemma</code></li>
+<li><code>numpy</code>, <code>scipy</code>, <code>pandas</code>, <code>simplemma</code> 2</li>
+<li><code>matplotlib</code> y <code>graphviz</code> para las <a href="../visualizers/zipf/">visualizaciones</a></li>
 </ul>
+<p>Las dependencias se instalan con el paquete. <code>graphviz</code> es la interfaz de Python; el <a href="../visualizers/word_tree/">árbol de palabras</a> y la <a href="../visualizers/corpus/#collocation_network">red de colocaciones</a> los dibujan los ejecutables de <a href="https://graphviz.org/download/">Graphviz</a>, que se instalan aparte (<code>brew install graphviz</code>, <code>apt install graphviz</code>, <code>conda install graphviz</code>).</p>
 <h2 id="desde-pypi">Desde PyPI<a class="headerlink" href="#desde-pypi" title="Permanent link">&para;</a></h2>
 <p>El distribuible en PyPI se llama <code>pyests</code> y el paquete que instala es <code>ests</code>:</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyests
@@ -2093,8 +2117,12 @@
 uv<span class="w"> </span>sync<span class="w"> </span>--all-groups
 </code></pre></div>
 <h2 id="model">El modelo de spaCy<a class="headerlink" href="#model" title="Permanent link">&para;</a></h2>
-<p>Las estadísticas básicas, la legibilidad y la diversidad léxica no necesitan ningún modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas y con el tokenizador del pipeline español vacío, y las sílabas y el acento por la ortografía. Las <a href="../stats/morph_stats/">estadísticas morfológicas</a>, las <a href="../stats/syntax_stats/">sintácticas</a> y las <a href="../stats/cohesion_stats/">de cohesión</a> sí lo necesitan - las sintácticas, un pipeline con analizador -, igual que construir un <code>Doc</code> para pasarlo a las estadísticas en lugar de una cadena; las pruebas también lo necesitan, donde viene con el grupo de dependencias <code>test</code>:</p>
+<p>Las estadísticas básicas, la legibilidad y la diversidad léxica no necesitan ningún modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas y con el tokenizador del pipeline español vacío, y las sílabas y el acento por la ortografía. Las <a href="../stats/morph_stats/">estadísticas morfológicas</a>, las <a href="../stats/syntax_stats/">sintácticas</a>, las <a href="../stats/cohesion_stats/">de cohesión</a> y las <a href="../stats/lexical_stats/">de complejidad léxica</a> de una cadena sí lo necesitan - las sintácticas, un pipeline con analizador -, igual que el perfil de las palabras funcionales (<a href="../corpus/stylometry/"><code>function_words_profile</code></a>), los rasgos de un texto y la <a href="../corpus/compare/">comparación de corpus</a>, y construir un <code>Doc</code> para pasarlo a las estadísticas en lugar de una cadena; las pruebas también lo necesitan, donde viene con el grupo de dependencias <code>test</code>:</p>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>spacy<span class="w"> </span>download<span class="w"> </span>es_core_news_sm
+</code></pre></div>
+<h2 id="datasets">Conjuntos de datos<a class="headerlink" href="#datasets" title="Permanent link">&para;</a></h2>
+<p>El <a href="../datasets/spanishliterature/">corpus de literatura</a> y el <a href="../datasets/freqdict/">diccionario de frecuencias</a> se descargan una vez con su método <code>download()</code>; las estadísticas de <a href="../stats/lexical_stats/"><code>LexicalStats</code></a> según el diccionario y <a href="../corpus/keyness/"><code>keyness</code></a> frente a él necesitan <code>FreqDict().download()</code>. Los archivos van al directorio <code>ests_data</code> junto al paquete instalado (<code>ests.constants.DEFAULT_DATA_DIR</code>), <code>dicts</code> para el diccionario y <code>texts</code> para el corpus. Donde ese directorio no se puede escribir - un Python del sistema, un entorno compartido - pase otro en <code>data_dir</code> (<code>FreqDict(data_dir="...")</code>) o defina la variable de entorno <code>ESTS_DATA_DIR</code> antes de importar el paquete:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">ESTS_DATA_DIR</span><span class="o">=</span>~/ests_data
 </code></pre></div>
 
 

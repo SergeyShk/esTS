@@ -2055,17 +2055,17 @@
 <tr>
 <td style="text-align: left;"><code>SourceTypeError</code></td>
 <td style="text-align: left;"><code>TypeError</code></td>
-<td style="text-align: left;">La fuente de datos no es una cadena ni un <code>Doc</code>, se pasa una cadena o un <code>Doc</code> donde se espera una lista de palabras, el tokenizador no es invocable o devuelve un objeto no iterable</td>
+<td style="text-align: left;">La fuente de datos no es una cadena ni un <code>Doc</code>, se pasa una cadena o un <code>Doc</code> donde se espera una lista de palabras, los textos de una visualización no son una lista de listas de palabras, las frecuencias de <code>zipf</code> no son un <code>Counter</code>, la medida de <code>fingerprinting</code> o el tokenizador no son invocables, el tokenizador devuelve un objeto no iterable, una ruta no es una cadena ni un <code>Path</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>SourceError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">La fuente no tiene palabras, oraciones ni textos, le falta la anotación que una estadística necesita (las categorías gramaticales, los lemas, el análisis de dependencias), es una cadena más larga que el <code>max_length</code> del pipeline o no queda ninguna unidad tras el filtrado</td>
+<td style="text-align: left;">La fuente no tiene palabras, oraciones, textos ni colocaciones, le falta la anotación que una estadística necesita (las categorías gramaticales, los lemas, el análisis de dependencias), es una cadena más larga que el <code>max_length</code> del pipeline o no queda ninguna unidad tras el filtrado; Delta y las componentes principales reciben menos de tres textos, una matriz de distancias no es cuadrada o tiene una distancia infinita, el pipeline de <code>function_words_profile</code> no etiqueta las categorías gramaticales, ningún texto de una comparación tiene una ventana de palabras suficientes, la palabra clave de <code>wordtree</code> no se encuentra o no tiene ninguna palabra al lado</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>ParameterError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">Un umbral, ventana, tamaño de segmento, número de elementos, base del logaritmo o nivel de confianza fuera de rango; un preajuste, escala, nombre de métrica, medida o variante desconocidos</td>
+<td style="text-align: left;">Un umbral, ventana, tamaño de segmento, número de elementos, base del logaritmo, nivel de confianza, número de muestras bootstrap o límite de una banda de frecuencia (1-10 000) fuera de rango, un límite de registros negativo, los tamaños de las partes de <code>dispersion</code> que no suman las palabras, la palabra clave de <code>kwic</code> vacía; un preajuste, escala, nombre de métrica, medida, variante, campo de una palabra clave, género o categoría gramatical desconocidos</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>UnknownStatError</code></td>
@@ -2080,12 +2080,12 @@
 <tr>
 <td style="text-align: left;"><code>DataFileError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">Un archivo del conjunto de datos está dañado, tiene un formato inesperado o no se puede decodificar</td>
+<td style="text-align: left;">El archivo de un conjunto de datos no es un archivo ZIP ni TAR, no se puede extraer, no tiene ficheros o tiene rutas fuera de su directorio, o el directorio donde extraerlo no se puede crear</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>DownloadError</code></td>
 <td style="text-align: left;"><code>RuntimeError</code></td>
-<td style="text-align: left;">El archivo no se pudo descargar o no superó la comprobación de la suma de verificación</td>
+<td style="text-align: left;">El archivo no se pudo descargar, su directorio no se pudo crear o no superó dos veces la comprobación de la suma de verificación</td>
 </tr>
 </tbody>
 </table>

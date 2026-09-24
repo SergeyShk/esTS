@@ -1691,6 +1691,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#check_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#download" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2095,6 +2106,17 @@
   
     <nav class="md-nav" aria-label="Methods">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#check_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_data
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#download" class="md-nav__link">
@@ -3280,7 +3302,7 @@
 <td style="text-align: center;"><code>data_dir</code></td>
 <td style="text-align: center;">str/Path</td>
 <td style="text-align: center;"><code>DEFAULT_DATA_DIR.joinpath("texts")</code></td>
-<td style="text-align: center;">Path to the dataset directory</td>
+<td style="text-align: center;">Path to the dataset directory; the data directory is described in <a href="../../installation/#datasets">Installation</a></td>
 </tr>
 </tbody>
 </table>
@@ -3304,9 +3326,37 @@
 <td style="text-align: center;">dict[str, str]</td>
 <td style="text-align: center;">Names of the authors by the names of their folders</td>
 </tr>
+<tr>
+<td style="text-align: center;"><code>name</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">Name of the dataset, <code>spanish_literature</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>meta</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;">Reference information: the source, the description, the author and the licence</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>info</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;">The name and the reference information in one dictionary</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>data_dir</code></td>
+<td style="text-align: center;">Path</td>
+<td style="text-align: center;">Absolute path to the dataset directory</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>filepath</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">Path to the archive of the dataset, <code>None</code> before the download</td>
+</tr>
 </tbody>
 </table>
+<p>The dataset iterates over its records as <code>get_records()</code> without filters: <code>for record in sl</code> goes over the works one at a time.</p>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
+<h3 id="check_data">check_data<a class="headerlink" href="#check_data" title="Permanent link">&para;</a></h3>
+<p>Checks that the list of works and the file of every work are in place and returns <code>True</code>; a dataset that is not downloaded or misses a file raises <code>DatasetNotFoundError</code>. The other methods check it themselves.</p>
 <h3 id="download">download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h3>
 <p>Downloads the archive with checksum verification and extracts the files. A corrupted or replaced archive is removed and downloaded again in the same call; if the archive is there but some files are missing, it is extracted again. A repeated call downloads nothing.</p>
 <table>

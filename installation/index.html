@@ -617,6 +617,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Datasets
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2056,6 +2067,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Datasets
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2081,8 +2103,10 @@
 <ul>
 <li><code>python</code> 3.11 or newer</li>
 <li><code>spaCy</code> 3.7 or newer</li>
-<li><code>numpy</code>, <code>scipy</code>, <code>simplemma</code></li>
+<li><code>numpy</code>, <code>scipy</code>, <code>pandas</code>, <code>simplemma</code> 2</li>
+<li><code>matplotlib</code> and <code>graphviz</code> for the <a href="../visualizers/zipf/">visualizers</a></li>
 </ul>
+<p>The dependencies are installed with the package. <code>graphviz</code> is the Python interface; the <a href="../visualizers/word_tree/">word tree</a> and the <a href="../visualizers/corpus/#collocation_network">network of collocations</a> are rendered by the executables of <a href="https://graphviz.org/download/">Graphviz</a>, installed apart (<code>brew install graphviz</code>, <code>apt install graphviz</code>, <code>conda install graphviz</code>).</p>
 <h2 id="from-pypi">From PyPI<a class="headerlink" href="#from-pypi" title="Permanent link">&para;</a></h2>
 <p>The distribution on PyPI is <code>pyests</code>, the package it installs is <code>ests</code>:</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyests
@@ -2093,8 +2117,12 @@
 uv<span class="w"> </span>sync<span class="w"> </span>--all-groups
 </code></pre></div>
 <h2 id="model">The spaCy model<a class="headerlink" href="#model" title="Permanent link">&para;</a></h2>
-<p>Basic statistics, readability and lexical diversity need no trained model: sentences, words and character N-grams are extracted by rules and by the tokenizer of the blank Spanish pipeline, syllables and stress by the orthography. The <a href="../stats/morph_stats/">morphological</a>, the <a href="../stats/syntax_stats/">syntactic</a> and the <a href="../stats/cohesion_stats/">cohesion statistics</a> need one - the syntactic ones need a pipeline with a parser - and so does building a <code>Doc</code> yourself to pass it to the statistics instead of a string; the test suite needs it too, where it comes with the <code>test</code> dependency group:</p>
+<p>Basic statistics, readability and lexical diversity need no trained model: sentences, words and character N-grams are extracted by rules and by the tokenizer of the blank Spanish pipeline, syllables and stress by the orthography. The <a href="../stats/morph_stats/">morphological</a>, the <a href="../stats/syntax_stats/">syntactic</a>, the <a href="../stats/cohesion_stats/">cohesion</a> and the <a href="../stats/lexical_stats/">lexical sophistication statistics</a> of a string need one - the syntactic ones need a pipeline with a parser - and so do the profile of the function words (<a href="../corpus/stylometry/"><code>function_words_profile</code></a>), the features of a text and the <a href="../corpus/compare/">comparison of corpora</a>, and building a <code>Doc</code> yourself to pass it to the statistics instead of a string; the test suite needs it too, where it comes with the <code>test</code> dependency group:</p>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>spacy<span class="w"> </span>download<span class="w"> </span>es_core_news_sm
+</code></pre></div>
+<h2 id="datasets">Datasets<a class="headerlink" href="#datasets" title="Permanent link">&para;</a></h2>
+<p>The <a href="../datasets/spanishliterature/">corpus of literature</a> and the <a href="../datasets/freqdict/">frequency dictionary</a> are downloaded once by their <code>download()</code> method; the statistics of <a href="../stats/lexical_stats/"><code>LexicalStats</code></a> by the dictionary and <a href="../corpus/keyness/"><code>keyness</code></a> against it need <code>FreqDict().download()</code>. The archives go to the directory <code>ests_data</code> next to the installed package (<code>ests.constants.DEFAULT_DATA_DIR</code>), <code>dicts</code> for the dictionary and <code>texts</code> for the corpus. Where that directory cannot be written - a system Python, a shared environment - pass another one in <code>data_dir</code> (<code>FreqDict(data_dir="...")</code>) or set the environment variable <code>ESTS_DATA_DIR</code> before the package is imported:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">ESTS_DATA_DIR</span><span class="o">=</span>~/ests_data
 </code></pre></div>
 
 

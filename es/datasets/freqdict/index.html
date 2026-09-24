@@ -1730,6 +1730,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#check_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#download" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2141,6 +2152,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#check_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#download" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2235,7 +2257,7 @@
 </div>
 <h2 id="lemma_key">Clave de una palabra<a class="headerlink" href="#lemma_key" title="Permanent link">&para;</a></h2>
 <p><code>ests.datasets.freq_dict.lemma_key(word, proper=False)</code> - la clave por la que se busca una palabra en el diccionario y con la que se construye el diccionario: la palabra pasa a minúsculas y luego a su lema por <code>lemmatize</code>. simplemma distingue mayúsculas y minúsculas y deja tal cual una palabra desconocida con mayúscula, así que una palabra al principio de una oración perdería su lema (<code>Miró</code>, <code>Déjame</code>); en minúsculas lo encuentra (<code>mirar</code>, <code>dejar</code>). Un nombre propio conserva su forma en minúsculas (<code>proper=True</code>): <code>París</code> es <code>parís</code>, no el verbo <code>parir</code>.</p>
-<p>Los lemas dependen de la versión de simplemma: el diccionario se construye con la 2.0.0 (la constante <code>SIMPLEMMA_VERSION</code>), y la biblioteca requiere simplemma 2.0 o posterior; con la 1.x cerca del 4 % de las palabras de un texto tendrían otros lemas (<code>fue</code> - <code>ir</code> en lugar de <code>ser</code>, <code>usted</code> sin cambios).</p>
+<p>Los lemas dependen de la versión de simplemma: el diccionario se construye con la 2.0.0 (la constante <code>SIMPLEMMA_VERSION</code>), y la biblioteca requiere simplemma 2 (2.0 o posterior, anterior a la 3); con la 1.x cerca del 4 % de las palabras de un texto tendrían otros lemas (<code>fue</code> - <code>ir</code> en lugar de <code>ser</code>, <code>usted</code> sin cambios). Un <code>FreqDict</code> avisa una vez por proceso cuando la versión instalada de simplemma no es la 2.0.0, ya que entonces algunas palabras pueden no encontrarse en el diccionario.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets.freq_dict</span><span class="w"> </span><span class="kn">import</span> <span class="n">lemma_key</span>
@@ -2261,7 +2283,7 @@
 <td style="text-align: center;"><code>data_dir</code></td>
 <td style="text-align: center;">str/Path</td>
 <td style="text-align: center;"><code>DEFAULT_DATA_DIR.joinpath("dicts")</code></td>
-<td style="text-align: center;">Ruta al directorio del diccionario</td>
+<td style="text-align: center;">Ruta al directorio del diccionario; el directorio de datos se describe en <a href="../../installation/#datasets">Instalación</a></td>
 </tr>
 </tbody>
 </table>
@@ -2275,6 +2297,31 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td style="text-align: center;"><code>name</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">Nombre del conjunto de datos, <code>freq_dict</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>meta</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;">Información de referencia: la fuente, la descripción, el autor, la licencia y la cita</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>info</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;">El nombre y la información de referencia en un diccionario</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>data_dir</code></td>
+<td style="text-align: center;">Path</td>
+<td style="text-align: center;">Ruta absoluta al directorio del diccionario</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>filepath</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">Ruta al fichero del diccionario, <code>None</code> antes de la descarga</td>
+</tr>
 <tr>
 <td style="text-align: center;"><code>entries</code></td>
 <td style="text-align: center;">dict[str, Entry]</td>
@@ -2293,7 +2340,10 @@
 </tbody>
 </table>
 <p>Un <code>Entry</code> es una tupla con nombre con los campos <code>lemma</code>, <code>pos</code> (tupla de categorías gramaticales), <code>ipm</code>, <code>range</code>, <code>dispersion</code>, <code>docs</code>.</p>
+<p>El diccionario se recorre por sus registros como <code>get_records()</code> sin filtros: <code>for record in fd</code> pasa por las 109 178 filas de un lema y una categoría gramatical, mientras que <code>len(fd)</code> cuenta los 83 785 lemas con sus categorías unidas, tal como los ven <code>lookup</code> e <code>in</code>.</p>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
+<h3 id="check_data">check_data<a class="headerlink" href="#check_data" title="Permanent link">&para;</a></h3>
+<p>Comprueba que el fichero del diccionario está en su sitio y devuelve <code>True</code>; un diccionario sin descargar levanta <code>DatasetNotFoundError</code>. Los demás métodos lo comprueban por sí mismos.</p>
 <h3 id="download">download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h3>
 <p>Descarga el archivo con verificación de la suma de comprobación y extrae el fichero. Un archivo dañado o sustituido se borra y se descarga de nuevo en la misma llamada; si el archivo está pero falta el fichero del diccionario, se extrae otra vez, y el diccionario analizado se vuelve a leer.</p>
 <table>
@@ -2325,7 +2375,7 @@
 </code></pre></div>
 </div>
 <h3 id="lookup">lookup<a class="headerlink" href="#lookup" title="Permanent link">&para;</a></h3>
-<p>Devuelve la entrada de un lema en cualquier combinación de mayúsculas y minúsculas, <code>None</code> para un lema que no está en el diccionario. Una forma se busca por su clave: <code>computadoras</code> por <code>lemma_key("computadoras")</code>, que es <code>computador</code>, no por <code>computadora</code>.</p>
+<p>Devuelve la entrada de un lema en cualquier combinación de mayúsculas y minúsculas, <code>None</code> para un lema que no está en el diccionario. El argumento es una clave del diccionario, no una forma, y una forma se busca por su clave: <code>computadoras</code> por <code>lemma_key("computadoras")</code>, que es <code>computador</code>, no por <code>computadora</code>; el lema de <code>usted</code> en simplemma es <code>tú</code>, así que <code>fd.lookup("usted")</code> es <code>None</code>. Lo mismo vale para <code>ipm</code> e <code>in</code>; <a href="../../stats/lexical_stats/"><code>LexicalStats</code></a> y <a href="../../corpus/keyness/"><code>keyness</code></a> pasan a las claves por sí mismos.</p>
 <table>
 <thead>
 <tr>
@@ -2346,22 +2396,24 @@
 </table>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
-<div class="highlight"><pre><span></span><code><span class="n">fd</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">"Gato"</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets.freq_dict</span><span class="w"> </span><span class="kn">import</span> <span class="n">lemma_key</span>
+
+<span class="n">fd</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">"Gato"</span><span class="p">)</span>
 <span class="c1"># Entry(lemma='gato', pos=('NOUN', 'ADJ'), ipm=29.08, range=40, dispersion=95, docs=232841)</span>
 <span class="n">fd</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">"dios"</span><span class="p">)</span>
 <span class="c1"># Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.42, range=40, dispersion=98, docs=566129)</span>
+<span class="n">fd</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">"usted"</span><span class="p">),</span> <span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="n">lemma_key</span><span class="p">(</span><span class="s2">"usted"</span><span class="p">))</span>
+<span class="c1"># (None, 1396.74)</span>
 </code></pre></div>
 </div>
 <h3 id="ipm">ipm<a class="headerlink" href="#ipm" title="Permanent link">&para;</a></h3>
 <p>Devuelve la frecuencia de un lema por millón de palabras, 0 para un lema que no está en el diccionario.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets.freq_dict</span><span class="w"> </span><span class="kn">import</span> <span class="n">lemma_key</span>
-
-<span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="s2">"computadora"</span><span class="p">),</span> <span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="n">lemma_key</span><span class="p">(</span><span class="s2">"computadoras"</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><code><span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="s2">"computadora"</span><span class="p">),</span> <span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="n">lemma_key</span><span class="p">(</span><span class="s2">"computadoras"</span><span class="p">))</span>
 <span class="c1"># (0.0, 20.07)</span>
-<span class="s2">"gato"</span> <span class="ow">in</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
-<span class="c1"># (True, 83785)</span>
+<span class="s2">"gato"</span> <span class="ow">in</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fd</span><span class="p">),</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">fd</span><span class="p">)</span>
+<span class="c1"># (True, 83785, 109178)</span>
 </code></pre></div>
 </div>
 <h3 id="get_records">get_records<a class="headerlink" href="#get_records" title="Permanent link">&para;</a></h3>

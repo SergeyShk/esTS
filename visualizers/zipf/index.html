@@ -2125,7 +2125,7 @@
 </tr>
 </tbody>
 </table>
-<p>The function returns the <code>Axes</code> with the plot; a <code>num_words</code> greater than the number of word types does not extend the curves beyond the data, and an empty counter raises <code>SourceError</code>. <code>zipf_theory(size, num_ranks, alpha, ax)</code> plots the theoretical curve alone, <span class="arithmatex">\(f(r) = size \cdot r^{-\alpha}\)</span> for the ranks from 1 to <code>num_ranks</code>.</p>
+<p>The function returns the <code>Axes</code> with the plot; a <code>num_words</code> greater than the number of word types does not extend the curves beyond the data, an empty counter raises <code>SourceError</code>, and a <code>num_words</code> below one raises <code>ParameterError</code>. <code>zipf_theory(size, num_ranks, alpha, ax)</code> plots the theoretical curve alone, <span class="arithmatex">\(f(r) = size \cdot r^{-\alpha}\)</span> for the ranks from 1 to <code>num_ranks</code>.</p>
 <h2 id="usage-example">Usage example<a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h2>
 <p>The lemmas of <em>Marianela</em> by Galdós from the <a href="../../datasets/spanishliterature/">corpus of literature</a>.</p>
 <div class="admonition example">

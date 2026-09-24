@@ -2125,7 +2125,7 @@
 </tr>
 </tbody>
 </table>
-<p>La función devuelve los <code>Axes</code> con el gráfico; un <code>num_words</code> mayor que el número de tipos de palabra no alarga las curvas más allá de los datos, y un contador vacío lanza <code>SourceError</code>. <code>zipf_theory(size, num_ranks, alpha, ax)</code> dibuja solo la curva teórica, <span class="arithmatex">\(f(r) = size \cdot r^{-\alpha}\)</span> para los rangos de 1 a <code>num_ranks</code>.</p>
+<p>La función devuelve los <code>Axes</code> con el gráfico; un <code>num_words</code> mayor que el número de tipos de palabra no alarga las curvas más allá de los datos, un contador vacío lanza <code>SourceError</code>, y un <code>num_words</code> menor que uno lanza <code>ParameterError</code>. <code>zipf_theory(size, num_ranks, alpha, ax)</code> dibuja solo la curva teórica, <span class="arithmatex">\(f(r) = size \cdot r^{-\alpha}\)</span> para los rangos de 1 a <code>num_ranks</code>.</p>
 <h2 id="ejemplo-de-uso">Ejemplo de uso<a class="headerlink" href="#ejemplo-de-uso" title="Permanent link">&para;</a></h2>
 <p>Los lemas de <em>Marianela</em> de Galdós del <a href="../../datasets/spanishliterature/">corpus de literatura</a>.</p>
 <div class="admonition example">

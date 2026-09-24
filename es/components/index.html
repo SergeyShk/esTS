@@ -2222,6 +2222,7 @@
 <p class="admonition-title">Serialización</p>
 <p>Un componente guarda un objeto de estadísticas en <code>doc._.&lt;name&gt;</code>, y spaCy no sabe serializarlo: <code>Doc.to_bytes()</code>, <code>DocBin(store_user_data=True)</code> y <code>nlp.pipe(..., n_process&gt;1)</code> fallan con estos componentes en el pipeline. Para guardar un documento, deje fuera los datos de usuario (<code>doc.to_bytes(exclude=["user_data"])</code>) o guarde <code>doc._.&lt;name&gt;.get_stats()</code> por su cuenta; para el multiproceso, calcule las estadísticas en el proceso principal después de <code>nlp.pipe</code>, sin los componentes.</p>
 </div>
+<p>Añadir un componente amplía el tokenizador de su pipeline con las reglas de las rayas de un diálogo pegadas a las palabras (<a href="../extractors/words/"><code>add_dash_rules</code></a>), que tiene la API de cadenas, así que las palabras de un componente son las palabras del resto de la biblioteca: <code>sí--dijo</code> son dos palabras y una raya, no una palabra. Las reglas solo separan esas rayas; un pipeline con un tokenizador propio que no es el <code>Tokenizer</code> de spaCy se queda como está.</p>
 <h2 id="requirements">Qué necesita cada componente<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

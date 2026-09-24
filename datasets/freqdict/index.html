@@ -1730,6 +1730,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#check_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#download" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2141,6 +2152,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#check_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#download" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2235,7 +2257,7 @@
 </div>
 <h2 id="lemma_key">Key of a word<a class="headerlink" href="#lemma_key" title="Permanent link">&para;</a></h2>
 <p><code>ests.datasets.freq_dict.lemma_key(word, proper=False)</code> - the key by which a word is looked up in the dictionary, and by which the dictionary is built: the word goes to lower case and then to its lemma by <code>lemmatize</code>. simplemma tells the case apart and leaves an unknown capitalized word as it is, so a word at the start of a sentence would miss its lemma (<code>Miró</code>, <code>Déjame</code>); the lower case finds it (<code>mirar</code>, <code>dejar</code>). A proper noun keeps its form in lower case (<code>proper=True</code>): <code>París</code> is <code>parís</code>, not the verb <code>parir</code>.</p>
-<p>The lemmas depend on the version of simplemma: the dictionary is built with 2.0.0 (the constant <code>SIMPLEMMA_VERSION</code>), and the library requires simplemma 2.0 or newer; with 1.x about 4% of the words of a text would get other lemmas (<code>fue</code> - <code>ir</code> instead of <code>ser</code>, <code>usted</code> left as it is).</p>
+<p>The lemmas depend on the version of simplemma: the dictionary is built with 2.0.0 (the constant <code>SIMPLEMMA_VERSION</code>), and the library requires simplemma 2 (2.0 or newer, below 3); with 1.x about 4% of the words of a text would get other lemmas (<code>fue</code> - <code>ir</code> instead of <code>ser</code>, <code>usted</code> left as it is). A <code>FreqDict</code> warns once per process when the installed simplemma is not 2.0.0, as some words may then miss the dictionary.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets.freq_dict</span><span class="w"> </span><span class="kn">import</span> <span class="n">lemma_key</span>
@@ -2261,7 +2283,7 @@
 <td style="text-align: center;"><code>data_dir</code></td>
 <td style="text-align: center;">str/Path</td>
 <td style="text-align: center;"><code>DEFAULT_DATA_DIR.joinpath("dicts")</code></td>
-<td style="text-align: center;">Path to the dictionary directory</td>
+<td style="text-align: center;">Path to the dictionary directory; the data directory is described in <a href="../../installation/#datasets">Installation</a></td>
 </tr>
 </tbody>
 </table>
@@ -2275,6 +2297,31 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td style="text-align: center;"><code>name</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">Name of the dataset, <code>freq_dict</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>meta</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;">Reference information: the source, the description, the author, the licence and the citation</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>info</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;">The name and the reference information in one dictionary</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>data_dir</code></td>
+<td style="text-align: center;">Path</td>
+<td style="text-align: center;">Absolute path to the dictionary directory</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>filepath</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;">Path to the file of the dictionary, <code>None</code> before the download</td>
+</tr>
 <tr>
 <td style="text-align: center;"><code>entries</code></td>
 <td style="text-align: center;">dict[str, Entry]</td>
@@ -2293,7 +2340,10 @@
 </tbody>
 </table>
 <p>An <code>Entry</code> is a named tuple with the fields <code>lemma</code>, <code>pos</code> (tuple of parts of speech), <code>ipm</code>, <code>range</code>, <code>dispersion</code>, <code>docs</code>.</p>
+<p>The dictionary iterates over its records as <code>get_records()</code> without filters: <code>for record in fd</code> goes over the 109,178 rows of a lemma and a part of speech, while <code>len(fd)</code> counts the 83,785 lemmas with their parts of speech merged, as <code>lookup</code> and <code>in</code> see them.</p>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
+<h3 id="check_data">check_data<a class="headerlink" href="#check_data" title="Permanent link">&para;</a></h3>
+<p>Checks that the file of the dictionary is in place and returns <code>True</code>; a dictionary that is not downloaded raises <code>DatasetNotFoundError</code>. The other methods check it themselves.</p>
 <h3 id="download">download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h3>
 <p>Downloads the archive with checksum verification and extracts the file. A corrupted or replaced archive is removed and downloaded again in the same call; if the archive is there but the file of the dictionary is missing, it is extracted again, and the parsed dictionary is read anew.</p>
 <table>
@@ -2325,7 +2375,7 @@
 </code></pre></div>
 </div>
 <h3 id="lookup">lookup<a class="headerlink" href="#lookup" title="Permanent link">&para;</a></h3>
-<p>Returns the entry of a lemma in any case, <code>None</code> for a lemma out of the dictionary. A word form is looked up by its key: <code>computadoras</code> by <code>lemma_key("computadoras")</code>, which is <code>computador</code>, not by <code>computadora</code>.</p>
+<p>Returns the entry of a lemma in any case, <code>None</code> for a lemma out of the dictionary. The argument is a key of the dictionary, not a word form, and a word form is looked up by its key: <code>computadoras</code> by <code>lemma_key("computadoras")</code>, which is <code>computador</code>, not by <code>computadora</code>; the lemma of <code>usted</code> in simplemma is <code>tú</code>, so <code>fd.lookup("usted")</code> is <code>None</code>. The same holds for <code>ipm</code> and <code>in</code>; <a href="../../stats/lexical_stats/"><code>LexicalStats</code></a> and <a href="../../corpus/keyness/"><code>keyness</code></a> go to the keys themselves.</p>
 <table>
 <thead>
 <tr>
@@ -2346,22 +2396,24 @@
 </table>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<div class="highlight"><pre><span></span><code><span class="n">fd</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">"Gato"</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets.freq_dict</span><span class="w"> </span><span class="kn">import</span> <span class="n">lemma_key</span>
+
+<span class="n">fd</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">"Gato"</span><span class="p">)</span>
 <span class="c1"># Entry(lemma='gato', pos=('NOUN', 'ADJ'), ipm=29.08, range=40, dispersion=95, docs=232841)</span>
 <span class="n">fd</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">"dios"</span><span class="p">)</span>
 <span class="c1"># Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.42, range=40, dispersion=98, docs=566129)</span>
+<span class="n">fd</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">"usted"</span><span class="p">),</span> <span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="n">lemma_key</span><span class="p">(</span><span class="s2">"usted"</span><span class="p">))</span>
+<span class="c1"># (None, 1396.74)</span>
 </code></pre></div>
 </div>
 <h3 id="ipm">ipm<a class="headerlink" href="#ipm" title="Permanent link">&para;</a></h3>
 <p>Returns the frequency of a lemma per million words, 0 for a lemma out of the dictionary.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets.freq_dict</span><span class="w"> </span><span class="kn">import</span> <span class="n">lemma_key</span>
-
-<span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="s2">"computadora"</span><span class="p">),</span> <span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="n">lemma_key</span><span class="p">(</span><span class="s2">"computadoras"</span><span class="p">))</span>
+<div class="highlight"><pre><span></span><code><span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="s2">"computadora"</span><span class="p">),</span> <span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="n">lemma_key</span><span class="p">(</span><span class="s2">"computadoras"</span><span class="p">))</span>
 <span class="c1"># (0.0, 20.07)</span>
-<span class="s2">"gato"</span> <span class="ow">in</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
-<span class="c1"># (True, 83785)</span>
+<span class="s2">"gato"</span> <span class="ow">in</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fd</span><span class="p">),</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">fd</span><span class="p">)</span>
+<span class="c1"># (True, 83785, 109178)</span>
 </code></pre></div>
 </div>
 <h3 id="get_records">get_records<a class="headerlink" href="#get_records" title="Permanent link">&para;</a></h3>
