@@ -45,7 +45,14 @@ from pathlib import Path
 import numpy as np
 import simplemma
 
-from ests.datasets.freq_dict import FILENAME, NAME, SIMPLEMMA_VERSION, VERSION, lemma_key
+from ests.datasets.freq_dict import (
+    FILENAME,
+    NAME,
+    SIMPLEMMA_VERSION,
+    VERSION,
+    WORD_PATTERN,
+    lemma_key,
+)
 
 FIRST_YEAR, LAST_YEAR = 1980, 2019
 N_YEARS = LAST_YEAR - FIRST_YEAR + 1
@@ -62,7 +69,6 @@ TAGS = {
     "ADP": "ADP",
     "CONJ": "CONJ",
 }
-WORD = re.compile(r"[a-záéíóúüñ]+")
 # A form below this count in the period is not kept: it adds less than 0.002 ipm
 MIN_FORM_COUNT = 100
 PROPER_SHARE = 0.9
@@ -112,7 +118,7 @@ def count_file(path: Path) -> tuple[dict[tuple[str, str], list[int]], np.ndarray
             if not sep or tag not in TAGS:
                 continue
             form = word.lower()
-            if not WORD.fullmatch(form):
+            if not WORD_PATTERN.fullmatch(form):
                 continue
             years = [0] * N_YEARS
             books = 0

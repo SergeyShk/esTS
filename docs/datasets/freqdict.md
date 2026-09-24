@@ -45,6 +45,7 @@ The lemmas depend on the version of simplemma: the dictionary is built with 2.0.
 | :-------: | :--: | :---------: |
 | `entries` | dict[str, Entry] | Entries by lemma, the parts of speech merged |
 | `min_ipm` | float | Minimum frequency in the dictionary (0.1) |
+| `word_ipm` | dict[str, float] | Frequencies by the key a word form reaches without a part of speech: the rows of the proper nouns go to `lemma_key` of their forms (`roma` to `romo`); the reference of [`keyness`](../corpus/keyness.md) |
 
 An `Entry` is a named tuple with the fields `lemma`, `pos` (tuple of parts of speech), `ipm`, `range`, `dispersion`, `docs`.
 

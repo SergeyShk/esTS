@@ -472,7 +472,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/components/).
 
 The library compares corpora and describes the use of a word, with the measures of corpus linguistics:
 
-*   keywords of a target corpus against a reference one: the log-likelihood with its p-value, Log Ratio, chi-square, %DIFF, BIC, ELL and the odds ratio
+*   keywords of a target corpus against a reference one or against the frequency dictionary of Google Books Ngram: the log-likelihood with its p-value, Log Ratio, chi-square, %DIFF, BIC, ELL and the odds ratio
 *   collocations by logDice, MI, MI³, t-score, Dice, log-likelihood, NPMI and minimum sensitivity, checked against NLTK
 *   the dispersion of a word over the parts of a text: DP of Gries, normalized DP, Juilland's D, Carroll's D2, Rosengren's S and the Kullback-Leibler divergence
 *   a KWIC concordance by word form or by lemma

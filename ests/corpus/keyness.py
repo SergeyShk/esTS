@@ -1,5 +1,5 @@
 from collections import Counter
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from math import e, inf, isnan, log, log2, nan
 from typing import Any, NamedTuple
 
@@ -7,6 +7,7 @@ import numpy as np
 from scipy.stats import chi2 as chi2_distribution
 
 from ..constants import KEYNESS_MEASURES
+from ..datasets.freq_dict import CORPUS_SIZE, WORD_PATTERN, FreqDict, lemma_key
 from ..exceptions import ParameterError, SourceError
 from ..utils import check_sequence
 
@@ -43,7 +44,7 @@ class Keyword(NamedTuple):
 
 def keyness(
     target: Sequence[str] | Mapping[str, int],
-    reference: Sequence[str] | Mapping[str, float],
+    reference: Sequence[str] | Mapping[str, float] | FreqDict,
     measure: str = "log_likelihood",
     min_freq: int = 1,
     positive: bool = True,
@@ -60,9 +61,24 @@ def keyness(
         score, which the list is sorted by. The measures of significance (G²,
         chi-square, BIC, ELL) are signed: negative when the word is more
         frequent in the reference
-        The reference may be a list of words or their frequencies, and so may
-        a frequency dictionary be given: its counts, with the size of the
-        reference taken as their sum
+        The reference may be a list of words or their frequencies, with the
+        size of the reference taken as their sum, or the frequency dictionary
+        FreqDict. Then the target has to be counted the way the dictionary was:
+        word forms, not lemmas (lemma_key is not idempotent - estado goes on to
+        estar), with the stop words kept, as CORPUS_SIZE keeps them; the forms
+        that are not made of the letters of WORD_PATTERN - numbers, words with
+        a hyphen or a dot - are left out, as the dictionary has none. A form
+        goes to its key by lemma_key, and the rows of the proper nouns of the
+        dictionary go to lemma_key of their forms (FreqDict.word_ipm), so both
+        sides count the same forms under a key and the keywords are lemmas,
+        some of them with the label of another lemma (Roma - romo, París -
+        parir). The frequency of a key in the reference is its ipm times the
+        size of the corpus of the dictionary (CORPUS_SIZE, 63 billion words of
+        books of 1980-2019); a word out of the dictionary gets its least
+        frequency (0.1 ipm, about 6300 occurrences), as the dictionary leaves
+        out the rarer words and their true frequency lies below it. That is an
+        upper bound, so it backs a positive keyword and never a negative one:
+        a word out of the reference is no negative keyword
         A zero frequency in one of the corpora is replaced with 0.5 for %DIFF,
         Log Ratio and the odds ratio (Hardie 2014)
         Positive keywords are more frequent in the target corpus, negative ones
@@ -75,9 +91,10 @@ def keyness(
         http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/
 
     Arguments:
-        target (list[str]|dict[str, int]): Words of the target corpus or their frequencies
-        reference (list[str]|dict[str, float]): Words of the reference corpus or
-            their frequencies
+        target (list[str]|dict[str, int]): Words of the target corpus or their
+            frequencies; word forms against the frequency dictionary
+        reference (list[str]|dict[str, float]|FreqDict): Words of the reference
+            corpus, their frequencies or the frequency dictionary
         measure (str): Measure of KEYNESS_MEASURES for score and the sorting
         min_freq (int): Minimum frequency of a keyword in its own corpus
         positive (bool): Positive keywords (True) or negative ones (False)
@@ -91,6 +108,7 @@ def keyness(
         SourceTypeError: If a string is passed instead of a list of words
         ParameterError: If the measure is unknown or top_n is below one
         SourceError: If one of the corpora is empty
+        DatasetNotFoundError: If the frequency dictionary is not downloaded
 
     Example:
         >>> from ests.corpus import keyness
@@ -105,18 +123,32 @@ def keyness(
         raise ParameterError("The number of keywords must be greater than 0")
     check_sequence(target)
     check_sequence(reference)
-    counts_target = _count(target)
-    counts_reference = _count(reference)
+    counts_reference: Mapping[str, float]
+    if isinstance(reference, FreqDict):
+        counts_target = _count(target, key=lemma_key, keep=_is_dictionary_word)
+        size_reference = float(CORPUS_SIZE)
+        counts_reference = {
+            key: ipm * size_reference / 1e6 for key, ipm in reference.word_ipm.items()
+        }
+        missing = reference.min_ipm * size_reference / 1e6
+    else:
+        counts_target = _count(target)
+        counts_reference = _count(reference)
+        size_reference = float(sum(counts_reference.values()))
+        missing = 0.0
     size_target = float(sum(counts_target.values()))
-    size_reference = float(sum(counts_reference.values()))
     if not size_target or not size_reference:
         raise SourceError("The data source has no words")
     calc = MEASURES[measure]
     rows = []
     words = set(counts_target) | set(counts_reference)
     for word in words:
+        # The least frequency of the dictionary is an upper bound for a word out of
+        # it: it can back a word more frequent in the target, never in the reference
+        if not positive and word not in counts_reference:
+            continue
         a = counts_target.get(word, 0)
-        b = counts_reference.get(word, 0)
+        b = counts_reference.get(word, missing)
         ipm_target = a / size_target * 1e6
         ipm_reference = b / size_reference * 1e6
         if ipm_target == ipm_reference or (ipm_target > ipm_reference) != positive:
@@ -152,8 +184,25 @@ def keyness(
     return keywords[:top_n] if top_n else keywords
 
 
-def _count(words: Sequence[str] | Mapping[str, float]) -> Mapping[str, float]:
-    return words if isinstance(words, Mapping) else Counter(words)
+def _count(
+    words: Sequence[str] | Mapping[str, float],
+    key: Callable[[str], str] | None = None,
+    keep: Callable[[str], bool] | None = None,
+) -> Mapping[str, float]:
+    """Frequencies of the words that keep passes, summed by key when one is given"""
+    if key is None or keep is None:
+        return words if isinstance(words, Mapping) else Counter(words)
+    counts: dict[str, float] = {}
+    pairs = words.items() if isinstance(words, Mapping) else ((word, 1) for word in words)
+    for word, count in pairs:
+        if keep(word):
+            counts[key(word)] = counts.get(key(word), 0) + count
+    return counts
+
+
+def _is_dictionary_word(word: str) -> bool:
+    """Whether a word is made of the letters of the forms the frequency dictionary counts"""
+    return WORD_PATTERN.fullmatch(word.lower()) is not None
 
 
 def _sign(a: float, b: float, c: float, d: float) -> int:

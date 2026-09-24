@@ -1,4 +1,5 @@
 import csv
+import re
 from collections.abc import Iterator
 from functools import cache
 from itertools import islice
@@ -31,6 +32,9 @@ FILENAME = "freq_dict.tsv"
 SIMPLEMMA_VERSION = "2.0.0"
 CORPUS_SIZE = 63_090_618_290
 POS_TAGS = ("NOUN", "PROPN", "VERB", "ADJ", "ADV", "PRON", "DET", "ADP", "CONJ")
+# Letters of the forms the dictionary counts: numbers, punctuation and the forms with
+# a hyphen or a dot are not in it, nor in CORPUS_SIZE
+WORD_PATTERN = re.compile(r"[a-záéíóúüñ]+")
 DEFAULT_DATASET_DIR = DEFAULT_DATA_DIR.joinpath("dicts")
 
 
@@ -144,6 +148,8 @@ class FreqDict(Dataset):
     Attributes:
         entries (dict[str, Entry]): Entries by lemma, the parts of speech merged
         min_ipm (float): Minimum frequency in the dictionary
+        word_ipm (dict[str, float]): Frequencies by the key a word form reaches
+            without a part of speech - the reference of keyness
 
     Methods:
         check_data: Checking that the file of the dictionary is in place
@@ -211,6 +217,7 @@ class FreqDict(Dataset):
         self.check_data()
         load_entries.cache_clear()
         load_min_ipm.cache_clear()
+        load_word_ipm.cache_clear()
 
     def __iter__(self) -> Iterator[dict[str, Any]]:
         """
@@ -295,6 +302,14 @@ class FreqDict(Dataset):
         """
         self._ensure_data()
         return load_entries(self._filepath)
+
+    @property
+    def word_ipm(self) -> dict[str, float]:
+        """
+        Frequencies of the dictionary by the key a word form reaches without a part of speech
+        """
+        self._ensure_data()
+        return load_word_ipm(self._filepath)
 
     @property
     def min_ipm(self) -> float:
@@ -405,3 +420,34 @@ def load_min_ipm(filepath: Path) -> float:
         float: Minimum frequency
     """
     return min(entry.ipm for entry in load_entries(filepath).values())
+
+
+@cache
+def load_word_ipm(filepath: Path) -> dict[str, float]:
+    """
+    Frequencies of the dictionary by the key that a word form reaches without a part of speech
+
+    Description:
+        A word with no annotation goes to lemma_key(word), while the dictionary
+        keeps the forms of its proper nouns (lemma_key(form, proper=True)):
+        Roma is a row of its own, but the word Roma reaches romo. So the rows
+        of the proper nouns go to lemma_key of their forms and every key is
+        summed over the parts of speech; then a word form of a text and the
+        occurrences counted in the books meet under one key, with the label
+        of a lemma (romo, parir) the only thing left of the difference. The
+        result is cached by the path of the file, as load_entries
+
+    Arguments:
+        filepath (Path): Path to the file of the dictionary
+
+    Returns:
+        dict[str, float]: Occurrences per million words by key
+    """
+    ipm: dict[str, float] = {}
+    with filepath.open(encoding="utf-8", newline="") as file:
+        reader = csv.reader(file, delimiter="\t", quoting=csv.QUOTE_NONE)
+        next(reader)
+        for lemma, pos, value, *_ in reader:
+            key = lemma_key(lemma) if pos == "PROPN" else lemma
+            ipm[key] = ipm.get(key, 0.0) + float(value)
+    return ipm

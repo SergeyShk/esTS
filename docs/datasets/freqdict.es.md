@@ -45,6 +45,7 @@ Los lemas dependen de la versión de simplemma: el diccionario se construye con 
 | :------: | :--: | :---------: |
 | `entries` | dict[str, Entry] | Entradas por lema, con las categorías gramaticales unidas |
 | `min_ipm` | float | Frecuencia mínima del diccionario (0,1) |
+| `word_ipm` | dict[str, float] | Frecuencias por la clave a la que llega una forma sin categoría gramatical: las filas de los nombres propios van a `lemma_key` de sus formas (`roma` a `romo`); la referencia de [`keyness`](../corpus/keyness.md) |
 
 Un `Entry` es una tupla con nombre con los campos `lemma`, `pos` (tupla de categorías gramaticales), `ipm`, `range`, `dispersion`, `docs`.
 
