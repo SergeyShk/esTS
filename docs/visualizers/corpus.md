@@ -42,38 +42,45 @@ An undirected graph (`textplot_network` of quanteda): the nodes are the words wi
 
 ## Usage example
 
-*Marianela* by Galdós and six novels from [Project Gutenberg](https://www.gutenberg.org): *Marianela*, *Misericordia* and *Torquemada en la hoguera* against *Niebla*, *Abel Sánchez* and *La tía Tula* by Unamuno.
+*Marianela* by Galdós and six novels from the [corpus of literature](../datasets/spanishliterature.md): *Marianela*, *Misericordia* and *Torquemada en la hoguera* against *Niebla*, *Abel Sánchez* and *La tía Tula* by Unamuno.
 
 !!! example "Example"
 
     _Code_:
 
     ``` python
-    from urllib.request import urlopen
-
     from spacy.lang.es.stop_words import STOP_WORDS
 
     from ests import WordsExtractor
     from ests.corpus import collocations, keyness
+    from ests.datasets import SpanishLiterature
     from ests.visualizers import collocation_network, dispersion_plot, keyness_plot
 
-
-    def gutenberg(number):
-        url = f"https://www.gutenberg.org/cache/epub/{number}/pg{number}.txt"
-        text = urlopen(url).read().decode("utf-8")
-        start = text.index("\n", text.index("*** START OF"))
-        return text[start : text.index("*** END OF")]
-
+    sl = SpanishLiterature()
+    sl.download()
+    titles = (
+        "Marianela",
+        "Misericordia",
+        "Torquemada en la hoguera",
+        "Niebla",
+        "Abel Sánchez",
+        "La tía Tula",
+    )
+    novels = {
+        record["title"]: record["text"]
+        for author in ("galdos", "unamuno")
+        for record in sl.get_records(author=author)
+        if record["title"] in titles
+    }
 
     # Where the characters and the motifs of Marianela occur
-    marianela = gutenberg(17340)
-    words = WordsExtractor(lowercase=True).extract(marianela)
+    words = WordsExtractor(lowercase=True).extract(novels["Marianela"])
     dispersion_plot(words, ["nela", "pablo", "florentina", "golfín", "ciego", "luz"])
 
     # Keywords of Galdós against Unamuno, lemmas without stop words
     we = WordsExtractor(use_lexemes=True, lowercase=True, filter_nums=True, stopwords=STOP_WORDS)
-    galdos = [lemma for number in (17340, 21831, 15206) for lemma in we.extract(gutenberg(number))]
-    unamuno = [lemma for number in (49836, 44512, 44358) for lemma in we.extract(gutenberg(number))]
+    galdos = [lemma for title in titles[:3] for lemma in we.extract(novels[title])]
+    unamuno = [lemma for title in titles[3:] for lemma in we.extract(novels[title])]
     keyness_plot(
         keyness(galdos, unamuno, min_freq=5, top_n=10),
         keyness(galdos, unamuno, positive=False, min_freq=5, top_n=10),
@@ -81,7 +88,9 @@ An undirected graph (`textplot_network` of quanteda): the nodes are the words wi
     )
 
     # Network of collocations of Marianela
-    graph = collocation_network(collocations(we.extract(marianela), window=3, min_freq=5, top_n=25))
+    graph = collocation_network(
+        collocations(we.extract(novels["Marianela"]), window=3, min_freq=5, top_n=25)
+    )
     graph.render("network", format="png")
     ```
 
@@ -93,4 +102,4 @@ An undirected graph (`textplot_network` of quanteda): the nodes are the words wi
 
     ![ests](../img/network.png){: .center }
 
-Nela runs through the whole novel, Florentina enters in its second half, and the doctor Golfín opens and closes it; the blindness of Pablo (`ciego`) belongs mostly to the first half. Beside the names of the characters, the keywords show the spelling of the editions - `á` and `ó` with the accent of the old orthography in Galdós - and words of the themes of Unamuno: `acaso`, `hijo`, `mujer`. The network of collocations gathers the names and the places of *Marianela* around `d.`, the abbreviated *don*: Teodoro Golfín, Aldeacorba de Suso, the mines of Socartes.
+Nela runs through the whole novel, Florentina enters in its second half, and the doctor Golfín opens and closes it; the blindness of Pablo (`ciego`) belongs mostly to the first half. Beside the names of the characters, the keywords show the spelling of the editions - `á` with the accent of the old orthography, which of the novels of Galdós only the edition of *Torquemada en la hoguera* keeps, and `fué`, which all three editions of Unamuno keep - and words of the themes of Unamuno: `acaso`, `hijo`. The network of collocations gathers the names and the places of *Marianela* around `d.`, the abbreviated *don*: Teodoro Golfín, Aldeacorba de Suso, the mines of Socartes.
