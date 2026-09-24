@@ -102,6 +102,14 @@ def test_not_downloaded(tmp_path):
         list(dataset.get_texts())
 
 
+@pytest.mark.network
+def test_download(tmp_path):
+    dataset = SpanishLiterature(data_dir=tmp_path)
+    dataset.download()
+    assert dataset.filepath == str(tmp_path / module.ARCHIVE)
+    assert sum(1 for _ in dataset.get_records(genre="poems")) == 10
+
+
 def test_download_extracts_existing_archive(small):
     dataset, _, calls = small
     dataset.download()

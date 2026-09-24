@@ -41,7 +41,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
 * **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text, a KWIC concordance and the stylometry of authorship: Burrows's Delta with its variants, Zeta, the Mendenhall curve, the profile of the function words; the comparison of two corpora by 132 features of a text with effect sizes
 * **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, vocabulary growth, sentence lengths
-* **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors from Spain, Latin America and the Philippines in prose, poems, drama and publicism, with the genre, the years and the country
+* **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors from Spain, Latin America and the Philippines in prose, poems, drama and publicism, with the genre, the years and the country; a frequency dictionary of 83,785 lemmas by Google Books Ngram with ipm, range and dispersion
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
 * **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 255 Spanish discourse markers
 * **[Syntactic statistics](https://sergeyshk.github.io/esTS/stats/syntax_stats/)** - the dependency tree by distances, depth, clauses and coordination, with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
@@ -493,6 +493,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/corpus/keyness/).
 <br>
 
 *   [spanish_literature](https://sergeyshk.github.io/esTS/datasets/spanishliterature/) - Spanish-language literature in the public domain: 150 works by 33 authors from Spain, Latin America and the Philippines, from Cervantes to the 1920s, in prose, poems, drama and publicism; 65 million characters
+*   [freq_dict](https://sergeyshk.github.io/esTS/datasets/freqdict/) - a frequency dictionary of 83,785 Spanish lemmas from the books of Google Books Ngram of 1980-2019 (63 billion words): ipm, range and Juilland's D over the years, the number of books and the part of speech (CC BY 3.0)
 
 The texts are cut to the text of the author, without title pages, notes of the transcribers and the editors, tables of contents and footnotes, and come with the genre, the author, the title, the years of the first publication and the country; the records can be filtered by any of them and by the length of the text.
 
@@ -593,7 +594,7 @@ Bug reports, ideas and pull requests are welcome - [issues](https://github.com/S
     *   cohesion_stats.py - cohesion statistics
     *   components.py - components of a spaCy pipeline
     *   corpus - measures of corpus linguistics: keywords, collocations, dispersion, concordance, stylometry, comparison of corpora
-    *   datasets - datasets: Spanish-language literature
+    *   datasets - datasets: Spanish-language literature, the frequency dictionary
     *   constants.py - constants of the Spanish language and of the metrics
     *   diversity_stats.py - lexical diversity metrics
     *   exceptions.py - library exceptions

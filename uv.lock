@@ -2182,7 +2182,7 @@ wheels = [
 
 [[package]]
 name = "pyests"
-version = "0.3.0.dev7"
+version = "0.3.0.dev8"
 source = { editable = "." }
 dependencies = [
     { name = "graphviz" },
@@ -2235,7 +2235,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=1.26" },
     { name = "pandas", specifier = ">=2.1" },
     { name = "scipy", specifier = ">=1.11" },
-    { name = "simplemma", specifier = ">=1.0" },
+    { name = "simplemma", specifier = ">=2.0" },
     { name = "spacy", specifier = ">=3.7" },
 ]
 
