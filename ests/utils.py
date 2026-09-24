@@ -8,7 +8,6 @@ import spacy
 from spacy.language import Language
 from spacy.tokenizer import Tokenizer
 from spacy.tokens import Doc, Span, Token
-from spacy.util import compile_infix_regex, compile_prefix_regex, compile_suffix_regex
 
 from .constants import (
     ABBREVIATIONS,
@@ -225,7 +224,10 @@ def add_dash_rules(nlp: Language) -> None:
         a digit (-5) alone. The blank pipeline of get_tokenizer and the models
         of get_nlp get them; a pipeline of one's own gets them from this
         function, so that its words are the words of the rest of the library.
-        A tokenizer that is not the Tokenizer of spaCy is left as it is
+        The rules are added to the ones the tokenizer already has, a rule it
+        has already is not added twice, and a tokenizer that is not the
+        Tokenizer of spaCy, or whose rules are not regular expressions, is
+        left as it is
 
     Arguments:
         nlp (Language): Pipeline whose tokenizer gets the rules
@@ -240,19 +242,37 @@ def add_dash_rules(nlp: Language) -> None:
         >>> [token.text for token in nlp("--No --dijo él.")]
         ['--', 'No', '--', 'dijo', 'él', '.']
     """
-    defaults = nlp.Defaults
     tokenizer = nlp.tokenizer
     if not isinstance(tokenizer, Tokenizer):
         return
-    tokenizer.prefix_search = compile_prefix_regex(
-        (*(defaults.prefixes or ()), *TOKENIZER_PREFIXES)
-    ).search
-    tokenizer.suffix_search = compile_suffix_regex(
-        (*(defaults.suffixes or ()), *TOKENIZER_SUFFIXES)
-    ).search
-    tokenizer.infix_finditer = compile_infix_regex(
-        (*(defaults.infixes or ()), *TOKENIZER_INFIXES)
-    ).finditer
+    prefixes = _extend_rules(tokenizer.prefix_search, [f"^{rule}" for rule in TOKENIZER_PREFIXES])
+    suffixes = _extend_rules(tokenizer.suffix_search, [f"{rule}$" for rule in TOKENIZER_SUFFIXES])
+    infixes = _extend_rules(tokenizer.infix_finditer, list(TOKENIZER_INFIXES))
+    if prefixes is not None:
+        tokenizer.prefix_search = prefixes.search
+    if suffixes is not None:
+        tokenizer.suffix_search = suffixes.search
+    if infixes is not None:
+        tokenizer.infix_finditer = infixes.finditer
+
+
+def _extend_rules(method: object, rules: list[str]) -> re.Pattern[str] | None:
+    """
+    Regular expression of a tokenizer extended with the rules it does not have yet
+
+    Description:
+        The expression is read from the bound method of the tokenizer
+        (prefix_search, suffix_search, infix_finditer); a tokenizer without
+        the rule gets the rules alone, and a method that is not one of a
+        regular expression gives None, the rule left as it is
+    """
+    if method is None:
+        return re.compile("|".join(rules))
+    pattern = getattr(getattr(method, "__self__", None), "pattern", None)
+    if not isinstance(pattern, str):
+        return None
+    missing = [rule for rule in rules if rule not in pattern]
+    return re.compile("|".join([pattern, *missing]))
 
 
 def tokenize(text: str) -> Iterator[str]:

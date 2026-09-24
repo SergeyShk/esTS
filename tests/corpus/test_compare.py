@@ -86,6 +86,10 @@ def test_split_windows():
         "uno dos tres —dijo Juan—",
         "y se fue ya",
     ]
+    assert split_windows("uno dos tres ―dijo Juan― y se fue ya", 4) == [
+        "uno dos tres ―dijo Juan―",
+        "y se fue ya",
+    ]
     for glued in ("cuatro. —¿Cinco?", "cuatro.—¿Cinco?"):
         assert split_windows(f"uno dos tres {glued} seis siete ocho", 4) == [
             "uno dos tres cuatro.",
