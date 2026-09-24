@@ -148,6 +148,20 @@
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/diversity_stats_funcs/"/>
     </url>
     <url>
+        <loc>Nonestats/lexical_stats/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/lexical_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/lexical_stats/"/>
+    </url>
+    <url>
+        <loc>Nonestats/lexical_stats_funcs/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/lexical_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/lexical_stats_funcs/"/>
+    </url>
+    <url>
         <loc>Nonestats/morph_stats/</loc>
         <lastmod>2026-09-24</lastmod>
         <changefreq>daily</changefreq>
@@ -370,6 +384,20 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/diversity_stats_funcs/"/>
         <xhtml:link rel="alternate" hreflang="en" href="Nonestats/diversity_stats_funcs/"/>
+    </url>
+    <url>
+        <loc>Nonees/stats/lexical_stats/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/lexical_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/lexical_stats/"/>
+    </url>
+    <url>
+        <loc>Nonees/stats/lexical_stats_funcs/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/lexical_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/lexical_stats_funcs/"/>
     </url>
     <url>
         <loc>Nonees/stats/morph_stats/</loc>

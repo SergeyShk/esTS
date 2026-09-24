@@ -1252,6 +1252,120 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_7" id="__nav_5_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas de complejidad léxica
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Estadísticas de complejidad léxica
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats/lexical_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats/lexical_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1978,7 +2092,7 @@
 <p>Las clases están disponibles desde <code>ests</code> y desde <code>ests.exceptions</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p><code>DatasetNotFoundError</code> es lo que levanta una estadística de Universal Dependencies cuando el modelo <code>es_core_news_sm</code> no está instalado, que es lo primero con lo que se topa un lector nuevo: <code>MorphStats("El gato duerme")</code> sin el modelo dice cómo descargarlo. También la levantan los conjuntos de datos mientras no se han descargado (<code>SpanishLiterature().get_texts()</code> antes de <code>download()</code>); <code>DownloadError</code> viene de una descarga fallida o de un archivo que no supera dos veces su suma de comprobación SHA-256, <code>DataFileError</code> de un archivo que no se puede extraer.</p>
+<p><code>DatasetNotFoundError</code> es lo que levanta una estadística de Universal Dependencies cuando el modelo <code>es_core_news_sm</code> no está instalado, que es lo primero con lo que se topa un lector nuevo: <code>MorphStats("El gato duerme")</code> sin el modelo dice cómo descargarlo. También la levantan los conjuntos de datos mientras no se han descargado (<code>SpanishLiterature().get_texts()</code> antes de <code>download()</code>), y las estadísticas de <code>LexicalStats</code> según el diccionario de frecuencias; <code>DownloadError</code> viene de una descarga fallida o de un archivo que no supera dos veces su suma de comprobación SHA-256, <code>DataFileError</code> de un archivo que no se puede extraer.</p>
 </div>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>

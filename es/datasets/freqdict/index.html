@@ -1178,6 +1178,120 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_7" id="__nav_5_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas de complejidad léxica
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Estadísticas de complejidad léxica
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/lexical_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/lexical_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2113,7 +2227,7 @@
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
 <p>Un diccionario de frecuencias de lemas del español construido a partir de los libros en español de <a href="https://storage.googleapis.com/books/ngrams/books/datasetsv3.html">Google Books Ngram</a> (versión 20200217): 83 785 lemas (109 178 filas de un lema y una categoría gramatical) de los libros de 1980-2019, 63 000 millones de palabras. Cada fila tiene la frecuencia por millón de palabras (ipm), el rango (el número de años, de 40, en que aparece el lema), la D de Juilland por años (0-100) y el número de libros con la forma más extendida del lema. Las categorías gramaticales son las de Google, con los nombres de Universal Dependencies: <code>NOUN</code>, <code>PROPN</code>, <code>VERB</code>, <code>ADJ</code>, <code>ADV</code>, <code>PRON</code>, <code>DET</code>, <code>ADP</code>, <code>CONJ</code> (coordinantes y subordinantes juntas).</p>
 <p>El diccionario lo construye <code>scripts/build_freq_dict.py</code> a partir de los 1-gramas (3,2 GB): se cuentan solo las formas etiquetadas con una categoría gramatical y hechas de letras (se quitan los números, la puntuación y la etiqueta <code>X</code>); las formas pasan a sus claves por <a href="#lemma_key"><code>lemma_key</code></a>: minúsculas y luego el lema por simplemma 2.0.0, el lematizador de la biblioteca. Google no tiene etiqueta para los nombres propios, así que una forma de sustantivo escrita con mayúscula en el 90 % de sus apariciones es <code>PROPN</code> y conserva su forma. La decisión se toma para la forma entera, con las apariciones en minúsculas: la forma <code>dios</code> va con mayúscula en el 92 % de sus apariciones, así que toda ella, también <code>dios</code> en minúsculas, es <code>PROPN</code> (405,9 ipm), mientras que la fila <code>NOUN</code> de <code>dios</code> (37,3 ipm) viene sobre todo del plural <code>dioses</code>, con mayúscula en el 6 % de sus apariciones. Se dejan fuera las filas por debajo de 0,1 ipm o presentes en menos de 5 años (las malas lecturas de un solo lote de libros escaneados). La dispersión se calcula sobre la frecuencia relativa de cada año, para que los años de distinto tamaño pesen igual; el número de libros es una cota inferior, ya que un libro con varias formas del lema se cuenta una vez.</p>
-<p>Para buscar un lema se unen sus categorías gramaticales: las frecuencias se suman, el rango, la dispersión y el número de libros son los mayores. El lema se busca en minúsculas. El diccionario analizado se guarda en caché por la ruta del fichero y se lee una vez por proceso, así que un <code>FreqDict()</code> para cada texto es barato. El tamaño del diccionario es <code>CORPUS_SIZE</code>, 63 090 618 290 palabras.</p>
+<p>Para buscar un lema se unen sus categorías gramaticales: las frecuencias se suman, el rango, la dispersión y el número de libros son los mayores. El lema se busca en minúsculas. El diccionario analizado se guarda en caché por la ruta del fichero y se lee una vez por proceso, así que un <code>FreqDict()</code> para cada texto es barato. El diccionario es la fuente de las frecuencias de <a href="../../stats/lexical_stats/"><code>LexicalStats</code></a>, y sus 10 000 lemas más frecuentes son la lista integrada de las bandas de frecuencia. El tamaño del diccionario es <code>CORPUS_SIZE</code>, 63 090 618 290 palabras.</p>
 <p>El archivo (0,9 MB) se guarda en el repositorio de la biblioteca, se descarga una vez en el directorio de datos, se verifica con su suma de comprobación SHA-256 y se extrae.</p>
 <div class="admonition quote">
 <p class="admonition-title">Licencia y atribución</p>

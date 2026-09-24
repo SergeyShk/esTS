@@ -11,16 +11,16 @@
       
       
       
-        <link rel="prev" href="../sentences/">
+        <link rel="prev" href="../cohesion_stats/">
       
       
-        <link rel="next" href="../char_ngrams/">
+        <link rel="next" href="../lexical_stats_funcs/">
       
       
         
           <link rel="alternate" href="./" hreflang="en">
         
-          <link rel="alternate" href="../../es/extractors/words/" hreflang="es">
+          <link rel="alternate" href="../../es/stats/lexical_stats/" hreflang="es">
         
       
       
@@ -29,7 +29,7 @@
     
     
       
-        <title>Word extraction - esTS</title>
+        <title>Metrics module - esTS</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#word-extraction" class="md-skip">
+        <a href="#lexical-sophistication-statistics" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Word extraction
+              Metrics module
             
           </span>
         </div>
@@ -141,7 +141,7 @@
           </li>
         
           <li class="md-select__item">
-            <a href="../../es/extractors/words/" hreflang="es" class="md-select__link">
+            <a href="../../es/stats/lexical_stats/" hreflang="es" class="md-select__link">
               Español
             </a>
           </li>
@@ -243,13 +243,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../sentences/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../extractors/sentences/" class="md-tabs__link">
           
   
   
@@ -303,11 +301,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../stats/basic_stats/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../basic_stats/" class="md-tabs__link">
           
   
   
@@ -597,29 +597,24 @@
       
   
   
-    
   
   
-  
     
     
     
     
       
-        
-        
-      
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
   
@@ -637,7 +632,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -655,7 +650,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../sentences/" class="md-nav__link">
+      <a href="../../extractors/sentences/" class="md-nav__link">
         
   
   
@@ -680,37 +675,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Word extraction
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../extractors/words/" class="md-nav__link">
         
   
   
@@ -726,87 +694,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Description
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parameters
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#methods" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Methods
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Methods">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#extract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        extract
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_most_common" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_most_common
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -819,7 +706,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../char_ngrams/" class="md-nav__link">
+      <a href="../../extractors/char_ngrams/" class="md-nav__link">
         
   
   
@@ -905,24 +792,29 @@
       
   
   
+    
   
   
+  
     
     
     
     
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -940,7 +832,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -958,7 +850,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/basic_stats/" class="md-nav__link">
+      <a href="../basic_stats/" class="md-nav__link">
         
   
   
@@ -1036,7 +928,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/readability_stats/" class="md-nav__link">
+      <a href="../readability_stats/" class="md-nav__link">
         
   
   
@@ -1064,7 +956,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/readability_stats_funcs/" class="md-nav__link">
+      <a href="../readability_stats_funcs/" class="md-nav__link">
         
   
   
@@ -1150,7 +1042,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/diversity_stats/" class="md-nav__link">
+      <a href="../diversity_stats/" class="md-nav__link">
         
   
   
@@ -1178,7 +1070,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/diversity_stats_funcs/" class="md-nav__link">
+      <a href="../diversity_stats_funcs/" class="md-nav__link">
         
   
   
@@ -1214,7 +1106,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/morph_stats/" class="md-nav__link">
+      <a href="../morph_stats/" class="md-nav__link">
         
   
   
@@ -1242,7 +1134,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/syntax_stats/" class="md-nav__link">
+      <a href="../syntax_stats/" class="md-nav__link">
         
   
   
@@ -1270,7 +1162,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/cohesion_stats/" class="md-nav__link">
+      <a href="../cohesion_stats/" class="md-nav__link">
         
   
   
@@ -1295,6 +1187,8 @@
                 
   
   
+    
+  
   
   
     
@@ -1305,11 +1199,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_7" checked>
         
           
           <label class="md-nav__link" for="__nav_5_7" id="__nav_5_7_label" tabindex="0">
@@ -1330,7 +1224,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_7_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_7_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5_7">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1345,10 +1239,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../stats/lexical_stats/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics module
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1364,6 +1285,109 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#description" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#band_coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        band_coverage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#print_stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        print_stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1376,7 +1400,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/lexical_stats_funcs/" class="md-nav__link">
+      <a href="../lexical_stats_funcs/" class="md-nav__link">
         
   
   
@@ -2052,6 +2076,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#methods" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2064,10 +2099,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#extract" class="md-nav__link">
+  <a href="#band_coverage" class="md-nav__link">
     <span class="md-ellipsis">
       
-        extract
+        band_coverage
       
     </span>
   </a>
@@ -2075,10 +2110,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#get_most_common" class="md-nav__link">
+  <a href="#get_stats" class="md-nav__link">
     <span class="md-ellipsis">
       
-        get_most_common
+        get_stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#print_stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        print_stats
       
     </span>
   </a>
@@ -2110,20 +2156,36 @@
   
 
 
-<h1 id="word-extraction">Word extraction<a class="headerlink" href="#word-extraction" title="Permanent link">&para;</a></h1>
+<h1 id="lexical-sophistication-statistics">Lexical sophistication statistics<a class="headerlink" href="#lexical-sophistication-statistics" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.extractors.WordsExtractor</strong></p>
+<p><strong>ests.lexical_stats.LexicalStats</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A module for extracting words from a text. It allows using different tokenizers, filtering stop words, numbers and punctuation, lemmatizing, building N-grams, and setting the minimum and maximum length of extracted words.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The default tokenizer is the rule-based tokenizer of the <a href="https://github.com/explosion/spaCy">spaCy</a> Spanish language class (<code>ests.utils.tokenize</code>); it needs no trained model. Punctuation marks, including <code>¿</code> and <code>¡</code>, numbers like <code>1.500,50</code>, <code>3.º</code>, <code>1990-1995</code> and abbreviations like <code>Sr.</code>, <code>EE. UU.</code> are single tokens; words with enclitic pronouns (<code>dámelo</code>, <code>decírselo</code>) are not split. The dashes of a dialogue glued to the words, as plain-text corpora type them, are split off: <code>--No</code>, <code>-dijo</code>, <code>sí--dijo</code>, <code>sí-¿y qué?</code>, <code>reírse—me decía</code>, <code>dijo:—¡Mis</code>, <code>―dijo él―.</code> give the words <code>No</code>, <code>dijo</code>, <code>sí</code>, <code>reírse</code>, <code>me</code>, <code>Mis</code>, <code>él</code>, also next to the underscores that Project Gutenberg writes for italics (<code>--_Siguro_</code>), while a hyphen between letters (<code>franco-alemán</code>) or before a digit (<code>-5</code>) stays in its token; a suffix quoted with its hyphen (<code>-mente</code>) loses it as well. The horizontal bar <code>―</code> of some digitized texts is a raya. <code>ests.utils.add_dash_rules(nlp)</code> adds the same rules to the ones a spaCy pipeline of one's own has; the model of <code>get_nlp</code> has them already.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Lemmas come from <a href="https://github.com/adbar/simplemma">simplemma</a> (<code>ests.utils.lemmatize</code>), which works from a dictionary without a trained model: a known form is mapped to its lower-case lemma (<code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>), an unknown form is returned unchanged (<code>Madrid</code>, <code>dámelo</code>).</p>
-</div>
+<p>A module for computing the lexical sophistication statistics of a text in the manner of <a href="https://doi.org/10.3758/s13428-017-0924-4">TAALES</a> - how rare the words of the text are in the language: the mean frequency, range and dispersion of the lemmas by the <a href="../../datasets/freqdict/">frequency dictionary</a> of Google Books Ngram, the shares of the words of the frequency bands top-1000, 2000, 5000 and 10000 by the embedded list of the most frequent lemmas, the surprisal and the perplexity by the unigram model of the dictionary, the lexical density. Unlike the <a href="../diversity_stats/">lexical diversity metrics</a>, which compare the words of the text with each other, here the words are compared with the frequencies of the language.</p>
+<p>A word is looked up by <a href="../../datasets/freqdict/#lemma_key"><code>lemma_key</code></a>, the key the dictionary is built with: the lemma of simplemma of the word in lower case, and for a proper noun the lower-case form when the dictionary has it, so <code>París</code> is found as <code>parís</code> and not as the verb <code>parir</code>. A proper noun whose form has no row of its own falls back to its lemma, as the dictionary counted it there: a form not capitalized in 90% of its occurrences went to its lemma, so <code>Estados</code> of <em>Estados Unidos</em> is found in <code>estado</code> and <code>Nueva</code> of <em>Nueva York</em> in <code>nuevo</code> (the attribute <code>keys</code>). Whether a word is a proper noun, and whether it is a content word, comes from the annotation, so the source has to be annotated: a string is parsed with <a href="../../installation/#model"><code>es_core_news_sm</code></a> or with the pipeline passed in <code>nlp</code>, and a <code>Doc</code> must carry the parts of speech (a <code>morphologizer</code>, or a <code>tagger</code> with an <code>attribute_ruler</code>); a source without them raises <code>SourceError</code>. The lemmas of the model are not used. A capitalized verb at the start of a sentence that the tagger calls <code>PROPN</code> has no row of its own either and is found by its lemma (<code>Miró</code> in <code>mirar</code>). A content word is defined as in <a href="../cohesion_stats/"><code>CohesionStats</code></a>: one of <code>CONTENT_UD_POS</code> (nouns, proper nouns, adjectives, verbs, adverbs) and no demonstrative. Numbers (<code>2020</code>, <code>5,5</code>, <code>3.º</code>) are no words: the dictionary and the list do not have them, and they would look like the rarest words of the text.</p>
+<p>A text longer than the <code>max_length</code> of the pipeline - a million characters by default - raises <code>SourceError</code>: split it into parts, or raise <code>max_length</code> on a pipeline of your own and pass it in <code>nlp</code>.</p>
+<p>Resources:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Resource</th>
+<th style="text-align: left;">Statistics</th>
+<th style="text-align: left;">Availability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><a href="../../datasets/freqdict/"><code>FreqDict</code></a> - 83,785 lemmas of Google Books Ngram (1980-2019) with ipm, range and dispersion</td>
+<td style="text-align: left;"><code>coverage</code>, <code>mean_ipm*</code>, <code>mean_log_ipm*</code>, <code>mean_range</code>, <code>mean_dispersion</code>, <code>surprisal</code>, <code>perplexity</code></td>
+<td style="text-align: left;">downloaded once with <code>FreqDict().download()</code>; without the dictionary reading these statistics and <code>get_stats</code> raises <code>DatasetNotFoundError</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">The embedded list of the 10,000 most frequent lemmas of the same dictionary (<code>ests/resources/google_books_top10000.txt</code>, CC BY 3.0)</td>
+<td style="text-align: left;"><code>p_top1000</code>, <code>p_top2000</code>, <code>p_top5000</code>, <code>p_top10000</code>, <code>p_beyond_top10000</code>, <code>band_coverage</code></td>
+<td style="text-align: left;">always</td>
+</tr>
+</tbody>
+</table>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2136,68 +2198,160 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>tokenizer</code></td>
-<td style="text-align: center;">Pattern/Callable</td>
+<td style="text-align: center;"><code>source</code></td>
+<td style="text-align: center;">str/Doc</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Data source (a string or a Doc object)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>freq_dict</code></td>
+<td style="text-align: center;">FreqDict</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Tokenizer or regular expression</td>
+<td style="text-align: center;">Frequency dictionary; if not given, <code>FreqDict()</code> from the default directory is used</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>filter_punct</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>True</code></td>
-<td style="text-align: center;">Filter punctuation marks</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>filter_nums</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Filter numbers, including signed numbers, ranges, fractions, dates, times, percentages and ordinals (-5, +7, 1990-1995, 1.500,50, 12/03/2020, 3:30, 10%, 3.º, 1.ª, 2do)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>use_lexemes</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Use word lemmas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>stopwords</code></td>
-<td style="text-align: center;">Collection[str]</td>
+<td style="text-align: center;"><code>nlp</code></td>
+<td style="text-align: center;">Language</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Stop words, compared case-insensitively</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>lowercase</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Convert words to lower case</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>ngram_range</code></td>
-<td style="text-align: center;">Tuple[int, int]</td>
-<td style="text-align: center;"><code>(1, 1)</code></td>
-<td style="text-align: center;">Lower and upper bound of the N-gram size</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>min_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Minimum length of an extracted word</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>max_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Maximum length of an extracted word</td>
+<td style="text-align: center;">Pipeline of spaCy that parses a string; without it the model <code>es_core_news_sm</code> is loaded</td>
 </tr>
 </tbody>
 </table>
+<h2 id="attributes">Attributes<a class="headerlink" href="#attributes" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Attribute</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>words</code></td>
+<td style="text-align: center;">tuple[str]</td>
+<td style="text-align: center;">Tuple of the words</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>lemmas</code></td>
+<td style="text-align: center;">tuple[str]</td>
+<td style="text-align: center;">Tuple of the lemmas of the words by <code>lemma_key</code>, the lower-case form for a proper noun; the bands are counted by them</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>keys</code></td>
+<td style="text-align: center;">tuple[str]</td>
+<td style="text-align: center;">Tuple of the keys of the words in the dictionary: the lemma of a proper noun whose form is not there</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>ranks</code></td>
+<td style="text-align: center;">tuple[int/None]</td>
+<td style="text-align: center;">Tuple of the ranks of the lemmas by the embedded list, <code>None</code> beyond the top 10000</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>entries</code></td>
+<td style="text-align: center;">tuple[Entry/None]</td>
+<td style="text-align: center;">Tuple of the entries of the dictionary for every word, <code>None</code> for a word out of it</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_words</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Number of words</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_content_words</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Number of content words</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>n_found</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;">Number of words found in the dictionary</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>coverage</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Share of words found in the dictionary</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>mean_ipm</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Mean frequency of the words found</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>mean_ipm_content</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Mean frequency of the content words found</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>mean_log_ipm</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Mean decimal logarithm of the frequency of the words found</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>mean_log_ipm_content</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">The same over the content words</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>mean_range</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Mean range of the words found - years out of 40</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>mean_dispersion</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Mean dispersion D of the words found</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>surprisal</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Mean surprisal of the words by the unigram model of the dictionary, in bits</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>perplexity</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Unigram perplexity</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>p_top1000</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Share of words with a lemma of the top 1000</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>p_top2000</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Share of words with a lemma of the top 2000</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>p_top5000</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Share of words with a lemma of the top 5000</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>p_top10000</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Share of words with a lemma of the top 10000</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>p_beyond_top10000</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Share of words with a lemma beyond the top 10000</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>lexical_density</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Share of content words</td>
+</tr>
+</tbody>
+</table>
+<p>The means by the dictionary are computed over the words found only, <code>nan</code> without them; read them next to <code>coverage</code>. The mean frequency in ipm is dominated by the function words (<code>el</code> - 97,000 ipm, <code>de</code> - 71,000), so to compare texts the log frequency or the mean over the content words suits better. The range is the number of years out of 40 in which the lemma occurs in the books, not the number of parts of a corpus out of 100.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The filters are applied in order: punctuation, numbers, lemmatization, lower case, stop words, word length. Stop words are compared case-insensitively, so a lower-case list also filters <code>Los</code> or <code>La</code> at the start of a sentence. A punctuation mark is a token consisting entirely of marks and symbols, including multi-character ones: <code>?!</code>, <code>!..</code>, <code>--</code>, <code>…</code>, <code>€</code>. Empty tokens, which <code>re.split</code> leaves after a final separator, are dropped before the filters. A ready stop word list is <code>spacy.lang.es.stop_words.STOP_WORDS</code>; note that it also holds frequent verbs like <code>tener</code>.</p>
+<p>Every statistic can be computed apart by calling its function. The statistics and the functions that compute them are described in the corresponding <a href="../lexical_stats_funcs/">section</a>.</p>
 </div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
-<h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
-<p>Extracts words from a text.</p>
+<h3 id="band_coverage">band_coverage<a class="headerlink" href="#band_coverage" title="Permanent link">&para;</a></h3>
+<p>Returns the shares of the words with a lemma of the top N for every bound N. A bound out of 1 and 10000 - the size of the list - raises <code>ParameterError</code>.</p>
 <table>
 <thead>
 <tr>
@@ -2209,49 +2363,102 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Text string</td>
+<td style="text-align: center;"><code>bands</code></td>
+<td style="text-align: center;">list[int]</td>
+<td style="text-align: center;"><code>(1000, 2000, 5000, 10000)</code></td>
+<td style="text-align: center;">Bounds of the bands - the sizes of the top lists</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>unique</code></td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;"><code>False</code></td>
+<td style="text-align: center;">Count the distinct lemmas instead of the words</td>
 </tr>
 </tbody>
 </table>
-<p>An example of word extraction with bigrams as tokens, after filtering numbers and stop words and lemmatizing:</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">LexicalStats</span>
+
+<span class="n">ls</span> <span class="o">=</span> <span class="n">LexicalStats</span><span class="p">(</span><span class="s2">"El gato estaba en la ventana y miraba a los pájaros"</span><span class="p">)</span>
+<span class="n">ls</span><span class="o">.</span><span class="n">band_coverage</span><span class="p">(</span><span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># {1000: 0.6666666666666666, 2000: 0.7777777777777778, 5000: 1.0, 10000: 1.0}</span>
+<span class="n">ls</span><span class="o">.</span><span class="n">band_coverage</span><span class="p">(</span><span class="n">bands</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
+<span class="c1"># {100: 0.6363636363636364, 500: 0.7272727272727273}</span>
+</code></pre></div>
+</div>
+<h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
+<p>Returns a dictionary with the computed lexical sophistication statistics.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <p><em>Code</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Import the library</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Import the libraries</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">LexicalStats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">FreqDict</span>
 
-<span class="c1"># Prepare the data</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">"No tengas 100 euros, ten 100 amigos"</span>
+<span class="c1"># Download the dictionary (once)</span>
+<span class="n">FreqDict</span><span class="p">()</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
 
-<span class="c1"># Extract words</span>
-<span class="n">we</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">use_lexemes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="p">[</span><span class="s2">"no"</span><span class="p">],</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="c1"># Compute the statistics</span>
+<span class="n">ls</span> <span class="o">=</span> <span class="n">LexicalStats</span><span class="p">(</span><span class="s2">"El gato estaba en la ventana y miraba a los pájaros"</span><span class="p">)</span>
+<span class="n">ls</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
 </code></pre></div>
 <p><em>Result</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">(</span><span class="s1">'tener'</span>,<span class="w"> </span><span class="s1">'euro'</span>,<span class="w"> </span><span class="s1">'tener'</span>,<span class="w"> </span><span class="s1">'amigo'</span>,<span class="w"> </span><span class="s1">'tener_euro'</span>,<span class="w"> </span><span class="s1">'euro_tener'</span>,<span class="w"> </span><span class="s1">'tener_amigo'</span><span class="o">)</span>
+<div class="highlight"><pre><span></span><code><span class="o">{</span><span class="s1">'coverage'</span>:<span class="w"> </span><span class="m">1</span>.0,
+<span class="w"> </span><span class="s1">'mean_ipm'</span>:<span class="w"> </span><span class="m">34283</span>.74818181818,
+<span class="w"> </span><span class="s1">'mean_ipm_content'</span>:<span class="w"> </span><span class="m">956</span>.3320000000001,
+<span class="w"> </span><span class="s1">'mean_log_ipm'</span>:<span class="w"> </span><span class="m">3</span>.559971676175293,
+<span class="w"> </span><span class="s1">'mean_log_ipm_content'</span>:<span class="w"> </span><span class="m">2</span>.1916598821626314,
+<span class="w"> </span><span class="s1">'mean_range'</span>:<span class="w"> </span><span class="m">40</span>.0,
+<span class="w"> </span><span class="s1">'mean_dispersion'</span>:<span class="w"> </span><span class="m">97</span>.63636363636364,
+<span class="w"> </span><span class="s1">'surprisal'</span>:<span class="w"> </span><span class="m">8</span>.105598641234213,
+<span class="w"> </span><span class="s1">'perplexity'</span>:<span class="w"> </span><span class="m">275</span>.4408334528846,
+<span class="w"> </span><span class="s1">'p_top1000'</span>:<span class="w"> </span><span class="m">0</span>.7272727272727273,
+<span class="w"> </span><span class="s1">'p_top2000'</span>:<span class="w"> </span><span class="m">0</span>.8181818181818182,
+<span class="w"> </span><span class="s1">'p_top5000'</span>:<span class="w"> </span><span class="m">1</span>.0,
+<span class="w"> </span><span class="s1">'p_top10000'</span>:<span class="w"> </span><span class="m">1</span>.0,
+<span class="w"> </span><span class="s1">'p_beyond_top10000'</span>:<span class="w"> </span><span class="m">0</span>.0,
+<span class="w"> </span><span class="s1">'lexical_density'</span>:<span class="w"> </span><span class="m">0</span>.45454545454545453<span class="o">}</span>
 </code></pre></div>
 </div>
-<h3 id="get_most_common">get_most_common<a class="headerlink" href="#get_most_common" title="Permanent link">&para;</a></h3>
-<p>Returns a counter of the top words of the text. It takes the number of top words to return as a parameter.</p>
-<p>To illustrate the method, we reuse the code from the previous example:</p>
+<p>Rare words raise the surprisal and lower the coverage and the bands:</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="n">ls</span> <span class="o">=</span> <span class="n">LexicalStats</span><span class="p">(</span><span class="s2">"El felinólogo examinaba al minino con parsimonia"</span><span class="p">)</span>
+<span class="n">ls</span><span class="o">.</span><span class="n">coverage</span><span class="p">,</span> <span class="n">ls</span><span class="o">.</span><span class="n">p_top1000</span><span class="p">,</span> <span class="n">ls</span><span class="o">.</span><span class="n">p_beyond_top10000</span><span class="p">,</span> <span class="n">ls</span><span class="o">.</span><span class="n">surprisal</span>
+<span class="c1"># (0.8571428571428571, 0.42857142857142855, 0.4285714285714286, 13.70650419215419)</span>
+</code></pre></div>
+</div>
+<h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
+<p>Prints a table with the computed lexical sophistication statistics.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <p><em>Code</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<div class="highlight"><pre><span></span><code><span class="c1"># Create the object of the statistics</span>
+<span class="n">ls</span> <span class="o">=</span> <span class="n">LexicalStats</span><span class="p">(</span><span class="s2">"El gato estaba en la ventana y miraba a los pájaros"</span><span class="p">)</span>
 
-<span class="c1"># Print the top words</span>
-<span class="n">we</span><span class="o">.</span><span class="n">get_most_common</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1"># Print the table of the computed statistics</span>
+<span class="n">ls</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
 </code></pre></div>
 <p><em>Result</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">[(</span><span class="s1">'tener'</span>,<span class="w"> </span><span class="m">2</span><span class="o">)</span>,<span class="w"> </span><span class="o">(</span><span class="s1">'euro'</span>,<span class="w"> </span><span class="m">1</span><span class="o">)</span>,<span class="w"> </span><span class="o">(</span><span class="s1">'amigo'</span>,<span class="w"> </span><span class="m">1</span><span class="o">)]</span>
+<div class="highlight"><pre><span></span><code><span class="w">                        </span>Statistic<span class="w">                         </span><span class="p">|</span><span class="w">  </span>Value
+--------------------------------------------------------------------
+Share<span class="w"> </span>of<span class="w"> </span>words<span class="w"> </span>found<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>frequency<span class="w"> </span>dictionary<span class="w">          </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.00
+Mean<span class="w"> </span>frequency<span class="w"> </span><span class="o">(</span>ipm<span class="o">)</span><span class="w">                                      </span><span class="p">|</span><span class="w"> </span><span class="m">34283</span>.75
+Mean<span class="w"> </span>frequency<span class="w"> </span>of<span class="w"> </span>content<span class="w"> </span>words<span class="w"> </span><span class="o">(</span>ipm<span class="o">)</span><span class="w">                     </span><span class="p">|</span><span class="w">  </span><span class="m">956</span>.33
+Mean<span class="w"> </span>log<span class="w"> </span>frequency<span class="w"> </span><span class="o">(</span>lg<span class="w"> </span>ipm<span class="o">)</span><span class="w">                               </span><span class="p">|</span><span class="w">   </span><span class="m">3</span>.56
+Mean<span class="w"> </span>log<span class="w"> </span>frequency<span class="w"> </span>of<span class="w"> </span>content<span class="w"> </span>words<span class="w">                       </span><span class="p">|</span><span class="w">   </span><span class="m">2</span>.19
+Mean<span class="w"> </span>range<span class="w"> </span><span class="o">(</span>years<span class="w"> </span>out<span class="w"> </span>of<span class="w"> </span><span class="m">40</span><span class="o">)</span><span class="w">                              </span><span class="p">|</span><span class="w">  </span><span class="m">40</span>.00
+Mean<span class="w"> </span>dispersion<span class="w"> </span><span class="o">(</span>D<span class="o">)</span><span class="w">                                       </span><span class="p">|</span><span class="w">  </span><span class="m">97</span>.64
+Mean<span class="w"> </span>surprisal<span class="w"> </span><span class="o">(</span>bits<span class="o">)</span><span class="w">                                     </span><span class="p">|</span><span class="w">   </span><span class="m">8</span>.11
+Unigram<span class="w"> </span>perplexity<span class="w">                                        </span><span class="p">|</span><span class="w">  </span><span class="m">275</span>.44
+Share<span class="w"> </span>of<span class="w"> </span>words<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>top<span class="w"> </span><span class="m">1000</span><span class="w">                            </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.73
+Share<span class="w"> </span>of<span class="w"> </span>words<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>top<span class="w"> </span><span class="m">2000</span><span class="w">                            </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.82
+Share<span class="w"> </span>of<span class="w"> </span>words<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>top<span class="w"> </span><span class="m">5000</span><span class="w">                            </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.00
+Share<span class="w"> </span>of<span class="w"> </span>words<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>top<span class="w"> </span><span class="m">10000</span><span class="w">                           </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.00
+Share<span class="w"> </span>of<span class="w"> </span>words<span class="w"> </span>beyond<span class="w"> </span>the<span class="w"> </span>top<span class="w"> </span><span class="m">10000</span><span class="w">                       </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
+Lexical<span class="w"> </span>density<span class="w">                                           </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.45
 </code></pre></div>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The method must be called after words have been extracted with <code>extract</code>.</p>
 </div>
 
 

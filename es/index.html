@@ -1261,6 +1261,120 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_7" id="__nav_5_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas de complejidad léxica
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Estadísticas de complejidad léxica
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="stats/lexical_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="stats/lexical_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1953,12 +2067,13 @@
 <li>calcular <a href="stats/morph_stats/">estadísticas morfológicas</a> sobre Universal Dependencies (categorías gramaticales y quince rasgos morfológicos) con los marcadores del español: los modos, las formas no personales, las cópulas <code>ser</code> y <code>estar</code>, los adverbios en <code>-mente</code></li>
 <li>calcular <a href="stats/syntax_stats/">estadísticas sintácticas</a> sobre el árbol de dependencias (distancias, profundidad, cláusulas, coordinación) con las construcciones del estilo administrativo: la pasiva con <code>ser</code> y con <code>se</code>, las cláusulas de participio y de gerundio, las cadenas de <code>de</code>, los predicados escindidos</li>
 <li>calcular <a href="stats/cohesion_stats/">estadísticas de cohesión</a> a la manera de Coh-Metrix (repetición de sustantivos, argumentos y palabras con contenido entre oraciones, información dada, cohesión temporal) con la densidad de 255 marcadores del discurso por clase</li>
+<li>calcular <a href="stats/lexical_stats/">estadísticas de complejidad léxica</a> a la manera de TAALES: cuán raras son las palabras de un texto según un <a href="datasets/freqdict/">diccionario de frecuencias</a> de Google Books Ngram (frecuencia, rango, dispersión, sorpresa) y según las bandas de frecuencia del top-1000 al 10000, con la densidad léxica</li>
 <li>comparar corpus con las medidas de la lingüística de corpus: <a href="corpus/keyness/">palabras clave</a> frente a un corpus de referencia, <a href="corpus/collocations/">colocaciones</a>, la <a href="corpus/dispersion/">dispersión</a> de una palabra por las partes de un texto y una <a href="corpus/kwic/">concordancia KWIC</a>, y atribuir la autoría por <a href="corpus/stylometry/">estilometría</a>: la Delta de Burrows, Zeta, la curva de Mendenhall, las palabras funcionales; encontrar los rasgos que distinguen dos corpus <a href="corpus/compare/">comparándolos</a> por 132 rasgos de un texto</li>
 <li>visualizar textos y corpus: la <a href="visualizers/zipf/">ley de Zipf</a>, la <a href="visualizers/fingerprinting/">huella literaria</a>, un <a href="visualizers/word_tree/">árbol de palabras</a>, gráficos <a href="visualizers/corpus/">de corpus</a> y <a href="visualizers/stylometry/">estilométricos</a>, el <a href="visualizers/vocabulary/">crecimiento del vocabulario</a> y las <a href="visualizers/sentences/">longitudes de las oraciones</a></li>
 <li>añadir las estadísticas a un <a href="components/">pipeline de spaCy</a> como componentes, de modo que el texto se anote y se mida en una sola pasada y las estadísticas viajen con el <code>Doc</code></li>
 <li>trabajar con un <a href="datasets/spanishliterature/">corpus de literatura en español</a> de dominio público: 150 obras de 33 autores en cuatro géneros, filtradas por el autor, el género, el país y los años, y con un <a href="datasets/freqdict/">diccionario de frecuencias</a> de 83 785 lemas según Google Books Ngram</li>
 </ul>
-<p>La complejidad léxica completa la 0.3; el estilo, la fonoestadística, la métrica y la rima llegan en la 0.4.</p>
+<p>El estilo, la fonoestadística, la métrica y la rima llegan en la 0.4.</p>
 <h2 id="instalacion">Instalación<a class="headerlink" href="#instalacion" title="Permanent link">&para;</a></h2>
 <p>Se requiere Python 3.11 o superior.</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyests
@@ -2021,6 +2136,7 @@
 <li><strong>ests</strong>:<ul>
 <li>basic_stats.py - estadísticas básicas del texto</li>
 <li>cohesion_stats.py - estadísticas de cohesión</li>
+<li>lexical_stats.py - estadísticas de complejidad léxica</li>
 <li>components.py - componentes de un pipeline de spaCy</li>
 <li>corpus - medidas de la lingüística de corpus: palabras clave, colocaciones, dispersión, concordancia, estilometría, comparación de corpus</li>
 <li>datasets - conjuntos de datos: literatura en español, diccionario de frecuencias</li>
