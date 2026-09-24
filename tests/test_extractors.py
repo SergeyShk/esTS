@@ -174,11 +174,11 @@ class TestWordsExtractor:
             ("+7", True),
             ("−5", True),
             ("-5,5%", True),
-            ("-x", False),
+            ("−x", False),
             ("palabra", False),
             ("teórico-práctico", False),
             ("n.º", False),
-            ("3-mya-", False),
+            ("3-mya", False),
             ("1os", False),
         ],
     )

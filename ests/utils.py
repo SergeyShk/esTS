@@ -8,6 +8,7 @@ import spacy
 from spacy.language import Language
 from spacy.tokenizer import Tokenizer
 from spacy.tokens import Doc, Span, Token
+from spacy.util import compile_infix_regex, compile_prefix_regex, compile_suffix_regex
 
 from .constants import (
     ABBREVIATIONS,
@@ -15,6 +16,9 @@ from .constants import (
     PUNCTUATIONS,
     SENTENCE_OPENERS,
     SPACY_MODEL,
+    TOKENIZER_INFIXES,
+    TOKENIZER_PREFIXES,
+    TOKENIZER_SUFFIXES,
     VERBAL_NOUN_LEMMAS,
     VERBAL_NOUN_SUFFIXES,
 )
@@ -196,12 +200,59 @@ def get_tokenizer() -> Tokenizer:
 
     Description:
         The tokenizer of a blank "es" pipeline does not need a trained
-        model; it is created once per process
+        model; it is created once per process, with the rules of
+        add_dash_rules for the dashes of a dialogue
 
     Returns:
         Tokenizer: spaCy tokenizer
     """
-    return spacy.blank("es").tokenizer
+    nlp = spacy.blank("es")
+    add_dash_rules(nlp)
+    return nlp.tokenizer
+
+
+def add_dash_rules(nlp: Language) -> None:
+    """
+    Adding the rules for the dashes of a dialogue to the tokenizer of a pipeline
+
+    Description:
+        spaCy splits a long dash off only at the start and at the end of
+        a token and a hyphen not at all, so the dashes of a dialogue glued
+        to the words stay inside them: --No, -dijo, reírse—me decía and
+        dijo:—¡Mis are single tokens, and the words are not words. The rules
+        of TOKENIZER_PREFIXES, TOKENIZER_SUFFIXES and TOKENIZER_INFIXES split
+        them off and leave a hyphen between letters (franco-alemán) or before
+        a digit (-5) alone. The blank pipeline of get_tokenizer and the models
+        of get_nlp get them; a pipeline of one's own gets them from this
+        function, so that its words are the words of the rest of the library.
+        A tokenizer that is not the Tokenizer of spaCy is left as it is
+
+    Arguments:
+        nlp (Language): Pipeline whose tokenizer gets the rules
+
+    Example:
+        >>> import spacy
+        >>> from ests.utils import add_dash_rules
+        >>> nlp = spacy.blank("es")
+        >>> [token.text for token in nlp("--No --dijo él.")]
+        ['--No', '--dijo', 'él', '.']
+        >>> add_dash_rules(nlp)
+        >>> [token.text for token in nlp("--No --dijo él.")]
+        ['--', 'No', '--', 'dijo', 'él', '.']
+    """
+    defaults = nlp.Defaults
+    tokenizer = nlp.tokenizer
+    if not isinstance(tokenizer, Tokenizer):
+        return
+    tokenizer.prefix_search = compile_prefix_regex(
+        (*(defaults.prefixes or ()), *TOKENIZER_PREFIXES)
+    ).search
+    tokenizer.suffix_search = compile_suffix_regex(
+        (*(defaults.suffixes or ()), *TOKENIZER_SUFFIXES)
+    ).search
+    tokenizer.infix_finditer = compile_infix_regex(
+        (*(defaults.infixes or ()), *TOKENIZER_INFIXES)
+    ).finditer
 
 
 def tokenize(text: str) -> Iterator[str]:
@@ -212,7 +263,9 @@ def tokenize(text: str) -> Iterator[str]:
         Whitespace tokens are dropped; punctuation marks, including "¿"
         and "¡", numbers like "1.500,50", "3.º", "1990-1995" and
         abbreviations like "Sr.", "EE. UU." are single tokens; words
-        with enclitic pronouns (dámelo) are not split
+        with enclitic pronouns (dámelo) are not split; the dashes of a
+        dialogue glued to the words (--No, -dijo, reírse—me) are split off
+        by the rules of add_dash_rules
 
     Arguments:
         text (str): Text string
@@ -342,13 +395,15 @@ def count_words_by_spans(starts: Sequence[int], spans: Sequence[tuple[int, int]]
 
 @lru_cache(maxsize=4)
 def _load_nlp(model: str) -> Language:
-    """Loading a pipeline by the name of its model, once per name"""
+    """Loading a pipeline by the name of its model, once per name, with the dash rules"""
     try:
-        return spacy.load(model)
+        nlp = spacy.load(model)
     except OSError as error:
         raise DatasetNotFoundError(
             f"The spaCy model {model} is not installed: python -m spacy download {model}"
         ) from error
+    add_dash_rules(nlp)
+    return nlp
 
 
 def get_nlp(model: str = SPACY_MODEL) -> Language:
@@ -358,9 +413,11 @@ def get_nlp(model: str = SPACY_MODEL) -> Language:
     Description:
         The statistics on Universal Dependencies need a trained model.
         The default one is es_core_news_sm; a pipeline loaded by the caller
-        can be passed to those statistics instead. The default is resolved
-        before the cache, so that get_nlp() and get_nlp(SPACY_MODEL) are
-        the same pipeline and not two copies of it
+        can be passed to those statistics instead. The tokenizer of a loaded
+        model gets the rules of add_dash_rules, so that its words are the
+        words of get_tokenizer. The default is resolved before the cache, so
+        that get_nlp() and get_nlp(SPACY_MODEL) are the same pipeline and not
+        two copies of it
 
     Arguments:
         model (str): Name of the model

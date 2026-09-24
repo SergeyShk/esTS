@@ -219,6 +219,12 @@ def test_count_punctuations_spaced_hyphen_as_dash():
         ("un texto jus-\ntificado con dos pala-\nbras", 0, 2),
         ("todo -\nnada", 1, 0),
         ("fin-", 1, 0),
+        # Two or three hyphens are one dash, as a hyphen glued after a closing mark
+        ("--Hola --dijo Juan.", 2, 0),
+        ("sí--dijo él", 1, 0),
+        ("---Adiós", 1, 0),
+        ("cuatro.-¿Cinco?", 1, 0),
+        ("dijo:-¡Vete!", 1, 0),
     ],
 )
 def test_count_punctuations_attached_raya(text, dashes, hyphens):

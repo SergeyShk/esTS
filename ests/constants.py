@@ -13,6 +13,27 @@ SENTENCE_OPENERS = "¿¡«“\"'([—–-"
 # the remark of the narrator inside the same sentence (-¿Vienes? -preguntó ella)
 DASHES = "—–-"
 
+# Rules added to the tokenizer for the dashes of a dialogue glued to the words,
+# as plain-text corpora type them (--No, -dijo, Juan- y, sí--dijo, reírse—me decía,
+# dijo:—¡Mis, cuatro.-¿Cinco?): a run of hyphens before a letter or an opening
+# mark, a run of hyphens after a letter at the end of a token, two or three
+# hyphens or a long dash between letters, any dash after a closing mark, the
+# closing marks before a dash and an opening mark after one are split off.
+# A single hyphen between two letters (franco-alemán) or before a digit (-5) is
+# left alone
+_LETTER = r"[^\W\d_]"
+_OPENING = r"[¿¡«“\"'(\[]"
+_CLOSING = r"[.,;:!?…»”\"')\]]"
+_DASH = r"(?:-{1,3}|[—–―])"
+TOKENIZER_PREFIXES = (rf"-{{1,3}}(?={_LETTER}|{_OPENING})",)
+TOKENIZER_SUFFIXES = (rf"(?<={_LETTER})-{{1,3}}",)
+TOKENIZER_INFIXES = (
+    rf"(?<={_LETTER})(?:-{{2,3}}|[—–―])(?={_LETTER}|{_OPENING})",
+    rf"(?<={_CLOSING}){_DASH}(?={_LETTER}|{_OPENING})",
+    rf"(?<={_LETTER}){_CLOSING}+(?={_DASH})",
+    rf"(?<=[-—–―]){_OPENING}",
+)
+
 # Abbreviations after which a sentence does not end even before an upper-case
 # word or a number: forms of address, references, times and eras; compared in
 # lower case with the last one or two space-separated tokens before the period.

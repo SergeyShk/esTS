@@ -1,8 +1,10 @@
 import pytest
 import spacy
+from spacy.tokens import Doc
 
 from ests.exceptions import DatasetNotFoundError
 from ests.utils import (
+    add_dash_rules,
     get_nlp,
     get_tokenizer,
     has_words,
@@ -201,6 +203,41 @@ def test_tokenize():
     ]
     assert list(tokenize("")) == []
     assert list(tokenize("  \n ")) == []
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("--No --dijo él.", ["--", "No", "--", "dijo", "él", "."]),
+        ("-¿Qué? -dijo Nela.", ["-", "¿", "Qué", "?", "-", "dijo", "Nela", "."]),
+        ("sí--dijo", ["sí", "--", "dijo"]),
+        ("Juan- y", ["Juan", "-", "y"]),
+        ("reírse—me decía", ["reírse", "—", "me", "decía"]),
+        ("dijo:—¡Mis ojos!", ["dijo", ":", "—", "¡", "Mis", "ojos", "!"]),
+        ("cuatro.-¿Cinco?", ["cuatro", ".", "-", "¿", "Cinco", "?"]),
+        ("capítulo -II-", ["capítulo", "-", "II", "-"]),
+        # A hyphen between letters or before a digit is left alone
+        ("franco-alemán e-mail", ["franco-alemán", "e-mail"]),
+        ("-5 grados, 1990-1995, 1990–1995", ["-5", "grados", ",", "1990-1995", ",", "1990–1995"]),
+    ],
+)
+def test_tokenize_dialogue_dashes(text, expected):
+    assert list(tokenize(text)) == expected
+
+
+def test_add_dash_rules():
+    nlp = spacy.blank("es")
+    assert [token.text for token in nlp("--No")] == ["--No"]
+    add_dash_rules(nlp)
+    assert [token.text for token in nlp("--No")] == ["--", "No"]
+    # The model of get_nlp has the rules, so its words are the words of the tokenizer
+    text = "--No --dijo él. Y reírse—me decía:—¡Vete!"
+    assert [token.text for token in get_nlp()(text)] == list(tokenize(text))
+    # A tokenizer of one's own is left as it is
+    custom = spacy.blank("es")
+    custom.tokenizer = lambda text: Doc(custom.vocab, words=text.split())
+    add_dash_rules(custom)
+    assert [token.text for token in custom("--No sé")] == ["--No", "sé"]
 
 
 def test_get_tokenizer_cached():

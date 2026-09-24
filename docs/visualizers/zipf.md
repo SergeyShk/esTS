@@ -54,4 +54,4 @@ The lemmas of *Marianela* by Galdós from [Project Gutenberg](https://www.gutenb
 
     ![ests](../img/zipf.png){: .center }
 
-On logarithmic axes the frequencies of the lemmas fall along a straight line; the Zipf-Mandelbrot fit, $s = 1.09$ with a shift $q = 0.54$, follows them closer than the theoretical law with $\alpha = 1$ at the head of the list.
+On logarithmic axes the frequencies of the lemmas fall along a straight line; the Zipf-Mandelbrot fit, $s = 1.14$ with a shift $q = 1.77$, follows them closer than the theoretical law with $\alpha = 1$ at the head of the list.
