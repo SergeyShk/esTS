@@ -587,7 +587,7 @@ def test_extract_archive_empty(tmp_path):
 
 def test_extract_archive_without_the_data_filter(tar_archive, tmp_path, monkeypatch):
     # Python 3.11 before 3.11.4 has no filter: the members are checked by hand
-    monkeypatch.delattr(tarfile, "data_filter")
+    monkeypatch.setattr(utils_module, "TAR_DATA_FILTER", False)
     extracted = extract_archive(tar_archive, tmp_path / "out")
     assert (Path(extracted) / "prose" / "a.txt").read_text(encoding="utf-8") == "texto"
     payload = tmp_path / "payload.txt"

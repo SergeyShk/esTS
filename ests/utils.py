@@ -596,6 +596,9 @@ def to_path(path: str | Path) -> Path:
 # Seconds that a download waits for the server to answer
 DOWNLOAD_TIMEOUT = 60
 
+# The safe filter of the extraction of TAR archives, which Python has since 3.11.4
+TAR_DATA_FILTER = hasattr(tarfile, "data_filter")
+
 
 def download_file(
     url: str,
@@ -708,7 +711,7 @@ def extract_archive(archive_file: str | Path, extract_dir: str | Path | None = N
                 zip_file.extractall(extract_path)
         else:
             with tarfile.open(archive_path, mode="r") as tar_file:
-                if hasattr(tarfile, "data_filter"):
+                if TAR_DATA_FILTER:
                     tar_file.extractall(extract_path, filter="data")
                 else:
                     for member in tar_file:
