@@ -9,7 +9,7 @@ Extracción de palabras clave (keyness) de un corpus objetivo frente a uno de re
 
 Para cada palabra se calculan dos valores que [Gabrielatos y Marchi](http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf) y [Hardie](http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/) recomiendan leer juntos: la razón de verosimilitud $G^2$ con su valor p (la significación de la diferencia: si la hay) y Log Ratio (el tamaño del efecto: cuán grande es). Se calcula además la medida elegida `score`, que sirve para ordenar. Las medidas de significación ($G^2$, ji cuadrado, BIC, ELL) llevan signo: negativo cuando la palabra es más frecuente en la referencia; las medidas de efecto (%DIFF, Log Ratio, razón de momios) tienen dirección por construcción.
 
-La referencia puede ser una lista de palabras o una correspondencia de frecuencias - los recuentos de un diccionario de frecuencias, por ejemplo -; el tamaño de la referencia es entonces la suma de los recuentos.
+La referencia puede ser una lista de palabras o una correspondencia de frecuencias, con el tamaño de la referencia tomado como la suma de los recuentos, o el [diccionario de frecuencias](../datasets/freqdict.md) `FreqDict` de Google Books Ngram. Con el diccionario las palabras del corpus objetivo pasan a sus claves por [`lemma_key`](../datasets/freqdict.md#lemma_key) - una forma a su lema, un lema se queda como está -, así que las palabras clave son lemas, y la frecuencia de un lema en la referencia es su ipm por el tamaño del corpus del diccionario (`CORPUS_SIZE`, 63 000 millones de palabras de los libros de 1980-2019); una palabra fuera del diccionario tiene ahí frecuencia cero. Sin las categorías gramaticales un nombre propio también va a su lema (`París` - `parir`), mientras que un nombre desconocido se queda como está (`Madrid` - `madrid`). El diccionario describe el registro de los libros, así que las palabras clave negativas de un texto son las de la prosa académica (`de`, `social`, `país`).
 
 Las palabras se comparan tal cual: la caja, la lematización y las palabras vacías corresponden a [`WordsExtractor`](../extractors/words.md).
 
@@ -34,7 +34,7 @@ Una frecuencia nula en uno de los corpus se sustituye por 0.5 para %DIFF, Log Ra
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `target` | list[str]/dict[str, int] | `-` | Palabras del corpus objetivo o sus frecuencias |
-| `reference` | list[str]/dict[str, float] | `-` | Palabras del corpus de referencia o sus frecuencias |
+| `reference` | list[str]/dict[str, float]/FreqDict | `-` | Palabras del corpus de referencia, sus frecuencias o el diccionario de frecuencias |
 | `measure` | str | `log_likelihood` | Medida de `KEYNESS_MEASURES` para `score` y el orden |
 | `min_freq` | int | `1` | Frecuencia mínima de una palabra clave en su propio corpus |
 | `positive` | bool | `True` | Palabras clave positivas (más frecuentes en el corpus objetivo) o negativas (más frecuentes en la referencia) |
@@ -81,4 +81,24 @@ Una lista de tuplas con nombre `Keyword` por orden descendente de clave (los emp
 
     [(k.word, round(k.g2, 2)) for k in keyness(target, reference, positive=False, top_n=2)]
     # [('perro', -5.92), ('comer', -1.97)]
+    ```
+
+Frente al [diccionario de frecuencias](../datasets/freqdict.md) las palabras de una comedia de Lope de Vega del [corpus de literatura](../datasets/spanishliterature.md) dan sus personajes:
+
+!!! example "Ejemplo"
+
+    ``` python
+    from ests import WordsExtractor
+    from ests.corpus import keyness
+    from ests.datasets import FreqDict, SpanishLiterature
+
+    text = next(SpanishLiterature().get_texts(author="lope", genre="drama"))
+    words = WordsExtractor(lowercase=True).extract(text)
+    for k in keyness(words, FreqDict(), top_n=5):
+        print(k.word, k.freq_target, round(k.ipm_reference, 2), round(k.g2, 1), round(k.log_ratio, 2))
+    # laurencia 135 0.32 2528.4 14.96
+    # mengo 105 0.13 2102.3 15.89
+    # comendador 154 5.33 2059.6 11.09
+    # barrildo 52 0.0 1599.0 28.88
+    # frondoso 113 3.84 1515.4 11.12
     ```

@@ -1,5 +1,5 @@
 from collections import Counter
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from math import e, inf, isnan, log, log2, nan
 from typing import Any, NamedTuple
 
@@ -7,6 +7,7 @@ import numpy as np
 from scipy.stats import chi2 as chi2_distribution
 
 from ..constants import KEYNESS_MEASURES
+from ..datasets.freq_dict import CORPUS_SIZE, FreqDict, lemma_key
 from ..exceptions import ParameterError, SourceError
 from ..utils import check_sequence
 
@@ -43,7 +44,7 @@ class Keyword(NamedTuple):
 
 def keyness(
     target: Sequence[str] | Mapping[str, int],
-    reference: Sequence[str] | Mapping[str, float],
+    reference: Sequence[str] | Mapping[str, float] | FreqDict,
     measure: str = "log_likelihood",
     min_freq: int = 1,
     positive: bool = True,
@@ -60,9 +61,15 @@ def keyness(
         score, which the list is sorted by. The measures of significance (G²,
         chi-square, BIC, ELL) are signed: negative when the word is more
         frequent in the reference
-        The reference may be a list of words or their frequencies, and so may
-        a frequency dictionary be given: its counts, with the size of the
-        reference taken as their sum
+        The reference may be a list of words or their frequencies, with the
+        size of the reference taken as their sum, or the frequency dictionary
+        FreqDict: then the words of the target corpus go to the keys of the
+        dictionary by lemma_key (a word form to its lemma, a lemma stays as it
+        is), so the keywords are lemmas, and the frequency of a lemma in the
+        reference is its ipm times the size of the corpus of the dictionary
+        (CORPUS_SIZE, 63 billion words of books of 1980-2019). Without the
+        parts of speech a proper noun goes to its lemma too (París - parir),
+        while an unknown name stays as it is (Madrid - madrid)
         A zero frequency in one of the corpora is replaced with 0.5 for %DIFF,
         Log Ratio and the odds ratio (Hardie 2014)
         Positive keywords are more frequent in the target corpus, negative ones
@@ -76,8 +83,8 @@ def keyness(
 
     Arguments:
         target (list[str]|dict[str, int]): Words of the target corpus or their frequencies
-        reference (list[str]|dict[str, float]): Words of the reference corpus or
-            their frequencies
+        reference (list[str]|dict[str, float]|FreqDict): Words of the reference
+            corpus, their frequencies or the frequency dictionary
         measure (str): Measure of KEYNESS_MEASURES for score and the sorting
         min_freq (int): Minimum frequency of a keyword in its own corpus
         positive (bool): Positive keywords (True) or negative ones (False)
@@ -91,6 +98,7 @@ def keyness(
         SourceTypeError: If a string is passed instead of a list of words
         ParameterError: If the measure is unknown or top_n is below one
         SourceError: If one of the corpora is empty
+        DatasetNotFoundError: If the frequency dictionary is not downloaded
 
     Example:
         >>> from ests.corpus import keyness
@@ -105,10 +113,18 @@ def keyness(
         raise ParameterError("The number of keywords must be greater than 0")
     check_sequence(target)
     check_sequence(reference)
-    counts_target = _count(target)
-    counts_reference = _count(reference)
+    counts_reference: Mapping[str, float]
+    if isinstance(reference, FreqDict):
+        counts_target = _count(target, key=lemma_key)
+        size_reference = float(CORPUS_SIZE)
+        counts_reference = {
+            lemma: entry.ipm * size_reference / 1e6 for lemma, entry in reference.entries.items()
+        }
+    else:
+        counts_target = _count(target)
+        counts_reference = _count(reference)
+        size_reference = float(sum(counts_reference.values()))
     size_target = float(sum(counts_target.values()))
-    size_reference = float(sum(counts_reference.values()))
     if not size_target or not size_reference:
         raise SourceError("The data source has no words")
     calc = MEASURES[measure]
@@ -152,8 +168,17 @@ def keyness(
     return keywords[:top_n] if top_n else keywords
 
 
-def _count(words: Sequence[str] | Mapping[str, float]) -> Mapping[str, float]:
-    return words if isinstance(words, Mapping) else Counter(words)
+def _count(
+    words: Sequence[str] | Mapping[str, float], key: Callable[[str], str] | None = None
+) -> Mapping[str, float]:
+    """Frequencies of the words, summed by key when one is given"""
+    if key is None:
+        return words if isinstance(words, Mapping) else Counter(words)
+    counts: dict[str, float] = {}
+    pairs = words.items() if isinstance(words, Mapping) else ((word, 1) for word in words)
+    for word, count in pairs:
+        counts[key(word)] = counts.get(key(word), 0) + count
+    return counts
 
 
 def _sign(a: float, b: float, c: float, d: float) -> int:

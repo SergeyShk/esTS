@@ -9,7 +9,7 @@ Keyword extraction (keyness) for a target corpus against a reference one: the wo
 
 For every word two values are computed that [Gabrielatos and Marchi](http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf) and [Hardie](http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/) recommend reading together: the log-likelihood $G^2$ with its p-value (the significance of the difference - whether there is one) and Log Ratio (the size of the effect - how large it is). The chosen measure `score` is computed as well and used for the sorting. The measures of significance ($G^2$, chi-square, BIC, ELL) are signed: negative when the word is more frequent in the reference; the measures of effect (%DIFF, Log Ratio, odds ratio) are directional by construction.
 
-The reference may be a list of words or a mapping of frequencies - the counts of a frequency dictionary, for example; the size of the reference is then the sum of the counts.
+The reference may be a list of words or a mapping of frequencies, with the size of the reference taken as the sum of the counts, or the [frequency dictionary](../datasets/freqdict.md) `FreqDict` of Google Books Ngram. With the dictionary the words of the target corpus go to its keys by [`lemma_key`](../datasets/freqdict.md#lemma_key) - a word form to its lemma, a lemma stays as it is - so the keywords are lemmas, and the frequency of a lemma in the reference is its ipm times the size of the corpus of the dictionary (`CORPUS_SIZE`, 63 billion words of the books of 1980-2019); a word out of the dictionary has a zero frequency there. Without the parts of speech a proper noun goes to its lemma as well (`París` - `parir`), while an unknown name stays as it is (`Madrid` - `madrid`). The dictionary describes the register of the books, so the negative keywords of a text are the words of scholarly prose (`de`, `social`, `país`).
 
 Words are compared as they are: case, lemmatization and stop words belong to [`WordsExtractor`](../extractors/words.md).
 
@@ -34,7 +34,7 @@ A zero frequency in one of the corpora is replaced with 0.5 for %DIFF, Log Ratio
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
 | `target` | list[str]/dict[str, int] | `-` | Words of the target corpus or their frequencies |
-| `reference` | list[str]/dict[str, float] | `-` | Words of the reference corpus or their frequencies |
+| `reference` | list[str]/dict[str, float]/FreqDict | `-` | Words of the reference corpus, their frequencies or the frequency dictionary |
 | `measure` | str | `log_likelihood` | Measure of `KEYNESS_MEASURES` for `score` and the sorting |
 | `min_freq` | int | `1` | Minimum frequency of a keyword in its own corpus |
 | `positive` | bool | `True` | Positive keywords (more frequent in the target corpus) or negative ones (more frequent in the reference) |
@@ -81,4 +81,24 @@ A list of `Keyword` named tuples by descending keyness (ties broken by descendin
 
     [(k.word, round(k.g2, 2)) for k in keyness(target, reference, positive=False, top_n=2)]
     # [('perro', -5.92), ('comer', -1.97)]
+    ```
+
+Against the [frequency dictionary](../datasets/freqdict.md) the words of a play of Lope de Vega from the [corpus of literature](../datasets/spanishliterature.md) give its characters:
+
+!!! example "Example"
+
+    ``` python
+    from ests import WordsExtractor
+    from ests.corpus import keyness
+    from ests.datasets import FreqDict, SpanishLiterature
+
+    text = next(SpanishLiterature().get_texts(author="lope", genre="drama"))
+    words = WordsExtractor(lowercase=True).extract(text)
+    for k in keyness(words, FreqDict(), top_n=5):
+        print(k.word, k.freq_target, round(k.ipm_reference, 2), round(k.g2, 1), round(k.log_ratio, 2))
+    # laurencia 135 0.32 2528.4 14.96
+    # mengo 105 0.13 2102.3 15.89
+    # comendador 154 5.33 2059.6 11.09
+    # barrildo 52 0.0 1599.0 28.88
+    # frondoso 113 3.84 1515.4 11.12
     ```

@@ -17,7 +17,9 @@ from ests.corpus.keyness import (
     calc_odds_ratio,
     calc_p_value,
 )
-from ests.exceptions import ParameterError, SourceError, SourceTypeError
+from ests.datasets import FreqDict
+from ests.datasets.freq_dict import CORPUS_SIZE
+from ests.exceptions import DatasetNotFoundError, ParameterError, SourceError, SourceTypeError
 from ests.utils import get_nlp
 
 target = ["gato", "estaba", "en", "ventana", "y", "miraba", "en", "pájaros", "gato", "dormía"]
@@ -127,6 +129,39 @@ def test_keyness_against_frequencies_of_a_dictionary():
     assert gato.freq_reference == 40.0
     assert gato.ipm_reference == pytest.approx(40 / size * 1e6)
     assert gato.g2 == pytest.approx(calc_log_likelihood(2, 40, 10, size))
+
+
+def test_keyness_against_the_frequency_dictionary(freq_dict):
+    words = ["Gatos", "gato", "gatos", "el", "felinólogo", "ventana"]
+    keywords = keyness(words, freq_dict)
+    gato = next(keyword for keyword in keywords if keyword.word == "gato")
+    reference = freq_dict.ipm("gato") * CORPUS_SIZE / 1e6
+    assert gato.freq_target == 3
+    assert gato.freq_reference == pytest.approx(reference)
+    assert gato.ipm_reference == pytest.approx(freq_dict.ipm("gato"))
+    assert gato.g2 == pytest.approx(calc_log_likelihood(3, reference, 6, CORPUS_SIZE))
+    # A word out of the dictionary has a zero frequency in the reference
+    felinologo = next(keyword for keyword in keywords if keyword.word == "felinólogo")
+    assert felinologo.freq_reference == 0
+    assert [keyword.g2 for keyword in keywords] == sorted((k.g2 for k in keywords), reverse=True)
+
+
+def test_keyness_against_the_frequency_dictionary_by_frequencies(freq_dict):
+    by_words = keyness(["gatos", "gatos", "gato", "ventana"], freq_dict)
+    by_counts = keyness({"gatos": 2, "gato": 1, "ventana": 1}, freq_dict)
+    assert by_counts == by_words
+    assert {keyword.word for keyword in by_words} == {"gato", "ventana"}
+
+
+def test_keyness_against_the_frequency_dictionary_negative(freq_dict):
+    keywords = keyness(["gato"] * 5, freq_dict, positive=False, top_n=3)
+    assert [keyword.word for keyword in keywords] == ["el", "de", "y"]
+    assert all(keyword.g2 < 0 for keyword in keywords)
+
+
+def test_keyness_without_the_dictionary(tmp_path):
+    with pytest.raises(DatasetNotFoundError):
+        keyness(["gato"], FreqDict(data_dir=tmp_path))
 
 
 @pytest.mark.parametrize("measure", list(KEYNESS_MEASURES))

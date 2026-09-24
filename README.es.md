@@ -472,7 +472,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/components/).
 
 La biblioteca compara corpus y describe el uso de una palabra con las medidas de la lingüística de corpus:
 
-*   palabras clave de un corpus objetivo frente a uno de referencia: la razón de verosimilitud con su valor p, Log Ratio, ji cuadrado, %DIFF, BIC, ELL y la razón de momios
+*   palabras clave de un corpus objetivo frente a uno de referencia o frente al diccionario de frecuencias de Google Books Ngram: la razón de verosimilitud con su valor p, Log Ratio, ji cuadrado, %DIFF, BIC, ELL y la razón de momios
 *   colocaciones por logDice, MI, MI³, t-score, Dice, razón de verosimilitud, NPMI y sensibilidad mínima, contrastadas con NLTK
 *   la dispersión de una palabra por las partes de un texto: la DP de Gries, la DP normalizada, la D de Juilland, la D2 de Carroll, la S de Rosengren y la divergencia de Kullback-Leibler
 *   una concordancia KWIC por forma o por lema
