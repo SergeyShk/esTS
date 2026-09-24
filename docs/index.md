@@ -18,12 +18,13 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 *   compute [morphological statistics](stats/morph_stats.md) on Universal Dependencies (parts of speech and fifteen grammatical features) with the markers of Spanish: the moods, the non-finite forms, the copulas `ser` and `estar`, the adverbs in `-mente`
 *   compute [syntactic statistics](stats/syntax_stats.md) on the dependency tree (dependency distances, depth, clauses, coordination) with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
 *   compute [cohesion statistics](stats/cohesion_stats.md) in the manner of Coh-Metrix (the overlap of nouns, arguments and content words between sentences, givenness, temporal cohesion) with the density of 255 Spanish discourse markers by class
+*   compute [lexical sophistication statistics](stats/lexical_stats.md) in the manner of TAALES: how rare the words of a text are by a [frequency dictionary](datasets/freqdict.md) of Google Books Ngram (frequency, range, dispersion, surprisal) and by the frequency bands top-1000 to 10000, with the lexical density
 *   compare corpora with the measures of corpus linguistics: [keywords](corpus/keyness.md) against a reference corpus, [collocations](corpus/collocations.md), the [dispersion](corpus/dispersion.md) of a word over the parts of a text and a [KWIC concordance](corpus/kwic.md), and attribute authorship by [stylometry](corpus/stylometry.md): Burrows's Delta, Zeta, the Mendenhall curve, the function words; find the features that tell two corpora apart by [comparing](corpus/compare.md) them over 132 features of a text
 *   visualize texts and corpora: [Zipf's law](visualizers/zipf.md), [literature fingerprinting](visualizers/fingerprinting.md), a [word tree](visualizers/word_tree.md), [corpus](visualizers/corpus.md) and [stylometric](visualizers/stylometry.md) plots, [vocabulary growth](visualizers/vocabulary.md) and [sentence lengths](visualizers/sentences.md)
 *   add the statistics to a [spaCy pipeline](components.md) as components, so that a text is annotated and measured in one pass and the statistics travel with the `Doc`
 *   work with a [corpus of Spanish-language literature](datasets/spanishliterature.md) in the public domain: 150 works by 33 authors in four genres, filtered by the author, the genre, the country and the years, and with a [frequency dictionary](datasets/freqdict.md) of 83,785 lemmas by Google Books Ngram
 
-Lexical sophistication completes 0.3; style, phonostatistics, metre and rhyme come in 0.4.
+Style, phonostatistics, metre and rhyme come in 0.4.
 
 ## Installation
 
@@ -97,6 +98,7 @@ Punctuation marks   |    2
     *   **ests**:
         *   basic_stats.py - basic text statistics
         *   cohesion_stats.py - cohesion statistics
+        *   lexical_stats.py - lexical sophistication statistics
         *   components.py - components of a spaCy pipeline
         *   corpus - measures of corpus linguistics: keywords, collocations, dispersion, concordance, stylometry, comparison of corpora
         *   datasets - datasets: Spanish-language literature, the frequency dictionary

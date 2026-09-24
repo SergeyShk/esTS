@@ -13,6 +13,7 @@ from .components import (
     BasicStatsComponent,
     CohesionStatsComponent,
     DiversityStatsComponent,
+    LexicalStatsComponent,
     MorphStatsComponent,
     ReadabilityStatsComponent,
     SyntaxStatsComponent,
@@ -29,6 +30,7 @@ from .exceptions import (
     UnknownStatError,
 )
 from .extractors import CharNgramsExtractor, SentsExtractor, WordsExtractor
+from .lexical_stats import LexicalStats
 from .morph_stats import MorphStats
 from .readability_stats import ReadabilityStats
 from .syntax_stats import SyntaxStats
@@ -60,6 +62,8 @@ __all__ = [
     "DiversityStatsComponent",
     "DownloadError",
     "EstsError",
+    "LexicalStats",
+    "LexicalStatsComponent",
     "MorphStats",
     "MorphStatsComponent",
     "ParameterError",

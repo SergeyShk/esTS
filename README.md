@@ -44,9 +44,10 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors from Spain, Latin America and the Philippines in prose, poems, drama and publicism, with the genre, the years and the country; a frequency dictionary of 83,785 lemmas by Google Books Ngram with ipm, range and dispersion
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
 * **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 255 Spanish discourse markers
+* **[Lexical sophistication statistics](https://sergeyshk.github.io/esTS/stats/lexical_stats/)** - how rare the words of a text are in the language: the frequency, range and dispersion of the lemmas by a dictionary of Google Books Ngram, the frequency bands top-1000 to 10000, surprisal, perplexity and lexical density
 * **[Syntactic statistics](https://sergeyshk.github.io/esTS/stats/syntax_stats/)** - the dependency tree by distances, depth, clauses and coordination, with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
 
-Lexical sophistication completes 0.3; style, phonostatistics, metre and rhyme come in 0.4.
+Style, phonostatistics, metre and rhyme come in 0.4.
 
 ## Installation
 
@@ -415,6 +416,27 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/cohesion_stat
 </details>
 
 <details>
+<summary><b>Lexical sophistication statistics</b></summary>
+
+<br>
+
+How rare the words of a text are in the language, in the manner of TAALES: the mean frequency, range and dispersion of the lemmas by the frequency dictionary of Google Books Ngram, the shares of the words of the frequency bands top-1000, 2000, 5000 and 10000, the surprisal and the perplexity by the unigram model of the dictionary, the lexical density. The bands and the density work out of the box; the statistics by the dictionary need it downloaded once.
+
+```python
+>>> from ests import LexicalStats
+>>> from ests.datasets import FreqDict
+
+>>> FreqDict().download()
+>>> ls = LexicalStats("El felinólogo examinaba al minino con parsimonia")
+>>> ls.coverage, ls.p_top1000, round(ls.surprisal, 2)
+(0.8571428571428571, 0.42857142857142855, 13.71)
+```
+
+More in the [documentation](https://sergeyshk.github.io/esTS/stats/lexical_stats/).
+
+</details>
+
+<details>
 <summary><b>spaCy components</b></summary>
 
 <br>
@@ -592,6 +614,7 @@ Bug reports, ideas and pull requests are welcome - [issues](https://github.com/S
 *   **ests**:
     *   basic_stats.py - basic text statistics
     *   cohesion_stats.py - cohesion statistics
+    *   lexical_stats.py - lexical sophistication statistics
     *   components.py - components of a spaCy pipeline
     *   corpus - measures of corpus linguistics: keywords, collocations, dispersion, concordance, stylometry, comparison of corpora
     *   datasets - datasets: Spanish-language literature, the frequency dictionary

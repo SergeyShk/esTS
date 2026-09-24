@@ -1,6 +1,6 @@
 [project]
 name = "pyests"
-version = "0.3.0.dev8"
+version = "0.3.0.dev9"
 description = "Spanish Texts Statistics"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -65,6 +65,7 @@ ests_diversity = "ests.components:DiversityStatsComponent"
 ests_morph = "ests.components:MorphStatsComponent"
 ests_syntax = "ests.components:SyntaxStatsComponent"
 ests_cohesion = "ests.components:CohesionStatsComponent"
+ests_lexical = "ests.components:LexicalStatsComponent"
 
 [tool.hatch.build.targets.wheel]
 packages = ["ests"]
