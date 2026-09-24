@@ -162,6 +162,55 @@
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/syntax_stats/"/>
     </url>
     <url>
+        <loc>Nonevisualizers/corpus/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/corpus/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/corpus/"/>
+    </url>
+    <url>
+        <loc>Nonevisualizers/fingerprinting/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/fingerprinting/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/fingerprinting/"/>
+    </url>
+    <url>
+        <loc>Nonevisualizers/sentences/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/sentences/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/sentences/"/>
+    </url>
+    <url>
+        <loc>Nonevisualizers/stylometry/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/stylometry/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/stylometry/"/>
+    </url>
+    <url>
+        <loc>Nonevisualizers/vocabulary/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/vocabulary/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/vocabulary/"/>
+    </url>
+    <url>
+        <loc>Nonevisualizers/word_tree/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/word_tree/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/word_tree/"/>
+    </url>
+    <url>
+        <loc>Nonevisualizers/zipf/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/zipf/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/zipf/"/>
+    </url>
+    <url>
         <loc>Nonees/</loc>
         <lastmod>2026-09-24</lastmod>
         <changefreq>daily</changefreq>
@@ -321,5 +370,54 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/syntax_stats/"/>
         <xhtml:link rel="alternate" hreflang="en" href="Nonestats/syntax_stats/"/>
+    </url>
+    <url>
+        <loc>Nonees/visualizers/corpus/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/corpus/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/corpus/"/>
+    </url>
+    <url>
+        <loc>Nonees/visualizers/fingerprinting/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/fingerprinting/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/fingerprinting/"/>
+    </url>
+    <url>
+        <loc>Nonees/visualizers/sentences/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/sentences/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/sentences/"/>
+    </url>
+    <url>
+        <loc>Nonees/visualizers/stylometry/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/stylometry/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/stylometry/"/>
+    </url>
+    <url>
+        <loc>Nonees/visualizers/vocabulary/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/vocabulary/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/vocabulary/"/>
+    </url>
+    <url>
+        <loc>Nonees/visualizers/word_tree/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/word_tree/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/word_tree/"/>
+    </url>
+    <url>
+        <loc>Nonees/visualizers/zipf/</loc>
+        <lastmod>2026-09-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/zipf/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/zipf/"/>
     </url>
 </urlset>
