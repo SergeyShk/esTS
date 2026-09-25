@@ -5,18 +5,18 @@
 
 ## Descripción
 
-Una colección de sonetos en español del [Diachronic Spanish Sonnet Corpus](https://github.com/pruizf/disco) (DISCO 5.0): 4306 sonetos de 1197 autores de España, Hispanoamérica y Filipinas, del siglo XV a principios del XX, 60 881 versos. Cada verso lleva su patrón métrico y la etiqueta de su rima, así que la colección sirve para estudiar la métrica y la rima y para contrastar una escansión con la anotación del corpus.
+Una colección de sonetos en español del [Diachronic Spanish Sonnet Corpus](https://github.com/pruizf/disco) (DISCO 5.0): 4259 sonetos de 1167 autores de España, Hispanoamérica y Filipinas, del siglo XV a principios del XX, 60 209 versos. Cada verso lleva su patrón métrico y la etiqueta de su rima, así que la colección sirve para estudiar la métrica y la rima y para contrastar una escansión con la anotación del corpus.
 
 | Periodo | Clave | Sonetos | Autores | Los autores más representados |
 | :------ | :---- | :-----: | :-----: | :---------------------------- |
 | Siglos XV-XVII | `15th-17th` | 1088 | 475 | Juan de Arguijo (72), Marqués de Santillana (42), Juan de Jauregui (23), Luis Martín de la Plaza (22) |
 | Siglo XVIII | `18th` | 321 | 42 | Juan Nicasio Gallego (50), Juan Bautista Arriaza (28), Vicente García de la Huerta (25), Juan Meléndez Valdés (25) |
-| Siglo XIX | `19th` | 2892 | 680 | Rubén Darío (140), José Santos Chocano (130), Clemente Althaus (52), Julio Flores Roa (52) |
+| Siglo XIX | `19th` | 2845 | 650 | Rubén Darío (140), José Santos Chocano (130), Clemente Althaus (52), Julio Flores Roa (52) |
 | Siglo XX | `20th` | 5 | 1 | Cecilio Apóstol (5) |
 
-297 sonetos son de mujeres. Por el país de nacimiento: España (2404), Cuba (739), Perú (204), México (192), Nicaragua (141), Colombia (100), Argentina (99), Uruguay (76), Venezuela (68) y 13 países más; el país de 38 sonetos es desconocido. La parte del siglo XIX de DISCO es una antología de España e Hispanoamérica, la del siglo XX reúne a los poetas filipinos en español.
+295 sonetos son de mujeres. Por el país de nacimiento: España (2388), Cuba (719), Perú (204), México (191), Nicaragua (141), Colombia (100), Argentina (93), Uruguay (76), Venezuela (68) y 13 países más; el país de 38 sonetos es desconocido. La parte del siglo XIX de DISCO es una antología de España e Hispanoamérica, la del siglo XX reúne a los poetas filipinos en español.
 
-Solo se guardan los sonetos de dominio público, 4306 de 4523: los de los autores que murieron antes de 1946, los de los autores de los siglos XV-XVIII cuya muerte se desconoce y los de los autores de la antología del siglo XIX nacidos antes de 1866 o sin fechas. Los sonetos de los autores que murieron en 1946 o después se quedan fuera, entre ellos los de la mayoría de los poetas filipinos. Los años de vida se leen de la línea biográfica de la fuente donde DISCO tomó de ella un año posterior por el de la muerte (Echegaray murió en 1916, no en 1904, el año de su premio Nobel), y lo mismo el país de nacimiento donde la línea lo nombra (Gertrudis Gómez de Avellaneda nació en Puerto Príncipe, Cuba, no en Haití). Los poetas filipinos, escritos en DISCO con el apellido primero, llevan el nombre primero como los demás; los interlocutores de los diálogos (`[Car]`, `[POETA]`) y las llamadas de las notas se quitan de los versos, como están fuera de sus patrones métricos.
+Solo se guardan los sonetos de dominio público, 4259 de 4523: los de los autores que murieron antes de 1946, los de los autores de los siglos XV-XVIII cuya muerte se desconoce y los de los autores de la antología del siglo XIX nacidos antes de 1866 o sin fechas. Los sonetos de los autores que murieron en 1946 o después se quedan fuera, entre ellos los de la mayoría de los poetas filipinos. Un autor de la antología sin fechas en la fuente también se queda fuera cuando las fechas de [VIAF](https://viaf.org) que DISCO asoció con confianza alta dan una muerte en 1946 o después o un nacimiento en 1866 o después sin muerte (Luis Rodríguez Embil, 1879-1954, marcado solo como del siglo XIX): VIAF solo deja fuera a un autor y nunca sustituye las fechas de la fuente, ya que algunas de sus asociaciones son otras personas. Los años de vida se leen de la línea biográfica de la fuente donde DISCO tomó de ella un año posterior por el de la muerte (Echegaray murió en 1916, no en 1904, el año de su premio Nobel) o no vio un nacimiento o una muerte dados solos (`1585 - Siglo XVII`, `18¿? - 1892`); los años que siguen a un siglo en esa línea son de otras personas o sucesos y no se toman. El país de nacimiento también se lee de esa línea donde la nombra (Gertrudis Gómez de Avellaneda nació en Puerto Príncipe, Cuba, no en Haití). Los poetas filipinos, escritos en DISCO con el apellido primero, llevan el nombre primero como los demás; los interlocutores de los diálogos (`[Car]`, `[POETA]`) y las llamadas de las notas se quitan de los versos, como están fuera de sus patrones métricos.
 
 El archivo (1 MB) se guarda en el repositorio de la biblioteca, se descarga una vez en el directorio de datos, se verifica con su suma de comprobación SHA-256 y se extrae; los sonetos se leen de uno en uno de un fichero JSON Lines. Lo construye `scripts/build_spanish_sonnets.py` a partir de DISCO en un commit fijo.
 
@@ -131,7 +131,7 @@ Los parámetros son los mismos que los de `get_texts`.
         print(period, f"{lengths[11] / total:.2f}", f"{lengths[14] / total:.2f}")
     # 15th-17th 0.98 0.00
     # 18th 0.99 0.00
-    # 19th 0.85 0.10
+    # 19th 0.86 0.09
     # 20th 0.60 0.40
     ```
 
@@ -139,4 +139,4 @@ Los parámetros son los mismos que los de `get_texts`.
     Los patrones métricos y las etiquetas de la rima son la anotación automática de DISCO, no una manual: la escansión de ADSO (precisión 0,91) y, para los sonetos modernistas y filipinos, de Jumper (0,95); la rima de RhymeTagger. Son una referencia con la que comparar una escansión, no un patrón de oro: un patrón puede perder una sinalefa o un acento que haría un lector. 20 sonetos no tienen etiquetas de la rima, y las secuencias largas no las tienen después de la letra `N`: esa etiqueta es una cadena vacía.
 
 !!! note "Sonetos, secuencias y títulos"
-    4257 registros son sonetos de 14 versos. Los demás son sonetos con estrambote (17 versos, etc.), unos pocos incompletos o de forma irregular («El soneto de trece versos» de Darío) y secuencias de sonetos que DISCO guarda en un solo fichero, de hasta 98 versos. Los sonetos de una secuencia en ficheros separados tienen el título `Part of: ` y el título de la secuencia (401 registros). Los títulos y la ortografía son los de las fuentes de DISCO, algunos títulos en mayúsculas.
+    4211 registros son sonetos de 14 versos. Los demás son sonetos con estrambote (17 versos, etc.), unos pocos incompletos o de forma irregular («El soneto de trece versos» de Darío) y secuencias de sonetos que DISCO guarda en un solo fichero, de hasta 98 versos. Los sonetos de una secuencia en ficheros separados tienen el título `Part of: ` y el título de la secuencia (397 registros). Los títulos y la ortografía son los de las fuentes de DISCO, algunos títulos en mayúsculas.

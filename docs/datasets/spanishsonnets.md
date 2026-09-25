@@ -5,18 +5,18 @@
 
 ## Description
 
-A collection of Spanish sonnets from the [Diachronic Spanish Sonnet Corpus](https://github.com/pruizf/disco) (DISCO 5.0): 4,306 sonnets by 1,197 authors from Spain, Latin America and the Philippines, from the 15th century to the early 20th, 60,881 lines. Every line has its metrical pattern and the label of its rhyme, so the collection suits the study of meter and rhyme and the checking of a scansion against the annotation of the corpus.
+A collection of Spanish sonnets from the [Diachronic Spanish Sonnet Corpus](https://github.com/pruizf/disco) (DISCO 5.0): 4,259 sonnets by 1,167 authors from Spain, Latin America and the Philippines, from the 15th century to the early 20th, 60,209 lines. Every line has its metrical pattern and the label of its rhyme, so the collection suits the study of meter and rhyme and the checking of a scansion against the annotation of the corpus.
 
 | Period | Key | Sonnets | Authors | The most represented authors |
 | :----- | :-- | :-----: | :-----: | :--------------------------- |
 | 15th-17th centuries | `15th-17th` | 1,088 | 475 | Juan de Arguijo (72), Marqués de Santillana (42), Juan de Jauregui (23), Luis Martín de la Plaza (22) |
 | 18th century | `18th` | 321 | 42 | Juan Nicasio Gallego (50), Juan Bautista Arriaza (28), Vicente García de la Huerta (25), Juan Meléndez Valdés (25) |
-| 19th century | `19th` | 2,892 | 680 | Rubén Darío (140), José Santos Chocano (130), Clemente Althaus (52), Julio Flores Roa (52) |
+| 19th century | `19th` | 2,845 | 650 | Rubén Darío (140), José Santos Chocano (130), Clemente Althaus (52), Julio Flores Roa (52) |
 | 20th century | `20th` | 5 | 1 | Cecilio Apóstol (5) |
 
-297 sonnets are by women. By the country of birth: Spain (2,404), Cuba (739), Peru (204), Mexico (192), Nicaragua (141), Colombia (100), Argentina (99), Uruguay (76), Venezuela (68) and 13 more countries; the country of 38 sonnets is unknown. The 19th-century part of DISCO is an anthology of Spain and Latin America, the 20th-century one gathers the Filipino poets in Spanish.
+295 sonnets are by women. By the country of birth: Spain (2,388), Cuba (719), Peru (204), Mexico (191), Nicaragua (141), Colombia (100), Argentina (93), Uruguay (76), Venezuela (68) and 13 more countries; the country of 38 sonnets is unknown. The 19th-century part of DISCO is an anthology of Spain and Latin America, the 20th-century one gathers the Filipino poets in Spanish.
 
-Only the sonnets in the public domain are kept, 4,306 of 4,523: the ones by the authors who died before 1946, by the authors of the 15th-18th centuries whose death is unknown and by the authors of the 19th-century anthology born before 1866 or with no dates. The sonnets by the authors who died in 1946 or later are left out, most of the Filipino poets among them. The years of life are read from the biographical line of the source where DISCO took a later year of it for the death (Echegaray died in 1916, not in 1904, the year of his Nobel prize), and so is the country of birth where the line names it (Gertrudis Gómez de Avellaneda was born in Puerto Príncipe, Cuba, not in Haiti). The Filipino poets, written in DISCO with the surname first, have the name first as the rest; the speakers of the dialogues (`[Car]`, `[POETA]`) and the calls of the footnotes are left out of the lines, as they are out of their metrical patterns.
+Only the sonnets in the public domain are kept, 4,259 of 4,523: the ones by the authors who died before 1946, by the authors of the 15th-18th centuries whose death is unknown and by the authors of the 19th-century anthology born before 1866 or with no dates. The sonnets by the authors who died in 1946 or later are left out, most of the Filipino poets among them. An author of the anthology with no dates in the source is left out too when the dates of [VIAF](https://viaf.org) that DISCO matched with high confidence give a death in 1946 or later or a birth in 1866 or later with no death (Luis Rodríguez Embil, 1879-1954, marked only as of the 19th century): VIAF only drops an author and never replaces the dates of the source, as some of its matches are other people. The years of life are read from the biographical line of the source where DISCO took a later year of it for the death (Echegaray died in 1916, not in 1904, the year of his Nobel prize) or missed a birth or a death given alone (`1585 - Siglo XVII`, `18¿? - 1892`); the years after a century in that line are of other people or events and are not taken. The country of birth is read from that line too where it names one (Gertrudis Gómez de Avellaneda was born in Puerto Príncipe, Cuba, not in Haiti). The Filipino poets, written in DISCO with the surname first, have the name first as the rest; the speakers of the dialogues (`[Car]`, `[POETA]`) and the calls of the footnotes are left out of the lines, as they are out of their metrical patterns.
 
 The archive (1 MB) is kept in the repository of the library, is downloaded once into the data directory, verified against its SHA-256 checksum and extracted; the sonnets are read one at a time from a JSON Lines file. It is built by `scripts/build_spanish_sonnets.py` from DISCO at a fixed commit.
 
@@ -131,7 +131,7 @@ The parameters are the same as for `get_texts`.
         print(period, f"{lengths[11] / total:.2f}", f"{lengths[14] / total:.2f}")
     # 15th-17th 0.98 0.00
     # 18th 0.99 0.00
-    # 19th 0.85 0.10
+    # 19th 0.86 0.09
     # 20th 0.60 0.40
     ```
 
@@ -139,4 +139,4 @@ The parameters are the same as for `get_texts`.
     The metrical patterns and the labels of the rhyme are the automatic annotation of DISCO, not a manual one: the scansion by ADSO (accuracy 0.91) and, for the modernist and the Filipino sonnets, by Jumper (0.95); the rhyme by RhymeTagger. They are a reference to compare a scansion with, not a gold standard: a pattern may miss a synalepha or a stress that a reader would make. 20 sonnets have no labels of the rhyme, and the long sequences have none after the letter `N`: such a label is an empty string.
 
 !!! note "Sonnets, sequences and titles"
-    4,257 records are sonnets of 14 lines. The rest are sonnets with an estrambote (17 lines and so on), a few incomplete ones or ones with an irregular form (Darío's "El soneto de trece versos"), and sequences of sonnets that DISCO keeps in one file, up to 98 lines. The sonnets of a sequence in separate files have the title `Part of: ` and the title of the sequence (401 records). The titles and the spelling are those of the sources of DISCO, some titles in capitals.
+    4,211 records are sonnets of 14 lines. The rest are sonnets with an estrambote (17 lines and so on), a few incomplete ones or ones with an irregular form (Darío's "El soneto de trece versos"), and sequences of sonnets that DISCO keeps in one file, up to 98 lines. The sonnets of a sequence in separate files have the title `Part of: ` and the title of the sequence (397 records). The titles and the spelling are those of the sources of DISCO, some titles in capitals.

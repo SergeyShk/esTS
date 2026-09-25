@@ -74,18 +74,18 @@ def test_download_extracts_again(tmp_path):
     assert dataset.check_data()
     readme = (tmp_path / ROOT / "README.txt").read_text(encoding="utf-8")
     assert "Creative Commons Attribution 4.0" in readme
-    assert "4306 of 4523" in readme
+    assert "4259 of 4523" in readme
 
 
 def test_records(records):
-    assert len(records) == 4306
+    assert len(records) == 4259
     assert Counter(record["period"] for record in records) == {
-        "19th": 2892,
+        "19th": 2845,
         "15th-17th": 1088,
         "18th": 321,
         "20th": 5,
     }
-    assert Counter(record["gender"] for record in records) == {"M": 4009, "F": 297}
+    assert Counter(record["gender"] for record in records) == {"M": 3964, "F": 295}
     assert sorted(records[0]) == [
         "author",
         "birth",
@@ -134,15 +134,15 @@ def test_dialogue(records):
 def test_sonnets(records):
     # A sonnet of 14 lines, a sonnet with an estrambote or a sequence in one record
     lengths = Counter(len(record["meter"]) for record in records)
-    assert lengths[14] == 4257
+    assert lengths[14] == 4211
     assert lengths[17] == 13
     assert max(lengths) == 98
-    assert sum(record["title"].startswith("Part of: ") for record in records) == 401
+    assert sum(record["title"].startswith("Part of: ") for record in records) == 397
 
 
 def test_rhyme_labels(records):
     labels = Counter(label for record in records for label in record["rhyme"])
-    assert labels["-"] == 554
+    assert labels["-"] == 546
     assert labels[""] == 434
     assert sum(not any(record["rhyme"]) for record in records) == 20
     first = records[0]
@@ -150,19 +150,42 @@ def test_rhyme_labels(records):
     assert first["meter"][0] == "-+-+-+---+-"
 
 
+@pytest.mark.parametrize(
+    ("author", "years"),
+    [
+        # The death that DISCO took from a later year of the biographical line
+        ("José Echegaray", (1832, 1916)),
+        # The year of a work that DISCO gave for both years of life
+        ("Luis de Rivera", (None, None)),
+        # "Siglos XVI-XVII Poeta nombrado por Juan de Castellanos, 1522-1607": the years
+        # after a century are of other people
+        ("Juan Ciberio de Vera", (None, None)),
+        ("Jerónimo Gálvez", (None, None)),
+        ("Petri Verdugo", (None, None)),
+        # "1585 - Siglo XVII Caballero en 1613": a birth, the death unknown
+        ("Diego Jiménez de Enciso", (1585, None)),
+        # "18¿? - 1892", "Sevilla - Madrid,1651": a death, the birth unknown
+        ("Antonio Alcalde Valladares", (None, 1892)),
+        ("José García de Salcedo Coronel", (None, 1651)),
+        # The years of the line, not the ones of VIAF (the musicologist of 1900-1978)
+        ("José Antonio Calcaño", (1821, 1891)),
+    ],
+)
+def test_years_of_life(records, author, years):
+    record = next(record for record in records if record["author"] == author)
+    assert (record["birth"], record["death"]) == years
+
+
 def test_authors(dataset, records):
     authors = dataset.authors
-    assert len(authors) == 1197
+    assert len(authors) == 1167
     assert authors.most_common(2) == [("Rubén Darío", 140), ("José Santos Chocano", 130)]
     # The Filipino poets have the name first, as the rest
     assert authors["José Rizal"] == 2
     assert not any(", " in author for author in authors)
-    # The death that DISCO took from a later year of the biographical line
-    echegaray = next(record for record in records if record["author"] == "José Echegaray")
-    assert (echegaray["birth"], echegaray["death"]) == (1832, 1916)
-    # The year of a work that DISCO gave for both years of life
-    rivera = next(record for record in records if record["author"] == "Luis de Rivera")
-    assert (rivera["birth"], rivera["death"]) == (None, None)
+    # With no dates in the line, the ones of VIAF put out of the public domain
+    # (Luis Rodríguez Embil, 1879-1954; Manuel de Montoliu, 1877-1961)
+    assert authors["Luis Rodríguez Embil"] == authors["Manuel de Montoliu"] == 0
     # The country named in the place of birth, "Puerto Príncipe. (Cuba)", not Haiti
     avellaneda = next(r for r in records if r["author"] == "Gertrudis Gómez de Avellaneda")
     assert avellaneda["country"] == "Cuba"
@@ -175,11 +198,11 @@ def test_authors(dataset, records):
         ({"period": "20th"}, 5),
         ({"author": "dario"}, 142),
         ({"author": "RUBÉN DARÍO"}, 140),
-        ({"country": "mexico"}, 192),
-        ({"country": "México"}, 192),
+        ({"country": "mexico"}, 191),
+        ({"country": "México"}, 191),
         ({"country": "filipinas"}, 26),
-        ({"country": "cuba"}, 739),
-        ({"gender": "F"}, 297),
+        ({"country": "cuba"}, 719),
+        ({"gender": "F"}, 295),
         ({"period": "15th-17th", "gender": "F"}, 54),
         ({"author": "avellaneda", "gender": "F"}, 14),
         ({"author": "garcilaso"}, 0),

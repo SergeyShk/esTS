@@ -25,7 +25,7 @@ META = {
 }
 ARCHIVE = f"{NAME}_v{VERSION}.tar.xz"
 DOWNLOAD_URL = f"https://github.com/SergeyShk/esTS/raw/master/ests/datasets/data/{ARCHIVE}"
-ARCHIVE_SHA256 = "f2f6d2443c37891d5c4a1372d83a589505f5cbbe531e5f081f7aa3fb94e30af7"
+ARCHIVE_SHA256 = "87fe8591153e8f25211524e1350d3d8f89be6171ab3fcacbc1fc2fd7a9d578a5"
 FILENAME = "sonnets.jsonl"
 # Periods of the subcorpora of DISCO, in the order of the records
 PERIODS = ("15th-17th", "18th", "19th", "20th")
@@ -41,26 +41,28 @@ class SpanishSonnets(Dataset):
         The sonnets of DISCO 5.0 in the public domain: the ones of the authors
         who died before 1946, of the authors of the 15th-18th centuries whose
         death is unknown and of the authors of the 19th-century anthology born
-        before 1866 or with no dates; the sonnets of the authors who died in
-        1946 or later, most of the Filipino poets of the 20th century, are left
-        out. The years of life are read from the biographical line of the source
-        where DISCO took a later year of it for the death (Echegaray, 1916 and
-        not 1904), and so is the country of birth where the line names it
-        (Gómez de Avellaneda, Cuba and not Haiti). Every line of a sonnet carries its metrical pattern (+ for a
-        stressed syllable, - for an unstressed one) and the label of its rhyme,
-        both annotated automatically by DISCO: the scansion by ADSO (accuracy
-        0.91) and by Jumper for the modernist and the Filipino sonnets (0.95),
-        the rhyme by RhymeTagger, which labels a line that rhymes with no other
-        with -. 20 sonnets have no labels of the rhyme, and the long sequences
-        none after the letter N: such a label is empty. A record is one sonnet
-        of 14 lines, a sonnet with an estrambote or a sequence of sonnets that
-        DISCO keeps in one file; the sonnets of a sequence in separate files
-        have the title "Part of: " and the title of the sequence. The speakers
-        of the dialogues ([Car], [POETA]) and the calls of the footnotes are
-        left out of the lines, as out of their metrical patterns. DISCO is
-        distributed under CC BY 4.0, and so is this dataset; the archive is
-        downloaded from the repository of the library and verified against its
-        SHA-256 checksum
+        before 1866 or with no dates, unless the dates of VIAF that DISCO
+        matched with high confidence put them later; the sonnets of the authors
+        who died in 1946 or later, most of the Filipino poets of the 20th
+        century, are left out. The years of life are read from the biographical
+        line of the source where DISCO took a later year of it for the death
+        (Echegaray, 1916 and not 1904) or missed a birth or a death given alone,
+        and so is the country of birth where the line names it (Gómez de
+        Avellaneda, Cuba and not Haiti). Every line of a sonnet carries its
+        metrical pattern (+ for a stressed syllable, - for an unstressed one)
+        and the label of its rhyme, both annotated automatically by DISCO: the
+        scansion by ADSO (accuracy 0.91) and by Jumper for the modernist and the
+        Filipino sonnets (0.95), the rhyme by RhymeTagger, which labels a line
+        that rhymes with no other with -. 20 sonnets have no labels of the
+        rhyme, and the long sequences none after the letter N: such a label is
+        empty. A record is one sonnet of 14 lines, a sonnet with an estrambote
+        or a sequence of sonnets that DISCO keeps in one file; the sonnets of a
+        sequence in separate files have the title "Part of: " and the title of
+        the sequence. The speakers of the dialogues ([Car], [POETA]) and the
+        calls of the footnotes are left out of the lines, as out of their
+        metrical patterns. DISCO is distributed under CC BY 4.0, and so is this
+        dataset; the archive is downloaded from the repository of the library
+        and verified against its SHA-256 checksum
 
     References:
         https://github.com/pruizf/disco
