@@ -23,6 +23,7 @@ FACTORIES = {
     "ests_lexical",
     "ests_style",
     "ests_phon",
+    "ests_verse",
 }
 RESOURCES = {"connectors.tsv", "google_books_top10000.txt"}
 

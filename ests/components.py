@@ -54,6 +54,7 @@ from .style_stats import StyleStats
 from .style_stats import check_params as check_style_params
 from .syntax_stats import SyntaxStats
 from .utils import add_dash_rules, has_words, iter_doc_tokens
+from .verse_stats import LETTER, VerseStats
 
 
 @Language.factory("ests_basic")
@@ -660,4 +661,57 @@ class PhonStatsComponent:
             return doc
         ps = PhonStats(doc, window_len=self.window_len)
         doc._.set(self.name, ps)
+        return doc
+
+
+@Language.factory("ests_verse")
+class VerseStatsComponent:
+    """
+    Class for the component of the verse statistics of a text
+
+    Description:
+        The statistics read the text of the document with its line breaks and
+        blank lines, so the text of a poem goes to nlp as it is, the lines not
+        joined; the component needs no annotation of a model. A text with
+        letters but no Spanish syllables gives empty statistics, as VerseStats,
+        and a document with no letter passes untouched
+
+    Adding the component to a pipeline:
+        >>> import ests
+        >>> import spacy
+        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp.add_pipe("ests_verse", name="verse", last=True)
+        <ests.components.VerseStatsComponent object at 0x...>
+
+    Reading the computed statistics:
+        >>> doc = nlp("Cuando me paro a contemplar mi estado\\ny a ver los pasos por do me han traído")
+        >>> doc._.verse.meter, doc._.verse.n_feet
+        ('endecasílabo', 11)
+
+    Arguments:
+        name (str): Name of the component in the pipeline
+    """
+
+    def __init__(self, nlp: Language, name: str = "ests_verse"):
+        add_dash_rules(nlp)
+        self.name = name
+        Doc.set_extension(self.name, default=None, force=True)
+
+    def __call__(self, doc: Doc) -> Doc:
+        """
+        Adding the computed statistics to the component
+
+        Description:
+            A document with no letter is returned untouched, its extension
+            left at None
+
+        Arguments:
+            doc (Doc): Doc object
+
+        Returns:
+            doc (Doc): Modified Doc object
+        """
+        if not LETTER.search(doc.text):
+            return doc
+        doc._.set(self.name, VerseStats(doc))
         return doc

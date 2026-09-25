@@ -26,6 +26,8 @@ from ests import (
     StyleStatsComponent,
     SyntaxStats,
     SyntaxStatsComponent,
+    VerseStats,
+    VerseStatsComponent,
 )
 from ests.exceptions import ParameterError, SourceError
 
@@ -39,9 +41,15 @@ COMPONENTS = (
     ("ests_style", StyleStatsComponent, StyleStats),
     ("ests_phon", PhonStatsComponent, PhonStats),
 )
-# The lexical component needs the frequency dictionary, its statistics are tested apart
-ALL_COMPONENTS = (*COMPONENTS, ("ests_lexical", LexicalStatsComponent, LexicalStats))
+# The lexical component needs the frequency dictionary and the verse component the lines of
+# a poem, their statistics are tested apart
+ALL_COMPONENTS = (
+    *COMPONENTS,
+    ("ests_lexical", LexicalStatsComponent, LexicalStats),
+    ("ests_verse", VerseStatsComponent, VerseStats),
+)
 TEXT = "El gato duerme en la ventana. Los niños juegan en el parque."
+POEM = "Cuando me paro a contemplar mi estado\ny a ver los pasos por do me han traído"
 
 
 @pytest.fixture(scope="module")
@@ -154,6 +162,21 @@ def test_phon_parameters(nlp):
     assert doc._.stats.get_stats() == PhonStats(nlp(TEXT), window_len=5).get_stats()
     with pytest.raises(ParameterError):
         pipeline.add_pipe("ests_phon", name="wrong", config={"window_len": 1})
+
+
+def test_verse_component():
+    pipeline = spacy.load("es_core_news_sm")
+    pipeline.add_pipe("ests_verse", name="verse", last=True)
+    doc = pipeline(POEM)
+    assert doc._.verse.meter == "endecasílabo"
+    assert doc._.verse.get_stats() == VerseStats(POEM).get_stats()
+
+
+@pytest.mark.parametrize("text", ["", "   ", "¿?", "...", "1810"])
+def test_verse_component_of_a_document_without_letters(text):
+    pipeline = spacy.blank("es")
+    pipeline.add_pipe("ests_verse", name="verse", last=True)
+    assert pipeline(text)._.verse is None
 
 
 def test_style_component_without_the_annotation():

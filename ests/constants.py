@@ -1091,6 +1091,59 @@ VOWEL_SOUNDS = frozenset("aeiou")
 SONORANT_SOUNDS = frozenset({"m", "n", "ɲ", "l", "r"})
 VOICED_SOUNDS = frozenset({"b", "d", "g", "ʝ"})
 VOICELESS_SOUNDS = frozenset({"p", "t", "k", "f", "θ", "s", "x", "tʃ"})
+VERSE_STATS_DESC = {
+    "n_lines": "Number of lines",
+    "n_stanzas": "Number of stanzas",
+    "meter": "Meter",
+    "n_feet": "Number of metrical syllables",
+    "p_deviations": "Share of lines off the meter",
+    "p_pyrrhics": "Share of lines without the rhythmic stresses",
+    "p_masculine": "Share of oxytone endings (aguda)",
+    "p_feminine": "Share of paroxytone endings (llana)",
+    "p_dactylic": "Share of proparoxytone endings (esdrújula)",
+}
+# Meters by the number of metrical syllables of the line
+VERSE_METERS = {
+    "bisílabo": 2, "trisílabo": 3, "tetrasílabo": 4, "pentasílabo": 5, "hexasílabo": 6,
+    "heptasílabo": 7, "octosílabo": 8, "eneasílabo": 9, "decasílabo": 10, "endecasílabo": 11,
+    "dodecasílabo": 12, "tridecasílabo": 13, "alejandrino": 14, "pentadecasílabo": 15,
+    "hexadecasílabo": 16, "heptadecasílabo": 17, "octodecasílabo": 18,
+}  # fmt: skip
+# Compound verses of two equal hemistichs: the length of the line and of the hemistich.
+# The caesura between them blocks the synalepha, and each hemistich follows the law of
+# the final stress on its own
+VERSE_HEMISTICHS = {10: 5, 12: 6, 14: 7, 16: 8, 18: 9}
+# Rhythmic stresses of a meter besides the last one, 1-based: one of the sets. The
+# endecasílabo is stressed on the 6th syllable (a maiore) or on the 4th and the 8th
+# (sáfico) or the 7th (dactílico); a compound verse, on the last stress of the first
+# hemistich
+VERSE_RHYTHMS = {"endecasílabo": ((6,), (4, 8), (4, 7))}
+VERSE_CLAUSULAS = ("aguda", "llana", "esdrújula", "sobresdrújula")
+VERSE_MAX_DEVIATIONS = 0.1
+# Fewest lines with a meter: a single line of up to 18 syllables has a length with a name
+# whatever it is - 36% of the sentences of twelve prose works of SpanishLiterature
+# would get a meter, 1.4% of two sentences as two lines and 0.1% of three
+VERSE_MIN_LINES = 2
+# Unstressed words of the verse: the articles, the prepositions (except según), the
+# conjunctions, the relatives, the clitic pronouns, the possessives before a noun, the
+# titles before a name, tan and aun (incluso); the interjections oh, ay and ah, unstressed
+# in the scansion of the sonnets of DISCO (92% of oh and 96% of ay) and of rantanplan. The
+# last word of a line is stressed whatever it is
+VERSE_PROCLITICS = frozenset(
+    (
+        "el", "la", "lo", "los", "las", "al", "del",
+        "a", "ante", "bajo", "con", "contra", "de", "desde", "en", "entre", "hacia", "hasta",
+        "para", "por", "sin", "so", "sobre", "tras",
+        "y", "e", "ni", "o", "u", "que", "pero", "mas", "sino", "aunque", "porque", "pues", "si",
+        "mientras", "conque", "desque",
+        "quien", "quienes", "cual", "cuales", "cuyo", "cuya", "cuyos", "cuyas", "donde", "do",
+        "adonde", "cuando", "como", "cuanto", "cuanta", "cuantos", "cuantas",
+        "me", "te", "se", "nos", "os", "le", "les",
+        "mi", "mis", "tu", "tus", "su", "sus", "nuestro", "nuestra", "nuestros", "nuestras",
+        "vuestro", "vuestra", "vuestros", "vuestras",
+        "don", "doña", "fray", "sor", "san", "tan", "aun", "oh", "ay", "ah",
+    )
+)  # fmt: skip
 
 # Layers of the highlighting of a text, in the order of drawing, by the statistics
 # of the library they show

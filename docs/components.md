@@ -7,7 +7,7 @@ A set of components for [spaCy](https://github.com/explosion/spaCy) pipelines. E
 
 ## Names { #names }
 
-The factories carry the prefix of the library - `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` - because the registry of spaCy is one for the whole process: a plain `basic` would collide with the component of any other library registering that name, and spaCy answers a second registration with `ValueError [E004]`.
+The factories carry the prefix of the library - `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse` - because the registry of spaCy is one for the whole process: a plain `basic` would collide with the component of any other library registering that name, and spaCy answers a second registration with `ValueError [E004]`.
 
 They are declared as entry points of `spacy_factories`, so a pipeline saved with these components - `nlp.to_disk(path)`, `spacy package`, a training config - loads with `spacy.load(path)` in a process that never imports the library.
 
@@ -39,6 +39,7 @@ Adding a component extends the tokenizer of its pipeline with the rules for the 
 | `LexicalStatsComponent` | `ests_lexical` | [LexicalStats](stats/lexical_stats.md) | parts of speech; the statistics by the frequency dictionary need it downloaded |
 | `StyleStatsComponent` | `ests_style` | [StyleStats](stats/style_stats.md) | parts of speech and lemmas for the verbal nouns |
 | `PhonStatsComponent` | `ests_phon` | [PhonStats](stats/phon_stats.md) | nothing |
+| `VerseStatsComponent` | `ests_verse` | [VerseStats](stats/verse_stats.md) | nothing; the line breaks of the text |
 
 A document with no words - an empty string, whitespace, punctuation alone - passes through every component untouched, its extension left at `None`, so that one such document in a corpus does not stop `nlp.pipe`. A missing annotation is another matter: that is an error of the pipeline and it is raised.
 
@@ -391,9 +392,46 @@ Parameters:
     (0.458, {1: 12, 2: 7})
     ```
 
+## VerseStatsComponent
+
+!!! info ""
+    **ests.components.VerseStatsComponent**
+
+The component of the verse statistics of a text. The statistics read the text of the document with its line breaks and blank lines, so the text of a poem goes to `nlp` as it is, the lines not joined; the component needs no annotation of a model. A document with no letter passes untouched, and a text with letters but no Spanish syllables gives empty statistics, as `VerseStats`.
+
+Parameters:
+
+| Parameter | Type | Default | Description |
+| :-------: | :--: | :-----: | :---------: |
+| `nlp` | Language | `-` | Language object |
+| `name` | str | `"ests_verse"` | Name of the component in the pipeline |
+
+!!! example "Example"
+
+    _Code_:
+
+    ``` python
+    ...
+
+    # Add the component
+    nlp.add_pipe("ests_verse", name="verse", last=True)
+
+    # Read the computed statistics of the beginning of the Romance del prisionero
+    doc = nlp(
+        "Que por mayo era, por mayo,\ncuando hace la calor,\ncuando los trigos encañan\ny están los campos en flor,"
+    )
+    doc._.verse.meter, doc._.verse.c_clausulas
+    ```
+
+    _Result_:
+
+    ``` bash
+    ('octosílabo', {'aguda': 2, 'llana': 2})
+    ```
+
 ## Everything in one pipeline { #pipeline }
 
-The nine components can live side by side, and then one pass over a document gives every statistic of the library that a `Doc` can carry.
+The ten components can live side by side, and then one pass over a document gives every statistic of the library that a `Doc` can carry.
 
 !!! example "Example"
 
@@ -414,6 +452,7 @@ The nine components can live side by side, and then one pass over a document giv
         "lexical",
         "style",
         "phon",
+        "verse",
     )
     for factory in factories:
         nlp.add_pipe(f"ests_{factory}", name=factory, last=True)
@@ -429,11 +468,12 @@ The nine components can live side by side, and then one pass over a document giv
         round(doc._.lexical.p_top1000, 3),
         round(doc._.style.water, 2),
         round(doc._.phon.p_vowels, 3),
+        doc._.verse.n_lines,
     )
     ```
 
     _Result_:
 
     ``` bash
-    (12, 102.19, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0, 0.457)
+    (12, 102.19, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0, 0.457, 1)
     ```
