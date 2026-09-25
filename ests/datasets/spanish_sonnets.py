@@ -25,7 +25,7 @@ META = {
 }
 ARCHIVE = f"{NAME}_v{VERSION}.tar.xz"
 DOWNLOAD_URL = f"https://github.com/SergeyShk/esTS/raw/master/ests/datasets/data/{ARCHIVE}"
-ARCHIVE_SHA256 = "87fe8591153e8f25211524e1350d3d8f89be6171ab3fcacbc1fc2fd7a9d578a5"
+ARCHIVE_SHA256 = "5d45887d2c4aa8b8565410cbc22a652d1fa2cc8809143d80a58be63b0abd5ee9"
 FILENAME = "sonnets.jsonl"
 # Periods of the subcorpora of DISCO, in the order of the records
 PERIODS = ("15th-17th", "18th", "19th", "20th")
@@ -247,8 +247,9 @@ class SpanishSonnets(Dataset):
 
         Description:
             The sonnets in the order of PERIODS, within a period by the
-            identifier of DISCO, which keeps the authors and the order of their
-            source; the file is read one line at a time
+            identifier of DISCO with its numbers compared as numbers
+            (1035e_269 before 1035e_1360), which keeps the authors and the
+            order of their source; the file is read one line at a time
 
         Returns:
             iterator[dict[str, object]]: Records

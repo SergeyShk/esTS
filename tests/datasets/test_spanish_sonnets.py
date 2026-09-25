@@ -116,8 +116,18 @@ def test_records(records):
 
 
 def test_records_order(records):
-    keys = [(module.PERIODS.index(record["period"]), record["id"]) for record in records]
+    # The numbers of an identifier are compared as numbers
+    keys = [
+        (
+            module.PERIODS.index(record["period"]),
+            [int(part) if part.isdigit() else part for part in re.split(r"(\d+)", record["id"])],
+        )
+        for record in records
+    ]
     assert keys == sorted(keys)
+    # The numbers of Torres Villarroel have no leading zeros: 269 goes before 1360
+    torres = [record["id"] for record in records if record["id"].startswith("1035e_")]
+    assert torres[:5] == ["1035e_269", "1035e_876", "1035e_922", "1035e_979", "1035e_1360"]
     assert records[0]["id"] == "001g_0001"
     assert records[0]["author"] == "Joseph Aragonés"
     assert records[0]["text"].split("\n")[0] == "Valencia insigne, patria venturosa,"

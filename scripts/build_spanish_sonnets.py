@@ -176,6 +176,11 @@ def is_public_domain(period: str, birth: int | None, death: int | None, late: bo
     return False
 
 
+def id_key(identifier: str) -> list[str | int]:
+    """Key of an identifier of DISCO with its numbers as numbers: 1035e_269 before 1035e_1360"""
+    return [int(part) if part.isdigit() else part for part in re.split(r"(\d+)", identifier)]
+
+
 def _text(element: ET.Element) -> str:
     return " ".join("".join(element.itertext()).split())
 
@@ -254,7 +259,7 @@ def main(cache: Path, output: Path) -> None:
             author = f"{first_name} {surname}" if first_name else author
             records.append(
                 (
-                    (PERIODS.index(period), identifier),
+                    (PERIODS.index(period), id_key(identifier)),
                     {
                         "id": identifier,
                         "period": period,
