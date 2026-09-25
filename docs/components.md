@@ -7,7 +7,7 @@ A set of components for [spaCy](https://github.com/explosion/spaCy) pipelines. E
 
 ## Names { #names }
 
-The factories carry the prefix of the library - `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical` - because the registry of spaCy is one for the whole process: a plain `basic` would collide with the component of any other library registering that name, and spaCy answers a second registration with `ValueError [E004]`.
+The factories carry the prefix of the library - `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style` - because the registry of spaCy is one for the whole process: a plain `basic` would collide with the component of any other library registering that name, and spaCy answers a second registration with `ValueError [E004]`.
 
 They are declared as entry points of `spacy_factories`, so a pipeline saved with these components - `nlp.to_disk(path)`, `spacy package`, a training config - loads with `spacy.load(path)` in a process that never imports the library.
 
@@ -37,6 +37,7 @@ Adding a component extends the tokenizer of its pipeline with the rules for the 
 | `SyntaxStatsComponent` | `ests_syntax` | [SyntaxStats](stats/syntax_stats.md) | a parse and lemmas |
 | `CohesionStatsComponent` | `ests_cohesion` | [CohesionStats](stats/cohesion_stats.md) | parts of speech and lemmas |
 | `LexicalStatsComponent` | `ests_lexical` | [LexicalStats](stats/lexical_stats.md) | parts of speech; the statistics by the frequency dictionary need it downloaded |
+| `StyleStatsComponent` | `ests_style` | [StyleStats](stats/style_stats.md) | parts of speech and lemmas for the verbal nouns |
 
 A document with no words - an empty string, whitespace, punctuation alone - passes through every component untouched, its extension left at `None`, so that one such document in a corpus does not stop `nlp.pipe`. A missing annotation is another matter: that is an error of the pipeline and it is raised.
 
@@ -316,9 +317,46 @@ Parameters:
     (0.857, 0.429)
     ```
 
+## StyleStatsComponent
+
+!!! info ""
+    **ests.components.StyleStatsComponent**
+
+The component of the style metrics of a text. The SEO metrics and the markers of the officialese style read the words of the document; the verbal nouns read its parts of speech and lemmas, so the pipeline needs a `morphologizer` and a `lemmatizer` before the component for them.
+
+Parameters:
+
+| Parameter | Type | Default | Description |
+| :-------: | :--: | :-----: | :---------: |
+| `nlp` | Language | `-` | Language object |
+| `name` | str | `"ests_style"` | Name of the component in the pipeline |
+| `stopwords` | list[str] | `None` | Stopwords for the water content; `STOPWORDS` and the one-word parenthetical expressions if not given |
+| `top_n` | int | `10` | Number of the most frequent words for the academic nausea and the naturalness by Zipf's law |
+
+!!! example "Example"
+
+    _Code_:
+
+    ``` python
+    ...
+
+    # Add the component
+    nlp.add_pipe("ests_style", name="style", last=True)
+
+    # Read the computed metrics
+    doc = nlp("Se procedió a la revisión del expediente a la mayor brevedad.")
+    round(doc._.style.cliches, 2), round(doc._.style.verbal_nouns, 2)
+    ```
+
+    _Result_:
+
+    ``` bash
+    (18.18, 33.33)
+    ```
+
 ## Everything in one pipeline { #pipeline }
 
-The seven components can live side by side, and then one pass over a document gives every statistic of the library that a `Doc` can carry.
+The eight components can live side by side, and then one pass over a document gives every statistic of the library that a `Doc` can carry.
 
 !!! example "Example"
 
@@ -329,7 +367,17 @@ The seven components can live side by side, and then one pass over a document gi
     import spacy
 
     nlp = spacy.load("es_core_news_sm")
-    for factory in ("basic", "readability", "diversity", "morph", "syntax", "cohesion", "lexical"):
+    factories = (
+        "basic",
+        "readability",
+        "diversity",
+        "morph",
+        "syntax",
+        "cohesion",
+        "lexical",
+        "style",
+    )
+    for factory in factories:
         nlp.add_pipe(f"ests_{factory}", name=factory, last=True)
 
     doc = nlp("El gato duerme en la ventana. Los niños juegan en el parque.")
@@ -341,11 +389,12 @@ The seven components can live side by side, and then one pass over a document gi
         doc._.syntax.tree_depth,
         doc._.cohesion.p_given,
         round(doc._.lexical.p_top1000, 3),
+        round(doc._.style.water, 2),
     )
     ```
 
     _Result_:
 
     ``` bash
-    (12, 102.19, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667)
+    (12, 102.19, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0)
     ```

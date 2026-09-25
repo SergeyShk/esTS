@@ -16,6 +16,7 @@ from .components import (
     LexicalStatsComponent,
     MorphStatsComponent,
     ReadabilityStatsComponent,
+    StyleStatsComponent,
     SyntaxStatsComponent,
 )
 from .diversity_stats import DiversityStats
@@ -33,6 +34,7 @@ from .extractors import CharNgramsExtractor, SentsExtractor, WordsExtractor
 from .lexical_stats import LexicalStats
 from .morph_stats import MorphStats
 from .readability_stats import ReadabilityStats
+from .style_stats import StyleStats
 from .syntax_stats import SyntaxStats
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
@@ -72,6 +74,8 @@ __all__ = [
     "SentsExtractor",
     "SourceError",
     "SourceTypeError",
+    "StyleStats",
+    "StyleStatsComponent",
     "SyntaxStats",
     "SyntaxStatsComponent",
     "UnknownStatError",

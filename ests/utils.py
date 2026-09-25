@@ -8,7 +8,7 @@ import unicodedata
 import urllib.parse
 import urllib.request
 import zipfile
-from collections.abc import Iterator, Sequence
+from collections.abc import Iterable, Iterator, Sequence
 from functools import lru_cache
 from pathlib import Path, PurePosixPath
 
@@ -553,6 +553,52 @@ def is_verbal_noun(lemma: str) -> bool:
     """
     lemma = lemma.lower()
     return lemma.endswith(VERBAL_NOUN_SUFFIXES) or lemma in VERBAL_NOUN_LEMMAS
+
+
+def find_phrases(words: Sequence[str], phrases: Iterable[str]) -> list[tuple[int, int]]:
+    """
+    Finding phrases in a sequence of words
+
+    Description:
+        The words and the phrases are compared in lower case; at every position
+        the longest phrase is taken, and the phrases found do not overlap. The
+        phrases are indexed by their first word, so that at every position only
+        the ones starting with that word are compared
+
+    Arguments:
+        words (list[str]): Words of the text
+        phrases (list[str]): Phrases, words separated by spaces
+
+    Returns:
+        list[tuple[int, int]]: Bounds of the phrases found as slices of words;
+            empty phrases are skipped
+
+    Example:
+        >>> from ests.utils import find_phrases
+        >>> find_phrases(["Sin", "embargo", "no", "llegó"], ["sin embargo", "sin"])
+        [(0, 2)]
+    """
+    patterns = sorted(
+        {pattern for phrase in phrases if (pattern := tuple(phrase.lower().split()))},
+        key=len,
+        reverse=True,
+    )
+    by_first: dict[str, list[tuple[str, ...]]] = {}
+    for pattern in patterns:
+        by_first.setdefault(pattern[0], []).append(pattern)
+    lowered = [word.lower() for word in words]
+    spans = []
+    position = 0
+    while position < len(lowered):
+        for pattern in by_first.get(lowered[position], ()):
+            end = position + len(pattern)
+            if tuple(lowered[position:end]) == pattern:
+                spans.append((position, end))
+                position = end
+                break
+        else:
+            position += 1
+    return spans
 
 
 def count_letters(word: str) -> int:
