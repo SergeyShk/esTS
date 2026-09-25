@@ -1489,6 +1489,120 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_9" id="__nav_5_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phonostatistics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Phonostatistics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="stats/phon_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="stats/phon_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metric functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2197,7 +2311,7 @@
 <h1 id="spanish-texts-statistics-ests">Spanish Texts Statistics (esTS)<a class="headerlink" href="#spanish-texts-statistics-ests" title="Permanent link">&para;</a></h1>
 <p><img alt="esTS" src="img/ests.svg" /></p>
 <p><em>¿Cómo esTáS, texto?</em></p>
-<p><strong>esTS</strong> computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity, lexical sophistication, style, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech, the features and the dependencies of Universal Dependencies.</p>
+<p><strong>esTS</strong> computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity, lexical sophistication, style, phonostatistics, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech, the features and the dependencies of Universal Dependencies.</p>
 <p>The library works both with raw strings and with <code>Doc</code> objects of <a href="https://github.com/explosion/spaCy">spaCy</a>, and only the morphological, the syntactic, the cohesion and the lexical sophistication statistics, the verbal nouns of the style metrics, the profile of the function words and the comparison of corpora need a trained model (<a href="installation/#model">Installation</a>): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography.</p>
 <h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
 <ul>
@@ -2211,12 +2325,13 @@
 <li>compute <a href="stats/cohesion_stats/">cohesion statistics</a> in the manner of Coh-Metrix (the overlap of nouns, arguments and content words between sentences, givenness, temporal cohesion) with the density of 255 Spanish discourse markers by class</li>
 <li>compute <a href="stats/lexical_stats/">lexical sophistication statistics</a> in the manner of TAALES: how rare the words of a text are by a <a href="datasets/freqdict/">frequency dictionary</a> of Google Books Ngram (frequency, range, dispersion, surprisal) and by the frequency bands top-1000 to 10000, with the lexical density</li>
 <li>compute <a href="stats/style_stats/">style metrics</a>: the SEO indicators of Advego and Text.ru (nausea, water content, spam score, naturalness by Zipf's law, keyword density) and the markers of the officialese style by the Spanish guides to plain language - verbal nouns, compound prepositions, parenthetical expressions and clichés</li>
+<li>compute <a href="stats/phon_stats/">phonostatistics</a> over the sounds of a rule-based transcription: the shares of the classes of sounds, consonant clusters, hiatuses, open syllables, hardness and the indices of alliteration and assonance</li>
 <li>compare corpora with the measures of corpus linguistics: <a href="corpus/keyness/">keywords</a> against a reference corpus or the frequency dictionary, <a href="corpus/collocations/">collocations</a>, the <a href="corpus/dispersion/">dispersion</a> of a word over the parts of a text and a <a href="corpus/kwic/">KWIC concordance</a>, and attribute authorship by <a href="corpus/stylometry/">stylometry</a>: Burrows's Delta, Zeta, the Mendenhall curve, the function words; find the features that tell two corpora apart by <a href="corpus/compare/">comparing</a> them over 132 features of a text</li>
 <li>visualize texts and corpora: <a href="visualizers/zipf/">Zipf's law</a>, <a href="visualizers/fingerprinting/">literature fingerprinting</a>, a <a href="visualizers/word_tree/">word tree</a>, <a href="visualizers/corpus/">corpus</a> and <a href="visualizers/stylometry/">stylometric</a> plots, <a href="visualizers/vocabulary/">vocabulary growth</a>, <a href="visualizers/sentences/">sentence lengths</a> and the <a href="visualizers/highlight/">highlighting of a text</a> by the fragments the statistics count</li>
 <li>add the statistics to a <a href="components/">spaCy pipeline</a> as components, so that a text is annotated and measured in one pass and the statistics travel with the <code>Doc</code></li>
 <li>work with a <a href="datasets/spanishliterature/">corpus of Spanish-language literature</a> in the public domain: 150 works by 33 authors in four genres, filtered by the author, the genre, the country and the years, and with a <a href="datasets/freqdict/">frequency dictionary</a> of 83,785 lemmas by Google Books Ngram</li>
 </ul>
-<p>Phonostatistics, metre and rhyme come in 0.4.</p>
+<p>Metre and rhyme come in 0.4.</p>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <p>Requires Python 3.11 or newer.</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyests
@@ -2290,6 +2405,7 @@
 <li>morph_stats.py - morphological statistics</li>
 <li>readability_stats.py - readability metrics</li>
 <li>style_stats.py - style metrics</li>
+<li>phon_stats.py - phonostatistics</li>
 <li>syntax_stats.py - syntactic statistics</li>
 <li>syllables.py - syllabification and stress</li>
 <li>utils.py - helper tools</li>

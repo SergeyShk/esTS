@@ -1404,6 +1404,120 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_9" id="__nav_5_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fonoestadística
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fonoestadística
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/phon_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stats/phon_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2277,7 +2391,7 @@
 <p><strong>ests.visualizers.highlight()</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Resaltado de los fragmentos del texto que cuentan las estadísticas de la biblioteca, a la manera de los correctores de estilo: oraciones largas, palabras complejas y raras, la pasiva con <code>ser</code> y con <code>se</code>, construcciones de participio y de gerundio, cadenas de <code>de</code>, predicados escindidos, sustantivos deverbales, locuciones prepositivas, clichés, palabras vacías, expresiones parentéticas y conectores. Una imagen dice de qué están hechos los valores de las métricas mejor que una tabla de números. La fuente de datos puede ser un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>.</p>
+<p>Resaltado de los fragmentos del texto que cuentan las estadísticas de la biblioteca, a la manera de los correctores de estilo: oraciones largas, palabras complejas y raras, la pasiva con <code>ser</code> y con <code>se</code>, construcciones de participio y de gerundio, cadenas de <code>de</code>, predicados escindidos, sustantivos deverbales, locuciones prepositivas, clichés, palabras vacías, expresiones parentéticas, conectores y aliteraciones. Una imagen dice de qué están hechos los valores de las métricas mejor que una tabla de números. La fuente de datos puede ser un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>.</p>
 <p>La función devuelve un objeto <code>HighlightedText</code>, que Jupyter muestra como HTML con estilos y una leyenda; el método <code>to_html</code> devuelve el mismo marcado para la documentación y las aplicaciones web. Los fragmentos se guardan en el atributo <code>highlights</code> y quedan disponibles para una representación propia.</p>
 <p>Capas del resaltado:</p>
 <table>
@@ -2374,10 +2488,20 @@
 <td style="text-align: center;">Marcadores del discurso, con la clase y el tipo en la nota</td>
 <td style="text-align: center;"><a href="../../stats/cohesion_stats/">CohesionStats</a></td>
 </tr>
+<tr>
+<td style="text-align: left;">Fónica</td>
+<td style="text-align: center;"><code>alliteration</code></td>
+<td style="text-align: center;">Repeticiones de un sonido consonántico en palabras vecinas, poco probables por las frecuencias de los sonidos del español; la nota da el sonido y las letras que lo escriben</td>
+<td style="text-align: center;"><a href="../../stats/phon_stats/">PhonStats</a></td>
+</tr>
 </tbody>
 </table>
-<p>Los grupos se definen en <code>ests.constants.HIGHLIGHT_LAYER_GROUPS</code>. Las capas del grupo «Sintaxis» se leen del árbol de dependencias y de los lemas (el auxiliar <code>ser</code>, los verbos de apoyo) y necesitan un <code>Doc</code> con análisis y lematizador (los modelos <code>es_core_news_sm</code>, <code>es_core_news_md</code>, <code>es_core_news_lg</code>), como <a href="../../stats/syntax_stats/">SyntaxStats</a>; <code>verbal_nouns</code> necesita un <code>Doc</code> con las categorías gramaticales y los lemas, como los sustantivos deverbales de <code>StyleStats</code>. Un <code>Doc</code> sin los límites de las oraciones (un pipeline vacío, un pipeline sin analizador) se divide con las reglas de <a href="../../extractors/sentences/">SentsExtractor</a>, como lo divide <code>BasicStats</code>. Por defecto se activan las capas de <code>HIGHLIGHT_DEFAULT_LAYERS</code> que la fuente permite - oraciones largas, palabras complejas, pasiva, cadenas de <code>de</code>, predicados escindidos, clichés; <code>layers="all"</code> activa todas las permitidas. Catorce capas a la vez se solapan (una locución prepositiva está hecha de palabras vacías, un conector puede ser una expresión parentética), así que elija las que necesite.</p>
+<p>Los grupos se definen en <code>ests.constants.HIGHLIGHT_LAYER_GROUPS</code>. Las capas del grupo «Sintaxis» se leen del árbol de dependencias y de los lemas (el auxiliar <code>ser</code>, los verbos de apoyo) y necesitan un <code>Doc</code> con análisis y lematizador (los modelos <code>es_core_news_sm</code>, <code>es_core_news_md</code>, <code>es_core_news_lg</code>), como <a href="../../stats/syntax_stats/">SyntaxStats</a>; <code>verbal_nouns</code> necesita un <code>Doc</code> con las categorías gramaticales y los lemas, como los sustantivos deverbales de <code>StyleStats</code>. Un <code>Doc</code> sin los límites de las oraciones (un pipeline vacío, un pipeline sin analizador) se divide con las reglas de <a href="../../extractors/sentences/">SentsExtractor</a>, como lo divide <code>BasicStats</code>. Por defecto se activan las capas de <code>HIGHLIGHT_DEFAULT_LAYERS</code> que la fuente permite - oraciones largas, palabras complejas, pasiva, cadenas de <code>de</code>, predicados escindidos, clichés; <code>layers="all"</code> activa todas las permitidas. Quince capas a la vez se solapan (una locución prepositiva está hecha de palabras vacías, un conector puede ser una expresión parentética), así que elija las que necesite.</p>
 <p>Una oración es larga a partir de 30 palabras: ahí ponen el límite las guías españolas de lenguaje claro (la <a href="https://www.comunidad.madrid/transparencia/sites/default/files/ckeditor/guia_tramites_claros-comunidad_madrid-noviembre_2021.pdf">Comunidad de Madrid</a> y el <a href="https://gcba.github.io/programadelenguajeclaro/Manual%20de%20lenguaje%20claro%202024%20(Final).pdf">Gobierno de la Ciudad de Buenos Aires</a>), y una palabra es compleja a partir de cuatro sílabas. Con tres, el límite de las fórmulas de legibilidad y de <code>BasicStats</code>, la capa marca la mitad de las palabras con contenido de cualquier texto en español (<code>abuela</code>, <code>pequeña</code>, <code>camino</code>), y un relato sencillo parece casi tan pesado como un aviso oficial; <code>complex_syl_factor=3</code> muestra las palabras de <code>n_complex_words</code>. Los dos límites son parámetros.</p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Una aliteración se busca dentro de una oración como una secuencia de dos palabras vecinas o más con el mismo sonido consonántico en su raíz. Los sonidos son los de la <a href="../../stats/phon_stats_funcs/#transcribe">transcripción</a>, así que <code>casa</code> y <code>queso</code> repiten k; la raíz es el comienzo común de las transcripciones de la forma y de su lema (<code>cantaban</code> - k a n t a, <code>hacía</code> - a θ), ya que las terminaciones concuerdan con las palabras vecinas y repiten sus consonantes por la gramática, no por el sonido (<code>las casas blancas</code>). La probabilidad de una secuencia con un reparto independiente de los sonidos es el producto sobre sus palabras de la probabilidad de encontrar la consonante entre los sonidos de la raíz, <span class="arithmatex">\(1 - (1 - f)^n\)</span>, donde <span class="arithmatex">\(f\)</span> es la frecuencia del sonido en el <a href="../../datasets/spanishliterature/">corpus de literatura</a> y <span class="arithmatex">\(n\)</span> el número de sonidos de la raíz; una secuencia se resalta cuando la probabilidad queda por debajo de <code>alliteration_threshold</code>. En cada posición se comprueban unas veinte consonantes, así que el umbral es estricto: con 0.001 se resalta el 3,4% de las palabras de la prosa del corpus, con 0.002 el 5,8%, con 0.01 el 16%. La repetición de un sonido raro se nota en dos o tres palabras (<code>deje la abeja</code>), mientras que la <code>s</code> de <code>los suspiros se escapan</code> es demasiado frecuente para contar en dos palabras. Las palabras de menos de tres letras (<code>de</code>, <code>la</code>, <code>el</code>) y las palabras vacías (<code>que</code>, <code>los</code>, <code>con</code>, <code>como</code>) no cortan ni continúan una secuencia: el modelo del azar no sirve para las palabras funcionales - <code>que</code> y <code>qué</code>, el 3,8% de las palabras de la prosa, tienen una k con mucha más probabilidad que dos sonidos tomados al azar - y con ellas las repeticiones de la k de <code>que</code> y de la l de <code>los</code> y <code>del</code> llenaban la capa. El índice de aliteración de <a href="../../stats/phon_stats/">PhonStats</a> mide cómo se agrupan las repeticiones en todo el texto; el resaltado muestra dónde están.</p>
+</div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2424,6 +2548,12 @@
 <td style="text-align: center;">list[str]</td>
 <td style="text-align: center;"><code>None</code></td>
 <td style="text-align: center;">Lista de clichés; si no se da, <code>OFFICIALESE_CLICHES</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>alliteration_threshold</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;"><code>0.001</code></td>
+<td style="text-align: center;">Probabilidad de una repetición de una consonante con un reparto independiente de los sonidos, por debajo de la cual la repetición es aliteración</td>
 </tr>
 </tbody>
 </table>
@@ -2522,7 +2652,7 @@
 <span class="c1"># {'long_sents': 1, 'complex_words': 16, 'rare_words': 0, 'passive': 2,</span>
 <span class="c1">#  'participle_clauses': 2, 'gerund_clauses': 1, 'de_chains': 3, 'split_predicates': 2,</span>
 <span class="c1">#  'verbal_nouns': 9, 'compound_prepositions': 1, 'cliches': 1, 'stopwords': 48,</span>
-<span class="c1">#  'parentheticals': 0, 'connectors': 3}</span>
+<span class="c1">#  'parentheticals': 0, 'connectors': 3, 'alliteration': 0}</span>
 
 <span class="c1"># Mostrar en Jupyter o guardar el marcado</span>
 <span class="n">ht</span>
@@ -2550,9 +2680,20 @@
 .ests-hl-de_chains { border-bottom: 2px solid #b45309; }
 .ests-hl-split_predicates { border-bottom: 2px solid #dc2626; }
 .ests-hl-connectors { border-bottom: 2px dashed #2563eb; }
+.ests-hl-alliteration { text-decoration-line: underline; text-decoration-style: dotted; text-decoration-color: #db2777; text-decoration-thickness: 2px; text-underline-offset: 3px; }
 </style><div class="ests-highlight-legend"><span><span class="ests-hl ests-hl-long_sents">Long sentences</span><span class="ests-highlight-count">1</span></span><span><span class="ests-hl ests-hl-complex_words">Complex words</span><span class="ests-highlight-count">16</span></span><span><span class="ests-hl ests-hl-passive">Passive</span><span class="ests-highlight-count">2</span></span><span><span class="ests-hl ests-hl-de_chains">Chains of de</span><span class="ests-highlight-count">3</span></span><span><span class="ests-hl ests-hl-split_predicates">Split predicates</span><span class="ests-highlight-count">2</span></span><span><span class="ests-hl ests-hl-cliches">Clichés</span><span class="ests-highlight-count">1</span></span></div><div class="ests-highlight-text">El proyecto, <span class="ests-hl ests-hl-complex_words" title="complex word, 5 syllables">elaborado</span> durante el verano, <span class="ests-hl ests-hl-passive" title="passive with ser">fue </span><span class="ests-hl ests-hl-complex_words ests-hl-passive" title="complex word, 4 syllables; passive with ser">aprobado</span> por el consejo sin debate. El <span class="ests-hl ests-hl-de_chains" title="chain of 3 complements with de">aumento de la </span><span class="ests-hl ests-hl-complex_words ests-hl-de_chains" title="complex word, 4 syllables; chain of 3 complements with de">eficiencia</span><span class="ests-hl ests-hl-de_chains" title="chain of 3 complements with de"> del uso de los recursos</span> públicos <span class="ests-hl ests-hl-passive" title="passive with se">se </span><span class="ests-hl ests-hl-complex_words ests-hl-passive" title="complex word, 4 syllables; passive with se">analizó</span>, siguiendo las normas del <span class="ests-hl ests-hl-complex_words" title="complex word, 4 syllables">reglamento</span>. <span class="ests-hl ests-hl-long_sents" title="long sentence, 40 words">Los </span><span class="ests-hl ests-hl-long_sents ests-hl-complex_words" title="long sentence, 40 words; complex word, 5 syllables">representantes</span><span class="ests-hl ests-hl-long_sents" title="long sentence, 40 words"> de los </span><span class="ests-hl ests-hl-long_sents ests-hl-complex_words" title="long sentence, 40 words; complex word, 4 syllables">ministerios</span><span class="ests-hl ests-hl-long_sents" title="long sentence, 40 words"> </span><span class="ests-hl ests-hl-long_sents ests-hl-complex_words" title="long sentence, 40 words; complex word, 4 syllables">regionales</span><span class="ests-hl ests-hl-long_sents" title="long sentence, 40 words"> no </span><span class="ests-hl ests-hl-long_sents ests-hl-complex_words" title="long sentence, 40 words; complex word, 4 syllables">consiguieron</span><span class="ests-hl ests-hl-long_sents" title="long sentence, 40 words"> </span><span class="ests-hl ests-hl-long_sents ests-hl-split_predicates" title="long sentence, 40 words; split predicate: hacer revisión">hacer una </span><span class="ests-hl ests-hl-long_sents ests-hl-de_chains ests-hl-split_predicates" title="long sentence, 40 words; chain of 2 complements with de; split predicate: hacer revisión">revisión</span><span class="ests-hl ests-hl-long_sents ests-hl-de_chains" title="long sentence, 40 words; chain of 2 complements with de"> conjunta de las cuestiones de </span><span class="ests-hl ests-hl-long_sents ests-hl-complex_words ests-hl-de_chains" title="long sentence, 40 words; complex word, 4 syllables; chain of 2 complements with de">financiación</span><span class="ests-hl ests-hl-long_sents" title="long sentence, 40 words"> y de reparto de </span><span class="ests-hl ests-hl-long_sents ests-hl-complex_words" title="long sentence, 40 words; complex word, 7 syllables">responsabilidades</span><span class="ests-hl ests-hl-long_sents" title="long sentence, 40 words"> entre los </span><span class="ests-hl ests-hl-long_sents ests-hl-complex_words" title="long sentence, 40 words; complex word, 4 syllables">organismos</span><span class="ests-hl ests-hl-long_sents" title="long sentence, 40 words">, puesto que cada uno de ellos </span><span class="ests-hl ests-hl-long_sents ests-hl-complex_words" title="long sentence, 40 words; complex word, 4 syllables">defendía</span><span class="ests-hl ests-hl-long_sents" title="long sentence, 40 words"> su propia </span><span class="ests-hl ests-hl-long_sents ests-hl-complex_words ests-hl-de_chains" title="long sentence, 40 words; complex word, 5 syllables; chain of 2 complements with de">interpretación</span><span class="ests-hl ests-hl-long_sents ests-hl-de_chains" title="long sentence, 40 words; chain of 2 complements with de"> de las </span><span class="ests-hl ests-hl-long_sents ests-hl-complex_words ests-hl-de_chains" title="long sentence, 40 words; complex word, 5 syllables; chain of 2 complements with de">disposiciones</span><span class="ests-hl ests-hl-long_sents ests-hl-de_chains" title="long sentence, 40 words; chain of 2 complements with de"> del acuerdo</span><span class="ests-hl ests-hl-long_sents" title="long sentence, 40 words">.</span> En el marco de la reunión se <span class="ests-hl ests-hl-split_predicates ests-hl-cliches" title="split predicate: proceder votación; cliché: «proceder a»">procedió a</span><span class="ests-hl ests-hl-split_predicates" title="split predicate: proceder votación"> la votación</span>, y la decisión quedó <span class="ests-hl ests-hl-complex_words" title="complex word, 4 syllables">aplazada</span> hasta la próxima sesión.</div></div>
 
-<p>Una cadena sin modelo de spaCy permite todas las capas salvo las sintácticas y <code>verbal_nouns</code>: por defecto, oraciones largas, palabras complejas y clichés.</p>
+<p>Una cadena sin modelo de spaCy permite todas las capas salvo las sintácticas y <code>verbal_nouns</code>: por defecto, oraciones largas, palabras complejas y clichés, y la aliteración a petición.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.visualizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">highlight</span>
+
+<span class="c1"># Antonio Machado, Poesías completas (el corpus de literatura)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"El cierzo corre por el campo yerto alborotando en blancos torbellinos la nieve silenciosa."</span>
+<span class="n">highlight</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="s2">"alliteration"</span><span class="p">)</span><span class="o">.</span><span class="n">highlights</span>
+<span class="c1"># (Highlight(start=35, end=78, layer='alliteration', note='alliteration on /b/ (b, v)'),)</span>
+</code></pre></div>
+</div>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.visualizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">highlight</span>

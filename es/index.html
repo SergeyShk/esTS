@@ -1489,6 +1489,120 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_9" id="__nav_5_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fonoestadística
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Fonoestadística
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="stats/phon_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="stats/phon_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2197,7 +2311,7 @@
 <h1 id="spanish-texts-statistics-ests">Spanish Texts Statistics (esTS)<a class="headerlink" href="#spanish-texts-statistics-ests" title="Permanent link">&para;</a></h1>
 <p><img alt="esTS" src="../img/ests.svg" /></p>
 <p><em>¿Cómo esTáS, texto?</em></p>
-<p><strong>esTS</strong> calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica, complejidad léxica, estilo, morfología, sintaxis y cohesión, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías, los rasgos y las dependencias de Universal Dependencies.</p>
+<p><strong>esTS</strong> calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica, complejidad léxica, estilo, fonoestadística, morfología, sintaxis y cohesión, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías, los rasgos y las dependencias de Universal Dependencies.</p>
 <p>La biblioteca trabaja tanto con cadenas como con objetos <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> y solo las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica, los sustantivos deverbales de las métricas de estilo, el perfil de las palabras funcionales y la comparación de corpus necesitan un modelo entrenado (<a href="installation/#model">Instalación</a>): las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, y las sílabas y el acento se deducen de la ortografía.</p>
 <h2 id="funcionalidad">Funcionalidad<a class="headerlink" href="#funcionalidad" title="Permanent link">&para;</a></h2>
 <ul>
@@ -2211,12 +2325,13 @@
 <li>calcular <a href="stats/cohesion_stats/">estadísticas de cohesión</a> a la manera de Coh-Metrix (repetición de sustantivos, argumentos y palabras con contenido entre oraciones, información dada, cohesión temporal) con la densidad de 255 marcadores del discurso por clase</li>
 <li>calcular <a href="stats/lexical_stats/">estadísticas de complejidad léxica</a> a la manera de TAALES: cuán raras son las palabras de un texto según un <a href="datasets/freqdict/">diccionario de frecuencias</a> de Google Books Ngram (frecuencia, rango, dispersión, sorpresa) y según las bandas de frecuencia del top-1000 al 10000, con la densidad léxica</li>
 <li>calcular <a href="stats/style_stats/">métricas de estilo</a>: los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías españolas de lenguaje claro - sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés</li>
+<li>calcular la <a href="stats/phon_stats/">fonoestadística</a> sobre los sonidos de una transcripción por reglas: proporciones de las clases de sonidos, grupos consonánticos, hiatos, sílabas abiertas, dureza e índices de aliteración y de asonancia</li>
 <li>comparar corpus con las medidas de la lingüística de corpus: <a href="corpus/keyness/">palabras clave</a> frente a un corpus de referencia o al diccionario de frecuencias, <a href="corpus/collocations/">colocaciones</a>, la <a href="corpus/dispersion/">dispersión</a> de una palabra por las partes de un texto y una <a href="corpus/kwic/">concordancia KWIC</a>, y atribuir la autoría por <a href="corpus/stylometry/">estilometría</a>: la Delta de Burrows, Zeta, la curva de Mendenhall, las palabras funcionales; encontrar los rasgos que distinguen dos corpus <a href="corpus/compare/">comparándolos</a> por 132 rasgos de un texto</li>
 <li>visualizar textos y corpus: la <a href="visualizers/zipf/">ley de Zipf</a>, la <a href="visualizers/fingerprinting/">huella literaria</a>, un <a href="visualizers/word_tree/">árbol de palabras</a>, gráficos <a href="visualizers/corpus/">de corpus</a> y <a href="visualizers/stylometry/">estilométricos</a>, el <a href="visualizers/vocabulary/">crecimiento del vocabulario</a>, las <a href="visualizers/sentences/">longitudes de las oraciones</a> y el <a href="visualizers/highlight/">resaltado del texto</a> por los fragmentos que cuentan las estadísticas</li>
 <li>añadir las estadísticas a un <a href="components/">pipeline de spaCy</a> como componentes, de modo que el texto se anote y se mida en una sola pasada y las estadísticas viajen con el <code>Doc</code></li>
 <li>trabajar con un <a href="datasets/spanishliterature/">corpus de literatura en español</a> de dominio público: 150 obras de 33 autores en cuatro géneros, filtradas por el autor, el género, el país y los años, y con un <a href="datasets/freqdict/">diccionario de frecuencias</a> de 83 785 lemas según Google Books Ngram</li>
 </ul>
-<p>La fonoestadística, la métrica y la rima llegan en la 0.4.</p>
+<p>La métrica y la rima llegan en la 0.4.</p>
 <h2 id="instalacion">Instalación<a class="headerlink" href="#instalacion" title="Permanent link">&para;</a></h2>
 <p>Se requiere Python 3.11 o superior.</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyests
@@ -2290,6 +2405,7 @@
 <li>morph_stats.py - estadísticas morfológicas</li>
 <li>readability_stats.py - métricas de legibilidad</li>
 <li>style_stats.py - métricas de estilo</li>
+<li>phon_stats.py - fonoestadística</li>
 <li>syntax_stats.py - estadísticas sintácticas</li>
 <li>syllables.py - silabificación y acento</li>
 <li>utils.py - herramientas auxiliares</li>

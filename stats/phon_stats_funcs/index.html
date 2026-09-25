@@ -11,16 +11,16 @@
       
       
       
-        <link rel="prev" href="../lexical_stats_funcs/">
+        <link rel="prev" href="../phon_stats/">
       
       
-        <link rel="next" href="../style_stats_funcs/">
+        <link rel="next" href="../../corpus/keyness/">
       
       
         
           <link rel="alternate" href="./" hreflang="en">
         
-          <link rel="alternate" href="../../es/stats/style_stats/" hreflang="es">
+          <link rel="alternate" href="../../es/stats/phon_stats_funcs/" hreflang="es">
         
       
       
@@ -29,7 +29,7 @@
     
     
       
-        <title>Metrics module - esTS</title>
+        <title>Metric functions - esTS</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#style-metrics" class="md-skip">
+        <a href="#statistic-functions" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Metrics module
+              Metric functions
             
           </span>
         </div>
@@ -141,7 +141,7 @@
           </li>
         
           <li class="md-select__item">
-            <a href="../../es/stats/style_stats/" hreflang="es" class="md-select__link">
+            <a href="../../es/stats/phon_stats_funcs/" hreflang="es" class="md-select__link">
               Español
             </a>
           </li>
@@ -1301,8 +1301,6 @@
                 
   
   
-    
-  
   
   
     
@@ -1313,11 +1311,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_8" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_8" >
         
           
           <label class="md-nav__link" for="__nav_5_8" id="__nav_5_8_label" tabindex="0">
@@ -1338,7 +1336,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_8_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5_8">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1353,37 +1351,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Metrics module
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../style_stats/" class="md-nav__link">
         
   
   
@@ -1399,120 +1370,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Description
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parameters
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#attributes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Attributes
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#methods" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Methods
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Methods">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#keyword_density" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        keyword_density
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_stats" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_stats
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#print_stats" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        print_stats
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Usage example
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1558,6 +1415,8 @@
                 
   
   
+    
+  
   
   
     
@@ -1568,11 +1427,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9" checked>
         
           
           <label class="md-nav__link" for="__nav_5_9" id="__nav_5_9_label" tabindex="0">
@@ -1593,7 +1452,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_9_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_9_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5_9">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1636,10 +1495,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../phon_stats_funcs/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metric functions
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1655,6 +1541,125 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#transcribe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Transcription
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cv_pattern" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CV pattern
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is_open_syllable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Open syllable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_consonant_clusters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consonant clusters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_hiatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hiatuses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_cv_entropy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entropy of the CV patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hardness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hardness
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_alliteration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alliteration index
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_assonance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assonance index
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2321,10 +2326,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
+  <a href="#transcribe" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Description
+        Transcription
       
     </span>
   </a>
@@ -2332,10 +2337,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
+  <a href="#cv_pattern" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parameters
+        CV pattern
       
     </span>
   </a>
@@ -2343,10 +2348,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#attributes" class="md-nav__link">
+  <a href="#is_open_syllable" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Attributes
+        Open syllable
       
     </span>
   </a>
@@ -2354,60 +2359,65 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#methods" class="md-nav__link">
+  <a href="#calc_consonant_clusters" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Methods
+        Consonant clusters
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Methods">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#keyword_density" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        keyword_density
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_stats" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_stats
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#print_stats" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        print_stats
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-example" class="md-nav__link">
+  <a href="#calc_hiatus" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Usage example
+        Hiatuses
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_cv_entropy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entropy of the CV patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hardness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hardness
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_alliteration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alliteration index
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_assonance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assonance index
       
     </span>
   </a>
@@ -2434,19 +2444,103 @@
   
 
 
-<h1 id="style-metrics">Style metrics<a class="headerlink" href="#style-metrics" title="Permanent link">&para;</a></h1>
+<h1 id="statistic-functions">Statistic functions<a class="headerlink" href="#statistic-functions" title="Permanent link">&para;</a></h1>
+<h2 id="transcribe">Transcription<a class="headerlink" href="#transcribe" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
-<p><strong>ests.style_stats.StyleStats</strong></p>
+<p><strong>ests.phon_stats.transcribe()</strong></p>
 </div>
-<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A module for computing the style metrics of a text: the SEO indicators of the <a href="https://advego.com/text/seo/">Advego</a> and <a href="https://text.ru/seo">Text.ru</a> services - nausea, water content, spam score, naturalness of the distribution of words by Zipf's law and keyword density - and the lexical markers of the officialese style that the Spanish guides to plain language warn about: the nouns derived from a verb, the compound prepositions of the administrative style, the parenthetical expressions and the clichés. The data source can be either a text or a <code>Doc</code> object of the <a href="https://github.com/explosion/spaCy">spaCy</a> library.</p>
-<p>The exact formulas of the services are not published, so the commonly accepted definitions are implemented; they are described in the <a href="../style_stats_funcs/">functions</a> section. By default words are extracted in lower case without lemmatization, so the forms of one word count as different words, as in Advego. To compute by lemmas, pass a <a href="../../extractors/words/"><code>WordsExtractor</code></a> object with <code>use_lexemes=True</code> and <code>lowercase=True</code>.</p>
-<p>The markers of the officialese style are counted over the unfiltered word forms (<code>forms</code>) whatever the extractor passed, by the lists <code>COMPOUND_PREPOSITIONS</code>, <code>PARENTHETICALS</code> and <code>OFFICIALESE_CLICHES</code> of <code>ests.constants</code>. A phrase ending in <code>a</code> or <code>de</code> also matches the contraction with the article (<code>a efectos del</code>, <code>conforme al</code>), and a phrase that starts with an infinitive stands for the forms of the verb: <code>proceder a</code> finds <code>se procedió a</code>, <code>dar cumplimiento</code> finds <code>ha dado cumplimiento</code>, <code>llevar a cabo</code> finds <code>deberá llevarse a cabo</code>. The verbal nouns need the parts of speech and the lemmas: a <code>Doc</code> gives its own annotation, and a string is parsed with <a href="../../installation/#model"><code>es_core_news_sm</code></a> or with the pipeline passed in <code>nlp</code> the first time <code>verbal_nouns</code> is read - the other metrics of a string need no model.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The metrics are computed by accessing the corresponding attribute or by calling the <code>get_stats</code> method of the <code>StyleStats</code> object. The norms of the services are meant for texts of several hundred words; on short texts nausea and spam are uninformative.</p>
+<p>Transcribes a word into its sounds. The word is split into syllables (<a href="../../syllables/"><code>syllabify</code></a>) and every syllable is read by the rules of the Spanish orthography; the characters that are no Spanish letters (digits, hyphens) are left out, and the results are cached by word form.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Spelling</th>
+<th style="text-align: center;">Sound</th>
+<th style="text-align: left;">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>a</code>, <code>á</code>; <code>e</code>, <code>é</code>; <code>i</code>, <code>í</code>; <code>o</code>, <code>ó</code>; <code>u</code>, <code>ú</code>, <code>ü</code></td>
+<td style="text-align: center;">a, e, i, o, u</td>
+<td style="text-align: left;"><code>canción</code> - k a n θ i o n</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>h</code></td>
+<td style="text-align: center;">none; <code>hi</code> before a vowel at the start of a syllable is ʝ</td>
+<td style="text-align: left;"><code>ahora</code> - a o r a, <code>hielo</code> - ʝ e l o</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ch</code></td>
+<td style="text-align: center;">tʃ</td>
+<td style="text-align: left;"><code>hechizo</code> - e tʃ i θ o</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>c</code> before <code>e</code>, <code>i</code>; <code>z</code></td>
+<td style="text-align: center;">θ</td>
+<td style="text-align: left;"><code>cena</code> - θ e n a</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>c</code> elsewhere, <code>qu</code> before <code>e</code>, <code>i</code>, <code>k</code></td>
+<td style="text-align: center;">k</td>
+<td style="text-align: left;"><code>queso</code> - k e s o</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>g</code> before <code>e</code>, <code>i</code>; <code>j</code></td>
+<td style="text-align: center;">x</td>
+<td style="text-align: left;"><code>gente</code> - x e n t e</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>g</code> elsewhere, <code>gu</code> before <code>e</code>, <code>i</code></td>
+<td style="text-align: center;">g</td>
+<td style="text-align: left;"><code>guerra</code> - g e r a</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ll</code>; <code>y</code> before a vowel</td>
+<td style="text-align: center;">ʝ</td>
+<td style="text-align: left;"><code>calle</code> - k a ʝ e</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>y</code> at the end of a syllable</td>
+<td style="text-align: center;">i</td>
+<td style="text-align: left;"><code>hoy</code> - o i</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>r</code>, <code>rr</code></td>
+<td style="text-align: center;">r</td>
+<td style="text-align: left;"><code>perro</code> - p e r o</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ñ</code></td>
+<td style="text-align: center;">ɲ</td>
+<td style="text-align: left;"><code>niño</code> - n i ɲ o</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>v</code></td>
+<td style="text-align: center;">b</td>
+<td style="text-align: left;"><code>vaca</code> - b a k a</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>x</code>; <code>x</code> at the start of a word</td>
+<td style="text-align: center;">k s; s</td>
+<td style="text-align: left;"><code>examen</code> - e k s a m e n, <code>xilófono</code> - s i l o f o n o</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>w</code></td>
+<td style="text-align: center;">u</td>
+<td style="text-align: left;"><code>whisky</code> - u i s k i</td>
+</tr>
+</tbody>
+</table>
+<p>The pronunciation is the one of the standard of Spain, with yeísmo and distinción. A rule reads the spelling of a word, not its history: the <code>x</code> of <code>México</code> is k s, as in <code>examen</code>.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.phon_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">transcribe</span>
+
+<span class="n">transcribe</span><span class="p">(</span><span class="s2">"hechizo"</span><span class="p">),</span> <span class="n">transcribe</span><span class="p">(</span><span class="s2">"guerrilla"</span><span class="p">),</span> <span class="n">transcribe</span><span class="p">(</span><span class="s2">"examen"</span><span class="p">)</span>
+<span class="c1"># (('e', 'tʃ', 'i', 'θ', 'o'), ('g', 'e', 'r', 'i', 'ʝ', 'a'),</span>
+<span class="c1">#  ('e', 'k', 's', 'a', 'm', 'e', 'n'))</span>
+</code></pre></div>
 </div>
-<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -2458,149 +2552,175 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>source</code></td>
-<td style="text-align: center;">str/Doc</td>
+<td style="text-align: center;"><code>word</code></td>
+<td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Data source (a string or a Doc object)</td>
+<td style="text-align: center;">Word</td>
 </tr>
+</tbody>
+</table>
+<h2 id="cv_pattern">CV pattern<a class="headerlink" href="#cv_pattern" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.phon_stats.cv_pattern()</strong></p>
+</div>
+<p>The CV pattern of a word or a syllable: the vowels are written V and the consonants C, over the sounds of the transcription - <code>queso</code> is CVCV, <code>hora</code> VCV, <code>examen</code> VCCVCVC.</p>
+<table>
+<thead>
 <tr>
-<td style="text-align: center;"><code>words_extractor</code></td>
-<td style="text-align: center;">WordsExtractor</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Word extraction tool</td>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
 </tr>
+</thead>
+<tbody>
 <tr>
-<td style="text-align: center;"><code>stopwords</code></td>
+<td style="text-align: center;"><code>sounds</code></td>
+<td style="text-align: center;">tuple[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Sounds of a word or a syllable</td>
+</tr>
+</tbody>
+</table>
+<h2 id="is_open_syllable">Open syllable<a class="headerlink" href="#is_open_syllable" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.phon_stats.is_open_syllable()</strong></p>
+</div>
+<p>Checks whether a syllable is open: an open syllable ends in a vowel sound - <code>ca</code>, <code>que</code>, <code>hoy</code> (the final <code>y</code> is the vowel i); <code>car</code> and <code>pan</code> are closed.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>syllable</code></td>
+<td style="text-align: center;">tuple[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Sounds of the syllable</td>
+</tr>
+</tbody>
+</table>
+<h2 id="calc_consonant_clusters">Consonant clusters<a class="headerlink" href="#calc_consonant_clusters" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.phon_stats.calc_consonant_clusters()</strong></p>
+</div>
+<p>The distribution of the consonant clusters by length. A cluster is a run of consonant sounds inside a word, across the syllables: <code>instrumento</code> has the clusters n s t r (4), m (1) and n t (2). The clusters of length 1 are the single consonants between vowels or at the edges of a word. The digraphs are one sound (<code>calle</code>, <code>perro</code>, <code>chico</code>), and <code>x</code> is two (<code>extra</code> - k s t r).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>text</code></td>
 <td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Stopwords for the water content; if not given, <code>STOPWORDS</code> and the one-word parenthetical expressions are used</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">List of words</td>
+</tr>
+</tbody>
+</table>
+<h2 id="calc_hiatus">Hiatuses<a class="headerlink" href="#calc_hiatus" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.phon_stats.calc_hiatus()</strong></p>
+</div>
+<p>The number of hiatuses: two vowels next to each other in two syllables of a word, as <a href="../../syllables/"><code>syllabify</code></a> splits them - <code>po-e-ta</code>, <code>dí-a</code>, <code>le-er</code>, <code>a-é-re-o</code> (two). A silent <code>h</code> between the vowels does not break the hiatus (<code>bú-ho</code>, <code>a-ho-ra</code>), and the vowels of a diphthong are one syllable and no hiatus (<code>cie-lo</code>, <code>ciu-dad</code>).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">List of words</td>
+</tr>
+</tbody>
+</table>
+<h2 id="calc_cv_entropy">Entropy of the CV patterns<a class="headerlink" href="#calc_cv_entropy" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.phon_stats.calc_cv_entropy()</strong></p>
+</div>
+<p>The Shannon entropy of the distribution of the words by CV pattern in bits: the higher it is, the more varied the phonetic shape of the words of the text. Words without sounds (numbers) are left out; <code>nan</code> for a text without them.</p>
+<div class="arithmatex">\[
+H = -\sum_{k} p_k \log_2 p_k
+\]</div>
+<p>where <span class="arithmatex">\(p_k\)</span> is the share of the words with the CV pattern <span class="arithmatex">\(k\)</span>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">List of words</td>
+</tr>
+</tbody>
+</table>
+<h2 id="hardness">Hardness<a class="headerlink" href="#hardness" title="Permanent link">&para;</a></h2>
+<p>The ratio of the voiceless obstruents to the vowels and the sonorants: a text of p, t, k, s and θ sounds harder than a text of vowels and m, n, l, r.</p>
+<div class="arithmatex">\[
+\frac{n_{voiceless}}{n_{vowels} + n_{sonorants}}
+\]</div>
+<h2 id="calc_alliteration">Alliteration index<a class="headerlink" href="#calc_alliteration" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.phon_stats.calc_alliteration()</strong></p>
+</div>
+<p>The ratio of the observed number of windows of <code>window_len</code> neighbouring words where one consonant sound occurs in two words or more to the number expected if the consonants were spread over the words at random, summed over the consonants. The expected number comes from the frequencies of the consonants in the text itself, so the index tells whether the repetitions cluster in neighbouring words, not how frequent a sound is: about 1 - the repetitions are random, well above 1 - alliteration. The consonants are the sounds of the transcription, so <code>casa</code> and <code>queso</code> repeat k, and <code>cena</code> and <code>casa</code> do not; <code>nan</code> for a text shorter than the window.</p>
+<div class="arithmatex">\[
+\frac{\sum_c O_c}{\sum_c (W - w + 1) \left(1 - (1 - p_c)^w - w p_c (1 - p_c)^{w - 1}\right)}
+\]</div>
+<p>where <span class="arithmatex">\(O_c\)</span> is the number of windows with the consonant <span class="arithmatex">\(c\)</span> in two words or more, <span class="arithmatex">\(W\)</span> the number of words, <span class="arithmatex">\(w\)</span> the window and <span class="arithmatex">\(p_c\)</span> the share of the words with the consonant <span class="arithmatex">\(c\)</span>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">List of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>top_n</code></td>
+<td style="text-align: center;"><code>window_len</code></td>
 <td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Number of the most frequent words for the academic nausea and the naturalness by Zipf's law</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>cliches</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">List of clichés; if not given, <code>OFFICIALESE_CLICHES</code> is used</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>nlp</code></td>
-<td style="text-align: center;">Language</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Pipeline of spaCy that parses a string for the verbal nouns; without it the model <code>es_core_news_sm</code> is loaded</td>
+<td style="text-align: center;"><code>3</code></td>
+<td style="text-align: center;">Window in words</td>
 </tr>
 </tbody>
 </table>
-<h2 id="attributes">Attributes<a class="headerlink" href="#attributes" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Attribute</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>words</code></td>
-<td style="text-align: center;">tuple[str]</td>
-<td style="text-align: center;">Tuple of the extracted words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>forms</code></td>
-<td style="text-align: center;">tuple[str]</td>
-<td style="text-align: center;">Tuple of the unfiltered word forms in lower case; the markers of the officialese style are counted over them</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>classic_nausea</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Classic nausea</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>academic_nausea</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Academic nausea in percent</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>water</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Water content in percent</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>spam</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Spam score in percent</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>zipf_naturalness</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Naturalness by Zipf's law in percent</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>verbal_nouns</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Share of the verbal nouns among the nouns in percent</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>compound_prepositions</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Compound prepositions per 100 words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>parentheticals</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Parenthetical expressions per 100 words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>cliches</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Clichés per 100 words</td>
-</tr>
-</tbody>
-</table>
-<p>Norms of the services:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Metric</th>
-<th style="text-align: center;">Norm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">Classic nausea</td>
-<td style="text-align: center;">at most 7, in practice 1-5 (Advego)</td>
-</tr>
-<tr>
-<td style="text-align: center;">Academic nausea</td>
-<td style="text-align: center;">5-15% (Advego)</td>
-</tr>
-<tr>
-<td style="text-align: center;">Water content</td>
-<td style="text-align: center;">up to 15% - natural, 15-30% - excessive, above 30% - high (Text.ru)</td>
-</tr>
-<tr>
-<td style="text-align: center;">Spam score</td>
-<td style="text-align: center;">up to 30% - natural, 30-60% - SEO-optimized text, above 60% - spammed (Text.ru)</td>
-</tr>
-<tr>
-<td style="text-align: center;">Naturalness by Zipf's law</td>
-<td style="text-align: center;">at least 50% (pr-cy, megaindex)</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition warning">
-<p class="admonition-title">The water content of Spanish</p>
-<p>The norms of Text.ru are set for Russian, which has no articles. A Spanish text has more water by its grammar alone: the 150 texts of the <a href="../../datasets/spanishliterature/">corpus of literature</a> have 42-54% of it, the prose 49% by the median. Compare the water content of texts with each other, not with the norm.</p>
+<h2 id="calc_assonance">Assonance index<a class="headerlink" href="#calc_assonance" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.phon_stats.calc_assonance()</strong></p>
 </div>
-<h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
-<h3 id="keyword_density">keyword_density<a class="headerlink" href="#keyword_density" title="Permanent link">&para;</a></h3>
-<p>Returns the density of keywords and phrases - the frequency of each per 100 words of the text. A phrase of several words separated by spaces is looked for as a sequence of words, in any case.</p>
-<p>Parameters:</p>
+<p>The same ratio over the vowels: the observed number of windows of <code>window_len</code> neighbouring words where one vowel occurs in two words or more against the number expected by the frequencies of the vowels in the text. Every vowel counts, stressed or not; <code>nan</code> for a text shorter than the window.</p>
 <table>
 <thead>
 <tr>
@@ -2612,72 +2732,19 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>keywords</code></td>
-<td style="text-align: center;">tuple[str]</td>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">list[str]</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Keywords or phrases</td>
+<td style="text-align: center;">List of words</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>window_len</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>3</code></td>
+<td style="text-align: center;">Window in words</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">StyleStats</span>
-
-<span class="n">text</span> <span class="o">=</span> <span class="s2">"Tres tristes tigres tragaban trigo en un trigal, en tres tristes trastos"</span>
-<span class="n">StyleStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">keyword_density</span><span class="p">(</span><span class="s2">"tres tristes"</span><span class="p">,</span> <span class="s2">"trigo"</span><span class="p">)</span>
-<span class="c1"># {'tres tristes': 16.666666666666668, 'trigo': 8.333333333333334}</span>
-</code></pre></div>
-</div>
-<h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
-<p>Returns a dictionary with the computed style metrics.</p>
-<h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
-<p>Prints a table with the computed style metrics.</p>
-<h2 id="usage-example">Usage example<a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h2>
-<p>The same notice written in the administrative style and in plain language.</p>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
-<p><em>Code</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">StyleStats</span>
-
-<span class="n">official</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">"En el marco del procedimiento de referencia, y a efectos de dar cumplimiento a lo "</span>
-    <span class="s2">"dispuesto en la normativa vigente, se procedió a la revisión de la documentación "</span>
-    <span class="s2">"presentada. No obstante, en virtud de la resolución de la comisión, se llevará a cabo "</span>
-    <span class="s2">"la notificación de la misma a la mayor brevedad, en tiempo y forma."</span>
-<span class="p">)</span>
-<span class="n">plain</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">"Hemos revisado los documentos que nos envió, como pide la ley. La comisión ha "</span>
-    <span class="s2">"decidido su caso y le avisaremos lo antes posible."</span>
-<span class="p">)</span>
-
-<span class="n">StyleStats</span><span class="p">(</span><span class="n">official</span><span class="p">)</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
-<span class="n">StyleStats</span><span class="p">(</span><span class="n">plain</span><span class="p">)</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
-</code></pre></div>
-<p><em>Result</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="w">                      </span>Metric<span class="w">                      </span><span class="p">|</span><span class="w">  </span>Value
-------------------------------------------------------------
-Classic<span class="w"> </span>nausea<span class="w">                                    </span><span class="p">|</span><span class="w">   </span><span class="m">2</span>.83
-Academic<span class="w"> </span>nausea<span class="w"> </span><span class="o">(</span>%<span class="o">)</span><span class="w">                               </span><span class="p">|</span><span class="w">  </span><span class="m">55</span>.36
-Water<span class="w"> </span>content<span class="w"> </span><span class="o">(</span>%<span class="o">)</span><span class="w">                                 </span><span class="p">|</span><span class="w">  </span><span class="m">57</span>.14
-Spam<span class="w"> </span>score<span class="w"> </span><span class="o">(</span>%<span class="o">)</span><span class="w">                                    </span><span class="p">|</span><span class="w">  </span><span class="m">37</span>.50
-Naturalness<span class="w"> </span>by<span class="w"> </span>Zipf<span class="s1">'s law (%)                     |  53.57</span>
-<span class="s1">Verbal nouns (% of nouns)                         |  47.06</span>
-<span class="s1">Compound prepositions (per 100 words)             |   5.36</span>
-<span class="s1">Parenthetical expressions (per 100 words)         |   1.79</span>
-<span class="s1">Officialese clichés (per 100 words)               |   8.93</span>
-
-<span class="s1">{'</span>classic_nausea<span class="s1">': 1.4142135623730951,</span>
-<span class="s1"> '</span>academic_nausea<span class="s1">': 47.82608695652174,</span>
-<span class="s1"> '</span>water<span class="s1">': 43.47826086956522,</span>
-<span class="s1"> '</span>spam<span class="s1">': 4.3478260869565215,</span>
-<span class="s1"> '</span>zipf_naturalness<span class="s1">': 100.0,</span>
-<span class="s1"> '</span>verbal_nouns<span class="s1">': 25.0,</span>
-<span class="s1"> '</span>compound_prepositions<span class="s1">': 0.0,</span>
-<span class="s1"> '</span>parentheticals<span class="s1">': 0.0,</span>
-<span class="s1"> '</span>cliches<span class="err">'</span>:<span class="w"> </span><span class="m">0</span>.0<span class="o">}</span>
-</code></pre></div>
-</div>
-<p>The notice of 56 words has three compound prepositions (<code>en el marco del</code>, <code>a efectos de</code>, <code>en virtud de</code>), five clichés (<code>dar cumplimiento</code>, <code>se procedió a</code>, <code>se llevará a cabo</code>, <code>a la mayor brevedad</code>, <code>en tiempo y forma</code>) and one parenthetical expression, and almost half of its nouns are derived from a verb (<code>revisión</code>, <code>notificación</code>, <code>resolución</code>); the plain version of 23 words has none of the markers. The anaphoric <code>de la misma</code>, which the guides also advise against, is not counted: telling it from <code>el mismo día</code> needs the syntax.</p>
 
 
 
