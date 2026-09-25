@@ -24,7 +24,7 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 *   comparar corpus con las medidas de la lingüística de corpus: [palabras clave](corpus/keyness.md) frente a un corpus de referencia o al diccionario de frecuencias, [colocaciones](corpus/collocations.md), la [dispersión](corpus/dispersion.md) de una palabra por las partes de un texto y una [concordancia KWIC](corpus/kwic.md), y atribuir la autoría por [estilometría](corpus/stylometry.md): la Delta de Burrows, Zeta, la curva de Mendenhall, las palabras funcionales; encontrar los rasgos que distinguen dos corpus [comparándolos](corpus/compare.md) por 132 rasgos de un texto
 *   visualizar textos y corpus: la [ley de Zipf](visualizers/zipf.md), la [huella literaria](visualizers/fingerprinting.md), un [árbol de palabras](visualizers/word_tree.md), gráficos [de corpus](visualizers/corpus.md) y [estilométricos](visualizers/stylometry.md), el [crecimiento del vocabulario](visualizers/vocabulary.md), las [longitudes de las oraciones](visualizers/sentences.md) y el [resaltado del texto](visualizers/highlight.md) por los fragmentos que cuentan las estadísticas
 *   añadir las estadísticas a un [pipeline de spaCy](components.md) como componentes, de modo que el texto se anote y se mida en una sola pasada y las estadísticas viajen con el `Doc`
-*   trabajar con un [corpus de literatura en español](datasets/spanishliterature.md) de dominio público: 150 obras de 33 autores en cuatro géneros, filtradas por el autor, el género, el país y los años, y con un [diccionario de frecuencias](datasets/freqdict.md) de 83 785 lemas según Google Books Ngram
+*   trabajar con un [corpus de literatura en español](datasets/spanishliterature.md) de dominio público: 150 obras de 33 autores en cuatro géneros, filtradas por el autor, el género, el país y los años, con una [colección de sonetos](datasets/spanishsonnets.md) de los siglos XV-XX cuyos versos llevan su patrón métrico y su rima, y con un [diccionario de frecuencias](datasets/freqdict.md) de 83 785 lemas según Google Books Ngram
 
 La métrica y la rima llegan en la 0.4.
 
@@ -103,7 +103,7 @@ Punctuation marks   |    2
         *   lexical_stats.py - estadísticas de complejidad léxica
         *   components.py - componentes de un pipeline de spaCy
         *   corpus - medidas de la lingüística de corpus: palabras clave, colocaciones, dispersión, concordancia, estilometría, comparación de corpus
-        *   datasets - conjuntos de datos: literatura en español, diccionario de frecuencias
+        *   datasets - conjuntos de datos: literatura en español, sonetos en español, diccionario de frecuencias
         *   constants.py - constantes de la lengua española y de las métricas
         *   diversity_stats.py - métricas de diversidad léxica
         *   exceptions.py - excepciones de la biblioteca

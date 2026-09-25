@@ -79,7 +79,8 @@ class DataFileError(EstsError, ValueError):
     Description:
         The archive is not a ZIP or TAR archive, cannot be extracted, has no
         files or has paths outside its directory, or the directory to extract
-        it into cannot be created
+        it into cannot be created; a line of the file of a dataset cannot be
+        read
     """
 
 

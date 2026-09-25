@@ -15,7 +15,7 @@ All library exceptions inherit the base class `EstsError` and one of the built-i
 | `ParameterError` | `ValueError` | A threshold, window, segment size, number of items, logarithm base, confidence level, number of bootstrap samples or bound of a frequency band (1-10,000) is out of range, a limit of records is negative, the sizes of the parts of `dispersion` do not add up to the words, the keyword of `kwic` is empty; an unknown preset, scale, metric name, measure, variant, field of a keyword, genre or part of speech |
 | `UnknownStatError` | `ParameterError`, `KeyError` | An unknown statistic is requested by name, as in `DiversityStats.windowed` |
 | `DatasetNotFoundError` | `OSError` | The model of spaCy is not installed or a dataset is not downloaded; the message shows the command that brings what is missing |
-| `DataFileError` | `ValueError` | The archive of a dataset is not a ZIP or TAR archive, cannot be extracted, has no files or has paths outside its directory, or the directory to extract it into cannot be created |
+| `DataFileError` | `ValueError` | The archive of a dataset is not a ZIP or TAR archive, cannot be extracted, has no files or has paths outside its directory, or the directory to extract it into cannot be created; a line of the file of a dataset cannot be read |
 | `DownloadError` | `RuntimeError` | The file could not be downloaded, its directory could not be created, or it failed the checksum verification twice |
 
 The classes are available from `ests` and from `ests.exceptions`.

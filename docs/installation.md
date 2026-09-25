@@ -35,7 +35,7 @@ python -m spacy download es_core_news_sm
 
 ## Datasets { #datasets }
 
-The [corpus of literature](datasets/spanishliterature.md) and the [frequency dictionary](datasets/freqdict.md) are downloaded once by their `download()` method; the statistics of [`LexicalStats`](stats/lexical_stats.md) by the dictionary and [`keyness`](corpus/keyness.md) against it need `FreqDict().download()`. The archives go to the directory `ests_data` next to the installed package (`ests.constants.DEFAULT_DATA_DIR`), `dicts` for the dictionary and `texts` for the corpus. Where that directory cannot be written - a system Python, a shared environment - pass another one in `data_dir` (`FreqDict(data_dir="...")`) or set the environment variable `ESTS_DATA_DIR` before the package is imported:
+The [corpus of literature](datasets/spanishliterature.md), the [sonnets](datasets/spanishsonnets.md) and the [frequency dictionary](datasets/freqdict.md) are downloaded once by their `download()` method; the statistics of [`LexicalStats`](stats/lexical_stats.md) by the dictionary and [`keyness`](corpus/keyness.md) against it need `FreqDict().download()`. The archives go to the directory `ests_data` next to the installed package (`ests.constants.DEFAULT_DATA_DIR`), `dicts` for the dictionary and `texts` for the corpus and the sonnets. Where that directory cannot be written - a system Python, a shared environment - pass another one in `data_dir` (`FreqDict(data_dir="...")`) or set the environment variable `ESTS_DATA_DIR` before the package is imported:
 
 ``` bash
 export ESTS_DATA_DIR=~/ests_data
