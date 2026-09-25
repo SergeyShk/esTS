@@ -1944,6 +1944,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../datasets/spanishsonnets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spanish sonnets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../datasets/freqdict/" class="md-nav__link">
         
   
@@ -2377,7 +2405,7 @@ uv<span class="w"> </span>sync<span class="w"> </span>--all-groups
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>spacy<span class="w"> </span>download<span class="w"> </span>es_core_news_sm
 </code></pre></div>
 <h2 id="datasets">Datasets<a class="headerlink" href="#datasets" title="Permanent link">&para;</a></h2>
-<p>The <a href="../datasets/spanishliterature/">corpus of literature</a> and the <a href="../datasets/freqdict/">frequency dictionary</a> are downloaded once by their <code>download()</code> method; the statistics of <a href="../stats/lexical_stats/"><code>LexicalStats</code></a> by the dictionary and <a href="../corpus/keyness/"><code>keyness</code></a> against it need <code>FreqDict().download()</code>. The archives go to the directory <code>ests_data</code> next to the installed package (<code>ests.constants.DEFAULT_DATA_DIR</code>), <code>dicts</code> for the dictionary and <code>texts</code> for the corpus. Where that directory cannot be written - a system Python, a shared environment - pass another one in <code>data_dir</code> (<code>FreqDict(data_dir="...")</code>) or set the environment variable <code>ESTS_DATA_DIR</code> before the package is imported:</p>
+<p>The <a href="../datasets/spanishliterature/">corpus of literature</a>, the <a href="../datasets/spanishsonnets/">sonnets</a> and the <a href="../datasets/freqdict/">frequency dictionary</a> are downloaded once by their <code>download()</code> method; the statistics of <a href="../stats/lexical_stats/"><code>LexicalStats</code></a> by the dictionary and <a href="../corpus/keyness/"><code>keyness</code></a> against it need <code>FreqDict().download()</code>. The archives go to the directory <code>ests_data</code> next to the installed package (<code>ests.constants.DEFAULT_DATA_DIR</code>), <code>dicts</code> for the dictionary and <code>texts</code> for the corpus and the sonnets. Where that directory cannot be written - a system Python, a shared environment - pass another one in <code>data_dir</code> (<code>FreqDict(data_dir="...")</code>) or set the environment variable <code>ESTS_DATA_DIR</code> before the package is imported:</p>
 <div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">ESTS_DATA_DIR</span><span class="o">=</span>~/ests_data
 </code></pre></div>
 
