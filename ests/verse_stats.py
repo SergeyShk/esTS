@@ -496,35 +496,35 @@ def _fit(units: Sequence[_Unit], bounds: Sequence[int], length: int) -> _Scansio
         ones with an accented i or u last; a shorter one breaks the synalephas
         from the end of the line (hiatus), then splits the diphthongs
         (dieresis). A change is kept if it moves the length, and if the length
-        is not reached the plain reading is returned
+        is out of reach the plain reading is returned at once, so that a long
+        line of prose costs one reading
     """
-    default = _default_joins(bounds)
-    joins = set(default)
-    scansion = _scan(units, joins)
-    if scansion.length == length:
-        return scansion
-    if scansion.length < length:
+    joins = _default_joins(bounds)
+    plain = _scan(units, joins)
+    if plain.length == length:
+        return plain
+    if plain.length < length:
         # The last word is stressed, so every join is before the last stress, and
         # breaking one adds a syllable
         order = sorted(joins, key=lambda index: (bounds[index] != SYNALEPHA_BOUNDARY, -index))
-        for index in order:
-            joins.discard(index)
-            scansion = _scan(units, joins)
-            if scansion.length == length:
-                return scansion
-    else:
-        order = sorted(
-            (index for index, kind in enumerate(bounds) if kind == SYNAERESIS),
-            key=lambda index: (_accented_weak(units[index], units[index + 1]), index),
-        )
-        for index in order:
-            trial = _scan(units, joins | {index})
-            if trial.length < scansion.length:
-                joins.add(index)
-                scansion = trial
-            if scansion.length == length:
-                return scansion
-    return _scan(units, set(default))
+        if length - plain.length > len(order):
+            return plain
+        return _scan(units, joins.difference(order[: length - plain.length]))
+    order = sorted(
+        (index for index, kind in enumerate(bounds) if kind == SYNAERESIS),
+        key=lambda index: (_accented_weak(units[index], units[index + 1]), index),
+    )
+    if plain.length - length > len(order):
+        return plain
+    scansion = plain
+    for index in order:
+        trial = _scan(units, joins | {index})
+        if trial.length < scansion.length:
+            joins.add(index)
+            scansion = trial
+        if scansion.length == length:
+            return scansion
+    return plain
 
 
 def _accented_weak(first: _Unit, second: _Unit) -> bool:
@@ -559,6 +559,8 @@ def _fit_compound(line: _Line, hemistich: int) -> _Scansion | None:
         to the length on its own, and the caesura with the fewest changes of
         the plain readings wins
     """
+    if not _reaches(line, 2 * hemistich):
+        return None
     best: tuple[int, _Scansion] | None = None
     for cut in _caesuras(line):
         parts = []
@@ -585,6 +587,24 @@ def _fit_compound(line: _Line, hemistich: int) -> _Scansion | None:
     return best[1] if best is not None else None
 
 
+def _reaches(line: _Line, compound: int, fitted: bool = True) -> bool:
+    """
+    Checking that a line may split into two hemistichs of a compound verse
+
+    Description:
+        The hemistichs differ from the plain reading of the whole line by two
+        syllables at most - the synalepha at the caesura and the aguda or the
+        esdrújula before it - and a fitted line by one syllable more for every
+        join it breaks and one less for every synaeresis, so a long line of
+        prose is not split at every word
+    """
+    low = high = line.scansion.length
+    if fitted:
+        low -= sum(kind == SYNAERESIS for kind in line.bounds)
+        high += sum(kind in (DIPHTHONG, SYNALEPHA_BOUNDARY) for kind in line.bounds)
+    return low - 2 <= compound <= high + 2
+
+
 def _scan_line(line: _Line, length: int, hemistich: int | None) -> _Scansion:
     """Scansion of a line fitted to the meter, by hemistichs for a compound verse"""
     if hemistich is not None:
@@ -606,9 +626,10 @@ def _fit_meter(lines: Sequence[_Line]) -> tuple[int, int | None, list[_Scansion]
         (VERSE_HEMISTICHS) one syllable off such a length or of it if more than
         half of the plain readings split into its hemistichs; the lines are
         fitted to each, and the one with the fewest lines off it wins, the
-        shorter length and the compound verse on a tie. Two lines of two
-        lengths keep the shorter one: of two lines of prose one would fit
-        either. On the stanzas of the sonnets of SpanishSonnets the ties leave
+        shorter length and the compound verse on a tie. Only the tied lengths
+        with a name are tried, the shortest length if none has one. Two lines
+        of two lengths keep the shorter one: of two lines of prose one would
+        fit either. On the stanzas of the sonnets of SpanishSonnets the ties leave
         414 of 17,207 without a meter instead of 664, and a meter goes to 0.2%
         of three sentences of prose as three lines instead of 0.13%. A compound
         verse is not tried without the support of the plain readings: fitted by
@@ -622,6 +643,10 @@ def _fit_meter(lines: Sequence[_Line]) -> tuple[int, int | None, list[_Scansion]
     tied = sorted(length for length, count in lengths.items() if count == most)
     if len(lines) < 3:
         tied = tied[:1]
+    else:
+        # A length with no name gives no meter: a paragraph of prose per line would make
+        # every length of it a candidate, and every line would be fitted to each
+        tied = [length for length in tied if length in METER_NAMES] or tied[:1]
     candidates: list[tuple[int, int | None]] = []
     for length in tied:
         candidates += [
@@ -686,6 +711,8 @@ def _best_fit(
 
 def _splits(line: _Line, hemistich: int) -> bool:
     """Checking that the plain reading of a line splits into two hemistichs of a length"""
+    if not _reaches(line, 2 * hemistich, fitted=False):
+        return False
     return any(
         all(
             _scan(units, _default_joins(bounds)).length == hemistich

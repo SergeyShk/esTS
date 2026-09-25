@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 import spacy
 
-from ests import VerseStats
+from ests import VerseStats, verse_stats
 from ests.constants import VERSE_STATS_DESC
 from ests.datasets import SpanishSonnets
 from ests.datasets import spanish_sonnets as sonnets_module
@@ -191,6 +191,8 @@ def test_synalepha(text, syllables):
         ("el perro ladra", 10, ("el", "pe", "rro", "la", "dra")),
         ("que a mí me mira a veces", 12, ("que‿a", "mí", "me", "mi", "ra‿a", "ve", "ces")),
         ("el poeta cantaba", 4, ("el", "po", "e", "ta", "can", "ta", "ba")),
+        # a synaeresis after the last stress moves nothing
+        ("la luz del día", 4, ("la", "luz", "del", "dí", "a")),
     ],
 )
 def test_fit(text, length, syllables):
@@ -244,6 +246,26 @@ este espacio no más a Dios le pido!"""
     assert (vs.meter, vs.c_feet) == ("endecasílabo", {11: 4})
     # two lines of two lengths keep the shorter one
     assert VerseStats("Cuando me paro a contemplar mi estado\nla luz del día").meter is None
+
+
+def test_distinct_lengths(monkeypatch):
+    # A paragraph of prose per line gives every line its own length: the lengths without
+    # a name are no candidates, and a long line out of reach of a meter costs one reading
+    lines = [" ".join(["la casa blanca"] * repeats) for repeats in range(10, 50)]
+    lines += [GARCILASO.split("\n")[0], "la luz del día", SONATINA.split("\n")[0]]
+    calls = 0
+    scan = verse_stats._scan
+
+    def counting(*args):
+        nonlocal calls
+        calls += 1
+        return scan(*args)
+
+    monkeypatch.setattr(verse_stats, "_scan", counting)
+    vs = VerseStats("\n".join(lines))
+    assert vs.meter is None
+    assert len(vs.c_feet) == len(lines)
+    assert calls < 10 * len(lines)
 
 
 def test_polymetric():
