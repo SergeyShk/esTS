@@ -1065,6 +1065,50 @@ PARENTHETICALS = (
 )
 
 
+# Layers of the highlighting of a text, in the order of drawing, by the statistics
+# of the library they show
+HIGHLIGHT_LAYERS_DESC = {
+    "long_sents": "Long sentences",
+    "complex_words": "Complex words",
+    "rare_words": "Rare words",
+    "passive": "Passive",
+    "participle_clauses": "Participial clauses",
+    "gerund_clauses": "Gerund clauses",
+    "de_chains": "Chains of de",
+    "split_predicates": "Split predicates",
+    "verbal_nouns": "Verbal nouns",
+    "compound_prepositions": "Compound prepositions",
+    "cliches": "Clichés",
+    "stopwords": "Stopwords",
+    "parentheticals": "Parenthetical expressions",
+    "connectors": "Connectors",
+}
+HIGHLIGHT_LAYER_GROUPS = {
+    "Readability": ("long_sents", "complex_words", "rare_words"),
+    "Syntax": ("passive", "participle_clauses", "gerund_clauses", "de_chains", "split_predicates"),
+    "Officialese": ("verbal_nouns", "compound_prepositions", "cliches"),
+    "Style": ("stopwords", "parentheticals", "connectors"),
+}
+HIGHLIGHT_DEFAULT_LAYERS = (
+    "long_sents",
+    "complex_words",
+    "passive",
+    "de_chains",
+    "split_predicates",
+    "cliches",
+)
+# Layers read from the dependency tree, which a Doc with a parse gives
+HIGHLIGHT_SYNTAX_LAYERS = frozenset(
+    {"passive", "participle_clauses", "gerund_clauses", "de_chains", "split_predicates"}
+)
+# Layers read from the parts of speech and the lemmas of a Doc
+HIGHLIGHT_TAGGED_LAYERS = frozenset({"verbal_nouns"})
+# Number of words from which a sentence is long: the Spanish guides to plain language put
+# the bound at 30 words (Comunidad de Madrid 2021, Gobierno de la Ciudad de Buenos Aires
+# 2024, Legislatura de la Ciudad de Buenos Aires 2024; 20-30 on average by the Secretaría
+# de la Función Pública of Mexico 2007)
+LONG_SENT_WORD_FACTOR = 30
+
 # Measures of keyness, of association of collocations, of dispersion of words and of stylometry
 KEYNESS_MEASURES = {
     "log_likelihood": "Log-likelihood G²",

@@ -253,7 +253,9 @@ def test_expand_phrases():
     ]
     assert calc_phrase_density(words, OFFICIALESE_CLICHES) == pytest.approx(100 * 3 / 9)
     # a word that is no infinitive stays as it is
-    assert expand_phrases(["cabe"], ["cabe destacar"]) == ["cabe destacar"]
+    assert expand_phrases(["cabe"], ["cabe destacar"]) == {"cabe destacar": "cabe destacar"}
+    # every spelled-out phrase keeps the phrase of the list
+    assert expand_phrases(words, ["llevar a cabo"])["llevará a cabo"] == "llevar a cabo"
 
 
 @pytest.mark.parametrize(

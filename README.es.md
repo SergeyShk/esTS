@@ -40,7 +40,7 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Métricas de diversidad léxica](https://sergeyshk.github.io/esTS/es/stats/diversity_stats/)** - TTR y sus variantes, MATTR, MSTTR, MTLD, HD-D, índices de Simpson y de Yule, entropía, leyes de Zipf y de Heaps
 * **[Estadísticas morfológicas](https://sergeyshk.github.io/esTS/es/stats/morph_stats/)** - categorías gramaticales y quince rasgos morfológicos de Universal Dependencies, con los marcadores del español: los modos, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
 * **[Medidas de corpus](https://sergeyshk.github.io/esTS/es/corpus/keyness/)** - palabras clave frente a un corpus de referencia, colocaciones, la dispersión de una palabra por las partes de un texto, una concordancia KWIC y la estilometría de autoría: la Delta de Burrows con sus variantes, Zeta, la curva de Mendenhall, el perfil de las palabras funcionales; la comparación de dos corpus por 132 rasgos de un texto con tamaños del efecto
-* **[Visualizaciones](https://sergeyshk.github.io/esTS/es/visualizers/zipf/)** - ley de Zipf, huella literaria, árbol de palabras, dispersión léxica y palabras clave, red de colocaciones, dendrograma, PCA y MDS por la Delta, crecimiento del vocabulario, longitudes de las oraciones
+* **[Visualizaciones](https://sergeyshk.github.io/esTS/es/visualizers/zipf/)** - ley de Zipf, huella literaria, árbol de palabras, dispersión léxica y palabras clave, red de colocaciones, dendrograma, PCA y MDS por la Delta, crecimiento del vocabulario, longitudes de las oraciones y el resaltado del texto por los fragmentos que cuentan las estadísticas: oraciones largas, pasivas, cadenas de de, clichés
 * **[Conjuntos de datos](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/)** - literatura en español de dominio público: 150 obras de 33 autores de España, Hispanoamérica y Filipinas en prosa, poesía, teatro y ensayo, con el género, los años y el país; un diccionario de frecuencias de 83 785 lemas según Google Books Ngram con ipm, rango y dispersión
 * **[Componentes de spaCy](https://sergeyshk.github.io/esTS/es/components/)** - cada clase de estadísticas como componente de un pipeline, con las estadísticas puestas en el `Doc` en una sola pasada
 * **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, con la densidad de 255 marcadores del discurso españoles
@@ -667,7 +667,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos: las [iss
     *   syntax_stats.py - estadísticas sintácticas
     *   syllables.py - silabificación y acento
     *   utils.py - herramientas auxiliares
-    *   visualizers - gráficos: ley de Zipf, huella literaria, árbol de palabras, gráficos de corpus y estilométricos, crecimiento del vocabulario, longitudes de las oraciones
+    *   visualizers - gráficos: ley de Zipf, huella literaria, árbol de palabras, gráficos de corpus y estilométricos, crecimiento del vocabulario, longitudes de las oraciones, resaltado del texto
 *   **scripts** - scripts que construyen los archivos de los conjuntos de datos
 *   **tests** - pruebas que reproducen la estructura del paquete
 

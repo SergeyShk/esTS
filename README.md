@@ -40,7 +40,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Lexical diversity metrics](https://sergeyshk.github.io/esTS/stats/diversity_stats/)** - TTR and its variations, MATTR, MSTTR, MTLD, HD-D, Simpson's and Yule's indices, entropy, Zipf's and Heaps' laws
 * **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
 * **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text, a KWIC concordance and the stylometry of authorship: Burrows's Delta with its variants, Zeta, the Mendenhall curve, the profile of the function words; the comparison of two corpora by 132 features of a text with effect sizes
-* **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, vocabulary growth, sentence lengths
+* **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, vocabulary growth, sentence lengths, and the highlighting of a text by the fragments the statistics count: long sentences, passives, chains of de, clichés
 * **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors from Spain, Latin America and the Philippines in prose, poems, drama and publicism, with the genre, the years and the country; a frequency dictionary of 83,785 lemmas by Google Books Ngram with ipm, range and dispersion
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
 * **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 255 Spanish discourse markers
@@ -667,7 +667,7 @@ Bug reports, ideas and pull requests are welcome - [issues](https://github.com/S
     *   syntax_stats.py - syntactic statistics
     *   syllables.py - syllabification and stress
     *   utils.py - helper tools
-    *   visualizers - plots: Zipf's law, fingerprinting, word tree, corpus and stylometric plots, vocabulary growth, sentence lengths
+    *   visualizers - plots: Zipf's law, fingerprinting, word tree, corpus and stylometric plots, vocabulary growth, sentence lengths, text highlighting
 *   **scripts** - scripts that build the archives of the datasets
 *   **tests** - tests mirroring the package structure
 

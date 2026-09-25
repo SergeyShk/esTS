@@ -528,7 +528,7 @@ def calc_verbal_nouns(nouns: Sequence[str]) -> float:
     return safe_divide(verbal, len(nouns), nan) * 100
 
 
-def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> list[str]:
+def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> dict[str, str]:
     """
     Spelling out the phrases in the forms a text has
 
@@ -547,12 +547,16 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> list[str]:
         phrases (list[str]): Phrases, words separated by spaces
 
     Returns:
-        list[str]: Phrases with their contractions and the forms of their verbs
+        dict[str, str]: Phrases with their contractions and the forms of their
+            verbs, each with the phrase of the list it spells out
 
     Example:
         >>> from ests.style_stats import expand_phrases
-        >>> sorted(expand_phrases(["se", "procedió", "al", "cierre"], ["proceder a"]))
+        >>> expanded = expand_phrases(["se", "procedió", "al", "cierre"], ["proceder a"])
+        >>> sorted(expanded)
         ['proceder a', 'proceder al', 'procedió a', 'procedió al']
+        >>> expanded["procedió al"]
+        'proceder a'
     """
     heads = {
         words[0]
@@ -569,7 +573,7 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> list[str]:
                 lemma = lemma.removesuffix("se")
             if lemma in forms:
                 forms[lemma].add(form)
-    expanded: list[str] = []
+    expanded: dict[str, str] = {}
     for phrase in phrases:
         words = phrase.lower().split()
         if not words:
@@ -581,11 +585,11 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> list[str]:
             endings.append("del")
         firsts = forms.get(words[0], {words[0]})
         if len(words) == 1:
-            expanded.extend(firsts)
+            expanded.update(dict.fromkeys(firsts, phrase))
             continue
-        expanded.extend(
-            " ".join([first, *words[1:-1], ending]) for first in firsts for ending in endings
-        )
+        for first in firsts:
+            for ending in endings:
+                expanded.setdefault(" ".join([first, *words[1:-1], ending]), phrase)
     return expanded
 
 

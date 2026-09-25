@@ -49,6 +49,7 @@ nav:
       - Stylometric plots: visualizers/stylometry.md
       - Vocabulary growth and frequency spectrum: visualizers/vocabulary.md
       - Sentence lengths: visualizers/sentences.md
+      - Text highlighting: visualizers/highlight.md
 
 theme:
   name: material
@@ -121,6 +122,7 @@ plugins:
             Stylometric plots: Gráficos estilométricos
             Vocabulary growth and frequency spectrum: Crecimiento del vocabulario y espectro de frecuencias
             Sentence lengths: Longitudes de las oraciones
+            Text highlighting: Resaltado del texto
 
 extra:
   social:
