@@ -47,9 +47,10 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Lexical sophistication statistics](https://sergeyshk.github.io/esTS/stats/lexical_stats/)** - how rare the words of a text are in the language: the frequency, range and dispersion of the lemmas by a dictionary of Google Books Ngram, the frequency bands top-1000 to 10000, surprisal, perplexity and lexical density
 * **[Style metrics](https://sergeyshk.github.io/esTS/stats/style_stats/)** - the SEO indicators of Advego and Text.ru (nausea, water content, spam score, naturalness by Zipf's law, keyword density) and the markers of the officialese style by the Spanish guides to plain language: verbal nouns, compound prepositions, parenthetical expressions and clichés
 * **[Phonostatistics](https://sergeyshk.github.io/esTS/stats/phon_stats/)** - the shares of the classes of sounds, consonant clusters, hiatuses, open syllables, hardness and the indices of alliteration and assonance, over the sounds of a rule-based transcription
+* **[Verse statistics](https://sergeyshk.github.io/esTS/stats/verse_stats/)** - the scansion of Spanish verse by its syllabic meter: the metrical syllables with the synalepha and the law of the final stress, the meter of a poem and the hemistichs of the alejandrino, the stress profile and the types of the endecasílabo
 * **[Syntactic statistics](https://sergeyshk.github.io/esTS/stats/syntax_stats/)** - the dependency tree by distances, depth, clauses and coordination, with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
 
-Metre and rhyme come in 0.4.
+Rhyme comes in 0.4.
 
 ## Installation
 
@@ -479,6 +480,31 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/phon_stats/).
 </details>
 
 <details>
+<summary><b>Verse statistics</b></summary>
+
+<br>
+
+The scansion of Spanish verse by its syllabic meter: the metrical syllables of a line with the synalepha and the law of the final stress, a line fitted to the meter of its poem by a hiatus, a dieresis or a synaeresis, the alejandrino read by hemistichs; the meter, the stress profile, the types of the endecasílabo and the endings of the lines. No model and no dictionary are needed.
+
+```python
+>>> from ests import VerseStats
+
+>>> text = """Cuando me paro a contemplar mi estado
+... y a ver los pasos por do me han traído,
+... hallo, según por do anduve perdido,
+... que a mayor mal pudiera haber llegado."""
+>>> vs = VerseStats(text)
+>>> vs.meter, vs.patterns[0], vs.c_rhythms
+('endecasílabo', '---+---+-+-', {'4-8-10': 2, '4-7-10': 1, '3-6-10': 1})
+>>> vs.syllables[0]
+('cuan', 'do', 'me', 'pa', 'ro‿a', 'con', 'tem', 'plar', 'mi‿es', 'ta', 'do')
+```
+
+More in the [documentation](https://sergeyshk.github.io/esTS/stats/verse_stats/).
+
+</details>
+
+<details>
 <summary><b>spaCy components</b></summary>
 
 <br>
@@ -687,6 +713,7 @@ Bug reports, ideas and pull requests are welcome - [issues](https://github.com/S
     *   style_stats.py - style metrics
     *   phon_stats.py - phonostatistics
     *   syntax_stats.py - syntactic statistics
+    *   verse_stats.py - verse statistics
     *   syllables.py - syllabification and stress
     *   utils.py - helper tools
     *   visualizers - plots: Zipf's law, fingerprinting, word tree, corpus and stylometric plots, vocabulary growth, sentence lengths, text highlighting

@@ -47,9 +47,10 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Estadísticas de complejidad léxica](https://sergeyshk.github.io/esTS/es/stats/lexical_stats/)** - cuán raras son las palabras de un texto en la lengua: la frecuencia, el rango y la dispersión de los lemas según un diccionario de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la sorpresa, la perplejidad y la densidad léxica
 * **[Métricas de estilo](https://sergeyshk.github.io/esTS/es/stats/style_stats/)** - los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías españolas de lenguaje claro: sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés
 * **[Fonoestadística](https://sergeyshk.github.io/esTS/es/stats/phon_stats/)** - proporciones de las clases de sonidos, grupos consonánticos, hiatos, sílabas abiertas, dureza e índices de aliteración y de asonancia, sobre los sonidos de una transcripción por reglas
+* **[Estadísticas del verso](https://sergeyshk.github.io/esTS/es/stats/verse_stats/)** - la escansión del verso español por su metro silábico: las sílabas métricas con la sinalefa y la ley del acento final, el metro de un poema y los hemistiquios del alejandrino, el perfil acentual y los tipos del endecasílabo
 * **[Estadísticas sintácticas](https://sergeyshk.github.io/esTS/es/stats/syntax_stats/)** - el árbol de dependencias por distancias, profundidad, cláusulas y coordinación, con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
 
-La métrica y la rima llegan en la 0.4.
+La rima llega en la 0.4.
 
 ## Instalación
 
@@ -479,6 +480,31 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/phon_stats
 </details>
 
 <details>
+<summary><b>Estadísticas del verso</b></summary>
+
+<br>
+
+La escansión del verso español por su metro silábico: las sílabas métricas de un verso con la sinalefa y la ley del acento final, un verso ajustado al metro de su poema por un hiato, una diéresis o una sinéresis, el alejandrino leído por hemistiquios; el metro, el perfil acentual, los tipos del endecasílabo y las terminaciones de los versos. No hacen falta ni modelo ni diccionario.
+
+```python
+>>> from ests import VerseStats
+
+>>> text = """Cuando me paro a contemplar mi estado
+... y a ver los pasos por do me han traído,
+... hallo, según por do anduve perdido,
+... que a mayor mal pudiera haber llegado."""
+>>> vs = VerseStats(text)
+>>> vs.meter, vs.patterns[0], vs.c_rhythms
+('endecasílabo', '---+---+-+-', {'4-8-10': 2, '4-7-10': 1, '3-6-10': 1})
+>>> vs.syllables[0]
+('cuan', 'do', 'me', 'pa', 'ro‿a', 'con', 'tem', 'plar', 'mi‿es', 'ta', 'do')
+```
+
+Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/verse_stats/).
+
+</details>
+
+<details>
 <summary><b>Componentes de spaCy</b></summary>
 
 <br>
@@ -687,6 +713,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos: las [iss
     *   style_stats.py - métricas de estilo
     *   phon_stats.py - fonoestadística
     *   syntax_stats.py - estadísticas sintácticas
+    *   verse_stats.py - estadísticas del verso
     *   syllables.py - silabificación y acento
     *   utils.py - herramientas auxiliares
     *   visualizers - gráficos: ley de Zipf, huella literaria, árbol de palabras, gráficos de corpus y estilométricos, crecimiento del vocabulario, longitudes de las oraciones, resaltado del texto

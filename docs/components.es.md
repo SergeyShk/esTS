@@ -7,7 +7,7 @@ Conjunto de componentes para los pipelines de [spaCy](https://github.com/explosi
 
 ## Nombres { #names }
 
-Las fábricas llevan el prefijo de la biblioteca - `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` - porque el registro de spaCy es uno para todo el proceso: un `basic` a secas chocaría con el componente de cualquier otra biblioteca que registre ese nombre, y spaCy responde a un segundo registro con `ValueError [E004]`.
+Las fábricas llevan el prefijo de la biblioteca - `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse` - porque el registro de spaCy es uno para todo el proceso: un `basic` a secas chocaría con el componente de cualquier otra biblioteca que registre ese nombre, y spaCy responde a un segundo registro con `ValueError [E004]`.
 
 Están declaradas como entry points de `spacy_factories`, así que un pipeline guardado con estos componentes - `nlp.to_disk(path)`, `spacy package`, una configuración de entrenamiento - se carga con `spacy.load(path)` en un proceso que nunca importa la biblioteca.
 
@@ -39,6 +39,7 @@ Añadir un componente amplía el tokenizador de su pipeline con las reglas de la
 | `LexicalStatsComponent` | `ests_lexical` | [LexicalStats](stats/lexical_stats.md) | categorías gramaticales; las estadísticas por el diccionario de frecuencias lo necesitan descargado |
 | `StyleStatsComponent` | `ests_style` | [StyleStats](stats/style_stats.md) | categorías gramaticales y lemas para los sustantivos deverbales |
 | `PhonStatsComponent` | `ests_phon` | [PhonStats](stats/phon_stats.md) | nada |
+| `VerseStatsComponent` | `ests_verse` | [VerseStats](stats/verse_stats.md) | nada; los saltos de línea del texto |
 
 Un documento sin palabras - una cadena vacía, espacios, solo puntuación - pasa por cada componente sin tocarse, con su extensión en `None`, de modo que un documento así en un corpus no detiene `nlp.pipe`. Una anotación que falta es otra cosa: eso es un error del pipeline y se levanta.
 
@@ -391,9 +392,46 @@ Parámetros:
     (0.458, {1: 12, 2: 7})
     ```
 
+## VerseStatsComponent
+
+!!! info ""
+    **ests.components.VerseStatsComponent**
+
+El componente de las estadísticas del verso de un texto. Las estadísticas leen el texto del documento con sus saltos de línea y sus líneas en blanco, así que el texto de un poema va a `nlp` tal cual, sin unir los versos; el componente no necesita ninguna anotación de un modelo. Un documento sin letras pasa intacto, y un texto con letras pero sin sílabas españolas da estadísticas vacías, como `VerseStats`.
+
+Parámetros:
+
+| Parámetro | Tipo | Valor por defecto | Descripción |
+| :-------: | :--: | :---------------: | :---------: |
+| `nlp` | Language | `-` | Objeto Language |
+| `name` | str | `"ests_verse"` | Nombre del componente en el pipeline |
+
+!!! example "Ejemplo"
+
+    _Código_:
+
+    ``` python
+    ...
+
+    # Añadir el componente
+    nlp.add_pipe("ests_verse", name="verse", last=True)
+
+    # Leer las estadísticas calculadas del comienzo del Romance del prisionero
+    doc = nlp(
+        "Que por mayo era, por mayo,\ncuando hace la calor,\ncuando los trigos encañan\ny están los campos en flor,"
+    )
+    doc._.verse.meter, doc._.verse.c_clausulas
+    ```
+
+    _Resultado_:
+
+    ``` bash
+    ('octosílabo', {'aguda': 2, 'llana': 2})
+    ```
+
 ## Todo en un pipeline { #pipeline }
 
-Los nueve componentes pueden convivir, y entonces una sola pasada sobre un documento da todas las estadísticas de la biblioteca que un `Doc` puede llevar.
+Los diez componentes pueden convivir, y entonces una sola pasada sobre un documento da todas las estadísticas de la biblioteca que un `Doc` puede llevar.
 
 !!! example "Ejemplo"
 
@@ -414,6 +452,7 @@ Los nueve componentes pueden convivir, y entonces una sola pasada sobre un docum
         "lexical",
         "style",
         "phon",
+        "verse",
     )
     for factory in factories:
         nlp.add_pipe(f"ests_{factory}", name=factory, last=True)
@@ -429,11 +468,12 @@ Los nueve componentes pueden convivir, y entonces una sola pasada sobre un docum
         round(doc._.lexical.p_top1000, 3),
         round(doc._.style.water, 2),
         round(doc._.phon.p_vowels, 3),
+        doc._.verse.n_lines,
     )
     ```
 
     _Resultado_:
 
     ``` bash
-    (12, 102.19, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0, 0.457)
+    (12, 102.19, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0, 0.457, 1)
     ```
