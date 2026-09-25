@@ -529,7 +529,7 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> list[str]:
             lemma = lemmatize(form)
             if lemma in forms:
                 forms[lemma].add(form)
-    expanded = []
+    expanded: list[str] = []
     for phrase in phrases:
         words = phrase.lower().split()
         if not words:
@@ -540,13 +540,12 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> list[str]:
         elif words[-1] == "de":
             endings.append("del")
         firsts = forms.get(words[0], {words[0]})
-        middle = words[1:-1] if len(words) > 1 else []
-        for first in firsts:
-            if len(words) == 1:
-                expanded.append(first)
-                continue
-            for ending in endings:
-                expanded.append(" ".join([first, *middle, ending]))
+        if len(words) == 1:
+            expanded.extend(firsts)
+            continue
+        expanded.extend(
+            " ".join([first, *words[1:-1], ending]) for first in firsts for ending in endings
+        )
     return expanded
 
 
