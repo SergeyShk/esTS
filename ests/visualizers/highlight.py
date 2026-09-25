@@ -9,6 +9,8 @@ from spacy.tokens import Doc, Token
 
 from ..cohesion_stats import find_connectors
 from ..constants import (
+    ALLITERATION_MIN_WORD_LEN,
+    ALLITERATION_THRESHOLD,
     COMPOUND_PREPOSITIONS,
     CONNECTOR_CLASSES,
     CONNECTOR_TYPES,
@@ -22,10 +24,14 @@ from ..constants import (
     PARENTHETICALS,
     PASSIVE_AUX,
     SE_PASSIVE_DEP,
+    SOUND_FREQUENCIES,
+    SOUND_SPELLINGS,
+    VOWEL_SOUNDS,
 )
 from ..datasets.freq_dict import lemma_key
 from ..exceptions import ParameterError, SourceError, SourceTypeError
 from ..lexical_stats import get_rank
+from ..phon_stats import CONSONANT_SOUNDS, transcribe
 from ..style_stats import expand_phrases, is_stopword
 from ..syllables import count_syllables
 from ..syntax_stats import (
@@ -47,6 +53,7 @@ from ..utils import (
     iter_doc_tokens,
     iter_text_sents,
     iter_text_words,
+    lemmatize,
 )
 
 SPANISH_WORD = re.compile(r"[a-záéíóúüñ]{2,}", re.IGNORECASE)
@@ -71,6 +78,7 @@ CSS = """\
 .ests-hl-de_chains { border-bottom: 2px solid #b45309; }
 .ests-hl-split_predicates { border-bottom: 2px solid #dc2626; }
 .ests-hl-connectors { border-bottom: 2px dashed #2563eb; }
+.ests-hl-alliteration { text-decoration-line: underline; text-decoration-style: dotted; text-decoration-color: #db2777; text-decoration-thickness: 2px; text-underline-offset: 3px; }
 """
 
 
@@ -127,8 +135,10 @@ class HighlightedText:
             parentheticals - parenthetical expressions (StyleStats)
             connectors - discourse markers, with the class and the kind in the note
                 (CohesionStats)
+            alliteration - repetitions of a consonant sound in neighbouring words,
+                unlikely by the frequencies of the Spanish sounds (PhonStats)
         The layers are grouped in HIGHLIGHT_LAYER_GROUPS: readability, syntax,
-        officialese, style. The syntactic layers are read from the dependency
+        officialese, style, phonics. The syntactic layers are read from the dependency
         tree and the lemmas (the auxiliary ser, the light verbs) and need a Doc
         with a parse and a lemmatizer, as SyntaxStats does; verbal_nouns needs a
         Doc with the parts of speech and the lemmas. A Doc without the sentence
@@ -170,6 +180,9 @@ class HighlightedText:
         stopwords (list[str]): Stopwords; STOPWORDS and the one-word parenthetical
             expressions if not set
         cliches (list[str]): List of clichés; OFFICIALESE_CLICHES if not set
+        alliteration_threshold (float): Probability of a repetition of a consonant
+            under an independent spread of the sounds, below which the repetition
+            is alliteration
 
     Attributes:
         text (str): Text of the source
@@ -184,7 +197,7 @@ class HighlightedText:
         SourceTypeError: If the source is neither a string nor a Doc
         SourceError: If the source has no words
         ParameterError: If a layer is unknown or not allowed by the source
-        ParameterError: If a threshold of a layer is below one
+        ParameterError: If a threshold of a layer is out of its range
     """
 
     def __init__(
@@ -195,6 +208,7 @@ class HighlightedText:
         complex_syl_factor: int = HIGHLIGHT_COMPLEX_SYL_FACTOR,
         stopwords: Sequence[str] | None = None,
         cliches: Sequence[str] | None = None,
+        alliteration_threshold: float = ALLITERATION_THRESHOLD,
     ):
         tagged = False
         doc = None
@@ -223,6 +237,14 @@ class HighlightedText:
             raise ParameterError(
                 "The number of syllables of a complex word must be greater than 0"
             )
+        try:
+            threshold_ok = 0 < alliteration_threshold <= 1
+        except TypeError:
+            threshold_ok = False
+        if not threshold_ok:
+            raise ParameterError(
+                "The threshold of the alliteration must lie in the interval (0, 1]"
+            )
         if stopwords is not None:
             check_sequence(stopwords, "stopwords")
             stopwords = tuple(stopwords)
@@ -247,6 +269,7 @@ class HighlightedText:
             "cliches": lambda: find_cliches(words, cliches),
             "parentheticals": lambda: find_parentheticals(words),
             "connectors": lambda: find_connector_highlights(words, sents),
+            "alliteration": lambda: find_alliteration(words, alliteration_threshold, sents),
             "passive": lambda: find_passive(doc) if doc else [],
             "participle_clauses": lambda: find_participle_clauses(doc) if doc else [],
             "gerund_clauses": lambda: find_gerund_clauses(doc) if doc else [],
@@ -321,6 +344,7 @@ def highlight(
     complex_syl_factor: int = HIGHLIGHT_COMPLEX_SYL_FACTOR,
     stopwords: Sequence[str] | None = None,
     cliches: Sequence[str] | None = None,
+    alliteration_threshold: float = ALLITERATION_THRESHOLD,
 ) -> HighlightedText:
     """
     Highlighting a text by layers, in the manner of the style checkers
@@ -329,7 +353,7 @@ def highlight(
         The layers of HIGHLIGHT_LAYERS_DESC: long sentences, complex and rare
         words, passive, participial and gerund clauses, chains of de, split
         predicates, verbal nouns, compound prepositions, clichés, stopwords,
-        parenthetical expressions, connectors; the syntactic layers need a Doc
+        parenthetical expressions, connectors, alliteration; the syntactic layers need a Doc
         with a parse and the lemmas, the verbal nouns a Doc with the parts of
         speech and the lemmas, see HighlightedText
 
@@ -343,6 +367,9 @@ def highlight(
         stopwords (list[str]): Stopwords; STOPWORDS and the one-word parenthetical
             expressions if not set
         cliches (list[str]): List of clichés; OFFICIALESE_CLICHES if not set
+        alliteration_threshold (float): Probability of a repetition of a consonant
+            under an independent spread of the sounds, below which the repetition
+            is alliteration
 
     Returns:
         HighlightedText: Highlighted text with an HTML view for Jupyter
@@ -354,6 +381,7 @@ def highlight(
         complex_syl_factor=complex_syl_factor,
         stopwords=stopwords,
         cliches=cliches,
+        alliteration_threshold=alliteration_threshold,
     )
 
 
@@ -754,6 +782,137 @@ def group_words_by_sents(words: Sequence[Word], sents: Sequence[Sent]) -> list[l
         if index < len(sents) and sents[index].start <= word.start:
             groups[index].append(word)
     return groups
+
+
+def get_stem_sounds(word: str) -> tuple[str, ...]:
+    """
+    Getting the sounds of the stem of a word form
+
+    Description:
+        The common start of the transcriptions of the word form and of its
+        lemma (transcribe, lemmatize): hacía - a θ, cogió - k o x, aquella - a k
+        e. The transcriptions are compared rather than the letters, since a cut
+        in letters reads the letters at the cut without the context their sound
+        depends on (hac would be a k, qu no sound at all). For the suppletive
+        forms (fue - ser, quiero - querer) the common part is shorter than two
+        sounds, and the stem is the whole word form
+
+    Arguments:
+        word (str): Word form in lower case
+
+    Returns:
+        tuple[str]: Sounds of the stem
+    """
+    sounds, lemma_sounds = transcribe(word), transcribe(lemmatize(word))
+    length = 0
+    for sound, lemma_sound in zip(sounds, lemma_sounds, strict=False):
+        if sound != lemma_sound:
+            break
+        length += 1
+    return sounds[:length] if length >= 2 else sounds
+
+
+def calc_alliteration_runs(
+    text: Sequence[str], threshold: float = ALLITERATION_THRESHOLD
+) -> list[tuple[int, int, str]]:
+    """
+    Finding the repetitions of a consonant sound in neighbouring words
+
+    Description:
+        A repetition is a run of two neighbouring words or more with the same
+        consonant sound in the stem of each (get_stem_sounds); the words shorter
+        than three letters, the stopwords (is_stopword: que, los, con, como) and
+        the words without vowels neither break nor continue a run. The function
+        words are left out as the model of chance does not fit them: que and
+        qué, 3.8% of the words of the prose, are two sounds with a k, far
+        likelier to hold a k than two sounds taken at random
+        The sound is looked for in the stem, not in the ending: the endings
+        agree with the neighbouring words and repeat their consonants by the
+        grammar, not by the sound (las casas blancas, los ojos rojos)
+        The probability of a run under an independent spread of the sounds is
+        the product over its words of the probability to meet the consonant at
+        least once among the sounds of the stem, 1 - (1 - f)^n, where f is the
+        frequency of the consonant in SOUND_FREQUENCIES and n the number of the
+        sounds of the stem; a run is alliteration when the probability is below
+        the threshold. Some twenty consonants are checked at every position, so
+        the default threshold is strict: 3.4% of the words of the prose of
+        the corpus of literature are highlighted at 0.001. A repetition of a rare
+        sound shows in two or three words (deje la abeja), a repetition of a
+        frequent one in long words is expected and is not alliteration
+        The alliteration index of PhonStats measures how the repetitions cluster
+        over the whole text; here their places are found
+
+    Arguments:
+        text (list[str]): List of words
+        threshold (float): Probability threshold
+
+    Returns:
+        list[tuple[int, int, str]]: Positions of the first word and after the last
+            word of every run and its consonant, in the order of the text
+    """
+    words = [word.lower() for word in text]
+    transparent = [
+        len(word) < ALLITERATION_MIN_WORD_LEN
+        or is_stopword(word)
+        or not any(sound in VOWEL_SOUNDS for sound in transcribe(word))
+        for word in words
+    ]
+    stems = [get_stem_sounds(word) for word in words]
+    runs = []
+    for consonant in sorted(CONSONANT_SOUNDS):
+        frequency = SOUND_FREQUENCIES[consonant]
+        start = None
+        stop = 0
+        probability = 1.0
+        for i, stem in enumerate(stems):
+            if transparent[i]:
+                continue
+            if consonant in stem:
+                if start is None:
+                    start, probability = i, 1.0
+                stop = i + 1
+                probability *= 1 - (1 - frequency) ** len(stem)
+            elif start is not None:
+                if stop - start >= 2 and probability < threshold:
+                    runs.append((start, stop, consonant))
+                start = None
+        if start is not None and stop - start >= 2 and probability < threshold:
+            runs.append((start, stop, consonant))
+    return sorted(runs)
+
+
+def find_alliteration(
+    words: Sequence[Word],
+    threshold: float = ALLITERATION_THRESHOLD,
+    sents: Sequence[Sent] | None = None,
+) -> list[Highlight]:
+    """
+    Finding the alliterations
+
+    Description:
+        The repetitions are looked for inside the sentences, in the whole text
+        without them; the note gives the sound and the letters that write it
+
+    Arguments:
+        words (list[Word]): Words with their positions
+        threshold (float): Probability threshold, see calc_alliteration_runs
+        sents (list[Sent]): Sentences with their positions
+
+    Returns:
+        list[Highlight]: Fragments of the layer alliteration
+    """
+    groups = [list(words)] if sents is None else group_words_by_sents(words, sents)
+    highlights = []
+    for group in groups:
+        for start, stop, sound in calc_alliteration_runs([word.text for word in group], threshold):
+            spellings = SOUND_SPELLINGS[sound]
+            note = f"alliteration on /{sound}/"
+            if spellings != sound:
+                note += f" ({spellings})"
+            highlights.append(
+                Highlight(group[start].start, group[stop - 1].end, "alliteration", note)
+            )
+    return highlights
 
 
 def tokens_span(tokens: Iterable[Token]) -> tuple[int, int]:

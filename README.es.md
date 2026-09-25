@@ -29,7 +29,7 @@
 
 ---
 
-**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica, complejidad léxica, estilo, morfología, sintaxis y cohesión, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
+**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica, complejidad léxica, estilo, fonoestadística, morfología, sintaxis y cohesión, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
 
 La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy): las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, las sílabas y el acento se deducen de la ortografía, y solo las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica, los sustantivos deverbales de las métricas de estilo, el perfil de las palabras funcionales y la comparación de corpus necesitan un modelo entrenado.
 
@@ -46,9 +46,10 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, con la densidad de 255 marcadores del discurso españoles
 * **[Estadísticas de complejidad léxica](https://sergeyshk.github.io/esTS/es/stats/lexical_stats/)** - cuán raras son las palabras de un texto en la lengua: la frecuencia, el rango y la dispersión de los lemas según un diccionario de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la sorpresa, la perplejidad y la densidad léxica
 * **[Métricas de estilo](https://sergeyshk.github.io/esTS/es/stats/style_stats/)** - los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías españolas de lenguaje claro: sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés
+* **[Fonoestadística](https://sergeyshk.github.io/esTS/es/stats/phon_stats/)** - proporciones de las clases de sonidos, grupos consonánticos, hiatos, sílabas abiertas, dureza e índices de aliteración y de asonancia, sobre los sonidos de una transcripción por reglas
 * **[Estadísticas sintácticas](https://sergeyshk.github.io/esTS/es/stats/syntax_stats/)** - el árbol de dependencias por distancias, profundidad, cláusulas y coordinación, con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
 
-La fonoestadística, la métrica y la rima llegan en la 0.4.
+La métrica y la rima llegan en la 0.4.
 
 ## Instalación
 
@@ -64,7 +65,7 @@ O con [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad y la diversidad léxica no necesitan ningún modelo de spaCy; las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica de una cadena sí, igual que los sustantivos deverbales de las métricas de estilo, el perfil de las palabras funcionales, los rasgos de un texto y la comparación de corpus, y analizar un texto por su cuenta para pasar el `Doc` en lugar de una cadena:
+El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad, la diversidad léxica y la fonoestadística no necesitan ningún modelo de spaCy; las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica de una cadena sí, igual que los sustantivos deverbales de las métricas de estilo, el perfil de las palabras funcionales, los rasgos de un texto y la comparación de corpus, y analizar un texto por su cuenta para pasar el `Doc` en lugar de una cadena:
 
 ```bash
 python -m spacy download es_core_news_sm
@@ -459,6 +460,25 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/style_stat
 </details>
 
 <details>
+<summary><b>Fonoestadística</b></summary>
+
+<br>
+
+Las proporciones de las clases de sonidos, los grupos consonánticos, los hiatos, las sílabas abiertas, la dureza y los índices de aliteración y de asonancia, contados sobre los sonidos de una transcripción por reglas y no sobre las letras: la `h` y la `u` de `que` son mudas, `ll`, `ch` y `rr` son un sonido, la `x` son dos.
+
+```python
+>>> from ests import PhonStats
+
+>>> ps = PhonStats("Los suspiros se escapan de su boca de fresa")
+>>> round(ps.p_voiceless, 3), round(ps.hardness, 3), ps.sounds[-1]
+(0.371, 0.684, ('f', 'r', 'e', 's', 'a'))
+```
+
+Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/phon_stats/).
+
+</details>
+
+<details>
 <summary><b>Componentes de spaCy</b></summary>
 
 <br>
@@ -481,7 +501,7 @@ Cada clase de estadísticas es también un componente de un pipeline, de modo qu
 (12, ('DET', 'NOUN'), 2.0)
 ```
 
-Las fábricas son `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical` y `ests_style`; el nombre del paso del pipeline es libre y es como se llama la extensión.
+Las fábricas son `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style` y `ests_phon`; el nombre del paso del pipeline es libre y es como se llama la extensión.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/components/).
 
@@ -664,6 +684,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos: las [iss
     *   morph_stats.py - estadísticas morfológicas
     *   readability_stats.py - métricas de legibilidad
     *   style_stats.py - métricas de estilo
+    *   phon_stats.py - fonoestadística
     *   syntax_stats.py - estadísticas sintácticas
     *   syllables.py - silabificación y acento
     *   utils.py - herramientas auxiliares

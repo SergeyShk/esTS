@@ -1065,6 +1065,33 @@ PARENTHETICALS = (
 )
 
 
+# Phonostatistics of a text, counted over the sounds of the transcription (transcribe)
+PHON_STATS_DESC = {
+    "p_vowels": "Share of vowels",
+    "p_sonorants": "Share of sonorant consonants",
+    "p_voiced": "Share of voiced obstruents",
+    "p_voiceless": "Share of voiceless obstruents",
+    "consonant_vowel_ratio": "Ratio of consonants to vowels",
+    "p_heavy_clusters": "Share of clusters of 3 consonants or more",
+    "p_hiatus": "Hiatuses per word",
+    "cv_entropy": "Entropy of the CV patterns of words (bits)",
+    "hardness": "Hardness",
+    "alliteration": "Alliteration index",
+    "assonance": "Assonance index",
+    "p_open_syllables": "Share of open syllables",
+    "mean_syllable_len": "Mean length of a syllable (sounds)",
+}
+# Window in words for the alliteration and the assonance
+PHON_WINDOW_LEN = 3
+# Sounds of the transcription by class: the five vowels, the sonorants (the tap and the
+# trill are one r), the voiced and the voiceless obstruents. The pronunciation is the one
+# of the standard of Spain: yeísmo (ll and y are one sound, ʝ) and distinción (c before e
+# and i and z are θ, apart from s)
+VOWEL_SOUNDS = frozenset("aeiou")
+SONORANT_SOUNDS = frozenset({"m", "n", "ɲ", "l", "r"})
+VOICED_SOUNDS = frozenset({"b", "d", "g", "ʝ"})
+VOICELESS_SOUNDS = frozenset({"p", "t", "k", "f", "θ", "s", "x", "tʃ"})
+
 # Layers of the highlighting of a text, in the order of drawing, by the statistics
 # of the library they show
 HIGHLIGHT_LAYERS_DESC = {
@@ -1082,12 +1109,14 @@ HIGHLIGHT_LAYERS_DESC = {
     "stopwords": "Stopwords",
     "parentheticals": "Parenthetical expressions",
     "connectors": "Connectors",
+    "alliteration": "Alliteration",
 }
 HIGHLIGHT_LAYER_GROUPS = {
     "Readability": ("long_sents", "complex_words", "rare_words"),
     "Syntax": ("passive", "participle_clauses", "gerund_clauses", "de_chains", "split_predicates"),
     "Officialese": ("verbal_nouns", "compound_prepositions", "cliches"),
     "Style": ("stopwords", "parentheticals", "connectors"),
+    "Phonics": ("alliteration",),
 }
 HIGHLIGHT_DEFAULT_LAYERS = (
     "long_sents",
@@ -1113,6 +1142,25 @@ LONG_SENT_WORD_FACTOR = 30
 # text are marked (abuela, pequeña, camino), a plain story almost as much as an official
 # notice, and the layer no longer points at the heavy words
 HIGHLIGHT_COMPLEX_SYL_FACTOR = 4
+# Probability of a repetition of a consonant sound under an independent spread of the
+# sounds, below which the repetition is highlighted as alliteration
+ALLITERATION_THRESHOLD = 0.001
+# Words shorter than this number of letters neither break nor continue an alliteration
+ALLITERATION_MIN_WORD_LEN = 3
+# Frequencies of the sounds of the transcription in the 49 million sounds of the corpus of
+# literature (SpanishLiterature, transcribe)
+SOUND_FREQUENCIES = {
+    "a": 0.1350, "e": 0.1350, "o": 0.0974, "s": 0.0795, "i": 0.0726, "n": 0.0683,
+    "r": 0.0644, "d": 0.0510, "l": 0.0499, "t": 0.0414, "k": 0.0394, "u": 0.0314,
+    "m": 0.0298, "b": 0.0280, "p": 0.0250, "θ": 0.0162, "g": 0.0096, "x": 0.0072,
+    "ʝ": 0.0071, "f": 0.0065, "tʃ": 0.0028, "ɲ": 0.0026,
+}  # fmt: skip
+# Letters that write a consonant sound, for the notes of the highlighting
+SOUND_SPELLINGS = {
+    "b": "b, v", "d": "d", "f": "f", "g": "g, gu", "k": "c, qu, k", "l": "l", "m": "m",
+    "n": "n", "p": "p", "r": "r, rr", "s": "s, x", "t": "t", "x": "j, g", "ɲ": "ñ",
+    "θ": "c, z", "ʝ": "y, ll", "tʃ": "ch",
+}  # fmt: skip
 
 # Measures of keyness, of association of collocations, of dispersion of words and of stylometry
 KEYNESS_MEASURES = {

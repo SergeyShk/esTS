@@ -7,7 +7,7 @@ A set of components for [spaCy](https://github.com/explosion/spaCy) pipelines. E
 
 ## Names { #names }
 
-The factories carry the prefix of the library - `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style` - because the registry of spaCy is one for the whole process: a plain `basic` would collide with the component of any other library registering that name, and spaCy answers a second registration with `ValueError [E004]`.
+The factories carry the prefix of the library - `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` - because the registry of spaCy is one for the whole process: a plain `basic` would collide with the component of any other library registering that name, and spaCy answers a second registration with `ValueError [E004]`.
 
 They are declared as entry points of `spacy_factories`, so a pipeline saved with these components - `nlp.to_disk(path)`, `spacy package`, a training config - loads with `spacy.load(path)` in a process that never imports the library.
 
@@ -38,6 +38,7 @@ Adding a component extends the tokenizer of its pipeline with the rules for the 
 | `CohesionStatsComponent` | `ests_cohesion` | [CohesionStats](stats/cohesion_stats.md) | parts of speech and lemmas |
 | `LexicalStatsComponent` | `ests_lexical` | [LexicalStats](stats/lexical_stats.md) | parts of speech; the statistics by the frequency dictionary need it downloaded |
 | `StyleStatsComponent` | `ests_style` | [StyleStats](stats/style_stats.md) | parts of speech and lemmas for the verbal nouns |
+| `PhonStatsComponent` | `ests_phon` | [PhonStats](stats/phon_stats.md) | nothing |
 
 A document with no words - an empty string, whitespace, punctuation alone - passes through every component untouched, its extension left at `None`, so that one such document in a corpus does not stop `nlp.pipe`. A missing annotation is another matter: that is an error of the pipeline and it is raised.
 
@@ -354,9 +355,45 @@ Parameters:
     (18.18, 33.33)
     ```
 
+## PhonStatsComponent
+
+!!! info ""
+    **ests.components.PhonStatsComponent**
+
+The component of the phonostatistics of a text. The statistics read the words of the document and their transcription, so the component needs no annotation of a model.
+
+Parameters:
+
+| Parameter | Type | Default | Description |
+| :-------: | :--: | :-----: | :---------: |
+| `nlp` | Language | `-` | Language object |
+| `name` | str | `"ests_phon"` | Name of the component in the pipeline |
+| `window_len` | int | `3` | Window in words for the alliteration and the assonance |
+
+!!! example "Example"
+
+    _Code_:
+
+    ``` python
+    ...
+
+    # Add the component
+    nlp.add_pipe("ests_phon", name="phon", last=True)
+
+    # Read the computed statistics
+    doc = nlp("Tres tristes tigres tragaban trigo en un trigal")
+    round(doc._.phon.hardness, 3), doc._.phon.c_clusters
+    ```
+
+    _Result_:
+
+    ``` bash
+    (0.458, {1: 12, 2: 7})
+    ```
+
 ## Everything in one pipeline { #pipeline }
 
-The eight components can live side by side, and then one pass over a document gives every statistic of the library that a `Doc` can carry.
+The nine components can live side by side, and then one pass over a document gives every statistic of the library that a `Doc` can carry.
 
 !!! example "Example"
 
@@ -376,6 +413,7 @@ The eight components can live side by side, and then one pass over a document gi
         "cohesion",
         "lexical",
         "style",
+        "phon",
     )
     for factory in factories:
         nlp.add_pipe(f"ests_{factory}", name=factory, last=True)
@@ -390,11 +428,12 @@ The eight components can live side by side, and then one pass over a document gi
         doc._.cohesion.p_given,
         round(doc._.lexical.p_top1000, 3),
         round(doc._.style.water, 2),
+        round(doc._.phon.p_vowels, 3),
     )
     ```
 
     _Result_:
 
     ``` bash
-    (12, 102.19, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0)
+    (12, 102.19, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0, 0.457)
     ```

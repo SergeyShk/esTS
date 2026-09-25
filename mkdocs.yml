@@ -31,6 +31,9 @@ nav:
       - Style metrics:
         - Metrics module: stats/style_stats.md
         - Metric functions: stats/style_stats_funcs.md
+      - Phonostatistics:
+        - Metrics module: stats/phon_stats.md
+        - Metric functions: stats/phon_stats_funcs.md
     - Corpus measures:
       - Keywords: corpus/keyness.md
       - Collocations: corpus/collocations.md
@@ -104,6 +107,7 @@ plugins:
             Cohesion statistics: Estadísticas de cohesión
             Lexical sophistication statistics: Estadísticas de complejidad léxica
             Style metrics: Métricas de estilo
+            Phonostatistics: Fonoestadística
             Corpus measures: Medidas de corpus
             Keywords: Palabras clave
             Collocations: Colocaciones

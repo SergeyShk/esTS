@@ -15,6 +15,7 @@ from .components import (
     DiversityStatsComponent,
     LexicalStatsComponent,
     MorphStatsComponent,
+    PhonStatsComponent,
     ReadabilityStatsComponent,
     StyleStatsComponent,
     SyntaxStatsComponent,
@@ -33,6 +34,7 @@ from .exceptions import (
 from .extractors import CharNgramsExtractor, SentsExtractor, WordsExtractor
 from .lexical_stats import LexicalStats
 from .morph_stats import MorphStats
+from .phon_stats import PhonStats
 from .readability_stats import ReadabilityStats
 from .style_stats import StyleStats
 from .syntax_stats import SyntaxStats
@@ -69,6 +71,8 @@ __all__ = [
     "MorphStats",
     "MorphStatsComponent",
     "ParameterError",
+    "PhonStats",
+    "PhonStatsComponent",
     "ReadabilityStats",
     "ReadabilityStatsComponent",
     "SentsExtractor",

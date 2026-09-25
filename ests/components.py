@@ -39,6 +39,7 @@ from .constants import (
     MTLD_MIN_LEN,
     MTLD_TTR_THRESHOLD,
     NAUSEA_TOP_N,
+    PHON_WINDOW_LEN,
 )
 from .datasets.freq_dict import FreqDict
 from .diversity_stats import DiversityStats
@@ -46,6 +47,8 @@ from .diversity_stats import check_params as check_diversity_params
 from .exceptions import SourceError
 from .lexical_stats import LexicalStats, is_number
 from .morph_stats import MorphStats
+from .phon_stats import PhonStats
+from .phon_stats import check_params as check_phon_params
 from .readability_stats import ReadabilityStats, check_preset
 from .style_stats import StyleStats
 from .style_stats import check_params as check_style_params
@@ -596,4 +599,65 @@ class StyleStatsComponent:
             return doc
         ss = StyleStats(doc, stopwords=self.stopwords, top_n=self.top_n)
         doc._.set(self.name, ss)
+        return doc
+
+
+@Language.factory("ests_phon")
+class PhonStatsComponent:
+    """
+    Class for the component of the phonostatistics of a text
+
+    Description:
+        The statistics read the words of the document and their transcription,
+        so the component needs no annotation of a model
+
+    Adding the component to a pipeline:
+        >>> import ests
+        >>> import spacy
+        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp.add_pipe("ests_phon", name="phon", last=True)
+        <ests.components.PhonStatsComponent object at 0x...>
+
+    Setting the window of the alliteration and the assonance:
+        >>> nlp.add_pipe("ests_phon", name="phon_windowed", config={"window_len": 5}, last=True)
+        <ests.components.PhonStatsComponent object at 0x...>
+
+    Reading the computed statistics:
+        >>> doc = nlp("El gato duerme en la ventana")
+        >>> round(doc._.phon.p_vowels, 3)
+        0.478
+
+    Arguments:
+        name (str): Name of the component in the pipeline
+        window_len (int): Window in words for the alliteration and the assonance
+
+    Raises:
+        ParameterError: If the window is below 2
+    """
+
+    def __init__(self, nlp: Language, name: str = "ests_phon", window_len: int = PHON_WINDOW_LEN):
+        check_phon_params(window_len)
+        add_dash_rules(nlp)
+        self.name = name
+        self.window_len = window_len
+        Doc.set_extension(self.name, default=None, force=True)
+
+    def __call__(self, doc: Doc) -> Doc:
+        """
+        Adding the computed statistics to the component
+
+        Description:
+            A document with no words is returned untouched, its extension
+            left at None
+
+        Arguments:
+            doc (Doc): Doc object
+
+        Returns:
+            doc (Doc): Modified Doc object
+        """
+        if not has_words(doc):
+            return doc
+        ps = PhonStats(doc, window_len=self.window_len)
+        doc._.set(self.name, ps)
         return doc
