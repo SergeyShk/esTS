@@ -177,15 +177,17 @@ ABBREVIATIONS = frozenset(
 # Vowels: every accented vowel is strong, an unaccented i, u, ü and a vocalic y
 # are weak; a weak vowel next to another vowel forms a diphthong, two strong
 # vowels a hiatus. Vowels with a grave, a circumflex, a tilde or a diaeresis
-# other than ü come from Catalan, French, Portuguese and German names
-# (Lluïsa, Citroën, São, Björk); they count as accented, so they are strong
-# and take the stress. A diaeresis marks a hiatus in Catalan and French
-# (Llu-ï-sa, Ci-tro-ën); the Portuguese nasal ã and õ join a following
-# o or e into a diphthong (São, Ca-mões)
+# come from Catalan, French, Portuguese and German names (Lluïsa, Citroën,
+# São, Björk); they count as accented, so they are strong and take the
+# stress, except ï. A diaeresis marks a hiatus: the ü of Spanish verse outside
+# gü and qü and the ï of Spanish verse and of Catalan (sü-a-ve, rü-i-do,
+# glo-rï-o-sa, Llu-ï-sa), which leave the stress to the rules of the word,
+# and the ë of French (Ci-tro-ën); the Portuguese nasal ã and õ join
+# a following o or e into a diphthong (São, Ca-mões)
 VOWELS = "aeiouáéíóúüàèìòùâêîôûãõäëïöå"
 WEAK_VOWELS = "iuü"
-ACCENTED_VOWELS = "áéíóúàèìòùâêîôûãõäëïöå"
-HIATUS_VOWELS = "ïë"
+ACCENTED_VOWELS = "áéíóúàèìòùâêîôûãõäëöå"
+HIATUS_VOWELS = "ïëü"
 NASAL_VOWELS = "ãõ"
 
 # Two-letter consonant units that are never split (digraphs and the silent u)

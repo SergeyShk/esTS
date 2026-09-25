@@ -34,8 +34,9 @@ El metro del verso español es silábico: un verso se mide por sus sílabas mét
 | `stress_profile` | tuple[float, ...] | Proporción de los versos del metro acentuados en cada sílaba métrica |
 | `c_rhythms` | dict[str, int] | Distribución de los endecasílabos por tipo |
 | `syllables` | tuple[tuple[str, ...], ...] | Sílabas de cada verso como las lee el verso, con la sinalefa marcada con `‿` |
-| `stresses` | tuple[tuple[int, ...], ...] | Números de las sílabas métricas acentuadas de cada verso, desde cero |
-| `patterns` | tuple[str, ...] | Esquemas de los versos de `+` (una sílaba métrica acentuada) y `-` (una átona) |
+| `stresses` | tuple[tuple[int, ...], ...] | Índices de las sílabas acentuadas de cada verso en `syllables`, desde cero |
+| `caesuras` | tuple[int/None, ...] | Índice de la primera sílaba del segundo hemistiquio de cada verso en `syllables`, `None` para un verso simple |
+| `patterns` | tuple[str, ...] | Esquemas de los versos de `+` (una sílaba métrica acentuada) y `-` (una átona), tan largos como el verso en sílabas métricas |
 | `c_clausulas` | dict[str, int] | Distribución de las terminaciones de los versos por tipo: `aguda`, `llana`, `esdrújula`, `sobresdrújula` |
 | `p_masculine` | float | Proporción de terminaciones agudas (el acento en la última sílaba) |
 | `p_feminine` | float | Proporción de terminaciones llanas (una sílaba tras el acento) |
@@ -43,7 +44,7 @@ El metro del verso español es silábico: un verso se mide por sus sílabas mét
 | `c_stressed_vowels` | dict[str, int] | Distribución de las vocales acentuadas |
 | `mean_line_len` | float | Longitud media de un verso en sílabas métricas |
 
-El metro es la medida de la mayoría de los versos, y no se determina (`None`) si más de una décima parte de los versos (`VERSE_MAX_DEVIATIONS`) quedan fuera de él tras el ajuste: un poema polimétrico (una silva de heptasílabos y endecasílabos, un soneto con estrambote de más de una décima parte de heptasílabos), el verso libre y la prosa. Un solo verso tampoco tiene metro (`VERSE_MIN_LINES`): cualquier línea de hasta 18 sílabas tiene una medida con nombre, y lo tendría el 36% de las oraciones de doce obras en prosa del [corpus de literatura](../datasets/spanishliterature.md), frente al 1,4% de dos oraciones como dos versos y al 0,1% de tres. La distribución de las medidas se cuenta con metro y sin él.
+El metro es la medida de la mayoría de los versos, y no se determina (`None`) si más de una décima parte de los versos (`VERSE_MAX_DEVIATIONS`) quedan fuera de él tras el ajuste: un poema polimétrico (una silva de heptasílabos y endecasílabos, un soneto con estrambote de más de una décima parte de heptasílabos), el verso libre y la prosa. Un solo verso tampoco tiene metro (`VERSE_MIN_LINES`): cualquier línea de hasta 18 sílabas tiene una medida con nombre, y lo tendría el 36% de las oraciones de doce obras en prosa del [corpus de literatura](../datasets/spanishliterature.md), frente al 1,4% de dos oraciones como dos versos y al 0,1% de tres. Los versos de un poema sin metro se ajustan a sus medidas comunes - las de al menos dos versos y una décima parte de ellos, como las 7 y las 11 sílabas de una lira o una silva - si estas ocupan más de la mitad de los versos, de modo que la distribución de las medidas y los tipos del endecasílabo cuentan las medidas reales de un poema polimétrico; los versos del verso libre y de la prosa conservan su lectura llana.
 
 Los acentos rítmicos (`VERSE_RHYTHMS`) son los que un metro pide además del último, que todo verso tiene por la ley del acento final: el endecasílabo se acentúa en la 6.ª sílaba (a maiore) o en la 4.ª y la 8.ª (sáfico) o la 7.ª (dactílico); un verso compuesto, en el último acento de su primer hemistiquio. Un metro con solo el último acento, el octosílabo entre otros, tiene `p_pyrrhics` 0.
 
@@ -57,7 +58,7 @@ Los acentos rítmicos (`VERSE_RHYTHMS`) son los que un metro pide además del ú
 | `4-8-10` | 4.ª, 8.ª, sin 6.ª | sáfico |
 | `4-7-10` | 4.ª, 7.ª, sin 6.ª ni 8.ª | dactílico, de gaita gallega |
 
-Un verso con la 6.ª sílaba acentuada toma su tipo de su primer acento; `4-6-10` cuenta como sáfico en algunos tratados. Un verso sin ninguno de los tres conjuntos queda fuera de `c_rhythms` y se cuenta en `p_pyrrhics`. Las sílabas de `stresses` y `stress_profile` se cuentan desde cero, así que la 6.ª sílaba es el número 5.
+Un verso con la 6.ª sílaba acentuada toma su tipo de su primer acento; `4-6-10` cuenta como sáfico en algunos tratados. Un verso sin ninguno de los tres conjuntos queda fuera de `c_rhythms` y se cuenta en `p_pyrrhics`. Las sílabas métricas de `stress_profile` se cuentan desde cero, así que la 6.ª sílaba es el número 5. `stresses` indexa `syllables`, y ambos coinciden con `patterns` hasta el último acento de un verso simple; en un verso compuesto cada hemistiquio tiene su propia medida, así que tras una aguda o una esdrújula en la cesura `patterns` y `syllables` se separan, y `caesuras` dice dónde empieza el segundo hemistiquio.
 
 !!! note "Nota"
     La escansión, el metro y los acentos se pueden obtener por separado con las funciones del módulo. El algoritmo y las funciones se describen en la [sección](verse_stats_funcs.md) correspondiente.
@@ -167,6 +168,8 @@ El alejandrino se lee por hemistiquios de 7 sílabas. La cesura impide la sinale
     # ('la', 'prin', 'ce', 'sa‿es', 'tá', 'pá', 'li', 'da', 'en', 'su', 'si', 'lla', 'de', 'o', 'ro')
     vs.patterns[2], vs.patterns[3]
     # ('+-+--+-+-+--+-', '--+-++---+--+-')
+    vs.stresses[3], vs.caesuras
+    # ((2, 4, 5, 10, 13), (7, 7, 7, 8, 7, 7))
     ```
 
 ### accentuate { #accentuate }
@@ -193,4 +196,4 @@ Devuelve el texto con los acentos marcados: se pone un acento agudo (U+0301) tra
     ```
 
 !!! note "Sobre los sonetos de DISCO"
-    En los 4259 sonetos de [SpanishSonnets](../datasets/spanishsonnets.md) el metro es el endecasílabo en 3873, el alejandrino en 316, y 28 sonetos no tienen metro, entre ellos diálogos con los nombres de los interlocutores en los versos y sonetos con estrambote. Los tipos del endecasílabo cambian del Siglo de Oro al siglo XIX: el heroico `2-6-10` encabeza los siglos XV-XVII (el 32% de los versos con tipo, el sáfico `4-8-10` el 18%), y el sáfico encabeza el XIX (el 25%, el heroico el 25%, el melódico `3-6-10` el 21%).
+    En los 4259 sonetos de [SpanishSonnets](../datasets/spanishsonnets.md) el metro es el endecasílabo en 3874, el alejandrino en 316, y 27 sonetos no tienen metro, entre ellos diálogos con los nombres de los interlocutores en los versos y sonetos con estrambote. Los tipos del endecasílabo cambian del Siglo de Oro al siglo XIX: el heroico `2-6-10` encabeza los siglos XV-XVII (el 32% de los versos con tipo, el sáfico `4-8-10` el 18%), y el sáfico encabeza el XIX (el 25%, el heroico el 25%, el melódico `3-6-10` el 21%).

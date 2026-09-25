@@ -31,7 +31,7 @@ División de una palabra en sílabas. Cada sílaba se construye alrededor de un 
 | los demás pares de consonantes se separan | ac-to, is-la, at-las, rit-mo |
 | de tres o más consonantes, las dos últimas pasan a la sílaba siguiente cuando forman uno de esos grupos; si no, solo pasa la última | com-pra, cons-truir, ins-ti-tu-to, obs-tá-cu-lo, tungs-te-no |
 
-La palabra se normaliza a NFC (un acento descompuesto pasa a ser una sola letra con su base) y se pasa a minúsculas. Se divide en partes por cifras, guiones y otros caracteres que no son letras, cada parte se silabifica por separado (`te-ó-ri-co-prác-ti-co`), y una parte sin vocales (una abreviatura como `sh`) no produce sílabas. Las vocales con diacríticos extranjeros cuentan como vocales fuertes con tilde (`Björk`); una diéresis distinta de `ü` marca hiato (`Llu-ï-sa`, `Ci-tro-ën`) y los portugueses `ão` y `õe` son diptongos (`São`, `Ca-mões`).
+La palabra se normaliza a NFC (un acento descompuesto pasa a ser una sola letra con su base) y se pasa a minúsculas. Se divide en partes por cifras, guiones y otros caracteres que no son letras, cada parte se silabifica por separado (`te-ó-ri-co-prác-ti-co`), y una parte sin vocales (una abreviatura como `sh`) no produce sílabas. Las vocales con diacríticos extranjeros cuentan como vocales fuertes con tilde (`Björk`). La diéresis marca hiato: la `ü` del verso fuera de `gü` y `qü` y la `ï` (`sü-a-ve`, `rü-i-do`, `glo-rï-o-sa`, `Llu-ï-sa`), que dejan el acento a las reglas de la palabra, y la `ë` del francés (`Ci-tro-ën`), que lo lleva; los portugueses `ão` y `õe` son diptongos (`São`, `Ca-mões`).
 
 Parámetros:
 

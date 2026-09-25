@@ -52,9 +52,11 @@ def syllabify(word: str) -> list[str]:
         hyphens and other non-letters, each part is syllabified on its
         own (te-ó-ri-co-prác-ti-co), and a part without vowels
         (an abbreviation like sh) yields no syllables. Vowels with foreign
-        diacritics count as accented strong vowels (Björk); a diaeresis
-        other than ü marks a hiatus (Llu-ï-sa, Ci-tro-ën) and the
-        Portuguese ão and õe are diphthongs (São, Ca-mões)
+        diacritics count as accented strong vowels (Björk). A diaeresis
+        marks a hiatus: the ü of verse outside gü and qü and the ï
+        (sü-a-ve, rü-i-do, glo-rï-o-sa, Llu-ï-sa), which leave the stress to
+        the rules of the word, and the ë of French (Ci-tro-ën), which takes
+        it; the Portuguese ão and õe are diphthongs (São, Ca-mões)
 
     References:
         Real Academia Española. Ortografía de la lengua española. 2010, §§ 2.2, 4.1
@@ -268,14 +270,14 @@ def _joins(part: str, vowels: list[int], index: int) -> bool:
         join, two strong vowels do not. A weak
         vowel followed by a strong one is left to that vowel
         (chi-hua-hua, ca-ca-hue-te). The same check adds the third vowel
-        of a triphthong (buey, a-ve-ri-guáis). A vowel with a diaeresis
-        other than ü never joins (Llu-ï-sa), a Portuguese nasal vowel
+        of a triphthong (buey, a-ve-ri-guáis). A vowel with the diaeresis of
+        a hiatus never joins (sü-a-ve, Llu-ï-sa), a Portuguese nasal vowel
         joins a following o or e (São, Ca-mões)
     """
     first, second = vowels[index], vowels[index + 1]
     if not _adjacent(part, first, second):
         return False
-    if part[first] in HIATUS_VOWELS or part[second] in HIATUS_VOWELS:
+    if _marks_hiatus(part, first) or _marks_hiatus(part, second):
         return False
     if part[first] in NASAL_VOWELS:
         return part[second] in "oe"
@@ -293,6 +295,14 @@ def _joins(part: str, vowels: list[int], index: int) -> bool:
         if not _is_weak(part, third) and _adjacent(part, second, third):
             return False
     return True
+
+
+def _marks_hiatus(part: str, index: int) -> bool:
+    """Whether the vowel carries the diaeresis of a hiatus: ï, ë, ü outside gü and qü (pin-güi-no)"""
+    letter = part[index]
+    if letter == "ü":
+        return index == 0 or part[index - 1] not in "gq"
+    return letter in HIATUS_VOWELS
 
 
 def _boundary(part: str, end: int, start: int) -> int:

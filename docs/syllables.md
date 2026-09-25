@@ -31,7 +31,7 @@ Division of a word into syllables. A syllable is built around a vowel nucleus: a
 | other consonant pairs are split | ac-to, is-la, at-las, rit-mo |
 | of three or more consonants the last two go to the next syllable when they form such a cluster, otherwise only the last one does | com-pra, cons-truir, ins-ti-tu-to, obs-tá-cu-lo, tungs-te-no |
 
-The word is normalized to NFC (a decomposed accent becomes one letter with its base) and lower-cased. It is split into parts at digits, hyphens and other non-letters, each part is syllabified on its own (`te-ó-ri-co-prác-ti-co`), and a part without vowels (an abbreviation like `sh`) yields no syllables. Vowels with foreign diacritics count as accented strong vowels (`Björk`); a diaeresis other than `ü` marks a hiatus (`Llu-ï-sa`, `Ci-tro-ën`) and the Portuguese `ão` and `õe` are diphthongs (`São`, `Ca-mões`).
+The word is normalized to NFC (a decomposed accent becomes one letter with its base) and lower-cased. It is split into parts at digits, hyphens and other non-letters, each part is syllabified on its own (`te-ó-ri-co-prác-ti-co`), and a part without vowels (an abbreviation like `sh`) yields no syllables. Vowels with foreign diacritics count as accented strong vowels (`Björk`). A diaeresis marks a hiatus: the `ü` of verse outside `gü` and `qü` and the `ï` (`sü-a-ve`, `rü-i-do`, `glo-rï-o-sa`, `Llu-ï-sa`), which leave the stress to the rules of the word, and the `ë` of French (`Ci-tro-ën`), which takes it; the Portuguese `ão` and `õe` are diphthongs (`São`, `Ca-mões`).
 
 Parameters:
 

@@ -37,6 +37,24 @@ ROMANCE = """Que por mayo era, por mayo,
 cuando hace la calor,
 cuando los trigos encañan
 y están los campos en flor,"""
+# The first three liras of the Vida retirada by Fray Luis de León: 7-11-7-7-11
+LIRAS = """¡Qué descansada vida
+la del que huye el mundanal ruido
+y sigue la escondida
+senda por donde han ido
+los pocos sabios que en el mundo han sido!
+
+Que no le enturbia el pecho
+de los soberbios grandes el estado,
+ni del dorado techo
+se admira, fabricado
+del sabio moro, en jaspes sustentado.
+
+No cura si la fama
+canta con voz su nombre pregonera,
+ni cura si encarama
+la lengua lisonjera
+lo que condena la verdad sincera."""
 SONNETS_ARCHIVE = Path(__file__).parents[1] / "ests" / "datasets" / "data" / sonnets_module.ARCHIVE
 
 
@@ -101,6 +119,7 @@ def test_endecasyllables():
     assert vs.c_clausulas == {"llana": 4}
     assert (vs.p_masculine, vs.p_feminine, vs.p_dactylic) == (0.0, 1.0, 0.0)
     assert vs.c_stressed_vowels == {"a": 8, "e": 3, "i": 2, "u": 2, "o": 1}
+    assert vs.caesuras == (None, None, None, None)
 
 
 def test_alexandrines():
@@ -114,6 +133,10 @@ def test_alexandrines():
         "la", "prin", "ce", "sa‿es", "tá", "pá", "li", "da", "en", "su", "si", "lla", "de", "o", "ro"
     )  # fmt: skip
     assert vs.patterns[3] == "--+-++---+--+-"
+    # The stresses index the syllables, the patterns keep the metrical syllables
+    assert vs.stresses[3] == (2, 4, 5, 10, 13)
+    assert [vs.syllables[3][index] for index in vs.stresses[3]] == ["ce", "tá", "pá", "si", "o"]
+    assert vs.caesuras == (7, 7, 7, 8, 7, 7)
     # The last syllables of the hemistichs are always stressed
     assert vs.stress_profile[5] == vs.stress_profile[12] == 1.0
     assert vs.c_clausulas == {"aguda": 2, "llana": 4}
@@ -209,6 +232,44 @@ def test_no_meter():
     assert sum(vs.c_rhythms.values()) == 2
     # a single line has no meter
     assert VerseStats("Cuando me paro a contemplar mi estado").meter is None
+
+
+def test_tied_lengths():
+    # Two lines of 10 syllables in the plain reading, two of 11: the hiatus brings all to 11
+    stanza = """Feliz eternamente y escondido
+viviré de ocuparle satisfecho
+¡De tantos mundos como Dios ha hecho,
+este espacio no más a Dios le pido!"""
+    vs = VerseStats(stanza)
+    assert (vs.meter, vs.c_feet) == ("endecasílabo", {11: 4})
+    # two lines of two lengths keep the shorter one
+    assert VerseStats("Cuando me paro a contemplar mi estado\nla luz del día").meter is None
+
+
+def test_polymetric():
+    vs = VerseStats(LIRAS)
+    assert (vs.meter, vs.n_feet) == (None, None)
+    assert isnan(vs.p_deviations)
+    # the lines are fitted to the common lengths: ruido takes a hiatus twice to reach 11
+    assert vs.c_feet == {7: 9, 11: 6}
+    assert vs.syllables[1] == (
+        "la", "del", "que", "hu", "ye", "el", "mun", "da", "nal", "rui", "do"
+    )  # fmt: skip
+    assert sum(vs.c_rhythms.values()) == 5
+    # free verse without a common length keeps the plain readings
+    free = (
+        "El mar\nla noche entera sobre los tejados\ny nadie pasa por la calle vacía de la ciudad"
+    )
+    assert VerseStats(free).c_feet == {3: 1, 11: 1, 17: 1}
+
+
+def test_diaeresis():
+    # a written diaeresis splits the diphthong and no synaeresis joins it back
+    assert scan("Viose un guerrero en lides y rüinas").syllables[-3:] == ("rü", "i", "nas")
+    assert scan("la glorïosa luz de la poesía", 11).syllables == (
+        "la", "glo", "rï", "o", "sa", "luz", "de", "la", "poe", "sí", "a"
+    )  # fmt: skip
+    assert scan("vuestra süave musa").length == 7
 
 
 def test_pyrrhics():

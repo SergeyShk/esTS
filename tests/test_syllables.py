@@ -188,6 +188,12 @@ WORDS = [
     ("Camões", "ca-mões", [1]),
     ("João", "jo-ão", [1]),
     ("naïve", "na-ï-ve", [1]),
+    # The diaeresis of verse: a hiatus that leaves the stress to the rules of the word
+    ("süave", "sü-a-ve", [1]),
+    ("rüido", "rü-i-do", [1]),
+    ("crüel", "crü-el", [1]),
+    ("glorïosa", "glo-rï-o-sa", [2]),
+    ("vïolento", "vï-o-len-to", [2]),
     ("CASA", "ca-sa", [0]),
     # No vowels
     ("sh", "", []),

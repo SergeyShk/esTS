@@ -10,6 +10,7 @@ from spacy.tokens import Doc
 
 from .constants import (
     ACCENTED_VOWELS,
+    HIATUS_VOWELS,
     VERSE_CLAUSULAS,
     VERSE_HEMISTICHS,
     VERSE_MAX_DEVIATIONS,
@@ -57,12 +58,24 @@ class _Unit:
 
 
 class _Scansion(NamedTuple):
-    """Metrical syllables of a line, its stressed syllables, its length and its ending"""
+    """
+    Scansion of a line
+
+    Description:
+        The syllables as the verse reads them and the indices of the stressed
+        ones, the stressed metrical syllables, the length in metrical
+        syllables, the syllables after the last stress and the first syllable
+        of the second hemistich. The metrical syllables are the syllables up to
+        the last stress, and in a compound verse each hemistich counts its own
+        length by the law of the final stress
+    """
 
     syllables: tuple[str, ...]
     stresses: tuple[int, ...]
+    metrical: tuple[int, ...]
     length: int
     tail: int
+    caesura: int | None = None
 
 
 @dataclass(slots=True)
@@ -109,7 +122,12 @@ class VerseStats:
         determined (None) if more than a tenth of the lines (VERSE_MAX_DEVIATIONS)
         do not reach it or if it has no name (a line of more than 18 syllables
         is prose): a polymetric poem (a silva of 7 and 11 syllables), free
-        verse and prose. The rhythm is described by the stresses of the lines
+        verse and prose. The lines of a polymetric poem are fitted to its
+        common lengths instead, the 7 and the 11 syllables of a lira, while
+        the lines of free verse and prose keep their plain readings; either
+        way the lengths and the types of the endecasílabo count them. A written
+        diaeresis is the mark of a hiatus (sü-a-ve, glo-rï-o-sa) that no
+        synaeresis joins. The rhythm is described by the stresses of the lines
         of the meter: the stress profile, the rhythmic stresses of the meter
         (VERSE_RHYTHMS) - the 6th syllable of the endecasílabo, or the 4th with
         the 8th or the 7th - and the types of the endecasílabo by its stresses.
@@ -173,10 +191,14 @@ class VerseStats:
             final stress the pattern of a line is one syllable longer after an
             aguda and one shorter after an esdrújula, at the end of a line and of
             a hemistich
-        stresses (tuple[tuple[int, ...], ...]): Numbers of the stressed metrical
-            syllables of every line, from zero
+        stresses (tuple[tuple[int, ...], ...]): Indices of the stressed syllables
+            of every line in syllables, from zero
+        caesuras (tuple[int|None, ...]): Index of the first syllable of the
+            second hemistich of every line in syllables, None for a simple verse
         patterns (tuple[str, ...]): Patterns of the lines of + (a stressed
-            metrical syllable) and - (an unstressed one)
+            metrical syllable) and - (an unstressed one); in a compound verse
+            each hemistich takes its own length, so after an aguda or an
+            esdrújula at the caesura the pattern and syllables part
         c_clausulas (dict[str, int]): Distribution of the endings of the lines by type
         p_masculine (float): Share of oxytone endings (aguda)
         p_feminine (float): Share of paroxytone endings (llana)
@@ -225,15 +247,16 @@ class VerseStats:
             if meter is None or p_deviations > VERSE_MAX_DEVIATIONS:
                 meter = None
                 p_deviations = nan
-            else:
-                for line, scansion in zip(lines, scansions, strict=True):
-                    line.scansion = scansion
+                scansions = _fit_polymetric(lines)
+            for line, scansion in zip(lines, scansions, strict=True):
+                line.scansion = scansion
         self.meter = meter
         self.n_feet = length if meter is not None else None
         self.p_deviations = p_deviations
         scansions = [line.scansion for line in lines]
         self.syllables = tuple(scansion.syllables for scansion in scansions)
         self.stresses = tuple(scansion.stresses for scansion in scansions)
+        self.caesuras = tuple(scansion.caesura for scansion in scansions)
         self.patterns = tuple(_pattern(scansion) for scansion in scansions)
         self.c_feet = dict(sorted(Counter(scansion.length for scansion in scansions).items()))
         self.mean_line_len = safe_divide(
@@ -245,7 +268,7 @@ class VerseStats:
         self.p_pyrrhics = nan
         if self.n_feet is not None:
             self.stress_profile = tuple(
-                sum(position in scansion.stresses for scansion in metrical) / len(metrical)
+                sum(position in scansion.metrical for scansion in metrical) / len(metrical)
                 for position in range(self.n_feet)
             )
             rhythms = _rhythms(self.meter, hemistich)
@@ -256,7 +279,7 @@ class VerseStats:
             rhythm
             for scansion in scansions
             if scansion.length == VERSE_METERS["endecasílabo"]
-            and (rhythm := _endecasyllable_type(scansion.stresses)) is not None
+            and (rhythm := _endecasyllable_type(scansion.metrical)) is not None
         )
         self.c_rhythms = dict(rhythm_types.most_common())
 
@@ -382,7 +405,12 @@ def _boundary(previous: _Unit, syllable: str, word: int) -> int:
     """Kind of the boundary between a unit and the next syllable"""
     if not (_ends_in_vowel(previous.text) and _starts_with_vowel(syllable)):
         return HARD
-    return SYNAERESIS if previous.word == word else SYNALEPHA_BOUNDARY
+    if previous.word != word:
+        return SYNALEPHA_BOUNDARY
+    # A diaeresis is the mark of a hiatus that no synaeresis joins (sü-a-ve, glo-rï-o-sa)
+    if previous.text[-1] in HIATUS_VOWELS or syllable.lstrip("h")[:1] in HIATUS_VOWELS:
+        return HARD
+    return SYNAERESIS
 
 
 def _ends_in_vowel(syllable: str) -> bool:
@@ -456,7 +484,7 @@ def _scan(units: Sequence[_Unit], joins: set[int]) -> _Scansion:
             flags.append(unit.stressed)
     stresses = tuple(index for index, flag in enumerate(flags) if flag)
     last = stresses[-1] if stresses else len(flags) - 1
-    return _Scansion(tuple(syllables), stresses, last + 2, len(flags) - 1 - last)
+    return _Scansion(tuple(syllables), stresses, stresses, last + 2, len(flags) - 1 - last)
 
 
 def _fit(units: Sequence[_Unit], bounds: Sequence[int], length: int) -> _Scansion:
@@ -543,11 +571,14 @@ def _fit_compound(line: _Line, hemistich: int) -> _Scansion | None:
             parts.append(scansion)
         else:
             first, second = parts
+            caesura = len(first.syllables)
             joined = _Scansion(
                 first.syllables + second.syllables,
-                first.stresses + tuple(hemistich + position for position in second.stresses),
+                first.stresses + tuple(caesura + index for index in second.stresses),
+                first.metrical + tuple(hemistich + position for position in second.metrical),
                 2 * hemistich,
                 second.tail,
+                caesura,
             )
             if best is None or cost < best[0]:
                 best = (cost, joined)
@@ -568,31 +599,75 @@ def _fit_meter(lines: Sequence[_Line]) -> tuple[int, int | None, list[_Scansion]
     Length of the meter of the lines, the length of its hemistich and the fitted lines
 
     Description:
-        The candidate is the length of most plain readings as a simple verse,
-        and a compound verse (VERSE_HEMISTICHS) one syllable off it or of it
-        if more than half of the plain readings split into its hemistichs; the
-        lines are fitted to each, and the one with the fewest lines off it
-        wins, the compound verse on a tie. A compound verse is not tried
-        without the support of the plain readings: fitted by hiatuses and
-        diereses, an endecasílabo would split into two hemistichs of 6 as
-        well. Fewer lines than VERSE_MIN_LINES have no meter
+        The candidates are the lengths of most plain readings as a simple verse
+        - all of them on a tie from three lines up, so that a stanza of
+        endecasílabos with two lines of 10 syllables in the plain reading, which
+        a hiatus brings to 11, gets its meter - and a compound verse
+        (VERSE_HEMISTICHS) one syllable off such a length or of it if more than
+        half of the plain readings split into its hemistichs; the lines are
+        fitted to each, and the one with the fewest lines off it wins, the
+        shorter length and the compound verse on a tie. Two lines of two
+        lengths keep the shorter one: of two lines of prose one would fit
+        either. On the stanzas of the sonnets of SpanishSonnets the ties leave
+        414 of 17,207 without a meter instead of 664, and a meter goes to 0.2%
+        of three sentences of prose as three lines instead of 0.13%. A compound
+        verse is not tried without the support of the plain readings: fitted by
+        hiatuses and diereses, an endecasílabo would split into two hemistichs
+        of 6 as well. Fewer lines than VERSE_MIN_LINES have no meter
     """
     if len(lines) < VERSE_MIN_LINES:
         return None
     lengths = Counter(line.scansion.length for line in lines)
-    length = max(lengths, key=lambda value: (lengths[value], -value))
-    compounds = [
-        (compound, hemistich)
-        for compound, hemistich in VERSE_HEMISTICHS.items()
-        if abs(compound - length) <= 1
-    ]
-    supported = [
-        (compound, hemistich)
-        for compound, hemistich in compounds
-        if sum(_splits(line, hemistich) for line in lines) > len(lines) / 2
-    ]
-    _, length, hemistich, scansions = _best_fit(lines, [*supported, (length, None)])
+    most = max(lengths.values())
+    tied = sorted(length for length, count in lengths.items() if count == most)
+    if len(lines) < 3:
+        tied = tied[:1]
+    candidates: list[tuple[int, int | None]] = []
+    for length in tied:
+        candidates += [
+            (compound, hemistich)
+            for compound, hemistich in VERSE_HEMISTICHS.items()
+            if abs(compound - length) <= 1
+            and (compound, hemistich) not in candidates
+            and sum(_splits(line, hemistich) for line in lines) > len(lines) / 2
+        ]
+        candidates.append((length, None))
+    _, length, hemistich, scansions = _best_fit(lines, candidates)
     return length, hemistich, scansions
+
+
+def _fit_polymetric(lines: Sequence[_Line]) -> list[_Scansion]:
+    """
+    Scansions of the lines of a poem with no meter, fitted to its common lengths
+
+    Description:
+        The common lengths are the named lengths of the plain readings of at
+        least two lines and of a tenth of them (VERSE_MAX_DEVIATIONS) - the
+        7 and the 11 syllables of a lira or a silva. If they take more than
+        half of the lines, every other line is fitted to the nearest of them
+        it reaches, the longer one on a tie; otherwise, in free verse and
+        prose, the lines keep their plain readings
+    """
+    lengths = Counter(line.scansion.length for line in lines)
+    common = [
+        length
+        for length, count in lengths.items()
+        if length in METER_NAMES and count >= max(2, VERSE_MAX_DEVIATIONS * len(lines))
+    ]
+    if sum(lengths[length] for length in common) <= len(lines) / 2:
+        return [line.scansion for line in lines]
+    scansions = []
+    for line in lines:
+        scansion = line.scansion
+        plain = scansion.length
+        if plain not in common:
+            for length in sorted(common, key=lambda value: (abs(value - plain), -value)):
+                fitted = _fit(line.units, line.bounds, length)
+                if fitted.length == length:
+                    scansion = fitted
+                    break
+        scansions.append(scansion)
+    return scansions
 
 
 def _best_fit(
@@ -623,7 +698,7 @@ def _splits(line: _Line, hemistich: int) -> bool:
 def _pattern(scansion: _Scansion) -> str:
     """Pattern of a line: + for a stressed metrical syllable, - for an unstressed one"""
     return "".join(
-        PATTERN_STRESSED if position in scansion.stresses else PATTERN_UNSTRESSED
+        PATTERN_STRESSED if position in scansion.metrical else PATTERN_UNSTRESSED
         for position in range(scansion.length)
     )
 
@@ -639,7 +714,7 @@ def _rhythms(meter: str | None, hemistich: int | None) -> tuple[tuple[int, ...],
 
 def _has_rhythm(scansion: _Scansion, rhythms: Sequence[Sequence[int]]) -> bool:
     """Checking that a line has one of the sets of rhythmic stresses"""
-    return any(all(position - 1 in scansion.stresses for position in rhythm) for rhythm in rhythms)
+    return any(all(position - 1 in scansion.metrical for position in rhythm) for rhythm in rhythms)
 
 
 def _endecasyllable_type(stresses: Sequence[int]) -> str | None:

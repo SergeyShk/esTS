@@ -34,8 +34,9 @@ The meter of Spanish verse is syllabic: a line is measured by its metrical sylla
 | `stress_profile` | tuple[float, ...] | Share of the stressed lines of the meter by metrical syllable |
 | `c_rhythms` | dict[str, int] | Distribution of the endecasílabos by type |
 | `syllables` | tuple[tuple[str, ...], ...] | Syllables of every line as the verse reads them, a synalepha marked with `‿` |
-| `stresses` | tuple[tuple[int, ...], ...] | Numbers of the stressed metrical syllables of every line, from zero |
-| `patterns` | tuple[str, ...] | Patterns of the lines of `+` (a stressed metrical syllable) and `-` (an unstressed one) |
+| `stresses` | tuple[tuple[int, ...], ...] | Indices of the stressed syllables of every line in `syllables`, from zero |
+| `caesuras` | tuple[int/None, ...] | Index of the first syllable of the second hemistich of every line in `syllables`, `None` for a simple verse |
+| `patterns` | tuple[str, ...] | Patterns of the lines of `+` (a stressed metrical syllable) and `-` (an unstressed one), as long as the line in metrical syllables |
 | `c_clausulas` | dict[str, int] | Distribution of the endings of the lines by type: `aguda`, `llana`, `esdrújula`, `sobresdrújula` |
 | `p_masculine` | float | Share of oxytone endings (`aguda`, the stress on the last syllable) |
 | `p_feminine` | float | Share of paroxytone endings (`llana`, one syllable after the stress) |
@@ -43,7 +44,7 @@ The meter of Spanish verse is syllabic: a line is measured by its metrical sylla
 | `c_stressed_vowels` | dict[str, int] | Distribution of the stressed vowels |
 | `mean_line_len` | float | Mean length of a line in metrical syllables |
 
-The meter is the length of most lines, and it is not determined (`None`) if more than a tenth of the lines (`VERSE_MAX_DEVIATIONS`) stay off it after the fitting: a polymetric poem (a silva of heptasílabos and endecasílabos, a sonnet with an estrambote of more than a tenth of heptasílabos), free verse and prose. A single line has no meter either (`VERSE_MIN_LINES`): any line of up to 18 syllables has a length with a name, and 36% of the sentences of twelve prose works of the [corpus of literature](../datasets/spanishliterature.md) would get one, against 1.4% of two sentences as two lines and 0.1% of three. The distribution of the lengths is counted with a meter and without it.
+The meter is the length of most lines, and it is not determined (`None`) if more than a tenth of the lines (`VERSE_MAX_DEVIATIONS`) stay off it after the fitting: a polymetric poem (a silva of heptasílabos and endecasílabos, a sonnet with an estrambote of more than a tenth of heptasílabos), free verse and prose. A single line has no meter either (`VERSE_MIN_LINES`): any line of up to 18 syllables has a length with a name, and 36% of the sentences of twelve prose works of the [corpus of literature](../datasets/spanishliterature.md) would get one, against 1.4% of two sentences as two lines and 0.1% of three. The lines of a poem without a meter are fitted to its common lengths - the ones of at least two lines and a tenth of them, as the 7 and the 11 syllables of a lira or a silva - if these take more than half of the lines, so that the distribution of the lengths and the types of the endecasílabo count the real lengths of a polymetric poem; the lines of free verse and prose keep their plain readings.
 
 The rhythmic stresses (`VERSE_RHYTHMS`) are the ones a meter asks for besides the last stress, which every line has by the law of the final stress: the endecasílabo is stressed on the 6th syllable (a maiore) or on the 4th and the 8th (sáfico) or the 7th (dactílico); a compound verse on the last stress of its first hemistich. A meter with the last stress alone, the octosílabo among others, has `p_pyrrhics` 0.
 
@@ -57,7 +58,7 @@ The rhythmic stresses (`VERSE_RHYTHMS`) are the ones a meter asks for besides th
 | `4-8-10` | 4th, 8th, no 6th | sáfico |
 | `4-7-10` | 4th, 7th, no 6th nor 8th | dactílico, de gaita gallega |
 
-A line with the 6th syllable stressed takes its type from its first stress; `4-6-10` counts as sáfico in some treatises. A line with none of the three sets is left out of `c_rhythms` and counted in `p_pyrrhics`. The syllables of `stresses` and `stress_profile` are counted from zero, so the 6th syllable is the number 5.
+A line with the 6th syllable stressed takes its type from its first stress; `4-6-10` counts as sáfico in some treatises. A line with none of the three sets is left out of `c_rhythms` and counted in `p_pyrrhics`. The metrical syllables of `stress_profile` are counted from zero, so the 6th syllable is the number 5. `stresses` indexes `syllables`, and the two agree with `patterns` up to the last stress of a simple verse; in a compound verse each hemistich takes its own length, so after an aguda or an esdrújula at the caesura `patterns` and `syllables` part, and `caesuras` tells where the second hemistich begins.
 
 !!! note "Note"
     The scansion, the meter and the stresses can be obtained apart with the functions of the module. The algorithm and the functions are described in the corresponding [section](verse_stats_funcs.md).
@@ -167,6 +168,8 @@ The alejandrino is read by hemistichs of 7 syllables. The caesura blocks the syn
     # ('la', 'prin', 'ce', 'sa‿es', 'tá', 'pá', 'li', 'da', 'en', 'su', 'si', 'lla', 'de', 'o', 'ro')
     vs.patterns[2], vs.patterns[3]
     # ('+-+--+-+-+--+-', '--+-++---+--+-')
+    vs.stresses[3], vs.caesuras
+    # ((2, 4, 5, 10, 13), (7, 7, 7, 8, 7, 7))
     ```
 
 ### accentuate { #accentuate }
@@ -193,4 +196,4 @@ Returns the text with the stresses marked: an acute accent (U+0301) is put after
     ```
 
 !!! note "On the sonnets of DISCO"
-    Over the 4,259 sonnets of [SpanishSonnets](../datasets/spanishsonnets.md) the meter is the endecasílabo for 3,873, the alejandrino for 316, and 28 sonnets have none, among them dialogues with the names of the speakers in the lines and sonnets with an estrambote. The types of the endecasílabo shift from the Golden Age to the 19th century: the heroico `2-6-10` leads in the 15th-17th centuries (32% of the typed lines, the sáfico `4-8-10` 18%), and the sáfico leads in the 19th (25%, the heroico 25%, the melódico `3-6-10` 21%).
+    Over the 4,259 sonnets of [SpanishSonnets](../datasets/spanishsonnets.md) the meter is the endecasílabo for 3,874, the alejandrino for 316, and 27 sonnets have none, among them dialogues with the names of the speakers in the lines and sonnets with an estrambote. The types of the endecasílabo shift from the Golden Age to the 19th century: the heroico `2-6-10` leads in the 15th-17th centuries (32% of the typed lines, the sáfico `4-8-10` 18%), and the sáfico leads in the 19th (25%, the heroico 25%, the melódico `3-6-10` 21%).
