@@ -1399,6 +1399,120 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_8" id="__nav_5_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Métricas de estilo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Métricas de estilo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats/style_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats/style_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2117,7 +2231,7 @@
 uv<span class="w"> </span>sync<span class="w"> </span>--all-groups
 </code></pre></div>
 <h2 id="model">El modelo de spaCy<a class="headerlink" href="#model" title="Permanent link">&para;</a></h2>
-<p>Las estadísticas básicas, la legibilidad y la diversidad léxica no necesitan ningún modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas y con el tokenizador del pipeline español vacío, y las sílabas y el acento por la ortografía. Las <a href="../stats/morph_stats/">estadísticas morfológicas</a>, las <a href="../stats/syntax_stats/">sintácticas</a>, las <a href="../stats/cohesion_stats/">de cohesión</a> y las <a href="../stats/lexical_stats/">de complejidad léxica</a> de una cadena sí lo necesitan - las sintácticas, un pipeline con analizador -, igual que el perfil de las palabras funcionales (<a href="../corpus/stylometry/"><code>function_words_profile</code></a>), los rasgos de un texto y la <a href="../corpus/compare/">comparación de corpus</a>, y construir un <code>Doc</code> para pasarlo a las estadísticas en lugar de una cadena; las pruebas también lo necesitan, donde viene con el grupo de dependencias <code>test</code>:</p>
+<p>Las estadísticas básicas, la legibilidad y la diversidad léxica no necesitan ningún modelo entrenado: las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas y con el tokenizador del pipeline español vacío, y las sílabas y el acento por la ortografía. Las <a href="../stats/morph_stats/">estadísticas morfológicas</a>, las <a href="../stats/syntax_stats/">sintácticas</a>, las <a href="../stats/cohesion_stats/">de cohesión</a> y las <a href="../stats/lexical_stats/">de complejidad léxica</a> de una cadena sí lo necesitan - las sintácticas, un pipeline con analizador -, igual que los sustantivos deverbales de las <a href="../stats/style_stats/">métricas de estilo</a>, el perfil de las palabras funcionales (<a href="../corpus/stylometry/"><code>function_words_profile</code></a>), los rasgos de un texto y la <a href="../corpus/compare/">comparación de corpus</a>, y construir un <code>Doc</code> para pasarlo a las estadísticas en lugar de una cadena; las pruebas también lo necesitan, donde viene con el grupo de dependencias <code>test</code>:</p>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>spacy<span class="w"> </span>download<span class="w"> </span>es_core_news_sm
 </code></pre></div>
 <h2 id="datasets">Conjuntos de datos<a class="headerlink" href="#datasets" title="Permanent link">&para;</a></h2>

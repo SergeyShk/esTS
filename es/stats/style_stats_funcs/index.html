@@ -11,14 +11,14 @@
       
       
       
-        <link rel="prev" href="../sentences/">
+        <link rel="prev" href="../style_stats/">
       
       
-        <link rel="next" href="../char_ngrams/">
+        <link rel="next" href="../../corpus/keyness/">
       
       
         
-          <link rel="alternate" href="../../../extractors/words/" hreflang="en">
+          <link rel="alternate" href="../../../stats/style_stats_funcs/" hreflang="en">
         
           <link rel="alternate" href="./" hreflang="es">
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Extracción de palabras - esTS</title>
+        <title>Funciones de las métricas - esTS</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#extraccion-de-palabras" class="md-skip">
+        <a href="#funciones-de-las-metricas" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Extracción de palabras
+              Funciones de las métricas
             
           </span>
         </div>
@@ -135,7 +135,7 @@
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="../../../extractors/words/" hreflang="en" class="md-select__link">
+            <a href="../../../stats/style_stats_funcs/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
@@ -243,13 +243,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../sentences/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../extractors/sentences/" class="md-tabs__link">
           
   
   
@@ -303,11 +301,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../stats/basic_stats/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../basic_stats/" class="md-tabs__link">
           
   
   
@@ -597,29 +597,24 @@
       
   
   
-    
   
   
-  
     
     
     
     
       
-        
-        
-      
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
             
   
   
@@ -637,7 +632,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -655,7 +650,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../sentences/" class="md-nav__link">
+      <a href="../../extractors/sentences/" class="md-nav__link">
         
   
   
@@ -680,37 +675,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Extracción de palabras
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../extractors/words/" class="md-nav__link">
         
   
   
@@ -726,87 +694,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Tabla de contenidos
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Descripción
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#parametros" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parámetros
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#metodos" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Métodos
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Métodos">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#extract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        extract
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_most_common" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_most_common
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -819,7 +706,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../char_ngrams/" class="md-nav__link">
+      <a href="../../extractors/char_ngrams/" class="md-nav__link">
         
   
   
@@ -905,24 +792,29 @@
       
   
   
+    
   
   
+  
     
     
     
     
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -940,7 +832,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
@@ -958,7 +850,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/basic_stats/" class="md-nav__link">
+      <a href="../basic_stats/" class="md-nav__link">
         
   
   
@@ -1036,7 +928,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/readability_stats/" class="md-nav__link">
+      <a href="../readability_stats/" class="md-nav__link">
         
   
   
@@ -1064,7 +956,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/readability_stats_funcs/" class="md-nav__link">
+      <a href="../readability_stats_funcs/" class="md-nav__link">
         
   
   
@@ -1150,7 +1042,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/diversity_stats/" class="md-nav__link">
+      <a href="../diversity_stats/" class="md-nav__link">
         
   
   
@@ -1178,7 +1070,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/diversity_stats_funcs/" class="md-nav__link">
+      <a href="../diversity_stats_funcs/" class="md-nav__link">
         
   
   
@@ -1214,7 +1106,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/morph_stats/" class="md-nav__link">
+      <a href="../morph_stats/" class="md-nav__link">
         
   
   
@@ -1242,7 +1134,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/syntax_stats/" class="md-nav__link">
+      <a href="../syntax_stats/" class="md-nav__link">
         
   
   
@@ -1270,7 +1162,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/cohesion_stats/" class="md-nav__link">
+      <a href="../cohesion_stats/" class="md-nav__link">
         
   
   
@@ -1348,7 +1240,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/lexical_stats/" class="md-nav__link">
+      <a href="../lexical_stats/" class="md-nav__link">
         
   
   
@@ -1376,7 +1268,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/lexical_stats_funcs/" class="md-nav__link">
+      <a href="../lexical_stats_funcs/" class="md-nav__link">
         
   
   
@@ -1409,6 +1301,8 @@
                 
   
   
+    
+  
   
   
     
@@ -1419,11 +1313,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_8" checked>
         
           
           <label class="md-nav__link" for="__nav_5_8" id="__nav_5_8_label" tabindex="0">
@@ -1444,7 +1338,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_8_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_8_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5_8">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1462,7 +1356,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/style_stats/" class="md-nav__link">
+      <a href="../style_stats/" class="md-nav__link">
         
   
   
@@ -1487,10 +1381,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../stats/style_stats_funcs/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1506,6 +1427,136 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#calc_classic_nausea" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Náusea clásica
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_academic_nausea" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Náusea académica
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_water" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contenido de agua
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is_stopword" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Palabra vacía
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_spam" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índice de spam
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_zipf_naturalness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Naturalidad según la ley de Zipf
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_keyword_density" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Densidad de palabras clave
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_verbal_nouns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sustantivos deverbales
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_phrase_density" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Densidad de expresiones
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_parentheticals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expresiones parentéticas
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2144,10 +2195,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
+  <a href="#calc_classic_nausea" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Descripción
+        Náusea clásica
       
     </span>
   </a>
@@ -2155,10 +2206,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#parametros" class="md-nav__link">
+  <a href="#calc_academic_nausea" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parámetros
+        Náusea académica
       
     </span>
   </a>
@@ -2166,41 +2217,90 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#metodos" class="md-nav__link">
+  <a href="#calc_water" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Métodos
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Métodos">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#extract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        extract
+        Contenido de agua
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#get_most_common" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#is_stopword" class="md-nav__link">
     <span class="md-ellipsis">
       
-        get_most_common
+        Palabra vacía
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#calc_spam" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índice de spam
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_zipf_naturalness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Naturalidad según la ley de Zipf
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_keyword_density" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Densidad de palabras clave
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_verbal_nouns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sustantivos deverbales
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_phrase_density" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Densidad de expresiones
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_parentheticals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Expresiones parentéticas
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2224,149 +2324,385 @@
   
 
 
-<h1 id="extraccion-de-palabras">Extracción de palabras<a class="headerlink" href="#extraccion-de-palabras" title="Permanent link">&para;</a></h1>
+<h1 id="funciones-de-las-metricas">Funciones de las métricas<a class="headerlink" href="#funciones-de-las-metricas" title="Permanent link">&para;</a></h1>
+<h2 id="calc_classic_nausea">Náusea clásica<a class="headerlink" href="#calc_classic_nausea" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
-<p><strong>ests.extractors.WordsExtractor</strong></p>
+<p><strong>ests.style_stats.calc_classic_nausea()</strong></p>
 </div>
-<h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Módulo para extraer palabras de un texto. Permite usar distintos tokenizadores, filtrar palabras vacías, números y signos de puntuación, lematizar, construir N-gramas y fijar la longitud mínima y máxima de las palabras extraídas.</p>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>El tokenizador por defecto es el tokenizador por reglas de la clase de idioma español de <a href="https://github.com/explosion/spaCy">spaCy</a> (<code>ests.utils.tokenize</code>); no necesita un modelo entrenado. Los signos de puntuación, incluidos <code>¿</code> y <code>¡</code>, los números como <code>1.500,50</code>, <code>3.º</code>, <code>1990-1995</code> y las abreviaturas como <code>Sr.</code>, <code>EE. UU.</code> son tokens únicos; las palabras con pronombres enclíticos (<code>dámelo</code>, <code>decírselo</code>) no se separan. Las rayas de un diálogo pegadas a las palabras, como las escriben los corpus de texto plano, se separan: <code>--No</code>, <code>-dijo</code>, <code>sí--dijo</code>, <code>sí-¿y qué?</code>, <code>reírse—me decía</code>, <code>dijo:—¡Mis</code>, <code>―dijo él―.</code> dan las palabras <code>No</code>, <code>dijo</code>, <code>sí</code>, <code>reírse</code>, <code>me</code>, <code>Mis</code>, <code>él</code>, también junto a los guiones bajos con que Project Gutenberg escribe la cursiva (<code>--_Siguro_</code>), mientras que un guion entre letras (<code>franco-alemán</code>) o ante una cifra (<code>-5</code>) se queda en su token; un sufijo citado con su guion (<code>-mente</code>) también lo pierde, y lo mismo el número de un punto de una lista (<code>Artículo 1.- El objeto</code> da el número <code>1</code>). La barra horizontal <code>―</code> de algunos textos digitalizados es una raya. <code>ests.utils.add_dash_rules(nlp)</code> añade las mismas reglas a las que ya tiene un pipeline de spaCy propio; el modelo de <code>get_nlp</code> ya las tiene, y los <a href="../../components/">componentes</a> de la biblioteca las añaden a su pipeline.</p>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Los lemas provienen de <a href="https://github.com/adbar/simplemma">simplemma</a> (<code>ests.utils.lemmatize</code>), que trabaja con un diccionario sin modelo entrenado: una forma conocida se convierte en su lema en minúsculas (<code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>), una forma desconocida se devuelve sin cambios (<code>Madrid</code>, <code>dámelo</code>).</p>
-</div>
-<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<p>La náusea clásica de <a href="https://advego.com/text/seo/">Advego</a>: la raíz cuadrada del número de apariciones de la palabra más frecuente. Mide la insistencia en una palabra sin tener en cuenta la longitud del texto, así que crece con el texto. La norma de Advego es como máximo 7, en la práctica 1-5.</p>
+<p>Fórmula:</p>
+<div class="arithmatex">\[
+\sqrt{\max_k n_k}
+\]</div>
+<p>donde <span class="arithmatex">\(n_k\)</span> es el número de apariciones de la palabra <span class="arithmatex">\(k\)</span>.</p>
 <table>
 <thead>
 <tr>
 <th style="text-align: center;">Parámetro</th>
 <th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>tokenizer</code></td>
-<td style="text-align: center;">Pattern/Callable</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Tokenizador o expresión regular</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>filter_punct</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>True</code></td>
-<td style="text-align: center;">Filtrar los signos de puntuación</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>filter_nums</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Filtrar los números, incluidos números con signo, rangos, fracciones, fechas, horas, porcentajes y ordinales (-5, +7, 1990-1995, 1.500,50, 12/03/2020, 3:30, 10%, 3.º, 1.ª, 2do)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>use_lexemes</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Usar los lemas de las palabras</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>stopwords</code></td>
-<td style="text-align: center;">Collection[str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Palabras vacías, comparadas sin distinguir mayúsculas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>lowercase</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Convertir las palabras a minúsculas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>ngram_range</code></td>
-<td style="text-align: center;">Tuple[int, int]</td>
-<td style="text-align: center;"><code>(1, 1)</code></td>
-<td style="text-align: center;">Límite inferior y superior del tamaño de los N-gramas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>min_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Longitud mínima de la palabra extraída</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>max_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Longitud máxima de la palabra extraída</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Las palabras vacías se comparan sin distinguir mayúsculas de minúsculas, así que una lista en minúsculas también filtra <code>Los</code> o <code>La</code> al principio de una oración. Un signo de puntuación es un token formado solo por signos y símbolos, también de varios caracteres: <code>?!</code>, <code>!..</code>, <code>--</code>, <code>…</code>, <code>€</code>. Los tokens vacíos, que <code>re.split</code> deja tras un separador final, se descartan antes de los filtros. Una lista de palabras vacías ya hecha es <code>spacy.lang.es.stop_words.STOP_WORDS</code>; téngase en cuenta que incluye verbos frecuentes como <code>tener</code>.</p>
-</div>
-<h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
-<h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
-<p>Extrae las palabras de un texto.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Valor por defecto</th>
 <th style="text-align: center;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">str</td>
+<td style="text-align: center;">list[str]</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Cadena de texto</td>
+<td style="text-align: center;">Lista de palabras</td>
 </tr>
 </tbody>
 </table>
-<p>Ejemplo de extracción de palabras con bigramas como tokens, tras filtrar números y palabras vacías y lematizar:</p>
+<h2 id="calc_academic_nausea">Náusea académica<a class="headerlink" href="#calc_academic_nausea" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.style_stats.calc_academic_nausea()</strong></p>
+</div>
+<p>La náusea académica de <a href="https://advego.com/text/seo/">Advego</a>: la proporción de las apariciones de las palabras más frecuentes del texto en porcentaje. La fórmula exacta de Advego no se ha publicado: la frecuencia sumada de las <code>top_n</code> palabras más frecuentes se divide entre el número de palabras. La norma de Advego es 5-15%.</p>
+<p>Fórmula:</p>
+<div class="arithmatex">\[
+100\times\frac{\sum_{k \in \textrm{top}_n} n_k}{N}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>top_n</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>10</code></td>
+<td style="text-align: center;">Número de las palabras más frecuentes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="calc_water">Contenido de agua<a class="headerlink" href="#calc_water" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.style_stats.calc_water()</strong></p>
+</div>
+<p>El contenido de agua de <a href="https://text.ru/seo">Text.ru</a>: la proporción de las palabras sin contenido en porcentaje, es decir, las palabras vacías de <a href="#is_stopword"><code>is_stopword</code></a> o de la lista pasada, sin distinguir mayúsculas. Las normas de Text.ru - hasta 15% natural, 15-30% excesivo, más de 30% alto - están pensadas para el ruso, que no tiene artículos; un texto en español tiene más agua solo por su gramática, un 42-54% en los textos del corpus de literatura.</p>
+<p>Fórmula:</p>
+<div class="arithmatex">\[
+100\times\frac{\textrm{Número de palabras vacías}}{\textrm{Número de palabras}}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>stopwords</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Lista de palabras vacías; si no se da, se usa <code>is_stopword</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="is_stopword">Palabra vacía<a class="headerlink" href="#is_stopword" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.style_stats.is_stopword()</strong></p>
+</div>
+<p>Comprueba si una palabra es una palabra vacía, sin distinguir mayúsculas. Las palabras vacías son las 265 formas de <code>ests.constants.STOPWORDS</code> - las clases cerradas de la gramática: artículos y demás determinantes (<code>este</code>, <code>cada</code>, <code>mucho</code>), pronombres (<code>él</code>, <code>cuyo</code>, <code>nadie</code>), preposiciones, conjunciones e interjecciones, con los adverbios que señalan, relacionan o preguntan (<code>aquí</code>, <code>así</code>, <code>dónde</code>) y los que niegan, afirman o focalizan (<code>no</code>, <code>solo</code>, <code>también</code>) - y las expresiones parentéticas de una palabra de <code>PARENTHETICALS</code> (<code>finalmente</code>, <code>naturalmente</code>). Se conservan las formas de la ortografía antigua (<code>á</code>, <code>ó</code>, <code>tí</code>), tal como las escriben los textos de dominio público. No se usan las palabras vacías de spaCy para el español: esa lista está hecha para noticias y contiene palabras con contenido (<code>acuerdo</code>, <code>dijo</code>, <code>verdad</code>, <code>grande</code>).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>word</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Palabra</td>
+</tr>
+</tbody>
+</table>
+<h2 id="calc_spam">Índice de spam<a class="headerlink" href="#calc_spam" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.style_stats.calc_spam()</strong></p>
+</div>
+<p>El índice de spam de <a href="https://text.ru/seo">Text.ru</a>: la proporción de las palabras repetidas del texto en porcentaje; cada aparición de una palabra salvo la primera es una repetición, así que el índice es <span class="arithmatex">\(100 \times (1 - TTR)\)</span>. Para calcularlo por lemas, extraiga las palabras lematizadas. Las normas de Text.ru: hasta 30% natural, 30-60% optimizado para SEO, más de 60% saturado.</p>
+<p>Fórmula:</p>
+<div class="arithmatex">\[
+100\times\frac{N - V}{N}
+\]</div>
+<p>donde <span class="arithmatex">\(N\)</span> es el número de palabras y <span class="arithmatex">\(V\)</span> el número de palabras distintas.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+<h2 id="calc_zipf_naturalness">Naturalidad según la ley de Zipf<a class="headerlink" href="#calc_zipf_naturalness" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.style_stats.calc_zipf_naturalness()</strong></p>
+</div>
+<p>La concordancia de las frecuencias de las palabras más frecuentes con la distribución ideal <span class="arithmatex">\(f_r = f_1 / r\)</span> de la <a href="https://es.wikipedia.org/wiki/Ley_de_Zipf">ley de Zipf</a>, donde <span class="arithmatex">\(f_1\)</span> es la frecuencia de la palabra más frecuente y <span class="arithmatex">\(r\)</span> el rango de una palabra (pr-cy, megaindex). Es 100 por uno menos la desviación relativa media de las frecuencias respecto de las ideales en los rangos de 2 a <span class="arithmatex">\(R = \min(top\_n, V, f_1)\)</span>: el rango 1 coincide con el ideal por construcción, y por encima del rango <span class="arithmatex">\(f_1\)</span> la frecuencia ideal es menor que uno y la desviación de los hápax crece sin límite. Los valores negativos se recortan a 0; la norma de los servicios es al menos 50%. Es <code>nan</code> cuando no hay rangos que comparar: todas las palabras son hápax, el texto tiene un solo tipo de palabra o <code>top_n</code> es menor que 2.</p>
+<p>Fórmula:</p>
+<div class="arithmatex">\[
+\max\left(0,\ 100\times\left(1 - \frac{1}{R-1}\sum_{r=2}^{R}\frac{|f_r - f_1/r|}{f_1/r}\right)\right)
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>top_n</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>10</code></td>
+<td style="text-align: center;">Número de las palabras más frecuentes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="calc_keyword_density">Densidad de palabras clave<a class="headerlink" href="#calc_keyword_density" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.style_stats.calc_keyword_density()</strong></p>
+</div>
+<p>La frecuencia de cada palabra clave por cada 100 palabras del texto (<a href="https://text.ru/seo">Text.ru</a>). Una palabra clave de varias palabras separadas por espacios se busca como una secuencia de palabras, y sus apariciones pueden solaparse. Las palabras se comparan sin distinguir mayúsculas; para comparar por lemas, extraiga las palabras lematizadas y pase lemas.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>keywords</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Palabras o frases clave</td>
+</tr>
+</tbody>
+</table>
+<h2 id="calc_verbal_nouns">Sustantivos deverbales<a class="headerlink" href="#calc_verbal_nouns" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.style_stats.calc_verbal_nouns()</strong></p>
+</div>
+<p>La proporción de los sustantivos derivados de un verbo entre los lemas de los sustantivos de un texto en porcentaje, <code>nan</code> para un texto sin sustantivos. Un sustantivo es deverbal por su sufijo - <code>-ción</code>, <code>-sión</code>, <code>-miento</code>, <code>-anza</code>, <code>-encia</code>, <code>-ancia</code>, <code>-aje</code>, <code>-dura</code>, <code>-azgo</code> (<code>revisión</code>, <code>nombramiento</code>, <code>aprendizaje</code>) - o es uno de los sustantivos cuya derivación no deja sufijo (<code>uso</code>, <code>pago</code>, <code>envío</code>), como en los predicados escindidos de <a href="../syntax_stats/"><code>SyntaxStats</code></a>. La regla atrapa también sustantivos de otro origen con las mismas terminaciones (<code>ciencia</code>, <code>distancia</code>), como cualquier regla de sufijos. En español un sustantivo solo se distingue de una forma verbal por la anotación (<code>uso</code>, <code>viaje</code>, <code>dura</code>), así que la función recibe los lemas de los tokens etiquetados <code>NOUN</code>, no las palabras.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
-<p><em>Código</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Importar la biblioteca</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.style_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_verbal_nouns</span>
 
-<span class="c1"># Preparar los datos</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">"No tengas 100 euros, ten 100 amigos"</span>
-
-<span class="c1"># Extraer las palabras</span>
-<span class="n">we</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">use_lexemes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="p">[</span><span class="s2">"no"</span><span class="p">],</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-</code></pre></div>
-<p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">(</span><span class="s1">'tener'</span>,<span class="w"> </span><span class="s1">'euro'</span>,<span class="w"> </span><span class="s1">'tener'</span>,<span class="w"> </span><span class="s1">'amigo'</span>,<span class="w"> </span><span class="s1">'tener_euro'</span>,<span class="w"> </span><span class="s1">'euro_tener'</span>,<span class="w"> </span><span class="s1">'tener_amigo'</span><span class="o">)</span>
+<span class="n">calc_verbal_nouns</span><span class="p">([</span><span class="s2">"revisión"</span><span class="p">,</span> <span class="s2">"proyecto"</span><span class="p">,</span> <span class="s2">"nombramiento"</span><span class="p">,</span> <span class="s2">"casa"</span><span class="p">])</span>
+<span class="c1"># 50.0</span>
 </code></pre></div>
 </div>
-<h3 id="get_most_common">get_most_common<a class="headerlink" href="#get_most_common" title="Permanent link">&para;</a></h3>
-<p>Devuelve un contador de las palabras más frecuentes del texto. Recibe como parámetro el número de palabras a devolver.</p>
-<p>Para ilustrar el método reutilizamos el código del ejemplo anterior:</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<p><em>Código</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">...</span>
-
-<span class="c1"># Mostrar las palabras más frecuentes</span>
-<span class="n">we</span><span class="o">.</span><span class="n">get_most_common</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-</code></pre></div>
-<p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">[(</span><span class="s1">'tener'</span>,<span class="w"> </span><span class="m">2</span><span class="o">)</span>,<span class="w"> </span><span class="o">(</span><span class="s1">'euro'</span>,<span class="w"> </span><span class="m">1</span><span class="o">)</span>,<span class="w"> </span><span class="o">(</span><span class="s1">'amigo'</span>,<span class="w"> </span><span class="m">1</span><span class="o">)]</span>
-</code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>nouns</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Lemas de los sustantivos</td>
+</tr>
+</tbody>
+</table>
+<h2 id="calc_phrase_density">Densidad de expresiones<a class="headerlink" href="#calc_phrase_density" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.style_stats.calc_phrase_density()</strong>, <strong>ests.style_stats.expand_phrases()</strong></p>
 </div>
-<div class="admonition warning">
-<p class="admonition-title">Aviso</p>
-<p>El método debe llamarse después de extraer las palabras con <code>extract</code>.</p>
+<p>El número de apariciones de las expresiones de una lista por cada 100 palabras: las locuciones prepositivas (<code>COMPOUND_PREPOSITIONS</code>), las expresiones parentéticas (<code>PARENTHETICALS</code>) y los clichés (<code>OFFICIALESE_CLICHES</code>). En cada posición se toma la expresión más larga, y las expresiones encontradas no se solapan. <code>expand_phrases</code> escribe las expresiones en las formas del texto: una expresión que termina en <code>a</code> o <code>de</code> también recibe la contracción con el artículo (<code>a efectos del</code>, <code>conforme al</code>), y una expresión cuya primera palabra es un infinitivo recibe las formas del texto con ese lema (<code>proceder a</code> - <code>procedió a</code>, <code>ser de aplicación</code> - <code>es de aplicación</code>). El lema es el de simplemma, y un lema pronominal vale por su verbo (<code>llévese</code>, <code>llevarse</code> - <code>llevarse</code> - <code>llevar</code>); las formas que simplemma deja como están - los participios irregulares del perfecto (<code>ha dado</code>, <code>ha hecho</code>, <code>ha puesto</code>) y el imperativo <code>dese</code> - las da <code>IRREGULAR_VERB_FORMS</code>. Las palabras que siguen al verbo descartan la lectura como sustantivo (<code>el hecho</code>, <code>el puesto</code>).</p>
+<p>Las locuciones prepositivas (42) y los clichés (74) son los que señalan las guías españolas de lenguaje claro y los manuales de estilo de las administraciones:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Fuente</th>
+<th style="text-align: left;">Autor</th>
+<th style="text-align: left;">Año</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><a href="https://www.rae.es/libro-estilo-justicia/el-lenguaje-jur%C3%ADdico/caracteres-externos/car%C3%A1cter-arcaizante">Libro de estilo de la Justicia</a></td>
+<td style="text-align: left;">RAE, CGPJ</td>
+<td style="text-align: left;">2017</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://www.rae.es/dpd/hoy">Diccionario panhispánico de dudas</a>, 2.ª ed.</td>
+<td style="text-align: left;">RAE, ASALE</td>
+<td style="text-align: left;">en línea</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://www.rae.es/sites/default/files/2025-10/Gu%C3%ADa%20panhisp%C3%A1nica%20de%20lenguaje%20claro%20y%20accesible.pdf">Guía panhispánica de lenguaje claro y accesible</a></td>
+<td style="text-align: left;">RAE, ASALE</td>
+<td style="text-align: left;">2024</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://www.mjusticia.gob.es/es/AreaTematica/DocumentacionPublicaciones/InstListDownload/Claridad_y_derecho_a_comprender_Comision_para_la_modernizacion_del_lenguaje_juridico.PDF">Claridad y derecho a comprender</a></td>
+<td style="text-align: left;">Comisión de Modernización del Lenguaje Jurídico</td>
+<td style="text-align: left;">2011</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://publications.europa.eu/resource/cellar/725b7eb0-d92e-11e5-8fea-01aa75ed71a1.0007.03/DOC_1">Cómo escribir con claridad</a></td>
+<td style="text-align: left;">Comisión Europea</td>
+<td style="text-align: left;">2015</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://www.madrid.es/UnidadesDescentralizadas/Calidad/Publicaciones/Documentaciontecnica/ficherosdocte/ManualLA.pdf">Manual del Lenguaje Administrativo</a></td>
+<td style="text-align: left;">Ayuntamiento de Madrid</td>
+<td style="text-align: left;">hacia 2008</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://www.madrid.es/UnidadesDescentralizadas/Calidad/LenguajeClaro/ComunicacionClara/Documentos/GuiaPracticaCClara.pdf">Comunicación Clara. Guía práctica</a></td>
+<td style="text-align: left;">Ayuntamiento de Madrid</td>
+<td style="text-align: left;">2017</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://www.comunidad.madrid/transparencia/sites/default/files/ckeditor/guia_tramites_claros-comunidad_madrid-noviembre_2021.pdf">Guía de Comunicación Clara</a></td>
+<td style="text-align: left;">Comunidad de Madrid</td>
+<td style="text-align: left;">2021</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://www.carm.es/web/integra.servlets.Blob?ARCHIVO=0-2934_Manual+de+lenguaje+y+estilo+administrativo.pdf&amp;TABLA=ARCHIVOS&amp;CAMPOCLAVE=IDARCHIVO&amp;VALORCLAVE=33424&amp;CAMPOIMAGEN=ARCHIVO&amp;IDTIPO=60">Manual de Lenguaje y Estilo Administrativo</a></td>
+<td style="text-align: left;">Región de Murcia</td>
+<td style="text-align: left;">2008</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://www.economia.gob.mx/files/empleo/ManualLenguaje.pdf">Manual de Lenguaje Claro</a></td>
+<td style="text-align: left;">Secretaría de la Función Pública, México</td>
+<td style="text-align: left;">2007</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://colaboracion.dnp.gov.co/CDT/Programa%20Nacional%20del%20Servicio%20al%20Ciudadano/GUIA%20DEL%20LENGUAJE%20CLARO.pdf">Guía de lenguaje claro para servidores públicos</a></td>
+<td style="text-align: left;">Departamento Nacional de Planeación, Colombia</td>
+<td style="text-align: left;">2015</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://colombiacompra.gov.co/wp-content/uploads/2025/05/cce-rec-gi-01_guia_lenguaje_claro_v2_31-12-2024-1.pdf">Guía de lenguaje claro</a></td>
+<td style="text-align: left;">Colombia Compra Eficiente</td>
+<td style="text-align: left;">2024</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://gcba.github.io/programadelenguajeclaro/Manual%20de%20lenguaje%20claro%202024%20(Final).pdf">Manual de lenguaje claro</a></td>
+<td style="text-align: left;">Gobierno de la Ciudad de Buenos Aires</td>
+<td style="text-align: left;">2024</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://biblioteca.legislatura.gob.ar/archivos/lenguajeClaro.pdf">Guía para el uso del Lenguaje Claro</a></td>
+<td style="text-align: left;">Legislatura de la Ciudad de Buenos Aires</td>
+<td style="text-align: left;">2024</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="https://www.salta.gob.ar/public/descargas/archivos/ocspdfs/ocs_manual_de_estilo_del_lenguaje_para_la_administracion_publica_provincial.pdf">Manual de Estilo del Lenguaje para uso de la Administración Pública Provincial</a></td>
+<td style="text-align: left;">Provincia de Salta</td>
+<td style="text-align: left;">hacia 2007</td>
+</tr>
+</tbody>
+</table>
+<p>Quedan fuera las formas que las propias guías recomiendan (<code>sobre la base de</code>, <code>con base en</code>) o aceptan (<code>de acuerdo a</code>, <code>de cara a</code>), y las expresiones con usos neutros frecuentes (<code>tomar una decisión</code>, <code>en este sentido</code>), salvo <code>proceder a</code> y <code>llevar a cabo</code>, que señalan las guías de tres administraciones o más. Algunas locuciones prepositivas también tienen usos neutros (<code>a través de</code>, <code>en caso de</code>, <code>con respecto a</code>), así que la densidad de un texto neutro no es cero: compare los textos entre sí.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>phrases</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Expresiones, palabras separadas por espacios</td>
+</tr>
+</tbody>
+</table>
+<h2 id="calc_parentheticals">Expresiones parentéticas<a class="headerlink" href="#calc_parentheticals" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.style_stats.calc_parentheticals()</strong>, <strong>ests.style_stats.is_parenthetical()</strong></p>
 </div>
+<p>Las expresiones parentéticas de <code>PARENTHETICALS</code> (<code>sin embargo</code>, <code>es decir</code>, <code>por ejemplo</code>, <code>finalmente</code>) por cada 100 palabras; <code>is_parenthetical</code> comprueba una palabra con las expresiones de una palabra de la lista. La puntuación no se mira, así que la lista contiene las expresiones que van aparte en la mayoría de sus apariciones: las 55 que van entre comas o en el borde de una oración en al menos el 55% de sus apariciones en el <a href="../../datasets/spanishliterature/">corpus de literatura</a>, con las series de orden que abre la primera de ellas (<code>en primer lugar</code>, <code>en segundo lugar</code>). Quedan fuera los adverbios de duda, que el español rara vez aísla (<code>tal vez</code> 8%, <code>quizá</code> 10%), y también <code>sobre todo</code> (32%), <code>sin duda</code> (28%) y <code>además</code> (53%), que llevan un complemento o se unen a la oración sin comas.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
 
 
 

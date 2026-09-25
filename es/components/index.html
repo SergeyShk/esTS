@@ -927,6 +927,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#stylestatscomponent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StyleStatsComponent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1421,6 +1432,120 @@
   
     <li class="md-nav__item">
       <a href="../stats/lexical_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_8" id="__nav_5_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Métricas de estilo
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Métricas de estilo
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats/style_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats/style_stats_funcs/" class="md-nav__link">
         
   
   
@@ -2173,6 +2298,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#stylestatscomponent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        StyleStatsComponent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2210,7 +2346,7 @@
 <p>La escritura de componentes propios se describe en la sección correspondiente de la <a href="https://spacy.io/usage/processing-pipelines#custom-components">documentación de spaCy</a>. Los ejemplos de abajo usan el modelo <code>es_core_news_sm</code>, que se instala aparte: <code>python -m spacy download es_core_news_sm</code> (véase <a href="../installation/">instalación</a>).</p>
 </div>
 <h2 id="names">Nombres<a class="headerlink" href="#names" title="Permanent link">&para;</a></h2>
-<p>Las fábricas llevan el prefijo de la biblioteca - <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code> - porque el registro de spaCy es uno para todo el proceso: un <code>basic</code> a secas chocaría con el componente de cualquier otra biblioteca que registre ese nombre, y spaCy responde a un segundo registro con <code>ValueError [E004]</code>.</p>
+<p>Las fábricas llevan el prefijo de la biblioteca - <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code> - porque el registro de spaCy es uno para todo el proceso: un <code>basic</code> a secas chocaría con el componente de cualquier otra biblioteca que registre ese nombre, y spaCy responde a un segundo registro con <code>ValueError [E004]</code>.</p>
 <p>Están declaradas como entry points de <code>spacy_factories</code>, así que un pipeline guardado con estos componentes - <code>nlp.to_disk(path)</code>, <code>spacy package</code>, una configuración de entrenamiento - se carga con <code>spacy.load(path)</code> en un proceso que nunca importa la biblioteca.</p>
 <p>El nombre del paso del pipeline es libre y es como se llama la extensión, así que la forma corta está a un argumento de distancia:</p>
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_basic"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"basic"</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -2275,6 +2411,12 @@
 <td style="text-align: center;"><code>ests_lexical</code></td>
 <td style="text-align: center;"><a href="../stats/lexical_stats/">LexicalStats</a></td>
 <td style="text-align: center;">categorías gramaticales; las estadísticas por el diccionario de frecuencias lo necesitan descargado</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>StyleStatsComponent</code></td>
+<td style="text-align: center;"><code>ests_style</code></td>
+<td style="text-align: center;"><a href="../stats/style_stats/">StyleStats</a></td>
+<td style="text-align: center;">categorías gramaticales y lemas para los sustantivos deverbales</td>
 </tr>
 </tbody>
 </table>
@@ -2668,8 +2810,66 @@
 <div class="highlight"><pre><span></span><code><span class="o">(</span><span class="m">0</span>.857,<span class="w"> </span><span class="m">0</span>.429<span class="o">)</span>
 </code></pre></div>
 </div>
+<h2 id="stylestatscomponent">StyleStatsComponent<a class="headerlink" href="#stylestatscomponent" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.components.StyleStatsComponent</strong></p>
+</div>
+<p>El componente de las métricas de estilo de un texto. Las métricas SEO y los marcadores del estilo burocrático leen las palabras del documento; los sustantivos deverbales leen sus categorías gramaticales y lemas, así que para ellos el pipeline necesita un <code>morphologizer</code> y un <code>lemmatizer</code> antes del componente.</p>
+<p>Parámetros:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>nlp</code></td>
+<td style="text-align: center;">Language</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Objeto Language</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>name</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>"ests_style"</code></td>
+<td style="text-align: center;">Nombre del componente en el pipeline</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>stopwords</code></td>
+<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Palabras vacías para el contenido de agua; <code>STOPWORDS</code> y las expresiones parentéticas de una palabra si no se indican</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>top_n</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>10</code></td>
+<td style="text-align: center;">Número de las palabras más frecuentes para la náusea académica y la naturalidad según Zipf</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<p><em>Código</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+
+<span class="c1"># Añadir el componente</span>
+<span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_style"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"style"</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Leer las métricas calculadas</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"Se procedió a la revisión del expediente a la mayor brevedad."</span><span class="p">)</span>
+<span class="nb">round</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">cliches</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">verbal_nouns</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+<p><em>Resultado</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="o">(</span><span class="m">18</span>.18,<span class="w"> </span><span class="m">33</span>.33<span class="o">)</span>
+</code></pre></div>
+</div>
 <h2 id="pipeline">Todo en un pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h2>
-<p>Los siete componentes pueden convivir, y entonces una sola pasada sobre un documento da todas las estadísticas de la biblioteca que un <code>Doc</code> puede llevar.</p>
+<p>Los ocho componentes pueden convivir, y entonces una sola pasada sobre un documento da todas las estadísticas de la biblioteca que un <code>Doc</code> puede llevar.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <p><em>Código</em>:</p>
@@ -2677,7 +2877,17 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">spacy</span>
 
 <span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"es_core_news_sm"</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">factory</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"basic"</span><span class="p">,</span> <span class="s2">"readability"</span><span class="p">,</span> <span class="s2">"diversity"</span><span class="p">,</span> <span class="s2">"morph"</span><span class="p">,</span> <span class="s2">"syntax"</span><span class="p">,</span> <span class="s2">"cohesion"</span><span class="p">,</span> <span class="s2">"lexical"</span><span class="p">):</span>
+<span class="n">factories</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"basic"</span><span class="p">,</span>
+    <span class="s2">"readability"</span><span class="p">,</span>
+    <span class="s2">"diversity"</span><span class="p">,</span>
+    <span class="s2">"morph"</span><span class="p">,</span>
+    <span class="s2">"syntax"</span><span class="p">,</span>
+    <span class="s2">"cohesion"</span><span class="p">,</span>
+    <span class="s2">"lexical"</span><span class="p">,</span>
+    <span class="s2">"style"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">for</span> <span class="n">factory</span> <span class="ow">in</span> <span class="n">factories</span><span class="p">:</span>
     <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="sa">f</span><span class="s2">"ests_</span><span class="si">{</span><span class="n">factory</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">factory</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"El gato duerme en la ventana. Los niños juegan en el parque."</span><span class="p">)</span>
@@ -2689,10 +2899,11 @@
     <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">syntax</span><span class="o">.</span><span class="n">tree_depth</span><span class="p">,</span>
     <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">cohesion</span><span class="o">.</span><span class="n">p_given</span><span class="p">,</span>
     <span class="nb">round</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">lexical</span><span class="o">.</span><span class="n">p_top1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="nb">round</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">water</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
 <span class="p">)</span>
 </code></pre></div>
 <p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">(</span><span class="m">12</span>,<span class="w"> </span><span class="m">102</span>.19,<span class="w"> </span><span class="m">0</span>.833,<span class="w"> </span><span class="o">(</span><span class="s1">'DET'</span>,<span class="w"> </span><span class="s1">'NOUN'</span><span class="o">)</span>,<span class="w"> </span><span class="m">2</span>.0,<span class="w"> </span><span class="m">0</span>.0,<span class="w"> </span><span class="m">0</span>.667<span class="o">)</span>
+<div class="highlight"><pre><span></span><code><span class="o">(</span><span class="m">12</span>,<span class="w"> </span><span class="m">102</span>.19,<span class="w"> </span><span class="m">0</span>.833,<span class="w"> </span><span class="o">(</span><span class="s1">'DET'</span>,<span class="w"> </span><span class="s1">'NOUN'</span><span class="o">)</span>,<span class="w"> </span><span class="m">2</span>.0,<span class="w"> </span><span class="m">0</span>.0,<span class="w"> </span><span class="m">0</span>.667,<span class="w"> </span><span class="m">50</span>.0<span class="o">)</span>
 </code></pre></div>
 </div>
 
