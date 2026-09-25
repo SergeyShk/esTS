@@ -21,6 +21,7 @@ FACTORIES = {
     "ests_syntax",
     "ests_cohesion",
     "ests_lexical",
+    "ests_style",
 }
 RESOURCES = {"connectors.tsv", "google_books_top10000.txt"}
 

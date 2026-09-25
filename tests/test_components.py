@@ -18,6 +18,8 @@ from ests import (
     MorphStatsComponent,
     ReadabilityStats,
     ReadabilityStatsComponent,
+    StyleStats,
+    StyleStatsComponent,
     SyntaxStats,
     SyntaxStatsComponent,
 )
@@ -30,6 +32,7 @@ COMPONENTS = (
     ("ests_morph", MorphStatsComponent, MorphStats),
     ("ests_syntax", SyntaxStatsComponent, SyntaxStats),
     ("ests_cohesion", CohesionStatsComponent, CohesionStats),
+    ("ests_style", StyleStatsComponent, StyleStats),
 )
 # The lexical component needs the frequency dictionary, its statistics are tested apart
 ALL_COMPONENTS = (*COMPONENTS, ("ests_lexical", LexicalStatsComponent, LexicalStats))
@@ -118,6 +121,26 @@ def test_diversity_wrong_parameters(config):
     pipeline = spacy.load("es_core_news_sm")
     with pytest.raises(ParameterError):
         pipeline.add_pipe("ests_diversity", name="stats", config=config)
+
+
+def test_style_parameters(nlp):
+    pipeline = spacy.load("es_core_news_sm")
+    config = {"stopwords": ["el", "en"], "top_n": 3}
+    pipeline.add_pipe("ests_style", name="stats", config=config, last=True)
+    doc = pipeline(TEXT)
+    expected = StyleStats(nlp(TEXT), stopwords=["el", "en"], top_n=3).get_stats()
+    assert doc._.stats.get_stats() == expected
+    with pytest.raises(ParameterError):
+        pipeline.add_pipe("ests_style", name="wrong", config={"top_n": 0})
+
+
+def test_style_component_without_the_annotation():
+    pipeline = spacy.blank("es")
+    pipeline.add_pipe("ests_style", name="stats", last=True)
+    doc = pipeline(TEXT)
+    assert doc._.stats.water == StyleStats(TEXT).water
+    with pytest.raises(SourceError, match="parts of speech"):
+        _ = doc._.stats.verbal_nouns
 
 
 @pytest.mark.parametrize("factory", ["ests_morph", "ests_syntax", "ests_cohesion"])

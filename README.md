@@ -29,9 +29,9 @@
 
 ---
 
-**esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity, lexical sophistication, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
+**esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity, lexical sophistication, style, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
 
-The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography, and only the morphological, the syntactic, the cohesion and the lexical sophistication statistics, the profile of the function words and the comparison of corpora need a trained model.
+The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography, and only the morphological, the syntactic, the cohesion and the lexical sophistication statistics, the verbal nouns of the style metrics, the profile of the function words and the comparison of corpora need a trained model.
 
 * **[Object extraction](https://sergeyshk.github.io/esTS/extractors/sentences/)** - configurable sentence, word and character N-gram tokenizers that know the inverted marks, the dialogue dash and the abbreviations of Spanish
 * **[Syllables and stress](https://sergeyshk.github.io/esTS/syllables/)** - rule-based syllabification and the stressed syllable derived from the spelling, with no dictionary
@@ -45,9 +45,10 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
 * **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 255 Spanish discourse markers
 * **[Lexical sophistication statistics](https://sergeyshk.github.io/esTS/stats/lexical_stats/)** - how rare the words of a text are in the language: the frequency, range and dispersion of the lemmas by a dictionary of Google Books Ngram, the frequency bands top-1000 to 10000, surprisal, perplexity and lexical density
+* **[Style metrics](https://sergeyshk.github.io/esTS/stats/style_stats/)** - the SEO indicators of Advego and Text.ru (nausea, water content, spam score, naturalness by Zipf's law, keyword density) and the markers of the officialese style by the Spanish guides to plain language: verbal nouns, compound prepositions, parenthetical expressions and clichés
 * **[Syntactic statistics](https://sergeyshk.github.io/esTS/stats/syntax_stats/)** - the dependency tree by distances, depth, clauses and coordination, with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
 
-Style, phonostatistics, metre and rhyme come in 0.4.
+Phonostatistics, metre and rhyme come in 0.4.
 
 ## Installation
 
@@ -63,7 +64,7 @@ Or with [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, the readability and the lexical diversity metrics need no spaCy model; the morphological, the syntactic, the cohesion and the lexical sophistication statistics of a string do, and so do the profile of the function words, the features of a text and the comparison of corpora, and parsing a text yourself to pass the `Doc` instead of a string:
+The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, the readability and the lexical diversity metrics need no spaCy model; the morphological, the syntactic, the cohesion and the lexical sophistication statistics of a string do, and so do the verbal nouns of the style metrics, the profile of the function words, the features of a text and the comparison of corpora, and parsing a text yourself to pass the `Doc` instead of a string:
 
 ```bash
 python -m spacy download es_core_news_sm
@@ -439,6 +440,25 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/lexical_stats
 </details>
 
 <details>
+<summary><b>Style metrics</b></summary>
+
+<br>
+
+The SEO indicators of Advego and Text.ru - nausea, water content, spam score, naturalness by Zipf's law, keyword density - and the markers of the officialese style that the Spanish guides to plain language warn about: the nouns derived from a verb, the compound prepositions of the administrative style, the parenthetical expressions and the clichés, whose verbs are found in any form.
+
+```python
+>>> from ests import StyleStats
+
+>>> ss = StyleStats("Se procedió a la revisión del expediente en el marco del plan a la mayor brevedad.")
+>>> ss.compound_prepositions, ss.cliches, ss.verbal_nouns
+(6.25, 12.5, 20.0)
+```
+
+More in the [documentation](https://sergeyshk.github.io/esTS/stats/style_stats/).
+
+</details>
+
+<details>
 <summary><b>spaCy components</b></summary>
 
 <br>
@@ -461,7 +481,7 @@ Every statistics class is also a component of a pipeline, so a text is annotated
 (12, ('DET', 'NOUN'), 2.0)
 ```
 
-The factories are `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion` and `ests_lexical`; the name of the pipe is free and is what the extension is called.
+The factories are `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical` and `ests_style`; the name of the pipe is free and is what the extension is called.
 
 More in the [documentation](https://sergeyshk.github.io/esTS/components/).
 
@@ -643,6 +663,7 @@ Bug reports, ideas and pull requests are welcome - [issues](https://github.com/S
     *   extractors.py - tools for object extraction from a text
     *   morph_stats.py - morphological statistics
     *   readability_stats.py - readability metrics
+    *   style_stats.py - style metrics
     *   syntax_stats.py - syntactic statistics
     *   syllables.py - syllabification and stress
     *   utils.py - helper tools

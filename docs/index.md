@@ -4,9 +4,9 @@
 
 *¿Cómo esTáS, texto?*
 
-**esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity, lexical sophistication, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech, the features and the dependencies of Universal Dependencies.
+**esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity, lexical sophistication, style, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech, the features and the dependencies of Universal Dependencies.
 
-The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy), and only the morphological, the syntactic, the cohesion and the lexical sophistication statistics, the profile of the function words and the comparison of corpora need a trained model ([Installation](installation.md#model)): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography.
+The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy), and only the morphological, the syntactic, the cohesion and the lexical sophistication statistics, the verbal nouns of the style metrics, the profile of the function words and the comparison of corpora need a trained model ([Installation](installation.md#model)): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography.
 
 ## Features
 
@@ -19,12 +19,13 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 *   compute [syntactic statistics](stats/syntax_stats.md) on the dependency tree (dependency distances, depth, clauses, coordination) with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
 *   compute [cohesion statistics](stats/cohesion_stats.md) in the manner of Coh-Metrix (the overlap of nouns, arguments and content words between sentences, givenness, temporal cohesion) with the density of 255 Spanish discourse markers by class
 *   compute [lexical sophistication statistics](stats/lexical_stats.md) in the manner of TAALES: how rare the words of a text are by a [frequency dictionary](datasets/freqdict.md) of Google Books Ngram (frequency, range, dispersion, surprisal) and by the frequency bands top-1000 to 10000, with the lexical density
+*   compute [style metrics](stats/style_stats.md): the SEO indicators of Advego and Text.ru (nausea, water content, spam score, naturalness by Zipf's law, keyword density) and the markers of the officialese style by the Spanish guides to plain language - verbal nouns, compound prepositions, parenthetical expressions and clichés
 *   compare corpora with the measures of corpus linguistics: [keywords](corpus/keyness.md) against a reference corpus or the frequency dictionary, [collocations](corpus/collocations.md), the [dispersion](corpus/dispersion.md) of a word over the parts of a text and a [KWIC concordance](corpus/kwic.md), and attribute authorship by [stylometry](corpus/stylometry.md): Burrows's Delta, Zeta, the Mendenhall curve, the function words; find the features that tell two corpora apart by [comparing](corpus/compare.md) them over 132 features of a text
 *   visualize texts and corpora: [Zipf's law](visualizers/zipf.md), [literature fingerprinting](visualizers/fingerprinting.md), a [word tree](visualizers/word_tree.md), [corpus](visualizers/corpus.md) and [stylometric](visualizers/stylometry.md) plots, [vocabulary growth](visualizers/vocabulary.md) and [sentence lengths](visualizers/sentences.md)
 *   add the statistics to a [spaCy pipeline](components.md) as components, so that a text is annotated and measured in one pass and the statistics travel with the `Doc`
 *   work with a [corpus of Spanish-language literature](datasets/spanishliterature.md) in the public domain: 150 works by 33 authors in four genres, filtered by the author, the genre, the country and the years, and with a [frequency dictionary](datasets/freqdict.md) of 83,785 lemmas by Google Books Ngram
 
-Style, phonostatistics, metre and rhyme come in 0.4.
+Phonostatistics, metre and rhyme come in 0.4.
 
 ## Installation
 
@@ -108,6 +109,7 @@ Punctuation marks   |    2
         *   extractors.py - tools for object extraction from a text
         *   morph_stats.py - morphological statistics
         *   readability_stats.py - readability metrics
+        *   style_stats.py - style metrics
         *   syntax_stats.py - syntactic statistics
         *   syllables.py - syllabification and stress
         *   utils.py - helper tools

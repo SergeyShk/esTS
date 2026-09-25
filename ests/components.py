@@ -38,6 +38,7 @@ from .constants import (
     MATTR_WINDOW_LEN,
     MTLD_MIN_LEN,
     MTLD_TTR_THRESHOLD,
+    NAUSEA_TOP_N,
 )
 from .datasets.freq_dict import FreqDict
 from .diversity_stats import DiversityStats
@@ -46,6 +47,8 @@ from .exceptions import SourceError
 from .lexical_stats import LexicalStats, is_number
 from .morph_stats import MorphStats
 from .readability_stats import ReadabilityStats, check_preset
+from .style_stats import StyleStats
+from .style_stats import check_params as check_style_params
 from .syntax_stats import SyntaxStats
 from .utils import add_dash_rules, has_words, iter_doc_tokens
 
@@ -515,4 +518,82 @@ class LexicalStatsComponent:
             return doc
         ls = LexicalStats(doc, freq_dict=self.freq_dict)
         doc._.set(self.name, ls)
+        return doc
+
+
+@Language.factory("ests_style")
+class StyleStatsComponent:
+    """
+    Class for the component of the style metrics of a text
+
+    Description:
+        The SEO metrics and the markers of the officialese style read the words
+        of the document; the verbal nouns read its parts of speech and lemmas,
+        so the pipeline needs a morphologizer and a lemmatizer before the
+        component for them
+
+    Adding the component to a pipeline:
+        >>> import ests
+        >>> import spacy
+        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp.add_pipe("ests_style", name="style", last=True)
+        <ests.components.StyleStatsComponent object at 0x...>
+
+    Setting the stopwords and the number of the most frequent words:
+        >>> nlp.add_pipe(
+        ...     "ests_style",
+        ...     name="style_short",
+        ...     config={"stopwords": ["el", "la", "de"], "top_n": 5},
+        ...     last=True,
+        ... )
+        <ests.components.StyleStatsComponent object at 0x...>
+
+    Reading the computed metrics:
+        >>> doc = nlp("El gato duerme en la ventana")
+        >>> round(doc._.style.water, 2)
+        50.0
+
+    Arguments:
+        name (str): Name of the component in the pipeline
+        stopwords (list[str]): Stopwords for the water content; STOPWORDS and
+            the one-word parenthetical expressions if not set
+        top_n (int): Number of the most frequent words for the academic nausea
+            and the naturalness by Zipf's law
+
+    Raises:
+        ParameterError: If the number of the most frequent words is below one
+    """
+
+    def __init__(
+        self,
+        nlp: Language,
+        name: str = "ests_style",
+        stopwords: list[str] | None = None,
+        top_n: int = NAUSEA_TOP_N,
+    ):
+        check_style_params(top_n)
+        add_dash_rules(nlp)
+        self.name = name
+        self.stopwords = stopwords
+        self.top_n = top_n
+        Doc.set_extension(self.name, default=None, force=True)
+
+    def __call__(self, doc: Doc) -> Doc:
+        """
+        Adding the computed metrics to the component
+
+        Description:
+            A document with no words is returned untouched, its extension
+            left at None
+
+        Arguments:
+            doc (Doc): Doc object
+
+        Returns:
+            doc (Doc): Modified Doc object
+        """
+        if not has_words(doc):
+            return doc
+        ss = StyleStats(doc, stopwords=self.stopwords, top_n=self.top_n)
+        doc._.set(self.name, ss)
         return doc
