@@ -841,7 +841,8 @@ STOPWORDS = frozenset(
         "aquí", "ahí", "allí", "acá", "allá", "así", "entonces", "ahora", "tan",
         "donde", "dónde", "adonde", "adónde", "cómo", "cuándo",
         # Adverbs that negate, affirm or focus
-        "no", "sólo", "solo", "solamente", "también", "tampoco", "incluso", "aun",
+        "no", "nunca", "jamás", "sólo", "solo", "solamente", "también", "tampoco", "incluso",
+        "aun",
         # Interjections
         "ah", "ay", "bah", "caramba", "caray", "ea", "eh", "hala", "hola", "adiós", "huy",
         "ja", "oh", "ojalá", "olé", "uf", "uy",

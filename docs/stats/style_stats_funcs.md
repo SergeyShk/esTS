@@ -60,7 +60,7 @@ $$
 !!! info ""
     **ests.style_stats.is_stopword()**
 
-Checks whether a word is a stopword, in any case. The stopwords are the 263 forms of `ests.constants.STOPWORDS` - the closed classes of the grammar: articles and the other determiners (`este`, `cada`, `mucho`), pronouns (`él`, `cuyo`, `nadie`), prepositions, conjunctions and interjections, with the adverbs that point, relate or ask (`aquí`, `así`, `dónde`) and the ones that negate, affirm or focus (`no`, `solo`, `también`) - and the one-word parenthetical expressions of `PARENTHETICALS` (`finalmente`, `naturalmente`). The forms of the old orthography are kept (`á`, `ó`, `tí`), as the texts of the public domain write them. The stopwords of spaCy for Spanish are not used: that list is made for news and holds content words (`acuerdo`, `dijo`, `verdad`, `grande`).
+Checks whether a word is a stopword, in any case. The stopwords are the 265 forms of `ests.constants.STOPWORDS` - the closed classes of the grammar: articles and the other determiners (`este`, `cada`, `mucho`), pronouns (`él`, `cuyo`, `nadie`), prepositions, conjunctions and interjections, with the adverbs that point, relate or ask (`aquí`, `así`, `dónde`) and the ones that negate, affirm or focus (`no`, `solo`, `también`) - and the one-word parenthetical expressions of `PARENTHETICALS` (`finalmente`, `naturalmente`). The forms of the old orthography are kept (`á`, `ó`, `tí`), as the texts of the public domain write them. The stopwords of spaCy for Spanish are not used: that list is made for news and holds content words (`acuerdo`, `dijo`, `verdad`, `grande`).
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |

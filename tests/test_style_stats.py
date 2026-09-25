@@ -90,6 +90,7 @@ def test_init_lexemes():
     [
         ("y", True),
         ("no", True),
+        ("jamás", True),
         ("de", True),
         ("Él", True),
         ("aquel", True),
