@@ -15,7 +15,7 @@ Todas las excepciones de la biblioteca heredan de la clase base `EstsError` y de
 | `ParameterError` | `ValueError` | Un umbral, ventana, tamaño de segmento, número de elementos, base del logaritmo, nivel de confianza, número de muestras bootstrap o límite de una banda de frecuencia (1-10 000) fuera de rango, un límite de registros negativo, los tamaños de las partes de `dispersion` que no suman las palabras, la palabra clave de `kwic` vacía; un preajuste, escala, nombre de métrica, medida, variante, campo de una palabra clave, género o categoría gramatical desconocidos |
 | `UnknownStatError` | `ParameterError`, `KeyError` | Se pide por nombre una estadística desconocida, como en `DiversityStats.windowed` |
 | `DatasetNotFoundError` | `OSError` | El modelo de spaCy no está instalado o un conjunto de datos no está descargado; el mensaje muestra el comando que trae lo que falta |
-| `DataFileError` | `ValueError` | El archivo de un conjunto de datos no es un archivo ZIP ni TAR, no se puede extraer, no tiene ficheros o tiene rutas fuera de su directorio, o el directorio donde extraerlo no se puede crear |
+| `DataFileError` | `ValueError` | El archivo de un conjunto de datos no es un archivo ZIP ni TAR, no se puede extraer, no tiene ficheros o tiene rutas fuera de su directorio, o el directorio donde extraerlo no se puede crear; una línea del fichero de un conjunto de datos no se puede leer |
 | `DownloadError` | `RuntimeError` | El archivo no se pudo descargar, su directorio no se pudo crear o no superó dos veces la comprobación de la suma de verificación |
 
 Las clases están disponibles desde `ests` y desde `ests.exceptions`.

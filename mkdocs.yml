@@ -43,6 +43,7 @@ nav:
       - Corpus comparison: corpus/compare.md
     - Datasets:
       - Spanish-language literature: datasets/spanishliterature.md
+      - Spanish sonnets: datasets/spanishsonnets.md
       - Frequency dictionary: datasets/freqdict.md
     - Visualizers:
       - Zipf's law: visualizers/zipf.md
@@ -117,6 +118,7 @@ plugins:
             Corpus comparison: Comparación de corpus
             Datasets: Conjuntos de datos
             Spanish-language literature: Literatura en español
+            Spanish sonnets: Sonetos en español
             Frequency dictionary: Diccionario de frecuencias
             Visualizers: Visualizaciones
             Zipf's law: Ley de Zipf

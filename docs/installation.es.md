@@ -35,7 +35,7 @@ python -m spacy download es_core_news_sm
 
 ## Conjuntos de datos { #datasets }
 
-El [corpus de literatura](datasets/spanishliterature.md) y el [diccionario de frecuencias](datasets/freqdict.md) se descargan una vez con su método `download()`; las estadísticas de [`LexicalStats`](stats/lexical_stats.md) según el diccionario y [`keyness`](corpus/keyness.md) frente a él necesitan `FreqDict().download()`. Los archivos van al directorio `ests_data` junto al paquete instalado (`ests.constants.DEFAULT_DATA_DIR`), `dicts` para el diccionario y `texts` para el corpus. Donde ese directorio no se puede escribir - un Python del sistema, un entorno compartido - pase otro en `data_dir` (`FreqDict(data_dir="...")`) o defina la variable de entorno `ESTS_DATA_DIR` antes de importar el paquete:
+El [corpus de literatura](datasets/spanishliterature.md), los [sonetos](datasets/spanishsonnets.md) y el [diccionario de frecuencias](datasets/freqdict.md) se descargan una vez con su método `download()`; las estadísticas de [`LexicalStats`](stats/lexical_stats.md) según el diccionario y [`keyness`](corpus/keyness.md) frente a él necesitan `FreqDict().download()`. Los archivos van al directorio `ests_data` junto al paquete instalado (`ests.constants.DEFAULT_DATA_DIR`), `dicts` para el diccionario y `texts` para el corpus y los sonetos. Donde ese directorio no se puede escribir - un Python del sistema, un entorno compartido - pase otro en `data_dir` (`FreqDict(data_dir="...")`) o defina la variable de entorno `ESTS_DATA_DIR` antes de importar el paquete:
 
 ``` bash
 export ESTS_DATA_DIR=~/ests_data
