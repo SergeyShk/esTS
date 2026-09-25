@@ -1603,6 +1603,120 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_10" id="__nav_5_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Estadísticas del verso
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Estadísticas del verso
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="stats/verse_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="stats/verse_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2354,12 +2468,13 @@
 <li>calcular <a href="stats/lexical_stats/">estadísticas de complejidad léxica</a> a la manera de TAALES: cuán raras son las palabras de un texto según un <a href="datasets/freqdict/">diccionario de frecuencias</a> de Google Books Ngram (frecuencia, rango, dispersión, sorpresa) y según las bandas de frecuencia del top-1000 al 10000, con la densidad léxica</li>
 <li>calcular <a href="stats/style_stats/">métricas de estilo</a>: los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías españolas de lenguaje claro - sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés</li>
 <li>calcular la <a href="stats/phon_stats/">fonoestadística</a> sobre los sonidos de una transcripción por reglas: proporciones de las clases de sonidos, grupos consonánticos, hiatos, sílabas abiertas, dureza e índices de aliteración y de asonancia</li>
+<li>escandir el <a href="stats/verse_stats/">verso</a> por su metro silábico: las sílabas métricas con la sinalefa y la ley del acento final, el metro de un poema y los hemistiquios del alejandrino, el perfil acentual, los tipos del endecasílabo y las terminaciones de los versos</li>
 <li>comparar corpus con las medidas de la lingüística de corpus: <a href="corpus/keyness/">palabras clave</a> frente a un corpus de referencia o al diccionario de frecuencias, <a href="corpus/collocations/">colocaciones</a>, la <a href="corpus/dispersion/">dispersión</a> de una palabra por las partes de un texto y una <a href="corpus/kwic/">concordancia KWIC</a>, y atribuir la autoría por <a href="corpus/stylometry/">estilometría</a>: la Delta de Burrows, Zeta, la curva de Mendenhall, las palabras funcionales; encontrar los rasgos que distinguen dos corpus <a href="corpus/compare/">comparándolos</a> por 132 rasgos de un texto</li>
 <li>visualizar textos y corpus: la <a href="visualizers/zipf/">ley de Zipf</a>, la <a href="visualizers/fingerprinting/">huella literaria</a>, un <a href="visualizers/word_tree/">árbol de palabras</a>, gráficos <a href="visualizers/corpus/">de corpus</a> y <a href="visualizers/stylometry/">estilométricos</a>, el <a href="visualizers/vocabulary/">crecimiento del vocabulario</a>, las <a href="visualizers/sentences/">longitudes de las oraciones</a> y el <a href="visualizers/highlight/">resaltado del texto</a> por los fragmentos que cuentan las estadísticas</li>
 <li>añadir las estadísticas a un <a href="components/">pipeline de spaCy</a> como componentes, de modo que el texto se anote y se mida en una sola pasada y las estadísticas viajen con el <code>Doc</code></li>
 <li>trabajar con un <a href="datasets/spanishliterature/">corpus de literatura en español</a> de dominio público: 150 obras de 33 autores en cuatro géneros, filtradas por el autor, el género, el país y los años, con una <a href="datasets/spanishsonnets/">colección de sonetos</a> de los siglos XV-XX cuyos versos llevan su patrón métrico y su rima, y con un <a href="datasets/freqdict/">diccionario de frecuencias</a> de 83 785 lemas según Google Books Ngram</li>
 </ul>
-<p>La métrica y la rima llegan en la 0.4.</p>
+<p>La rima llega en la 0.4.</p>
 <h2 id="instalacion">Instalación<a class="headerlink" href="#instalacion" title="Permanent link">&para;</a></h2>
 <p>Se requiere Python 3.11 o superior.</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyests
@@ -2435,6 +2550,7 @@
 <li>style_stats.py - métricas de estilo</li>
 <li>phon_stats.py - fonoestadística</li>
 <li>syntax_stats.py - estadísticas sintácticas</li>
+<li>verse_stats.py - estadísticas del verso</li>
 <li>syllables.py - silabificación y acento</li>
 <li>utils.py - herramientas auxiliares</li>
 <li>visualizers - gráficos: ley de Zipf, huella literaria, árbol de palabras, gráficos de corpus y estilométricos, crecimiento del vocabulario, longitudes de las oraciones, resaltado del texto</li>

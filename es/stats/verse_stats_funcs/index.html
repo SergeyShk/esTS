@@ -1,42 +1,42 @@
 
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="es" class="no-js">
   <head>
     
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="A library for extracting statistics from texts in Spanish">
+        <meta name="description" content="Biblioteca para extraer estadísticas de textos en español">
       
       
       
       
-        <link rel="prev" href="../vocabulary/">
+        <link rel="prev" href="../verse_stats/">
       
       
-        <link rel="next" href="../highlight/">
+        <link rel="next" href="../../corpus/keyness/">
       
       
         
-          <link rel="alternate" href="./" hreflang="en">
+          <link rel="alternate" href="../../../stats/verse_stats_funcs/" hreflang="en">
         
-          <link rel="alternate" href="../../es/visualizers/sentences/" hreflang="es">
+          <link rel="alternate" href="./" hreflang="es">
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Sentence lengths - esTS</title>
+        <title>Funciones de las métricas - esTS</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -55,9 +55,9 @@
       
     
     
-      <link rel="stylesheet" href="../../css/extra.css">
+      <link rel="stylesheet" href="../../../css/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,8 +80,8 @@
     <div data-md-component="skip">
       
         
-        <a href="#sentence-lengths" class="md-skip">
-          Skip to content
+        <a href="#funciones-de-las-estadisticas" class="md-skip">
+          Saltar a contenido
         </a>
       
     </div>
@@ -93,8 +93,8 @@
       
 
 <header class="md-header" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="esTS" class="md-header__button md-logo" aria-label="esTS" data-md-component="logo">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../../" title="esTS" class="md-header__button md-logo" aria-label="esTS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Sentence lengths
+              Funciones de las métricas
             
           </span>
         </div>
@@ -128,20 +128,20 @@
       <div class="md-header__option">
   <div class="md-select">
     
-    <button class="md-header__button md-icon" aria-label="Select language">
+    <button class="md-header__button md-icon" aria-label="Seleccionar idioma">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
     </button>
     <div class="md-select__inner">
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="./" hreflang="en" class="md-select__link">
+            <a href="../../../stats/verse_stats_funcs/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
         
           <li class="md-select__item">
-            <a href="../../es/visualizers/sentences/" hreflang="es" class="md-select__link">
+            <a href="./" hreflang="es" class="md-select__link">
               Español
             </a>
           </li>
@@ -162,16 +162,16 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
-      <nav class="md-search__options" aria-label="Search">
+      <nav class="md-search__options" aria-label="Buscar">
         
-        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
@@ -182,7 +182,7 @@
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
         <div class="md-search-result" data-md-component="search-result">
           <div class="md-search-result__meta">
-            Initializing search
+            Inicializando búsqueda
           </div>
           <ol class="md-search-result__list" role="presentation"></ol>
         </div>
@@ -194,7 +194,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/SergeyShk/esTS" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/SergeyShk/esTS" title="Ir al repositorio" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -215,7 +215,7 @@
         
           
             
-<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
   <div class="md-grid">
     <ul class="md-tabs__list">
       
@@ -227,11 +227,11 @@
     
     
       <li class="md-tabs__item">
-        <a href="../.." class="md-tabs__link">
+        <a href="../../" class="md-tabs__link">
           
   
   
-  Home
+  Inicio
 
         </a>
       </li>
@@ -251,7 +251,7 @@
           
   
   
-  Extraction
+  Extracción
 
         </a>
       </li>
@@ -271,7 +271,7 @@
   
     
   
-  Syllables and stress
+  Sílabas y acento
 
       </a>
     </li>
@@ -290,7 +290,7 @@
   
     
   
-  spaCy components
+  Componentes de spaCy
 
       </a>
     </li>
@@ -301,15 +301,17 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../stats/basic_stats/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../basic_stats/" class="md-tabs__link">
           
   
   
-  Statistics
+  Estadísticas
 
         </a>
       </li>
@@ -329,7 +331,7 @@
           
   
   
-  Corpus measures
+  Medidas de corpus
 
         </a>
       </li>
@@ -349,7 +351,7 @@
           
   
   
-  Datasets
+  Conjuntos de datos
 
         </a>
       </li>
@@ -361,17 +363,15 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../zipf/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../visualizers/zipf/" class="md-tabs__link">
           
   
   
-  Visualizers
+  Visualizaciones
 
         </a>
       </li>
@@ -399,9 +399,9 @@
   
 
 
-<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="esTS" class="md-nav__button md-logo" aria-label="esTS" data-md-component="logo">
+    <a href="../../" title="esTS" class="md-nav__button md-logo" aria-label="esTS" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -411,7 +411,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/SergeyShk/esTS" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/SergeyShk/esTS" title="Ir al repositorio" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -452,7 +452,7 @@
   <span class="md-ellipsis">
     
   
-    Home
+    Inicio
   
 
     
@@ -468,7 +468,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Home
+    Inicio
   
 
           </label>
@@ -481,14 +481,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    About
+    Acerca de
   
 
     
@@ -516,7 +516,7 @@
   <span class="md-ellipsis">
     
   
-    Installation
+    Instalación
   
 
     
@@ -544,7 +544,7 @@
   <span class="md-ellipsis">
     
   
-    Exceptions and logging
+    Excepciones y registro
   
 
     
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-    Authors
+    Autores
   
 
     
@@ -621,7 +621,7 @@
   <span class="md-ellipsis">
     
   
-    Extraction
+    Extracción
   
 
     
@@ -637,7 +637,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Extraction
+    Extracción
   
 
           </label>
@@ -657,7 +657,7 @@
   <span class="md-ellipsis">
     
   
-    Sentence extraction
+    Extracción de oraciones
   
 
     
@@ -685,7 +685,7 @@
   <span class="md-ellipsis">
     
   
-    Word extraction
+    Extracción de palabras
   
 
     
@@ -713,7 +713,7 @@
   <span class="md-ellipsis">
     
   
-    Character N-gram extraction
+    Extracción de N-gramas de caracteres
   
 
     
@@ -748,7 +748,7 @@
   <span class="md-ellipsis">
     
   
-    Syllables and stress
+    Sílabas y acento
   
 
     
@@ -775,7 +775,7 @@
   <span class="md-ellipsis">
     
   
-    spaCy components
+    Componentes de spaCy
   
 
     
@@ -792,31 +792,36 @@
       
   
   
+    
   
   
+  
     
     
     
     
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
   <span class="md-ellipsis">
     
   
-    Statistics
+    Estadísticas
   
 
     
@@ -827,12 +832,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Statistics
+    Estadísticas
   
 
           </label>
@@ -845,14 +850,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/basic_stats/" class="md-nav__link">
+      <a href="../basic_stats/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Basic statistics
+    Estadísticas básicas
   
 
     
@@ -894,7 +899,7 @@
   <span class="md-ellipsis">
     
   
-    Readability metrics
+    Métricas de legibilidad
   
 
     
@@ -910,7 +915,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Readability metrics
+    Métricas de legibilidad
   
 
           </label>
@@ -923,14 +928,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/readability_stats/" class="md-nav__link">
+      <a href="../readability_stats/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Módulo de las métricas
   
 
     
@@ -951,14 +956,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/readability_stats_funcs/" class="md-nav__link">
+      <a href="../readability_stats_funcs/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Metric functions
+    Funciones de las métricas
   
 
     
@@ -1008,7 +1013,7 @@
   <span class="md-ellipsis">
     
   
-    Lexical diversity metrics
+    Métricas de diversidad léxica
   
 
     
@@ -1024,7 +1029,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Lexical diversity metrics
+    Métricas de diversidad léxica
   
 
           </label>
@@ -1037,14 +1042,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/diversity_stats/" class="md-nav__link">
+      <a href="../diversity_stats/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Módulo de las métricas
   
 
     
@@ -1065,14 +1070,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/diversity_stats_funcs/" class="md-nav__link">
+      <a href="../diversity_stats_funcs/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Metric functions
+    Funciones de las métricas
   
 
     
@@ -1101,14 +1106,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/morph_stats/" class="md-nav__link">
+      <a href="../morph_stats/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Morphological statistics
+    Estadísticas morfológicas
   
 
     
@@ -1129,14 +1134,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/syntax_stats/" class="md-nav__link">
+      <a href="../syntax_stats/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Syntactic statistics
+    Estadísticas sintácticas
   
 
     
@@ -1157,14 +1162,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/cohesion_stats/" class="md-nav__link">
+      <a href="../cohesion_stats/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Cohesion statistics
+    Estadísticas de cohesión
   
 
     
@@ -1206,7 +1211,7 @@
   <span class="md-ellipsis">
     
   
-    Lexical sophistication statistics
+    Estadísticas de complejidad léxica
   
 
     
@@ -1222,7 +1227,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Lexical sophistication statistics
+    Estadísticas de complejidad léxica
   
 
           </label>
@@ -1235,14 +1240,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/lexical_stats/" class="md-nav__link">
+      <a href="../lexical_stats/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Módulo de las métricas
   
 
     
@@ -1263,14 +1268,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/lexical_stats_funcs/" class="md-nav__link">
+      <a href="../lexical_stats_funcs/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Metric functions
+    Funciones de las métricas
   
 
     
@@ -1320,7 +1325,7 @@
   <span class="md-ellipsis">
     
   
-    Style metrics
+    Métricas de estilo
   
 
     
@@ -1336,7 +1341,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Style metrics
+    Métricas de estilo
   
 
           </label>
@@ -1349,14 +1354,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/style_stats/" class="md-nav__link">
+      <a href="../style_stats/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Módulo de las métricas
   
 
     
@@ -1377,14 +1382,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/style_stats_funcs/" class="md-nav__link">
+      <a href="../style_stats_funcs/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Metric functions
+    Funciones de las métricas
   
 
     
@@ -1434,7 +1439,7 @@
   <span class="md-ellipsis">
     
   
-    Phonostatistics
+    Fonoestadística
   
 
     
@@ -1450,7 +1455,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Phonostatistics
+    Fonoestadística
   
 
           </label>
@@ -1463,14 +1468,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/phon_stats/" class="md-nav__link">
+      <a href="../phon_stats/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Módulo de las métricas
   
 
     
@@ -1491,14 +1496,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/phon_stats_funcs/" class="md-nav__link">
+      <a href="../phon_stats_funcs/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Metric functions
+    Funciones de las métricas
   
 
     
@@ -1524,6 +1529,8 @@
                 
   
   
+    
+  
   
   
     
@@ -1534,11 +1541,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_10" checked>
         
           
           <label class="md-nav__link" for="__nav_5_10" id="__nav_5_10_label" tabindex="0">
@@ -1548,7 +1555,7 @@
   <span class="md-ellipsis">
     
   
-    Verse statistics
+    Estadísticas del verso
   
 
     
@@ -1559,12 +1566,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_10_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_10_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5_10">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Verse statistics
+    Estadísticas del verso
   
 
           </label>
@@ -1577,14 +1584,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stats/verse_stats/" class="md-nav__link">
+      <a href="../verse_stats/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Módulo de las métricas
   
 
     
@@ -1602,17 +1609,44 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../stats/verse_stats_funcs/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funciones de las métricas
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    Metric functions
+    Funciones de las métricas
   
 
     
@@ -1621,6 +1655,70 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Algoritmo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#accentuate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acentuación
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detect_meter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metro
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#split_stanzas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estrofas
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1669,7 +1767,7 @@
   <span class="md-ellipsis">
     
   
-    Corpus measures
+    Medidas de corpus
   
 
     
@@ -1685,7 +1783,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Corpus measures
+    Medidas de corpus
   
 
           </label>
@@ -1705,7 +1803,7 @@
   <span class="md-ellipsis">
     
   
-    Keywords
+    Palabras clave
   
 
     
@@ -1733,7 +1831,7 @@
   <span class="md-ellipsis">
     
   
-    Collocations
+    Colocaciones
   
 
     
@@ -1761,7 +1859,7 @@
   <span class="md-ellipsis">
     
   
-    Word dispersion
+    Dispersión de las palabras
   
 
     
@@ -1789,7 +1887,7 @@
   <span class="md-ellipsis">
     
   
-    KWIC concordance
+    Concordancia KWIC
   
 
     
@@ -1817,7 +1915,7 @@
   <span class="md-ellipsis">
     
   
-    Stylometry
+    Estilometría
   
 
     
@@ -1845,7 +1943,7 @@
   <span class="md-ellipsis">
     
   
-    Corpus comparison
+    Comparación de corpus
   
 
     
@@ -1894,7 +1992,7 @@
   <span class="md-ellipsis">
     
   
-    Datasets
+    Conjuntos de datos
   
 
     
@@ -1910,7 +2008,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    Datasets
+    Conjuntos de datos
   
 
           </label>
@@ -1930,7 +2028,7 @@
   <span class="md-ellipsis">
     
   
-    Spanish-language literature
+    Literatura en español
   
 
     
@@ -1958,7 +2056,7 @@
   <span class="md-ellipsis">
     
   
-    Spanish sonnets
+    Sonetos en español
   
 
     
@@ -1986,7 +2084,7 @@
   <span class="md-ellipsis">
     
   
-    Frequency dictionary
+    Diccionario de frecuencias
   
 
     
@@ -2011,36 +2109,31 @@
       
   
   
-    
   
   
-  
     
     
     
     
       
-        
-        
-      
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
         
           
-          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
             
   
   
   <span class="md-ellipsis">
     
   
-    Visualizers
+    Visualizaciones
   
 
     
@@ -2051,12 +2144,12 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             
   
-    Visualizers
+    Visualizaciones
   
 
           </label>
@@ -2069,14 +2162,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../zipf/" class="md-nav__link">
+      <a href="../../visualizers/zipf/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Zipf's law
+    Ley de Zipf
   
 
     
@@ -2097,14 +2190,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../fingerprinting/" class="md-nav__link">
+      <a href="../../visualizers/fingerprinting/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Literature fingerprinting
+    Huella literaria
   
 
     
@@ -2125,14 +2218,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../word_tree/" class="md-nav__link">
+      <a href="../../visualizers/word_tree/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Word tree
+    Árbol de palabras
   
 
     
@@ -2153,14 +2246,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../corpus/" class="md-nav__link">
+      <a href="../../visualizers/corpus/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Corpus plots
+    Gráficos de corpus
   
 
     
@@ -2181,14 +2274,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../stylometry/" class="md-nav__link">
+      <a href="../../visualizers/stylometry/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Stylometric plots
+    Gráficos estilométricos
   
 
     
@@ -2209,14 +2302,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../vocabulary/" class="md-nav__link">
+      <a href="../../visualizers/vocabulary/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Vocabulary growth and frequency spectrum
+    Crecimiento del vocabulario y espectro de frecuencias
   
 
     
@@ -2225,114 +2318,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Sentence lengths
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Sentence lengths
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Description
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parameters
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage-example" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Usage example
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2345,14 +2330,42 @@
   
   
     <li class="md-nav__item">
-      <a href="../highlight/" class="md-nav__link">
+      <a href="../../visualizers/sentences/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Text highlighting
+    Longitudes de las oraciones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../visualizers/highlight/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Resaltado del texto
   
 
     
@@ -2386,7 +2399,7 @@
                   <div class="md-sidebar__inner">
                     
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
   
   
   
@@ -2395,15 +2408,15 @@
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
-      Table of contents
+      Tabla de contenidos
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
+  <a href="#algorithm" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Description
+        Algoritmo
       
     </span>
   </a>
@@ -2411,10 +2424,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
+  <a href="#accentuate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parameters
+        Acentuación
       
     </span>
   </a>
@@ -2422,10 +2435,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage-example" class="md-nav__link">
+  <a href="#detect_meter" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Usage example
+        Metro
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#split_stanzas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estrofas
       
     </span>
   </a>
@@ -2452,72 +2476,122 @@
   
 
 
-<h1 id="sentence-lengths">Sentence lengths<a class="headerlink" href="#sentence-lengths" title="Permanent link">&para;</a></h1>
+<h1 id="funciones-de-las-estadisticas">Funciones de las estadísticas<a class="headerlink" href="#funciones-de-las-estadisticas" title="Permanent link">&para;</a></h1>
+<h2 id="algorithm">Algoritmo<a class="headerlink" href="#algorithm" title="Permanent link">&para;</a></h2>
+<p>Un verso español se mide por sus sílabas métricas, que no son las sílabas de sus palabras una por una:</p>
+<ol>
+<li><strong>Sílabas y acentos.</strong> Cada palabra se divide en sílabas con <a href="../../syllables/"><code>syllabify</code></a> y se acentúa con <a href="../../syllables/#word_stresses"><code>word_stresses</code></a>: la tilde marca el acento, y si no, las reglas ortográficas (llana tras vocal, <code>n</code> o <code>s</code>, aguda tras otra consonante); un adverbio en <code>-mente</code> tiene dos acentos. Las palabras átonas del verso (<code>VERSE_PROCLITICS</code>) no llevan acento: los artículos, las preposiciones salvo <code>según</code>, las conjunciones, los relativos (<code>que</code>, <code>cual</code>, <code>donde</code>, <code>como</code>, <code>cuanto</code>), los pronombres clíticos (<code>me</code>, <code>te</code>, <code>se</code>, <code>le</code>, <code>nos</code>), los posesivos antepuestos (<code>mi</code>, <code>tu</code>, <code>su</code>, <code>nuestro</code>, <code>vuestro</code>), los tratamientos ante un nombre (<code>don</code>, <code>fray</code>, <code>san</code>), <code>tan</code>, <code>aun</code> y las interjecciones <code>oh</code>, <code>ay</code>, <code>ah</code>, que las escansiones de DISCO y de rantanplan dejan átonas también. La última palabra de un verso siempre es tónica.</li>
+<li><strong>La lectura llana.</strong> La vocal final de una palabra y la primera de la siguiente forman una sílaba - la sinalefa (<em>cuan-do‿a-pe-nas</em>, <em>tie-rra‿y‿a-gua</em>). La <code>h</code> muda la deja pasar (<em>oh‿al-ma</em>), mientras que <code>hi</code> y <code>hu</code> ante vocal (<em>hierba</em>, <em>hueso</em>) e <code>y</code> ante vocal (<em>ya</em>, <em>yo</em>) son consonantes y la impiden; una consonante al final de la palabra la impide también (<em>el | al-ma</em>).</li>
+<li><strong>La ley del acento final.</strong> Un verso cuenta hasta su última sílaba acentuada y una sílaba más: un verso que termina en aguda gana una sílaba (<em>cuan-do‿ha-ce-la-ca-lor</em> - 6 + 1 = 7), uno que termina en esdrújula pierde una (<em>el pá-ja-ro</em> - 3).</li>
+<li><strong>El metro.</strong> El metro de un poema es la medida de la mayoría de las lecturas llanas; en caso de empate, desde tres versos, se prueban todas las medidas empatadas con nombre (una línea de prosa de 40 sílabas no da metro de todos modos) y gana la de menos versos fuera de ella (un cuarteto de dos versos de 10 y dos de 11 sílabas en la lectura llana es un cuarteto de endecasílabos). Cada verso se ajusta a él con los menos cambios de su lectura llana: un verso más largo une dos vocales de un hiato en una palabra - la sinéresis (<em>poe-ta</em>), las que tienen una <code>i</code> o una <code>u</code> con tilde (<em>dí-a</em>) al final; uno más corto deshace sus sinalefas desde el final del verso - el hiato, y después divide un diptongo de una sílaba acentuada - la diéresis (<em>su-a-ve</em>, <em>ru-i-do</em>, <em>con-fi-a-do</em>). La diéresis escrita es la marca del poeta de un hiato (<em>sü-a-ve</em>, <em>glo-rï-o-sa</em>), y ninguna sinéresis la une. Un verso que no alcanza el metro conserva su lectura llana y cuenta como fuera de él. Un poema sin metro ajusta en cambio sus versos a sus medidas comunes (las 7 y las 11 sílabas de una lira), si estas ocupan más de la mitad de los versos.</li>
+<li><strong>El verso compuesto.</strong> Un verso compuesto de dos hemistiquios iguales (<code>VERSE_HEMISTICHS</code>: 5 + 5, 6 + 6, 7 + 7, 8 + 8, 9 + 9) se prueba cuando más de la mitad de las lecturas llanas se dividen en sus hemistiquios y su medida difiere en una sílaba de la de la mayoría de los versos o es igual a ella; gana la lectura con menos versos fuera del metro, el verso compuesto en caso de empate. La cesura cae tras una palabra tónica, impide la sinalefa, y cada hemistiquio sigue la ley del acento final por su cuenta: el alejandrino <em>La princesa está pálida | en su silla de oro</em> es 7 + 7, la esdrújula ante la cesura pierde una sílaba y el hiato <em>de | oro</em> da una.</li>
+</ol>
+<p>La precisión se comprobó sobre los 60 209 versos de los 4259 sonetos de <a href="../../datasets/spanishsonnets/">SpanishSonnets</a>, frente a la escansión automática de DISCO y a la de <a href="https://github.com/linhd-postdata/rantanplan">rantanplan</a> (ejecutada aparte: necesita spaCy 2.2.4, que funciona con Python 3.8 como mucho). La medida de un verso coincide con DISCO en el 97,0% de los versos y con rantanplan en el 97,7%, el acento de una sílaba métrica de los versos de igual medida en el 97,4% y el 99,6%, el esquema entero de un verso en el 77% y el 96%. En los versos simples las medidas coinciden en el 98,2% y el 99,1%; la mayor parte del resto son alejandrinos, que ambos cuentan como versos simples, sin los hemistiquios. La mayoría de las demás diferencias con DISCO son elecciones suyas: acentúa los pronombres clíticos <code>me</code>, <code>te</code> y <code>le</code> en el 84% de sus apariciones y <code>tan</code> en el 96%, y da a las palabras con un <code>-os</code> enclítico (<em>encareceros</em>, <em>quereros</em>) un segundo acento y una sílaba de más.</p>
+<h2 id="accentuate">Acentuación<a class="headerlink" href="#accentuate" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
-<p><strong>ests.visualizers.sentence_lengths_plot()</strong>, <strong>ests.visualizers.sentence_lengths()</strong></p>
+<p><strong>ests.verse_stats.accentuate()</strong></p>
 </div>
-<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>The curve of the lengths of the sentences - the rhythm of a text: the length of every sentence in words in order, the moving average over a window of <code>window</code> sentences and an inset with the histogram of the lengths. Short and long sentences in turn are an editorial sign of a lively text, a flat curve - of a monotonous one. <code>sentence_lengths</code> extracts the lengths: the sentences of a string come from <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> by the same rules - the inverted marks, the dashes of a dialogue, the abbreviations - and a word belongs to the sentence it starts in; the sentences of a <code>Doc</code> come from its boundaries (without them, from its text); ready lengths - any sequence of integers, a numpy array and a Series included - are used as they are; sentences without words are skipped. The function takes the axes <code>ax</code> and returns <code>Axes</code>.</p>
-<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
+<p>Marca los acentos de un texto por las reglas ortográficas: se pone un acento agudo (U+0301) tras la vocal acentuada de cada palabra sin tilde, los dos acentos de un adverbio en <code>-mente</code> y de un compuesto con guion; las palabras átonas del verso (<code>VERSE_PROCLITICS</code>) quedan sin marca. El texto se normaliza a NFC. Para los versos de un poema, donde la última palabra siempre es tónica, sirve el método <a href="../verse_stats/#accentuate"><code>VerseStats.accentuate</code></a>.</p>
+<p>Parámetros:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>source</code></td>
-<td style="text-align: center;">str/Doc/Iterable[int]</td>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Text, Doc object or lengths of the sentences (a list, a numpy array, a Series)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>window</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Window of the moving average in sentences</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>inset</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>True</code></td>
-<td style="text-align: center;">Show the inset with the histogram</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>ax</code></td>
-<td style="text-align: center;">Axes</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Axes for the plot</td>
+<td style="text-align: center;">Texto</td>
 </tr>
 </tbody>
 </table>
-<h2 id="usage-example">Usage example<a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h2>
-<p>The second window of 2000 words of <em>Niebla</em> by Unamuno from the <a href="../../datasets/spanishliterature/">corpus of literature</a>; a window is cut by words, so it opens with the end of a sentence.</p>
 <div class="admonition example">
-<p class="admonition-title">Example</p>
-<p><em>Code</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">split_windows</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanishLiterature</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.visualizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">sentence_lengths</span><span class="p">,</span> <span class="n">sentence_lengths_plot</span>
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">unicodedata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.verse_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">accentuate</span>
 
-<span class="n">sl</span> <span class="o">=</span> <span class="n">SpanishLiterature</span><span class="p">()</span>
-<span class="n">sl</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
-<span class="n">text</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
-    <span class="n">record</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">sl</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">author</span><span class="o">=</span><span class="s2">"unamuno"</span><span class="p">)</span> <span class="k">if</span> <span class="n">record</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Niebla"</span>
-<span class="p">)</span>
-<span class="n">chapter</span> <span class="o">=</span> <span class="n">split_windows</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-
-<span class="n">sentence_lengths</span><span class="p">(</span><span class="n">chapter</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span>
-<span class="c1"># [2, 26, 30, 41, 41]</span>
-
-<span class="n">sentence_lengths_plot</span><span class="p">(</span><span class="n">chapter</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"Yo soy aquel que ayer no más decía el verso azul y la canción profana"</span>
+<span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">"NFC"</span><span class="p">,</span> <span class="n">accentuate</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+<span class="c1"># 'Yó sóy aquél que ayér nó más decía el vérso azúl y la canción profána'</span>
 </code></pre></div>
-<p><em>Result</em>:</p>
-<p><img alt="ests" class="center" src="../../img/sentences.png" /></p>
+</div>
+<h2 id="detect_meter">Metro<a class="headerlink" href="#detect_meter" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.verse_stats.detect_meter()</strong></p>
+</div>
+<p>Determina el metro de un poema: el nombre del verso por sus sílabas métricas (<code>octosílabo</code>, <code>endecasílabo</code>, <code>alejandrino</code>...), o <code>None</code> si más de una décima parte de los versos tienen otra medida o el texto tiene un solo verso.</p>
+<p>Parámetros:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Texto de un poema</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.verse_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_meter</span>
+
+<span class="c1"># El comienzo del Romance del prisionero</span>
+<span class="n">detect_meter</span><span class="p">(</span>
+    <span class="s2">"Que por mayo era, por mayo,</span><span class="se">\n</span><span class="s2">cuando hace la calor,</span><span class="se">\n</span><span class="s2">cuando los trigos encañan</span><span class="se">\n</span><span class="s2">y están los campos en flor,"</span>
+<span class="p">)</span>
+<span class="c1"># 'octosílabo'</span>
+</code></pre></div>
+</div>
+<h2 id="split_stanzas">Estrofas<a class="headerlink" href="#split_stanzas" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.verse_stats.split_stanzas()</strong></p>
+</div>
+<p>Divide un texto en estrofas y versos: las estrofas se separan por líneas en blanco, y los versos sin una sílaba española (números, asteriscos, otros alfabetos) se omiten. El texto se normaliza a NFC.</p>
+<p>Parámetros:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Texto de un poema</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.verse_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">split_stanzas</span>
+
+<span class="n">split_stanzas</span><span class="p">(</span>
+    <span class="s2">"Cuando me paro a contemplar mi estado</span><span class="se">\n</span><span class="s2">"</span>
+    <span class="s2">"y a ver los pasos por do me han traído,</span><span class="se">\n\n</span><span class="s2">* * *</span><span class="se">\n\n</span><span class="s2">"</span>
+    <span class="s2">"hallo, según por do anduve perdido,"</span>
+<span class="p">)</span>
+<span class="c1"># [['Cuando me paro a contemplar mi estado', 'y a ver los pasos por do me han traído,'],</span>
+<span class="c1">#  ['hallo, según por do anduve perdido,']]</span>
+</code></pre></div>
 </div>
 
 
@@ -2595,12 +2669,12 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
-        <script src="../../js/config.js"></script>
+        <script src="../../../js/config.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
       

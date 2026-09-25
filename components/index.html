@@ -949,6 +949,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#versestatscomponent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VerseStatsComponent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1671,6 +1682,120 @@
   
     <li class="md-nav__item">
       <a href="../stats/phon_stats_funcs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metric functions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_10" id="__nav_5_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Verse statistics
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Verse statistics
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats/verse_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metrics module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats/verse_stats_funcs/" class="md-nav__link">
         
   
   
@@ -2501,6 +2626,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#versestatscomponent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VerseStatsComponent
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2538,7 +2674,7 @@
 <p>Writing components of your own is described in the corresponding section of the <a href="https://spacy.io/usage/processing-pipelines#custom-components">documentation of spaCy</a>. The examples below use the model <code>es_core_news_sm</code>, which is installed apart: <code>python -m spacy download es_core_news_sm</code> (see <a href="../installation/">installation</a>).</p>
 </div>
 <h2 id="names">Names<a class="headerlink" href="#names" title="Permanent link">&para;</a></h2>
-<p>The factories carry the prefix of the library - <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code> - because the registry of spaCy is one for the whole process: a plain <code>basic</code> would collide with the component of any other library registering that name, and spaCy answers a second registration with <code>ValueError [E004]</code>.</p>
+<p>The factories carry the prefix of the library - <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code> - because the registry of spaCy is one for the whole process: a plain <code>basic</code> would collide with the component of any other library registering that name, and spaCy answers a second registration with <code>ValueError [E004]</code>.</p>
 <p>They are declared as entry points of <code>spacy_factories</code>, so a pipeline saved with these components - <code>nlp.to_disk(path)</code>, <code>spacy package</code>, a training config - loads with <code>spacy.load(path)</code> in a process that never imports the library.</p>
 <p>The name of the pipe is free and is what the extension is called, so the short form is one argument away:</p>
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_basic"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"basic"</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -2615,6 +2751,12 @@
 <td style="text-align: center;"><code>ests_phon</code></td>
 <td style="text-align: center;"><a href="../stats/phon_stats/">PhonStats</a></td>
 <td style="text-align: center;">nothing</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>VerseStatsComponent</code></td>
+<td style="text-align: center;"><code>ests_verse</code></td>
+<td style="text-align: center;"><a href="../stats/verse_stats/">VerseStats</a></td>
+<td style="text-align: center;">nothing; the line breaks of the text</td>
 </tr>
 </tbody>
 </table>
@@ -3118,8 +3260,56 @@
 <div class="highlight"><pre><span></span><code><span class="o">(</span><span class="m">0</span>.458,<span class="w"> </span><span class="o">{</span><span class="m">1</span>:<span class="w"> </span><span class="m">12</span>,<span class="w"> </span><span class="m">2</span>:<span class="w"> </span><span class="m">7</span><span class="o">})</span>
 </code></pre></div>
 </div>
+<h2 id="versestatscomponent">VerseStatsComponent<a class="headerlink" href="#versestatscomponent" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.components.VerseStatsComponent</strong></p>
+</div>
+<p>The component of the verse statistics of a text. The statistics read the text of the document with its line breaks and blank lines, so the text of a poem goes to <code>nlp</code> as it is, the lines not joined; the component needs no annotation of a model. A document with no letter passes untouched, and a text with letters but no Spanish syllables gives empty statistics, as <code>VerseStats</code>.</p>
+<p>Parameters:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>nlp</code></td>
+<td style="text-align: center;">Language</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Language object</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>name</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>"ests_verse"</code></td>
+<td style="text-align: center;">Name of the component in the pipeline</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Code</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+
+<span class="c1"># Add the component</span>
+<span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_verse"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"verse"</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Read the computed statistics of the beginning of the Romance del prisionero</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span>
+    <span class="s2">"Que por mayo era, por mayo,</span><span class="se">\n</span><span class="s2">cuando hace la calor,</span><span class="se">\n</span><span class="s2">cuando los trigos encañan</span><span class="se">\n</span><span class="s2">y están los campos en flor,"</span>
+<span class="p">)</span>
+<span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">verse</span><span class="o">.</span><span class="n">meter</span><span class="p">,</span> <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">verse</span><span class="o">.</span><span class="n">c_clausulas</span>
+</code></pre></div>
+<p><em>Result</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="o">(</span><span class="s1">'octosílabo'</span>,<span class="w"> </span><span class="o">{</span><span class="s1">'aguda'</span>:<span class="w"> </span><span class="m">2</span>,<span class="w"> </span><span class="s1">'llana'</span>:<span class="w"> </span><span class="m">2</span><span class="o">})</span>
+</code></pre></div>
+</div>
 <h2 id="pipeline">Everything in one pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h2>
-<p>The nine components can live side by side, and then one pass over a document gives every statistic of the library that a <code>Doc</code> can carry.</p>
+<p>The ten components can live side by side, and then one pass over a document gives every statistic of the library that a <code>Doc</code> can carry.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <p><em>Code</em>:</p>
@@ -3137,6 +3327,7 @@
     <span class="s2">"lexical"</span><span class="p">,</span>
     <span class="s2">"style"</span><span class="p">,</span>
     <span class="s2">"phon"</span><span class="p">,</span>
+    <span class="s2">"verse"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">for</span> <span class="n">factory</span> <span class="ow">in</span> <span class="n">factories</span><span class="p">:</span>
     <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="sa">f</span><span class="s2">"ests_</span><span class="si">{</span><span class="n">factory</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">factory</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -3152,10 +3343,11 @@
     <span class="nb">round</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">lexical</span><span class="o">.</span><span class="n">p_top1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
     <span class="nb">round</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">water</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
     <span class="nb">round</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">phon</span><span class="o">.</span><span class="n">p_vowels</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">verse</span><span class="o">.</span><span class="n">n_lines</span><span class="p">,</span>
 <span class="p">)</span>
 </code></pre></div>
 <p><em>Result</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">(</span><span class="m">12</span>,<span class="w"> </span><span class="m">102</span>.19,<span class="w"> </span><span class="m">0</span>.833,<span class="w"> </span><span class="o">(</span><span class="s1">'DET'</span>,<span class="w"> </span><span class="s1">'NOUN'</span><span class="o">)</span>,<span class="w"> </span><span class="m">2</span>.0,<span class="w"> </span><span class="m">0</span>.0,<span class="w"> </span><span class="m">0</span>.667,<span class="w"> </span><span class="m">50</span>.0,<span class="w"> </span><span class="m">0</span>.457<span class="o">)</span>
+<div class="highlight"><pre><span></span><code><span class="o">(</span><span class="m">12</span>,<span class="w"> </span><span class="m">102</span>.19,<span class="w"> </span><span class="m">0</span>.833,<span class="w"> </span><span class="o">(</span><span class="s1">'DET'</span>,<span class="w"> </span><span class="s1">'NOUN'</span><span class="o">)</span>,<span class="w"> </span><span class="m">2</span>.0,<span class="w"> </span><span class="m">0</span>.0,<span class="w"> </span><span class="m">0</span>.667,<span class="w"> </span><span class="m">50</span>.0,<span class="w"> </span><span class="m">0</span>.457,<span class="w"> </span><span class="m">1</span><span class="o">)</span>
 </code></pre></div>
 </div>
 
