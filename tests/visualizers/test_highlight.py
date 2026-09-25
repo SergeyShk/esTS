@@ -16,9 +16,12 @@ from ests.visualizers.highlight import (
     CSS,
     Sent,
     Word,
+    calc_alliteration_runs,
+    find_alliteration,
     find_complex_words,
     find_connector_highlights,
     find_long_sents,
+    get_stem,
     get_text_sents,
     get_text_words,
     group_words_by_sents,
@@ -71,6 +74,9 @@ def spans(ht, layer):
 def test_init_value_error():
     with pytest.raises(SourceError):
         highlight("¿? ...")
+    for threshold in (0, 1.5, "0.1"):
+        with pytest.raises(ParameterError, match="alliteration"):
+            highlight(text, alliteration_threshold=threshold)
     with pytest.raises(ParameterError):
         highlight(text, long_sent_word_factor=0)
     with pytest.raises(ParameterError):
@@ -375,6 +381,51 @@ def test_doc_text_layers(doc):
         assert spans(highlight(doc, layers=layer), layer) == spans(
             highlight(text, layers=layer), layer
         )
+
+
+def test_alliteration():
+    ht = highlight("Boga y boga en el lago. Deje la abeja.", layers="alliteration")
+    assert spans(ht, "alliteration") == ["Boga y boga en el lago", "Deje la abeja"]
+    assert [h.note for h in ht.highlights] == [
+        "alliteration on /g/ (g, gu)",
+        "alliteration on /x/ (j, g)",
+    ]
+    # a sound written with its own letter has no spellings in the note
+    ht = highlight("Ala aleve del leve abanico.", layers="alliteration")
+    assert [h.note for h in ht.highlights] == ["alliteration on /l/"]
+
+
+def test_alliteration_within_sentences():
+    # the repetition is looked for inside a sentence, not across the period
+    sample = "Boga. Boga."
+    ht = highlight(sample, layers="alliteration", alliteration_threshold=0.5)
+    assert ht.counts == {"alliteration": 0}
+    # without the sentences, b and g repeat across the period
+    assert len(find_alliteration(get_text_words(sample), 0.5)) == 2
+
+
+def test_alliteration_threshold():
+    sample = "La luz del sol llena la sala."
+    strict = highlight(sample, layers="alliteration").counts["alliteration"]
+    loose = highlight(sample, layers="alliteration", alliteration_threshold=0.5)
+    assert loose.counts["alliteration"] > strict
+
+
+def test_calc_alliteration_runs():
+    # de is too short to break the run, the sounds count and not the letters: casa, queso and
+    # fresco repeat k, 0.148 · 0.148 · 0.214 = 0.0047
+    assert calc_alliteration_runs(["casa", "de", "queso", "fresco"], 0.01) == [(0, 4, "k")]
+    assert calc_alliteration_runs(["casa", "de", "queso", "fresco"]) == []
+    # two words are 0.022 for k and 0.08 for s: several sounds of one run
+    assert calc_alliteration_runs(["casa", "queso"], 0.01) == []
+    assert calc_alliteration_runs(["casa", "queso"], 0.5) == [(0, 2, "k"), (0, 2, "s")]
+
+
+def test_get_stem():
+    assert get_stem("cantaban") == "canta"
+    assert get_stem("casas") == "casa"
+    # a suppletive form keeps the whole word
+    assert get_stem("fue") == "fue"
 
 
 def test_split_segments():

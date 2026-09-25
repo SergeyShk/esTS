@@ -7,7 +7,7 @@ Conjunto de componentes para los pipelines de [spaCy](https://github.com/explosi
 
 ## Nombres { #names }
 
-Las fábricas llevan el prefijo de la biblioteca - `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style` - porque el registro de spaCy es uno para todo el proceso: un `basic` a secas chocaría con el componente de cualquier otra biblioteca que registre ese nombre, y spaCy responde a un segundo registro con `ValueError [E004]`.
+Las fábricas llevan el prefijo de la biblioteca - `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` - porque el registro de spaCy es uno para todo el proceso: un `basic` a secas chocaría con el componente de cualquier otra biblioteca que registre ese nombre, y spaCy responde a un segundo registro con `ValueError [E004]`.
 
 Están declaradas como entry points de `spacy_factories`, así que un pipeline guardado con estos componentes - `nlp.to_disk(path)`, `spacy package`, una configuración de entrenamiento - se carga con `spacy.load(path)` en un proceso que nunca importa la biblioteca.
 
@@ -38,6 +38,7 @@ Añadir un componente amplía el tokenizador de su pipeline con las reglas de la
 | `CohesionStatsComponent` | `ests_cohesion` | [CohesionStats](stats/cohesion_stats.md) | categorías gramaticales y lemas |
 | `LexicalStatsComponent` | `ests_lexical` | [LexicalStats](stats/lexical_stats.md) | categorías gramaticales; las estadísticas por el diccionario de frecuencias lo necesitan descargado |
 | `StyleStatsComponent` | `ests_style` | [StyleStats](stats/style_stats.md) | categorías gramaticales y lemas para los sustantivos deverbales |
+| `PhonStatsComponent` | `ests_phon` | [PhonStats](stats/phon_stats.md) | nada |
 
 Un documento sin palabras - una cadena vacía, espacios, solo puntuación - pasa por cada componente sin tocarse, con su extensión en `None`, de modo que un documento así en un corpus no detiene `nlp.pipe`. Una anotación que falta es otra cosa: eso es un error del pipeline y se levanta.
 
@@ -354,9 +355,45 @@ Parámetros:
     (18.18, 33.33)
     ```
 
+## PhonStatsComponent
+
+!!! info ""
+    **ests.components.PhonStatsComponent**
+
+El componente de la fonoestadística de un texto. Las estadísticas leen las palabras del documento y su transcripción, así que el componente no necesita ninguna anotación de un modelo.
+
+Parámetros:
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------: | :--: | :---------: | :---------: |
+| `nlp` | Language | `-` | Objeto Language |
+| `name` | str | `"ests_phon"` | Nombre del componente en el pipeline |
+| `window_len` | int | `3` | Ventana en palabras para la aliteración y la asonancia |
+
+!!! example "Ejemplo"
+
+    _Código_:
+
+    ``` python
+    ...
+
+    # Añadir el componente
+    nlp.add_pipe("ests_phon", name="phon", last=True)
+
+    # Leer las estadísticas calculadas
+    doc = nlp("Tres tristes tigres tragaban trigo en un trigal")
+    round(doc._.phon.hardness, 3), doc._.phon.c_clusters
+    ```
+
+    _Resultado_:
+
+    ``` bash
+    (0.458, {1: 12, 2: 7})
+    ```
+
 ## Todo en un pipeline { #pipeline }
 
-Los ocho componentes pueden convivir, y entonces una sola pasada sobre un documento da todas las estadísticas de la biblioteca que un `Doc` puede llevar.
+Los nueve componentes pueden convivir, y entonces una sola pasada sobre un documento da todas las estadísticas de la biblioteca que un `Doc` puede llevar.
 
 !!! example "Ejemplo"
 
@@ -376,6 +413,7 @@ Los ocho componentes pueden convivir, y entonces una sola pasada sobre un docume
         "cohesion",
         "lexical",
         "style",
+        "phon",
     )
     for factory in factories:
         nlp.add_pipe(f"ests_{factory}", name=factory, last=True)
@@ -390,11 +428,12 @@ Los ocho componentes pueden convivir, y entonces una sola pasada sobre un docume
         doc._.cohesion.p_given,
         round(doc._.lexical.p_top1000, 3),
         round(doc._.style.water, 2),
+        round(doc._.phon.p_vowels, 3),
     )
     ```
 
     _Resultado_:
 
     ``` bash
-    (12, 102.19, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0)
+    (12, 102.19, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0, 0.457)
     ```

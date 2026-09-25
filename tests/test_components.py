@@ -18,6 +18,8 @@ from ests import (
     LexicalStatsComponent,
     MorphStats,
     MorphStatsComponent,
+    PhonStats,
+    PhonStatsComponent,
     ReadabilityStats,
     ReadabilityStatsComponent,
     StyleStats,
@@ -35,6 +37,7 @@ COMPONENTS = (
     ("ests_syntax", SyntaxStatsComponent, SyntaxStats),
     ("ests_cohesion", CohesionStatsComponent, CohesionStats),
     ("ests_style", StyleStatsComponent, StyleStats),
+    ("ests_phon", PhonStatsComponent, PhonStats),
 )
 # The lexical component needs the frequency dictionary, its statistics are tested apart
 ALL_COMPONENTS = (*COMPONENTS, ("ests_lexical", LexicalStatsComponent, LexicalStats))
@@ -142,6 +145,15 @@ def test_style_component_leaves_a_doc_that_pickles():
     doc = pipeline("Se procedió a la revisión del expediente.")
     for copied in (pickle.loads(pickle.dumps(doc)), copy.deepcopy(doc)):
         assert copied._.style.get_stats() == doc._.style.get_stats()
+
+
+def test_phon_parameters(nlp):
+    pipeline = spacy.load("es_core_news_sm")
+    pipeline.add_pipe("ests_phon", name="stats", config={"window_len": 5}, last=True)
+    doc = pipeline(TEXT)
+    assert doc._.stats.get_stats() == PhonStats(nlp(TEXT), window_len=5).get_stats()
+    with pytest.raises(ParameterError):
+        pipeline.add_pipe("ests_phon", name="wrong", config={"window_len": 1})
 
 
 def test_style_component_without_the_annotation():
