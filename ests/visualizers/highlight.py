@@ -784,29 +784,32 @@ def group_words_by_sents(words: Sequence[Word], sents: Sequence[Sent]) -> list[l
     return groups
 
 
-def get_stem(word: str) -> str:
+def get_stem_sounds(word: str) -> tuple[str, ...]:
     """
-    Getting the stem of a word form
+    Getting the sounds of the stem of a word form
 
     Description:
-        The stem is the common start of the word form and its lemma
-        (lemmatize): cantaban - canta, casas - casa, rojos - rojo. For the
-        suppletive forms (fue - ser, voy - ir) the common part is shorter than
-        two letters, and the stem is the whole word form
+        The common start of the transcriptions of the word form and of its
+        lemma (transcribe, lemmatize): hacía - a θ, cogió - k o x, aquella - a k
+        e. The transcriptions are compared rather than the letters, since a cut
+        in letters reads the letters at the cut without the context their sound
+        depends on (hac would be a k, qu no sound at all). For the suppletive
+        forms (fue - ser, quiero - querer) the common part is shorter than two
+        sounds, and the stem is the whole word form
 
     Arguments:
         word (str): Word form in lower case
 
     Returns:
-        str: Stem of the word form
+        tuple[str]: Sounds of the stem
     """
-    lemma = lemmatize(word)
+    sounds, lemma_sounds = transcribe(word), transcribe(lemmatize(word))
     length = 0
-    for letter, lemma_letter in zip(word, lemma, strict=False):
-        if letter != lemma_letter:
+    for sound, lemma_sound in zip(sounds, lemma_sounds, strict=False):
+        if sound != lemma_sound:
             break
         length += 1
-    return word[:length] if length >= 2 else word
+    return sounds[:length] if length >= 2 else sounds
 
 
 def calc_alliteration_runs(
@@ -817,9 +820,12 @@ def calc_alliteration_runs(
 
     Description:
         A repetition is a run of two neighbouring words or more with the same
-        consonant sound in the stem of each (get_stem, transcribe); the words
-        shorter than three letters (de, la, el, y) and the words without vowels
-        neither break nor continue a run: ala aleve del leve is a run of l
+        consonant sound in the stem of each (get_stem_sounds); the words shorter
+        than three letters, the stopwords (is_stopword: que, los, con, como) and
+        the words without vowels neither break nor continue a run. The function
+        words are left out as the model of chance does not fit them: que and
+        qué, 3.8% of the words of the prose, are two sounds with a k, far
+        likelier to hold a k than two sounds taken at random
         The sound is looked for in the stem, not in the ending: the endings
         agree with the neighbouring words and repeat their consonants by the
         grammar, not by the sound (las casas blancas, los ojos rojos)
@@ -829,7 +835,7 @@ def calc_alliteration_runs(
         frequency of the consonant in SOUND_FREQUENCIES and n the number of the
         sounds of the stem; a run is alliteration when the probability is below
         the threshold. Some twenty consonants are checked at every position, so
-        the default threshold is strict: about 3% of the words of the prose of
+        the default threshold is strict: 3.4% of the words of the prose of
         the corpus of literature are highlighted at 0.001. A repetition of a rare
         sound shows in two or three words (deje la abeja), a repetition of a
         frequent one in long words is expected and is not alliteration
@@ -847,10 +853,11 @@ def calc_alliteration_runs(
     words = [word.lower() for word in text]
     transparent = [
         len(word) < ALLITERATION_MIN_WORD_LEN
+        or is_stopword(word)
         or not any(sound in VOWEL_SOUNDS for sound in transcribe(word))
         for word in words
     ]
-    stems = [transcribe(get_stem(word)) for word in words]
+    stems = [get_stem_sounds(word) for word in words]
     runs = []
     for consonant in sorted(CONSONANT_SOUNDS):
         frequency = SOUND_FREQUENCIES[consonant]

@@ -21,7 +21,7 @@ from ests.visualizers.highlight import (
     find_complex_words,
     find_connector_highlights,
     find_long_sents,
-    get_stem,
+    get_stem_sounds,
     get_text_sents,
     get_text_words,
     group_words_by_sents,
@@ -390,9 +390,18 @@ def test_alliteration():
         "alliteration on /g/ (g, gu)",
         "alliteration on /x/ (j, g)",
     ]
+    # Machado: en and la neither break nor continue the run, nieve holds b in its v
+    machado = (
+        "El cierzo corre por el campo yerto alborotando en blancos torbellinos "
+        "la nieve silenciosa."
+    )
+    ht = highlight(machado, layers="alliteration")
+    assert spans(ht, "alliteration") == ["alborotando en blancos torbellinos la nieve"]
     # a sound written with its own letter has no spellings in the note
-    ht = highlight("Ala aleve del leve abanico.", layers="alliteration")
-    assert [h.note for h in ht.highlights] == ["alliteration on /l/"]
+    ht = highlight(
+        "Ala aleve del leve abanico.", layers="alliteration", alliteration_threshold=0.01
+    )
+    assert "alliteration on /l/" in [h.note for h in ht.highlights]
 
 
 def test_alliteration_within_sentences():
@@ -421,11 +430,30 @@ def test_calc_alliteration_runs():
     assert calc_alliteration_runs(["casa", "queso"], 0.5) == [(0, 2, "k"), (0, 2, "s")]
 
 
-def test_get_stem():
-    assert get_stem("cantaban") == "canta"
-    assert get_stem("casas") == "casa"
-    # a suppletive form keeps the whole word
-    assert get_stem("fue") == "fue"
+def test_calc_alliteration_runs_skips_the_stopwords():
+    # que neither breaks nor continues a run of k: the model of chance does not fit it
+    assert calc_alliteration_runs(["que", "hacía", "y", "de", "que", "aquel"]) == []
+    words = ["casa", "que", "con", "queso", "fresco"]
+    assert calc_alliteration_runs(words, 0.01) == [(0, 5, "k")]
+
+
+@pytest.mark.parametrize(
+    ("word", "expected"),
+    [
+        ("cantaban", "k a n t a"),
+        ("casas", "k a s a"),
+        # the transcriptions are compared, so the letters at the cut keep their sound
+        ("hacía", "a θ"),
+        ("cogió", "k o x"),
+        ("aquella", "a k e"),
+        ("seguía", "s e g i"),
+        # a suppletive form keeps the whole word
+        ("fue", "f u e"),
+        ("quiero", "k i e r o"),
+    ],
+)
+def test_get_stem_sounds(word, expected):
+    assert get_stem_sounds(word) == tuple(expected.split())
 
 
 def test_split_segments():
