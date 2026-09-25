@@ -901,8 +901,8 @@ COMPOUND_PREPOSITIONS = (
 # Clichés of the administrative style, by the same guides: the fixed formulas of letters
 # and resolutions, the fillers and the periphrases of a light verb with a noun that one
 # verb says (proceder a, dar cumplimiento, hacer entrega). A cliché that starts with an
-# infinitive stands for every form of the verb (se procedió a, dio cumplimiento, se
-# llevará a cabo). Left out are the phrases with frequent neutral uses (tomar una
+# infinitive stands for the forms of the verb (se procedió a, ha dado cumplimiento, deberá
+# llevarse a cabo). Left out are the phrases with frequent neutral uses (tomar una
 # decisión, en este sentido), but for proceder a and llevar a cabo, which guides of
 # three administrations and more flag
 OFFICIALESE_CLICHES = (
@@ -981,6 +981,27 @@ OFFICIALESE_CLICHES = (
     "tomar un acuerdo",
     "y para que así conste",
 )
+# Forms of the verbs of the clichés that simplemma leaves as they are, by their
+# infinitive: the irregular participles of the perfect (ha dado cumplimiento, se ha
+# hecho entrega, ha puesto de manifiesto) and the imperative with se (dese traslado).
+# The words after the verb rule out the readings as a noun (el hecho, el puesto)
+IRREGULAR_VERB_FORMS = {
+    "dado": "dar",
+    "dados": "dar",
+    "dese": "dar",
+    "dése": "dar",
+    "dense": "dar",
+    "dénse": "dar",
+    "hecho": "hacer",
+    "hechos": "hacer",
+    "llevada": "llevar",
+    "llevadas": "llevar",
+    "puesto": "poner",
+    "puesta": "poner",
+    "puestos": "poner",
+    "puestas": "poner",
+    "resultado": "resultar",
+}
 # Parenthetical expressions, set off by commas or standing at the edge of a sentence:
 # the ones set off in at least 55% of their occurrences in the corpus of literature,
 # and the series of order the first of them opens (en primer lugar, en segundo lugar)

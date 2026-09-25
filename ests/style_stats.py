@@ -8,6 +8,7 @@ from spacy.tokens import Doc
 
 from .constants import (
     COMPOUND_PREPOSITIONS,
+    IRREGULAR_VERB_FORMS,
     NAUSEA_TOP_N,
     OFFICIALESE_CLICHES,
     PARENTHETICALS,
@@ -30,7 +31,7 @@ from .utils import (
 UNUSED_COMPONENTS = ["parser", "ner"]
 # One-word parenthetical expressions, which the water counts as stopwords
 PARENTHETICAL_WORDS = frozenset(phrase for phrase in PARENTHETICALS if " " not in phrase)
-# Endings of the infinitive, whose phrases stand for every form of the verb
+# Endings of the infinitive, whose phrases stand for the forms of the verb
 INFINITIVE_ENDINGS = ("ar", "er", "ir", "ír")
 
 
@@ -68,9 +69,11 @@ class StyleStats:
         taken without punctuation (iter_doc_words)
         The markers of the officialese style are counted over the unfiltered
         word forms (forms), whatever the extractor passed. The verbal nouns
-        need the parts of speech and the lemmas: they are read from a Doc, and
-        a string is parsed by the model when they are first read, so the other
-        metrics of a string need no model
+        need the parts of speech and the lemmas: the lemmas of the nouns of a
+        Doc are read when the object is made, and the Doc is not kept, so a Doc
+        with the object in an extension still pickles; a string is parsed by
+        the model when the verbal nouns are first read, so the other metrics of
+        a string need no model
 
     Example:
         >>> from ests import StyleStats
@@ -118,8 +121,8 @@ class StyleStats:
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc
         SourceError: If the source has no words; when the verbal nouns are read,
-            if a Doc lacks the parts of speech or a string is longer than the
-            max_length of the pipeline
+            if the source lacks the parts of speech or the lemmas or a string is
+            longer than the max_length of the pipeline
         ParameterError: If the number of the most frequent words is below one
     """
 
@@ -132,19 +135,29 @@ class StyleStats:
         cliches: Sequence[str] | None = None,
         nlp: Language | None = None,
     ):
+        # The lemmas of the nouns of a Doc are read at once, and the Doc is not kept:
+        # an object in its extension that holds the Doc would make a cycle that
+        # neither pickle nor deepcopy can follow
+        self._text: str | None = None
+        self._nouns: list[str] | None = None
+        self._annotation_error = ""
         if isinstance(source, Doc):
             self.words = tuple(text.lower() for _, _, text in iter_doc_words(source))
             self.forms = self.words
+            try:
+                self._nouns = noun_lemmas(source)
+            except SourceError as error:
+                self._annotation_error = str(error)
         elif isinstance(source, str):
             forms = WordsExtractor(lowercase=True).extract(source)
             self.words = words_extractor.extract(source) if words_extractor else forms
             self.forms = forms
+            self._text = source
         else:
             raise SourceTypeError("The data source is set incorrectly")
         if not self.words:
             raise SourceError("The data source has no words")
         check_params(top_n)
-        self.source = source
         self.stopwords = tuple(stopwords) if stopwords is not None else None
         self.top_n = top_n
         self.cliches_list = tuple(cliches) if cliches is not None else OFFICIALESE_CLICHES
@@ -172,7 +185,11 @@ class StyleStats:
 
     @cached_property
     def verbal_nouns(self) -> float:
-        return calc_verbal_nouns(self._noun_lemmas())
+        if self._nouns is None:
+            if self._text is None:
+                raise SourceError(self._annotation_error)
+            self._nouns = noun_lemmas(self._parse(self._text))
+        return calc_verbal_nouns(self._nouns)
 
     @property
     def compound_prepositions(self) -> float:
@@ -186,37 +203,31 @@ class StyleStats:
     def cliches(self) -> float:
         return calc_phrase_density(self.forms, self.cliches_list)
 
-    def _noun_lemmas(self) -> list[str]:
+    def _parse(self, text: str) -> Doc:
         """
-        Lemmas of the nouns of the text
+        Parsing a string for the verbal nouns
 
         Description:
-            A Doc gives its own annotation; a string is parsed by the pipeline,
-            without the parser and the named entities
+            The pipeline of nlp or get_nlp(), without the parser and the named
+            entities
+
+        Arguments:
+            text (str): Text
 
         Returns:
-            list[str]: Lemmas of the tokens tagged NOUN
+            Doc: Parsed text
 
         Raises:
-            SourceError: If a Doc lacks the parts of speech or a string is longer
-                than the max_length of the pipeline
+            SourceError: If the text is longer than the max_length of the pipeline
         """
-        doc = self.source
-        if isinstance(doc, str):
-            pipeline = self.nlp or get_nlp()
-            if len(doc) > pipeline.max_length:
-                raise SourceError(
-                    f"The text of {len(doc)} characters is longer than the limit of the "
-                    f"pipeline ({pipeline.max_length}): split it into parts or raise "
-                    "max_length on a pipeline of your own and pass it in nlp"
-                )
-            doc = pipeline(doc, disable=UNUSED_COMPONENTS)
-        if not doc.has_annotation("POS"):
+        pipeline = self.nlp or get_nlp()
+        if len(text) > pipeline.max_length:
             raise SourceError(
-                "The data source has no annotation of the parts of speech: "
-                "parse the text with a model instead of a blank pipeline"
+                f"The text of {len(text)} characters is longer than the limit of the "
+                f"pipeline ({pipeline.max_length}): split it into parts or raise "
+                "max_length on a pipeline of your own and pass it in nlp"
             )
-        return [token.lemma_ for token in iter_doc_tokens(doc) if token.pos_ == "NOUN"]
+        return pipeline(text, disable=UNUSED_COMPONENTS)
 
     def keyword_density(self, *keywords: str) -> dict[str, float]:
         """
@@ -246,6 +257,31 @@ class StyleStats:
         stats = self.get_stats()
         for stat, desc in STYLE_STATS_DESC.items():
             print(f"{desc:50}|{stats[stat]:^10.2f}")
+
+
+def noun_lemmas(doc: Doc) -> list[str]:
+    """
+    Getting the lemmas of the nouns of a Doc
+
+    Arguments:
+        doc (Doc): Doc object
+
+    Returns:
+        list[str]: Lemmas of the tokens tagged NOUN
+
+    Raises:
+        SourceError: If the Doc lacks the parts of speech or the lemmas
+    """
+    if not doc.has_annotation("POS"):
+        raise SourceError(
+            "The data source has no annotation of the parts of speech: "
+            "parse the text with a model instead of a blank pipeline"
+        )
+    if not doc.has_annotation("LEMMA"):
+        raise SourceError(
+            "The data source has no lemmas: parse the text with a pipeline that has a lemmatizer"
+        )
+    return [token.lemma_ for token in iter_doc_tokens(doc) if token.pos_ == "NOUN"]
 
 
 def is_stopword(word: str) -> bool:
@@ -500,9 +536,11 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> list[str]:
         A phrase ending in a or de also takes the contraction with the article,
         al or del (a efectos del, conforme al). A phrase whose first word is an
         infinitive (proceder a, dar cumplimiento, ser de aplicación) takes the
-        forms of the text whose lemma (lemmatize) is that infinitive: procedió
-        a, dio cumplimiento, es de aplicación; the lemmas are those of
-        simplemma, so a form it does not know (llevarse) is not found
+        forms of the text whose lemma is that infinitive: procedió a, dio
+        cumplimiento, es de aplicación. The lemma is the one of lemmatize, a
+        pronominal lemma counting for its verb (llévese, llevarse - llevarse -
+        llevar), or of IRREGULAR_VERB_FORMS for the forms simplemma leaves as
+        they are (dado, hecho, puesto, dese)
 
     Arguments:
         text (list[str]): List of words
@@ -526,7 +564,9 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> list[str]:
     forms: dict[str, set[str]] = {head: {head} for head in heads}
     if heads:
         for form in {word.lower() for word in text}:
-            lemma = lemmatize(form)
+            lemma = IRREGULAR_VERB_FORMS.get(form) or lemmatize(form)
+            if lemma not in forms:
+                lemma = lemma.removesuffix("se")
             if lemma in forms:
                 forms[lemma].add(form)
     expanded: list[str] = []

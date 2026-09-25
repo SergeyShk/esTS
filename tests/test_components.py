@@ -1,3 +1,5 @@
+import copy
+import pickle
 import subprocess
 import sys
 
@@ -132,6 +134,14 @@ def test_style_parameters(nlp):
     assert doc._.stats.get_stats() == expected
     with pytest.raises(ParameterError):
         pipeline.add_pipe("ests_style", name="wrong", config={"top_n": 0})
+
+
+def test_style_component_leaves_a_doc_that_pickles():
+    pipeline = spacy.load("es_core_news_sm")
+    pipeline.add_pipe("ests_style", name="style", last=True)
+    doc = pipeline("Se procedió a la revisión del expediente.")
+    for copied in (pickle.loads(pickle.dumps(doc)), copy.deepcopy(doc)):
+        assert copied._.style.get_stats() == doc._.style.get_stats()
 
 
 def test_style_component_without_the_annotation():

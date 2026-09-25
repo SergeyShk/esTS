@@ -444,7 +444,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/lexical_st
 
 <br>
 
-Los indicadores SEO de Advego y Text.ru - náusea, contenido de agua, índice de spam, naturalidad según la ley de Zipf, densidad de palabras clave - y los marcadores del estilo burocrático contra los que advierten las guías españolas de lenguaje claro: los sustantivos deverbales, las locuciones prepositivas del estilo administrativo, las expresiones parentéticas y los clichés, cuyos verbos se encuentran en cualquier forma.
+Los indicadores SEO de Advego y Text.ru - náusea, contenido de agua, índice de spam, naturalidad según la ley de Zipf, densidad de palabras clave - y los marcadores del estilo burocrático contra los que advierten las guías españolas de lenguaje claro: los sustantivos deverbales, las locuciones prepositivas del estilo administrativo, las expresiones parentéticas y los clichés, cuyos verbos se encuentran en sus formas (`se procedió a`, `ha dado cumplimiento`).
 
 ```python
 >>> from ests import StyleStats

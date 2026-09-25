@@ -186,11 +186,19 @@ def test_verbal_nouns(ss, nlp):
     assert StyleStats(text, nlp=nlp).verbal_nouns == ss.verbal_nouns
 
 
-def test_verbal_nouns_without_the_annotation():
+def test_verbal_nouns_without_the_annotation(nlp):
     ss = StyleStats(spacy.blank("es")(text))
     assert ss.water == StyleStats(text).water
     with pytest.raises(SourceError, match="parts of speech"):
         _ = ss.verbal_nouns
+    # the parts of speech without the lemmas give every noun an empty lemma
+    ss = StyleStats(nlp(text, disable=["lemmatizer"]))
+    assert ss.spam == StyleStats(text).spam
+    with pytest.raises(SourceError, match="no lemmas"):
+        _ = ss.verbal_nouns
+    pipeline = spacy.load("es_core_news_sm", exclude=["lemmatizer"])
+    with pytest.raises(SourceError, match="no lemmas"):
+        _ = StyleStats(text, nlp=pipeline).verbal_nouns
 
 
 def test_verbal_nouns_of_a_long_text():
@@ -245,6 +253,34 @@ def test_expand_phrases():
     assert calc_phrase_density(words, OFFICIALESE_CLICHES) == pytest.approx(100 * 3 / 9)
     # a word that is no infinitive stays as it is
     assert expand_phrases(["cabe"], ["cabe destacar"]) == ["cabe destacar"]
+
+
+@pytest.mark.parametrize(
+    "phrase",
+    [
+        # the irregular participles of the perfect and the imperative with se
+        "ha dado cumplimiento",
+        "se ha hecho entrega",
+        "ha puesto de manifiesto",
+        "han resultado beneficiarios",
+        "dese traslado a las partes",
+        "dénse por notificados",
+        # the pronominal lemmas of simplemma: llevarse, ponerse
+        "llévese a cabo",
+        "deberá llevarse a cabo",
+        "poniéndose de manifiesto",
+    ],
+)
+def test_expand_phrases_of_the_forms_simplemma_misses(phrase):
+    words = phrase.split()
+    cliches = ["dar cumplimiento", "hacer entrega", "poner de manifiesto", "dar traslado"]
+    cliches += ["resultar beneficiarios", "dar por notificados", "llevar a cabo"]
+    assert calc_phrase_density(words, cliches) == pytest.approx(100 / len(words))
+
+
+def test_expand_phrases_leaves_the_nouns():
+    words = ["el", "hecho", "de", "que", "el", "puesto", "de", "trabajo"]
+    assert calc_phrase_density(words, OFFICIALESE_CLICHES) == 0.0
 
 
 def test_phrase_density():

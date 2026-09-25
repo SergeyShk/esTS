@@ -444,7 +444,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/lexical_stats
 
 <br>
 
-The SEO indicators of Advego and Text.ru - nausea, water content, spam score, naturalness by Zipf's law, keyword density - and the markers of the officialese style that the Spanish guides to plain language warn about: the nouns derived from a verb, the compound prepositions of the administrative style, the parenthetical expressions and the clichés, whose verbs are found in any form.
+The SEO indicators of Advego and Text.ru - nausea, water content, spam score, naturalness by Zipf's law, keyword density - and the markers of the officialese style that the Spanish guides to plain language warn about: the nouns derived from a verb, the compound prepositions of the administrative style, the parenthetical expressions and the clichés, whose verbs are found in their forms (`se procedió a`, `ha dado cumplimiento`).
 
 ```python
 >>> from ests import StyleStats
