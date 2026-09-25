@@ -13,6 +13,7 @@ from ests.exceptions import ParameterError, SourceError, SourceTypeError
 from ests.utils import get_nlp
 from ests.visualizers import Highlight, HighlightedText, highlight
 from ests.visualizers.highlight import (
+    CSS,
     Sent,
     Word,
     find_complex_words,
@@ -108,9 +109,9 @@ def test_layers_default_doc(doc):
 
 
 def test_layers_default_blank_doc():
-    # a blank pipeline gives no sentence boundaries and no parse
+    # a blank pipeline gives no parse; its sentences come from the rules of SentsExtractor
     ht = highlight(spacy.blank("es")(text))
-    assert ht.layers == ("complex_words", "cliches")
+    assert ht.layers == ("long_sents", "complex_words", "cliches")
 
 
 def test_layer_groups():
@@ -145,9 +146,23 @@ def test_layers_unavailable(layer, requirement):
         highlight(text, layers=layer)
 
 
-def test_layers_unavailable_blank_doc():
-    with pytest.raises(ParameterError, match="sentence boundaries"):
-        highlight(spacy.blank("es")(text), layers="long_sents")
+def test_doc_without_the_sentence_boundaries(nlp):
+    doc = nlp(long_sent + " " + text, disable=["parser"])
+    assert not doc.has_annotation("SENT_START")
+    for layer in ("long_sents", "connectors"):
+        assert spans(highlight(doc, layers=layer), layer) == spans(
+            highlight(doc.text, layers=layer), layer
+        )
+    assert highlight(doc, layers="long_sents").counts == {"long_sents": 1}
+
+
+@pytest.mark.parametrize("layer", sorted(HIGHLIGHT_SYNTAX_LAYERS))
+def test_syntax_layers_without_the_lemmas(nlp, layer):
+    # the syntactic layers read the lemmas: ser of the passive, the light verbs
+    doc = nlp(text, disable=["lemmatizer"])
+    with pytest.raises(ParameterError, match="parse and the lemmas"):
+        highlight(doc, layers=layer)
+    assert highlight(doc).layers == ("long_sents", "complex_words", "cliches")
 
 
 def test_counts(ht):
@@ -219,8 +234,12 @@ def test_find_long_sents():
 
 
 def test_complex_words(ht):
-    assert "comisión" in spans(ht, "complex_words")
-    assert "hacer" not in spans(ht, "complex_words")
+    # from 4 syllables by default: at 3 half the content words would be complex
+    assert "expedientes" in spans(ht, "complex_words")
+    assert "comisión" not in spans(ht, "complex_words")
+    three = highlight(text, layers="complex_words", complex_syl_factor=3)
+    assert "comisión" in spans(three, "complex_words")
+    assert "hacer" not in spans(three, "complex_words")
 
 
 def test_find_complex_words():
@@ -296,11 +315,12 @@ def test_connectors(ht):
 def test_connectors_pos():
     # a one-word connector counts with its part of speech only, pues as a verb is no connector
     words = [Word(0, 4, "Pues"), Word(5, 7, "no"), Word(8, 12, "vino")]
-    assert len(find_connector_highlights(words, None)) == 1
+    sents = [Sent(0, 13, 3)]
+    assert len(find_connector_highlights(words, sents)) == 1
     tagged = [
         word._replace(pos=pos) for word, pos in zip(words, ["VERB", "ADV", "VERB"], strict=True)
     ]
-    assert find_connector_highlights(tagged, None) == []
+    assert find_connector_highlights(tagged, sents) == []
 
 
 def test_passive(doc):
@@ -388,6 +408,19 @@ def test_to_html_escaping():
     markup = highlight("El <gato> & el perro\nduermen.", layers="stopwords").to_html()
     assert "&lt;gato&gt; &amp;" in markup
     assert "&#10;" in markup
+
+
+def test_css_paints_the_stopwords_first():
+    # the densest layer comes first, so that every other background covers it
+    backgrounds = [
+        line.split()[0].removeprefix(".ests-hl-")
+        for line in CSS.splitlines()
+        if line.startswith(".ests-hl-") and "background" in line
+    ]
+    assert backgrounds[:2] == ["long_sents", "stopwords"]
+    ht = highlight(text, layers=["stopwords", "compound_prepositions"])
+    markup = ht.to_html(legend=False, css=False)
+    assert '<span class="ests-hl ests-hl-compound_prepositions ests-hl-stopwords"' in markup
 
 
 def test_to_html_title():

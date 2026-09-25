@@ -1108,6 +1108,11 @@ HIGHLIGHT_TAGGED_LAYERS = frozenset({"verbal_nouns"})
 # 2024, Legislatura de la Ciudad de Buenos Aires 2024; 20-30 on average by the Secretaría
 # de la Función Pública of Mexico 2007)
 LONG_SENT_WORD_FACTOR = 30
+# Number of syllables from which the highlighting marks a word as complex: at 3, the
+# bound of the readability formulas (COMPLEX_SYL_FACTOR), half the content words of any
+# text are marked (abuela, pequeña, camino), a plain story almost as much as an official
+# notice, and the layer no longer points at the heavy words
+HIGHLIGHT_COMPLEX_SYL_FACTOR = 4
 
 # Measures of keyness, of association of collocations, of dispersion of words and of stylometry
 KEYNESS_MEASURES = {

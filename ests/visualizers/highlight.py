@@ -9,10 +9,10 @@ from spacy.tokens import Doc, Token
 
 from ..cohesion_stats import find_connectors
 from ..constants import (
-    COMPLEX_SYL_FACTOR,
     COMPOUND_PREPOSITIONS,
     CONNECTOR_CLASSES,
     CONNECTOR_TYPES,
+    HIGHLIGHT_COMPLEX_SYL_FACTOR,
     HIGHLIGHT_DEFAULT_LAYERS,
     HIGHLIGHT_LAYERS_DESC,
     HIGHLIGHT_SYNTAX_LAYERS,
@@ -58,13 +58,13 @@ CSS = """\
 .ests-highlight-text { white-space: pre-wrap; }
 .ests-highlight .ests-hl.ests-hl-long_sents, .ests-highlight .ests-hl.ests-hl-complex_words, .ests-highlight .ests-hl.ests-hl-rare_words, .ests-highlight .ests-hl.ests-hl-stopwords, .ests-highlight .ests-hl.ests-hl-passive, .ests-highlight .ests-hl.ests-hl-verbal_nouns, .ests-highlight .ests-hl.ests-hl-compound_prepositions, .ests-highlight .ests-hl.ests-hl-cliches, .ests-highlight .ests-hl.ests-hl-parentheticals { color: #1f2328; border-radius: 2px; }
 .ests-hl-long_sents { background: #fef9c3; }
+.ests-hl-stopwords { background: #bae6fd; }
 .ests-hl-complex_words { background: #fed7aa; }
 .ests-hl-rare_words { background: #e5e7eb; }
 .ests-hl-passive { background: #fecaca; }
 .ests-hl-verbal_nouns { background: #e9d5ff; }
 .ests-hl-compound_prepositions { background: #a7f3d0; }
 .ests-hl-cliches { background: #fbcfe8; }
-.ests-hl-stopwords { background: #bae6fd; }
 .ests-hl-parentheticals { background: #d9f99d; }
 .ests-hl-participle_clauses { border-bottom: 2px solid #7c3aed; }
 .ests-hl-gerund_clauses { border-bottom: 2px solid #0d9488; }
@@ -129,11 +129,17 @@ class HighlightedText:
                 (CohesionStats)
         The layers are grouped in HIGHLIGHT_LAYER_GROUPS: readability, syntax,
         officialese, style. The syntactic layers are read from the dependency
-        tree and need a Doc with a parse, verbal_nouns needs a Doc with the
-        parts of speech and the lemmas, long_sents of a Doc needs the sentence
-        boundaries. The layers of HIGHLIGHT_DEFAULT_LAYERS the source allows are
-        on by default (long sentences, complex words, passive, chains of de,
-        split predicates, clichés); layers="all" turns on every layer allowed
+        tree and the lemmas (the auxiliary ser, the light verbs) and need a Doc
+        with a parse and a lemmatizer, as SyntaxStats does; verbal_nouns needs a
+        Doc with the parts of speech and the lemmas. A Doc without the sentence
+        boundaries is split by the rules of SentsExtractor, as BasicStats splits
+        it. The layers of HIGHLIGHT_DEFAULT_LAYERS the source allows are on by
+        default (long sentences, complex words, passive, chains of de, split
+        predicates, clichés); layers="all" turns on every layer allowed
+        A word is complex from 4 syllables here (HIGHLIGHT_COMPLEX_SYL_FACTOR):
+        at 3, the bound of the readability formulas and of BasicStats, half the
+        content words of any Spanish text are complex (abuela, pequeña, camino);
+        complex_syl_factor=3 shows the words of n_complex_words
         The result shows in Jupyter as HTML with styles and a legend; to_html
         returns the same markup for documentation and web applications. The
         fragments of different layers may overlap: the text is cut into
@@ -147,7 +153,7 @@ class HighlightedText:
         ... )
         >>> ht = highlight(text)
         >>> ht.counts
-        {'long_sents': 0, 'complex_words': 5, 'cliches': 2}
+        {'long_sents': 0, 'complex_words': 1, 'cliches': 2}
         >>> ht = highlight(text, layers=["cliches", "compound_prepositions"])
         >>> ht.highlights[0]
         Highlight(start=3, end=13, layer='cliches', note='cliché: «proceder a»')
@@ -186,7 +192,7 @@ class HighlightedText:
         source: str | Doc,
         layers: Sequence[str] | str | None = None,
         long_sent_word_factor: int = LONG_SENT_WORD_FACTOR,
-        complex_syl_factor: int = COMPLEX_SYL_FACTOR,
+        complex_syl_factor: int = HIGHLIGHT_COMPLEX_SYL_FACTOR,
         stopwords: Sequence[str] | None = None,
         cliches: Sequence[str] | None = None,
     ):
@@ -196,8 +202,13 @@ class HighlightedText:
             self.text = source.text
             tagged = source.has_annotation("POS") and source.has_annotation("LEMMA")
             words = get_doc_words(source, tagged)
-            sents = get_doc_sents(source) if source.has_annotation("SENT_START") else None
-            doc = source if source.has_annotation("DEP") else None
+            sents = (
+                get_doc_sents(source)
+                if source.has_annotation("SENT_START")
+                else get_text_sents(self.text, words)
+            )
+            parsed = source.has_annotation("DEP") and source.has_annotation("LEMMA")
+            doc = source if parsed else None
         elif isinstance(source, str):
             self.text = source
             words = get_text_words(source)
@@ -221,14 +232,13 @@ class HighlightedText:
         available = [
             layer
             for layer in HIGHLIGHT_LAYERS_DESC
-            if not (layer == "long_sents" and sents is None)
-            and not (layer in HIGHLIGHT_SYNTAX_LAYERS and doc is None)
+            if not (layer in HIGHLIGHT_SYNTAX_LAYERS and doc is None)
             and not (layer in HIGHLIGHT_TAGGED_LAYERS and not tagged)
         ]
         self.layers = select_layers(layers, available)
 
         finders: dict[str, Callable[[], list[Highlight]]] = {
-            "long_sents": lambda: find_long_sents(sents or [], long_sent_word_factor),
+            "long_sents": lambda: find_long_sents(sents, long_sent_word_factor),
             "complex_words": lambda: find_complex_words(words, complex_syl_factor),
             "rare_words": lambda: find_rare_words(words),
             "stopwords": lambda: find_stopwords(words, stopwords),
@@ -308,7 +318,7 @@ def highlight(
     source: str | Doc,
     layers: Sequence[str] | str | None = None,
     long_sent_word_factor: int = LONG_SENT_WORD_FACTOR,
-    complex_syl_factor: int = COMPLEX_SYL_FACTOR,
+    complex_syl_factor: int = HIGHLIGHT_COMPLEX_SYL_FACTOR,
     stopwords: Sequence[str] | None = None,
     cliches: Sequence[str] | None = None,
 ) -> HighlightedText:
@@ -320,8 +330,8 @@ def highlight(
         words, passive, participial and gerund clauses, chains of de, split
         predicates, verbal nouns, compound prepositions, clichés, stopwords,
         parenthetical expressions, connectors; the syntactic layers need a Doc
-        with a parse, the verbal nouns a Doc with the parts of speech and the
-        lemmas, see HighlightedText
+        with a parse and the lemmas, the verbal nouns a Doc with the parts of
+        speech and the lemmas, see HighlightedText
 
     Arguments:
         source (str|Doc): Data source (a string or a Doc object)
@@ -378,12 +388,11 @@ def select_layers(layers: Sequence[str] | str | None, available: Sequence[str]) 
         if layer not in HIGHLIGHT_LAYERS_DESC:
             raise ParameterError(f"Unknown layer of the highlighting: {layer}")
         if layer not in available:
-            if layer == "long_sents":
-                requirement = "the sentence boundaries in the Doc"
-            elif layer in HIGHLIGHT_TAGGED_LAYERS:
-                requirement = "a Doc with the parts of speech and the lemmas"
-            else:
-                requirement = "a Doc with a dependency parse"
+            requirement = (
+                "a Doc with the parts of speech and the lemmas"
+                if layer in HIGHLIGHT_TAGGED_LAYERS
+                else "a Doc with a dependency parse and the lemmas"
+            )
             raise ParameterError(f"The layer {layer} needs {requirement}")
     return tuple(layer for layer in HIGHLIGHT_LAYERS_DESC if layer in layers)
 
@@ -686,27 +695,24 @@ def find_parentheticals(words: Sequence[Word]) -> list[Highlight]:
     )
 
 
-def find_connector_highlights(
-    words: Sequence[Word], sents: Sequence[Sent] | None
-) -> list[Highlight]:
+def find_connector_highlights(words: Sequence[Word], sents: Sequence[Sent]) -> list[Highlight]:
     """
     Finding the connectors
 
     Description:
-        The connectors are looked for inside every sentence (find_connectors),
-        in the whole text without the sentence boundaries; a one-word connector
-        is checked by the part of speech of the word when a tagged Doc gives it;
-        the note gives the class and the kind of the connector
+        The connectors are looked for inside every sentence (find_connectors);
+        a one-word connector is checked by the part of speech of the word when
+        a tagged Doc gives it; the note gives the class and the kind of the
+        connector
 
     Arguments:
         words (list[Word]): Words with their positions
-        sents (list[Sent]): Sentences with their positions; None if the boundaries
-            are unknown
+        sents (list[Sent]): Sentences with their positions
 
     Returns:
         list[Highlight]: Fragments of the layer connectors
     """
-    groups = group_words_by_sents(words, sents) if sents else [list(words)]
+    groups = group_words_by_sents(words, sents)
     highlights = []
     for group in groups:
         texts = [word.text for word in group]
