@@ -64,7 +64,7 @@ O con [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad, la diversidad léxica y la fonoestadística no necesitan ningún modelo de spaCy; las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica de una cadena sí, igual que los sustantivos deverbales de las métricas de estilo, el perfil de las palabras funcionales, los rasgos de un texto y la comparación de corpus, y analizar un texto por su cuenta para pasar el `Doc` en lugar de una cadena:
+El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad, la diversidad léxica, las métricas de estilo salvo los sustantivos deverbales, la fonoestadística y las estadísticas del verso no necesitan ningún modelo de spaCy; las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica de una cadena sí, igual que los sustantivos deverbales de las métricas de estilo, el perfil de las palabras funcionales, los rasgos de un texto y la comparación de corpus, y analizar un texto por su cuenta para pasar el `Doc` en lugar de una cadena:
 
 ```bash
 python -m spacy download es_core_news_sm
@@ -527,7 +527,7 @@ Cada clase de estadísticas es también un componente de un pipeline, de modo qu
 (12, ('DET', 'NOUN'), 2.0)
 ```
 
-Las fábricas son `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style` y `ests_phon`; el nombre del paso del pipeline es libre y es como se llama la extensión.
+Las fábricas son `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` y `ests_verse`; el nombre del paso del pipeline es libre y es como se llama la extensión.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/components/).
 

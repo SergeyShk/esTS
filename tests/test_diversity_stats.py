@@ -503,7 +503,8 @@ def test_entropy(ds):
     assert calc_entropy(riddle) == pytest.approx(expected)
     assert calc_perplexity(riddle) == pytest.approx(2**expected)
     assert calc_evenness(riddle) == pytest.approx(expected / log2(11))
-    assert calc_entropy(["a", "a"]) == 0.0
+    # a single lexeme gives 0.0, not -0.0, which prints with a sign
+    assert str(calc_entropy(["a", "a"])) == "0.0"
     assert calc_perplexity(["a", "b", "c", "d"]) == pytest.approx(4.0)
     assert isnan(calc_evenness(["a", "a"]))
     assert ds.evenness == pytest.approx(0.9230945052617391)
@@ -547,7 +548,7 @@ def test_fit_zipf_mandelbrot(ds):
 
 def test_heaps_beta(ds):
     assert calc_heaps_beta(["a", "b", "c", "d"]) == pytest.approx(1.0)
-    assert calc_heaps_beta(["a"] * 10) == pytest.approx(0.0)
+    assert str(calc_heaps_beta(["a"] * 10)) == "0.0"
     assert ds.heaps_beta == pytest.approx(0.8180436061700801)
     assert isnan(calc_heaps_beta(["palabra"]))
 

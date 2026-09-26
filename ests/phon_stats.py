@@ -182,7 +182,7 @@ class PhonStats:
         self.c_clusters = _consonant_clusters(counts)
         patterns: Counter[str] = Counter()
         for syllable, count in syllables.items():
-            patterns[cv_pattern(syllable)] += count
+            patterns[_cv_pattern(syllable)] += count
         self.c_syllable_patterns = dict(sorted(patterns.items()))
 
         self.p_vowels = safe_divide(self.n_vowels, n_sounds)
@@ -202,7 +202,7 @@ class PhonStats:
         self.assonance = _repetition_index(windows, VOWEL_COLUMNS, len(words), window_len)
         n_syllables = sum(syllables.values())
         self.p_open_syllables = safe_divide(
-            sum(count for syllable, count in syllables.items() if is_open_syllable(syllable)),
+            sum(count for syllable, count in syllables.items() if _is_open(syllable)),
             n_syllables,
             nan,
         )
@@ -325,43 +325,55 @@ def _read_letter(syllable: str, index: int, initial: bool) -> tuple[tuple[str, .
     return (), 1
 
 
-def cv_pattern(sounds: Sequence[str]) -> str:
+def cv_pattern(word: str) -> str:
     """
     Getting the CV pattern of a word or a syllable
 
     Description:
         The vowels are written V and the consonants C, over the sounds of the
-        transcription (transcribe): queso is CVCV, hora is VCV, examen VCCVCVC
+        transcription (transcribe): queso is CVCV, hora is VCV, examen VCCVCVC.
+        A syllable is read as a word of its own
 
     Arguments:
-        sounds (tuple[str]): Sounds of a word or a syllable
+        word (str): Word or syllable
 
     Returns:
         str: CV pattern
 
     Example:
-        >>> from ests.phon_stats import cv_pattern, transcribe
-        >>> cv_pattern(transcribe("queso")), cv_pattern(transcribe("instrumento"))
+        >>> from ests.phon_stats import cv_pattern
+        >>> cv_pattern("queso"), cv_pattern("instrumento")
         ('CVCV', 'VCCCCVCVCCV')
     """
+    return _cv_pattern(transcribe(word))
+
+
+def _cv_pattern(sounds: Sequence[str]) -> str:
+    """CV pattern of the sounds of a word or a syllable - see cv_pattern"""
     return "".join("V" if sound in VOWEL_SOUNDS else "C" for sound in sounds)
 
 
-def is_open_syllable(syllable: Sequence[str]) -> bool:
+def is_open_syllable(syllable: str) -> bool:
     """
     Checking whether a syllable is open
 
     Description:
         An open syllable ends in a vowel sound: ca, que, hoy (the final y is
-        the vowel i); car and pan are closed
+        the vowel i); car and pan are closed. The syllable is read as a word
+        of its own (transcribe)
 
     Arguments:
-        syllable (tuple[str]): Sounds of the syllable
+        syllable (str): Syllable
 
     Returns:
         bool: Result of the check
     """
-    return bool(syllable) and syllable[-1] in VOWEL_SOUNDS
+    return _is_open(transcribe(syllable))
+
+
+def _is_open(sounds: Sequence[str]) -> bool:
+    """Whether the sounds of a syllable end in a vowel - see is_open_syllable"""
+    return bool(sounds) and sounds[-1] in VOWEL_SOUNDS
 
 
 def calc_consonant_clusters(text: Sequence[str]) -> dict[int, int]:
@@ -477,12 +489,13 @@ def _cv_entropy(counts: Counter[str]) -> float:
     """Entropy of the CV patterns by a counter of word forms"""
     patterns: Counter[str] = Counter()
     for word, count in counts.items():
-        if pattern := cv_pattern(transcribe(word)):
+        if pattern := cv_pattern(word):
             patterns[pattern] += count
     total = sum(patterns.values())
     if not total:
         return nan
-    return -sum(count / total * log2(count / total) for count in patterns.values())
+    # A single pattern gives -0.0, which prints with a sign
+    return -sum(count / total * log2(count / total) for count in patterns.values()) or 0.0
 
 
 def _calc_repetition_index(text: Sequence[str], sounds: frozenset[str], window_len: int) -> float:

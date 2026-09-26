@@ -18,11 +18,13 @@ from .constants import (
 from .exceptions import ParameterError, SourceError, SourceTypeError
 from .extractors import WordsExtractor
 from .utils import (
+    check_sequence,
     find_phrases,
     get_nlp,
     is_verbal_noun,
     iter_doc_tokens,
     iter_doc_words,
+    iter_text_sents,
     lemmatize,
     safe_divide,
 )
@@ -73,7 +75,8 @@ class StyleStats:
         Doc are read when the object is made, and the Doc is not kept, so a Doc
         with the object in an extension still pickles; a string is parsed by
         the model when the verbal nouns are first read, so the other metrics of
-        a string need no model
+        a string need no model. A string longer than the max_length of the
+        pipeline is parsed in parts of whole sentences
 
     Example:
         >>> from ests import StyleStats
@@ -119,10 +122,11 @@ class StyleStats:
         print_stats: Printing the computed style metrics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc
+        SourceTypeError: If the source is neither a string nor a Doc, or the
+            stopwords or the clichés are a string
         SourceError: If the source has no words; when the verbal nouns are read,
-            if the source lacks the parts of speech or the lemmas or a string is
-            longer than the max_length of the pipeline
+            if the source lacks the parts of speech or the lemmas or a sentence
+            of a string is longer than the max_length of the pipeline
         ParameterError: If the number of the most frequent words is below one
     """
 
@@ -158,6 +162,10 @@ class StyleStats:
         if not self.words:
             raise SourceError("The data source has no words")
         check_params(top_n)
+        if stopwords is not None:
+            check_sequence(stopwords, "stopwords")
+        if cliches is not None:
+            check_sequence(cliches, "clichés")
         self.stopwords = tuple(stopwords) if stopwords is not None else None
         self.top_n = top_n
         self.cliches_list = tuple(cliches) if cliches is not None else OFFICIALESE_CLICHES
@@ -188,7 +196,7 @@ class StyleStats:
         if self._nouns is None:
             if self._text is None:
                 raise SourceError(self._annotation_error)
-            self._nouns = noun_lemmas(self._parse(self._text))
+            self._nouns = self._parse(self._text)
         return calc_verbal_nouns(self._nouns)
 
     @property
@@ -203,31 +211,31 @@ class StyleStats:
     def cliches(self) -> float:
         return calc_phrase_density(self.forms, self.cliches_list)
 
-    def _parse(self, text: str) -> Doc:
+    def _parse(self, text: str) -> list[str]:
         """
-        Parsing a string for the verbal nouns
+        Parsing a string for the lemmas of the nouns
 
         Description:
             The pipeline of nlp or get_nlp(), without the parser and the named
-            entities
+            entities; a text longer than the max_length of the pipeline is
+            parsed in parts of whole sentences
 
         Arguments:
             text (str): Text
 
         Returns:
-            Doc: Parsed text
+            list[str]: Lemmas of the tokens tagged NOUN
 
         Raises:
-            SourceError: If the text is longer than the max_length of the pipeline
+            SourceError: If a sentence is longer than the max_length of the pipeline
         """
         pipeline = self.nlp or get_nlp()
-        if len(text) > pipeline.max_length:
-            raise SourceError(
-                f"The text of {len(text)} characters is longer than the limit of the "
-                f"pipeline ({pipeline.max_length}): split it into parts or raise "
-                "max_length on a pipeline of your own and pass it in nlp"
-            )
-        return pipeline(text, disable=UNUSED_COMPONENTS)
+        parts = _split_text(text, pipeline.max_length)
+        return [
+            lemma
+            for doc in pipeline.pipe(parts, disable=UNUSED_COMPONENTS)
+            for lemma in noun_lemmas(doc)
+        ]
 
     def keyword_density(self, *keywords: str) -> dict[str, float]:
         """
@@ -257,6 +265,45 @@ class StyleStats:
         stats = self.get_stats()
         for stat, desc in STYLE_STATS_DESC.items():
             print(f"{desc:50}|{stats[stat]:^10.2f}")
+
+
+def _split_text(text: str, max_length: int) -> list[str]:
+    """
+    Splitting a text into parts of whole sentences no longer than a limit
+
+    Description:
+        A text within the limit is one part; a longer one is cut at the ends
+        of the sentences of sentenize, every part as long as the limit allows
+
+    Arguments:
+        text (str): Text
+        max_length (int): Maximum length of a part in characters
+
+    Returns:
+        list[str]: Parts of the text
+
+    Raises:
+        SourceError: If a sentence is longer than the limit
+    """
+    if len(text) <= max_length:
+        return [text]
+    parts = []
+    start = stop = -1
+    for begin, end, _ in iter_text_sents(text):
+        if end - begin > max_length:
+            raise SourceError(
+                f"A sentence of {end - begin} characters is longer than the limit of the "
+                f"pipeline ({max_length}): raise max_length on a pipeline of your own "
+                "and pass it in nlp"
+            )
+        if start < 0:
+            start = begin
+        elif end - start > max_length:
+            parts.append(text[start:stop])
+            start = begin
+        stop = end
+    parts.append(text[start:stop])
+    return parts
 
 
 def noun_lemmas(doc: Doc) -> list[str]:

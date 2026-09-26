@@ -111,12 +111,12 @@ def test_transcribe_is_case_insensitive():
     [("queso", "CVCV"), ("hora", "VCV"), ("examen", "VCCVCVC"), ("instrumento", "VCCCCVCVCCV")],
 )
 def test_cv_pattern(word, expected):
-    assert cv_pattern(transcribe(word)) == expected
+    assert cv_pattern(word) == expected
 
 
 @pytest.mark.parametrize(
     ("syllable", "expected"),
-    [(("k", "a"), True), (("o", "i"), True), (("k", "a", "r"), False), ((), False)],
+    [("ca", True), ("que", True), ("hoy", True), ("car", False), ("pan", False), ("", False)],
 )
 def test_is_open_syllable(syllable, expected):
     assert is_open_syllable(syllable) is expected
@@ -159,7 +159,8 @@ def test_hiatus(ps):
 
 def test_cv_entropy(ps):
     assert calc_cv_entropy(["casa", "pato", "sol", "mar"]) == pytest.approx(1.0)
-    assert calc_cv_entropy(["casa", "casa"]) == 0.0
+    # a single pattern gives 0.0, not -0.0, which prints with a sign
+    assert str(calc_cv_entropy(["casa", "casa"])) == "0.0"
     assert isnan(calc_cv_entropy(["2020", "123"]))
     assert ps.cv_entropy == pytest.approx(2.75)
     assert ps.cv_entropy <= log2(len(ps.words))

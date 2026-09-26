@@ -18,7 +18,7 @@ class SourceTypeError(EstsError, TypeError):
         where a list of words is expected, the frequency counter is not a
         Counter, the list of texts is not a list of word lists, the path is
         neither a string nor a Path, the tokenizer or the measure is not
-        callable
+        callable, the stopwords or the clichés are a string instead of a list
     """
 
 
@@ -30,7 +30,8 @@ class SourceError(EstsError, ValueError):
         The source has no words, sentences, texts, collocations or windows of
         enough words, lacks the annotation a statistic needs (the parts of
         speech, the lemmas, the dependency parse), is a string longer than the
-        max_length of the pipeline, has too few texts for the distances or the
+        max_length of the pipeline (for the verbal nouns, has a sentence longer
+        than it), has too few texts for the distances or the
         principal components, the matrix of distances is not square or not
         finite, the keyword of a word tree has no context, or nothing is left
         after culling
@@ -46,7 +47,8 @@ class ParameterError(EstsError, ValueError):
         frequency band or number of bootstrap samples is out of range, the
         sizes of the parts do not add up to the words, the keyword is empty;
         an unknown measure, variant, preset, scale, field, genre or part of
-        speech
+        speech; an unknown layer of the highlighting, a layer the source does
+        not allow, or layers that are neither a list nor a string
     """
 
 

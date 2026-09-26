@@ -57,6 +57,8 @@ from ..utils import (
 )
 
 SPANISH_WORD = re.compile(r"[a-záéíóúüñ]{2,}", re.IGNORECASE)
+# Line breaks of Unix, Windows and old Mac texts
+LINE_BREAK = re.compile(r"\r\n?|\n")
 CSS = """\
 .ests-highlight { line-height: 1.7; }
 .ests-highlight-legend { display: flex; flex-wrap: wrap; gap: 0.4em 1.2em; margin-bottom: 0.8em; font-size: 0.9em; }
@@ -293,9 +295,10 @@ class HighlightedText:
             The markup is a div of the class ests-highlight with the legend and
             its counts and the text, where the highlighted segments are wrapped
             in a span of the classes ests-hl and ests-hl-<layer>; the notes of
-            the fragments go to the title attribute. Line breaks are kept as
-            character references, so the markup can be put into Markdown with no
-            blank line inside the block
+            the fragments go to the title attribute. Line breaks, of Unix,
+            Windows or old Mac texts alike, are kept as character references, one
+            per break, so the markup can be put into Markdown with no blank line
+            inside the block
 
         Arguments:
             legend (bool): Add the legend with the counts of the fragments
@@ -326,7 +329,7 @@ class HighlightedText:
     def _render_text(self) -> str:
         chunks = []
         for start, end, active in split_segments(len(self.text), self.highlights):
-            chunk = html.escape(self.text[start:end]).replace("\n", "&#10;")
+            chunk = LINE_BREAK.sub("&#10;", html.escape(self.text[start:end]))
             if active:
                 active.sort(key=lambda h: self.layers.index(h.layer))
                 classes = " ".join(f"ests-hl-{h.layer}" for h in active)

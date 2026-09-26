@@ -63,7 +63,7 @@ A `Highlight` fragment is an immutable object with the fields `start` and `end` 
 
 ### to_html
 
-Returns the HTML markup of the highlighted text: a `div` of the class `ests-highlight` with the legend and its counts and the text, where the highlighted segments are wrapped in a `span` of the classes `ests-hl` and `ests-hl-<layer>`, the notes going to the attribute `title`. Overlapping fragments of different layers give segments with several classes. Line breaks are kept as character references, so the markup can be put into Markdown.
+Returns the HTML markup of the highlighted text: a `div` of the class `ests-highlight` with the legend and its counts and the text, where the highlighted segments are wrapped in a `span` of the classes `ests-hl` and `ests-hl-<layer>`, the notes going to the attribute `title`. Overlapping fragments of different layers give segments with several classes. Line breaks, of Unix, Windows (`\r\n`) or old Mac (`\r`) texts alike, are kept as character references, one per break, so the markup can be put into Markdown.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |

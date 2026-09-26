@@ -45,22 +45,22 @@ La pronunciación es la del estándar de España, con yeísmo y distinción. Una
 !!! info ""
     **ests.phon_stats.cv_pattern()**
 
-El patrón CV de una palabra o de una sílaba: las vocales se escriben V y las consonantes C, sobre los sonidos de la transcripción - `queso` es CVCV, `hora` VCV, `examen` VCCVCVC.
+El patrón CV de una palabra o de una sílaba: las vocales se escriben V y las consonantes C, sobre los sonidos de la transcripción - `queso` es CVCV, `hora` VCV, `examen` VCCVCVC. Una sílaba se lee como una palabra por sí sola.
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
-| `sounds` | tuple[str] | `-` | Sonidos de una palabra o de una sílaba |
+| `word` | str | `-` | Palabra o sílaba |
 
 ## Sílaba abierta { #is_open_syllable }
 
 !!! info ""
     **ests.phon_stats.is_open_syllable()**
 
-Comprueba si una sílaba es abierta: una sílaba abierta termina en un sonido vocálico - `ca`, `que`, `hoy` (la `y` final es la vocal i); `car` y `pan` son cerradas.
+Comprueba si una sílaba es abierta: una sílaba abierta termina en un sonido vocálico - `ca`, `que`, `hoy` (la `y` final es la vocal i); `car` y `pan` son cerradas. La sílaba se lee como una palabra por sí sola.
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
-| `syllable` | tuple[str] | `-` | Sonidos de la sílaba |
+| `syllable` | str | `-` | Sílaba |
 
 ## Grupos consonánticos { #calc_consonant_clusters }
 

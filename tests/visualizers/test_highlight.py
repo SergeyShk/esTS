@@ -487,6 +487,11 @@ def test_to_html_escaping():
     markup = highlight("El <gato> & el perro\nduermen.", layers="stopwords").to_html()
     assert "&lt;gato&gt; &amp;" in markup
     assert "&#10;" in markup
+    # A line break of Windows or of an old Mac is one break too
+    for text in ("El gato\r\nduerme.\rEl perro\n", "El gato\nduerme.\nEl perro\n"):
+        markup = highlight(text, layers="stopwords").to_html()
+        assert "\r" not in markup
+        assert markup.count("&#10;") == 3
 
 
 def test_css_paints_the_stopwords_first():

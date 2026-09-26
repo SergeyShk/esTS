@@ -1291,7 +1291,8 @@ def calc_entropy(text: Sequence[str]) -> float:
     n_words = len(text)
     if not n_words:
         return nan
-    return -sum(freq / n_words * log2(freq / n_words) for freq in Counter(text).values())
+    # A single lexeme gives -0.0, which prints with a sign
+    return -sum(freq / n_words * log2(freq / n_words) for freq in Counter(text).values()) or 0.0
 
 
 def calc_evenness(text: Sequence[str]) -> float:
@@ -1475,7 +1476,8 @@ def fit_heaps(text: Sequence[str]) -> HeapsFit:
     residual = float(((growth - (intercept + slope * lengths)) ** 2).sum())
     total = float(((growth - growth.mean()) ** 2).sum())
     r2 = 1 - residual / total if total else nan
-    return HeapsFit(float(np.exp(intercept)), float(slope), r2)
+    # A vocabulary that does not grow gives the slope -0.0, which prints with a sign
+    return HeapsFit(float(np.exp(intercept)), float(slope) or 0.0, r2)
 
 
 def vocabulary_growth(text: Sequence[str]) -> list[int]:

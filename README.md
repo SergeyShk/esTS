@@ -64,7 +64,7 @@ Or with [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, the readability, the lexical diversity metrics and the phonostatistics need no spaCy model; the morphological, the syntactic, the cohesion and the lexical sophistication statistics of a string do, and so do the verbal nouns of the style metrics, the profile of the function words, the features of a text and the comparison of corpora, and parsing a text yourself to pass the `Doc` instead of a string:
+The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, the readability, the lexical diversity metrics, the style metrics but the verbal nouns, the phonostatistics and the verse statistics need no spaCy model; the morphological, the syntactic, the cohesion and the lexical sophistication statistics of a string do, and so do the verbal nouns of the style metrics, the profile of the function words, the features of a text and the comparison of corpora, and parsing a text yourself to pass the `Doc` instead of a string:
 
 ```bash
 python -m spacy download es_core_news_sm
@@ -527,7 +527,7 @@ Every statistics class is also a component of a pipeline, so a text is annotated
 (12, ('DET', 'NOUN'), 2.0)
 ```
 
-The factories are `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style` and `ests_phon`; the name of the pipe is free and is what the extension is called.
+The factories are `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` and `ests_verse`; the name of the pipe is free and is what the extension is called.
 
 More in the [documentation](https://sergeyshk.github.io/esTS/components/).
 

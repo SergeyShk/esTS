@@ -63,7 +63,7 @@ Un fragmento `Highlight` es un objeto inmutable con los campos `start` y `end` (
 
 ### to_html
 
-Devuelve el marcado HTML del texto resaltado: un `div` de la clase `ests-highlight` con la leyenda y sus recuentos y el texto, donde los segmentos resaltados van dentro de un `span` de las clases `ests-hl` y `ests-hl-<capa>`, y las notas van al atributo `title`. Los fragmentos solapados de capas distintas dan segmentos con varias clases. Los saltos de línea se guardan como referencias de caracteres, así que el marcado puede insertarse en Markdown.
+Devuelve el marcado HTML del texto resaltado: un `div` de la clase `ests-highlight` con la leyenda y sus recuentos y el texto, donde los segmentos resaltados van dentro de un `span` de las clases `ests-hl` y `ests-hl-<capa>`, y las notas van al atributo `title`. Los fragmentos solapados de capas distintas dan segmentos con varias clases. Los saltos de línea, de textos de Unix, de Windows (`\r\n`) o del Mac antiguo (`\r`) por igual, se guardan como referencias de caracteres, una por salto, así que el marcado puede insertarse en Markdown.
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
