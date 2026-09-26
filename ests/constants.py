@@ -1100,6 +1100,7 @@ VERSE_STATS_DESC = {
     "n_feet": "Number of metrical syllables",
     "p_deviations": "Share of lines off the meter",
     "p_pyrrhics": "Share of lines without the rhythmic stresses",
+    "p_rhymed": "Share of rhymed lines",
     "p_masculine": "Share of oxytone endings (aguda)",
     "p_feminine": "Share of paroxytone endings (llana)",
     "p_dactylic": "Share of proparoxytone endings (esdrújula)",
@@ -1126,6 +1127,43 @@ VERSE_MAX_DEVIATIONS = 0.1
 # whatever it is - 36% of the sentences of twelve prose works of SpanishLiterature
 # would get a meter, 1.4% of two sentences as two lines and 0.1% of three
 VERSE_MIN_LINES = 2
+# Rhyme: a line rhymes with the lines of the window before it, across the stanzas, so that
+# the quatrains of a sonnet rhyme ABBA ABBA and the tercets CDC DCD
+RHYME_WINDOW = 4
+VERSE_RHYMES = ("consonante", "asonante")
+# Least share of the lines of a poem with one assonance and no full rhyme for the poem to
+# rhyme by assonance, as the even lines of a romance: on the sonnets of SpanishSonnets 15
+# rhyme so, and of prose split into lines of a sentence it takes 14% of eight lines and
+# 1.9% of fourteen, against 72% and 14% at a quarter
+RHYME_MIN_ASSONANCE = 1 / 3
+# Lines of arte mayor, of 9 syllables and more, take upper-case letters in a rhyme scheme,
+# the lines of arte menor lower-case ones: ABBA ABBA CDC DCD, abba, aBabB
+VERSE_ARTE_MAYOR = 9
+# Stanzas by the number of lines: the lengths of the lines ("mayor", "menor" or the
+# syllables of every line), the schemes with the letters from a in the order of the
+# stanza, and the kind of the rhyme (None for either); the first that fits wins, so
+# the forms with the syllables of every line go before the ones of arte mayor or menor
+VERSE_STROPHES = {
+    "pareado": (2, None, ("aa",), None),
+    "terceto": (3, "mayor", ("aba", "a-a", "abc", "aab", "abb"), None),
+    "tercerilla": (3, "menor", ("aba", "a-a"), None),
+    "cuaderna vía": (4, (14, 14, 14, 14), ("aaaa",), "consonante"),
+    "cuarteto": (4, "mayor", ("abba",), "consonante"),
+    "serventesio": (4, "mayor", ("abab",), "consonante"),
+    "redondilla": (4, "menor", ("abba",), "consonante"),
+    "cuarteta": (4, "menor", ("abab",), "consonante"),
+    "seguidilla": (4, (7, 5, 7, 5), ("-a-a",), None),
+    "copla": (4, (8, 8, 8, 8), ("-a-a",), "asonante"),
+    "lira": (5, (7, 11, 7, 7, 11), ("ababb",), "consonante"),
+    "quinteto": (5, "mayor", ("ababa", "abaab", "abbab", "aabab", "aabba"), "consonante"),
+    "quintilla": (5, "menor", ("ababa", "abaab", "abbab", "aabab", "aabba"), "consonante"),
+    "estrofa manriqueña": (6, (8, 8, 4, 8, 8, 4), ("abcabc",), "consonante"),
+    "sexta rima": (6, "mayor", ("ababcc",), "consonante"),
+    "sexteto": (6, "mayor", ("aabccb", "abcabc", "abbacc", "aabbcc"), "consonante"),
+    "sextilla": (6, "menor", ("aabccb", "ababcc", "abcabc", "aabaab"), "consonante"),
+    "octava real": (8, (11, 11, 11, 11, 11, 11, 11, 11), ("abababcc",), "consonante"),
+    "décima": (10, (8, 8, 8, 8, 8, 8, 8, 8, 8, 8), ("abbaaccddc",), "consonante"),
+}
 # Unstressed words of the verse: the articles, the prepositions (except según), the
 # conjunctions, the relatives, the clitic pronouns, the possessives before a noun, the
 # titles before a name, tan and aun (incluso); the interjections oh, ay and ah, unstressed

@@ -12,6 +12,8 @@ Un verso español se mide por sus sílabas métricas, que no son las sílabas de
 
 La precisión se comprobó sobre los 60 209 versos de los 4259 sonetos de [SpanishSonnets](../datasets/spanishsonnets.md), frente a la escansión automática de DISCO y a la de [rantanplan](https://github.com/linhd-postdata/rantanplan) (ejecutada aparte: necesita spaCy 2.2.4, que funciona con Python 3.8 como mucho). La medida de un verso coincide con DISCO en el 97,0% de los versos y con rantanplan en el 97,7%, el acento de una sílaba métrica de los versos de igual medida en el 97,4% y el 99,6%, el esquema entero de un verso en el 77% y el 96%. En los versos simples las medidas coinciden en el 98,2% y el 99,1%; la mayor parte del resto son alejandrinos, que ambos cuentan como versos simples, sin los hemistiquios. La mayoría de las demás diferencias con DISCO son elecciones suyas: acentúa los pronombres clíticos `me`, `te` y `le` en el 84% de sus apariciones y `tan` en el 96%, y da a las palabras con un `-os` enclítico (*encareceros*, *quereros*) un segundo acento y una sílaba de más.
 
+La rima se describe en el [módulo](verse_stats.md#rhyme). Frente a la rima automática de DISCO (RhymeTagger), el 99,2% de los pares de versos que riman que encontramos son pares suyos y encontramos el 97,9% de sus pares. Entre el resto están las rimas imperfectas que RhymeTagger aprende del corpus: `océanos` - `castellanos` del acento del Siglo de Oro, `cuidados` - `quedado`, `efecto` - `secreto` y `digno` - `divino` de los grupos cultos leídos como en el habla, `cesa` - `firmeza` de las sibilantes anteriores a la distinción, que `seseo` incorpora, y las rimas a más de cuatro versos de distancia. 15 sonetos riman en asonante - Juana Borrero, Vicente Wenceslao Querol, Carlos Valverde López -, y RhymeTagger deja sin rima la mayoría de sus versos. Con la rima, 3704 de los 4210 poemas de 14 versos son sonetos; los demás tienen sobre todo un verso cuya rima no es ninguna de las nuestras.
+
 ## Acentuación { #accentuate }
 
 !!! info ""
@@ -59,6 +61,32 @@ Parámetros:
         "Que por mayo era, por mayo,\ncuando hace la calor,\ncuando los trigos encañan\ny están los campos en flor,"
     )
     # 'octosílabo'
+    ```
+
+## Esquema de rima { #rhyme_scheme }
+
+!!! info ""
+    **ests.verse_stats.rhyme_scheme()**
+
+Determina el esquema de rima de un poema: los esquemas de las estrofas separados por espacios, las letras en el orden de los grupos de rima del poema, mayúsculas para los versos de arte mayor y minúsculas para los de arte menor, los versos sin rima como un guion.
+
+Parámetros:
+
+| Parámetro | Tipo | Valor por defecto | Descripción |
+| :-------: | :--: | :---------------: | :---------: |
+| `text` | str | `-` | Texto de un poema |
+| `seseo` | bool | `False` | Pronunciar `c` y `z` ante `e` e `i` como `s` en la rima |
+
+!!! example "Ejemplo"
+
+    ``` python
+    from ests.verse_stats import rhyme_scheme
+
+    # Sor Juana Inés de la Cruz
+    rhyme_scheme(
+        "Hombres necios que acusáis\na la mujer sin razón,\nsin ver que sois la ocasión\nde lo mismo que culpáis."
+    )
+    # 'abba'
     ```
 
 ## Estrofas { #split_stanzas }

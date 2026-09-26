@@ -405,6 +405,7 @@ Parámetros:
 | :-------: | :--: | :---------------: | :---------: |
 | `nlp` | Language | `-` | Objeto Language |
 | `name` | str | `"ests_verse"` | Nombre del componente en el pipeline |
+| `seseo` | bool | `False` | Pronunciar `c` y `z` ante `e` e `i` como `s` en la rima |
 
 !!! example "Ejemplo"
 

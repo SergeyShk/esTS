@@ -1,6 +1,7 @@
 import shutil
 import unicodedata
 from collections import Counter
+from itertools import combinations
 from math import isnan
 from pathlib import Path
 
@@ -15,11 +16,13 @@ from ests.exceptions import SourceError, SourceTypeError
 from ests.verse_stats import (
     _default_joins,
     _endecasyllable_type,
+    _ending,
     _fit,
     _parse_line,
     _scan,
     accentuate,
     detect_meter,
+    rhyme_scheme,
     split_stanzas,
 )
 
@@ -55,6 +58,80 @@ canta con voz su nombre pregonera,
 ni cura si encarama
 la lengua lisonjera
 lo que condena la verdad sincera."""
+# The sonnet X of Garcilaso de la Vega
+SONNET = """Cuando me paro a contemplar mi estado
+y a ver los pasos por do me han traído,
+hallo, según por do anduve perdido,
+que a mayor mal pudiera haber llegado;
+
+mas cuando del camino estó olvidado,
+a tanto mal no sé por dó he venido;
+sé que me acabo, y más he yo sentido
+ver acabar comigo mi cuidado.
+
+Yo acabaré, que me entregué sin arte
+a quien sabrá perderme y acabarme
+si quisiere, y aún sabrá querello;
+
+que pues mi voluntad puede matarme,
+la suya, que no es tanto de mi parte,
+pudiendo, ¿qué hará sino hacello?"""
+# The beginning of La tierra de Alvargonzález by Antonio Machado
+ROMANCE_MACHADO = """Siendo mozo Alvargonzález,
+dueño de mediana hacienda,
+que en otras tierras se dice
+bienestar y aquí, opulencia,
+en la feria de Berlanga
+prendóse de una doncella,
+y la tomó por mujer
+al año de conocerla.
+Muy ricas las bodas fueron,
+y quien las vió las recuerda;
+sonadas las tornabodas
+que hizo Alvar en su aldea;
+hubo gaitas, tamboriles,
+flauta, bandurria y vihuela,
+fuegos a la valenciana
+y danza a la aragonesa."""
+STROPHES = {
+    # Calderón de la Barca, La vida es sueño
+    "décima": """Cuentan de un sabio que un día
+tan pobre y mísero estaba,
+que sólo se sustentaba
+de unas yerbas que cogía.
+¿Habrá otro, entre sí decía,
+más pobre y triste que yo?;
+y cuando el rostro volvió
+halló la respuesta, viendo
+que otro sabio iba cogiendo
+las hierbas que él arrojó.""",
+    # Jorge Manrique, Coplas por la muerte de su padre
+    "estrofa manriqueña": """Recuerde el alma dormida,
+avive el seso y despierte
+contemplando
+cómo se pasa la vida,
+cómo se viene la muerte
+tan callando;""",
+    # Alonso de Ercilla, La Araucana
+    "octava real": """No las damas, amor, no gentilezas
+de caballeros canto enamorados,
+ni las muestras, regalos y ternezas
+de amorosos afectos y cuidados;
+mas el valor, los hechos, las proezas
+de aquellos españoles esforzados,
+que a la cerviz de Arauco no domada
+pusieron duro yugo por la espada.""",
+    # Sor Juana Inés de la Cruz
+    "redondilla": """Hombres necios que acusáis
+a la mujer sin razón,
+sin ver que sois la ocasión
+de lo mismo que culpáis.""",
+    # Popular
+    "seguidilla": """Por la calle abajito
+va quien yo quiero;
+no le veo la cara
+con el sombrero.""",
+}
 SONNETS_ARCHIVE = Path(__file__).parents[1] / "ests" / "datasets" / "data" / sonnets_module.ARCHIVE
 
 
@@ -95,6 +172,10 @@ def test_no_spanish_syllables():
     assert (vs.n_lines, vs.n_stanzas, vs.meter, vs.n_feet) == (0, 0, None, None)
     assert vs.lines == vs.patterns == vs.stress_profile == ()
     assert vs.c_feet == vs.c_rhythms == vs.c_clausulas == vs.c_stressed_vowels == {}
+    assert vs.c_rhymes == {}
+    assert vs.rhyme_schemes == vs.strophes == ()
+    assert vs.form is None
+    assert isnan(vs.p_rhymed)
     for stat in ("p_deviations", "p_pyrrhics", "p_masculine", "mean_line_len"):
         assert isnan(getattr(vs, stat))
 
@@ -294,6 +375,117 @@ def test_diaeresis():
     assert scan("vuestra süave musa").length == 7
 
 
+@pytest.mark.parametrize(
+    ("word", "consonant", "assonant"),
+    [
+        ("estado", "ado", ("a", "o")),
+        # an aguda has its stressed vowel alone
+        ("corazón", "on", ("o",)),
+        ("rey", "ei", ("e",)),
+        # the vowels between the stressed and the last one are left out
+        ("pálido", "alido", ("a", "o")),
+        # a diphthong gives its stressed vowel
+        ("cielo", "elo", ("e", "o")),
+        ("gracia", "aθia", ("a", "a")),
+        # a final i and u sound as e and o
+        ("fácil", "aθil", ("a", "e")),
+        ("Venus", "enus", ("e", "o")),
+        # the letters of one sound: rr, b and v, ll and y, h, ch, the u of gue and güe
+        ("guerra", "eRa", ("e", "a")),
+        ("lava", "aba", ("a", "a")),
+        ("calle", "aʝe", ("a", "e")),
+        ("haya", "aʝa", ("a", "a")),
+        ("hecho", "eʧo", ("e", "o")),
+        ("exige", "ixe", ("i", "e")),
+        ("sigue", "ige", ("i", "e")),
+        ("pingüe", "ingwe", ("i", "e")),
+        ("taxi", "aksi", ("a", "e")),
+    ],
+)
+def test_ending(word, consonant, assonant):
+    assert _ending(word, seseo=False) == (consonant, assonant)
+
+
+def test_seseo():
+    assert _ending("caza", seseo=False).consonant == "aθa"
+    assert _ending("caza", seseo=True).consonant == "asa"
+    # voz and dos rhyme by assonance, with seseo in full
+    assert VerseStats("La voz\nde los dos").c_rhymes == {"asonante": 2}
+    assert VerseStats("La voz\nde los dos", seseo=True).c_rhymes == {"consonante": 2}
+
+
+def test_sonnet():
+    vs = VerseStats(SONNET)
+    assert vs.rhyme_schemes == ("ABBA", "ABBA", "CDE", "DCE")
+    assert rhyme_scheme(SONNET) == "ABBA ABBA CDE DCE"
+    assert vs.strophes == ("cuarteto", "cuarteto", "terceto", "terceto")
+    assert vs.form == "soneto"
+    assert (vs.p_rhymed, vs.c_rhymes) == (1.0, {"consonante": 14})
+    assert vs.get_stats()["p_rhymed"] == 1.0
+
+
+def test_romance():
+    vs = VerseStats(ROMANCE_MACHADO)
+    # the even lines share the assonance e-a, the odd ones are unrhymed
+    assert vs.rhyme_schemes == ("-a-a-a-a-a-a-a-a",)
+    assert (vs.form, vs.c_rhymes, vs.p_rhymed) == ("romance", {"asonante": 8}, 0.5)
+    # a stanza of more than ten lines has no strophe
+    assert vs.strophes == (None,)
+
+
+def test_assonance():
+    # A full rhyme of the same vowels as the assonance keeps its kind
+    poem = """cantando por el amor
+la niña va por la vida
+y lleva en la mano una flor
+que le dieron aquel día
+y se acerca al mar
+con la voz tan fina
+y la luz
+de la pobre niña"""
+    vs = VerseStats(poem)
+    assert vs.rhyme_schemes == ("abAb-b-b",)
+    assert vs.c_rhymes == {"consonante": 2, "asonante": 4}
+    # in a quatrain of -ado and -ano every line has its full rhyme: no assonance
+    quatrain = "Cuando me paro a ver mi estado\nme das la mano\ncon el amor lejano\nde mi cuidado"
+    assert VerseStats(quatrain).rhyme_schemes == ("Abba",)
+
+
+@pytest.mark.parametrize(("strophe", "text"), list(STROPHES.items()))
+def test_strophes(strophe, text):
+    vs = VerseStats(text)
+    assert vs.strophes == (strophe,)
+    assert vs.form == strophe
+
+
+def test_strophe_schemes():
+    assert VerseStats(STROPHES["décima"]).rhyme_schemes == ("abbaaccddc",)
+    assert VerseStats(STROPHES["estrofa manriqueña"]).rhyme_schemes == ("abcabc",)
+    # a single lira is fitted to its 7 and 11 syllables
+    lira = VerseStats(LIRAS.split("\n\n")[0])
+    assert (lira.strophes, lira.rhyme_schemes, lira.c_feet) == (
+        ("lira",),
+        ("aBabB",),
+        {7: 3, 11: 2},
+    )
+    # liras with no stanza breaks make a silva
+    silva = VerseStats(LIRAS.replace("\n\n", "\n"))
+    assert (silva.strophes, silva.form) == ((None,), "silva")
+    # a quintet of no strophe keeps its lines
+    assert VerseStats("la luz\nel sol que va\nmi luz\nla voz\nel sol").strophes == (None,)
+    # the other strophes by their lines alone
+    assert VerseStats("la luz del día\nla noche fría").strophes == ("pareado",)
+
+
+def test_scheme_letters():
+    # After 26 rhyme groups the letter of a closed group is taken again
+    endings = [consonant + vowel for vowel in "aeio" for consonant in "bdfglmnprst"][:30]
+    poem = "\n".join(f"{article} ta{ending}" for ending in endings for article in ("la", "una"))
+    scheme = VerseStats(poem).rhyme_schemes[0]
+    assert scheme[:6] == "aabbcc"
+    assert scheme[52:54] == "aa"
+
+
 def test_pyrrhics():
     vs = VerseStats("Cuando me paro a contemplar mi estado\nsólo el serviros de encarecimiento")
     assert vs.meter == "endecasílabo"
@@ -340,6 +532,8 @@ def test_accentuate():
 
 
 def test_split_stanzas():
+    # the roman numerals of the parts of a poem are no lines
+    assert split_stanzas("I\nuno dos\n\n(II)\nMI casa\nIV.") == [["uno dos"], ["MI casa"]]
     assert split_stanzas("uno dos\n\n\n  tres  \n1810\n***\nцвет\ncuatro") == [
         ["uno dos"],
         ["tres", "cuatro"],
@@ -370,15 +564,27 @@ def test_print_stats(capsys):
     assert "endecasílabo" in captured.out
 
 
+def rhyme_pairs(labels):
+    """Pairs of the lines with the same rhyme label"""
+    return {
+        (first, second)
+        for first, second in combinations(range(len(labels)), 2)
+        if labels[first] not in ("", "-") and labels[first].lower() == labels[second].lower()
+    }
+
+
 def test_sonnets(sonnets):
     # The scansion agrees with the automatic one of DISCO on the length of the lines
-    # and on the stresses of the metrical syllables
+    # and on the stresses of the metrical syllables, the rhyme on the rhyming pairs
     meters = Counter()
+    forms = Counter()
     lengths = syllables = agreed = 0
     n_lines = 0
+    pairs = gold_pairs = common = 0
     for record in sonnets:
         vs = VerseStats(record["text"])
         meters[vs.meter] += 1
+        forms[vs.form] += 1
         assert vs.n_lines == len(record["meter"])
         for pattern, reference in zip(vs.patterns, record["meter"], strict=True):
             n_lines += 1
@@ -386,9 +592,17 @@ def test_sonnets(sonnets):
                 lengths += 1
                 syllables += len(reference)
                 agreed += sum(a == b for a, b in zip(pattern, reference, strict=True))
+        if any(record["rhyme"]):
+            ours, gold = rhyme_pairs("".join(vs.rhyme_schemes)), rhyme_pairs(record["rhyme"])
+            pairs += len(ours)
+            gold_pairs += len(gold)
+            common += len(ours & gold)
     assert n_lines == 60209
     assert lengths / n_lines > 0.965
     assert agreed / syllables > 0.97
     assert meters["endecasílabo"] > 3850
     assert meters["alejandrino"] > 310
     assert meters[None] < 30
+    assert common / pairs > 0.98
+    assert common / gold_pairs > 0.975
+    assert forms["soneto"] > 3650

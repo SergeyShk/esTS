@@ -683,6 +683,10 @@ class VerseStatsComponent:
         >>> nlp.add_pipe("ests_verse", name="verse", last=True)
         <ests.components.VerseStatsComponent object at 0x...>
 
+    Reading the rhyme with seseo, of Andalusia and America:
+        >>> nlp.add_pipe("ests_verse", name="verse_seseo", config={"seseo": True}, last=True)
+        <ests.components.VerseStatsComponent object at 0x...>
+
     Reading the computed statistics:
         >>> doc = nlp("Cuando me paro a contemplar mi estado\\ny a ver los pasos por do me han traído")
         >>> doc._.verse.meter, doc._.verse.n_feet
@@ -690,11 +694,13 @@ class VerseStatsComponent:
 
     Arguments:
         name (str): Name of the component in the pipeline
+        seseo (bool): Pronounce c and z before e and i as s in the rhyme
     """
 
-    def __init__(self, nlp: Language, name: str = "ests_verse"):
+    def __init__(self, nlp: Language, name: str = "ests_verse", seseo: bool = False):
         add_dash_rules(nlp)
         self.name = name
+        self.seseo = seseo
         Doc.set_extension(self.name, default=None, force=True)
 
     def __call__(self, doc: Doc) -> Doc:
@@ -713,5 +719,5 @@ class VerseStatsComponent:
         """
         if not LETTER.search(doc.text):
             return doc
-        doc._.set(self.name, VerseStats(doc))
+        doc._.set(self.name, VerseStats(doc, seseo=self.seseo))
         return doc

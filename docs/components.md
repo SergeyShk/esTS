@@ -405,6 +405,7 @@ Parameters:
 | :-------: | :--: | :-----: | :---------: |
 | `nlp` | Language | `-` | Language object |
 | `name` | str | `"ests_verse"` | Name of the component in the pipeline |
+| `seseo` | bool | `False` | Pronounce `c` and `z` before `e` and `i` as `s` in the rhyme |
 
 !!! example "Example"
 

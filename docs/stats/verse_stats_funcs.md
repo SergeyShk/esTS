@@ -12,6 +12,8 @@ A line of Spanish verse is measured by its metrical syllables, which are not the
 
 The accuracy was checked on the 60,209 lines of the 4,259 sonnets of [SpanishSonnets](../datasets/spanishsonnets.md), against the automatic scansion of DISCO and against the one of [rantanplan](https://github.com/linhd-postdata/rantanplan) (run apart: it needs spaCy 2.2.4, which runs on Python 3.8 at most). The length of a line agrees with DISCO in 97.0% of the lines and with rantanplan in 97.7%, the stress of a metrical syllable of the lines of equal length in 97.4% and 99.6%, the whole pattern of a line in 77% and 96%. On the lines of simple verse the lengths agree in 98.2% and 99.1%; most of the rest are alejandrinos, which both count as simple verse, without the hemistichs. Most of the other differences with DISCO are its own choices: it stresses the clitic pronouns `me`, `te` and `le` in 84% of their occurrences and `tan` in 96%, and it gives the words with an enclitic `-os` (*encareceros*, *quereros*) a second stress and a syllable too many.
 
+The rhyme is described in the [module](verse_stats.md#rhyme). Against the automatic rhyme of DISCO (RhymeTagger), 99.2% of the pairs of rhyming lines we find are its pairs and we find 97.9% of its pairs. Among the rest are the imperfect rhymes that RhymeTagger learns from the corpus: `océanos` - `castellanos` of the stress of the Golden Age, `cuidados` - `quedado`, `efecto` - `secreto` and `digno` - `divino` of the learned clusters read as in speech, `cesa` - `firmeza` of the sibilants before the distinción, which `seseo` brings in, and the rhymes more than four lines apart. 15 sonnets rhyme by assonance - Juana Borrero, Vicente Wenceslao Querol, Carlos Valverde López -, and RhymeTagger leaves most of their lines unrhymed. With the rhyme 3,704 of the 4,210 poems of 14 lines are sonnets; the others mostly have a line whose rhyme is none of ours.
+
 ## Accentuation { #accentuate }
 
 !!! info ""
@@ -59,6 +61,32 @@ Parameters:
         "Que por mayo era, por mayo,\ncuando hace la calor,\ncuando los trigos encañan\ny están los campos en flor,"
     )
     # 'octosílabo'
+    ```
+
+## Rhyme scheme { #rhyme_scheme }
+
+!!! info ""
+    **ests.verse_stats.rhyme_scheme()**
+
+Detects the rhyme scheme of a poem: the schemes of the stanzas separated by spaces, the letters in the order of the rhyme groups of the poem, upper-case for the lines of arte mayor and lower-case for the lines of arte menor, unrhymed lines as a hyphen.
+
+Parameters:
+
+| Parameter | Type | Default | Description |
+| :-------: | :--: | :-----: | :---------: |
+| `text` | str | `-` | Text of a poem |
+| `seseo` | bool | `False` | Pronounce `c` and `z` before `e` and `i` as `s` in the rhyme |
+
+!!! example "Example"
+
+    ``` python
+    from ests.verse_stats import rhyme_scheme
+
+    # Sor Juana Inés de la Cruz
+    rhyme_scheme(
+        "Hombres necios que acusáis\na la mujer sin razón,\nsin ver que sois la ocasión\nde lo mismo que culpáis."
+    )
+    # 'abba'
     ```
 
 ## Stanzas { #split_stanzas }

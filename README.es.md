@@ -47,10 +47,8 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Estadísticas de complejidad léxica](https://sergeyshk.github.io/esTS/es/stats/lexical_stats/)** - cuán raras son las palabras de un texto en la lengua: la frecuencia, el rango y la dispersión de los lemas según un diccionario de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la sorpresa, la perplejidad y la densidad léxica
 * **[Métricas de estilo](https://sergeyshk.github.io/esTS/es/stats/style_stats/)** - los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías españolas de lenguaje claro: sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés
 * **[Fonoestadística](https://sergeyshk.github.io/esTS/es/stats/phon_stats/)** - proporciones de las clases de sonidos, grupos consonánticos, hiatos, sílabas abiertas, dureza e índices de aliteración y de asonancia, sobre los sonidos de una transcripción por reglas
-* **[Estadísticas del verso](https://sergeyshk.github.io/esTS/es/stats/verse_stats/)** - la escansión del verso español por su metro silábico: las sílabas métricas con la sinalefa y la ley del acento final, el metro de un poema y los hemistiquios del alejandrino, el perfil acentual y los tipos del endecasílabo
+* **[Estadísticas del verso](https://sergeyshk.github.io/esTS/es/stats/verse_stats/)** - la escansión del verso español por su metro silábico: las sílabas métricas con la sinalefa y la ley del acento final, el metro de un poema y los hemistiquios del alejandrino, el perfil acentual y los tipos del endecasílabo, la rima consonante y asonante con su esquema, las estrofas y la forma de un poema
 * **[Estadísticas sintácticas](https://sergeyshk.github.io/esTS/es/stats/syntax_stats/)** - el árbol de dependencias por distancias, profundidad, cláusulas y coordinación, con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
-
-La rima llega en la 0.4.
 
 ## Instalación
 
@@ -484,7 +482,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/phon_stats
 
 <br>
 
-La escansión del verso español por su metro silábico: las sílabas métricas de un verso con la sinalefa y la ley del acento final, un verso ajustado al metro de su poema por un hiato, una diéresis o una sinéresis, el alejandrino leído por hemistiquios; el metro, el perfil acentual, los tipos del endecasílabo y las terminaciones de los versos. No hacen falta ni modelo ni diccionario.
+La escansión del verso español por su metro silábico: las sílabas métricas de un verso con la sinalefa y la ley del acento final, un verso ajustado al metro de su poema por un hiato, una diéresis o una sinéresis, el alejandrino leído por hemistiquios; el metro, el perfil acentual, los tipos del endecasílabo y las terminaciones de los versos; la rima consonante y asonante, su esquema según el uso español, las estrofas y la forma de un poema. No hacen falta ni modelo ni diccionario.
 
 ```python
 >>> from ests import VerseStats
@@ -498,6 +496,8 @@ La escansión del verso español por su metro silábico: las sílabas métricas 
 ('endecasílabo', '---+---+-+-', {'4-8-10': 2, '4-7-10': 1, '3-6-10': 1})
 >>> vs.syllables[0]
 ('cuan', 'do', 'me', 'pa', 'ro‿a', 'con', 'tem', 'plar', 'mi‿es', 'ta', 'do')
+>>> vs.rhyme_schemes, vs.strophes
+(('ABBA',), ('cuarteto',))
 ```
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/verse_stats/).
