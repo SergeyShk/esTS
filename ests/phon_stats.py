@@ -332,7 +332,9 @@ def cv_pattern(word: str) -> str:
     Description:
         The vowels are written V and the consonants C, over the sounds of the
         transcription (transcribe): queso is CVCV, hora is VCV, examen VCCVCVC.
-        A syllable is read as a word of its own
+        A syllable is read as a word of its own, so its initial x is s, as at
+        the start of a word: xi is CV, while the syllable xi of México counts
+        as CCV in PhonStats
 
     Arguments:
         word (str): Word or syllable

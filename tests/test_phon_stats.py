@@ -114,6 +114,12 @@ def test_cv_pattern(word, expected):
     assert cv_pattern(word) == expected
 
 
+def test_cv_pattern_of_a_syllable():
+    # A syllable is read as a word: its initial x is s, while inside a word it is k s
+    assert cv_pattern("xi") == "CV"
+    assert PhonStats("México").c_syllable_patterns == {"CCV": 1, "CV": 2}
+
+
 @pytest.mark.parametrize(
     ("syllable", "expected"),
     [("ca", True), ("que", True), ("hoy", True), ("car", False), ("pan", False), ("", False)],

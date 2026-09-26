@@ -45,7 +45,7 @@ La pronunciación es la del estándar de España, con yeísmo y distinción. Una
 !!! info ""
     **ests.phon_stats.cv_pattern()**
 
-El patrón CV de una palabra o de una sílaba: las vocales se escriben V y las consonantes C, sobre los sonidos de la transcripción - `queso` es CVCV, `hora` VCV, `examen` VCCVCVC. Una sílaba se lee como una palabra por sí sola.
+El patrón CV de una palabra o de una sílaba: las vocales se escriben V y las consonantes C, sobre los sonidos de la transcripción - `queso` es CVCV, `hora` VCV, `examen` VCCVCVC. Una sílaba se lee como una palabra por sí sola, así que su `x` inicial es s, como al comienzo de una palabra: `xi` es CV, mientras que la sílaba `xi` de `México` cuenta como CCV en `PhonStats`.
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |

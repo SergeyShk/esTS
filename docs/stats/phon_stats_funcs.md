@@ -45,7 +45,7 @@ The pronunciation is the one of the standard of Spain, with yeísmo and distinci
 !!! info ""
     **ests.phon_stats.cv_pattern()**
 
-The CV pattern of a word or a syllable: the vowels are written V and the consonants C, over the sounds of the transcription - `queso` is CVCV, `hora` VCV, `examen` VCCVCVC. A syllable is read as a word of its own.
+The CV pattern of a word or a syllable: the vowels are written V and the consonants C, over the sounds of the transcription - `queso` is CVCV, `hora` VCV, `examen` VCCVCVC. A syllable is read as a word of its own, so its initial `x` is s, as at the start of a word: `xi` is CV, while the syllable `xi` of `México` counts as CCV in `PhonStats`.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
