@@ -30,7 +30,7 @@ make test        # pytest: tests and docstring examples (doctest)
 make docs-build  # mkdocs build --strict, if the documentation changed
 ```
 
-CI runs the same on Python 3.11-3.14 (Linux) and on Windows and macOS for one Python version. Tests marked `network` download data; they can be skipped locally with `uv run pytest -m "not network"`.
+CI runs the same on Python 3.11-3.14 (Linux); Windows and macOS, for one Python version, run on the pull request of a release (a `release/*` branch) and on demand (Actions - build - Run workflow), since their minutes cost many times the ones of Linux. Tests marked `network` download data; they can be skipped locally with `uv run pytest -m "not network"`.
 
 ## What a pull request is expected to contain
 
