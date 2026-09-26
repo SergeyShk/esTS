@@ -17,8 +17,7 @@ def dendrogram_plot(distances: pd.DataFrame, method: str = "ward", ax: Axes | No
 
     Description:
         Hierarchical clustering of scipy over the matrix of distances (delta);
-        Ward's method by default, as in stylo and in Evert et al. (2015), the
-        labels of the leaves are the names of the texts of the index
+        the labels of the leaves are the names of the texts of the index
 
     Arguments:
         distances (DataFrame): Symmetric matrix of distances with the names of the texts
@@ -55,10 +54,9 @@ def pca_plot(
 
     Description:
         Principal component analysis of the z-scores of the relative
-        frequencies (frequency_table, z_scores) through the singular value
-        decomposition, as pca.visualization of stylo: the texts on the plane
-        of the first two components with their names, the shares of the
-        explained variance in the labels of the axes
+        frequencies (frequency_table, z_scores): the texts on the plane of the
+        first two components, the shares of the explained variance in the
+        labels of the axes
 
     Arguments:
         corpus (dict[str, list[str]]): Units of the texts by the names of the texts
@@ -100,10 +98,9 @@ def mds_plot(distances: pd.DataFrame, ax: Axes | None = None) -> Axes:
     Plotting the multidimensional scaling of a matrix of distances
 
     Description:
-        Classical multidimensional scaling (Torgerson 1952): double centering
-        of the matrix of squared distances and the two leading eigenvectors;
-        the texts on the plane with their names, the distances between the
-        points approximate the distances of the matrix (delta)
+        Classical multidimensional scaling (Torgerson 1952): the texts on the
+        plane, the distances between the points approximate the distances of
+        the matrix (delta)
 
     Arguments:
         distances (DataFrame): Symmetric matrix of distances with the names of the texts
@@ -152,9 +149,7 @@ def mendenhall_plot(corpus: Mapping[str, Sequence[str]], ax: Axes | None = None)
 
     Description:
         The shares of the words by length in characters (mendenhall_curve)
-        of every text on one plot - a comparison of the profiles of authors.
-        A curve runs over every length from one to the longest word of its
-        text, a length no word has at its share of zero
+        of every text on one plot; a length no word has is drawn at zero
 
     Arguments:
         corpus (dict[str, list[str]]): Words of the texts by the names of the texts

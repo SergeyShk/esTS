@@ -7,7 +7,7 @@
 
 Computation of the Type-Token Ratio (TTR).
 
-The simplest and the most criticized way to compute lexical diversity, which ignores the effect of text length.
+The simplest measure of lexical diversity; it is not corrected for text length.
 
 Formula:
 
@@ -94,7 +94,7 @@ Computation of the Summer Type-Token Ratio (STTR).
 A logarithmic modification of TTR (Summer, 1966).
 
 !!! note "Note"
-    The value depends on the logarithm base: 10 by default, as in koRpus and lexical-diversity; LexicalRichness, textcomplexity and zipfR use the natural logarithm. See [conventions](diversity_stats.md#conventions).
+    The value depends on the logarithm base, 10 by default. See [conventions](diversity_stats.md#conventions).
 
 Formula:
 
@@ -116,10 +116,10 @@ Parameters:
 
 Computation of the Maas Type-Token Ratio (MTTR).
 
-A logarithmic modification of TTR (Maas, 1972). The most stable metric with respect to text length.
+A logarithmic modification of TTR (Maas, 1972).
 
 !!! note "Note"
-    The value depends on the logarithm base: 10 by default, as in koRpus and lexical-diversity; LexicalRichness, textcomplexity and zipfR use the natural logarithm. See [conventions](diversity_stats.md#conventions).
+    The value depends on the logarithm base, 10 by default. See [conventions](diversity_stats.md#conventions).
 
 Formula:
 
@@ -144,7 +144,7 @@ Computation of the Dugast Type-Token Ratio (DTTR).
 A logarithmic modification of TTR (Dugast, 1978).
 
 !!! note "Note"
-    The value depends on the logarithm base: 10 by default, as in koRpus and lexical-diversity; LexicalRichness, textcomplexity and zipfR use the natural logarithm. See [conventions](diversity_stats.md#conventions).
+    The value depends on the logarithm base, 10 by default. See [conventions](diversity_stats.md#conventions).
 
 Formula:
 
@@ -175,7 +175,7 @@ Algorithm:
 3. Average the values
 
 !!! note "Note"
-    The default window is 50 words, as in lexical-diversity, TAALED and textacy; quanteda and koRpus use 100. For texts shorter than the window the TTR of the whole text is returned.
+    For texts shorter than the window the TTR of the whole text is returned.
 
 Parameters:
 
@@ -200,7 +200,7 @@ Algorithm:
 3. Average the values
 
 !!! note "Note"
-    The default segment is 50 words, as in lexical-diversity, TAALED and textacy; quanteda and koRpus use 100. For texts shorter than the segment the TTR of the whole text is returned; an incomplete last segment is dropped.
+    For texts shorter than the segment the TTR of the whole text is returned; an incomplete last segment is dropped.
 
 Parameters:
 
@@ -220,14 +220,14 @@ A modification of MSTTR (McCarthy, 2005). Independent of text length.
 
 Algorithm:
 
-1. The text is divided into factors - stretches on which TTR drops to the threshold 0.72 inclusive (`TTR <= 0.72`; lexical-diversity and TAALED use a strict comparison, see [conventions](diversity_stats.md#conventions))
+1. The text is divided into factors - stretches on which TTR drops to the threshold 0.72 inclusive (`TTR <= 0.72`, see [conventions](diversity_stats.md#conventions))
 2. An incomplete factor at the end of the text counts partially, in proportion to how close its TTR came to the threshold
 3. The number of words is divided by the number of factors
 
 The refined version of the algorithm makes two passes over the text - forward and backward - and averages the values (McCarthy & Jarvis, 2010).
 
 !!! note "Note"
-    The minimum factor length comes from Kyle's lexical-diversity and is non-standard: koRpus applies it only to MA-MTLD, LexicalRichness and textcomplexity do not apply it at all. The threshold 0.72 varies from 0.66 to 0.75 in the literature. If no factor completes and TTR never drops below 1, infinity is returned.
+    The minimum factor length is non-standard (Kyle's lexical-diversity). If no factor completes and TTR never drops below 1, infinity is returned.
 
 Parameters:
 
@@ -248,8 +248,6 @@ A moving-window modification of MTLD (koRpus MTLD-MA): a factor starts at every 
 
 !!! warning "Warning"
     If no factor completes, the function returns `nan`. The metric is unstable on short texts.
-
-Factors from all starts are computed from the array of previous word occurrences in blocks of starts with numpy rather than by rebuilding sets of lexemes (`_mtld_factor_lengths`): the number of lexemes on a stretch equals the number of positions whose previous occurrence lies before the start of the stretch. The time is linear in text length; the values coincide with the direct enumeration.
 
 Parameters:
 
@@ -311,9 +309,7 @@ Parameters:
 
 Computation of [Simpson's index](https://en.wikipedia.org/wiki/Diversity_index#Simpson_index).
 
-The index is widely used in biology to describe the probability that two individuals randomly drawn from an indefinitely large community belong to different species. With certain assumptions it also describes the lexical diversity of a text.
-
-It is computed in the classic form without replacement, as in quanteda, LexicalRichness and zipfR. The lower the value, the richer the vocabulary.
+The probability that two words drawn from the text at random without replacement are the same lexeme. The lower the value, the richer the vocabulary.
 
 !!! warning "Warning"
     For texts shorter than two words the index is undefined; the function returns `nan`. The same holds for the inverse Simpson's index and the Gini-Simpson index.
@@ -386,11 +382,9 @@ Computation of the [hapax index](https://en.wikipedia.org/wiki/Hapax_legomenon).
 
 !!! quote "Definition"
 
-    A hapax (Greek ἅπαξ λεγόμενον - "said only once") is a word that occurs only once in a certain corpus of texts. For instance, *baciyelmo*, the basin-helmet of Sancho Panza, is a hapax of Cervantes (it occurs only in one chapter of *Don Quixote*). The term is popular in Bible studies, where several hundred such words have been found.
+    A hapax (Greek ἅπαξ λεγόμενον - "said only once") is a word that occurs only once in a certain corpus of texts. For instance, *baciyelmo*, the basin-helmet of Sancho Panza, is a hapax of Cervantes (it occurs only in one chapter of *Don Quixote*).
 
-The hapaxes of an author are often used to attribute to that author another work in which such words occur.
-
-The metric coincides with Honoré's measure (1979). The natural logarithm is used, as in zipfR and textcomplexity.
+The metric coincides with Honoré's measure (1979), with the natural logarithm.
 
 Formula:
 
@@ -412,7 +406,7 @@ Parameters:
 !!! info ""
     **ests.diversity_stats.calc_frequency_spectrum()**
 
-Computation of the frequency spectrum - the number of lexemes $V_i$ occurring exactly $i$ times in the text. The basis for the measures of Yule, Herdan, Sichel, Michéa, Baayen and the LNRE models of zipfR. All measures below are computed from the frequency spectrum in linear time; the formulas are checked against Tweedie and Baayen (1998), zipfR, quanteda, koRpus, LexicalRichness and textcomplexity.
+Computation of the frequency spectrum - the number of lexemes $V_i$ occurring exactly $i$ times in the text. The measures below are computed from it; their formulas are checked against Tweedie and Baayen (1998).
 
 Notation: $N$ - number of words, $V$ - number of lexemes, $V_i$ - number of lexemes with frequency $i$, $V_1$ - hapaxes, $V_2$ - dis legomena, $p_k$ - relative frequency of a lexeme.
 
@@ -427,7 +421,7 @@ Parameters:
 !!! info ""
     **ests.diversity_stats.calc_yule_k()**
 
-Computation of Yule's characteristic (Yule, 1944). One of the few measures theoretically independent of text length (Tweedie & Baayen, 1998); in practice it converges as the text grows. The lower the value, the richer the vocabulary. Proportional to Simpson's index: $K \approx 10^4 \cdot D$. A stylometric marker present in all comparable libraries.
+Computation of Yule's characteristic (Yule, 1944). One of the few measures theoretically independent of text length (Tweedie & Baayen, 1998); in practice it converges as the text grows. The lower the value, the richer the vocabulary. Proportional to Simpson's index: $K \approx 10^4 \cdot D$.
 
 Formula:
 
@@ -545,7 +539,7 @@ Parameters:
 Computation of Dugast's measure (Dugast, 1979). Not to be confused with Dugast's U - the [DTTR](#dugast-type-token-ratio-dttr) metric.
 
 !!! note "Note"
-    The value depends on the logarithm base: 10 by default, as for the Summer, Maas and Dugast's U metrics; textcomplexity uses the natural logarithm. The measure is undefined when $\log N \le 1$, that is, for texts no longer than the logarithm base; in that case the function returns `nan`.
+    The value depends on the logarithm base, 10 by default. The measure is undefined when $\log N \le 1$, that is, for texts no longer than the logarithm base; in that case the function returns `nan`.
 
 Formula:
 
@@ -682,7 +676,7 @@ Parameters:
 Computation of the exponent $\alpha$ of [Zipf's law](https://en.wikipedia.org/wiki/Zipf's_law) $f(r) \propto r^{-\alpha}$, where $r$ is the frequency rank of a lexeme. Estimated by linear regression of log frequency on log rank. For natural texts $\alpha$ is close to 1.
 
 !!! note "Note"
-    The rank-based least squares estimate is biased; for an accurate estimate maximum likelihood is used (e.g. the powerlaw library). For texts of a single lexeme the function returns `nan`.
+    The rank-based least squares estimate is biased; maximum likelihood is more accurate. For texts of a single lexeme the function returns `nan`.
 
 Parameters:
 
@@ -695,7 +689,7 @@ Parameters:
 !!! info ""
     **ests.diversity_stats.fit_zipf_mandelbrot()**, **ests.diversity_stats.ZipfMandelbrot**
 
-Fitting the [Zipf-Mandelbrot law](https://en.wikipedia.org/wiki/Zipf–Mandelbrot_law) $f(r) = C / (r + q)^s$ to the rank-frequency distribution. With $q = 0$ the law reduces to Zipf's law with exponent $s$; the shift $q$ describes the flattening of the curve on the most frequent words that Zipf's law does not capture. The parameters are fitted by least squares in logarithmic coordinates (`scipy.optimize.least_squares`) with the initial guess $C = f(1)$, $q = 1$, $s = 1$ and the constraints $q \ge 0$, $s \ge 0$. Returns a `ZipfMandelbrot` named tuple with the fields `c`, `q`, `s` and `r2` - the coefficient of determination of the fit in logarithmic coordinates.
+Fitting the [Zipf-Mandelbrot law](https://en.wikipedia.org/wiki/Zipf–Mandelbrot_law) $f(r) = C / (r + q)^s$ to the rank-frequency distribution. With $q = 0$ the law reduces to Zipf's law with exponent $s$; the shift $q$ describes the flattening of the curve on the most frequent words that Zipf's law does not capture. The parameters are fitted by least squares in logarithmic coordinates with the constraints $q \ge 0$, $s \ge 0$. Returns a `ZipfMandelbrot` named tuple with the fields `c`, `q`, `s` and `r2` - the coefficient of determination of the fit in logarithmic coordinates.
 
 !!! note "Note"
     For texts of fewer than three lexemes, with identical frequencies of all lexemes and when the fit diverges all fields are `nan`. On short texts the parameters are unstable: the law describes the frequency distribution of large corpora.
@@ -723,7 +717,7 @@ Parameters:
 !!! info ""
     **ests.diversity_stats.calc_heaps_beta()**, **ests.diversity_stats.fit_heaps()**, **ests.diversity_stats.vocabulary_growth()**
 
-Computation of the exponent $\beta$ of [Heaps' law](https://en.wikipedia.org/wiki/Heaps'_law) $V(N) = K \cdot N^{\beta}$, which describes vocabulary growth with text length. Estimated by linear regression of log vocabulary size on log text length along the vocabulary growth curve (`vocabulary_growth` - the vocabulary size after every word). On corpora of millions of words $\beta$ lies within 0.4-0.6; regression over the whole growth curve of a single text gives more (0.6-0.9), since at the beginning of a text almost every word is new, so the values are comparable only between texts of similar length. `fit_heaps` returns a `HeapsFit` named tuple with both parameters `k`, `beta` and the coefficient of determination `r2`.
+Computation of the exponent $\beta$ of [Heaps' law](https://en.wikipedia.org/wiki/Heaps'_law) $V(N) = K \cdot N^{\beta}$, which describes vocabulary growth with text length. Estimated by linear regression of log vocabulary size on log text length along the vocabulary growth curve (`vocabulary_growth` - the vocabulary size after every word). On corpora of millions of words $\beta$ lies within 0.4-0.6; over the growth curve of a single text it is higher (0.6-0.9), so the values are comparable only between texts of similar length. `fit_heaps` returns a `HeapsFit` named tuple with both parameters `k`, `beta` and the coefficient of determination `r2`.
 
 !!! note "Note"
     The value depends on word order and needs several hundred words or more. For texts shorter than two words the function returns `nan`.
@@ -739,7 +733,7 @@ Parameters:
 !!! info ""
     **ests.diversity_stats.calc_windowed()**
 
-Windowed computation of any metric: its value over consecutive text windows of equal length, the mean, the sample standard deviation and the confidence interval of the mean by Student's distribution. The standard way to compare texts of different lengths (textcomplexity `bootstrap`, the characteristic curves of koRpus); Kubát and Milička's STTR is a windowed TTR with a 1000-word window and a 95% confidence interval. For texts shorter than the window the metric is computed over the whole text as a single window; windows with an undefined metric value (`nan`) are ignored. If the metric is infinite in at least one window (e.g. the inverse Simpson's index on a window of unique words), the mean is infinite and the standard deviation and confidence interval are undefined. Returns a `WindowStats` named tuple with the fields `mean`, `std`, `lower`, `upper` and `n_windows`.
+Windowed computation of any metric: its value over consecutive text windows of equal length, the mean, the sample standard deviation and the confidence interval of the mean by Student's distribution. The standard way to compare texts of different lengths; Kubát and Milička's STTR is a windowed TTR with a 1000-word window and a 95% confidence interval. For texts shorter than the window the metric is computed over the whole text as a single window; windows with an undefined metric value (`nan`) are ignored. If the metric is infinite in at least one window (e.g. the inverse Simpson's index on a window of unique words), the mean is infinite and the standard deviation and confidence interval are undefined. Returns a `WindowStats` named tuple with the fields `mean`, `std`, `lower`, `upper` and `n_windows`.
 
 Parameters:
 

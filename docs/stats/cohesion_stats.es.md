@@ -7,7 +7,7 @@
 
 Módulo para calcular las estadísticas de cohesión de un texto a la manera de [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) y de su adaptación española [Coh-Metrix-Esp](https://aclanthology.org/W16-4105/): la repetición de sustantivos, de argumentos y de palabras con contenido entre oraciones, la información dada, la cohesión temporal y la densidad de los marcadores del discurso.
 
-Las oraciones se comparan por lemas, y los rasgos vienen de la anotación de [Universal Dependencies](https://universaldependencies.org/u/feat/), así que la fuente tiene que estar anotada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, y un `Doc` debe llevar las categorías gramaticales, que vienen de un `morphologizer` (o de un `tagger` con un `attribute_ruler`), y los lemas, que vienen de un `lemmatizer`; una fuente sin unas u otros levanta `SourceError`, y sin los lemas las repeticiones se calcularían sobre cadenas vacías, donde cada sustantivo se repite con todos los demás. Sin límites de oración - un pipeline sin analizador - las oraciones se toman del texto con [`SentsExtractor`](../extractors/sentences.md).
+Las oraciones se comparan por lemas, y los rasgos vienen de la anotación de [Universal Dependencies](https://universaldependencies.org/u/feat/), así que la fuente tiene que estar anotada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, y un `Doc` debe llevar las categorías gramaticales, que vienen de un `morphologizer` (o de un `tagger` con un `attribute_ruler`), y los lemas, que vienen de un `lemmatizer`; una fuente sin unas u otros levanta `SourceError`. Sin límites de oración - un pipeline sin analizador - las oraciones se toman del texto con [`SentsExtractor`](../extractors/sentences.md).
 
 Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto - levanta `SourceError`: divídalo en partes o suba `max_length` en un pipeline propio y páselo en `nlp`.
 
@@ -45,11 +45,11 @@ La repetición de Coh-Metrix: un par de oraciones es cohesivo cuando comparten e
 | `mood_repetition` | float | Proporción de pares contiguos con el mismo modo dominante |
 | `temporal_cohesion` | float | Media de la repetición del tiempo y del modo |
 
-Un sustantivo es `NOUN` o `PROPN` y una palabra con contenido es un `NOUN`, `PROPN`, `ADJ`, `VERB` o `ADV`. Un pronombre es un `PRON` o un determinante que señala algo - un posesivo (`Poss=Yes`) o uno demostrativo o personal (`PronType=Dem`, `Prs`) -, de modo que `mi libro` y `este libro` llevan un pronombre y `el libro` y `cada libro` no: los cuantificadores y los indefinidos (`cada`, `todos`, `ningún`, `otro`, `cualquier`) no señalan nada e inflarían alrededor de un quinto una medida de densidad anafórica. Un demostrativo lleva `PronType=Dem`.
+Un sustantivo es `NOUN` o `PROPN` y una palabra con contenido es un `NOUN`, `PROPN`, `ADJ`, `VERB` o `ADV`. Un pronombre es un `PRON` o un determinante que señala algo - un posesivo (`Poss=Yes`) o uno demostrativo o personal (`PronType=Dem`, `Prs`) -, de modo que `mi libro` y `este libro` llevan un pronombre y `el libro` y `cada libro` no: los cuantificadores y los indefinidos (`cada`, `todos`, `ningún`, `otro`, `cualquier`) quedan fuera. Un demostrativo lleva `PronType=Dem`.
 
-Un argumento es un `NOUN`, `PROPN` o `PRON`, dejando fuera los determinantes aunque cuenten como pronombres: la repetición de argumentos de Coh-Metrix se hace con sustantivos y pronombres propiamente dichos, y el lema de `este` en dos oraciones no remite a la misma cosa.
+Un argumento es un `NOUN`, `PROPN` o `PRON`, dejando fuera los determinantes aunque cuenten como pronombres.
 
-La cohesión temporal sigue el SMTEMP de Coh-Metrix: de cada oración se toma el valor dominante del rasgo de sus verbos, y un par de oraciones contiguas cuenta como cohesivo cuando los valores coinciden. El español no tiene aspecto en Universal Dependencies, así que el modo ocupa su lugar junto al tiempo: el paso del indicativo al subjuntivo es lo que rompe el marco temporal de un texto español. Los pares en los que una de las oraciones no tiene ningún verbo con el rasgo se omiten, y un texto de menos de dos oraciones deja en `nan` todas las medidas de esta sección.
+La cohesión temporal sigue el SMTEMP de Coh-Metrix: de cada oración se toma el valor dominante del rasgo de sus verbos, y un par de oraciones contiguas cuenta como cohesivo cuando los valores coinciden. El español no tiene aspecto en Universal Dependencies, así que el modo ocupa su lugar junto al tiempo. Los pares en los que una de las oraciones no tiene ningún verbo con el rasgo se omiten, y un texto de menos de dos oraciones deja en `nan` todas las medidas de esta sección.
 
 ## Conectores { #connectors }
 
@@ -70,12 +70,12 @@ Los marcadores del discurso de la clasificación de Martín Zorraquino y Portol�
 
 Los conectores se buscan por sus formas en minúscula: en cada posición se toma el más largo, de modo que `sin embargo` no se rompe en `sin`, y los hallados no se solapan. Las apariciones están en el atributo `connector_spans` y su distribución en `c_connectors`.
 
-Dos reglas dejan fuera los usos corrientes de esas palabras. Un conector de una palabra cuenta solo con una categoría de `CONNECTOR_POS` - conjunción, partícula, adverbio, adposición, interjección - y nunca tras un determinante, así que `el antes y el después` lleva un conector, `y`, y no tres; un nombre propio cuenta solo al principio de la oración, donde los modelos leen así un marcador (`Primeramente`, `Concluyendo`), de modo que el apellido de `Ana, Luego y Mas firmaron` no es conector. Y un marcador que además encabeza un sintagma preposicional se descarta ahí: `antes de la reunión`, `después del informe`, `por encima de 80`, `al final de la línea`, `al principio de la oración`, `luego de la sesión` y `sobre todo el texto` no cuentan nada, mientras que `antes, firmó el acta`, `encima, no vino`, `al final, no vino` y `sobre todo cuando llueve` cuentan su marcador.
+Dos reglas dejan fuera los usos corrientes de esas palabras. Un conector de una palabra cuenta solo con una categoría de `CONNECTOR_POS` - conjunción, partícula, adverbio, adposición, interjección - y nunca tras un determinante, así que `el antes y el después` lleva un conector, `y`, y no tres; un nombre propio cuenta solo al principio de la oración, donde los modelos leen así un marcador (`Primeramente`), de modo que el apellido de `Ana, Luego y Mas firmaron` no es conector. Y un marcador que además encabeza un sintagma preposicional se descarta ahí: `antes de la reunión` y `sobre todo el texto` no cuentan nada, mientras que `antes, firmó el acta` y `sobre todo cuando llueve` cuentan su marcador.
 
 En `connectors` puede pasarse un diccionario propio: del conector a su clase de `CONNECTOR_CLASSES` y su tipo de `CONNECTOR_TYPES`, y uno desconocido levanta `ParameterError`.
 
 !!! warning "Advertencia"
-    Un marcador español suele ser una locución hecha de palabras corrientes, y esas palabras se cuentan como cualquier otra: el sustantivo `embargo` de `sin embargo` y el sustantivo `ejemplo` de `por ejemplo` son sustantivos y palabras con contenido de su oración, y un texto que repite un marcador gana algo de repetición por ello. Medido sobre las páginas españolas de este sitio, la diferencia es inferior a 0,002 en todas las repeticiones, pero en un texto hecho de marcadores sería mayor.
+    Las palabras de un marcador se cuentan como cualquier otra: el sustantivo `embargo` de `sin embargo` es un sustantivo y una palabra con contenido de su oración, así que un texto que repite un marcador gana algo de repetición por ello.
 
 ## Recuentos { #counts }
 
@@ -213,7 +213,7 @@ Para ilustrar el método reutilizamos el código del ejemplo anterior:
 !!! info ""
     **ests.cohesion_stats.find_connectors()**, **ests.cohesion_stats.load_connectors()**
 
-`find_connectors(words, connectors=None, sent_index=0, pos=None)` halla los conectores de una sola oración y devuelve sus apariciones, y `load_connectors()` devuelve el diccionario de la biblioteca, la clase y el tipo por conector; el diccionario está en caché y es de solo lectura, así que un cambio se hace por el parámetro `connectors` y no sobre el objeto devuelto.
+`find_connectors(words, connectors=None, sent_index=0, pos=None)` halla los conectores de una sola oración y devuelve sus apariciones, y `load_connectors()` devuelve el diccionario de la biblioteca, la clase y el tipo por conector; el diccionario es de solo lectura, así que un diccionario propio se pasa por el parámetro `connectors`.
 
 !!! example "Ejemplo"
 

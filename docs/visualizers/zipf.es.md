@@ -56,4 +56,4 @@ Los lemas de *Marianela* de Galdós del [corpus de literatura](../datasets/spani
 
     ![ests](../img/zipf.png){: .center }
 
-En ejes logarítmicos las frecuencias de los lemas caen a lo largo de una recta; el ajuste de Zipf-Mandelbrot, $s = 1.14$ con un desplazamiento $q = 1.78$, las sigue más de cerca en la cabeza de la lista que la ley teórica con $\alpha = 1$.
+En ejes logarítmicos las frecuencias de los lemas caen a lo largo de una recta; el ajuste de Zipf-Mandelbrot las sigue más de cerca en la cabeza de la lista que la ley teórica con $\alpha = 1$.

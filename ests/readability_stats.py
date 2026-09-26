@@ -46,20 +46,11 @@ class ReadabilityStats:
     Class for computing the main readability metrics of a text
 
     Description:
-        The formulas of the Spanish tradition: the Flesch reading ease with
-        the coefficients of Szigriszt-Pazos (1993, preset general) or of
-        Fernández Huerta (1959, preset classic), the comprehensibility
-        formula of Gutiérrez de Polini (1972), the grade formula of
-        Crawford (1989), Legibilidad µ of Muñoz Baquedano and Muñoz Urra
-        (2006), the SOL grade of Contreras et al. (1999) - SMOG converted
-        to Spanish - and the language-independent LIX and RIX.
-        The interpretation layer: the INFLESZ and other scales of the reading
-        ease, the µ scale, a consensus grade by the median of the grade
-        formulas, the school stage and reader age of Spain and the reading
-        time by the norms of Spanish-speaking readers. The scale of the
-        reading ease follows the preset: INFLESZ for general, the bands of
-        Fernández Huerta for classic, both in describe_level and in the
-        conversion of the reading ease into the consensus grade
+        The Spanish readability formulas, their interpretation scales, the school
+        stage and reader age of Spain and the reading time. The preset selects the
+        coefficients of the Flesch reading ease and its scale, used by describe_level
+        and by the consensus grade: general - Szigriszt-Pazos (1993) with the INFLESZ
+        scale, classic - Fernández Huerta (1959) with his own bands
 
     Example:
         >>> from ests import ReadabilityStats
@@ -82,8 +73,7 @@ class ReadabilityStats:
 
     Arguments:
         source (str|Doc|BasicStats): Data source - a string, a Doc object or
-            a ready BasicStats object, so that the basic statistics are not
-            computed again
+            a ready BasicStats object to reuse
         sents_extractor (SentsExtractor): Sentence extraction tool
         words_extractor (WordsExtractor): Word extraction tool
         preset (str): Coefficient preset (general, classic)
@@ -144,8 +134,7 @@ class ReadabilityStats:
 
     @property
     def gutierrez_polini_index(self) -> float:
-        # letters of the extracted words, not of the whole text, so that the mean word
-        # length stays on the same token set as the word count with any extractor
+        # letters of the extracted words, so the mean word length matches the word count
         n_letters = sum(letters * count for letters, count in self.bs.c_letters.items())
         return calc_gutierrez_polini_index(n_letters, self.bs.n_words, self.bs.n_sents)
 
@@ -304,21 +293,18 @@ def calc_flesch_reading_easy(
 
     Description:
         The higher the value, the easier the text is to read; the scale runs
-        from 0 to 100. The default coefficients are those of the fórmula de
-        perspicuidad of Szigriszt-Pazos (1993), 206.835 - 62.3 * ASW - ASL,
-        which Barrio-Cantalejo et al. (2008) validated and provided with the
-        INFLESZ scale (flesch_reading_easy_to_level):
+        from 0 to 100. The default coefficients are those of Szigriszt-Pazos
+        (1993), 206.835 - 62.3 * ASW - ASL, with the INFLESZ scale of
+        Barrio-Cantalejo et al. (2008) (flesch_reading_easy_to_level):
             80-100 - muy fácil (comics, children's books)
             65-80 - bastante fácil (primary school textbooks)
             55-65 - normal (general press)
             40-55 - algo difícil (secondary school textbooks)
             0-40 - muy difícil (scientific and technical texts)
         The coefficients of Fernández Huerta (1959), 206.84 - 60 * ASW -
-        1.02 * ASL, are available through the classic preset. Fernández
-        Huerta printed the last term as 1.02 times the number of sentences
-        per 100 words; Law (2011) showed that this inverts the fraction of
-        the Flesch formula the adaptation was based on, so the mean sentence
-        length is used here, as in koRpus and textstat
+        1.02 * ASL, are the classic preset; the last term takes the mean
+        sentence length, as corrected by Law (2011), not the number of
+        sentences per 100 words that Fernández Huerta printed
 
     References:
         Szigriszt Pazos, F. Sistemas predictivos de legibilidad del mensaje escrito:
@@ -348,12 +334,10 @@ def calc_gutierrez_polini_index(n_letters: int, n_words: int, n_sents: int) -> f
     Computing the comprehensibility formula of Gutiérrez de Polini
 
     Description:
-        The first formula written for Spanish rather than adapted from
-        English (Gutiérrez de Polini, 1972), 95.2 - 9.7 * AWL - 0.35 * ASL
-        with the mean word length in letters. The higher the value, the
-        easier the text; it was fitted on school texts for the sixth grade
-        and gives no scale of its own: the values of ordinary prose lie
-        between 30 and 50, and a text above 70 is read by a young child
+        95.2 - 9.7 * AWL - 0.35 * ASL with the mean word length in letters
+        The higher the value, the easier the text; there is no scale of its
+        own: ordinary prose lies between 30 and 50, a text above 70 is read
+        by a young child
 
     References:
         Gutiérrez de Polini, L. E. Investigación sobre lectura en Venezuela.
@@ -400,17 +384,9 @@ def calc_mu_index(c_letters: Mapping[int, int]) -> float:
     Computing Legibilidad µ
 
     Description:
-        The index of Muñoz Baquedano and Muñoz Urra (2006) measures the
-        variability of word length: the mean of the number of letters per
-        word divided by its variance, times 100. The variance is the sample
-        one, divided by n - 1, which is the "cuasivarianza" of the authors:
-        the population variance multiplied by the factor n / (n - 1) that
-        their printed formula carries. Read that way the worked example of
-        their manual comes out exactly (18 words, mean 6.9444, variance
-        13.5844, µ = 51.12); applying the factor once more, on top of the
-        sample variance, gives 54.13 instead and does not reproduce the
-        example. The higher the value, the easier the text;
-        the scale (mu_to_level):
+        The mean number of letters per word divided by its sample variance
+        (divided by n - 1), times 100 (Muñoz Baquedano and Muñoz Urra, 2006)
+        The higher the value, the easier the text; the scale (mu_to_level):
             91-100 - muy fácil
             81-90 - fácil
             71-80 - un poco fácil
@@ -448,10 +424,9 @@ def calc_smog_index(n_complex: int, n_sents: int, a: float = 1.043, b: float = 3
     Computing the SMOG index
 
     Description:
-        The formula of McLaughlin (1969), a * sqrt(30 * polysyllables /
-        sentences) + b, with the polysyllables being the words of three or
-        more syllables. Fitted on English; for Spanish it is the input of
-        the SOL formula (calc_sol_grade)
+        a * sqrt(30 * polysyllables / sentences) + b (McLaughlin, 1969), the
+        polysyllables being the words of three or more syllables. Fitted on
+        English; for Spanish it is the input of calc_sol_grade
 
     References:
         McLaughlin, G. H. SMOG grading: a new readability formula.
@@ -474,12 +449,9 @@ def calc_sol_grade(n_complex: int, n_sents: int, a: float = 0.74, b: float = -2.
     Computing the SOL grade
 
     Description:
-        Contreras et al. (1999) applied the SMOG index to Spanish texts and
-        their English translations and fitted the conversion E = -2.51 +
-        0.74 * S, where S is the SMOG index of the Spanish text and E the
-        grade of the English scale, the years of schooling; the SOL
-        formulas are named after the Spanish word for sun. The higher
-        the value, the harder the text
+        E = -2.51 + 0.74 * S (Contreras et al., 1999), where S is the SMOG
+        index of the Spanish text and E the years of schooling on the English
+        scale. The higher the value, the harder the text
 
     References:
         Contreras, A., García-Alonso, R., Echenique, M., Daye-Contreras, F. The SOL
@@ -504,16 +476,14 @@ def calc_lix(n_long_words: int, n_words: int, n_sents: int) -> float:
     Computing the LIX readability index
 
     Description:
-        The index of Björnsson (1968) does not depend on the language:
-        the mean sentence length plus the percentage of long words.
-        The higher the value, the harder the text; the scale:
+        The mean sentence length plus the percentage of long words (Björnsson,
+        1968), language-independent. The higher the value, the harder the text:
             0-30 - very easy texts, children's books
             30-40 - easy texts, fiction, newspaper articles
             40-50 - texts of medium difficulty, magazine articles
             50-60 - hard texts, popular science, official texts
             60-100 - very hard texts, laws and bureaucratic language
-        A long word has more than six letters, so ReadabilityStats passes
-        the number of words of seven or more letters
+        A long word has more than six letters
 
     References:
         https://en.wikipedia.org/wiki/Lix_(readability_test)
@@ -534,9 +504,8 @@ def calc_rix(n_long_words: int, n_sents: int) -> float:
     Computing the RIX readability index
 
     Description:
-        The simplified companion of LIX (Anderson, 1983), long words per
-        sentence, independent of the language. The higher the value, the
-        harder the text; the scale by grade:
+        Long words (more than six letters) per sentence (Anderson, 1983),
+        language-independent. The higher the value, the harder the text:
             < 0.2 - grade 1
             0.2-0.5 - grade 2
             0.5-0.8 - grade 3
@@ -550,7 +519,6 @@ def calc_rix(n_long_words: int, n_sents: int) -> float:
             5.3-6.2 - grade 11
             6.2-7.2 - grade 12
             > 7.2 - college
-        As for LIX, a long word has more than six letters
 
     References:
         https://en.wikipedia.org/wiki/Lix_(readability_test)
@@ -622,19 +590,16 @@ def flesch_reading_easy_to_grade(flesch_reading_easy: float, preset: str = "gene
     Converting the Flesch reading ease into years of schooling
 
     Description:
-        Used to include the reading ease in the consensus grade by analogy
-        with text_standard of textstat. The thresholds belong to the scale
-        of the preset, since the same value means different things on the
-        two scales.
-        With the general preset, through the text types of the INFLESZ bands
-        and the school stages of Spain:
+        Used for the consensus grade; the thresholds follow the scale of the
+        preset. With the general preset, through the text types of the INFLESZ
+        bands and the school stages of Spain:
             80-100 - 3 (comics and children's books, primary school grades 1-3)
             65-80 - 5 (primary school textbooks, grades 4-6)
             55-65 - 8 (general press, ESO)
             40-55 - 11 (secondary school textbooks, bachillerato)
             below 40 - 13 (scientific texts, university)
-        With the classic preset, through the interpretation table of Flesch,
-        whose bands Fernández Huerta kept: 90-100 - 5, 80-90 - 6, 70-80 - 7,
+        With the classic preset, through the bands of Flesch kept by Fernández
+        Huerta: 90-100 - 5, 80-90 - 6, 70-80 - 7,
         60-70 - 8.5, 50-60 - 10, 40-50 - 11, 30-40 - 12, below 30 - 13
         Values above 100 belong to the first grade of the scale
 
@@ -662,11 +627,9 @@ def calc_consensus_grade(
     Computing the consensus grade
 
     Description:
-        The median of the rounded values of the grade formulas by analogy
-        with text_standard of textstat, which uses the mode; the median
-        is more robust to an outlying formula. The values are rounded half
-        up. The reading ease is converted with flesch_reading_easy_to_grade
-        by the scale of the preset and added without rounding
+        The median of the values of the grade formulas rounded half up; the
+        reading ease is converted with flesch_reading_easy_to_grade by the
+        scale of the preset and added without rounding
 
     Arguments:
         grades (list[float]): Values of the grade formulas
@@ -724,9 +687,8 @@ def calc_reading_time(n_words: int, wpm: int = READING_SPEED_WPM) -> float:
 
     Description:
         The default speed is the silent reading speed of adults in Spanish,
-        278 words per minute (Brysbaert, 2019, mean of six studies; reading
-        aloud - 191). The norms of school years from the meta-analysis of
-        Ripoll, Tapia and Aguado (2020) are available in READING_SPEED_NORMS
+        278 words per minute (Brysbaert, 2019); the norms of school years
+        (Ripoll, Tapia and Aguado, 2020) are in READING_SPEED_NORMS
 
     References:
         Brysbaert, M. How many words do we read per minute? A review and

@@ -2,34 +2,18 @@ import os
 import string
 from pathlib import Path
 
-# Punctuation marks and symbols, including the Spanish inverted marks,
-# dashes, ellipsis, guillemets, curly quotes and the middle dot
+# Punctuation marks and symbols, with the Spanish inverted marks, dashes and quotes
 PUNCTUATIONS = string.punctuation + "¿¡—–…«»“”‘’·"
 
-# Characters that may open a sentence besides an upper-case letter or a digit:
-# inverted question and exclamation marks, opening quotes and brackets,
-# dashes of a dialogue line
+# Characters besides an upper-case letter or a digit that may open a sentence
 SENTENCE_OPENERS = "¿¡«“\"'([—–―-"
 
-# Dashes that open a line of dialogue - the raya, the en dash, the horizontal bar
-# of some digitized texts and the hyphen of plain text; one followed by a
-# lower-case word opens the remark of the narrator inside the same sentence
-# (-¿Vienes? -preguntó ella)
+# Dashes that open a line of dialogue: the raya, the en dash, the horizontal bar, the hyphen
 DASHES = "—–―-"
 
-# Rules added to the tokenizer for the dashes of a dialogue glued to the words,
-# as plain-text corpora type them (--No, -dijo, Juan- y, sí--dijo, reírse—me decía,
-# dijo:—¡Mis, cuatro.-¿Cinco?, sí-¿y qué?): a run of hyphens before a letter or
-# an opening mark, a run of hyphens after a letter at the end of a token, two or
-# more hyphens or a long dash between letters, a hyphen between a letter and an
-# opening mark, any dash after a closing mark, the closing marks before a dash
-# and an opening mark after one are split off, and the horizontal bar ― as the
-# raya and the en dash at the ends of a token, with the closing marks after it
-# (él―.), and the hyphens after the period of a number that opens an item of a
-# list (Artículo 1.- El objeto). The underscores of the italics of
-# Project Gutenberg (--_Siguro_, lux_--dijo) count as opening and closing marks.
-# A single hyphen between two letters (franco-alemán) or before a digit (-5) is
-# left alone
+# Tokenizer rules that split off the dashes of a dialogue glued to words (--No, -dijo,
+# sí--dijo, dijo:—¡Mis); the underscores of the Project Gutenberg italics count as quotes.
+# A single hyphen between letters (franco-alemán) or before a digit (-5) stays
 _LETTER = r"[^\W\d_]"
 _OPENING = r"[¿¡«“\"'(\[_]"
 _CLOSING = r"[.,;:!?…»”\"')\]_]"
@@ -44,18 +28,8 @@ TOKENIZER_INFIXES = (
     rf"(?<=[-—–―]){_OPENING}",
 )
 
-# Abbreviations after which a sentence does not end even before an upper-case
-# word or a number: forms of address, references, times and eras; compared in
-# lower case with the last one or two space-separated tokens before the period.
-# Single capital initials (J. L. Borges) are recognized separately.
-# Abbreviations that usually do end a sentence (etc.) or coincide with
-# a word (mar., no.) are not listed. The ones of time (a. m., p. m.) are listed
-# although they often close a sentence. The list decides nothing before a
-# lower-case word, which never opens a sentence; it decides before an upper-case
-# word or a digit, and there the readings collide: a digit usually continues the
-# sentence (a las 5 p. m. 30 personas esperaban), an upper-case word usually
-# opens a new one (Llegó a las 5 p. m. Luego se fue). Keeping the abbreviation
-# joins both, and joining two sentences costs less than cutting one in half
+# Abbreviations after which a sentence does not end even before an upper-case word or
+# a digit, compared in lower case with the last one or two tokens before the period
 ABBREVIATIONS = frozenset(
     {
         # Forms of address and titles
@@ -174,16 +148,9 @@ ABBREVIATIONS = frozenset(
     }
 )
 
-# Vowels: every accented vowel is strong, an unaccented i, u, ü and a vocalic y
-# are weak; a weak vowel next to another vowel forms a diphthong, two strong
-# vowels a hiatus. Vowels with a grave, a circumflex, a tilde or a diaeresis
-# come from Catalan, French, Portuguese and German names (Lluïsa, Citroën,
-# São, Björk); they count as accented, so they are strong and take the
-# stress, except ï. A diaeresis marks a hiatus: the ü of Spanish verse outside
-# gü and qü and the ï of Spanish verse and of Catalan (sü-a-ve, rü-i-do,
-# glo-rï-o-sa, Llu-ï-sa), which leave the stress to the rules of the word,
-# and the ë of French (Ci-tro-ën); the Portuguese nasal ã and õ join
-# a following o or e into a diphthong (São, Ca-mões)
+# Vowels, with the ones of foreign names (Lluïsa, Citroën, São, Björk): accented vowels
+# are strong and take the stress, a diaeresis marks a hiatus (sü-a-ve, Ci-tro-ën),
+# the nasal ã and õ join a following vowel into a diphthong (São, Ca-mões)
 VOWELS = "aeiouáéíóúüàèìòùâêîôûãõäëïöå"
 WEAK_VOWELS = "iuü"
 ACCENTED_VOWELS = "áéíóúàèìòùâêîôûãõäëöå"
@@ -198,9 +165,8 @@ ONSET_CLUSTERS = frozenset(
     {"bl", "br", "cl", "cr", "dr", "fl", "fr", "gl", "gr", "kl", "kr", "pl", "pr", "tr"}
 )
 
-# Words in -mente that look like adverbs but are not, so they carry a single
-# stress: adjectives and nouns, and subjunctives of verbs in -mentar whose stem
-# ends like an adjective
+# Words in -mente that are not adverbs and carry a single stress: adjectives, nouns
+# and subjunctives of verbs in -mentar
 NON_ADVERBS_MENTE = frozenset(
     {
         "clemente",
@@ -228,14 +194,12 @@ NON_ADVERBS_MENTE = frozenset(
 # Whitespace counted as spaces by the basic statistics
 SPACES = [" ", "\t"]
 
-# Thresholds of the basic statistics: a complex word has three or more syllables,
-# as in the Spanish readability formulas, a long word seven or more letters,
-# as in LIX and RIX
+# Minimum syllables of a complex word, as in the Spanish readability formulas,
+# and minimum letters of a long word, as in LIX and RIX
 COMPLEX_SYL_FACTOR = 3
 LONG_WORD_LETTER_FACTOR = 7
 
-# Types of punctuation marks; the inverted marks ¿ and ¡ count as question
-# and exclamation marks, so a Spanish question carries two of them
+# Types of punctuation marks; ¿ and ¡ count as question and exclamation marks
 PUNCTUATION_TYPES = {
     "comma": "Commas",
     "period": "Periods",
@@ -292,11 +256,8 @@ READABILITY_PRESETS: dict[str, dict[str, tuple[float, float, float]]] = {
     "classic": {"flesch_reading_easy": (1.02, 60.0, 206.84)},
 }
 
-# Interpretation of each preset: the scale of describe_level and the thresholds
-# that convert the reading ease into years of schooling for the consensus grade.
-# The INFLESZ bands are read through their text types and the school stages of
-# Spain; the bands of Fernández Huerta are those of Flesch, so his own
-# interpretation table gives the grades
+# Scale of describe_level for each preset, and the bounds of the reading ease that give
+# the years of schooling of the consensus grade
 PRESET_SCALES: dict[str, str] = {"general": "inflesz", "classic": "fernandez_huerta"}
 READING_EASE_GRADES: dict[str, tuple[tuple[float, float], ...]] = {
     "general": ((80, 3), (65, 5), (55, 8), (40, 11)),
@@ -313,7 +274,7 @@ READING_EASE_SCALES: dict[str, tuple[tuple[float, str], ...]] = {
         (40, "algo difícil"),
         (0, "muy difícil"),
     ),
-    # Szigriszt-Pazos (1993): 0-15, 16-35, 36-50, 51-65, 66-75, 76-85, 86-100
+    # Szigriszt-Pazos (1993)
     "szigriszt": (
         (86, "muy fácil"),
         (76, "fácil"),
@@ -355,12 +316,10 @@ GRADE_AGE_LEVELS: tuple[tuple[int, int, str, str], ...] = (
 )
 POSTGRADUATE_LEVEL = ("postgraduate", "over 22 years")
 
-# Silent reading speed of adults in Spanish, words per minute: Brysbaert (2019),
-# mean of six studies; reading aloud - 191
+# Silent reading speed of adults in Spanish, words per minute: Brysbaert (2019)
 READING_SPEED_WPM = 278
-# Reading speed norms (aloud, silent) in words per minute: means by school year
-# from the meta-analysis of Ripoll, Tapia and Aguado (2020), grades 1-6 primary
-# school, 7-10 ESO, 11 bachillerato; adults - Brysbaert (2019)
+# Reading speed norms (aloud, silent) in words per minute by school year: Ripoll, Tapia
+# and Aguado (2020); adults - Brysbaert (2019)
 READING_SPEED_NORMS: dict[str, tuple[int, int]] = {
     "grade_1": (49, 30),
     "grade_2": (73, 79),
@@ -425,19 +384,14 @@ DIVERSITY_STATS_DESC = {
 # Model of spaCy that the statistics on Universal Dependencies fall back to
 SPACY_MODEL = "es_core_news_sm"
 
-# Directory where the datasets are downloaded by default: the one of the environment
-# variable ESTS_DATA_DIR, read when the package is imported, or ests_data next to the
-# package, which a read-only site-packages does not allow to write
+# Default directory of the datasets: ESTS_DATA_DIR or ests_data next to the package
 DEFAULT_DATA_DIR = (
     Path(os.environ["ESTS_DATA_DIR"]).expanduser()
     if os.environ.get("ESTS_DATA_DIR")
     else Path(__file__).parent.parent.resolve() / "ests_data"
 )
 
-# Morphological features counted by the statistics, by the name of the statistic.
-# The Spanish models annotate 23 features; the ones left out are either marginal
-# (AdvType, Foreign, NumForm, Number[psor], PrepCase, Typo) or live on punctuation
-# (PunctSide, PunctType), which is not a word. They all stay inside the tags string
+# Morphological features counted by the statistics, by the name of the statistic
 MORPHOLOGY_FEATURES = {
     "case": "Case",
     "definite": "Definite",
@@ -548,16 +502,14 @@ MORPHOLOGY_MARKERS_DESC = {
 COPULAS = ("ser", "estar")
 
 
-# Dependencies that head a clause: the subtypes of Universal Dependencies are not
-# used by the Spanish models, which give acl for a relative clause as well
+# Dependencies that head a clause; the Spanish models give acl for a relative clause too
 CLAUSE_DEPS = frozenset({"ccomp", "advcl", "acl", "csubj", "parataxis"})
 SUBORDINATE_CLAUSE_DEPS = frozenset({"ccomp", "advcl", "acl", "csubj"})
 SUBJECT_DEPS = frozenset({"nsubj", "csubj"})
 VALENCY_IGNORED_DEPS = frozenset({"cc", "conj", "parataxis", "punct"})
 NOUN_MODIFIER_DEPS = frozenset({"amod", "det", "nmod", "nummod", "acl"})
 # Prepositions of a chain of complements (el aumento de la eficiencia del uso) and
-# of the agent of a passive (construida por los obreros); the contractions del and al
-# keep their own lemma in the models, so they are listed as they are written
+# of the agent of a passive (construida por los obreros)
 DE_PREPOSITIONS = frozenset({"de", "del"})
 AGENT_PREPOSITION = "por"
 # Auxiliary of the periphrastic passive (fue construida), the se of the passive
@@ -565,8 +517,7 @@ AGENT_PREPOSITION = "por"
 PASSIVE_AUX = "ser"
 SE_PASSIVE_DEP = "expl:pass"
 SE_IMPERSONAL_DEP = "expl:impers"
-# Words of negation: only no carries Polarity=Neg in the models, the others are
-# recognized by their form; ni is left to the conjunctions of ni... ni
+# Words of negation, recognized by their form
 NEGATION_WORDS = frozenset(
     {
         "no",
@@ -583,8 +534,7 @@ NEGATION_WORDS = frozenset(
     }
 )
 # Suffixes and lemmas of the nouns derived from a verb, the nominal part of a split
-# predicate (hacer una revisión, tomar una decisión). The heuristic catches nouns of
-# other origins with the same endings (ciencia, distancia), as any suffix rule does
+# predicate (hacer una revisión, tomar una decisión)
 VERBAL_NOUN_SUFFIXES = ("ción", "sión", "miento", "anza", "encia", "ancia", "aje", "dura", "azgo")
 VERBAL_NOUN_LEMMAS = frozenset(
     {
@@ -632,9 +582,7 @@ LIGHT_VERBS = frozenset(
         "tomar",
     }
 )
-# Nouns of the fixed split predicates that no suffix gives away, by the verbs they
-# are fixed with: parte, lugar, caso and cuenta are ordinary nouns with any other
-# verb (dar traslado a las partes, poner en primer lugar la seguridad)
+# Nouns of the fixed split predicates that no suffix gives away, by their verbs
 SPLIT_PREDICATE_NOUNS = {
     "cabo": ("llevar",),
     "cargo": ("hacer", "tener"),
@@ -652,8 +600,7 @@ SPLIT_PREDICATE_NOUNS = {
 }
 # Light verbs whose nominal part comes with a preposition: se procedió a la votación
 PREPOSITIONAL_LIGHT_VERBS = frozenset({"proceder"})
-# Verbs of the periphrases with a gerund: sigue trabajando, lleva años estudiando.
-# The models attach the gerund of these as xcomp or advcl instead of an auxiliary
+# Verbs of the periphrases with a gerund: sigue trabajando, lleva años estudiando
 GERUND_PERIPHRASIS_VERBS = frozenset(
     {"seguir", "continuar", "ir", "venir", "andar", "llevar", "quedar", "acabar"}
 )
@@ -707,8 +654,7 @@ CONNECTOR_CLASSES = {
 # Kinds of the discourse markers: conjunctions, conjunctive locutions and adverbs
 # against the lexicalized phrases (sin embargo, por lo tanto, es decir)
 CONNECTOR_TYPES = {"primary": "primary", "secondary": "secondary"}
-# Parts of speech a one-word marker may carry. PROPN is among them because the models
-# read a marker that opens a sentence as a proper noun (Primeramente, Concluyendo)
+# Parts of speech a one-word marker may carry (PROPN for one that opens a sentence)
 CONNECTOR_POS = frozenset({"CCONJ", "SCONJ", "PART", "ADV", "ADP", "INTJ", "PROPN", "X"})
 # Parts of speech allowed for single markers on top of CONNECTOR_POS
 CONNECTOR_POS_EXTRA = {
@@ -718,8 +664,8 @@ CONNECTOR_POS_EXTRA = {
     "concluyendo": frozenset({"VERB"}),
     "verbigracia": frozenset({"NOUN"}),
 }
-# Words that turn a marker into a part of a prepositional phrase: antes de la
-# reunión, por encima de 80, al final de la línea are no discourse markers
+# Words after or before a marker that make it a part of a prepositional phrase
+# (antes de la reunión, por encima de 80)
 CONNECTOR_BLOCKED_AFTER = {
     "antes": frozenset({"de", "del"}),
     "después": frozenset({"de", "del"}),
@@ -730,8 +676,7 @@ CONNECTOR_BLOCKED_AFTER = {
     "luego": frozenset({"de", "del"}),
 }
 CONNECTOR_BLOCKED_BEFORE = {"encima": frozenset({"por"})}
-# Parts of speech of the following word that turn a marker into a phrase of its own:
-# sobre todo el texto is sobre + todo el texto, sobre todo cuando is the marker
+# Parts of speech of the next word that make a marker a phrase of its own (sobre todo el)
 CONNECTOR_BLOCKED_AFTER_POS = {"sobre todo": frozenset({"DET"})}
 
 COHESION_STATS_DESC = {
@@ -799,11 +744,8 @@ STYLE_STATS_DESC = {
 }
 # Number of the most frequent words for the academic nausea and the naturalness by Zipf's law
 NAUSEA_TOP_N = 10
-# Word forms that carry no content, the water of a text: the closed classes of the
-# grammar - articles and the other determiners, pronouns, prepositions, conjunctions,
-# interjections - with the adverbs that point or ask (aquí, así, dónde) and the ones
-# that negate, affirm or focus (no, sí, solo, también, incluso); the forms of the
-# old orthography (á, ó, tí) are kept, as the texts of the public domain write them
+# Word forms that carry no content, the water of a text: the closed classes of the grammar
+# and the adverbs that point, ask, negate, affirm or focus, with the old spellings (á, ó, tí)
 STOPWORDS = frozenset(
     {
         # Articles, contractions and the other determiners
@@ -854,9 +796,7 @@ STOPWORDS = frozenset(
 # plain language: the RAE and the CGPJ (Libro de estilo de la Justicia, 2017), the RAE and
 # the ASALE (Guía panhispánica de lenguaje claro y accesible, 2024), the European
 # Commission (Cómo escribir con claridad, 2015) and the style manuals of the
-# administrations of Spain, Mexico, Colombia and Argentina. Left out are the forms the
-# guides themselves recommend (sobre la base de, con base en) or accept (de acuerdo a,
-# de cara a). A phrase ending in a or de also matches al or del (a efectos del)
+# administrations of Spain, Mexico, Colombia and Argentina
 COMPOUND_PREPOSITIONS = (
     "a cuyos efectos",
     "a efectos de",
@@ -901,13 +841,8 @@ COMPOUND_PREPOSITIONS = (
     "en virtud de",
     "habida cuenta de",
 )
-# Clichés of the administrative style, by the same guides: the fixed formulas of letters
-# and resolutions, the fillers and the periphrases of a light verb with a noun that one
-# verb says (proceder a, dar cumplimiento, hacer entrega). A cliché that starts with an
-# infinitive stands for the forms of the verb (se procedió a, ha dado cumplimiento, deberá
-# llevarse a cabo). Left out are the phrases with frequent neutral uses (tomar una
-# decisión, en este sentido), but for proceder a and llevar a cabo, which guides of
-# three administrations and more flag
+# Clichés of the administrative style, by the same guides; one that starts with an
+# infinitive stands for the forms of the verb (se procedió a, ha dado cumplimiento)
 OFFICIALESE_CLICHES = (
     "a día de hoy",
     "a instancia de parte",
@@ -985,9 +920,7 @@ OFFICIALESE_CLICHES = (
     "y para que así conste",
 )
 # Forms of the verbs of the clichés that simplemma leaves as they are, by their
-# infinitive: the irregular participles of the perfect (ha dado cumplimiento, se ha
-# hecho entrega, ha puesto de manifiesto) and the imperative with se (dese traslado).
-# The words after the verb rule out the readings as a noun (el hecho, el puesto)
+# infinitive: irregular participles (ha dado cumplimiento) and the imperative with se (dese)
 IRREGULAR_VERB_FORMS = {
     "dado": "dar",
     "dados": "dar",
@@ -1005,9 +938,8 @@ IRREGULAR_VERB_FORMS = {
     "puestas": "poner",
     "resultado": "resultar",
 }
-# Parenthetical expressions, set off by commas or standing at the edge of a sentence:
-# the ones set off in at least 55% of their occurrences in the corpus of literature,
-# and the series of order the first of them opens (en primer lugar, en segundo lugar)
+# Parenthetical expressions, set off by commas or standing at the edge of a sentence,
+# as the corpus of literature mostly sets them off
 PARENTHETICALS = (
     "a decir verdad",
     "a mi entender",
@@ -1085,10 +1017,7 @@ PHON_STATS_DESC = {
 }
 # Window in words for the alliteration and the assonance
 PHON_WINDOW_LEN = 3
-# Sounds of the transcription by class: the five vowels, the sonorants (the tap and the
-# trill are one r), the voiced and the voiceless obstruents. The pronunciation is the one
-# of the standard of Spain: yeísmo (ll and y are one sound, ʝ) and distinción (c before e
-# and i and z are θ, apart from s)
+# Sounds of the transcription by class, in the standard of Spain: yeísmo (ʝ) and distinción (θ)
 VOWEL_SOUNDS = frozenset("aeiou")
 SONORANT_SOUNDS = frozenset({"m", "n", "ɲ", "l", "r"})
 VOICED_SOUNDS = frozenset({"b", "d", "g", "ʝ"})
@@ -1112,43 +1041,30 @@ VERSE_METERS = {
     "dodecasílabo": 12, "tridecasílabo": 13, "alejandrino": 14, "pentadecasílabo": 15,
     "hexadecasílabo": 16, "heptadecasílabo": 17, "octodecasílabo": 18,
 }  # fmt: skip
-# Compound verses of two equal hemistichs: the length of the line and of the hemistich.
-# The caesura between them blocks the synalepha, and each hemistich follows the law of
-# the final stress on its own
+# Compound verses of two equal hemistichs: the length of the line and of the hemistich
 VERSE_HEMISTICHS = {10: 5, 12: 6, 14: 7, 16: 8, 18: 9}
-# Rhythmic stresses of a meter besides the last one, 1-based: one of the sets. The
-# endecasílabo is stressed on the 6th syllable (a maiore) or on the 4th and the 8th
-# (sáfico) or the 7th (dactílico); a compound verse, on the last stress of the first
-# hemistich
+# Rhythmic stresses of a meter besides the last one, 1-based, any of the sets:
+# the endecasílabo a maiore (6), sáfico (4, 8) and dactílico (4, 7)
 VERSE_RHYTHMS = {"endecasílabo": ((6,), (4, 8), (4, 7))}
 VERSE_CLAUSULAS = ("aguda", "llana", "esdrújula", "sobresdrújula")
+# Maximum share of the lines off the meter for a poem to keep it
 VERSE_MAX_DEVIATIONS = 0.1
-# Fewest lines with a meter: a single line of up to 18 syllables has a length with a name
-# whatever it is - 36% of the sentences of twelve prose works of SpanishLiterature
-# would get a meter, 1.4% of two sentences as two lines and 0.1% of three
+# Minimum number of lines for a text to get a meter
 VERSE_MIN_LINES = 2
-# Rhyme: a line rhymes with the lines of the window before it, across the stanzas, so that
-# the quatrains of a sonnet rhyme ABBA ABBA and the tercets CDC DCD
+# Number of the lines before a line that it may rhyme with, across the stanzas
 RHYME_WINDOW = 4
 VERSE_RHYMES = ("consonante", "asonante")
-# Assonance: a poem rhymes by the assonance when at least a third of its lines with no
-# full rhyme share one, and at least four of them (the assonant sonnets of SpanishSonnets);
-# otherwise the assonance counts on alternate lines with unrhymed lines between them,
-# a run of at least four lines with three in four of the lines between free of a full
-# rhyme (a romance, a rima of Bécquer) or all the even lines of a stanza (a copla). Of
-# prose cut into sentences as lines it takes 0.1-3.6% of the texts of 5 to 40 lines and
-# 6.5% of the ones of 4, where two lines of a copla are enough; with three lines instead
-# of four, up to 22% of the texts of 9 lines and 13% of the ones of 40
+# Minimum share and number of the lines without a full rhyme sharing one assonance for
+# a poem to rhyme by the assonance; the number bounds a run of alternate lines as well
 RHYME_MIN_ASSONANCE = 1 / 3
 RHYME_MIN_ASSONANT_LINES = 4
+# Minimum share of the lines free of a full rhyme between the alternate assonant lines
 RHYME_MIN_FREE = 0.75
-# Lines of arte mayor, of 9 syllables and more, take upper-case letters in a rhyme scheme,
-# the lines of arte menor lower-case ones: ABBA ABBA CDC DCD, abba, aBabB
+# Minimum syllables of a line of arte mayor, which takes upper-case letters in a scheme
 VERSE_ARTE_MAYOR = 9
 # Stanzas by the number of lines: the lengths of the lines ("mayor", "menor" or the
-# syllables of every line), the schemes with the letters from a in the order of the
-# stanza, and the kind of the rhyme (None for either); the first that fits wins, so
-# the forms with the syllables of every line go before the ones of arte mayor or menor
+# syllables of every line), the rhyme schemes and the kind of the rhyme (None for
+# either); the first that fits wins
 VERSE_STROPHES = {
     "pareado": (2, None, ("aa",), None),
     "terceto": (3, "mayor", ("aba", "a-a", "abc", "aab", "abb"), None),
@@ -1170,11 +1086,9 @@ VERSE_STROPHES = {
     "octava real": (8, (11, 11, 11, 11, 11, 11, 11, 11), ("abababcc",), "consonante"),
     "décima": (10, (8, 8, 8, 8, 8, 8, 8, 8, 8, 8), ("abbaaccddc",), "consonante"),
 }
-# Unstressed words of the verse: the articles, the prepositions (except según), the
-# conjunctions, the relatives, the clitic pronouns, the possessives before a noun, the
-# titles before a name, tan and aun (incluso); the interjections oh, ay and ah, unstressed
-# in the scansion of the sonnets of DISCO (92% of oh and 96% of ay) and of rantanplan. The
-# last word of a line is stressed whatever it is
+# Unstressed words of the verse: articles, prepositions, conjunctions, relatives, clitics,
+# possessives before a noun, titles before a name, tan, aun and the interjections oh, ay
+# and ah, unstressed in the scansion of DISCO and rantanplan
 VERSE_PROCLITICS = frozenset(
     (
         "el", "la", "lo", "los", "las", "al", "del",
@@ -1191,8 +1105,7 @@ VERSE_PROCLITICS = frozenset(
     )
 )  # fmt: skip
 
-# Layers of the highlighting of a text, in the order of drawing, by the statistics
-# of the library they show
+# Layers of the highlighting of a text, in the order of drawing
 HIGHLIGHT_LAYERS_DESC = {
     "long_sents": "Long sentences",
     "complex_words": "Complex words",
@@ -1231,23 +1144,18 @@ HIGHLIGHT_SYNTAX_LAYERS = frozenset(
 )
 # Layers read from the parts of speech and the lemmas of a Doc
 HIGHLIGHT_TAGGED_LAYERS = frozenset({"verbal_nouns"})
-# Number of words from which a sentence is long: the Spanish guides to plain language put
-# the bound at 30 words (Comunidad de Madrid 2021, Gobierno de la Ciudad de Buenos Aires
-# 2024, Legislatura de la Ciudad de Buenos Aires 2024; 20-30 on average by the Secretaría
-# de la Función Pública of Mexico 2007)
+# Number of words from which a sentence is long, by the Spanish guides to plain language
+# (Comunidad de Madrid 2021, Gobierno and Legislatura de la Ciudad de Buenos Aires 2024)
 LONG_SENT_WORD_FACTOR = 30
-# Number of syllables from which the highlighting marks a word as complex: at 3, the
-# bound of the readability formulas (COMPLEX_SYL_FACTOR), half the content words of any
-# text are marked (abuela, pequeña, camino), a plain story almost as much as an official
-# notice, and the layer no longer points at the heavy words
+# Number of syllables from which the highlighting marks a word as complex
 HIGHLIGHT_COMPLEX_SYL_FACTOR = 4
 # Probability of a repetition of a consonant sound under an independent spread of the
 # sounds, below which the repetition is highlighted as alliteration
 ALLITERATION_THRESHOLD = 0.001
 # Words shorter than this number of letters neither break nor continue an alliteration
 ALLITERATION_MIN_WORD_LEN = 3
-# Frequencies of the sounds of the transcription in the 49 million sounds of the corpus of
-# literature (SpanishLiterature, transcribe)
+# Frequencies of the sounds of the transcription in the corpus of literature
+# (SpanishLiterature, transcribe)
 SOUND_FREQUENCIES = {
     "a": 0.1350, "e": 0.1350, "o": 0.0974, "s": 0.0795, "i": 0.0726, "n": 0.0683,
     "r": 0.0644, "d": 0.0510, "l": 0.0499, "t": 0.0414, "k": 0.0394, "u": 0.0314,
@@ -1294,8 +1202,7 @@ DISPERSION_STATS_DESC = {
 # Marks that stay with the first word of a window of a text: quotes, brackets,
 # dashes of a dialogue and the inverted marks
 OPENING_MARKS = frozenset('«"„“‘([{—–―-¿¡')
-# Opening marks that close as well - the straight quote and the dashes of an aside:
-# glued to the end of a word they close it and stay in its window
+# Opening marks that close as well: the straight quote and the dashes of an aside
 SYMMETRIC_MARKS = frozenset('"—–―-')
 DELTA_VARIANTS = {
     "burrows": "Burrows's Delta - Manhattan distance of the z-scores divided by the number of units",

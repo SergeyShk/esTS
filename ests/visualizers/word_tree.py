@@ -98,10 +98,8 @@ class TreeDrawer:
         Adding a node with a generated identifier and the word as its label
 
         Description:
-            The identifier is n0, n1, ...: a word as an identifier would break
-            on a colon, which graphviz reads as a port (10:30), and paths of
-            words joined with a hyphen would merge different branches
-            (franco-alemán no, franco alemán no)
+            The identifier is n0, n1, ...: graphviz would read a colon in a word
+            as a port (10:30)
 
         Arguments:
             word (str): Word of the node
@@ -237,10 +235,8 @@ class WordTree:
         Selecting the N-grams of one side of the keyword
 
         Description:
-            The sizes are taken in ascending order, and an N-gram is kept only
-            when its (N-1)-gram on the same side was kept, so that every level
-            of the tree holds at most max_per_n nodes and every branch
-            continues a kept one; among the candidates of a size the most
+            An N-gram is a candidate only when its (N-1)-gram on the same side
+            was kept; of the candidates of every size the max_per_n most
             frequent are kept, alphabetically when equal
 
         Arguments:
@@ -305,12 +301,9 @@ def wordtree(
     Description:
         The N-grams of up to max_n words that start or end with the keyword
         are counted in every text (a sentence, for instance); on each side the
-        most frequent max_per_n of every size are kept among the ones that
-        continue a kept shorter N-gram, alphabetically when equal, and joined
-        into two trees - the words after the keyword and before it - with the
-        size of the font by frequency (Wattenberg and Viégas 2008). The nodes
-        get generated identifiers and the words go to their labels, so any
-        word is safe. Rendering needs the executables of Graphviz
+        max_per_n most frequent of every size are kept (WordTree.select) and
+        joined into a tree, with the size of the font by frequency. Rendering
+        needs the executables of Graphviz
 
     References:
         https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/2011/Gruppe05/Homepage/Paper/wordtree-paper-wattenberg.pdf

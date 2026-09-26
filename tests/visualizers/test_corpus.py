@@ -36,7 +36,6 @@ def test_dispersion_plot():
         dispersion_plot([], ["gato"])
     with pytest.raises(SourceError):
         dispersion_plot(words, [])
-    # The text itself or a Doc in place of the words, a string in place of the targets
     with pytest.raises(SourceTypeError):
         dispersion_plot("el gato estaba en la ventana", ["gato"])
     with pytest.raises(SourceTypeError):
@@ -133,7 +132,7 @@ def test_collocation_network():
 
 
 def test_collocation_network_ports():
-    # A colon is a port in graphviz: the words go to the labels, the edges to the identifiers
+    # A colon in a word would read as a port of graphviz
     graph = collocation_network([Collocation("10:30", "de", 2, 3, 2, 5.0)])
     assert '\tn0 [label="10:30" fontsize=10]' in graph.source
     assert "\tn0 -- n1 [label=5.00 penwidth=2.25]" in graph.source
@@ -141,7 +140,7 @@ def test_collocation_network_ports():
 
 
 def test_collocation_network_pairs_of_a_word_with_itself():
-    # A word repeated within the window would be a loop: it is left out before top_n
+    # A pair of a word with itself is left out before top_n
     pairs = [
         Collocation("mata", "mata", 5, 5, 5, 11.9),
         Collocation("rojo", "rojo", 7, 7, 7, 11.4),

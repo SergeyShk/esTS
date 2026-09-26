@@ -87,19 +87,11 @@ class DiversityStats:
     Class for computing the main lexical diversity metrics of a text
 
     Description:
-        Lexical diversity is a quantitative characteristic of a text that
-        reflects the richness of its vocabulary for a text of a given length
-        The conventions of the library (the same as in koRpus and Kyle's
-        lexical-diversity):
-            the logarithmic measures of Summer, Maas and Dugast use base 10,
-            LexicalRichness, textcomplexity and zipfR use the natural logarithm
-            the MATTR window and the MSTTR segment are 50 words, quanteda and koRpus use 100
-            the TTR threshold of MTLD is 0.72, the minimum factor length is 10 words;
-            a factor closes at a TTR not above the threshold (inclusive), in lexical-diversity
-            and TAALED the comparison is strict, so the values diverge on factors
-            where TTR hits exactly 0.72
-            the HD-D sample size is 42 words
-        All conventions are parameters of the class
+        Lexical diversity reflects the richness of the vocabulary of a text of a given
+        length. Defaults: base 10 for the logarithmic measures of Summer, Maas and
+        Dugast, a 50-word MATTR window and MSTTR segment, the MTLD threshold 0.72
+        (a factor closes at a TTR not above it) with a minimum factor of 10 words,
+        an HD-D sample of 42 words; all of them are parameters of the class
 
     References:
         https://en.wikipedia.org/wiki/Lexical_diversity
@@ -119,11 +111,9 @@ class DiversityStats:
 
     Arguments:
         source (str|Doc): Data source (a string or a Doc object); words are
-            lower-cased whatever the source and the extractor, since the metrics
-            count lexemes
+            always lower-cased
         words_extractor (WordsExtractor): Word extraction tool; for a Doc it is
-            applied to the text of the Doc when given, otherwise the words come
-            from the tokens
+            applied to the text of the Doc, without it the words come from the tokens
         window_len (int): Window size for MATTR and segment size for MSTTR
         mtld_threshold (float): TTR threshold for MTLD, MA-MTLD and MTLD-W
         mtld_min_len (int): Minimum factor length for MTLD, MA-MTLD and MTLD-W
@@ -137,7 +127,7 @@ class DiversityStats:
         mtld_min_len (int): Minimum factor length for MTLD, MA-MTLD and MTLD-W
         hdd_sample_size (int): Sample size for HD-D
         log_base (float): Logarithm base for the Summer, Maas and Dugast metrics;
-            the five parameters can be changed on the object, the metrics follow
+            the five parameters can be changed on the object
         frequency_spectrum (dict[int, int]): Frequency spectrum - the number of lexemes with a given frequency
         ttr (float): Type-Token Ratio (TTR)
         rttr (float): Root Type-Token Ratio (RTTR)
@@ -402,12 +392,7 @@ class DiversityStats:
         of the text, the mean and the confidence interval of the mean
 
         Description:
-            The standard way to compare texts of different lengths: the metric
-            is computed over windows of equal length, the spread over the windows
-            gives the confidence interval
-            The STTR of Kubát and Milička is a windowed TTR with a 1000-word window
-            Windows with an undefined metric (nan) are ignored, an infinite value
-            in at least one window gives an infinite mean without an interval
+            Computed by calc_windowed with the current parameters of the object
 
         Arguments:
             stat (str): Name of the metric from get_stats
@@ -452,9 +437,7 @@ def calc_frequency_spectrum(text: Sequence[str]) -> dict[int, int]:
     Computing the frequency spectrum
 
     Description:
-        The frequency spectrum is the number of lexemes V_i that occur in the
-        text exactly i times. The basis of the measures of Yule, Herdan, Sichel,
-        Michéa, Baayen and of the LNRE models of zipfR
+        The number of lexemes V_i that occur in the text exactly i times
 
     Arguments:
         text (list[str]): List of words
@@ -470,8 +453,8 @@ def calc_ttr(text: Sequence[str]) -> float:
     Computing the Type-Token Ratio (TTR)
 
     Description:
-        The simplest and the most criticized way to compute lexical diversity,
-        which ignores the effect of text length
+        The number of lexemes divided by the number of words; strongly depends
+        on text length
 
     Arguments:
         text (list[str]): List of words
@@ -547,8 +530,7 @@ def calc_sttr(text: Sequence[str], base: float = DIVERSITY_LOG_BASE) -> float:
 
     Description:
         A logarithmic modification of TTR (Summer, 1966)
-        The value depends on the logarithm base: 10 by default, as in koRpus
-        and lexical-diversity; LexicalRichness and textcomplexity use the natural one
+        The value depends on the logarithm base, 10 by default
 
     Arguments:
         text (list[str]): List of words
@@ -574,9 +556,7 @@ def calc_mttr(text: Sequence[str], base: float = DIVERSITY_LOG_BASE) -> float:
 
     Description:
         A logarithmic modification of TTR (Maas, 1972)
-        The most stable metric with respect to text length
-        The value depends on the logarithm base: 10 by default, as in koRpus
-        and lexical-diversity; LexicalRichness and textcomplexity use the natural one
+        The value depends on the logarithm base, 10 by default
 
     Arguments:
         text (list[str]): List of words
@@ -604,8 +584,7 @@ def calc_dttr(text: Sequence[str], base: float = DIVERSITY_LOG_BASE) -> float:
     Description:
         A logarithmic modification of TTR (Dugast, 1978), a.k.a. Dugast's U,
         the reciprocal of the Maas metric
-        The value depends on the logarithm base: 10 by default, as in koRpus
-        and lexical-diversity; LexicalRichness and textcomplexity use the natural one
+        The value depends on the logarithm base, 10 by default
 
     Arguments:
         text (list[str]): List of words
@@ -632,8 +611,6 @@ def calc_mattr(text: Sequence[str], window_len: int = MATTR_WINDOW_LEN) -> float
 
     Description:
         A moving-average modification of TTR (Covington & McFall, 2010)
-        The default window is 50 words, as in lexical-diversity, TAALED and textacy;
-        quanteda and koRpus use 100
         For texts shorter than the window the TTR of the whole text is returned
 
     Arguments:
@@ -669,8 +646,6 @@ def calc_msttr(text: Sequence[str], segment_len: int = MATTR_WINDOW_LEN) -> floa
 
     Description:
         A segmentation-based modification of TTR (Johnson, 1944)
-        The default segment is 50 words, as in lexical-diversity, TAALED and textacy;
-        quanteda and koRpus use 100
         For texts shorter than the segment the TTR of the whole text is returned,
         an incomplete last segment is dropped
 
@@ -727,19 +702,12 @@ def calc_mtld(
     Computing the Measure of Textual Lexical Diversity (MTLD)
 
     Description:
-        A modification of MSTTR (McCarthy, 2005)
-        The text is divided into factors - stretches on which TTR drops to the
-        threshold 0.72 inclusive (TTR <= 0.72; in McCarthy and Jarvis a factor
-        closes when TTR "reaches" 0.720); in Kyle's lexical-diversity and TAALED
-        the comparison is strict, so on factors where TTR hits the threshold
-        exactly (18/25, 36/50) the values diverge
-        The value of the metric is the number of words divided by the number of factors
-        An incomplete factor at the end of the text counts partially, in proportion
-        to how close its TTR came to the threshold
-        The final value is the mean of two passes over the text, forward
-        and backward (McCarthy & Jarvis, 2010)
-        The minimum factor length comes from Kyle's lexical-diversity and is non-standard:
-        koRpus applies it only to MA-MTLD, LexicalRichness and textcomplexity do not apply it
+        A modification of MSTTR (McCarthy, 2005): the number of words divided by
+        the number of factors - stretches on which TTR drops to the threshold
+        inclusive (TTR <= threshold); an incomplete factor at the end of the text
+        counts partially, in proportion to how close its TTR came to the threshold
+        The value is the mean of a forward and a backward pass (McCarthy & Jarvis, 2010)
+        The minimum factor length is not part of the original algorithm, min_len=0 disables it
         If no factor completes and TTR never drops below 1, infinity is returned
 
     Arguments:
@@ -794,16 +762,10 @@ def _mtld_factor_lengths(
     Lengths of the first MTLD factors starting at every position of the text
 
     Description:
-        The number of lexemes on the stretch [start, pos] equals the number of
-        positions of the stretch whose previous occurrence of the word lies
-        before start, so one array of previous occurrences replaces a set of
-        lexemes per start. The starts are processed in blocks: for a block
-        a matrix "start × offset" of the window width is taken, factors that
-        did not close in the window continue in the next one. The threshold
-        is compared in integers: for every factor length the largest number
-        of lexemes with a TTR not above the threshold is found beforehand
-        by the same formula as in _count_mtld_factors, so the values coincide
-        with the direct enumeration
+        The number of lexemes on the stretch [start, pos] is the number of its
+        positions whose previous occurrence of the word lies before start; the
+        starts are processed in blocks over windows of MTLD_WINDOW_LEN offsets,
+        and the threshold is compared in integers through _max_types
     """
     n_words = len(text)
     if not n_words:
@@ -844,12 +806,10 @@ def calc_mamtld(
     Computing the Moving Average Measure of Textual Lexical Diversity (MA-MTLD)
 
     Description:
-        A moving-window modification of MTLD (koRpus MTLD-MA): a factor starts
-        at every position of the text, the value of the metric is the mean length
-        of the completed factors over two passes, forward and backward
-        A factor closes at a TTR not above the threshold inclusive, as in calc_mtld
-        Factors not completed by the end of the text are ignored; if no factor
-        completes, nan is returned
+        A moving-window modification of MTLD (MTLD-MA of koRpus): a factor starts
+        at every position of the text, the value is the mean length of the completed
+        factors over a forward and a backward pass; factors close as in calc_mtld,
+        those not completed by the end of the text are ignored
 
     Arguments:
         text (list[str]): List of words
@@ -876,13 +836,10 @@ def calc_mtldw(
     Computing MTLD with a moving window and text wrap (MTLD-W)
 
     Description:
-        A modification of MA-MTLD (lexical-diversity mtld_ma_wrap, TAALED): a factor
-        starts at every position of the text, and factors not completed by the end
-        of the text continue from its beginning, so all factors get equal weight
-        A factor closes at a TTR not above the threshold inclusive, as in calc_mtld,
-        in lexical-diversity the comparison is strict
+        A modification of MA-MTLD (mtld_ma_wrap of lexical-diversity): factors not
+        completed by the end of the text continue from its beginning, so all factors
+        get equal weight; factors close as in calc_mtld
         Unstable on texts shorter than 100 words
-        If TTR does not drop to the threshold even over the whole text, nan is returned
 
     Arguments:
         text (list[str]): List of words
@@ -906,12 +863,9 @@ def calc_hdd(text: Sequence[str], sample_size: int = HDD_SAMPLE_SIZE) -> float:
     Computing the Hypergeometric Distribution D (HD-D)
 
     Description:
-        The most reliable implementation of the VocD algorithm (McCarthy & Jarvis, 2010)
-        The algorithm rests on random sampling of segments of 32 to 50 words from
-        the text, computing their TTR and averaging the values
-        The default sample size is 42 words, the literature uses 35 to 50
-        The metric is undefined for texts shorter than 50 words and for texts
-        shorter than the sample size
+        An implementation of the VocD algorithm (McCarthy & Jarvis, 2010): the
+        expected TTR of a random sample of sample_size words of the text, computed
+        from the hypergeometric distribution
 
     Arguments:
         text (list[str]): List of words
@@ -929,8 +883,7 @@ def calc_hdd(text: Sequence[str], sample_size: int = HDD_SAMPLE_SIZE) -> float:
     if n_words < 50 or n_words < sample_size:
         return nan
     frequencies = np.fromiter(Counter(text).values(), dtype=np.int64)
-    # the probability of not meeting a lexeme in the sample through the logarithms
-    # of the binomial coefficients, so that C(N, k) does not overflow on long texts
+    # probability that a lexeme is absent from the sample, in logarithms: C(N, k) overflows
     absent = np.exp(
         gammaln(n_words - frequencies + 1)
         - gammaln(np.maximum(n_words - frequencies - sample_size, 0) + 1)
@@ -946,15 +899,8 @@ def calc_simpson_index(text: Sequence[str]) -> float:
     Computing Simpson's index (D)
 
     Description:
-        The index is widely used in biology to describe the probability that two
-        individuals randomly drawn from an indefinitely large community belong
-        to different species
-        With certain assumptions it also describes the lexical diversity of a text
-        Computed in the classic form without replacement (D = Σ n·(n-1) / N·(N-1)),
-        as in quanteda, LexicalRichness and zipfR
-        The lower the value, the richer the vocabulary of the text
-        The reciprocal (1/D) and the Gini-Simpson index (1-D) are separate functions
-        For texts shorter than two words the index is undefined, as in zipfR and quanteda
+        D = Σ n·(n-1) / N·(N-1), without replacement. The lower the value, the
+        richer the vocabulary; undefined for texts shorter than two words
 
     References:
         https://en.wikipedia.org/wiki/Diversity_index#Simpson_index
@@ -977,9 +923,8 @@ def calc_inverse_simpson_index(text: Sequence[str]) -> float:
     Computing the inverse Simpson's index (1/D)
 
     Description:
-        The reciprocal of Simpson's index, the Hill number of order two
-        The higher the value, the richer the vocabulary of the text
-        If all words of the text are unique, Simpson's index is 0 and the inverse index is infinity
+        The Hill number of order two; the higher the value, the richer the vocabulary
+        If all words of the text are unique, the index is infinity
 
     References:
         https://en.wikipedia.org/wiki/Diversity_index#Inverse_Simpson_index
@@ -1018,14 +963,9 @@ def calc_hapax_index(text: Sequence[str]) -> float:
     Computing the hapax index (Honoré's R)
 
     Description:
-        A hapax is a word that occurs in the text only once
-        The hapaxes of an author are often used to attribute to that author
-        another work in which such words occur
-        The metric coincides with Honoré's measure (1979): R = 100 · ln N / (1 - V1/V),
-        where N is the number of words, V the number of lexemes, V1 the number of hapaxes
-        The natural logarithm is used, as in zipfR and textcomplexity
-        If all words of the text are hapaxes, the index is infinity
-        For texts shorter than two words the index is undefined, as in zipfR
+        Honoré's measure (1979): R = 100 · ln N / (1 - V1/V), where N is the number
+        of words, V the number of lexemes, V1 the number of hapaxes (words that occur
+        once); infinity if all words of the text are hapaxes
         Available under the alias calc_honore_r
 
     References:
@@ -1056,10 +996,8 @@ def calc_yule_k(text: Sequence[str]) -> float:
 
     Description:
         K = 10⁴ · (Σ i²·V_i - N) / N², where V_i is the number of lexemes with frequency i (Yule, 1944)
-        One of the few measures theoretically independent of text length
-        (Tweedie & Baayen, 1998), in practice it converges as the text grows
-        The lower the value, the richer the vocabulary of the text
-        Proportional to Simpson's index: K ≈ 10⁴ · D
+        Theoretically independent of text length (Tweedie & Baayen, 1998)
+        The lower the value, the richer the vocabulary; K ≈ 10⁴ · D (Simpson's index)
 
     References:
         https://link.springer.com/content/pdf/10.1007/s10579-005-8622-8.pdf
@@ -1189,8 +1127,7 @@ def calc_dugast_k(text: Sequence[str], base: float = DIVERSITY_LOG_BASE) -> floa
 
     Description:
         k = log V / log log N, where N is the number of words, V the number of lexemes (Dugast, 1979)
-        The value depends on the logarithm base: 10 by default, as for the Summer,
-        Maas and Dugast's U metrics; textcomplexity uses the natural one
+        The value depends on the logarithm base, 10 by default
         Undefined when log N is not above 1, that is, for texts no longer than the logarithm base
 
     Arguments:
@@ -1254,7 +1191,6 @@ def calc_alpha2(text: Sequence[str]) -> float:
     Description:
         α₂ = 1 - 2·V2 / V1, where V1 is the number of hapaxes, V2 the number of dis legomena
         An estimate of the Zipf-Mandelbrot parameter from the lower part of the frequency spectrum (Evert, 2004)
-        Undefined if the text has no hapaxes
 
     Arguments:
         text (list[str]): List of words
@@ -1276,8 +1212,6 @@ def calc_entropy(text: Sequence[str]) -> float:
     Description:
         H = -Σ p_k · log₂ p_k, where p_k is the relative frequency of a lexeme
         Measured in bits, the higher the value, the richer the vocabulary of the text
-        The Hill number of order one is 2^H (perplexity), of order zero V,
-        of order two the inverse Simpson's index
 
     References:
         https://en.wikipedia.org/wiki/Diversity_index#Shannon_index
@@ -1291,7 +1225,7 @@ def calc_entropy(text: Sequence[str]) -> float:
     n_words = len(text)
     if not n_words:
         return nan
-    return -sum(freq / n_words * log2(freq / n_words) for freq in Counter(text).values())
+    return -sum(freq / n_words * log2(freq / n_words) for freq in Counter(text).values()) or 0.0
 
 
 def calc_evenness(text: Sequence[str]) -> float:
@@ -1301,7 +1235,6 @@ def calc_evenness(text: Sequence[str]) -> float:
     Description:
         H / log₂ V - the ratio of the Shannon entropy to its maximum for the given
         number of lexemes (Pielou's evenness), lies between 0 and 1
-        Undefined for texts of a single lexeme
 
     Arguments:
         text (list[str]): List of words
@@ -1338,9 +1271,7 @@ def calc_zipf_alpha(text: Sequence[str]) -> float:
 
     Description:
         The exponent α of the law f(r) ∝ r^(-α), where r is the frequency rank of a lexeme
-        Estimated by linear regression of log frequency on log rank
-        The rank-based least squares estimate is biased, for an accurate estimate
-        maximum likelihood is used (for instance, the powerlaw library)
+        Estimated by linear regression of log frequency on log rank, which is biased
         For natural texts α is close to 1
 
     References:
@@ -1383,10 +1314,9 @@ def fit_zipf_mandelbrot(text: Sequence[str] | Mapping[str, int]) -> ZipfMandelbr
 
     Description:
         The law f(r) = C / (r + q)^s, where r is the frequency rank of a lexeme; with q = 0
-        it reduces to Zipf's law with exponent s. The parameters are fitted by least
-        squares in logarithmic coordinates (scipy.optimize.least_squares) with the
-        initial guess C = f(1), q = 1, s = 1 and the constraints q ≥ 0, s ≥ 0; the shift q
-        describes the flattening of the curve on the most frequent words
+        it reduces to Zipf's law with exponent s, the shift q describes the flattening
+        of the curve on the most frequent words
+        Fitted by least squares in logarithmic coordinates with q ≥ 0 and s ≥ 0
 
     References:
         https://en.wikipedia.org/wiki/Zipf–Mandelbrot_law
@@ -1414,8 +1344,7 @@ def fit_zipf_mandelbrot(text: Sequence[str] | Mapping[str, int]) -> ZipfMandelbr
         log_c, q, s = (float(value) for value in params)
         return np.asarray(model(ranks, log_c, q, s) - log_frequencies)
 
-    # least_squares rather than curve_fit: the same trust-region fit with bounds,
-    # without the covariance estimate and its warnings
+    # not curve_fit: it warns when the covariance cannot be estimated
     try:
         result = least_squares(
             residuals,
@@ -1453,9 +1382,8 @@ def fit_heaps(text: Sequence[str]) -> HeapsFit:
 
     Description:
         The law V(N) = K · N^β, where V is the vocabulary size after N words of the text;
-        the parameters are fitted by linear regression of the log vocabulary size
-        on the log text length along the growth curve, as in calc_heaps_beta, which
-        gives only the exponent β. Depends on the word order
+        fitted by linear regression of log V on log N along the vocabulary growth curve
+        Depends on the word order
 
     References:
         https://en.wikipedia.org/wiki/Heaps'_law
@@ -1475,7 +1403,7 @@ def fit_heaps(text: Sequence[str]) -> HeapsFit:
     residual = float(((growth - (intercept + slope * lengths)) ** 2).sum())
     total = float(((growth - growth.mean()) ** 2).sum())
     r2 = 1 - residual / total if total else nan
-    return HeapsFit(float(np.exp(intercept)), float(slope), r2)
+    return HeapsFit(float(np.exp(intercept)), float(slope) or 0.0, r2)
 
 
 def vocabulary_growth(text: Sequence[str]) -> list[int]:
@@ -1501,15 +1429,9 @@ def calc_heaps_beta(text: Sequence[str]) -> float:
     Computing the exponent of Heaps' law
 
     Description:
-        The exponent β of the law V(N) = K · N^β, which describes the growth
-        of the vocabulary V with the text length N
-        Estimated by linear regression of the log vocabulary size on the log text
-        length along the vocabulary growth curve; depends on the word order
-        and needs several hundred words or more
-        On corpora of millions of words β lies within 0.4-0.6; regression over
-        the whole growth curve of a single text gives more (0.6-0.9), since
-        at the beginning of a text almost every word is new, so the values
-        are comparable only between texts of similar length
+        The exponent β of the law V(N) = K · N^β, estimated as in fit_heaps
+        Needs several hundred words or more; a single text gives 0.6-0.9 (corpora of
+        millions of words 0.4-0.6), so compare only texts of similar length
 
     References:
         https://en.wikipedia.org/wiki/Heaps'_law
@@ -1537,13 +1459,9 @@ def calc_windowed(
         The metric is computed over consecutive windows of the text of equal length,
         the values of the windows give the mean, the sample standard deviation
         and the confidence interval of the mean by Student's distribution
-        The standard way to compare texts of different lengths (textcomplexity bootstrap,
-        the characteristic curves of koRpus); the STTR of Kubát and Milička is
-        a windowed TTR with a 1000-word window and a 95% confidence interval
-        For texts shorter than the window the metric is computed over the whole text as a single window
-        Windows in which the metric is undefined (nan) are ignored
-        If the metric is infinite in at least one window, the mean is infinite
-        and the standard deviation and the confidence interval are undefined
+        A text shorter than the window is a single window
+        Windows with an undefined metric (nan) are ignored; if the metric is infinite
+        in any window, the mean is infinite and the deviation and the interval are nan
 
     Arguments:
         text (list[str]): List of words
@@ -1566,7 +1484,6 @@ def calc_windowed(
         raise ParameterError("The window step must be greater than 0")
     if not 0 < confidence < 1:
         raise ParameterError("The confidence level must lie in the interval (0, 1)")
-    # one window is sliced at a time: a text shorter than the window is its only window
     starts = range(0, max(len(text) - window_len, 0) + 1, step)
     values = np.array([func(text[start : start + window_len]) for start in starts], dtype=float)
     values = values[~np.isnan(values)]

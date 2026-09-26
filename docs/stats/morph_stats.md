@@ -7,9 +7,9 @@
 
 A module for computing the morphological statistics of a text. The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library.
 
-Parts of speech and grammatical features are given in the terms of [Universal Dependencies](https://universaldependencies.org/u/feat/), as the Spanish models of spaCy annotate them. A text is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, without the entity recognizer, which nothing here reads; a `Doc` is taken as it is and must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer` - a `Doc` of `spacy.blank("es")` or of a pipeline with the `lemmatizer` excluded is not a valid source and raises `SourceError`. Words are taken from the tokens, punctuation marks and symbols are dropped.
+Parts of speech and grammatical features are given in the terms of [Universal Dependencies](https://universaldependencies.org/u/feat/). A text is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`; a `Doc` must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer` - a `Doc` of `spacy.blank("es")` or of a pipeline with the `lemmatizer` excluded raises `SourceError`. Words are taken from the tokens, punctuation marks and symbols are dropped.
 
-A text longer than the `max_length` of the pipeline - a million characters by default, a long novel - raises `SourceError` instead of reaching spaCy: split it into parts, or raise `max_length` on a pipeline of your own and pass it in `nlp`.
+A text longer than the `max_length` of the pipeline - a million characters by default - raises `SourceError`: split it into parts, or raise `max_length` on a pipeline of your own and pass it in `nlp`.
 
 !!! note "Note"
     The statistics are computed when the `MorphStats` object is initialized.
@@ -48,13 +48,11 @@ A text longer than the `max_length` of the pipeline - a million characters by de
 Every attribute has the length of `words`, and a word that the model gives the feature no value for holds `None`. The names of the attributes are the names of the statistics accepted by the methods; `tags` and `lemmas` are not statistics.
 
 !!! note "Note"
-    A feature with several values keeps the form of CoNLL-U: the interrogative and relative `qué`, `quién`, `cuál`, which the models do not disambiguate, has `pron_type` equal to `Int,Rel`, and `usted` has `case` equal to `Acc,Nom`. `print_stats` describes such a value by the descriptions of its parts - "Interrogative or relative", "Accusative or nominative".
+    A feature with several values keeps the form of CoNLL-U: `qué`, `quién`, `cuál` have `pron_type` equal to `Int,Rel`, and `usted` has `case` equal to `Acc,Nom`. `print_stats` describes such a value by the descriptions of its parts - "Interrogative or relative", "Accusative or nominative".
 
 ## Features { #features }
 
-The statistics count the fifteen features of the table below; the value `Unknown` in the printed tables and `None` in the attributes mean that the model gave the word no value of the feature.
-
-They are a subset: the Spanish models annotate 23 features, and the ones left out are either marginal (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`) or live on punctuation (`PunctSide`, `PunctType`), which this module does not treat as words. Whatever the model annotates stays in `tags`, counted or not.
+The statistics count the fifteen features of the table below; the value `Unknown` in the printed tables and `None` in the attributes mean that the model gave the word no value of the feature. The other features the models annotate (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`, `PunctSide`, `PunctType`) are not counted but stay in `tags`.
 
 | Statistic | Feature | Values |
 | :-------: | :-----: | :----: |
@@ -76,9 +74,7 @@ They are a subset: the Spanish models annotate 23 features, and the ones left ou
 | `verb_form` | Verb form | Fin, Inf, Part, Ger |
 
 !!! warning "Warning"
-    The statistics are as good as the annotation of the model. `es_core_news_sm` mis-analyses verbs with enclitic pronouns: `dámelo`, `decírselo`, `vámonos`, `cuéntamelo` come out as nouns or proper nouns and get invented lemmas (`dámelir`, `siéntatir`). The imperative suffers most of all: the models carry the value `Mood=Imp` in their label set - 21 of the 433 labels of the morphologizer - but in practice they tag the imperatives of `tú` as indicative, and `Habla más despacio`, `Abre la ventana` and `Ven aquí` all get `Mood=Ind`. Over 24 imperative sentences of `tú`, `vosotros` and `usted`, with and without enclitics, `es_core_news_sm` found the imperative twice, `es_core_news_md` three times and `es_core_news_lg` four, so `p_imperative` under-reports and `p_indicative` absorbs the orders.
-
-    Passing a bigger model in `nlp` does not change that. Measured against `es_core_news_sm`, both `es_core_news_md` (54 MB) and `es_core_news_lg` (631 MB) agree with it on every part of speech of modern prose and run at the same speed - the vectors they add weigh on memory, not on the tagger. What they bring is the rare and the old vocabulary: in the opening of the *Quijote* they read `rocín`, `salpicón`, `lentejas` and `carnero` as nouns, where the small model sees verbs and adjectives. On the enclitics they trade one improvement for one regression, `Dime` becoming a verb while `Cantándole` stops being a gerund.
+    The statistics are as good as the annotation of the model. `es_core_news_sm` mis-analyses verbs with enclitic pronouns (`dámelo`, `cuéntamelo` come out as nouns with invented lemmas) and tags the imperatives of `tú` as indicative (`Abre la ventana` gets `Mood=Ind`), so `p_imperative` under-reports and `p_indicative` absorbs the orders. A bigger model passed in `nlp` does not change that; it only reads rare and old vocabulary better.
 
 ## Methods
 
@@ -133,14 +129,14 @@ Returns a dictionary with the markers of Spanish computed from the features. Eve
 | `p_ser` | `ser` among the copulas `ser` and `estar` |
 | `p_mente_adverbs` | Adverbs in `-mente` among the adverbs |
 
-The first four markers share the base of the finite forms and sum to one wherever the model leaves no finite form without a mood - five of its 433 labels carry `VerbForm=Fin` and no `Mood`, and each such form is missing from all four shares. The next three markers share the base of all the verb forms, counted on verbs and auxiliaries, so that the participles that the model annotates as adjectives (`la casa pintada`) stay out of the base, while the ones of the compound tenses and the passive (`he leído`, `fue escrito`) stay in.
+The first four markers share the base of the finite forms and sum to one unless the model leaves a finite form without a mood. The next three share the base of all the verb forms of verbs and auxiliaries: a participle that the model annotates as an adjective (`la casa pintada`) is out of the base, the ones of the compound tenses and the passive (`he leído`, `fue escrito`) are in.
 
-The base of `p_ser` is the copular uses alone, read from the dependency of the token and from what it depends on: `fue escrito` and `está cantando` are the auxiliaries of the passive and of the progressive, and so is the `es` of `es financiado`, which the models tag as a copula in the present - none of the three is a choice between the two copulas, while `es alta`, `está cansada` and `lo importante es que vengas` are. The parse is what tells them apart, so for a `Doc` that carries none the marker is `nan`.
+The base of `p_ser` is the copular uses alone, read from the parse: the auxiliaries of the passive and of the progressive (`fue escrito`, `es financiado`, `está cantando`) are left out, while `es alta`, `está cansada` and `lo importante es que vengas` count. For a `Doc` without a parse the marker is `nan`.
 
 A marker whose base is empty - a text without verbs, without a copula, without adverbs - is `nan`.
 
 !!! note "Note"
-    The subjunctive, the choice between `ser` and `estar` and the adverbs in `-mente` are the traits of Spanish that the readability formulas do not see: the subjunctive marks hypothesis and subordination, `estar` a state against the property of `ser`, and the adverbs in `-mente` a formal, written register.
+    The subjunctive marks hypothesis and subordination, `estar` a state against the property of `ser`, and the adverbs in `-mente` a formal, written register.
 
 !!! example "Example"
 

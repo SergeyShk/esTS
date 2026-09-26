@@ -5,7 +5,7 @@
 !!! info ""
     **ests.phon_stats.transcribe()**
 
-Transcribes a word into its sounds. The word is split into syllables ([`syllabify`](../syllables.md)) and every syllable is read by the rules of the Spanish orthography; the characters that are no Spanish letters (digits, hyphens) are left out, and the results are cached by word form.
+Transcribes a word into its sounds. The word is split into syllables ([`syllabify`](../syllables.md)) and every syllable is read by the rules of the Spanish orthography; the characters that are no Spanish letters (digits, hyphens) are left out.
 
 | Spelling | Sound | Example |
 | :------- | :---: | :------ |
@@ -45,22 +45,22 @@ The pronunciation is the one of the standard of Spain, with yeísmo and distinci
 !!! info ""
     **ests.phon_stats.cv_pattern()**
 
-The CV pattern of a word or a syllable: the vowels are written V and the consonants C, over the sounds of the transcription - `queso` is CVCV, `hora` VCV, `examen` VCCVCVC.
+The CV pattern of a word or a syllable: the vowels are written V and the consonants C, over the sounds of the transcription - `queso` is CVCV, `hora` VCV, `examen` VCCVCVC. A syllable is read as a word of its own, so its initial `x` is s, as at the start of a word: `xi` is CV, while the syllable `xi` of `México` counts as CCV in `PhonStats`.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
-| `sounds` | tuple[str] | `-` | Sounds of a word or a syllable |
+| `word` | str | `-` | Word or syllable |
 
 ## Open syllable { #is_open_syllable }
 
 !!! info ""
     **ests.phon_stats.is_open_syllable()**
 
-Checks whether a syllable is open: an open syllable ends in a vowel sound - `ca`, `que`, `hoy` (the final `y` is the vowel i); `car` and `pan` are closed.
+Checks whether a syllable is open: an open syllable ends in a vowel sound - `ca`, `que`, `hoy` (the final `y` is the vowel i); `car` and `pan` are closed. The syllable is read as a word of its own.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
-| `syllable` | tuple[str] | `-` | Sounds of the syllable |
+| `syllable` | str | `-` | Syllable |
 
 ## Consonant clusters { #calc_consonant_clusters }
 

@@ -9,9 +9,9 @@ A module for computing basic text statistics. The data source can be either a te
 
 The module allows using pre-built [`SentsExtractor`](../extractors/sentences.md) and [`WordsExtractor`](../extractors/words.md) objects for the sentence and word tokenization needed before computing the statistics. Syllables are counted by [`count_syllables`](../syllables.md#count_syllables), letters by `str.isalpha`, so digits, hyphens and marks inside a word are not letters, while the ordinal indicators `º` and `ª` are (`3.º` is a one-letter word).
 
-A sentence of punctuation alone (`¿?`, a line of dots between two paragraphs) holds no word and is not counted: the formulas of readability divide by the number of sentences.
+A sentence of punctuation alone (`¿?`, a line of dots between two paragraphs) holds no word and is not counted.
 
-For a `Doc` object words are taken from the tokens (punctuation marks and symbols such as `€` or `%` are dropped), sentences - from the annotation; without sentence boundaries (`spacy.blank`, a pipeline without `parser` and `senter`) sentences are extracted from the text by `SentsExtractor`. An extractor passed explicitly is always used, on the text of the `Doc`, so that stop word filtering or a custom tokenizer works the same for both kinds of source.
+For a `Doc` object words are taken from the tokens (punctuation marks and symbols such as `€` or `%` are dropped), sentences - from the annotation; without sentence boundaries (`spacy.blank`, a pipeline without `parser` and `senter`) sentences are extracted from the text by `SentsExtractor`. An extractor passed explicitly is always used, on the text of the `Doc`.
 
 !!! note "Note"
     The statistics are computed when the `BasicStats` object is initialized.
@@ -28,7 +28,7 @@ For a `Doc` object words are taken from the tokens (punctuation marks and symbol
 | `long_word_letter_factor` | int | `7` | Minimum number of letters in a long word |
 
 !!! note "Note"
-    The default thresholds follow the Spanish readability tradition: a complex word has three or more syllables, as in the Spanish adaptations of SMOG and Gunning fog, and a long word seven or more letters, as in LIX and RIX.
+    The default thresholds are those of the readability formulas: a complex word has three or more syllables, as in SMOG, and a long word seven or more letters, as in LIX and RIX.
 
 ## Attributes
 
@@ -86,7 +86,7 @@ Parameters:
 | `min_letters` | int | `-` | Minimum number of letters in a word |
 
 !!! note "Note"
-    These methods recount complex and long words with a threshold different from the one set at initialization, which is what readability formulas with their own thresholds need.
+    These methods recount complex and long words with a threshold different from the one set at initialization.
 
 ### get_stats
 
@@ -185,9 +185,9 @@ To illustrate the method, we reuse the code from the previous example:
 !!! info ""
     **ests.basic_stats.count_punctuations()**, **ests.basic_stats.punctuation_profile()**
 
-`count_punctuations(text)` counts punctuation marks by the types of `PUNCTUATION_TYPES` - the same distribution lives in the `c_punctuations` attribute: commas, periods, question and exclamation marks (the inverted `¿` and `¡` included, so `¿Qué?` carries two question marks), ellipses (the `…` character, three or more periods, or two periods after `?` and `!` - one mark whose periods do not count as periods: `¿Quién?..` is a question and an ellipsis), colons, semicolons, dashes (`—`, `–` and the horizontal bar `―`, as well as a run of two or more hyphens, a hyphen after whitespace, at the start of a line or after a closing mark, before a space or between a letter and an opening or a closing mark, the way the raya is typed in plain-text corpora: `--Hola --dijo Juan`, `-Hola -dijo Juan-.`, `- Se fueron - dijo`, `cuatro.-¿Cinco?`, `sí-¿y qué?`), hyphens inside words, before digits and at the end of a line inside a word (`teórico-práctico`, `1990-1995`, `-5`, `pala-` at a line break), guillemets `«»`, straight and curly quotation marks `"“”‘’` of the three levels of the orthography, parentheses and the other marks: every remaining character of `PUNCTUATIONS` or of the Unicode categories P and S (`‹›`, `§`, `€`, `°`), the same set that `is_punctuation` removes from the words, so no mark is lost between the words and the types. `punctuation_profile(text, n_words=None)` turns them into frequencies per 1000 words and adds `inverted_share` - the share of inverted marks among all question and exclamation marks: `0.5` when every question and exclamation opens with `¿` or `¡` as the orthography requires, lower when the writer drops them, as in informal texts and messages.
+`count_punctuations(text)` counts punctuation marks by the types of `PUNCTUATION_TYPES` - the same distribution lives in the `c_punctuations` attribute: commas, periods, question and exclamation marks (the inverted `¿` and `¡` included, so `¿Qué?` carries two question marks), ellipses (the `…` character, three or more periods, or two periods after `?` and `!` - one mark whose periods do not count as periods: `¿Quién?..` is a question and an ellipsis), colons, semicolons, dashes (`—`, `–` and the horizontal bar `―`, as well as a run of two or more hyphens, a hyphen after whitespace, at the start of a line or after a closing mark, before a space or between a letter and an opening or a closing mark, as the raya is typed in plain text: `--Hola --dijo Juan`, `- Se fueron - dijo`), hyphens inside words, before digits and at the end of a line inside a word (`teórico-práctico`, `-5`), guillemets `«»`, straight and curly quotation marks `"“”‘’` of the three levels of the orthography, parentheses and the other marks: every remaining character of `PUNCTUATIONS` or of the Unicode categories P and S (`‹›`, `§`, `€`, `°`), the same set that `is_punctuation` removes from the words. `punctuation_profile(text, n_words=None)` turns them into frequencies per 1000 words and adds `inverted_share` - the share of inverted marks among all question and exclamation marks: `0.5` when every question and exclamation opens with `¿` or `¡` as the orthography requires, lower when the writer drops them.
 
-The profile is an editorial and stylometric feature. It depends on text formatting - typographic quotation marks and dashes, the inverted marks - and is easy to fake, so it is best read separately from linguistic features.
+The profile depends on text formatting (typographic quotation marks and dashes, the inverted marks), so it is best read separately from linguistic features.
 
 !!! example "Example"
 

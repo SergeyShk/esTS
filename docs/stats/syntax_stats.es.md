@@ -5,9 +5,9 @@
 
 ## Descripción
 
-Módulo para calcular las estadísticas sintácticas de un texto sobre el árbol de dependencias de [Universal Dependencies](https://universaldependencies.org/u/dep/). La fuente de datos puede ser un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy), pero tiene que estar analizada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, y un `Doc` debe llevar las dependencias, que vienen de un `parser`, y los lemas, que vienen de un `lemmatizer` y son lo que distingue una pasiva de un tiempo compuesto y un verbo soporte de cualquier otro: un `Doc` de `spacy.blank("es")`, de un pipeline sin analizador o de uno con el `lemmatizer` excluido no es una fuente válida y levanta `SourceError`.
+Módulo para calcular las estadísticas sintácticas de un texto sobre el árbol de dependencias de [Universal Dependencies](https://universaldependencies.org/u/dep/). La fuente de datos puede ser un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy), pero tiene que estar analizada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, y un `Doc` debe llevar las dependencias, que vienen de un `parser`, y los lemas, que vienen de un `lemmatizer`: un `Doc` de `spacy.blank("es")`, de un pipeline sin analizador o de uno con el `lemmatizer` excluido levanta `SourceError`.
 
-Los signos de puntuación, los símbolos (`%`, `€`, `+`) y los espacios no son nodos del árbol: lo son las palabras, las mismas que cuenta cualquier otra clase de la biblioteca, y las distancias se cuentan en posiciones de palabras. Las medidas de una oración - la dependencia más larga, la profundidad del árbol, el número de hojas y de subárboles, los nodos por hoja - se promedian sobre las oraciones, las construcciones se dan por oración, y la pasiva y los modificadores son proporciones sobre los verbos y sobre los sustantivos.
+Los signos de puntuación, los símbolos (`%`, `€`, `+`) y los espacios no son nodos del árbol, y las distancias se cuentan en posiciones de palabras. Las medidas de una sola oración - la dependencia más larga, la profundidad del árbol, los nodos por hoja - se promedian sobre las oraciones.
 
 Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto - levanta `SourceError`: divídalo en partes o suba `max_length` en un pipeline propio y páselo en `nlp`.
 
@@ -23,7 +23,7 @@ Un texto más largo que el `max_length` del pipeline - un millón de caracteres 
 
 ## Medidas de complejidad { #complexity }
 
-Las medidas del árbol siguen el trabajo de Ivanov, Solnyshkina y Solovyev sobre la complejidad sintáctica de un texto: la distancia de dependencia de Liu (2008) - la distancia entre una palabra y su núcleo en posiciones de palabras -, la profundidad del árbol, las hojas y los subárboles, la valencia de los verbos personales, las cadenas de coordinación, las cláusulas y los modificadores del sustantivo.
+Las medidas siguen el trabajo de Ivanov, Solnyshkina y Solovyev sobre la complejidad sintáctica de un texto; la distancia de dependencia es la de Liu (2008), la distancia entre una palabra y su núcleo en posiciones de palabras.
 
 | Atributo | Tipo | Descripción |
 | :------: | :--: | :---------: |
@@ -45,11 +45,11 @@ Las medidas del árbol siguen el trabajo de Ivanov, Solnyshkina y Solovyev sobre
 | `modifiers_per_noun` | float | Número medio de modificadores de un sustantivo |
 | `noun_verb_ratio` | float | Razón entre el número de sustantivos y el de formas verbales |
 
-Una cláusula la encabeza el núcleo de una oración o una palabra con la relación `ccomp`, `advcl`, `acl` o `csubj`; los modelos españoles no usan subtipos, así que una oración de relativo lleva el `acl` sin más. Los participios y los gerundios no encabezan una cláusula de esa clase - se cuentan aparte -, ni tampoco un infinitivo bajo `acl` (`el deseo de irse`). Un inciso (`parataxis`) y un predicado coordinado (`conj` del núcleo de una cláusula) cuentan solo cuando son un verbo o llevan sujeto propio.
+Una cláusula la encabeza el núcleo de una oración o una palabra con la relación `ccomp`, `advcl`, `acl` o `csubj`, incluida una oración de relativo. Los participios y los gerundios no encabezan una cláusula de esa clase - se cuentan aparte -, ni tampoco un infinitivo bajo `acl` (`el deseo de irse`). Un inciso (`parataxis`) y un predicado coordinado (`conj` del núcleo de una cláusula) cuentan solo cuando son un verbo o llevan sujeto propio.
 
 ## Construcciones del estilo administrativo { #constructions }
 
-Las construcciones son las que advierten las guías españolas de lenguaje claro: la pasiva, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos.
+Las construcciones son las que advierten las guías españolas de lenguaje claro.
 
 | Atributo | Tipo | Descripción |
 | :------: | :--: | :---------: |
@@ -68,17 +68,17 @@ Las construcciones son las que advierten las guías españolas de lenguaje claro
 | `split_predicates_per_sent` | float | Predicados escindidos por oración |
 
 *   Una **cadena de `de`** son dos o más complementos encajados introducidos por `de` o su contracción `del`: `el aumento de la eficiencia del uso de los recursos` es una cadena de longitud 3. Un complemento suelto (`el uso del agua`) no es una cadena.
-*   Una **cláusula de participio** es un participio con al menos un dependiente que no es el predicado de su cláusula: `la casa, construida por los obreros, se vendió` tiene una, `el autor ha escrito el libro` ninguna, porque el participio de un tiempo compuesto lleva auxiliar. Una **cláusula de gerundio** es lo mismo para un gerundio, dejando fuera las perífrasis: las que los modelos construyen con auxiliar (`está cantando`, `va aumentando`) y las que cuelgan de su verbo como `xcomp` o `advcl` (`sigue trabajando`, `lleva años estudiando`, `acabó reconociendo`).
-*   La **pasiva** es un participio con el auxiliar `ser` (`la casa fue construida`) o un verbo con el `se` de la pasiva (`se construyó la casa`). Los modelos españoles dan al auxiliar de la pasiva la relación `aux` sin más y a su sujeto el `nsubj` sin más, así que es el lema del auxiliar lo que distingue `fue construida` de `ha construido`; en presente leen a menudo el auxiliar como cópula (`el proyecto es financiado`), y cuentan las dos relaciones. Una pasiva es **sin agente** cuando ningún complemento suyo va introducido por `por`.
+*   Una **cláusula de participio** es un participio con al menos un dependiente que no es el predicado de su cláusula: `la casa, construida por los obreros, se vendió` tiene una, `el autor ha escrito el libro` ninguna, porque el participio de un tiempo compuesto lleva auxiliar. Una **cláusula de gerundio** es lo mismo para un gerundio, dejando fuera las perífrasis, tanto si los modelos las construyen con auxiliar (`está cantando`) como si las cuelgan de su verbo como `xcomp` o `advcl` (`sigue trabajando`, `acabó reconociendo`).
+*   La **pasiva** es un participio con el auxiliar `ser` (`la casa fue construida`, también cuando los modelos leen el auxiliar como cópula, `el proyecto es financiado`) o un verbo con el `se` de la pasiva (`se construyó la casa`). Una pasiva es **sin agente** cuando ningún complemento suyo va introducido por `por`.
 *   Un **predicado escindido** es un verbo soporte (`hacer`, `dar`, `tomar`, `tener`, `poner`, `llevar`, `prestar`, `efectuar`, `realizar`, `proceder`, `proporcionar`, `ejercer`) con una parte nominal derivada de un verbo (`revisión`, `decisión`, `uso`): `hacer una revisión` en lugar de `revisar`. Los sustantivos de las expresiones fijas - `cabo`, `manifiesto`, `parte`, `lugar`, `cuenta` - cuentan solo con el verbo con el que están fijados, de modo que `llevar a cabo` y `tomar parte` son predicados escindidos y `dar traslado a las partes` o `poner en primer lugar la seguridad` no lo son. Un complemento con preposición es la parte nominal solo en una expresión fija (`poner de manifiesto`) o con un verbo que la toma así (`proceder a la votación`); el agente de una pasiva nunca lo es. Los pares hallados están en el atributo `split_predicates`.
 *   Una **palabra de negación** lleva `Polarity=Neg`, que los modelos dan solo a `no`, o es una de `nunca`, `jamás`, `nada`, `nadie`, `ninguno` y `tampoco`; la conjunción `ni` de `ni... ni` no lo es. Cuenta cada una de esas palabras, así que la concordancia negativa del español, donde una negación se escribe dos veces (`no vino nadie`), da dos.
 
 !!! warning "Advertencia"
-    Las estadísticas valen lo que vale el análisis sintáctico. `es_core_news_sm` distingue mal los tres `se` del español: en las páginas españolas de este sitio marca 60 como `se` de pasiva, 51 como de verbo pronominal y solo 2 como impersonal, y lee `se fue dando un portazo` como una pasiva. Lea `se_passives_per_sent` e `impersonal_se_per_sent` juntas y no por separado. El agente de la pasiva es otro punto débil - los modelos no tienen la relación `obl:agent` y anotan `por los obreros` tanto como objeto como como oblicuo -, y por eso el agente se busca por su preposición y no por su relación.
+    Las estadísticas valen lo que vale el análisis sintáctico. `es_core_news_sm` distingue mal los tres `se` del español - rara vez marca un `se` impersonal y lee `se fue dando un portazo` como una pasiva -, así que lea `se_passives_per_sent` e `impersonal_se_per_sent` juntas y no por separado.
 
 ## Recuentos { #counts }
 
-Además de las estadísticas, el objeto guarda los recuentos con los que están hechas, útiles por sí mismos.
+Además de las estadísticas, el objeto guarda los recuentos con los que están hechas.
 
 | Atributo | Tipo | Descripción |
 | :------: | :--: | :---------: |

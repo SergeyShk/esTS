@@ -1,17 +1,15 @@
 # Components
 
-A set of components for [spaCy](https://github.com/explosion/spaCy) pipelines. Each one is a class with two methods: `__init__`, which registers an extension of `Doc` at initialization, and `__call__`, which takes a `Doc` object and returns it with the statistics attached. With them a text is annotated and measured in one pass, and the statistics travel with the document.
+A set of components for [spaCy](https://github.com/explosion/spaCy) pipelines. Each one is a class with two methods: `__init__`, which registers an extension of `Doc` at initialization, and `__call__`, which takes a `Doc` object and returns it with the statistics attached.
 
 !!! note "Note"
     Writing components of your own is described in the corresponding section of the [documentation of spaCy](https://spacy.io/usage/processing-pipelines#custom-components). The examples below use the model `es_core_news_sm`, which is installed apart: `python -m spacy download es_core_news_sm` (see [installation](installation.md)).
 
 ## Names { #names }
 
-The factories carry the prefix of the library - `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse` - because the registry of spaCy is one for the whole process: a plain `basic` would collide with the component of any other library registering that name, and spaCy answers a second registration with `ValueError [E004]`.
+The factories carry the prefix of the library: `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`. They are declared as entry points of `spacy_factories`, so a pipeline saved with these components (`nlp.to_disk(path)`, `spacy package`) loads with `spacy.load(path)` without importing the library.
 
-They are declared as entry points of `spacy_factories`, so a pipeline saved with these components - `nlp.to_disk(path)`, `spacy package`, a training config - loads with `spacy.load(path)` in a process that never imports the library.
-
-The name of the pipe is free and is what the extension is called, so the short form is one argument away:
+The name of the pipe is the name of the extension:
 
 ``` python
 nlp.add_pipe("ests_basic", name="basic", last=True)
@@ -19,12 +17,12 @@ doc = nlp("El gato duerme")
 doc._.basic.n_words
 ```
 
-Without `name` the pipe and the extension keep the name of the factory (`doc._.ests_basic`). The same component can be added twice under different names, which is how two presets or two sets of parameters live in one pipeline.
+Without `name` the pipe and the extension keep the name of the factory (`doc._.ests_basic`). The same component can be added twice under different names, for example with two presets.
 
 !!! warning "Serialization"
     A component keeps an object of statistics in `doc._.<name>`, and spaCy cannot serialize it: `Doc.to_bytes()`, `DocBin(store_user_data=True)` and `nlp.pipe(..., n_process>1)` fail with these components in the pipeline. To save a document, leave the user data out (`doc.to_bytes(exclude=["user_data"])`) or keep `doc._.<name>.get_stats()` on your own; for multiprocessing compute the statistics in the main process after `nlp.pipe`, without the components.
 
-Adding a component extends the tokenizer of its pipeline with the rules for the dashes of a dialogue glued to the words ([`add_dash_rules`](extractors/words.md)), which the string API has, so the words of a component are the words of the rest of the library: `sí--dijo` is two words and a dash, not one word. The rules only split such dashes off; a pipeline with a tokenizer of its own that is not the `Tokenizer` of spaCy is left as it is.
+Adding a component extends the tokenizer of its pipeline with the rules for the dashes of a dialogue glued to the words ([`add_dash_rules`](extractors/words.md)), as in the string API: `sí--dijo` is two words and a dash. A tokenizer that is not the `Tokenizer` of spaCy is left as it is.
 
 ## What each component needs { #requirements }
 
@@ -41,9 +39,9 @@ Adding a component extends the tokenizer of its pipeline with the rules for the 
 | `PhonStatsComponent` | `ests_phon` | [PhonStats](stats/phon_stats.md) | nothing |
 | `VerseStatsComponent` | `ests_verse` | [VerseStats](stats/verse_stats.md) | nothing; the line breaks of the text |
 
-A document with no words - an empty string, whitespace, punctuation alone - passes through every component untouched, its extension left at `None`, so that one such document in a corpus does not stop `nlp.pipe`. A missing annotation is another matter: that is an error of the pipeline and it is raised.
+A document with no words - an empty string, whitespace, punctuation alone - passes through every component untouched, its extension left at `None`.
 
-In the pipeline of `es_core_news_sm` the parts of speech come from the `morphologizer` (a `tagger` alone gives the tag of the corpus and not the part of speech of Universal Dependencies; with an `attribute_ruler` it does give it), the parse from the `parser` and the lemmas from the `lemmatizer`. A component whose annotation is missing raises `SourceError` when the document goes through it, `excluded` components included: without the `lemmatizer` every lemma is an empty string, which would make every noun of a text overlap with every other.
+In the pipeline of `es_core_news_sm` the parts of speech come from the `morphologizer` (or a `tagger` with an `attribute_ruler`; a `tagger` alone does not give them), the parse from the `parser` and the lemmas from the `lemmatizer`. A component whose annotation is missing, `excluded` components included, raises `SourceError` when the document goes through it.
 
 ## BasicStatsComponent
 
@@ -101,9 +99,9 @@ Parameters:
 | `preset` | str | `"general"` | Preset of the coefficients (`general`, `classic`) |
 | `basic` | str | `None` | Name of the extension of a component of basic statistics, whose object is used instead of computing them again |
 
-An unknown preset raises `ParameterError` when the component is added, not when a document goes through it.
+An unknown preset raises `ParameterError` when the component is added.
 
-The readability metrics are computed on the basic statistics, so a pipeline holding both components computes them twice unless `basic` names the extension of the first one - `nlp.add_pipe("ests_readability", config={"basic": "basic"})` after a component named `basic`. On the Spanish pages of this site that takes a document from 0.025 s to 0.015 s, and the saving grows with every further preset. A name that holds no basic statistics, or a component that runs after this one, raises `SourceError`.
+The readability metrics are computed on the basic statistics, so a pipeline holding both components computes them twice unless `basic` names the extension of the first one - `nlp.add_pipe("ests_readability", config={"basic": "basic"})` after a component named `basic`. A name that holds no basic statistics, or a component that runs after this one, raises `SourceError`.
 
 !!! example "Example"
 
@@ -183,7 +181,7 @@ A parameter out of its range raises `ParameterError` when the component is added
 !!! info ""
     **ests.components.MorphStatsComponent**
 
-The component of the morphological statistics of a text. The parts of speech and the features are read from the annotation of the model, so the pipeline needs a `morphologizer` (or a `tagger` with an `attribute_ruler`) and a `lemmatizer` before the component.
+The component of the morphological statistics of a text. The pipeline needs a `morphologizer` and a `lemmatizer` before the component.
 
 Parameters:
 
@@ -218,7 +216,7 @@ Parameters:
 !!! info ""
     **ests.components.SyntaxStatsComponent**
 
-The component of the syntactic statistics of a text. The statistics are computed on the dependency tree, so the pipeline needs a `parser` and a `lemmatizer` before the component.
+The component of the syntactic statistics of a text. The pipeline needs a `parser` and a `lemmatizer` before the component.
 
 Parameters:
 
@@ -253,7 +251,7 @@ Parameters:
 !!! info ""
     **ests.components.CohesionStatsComponent**
 
-The component of the cohesion statistics of a text. The features are read from the annotation of the model, so the pipeline needs a `morphologizer` (or a `tagger` with an `attribute_ruler`) and a `lemmatizer` before the component.
+The component of the cohesion statistics of a text. The pipeline needs a `morphologizer` and a `lemmatizer` before the component.
 
 Parameters:
 
@@ -288,7 +286,7 @@ Parameters:
 !!! info ""
     **ests.components.LexicalStatsComponent**
 
-The component of the lexical sophistication statistics of a text. The words are looked up by their parts of speech, so the pipeline needs a `morphologizer` (or a `tagger` with an `attribute_ruler`) before the component; the lemmas of the model are not used. The [frequency dictionary](datasets/freqdict.md) is created once for the component: the frequency bands and the lexical density are computed without it, the statistics by the dictionary need it downloaded. Numbers are no words here, so a document of numbers alone passes untouched as well.
+The component of the lexical sophistication statistics of a text. The pipeline needs a `morphologizer` before the component; the lemmas of the model are not used. The frequency bands and the lexical density are computed without the [frequency dictionary](datasets/freqdict.md), the statistics by the dictionary need it downloaded. Numbers are no words here, so a document of numbers alone passes untouched as well.
 
 Parameters:
 
@@ -324,7 +322,7 @@ Parameters:
 !!! info ""
     **ests.components.StyleStatsComponent**
 
-The component of the style metrics of a text. The SEO metrics and the markers of the officialese style read the words of the document; the verbal nouns read its parts of speech and lemmas, so the pipeline needs a `morphologizer` and a `lemmatizer` before the component for them.
+The component of the style metrics of a text. The verbal nouns need a `morphologizer` and a `lemmatizer` before the component; the other metrics read the words alone.
 
 Parameters:
 
@@ -361,7 +359,7 @@ Parameters:
 !!! info ""
     **ests.components.PhonStatsComponent**
 
-The component of the phonostatistics of a text. The statistics read the words of the document and their transcription, so the component needs no annotation of a model.
+The component of the phonostatistics of a text. It needs no annotation of a model.
 
 Parameters:
 
@@ -397,7 +395,7 @@ Parameters:
 !!! info ""
     **ests.components.VerseStatsComponent**
 
-The component of the verse statistics of a text. The statistics read the text of the document with its line breaks and blank lines, so the text of a poem goes to `nlp` as it is, the lines not joined; the component needs no annotation of a model. A document with no letter passes untouched, and a text with letters but no Spanish syllables gives empty statistics, as `VerseStats`.
+The component of the verse statistics of a text. The statistics read the line breaks and blank lines of the document, so pass the text of a poem to `nlp` with its lines not joined; the component needs no annotation of a model. A document with no letter passes untouched, and a text with letters but no Spanish syllables gives empty statistics.
 
 Parameters:
 
@@ -432,7 +430,7 @@ Parameters:
 
 ## Everything in one pipeline { #pipeline }
 
-The ten components can live side by side, and then one pass over a document gives every statistic of the library that a `Doc` can carry.
+The ten components can share one pipeline.
 
 !!! example "Example"
 

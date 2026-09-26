@@ -5,7 +5,7 @@
 
 ## Descripción
 
-La dispersión de una palabra es lo uniformemente que se reparte por las partes de un texto o de un corpus. La frecuencia no distingue una palabra que aparece una vez en cada capítulo de otra reunida en uno solo; las medidas de dispersión ([Gries 2008](https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf), [2020](https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf)) completan la frecuencia y sirven para elegir el vocabulario de diccionarios y de listas de palabras para estudiantes.
+La dispersión de una palabra es lo uniformemente que se reparte por las partes de un texto o de un corpus. La frecuencia no distingue una palabra que aparece una vez en cada capítulo de otra reunida en uno solo; las medidas de dispersión ([Gries 2008](https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf), [2020](https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf)) completan la frecuencia.
 
 El texto se divide en partes: `parts` es el número de partes de tamaño aproximadamente igual o los tamaños de las partes en orden (oraciones, párrafos, capítulos, documentos de un corpus), que suman el número de palabras. Para cada palabra se calculan sus frecuencias por parte y seis medidas; Gries recomienda DP como la principal.
 
@@ -24,7 +24,7 @@ Para $n$ partes de proporciones $s_i$ del texto, frecuencias de la palabra por p
 | S de Rosengren | `rosengren_s` | $\frac{(\sum \sqrt{s_i v_i})^2}{f}$ | 1 - en proporción, tiende a $1/n$ cuando se reúne en una de partes iguales; Rosengren (1971) |
 | Divergencia de Kullback-Leibler | `kl_divergence` | $\sum \frac{v_i}{f} \log_2 \frac{v_i / f}{s_i}$ | en bits; 0 - en proporción, crece cuando se reúne en partes pequeñas; Gries (2020) |
 
-Las medidas están disponibles como las funciones `calc_dp`, `calc_dp_norm`, `calc_juilland_d`, `calc_carroll_d2`, `calc_rosengren_s`, `calc_kl_divergence` con los argumentos `(frequencies, sizes)` - las frecuencias de la palabra por parte y los tamaños de las partes - del módulo `ests.corpus.dispersion` (`from ests.corpus.dispersion import calc_dp`); sus nombres están en `ests.constants.DISPERSION_STATS_DESC`. Para una palabra de frecuencia nula todas las medidas son `nan`. La función `dispersion` calcula las mismas medidas para todas las palabras a la vez sobre las celdas no nulas de la matriz palabra × parte, así que la memoria es lineal en el número de palabras y una división por oraciones cuesta poco.
+Las medidas están disponibles como las funciones `calc_dp`, `calc_dp_norm`, `calc_juilland_d`, `calc_carroll_d2`, `calc_rosengren_s`, `calc_kl_divergence` con los argumentos `(frequencies, sizes)` - las frecuencias de la palabra por parte y los tamaños de las partes - del módulo `ests.corpus.dispersion` (`from ests.corpus.dispersion import calc_dp`); sus nombres están en `ests.constants.DISPERSION_STATS_DESC`. Para una palabra de frecuencia nula todas las medidas son `nan`.
 
 ## Parámetros
 

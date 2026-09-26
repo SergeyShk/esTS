@@ -68,14 +68,13 @@ class SpanishLiterature(Dataset):
         150 works by 33 authors from Spain, Latin America and the Philippines,
         from the Golden Age to the 1920s, in four genres: prose, poems, drama
         and publicism. The texts are transcriptions of Project Gutenberg
-        without its licence and trademark, cut to the text of the author:
-        without the title pages, the notes of the transcribers, the tables of
-        contents, the introductions and notes of the editors and the
-        footnotes. Every work is in the public domain both in Spain (the
-        author died before 1946) and in the United States (published before
-        1931). Works in several volumes are joined in one text. The years are
-        those of the first publication. The archive is downloaded from the
-        repository of the library and verified against its SHA-256 checksum
+        without its licence and trademark, cut to the text of the author (no
+        title pages, notes, tables of contents, introductions or footnotes).
+        Every work is in the public domain both in Spain (the author died
+        before 1946) and in the United States (published before 1931). Works
+        in several volumes are joined in one text. The years are those of the
+        first publication. The archive is downloaded from the repository of
+        the library
 
     References:
         https://www.gutenberg.org
@@ -172,11 +171,9 @@ class SpanishLiterature(Dataset):
         Downloading the dataset from the network and extracting the files
 
         Description:
-            The archive is verified against its SHA-256 checksum; a corrupted
-            or replaced file (after a broken download, for example) is removed
-            and downloaded again in the same call. If the archive is there but
-            the list of works or the file of a work is missing (after an
-            interrupted extraction, for example), it is extracted again
+            The archive is verified against its SHA-256 checksum and downloaded
+            again once if it fails; missing files are extracted again from the
+            archive
 
         Arguments:
             force (bool): Download the dataset even if it is already downloaded
@@ -273,9 +270,8 @@ class SpanishLiterature(Dataset):
         Records that pass every filter
 
         Description:
-            The filters on the fields of the list of works go before the text
-            is read, so a work that fails them is not opened; the filters on
-            the length go after
+            The filters on the fields go before the text is read, the filters
+            on the length after
 
         Arguments:
             fields (Filters): Predicates on the fields of a record

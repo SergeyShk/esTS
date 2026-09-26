@@ -67,7 +67,7 @@ def test_fingerprinting_metric(texts):
 
 
 def test_fingerprinting_callable_metric(texts):
-    # Any callable object and not only a function: a partial, a method, a class
+    # Any callable, not only a function
     by_length = partial(lambda segment, scale: scale * len(segment), scale=0.1)
     values = [float(cells[0]) for cells in _cells(fingerprinting(texts, metric=by_length))]
     plt.close("all")
@@ -86,7 +86,7 @@ def test_fingerprinting_layout():
     ax = fingerprinting([words, words[:40]], segment_len=5, metric=metric, x_size=100, y_size=500)
     first, second = _cells(ax)
     assert first.shape == (10, 10) and second.shape == (8, 5)
-    # The empty cells and the undefined tails are masked, drawn in the grey of missing values
+    # The empty cells and the undefined tails are masked
     assert int(first.mask.sum()) == 8 + 1 and int(second.mask.sum()) == 3 + 1
     # The second block does not fit after the first and starts the next row
     corners = [mesh.get_coordinates()[0, 0] for mesh in ax.collections]
@@ -96,7 +96,7 @@ def test_fingerprinting_layout():
 
 
 def test_fingerprinting_fits():
-    # A block wider than a row wraps, and the area grows downwards: nothing is cut off
+    # A block wider than a row wraps, and the area grows downwards
     words = [f"palabra{index % 97}" for index in range(5000)]
     ax = fingerprinting([words, words], x_size=200, y_size=100)
     (x0, x1), (y0, y1) = ax.get_xlim(), ax.get_ylim()
@@ -111,8 +111,7 @@ def test_fingerprinting_fits():
 
 
 def test_fingerprinting_scale():
-    # Zero is a value on the scale and not a missing square; the colorbar is in the units
-    # of the measure, from its smallest to its greatest finite value
+    # Zero is a value and not a missing square; the colorbar spans the finite values
     texts = [["el", "gato", "come"], ["el", "el", "el"], ["el", "gato", "el"]]
     ax = fingerprinting(texts, metric=calc_simpson_index)
     values = [float(cells[0]) for cells in _cells(ax)]
@@ -142,7 +141,6 @@ def test_segment_values_tail():
 
 
 def test_fingerprinting_colorbar_height():
-    # The colorbar is as high as the box of the axes that the equal aspect shrinks
     ax = fingerprinting([["el", "gato", "come", "pan"] * 30] * 6, x_size=1000, y_size=330)
     ax.figure.canvas.draw()
     colorbar = ax.figure.axes[1]

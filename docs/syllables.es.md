@@ -5,9 +5,9 @@
 
 ## Descripción
 
-Módulo que divide una palabra española en sílabas y localiza su sílaba tónica a partir de la escritura. La ortografía española codifica ambas cosas: los límites silábicos se deducen de las vocales y de los grupos consonánticos, y el acento se deduce de la tilde o, en su ausencia, de la terminación de la palabra. No hace falta ningún diccionario ni modelo entrenado. Estas funciones son la base de las estadísticas básicas (recuento de sílabas), las fórmulas de legibilidad, la fonoestadística y la métrica.
+Módulo que divide una palabra española en sílabas y localiza su sílaba tónica a partir de la escritura, sin diccionario ni modelo entrenado. Estas funciones son la base de las estadísticas básicas, las fórmulas de legibilidad, la fonoestadística y la métrica.
 
-Las reglas siguen la *Ortografía de la lengua española* (RAE, 2010). Conviene conocer dos convenciones: dos vocales débiles forman siempre diptongo, como exigen las reglas ortográficas (`huir`, `cons-truir`, `je-sui-ta`, `guion` tienen una sílaba menos que en algunos silabeadores fonéticos), y `tl` se separa como en España (`at-las`).
+Las reglas siguen la *Ortografía de la lengua española* (RAE, 2010): dos vocales débiles forman siempre diptongo (`huir`, `je-sui-ta`, `guion`), y `tl` se separa como en España (`at-las`).
 
 ## Silabificación { #syllabify }
 
@@ -31,7 +31,7 @@ División de una palabra en sílabas. Cada sílaba se construye alrededor de un 
 | los demás pares de consonantes se separan | ac-to, is-la, at-las, rit-mo |
 | de tres o más consonantes, las dos últimas pasan a la sílaba siguiente cuando forman uno de esos grupos; si no, solo pasa la última | com-pra, cons-truir, ins-ti-tu-to, obs-tá-cu-lo, tungs-te-no |
 
-La palabra se normaliza a NFC (un acento descompuesto pasa a ser una sola letra con su base) y se pasa a minúsculas. Se divide en partes por cifras, guiones y otros caracteres que no son letras, cada parte se silabifica por separado (`te-ó-ri-co-prác-ti-co`), y una parte sin vocales (una abreviatura como `sh`) no produce sílabas. Las vocales con diacríticos extranjeros cuentan como vocales fuertes con tilde (`Björk`). La diéresis marca hiato: la `ü` del verso fuera de `gü` y `qü` y la `ï` (`sü-a-ve`, `rü-i-do`, `glo-rï-o-sa`, `Llu-ï-sa`), que dejan el acento a las reglas de la palabra, y la `ë` del francés (`Ci-tro-ën`), que lo lleva; los portugueses `ão` y `õe` son diptongos (`São`, `Ca-mões`).
+La palabra se normaliza a NFC y se pasa a minúsculas. Se divide en partes por cifras, guiones y otros caracteres que no son letras, cada parte se silabifica por separado (`te-ó-ri-co-prác-ti-co`), y una parte sin vocales (una abreviatura como `sh`) no produce sílabas. Las vocales con diacríticos extranjeros cuentan como vocales fuertes con tilde (`Björk`). La diéresis marca hiato: la `ü` del verso fuera de `gü` y `qü` y la `ï` (`sü-a-ve`, `glo-rï-o-sa`), que dejan el acento a las reglas de la palabra, y la `ë` del francés (`Ci-tro-ën`), que lo lleva; los portugueses `ão` y `õe` son diptongos (`São`, `Ca-mões`).
 
 Parámetros:
 
@@ -56,7 +56,7 @@ Parámetros:
 !!! info ""
     **ests.syllables.count_syllables()**
 
-El número de sílabas según `syllabify`, con caché por forma de palabra.
+El número de sílabas según `syllabify`.
 
 Parámetros:
 
@@ -87,7 +87,7 @@ El índice de la sílaba tónica, contado desde cero como en `syllabify`; `None`
 | cualquier otra palabra lleva el acento en la última sílaba | pa-**pel**, re-**loj**, ro-**bots**, U-ru-**guay** |
 | un monosílabo lleva el acento en su única sílaba | rey, y |
 
-Los pronombres enclíticos no necesitan tratamiento aparte: sus formas llevan la tilde según las mismas reglas (`dí-ga-me-lo`, `de-cír-se-lo`). En un adverbio en `-mente` y en un compuesto con guion el acento principal es el último de `word_stresses` (`fá-cil-men-te` - 2).
+Las formas con pronombres enclíticos llevan la tilde según las mismas reglas (`dí-ga-me-lo`). En un adverbio en `-mente` y en un compuesto con guion el acento principal es el último de `word_stresses` (`fá-cil-men-te` - 2).
 
 Parámetros:
 

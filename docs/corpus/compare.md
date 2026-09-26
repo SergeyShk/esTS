@@ -5,9 +5,9 @@
 
 ## Description
 
-Comparison of two corpora by every feature of a text at once: which statistics tell authors, genres, translations, human and generated texts apart, and by how much. For single words [`keyness`](keyness.md) does the same, for the distances between texts - [`delta`](stylometry.md#delta).
+Comparison of two corpora by every feature of a text at once: which statistics tell the corpora apart, and by how much. For single words [`keyness`](keyness.md) does the same, for the distances between texts - [`delta`](stylometry.md#delta).
 
-The texts of both corpora are split into windows of about the same size, so that the features do not depend on the length of a text. In `split_windows` the number of windows is the ratio of the number of words to the size of a window rounded half up, at least one, and the parts are equal: a long text gives windows within a few percent of the size, a text of one to two windows gives windows of 750 to 1499 words at a window of 1000, and a text shorter than `min_words` - half a window by default - gives none, so that short texts do not set windows of very different sizes against the others. A boundary goes before the opening marks of the first word of a window - dashes, quotes, brackets, the inverted `¿` and `¡` - so that no punctuation is lost, while a straight quote or a dash glued to the end of the previous word closes it and stays behind (`"cuatro"`, `—dijo Juan—`). The features are computed for every window (`text_features` or a function of one's own), and for every feature the two sets of values are compared. The result is a `DataFrame` feature × statistics sorted by descending absolute Cliff's delta.
+The texts of both corpora are split into windows of about the same size, so that the features do not depend on the length of a text. In `split_windows` the number of windows is the ratio of the number of words to the size of a window rounded half up, at least one, and the parts are equal: at a window of 1000 a text of one to two windows gives windows of 750 to 1499 words, and a text shorter than `min_words` - half a window by default - gives none. A boundary goes before the opening marks of the first word of a window - dashes, quotes, brackets, `¿` and `¡` - while a straight quote or a dash glued to the end of the previous word stays with it (`"cuatro"`, `—dijo Juan—`). The features are computed for every window (`text_features` or a function of one's own), and for every feature the two sets of values are compared. The result is a `DataFrame` feature × statistics sorted by descending absolute Cliff's delta.
 
 ## Features
 
@@ -22,13 +22,13 @@ The texts of both corpora are split into windows of about the same size, so that
 | `sents_` | mean length of a sentence in words, standard deviation, coefficient of variation, autocorrelation of neighbouring lengths (`sentence_rhythm`) - the rhythm of the text | [`SentsExtractor`](../extractors/sentences.md) |
 | `punct_` | frequencies of the punctuation marks by type per 1000 words and the share of the inverted marks | [`punctuation_profile`](../stats/basic_stats.md#punctuation) |
 
-Every feature is counted once. The reading time only follows the number of words in a window and is left out; the share of unique words repeats `diversity_ttr`, the words per sentence repeat `sents_mean`, and the markers of the moods repeat `morph_mood_*`, so they are left out as well.
+Left out are the reading time, which only follows the number of words in a window, and the features that repeat others: the share of unique words (`diversity_ttr`), the words per sentence (`sents_mean`) and the markers of the moods (`morph_mood_*`).
 
-The parts of speech and the features of a single value - polarity, polite, poss, reflex - are shares of all the words (`morph_polarity_Neg` is the share of the negations), the other features shares of the words that carry them (`morph_mood_Sub` is the subjunctive among the moods). A value that does not occur in a window gives 0, a feature absent from the window altogether (no verbs - no tense) gives `nan`. A value of several values, as the model writes `PronType=Int,Rel` of *que* and `Case=Acc,Nom` of *usted*, is shared equally among its parts, so the shares of a feature still sum to one.
+The parts of speech and the features of a single value - polarity, polite, poss, reflex - are shares of all the words (`morph_polarity_Neg` is the share of the negations), the other features shares of the words that carry them (`morph_mood_Sub` is the subjunctive among the moods). A value that does not occur in a window gives 0, a feature absent from the window altogether (no verbs - no tense) gives `nan`. A value of several values (`PronType=Int,Rel` of *que*) is shared equally among its parts, so the shares of a feature still sum to one.
 
-The morphology is parsed by the model [`es_core_news_sm`](../installation.md#model) without its parser, which takes most of the time: a window of 1000 words takes about 0.07 s. The parse of dependencies would add a third to that for a single marker, `morph_p_ser`, which reads the copulas from it; a pipeline passed in `nlp` runs whole but for the entity recognizer, so `functools.partial(text_features, nlp=get_nlp())` brings the parser and `morph_p_ser` back, and another model goes into the comparison the same way. A text longer than the `max_length` of the pipeline raises `SourceError`, so a novel is compared by windows and not whole.
+The morphology is parsed by the model [`es_core_news_sm`](../installation.md#model) without its parser, so the marker `morph_p_ser`, which reads the copulas from the dependencies, is left out; a pipeline passed in `nlp` runs whole but for the entity recognizer, so `functools.partial(text_features, nlp=get_nlp())` brings the parser and `morph_p_ser` back, and another model goes into the comparison the same way. A text longer than the `max_length` of the pipeline raises `SourceError`, so a novel is compared by windows and not whole.
 
-`corpus_features(texts, window, features)` returns the matrix of the features of the windows indexed by (number of the text, number of the window) - for classifiers of one's own - and `compare_features(table_a, table_b, labels, n_bootstrap, seed)` compares two such tables: `compare_corpora` is `corpus_features` for each corpus followed by `compare_features`. The split serves when the features are computed once for several corpora and pairs of them are to be compared, all the authors pairwise for instance.
+`corpus_features(texts, window, features)` returns the matrix of the features of the windows indexed by (number of the text, number of the window) - for classifiers of one's own - and `compare_features(table_a, table_b, labels, n_bootstrap, seed)` compares two such tables: `compare_corpora` is `corpus_features` for each corpus followed by `compare_features`, and the split lets the features of several corpora be computed once and compared in pairs.
 
 The shares of spaces, letters and punctuation marks (`basic_p_spaces`, `basic_p_letters`, `basic_p_punctuations`) count the characters as they are: indents, double and non-breaking spaces of the files reflect the typesetting of an edition and not the text. In a corpus from different sources collapse them beforehand, for instance with `re.sub(r"[^\S\n]+", " ", text)`.
 
@@ -44,14 +44,14 @@ For a feature with the values $x_1 \dots x_{n_A}$ in corpus A and $y_1 \dots y_{
 | `cliff_delta` | $\delta = P(x > y) - P(x < y)$ from −1 to 1; $\lvert\delta\rvert$ < 0.147 - a negligible effect, < 0.33 - small, < 0.474 - medium, large otherwise (Romano et al. 2006; `calc_cliff_delta`) |
 | `auc` | the feature as a classifier on its own: the share of the pairs of windows where the value in A is greater than in B, ties counted as half; $\delta = 2 \cdot AUC - 1$, 0.5 - the feature does not tell the corpora apart |
 | `u`, `p_value` | the Mann-Whitney U statistic and the two-sided p-value (`scipy.stats.mannwhitneyu`) |
-| `p_holm` | the p-value with Holm's correction for the number of features (`holm_correction`): a table of a hundred rows without a correction invites false discoveries |
+| `p_holm` | the p-value with Holm's correction for the number of features (`holm_correction`) |
 | `n_A`, `n_B` | number of windows with a defined value |
 | `n_texts_A`, `n_texts_B` | number of texts behind those windows |
 
 Cliff's delta and the AUC come from the same U statistic and agree with each other; Cohen's d is sensitive to outliers and to departures from normality, so it is best read next to the delta.
 
 !!! warning "Windows of one text are not independent"
-    The test and the effect sizes take every window for an independent observation, and the windows of one text are not: they share its plot, characters, narrator and edition. With few texts in a corpus the p-values are too small and reflect the texts chosen as much as the corpora - in the example below two novels of one author differ in 32 features by the same test. The bootstrap resamples whole texts instead, the level `text` of the index that `corpus_features` sets (a cluster bootstrap), so its interval accounts for the spread between the texts; it needs at least two texts on each side and is rough with only a few. A table of one's own without that level has every row taken for a text of its own.
+    The test and the effect sizes take every window for an independent observation, and the windows of one text are not. With few texts in a corpus the p-values are too small and reflect the texts chosen as much as the corpora - in the example below two novels of one author differ in 32 features by the same test. The bootstrap resamples whole texts instead, the level `text` of the index that `corpus_features` sets (a cluster bootstrap), so its interval accounts for the spread between the texts; it needs at least two texts on each side and is rough with only a few. A table of one's own without that level has every row taken for a text of its own.
 
 ## Parameters
 
@@ -68,7 +68,7 @@ Cliff's delta and the AUC come from the same U statistic and agree with each oth
 
 ## Usage example
 
-Galdós against Unamuno, three novels each from the [corpus of literature](../datasets/spanishliterature.md): *Marianela*, *Misericordia* and *Torquemada en la hoguera* against *Niebla*, *Abel Sánchez* and *La tía Tula* - 157 and 117 windows of 1000 words, under half a minute.
+Galdós against Unamuno, three novels each from the [corpus of literature](../datasets/spanishliterature.md): *Marianela*, *Misericordia* and *Torquemada en la hoguera* against *Niebla*, *Abel Sánchez* and *La tía Tula*.
 
 !!! example "Example"
 
@@ -142,9 +142,9 @@ Galdós against Unamuno, three novels each from the [corpus of literature](../da
     {'n_Galdós': 157, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós has the richer vocabulary: in 98.4% of the pairs of windows his has the larger share of distinct words (the AUC of `diversity_ttr` is 0.984). The measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Simpson's index and Yule's K, which weigh the frequent words, do far less (0.32, a small effect) and Herdan's Vm hardly at all (0.15): the difference lies mostly in the rare vocabulary and not in the repetition of the frequent words. His words and sentences are longer, and he uses nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue and in negations: two and a half times as many dashes per 1000 words, three times as many exclamation marks and twice as many question marks, and more negations among the words.
+Galdós has the richer vocabulary: the measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Yule's K, which weighs the frequent words, gives a small effect (0.32), so the difference lies mostly in the rare vocabulary. His words and sentences are longer, with nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue: two and a half times as many dashes per 1000 words, three times as many exclamation marks, and more negations.
 
-Of the 132 features, 94 have a corrected p-value below 0.01 and 63 show a large effect by Cliff's delta, but the test takes the 274 windows for independent, and they come from six novels: by the same test *Marianela* and *Misericordia*, two novels of Galdós, differ in 32 features. The interval of the difference of the medians resamples whole novels and is the safer guide - for the length of a sentence it spans 3.1 to 7.2 words, where the windows alone would give 3.8 to 6.3 - though three texts on a side are few for a bootstrap as well, and a comparison of authors wants as many texts as can be found.
+The p-values take the 274 windows of six novels for independent (see the warning above); the interval of the difference of the medians resamples whole novels and is the safer guide - for the length of a sentence it spans 3.1 to 7.2 words, where the windows alone would give 3.8 to 6.3.
 
 Features of one's own, for instance the syntactic ones, are passed as a function:
 

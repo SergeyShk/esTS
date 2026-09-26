@@ -7,7 +7,7 @@
 
 Cálculo de la facilidad de lectura de Flesch con coeficientes para el español. Cuanto mayor es el valor, más fácil es leer el texto; la escala va de 0 a 100.
 
-Los coeficientes por defecto son los de la *fórmula de perspicuidad* de Szigriszt-Pazos (1993), que Barrio-Cantalejo et al. (2008) validaron con textos para pacientes y dotaron de la escala INFLESZ:
+Los coeficientes por defecto son los de la *fórmula de perspicuidad* de Szigriszt-Pazos (1993), que se lee en la escala INFLESZ de Barrio-Cantalejo et al. (2008):
 
 | Valor | Nivel | Tipo de texto |
 | :---: | :---: | :------------ |
@@ -17,7 +17,7 @@ Los coeficientes por defecto son los de la *fórmula de perspicuidad* de Szigris
 | `40-55` | algo difícil | libros de texto de secundaria |
 | `0-40` | muy difícil | textos científicos y técnicos |
 
-Los coeficientes de Fernández Huerta (1959) están disponibles con el [preajuste](readability_stats.md#presets) `classic`. Él imprimió el último término como `1.02` por el número de frases por cada 100 palabras; Law (2011) mostró que eso invierte la fracción de la fórmula de Flesch en la que se basó la adaptación, así que se usa la longitud media de la oración, como en koRpus y textstat.
+Los coeficientes de Fernández Huerta (1959) están disponibles con el [preajuste](readability_stats.md#presets) `classic`, con la corrección de Law (2011): el último término toma la longitud media de la oración.
 
 Fórmula:
 
@@ -43,7 +43,7 @@ Fuentes: Szigriszt Pazos, F. *Sistemas predictivos de legibilidad del mensaje es
 !!! info ""
     **ests.readability_stats.calc_gutierrez_polini_index()**
 
-Cálculo de la *fórmula de comprensibilidad* de Gutiérrez de Polini (1972), la primera fórmula concebida para el español y no adaptada del inglés. Cuanto mayor es el valor, más fácil es el texto. Se ajustó con textos escolares de sexto grado y no tiene escala propia: los valores de la prosa corriente están entre 30 y 50, y un texto por encima de 70 lo lee un niño pequeño.
+Cálculo de la *fórmula de comprensibilidad* de Gutiérrez de Polini (1972). Cuanto mayor es el valor, más fácil es el texto. Se ajustó con textos escolares de sexto grado y no tiene escala propia: la prosa corriente está entre 30 y 50, y un texto por encima de 70 lo lee un niño pequeño.
 
 Fórmula:
 
@@ -89,7 +89,7 @@ Fuente: Crawford, A. N. Fórmula y gráfico para determinar la comprensibilidad 
 !!! info ""
     **ests.readability_stats.calc_mu_index()**
 
-Cálculo de la Legibilidad µ de Muñoz Baquedano y Muñoz Urra (2006), que mide la variabilidad de la longitud de las palabras: la media del número de letras por palabra dividida por su varianza. La varianza es la muestral, dividida por `n − 1`, que es la *cuasivarianza* de los autores: la varianza poblacional multiplicada por el factor `n / (n − 1)` que lleva su fórmula impresa. Leído así, el ejemplo resuelto de su manual sale exacto (18 palabras, media 6.9444, varianza 13.5844, µ = 51.12); aplicar el factor una segunda vez, sobre la varianza muestral, daría 54.13. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (`nan`). Cuanto mayor es el valor, más fácil es el texto:
+Cálculo de la Legibilidad µ de Muñoz Baquedano y Muñoz Urra (2006), que mide la variabilidad de la longitud de las palabras: la media del número de letras por palabra dividida por su varianza. La varianza es la muestral, dividida por `n − 1` (la *cuasivarianza* de los autores), que reproduce el ejemplo resuelto de su manual. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (`nan`). Cuanto mayor es el valor, más fácil es el texto:
 
 | Valor | Nivel |
 | :---: | :---: |
@@ -142,7 +142,7 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.calc_sol_grade()**
 
-Cálculo del grado SOL. Contreras et al. (1999) aplicaron el índice SMOG a textos en español y a sus traducciones al inglés y ajustaron la conversión `E = −2.51 + 0.74·S`, donde `S` es el índice SMOG del texto español y `E` el grado de la escala inglesa, los años de escolaridad; las fórmulas SOL deben su nombre a la palabra española sol. Cuanto mayor es el valor, más difícil es el texto.
+Cálculo del grado SOL de Contreras et al. (1999), la conversión `E = −2.51 + 0.74·S`, donde `S` es el índice SMOG del texto español y `E` el grado de la escala inglesa, los años de escolaridad. Cuanto mayor es el valor, más difícil es el texto.
 
 Parámetros:
 
@@ -257,7 +257,7 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.flesch_reading_easy_to_grade()**
 
-Conversión de la facilidad de lectura de Flesch en años de escolaridad, usada para incluir la facilidad de lectura en el grado de consenso por analogía con `text_standard` de textstat. Los umbrales son los de la escala del preajuste, porque el mismo valor significa cosas distintas en cada escala.
+Conversión de la facilidad de lectura de Flesch en años de escolaridad para el grado de consenso. Los umbrales son los de la escala del preajuste.
 
 Con el preajuste `general`, a través de los tipos de texto de los niveles INFLESZ y las etapas escolares de España:
 
@@ -269,7 +269,7 @@ Con el preajuste `general`, a través de los tipos de texto de los niveles INFLE
 | `40-55` | 11 | libros de texto de secundaria, bachillerato |
 | `menos de 40` | 13 | textos científicos, universidad |
 
-Con el preajuste `classic`, a través de la tabla de interpretación de Flesch, cuyos niveles conservó Fernández Huerta: `90-100` - 5, `80-90` - 6, `70-80` - 7, `60-70` - 8.5, `50-60` - 10, `40-50` - 11, `30-40` - 12, por debajo de `30` - 13.
+Con el preajuste `classic`, a través de la tabla de interpretación de Flesch que conservó Fernández Huerta: `90-100` - 5, `80-90` - 6, `70-80` - 7, `60-70` - 8.5, `50-60` - 10, `40-50` - 11, `30-40` - 12, por debajo de `30` - 13.
 
 Los valores por encima de 100 corresponden al primer grado de la escala.
 
@@ -285,7 +285,7 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.calc_consensus_grade()**
 
-Cálculo del grado de consenso: la mediana de los valores redondeados de las fórmulas de grado, por analogía con `text_standard` de textstat, que usa la moda; la mediana resiste mejor una fórmula desviada. Los valores se redondean con el medio hacia arriba. La facilidad de lectura se convierte con `flesch_reading_easy_to_grade` según la escala del preajuste y se añade sin redondear.
+Cálculo del grado de consenso: la mediana de los valores de las fórmulas de grado, cada uno redondeado con el medio hacia arriba. La facilidad de lectura se convierte con `flesch_reading_easy_to_grade` según la escala del preajuste y se añade sin redondear.
 
 Parámetros:
 
@@ -309,7 +309,7 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.grade_to_age()**
 
-La etapa escolar y la edad del lector según el valor de una fórmula de grado, por las etapas del sistema educativo español contadas en años de escolaridad desde el primer curso de primaria a los seis años (véase la tabla de la [interpretación](readability_stats.md#interpretation)). El valor se redondea con el medio hacia arriba, los valores por debajo de 1 corresponden a los cursos 1-3.
+La etapa del sistema educativo español y la edad del lector según el valor de una fórmula de grado (véase la tabla de la [interpretación](readability_stats.md#interpretation)). El valor se redondea con el medio hacia arriba, los valores por debajo de 1 corresponden a los cursos 1-3.
 
 Parámetros:
 
@@ -331,7 +331,7 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.calc_reading_time()**
 
-Cálculo del tiempo de lectura de un texto en minutos. La velocidad por defecto es la de lectura silenciosa de los adultos en español, 278 palabras por minuto: la media de seis estudios en el metaanálisis de Brysbaert (2019), donde la lectura en voz alta da 191. Las normas por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) están en `ests.constants.READING_SPEED_NORMS` como pares (en voz alta, en silencio):
+Cálculo del tiempo de lectura de un texto en minutos. La velocidad por defecto es la de lectura silenciosa de los adultos en español, 278 palabras por minuto, según el metaanálisis de Brysbaert (2019). Las normas por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) están en `ests.constants.READING_SPEED_NORMS` como pares (en voz alta, en silencio):
 
 | Norma | En voz alta | En silencio |
 | :---: | :---------: | :---------: |

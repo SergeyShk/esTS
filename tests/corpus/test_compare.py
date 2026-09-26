@@ -147,8 +147,7 @@ def test_text_features():
 
 
 def test_text_features_morphology():
-    # A feature of a single value is a share of all the words, a value of several
-    # values is shared among its parts
+    # A feature of a single value is a share of all the words; qué is half Int, half Rel
     features = text_features("No sé qué pasó.")
     assert features["morph_polarity_Neg"] == 0.25
     assert features["morph_pron_type_Int"] == features["morph_pron_type_Rel"] == 0.5
@@ -233,7 +232,7 @@ def test_compare_features():
     result = compare_features(table_short, table_long, labels=("cortos", "largos"), seed=1)
     expected = compare_corpora(short, long, window=None, labels=("cortos", "largos"), seed=1)
     pd.testing.assert_frame_equal(result, expected)
-    # A feature in one table only gives nan, the number of samples is checked
+    # A feature in one table only gives nan
     extra = table_short.assign(extra=1.0)
     assert isnan(compare_features(extra, table_long, n_bootstrap=10).loc["extra", "cliff_delta"])
     with pytest.raises(ParameterError):
@@ -249,8 +248,7 @@ def test_compare_corpora_rare_values():
     assert row["mean_B"] == 0.0
     assert row["cliff_delta"] == 1.0
     assert (row["n_A"], row["n_B"]) == (3, 3)
-    # Without question and exclamation marks in B the share of the inverted ones is undefined
-    # there, and a side without values leaves the feature without statistics
+    # B has no question or exclamation marks: no values there, no statistics
     inverted = result.loc["punct_inverted_share"]
     assert isnan(inverted["mean_A"]) and isnan(inverted["cliff_delta"])
     assert (inverted["n_A"], inverted["n_B"]) == (3, 0)

@@ -29,9 +29,9 @@
 
 ---
 
-**esTS** computes for Spanish texts what usually requires assembling several separate tools: basic statistics, readability, lexical diversity, lexical sophistication, style, phonostatistics, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
+**esTS** computes statistics of Spanish texts: basic statistics, readability, lexical diversity, lexical sophistication, style, phonostatistics, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
 
-The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy): sentences, words and character N-grams are extracted by rules, syllables and stress follow from the orthography, and only the morphological, the syntactic, the cohesion and the lexical sophistication statistics, the verbal nouns of the style metrics, the profile of the function words and the comparison of corpora need a trained model.
+The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy); most statistics need no trained model (see Installation).
 
 * **[Object extraction](https://sergeyshk.github.io/esTS/extractors/sentences/)** - configurable sentence, word and character N-gram tokenizers that know the inverted marks, the dialogue dash and the abbreviations of Spanish
 * **[Syllables and stress](https://sergeyshk.github.io/esTS/syllables/)** - rule-based syllabification and the stressed syllable derived from the spelling, with no dictionary
@@ -40,14 +40,14 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Lexical diversity metrics](https://sergeyshk.github.io/esTS/stats/diversity_stats/)** - TTR and its variations, MATTR, MSTTR, MTLD, HD-D, Simpson's and Yule's indices, entropy, Zipf's and Heaps' laws
 * **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
 * **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text, a KWIC concordance and the stylometry of authorship: Burrows's Delta with its variants, Zeta, the Mendenhall curve, the profile of the function words; the comparison of two corpora by 132 features of a text with effect sizes
-* **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, vocabulary growth, sentence lengths, and the highlighting of a text by the fragments the statistics count: long sentences, passives, chains of de, clichés
-* **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors from Spain, Latin America and the Philippines in prose, poems, drama and publicism, with the genre, the years and the country; 4,259 sonnets of the 15th-20th centuries with the metrical pattern and the rhyme of every line; a frequency dictionary of 83,785 lemmas by Google Books Ngram with ipm, range and dispersion
+* **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, vocabulary growth, sentence lengths, and the highlighting of the fragments the statistics count, such as long sentences and passives
+* **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors in four genres; 4,259 sonnets of the 15th-20th centuries with the metrical pattern and the rhyme of every line; a frequency dictionary of 83,785 lemmas by Google Books Ngram
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
 * **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 255 Spanish discourse markers
 * **[Lexical sophistication statistics](https://sergeyshk.github.io/esTS/stats/lexical_stats/)** - how rare the words of a text are in the language: the frequency, range and dispersion of the lemmas by a dictionary of Google Books Ngram, the frequency bands top-1000 to 10000, surprisal, perplexity and lexical density
 * **[Style metrics](https://sergeyshk.github.io/esTS/stats/style_stats/)** - the SEO indicators of Advego and Text.ru (nausea, water content, spam score, naturalness by Zipf's law, keyword density) and the markers of the officialese style by the Spanish guides to plain language: verbal nouns, compound prepositions, parenthetical expressions and clichés
 * **[Phonostatistics](https://sergeyshk.github.io/esTS/stats/phon_stats/)** - the shares of the classes of sounds, consonant clusters, hiatuses, open syllables, hardness and the indices of alliteration and assonance, over the sounds of a rule-based transcription
-* **[Verse statistics](https://sergeyshk.github.io/esTS/stats/verse_stats/)** - the scansion of Spanish verse by its syllabic meter: the metrical syllables with the synalepha and the law of the final stress, the meter of a poem and the hemistichs of the alejandrino, the stress profile and the types of the endecasílabo, the rhyme in full and by assonance with its scheme, the strophes and the form of a poem
+* **[Verse statistics](https://sergeyshk.github.io/esTS/stats/verse_stats/)** - the scansion of Spanish verse by its syllabic meter: the metrical syllables, the meter of a poem, the stress profile and the types of the endecasílabo, the rhyme in full and by assonance with its scheme, the strophes and the form of a poem
 * **[Syntactic statistics](https://sergeyshk.github.io/esTS/stats/syntax_stats/)** - the dependency tree by distances, depth, clauses and coordination, with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
 
 ## Installation
@@ -64,13 +64,13 @@ Or with [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, the readability, the lexical diversity metrics and the phonostatistics need no spaCy model; the morphological, the syntactic, the cohesion and the lexical sophistication statistics of a string do, and so do the verbal nouns of the style metrics, the profile of the function words, the features of a text and the comparison of corpora, and parsing a text yourself to pass the `Doc` instead of a string:
+The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, readability, lexical diversity, the style metrics except the verbal nouns, phonostatistics and verse statistics need no spaCy model. The morphological, syntactic, cohesion and lexical sophistication statistics of a string need one, and so do the verbal nouns, the profile of the function words, the features of a text, the comparison of corpora and parsing a `Doc` yourself:
 
 ```bash
 python -m spacy download es_core_news_sm
 ```
 
-The statistics by the frequency dictionary need it downloaded once with `FreqDict().download()`. The datasets go to the directory `ests_data` next to the installed package; another one is passed in `data_dir` or set in the environment variable `ESTS_DATA_DIR` before the package is imported.
+The statistics by the frequency dictionary need it downloaded once with `FreqDict().download()`. The datasets go to the directory `ests_data` next to the installed package, or to the one passed in `data_dir` or set in `ESTS_DATA_DIR` before the package is imported.
 
 ## Quick start
 
@@ -111,7 +111,7 @@ The statistics by the frequency dictionary need it downloaded once with `FreqDic
 
 ### Object extraction
 
-The library allows creating your own tools for sentence, word and character N-gram extraction from a text, which can be further employed for counting statistics. The sentence splitter knows the inverted marks, the dash of a line of dialogue with the remark of the narrator, the abbreviations and the initials of Spanish; the word tokenizer keeps clitics, ordinals and numbers written the Spanish way together, and lemmas come from [simplemma](https://github.com/adbar/simplemma), which needs no model.
+Configurable tools extract sentences, words and character N-grams from a text for the statistics. The sentence splitter knows the inverted marks, the dialogue dash and the abbreviations of Spanish; the word tokenizer keeps clitics, ordinals and Spanish numbers whole, and lemmas come from [simplemma](https://github.com/adbar/simplemma), which needs no model.
 
 ```python
 >>> from ests import CharNgramsExtractor, SentsExtractor, WordsExtractor
@@ -134,7 +134,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/extractors/sentence
 
 <br>
 
-Spanish spelling encodes both the syllable boundaries and the stress, so the library needs no dictionary: diphthongs, hiatuses and triphthongs, the silent `u` of `qu` and `gu`, the vocalic `y`, the `h` inside a diphthong and the consonant clusters give the syllables; the written accent, or the ending of the word when there is none, gives the stressed syllable. Adverbs in `-mente` and hyphenated compounds carry two stresses.
+The syllables and the stress follow from the Spanish spelling, with no dictionary: the written accent, or the ending of the word when there is none, gives the stressed syllable. Adverbs in `-mente` and hyphenated compounds carry two stresses.
 
 ```python
 >>> from ests.syllables import stress_type, syllabify, word_stress, word_stresses
@@ -179,7 +179,7 @@ The library allows extracting the following statistics from a text:
 *   the distribution of words by the number of letters
 *   the distribution of words by the number of syllables
 
-A complex word has three or more syllables and a long word seven or more letters, as the Spanish readability formulas count them. Any statistic can be printed in a readable form:
+A complex word has three or more syllables and a long word seven or more letters. Any statistic can be printed in a readable form:
 
 ```python
 >>> from ests import BasicStats
@@ -222,9 +222,9 @@ The library allows counting the following readability metrics:
 *   LIX readability measure
 *   RIX readability measure
 
-An interpretation layer works on top of the formulas: the band of a scale for the reading ease and for Legibilidad µ, a consensus grade as the median of the grade formulas, the school stage and the reader age of Spain, and reading time by the norms of Spanish-speaking readers.
+On top of the formulas: the band of a scale for the reading ease and for Legibilidad µ, a consensus grade (the median of the grade formulas), the school stage and the reader age in Spain, and reading time.
 
-The coefficients of the Flesch reading ease are selected by the `preset` argument: by default the *fórmula de perspicuidad* of Szigriszt-Pazos with the INFLESZ scale validated on texts for patients (`general`); the coefficients of Fernández Huerta with the bands of their author are available as `classic`.
+The coefficients of the Flesch reading ease are selected by `preset`: by default the *fórmula de perspicuidad* of Szigriszt-Pazos with the INFLESZ scale (`general`), or Fernández Huerta with the bands of its author (`classic`).
 
 ```python
 >>> from pprint import pprint
@@ -284,7 +284,7 @@ The library allows counting 32 lexical diversity metrics, among them:
 *   Shannon entropy, evenness and perplexity
 *   the slope of Zipf's law, the Zipf-Mandelbrot fit and the exponent of Heaps' law
 
-Any metric can be computed over windows of equal length, which is the standard way to compare texts of different lengths: the mean over the windows comes with a confidence interval.
+Any metric can be computed over windows of equal length, to compare texts of different lengths, with a confidence interval of the mean.
 
 ```python
 >>> from ests import DiversityStats
@@ -314,7 +314,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/diversity_sta
 
 <br>
 
-The library annotates a text with the parts of speech and the grammatical features of Universal Dependencies, as the Spanish models of spaCy give them, and counts them:
+The parts of speech and the grammatical features of Universal Dependencies, as the Spanish models of spaCy give them:
 
 *   the part of speech and fifteen features: case, definiteness, degree, gender, mood, numeral type, number, person, polarity, politeness, possessive, pronoun type, reflexive, tense and verb form
 *   the distribution of the words by the values of any feature, and the parse of the text word by word
@@ -338,7 +338,7 @@ The library annotates a text with the parts of speech and the grammatical featur
 0.5
 ```
 
-The statistics need a spaCy model: a text is parsed with `es_core_news_sm`, and any other pipeline can be passed in `nlp`.
+A text is parsed with `es_core_news_sm`; another pipeline can be passed in `nlp`.
 
 More in the [documentation](https://sergeyshk.github.io/esTS/stats/morph_stats/).
 
@@ -349,7 +349,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/morph_stats/)
 
 <br>
 
-The library measures the dependency tree of Universal Dependencies and the constructions that the Spanish guides to clear language warn about:
+The dependency tree of Universal Dependencies and the constructions that the Spanish guides to clear language warn about:
 
 *   the complexity of the tree: dependency distances, depth, leaves and subtrees, valency of the finite verbs, coordination chains, clauses and subordinate clauses, modifiers per noun
 *   the constructions: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates, the impersonal `se`, the words of negation, the ratio of nouns to verbs
@@ -374,7 +374,7 @@ The library measures the dependency tree of Universal Dependencies and the const
 2.05
 ```
 
-The statistics need a parse: a text is parsed with `es_core_news_sm`, and any other pipeline can be passed in `nlp`.
+A text is parsed with `es_core_news_sm`; another pipeline with a parser can be passed in `nlp`.
 
 More in the [documentation](https://sergeyshk.github.io/esTS/stats/syntax_stats/).
 
@@ -385,7 +385,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/syntax_stats/
 
 <br>
 
-The library measures referential cohesion in the manner of Coh-Metrix and of its Spanish adaptation Coh-Metrix-Esp:
+Referential cohesion in the manner of Coh-Metrix and its Spanish adaptation Coh-Metrix-Esp:
 
 *   the overlap of nouns, of arguments and of content words between adjacent sentences and between all pairs of sentences, binary and proportional
 *   givenness: pronouns, demonstratives and the content words whose lemma was already used
@@ -412,7 +412,7 @@ The library measures referential cohesion in the manner of Coh-Metrix and of its
 (86.96, 43.48)
 ```
 
-The statistics need the annotation: a text is parsed with `es_core_news_sm`, and any other pipeline can be passed in `nlp`.
+A text is parsed with `es_core_news_sm`; another pipeline can be passed in `nlp`.
 
 More in the [documentation](https://sergeyshk.github.io/esTS/stats/cohesion_stats/).
 
@@ -423,7 +423,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/cohesion_stat
 
 <br>
 
-How rare the words of a text are in the language, in the manner of TAALES: the mean frequency, range and dispersion of the lemmas by the frequency dictionary of Google Books Ngram, the shares of the words of the frequency bands top-1000, 2000, 5000 and 10000, the surprisal and the perplexity by the unigram model of the dictionary, the lexical density. The bands and the density work out of the box; the statistics by the dictionary need it downloaded once.
+How rare the words of a text are in the language, in the manner of TAALES: the mean frequency, range and dispersion of the lemmas by the frequency dictionary of Google Books Ngram, the shares of the frequency bands top-1000, 2000, 5000 and 10000, surprisal and perplexity, the lexical density. The statistics by the dictionary need it downloaded once.
 
 ```python
 >>> from ests import LexicalStats
@@ -444,7 +444,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/lexical_stats
 
 <br>
 
-The SEO indicators of Advego and Text.ru - nausea, water content, spam score, naturalness by Zipf's law, keyword density - and the markers of the officialese style that the Spanish guides to plain language warn about: the nouns derived from a verb, the compound prepositions of the administrative style, the parenthetical expressions and the clichés, whose verbs are found in their forms (`se procedió a`, `ha dado cumplimiento`).
+The SEO indicators of Advego and Text.ru - nausea, water content, spam score, naturalness by Zipf's law, keyword density - and the markers of the officialese style that the Spanish guides to plain language warn about: the nouns derived from a verb, the compound prepositions of the administrative style, the parenthetical expressions and the clichés.
 
 ```python
 >>> from ests import StyleStats
@@ -463,7 +463,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/style_stats/)
 
 <br>
 
-The shares of the classes of sounds, the consonant clusters, the hiatuses, the open syllables, the hardness and the indices of alliteration and assonance, counted over the sounds of a rule-based transcription rather than over the letters: `h` and the `u` of `que` are silent, `ll`, `ch` and `rr` are one sound, `x` is two.
+The shares of the classes of sounds, the consonant clusters, the hiatuses, the open syllables, the hardness and the indices of alliteration and assonance, counted over the sounds of a rule-based transcription, not over the letters: `h` is silent, `ll` and `rr` are one sound.
 
 ```python
 >>> from ests import PhonStats
@@ -482,7 +482,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/phon_stats/).
 
 <br>
 
-The scansion of Spanish verse by its syllabic meter: the metrical syllables of a line with the synalepha and the law of the final stress, a line fitted to the meter of its poem by a hiatus, a dieresis or a synaeresis, the alejandrino read by hemistichs; the meter, the stress profile, the types of the endecasílabo and the endings of the lines; the rhyme in full (consonante) and by assonance (asonante), its scheme in the Spanish usage, the strophes and the form of a poem. No model and no dictionary are needed.
+The scansion of Spanish verse by its syllabic meter: the metrical syllables of a line with the synalepha and the law of the final stress, fitted to the meter of the poem; the meter, the stress profile and the types of the endecasílabo; the rhyme in full (consonante) and by assonance (asonante) with its scheme, the strophes and the form of a poem. No model and no dictionary are needed.
 
 ```python
 >>> from ests import VerseStats
@@ -527,7 +527,7 @@ Every statistics class is also a component of a pipeline, so a text is annotated
 (12, ('DET', 'NOUN'), 2.0)
 ```
 
-The factories are `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style` and `ests_phon`; the name of the pipe is free and is what the extension is called.
+The factories are `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` and `ests_verse`; the name of the pipe is the name of the extension.
 
 More in the [documentation](https://sergeyshk.github.io/esTS/components/).
 
@@ -538,14 +538,14 @@ More in the [documentation](https://sergeyshk.github.io/esTS/components/).
 
 <br>
 
-The library compares corpora and describes the use of a word, with the measures of corpus linguistics:
+The measures of corpus linguistics that compare corpora and describe the use of a word:
 
 *   keywords of a target corpus against a reference one or against the frequency dictionary of Google Books Ngram: the log-likelihood with its p-value, Log Ratio, chi-square, %DIFF, BIC, ELL and the odds ratio
-*   collocations by logDice, MI, MI³, t-score, Dice, log-likelihood, NPMI and minimum sensitivity, checked against NLTK
+*   collocations by logDice, MI, MI³, t-score, Dice, log-likelihood, NPMI and minimum sensitivity
 *   the dispersion of a word over the parts of a text: DP of Gries, normalized DP, Juilland's D, Carroll's D2, Rosengren's S and the Kullback-Leibler divergence
 *   a KWIC concordance by word form or by lemma
 *   stylometry: the distances between texts by Burrows's Delta and its variants, with the attribution of a text to reference authors, the markers of preferred and avoided words by Zeta, Kilgarriff's chi-square, the Mendenhall curve and the profile of the function words
-*   the comparison of two corpora by 132 features of a text over windows of about the same size: Cliff's delta, Cohen's d and the AUC of every feature, the Mann-Whitney test with Holm's correction and a bootstrap interval of the difference of the medians that resamples whole texts
+*   the comparison of two corpora by 132 features of a text over windows of about the same size: Cliff's delta, Cohen's d and the AUC of every feature, the Mann-Whitney test with Holm's correction and a bootstrap interval of the difference of the medians
 
 ```python
 >>> from ests import WordsExtractor
@@ -582,11 +582,11 @@ More in the [documentation](https://sergeyshk.github.io/esTS/corpus/keyness/).
 
 <br>
 
-*   [spanish_literature](https://sergeyshk.github.io/esTS/datasets/spanishliterature/) - Spanish-language literature in the public domain: 150 works by 33 authors from Spain, Latin America and the Philippines, from Cervantes to the 1920s, in prose, poems, drama and publicism; 65 million characters
+*   [spanish_literature](https://sergeyshk.github.io/esTS/datasets/spanishliterature/) - Spanish-language literature in the public domain: 150 works by 33 authors from Spain, Latin America and the Philippines, from Cervantes to the 1920s, in prose, poems, drama and publicism
 *   [spanish_sonnets](https://sergeyshk.github.io/esTS/datasets/spanishsonnets/) - Spanish sonnets of the Diachronic Spanish Sonnet Corpus (DISCO) in the public domain: 4,259 sonnets by 1,167 authors of the 15th-20th centuries, every line with its metrical pattern and the label of its rhyme, the automatic annotation of DISCO (CC BY 4.0)
-*   [freq_dict](https://sergeyshk.github.io/esTS/datasets/freqdict/) - a frequency dictionary of 83,785 Spanish lemmas from the books of Google Books Ngram of 1980-2019 (63 billion words): ipm, range and Juilland's D over the years, the number of books and the part of speech (CC BY 3.0)
+*   [freq_dict](https://sergeyshk.github.io/esTS/datasets/freqdict/) - a frequency dictionary of 83,785 Spanish lemmas from the books of Google Books Ngram of 1980-2019: ipm, range and Juilland's D over the years, the number of books and the part of speech (CC BY 3.0)
 
-The texts are cut to the text of the author, without title pages, notes of the transcribers and the editors, tables of contents and footnotes, and come with the genre, the author, the title, the years of the first publication and the country; the records can be filtered by any of them and by the length of the text.
+The texts are cut to the text of the author and come with the genre, the author, the title, the years of the first publication and the country; the records can be filtered by any of them and by the length of the text.
 
 ```python
 >>> from ests.datasets import SpanishLiterature
@@ -601,7 +601,7 @@ La de Bringas 1884 413730
 Tormento 1884 477286
 ```
 
-The archive (19 MB) is downloaded once by `download()` into the data directory and verified against its SHA-256 checksum; before the download `get_texts()` and `get_records()` raise `DatasetNotFoundError` with a hint.
+The archive (19 MB) is downloaded once by `download()` into the data directory; before that `get_texts()` and `get_records()` raise `DatasetNotFoundError`.
 
 More in the [documentation](https://sergeyshk.github.io/esTS/datasets/spanishliterature/).
 
@@ -613,13 +613,13 @@ More in the [documentation](https://sergeyshk.github.io/esTS/datasets/spanishlit
 <br>
 
 *   [Zipf's law](https://sergeyshk.github.io/esTS/visualizers/zipf/) with the theoretical curve and the Zipf-Mandelbrot fit
-*   [Literature fingerprinting](https://sergeyshk.github.io/esTS/visualizers/fingerprinting/) (Literature Fingerprinting)
-*   [Word tree](https://sergeyshk.github.io/esTS/visualizers/word_tree/) (Word Tree)
+*   [Literature fingerprinting](https://sergeyshk.github.io/esTS/visualizers/fingerprinting/)
+*   [Word tree](https://sergeyshk.github.io/esTS/visualizers/word_tree/)
 *   [Corpus plots](https://sergeyshk.github.io/esTS/visualizers/corpus/): lexical dispersion, a chart of keywords, a network of collocations
 *   [Stylometric plots](https://sergeyshk.github.io/esTS/visualizers/stylometry/): a dendrogram, the principal components and the multidimensional scaling by Delta, the Mendenhall curves
 *   [Vocabulary growth and frequency spectrum](https://sergeyshk.github.io/esTS/visualizers/vocabulary/), [sentence lengths](https://sergeyshk.github.io/esTS/visualizers/sentences/) with a moving average
 
-The matplotlib plots take the axes `ax` and return `Axes`, so they can be laid out on one figure; the network of collocations and the word tree are graphs of graphviz, whose executables render them. Cosine Delta separates three novels by Galdós from three by Unamuno:
+The matplotlib plots take the axes `ax` and return `Axes`; the network of collocations and the word tree are rendered by the executables of Graphviz. Cosine Delta separates three novels by Galdós from three by Unamuno:
 
 ```python
 import matplotlib.pyplot as plt
@@ -679,7 +679,7 @@ Run `make help` for the full list of commands.
 
 The documentation is bilingual: English pages are `docs/*.md`, Spanish ones are `docs/*.es.md` next to them ([mkdocs-static-i18n](https://github.com/ultrabug/mkdocs-static-i18n)); when editing a page, update both versions.
 
-The installed version is `ests.__version__`. All exceptions inherit `ests.EstsError` and one of the built-in classes (`SourceError`, `ParameterError` and `DataFileError` - `ValueError`, `SourceTypeError` - `TypeError`, `UnknownStatError` - `KeyError`, `DatasetNotFoundError` - `OSError`, `DownloadError` - `RuntimeError`), so `except ValueError` keeps working. The library prints nothing on its own: its messages go to the `ests` logger (`logging.getLogger("ests")`) and are silent by default.
+The installed version is `ests.__version__`. All exceptions inherit `ests.EstsError` and a built-in class (`ValueError`, `TypeError`, `KeyError`, `OSError` or `RuntimeError`), so `except ValueError` keeps working. The library prints nothing on its own: its messages go to the `ests` logger and are silent by default. More in the [documentation](https://sergeyshk.github.io/esTS/exceptions/).
 
 Before submitting changes, install the hooks that run the linters on commit and the tests on push:
 
@@ -689,7 +689,7 @@ uv run pre-commit install
 
 ## Contributing
 
-Bug reports, ideas and pull requests are welcome - [issues](https://github.com/SergeyShk/esTS/issues) are open. The workflow, the checks to run before submitting a pull request and how to shape the changes are described in [CONTRIBUTING.md](https://github.com/SergeyShk/esTS/blob/master/CONTRIBUTING.md); the rules of conduct are in the [code of conduct](https://github.com/SergeyShk/esTS/blob/master/CODE_OF_CONDUCT.md).
+Bug reports, ideas and pull requests are welcome in the [issues](https://github.com/SergeyShk/esTS/issues). The workflow and the checks to run before a pull request are in [CONTRIBUTING.md](https://github.com/SergeyShk/esTS/blob/master/CONTRIBUTING.md); the rules of conduct are in the [code of conduct](https://github.com/SergeyShk/esTS/blob/master/CODE_OF_CONDUCT.md).
 
 <details>
 <summary><b>Project structure</b></summary>
@@ -703,7 +703,7 @@ Bug reports, ideas and pull requests are welcome - [issues](https://github.com/S
     *   lexical_stats.py - lexical sophistication statistics
     *   components.py - components of a spaCy pipeline
     *   corpus - measures of corpus linguistics: keywords, collocations, dispersion, concordance, stylometry, comparison of corpora
-    *   datasets - datasets: Spanish-language literature, the frequency dictionary
+    *   datasets - datasets: Spanish-language literature, Spanish sonnets, the frequency dictionary
     *   constants.py - constants of the Spanish language and of the metrics
     *   diversity_stats.py - lexical diversity metrics
     *   exceptions.py - library exceptions
@@ -732,7 +732,7 @@ Bug reports, ideas and pull requests are welcome - [issues](https://github.com/S
 
 ## Citation
 
-Please use the following BibTeX entry for citing **esTS** if you use it in your research or software. Citations are helpful for the continued development and maintenance of this library. The same metadata is in [CITATION.cff](https://github.com/SergeyShk/esTS/blob/master/CITATION.cff) - GitHub shows it under the "Cite this repository" button. The Concept DOI [10.5281/zenodo.22924655](https://doi.org/10.5281/zenodo.22924655) on Zenodo points at every version of the library; the DOI of a single version is on the page of its release.
+Please use the following BibTeX entry for citing **esTS** if you use it in your research or software. The same metadata is in [CITATION.cff](https://github.com/SergeyShk/esTS/blob/master/CITATION.cff) ("Cite this repository" on GitHub). The Concept DOI [10.5281/zenodo.22924655](https://doi.org/10.5281/zenodo.22924655) points at every version of the library; the DOI of a single version is on the page of its release.
 
 ```bibtex
 @software{esTS,

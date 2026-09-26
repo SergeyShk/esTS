@@ -7,9 +7,9 @@
 
 A module for computing the style metrics of a text: the SEO indicators of the [Advego](https://advego.com/text/seo/) and [Text.ru](https://text.ru/seo) services - nausea, water content, spam score, naturalness of the distribution of words by Zipf's law and keyword density - and the lexical markers of the officialese style that the Spanish guides to plain language warn about: the nouns derived from a verb, the compound prepositions of the administrative style, the parenthetical expressions and the clichés. The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library.
 
-The exact formulas of the services are not published, so the commonly accepted definitions are implemented; they are described in the [functions](style_stats_funcs.md) section. By default words are extracted in lower case without lemmatization, so the forms of one word count as different words, as in Advego. To compute by lemmas, pass a [`WordsExtractor`](../extractors/words.md) object with `use_lexemes=True` and `lowercase=True`.
+The services do not publish their formulas; the commonly accepted definitions are implemented and described in the [functions](style_stats_funcs.md) section. By default words are extracted in lower case without lemmatization, so the forms of one word count as different words, as in Advego. To compute by lemmas, pass a [`WordsExtractor`](../extractors/words.md) object with `use_lexemes=True` and `lowercase=True`.
 
-The markers of the officialese style are counted over the unfiltered word forms (`forms`) whatever the extractor passed, by the lists `COMPOUND_PREPOSITIONS`, `PARENTHETICALS` and `OFFICIALESE_CLICHES` of `ests.constants`. A phrase ending in `a` or `de` also matches the contraction with the article (`a efectos del`, `conforme al`), and a phrase that starts with an infinitive stands for the forms of the verb: `proceder a` finds `se procedió a`, `dar cumplimiento` finds `ha dado cumplimiento`, `llevar a cabo` finds `deberá llevarse a cabo`. The verbal nouns need the parts of speech and the lemmas: a `Doc` gives its own annotation, and a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp` the first time `verbal_nouns` is read - the other metrics of a string need no model.
+The markers of the officialese style are counted over the unfiltered word forms (`forms`) whatever the extractor passed, by the lists `COMPOUND_PREPOSITIONS`, `PARENTHETICALS` and `OFFICIALESE_CLICHES` of `ests.constants`. A phrase ending in `a` or `de` also matches the contraction with the article (`a efectos del`), and a phrase that starts with an infinitive stands for the forms of the verb (`proceder a` finds `se procedió a`); see [phrase density](style_stats_funcs.md#calc_phrase_density). The verbal nouns need the parts of speech and the lemmas: a `Doc` gives its own annotation, and a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp` the first time `verbal_nouns` is read - the other metrics of a string need no model. A string longer than the `max_length` of the pipeline is parsed in parts of whole sentences; only a single sentence longer than it raises `SourceError`.
 
 !!! note "Note"
     The metrics are computed by accessing the corresponding attribute or by calling the `get_stats` method of the `StyleStats` object. The norms of the services are meant for texts of several hundred words; on short texts nausea and spam are uninformative.
@@ -52,7 +52,7 @@ Norms of the services:
 | Naturalness by Zipf's law | at least 50% (pr-cy, megaindex) |
 
 !!! warning "The water content of Spanish"
-    The norms of Text.ru are set for Russian, which has no articles. A Spanish text has more water by its grammar alone: the 150 texts of the [corpus of literature](../datasets/spanishliterature.md) have 42-54% of it, the prose 49% by the median. Compare the water content of texts with each other, not with the norm.
+    The norms of Text.ru are set for Russian, which has no articles; a Spanish text has more water by its grammar alone. Compare the water content of texts with each other, not with the norm.
 
 ## Methods
 
@@ -136,4 +136,4 @@ The same notice written in the administrative style and in plain language.
      'cliches': 0.0}
     ```
 
-The notice of 56 words has three compound prepositions (`en el marco del`, `a efectos de`, `en virtud de`), five clichés (`dar cumplimiento`, `se procedió a`, `se llevará a cabo`, `a la mayor brevedad`, `en tiempo y forma`) and one parenthetical expression, and almost half of its nouns are derived from a verb (`revisión`, `notificación`, `resolución`); the plain version of 23 words has none of the markers. The anaphoric `de la misma`, which the guides also advise against, is not counted: telling it from `el mismo día` needs the syntax.
+The notice of 56 words has three compound prepositions (`en el marco del`, `a efectos de`, `en virtud de`), five clichés (`dar cumplimiento`, `se procedió a`, `se llevará a cabo`, `a la mayor brevedad`, `en tiempo y forma`) and one parenthetical expression, and almost half of its nouns are derived from a verb; the plain version has none of the markers. The anaphoric `de la misma`, which the guides also advise against, is not counted.

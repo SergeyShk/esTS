@@ -5,9 +5,9 @@
 
 ## Description
 
-A module that divides a Spanish word into syllables and finds its stressed syllable from the spelling alone. Spanish orthography encodes both: syllable boundaries follow from the vowels and consonant clusters, and the stress follows from the written accent or, without one, from the ending of the word. No dictionary or trained model is needed. The functions are the foundation of the basic statistics (syllable counts), readability formulas, phonostatistics and metre.
+A module that divides a Spanish word into syllables and finds its stressed syllable from the spelling alone, without a dictionary or a trained model. The functions are the foundation of the basic statistics, readability formulas, phonostatistics and metre.
 
-The rules follow the *Ortografía de la lengua española* (RAE, 2010). Two conventions are worth knowing: two weak vowels always form a diphthong, as the spelling rules require (`huir`, `cons-truir`, `je-sui-ta`, `guion` are one syllable shorter than in some phonetic syllabifiers), and `tl` is split as in Spain (`at-las`).
+The rules follow the *Ortografía de la lengua española* (RAE, 2010): two weak vowels always form a diphthong (`huir`, `je-sui-ta`, `guion`), and `tl` is split as in Spain (`at-las`).
 
 ## Syllabification { #syllabify }
 
@@ -31,7 +31,7 @@ Division of a word into syllables. A syllable is built around a vowel nucleus: a
 | other consonant pairs are split | ac-to, is-la, at-las, rit-mo |
 | of three or more consonants the last two go to the next syllable when they form such a cluster, otherwise only the last one does | com-pra, cons-truir, ins-ti-tu-to, obs-tá-cu-lo, tungs-te-no |
 
-The word is normalized to NFC (a decomposed accent becomes one letter with its base) and lower-cased. It is split into parts at digits, hyphens and other non-letters, each part is syllabified on its own (`te-ó-ri-co-prác-ti-co`), and a part without vowels (an abbreviation like `sh`) yields no syllables. Vowels with foreign diacritics count as accented strong vowels (`Björk`). A diaeresis marks a hiatus: the `ü` of verse outside `gü` and `qü` and the `ï` (`sü-a-ve`, `rü-i-do`, `glo-rï-o-sa`, `Llu-ï-sa`), which leave the stress to the rules of the word, and the `ë` of French (`Ci-tro-ën`), which takes it; the Portuguese `ão` and `õe` are diphthongs (`São`, `Ca-mões`).
+The word is normalized to NFC and lower-cased. It is split into parts at digits, hyphens and other non-letters, each part is syllabified on its own (`te-ó-ri-co-prác-ti-co`), and a part without vowels (an abbreviation like `sh`) yields no syllables. Vowels with foreign diacritics count as accented strong vowels (`Björk`). A diaeresis marks a hiatus: the `ü` of verse outside `gü` and `qü` and the `ï` (`sü-a-ve`, `glo-rï-o-sa`), which leave the stress to the rules of the word, and the `ë` of French (`Ci-tro-ën`), which takes it; the Portuguese `ão` and `õe` are diphthongs (`São`, `Ca-mões`).
 
 Parameters:
 
@@ -56,7 +56,7 @@ Parameters:
 !!! info ""
     **ests.syllables.count_syllables()**
 
-The number of syllables by `syllabify`, cached by word form.
+The number of syllables by `syllabify`.
 
 Parameters:
 
@@ -87,7 +87,7 @@ The index of the stressed syllable, counted from zero as in `syllabify`; `None` 
 | any other word is stressed on the last syllable | pa-**pel**, re-**loj**, ro-**bots**, U-ru-**guay** |
 | a monosyllable is stressed on its only syllable | rey, y |
 
-Enclitic pronouns need no special treatment: their forms carry the accent by the same rules (`dí-ga-me-lo`, `de-cír-se-lo`). For an adverb in `-mente` and for a hyphenated compound the main stress is the last of `word_stresses` (`fá-cil-men-te` - 2).
+Forms with enclitic pronouns carry the accent by the same rules (`dí-ga-me-lo`). For an adverb in `-mente` and for a hyphenated compound the main stress is the last of `word_stresses` (`fá-cil-men-te` - 2).
 
 Parameters:
 

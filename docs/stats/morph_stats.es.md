@@ -7,9 +7,9 @@
 
 Módulo para calcular las estadísticas morfológicas de un texto. La fuente de datos puede ser un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy).
 
-Las categorías gramaticales y los rasgos morfológicos se dan en los términos de [Universal Dependencies](https://universaldependencies.org/u/feat/), tal como los anotan los modelos españoles de spaCy. Un texto se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, sin el reconocedor de entidades, que aquí no se lee; un `Doc` se toma tal cual y debe llevar las categorías gramaticales, que vienen de un `morphologizer` (o de un `tagger` con un `attribute_ruler`), y los lemas, que vienen de un `lemmatizer`: un `Doc` de `spacy.blank("es")` o de un pipeline con el `lemmatizer` excluido no es una fuente válida y levanta `SourceError`. Las palabras se toman de los tokens y los signos de puntuación y los símbolos se descartan.
+Las categorías gramaticales y los rasgos morfológicos se dan en los términos de [Universal Dependencies](https://universaldependencies.org/u/feat/). Un texto se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`; un `Doc` debe llevar las categorías gramaticales, que vienen de un `morphologizer` (o de un `tagger` con un `attribute_ruler`), y los lemas, que vienen de un `lemmatizer`: un `Doc` de `spacy.blank("es")` o de un pipeline con el `lemmatizer` excluido levanta `SourceError`. Las palabras se toman de los tokens y los signos de puntuación y los símbolos se descartan.
 
-Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto, una novela larga - levanta `SourceError` en lugar de llegar a spaCy: divídalo en partes o suba `max_length` en un pipeline propio y páselo en `nlp`.
+Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto - levanta `SourceError`: divídalo en partes o suba `max_length` en un pipeline propio y páselo en `nlp`.
 
 !!! note "Nota"
     Las estadísticas se calculan al inicializar el objeto `MorphStats`.
@@ -48,13 +48,11 @@ Un texto más largo que el `max_length` del pipeline - un millón de caracteres 
 Cada atributo tiene la longitud de `words`, y una palabra a la que el modelo no da ningún valor del rasgo lleva `None`. Los nombres de los atributos son los nombres de las estadísticas que aceptan los métodos; `tags` y `lemmas` no son estadísticas.
 
 !!! note "Nota"
-    Un rasgo con varios valores conserva la forma de CoNLL-U: el interrogativo y relativo `qué`, `quién`, `cuál`, que los modelos no desambiguan, tiene `pron_type` igual a `Int,Rel`, y `usted` tiene `case` igual a `Acc,Nom`. `print_stats` describe un valor así con las descripciones de sus partes: «Interrogative or relative», «Accusative or nominative».
+    Un rasgo con varios valores conserva la forma de CoNLL-U: `qué`, `quién`, `cuál` tienen `pron_type` igual a `Int,Rel`, y `usted` tiene `case` igual a `Acc,Nom`. `print_stats` describe un valor así con las descripciones de sus partes: «Interrogative or relative», «Accusative or nominative».
 
 ## Rasgos { #features }
 
-Las estadísticas cuentan los quince rasgos de la tabla siguiente; el valor `Unknown` de las tablas impresas y `None` de los atributos significan que el modelo no dio a la palabra ningún valor del rasgo.
-
-Son un subconjunto: los modelos españoles anotan 23 rasgos, y los que quedan fuera son marginales (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`) o viven en la puntuación (`PunctSide`, `PunctType`), que este módulo no trata como palabras. Todo lo que el modelo anota queda en `tags`, se cuente o no.
+Las estadísticas cuentan los quince rasgos de la tabla siguiente; el valor `Unknown` de las tablas impresas y `None` de los atributos significan que el modelo no dio a la palabra ningún valor del rasgo. Los demás rasgos que anotan los modelos (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`, `PunctSide`, `PunctType`) no se cuentan, pero quedan en `tags`.
 
 | Estadística | Rasgo | Valores |
 | :---------: | :---: | :-----: |
@@ -76,9 +74,7 @@ Son un subconjunto: los modelos españoles anotan 23 rasgos, y los que quedan fu
 | `verb_form` | Forma verbal | Fin, Inf, Part, Ger |
 
 !!! warning "Advertencia"
-    Las estadísticas valen lo que vale la anotación del modelo. `es_core_news_sm` analiza mal los verbos con pronombres enclíticos: `dámelo`, `decírselo`, `vámonos`, `cuéntamelo` salen como sustantivos o nombres propios y reciben lemas inventados (`dámelir`, `siéntatir`). El imperativo es el que más lo sufre: los modelos llevan el valor `Mood=Imp` en su juego de etiquetas - 21 de las 433 del morfologizador -, pero en la práctica etiquetan los imperativos de `tú` como indicativo, y `Habla más despacio`, `Abre la ventana` y `Ven aquí` reciben todos `Mood=Ind`. Sobre 24 oraciones imperativas de `tú`, `vosotros` y `usted`, con enclíticos y sin ellos, `es_core_news_sm` encontró el imperativo dos veces, `es_core_news_md` tres y `es_core_news_lg` cuatro, de modo que `p_imperative` se queda corto y `p_indicative` absorbe las órdenes.
-
-    Indicar un modelo mayor en `nlp` no lo cambia. Medidos frente a `es_core_news_sm`, tanto `es_core_news_md` (54 MB) como `es_core_news_lg` (631 MB) coinciden con él en todas las categorías gramaticales de la prosa moderna y corren a la misma velocidad: los vectores que añaden pesan en memoria, no en el etiquetador. Lo que aportan es el vocabulario raro y antiguo: en el comienzo del *Quijote* leen `rocín`, `salpicón`, `lentejas` y `carnero` como sustantivos, donde el modelo pequeño ve verbos y adjetivos. Con los enclíticos cambian una mejora por un empeoramiento: `Dime` pasa a ser verbo mientras `Cantándole` deja de ser gerundio.
+    Las estadísticas valen lo que vale la anotación del modelo. `es_core_news_sm` analiza mal los verbos con pronombres enclíticos (`dámelo`, `cuéntamelo` salen como sustantivos con lemas inventados) y etiqueta los imperativos de `tú` como indicativo (`Abre la ventana` recibe `Mood=Ind`), de modo que `p_imperative` se queda corto y `p_indicative` absorbe las órdenes. Indicar un modelo mayor en `nlp` no lo cambia; solo lee mejor el vocabulario raro y antiguo.
 
 ## Métodos
 
@@ -133,14 +129,14 @@ Devuelve un diccionario con los marcadores del español calculados a partir de l
 | `p_ser` | `ser` entre las cópulas `ser` y `estar` |
 | `p_mente_adverbs` | Adverbios en `-mente` entre los adverbios |
 
-Los cuatro primeros marcadores comparten la base de las formas personales y suman uno siempre que el modelo no deje ninguna forma personal sin modo: cinco de sus 433 etiquetas llevan `VerbForm=Fin` y ningún `Mood`, y cada forma así falta en las cuatro proporciones. Los tres siguientes comparten la base de todas las formas verbales, contadas sobre verbos y auxiliares, de modo que los participios que el modelo anota como adjetivos (`la casa pintada`) quedan fuera de la base, mientras que los de los tiempos compuestos y la pasiva (`he leído`, `fue escrito`) quedan dentro.
+Los cuatro primeros marcadores comparten la base de las formas personales y suman uno salvo que el modelo deje alguna forma personal sin modo. Los tres siguientes comparten la base de todas las formas verbales de verbos y auxiliares: un participio que el modelo anota como adjetivo (`la casa pintada`) queda fuera de la base, los de los tiempos compuestos y la pasiva (`he leído`, `fue escrito`) quedan dentro.
 
-La base de `p_ser` son solo los usos copulativos, leídos de la dependencia del token y de aquello de lo que depende: `fue escrito` y `está cantando` son los auxiliares de la pasiva y de la perífrasis progresiva, y también lo es el `es` de `es financiado`, que en presente los modelos etiquetan como cópula - ninguno de los tres es una elección entre las dos cópulas, mientras que `es alta`, `está cansada` y `lo importante es que vengas` sí lo son. El análisis sintáctico es lo que los distingue, así que para un `Doc` que no lo lleva el marcador es `nan`.
+La base de `p_ser` son solo los usos copulativos, leídos del análisis sintáctico: los auxiliares de la pasiva y de la perífrasis progresiva (`fue escrito`, `es financiado`, `está cantando`) quedan fuera, mientras que `es alta`, `está cansada` y `lo importante es que vengas` cuentan. Para un `Doc` sin análisis sintáctico el marcador es `nan`.
 
 Un marcador cuya base está vacía - un texto sin verbos, sin cópula, sin adverbios - es `nan`.
 
 !!! note "Nota"
-    El subjuntivo, la elección entre `ser` y `estar` y los adverbios en `-mente` son los rasgos del español que las fórmulas de legibilidad no ven: el subjuntivo marca la hipótesis y la subordinación, `estar` un estado frente a la propiedad de `ser`, y los adverbios en `-mente` un registro formal y escrito.
+    El subjuntivo marca la hipótesis y la subordinación, `estar` un estado frente a la propiedad de `ser`, y los adverbios en `-mente` un registro formal y escrito.
 
 !!! example "Ejemplo"
 

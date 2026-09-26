@@ -5,11 +5,11 @@
 
 ## Description
 
-Plots for [stylometry](../corpus/stylometry.md): a dendrogram and the multidimensional scaling of the matrix of distances of [`delta`](../corpus/stylometry.md#delta), the principal components of the frequencies of the most frequent words and the Mendenhall curves of several texts - the set stylo uses to look at how texts cluster by author. The functions take the axes `ax` and return `Axes`.
+Plots for [stylometry](../corpus/stylometry.md): a dendrogram and the multidimensional scaling of the matrix of distances of [`delta`](../corpus/stylometry.md#delta), the principal components of the frequencies of the most frequent words and the Mendenhall curves of several texts. The functions take the axes `ax` and return `Axes`.
 
 ## Dendrogram { #dendrogram_plot }
 
-Hierarchical clustering by `scipy.cluster.hierarchy` over the matrix of distances between texts; Ward's method by default, as in stylo and in [Evert et al. (2015)](https://aclanthology.org/W15-0709.pdf), the labels of the leaves are the names of the texts of the index of the matrix.
+Hierarchical clustering by `scipy.cluster.hierarchy` over the matrix of distances between texts; Ward's method by default, as in [Evert et al. (2015)](https://aclanthology.org/W15-0709.pdf); the labels of the leaves are the names of the texts of the index of the matrix.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
@@ -19,7 +19,7 @@ Hierarchical clustering by `scipy.cluster.hierarchy` over the matrix of distance
 
 ## Principal components { #pca_plot }
 
-Principal component analysis of the z-scores of the relative frequencies of the most frequent units ([`frequency_table`](../corpus/stylometry.md#delta), `z_scores`) through the singular value decomposition, as `pca.visualization` of stylo: the texts on the plane of the first two components with their names, the shares of the explained variance in the labels of the axes.
+Principal component analysis of the z-scores of the relative frequencies of the most frequent units ([`frequency_table`](../corpus/stylometry.md#delta), `z_scores`): the texts on the plane of the first two components with their names, the shares of the explained variance in the labels of the axes.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
@@ -101,4 +101,4 @@ Six novels from the [corpus of literature](../datasets/spanishliterature.md), th
 
     ![ests](../img/mds_mendenhall.png){: .center }
 
-Cosine Delta over the 100 most frequent words separates the authors: the dendrogram joins the novels of each author before it joins the two groups, and the first principal component, 43.9% of the variance, puts Galdós on one side and Unamuno on the other. The Mendenhall curves hardly differ - word length is a weak feature on its own.
+Cosine Delta over the 100 most frequent words separates the authors: the dendrogram joins the novels of each author before it joins the two groups, and the first principal component puts Galdós on one side and Unamuno on the other. The Mendenhall curves hardly differ - word length is a weak feature on its own.

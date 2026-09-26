@@ -42,14 +42,10 @@ SENTENCE_END = re.compile(
 )
 NON_SPACE = re.compile(r"\S")
 INITIAL = re.compile(r"[A-ZÁÉÍÓÚÜÑ]\.")
-# Marker of a numbered or lettered list (1. 2.1. b. IV.) that opens a sentence
-# or a line, at the end of the examined window
+# Marker of a list (1. 2.1. b. IV.) that opens a sentence or a line, at the end of the window
 LIST_MARKER = re.compile(r"(?:^|\n)[ \t]*(?:\d+(?:\.\d+)*|[a-z]|[IVXLC]+)\.\Z")
 OPENING_CHARS = "(«“\"'["
-# Characters looked back from a period for an abbreviation: enough for the two
-# tokens that are checked, so that the scan stays linear in the text length.
-# A token cut by the window is at least 61 characters long and matches
-# neither an abbreviation nor an initial
+# Characters looked back from a period for an abbreviation or an initial
 LOOKBACK = 64
 
 
@@ -58,9 +54,8 @@ def is_punctuation(token: str) -> bool:
     Checking whether a token consists only of punctuation marks and symbols
 
     Description:
-        Marks are the characters of PUNCTUATIONS and the Unicode characters
-        of the categories P (punctuation) and S (symbols), so multi-character
-        tokens like "?!", "!..", "--", "…", "«", "€" are filtered as well
+        Characters of PUNCTUATIONS and of the Unicode categories P and S,
+        so "?!", "--", "«" and "€" are punctuation too
 
     Arguments:
         token (str): Token
@@ -76,9 +71,8 @@ def _opens_remark(text: str, position: int) -> bool:
     Whether the dash before the position opens the remark of the narrator
 
     Description:
-        In a dialogue the narrator's remark follows the dash in lower case
-        and belongs to the sentence of the line ("-Si -dijo el"), while
-        a new line of dialogue opens with an upper-case word
+        A remark of the narrator opens in lower case ("-Sí -dijo él"),
+        a new line of dialogue in upper case
 
     Arguments:
         text (str): Text string
@@ -96,17 +90,10 @@ def _ends_sentence(text: str, start: int, match: re.Match[str]) -> bool:
     Checking whether the terminal marks found in a text end a sentence
 
     Description:
-        The next non-space character must open a sentence: an upper-case
-        letter, a digit or one of SENTENCE_OPENERS; a lower-case continuation
-        after an ellipsis or an exclamation mark keeps the sentence going.
-        A dash followed by a lower-case word opens the remark of the narrator
-        of a dialogue rather than a sentence ("-¿Vienes? -preguntó ella").
-        A single period does not end a sentence after an abbreviation from
-        ABBREVIATIONS, after a capital initial or after a list marker that
-        opens the sentence or a line. Opening quotes and brackets are
-        stripped from the tokens before the check, so "(EE. UU. Es grande)"
-        stays together. Only the last LOOKBACK characters before the period
-        are examined
+        The rules of sentenize; the next non-space character must be an
+        upper-case letter, a digit or one of SENTENCE_OPENERS. Opening quotes
+        and brackets are stripped from the tokens before the abbreviation
+        check, so "(EE. UU. Es grande)" stays together
 
     Arguments:
         text (str): Text string
@@ -147,15 +134,12 @@ def sentenize(text: str) -> Iterator[str]:
         A sentence ends with a period, an exclamation or question mark or
         an ellipsis, possibly followed by closing quotes or brackets, when
         the next word starts with an upper-case letter, a digit, an inverted
-        mark, an opening quote or bracket or a dash; a blank line ends
-        a sentence too. A dash followed by a lower-case word opens the remark
-        of the narrator of a dialogue and keeps the sentence going.
-        Abbreviations (Sr., Dra., p. ej., EE. UU., a. m.),
-        capital initials and list markers at the start of a sentence or
-        a line (1. 2.1. IV.) do not end a sentence. A single line break
-        does not split a sentence, so hard-wrapped texts are handled.
-        The text is scanned once, the sentences are yielded as they are
-        found, stripped of surrounding whitespace
+        mark, an opening quote or bracket or a dash; a blank line ends one
+        too. A dash before a lower-case word opens a remark of the narrator
+        and keeps the sentence going. A single period after an abbreviation
+        (Sr., p. ej., EE. UU.), a capital initial or a list marker opening
+        a sentence or a line (1. 2.1. IV.) does not end a sentence, nor does
+        a single line break. Sentences are stripped of surrounding whitespace
 
     Arguments:
         text (str): Text string
@@ -171,8 +155,7 @@ def iter_text_sents(text: str) -> Iterator[tuple[int, int, str]]:
     Splitting a text into sentences with positions
 
     Description:
-        The sentences of sentenize, by the same rules, with the positions of
-        their stripped text in the string
+        The sentences of sentenize with their positions in the string
 
     Arguments:
         text (str): Text string
@@ -210,9 +193,7 @@ def get_tokenizer() -> Tokenizer:
     Getting the rule-based tokenizer of the spaCy Spanish language class
 
     Description:
-        The tokenizer of a blank "es" pipeline does not need a trained
-        model; it is created once per process, with the rules of
-        add_dash_rules for the dashes of a dialogue
+        The tokenizer of a blank "es" pipeline, with the rules of add_dash_rules
 
     Returns:
         Tokenizer: spaCy tokenizer
@@ -227,19 +208,13 @@ def add_dash_rules(nlp: Language) -> None:
     Adding the rules for the dashes of a dialogue to the tokenizer of a pipeline
 
     Description:
-        spaCy splits a long dash off only at the start and at the end of
-        a token and a hyphen not at all, so the dashes of a dialogue glued
-        to the words stay inside them: --No, -dijo, reírse—me decía and
-        dijo:—¡Mis are single tokens, and the words are not words. The rules
-        of TOKENIZER_PREFIXES, TOKENIZER_SUFFIXES and TOKENIZER_INFIXES split
-        them off and leave a hyphen between letters (franco-alemán) or before
-        a digit (-5) alone. The blank pipeline of get_tokenizer and the models
-        of get_nlp get them; a pipeline of one's own gets them from this
-        function, so that its words are the words of the rest of the library.
-        The rules are added to the ones the tokenizer already has, a rule it
-        has already is not added twice, and a tokenizer that is not the
-        Tokenizer of spaCy, or whose rules are not regular expressions, is
-        left as it is
+        The rules of TOKENIZER_PREFIXES, TOKENIZER_SUFFIXES and TOKENIZER_INFIXES
+        split the dashes glued to the words off (--No, -dijo, reírse—me,
+        dijo:—¡Mis) and leave a hyphen between letters (franco-alemán) or before
+        a digit (-5) alone; get_tokenizer and get_nlp have them already.
+        A rule the tokenizer has is not added twice; a tokenizer that is not
+        the Tokenizer of spaCy, or whose rules are not regular expressions,
+        is left as it is
 
     Arguments:
         nlp (Language): Pipeline whose tokenizer gets the rules
@@ -273,10 +248,9 @@ def _extend_rules(method: object, rules: list[str]) -> re.Pattern[str] | None:
     Regular expression of a tokenizer extended with the rules it does not have yet
 
     Description:
-        The expression is read from the bound method of the tokenizer
-        (prefix_search, suffix_search, infix_finditer); a tokenizer without
-        the rule gets the rules alone, and a method that is not one of a
-        regular expression gives None, the rule left as it is
+        The expression is read from a bound method of the tokenizer
+        (prefix_search, suffix_search, infix_finditer); no method gives the
+        rules alone, a method not bound to a regular expression gives None
     """
     if method is None:
         return re.compile("|".join(rules))
@@ -292,12 +266,10 @@ def tokenize(text: str) -> Iterator[str]:
     Splitting a text into tokens with the spaCy Spanish tokenizer
 
     Description:
-        Whitespace tokens are dropped; punctuation marks, including "¿"
-        and "¡", numbers like "1.500,50", "3.º", "1990-1995" and
-        abbreviations like "Sr.", "EE. UU." are single tokens; words
-        with enclitic pronouns (dámelo) are not split; the dashes of a
-        dialogue glued to the words (--No, -dijo, reírse—me) are split off
-        by the rules of add_dash_rules
+        Whitespace tokens are dropped; punctuation marks (¿, ¡), numbers
+        (1.500,50, 3.º, 1990-1995), abbreviations (Sr., EE. UU.) and words
+        with enclitic pronouns (dámelo) are single tokens; the dashes of
+        a dialogue are split off by add_dash_rules
 
     Arguments:
         text (str): Text string
@@ -314,12 +286,9 @@ def lemmatize(word: str) -> str:
     Lemmatizing a word form with simplemma, with caching
 
     Description:
-        simplemma works from a dictionary without a trained model: a known
-        form is mapped to its lower-case lemma (Tienes - tener, NIÑOS -
-        niño), an unknown form is returned unchanged (Madrid, dámelo).
-        Verbs with enclitic pronouns are handled when the form is in the
-        dictionary (cantándole - cantar). The results are cached by form:
-        a text has far fewer distinct forms than tokens
+        A known form is mapped to its lower-case lemma (Tienes - tener,
+        cantándole - cantar), an unknown form is returned unchanged (Madrid,
+        dámelo)
 
     Arguments:
         word (str): Word form
@@ -335,12 +304,8 @@ def iter_doc_tokens(source: Doc | Span) -> Iterator[Token]:
     Extracting the tokens of the words from a Doc or Span object
 
     Description:
-        Whitespace tokens are skipped, punctuation marks and symbols are
-        dropped by the same is_punctuation check as for a string (%, €, §
-        and other symbols of the category S are not words, although spaCy
-        does not treat them as punctuation). The Spanish tokenizer keeps
-        hyphenated words (teórico-práctico) and abbreviations (EE. UU.)
-        as single tokens, so a word is always one token
+        Whitespace tokens and the tokens of is_punctuation (symbols like %
+        and € included) are skipped
 
     Arguments:
         source (Doc|Span): Doc or Span object
@@ -376,9 +341,8 @@ def iter_text_words(text: str) -> Iterator[tuple[int, int, str]]:
     Extracting words with positions from a string
 
     Description:
-        The string is split by the tokenizer of the blank Spanish pipeline
-        (get_tokenizer), and punctuation marks and symbols are dropped, as in
-        WordsExtractor
+        The tokens of get_tokenizer without punctuation marks and symbols,
+        as in WordsExtractor
 
     Arguments:
         text (str): Text string
@@ -443,13 +407,7 @@ def get_nlp(model: str = SPACY_MODEL) -> Language:
     Loading a spaCy pipeline, once per process
 
     Description:
-        The statistics on Universal Dependencies need a trained model.
-        The default one is es_core_news_sm; a pipeline loaded by the caller
-        can be passed to those statistics instead. The tokenizer of a loaded
-        model gets the rules of add_dash_rules, so that its words are the
-        words of get_tokenizer. The default is resolved before the cache, so
-        that get_nlp() and get_nlp(SPACY_MODEL) are the same pipeline and not
-        two copies of it
+        The tokenizer of the pipeline gets the rules of add_dash_rules
 
     Arguments:
         model (str): Name of the model
@@ -473,10 +431,8 @@ def has_words(source: str | Doc | Span) -> bool:
     Checking whether a text holds a word
 
     Description:
-        A text of punctuation alone (¿?, ..., a line of dots between two
-        paragraphs) and an empty one hold no word: the statistics have nothing
-        to count in them, the formulas of readability would divide by them, and
-        a component of a pipeline meets them in any corpus
+        An empty text or one of whitespace and punctuation alone (¿?, ...)
+        holds no word
 
     Arguments:
         source (str|Doc|Span): Text, Doc or Span object
@@ -496,13 +452,6 @@ def has_words(source: str | Doc | Span) -> bool:
 def check_sequence(value: object, what: str = "words") -> None:
     """
     Checking that an argument is a sequence of strings and not a text
-
-    Description:
-        A string satisfies Sequence[str] formally but is iterated character by
-        character, and a Doc or a Span of spaCy is iterated token by token,
-        where every token compares only with itself, so every one of them would
-        be a word of its own with a frequency of one; the functions that expect
-        a list of words or of texts refuse both explicitly
 
     Arguments:
         value (object): Value to check
@@ -533,12 +482,9 @@ def is_verbal_noun(lemma: str) -> bool:
     Checking whether a lemma is a noun derived from a verb, by its suffix
 
     Description:
-        The suffixes of VERBAL_NOUN_SUFFIXES - -ción, -sión, -miento, -anza,
-        -encia, -ancia, -aje, -dura, -azgo (revisión, nombramiento, aprendizaje)
-        - or a lemma of VERBAL_NOUN_LEMMAS, the nouns whose derivation leaves no
-        suffix behind (uso, pago, comienzo, envío). The rule catches nouns of
-        other origins with the same endings (ciencia, distancia), as any suffix
-        rule does
+        A suffix of VERBAL_NOUN_SUFFIXES (-ción, -miento, -aje...) or a lemma
+        of VERBAL_NOUN_LEMMAS, the nouns derived without a suffix (uso, pago);
+        nouns of other origins with the same endings match too (ciencia)
 
     Arguments:
         lemma (str): Lemma of a noun
@@ -561,9 +507,7 @@ def find_phrases(words: Sequence[str], phrases: Iterable[str]) -> list[tuple[int
 
     Description:
         The words and the phrases are compared in lower case; at every position
-        the longest phrase is taken, and the phrases found do not overlap. The
-        phrases are indexed by their first word, so that at every position only
-        the ones starting with that word are compared
+        the longest phrase is taken, and the phrases found do not overlap
 
     Arguments:
         words (list[str]): Words of the text
@@ -606,9 +550,8 @@ def count_letters(word: str) -> int:
     Counting the letters of a string
 
     Description:
-        Letters of any alphabet (str.isalpha), without digits, hyphens
-        and marks; the ordinal indicators º and ª are letters for
-        str.isalpha, so 3.º is a one-letter word
+        Letters of any alphabet (str.isalpha); the ordinal indicators º and ª
+        are letters too, so 3.º has one
 
     Arguments:
         word (str): Word form
@@ -639,10 +582,10 @@ def to_path(path: str | Path) -> Path:
     raise SourceTypeError("The path must be a string or a Path")
 
 
-# Seconds that a download waits for the server to answer
+# Seconds a download waits for the server to answer
 DOWNLOAD_TIMEOUT = 60
 
-# The safe filter of the extraction of TAR archives, which Python has since 3.11.4
+# Whether tarfile has the data filter (Python 3.11.4+)
 TAR_DATA_FILTER = hasattr(tarfile, "data_filter")
 
 
@@ -656,10 +599,8 @@ def download_file(
     Downloading a file from the network
 
     Description:
-        The file is written under a temporary name next to the target one and
-        renamed once it is complete, so a broken download leaves no partial
-        file that the next call would take for a downloaded one. The connection
-        waits for an answer no longer than DOWNLOAD_TIMEOUT seconds
+        A broken download leaves no partial file; the server is waited for
+        DOWNLOAD_TIMEOUT seconds at most
 
     Arguments:
         url (str): Address of the file
@@ -712,16 +653,9 @@ def extract_archive(archive_file: str | Path, extract_dir: str | Path | None = N
     Extracting the files of a ZIP or TAR archive
 
     Description:
-        A ZIP archive is extracted by ZipFile.extractall, as shutil.unpack_archive
-        in some versions of Python skips the files with two dots in a row in
-        their names, not only the path components «..»; a TAR archive is read
-        once, through the data filter of tarfile, which refuses links and paths
-        outside the directory, or, on the versions of Python 3.11 before 3.11.4
-        that have no filter, through a check of its own that takes only files
-        and directories inside it. If the root of the archive differs from the
-        name of the archive without its extensions, it is renamed, and an
-        earlier directory with that name is removed first, otherwise a second
-        extraction would put a copy inside it
+        Paths and links leading outside the directory are refused. A root
+        directory that differs from the name of the archive without its
+        extensions is renamed to it, replacing an earlier extraction
 
     Arguments:
         archive_file (str|Path): Path to the archive
@@ -767,7 +701,7 @@ def extract_archive(archive_file: str | Path, extract_dir: str | Path | None = N
                                 "or links"
                             )
                         tar_file.extract(member, extract_path)
-                # The members are read by the extraction, the stream is not read again
+                # After the extraction, so that the stream is read once
                 members = tar_file.getnames()
     except (OSError, zipfile.BadZipFile, tarfile.TarError) as e:
         raise DataFileError(f"Cannot extract the archive {archive_path}") from e
@@ -778,7 +712,7 @@ def extract_archive(archive_file: str | Path, extract_dir: str | Path | None = N
         src_basename = str(Path(src_basename).parent)
     if not src_basename or src_basename == ".":
         return str(extract_path)
-    # All the extensions go: spanish_literature_v1.tar.xz -> spanish_literature_v1
+    # spanish_literature_v1.tar.xz -> spanish_literature_v1
     dest_basename = archive_path.name
     while (stem := Path(dest_basename).stem) != dest_basename:
         dest_basename = stem

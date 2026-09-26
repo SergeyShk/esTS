@@ -5,11 +5,11 @@
 
 ## Descripción
 
-Dos gráficos de la distribución de las palabras de un texto que completan la [ley de Zipf](zipf.md): el crecimiento del vocabulario con la longitud del texto según la ley de Heaps y el espectro de frecuencias, cuántos tipos de palabra aparecen exactamente una, dos, tres veces. Ambos gráficos están en zipfR (`plot.vgc`, `plot.spc`). Las funciones reciben los ejes `ax` y devuelven `Axes`.
+Dos gráficos de la distribución de las palabras de un texto que completan la [ley de Zipf](zipf.md): el crecimiento del vocabulario con la longitud del texto según la ley de Heaps y el espectro de frecuencias, cuántos tipos de palabra aparecen exactamente una, dos, tres veces. Las funciones reciben los ejes `ax` y devuelven `Axes`.
 
 ## Ley de Heaps { #heaps_plot }
 
-El tamaño del vocabulario $V$ tras cada palabra del texto y la curva ajustada $V(N) = K \cdot N^{\beta}$ de [`fit_heaps`](../stats/diversity_stats_funcs.md#heaps_beta) con sus parámetros en la leyenda. En corpus de millones de palabras $\beta$ ronda 0.4-0.6; sobre la curva entera de un solo texto sale más alto, 0.6-0.9, porque al principio de un texto casi cada palabra es nueva; la curva depende del orden de las palabras.
+El tamaño del vocabulario $V$ tras cada palabra del texto y la curva ajustada $V(N) = K \cdot N^{\beta}$ de [`fit_heaps`](../stats/diversity_stats_funcs.md#heaps_beta) con sus parámetros en la leyenda; la curva depende del orden de las palabras.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |

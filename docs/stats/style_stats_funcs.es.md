@@ -42,7 +42,7 @@ $$
 !!! info ""
     **ests.style_stats.calc_water()**
 
-El contenido de agua de [Text.ru](https://text.ru/seo): la proporción de las palabras sin contenido en porcentaje, es decir, las palabras vacías de [`is_stopword`](#is_stopword) o de la lista pasada, sin distinguir mayúsculas. Las normas de Text.ru - hasta 15% natural, 15-30% excesivo, más de 30% alto - están pensadas para el ruso, que no tiene artículos; un texto en español tiene más agua solo por su gramática, un 42-54% en los textos del corpus de literatura.
+El contenido de agua de [Text.ru](https://text.ru/seo): la proporción de las palabras sin contenido en porcentaje, es decir, las palabras vacías de [`is_stopword`](#is_stopword) o de la lista pasada, sin distinguir mayúsculas. Las normas de Text.ru - hasta 15% natural, 15-30% excesivo, más de 30% alto - están pensadas para el ruso, que no tiene artículos; un texto en español tiene más agua solo por su gramática.
 
 Fórmula:
 
@@ -60,7 +60,7 @@ $$
 !!! info ""
     **ests.style_stats.is_stopword()**
 
-Comprueba si una palabra es una palabra vacía, sin distinguir mayúsculas. Las palabras vacías son las 265 formas de `ests.constants.STOPWORDS` - las clases cerradas de la gramática: artículos y demás determinantes (`este`, `cada`, `mucho`), pronombres (`él`, `cuyo`, `nadie`), preposiciones, conjunciones e interjecciones, con los adverbios que señalan, relacionan o preguntan (`aquí`, `así`, `dónde`) y los que niegan, afirman o focalizan (`no`, `solo`, `también`) - y las expresiones parentéticas de una palabra de `PARENTHETICALS` (`finalmente`, `naturalmente`). Se conservan las formas de la ortografía antigua (`á`, `ó`, `tí`), tal como las escriben los textos de dominio público. No se usan las palabras vacías de spaCy para el español: esa lista está hecha para noticias y contiene palabras con contenido (`acuerdo`, `dijo`, `verdad`, `grande`).
+Comprueba si una palabra es una palabra vacía, sin distinguir mayúsculas. Las palabras vacías son las 265 formas de `ests.constants.STOPWORDS` - las clases cerradas de la gramática: artículos y demás determinantes (`este`, `cada`, `mucho`), pronombres (`él`, `cuyo`, `nadie`), preposiciones, conjunciones e interjecciones, con los adverbios que señalan, relacionan o preguntan (`aquí`, `así`, `dónde`) y los que niegan, afirman o focalizan (`no`, `solo`, `también`) - y las expresiones parentéticas de una palabra de `PARENTHETICALS` (`finalmente`, `naturalmente`). Se incluyen las formas de la ortografía antigua (`á`, `ó`, `tí`).
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
@@ -90,7 +90,7 @@ donde $N$ es el número de palabras y $V$ el número de palabras distintas.
 !!! info ""
     **ests.style_stats.calc_zipf_naturalness()**
 
-La concordancia de las frecuencias de las palabras más frecuentes con la distribución ideal $f_r = f_1 / r$ de la [ley de Zipf](https://es.wikipedia.org/wiki/Ley_de_Zipf), donde $f_1$ es la frecuencia de la palabra más frecuente y $r$ el rango de una palabra (pr-cy, megaindex). Es 100 por uno menos la desviación relativa media de las frecuencias respecto de las ideales en los rangos de 2 a $R = \min(top\_n, V, f_1)$: el rango 1 coincide con el ideal por construcción, y por encima del rango $f_1$ la frecuencia ideal es menor que uno y la desviación de los hápax crece sin límite. Los valores negativos se recortan a 0; la norma de los servicios es al menos 50%. Es `nan` cuando no hay rangos que comparar: todas las palabras son hápax, el texto tiene un solo tipo de palabra o `top_n` es menor que 2.
+La concordancia de las frecuencias de las palabras más frecuentes con la distribución ideal $f_r = f_1 / r$ de la [ley de Zipf](https://es.wikipedia.org/wiki/Ley_de_Zipf), donde $f_1$ es la frecuencia de la palabra más frecuente y $r$ el rango de una palabra (pr-cy, megaindex). Es 100 por uno menos la desviación relativa media de las frecuencias respecto de las ideales en los rangos de 2 a $R = \min(top\_n, V, f_1)$. Los valores negativos se recortan a 0; la norma de los servicios es al menos 50%. Es `nan` cuando no hay rangos que comparar: todas las palabras son hápax, el texto tiene un solo tipo de palabra o `top_n` es menor que 2.
 
 Fórmula:
 
@@ -120,7 +120,7 @@ La frecuencia de cada palabra clave por cada 100 palabras del texto ([Text.ru](h
 !!! info ""
     **ests.style_stats.calc_verbal_nouns()**
 
-La proporción de los sustantivos derivados de un verbo entre los lemas de los sustantivos de un texto en porcentaje, `nan` para un texto sin sustantivos. Un sustantivo es deverbal por su sufijo - `-ción`, `-sión`, `-miento`, `-anza`, `-encia`, `-ancia`, `-aje`, `-dura`, `-azgo` (`revisión`, `nombramiento`, `aprendizaje`) - o es uno de los sustantivos cuya derivación no deja sufijo (`uso`, `pago`, `envío`), como en los predicados escindidos de [`SyntaxStats`](syntax_stats.md). La regla atrapa también sustantivos de otro origen con las mismas terminaciones (`ciencia`, `distancia`), como cualquier regla de sufijos. En español un sustantivo solo se distingue de una forma verbal por la anotación (`uso`, `viaje`, `dura`), así que la función recibe los lemas de los tokens etiquetados `NOUN`, no las palabras.
+La proporción de los sustantivos derivados de un verbo entre los lemas de los sustantivos de un texto en porcentaje, `nan` para un texto sin sustantivos. Un sustantivo es deverbal por su sufijo - `-ción`, `-sión`, `-miento`, `-anza`, `-encia`, `-ancia`, `-aje`, `-dura`, `-azgo` (`revisión`, `nombramiento`, `aprendizaje`) - o es uno de los sustantivos cuya derivación no deja sufijo (`uso`, `pago`, `envío`), como en los predicados escindidos de [`SyntaxStats`](syntax_stats.md). La regla atrapa también sustantivos de otro origen con las mismas terminaciones (`ciencia`, `distancia`). La función recibe los lemas de los tokens etiquetados `NOUN`, no las palabras.
 
 !!! example "Ejemplo"
 
@@ -140,7 +140,7 @@ La proporción de los sustantivos derivados de un verbo entre los lemas de los s
 !!! info ""
     **ests.style_stats.calc_phrase_density()**, **ests.style_stats.expand_phrases()**
 
-El número de apariciones de las expresiones de una lista por cada 100 palabras: las locuciones prepositivas (`COMPOUND_PREPOSITIONS`), las expresiones parentéticas (`PARENTHETICALS`) y los clichés (`OFFICIALESE_CLICHES`). En cada posición se toma la expresión más larga, y las expresiones encontradas no se solapan. `expand_phrases` escribe las expresiones en las formas del texto: una expresión que termina en `a` o `de` también recibe la contracción con el artículo (`a efectos del`, `conforme al`), y una expresión cuya primera palabra es un infinitivo recibe las formas del texto con ese lema (`proceder a` - `procedió a`, `ser de aplicación` - `es de aplicación`). El lema es el de simplemma, y un lema pronominal vale por su verbo (`llévese`, `llevarse` - `llevarse` - `llevar`); las formas que simplemma deja como están - los participios irregulares del perfecto (`ha dado`, `ha hecho`, `ha puesto`) y el imperativo `dese` - las da `IRREGULAR_VERB_FORMS`. Las palabras que siguen al verbo descartan la lectura como sustantivo (`el hecho`, `el puesto`).
+El número de apariciones de las expresiones de una lista por cada 100 palabras: las locuciones prepositivas (`COMPOUND_PREPOSITIONS`), las expresiones parentéticas (`PARENTHETICALS`) y los clichés (`OFFICIALESE_CLICHES`). En cada posición se toma la expresión más larga, y las expresiones encontradas no se solapan. `expand_phrases` escribe las expresiones en las formas del texto: una expresión que termina en `a` o `de` también recibe la contracción con el artículo (`a efectos del`, `conforme al`), y una expresión cuya primera palabra es un infinitivo recibe las formas del texto con ese lema (`proceder a` - `procedió a`, `ser de aplicación` - `es de aplicación`). El lema es el de simplemma, y un lema pronominal vale por su verbo (`llévese` - `llevar`); las formas que simplemma no lematiza - los participios irregulares (`ha dado`, `ha hecho`) y el imperativo `dese` - las da `IRREGULAR_VERB_FORMS`. Las palabras que siguen al verbo descartan la lectura como sustantivo (`el hecho`, `el puesto`).
 
 Las locuciones prepositivas (42) y los clichés (74) son los que señalan las guías españolas de lenguaje claro y los manuales de estilo de las administraciones:
 
@@ -162,7 +162,7 @@ Las locuciones prepositivas (42) y los clichés (74) son los que señalan las gu
 | [Guía para el uso del Lenguaje Claro](https://biblioteca.legislatura.gob.ar/archivos/lenguajeClaro.pdf) | Legislatura de la Ciudad de Buenos Aires | 2024 |
 | [Manual de Estilo del Lenguaje para uso de la Administración Pública Provincial](https://www.salta.gob.ar/public/descargas/archivos/ocspdfs/ocs_manual_de_estilo_del_lenguaje_para_la_administracion_publica_provincial.pdf) | Provincia de Salta | hacia 2007 |
 
-Quedan fuera las formas que las propias guías recomiendan (`sobre la base de`, `con base en`) o aceptan (`de acuerdo a`, `de cara a`), y las expresiones con usos neutros frecuentes (`tomar una decisión`, `en este sentido`), salvo `proceder a` y `llevar a cabo`, que señalan las guías de tres administraciones o más. Algunas locuciones prepositivas también tienen usos neutros (`a través de`, `en caso de`, `con respecto a`), así que la densidad de un texto neutro no es cero: compare los textos entre sí.
+Quedan fuera las formas que las guías recomiendan (`sobre la base de`) o aceptan (`de acuerdo a`) y las expresiones con usos neutros frecuentes (`en este sentido`), salvo `proceder a` y `llevar a cabo`. Algunas locuciones prepositivas también tienen usos neutros (`a través de`, `en caso de`, `con respecto a`), así que la densidad de un texto neutro no es cero: compare los textos entre sí.
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
@@ -174,7 +174,7 @@ Quedan fuera las formas que las propias guías recomiendan (`sobre la base de`, 
 !!! info ""
     **ests.style_stats.calc_parentheticals()**, **ests.style_stats.is_parenthetical()**
 
-Las expresiones parentéticas de `PARENTHETICALS` (`sin embargo`, `es decir`, `por ejemplo`, `finalmente`) por cada 100 palabras; `is_parenthetical` comprueba una palabra con las expresiones de una palabra de la lista. La puntuación no se mira, así que la lista contiene las expresiones que van aparte en la mayoría de sus apariciones: las 55 que van entre comas o en el borde de una oración en al menos el 55% de sus apariciones en el [corpus de literatura](../datasets/spanishliterature.md), con las series de orden que abre la primera de ellas (`en primer lugar`, `en segundo lugar`). Quedan fuera los adverbios de duda, que el español rara vez aísla (`tal vez` 8%, `quizá` 10%), y también `sobre todo` (32%), `sin duda` (28%) y `además` (53%), que llevan un complemento o se unen a la oración sin comas.
+Las expresiones parentéticas de `PARENTHETICALS` (`sin embargo`, `es decir`, `por ejemplo`, `finalmente`) por cada 100 palabras; `is_parenthetical` comprueba una palabra con las expresiones de una palabra de la lista. La puntuación no se mira, así que la lista contiene las expresiones que van entre comas o en el borde de una oración en la mayoría de sus apariciones en el [corpus de literatura](../datasets/spanishliterature.md), con las series de orden (`en primer lugar`, `en segundo lugar`). Los adverbios de duda (`tal vez`, `quizá`), `sobre todo`, `sin duda` y `además` no están en la lista.
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |

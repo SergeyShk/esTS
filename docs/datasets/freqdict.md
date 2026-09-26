@@ -7,20 +7,20 @@
 
 A frequency dictionary of Spanish lemmas built from the Spanish books of [Google Books Ngram](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html) (version 20200217): 83,785 lemmas (109,178 rows of a lemma and a part of speech) of the books of 1980-2019, 63 billion words. Every row has the frequency per million words (ipm), the range (the number of years out of 40 in which the lemma occurs), Juilland's D over the years (0-100) and the number of books with the most widespread form of the lemma. The parts of speech are those of Google, with the names of Universal Dependencies: `NOUN`, `PROPN`, `VERB`, `ADJ`, `ADV`, `PRON`, `DET`, `ADP`, `CONJ` (coordinating and subordinating together).
 
-The dictionary is built by `scripts/build_freq_dict.py` from the 1-grams (3.2 GB): only the forms tagged with a part of speech and made of letters are counted (numbers, punctuation and the tag `X` go); the forms go to their keys by [`lemma_key`](#lemma_key) - lower case, then the lemma by simplemma 2.0.0, the lemmatizer of the library. Google has no tag for proper nouns, so a noun form written with a capital letter in 90% of its occurrences is `PROPN` and keeps its form. The decision is taken for the whole form, the lower-case occurrences included: the form `dios` is capitalized in 92% of its occurrences, so all of it, `dios` in lower case too, is `PROPN` (405.9 ipm), while the `NOUN` row of `dios` (37.3 ipm) comes mostly from the plural `dioses`, capitalized in 6% of its occurrences. The rows below 0.1 ipm or found in fewer than 5 years (the misreadings of one batch of scanned books) are left out. The dispersion is computed on the relative frequency of every year, so that the years of different size weigh the same; the number of books is a lower bound, as a book with several forms of the lemma is counted once.
+The dictionary is built by `scripts/build_freq_dict.py` from the 1-grams: only the forms tagged with a part of speech and made of letters are counted (numbers, punctuation and the tag `X` are dropped), and every form goes to its key by [`lemma_key`](#lemma_key). Google has no tag for proper nouns, so a noun form capitalized in 90% of its occurrences is `PROPN` and keeps its form. The decision is taken for the whole form: `dios`, capitalized in 92% of its occurrences, is `PROPN` in lower case too, while its `NOUN` row comes mostly from the plural `dioses`. The rows below 0.1 ipm or found in fewer than 5 years are left out. The dispersion is computed on the relative frequency of every year; the number of books is a lower bound, as a book with several forms of the lemma is counted once.
 
-For a lookup the parts of speech of a lemma are merged: the frequencies are summed, the range, the dispersion and the number of books are the greatest ones. The lemma is looked up in lower case. The parsed dictionary is cached by the path of the file and read once per process, so a `FreqDict()` for every text is cheap. The dictionary is the source of the frequencies of [`LexicalStats`](../stats/lexical_stats.md), and its 10,000 most frequent lemmas are the embedded list of the frequency bands. The dictionary size is `CORPUS_SIZE`, 63,090,618,290 words.
+For a lookup the parts of speech of a lemma are merged: the frequencies are summed, the range, the dispersion and the number of books are the greatest ones. The dictionary is read once per process, so a `FreqDict()` for every text is cheap. It is the source of the frequencies of [`LexicalStats`](../stats/lexical_stats.md), and its 10,000 most frequent lemmas are the embedded list of the frequency bands. The dictionary size is `CORPUS_SIZE`, 63,090,618,290 words.
 
-The archive (0.9 MB) is kept in the repository of the library, downloaded once into the data directory, verified against its SHA-256 checksum and extracted.
+The archive (0.9 MB) is kept in the repository of the library and downloaded once into the data directory.
 
 !!! quote "Licence and attribution"
     The dictionary is derived from Google Books Ngram, which is licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/), and is distributed under the same licence; the archive carries a `README.txt` with the source and the changes. Cite the source as: Michel J.-B. et al. Quantitative analysis of culture using millions of digitized books. Science 331 (6014), 2011.
 
 ## Key of a word { #lemma_key }
 
-`ests.datasets.freq_dict.lemma_key(word, proper=False)` - the key by which a word is looked up in the dictionary, and by which the dictionary is built: the word goes to lower case and then to its lemma by `lemmatize`. simplemma tells the case apart and leaves an unknown capitalized word as it is, so a word at the start of a sentence would miss its lemma (`Miró`, `Déjame`); the lower case finds it (`mirar`, `dejar`). A proper noun keeps its form in lower case (`proper=True`): `París` is `parís`, not the verb `parir`.
+`ests.datasets.freq_dict.lemma_key(word, proper=False)` - the key by which a word is looked up in the dictionary, and by which the dictionary is built: the word goes to lower case, so that a word at the start of a sentence finds its lemma (`Miró` - `mirar`), and then to its lemma by `lemmatize`. A proper noun keeps its form in lower case (`proper=True`): `París` is `parís`, not the verb `parir`.
 
-The lemmas depend on the version of simplemma: the dictionary is built with 2.0.0 (the constant `SIMPLEMMA_VERSION`), and the library requires simplemma 2 (2.0 or newer, below 3); with 1.x about 4% of the words of a text would get other lemmas (`fue` - `ir` instead of `ser`, `usted` left as it is). A `FreqDict` warns once per process when the installed simplemma is not 2.0.0, as some words may then miss the dictionary.
+The lemmas depend on the version of simplemma: the dictionary is built with 2.0.0 (the constant `SIMPLEMMA_VERSION`), and a `FreqDict` warns once per process when another version is installed, as some words may then miss the dictionary.
 
 !!! example "Example"
 
@@ -64,7 +64,7 @@ Checks that the file of the dictionary is in place and returns `True`; a diction
 
 ### download
 
-Downloads the archive with checksum verification and extracts the file. A corrupted or replaced archive is removed and downloaded again in the same call; if the archive is there but the file of the dictionary is missing, it is extracted again, and the parsed dictionary is read anew.
+Downloads the archive, verifies its SHA-256 checksum and extracts the file. A corrupted archive is downloaded again, a missing file is extracted again; after the call the dictionary is read anew.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
@@ -83,7 +83,7 @@ Downloads the archive with checksum verification and extracts the file. A corrup
 
 ### lookup
 
-Returns the entry of a lemma in any case, `None` for a lemma out of the dictionary. The argument is a key of the dictionary, not a word form, and a word form is looked up by its key: `computadoras` by `lemma_key("computadoras")`, which is `computador`, not by `computadora`; the lemma of `usted` in simplemma is `tú`, so `fd.lookup("usted")` is `None`. The same holds for `ipm` and `in`; [`LexicalStats`](../stats/lexical_stats.md) and [`keyness`](../corpus/keyness.md) go to the keys themselves.
+Returns the entry of a lemma in any case, `None` for a lemma out of the dictionary. The argument is a key of the dictionary, not a word form: a word form is looked up by its key, `computadoras` by `lemma_key("computadoras")` (`computador`), not by `computadora`; the lemma of `usted` in simplemma is `tú`, so `fd.lookup("usted")` is `None`. The same holds for `ipm` and `in`; [`LexicalStats`](../stats/lexical_stats.md) and [`keyness`](../corpus/keyness.md) go to the keys themselves.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
@@ -147,4 +147,4 @@ Returns the lemmas of the dictionary with the same parameters as `get_records`.
     ```
 
 !!! warning "The register of the books"
-    The dictionary describes the written language of books, a good part of them scholarly, and keeps what the books have: the abbreviations of the references are frequent words (`pp` 259.6 ipm, `cit` 110.5, `vol` 53.6), and so are the English words of the bibliographies (`the` 320.3, `of` 262.4) and the old spellings of the reprints (`fué` 26.7). The texts are recognized from scans and tagged automatically, so misreadings and tagging errors remain, mostly among the rare lemmas; the lemmatizer knows no context, so a form shared by two lemmas goes to one of them (`como` is only `como`, never `comer`), and a form it does not know stays as it is (`darle`, `verlo`).
+    The dictionary describes the written language of books, a good part of them scholarly, and keeps what the books have: the abbreviations of the references are frequent words (`pp`, `cit`, `vol`), and so are the English words of the bibliographies (`the`, `of`) and the old spellings of the reprints (`fué`). The texts are recognized from scans and tagged automatically, so misreadings and tagging errors remain, mostly among the rare lemmas; the lemmatizer knows no context, so a form shared by two lemmas goes to one of them (`como` is only `como`, never `comer`), and a form it does not know stays as it is (`darle`, `verlo`).

@@ -7,7 +7,7 @@
 
 Módulo para calcular las principales métricas de [diversidad léxica](https://en.wikipedia.org/wiki/Lexical_diversity) de un texto. La fuente de datos puede ser un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy).
 
-El módulo permite usar un objeto [`WordsExtractor`](../extractors/words.md) ya configurado para la segmentación en palabras que precede al cálculo; para un `Doc`, el extractor indicado se aplica al texto del `Doc`, y sin él las palabras salen de sus tokens. Sea cual sea la fuente y el extractor, las palabras se pasan a minúsculas, porque todas las métricas cuentan lexemas.
+Las palabras pueden extraerse con un [`WordsExtractor`](../extractors/words.md) ya configurado; para un `Doc`, el extractor indicado se aplica a su texto, y sin él las palabras salen de sus tokens. Las palabras siempre se pasan a minúsculas, porque todas las métricas cuentan lexemas.
 
 !!! note "Nota"
     Las métricas se calculan al acceder al atributo correspondiente o al llamar al método `get_stats` del objeto `DiversityStats`.
@@ -26,14 +26,14 @@ El módulo permite usar un objeto [`WordsExtractor`](../extractors/words.md) ya 
 
 ## Convenciones { #conventions }
 
-Los valores de algunas métricas dependen de parámetros que cada biblioteca elige de forma distinta. Los valores por defecto coinciden con koRpus y con lexical-diversity de Kyle, y todos son parámetros de la clase. La comparación con el umbral de MTLD es la única convención que no es un parámetro:
+Los valores de algunas métricas dependen de convenciones que difieren entre bibliotecas. Todas salvo la comparación con el umbral de MTLD son parámetros de la clase:
 
 | Parámetro | esTS | Otras bibliotecas |
 | :-------: | :--: | :---------------: |
 | Base del logaritmo para Summer, Maas, U de Dugast y k de Dugast | 10 | LexicalRichness, textcomplexity y zipfR: natural |
 | Ventana de MATTR y segmento de MSTTR | 50 | quanteda y koRpus: 100 |
 | Umbral de TTR para MTLD | 0.72 | 0.66-0.75 en la bibliografía |
-| Comparación con el umbral de MTLD | un factor se cierra con TTR ≤ 0.72; en McCarthy y Jarvis (2010) el factor termina cuando el TTR «alcanza» 0.720 | lexical-diversity y TAALED: `<` estricto, así que en los factores donde el TTR da exactamente el umbral (18/25, 36/50) los valores de MTLD, MA-MTLD y MTLD-W divergen |
+| Comparación con el umbral de MTLD | un factor se cierra con TTR ≤ 0.72 (McCarthy & Jarvis, 2010) | lexical-diversity y TAALED: `<` estricto; los valores difieren cuando el TTR da exactamente el umbral |
 | Longitud mínima del factor de MTLD | 10 | koRpus la aplica solo a MA-MTLD, LexicalRichness y textcomplexity no la aplican |
 | Tamaño de la muestra de HD-D | 42 | 35-50 en la bibliografía |
 
@@ -81,13 +81,13 @@ Según Zenker y Kyle (2021), MATTR, MTLD y HD-D son estables en textos de 50-200
 | `heaps_beta` | float | Exponente de la ley de Heaps |
 
 !!! note "Nota"
-    Cada métrica puede calcularse por separado llamando a la función correspondiente. La información detallada sobre las métricas de diversidad léxica y las funciones que las calculan está en la [sección](diversity_stats_funcs.md) correspondiente.
+    Cada métrica puede calcularse también con su función; las métricas y sus funciones se describen en la [sección](diversity_stats_funcs.md) correspondiente.
 
 ## Métodos
 
 ### windowed
 
-Cálculo por ventanas de una métrica: su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Es la forma estándar de comparar textos de distinta longitud; el STTR de Kubát y Milička es un TTR por ventanas de 1000 palabras con un intervalo de confianza del 95 %. En los textos más cortos que la ventana la métrica se calcula sobre todo el texto como una sola ventana; las ventanas con un valor no definido (`nan`) se ignoran. Si la métrica es infinita en al menos una ventana, la media es infinita y la desviación típica y el intervalo de confianza no están definidos.
+Cálculo por ventanas de una métrica por su nombre, como en [`calc_windowed`](diversity_stats_funcs.md#calc_windowed): su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Los casos límite (textos cortos, valores `nan` e infinitos) se describen allí.
 
 Parámetros:
 
@@ -116,8 +116,6 @@ Devuelve una tupla con nombre `WindowStats` con los campos `mean`, `std`, `lower
 ### get_stats
 
 Devuelve un diccionario con las métricas de diversidad léxica calculadas.
-
-Ejemplo de cálculo de las métricas de diversidad léxica:
 
 !!! example "Ejemplo"
 
@@ -176,7 +174,7 @@ Ejemplo de cálculo de las métricas de diversidad léxica:
 
 Muestra una tabla con las métricas de diversidad léxica calculadas.
 
-Para ilustrar el método reutilizamos el código del ejemplo anterior:
+El ejemplo continúa el anterior:
 
 !!! example "Ejemplo"
 

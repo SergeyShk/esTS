@@ -22,8 +22,7 @@ def sentence_lengths_plot(
     Description:
         The length of every sentence in words in the order of the text, the
         moving average over a window of sentences and an inset with the
-        histogram of the lengths - the rhythm of the text; the lengths come
-        from sentence_lengths
+        histogram of the lengths; the lengths come from sentence_lengths
 
     Arguments:
         source (str|Doc|Iterable[int]): Text, Doc object or lengths of the
@@ -76,12 +75,10 @@ def sentence_lengths(source: str | Doc | Iterable[int]) -> list[int]:
     Extracting the lengths of the sentences in words
 
     Description:
-        The sentences of a string come from sentenize and its words from the
-        tokenizer of the blank Spanish pipeline, a word belonging to the
-        sentence it starts in; the sentences of a Doc come from its sentence
-        boundaries, or from its text without them; ready lengths - any
-        sequence of integers, a numpy array and a Series included - are used
-        as they are. Sentences without words are skipped
+        A string is split by sentenize, a word belonging to the sentence it
+        starts in; a Doc by its sentence boundaries, or as its text without
+        them; ready lengths (any iterable of integers) are used as they are.
+        Sentences without words are skipped
 
     Arguments:
         source (str|Doc|Iterable[int]): Text, Doc object or ready lengths

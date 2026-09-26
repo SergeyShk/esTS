@@ -38,31 +38,23 @@ class SpanishSonnets(Dataset):
     Collection of Spanish sonnets of the Diachronic Spanish Sonnet Corpus (DISCO)
 
     Description:
-        The sonnets of DISCO 5.0 in the public domain: the ones of the authors
-        who died before 1946, of the authors of the 15th-18th centuries whose
-        death is unknown and of the authors of the 19th-century anthology born
-        before 1866 or with no dates, unless the dates of VIAF that DISCO
-        matched with high confidence put them later; the sonnets of the authors
-        who died in 1946 or later, most of the Filipino poets of the 20th
-        century, are left out. The years of life are read from the biographical
-        line of the source where DISCO took a later year of it for the death
-        (Echegaray, 1916 and not 1904) or missed a birth or a death given alone,
-        and so is the country of birth where the line names it (Gómez de
-        Avellaneda, Cuba and not Haiti). Every line of a sonnet carries its
-        metrical pattern (+ for a stressed syllable, - for an unstressed one)
-        and the label of its rhyme, both annotated automatically by DISCO: the
-        scansion by ADSO (accuracy 0.91) and by Jumper for the modernist and the
-        Filipino sonnets (0.95), the rhyme by RhymeTagger, which labels a line
-        that rhymes with no other with -. 20 sonnets have no labels of the
-        rhyme, and the long sequences none after the letter N: such a label is
-        empty. A record is one sonnet of 14 lines, a sonnet with an estrambote
-        or a sequence of sonnets that DISCO keeps in one file; the sonnets of a
-        sequence in separate files have the title "Part of: " and the title of
-        the sequence. The speakers of the dialogues ([Car], [POETA]) and the
-        calls of the footnotes are left out of the lines, as out of their
-        metrical patterns. DISCO is distributed under CC BY 4.0, and so is this
-        dataset; the archive is downloaded from the repository of the library
-        and verified against its SHA-256 checksum
+        The sonnets of DISCO 5.0 in the public domain: of the authors who died
+        before 1946, of the authors of the 15th-18th centuries whose death is
+        unknown and of the authors of the 19th-century anthology born before
+        1866 or with no dates, unless VIAF puts them later. The years of life
+        and the country of birth are taken from the biographical line of the
+        source where DISCO misread them. Every line carries its metrical pattern
+        (+ for a stressed syllable, - for an unstressed one) and the label of
+        its rhyme, both annotated automatically by DISCO: the scansion by ADSO
+        (accuracy 0.91) and Jumper (0.95), the rhyme by RhymeTagger, which
+        labels a line that rhymes with no other with -; a label DISCO does not
+        give (20 sonnets, the long sequences after the letter N) is empty. A
+        record is one sonnet, a sonnet with an estrambote or a sequence that
+        DISCO keeps in one file; the sonnets of a sequence in separate files
+        have the title "Part of: " and the title of the sequence. The speakers
+        of the dialogues and the calls of the footnotes are left out of the
+        lines. DISCO is distributed under CC BY 4.0, and so is this dataset;
+        the archive is downloaded from the repository of the library
 
     References:
         https://github.com/pruizf/disco
@@ -152,10 +144,9 @@ class SpanishSonnets(Dataset):
         Downloading the dataset from the network and extracting the file
 
         Description:
-            The archive is verified against its SHA-256 checksum; a corrupted
-            or replaced file is removed and downloaded again in the same call.
-            If the archive is there but the file of the dataset is missing, it
-            is extracted again
+            The archive is verified against its SHA-256 checksum and downloaded
+            again once if it fails; a missing file is extracted again from the
+            archive
 
         Arguments:
             force (bool): Download the dataset even if it is already downloaded
@@ -248,8 +239,7 @@ class SpanishSonnets(Dataset):
         Description:
             The sonnets in the order of PERIODS, within a period by the
             identifier of DISCO with its numbers compared as numbers
-            (1035e_269 before 1035e_1360), which keeps the authors and the
-            order of their source; the file is read one line at a time
+            (1035e_269 before 1035e_1360)
 
         Returns:
             iterator[dict[str, object]]: Records

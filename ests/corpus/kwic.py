@@ -38,19 +38,15 @@ def kwic(
 
     Description:
         The occurrences of a word or a phrase are looked for among the words of
-        the text: by the word form ignoring case, respecting it, or by the lemma
-        (gatos is found by gato). The text and the keyword are split into words
-        the same way, by the tokenizer of the blank Spanish pipeline, so EE. UU.
-        is one word in both, and punctuation and symbols are words of neither
-        By lemma, a word of the text is found by its lemma of simplemma and, in
-        a Doc that carries lemmas, by the lemma of the model as well, while the
-        keyword is lemmatized by simplemma: the model tells the verb of vino
-        from the noun (venir finds the verb alone), and simplemma finds what the
-        model misreads (pusiste, which the model lemmatizes as pusistar). The
-        context is window words on each side as they are written in the text,
-        with the punctuation between them; whitespace in the contexts and in the
-        occurrence collapses to one space; occurrences do not overlap
-        Accents are part of the word form: solo and sólo are two forms
+        the text by the word form, ignoring case or not, or by the lemma (gatos
+        is found by gato). The text and the keyword are tokenized the same way
+        (EE. UU. is one word); punctuation and symbols are not words. By lemma,
+        a word matches by its lemma of simplemma and, in a Doc with lemmas, by
+        the lemma of the model too; the keyword is lemmatized by simplemma
+        The context is window words on each side as written, with the
+        punctuation between them; whitespace collapses to one space;
+        occurrences do not overlap. Accents are part of the word form: solo and
+        sólo are two forms
 
     Arguments:
         source (str|Doc): Text or Doc object

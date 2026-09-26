@@ -54,25 +54,16 @@ def split_windows(text: str, window: int | None = 1000, min_words: int | None = 
     Splitting a text into windows of words
 
     Description:
-        The number of windows is the ratio of the number of words to the size
-        of a window rounded half up (2500 words at a window of 1000 - three
-        windows), at least one, and the parts are equal, as the segments of
-        zeta: the tail is not dropped, and a text of more than half a window
-        gives windows of half a window to one and a half (1500 words - two of
-        750, 1499 - one), within a few percent of the size for long texts.
-        Windows of fewer than min_words words are dropped: by default half a
-        window, which drops the texts shorter than that, so that a comparison
-        does not set windows of very different sizes against each other.
-        The first window starts at the first non-space character of the text,
-        a boundary between windows goes before the first word of the next
-        window and the opening marks before it (OPENING_MARKS: quotes,
-        brackets, dashes, the inverted ¿ and ¡), except a straight quote or a
-        dash glued to the end of the previous word, which closes it
-        (SYMMETRIC_MARKS: "cuatro", —dijo Juan—), and the last window lasts to
-        the end of the text; the windows are stripped of whitespace, so the
-        punctuation before the first word, after the last word of a window
-        and at the end of the text stays in the windows; with window=None the
-        window is the whole text stripped of whitespace
+        The number of windows is the number of words divided by the window
+        rounded half up (2500 words at 1000 - three windows), at least one;
+        the windows are equal and the tail is not dropped, so a window holds
+        from half a window to one and a half (1500 words - two of 750, 1499 -
+        one). Windows of fewer than min_words words are dropped (by default
+        half a window). A boundary goes before the first word of the next
+        window and the opening marks before it (OPENING_MARKS), except a
+        straight quote or a dash glued to the previous word, which closes it
+        (SYMMETRIC_MARKS); the windows are stripped of whitespace and keep
+        their punctuation; window=None gives the whole text
 
     Arguments:
         text (str): Text string
@@ -135,43 +126,21 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         complex, simple, mono- and polysyllabic words, of letters, spaces and
         punctuation marks, the mean number of letters and syllables per word
         (BasicStats); readability_ - every readability formula and the
-        consensus grade (ReadabilityStats); diversity_ - every measure of
-        lexical diversity (DiversityStats); morph_ - the shares of the values
-        of every morphological feature of MORPHOLOGY_STATS_DESC and the markers
-        of Spanish of MorphStats.get_markers; sents_ - the mean length of a
-        sentence in words, its standard deviation, the coefficient of
-        variation and the autocorrelation of neighbouring lengths - the rhythm
-        of the text; punct_ - the frequencies of the marks by type per 1000
-        words and the share of the inverted marks (punctuation_profile)
-        Every feature is counted once: the reading time, which only follows
-        the number of words, is left out, as are the share of unique words
-        (diversity_ttr), the words per sentence (sents_mean) and the markers
-        of the moods (morph_mood_*), which repeat other features
-        The morphological shares are taken over the full list of values: a
-        value that does not occur gives 0, a feature absent from the window
-        altogether (no verbs - no tense) nan. The parts of speech and the
+        consensus grade except the reading time (ReadabilityStats); diversity_ -
+        every measure of lexical diversity (DiversityStats); morph_ - the
+        shares of the values of every feature of MORPHOLOGY_STATS_DESC and the
+        markers of MorphStats.get_markers except the moods; sents_ - the rhythm
+        of the sentences (sentence_rhythm); punct_ - punctuation_profile
+        A morphological value that does not occur gives 0, a feature absent
+        from the window (no verbs - no tense) nan. The parts of speech and the
         features of a single value (polarity, polite, poss, reflex) are shares
-        of all the words (morph_pos_NOUN, morph_polarity_Neg - the negations),
-        the other features shares of the words that carry them
-        (morph_mood_Sub - the subjunctive among the moods); a value of several
-        values (PronType=Int,Rel of que, Case=Acc,Nom of usted) is shared
-        equally among its parts, so the shares of a feature still sum to one
-        The text is tokenized and split into sentences once: the words with
-        their positions and the sentences of sentenize go to every class
-        through extractors with the ready result, and the lengths of the
-        sentences are counted from them; the basic statistics are computed
-        once (ReadabilityStats gets the ready BasicStats). The morphology is
-        parsed by the model es_core_news_sm without its parser, which takes
-        most of the time: about 0.07 s for a window of 1000 words. The parse
-        of dependencies would add a third to that for one marker, p_ser,
-        which reads the copulas from it: a pipeline passed in nlp runs whole
-        but for the entity recognizer, and with a parser it adds morph_p_ser.
-        A text longer than the max_length of the pipeline raises SourceError
-        The shares of spaces, letters and marks (basic_p_spaces,
-        basic_p_letters, basic_p_punctuations) count the characters as they
-        are: indents, double and non-breaking spaces of the files reflect the
-        typesetting of an edition and not the text, and in a corpus from
-        different sources they are best collapsed beforehand
+        of all the words, the other features shares of the words that carry
+        them; a value of several values (PronType=Int,Rel) is shared equally
+        among its parts. The default model runs without its parser; a
+        pipeline passed in nlp runs whole except the entity recognizer, and
+        with a parser it adds morph_p_ser
+        The shares of spaces, letters and marks count the characters as they
+        are: in a corpus from different editions collapse the whitespace beforehand
 
     Arguments:
         text (str): Text string
@@ -229,7 +198,7 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
 
 
 def _parse(text: str, nlp: Language | None) -> Doc:
-    """Parsing a text for the morphology: the default model without its parser, or the pipeline"""
+    """Parsing a text: the default model without its parser, or the pipeline without ner"""
     pipeline = nlp or get_nlp()
     if len(text) > pipeline.max_length:
         raise SourceError(
@@ -242,11 +211,8 @@ def _parse(text: str, nlp: Language | None) -> Doc:
 
 def _morph_features(morph: MorphStats, parsed: bool) -> dict[str, float]:
     """
-    Morphological features of text_features: the shares of the values of every feature
-    (of all the words for the parts of speech and the features of a single value, of the
-    words that carry the feature for the others, a value of several values shared equally
-    among its parts) and the markers but the ones of the moods; p_ser only for a parse
-    with dependencies
+    Morphological features of text_features: the shares of the values of every feature and
+    the markers except the moods; p_ser only for a parse with dependencies
     """
     n_words = len(morph.words)
     features: dict[str, float] = {}
@@ -269,7 +235,7 @@ def _morph_features(morph: MorphStats, parsed: bool) -> dict[str, float]:
 
 
 class _FixedWordsExtractor(WordsExtractor):
-    """Extractor with ready words, so that the text is not tokenized twice"""
+    """Extractor with ready words"""
 
     def __init__(self, words: tuple[str, ...]) -> None:
         super().__init__()
@@ -280,7 +246,7 @@ class _FixedWordsExtractor(WordsExtractor):
 
 
 class _FixedSentsExtractor(SentsExtractor):
-    """Extractor with ready sentences, so that the text is not split twice"""
+    """Extractor with ready sentences"""
 
     def __init__(self, sents: tuple[str, ...]) -> None:
         super().__init__()
@@ -397,32 +363,21 @@ def compare_corpora(
     Comparing two corpora by every feature of a text
 
     Description:
-        The texts of both corpora are split into windows of about the same
-        size, so that the features do not depend on the length, the features
-        are computed for every window (text_features or a function of one's
-        own), and for every feature the two sets of values are compared: the
-        means and the medians, the difference of the medians with its 95%
-        percentile bootstrap interval, Cohen's d, Cliff's delta, the AUC of
-        the feature as a classifier on its own (the share of the pairs of
-        windows where the value in A is greater than in B, ties counted as
-        half; Cliff's delta equals 2·AUC − 1), the Mann-Whitney U test with a
-        two-sided p-value and Holm's correction for the number of features.
-        Undefined and infinite values of a feature are dropped, and with fewer
-        than two values on a side the statistics of the feature are nan. The
-        rows are sorted by descending absolute Cliff's delta, the features
-        without statistics go last
-        The test and the effect sizes take the windows as independent, and
-        the windows of one text are not: they share its plot, characters,
-        narrator and edition. With few texts in a corpus the p-values are too
-        small and reflect the texts chosen as much as the corpora - two novels
-        of one author differ in dozens of features by the same test. The
-        bootstrap resamples whole texts instead (a cluster bootstrap over the
-        level text of the index of corpus_features), so its interval accounts
+        The texts are split into windows (split_windows), the features are
+        computed for every window, and for every feature the two sets of
+        values are compared: the means and the medians, the difference of the
+        medians with its 95% bootstrap interval, Cohen's d, Cliff's delta,
+        the AUC (the share of the pairs of windows where the value in A is
+        greater than in B, ties counted as half; Cliff's delta = 2·AUC − 1),
+        the two-sided Mann-Whitney U test and Holm's correction for the number
+        of features. Undefined and infinite values are dropped; with fewer
+        than two values on a side the statistics are nan. The rows are sorted
+        by descending absolute Cliff's delta, the features without statistics
+        last
+        The test and the effect sizes take the windows as independent, while
+        the windows of one text are not: with few texts the p-values are too
+        small. The bootstrap resamples whole texts, so its interval accounts
         for the spread between texts; n_texts_<name> gives the number of texts
-        behind the windows
-        One tool for authorship attribution, the comparison of genres and of
-        translations, telling generated texts from human ones; keyness does
-        the same for single words
 
     References:
         https://doi.org/10.1037/0033-2909.114.3.494
@@ -477,14 +432,10 @@ def compare_features(
 
     Description:
         The second half of compare_corpora: the tables of features
-        (corpus_features or one's own) are compared column by column, as
-        described there. It serves when the features are computed once for
-        several corpora and pairs of them are to be compared - all the authors
-        pairwise, for instance. The windows of a text are told by the level
-        text of the index, which corpus_features sets: the bootstrap resamples
-        whole texts; a table without that level takes every row for a text of
-        its own. A column missing from one of the tables is compared with an
-        empty set of values and gives nan
+        (corpus_features or one's own) are compared column by column. The
+        bootstrap resamples whole texts by the level text of the index; a
+        table without that level takes every row for a text of its own. A
+        column missing from one of the tables gives nan
 
     Arguments:
         table_a (DataFrame): Features of the windows of the first corpus (rows - the windows)
@@ -530,12 +481,7 @@ def compare_features(
 
 def _finite(table: pd.DataFrame, name: str) -> tuple[np.ndarray, np.ndarray | None]:
     """
-    Finite values of a column of a table and the texts of their windows
-
-    Description:
-        The texts come from the level text of the index; without it they are
-        None, and every row is a text of its own. A missing column gives an
-        empty array
+    Finite values of a column and the texts of their windows (level text of the index, or None)
     """
     if name not in table:
         return np.array([]), None
@@ -677,14 +623,11 @@ def bootstrap_median_diff(
     Computing the percentile bootstrap interval of the difference of the medians
 
     Description:
-        Both sets are resampled with replacement n_bootstrap times, for every
-        pair of samples median_a − median_b is computed, and the bounds of the
-        interval are the percentiles (1 − confidence) / 2 and
-        1 − (1 − confidence) / 2. With the texts of the values given, whole
-        texts are resampled with all their values (a cluster bootstrap), so
-        that the interval accounts for the spread between the texts and not
-        only between the windows of a text; it then needs at least two texts
-        on each side
+        Both sets are resampled with replacement n_bootstrap times, and the
+        bounds are the percentiles (1 − confidence) / 2 and
+        1 − (1 − confidence) / 2 of median_a − median_b. With the texts of the
+        values given, whole texts are resampled (a cluster bootstrap), which
+        needs at least two texts on each side
 
     Arguments:
         values_a (list[float]): Values in the first corpus
@@ -736,9 +679,7 @@ def _resampled_medians(
 
     Description:
         A draw of texts is the number of times every text is taken; the median
-        of the sample is read from the sorted values weighted by those numbers:
-        the values of ranks (N − 1) // 2 and N // 2 of the N values of the
-        sample, averaged, as np.median of the sample itself
+        is read from the sorted values weighted by those numbers
     """
     if texts is None:
         return np.asarray(

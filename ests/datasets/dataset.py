@@ -73,13 +73,9 @@ def fetch_archive(
 
     Description:
         The archive is verified and extracted when it is downloaded now or the
-        extracted files are missing. A file that fails the SHA-256 checksum
-        (corrupted, cut short, replaced) is removed and downloaded again in the
-        same call. The files are extracted into a temporary directory next to
-        the archive, which takes the place of the earlier directory of the
-        dataset only once the extraction is complete: no stale file stays, and
-        an interrupted extraction never leaves a half of the dataset under its
-        name
+        extracted files are missing. An archive that fails the SHA-256 checksum
+        is removed and downloaded again once. The extracted files replace the
+        directory of the dataset only once the extraction is complete
 
     Arguments:
         url (str): Address of the archive

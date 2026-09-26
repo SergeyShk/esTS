@@ -13,6 +13,7 @@ from ests.constants import (
 )
 from ests.exceptions import SourceError
 from ests.style_stats import (
+    _split_text,
     calc_academic_nausea,
     calc_classic_nausea,
     calc_keyword_density,
@@ -69,6 +70,14 @@ def test_init_value_error():
 def test_init_type_error(source):
     with pytest.raises(TypeError):
         StyleStats(source)
+
+
+def test_init_lists_as_a_string():
+    # A string would be taken letter by letter
+    with pytest.raises(TypeError, match="list of stopwords"):
+        StyleStats(text, stopwords="de la")
+    with pytest.raises(TypeError, match="list of clichés"):
+        StyleStats(text, cliches="a la mayor brevedad")
 
 
 def test_init_doc(nlp):
@@ -202,13 +211,30 @@ def test_verbal_nouns_without_the_annotation(nlp):
         _ = StyleStats(text, nlp=pipeline).verbal_nouns
 
 
-def test_verbal_nouns_of_a_long_text():
+def test_verbal_nouns_of_a_long_text(nlp, monkeypatch):
+    # The text of 223 characters is parsed in its three sentences, with the same nouns
+    monkeypatch.setattr(nlp, "max_length", 100)
+    assert _split_text(text, 100) == [text[:63], text[64:163], text[164:]]
+    assert StyleStats(text).verbal_nouns == pytest.approx(100 * 6 / 15)
+    # A sentence longer than the limit cannot be parsed
     pipeline = spacy.blank("es")
     pipeline.max_length = 20
     ss = StyleStats(text, nlp=pipeline)
     assert ss.spam == StyleStats(text).spam
-    with pytest.raises(SourceError, match="longer than the limit"):
+    with pytest.raises(SourceError, match="A sentence of 63 characters is longer than the limit"):
         _ = ss.verbal_nouns
+
+
+def test_split_text():
+    assert _split_text("El gato duerme.", 15) == ["El gato duerme."]
+    # The parts are as long as the limit allows, without the spaces around the sentences
+    parts = _split_text("  El gato duerme. El perro ladra. Llueve. ", 32)
+    assert parts == ["El gato duerme. El perro ladra.", "Llueve."]
+    assert _split_text("El gato duerme. El perro ladra. Llueve.", 16) == [
+        "El gato duerme.",
+        "El perro ladra.",
+        "Llueve.",
+    ]
 
 
 def test_parentheticals(ss):

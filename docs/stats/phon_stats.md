@@ -7,7 +7,7 @@
 
 A module for computing the phonostatistics of a text: the shares of the classes of sounds, the consonant clusters, the hiatuses, the variety of the phonetic shape of the words, the open syllables, and the indices of alliteration and assonance, which tell whether the repetitions of a sound gather in neighbouring words. The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library; no trained model is needed.
 
-The statistics are counted over the sounds of the transcription of the words ([`transcribe`](phon_stats_funcs.md#transcribe)), not over the letters: Spanish writes some sounds with two letters (`ch`, `ll`, `rr`, `qu`), some letters with no sound (`h`, the `u` of `que` and `gui`) and one letter for two sounds (`x`), so a count of letters would make `calle` a cluster of two consonants and `queso` a word of three vowels. The spelling of Spanish is regular enough to be read by rules, without a dictionary. The pronunciation is the one of the standard of Spain: yeísmo (`ll` and `y` are one sound) and distinción (`c` before `e` and `i` and `z` are θ, apart from `s`).
+The statistics are counted over the sounds of the transcription of the words ([`transcribe`](phon_stats_funcs.md#transcribe)), not over the letters: `ch`, `ll`, `rr` and `qu` are one sound, `h` and the `u` of `que` and `gui` none, and `x` two. The pronunciation is the one of the standard of Spain: yeísmo (`ll` and `y` are one sound) and distinción (`c` before `e` and `i` and `z` are θ, apart from `s`).
 
 | Class | Sounds |
 | :---- | :----- |
@@ -132,4 +132,4 @@ Prints a table with the computed phonostatistics.
     Mean length of a syllable (sounds)            |   2.19
     ```
 
-The indices of alliteration and assonance compare the repetitions with the ones expected from the frequencies of the sounds of the text itself, so they tell whether a text gathers its repetitions in neighbouring words. Over a whole book they come near 1 for verse and for prose alike (0.95-0.98 for *Prosas profanas*, the poems of Machado, *En las orillas del Sar*, *Marianela* and *Niebla* in the [corpus of literature](../datasets/spanishliterature.md)): the repetitions of a poem are local, and the places where they gather are shown by the layer `alliteration` of the [highlighting](../visualizers/highlight.md).
+Over a whole book the indices of alliteration and assonance come near 1 for verse and prose alike, as on the books of the [corpus of literature](../datasets/spanishliterature.md): the repetitions of a poem are local, and the places where they gather are shown by the layer `alliteration` of the [highlighting](../visualizers/highlight.md).

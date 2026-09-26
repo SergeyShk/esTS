@@ -54,33 +54,20 @@ def keyness(
     Finding the keywords of a target corpus against a reference one
 
     Description:
-        Words are compared by their frequencies in the two corpora: for every
-        word the log-likelihood G² with its p-value (the significance of the
-        difference) and Log Ratio (the size of the effect) are computed, as
-        Gabrielatos and Hardie recommend, together with the chosen measure
-        score, which the list is sorted by. The measures of significance (G²,
-        chi-square, BIC, ELL) are signed: negative when the word is more
-        frequent in the reference
-        The reference may be a list of words or their frequencies, with the
-        size of the reference taken as their sum, or the frequency dictionary
-        FreqDict. Then the target has to be counted the way the dictionary was:
-        word forms, not lemmas (lemma_key is not idempotent - estado goes on to
-        estar), with the stop words kept, as CORPUS_SIZE keeps them; the forms
-        that are not made of the letters of WORD_PATTERN - numbers, words with
-        a hyphen or a dot - are left out, as the dictionary has none. A form
-        goes to its key by lemma_key, and the rows of the proper nouns of the
-        dictionary go to lemma_key of their forms (FreqDict.word_ipm), so both
-        sides count the same forms under a key and the keywords are lemmas,
-        some of them with the label of another lemma (Roma - romo, París -
-        parir). The frequency of a key in the reference is its ipm times the
-        size of the corpus of the dictionary (CORPUS_SIZE, 63 billion words of
-        books of 1980-2019); a word out of the dictionary gets its least
-        frequency (0.1 ipm, about 6300 occurrences), as the dictionary leaves
-        out the rarer words and their true frequency lies below it. That is an
-        upper bound, so it backs a positive keyword and never a negative one:
-        a word out of the reference is no negative keyword
-        A zero frequency in one of the corpora is replaced with 0.5 for %DIFF,
-        Log Ratio and the odds ratio (Hardie 2014)
+        For every word the log-likelihood G² with its p-value (significance)
+        and Log Ratio (effect size) are computed, as Gabrielatos and Hardie
+        recommend, with the chosen measure score, which sorts the list. The
+        measures of significance (G², chi-square, BIC, ELL) are negative when
+        the word is more frequent in the reference. A zero frequency is
+        replaced with 0.5 for %DIFF, Log Ratio and the odds ratio (Hardie 2014)
+        The reference may be a list of words, their frequencies (the size is
+        their sum) or FreqDict. Against FreqDict the target is to be word
+        forms, not lemmas, with the stop words kept; the forms not made of the
+        letters of WORD_PATTERN are left out, and both sides go to keys by
+        lemma_key, so the keywords are lemmas, some with the label of another
+        lemma (Roma - romo). The reference frequency of a key is its ipm times
+        CORPUS_SIZE; a word out of the dictionary gets its least frequency, an
+        upper bound, so it may be a positive keyword but never a negative one
         Positive keywords are more frequent in the target corpus, negative ones
         in the reference; min_freq is the least frequency of a word in the
         corpus where it is more frequent
@@ -143,8 +130,7 @@ def keyness(
     rows = []
     words = set(counts_target) | set(counts_reference)
     for word in words:
-        # The least frequency of the dictionary is an upper bound for a word out of
-        # it: it can back a word more frequent in the target, never in the reference
+        # The least frequency of the dictionary only bounds a missing word from above
         if not positive and word not in counts_reference:
             continue
         a = counts_target.get(word, 0)
@@ -220,10 +206,9 @@ def calc_log_likelihood(a: float, b: float, c: float, d: float) -> float:
     Description:
         By Rayson and Garside (2000): the expected frequencies
         E1 = c·(a + b)/(c + d) and E2 = d·(a + b)/(c + d),
-        G² = 2·(a·ln(a/E1) + b·ln(b/E2)); a term of zero frequency is zero.
-        The critical values are in G2_CRITICAL_VALUES (3.84 for p < 0.05, 6.63
-        for p < 0.01, 10.83 for p < 0.001, 15.13 for p < 0.0001)
-        The sign is negative when the word is more frequent in the reference
+        G² = 2·(a·ln(a/E1) + b·ln(b/E2)); a term of zero frequency is zero;
+        critical values in G2_CRITICAL_VALUES (3.84 for p < 0.05). The sign is
+        negative when the word is more frequent in the reference
 
     References:
         https://ucrel.lancs.ac.uk/llwizard.html
@@ -349,11 +334,10 @@ def calc_bic(a: float, b: float, c: float, d: float) -> float:
     Computing the Bayesian information criterion for G²
 
     Description:
-        By Wilson (2013): BIC = G² − ln(N), N = c + d; values above 2 are
-        positive evidence of a difference, above 6 strong, above 10 very strong
-        Computed as sign(G²) · (|G²| − ln N): a positive value is evidence of a
-        difference in the direction of the sign of G², a negative one no
-        evidence, and then the sign of BIC differs from the sign of G²
+        By Wilson (2013): BIC = sign(G²) · (|G²| − ln N), N = c + d; values
+        above 2 in the direction of G² are positive evidence of a difference,
+        above 6 strong, above 10 very strong; the sign opposite to G² means no
+        evidence
 
     Arguments:
         a (float): Frequency of the word in the target corpus
@@ -383,8 +367,8 @@ def calc_ell(a: float, b: float, c: float, d: float) -> float:
         d (float): Size of the reference corpus
 
     Returns:
-        float: Signed ELL, nan when the least expected frequency is below e -
-            there the denominator is below N and ELL leaves the interval from 0 to 1
+        float: Signed ELL, nan when the least expected frequency is below e
+            (ELL would leave the interval from 0 to 1)
     """
     total = a + b
     expected_min = min(c, d) * total / (c + d)

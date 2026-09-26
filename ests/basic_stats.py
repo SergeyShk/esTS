@@ -20,13 +20,8 @@ from .syllables import count_syllables
 from .utils import count_letters, has_words, iter_doc_words
 
 ELLIPSIS_PATTERN = re.compile(r"…|\.{3,}|(?<=[?!])\.{2}")
-# A run of two or more hyphens, a hyphen after whitespace or at the start of
-# a line, after a closing mark (the underscore of the italics of Project
-# Gutenberg included), before a space, between a letter and an opening mark or
-# between a letter and a closing mark, is a dash, the way the raya is typed in
-# plain-text corpora (--Hola --dijo Juan, sí--dijo, -Hola -dijo Juan-.,
-# cuatro.-¿Cinco?, sí-¿y qué?); a hyphen before a digit is a sign, a hyphen
-# inside a word or at the end of a line inside a word (pala-\nbra) is a hyphen
+# The raya typed with hyphens (see count_punctuations); the underscore of the italics of
+# Project Gutenberg counts as a closing mark
 DASH_PATTERN = re.compile(
     r"-{2,}|(?:(?<=\s)|(?<=[.,;:!?…»”\"')\]_])|^)-(?!\d)|-(?=[ \t]|\Z)"
     r"|(?<=[^\W\d_])-(?=[¿¡«“\"'(\[_])|(?<=[^\W\d_])-(?=[.,;:!?…»”\"')\]_])",
@@ -99,11 +94,11 @@ class BasicStats:
     Arguments:
         source (str|Doc): Data source (a string or a Doc object); for a Doc the
             words come from the tokens and the sentences from the annotation,
-            without sentence boundaries they come from sents_extractor
-        sents_extractor (SentsExtractor): Sentence extraction tool; an extractor
-            passed explicitly is used whatever the source, on the text of a Doc
-        words_extractor (WordsExtractor): Word extraction tool; an extractor
-            passed explicitly is used whatever the source, on the text of a Doc
+            without sentence boundaries they come from SentsExtractor
+        sents_extractor (SentsExtractor): Sentence extraction tool; if given,
+            used on the text of a Doc too
+        words_extractor (WordsExtractor): Word extraction tool; if given,
+            used on the text of a Doc too
         normalize (bool): Compute the normalized statistics
         complex_syl_factor (int): Minimum number of syllables in a complex word
         long_word_letter_factor (int): Minimum number of letters in a long word
@@ -264,23 +259,17 @@ def count_punctuations(text: str) -> dict[str, int]:
 
     Description:
         The types of PUNCTUATION_TYPES: commas, periods, question and
-        exclamation marks (the inverted ¿ and ¡ included, so "¿Qué?" has two
-        question marks), ellipses (the character …, three or more periods,
-        or two periods after ? and ! count as one mark whose periods are not
-        periods: "¿Quién?.." is a question and an ellipsis), colons,
-        semicolons, dashes (—, – and the horizontal bar ―, as well as a run
-        of two or more hyphens, a hyphen after whitespace, at the start of
-        a line or after a closing mark, before a space or between a letter and
-        an opening or a closing mark, the way the raya is typed in plain-text
-        corpora: "--Hola --dijo Juan", "-Hola -dijo Juan-.", "- Se fueron -
-        dijo", "cuatro.-¿Cinco?", "sí-¿y qué?"), hyphens inside words, before
-        digits and at the end of a line inside a word (teórico-práctico,
-        1990-1995, -5, pala-\nbra),
-        guillemets «», straight and curly quotes "“”‘’ of the three
-        levels of the orthography, parentheses and the other marks: every
-        remaining character of PUNCTUATIONS or of the Unicode categories P
-        and S, the same set that is_punctuation removes from the words,
-        so that no mark is lost between the words and the types
+        exclamation marks (¿ and ¡ included, so "¿Qué?" has two), ellipses
+        (…, three or more periods, or two after ? and !: "¿Quién?.." is
+        a question and an ellipsis), colons, semicolons, dashes (—, –, ― and
+        the raya typed with hyphens: a run of two or more, a hyphen after
+        whitespace, a line start or a closing mark, before a space, or between
+        a letter and an opening or a closing mark: "--Hola --dijo Juan",
+        "-Hola -dijo Juan-.", "cuatro.-¿Cinco?", "sí-¿y qué?"), hyphens inside
+        words, before digits and at a line break inside a word
+        (teórico-práctico, -5, pala-\nbra), guillemets «», straight and curly
+        quotes "“”‘’, parentheses and other marks: any other character of
+        is_punctuation
 
     Arguments:
         text (str): Text string
@@ -289,7 +278,7 @@ def count_punctuations(text: str) -> dict[str, int]:
         dict[str, int]: Number of marks of each type in the order of PUNCTUATION_TYPES
     """
     counts = dict.fromkeys(PUNCTUATION_TYPES, 0)
-    # The dashes first, so that one after an ellipsis still sees it (sé...-dijo)
+    # Dashes first, so that one after an ellipsis still sees it (sé...-dijo)
     rest, counts["dash"] = DASH_PATTERN.subn("", text)
     rest, counts["ellipsis"] = ELLIPSIS_PATTERN.subn("", rest)
     chars = Counter(rest)
@@ -309,15 +298,10 @@ def punctuation_profile(text: str, n_words: int | None = None) -> dict[str, floa
     Computing the punctuation profile - frequencies of marks by type per 1000 words
 
     Description:
-        Frequencies of the types of PUNCTUATION_TYPES (count_punctuations)
-        per 1000 words and the share of inverted marks among all question
-        and exclamation marks (inverted_share): 0.5 when every question and
-        exclamation opens with ¿ or ¡ as the orthography requires, lower
-        when the writer drops them, as in informal texts and messages.
-        The profile is an editorial and stylometric feature: it depends on
-        the formatting of the text (typographic quotes and dashes, inverted
-        marks) and is easy to fake, so it is best read separately from
-        linguistic features
+        Frequencies of the types of count_punctuations per 1000 words and
+        inverted_share, the share of ¿ and ¡ among all question and
+        exclamation marks: 0.5 when every question and exclamation opens with
+        one, lower when the writer drops them
 
     Arguments:
         text (str): Text string

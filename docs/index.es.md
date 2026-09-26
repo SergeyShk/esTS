@@ -4,9 +4,9 @@
 
 *¿Cómo esTáS, texto?*
 
-**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica, complejidad léxica, estilo, fonoestadística, morfología, sintaxis y cohesión, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías, los rasgos y las dependencias de Universal Dependencies.
+**esTS** calcula estadísticas de textos en español: estadísticas básicas, legibilidad, diversidad léxica, complejidad léxica, estilo, fonoestadística, morfología, sintaxis y cohesión, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías, los rasgos y las dependencias de Universal Dependencies.
 
-La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy) y solo las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica, los sustantivos deverbales de las métricas de estilo, el perfil de las palabras funcionales y la comparación de corpus necesitan un modelo entrenado ([Instalación](installation.md#model)): las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, y las sílabas y el acento se deducen de la ortografía.
+La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy); la mayoría de las estadísticas no necesita un modelo entrenado ([Instalación](installation.md#model)).
 
 ## Funcionalidad
 
@@ -21,11 +21,11 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 *   calcular [estadísticas de complejidad léxica](stats/lexical_stats.md) a la manera de TAALES: cuán raras son las palabras de un texto según un [diccionario de frecuencias](datasets/freqdict.md) de Google Books Ngram (frecuencia, rango, dispersión, sorpresa) y según las bandas de frecuencia del top-1000 al 10000, con la densidad léxica
 *   calcular [métricas de estilo](stats/style_stats.md): los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías españolas de lenguaje claro - sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés
 *   calcular la [fonoestadística](stats/phon_stats.md) sobre los sonidos de una transcripción por reglas: proporciones de las clases de sonidos, grupos consonánticos, hiatos, sílabas abiertas, dureza e índices de aliteración y de asonancia
-*   escandir el [verso](stats/verse_stats.md) por su metro silábico: las sílabas métricas con la sinalefa y la ley del acento final, el metro de un poema y los hemistiquios del alejandrino, el perfil acentual, los tipos del endecasílabo y las terminaciones de los versos, la rima consonante y asonante con su esquema, las estrofas y la forma de un poema
+*   escandir el [verso](stats/verse_stats.md) por su metro silábico: las sílabas métricas, el metro de un poema, el perfil acentual y los tipos del endecasílabo, la rima consonante y asonante con su esquema, las estrofas y la forma de un poema
 *   comparar corpus con las medidas de la lingüística de corpus: [palabras clave](corpus/keyness.md) frente a un corpus de referencia o al diccionario de frecuencias, [colocaciones](corpus/collocations.md), la [dispersión](corpus/dispersion.md) de una palabra por las partes de un texto y una [concordancia KWIC](corpus/kwic.md), y atribuir la autoría por [estilometría](corpus/stylometry.md): la Delta de Burrows, Zeta, la curva de Mendenhall, las palabras funcionales; encontrar los rasgos que distinguen dos corpus [comparándolos](corpus/compare.md) por 132 rasgos de un texto
 *   visualizar textos y corpus: la [ley de Zipf](visualizers/zipf.md), la [huella literaria](visualizers/fingerprinting.md), un [árbol de palabras](visualizers/word_tree.md), gráficos [de corpus](visualizers/corpus.md) y [estilométricos](visualizers/stylometry.md), el [crecimiento del vocabulario](visualizers/vocabulary.md), las [longitudes de las oraciones](visualizers/sentences.md) y el [resaltado del texto](visualizers/highlight.md) por los fragmentos que cuentan las estadísticas
 *   añadir las estadísticas a un [pipeline de spaCy](components.md) como componentes, de modo que el texto se anote y se mida en una sola pasada y las estadísticas viajen con el `Doc`
-*   trabajar con un [corpus de literatura en español](datasets/spanishliterature.md) de dominio público: 150 obras de 33 autores en cuatro géneros, filtradas por el autor, el género, el país y los años, con una [colección de sonetos](datasets/spanishsonnets.md) de los siglos XV-XX cuyos versos llevan su patrón métrico y su rima, y con un [diccionario de frecuencias](datasets/freqdict.md) de 83 785 lemas según Google Books Ngram
+*   trabajar con un [corpus de literatura en español](datasets/spanishliterature.md) de dominio público (150 obras de 33 autores en cuatro géneros), una [colección de sonetos](datasets/spanishsonnets.md) de los siglos XV-XX con el patrón métrico y la rima de cada verso, y un [diccionario de frecuencias](datasets/freqdict.md) de 83 785 lemas según Google Books Ngram
 
 ## Instalación
 
@@ -35,7 +35,7 @@ Se requiere Python 3.11 o superior.
 pip install pyests
 ```
 
-El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Más sobre las dependencias y la instalación desde el repositorio, en la página de [Instalación](installation.md).
+El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las dependencias, el modelo de spaCy y los conjuntos de datos están en la página de [Instalación](installation.md).
 
 ## Primeros pasos
 

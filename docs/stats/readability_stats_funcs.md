@@ -7,7 +7,7 @@
 
 Computation of the Flesch reading ease with Spanish coefficients. The higher the value, the easier the text is to read; the scale runs from 0 to 100.
 
-The default coefficients are those of the *fórmula de perspicuidad* of Szigriszt-Pazos (1993), which Barrio-Cantalejo et al. (2008) validated on texts for patients and provided with the INFLESZ scale:
+The default coefficients are those of the *fórmula de perspicuidad* of Szigriszt-Pazos (1993), read on the INFLESZ scale of Barrio-Cantalejo et al. (2008):
 
 | Value | Level | Text type |
 | :---: | :---: | :-------- |
@@ -17,7 +17,7 @@ The default coefficients are those of the *fórmula de perspicuidad* of Szigrisz
 | `40-55` | algo difícil | secondary school textbooks |
 | `0-40` | muy difícil | scientific and technical texts |
 
-The coefficients of Fernández Huerta (1959) are available through the `classic` [preset](readability_stats.md#presets). He printed the last term as `1.02` times the number of sentences per 100 words; Law (2011) showed that this inverts the fraction of the Flesch formula the adaptation was based on, so the mean sentence length is used, as in koRpus and textstat.
+The coefficients of Fernández Huerta (1959) are available through the `classic` [preset](readability_stats.md#presets), with the correction of Law (2011): the last term takes the mean sentence length.
 
 Formula:
 
@@ -43,7 +43,7 @@ Sources: Szigriszt Pazos, F. *Sistemas predictivos de legibilidad del mensaje es
 !!! info ""
     **ests.readability_stats.calc_gutierrez_polini_index()**
 
-Computation of the *fórmula de comprensibilidad* of Gutiérrez de Polini (1972), the first formula written for Spanish rather than adapted from English. The higher the value, the easier the text. It was fitted on school texts for the sixth grade and has no scale of its own: the values of ordinary prose lie between 30 and 50, and a text above 70 is read by a young child.
+Computation of the *fórmula de comprensibilidad* of Gutiérrez de Polini (1972). The higher the value, the easier the text. It was fitted on sixth-grade school texts and has no scale of its own: ordinary prose lies between 30 and 50, and a text above 70 is read by a young child.
 
 Formula:
 
@@ -89,7 +89,7 @@ Source: Crawford, A. N. Fórmula y gráfico para determinar la comprensibilidad 
 !!! info ""
     **ests.readability_stats.calc_mu_index()**
 
-Computation of Legibilidad µ of Muñoz Baquedano and Muñoz Urra (2006), which measures the variability of word length: the mean of the number of letters per word divided by its variance. The variance is the sample one, divided by `n − 1`, which is the *cuasivarianza* of the authors: the population variance multiplied by the factor `n / (n − 1)` that their printed formula carries. Read that way the worked example of their manual comes out exactly (18 words, mean 6.9444, variance 13.5844, µ = 51.12); applying the factor once more, on top of the sample variance, gives 54.13 instead. Words without letters (numbers) are left out; with fewer than two words or without variability the index is undefined (`nan`). The higher the value, the easier the text:
+Computation of Legibilidad µ of Muñoz Baquedano and Muñoz Urra (2006), which measures the variability of word length: the mean of the number of letters per word divided by its variance. The variance is the sample one, divided by `n − 1` (the *cuasivarianza* of the authors), which reproduces the worked example of their manual. Words without letters (numbers) are left out; with fewer than two words or without variability the index is undefined (`nan`). The higher the value, the easier the text:
 
 | Value | Level |
 | :---: | :---: |
@@ -142,7 +142,7 @@ Parameters:
 !!! info ""
     **ests.readability_stats.calc_sol_grade()**
 
-Computation of the SOL grade. Contreras et al. (1999) applied the SMOG index to Spanish texts and their English translations and fitted the conversion `E = −2.51 + 0.74·S`, where `S` is the SMOG index of the Spanish text and `E` the grade of the English scale, the years of schooling; the SOL formulas are named after the Spanish word for sun. The higher the value, the harder the text.
+Computation of the SOL grade of Contreras et al. (1999), the conversion `E = −2.51 + 0.74·S`, where `S` is the SMOG index of the Spanish text and `E` the grade of the English scale, the years of schooling. The higher the value, the harder the text.
 
 Parameters:
 
@@ -257,7 +257,7 @@ Parameters:
 !!! info ""
     **ests.readability_stats.flesch_reading_easy_to_grade()**
 
-Conversion of the Flesch reading ease into years of schooling, used to include the reading ease in the consensus grade by analogy with `text_standard` of textstat. The thresholds belong to the scale of the preset, since the same value means different things on the two scales.
+Conversion of the Flesch reading ease into years of schooling for the consensus grade. The thresholds belong to the scale of the preset.
 
 With the `general` preset, through the text types of the INFLESZ bands and the school stages of Spain:
 
@@ -269,7 +269,7 @@ With the `general` preset, through the text types of the INFLESZ bands and the s
 | `40-55` | 11 | secondary school textbooks, bachillerato |
 | `below 40` | 13 | scientific texts, university |
 
-With the `classic` preset, through the interpretation table of Flesch, whose bands Fernández Huerta kept: `90-100` - 5, `80-90` - 6, `70-80` - 7, `60-70` - 8.5, `50-60` - 10, `40-50` - 11, `30-40` - 12, below `30` - 13.
+With the `classic` preset, through the interpretation table of Flesch kept by Fernández Huerta: `90-100` - 5, `80-90` - 6, `70-80` - 7, `60-70` - 8.5, `50-60` - 10, `40-50` - 11, `30-40` - 12, below `30` - 13.
 
 Values above 100 belong to the first grade of the scale.
 
@@ -285,7 +285,7 @@ Parameters:
 !!! info ""
     **ests.readability_stats.calc_consensus_grade()**
 
-Computation of the consensus grade: the median of the rounded values of the grade formulas by analogy with `text_standard` of textstat, which uses the mode; the median is more robust to an outlying formula. The values are rounded half up. The reading ease is converted with `flesch_reading_easy_to_grade` by the scale of the preset and added without rounding.
+Computation of the consensus grade: the median of the values of the grade formulas, each rounded half up. The reading ease is converted with `flesch_reading_easy_to_grade` by the scale of the preset and added without rounding.
 
 Parameters:
 
@@ -309,7 +309,7 @@ Parameters:
 !!! info ""
     **ests.readability_stats.grade_to_age()**
 
-The school stage and reader age by the value of a grade formula, by the stages of the Spanish school system counted in years of schooling from the first year of primary school at the age of six (see the [interpretation](readability_stats.md#interpretation) table). The value is rounded half up, values below 1 belong to grades 1-3.
+The school stage of the Spanish school system and reader age by the value of a grade formula (see the [interpretation](readability_stats.md#interpretation) table). The value is rounded half up, values below 1 belong to grades 1-3.
 
 Parameters:
 
@@ -331,7 +331,7 @@ Parameters:
 !!! info ""
     **ests.readability_stats.calc_reading_time()**
 
-Computation of the reading time of a text in minutes. The default speed is the silent reading speed of adults in Spanish, 278 words per minute: the mean of six studies in the meta-analysis of Brysbaert (2019), where reading aloud gives 191. The norms of school years from the meta-analysis of Ripoll, Tapia and Aguado (2020) are available in `ests.constants.READING_SPEED_NORMS` as pairs (aloud, silent):
+Computation of the reading time of a text in minutes. The default speed is the silent reading speed of adults in Spanish, 278 words per minute, from the meta-analysis of Brysbaert (2019). The norms of school years from the meta-analysis of Ripoll, Tapia and Aguado (2020) are available in `ests.constants.READING_SPEED_NORMS` as pairs (aloud, silent):
 
 | Norm | Aloud | Silent |
 | :--: | :---: | :----: |

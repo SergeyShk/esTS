@@ -5,11 +5,11 @@
 
 ## Descripción
 
-Una concordancia KWIC (keyword in context) - todas las apariciones de una palabra o de una expresión con su contexto a la izquierda y a la derecha, como en [AntConc](https://www.laurenceanthony.net/software/antconc/) y textacy `keyword_in_context`. Muestra cómo se usa una palabra en un texto: con qué se combina, en qué formas y sentidos.
+Una concordancia KWIC (keyword in context) - todas las apariciones de una palabra o de una expresión con su contexto a la izquierda y a la derecha.
 
 Las apariciones se buscan entre las palabras del texto: por la forma sin distinguir la caja, distinguiéndola (`ignore_case=False`) o por el lema (`by_lemma=True`: `gatos` se encuentra por `gato`, y una expresión se da por lemas - `mirar a el pájaro` - o tal como se escribe, porque cada una de sus palabras se lematiza). El texto y la palabra clave se dividen en palabras del mismo modo, con el tokenizador del pipeline español vacío, así que `EE. UU.` es una palabra en los dos, y la puntuación y los símbolos no son palabras de ninguno: `¿Dónde` encuentra `Dónde`, `20 €` encuentra `20`. Las tildes forman parte de la forma: `solo` y `sólo` son dos formas.
 
-Por lema, la palabra clave se lematiza con simplemma, y una palabra del texto se encuentra por su lema de simplemma y, en un `Doc` que lleva lemas, también por el lema del modelo. Los dos lematizadores se equivocan en sitios distintos y cada uno cubre al otro: en `Mi amigo vino con una botella de vino` el modelo da `venir` al verbo y `vino` al sustantivo, así que `venir` encuentra solo el verbo, donde simplemma, que no ve el contexto, no encontraría nada; en `¿Dónde pusiste las llaves?` el modelo lee `pusiste` como `pusistar`, y simplemma deja que `poner` lo encuentre igualmente. El precio es que `vino` encuentra también el verbo, porque simplemma lo lee así.
+Por lema, la palabra clave se lematiza con simplemma, y una palabra del texto se encuentra por su lema de simplemma y, en un `Doc` que lleva lemas, también por el lema del modelo. En `Mi amigo vino con una botella de vino` el modelo da `venir` al verbo, así que `venir` encuentra el verbo, donde simplemma, que no ve el contexto, no encontraría nada; `vino` encuentra los dos, porque simplemma lee el verbo como `vino`.
 
 El contexto son `window` palabras a cada lado tal como están escritas en el texto, con la puntuación entre ellas; los espacios se reducen a uno, y las apariciones no se solapan.
 

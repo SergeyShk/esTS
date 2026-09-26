@@ -387,8 +387,8 @@ este espacio no más a Dios le pido!"""
 
 
 def test_distinct_lengths(monkeypatch):
-    # A paragraph of prose per line gives every line its own length: the lengths without
-    # a name are no candidates, and a long line out of reach of a meter costs one reading
+    # Prose lines of distinct lengths: the unnamed lengths are no candidates, and a line
+    # out of reach of a meter costs one reading
     lines = [" ".join(["la casa blanca"] * repeats) for repeats in range(10, 50)]
     lines += [GARCILASO.split("\n")[0], "la luz del día", SONATINA.split("\n")[0]]
     calls = 0
@@ -667,8 +667,7 @@ def rhyme_pairs(labels):
 
 
 def test_sonnets(sonnets):
-    # The scansion agrees with the automatic one of DISCO on the length of the lines
-    # and on the stresses of the metrical syllables, the rhyme on the rhyming pairs
+    # Agreement with the automatic scansion and rhyme of DISCO
     meters = Counter()
     forms = Counter()
     lengths = syllables = agreed = 0

@@ -19,7 +19,7 @@ def dictionary(tmp_path_factory):
     path = tmp_path_factory.mktemp("ests_dicts")
     shutil.copy(BUNDLED_ARCHIVE, path / module.ARCHIVE)
     dictionary = FreqDict(data_dir=path)
-    # The archive is in the repository next to the code, the network is not needed
+    # The archive is bundled with the code, the network is not needed
     dictionary.download()
     return dictionary
 
@@ -172,8 +172,7 @@ def test_bad_filters(dictionary, bad_filter):
     ],
 )
 def test_lemma_key(dictionary, word, key):
-    # These lemmas differ between the versions of simplemma: when the lock moves
-    # to a version that changes them, the dictionary has to be built anew
+    # Lemmas that differ between the versions of simplemma the dictionary is built with
     assert lemma_key(word) == key
     assert key in dictionary
 

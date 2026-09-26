@@ -7,7 +7,7 @@
 
 A module for computing the cohesion statistics of a text in the manner of [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) and of its Spanish adaptation [Coh-Metrix-Esp](https://aclanthology.org/W16-4105/): the overlap of nouns, of arguments and of content words between sentences, givenness, temporal cohesion and the density of the discourse markers.
 
-Sentences are compared by lemmas, and the features come from the annotation of [Universal Dependencies](https://universaldependencies.org/u/feat/), so the source has to be annotated: a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, and a `Doc` must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer`; a source without either raises `SourceError`, and without the lemmas the overlaps would be computed on empty strings, where every noun overlaps with every other. Without sentence boundaries - a pipeline with no parser - the sentences are taken from the text by [`SentsExtractor`](../extractors/sentences.md).
+Sentences are compared by lemmas, and the features come from the annotation of [Universal Dependencies](https://universaldependencies.org/u/feat/), so the source has to be annotated: a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, and a `Doc` must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer`; a source without either raises `SourceError`. Without sentence boundaries - a pipeline with no parser - the sentences are taken from the text by [`SentsExtractor`](../extractors/sentences.md).
 
 A text longer than the `max_length` of the pipeline - a million characters by default - raises `SourceError`: split it into parts, or raise `max_length` on a pipeline of your own and pass it in `nlp`.
 
@@ -45,11 +45,11 @@ The overlap of Coh-Metrix: a pair of sentences is cohesive when they share the l
 | `mood_repetition` | float | Share of adjacent pairs with the same dominant mood |
 | `temporal_cohesion` | float | Mean of the repetition of the tense and of the mood |
 
-A noun is `NOUN` or `PROPN` and a content word is a `NOUN`, `PROPN`, `ADJ`, `VERB` or `ADV`. A pronoun is a `PRON` or a determiner that points at something - a possessive (`Poss=Yes`) or a demonstrative or personal one (`PronType=Dem`, `Prs`) - so `mi libro` and `este libro` hold a pronoun while `el libro` and `cada libro` do not: the quantifiers and the indefinites (`cada`, `todos`, `ningún`, `otro`, `cualquier`) point at nothing and would inflate a measure of anaphoric density by about a fifth. A demonstrative carries `PronType=Dem`.
+A noun is `NOUN` or `PROPN` and a content word is a `NOUN`, `PROPN`, `ADJ`, `VERB` or `ADV`. A pronoun is a `PRON` or a determiner that points at something - a possessive (`Poss=Yes`) or a demonstrative or personal one (`PronType=Dem`, `Prs`) - so `mi libro` and `este libro` hold a pronoun while `el libro` and `cada libro` do not - the quantifiers and the indefinites (`cada`, `todos`, `ningún`, `otro`, `cualquier`) are left out. A demonstrative carries `PronType=Dem`.
 
-An argument is a `NOUN`, `PROPN` or `PRON`, the determiners left out even when they count as pronouns: the argument overlap of Coh-Metrix is built on nouns and pronouns proper, and the lemma of `este` in two sentences is no reference to the same thing.
+An argument is a `NOUN`, `PROPN` or `PRON`, the determiners left out even when they count as pronouns.
 
-Temporal cohesion follows SMTEMP of Coh-Metrix: for every sentence the dominant value of the feature of its verbs is taken, and a pair of adjacent sentences counts as cohesive when the values are equal. Spanish has no aspect in Universal Dependencies, so the mood takes its place next to the tense - the shift from the indicative to the subjunctive is what breaks the temporal frame of a Spanish text. Pairs where one of the sentences has no verb with the feature are skipped, and a text shorter than two sentences leaves every measure of this section `nan`.
+Temporal cohesion follows SMTEMP of Coh-Metrix: for every sentence the dominant value of the feature of its verbs is taken, and a pair of adjacent sentences counts as cohesive when the values are equal. Spanish has no aspect in Universal Dependencies, so the mood takes its place next to the tense. Pairs where one of the sentences has no verb with the feature are skipped, and a text shorter than two sentences leaves every measure of this section `nan`.
 
 ## Connectors { #connectors }
 
@@ -70,12 +70,12 @@ The discourse markers (*marcadores del discurso*) of the classification of Mart�
 
 The connectors are looked for by their word forms in lower case: at every position the longest one is taken, so `sin embargo` does not fall apart into `sin`, and the ones found do not overlap. The occurrences are in the attribute `connector_spans` and their distribution in `c_connectors`.
 
-Two rules keep the ordinary uses of those words out. A one-word connector counts only with a part of speech of `CONNECTOR_POS` - a conjunction, a particle, an adverb, an adposition, an interjection - and never after a determiner, so `el antes y el después` holds one connector, `y`, and not three; a proper noun counts only at the start of a sentence, where the models read a marker as one (`Primeramente`, `Concluyendo`), so the surname of `Ana, Luego y Mas firmaron` is no connector. And a marker that is also the head of a prepositional phrase is dropped there: `antes de la reunión`, `después del informe`, `por encima de 80`, `al final de la línea`, `al principio de la oración`, `luego de la sesión` and `sobre todo el texto` count nothing, while `antes, firmó el acta`, `encima, no vino`, `al final, no vino` and `sobre todo cuando llueve` count their marker.
+Two rules keep the ordinary uses of those words out. A one-word connector counts only with a part of speech of `CONNECTOR_POS` - a conjunction, a particle, an adverb, an adposition, an interjection - and never after a determiner, so `el antes y el después` holds one connector, `y`, and not three; a proper noun counts only at the start of a sentence, where the models read a marker as one (`Primeramente`), so the surname of `Ana, Luego y Mas firmaron` is no connector. And a marker that is also the head of a prepositional phrase is dropped there: `antes de la reunión` and `sobre todo el texto` count nothing, while `antes, firmó el acta` and `sobre todo cuando llueve` count their marker.
 
 Your own dictionary can be passed in `connectors`: a mapping from the connector to its class of `CONNECTOR_CLASSES` and its kind of `CONNECTOR_TYPES`, an unknown one raising `ParameterError`.
 
 !!! warning "Warning"
-    A Spanish marker is most often a phrase built of ordinary words, and those words are counted as words like any other: the noun `embargo` of `sin embargo` and the noun `ejemplo` of `por ejemplo` are nouns and content words of their sentence, and a text that repeats a marker gains a little overlap from it. Measured on the Spanish pages of this site the difference is below 0.002 for every overlap, but on a text built of markers it would be larger.
+    The words of a marker are counted as words like any other: the noun `embargo` of `sin embargo` is a noun and a content word of its sentence, so a text that repeats a marker gains a little overlap from it.
 
 ## Counts { #counts }
 
@@ -213,7 +213,7 @@ To illustrate the method, we reuse the code from the previous example:
 !!! info ""
     **ests.cohesion_stats.find_connectors()**, **ests.cohesion_stats.load_connectors()**
 
-`find_connectors(words, connectors=None, sent_index=0, pos=None)` finds the connectors of a single sentence and returns their occurrences, and `load_connectors()` returns the dictionary of the library, the class and the kind by connector; the dictionary is cached and read-only, so a change of it goes through the `connectors` parameter and not through the object returned.
+`find_connectors(words, connectors=None, sent_index=0, pos=None)` finds the connectors of a single sentence and returns their occurrences, and `load_connectors()` returns the dictionary of the library, the class and the kind by connector; the dictionary is read-only, so a dictionary of your own goes through the `connectors` parameter.
 
 !!! example "Example"
 

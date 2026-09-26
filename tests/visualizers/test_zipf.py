@@ -117,7 +117,6 @@ def test_zipf_ax(tokens):
 
 
 def test_zipf_labels_of_equal_frequencies():
-    # A rank is labelled with its own word, whatever the ties of the frequencies
     ax = zipf(Counter({"a": 2, "b": 2, "c": 2, "d": 2, "e": 1}), num_labels=5)
     assert [text.get_text() for text in ax.texts] == [" a", " b", " c", " e"]
     plt.close("all")
