@@ -58,8 +58,8 @@ def frequency_spectrum_plot(words: Sequence[str], ax: Axes | None = None) -> Axe
 
     Description:
         The number of word types V(m) that occur exactly m times
-        (calc_frequency_spectrum) in logarithmic coordinates, as plot.spc of
-        zipfR; the left edge is the hapaxes
+        (calc_frequency_spectrum) in logarithmic coordinates; the left edge is
+        the hapaxes
 
     Arguments:
         words (list[str]): Words of the text

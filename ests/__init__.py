@@ -43,8 +43,6 @@ from .verse_stats import VerseStats
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
-# Metadata
-
 # The distribution is pyests, the package it installs is ests
 try:
     __version__ = version("pyests")

@@ -56,27 +56,17 @@ class StyleStats:
     Class for computing the style metrics of a text
 
     Description:
-        The SEO metrics repeat the indicators of the services Advego and
-        Text.ru: nausea, water content, spam score, naturalness of the
-        distribution of words by Zipf's law and keyword density. The exact
-        formulas of the services are not published, so the commonly accepted
-        definitions are implemented; they are described in the docstrings of
-        the functions
-        The lexical markers of the officialese style: the nouns derived from a
-        verb, the compound prepositions of the administrative style, the
-        parenthetical expressions and the clichés, by the lists of constants
-        The words are extracted in lower case without lemmatization by default;
-        to compute the SEO metrics by lemmas, pass
-        WordsExtractor(use_lexemes=True, lowercase=True). The words of a Doc are
-        taken without punctuation (iter_doc_words)
-        The markers of the officialese style are counted over the unfiltered
-        word forms (forms), whatever the extractor passed. The verbal nouns
-        need the parts of speech and the lemmas: the lemmas of the nouns of a
-        Doc are read when the object is made, and the Doc is not kept, so a Doc
-        with the object in an extension still pickles; a string is parsed by
-        the model when the verbal nouns are first read, so the other metrics of
-        a string need no model. A string longer than the max_length of the
-        pipeline is parsed in parts of whole sentences
+        The SEO metrics follow the indicators of Advego and Text.ru (nausea,
+        water content, spam score, naturalness by Zipf's law, keyword density),
+        whose exact formulas are not published. The words are extracted in
+        lower case without lemmatization by default; for the SEO metrics by
+        lemmas, pass WordsExtractor(use_lexemes=True, lowercase=True)
+        The markers of the officialese style - the verbal nouns, the compound
+        prepositions, the parenthetical expressions and the clichés - are
+        counted over the unfiltered word forms (forms), whatever the extractor.
+        The verbal nouns need the parts of speech and the lemmas: a string is
+        parsed by the model only when they are first read, in parts of whole
+        sentences if it is longer than the max_length of the pipeline
 
     Example:
         >>> from ests import StyleStats
@@ -139,9 +129,7 @@ class StyleStats:
         cliches: Sequence[str] | None = None,
         nlp: Language | None = None,
     ):
-        # The lemmas of the nouns of a Doc are read at once, and the Doc is not kept:
-        # an object in its extension that holds the Doc would make a cycle that
-        # neither pickle nor deepcopy can follow
+        # The Doc is not kept: this object in an extension of the Doc would make a cycle
         self._text: str | None = None
         self._nouns: list[str] | None = None
         self._annotation_error = ""
@@ -336,10 +324,8 @@ def is_stopword(word: str) -> bool:
     Checking whether a word is a stopword
 
     Description:
-        The word forms of STOPWORDS - determiners, pronouns, prepositions,
-        conjunctions, interjections, the adverbs that point, relate or ask and
-        the ones that negate, affirm or focus - and the one-word parenthetical
-        expressions of PARENTHETICALS (finalmente, naturalmente), in any case
+        The word forms of STOPWORDS and the one-word parenthetical expressions
+        of PARENTHETICALS (finalmente, naturalmente), in any case
 
     Arguments:
         word (str): Word
@@ -362,9 +348,8 @@ def calc_classic_nausea(text: Sequence[str]) -> float:
 
     Description:
         The square root of the number of occurrences of the most frequent word
-        (Advego). It measures how insistent one word is regardless of the length
-        of the text, so it grows with the text. The norm of Advego is at most 7,
-        1-5 in practice
+        (Advego); it grows with the text. The norm of Advego is at most 7, 1-5
+        in practice
 
     References:
         https://advego.com/text/seo/
@@ -385,10 +370,8 @@ def calc_academic_nausea(text: Sequence[str], top_n: int = NAUSEA_TOP_N) -> floa
     Computing the academic nausea
 
     Description:
-        The share of the occurrences of the most frequent words of the text in
-        percent (Advego). The exact formula of Advego is not published: the
-        summed frequency of the top_n most frequent words is divided by the
-        number of words. The norm of Advego is 5-15%
+        The summed frequency of the top_n most frequent words per 100 words
+        (Advego). The norm of Advego is 5-15%
 
     References:
         https://advego.com/text/seo/
@@ -411,9 +394,8 @@ def calc_water(text: Sequence[str], stopwords: Sequence[str] | None = None) -> f
     Description:
         The share of the words that carry no content in percent (Text.ru): the
         stopwords of is_stopword or of the list passed, in any case. The norms
-        of Text.ru are set for Russian, which has no articles: a Spanish text
-        has more water by its grammar alone: the texts of the corpus of
-        literature have 42-54% of it, the prose 49% by the median
+        of Text.ru are set for Russian, which has no articles, so a Spanish
+        text has more water by its grammar alone
 
     References:
         https://text.ru/seo
@@ -438,11 +420,9 @@ def calc_spam(text: Sequence[str]) -> float:
     Computing the spam score
 
     Description:
-        The share of the repeated words of the text in percent (Text.ru): every
-        occurrence of a word but the first is a repetition, so the spam score
-        is 100 · (1 - TTR). To compute it by lemmas, extract the words with
-        lemmatization. The norms of Text.ru: up to 30% - natural, 30-60% -
-        SEO-optimized, above 60% - spammed
+        The share of the repeated words in percent (Text.ru), every occurrence
+        of a word after the first: 100 · (1 - TTR). The norms of Text.ru: up to
+        30% - natural, 30-60% - SEO-optimized, above 60% - spammed
 
     References:
         https://text.ru/seo
@@ -462,16 +442,12 @@ def calc_zipf_naturalness(text: Sequence[str], top_n: int = NAUSEA_TOP_N) -> flo
     Computing the naturalness of a text by Zipf's law
 
     Description:
-        How well the frequencies of the most frequent words agree with the
-        ideal distribution f_r = f_1 / r, where f_1 is the frequency of the most
-        frequent word and r is the rank of a word (pr-cy, megaindex). It is
         100 · (1 - the mean relative deviation of the frequencies from the
-        ideal ones) over the ranks from 2 to min(top_n, V, f_1): rank 1 matches
-        the ideal by construction, and above the rank f_1 the ideal frequency
-        is below one and the deviation of the hapaxes grows without a bound.
-        Negative values are clipped to 0; the norm of the services is at least
-        50%. It is undefined when there are no ranks to compare: every word is
-        a hapax, the text has one word type or top_n is below 2
+        ideal f_r = f_1 / r), where f_1 is the frequency of the most frequent
+        word, over the ranks r from 2 to min(top_n, V, f_1), V the number of
+        word types, clipped to 0 (pr-cy, megaindex); the norm of the services
+        is at least 50%. Undefined when there are no ranks to compare: every
+        word is a hapax, the text has one word type or top_n is below 2
 
     References:
         https://en.wikipedia.org/wiki/Zipf's_law
@@ -505,8 +481,7 @@ def calc_keyword_density(text: Sequence[str], keywords: Sequence[str]) -> dict[s
         The frequency of every keyword per 100 words of the text (Text.ru). A
         keyword of several words separated by spaces is looked for as a
         sequence of words, and its occurrences may overlap. The words are
-        compared in any case; to compare by lemmas, extract the words with
-        lemmatization and pass lemmas
+        compared in any case
 
     References:
         https://text.ru/seo
@@ -555,10 +530,9 @@ def calc_verbal_nouns(nouns: Sequence[str]) -> float:
 
     Description:
         The share of the nouns derived from a verb (is_verbal_noun: revisión,
-        nombramiento, aprendizaje, uso) among the lemmas of the nouns of a text
-        in percent; nan for a text without nouns. Spanish tells a noun from a
-        verb form by the annotation only (uso, viaje, dura), so the lemmas of the
-        tokens tagged NOUN are passed, not the words
+        aprendizaje, uso) among the lemmas of the nouns in percent; nan without
+        nouns. Pass the lemmas of the tokens tagged NOUN (noun_lemmas), not the
+        words: a noun and a verb form may be spelt alike (uso, viaje)
 
     Arguments:
         nouns (list[str]): Lemmas of the nouns
@@ -580,14 +554,11 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> dict[str, str
     Spelling out the phrases in the forms a text has
 
     Description:
-        A phrase ending in a or de also takes the contraction with the article,
-        al or del (a efectos del, conforme al). A phrase whose first word is an
-        infinitive (proceder a, dar cumplimiento, ser de aplicación) takes the
-        forms of the text whose lemma is that infinitive: procedió a, dio
-        cumplimiento, es de aplicación. The lemma is the one of lemmatize, a
-        pronominal lemma counting for its verb (llévese, llevarse - llevarse -
-        llevar), or of IRREGULAR_VERB_FORMS for the forms simplemma leaves as
-        they are (dado, hecho, puesto, dese)
+        A phrase ending in a or de also takes al or del (conforme al). A phrase
+        whose first word is an infinitive (dar cumplimiento) takes the forms of
+        the text with that lemma (dio cumplimiento): the lemma of lemmatize, a
+        pronominal one counting for its verb (llevarse - llevar), or of
+        IRREGULAR_VERB_FORMS (dado, hecho, dese)
 
     Arguments:
         text (list[str]): List of words
@@ -667,8 +638,7 @@ def calc_parentheticals(text: Sequence[str]) -> float:
 
     Description:
         The expressions of PARENTHETICALS (sin embargo, es decir, por ejemplo,
-        finalmente) per 100 words. The punctuation is not looked at: the list
-        holds the expressions that stand apart in most of their occurrences
+        finalmente) per 100 words, whatever the punctuation
 
     Arguments:
         text (list[str]): List of words

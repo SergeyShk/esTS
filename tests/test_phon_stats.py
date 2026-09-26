@@ -165,7 +165,6 @@ def test_hiatus(ps):
 
 def test_cv_entropy(ps):
     assert calc_cv_entropy(["casa", "pato", "sol", "mar"]) == pytest.approx(1.0)
-    # a single pattern gives 0.0, not -0.0, which prints with a sign
     assert str(calc_cv_entropy(["casa", "casa"])) == "0.0"
     assert isnan(calc_cv_entropy(["2020", "123"]))
     assert ps.cv_entropy == pytest.approx(2.75)

@@ -131,14 +131,10 @@ def _cell_measures(
     Measures of dispersion of every word over the non-zero cells of the word × part matrix
 
     Description:
-        A vectorized computation of the measures of calc_dp, calc_dp_norm,
-        calc_juilland_d, calc_carroll_d2, calc_rosengren_s and
-        calc_kl_divergence on a sparse representation: rows and cols are the
-        word and the part of a non-zero cell, values its frequency, so the
-        memory is linear in the number of cells and not in words times parts.
-        A zero cell contributes s_i to DP and nothing to the entropy, the
-        divergence and Rosengren's S; the mean and the variance of Juilland's
-        D come from sums and sums of squares; words of zero frequency give nan
+        The measures of calc_dp, calc_dp_norm, calc_juilland_d,
+        calc_carroll_d2, calc_rosengren_s and calc_kl_divergence over a sparse
+        matrix: rows and cols are the word and the part of a non-zero cell,
+        values its frequency; words of zero frequency give nan
 
     Arguments:
         rows (ndarray): Words of the non-zero cells

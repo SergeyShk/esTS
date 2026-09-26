@@ -41,8 +41,7 @@ COMPONENTS = (
     ("ests_style", StyleStatsComponent, StyleStats),
     ("ests_phon", PhonStatsComponent, PhonStats),
 )
-# The lexical component needs the frequency dictionary and the verse component the lines of
-# a poem, their statistics are tested apart
+# The lexical component needs the frequency dictionary and the verse one a poem: tested apart
 ALL_COMPONENTS = (
     *COMPONENTS,
     ("ests_lexical", LexicalStatsComponent, LexicalStats),

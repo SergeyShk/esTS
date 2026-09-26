@@ -2,29 +2,16 @@
 Components of spaCy for the classes of statistics
 
 Description:
-    Every component puts an object of a class of statistics into doc._.<name>;
-    spaCy does not serialize such objects, so Doc.to_bytes(), DocBin with
-    store_user_data=True and nlp.pipe(n_process > 1) do not work with these
-    components - leave the user data out when saving, or keep get_stats()
-    on your own
-    The factories carry the prefix of the library, because the registry of
-    spaCy is one for the whole process: a plain basic or morph would collide
-    with the component of any other library that registers the same name, and
-    spaCy answers a second registration with an error. The name of the pipe,
-    which is also the name of the extension, is free: add_pipe(name="basic")
-    gives doc._.basic
-    The factories are declared as entry points of spacy_factories, so a
-    pipeline saved with these components loads with spacy.load() in a process
-    that never imports this package
-    A document with no words - an empty string, whitespace, punctuation alone -
-    passes through every component untouched, its extension left at None, so
-    that one such document in a corpus does not stop nlp.pipe. A pipeline that
-    gives no annotation a component needs is another matter: that is an error
-    of the pipeline, and it is raised
-    Adding a component extends the tokenizer of its pipeline with the rules for
-    the dashes of a dialogue (add_dash_rules), which the string API has, so the
-    words of a component are the words of the rest of the library: sí--dijo is
-    two words and a dash, not one word
+    Every component puts an object of a class of statistics into doc._.<name>,
+    the name of the pipe: add_pipe("ests_basic", name="basic") gives doc._.basic
+    spaCy does not serialize these objects, so Doc.to_bytes(), DocBin with
+    store_user_data=True and nlp.pipe(n_process > 1) fail - leave the user data
+    out when saving, or keep get_stats() on your own
+    The factories are entry points of spacy_factories, so a saved pipeline loads
+    with spacy.load() without importing the package
+    A document with no words passes untouched, its extension left at None; a
+    pipeline without an annotation a component needs raises SourceError
+    Adding a component extends the tokenizer of its pipeline with add_dash_rules
 """
 
 from spacy.language import Language
@@ -62,6 +49,9 @@ class BasicStatsComponent:
     """
     Class for the component of the basic statistics of a text
 
+    Description:
+        Puts a BasicStats object into doc._.<name>
+
     Examples:
     Adding the component to a pipeline:
         >>> import ests
@@ -88,15 +78,11 @@ class BasicStatsComponent:
         """
         Adding the computed statistics to the component
 
-        Description:
-            A document with no words is returned untouched, its extension
-            left at None
-
         Arguments:
             doc (Doc): Doc object
 
         Returns:
-            doc (Doc): Modified Doc object
+            doc (Doc): Modified Doc object; untouched if it has no words
         """
         if not has_words(doc):
             return doc
@@ -109,6 +95,9 @@ class BasicStatsComponent:
 class ReadabilityStatsComponent:
     """
     Class for the component of the readability metrics of a text
+
+    Description:
+        Puts a ReadabilityStats object into doc._.<name>
 
     Adding the component to a pipeline:
         >>> import ests
@@ -131,8 +120,7 @@ class ReadabilityStatsComponent:
         >>> round(doc._.readability.flesch_reading_easy, 2)
         97.0
 
-    Taking the basic statistics from a component that already computed them,
-    instead of computing them a second time:
+    Reusing the basic statistics of another component:
         >>> _ = nlp.add_pipe("ests_basic", name="basic", before="readability")
         >>> nlp.add_pipe(
         ...     "ests_readability",
@@ -145,8 +133,8 @@ class ReadabilityStatsComponent:
     Arguments:
         name (str): Name of the component in the pipeline
         preset (str): Preset of the coefficients (general, classic)
-        basic (str): Name of the extension of a component of basic statistics,
-            whose object is used instead of computing them again
+        basic (str): Extension of a component of basic statistics to reuse
+            instead of computing them again
 
     Raises:
         ParameterError: If the preset is unknown
@@ -171,15 +159,11 @@ class ReadabilityStatsComponent:
         """
         Adding the computed metrics to the component
 
-        Description:
-            A document with no words is returned untouched, its extension
-            left at None
-
         Arguments:
             doc (Doc): Doc object
 
         Returns:
-            doc (Doc): Modified Doc object
+            doc (Doc): Modified Doc object; untouched if it has no words
         """
         if not has_words(doc):
             return doc
@@ -215,6 +199,9 @@ class ReadabilityStatsComponent:
 class DiversityStatsComponent:
     """
     Class for the component of the lexical diversity metrics of a text
+
+    Description:
+        Puts a DiversityStats object into doc._.<name>
 
     Adding the component to a pipeline:
         >>> import ests
@@ -273,15 +260,11 @@ class DiversityStatsComponent:
         """
         Adding the computed metrics to the component
 
-        Description:
-            A document with no words is returned untouched, its extension
-            left at None
-
         Arguments:
             doc (Doc): Doc object
 
         Returns:
-            doc (Doc): Modified Doc object
+            doc (Doc): Modified Doc object; untouched if it has no words
         """
         if not has_words(doc):
             return doc
@@ -303,9 +286,8 @@ class MorphStatsComponent:
     Class for the component of the morphological statistics of a text
 
     Description:
-        The parts of speech and the features are read from the annotation of
-        the model, so the pipeline needs a morphologizer (or a tagger with an
-        attribute ruler) and a lemmatizer before the component
+        Puts a MorphStats object into doc._.<name>; needs a morphologizer (or
+        a tagger with an attribute ruler) and a lemmatizer before it
 
     Adding the component to a pipeline:
         >>> import ests
@@ -335,15 +317,11 @@ class MorphStatsComponent:
         """
         Adding the computed statistics to the component
 
-        Description:
-            A document with no words is returned untouched, its extension
-            left at None
-
         Arguments:
             doc (Doc): Doc object
 
         Returns:
-            doc (Doc): Modified Doc object
+            doc (Doc): Modified Doc object; untouched if it has no words
         """
         if not has_words(doc):
             return doc
@@ -358,8 +336,8 @@ class SyntaxStatsComponent:
     Class for the component of the syntactic statistics of a text
 
     Description:
-        The statistics are computed on the dependency tree, so the pipeline
-        needs a parser and a lemmatizer before the component
+        Puts a SyntaxStats object into doc._.<name>; needs a parser and
+        a lemmatizer before it
 
     Adding the component to a pipeline:
         >>> import ests
@@ -389,15 +367,11 @@ class SyntaxStatsComponent:
         """
         Adding the computed statistics to the component
 
-        Description:
-            A document with no words is returned untouched, its extension
-            left at None
-
         Arguments:
             doc (Doc): Doc object
 
         Returns:
-            doc (Doc): Modified Doc object
+            doc (Doc): Modified Doc object; untouched if it has no words
         """
         if not has_words(doc):
             return doc
@@ -412,9 +386,8 @@ class CohesionStatsComponent:
     Class for the component of the cohesion statistics of a text
 
     Description:
-        The features are read from the annotation of the model, so the pipeline
-        needs a morphologizer (or a tagger with an attribute ruler) and a
-        lemmatizer before the component
+        Puts a CohesionStats object into doc._.<name>; needs a morphologizer (or
+        a tagger with an attribute ruler) and a lemmatizer before it
 
     Adding the component to a pipeline:
         >>> import ests
@@ -444,15 +417,11 @@ class CohesionStatsComponent:
         """
         Adding the computed statistics to the component
 
-        Description:
-            A document with no words is returned untouched, its extension
-            left at None
-
         Arguments:
             doc (Doc): Doc object
 
         Returns:
-            doc (Doc): Modified Doc object
+            doc (Doc): Modified Doc object; untouched if it has no words
         """
         if not has_words(doc):
             return doc
@@ -467,10 +436,9 @@ class LexicalStatsComponent:
     Class for the component of the lexical sophistication statistics of a text
 
     Description:
-        The words are looked up by their parts of speech, so the pipeline needs
-        a morphologizer (or a tagger with an attribute ruler) before the
-        component. The frequency dictionary is created once for the component;
-        the statistics by the dictionary need it downloaded
+        Puts a LexicalStats object into doc._.<name>; needs a morphologizer (or
+        a tagger with an attribute ruler) before it, and the statistics by the
+        frequency dictionary need it downloaded
 
     Adding the component to a pipeline:
         >>> import ests
@@ -508,15 +476,11 @@ class LexicalStatsComponent:
         """
         Adding the computed statistics to the component
 
-        Description:
-            A document with no words - numbers are no words here - is
-            returned untouched, its extension left at None
-
         Arguments:
             doc (Doc): Doc object
 
         Returns:
-            doc (Doc): Modified Doc object
+            doc (Doc): Modified Doc object; untouched if it has no words other than numbers
         """
         if not any(not is_number(token.text) for token in iter_doc_tokens(doc)):
             return doc
@@ -531,10 +495,8 @@ class StyleStatsComponent:
     Class for the component of the style metrics of a text
 
     Description:
-        The SEO metrics and the markers of the officialese style read the words
-        of the document; the verbal nouns read its parts of speech and lemmas,
-        so the pipeline needs a morphologizer and a lemmatizer before the
-        component for them
+        Puts a StyleStats object into doc._.<name>; the verbal nouns need
+        a morphologizer and a lemmatizer before it
 
     Adding the component to a pipeline:
         >>> import ests
@@ -586,15 +548,11 @@ class StyleStatsComponent:
         """
         Adding the computed metrics to the component
 
-        Description:
-            A document with no words is returned untouched, its extension
-            left at None
-
         Arguments:
             doc (Doc): Doc object
 
         Returns:
-            doc (Doc): Modified Doc object
+            doc (Doc): Modified Doc object; untouched if it has no words
         """
         if not has_words(doc):
             return doc
@@ -609,8 +567,7 @@ class PhonStatsComponent:
     Class for the component of the phonostatistics of a text
 
     Description:
-        The statistics read the words of the document and their transcription,
-        so the component needs no annotation of a model
+        Puts a PhonStats object into doc._.<name>; needs no annotation of a model
 
     Adding the component to a pipeline:
         >>> import ests
@@ -647,15 +604,11 @@ class PhonStatsComponent:
         """
         Adding the computed statistics to the component
 
-        Description:
-            A document with no words is returned untouched, its extension
-            left at None
-
         Arguments:
             doc (Doc): Doc object
 
         Returns:
-            doc (Doc): Modified Doc object
+            doc (Doc): Modified Doc object; untouched if it has no words
         """
         if not has_words(doc):
             return doc
@@ -670,11 +623,9 @@ class VerseStatsComponent:
     Class for the component of the verse statistics of a text
 
     Description:
-        The statistics read the text of the document with its line breaks and
-        blank lines, so the text of a poem goes to nlp as it is, the lines not
-        joined; the component needs no annotation of a model. A text with
-        letters but no Spanish syllables gives empty statistics, as VerseStats,
-        and a document with no letter passes untouched
+        Puts a VerseStats object into doc._.<name>; reads the text with its line
+        breaks, so a poem goes to nlp with its lines not joined. Needs no
+        annotation of a model; a document with no letter passes untouched
 
     Adding the component to a pipeline:
         >>> import ests
@@ -683,7 +634,7 @@ class VerseStatsComponent:
         >>> nlp.add_pipe("ests_verse", name="verse", last=True)
         <ests.components.VerseStatsComponent object at 0x...>
 
-    Reading the rhyme with seseo, of Andalusia and America:
+    Reading the rhyme with seseo:
         >>> nlp.add_pipe("ests_verse", name="verse_seseo", config={"seseo": True}, last=True)
         <ests.components.VerseStatsComponent object at 0x...>
 
@@ -707,15 +658,11 @@ class VerseStatsComponent:
         """
         Adding the computed statistics to the component
 
-        Description:
-            A document with no letter is returned untouched, its extension
-            left at None
-
         Arguments:
             doc (Doc): Doc object
 
         Returns:
-            doc (Doc): Modified Doc object
+            doc (Doc): Modified Doc object; untouched if it has no letter
         """
         if not LETTER.search(doc.text):
             return doc

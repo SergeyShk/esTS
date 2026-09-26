@@ -327,7 +327,6 @@ def test_function_words_profile_errors():
 
 @pytest.mark.parametrize("container", [np.array, pd.Series])
 def test_arrays_of_words(container):
-    # Words taken from a column of a table: an array of numpy or a Series of pandas
     words = ["a", "b", "a", "c", "a", "b"]
     assert zeta(container(words), ["d"]) == zeta(words, ["d"])
     assert mendenhall_curve(container(words)) == mendenhall_curve(words)

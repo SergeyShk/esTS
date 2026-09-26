@@ -19,9 +19,8 @@ def dispersion_plot(words: Sequence[str], targets: Sequence[str], ax: Axes | Non
 
     Description:
         A row for every word of targets and a tick at the position of each of
-        its occurrences in the text (dispersion_plot of NLTK, textplot_xray of
-        quanteda); words are compared as they are - case and lemmatization
-        belong to the extraction
+        its occurrences in the text; words are compared as they are, so case and
+        lemmatization belong to the extraction
 
     Arguments:
         words (list[str]): Words of the text in order
@@ -72,14 +71,10 @@ def keyness_plot(
     Plotting a chart of keywords
 
     Description:
-        Diverging horizontal bars (textplot_keyness of quanteda): the words of
-        positive to the right, of negative to the left, the length of a bar is
-        the absolute value of the field (score, g2, log_ratio), so the side is
-        set by the list and not by the sign of the measure; top_n words on
-        each side, the words with an undefined or infinite value are skipped.
-        For the odds ratio (score from 0 to infinity, one - equal odds) set
-        log=True: the absolute log2 of the value is plotted, symmetric
-        around one
+        Diverging horizontal bars: the words of positive to the right, of
+        negative to the left, the length of a bar is the absolute value of the
+        field, so the side is set by the list and not by the sign of the
+        measure; the words with an undefined or infinite value are skipped
 
     Arguments:
         positive (list[Keyword]): Positive keywords (keyness)
@@ -150,15 +145,11 @@ def collocation_network(collocations: Sequence[Collocation], top_n: int | None =
     Building the network of collocations
 
     Description:
-        An undirected graph (textplot_network of quanteda): the nodes are the
-        words with the size of the font by the frequency of the word, the
-        edges the pairs with the width and the label by the value of the
-        measure; the neato layout. A pair of a word with itself - a word
-        repeated within the window (rojo rojo) - would be a loop and is left
-        out before the pairs are taken. The nodes get generated identifiers and
-        the words go to their labels, as a colon in a word (10:30) would read
-        as a port of graphviz. The format of the graph is png, as for the word
-        tree. Rendering needs the executables of Graphviz
+        An undirected graph in the neato layout: the nodes are the words with
+        the size of the font by frequency, the edges the pairs with the width
+        and the label by the value of the measure. The pairs of a word with
+        itself are left out before top_n. The format is png; rendering needs the
+        executables of Graphviz
 
     Arguments:
         collocations (list[Collocation]): Collocations (collocations)

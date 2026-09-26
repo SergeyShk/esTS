@@ -24,19 +24,16 @@ def syllabify(word: str) -> list[str]:
     Division of a word into syllables by the orthographic rules of Spanish
 
     Description:
-        A syllable is built around a vowel nucleus: a single vowel,
-        a diphthong or a triphthong. A weak vowel (unaccented i, u, ü)
-        next to another vowel joins it into a diphthong (ai-re, puen-te,
-        rui-do, ciu-dad), a strong vowel next to a strong one forms
-        a hiatus (po-e-ta, le-er, a-é-re-o), and an accented weak vowel
-        is strong (dí-a, pa-ís, ba-úl), while two close vowels of the same
-        letter are a hiatus with or without a tilde (chi-i-ta, chi-í-es);
-        a weak vowel between two others
-        gives a triphthong (a-ve-ri-guáis, buey). An h between vowels does
-        not break a diphthong (ahu-ma-do, prohi-bir). The u of qu and of
-        gu before e and i is silent (que-so, gue-rra) and ü is a vowel
-        (pin-güi-no); y is a vowel at the end of a word (rey, U-ru-guay)
-        and a consonant before a vowel (ma-yo).
+        A syllable is built around a vowel nucleus: a vowel, a diphthong or
+        a triphthong. A weak vowel (unaccented i, u, ü) next to another vowel
+        forms a diphthong with it (ai-re, ciu-dad), between two others
+        a triphthong (a-ve-ri-guáis, buey); two strong vowels form a hiatus
+        (po-e-ta, le-er), an accented weak vowel is strong (dí-a, ba-úl), two
+        close vowels of the same letter are a hiatus (chi-i-ta, chi-í-es).
+        An h between vowels does not break a diphthong (prohi-bir); the u of
+        qu and of gu before e and i is silent (que-so, gue-rra), ü is a vowel
+        (pin-güi-no); y is a vowel at the end of a word (rey) and a consonant
+        before a vowel (ma-yo).
         Consonants between two nuclei are distributed by these rules:
             a single consonant or digraph goes to the next syllable: ca-sa, mu-cho, pe-rro
             an obstruent with l or r goes to the next syllable: ha-blar, o-tro
@@ -44,19 +41,15 @@ def syllabify(word: str) -> list[str]:
             of three or more consonants the last two go to the next syllable
                 when they form such a cluster: com-pra, cons-truir; otherwise
                 only the last one goes: ins-ti-tu-to, obs-tá-cu-lo, tungs-te-no
-        The rules follow the Ortografía de la lengua española (RAE, 2010),
-        where two weak vowels always form a diphthong (huir, cons-truir,
-        je-sui-ta, guion) and tl is split as in Spain (at-las).
-        The word is normalized to NFC (a decomposed accent is one letter
-        with its base) and lower-cased; it is split into parts at digits,
-        hyphens and other non-letters, each part is syllabified on its
-        own (te-ó-ri-co-prác-ti-co), and a part without vowels
-        (an abbreviation like sh) yields no syllables. Vowels with foreign
-        diacritics count as accented strong vowels (Björk). A diaeresis
-        marks a hiatus: the ü of verse outside gü and qü and the ï
-        (sü-a-ve, rü-i-do, glo-rï-o-sa, Llu-ï-sa), which leave the stress to
-        the rules of the word, and the ë of French (Ci-tro-ën), which takes
-        it; the Portuguese ão and õe are diphthongs (São, Ca-mões)
+        As in the Ortografía, two weak vowels always form a diphthong (huir,
+        je-sui-ta, guion) and tl is split (at-las).
+        The word is lower-cased and split into parts at non-letters, each part
+        syllabified on its own (te-ó-ri-co-prác-ti-co); a part without vowels
+        (sh) yields no syllables. Vowels with foreign diacritics are accented
+        strong vowels (Björk). The diaeresis of verse (ü outside gü and qü, ï)
+        and the French ë mark a hiatus (sü-a-ve, glo-rï-o-sa, Ci-tro-ën), and
+        only ë takes the stress; the Portuguese ão and õe are diphthongs (São,
+        Ca-mões)
 
     References:
         Real Academia Española. Ortografía de la lengua española. 2010, §§ 2.2, 4.1
@@ -75,7 +68,7 @@ def count_syllables(word: str) -> int:
     Counting the syllables of a word
 
     Description:
-        The number of syllables by syllabify, cached by word form
+        The number of syllables by syllabify
 
     Arguments:
         word (str): Word
@@ -92,16 +85,12 @@ def word_stress(word: str) -> int | None:
 
     Description:
         Syllables are counted from zero as in syllabify. A written accent
-        marks the stressed syllable (ca-mión, ár-bol, mur-cié-la-go);
-        otherwise a word ending in a vowel, in n or s after a vowel or
-        in y after a consonant is stressed on the penultimate syllable
-        (ca-sa, jo-ven, lu-nes, whis-ky), and any other word on the last
-        one (pa-pel, re-loj, ro-bots, U-ru-guay). A monosyllable is
-        stressed on its only syllable.
-        Enclitic pronouns need no special treatment: their forms carry
-        the accent by the same rules (dí-ga-me-lo, de-cír-se-lo).
-        For an adverb in -mente and for a hyphenated compound the main
-        stress is the last of word_stresses (fá-cil-men-te - 2)
+        marks the stressed syllable (ca-mión, ár-bol); otherwise a word ending
+        in a vowel, in n or s after a vowel or in y after a consonant is
+        stressed on the penultimate syllable (ca-sa, jo-ven, whis-ky), any
+        other word on the last one (pa-pel, ro-bots, U-ru-guay). For an adverb
+        in -mente and a hyphenated compound the main stress is the last of
+        word_stresses (fá-cil-men-te - 2)
 
     Arguments:
         word (str): Word
@@ -118,17 +107,13 @@ def word_stresses(word: str) -> list[int]:
     Getting all stressed syllables of a word
 
     Description:
-        A single index for most words - see word_stress. Two indices for
-        an adverb in -mente, which keeps the stress of its adjective
-        (fá-cil-men-te - 0 and 2, fe-liz-men-te - 1 and 2), and one index
-        per part of a hyphenated compound (te-ó-ri-co-prác-ti-co - 1 and 4).
-        An adverb is recognized by its shape: a stem of at least one
-        syllable before -mente that ends like an adjective (in a vowel, l,
-        r, z, n or s) or carries an accent, so cruel-men-te counts too.
-        Words of the same shape that are not adverbs are listed in
-        NON_ADVERBS_MENTE: adjectives and nouns (demente, vehemente) and
-        subjunctives of verbs in -mentar (fundamente, complemente); an
-        unlisted subjunctive of that kind gets a second stress
+        One index for most words (see word_stress), two for an adverb in
+        -mente, which keeps the stress of its adjective (fá-cil-men-te - 0
+        and 2), one per part of a hyphenated compound
+        (te-ó-ri-co-prác-ti-co - 1 and 4). An adverb is a stem of at least one
+        syllable before -mente that ends in a vowel, l, r, z, n or s or carries
+        an accent; look-alikes (demente, fundamente) are listed in
+        NON_ADVERBS_MENTE, an unlisted one gets a second stress
 
     Arguments:
         word (str): Word
@@ -265,14 +250,12 @@ def _joins(part: str, vowels: list[int], index: int) -> bool:
     Whether the vowel at the index forms a diphthong with the next one
 
     Description:
-        Two close vowels join unless they are the same letter, with or
-        without a tilde (chi-i-ta, chi-í-es), a weak and a strong vowel
-        join, two strong vowels do not. A weak
-        vowel followed by a strong one is left to that vowel
-        (chi-hua-hua, ca-ca-hue-te). The same check adds the third vowel
-        of a triphthong (buey, a-ve-ri-guáis). A vowel with the diaeresis of
-        a hiatus never joins (sü-a-ve, Llu-ï-sa), a Portuguese nasal vowel
-        joins a following o or e (São, Ca-mões)
+        Two close vowels join unless they are the same letter (chi-i-ta),
+        a weak and a strong vowel join, two strong vowels do not; a weak
+        second vowel followed by a strong one is left to it (chi-hua-hua).
+        The same check adds the third vowel of a triphthong. A vowel with the
+        diaeresis of a hiatus never joins, a Portuguese nasal vowel joins
+        a following o or e
     """
     first, second = vowels[index], vowels[index + 1]
     if not _adjacent(part, first, second):

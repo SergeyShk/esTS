@@ -270,7 +270,6 @@ def test_mtld_threshold():
 
 
 def test_mtld_partial_factor():
-    # an incomplete factor counts partially
     words = ["a", "b", "c", "d", "a", "b", "c", "d", "a", "b", "c"]
     factors = 1 + (1 - 4 / 5) / (1 - 0.72)
     assert calc_mtld(words, 4, 0.72) == pytest.approx(len(words) / factors)
@@ -316,7 +315,7 @@ def mtld_factor_lengths_by_sets(text, threshold, min_len, wrap):
     [(0.72, 10), (0.72, 0), (0.5, 3), (0.9, 1), (0.66, 25), (1.0, 5), (1 / 3, 2)],
 )
 def test_mtld_factor_lengths_match_sets(wrap, threshold, min_len, monkeypatch):
-    # a block of 16 starts: the same texts go through several blocks with carried counters
+    # small blocks, so the texts span several of them
     monkeypatch.setattr(diversity_stats, "MTLD_BLOCK_SIZE", 16)
     rng = random.Random(0)
     for _ in range(60):
@@ -391,7 +390,7 @@ def test_hdd_params(ds):
 
 
 def test_hdd_long_text():
-    # C(N, k) overflows at N of thousands of words and k = 200; in logarithms the value is finite
+    # C(N, k) overflows at N = 3000 and k = 200
     rng = random.Random(0)
     words = [str(rng.randrange(1000)) for _ in range(3000)]
     value = calc_hdd(words, 200)
@@ -503,7 +502,6 @@ def test_entropy(ds):
     assert calc_entropy(riddle) == pytest.approx(expected)
     assert calc_perplexity(riddle) == pytest.approx(2**expected)
     assert calc_evenness(riddle) == pytest.approx(expected / log2(11))
-    # a single lexeme gives 0.0, not -0.0, which prints with a sign
     assert str(calc_entropy(["a", "a"])) == "0.0"
     assert calc_perplexity(["a", "b", "c", "d"]) == pytest.approx(4.0)
     assert isnan(calc_evenness(["a", "a"]))

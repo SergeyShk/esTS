@@ -22,17 +22,12 @@ FINITE_MOODS = {
     "p_imperative": "Imp",
 }
 VERB_FORMS = {"p_infinitive": "Inf", "p_gerund": "Ger", "p_participle": "Part"}
-# Parts of speech whose forms make the verbal system: the participles that the
-# model annotates as adjectives (cansada, escrita) stay out of the markers
+# Parts of speech of the verb forms: participles tagged ADJ (cansada) stay out
 VERBAL_POS = ("VERB", "AUX")
-# Dependency of an auxiliary: aux for the progressive (está cantando) and the
-# compound tenses (ha sido leído), aux:pass for the passive (fue escrito). In the
-# present the models often give the auxiliary of a passive the dependency of a
-# copula instead (el proyecto es financiado), which its head gives away
+# Dependencies of an auxiliary (aux, aux:pass) and of a copula
 AUXILIARY_DEP = "aux"
 COPULA_DEP = "cop"
-# Components a parse of the text does not need: the entities are never read, and
-# the parse is, for the dependency of the copulas
+# Components the statistics never read; the parser stays for the copulas
 UNUSED_COMPONENTS = ["ner"]
 
 
@@ -41,13 +36,9 @@ def is_auxiliary(token: Token) -> bool:
     Checking whether a token is an auxiliary and not a copula
 
     Description:
-        An auxiliary carries a dependency of aux - aux for the compound tenses
-        and the progressive, aux:pass for the passive - or, in the present of
-        a passive, the dependency of a copula over a participle: el proyecto es
-        financiado has the same es as ella es alta, and only its head tells
-        them apart. The copula of a passive is ser, as it is for is_passive of
-        the syntactic statistics, so that the two modules read the same token
-        the same way
+        A token with the dependency aux or aux:pass, or ser with the dependency
+        cop over a participle: the models tag the auxiliary of a present passive
+        (el proyecto es financiado) as a copula
 
     Arguments:
         token (Token): Token
@@ -67,25 +58,14 @@ class MorphStats:
     Class for computing the morphological statistics of a text
 
     Description:
-        Parts of speech and grammatical features are given in the terms of
-        Universal Dependencies, as the Spanish models of spaCy annotate them:
-        pos - NOUN, VERB, ADJ, PRON, DET and the others, mood - Ind, Sub,
-        Imp, Cnd, tense - Pres, Past, Imp, Fut, and likewise case, definite,
-        degree, gender, num_type, number, person, polarity, polite, poss,
-        pron_type, reflex and verb_form: the fifteen features of
-        MORPHOLOGY_FEATURES, chosen among the ones the models annotate.
-        A feature with several values keeps the form of CoNLL-U,
-        PronType=Int,Rel, and the whole annotation of a word, the features
-        left uncounted included, stays in tags
-        A string is parsed with the model es_core_news_sm, or with the
-        pipeline given in nlp, without the entity recognizer, which nothing
-        here reads; a Doc is taken as it is and must carry the parts of speech,
-        which come from a morphologizer or from a tagger with an attribute
-        ruler, and the lemmas, which come from a lemmatizer. Punctuation marks
-        and symbols are not words and are left out
-        On top of the features the class computes the markers of Spanish:
-        the moods of the finite forms, the non-finite forms, the choice
-        between the copulas ser and estar and the adverbs in -mente
+        Counts the parts of speech and the features of MORPHOLOGY_FEATURES in
+        the tags of Universal Dependencies (NOUN, VERB; Ind, Sub; Pres, Past);
+        a feature with several values keeps the form of CoNLL-U
+        (PronType=Int,Rel), and tags holds the whole annotation of every word.
+        get_markers gives the markers of Spanish computed from the features
+        A Doc must carry the parts of speech (from a morphologizer, or a tagger
+        with an attribute ruler) and the lemmas. Punctuation marks and symbols
+        are not words
 
     References:
         https://universaldependencies.org/u/feat/
@@ -229,18 +209,13 @@ class MorphStats:
 
         Description:
             Every marker is a share of its own base: the moods among the
-            finite forms, the non-finite forms among all the verb forms,
-            ser among the two copulas and the adverbs in -mente among the
-            adverbs. Verb forms are counted on verbs and auxiliaries, so
-            that the participles that the model annotates as adjectives
-            (cansada, escrita) stay out of the base; the moods sum to one
-            wherever the model leaves no finite form without a mood
-            The base of p_ser is the copular uses of ser and estar, read
-            from the dependency of the token and from what it depends on: the
-            auxiliaries of the passive (fue escrito, es financiado) and of the
-            progressive (está cantando) are not a choice between the two
-            copulas. For a Doc with no parse the marker is nan
-            A marker whose base is empty is nan
+            finite forms, the non-finite forms among the verb forms (VERB and
+            AUX, so participles tagged ADJ stay out), ser among the copular
+            uses of ser and estar (the auxiliaries of the passive and of the
+            progressive left out, see is_auxiliary) and the adverbs in -mente
+            among the adverbs
+            A marker whose base is empty is nan, and so is p_ser for a Doc
+            with no parse
 
         Returns:
             dict[str, float]: Dictionary of the markers in the order of
@@ -378,10 +353,8 @@ class MorphStats:
         Description of a value of a statistic
 
         Description:
-            A value of several values, which the models write in the form of
-            CoNLL-U (Case=Acc,Nom of usted, PronType=Int,Rel of qué), is
-            described by the descriptions of its parts joined with or; a value
-            with no description at all is printed as the model gives it
+            A value of several values (PronType=Int,Rel) joins the descriptions
+            of its parts with or; a value with no description is returned as is
 
         Arguments:
             values (dict[str, str]): Descriptions of the values of the statistic

@@ -34,8 +34,7 @@ FILENAME = "freq_dict.tsv"
 SIMPLEMMA_VERSION = "2.0.0"
 CORPUS_SIZE = 63_090_618_290
 POS_TAGS = ("NOUN", "PROPN", "VERB", "ADJ", "ADV", "PRON", "DET", "ADP", "CONJ")
-# Letters of the forms the dictionary counts: numbers, punctuation and the forms with
-# a hyphen or a dot are not in it, nor in CORPUS_SIZE
+# Forms the dictionary and CORPUS_SIZE count: no numbers, no forms with a hyphen or a dot
 WORD_PATTERN = re.compile(r"[a-záéíóúüñ]+")
 DEFAULT_DATASET_DIR = DEFAULT_DATA_DIR.joinpath("dicts")
 
@@ -66,15 +65,10 @@ def lemma_key(word: str, proper: bool = False) -> str:
     Key of a word in the frequency dictionary
 
     Description:
-        The word goes to lower case and then to its lemma by lemmatize.
-        simplemma tells the case apart and leaves an unknown capitalized word
-        as it is, so a word at the start of a sentence would miss its lemma
-        (Miró, Déjame - mirar, dejar); the lower case finds it. A proper noun
-        keeps its form in lower case (París, not the verb parir), as the
-        dictionary keeps the forms of the nouns written with a capital letter.
-        The dictionary is built with this function, so a text is looked up by
-        the keys the dictionary was built with; the lemmas are those of
-        simplemma SIMPLEMMA_VERSION, another version gives other ones
+        The word goes to lower case and then to its lemma by lemmatize, so a
+        capitalized word at the start of a sentence finds its lemma; a proper
+        noun keeps its form in lower case. The dictionary is built with this
+        function and simplemma SIMPLEMMA_VERSION
 
     Arguments:
         word (str): Word form in any case
@@ -103,22 +97,15 @@ class FreqDict(Dataset):
         Spanish books of Google Books Ngram of 1980-2019, 63 billion words, with
         the frequency per million words, the range (the number of years out of
         40 in which the lemma occurs), Juilland's D over the years and the
-        number of books. The forms tagged by Google with a part of speech are
-        lower-cased and lemmatized by simplemma 2.0.0, the lemmatizer of the
-        library, so a word is looked up by its lemma_key (computadoras -
-        computador);
-        a noun form written with a capital letter in 90% of its occurrences is
-        a proper noun (PROPN) as a whole, its lower-case occurrences included
-        (the form dios; the NOUN row of dios comes from dioses), as the tagset
-        of Google has none. The rows below
-        0.1 ipm or found in fewer than 5 years are left out. The dictionary is
-        derived from Google Books Ngram under CC BY 3.0 and is distributed
-        under the same licence
+        number of books. The forms are lower-cased and lemmatized by simplemma
+        2.0.0, so a word is looked up by its lemma_key; a noun form written
+        with a capital letter in 90% of its occurrences is a proper noun
+        (PROPN), as Google tags none. The rows below 0.1 ipm or found in fewer
+        than 5 years are left out. The dictionary is derived from Google Books
+        Ngram under CC BY 3.0 and is distributed under the same licence
         For a lookup the parts of speech of a lemma are merged: the frequencies
         are summed, the range, the dispersion and the number of books are the
-        greatest ones. The parsed dictionary is cached by the path of the file
-        and read once per process; the archive is verified against its SHA-256
-        checksum
+        greatest ones
 
     References:
         https://storage.googleapis.com/books/ngrams/books/datasetsv3.html
@@ -204,10 +191,9 @@ class FreqDict(Dataset):
         Downloading the dictionary from the network and extracting the file
 
         Description:
-            The archive is verified against its SHA-256 checksum; a corrupted
-            or replaced file is removed and downloaded again in the same call.
-            If the archive is there but the file of the dictionary is missing,
-            it is extracted again. The parsed dictionary is read anew
+            The archive is verified against its SHA-256 checksum and downloaded
+            again once if it fails; a missing file is extracted again from the
+            archive
 
         Arguments:
             force (bool): Download the dictionary even if it is already downloaded
@@ -325,10 +311,6 @@ class FreqDict(Dataset):
     def _ensure_data(self) -> None:
         """
         Checking once that the file of the dictionary is in place
-
-        Description:
-            The first successful check is remembered, so that lookup and ipm do
-            not touch the file system for every word
         """
         if not self._checked:
             self.check_data()
@@ -339,10 +321,9 @@ class FreqDict(Dataset):
         Getting the entry of a lemma
 
         Description:
-            The lemma is the key of the dictionary, the one lemma_key gives, not
-            a word form: the lemma of usted in simplemma is tú, so
-            lookup("usted") is None and a word of a text is looked up by
-            lookup(lemma_key(word)); the same holds for ipm and in
+            The lemma is the key lemma_key gives, not a word form: a word of a
+            text is looked up by lookup(lemma_key(word)); the same holds for ipm
+            and in
 
         Arguments:
             lemma (str): Lemma in any case
@@ -377,9 +358,8 @@ class FreqDict(Dataset):
         Number of the lemmas of the dictionary
 
         Description:
-            The lemmas with their parts of speech merged (83,785), fewer than
-            the rows of the iteration, a row for every lemma and part of speech
-            (109,178)
+            The lemmas with their parts of speech merged, fewer than the rows of
+            the iteration
         """
         return len(self.entries)
 
@@ -391,11 +371,6 @@ class FreqDict(Dataset):
 def check_simplemma() -> None:
     """
     Warning once if the installed simplemma is not the one of the dictionary
-
-    Description:
-        The keys of the dictionary are the lemmas of simplemma
-        SIMPLEMMA_VERSION; another version lemmatizes some words otherwise, and
-        they are missed in the dictionary
     """
     installed = version("simplemma")
     if installed != SIMPLEMMA_VERSION:
@@ -415,9 +390,7 @@ def load_entries(filepath: Path) -> dict[str, Entry]:
     Description:
         The rows of the parts of speech of a lemma are merged: the frequencies
         are summed, the range, the dispersion and the number of books are the
-        greatest ones. The result is cached by the path of the file, so every
-        FreqDict over one directory shares one parsed dictionary; the cache is
-        cleared by a new download
+        greatest ones
 
     Arguments:
         filepath (Path): Path to the file of the dictionary
@@ -453,9 +426,8 @@ def load_min_ipm(filepath: Path) -> float:
     Minimum frequency of an entry of the dictionary
 
     Description:
-        Computed once over the parsed dictionary and cached by the path of the
-        file, as load_entries; it is the frequency of the words out of the
-        dictionary in the surprisal
+        The frequency of the words out of the dictionary in the surprisal and
+        in keyness
 
     Arguments:
         filepath (Path): Path to the file of the dictionary
@@ -472,14 +444,9 @@ def load_word_ipm(filepath: Path) -> dict[str, float]:
     Frequencies of the dictionary by the key that a word form reaches without a part of speech
 
     Description:
-        A word with no annotation goes to lemma_key(word), while the dictionary
-        keeps the forms of its proper nouns (lemma_key(form, proper=True)):
-        Roma is a row of its own, but the word Roma reaches romo. So the rows
-        of the proper nouns go to lemma_key of their forms and every key is
-        summed over the parts of speech; then a word form of a text and the
-        occurrences counted in the books meet under one key, with the label
-        of a lemma (romo, parir) the only thing left of the difference. The
-        result is cached by the path of the file, as load_entries
+        The rows of the proper nouns go to lemma_key of their forms (Roma -
+        romo), as a word of a text without annotation does, and every key is
+        summed over the parts of speech
 
     Arguments:
         filepath (Path): Path to the file of the dictionary

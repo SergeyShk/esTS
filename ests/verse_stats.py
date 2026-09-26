@@ -41,12 +41,12 @@ ROMAN_NUMERAL = re.compile(r"\(?[IVXLCDM]+[.)]?")
 WORD_PATTERN = re.compile(r"[^\W\d_]+(?:['’-][^\W\d_]+)*")
 PATTERN_STRESSED = "+"
 PATTERN_UNSTRESSED = "-"
-# The mark of a synalepha between the syllables of two words in a metrical syllable
+# Mark of a synalepha between two words in a metrical syllable
 SYNALEPHA = "‿"
 METER_NAMES = {length: name for name, length in VERSE_METERS.items()}
 STRONG_VOWELS = frozenset("aeoáéóàèòâêôãõäëö")
-# Spellings of the sounds of a rhyme: the u of gue and gui is silent, the one of güe and güi
-# is not; c and g before e and i, the digraphs, and the letters of one sound
+# Spellings of the sounds of a rhyme: the silent u of gue and gui, the soft c and g, the
+# consonant y, the digraphs and the letters of one sound
 RHYME_SILENT_U = re.compile(r"gu(?=[eéií])")
 RHYME_SOFT_C = re.compile(r"c(?=[eéií])")
 RHYME_SOFT_G = re.compile(r"g(?=[eéií])")
@@ -54,9 +54,8 @@ RHYME_CONSONANT_Y = re.compile(r"y(?=[aeiouáéíóú])")
 RHYME_DIGRAPHS = (("gü", "gw"), ("ch", "ʧ"), ("ll", "ʝ"), ("rr", "R"), ("qu", "k"), ("x", "ks"))
 RHYME_LETTERS = str.maketrans("ckzvjGyáéíóúüàèìòùâêîôûäëïö", "kkθbxgiaeiouuaeiouaeiouaeio", "h")
 MAX_STROPHE_LINES = max(n_lines for n_lines, *_ in VERSE_STROPHES.values())
-# Scheme of a sonnet with the letters from a: two quatrains ABBA or ABAB, the second one
-# on the rhymes of the first in either order or on its own, and the tercets on rhymes of
-# their own
+# Scheme of a sonnet, letters from a: quatrains ABBA or ABAB, the second on the rhymes of
+# the first or on its own, the tercets on rhymes of their own
 SONNET_SCHEME = re.compile(r"(abba|abab)(abba|abab|baab|baba|cddc|cdcd)[c-h]{6}")
 # The final unstressed i and u of an assonance sound as e and o: fácil - valle, Venus - lento
 ASSONANT_FINALS = {"i": "e", "u": "o"}
@@ -88,12 +87,11 @@ class _Scansion(NamedTuple):
     Scansion of a line
 
     Description:
-        The syllables as the verse reads them and the indices of the stressed
+        The syllables as the verse reads them, the indices of the stressed
         ones, the stressed metrical syllables, the length in metrical
         syllables, the syllables after the last stress and the first syllable
-        of the second hemistich. The metrical syllables are the syllables up to
-        the last stress, and in a compound verse each hemistich counts its own
-        length by the law of the final stress
+        of the second hemistich; in a compound verse each hemistich counts its
+        own metrical syllables
     """
 
     syllables: tuple[str, ...]
@@ -121,69 +119,21 @@ class VerseStats:
     Class for computing the verse statistics of a text
 
     Description:
-        The text is split into lines and stanzas (by blank lines). The words
-        are split into syllables and stressed by the orthographic rules
-        (syllabify, word_stresses), except the unstressed words of the verse
-        (VERSE_PROCLITICS): the articles, the prepositions, the conjunctions,
-        the relatives, the clitic pronouns and the possessives before a noun;
-        the last word of a line is always stressed. The meter of Spanish verse
-        is syllabic, so a line is measured in metrical syllables:
-            the final vowel of a word and the first one of the next (after
-            a silent h) make one syllable - a synalepha (cuan-do‿a-pe-nas);
-            the law of the final stress adds a syllable after an oxytone
-            last word (aguda) and takes one off after a proparoxytone
-            (esdrújula), so that a line counts up to its last stress and
-            one syllable more;
-            to reach the meter of the poem a line may break a synalepha
-            (a hiatus), split a diphthong of a stressed syllable (a dieresis:
-            su-a-ve, ru-i-do) or join two vowels of a hiatus in a word (a
-            synaeresis: poe-ta).
-        The meter is the length of most lines of the plain reading, with every
-        synalepha and without a dieresis or a synaeresis, and every line is
-        fitted to it with the fewest changes, the synalephas broken from the
-        end of the line. A compound verse (VERSE_HEMISTICHS) - the alejandrino
-        of 7 + 7 syllables above all - is read as two hemistichs when most
-        lines split so: the caesura between them blocks the synalepha and
-        each hemistich follows the law of the final stress. The meter is not
-        determined (None) if more than a tenth of the lines (VERSE_MAX_DEVIATIONS)
-        do not reach it or if it has no name (a line of more than 18 syllables
-        is prose): a polymetric poem (a silva of 7 and 11 syllables), free
-        verse and prose. The lines of a polymetric poem are fitted to its
-        common lengths instead, the 7 and the 11 syllables of a lira, while
-        the lines of free verse and prose keep their plain readings; either
-        way the lengths and the types of the endecasílabo count them. A written
-        diaeresis is the mark of a hiatus (sü-a-ve, glo-rï-o-sa) that no
-        synaeresis joins. The rhythm is described by the stresses of the lines
-        of the meter: the stress profile, the rhythmic stresses of the meter
-        (VERSE_RHYTHMS) - the 6th syllable of the endecasílabo, or the 4th with
-        the 8th or the 7th - and the types of the endecasílabo by its stresses.
-        A line rhymes with the lines of the window of RHYME_WINDOW lines before
-        it, across the stanzas, by its ending from the last stressed vowel:
-        in full (consonante) if the sounds are the same - b and v, c and z (s
-        with seseo), ll and y are one sound, h is silent -, by assonance
-        (asonante) if the stressed and the last vowels are, in a poem whose
-        rhyme is the assonance or on alternate lines with unrhymed lines between
-        them, as the even lines of a romance (_rhyme_groups). A rhyme
-        scheme gives the rhyme groups letters in the order of the poem, upper-
-        case for the lines of arte mayor (VERSE_ARTE_MAYOR syllables and more)
-        and lower-case for the ones of arte menor, and a hyphen to an unrhymed
-        line: ABBA ABBA CDC DCD, abba, aBabB, -a-a. A stanza is named by its
-        lines, their lengths and its scheme (VERSE_STROPHES) - a stanza of a
-        poem with no meter is fitted to the syllables of a strophe that asks
-        for them, a lira of 7 and 11 syllables - and the poem by its form:
-        soneto, romance, the strophe of all its stanzas or silva.
-        A text with letters but no Spanish syllables gives empty statistics:
-        n_lines 0, the meter None, the shares nan; a text with no words raises
-        SourceError.
-        On the sonnets of DISCO (SpanishSonnets, 60,209 lines) the length of a
-        line agrees with the automatic scansion of the corpus in 97% of the
-        lines and with the one of rantanplan in 97.7%, the stress of a syllable
-        in 97.4% and 99.6%; on the lines of simple verse the lengths agree in
-        98.2% and 99.1%, and the rest are mostly the alejandrinos, which both
-        count as simple verse, without the hemistichs. The pairs of rhyming
-        lines agree with the automatic rhyme of DISCO (RhymeTagger) in 99.1% of
-        ours and 97.9% of its own, and 18 sonnets rhyme by assonance, which it
-        mostly leaves unrhymed
+        Stanzas are separated by blank lines. A line is measured in metrical
+        syllables: a synalepha joins the vowels of two words, the unstressed
+        words (VERSE_PROCLITICS) take no stress except at the end of a line, and
+        by the law of the final stress a line counts up to its last stress and
+        one syllable more. The meter is the most common length, every line
+        fitted to it by the fewest hiatuses, diereses and synaereses, a compound
+        verse (VERSE_HEMISTICHS) by its hemistichs; it is None if more than a
+        tenth of the lines (VERSE_MAX_DEVIATIONS) are off it. A line rhymes with
+        a line of the RHYME_WINDOW lines before it in full (consonante) or, in
+        a poem rhymed by assonance or on alternate lines, by assonance
+        (asonante). A rhyme scheme is upper case for arte mayor
+        (VERSE_ARTE_MAYOR syllables and more), lower case for arte menor and a
+        hyphen for an unrhymed line: ABBA ABBA CDC DCD, aBabB, -a-a. Stanzas
+        are named by VERSE_STROPHES, the poem by its form. A text without
+        Spanish syllables gives n_lines 0, the meter None and nan shares
 
     References:
         Quilis A. Métrica española. Barcelona: Ariel, 1984
@@ -235,18 +185,15 @@ class VerseStats:
             the first stress before the 6th (1-6-10 enfático, 2-6-10 heroico,
             3-6-10 melódico, 4-6-10), 6-10, 4-8-10 (sáfico), 4-7-10 (dactílico)
         syllables (tuple[tuple[str, ...], ...]): Syllables of every line as the
-            verse reads them, a synalepha marked with ‿ (ro‿a); by the law of the
-            final stress the pattern of a line is one syllable longer after an
-            aguda and one shorter after an esdrújula, at the end of a line and of
-            a hemistich
+            verse reads them, a synalepha marked with ‿ (ro‿a)
         stresses (tuple[tuple[int, ...], ...]): Indices of the stressed syllables
             of every line in syllables, from zero
         caesuras (tuple[int|None, ...]): Index of the first syllable of the
             second hemistich of every line in syllables, None for a simple verse
         patterns (tuple[str, ...]): Patterns of the lines of + (a stressed
-            metrical syllable) and - (an unstressed one); in a compound verse
-            each hemistich takes its own length, so after an aguda or an
-            esdrújula at the caesura the pattern and syllables part
+            metrical syllable) and - (an unstressed one), a syllable longer than
+            the line after an aguda and shorter after an esdrújula, at the end of
+            a line and of a hemistich
         c_clausulas (dict[str, int]): Distribution of the endings of the lines by type
         p_masculine (float): Share of oxytone endings (aguda)
         p_feminine (float): Share of paroxytone endings (llana)
@@ -400,14 +347,11 @@ class VerseStats:
         Getting the text with the stresses marked
 
         Description:
-            An acute accent (U+0301) is put after the stressed vowel of every
-            stressed word that has no written accent; the words with a written
-            accent keep it, and the unstressed words of the verse
+            A combining acute accent (U+0301) is put after the stressed vowel of
+            every stressed word without a written accent, so NFC normalization
+            turns it into an accented letter; the unstressed words
             (VERSE_PROCLITICS) stay unmarked, except the last word of a line.
-            The marks are combining characters apart from the written accents,
-            so unicodedata.normalize("NFC", ...) turns them into accented letters.
-            Only the lines with Spanish words are returned (as in lines), the
-            stanzas separated by a blank line
+            The lines are the ones of lines, the stanzas separated by a blank line
 
         Returns:
             str: Text with the stresses
@@ -425,8 +369,7 @@ def split_stanzas(text: str) -> list[list[str]]:
     Description:
         The stanzas are separated by blank lines; the lines without a Spanish
         syllable (numbers, asterisks, other alphabets) and the roman numerals of
-        the parts of a poem (II, IV.) are left out. The text is normalized to
-        NFC, so that a decomposed accent is one letter
+        the parts of a poem (II, IV.) are left out. The text is normalized to NFC
 
     Arguments:
         text (str): Text of a poem
@@ -589,17 +532,15 @@ def _fit(units: Sequence[_Unit], bounds: Sequence[int], length: int) -> _Scansio
         A longer plain reading joins the hiatuses in a word (synaeresis), the
         ones with an accented i or u last; a shorter one breaks the synalephas
         from the end of the line (hiatus), then splits the diphthongs
-        (dieresis). A change is kept if it moves the length, and if the length
-        is out of reach the plain reading is returned at once, so that a long
-        line of prose costs one reading
+        (dieresis). A change is kept if it moves the length; a length out of
+        reach returns the plain reading
     """
     joins = _default_joins(bounds)
     plain = _scan(units, joins)
     if plain.length == length:
         return plain
     if plain.length < length:
-        # The last word is stressed, so every join is before the last stress, and
-        # breaking one adds a syllable
+        # Every join is before the stressed last word, so breaking one adds a syllable
         order = sorted(joins, key=lambda index: (bounds[index] != SYNALEPHA_BOUNDARY, -index))
         if length - plain.length > len(order):
             return plain
@@ -689,8 +630,7 @@ def _reaches(line: _Line, compound: int, fitted: bool = True) -> bool:
         The hemistichs differ from the plain reading of the whole line by two
         syllables at most - the synalepha at the caesura and the aguda or the
         esdrújula before it - and a fitted line by one syllable more for every
-        join it breaks and one less for every synaeresis, so a long line of
-        prose is not split at every word
+        join it breaks and one less for every synaeresis
     """
     low = high = line.scansion.length
     if fitted:
@@ -713,22 +653,13 @@ def _fit_meter(lines: Sequence[_Line]) -> tuple[int, int | None, list[_Scansion]
     Length of the meter of the lines, the length of its hemistich and the fitted lines
 
     Description:
-        The candidates are the lengths of most plain readings as a simple verse
-        - all of them on a tie from three lines up, so that a stanza of
-        endecasílabos with two lines of 10 syllables in the plain reading, which
-        a hiatus brings to 11, gets its meter - and a compound verse
-        (VERSE_HEMISTICHS) one syllable off such a length or of it if more than
-        half of the plain readings split into its hemistichs; the lines are
-        fitted to each, and the one with the fewest lines off it wins, the
-        shorter length and the compound verse on a tie. Only the tied lengths
-        with a name are tried, the shortest length if none has one. Two lines
-        of two lengths keep the shorter one: of two lines of prose one would
-        fit either. On the stanzas of the sonnets of SpanishSonnets the ties leave
-        414 of 17,207 without a meter instead of 664, and a meter goes to 0.2%
-        of three sentences of prose as three lines instead of 0.13%. A compound
-        verse is not tried without the support of the plain readings: fitted by
-        hiatuses and diereses, an endecasílabo would split into two hemistichs
-        of 6 as well. Fewer lines than VERSE_MIN_LINES have no meter
+        The candidates are the lengths of most plain readings - on a tie the
+        shortest of two lines, the named ones (or the shortest) from three
+        lines up - and a compound verse (VERSE_HEMISTICHS) within one syllable
+        of such a length if more than half of the plain readings split into its
+        hemistichs. The lines are fitted to each, and the one with the fewest
+        lines off it wins, the shorter length and the compound verse on a tie.
+        Fewer lines than VERSE_MIN_LINES have no meter
     """
     if len(lines) < VERSE_MIN_LINES:
         return None
@@ -738,8 +669,7 @@ def _fit_meter(lines: Sequence[_Line]) -> tuple[int, int | None, list[_Scansion]
     if len(lines) < 3:
         tied = tied[:1]
     else:
-        # A length with no name gives no meter: a paragraph of prose per line would make
-        # every length of it a candidate, and every line would be fitted to each
+        # A length with no name gives no meter, and prose would tie many of them
         tied = [length for length in tied if length in METER_NAMES] or tied[:1]
     candidates: list[tuple[int, int | None]] = []
     for length in tied:
@@ -761,11 +691,10 @@ def _fit_polymetric(lines: Sequence[_Line]) -> list[_Scansion]:
 
     Description:
         The common lengths are the named lengths of the plain readings of at
-        least two lines and of a tenth of them (VERSE_MAX_DEVIATIONS) - the
-        7 and the 11 syllables of a lira or a silva. If they take more than
-        half of the lines, every other line is fitted to the nearest of them
-        it reaches, the longer one on a tie; otherwise, in free verse and
-        prose, the lines keep their plain readings
+        least two lines and a tenth of them (VERSE_MAX_DEVIATIONS), as the 7
+        and 11 syllables of a silva. If they take more than half of the lines,
+        every other line is fitted to the nearest of them it reaches, the
+        longer on a tie; otherwise the lines keep their plain readings
     """
     lengths = Counter(line.scansion.length for line in lines)
     common = [
@@ -938,18 +867,14 @@ def _rhyme_groups(
 
     Description:
         The lines rhyme by their full endings (consonante), and by assonance
-        (asonante) in two cases. A poem whose rhyme is the assonance - at least
-        a third of its lines with no full rhyme, and at least
-        RHYME_MIN_ASSONANT_LINES of them, share one (RHYME_MIN_ASSONANCE) -
-        rhymes by the assonances of all its lines: the groups follow them and take in the full rhymes of the same
-        vowels. Otherwise the assonance counts on alternate lines with the
-        lines between them unrhymed (_alternations), as the even lines of a
-        romance, which may change its assonance, or of a rima of Bécquer,
-        whose assonant lines may also rhyme in full; the full rhymes of those
-        lines join them. A group of different full endings is asonante. An
-        assonance of neighbouring lines is no rhyme: in a sonnet of -ado and
-        -ano every line has its full rhyme, and in a few lines of prose two
-        often share one by chance
+        (asonante) in two cases. If lines with no full rhyme sharing one
+        assonance make a third of the poem (RHYME_MIN_ASSONANCE) and at least
+        RHYME_MIN_ASSONANT_LINES, the groups follow the assonances of all the
+        lines, the full rhymes of the same vowels included. Otherwise the
+        assonance counts on alternate lines with unrhymed lines between them
+        (_alternations), the full rhymes of those lines joining them. A group
+        of different full endings is asonante; an assonance of neighbouring
+        lines alone is no rhyme
     """
     full = _chains([ending.consonant for ending in endings])
     free = Counter(
@@ -1088,14 +1013,12 @@ def _strophe(
     Name of a stanza by its lines, their lengths and its rhyme (VERSE_STROPHES)
 
     Description:
-        The first stanza of the list with the number of lines, one of the
-        schemes - with the letters from a in the order of the stanza -, the
-        kind of the rhyme, asonante if a line of it rhymes so, and the lengths
-        of the lines: all of arte mayor, all of arte menor or the syllables of
-        every line. In a poem with no meter (refit) the lines are fitted to the
-        syllables of a strophe that asks for them, so that a single lira gets
-        its 7 and 11 syllables. None for a stanza of no known form, with the
-        scansions of its lines, fitted or not
+        The first strophe with the number of lines, one of the schemes (letters
+        from a in the order of the stanza), the kind of the rhyme (asonante if
+        a line rhymes so) and the lengths: all of arte mayor, all of arte menor
+        or the syllables of every line. With refit (a poem with no meter) the
+        lines are fitted to the syllables a strophe asks for. None for a stanza
+        of no known form; the scansions of the lines are returned either way
     """
     scansions = [line.scansion for line in lines]
     if len(lines) > MAX_STROPHE_LINES:
@@ -1138,11 +1061,10 @@ def _form(verse: "VerseStats", labels: Sequence[str], kinds: Sequence[str | None
         soneto - 14 lines of a meter of arte mayor in full rhyme, the quatrains
         ABBA or ABAB and the tercets on rhymes of their own (CDC DCD, CDE CDE);
         romance - octosílabos from 8 lines, three in four of the even lines of
-        the stanzas rhymed by assonance, which may change from part to part,
-        and three in four of the odd ones unrhymed; the strophe of all the stanzas; silva -
-        heptasílabos and endecasílabos with no meter, longer than a strophe
-        and with no pattern of lengths repeated by all its stanzas; None
-        otherwise
+        the stanzas rhymed by assonance and three in four of the odd ones
+        unrhymed; the strophe of all the stanzas; silva - heptasílabos and
+        endecasílabos with no meter, longer than a strophe and with no pattern
+        of lengths repeated by all its stanzas; None otherwise
     """
     scheme = _relabel(labels)
     if (
@@ -1154,8 +1076,7 @@ def _form(verse: "VerseStats", labels: Sequence[str], kinds: Sequence[str | None
         and all(scheme[8:].count(letter) >= 2 for letter in scheme[8:])
     ):
         return "soneto"
-    # The even and the odd lines of every stanza: a title of a part on a line of its own
-    # does not shift the lines of the next one
+    # Counted by stanza, so that a title of a part on a line of its own shifts nothing
     even = [kinds[stanza.start + i] for stanza in verse._stanzas for i in range(1, len(stanza), 2)]
     odd = [kinds[stanza.start + i] for stanza in verse._stanzas for i in range(0, len(stanza), 2)]
     if (
@@ -1217,7 +1138,7 @@ def _nucleus_index(syllable: str) -> int:
     Description:
         The accented vowel, else the strong one (a, e, o), else the last weak
         one after the silent u of qu and gu (cui-da, qui-so); a y before no
-        vowel is a weak vowel (muy, the conjunction y, the old yr and Pythio)
+        vowel is a weak vowel (muy, the conjunction y)
     """
     following = [*syllable[1:], ""]
     indices = [
@@ -1252,11 +1173,11 @@ def accentuate(text: str) -> str:
 
     Description:
         An acute accent (U+0301) is put after the stressed vowel of every word
-        without a written accent (word_stresses): both stresses of an adverb
+        without a written accent (word_stresses), both stresses of an adverb
         in -mente and of a hyphenated compound; the unstressed words of the
         verse (VERSE_PROCLITICS) stay unmarked. The text is normalized to NFC.
-        For the lines of a poem, where the last word is always stressed,
-        VerseStats.accentuate serves
+        For a poem, where the last word of a line is always stressed, use
+        VerseStats.accentuate
 
     Arguments:
         text (str): Text

@@ -15,7 +15,7 @@ from ..utils import check_sequence
 # Size of a square and the margin between blocks, in the units of the drawing area
 SQUARE = 15
 MARGIN = 25
-# Colour of the segments without a value: the empty cells of a block and the undefined measure
+# Colour of the empty cells of a block and of the undefined measure
 MISSING_COLOR = "lightgray"
 
 
@@ -33,20 +33,14 @@ def fingerprinting(
 
     Description:
         Every text is cut into segments of segment_len words with a sliding
-        step of a tenth of a segment, and a measure of lexical diversity is
-        computed for every segment. A text is a block of squares in the order
-        of its segments, row by row, 8 rows high, or a single column when it
-        has at most 8 segments; a block wider than a row of the drawing area
-        wraps into rows of that width. The blocks are laid out left to right
-        and wrap between the rows of an area 2 · x_size wide, which grows
-        downwards from 2 · y_size when they need more height, so nothing is
-        cut off. The colour of a square is the value of the measure on the
-        scale of the colorbar, from its smallest to its greatest finite
-        value over all the texts; a sequential colour map suits a measure
-        whose middle means nothing. Segments where the measure is undefined
-        (nan on segments too short for it) and the empty cells of a block are
-        light grey, apart from every value, zero included. The axes get an
-        equal aspect, so that the squares stay square
+        step of a tenth of a segment, and the measure is computed for every
+        segment. A text is a block of squares in the order of its segments,
+        row by row, 8 rows high, or a single column when it has at most 8
+        segments. The blocks are laid out left to right in an area 2 · x_size
+        wide, which grows downwards from 2 · y_size when they need more height.
+        The colour scale runs from the smallest to the greatest finite value
+        over all the texts; undefined values (nan) and the empty cells of a
+        block are light grey
 
     References:
         https://www.uni-konstanz.de/mmsp/pubsys/publishedFiles/KeOe07.pdf

@@ -121,7 +121,7 @@ class HighlightedText:
     Class for highlighting a text by layers, in the manner of the style checkers
 
     Description:
-        Every layer marks the fragments the statistics of the library count:
+        Every layer marks the fragments a statistic of the library counts:
             long_sents - sentences of long_sent_word_factor words or more (BasicStats)
             complex_words - words of complex_syl_factor syllables or more (BasicStats)
             rare_words - words with a lemma beyond the embedded top 10000 (LexicalStats)
@@ -139,23 +139,16 @@ class HighlightedText:
                 (CohesionStats)
             alliteration - repetitions of a consonant sound in neighbouring words,
                 unlikely by the frequencies of the Spanish sounds (PhonStats)
-        The layers are grouped in HIGHLIGHT_LAYER_GROUPS: readability, syntax,
-        officialese, style, phonics. The syntactic layers are read from the dependency
-        tree and the lemmas (the auxiliary ser, the light verbs) and need a Doc
-        with a parse and a lemmatizer, as SyntaxStats does; verbal_nouns needs a
-        Doc with the parts of speech and the lemmas. A Doc without the sentence
-        boundaries is split by the rules of SentsExtractor, as BasicStats splits
-        it. The layers of HIGHLIGHT_DEFAULT_LAYERS the source allows are on by
-        default (long sentences, complex words, passive, chains of de, split
-        predicates, clichés); layers="all" turns on every layer allowed
-        A word is complex from 4 syllables here (HIGHLIGHT_COMPLEX_SYL_FACTOR):
-        at 3, the bound of the readability formulas and of BasicStats, half the
-        content words of any Spanish text are complex (abuela, pequeña, camino);
-        complex_syl_factor=3 shows the words of n_complex_words
-        The result shows in Jupyter as HTML with styles and a legend; to_html
-        returns the same markup for documentation and web applications. The
-        fragments of different layers may overlap: the text is cut into
-        segments with a set of CSS classes each
+        HIGHLIGHT_LAYER_GROUPS groups the layers. The syntactic layers need a Doc
+        with a dependency parse and the lemmas, verbal_nouns a Doc with the parts
+        of speech and the lemmas; a Doc without the sentence boundaries is split
+        by the rules of SentsExtractor. By default the layers of
+        HIGHLIGHT_DEFAULT_LAYERS the source allows are on (long sentences, complex
+        words, passive, chains of de, split predicates, clichés)
+        A word is complex from 4 syllables here; complex_syl_factor=3 shows the
+        words of n_complex_words
+        The result shows in Jupyter as HTML with a legend (to_html); fragments of
+        different layers may overlap
 
     Example:
         >>> from ests.visualizers import highlight
@@ -292,13 +285,11 @@ class HighlightedText:
         Getting the HTML markup of the highlighted text
 
         Description:
-            The markup is a div of the class ests-highlight with the legend and
-            its counts and the text, where the highlighted segments are wrapped
-            in a span of the classes ests-hl and ests-hl-<layer>; the notes of
-            the fragments go to the title attribute. Line breaks, of Unix,
-            Windows or old Mac texts alike, are kept as character references, one
-            per break, so the markup can be put into Markdown with no blank line
-            inside the block
+            A div of the class ests-highlight with the legend and the text, where
+            a highlighted segment is a span of the classes ests-hl and
+            ests-hl-<layer> with the notes in its title. Line breaks become
+            character references, so the markup can go into Markdown with no
+            blank line inside the block
 
         Arguments:
             legend (bool): Add the legend with the counts of the fragments
@@ -353,12 +344,8 @@ def highlight(
     Highlighting a text by layers, in the manner of the style checkers
 
     Description:
-        The layers of HIGHLIGHT_LAYERS_DESC: long sentences, complex and rare
-        words, passive, participial and gerund clauses, chains of de, split
-        predicates, verbal nouns, compound prepositions, clichés, stopwords,
-        parenthetical expressions, connectors, alliteration; the syntactic layers need a Doc
-        with a parse and the lemmas, the verbal nouns a Doc with the parts of
-        speech and the lemmas, see HighlightedText
+        The layers and the annotations of the Doc they need are described in
+        HighlightedText
 
     Arguments:
         source (str|Doc): Data source (a string or a Doc object)
@@ -433,8 +420,7 @@ def get_text_words(text: str) -> list[Word]:
     Extracting the words of a string with their positions
 
     Description:
-        The tokenizer of the blank Spanish pipeline, the punctuation dropped as in
-        WordsExtractor (iter_text_words)
+        The words of iter_text_words, without the punctuation
 
     Arguments:
         text (str): Text string
@@ -450,8 +436,8 @@ def get_text_sents(text: str, words: Sequence[Word]) -> list[Sent]:
     Extracting the sentences of a string with their positions and numbers of words
 
     Description:
-        The sentences of SentsExtractor (iter_text_sents); a word belongs to the
-        sentence of its first character
+        The sentences of iter_text_sents; a word belongs to the sentence of its
+        first character
 
     Arguments:
         text (str): Text string
@@ -476,8 +462,7 @@ def get_doc_words(doc: Doc, tagged: bool) -> list[Word]:
     Extracting the words of a Doc object with their positions
 
     Description:
-        The words of iter_doc_tokens; a Doc with the parts of speech and the
-        lemmas gives both to every word
+        The words of iter_doc_tokens
 
     Arguments:
         doc (Doc): Doc object
@@ -504,8 +489,7 @@ def get_doc_sents(doc: Doc) -> list[Sent]:
 
     Description:
         The whitespace tokens at the edges of a sentence are left out of its
-        positions: the sentencizer puts a boundary at the line break after a
-        period
+        positions
 
     Arguments:
         doc (Doc): Doc object with the sentence boundaries
@@ -584,8 +568,7 @@ def find_stopwords(
     Finding the stopwords
 
     Description:
-        The stopwords of is_stopword or of the list passed, in any case, as the
-        water content of StyleStats counts them
+        The words are matched in any case
 
     Arguments:
         words (list[Word]): Words with their positions
@@ -607,12 +590,10 @@ def find_rare_words(words: Iterable[Word]) -> list[Highlight]:
     Finding the rare words
 
     Description:
-        The words with a lemma beyond the embedded list of the 10,000 most
-        frequent lemmas (get_rank), as the share p_beyond_top10000 of
-        LexicalStats counts them: the key of lemma_key, the lower-case form for
-        a proper noun of a tagged Doc. Only the words of two Spanish letters or
-        more are looked at, and the stopwords are not: numbers, words with a
-        hyphen or a digit and the words of other alphabets are not highlighted
+        The words whose lemma_key is beyond the 10,000 most frequent lemmas
+        (get_rank), as p_beyond_top10000 of LexicalStats counts them; a proper
+        noun of a tagged Doc keeps its form. Only the words of two Spanish
+        letters or more that are not stopwords are looked at
 
     Arguments:
         words (list[Word]): Words with their positions
@@ -634,8 +615,7 @@ def find_verbal_nouns(words: Iterable[Word]) -> list[Highlight]:
     Finding the verbal nouns
 
     Description:
-        The words tagged NOUN with a lemma derived from a verb (is_verbal_noun),
-        as the share verbal_nouns of StyleStats counts them
+        The words tagged NOUN with a lemma derived from a verb (is_verbal_noun)
 
     Arguments:
         words (list[Word]): Words with their parts of speech and lemmas
@@ -657,10 +637,9 @@ def find_phrase_highlights(
     Finding the phrases of a list
 
     Description:
-        The phrases are looked for in the forms of the text (expand_phrases,
-        find_phrases), with their contractions and the forms of their verbs; a
-        fragment covers the words from the first to the last with the marks
-        between them, and the note gives the phrase of the list
+        The phrases are matched with their contractions and the forms of their
+        verbs (expand_phrases); a fragment covers the words from the first to the
+        last, and the note gives the phrase of the list
 
     Arguments:
         words (list[Word]): Words with their positions
@@ -731,10 +710,9 @@ def find_connector_highlights(words: Sequence[Word], sents: Sequence[Sent]) -> l
     Finding the connectors
 
     Description:
-        The connectors are looked for inside every sentence (find_connectors);
-        a one-word connector is checked by the part of speech of the word when
-        a tagged Doc gives it; the note gives the class and the kind of the
-        connector
+        The connectors are looked for inside every sentence (find_connectors), a
+        one-word one checked by its part of speech when the words have it; the
+        note gives the class and the kind of the connector
 
     Arguments:
         words (list[Word]): Words with their positions
@@ -766,9 +744,9 @@ def group_words_by_sents(words: Sequence[Word], sents: Sequence[Sent]) -> list[l
     Grouping the words by sentences
 
     Description:
-        The words and the sentences are ordered by position, so one pass is
-        enough; a word belongs to the sentence of its first character, and the
-        words out of the sentences are skipped
+        The words and the sentences must be ordered by position; a word belongs
+        to the sentence of its first character, the words out of the sentences
+        are skipped
 
     Arguments:
         words (list[Word]): Words with their positions
@@ -793,12 +771,9 @@ def get_stem_sounds(word: str) -> tuple[str, ...]:
 
     Description:
         The common start of the transcriptions of the word form and of its
-        lemma (transcribe, lemmatize): hacía - a θ, cogió - k o x, aquella - a k
-        e. The transcriptions are compared rather than the letters, since a cut
-        in letters reads the letters at the cut without the context their sound
-        depends on (hac would be a k, qu no sound at all). For the suppletive
-        forms (fue - ser, quiero - querer) the common part is shorter than two
-        sounds, and the stem is the whole word form
+        lemma (transcribe, lemmatize): hacía - a θ, cogió - k o x. When it is
+        shorter than two sounds, as for the suppletive forms (fue - ser), the
+        stem is the whole word form
 
     Arguments:
         word (str): Word form in lower case
@@ -824,26 +799,12 @@ def calc_alliteration_runs(
     Description:
         A repetition is a run of two neighbouring words or more with the same
         consonant sound in the stem of each (get_stem_sounds); the words shorter
-        than three letters, the stopwords (is_stopword: que, los, con, como) and
-        the words without vowels neither break nor continue a run. The function
-        words are left out as the model of chance does not fit them: que and
-        qué, 3.8% of the words of the prose, are two sounds with a k, far
-        likelier to hold a k than two sounds taken at random
-        The sound is looked for in the stem, not in the ending: the endings
-        agree with the neighbouring words and repeat their consonants by the
-        grammar, not by the sound (las casas blancas, los ojos rojos)
-        The probability of a run under an independent spread of the sounds is
-        the product over its words of the probability to meet the consonant at
-        least once among the sounds of the stem, 1 - (1 - f)^n, where f is the
-        frequency of the consonant in SOUND_FREQUENCIES and n the number of the
-        sounds of the stem; a run is alliteration when the probability is below
-        the threshold. Some twenty consonants are checked at every position, so
-        the default threshold is strict: 3.4% of the words of the prose of
-        the corpus of literature are highlighted at 0.001. A repetition of a rare
-        sound shows in two or three words (deje la abeja), a repetition of a
-        frequent one in long words is expected and is not alliteration
-        The alliteration index of PhonStats measures how the repetitions cluster
-        over the whole text; here their places are found
+        than three letters, the stopwords and the words without vowels neither
+        break nor continue a run. The probability of a run under an independent
+        spread of the sounds is the product over its words of 1 - (1 - f)^n,
+        where f is the frequency of the consonant in SOUND_FREQUENCIES and n the
+        number of the sounds of the stem; a run is alliteration when the
+        probability is below the threshold
 
     Arguments:
         text (list[str]): List of words
@@ -923,8 +884,7 @@ def tokens_span(tokens: Iterable[Token]) -> tuple[int, int]:
     Computing the positions of the fragment of a text that covers some words
 
     Description:
-        The punctuation marks and the whitespace tokens are left out, so the
-        commas at the edges of a clause stay out of the fragment
+        The punctuation marks and the whitespace tokens are left out
 
     Arguments:
         tokens (Doc|Span|list[Token]): Sequence of tokens
@@ -941,9 +901,9 @@ def find_passive(doc: Doc) -> list[Highlight]:
     Finding the passive verb forms
 
     Description:
-        A form is highlighted with its auxiliary ser (fue construida) or its se
-        (se construyó), as is_passive finds them; the note tells the passive
-        with se from the one with ser, and a passive with ser without an agent
+        A form of is_passive is highlighted with its auxiliary ser (fue
+        construida) or its se (se construyó); the note tells the passive with se
+        from the one with ser, and a passive with ser without an agent
 
     Arguments:
         doc (Doc): Doc object with a dependency parse

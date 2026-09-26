@@ -41,17 +41,12 @@ def collocations(
     Finding the collocations of a sequence of words
 
     Description:
-        Pairs of words are ordered, as in NLTK: the right word occurs no more
-        than window words after the left one, and every pair of positions is
-        counted once; window = 1 gives bigrams. For a pair the chosen measure of
-        association is computed from the frequencies of the words, of the pair
-        and the number of words N; the frequency of the pair is divided by the
-        size of the window inside the measure (Church and Hanks 1990, as in
-        NLTK), so that the expected frequency does not depend on the window and
-        Dice and the minimum sensitivity stay at most one, while freq_pair keeps
-        the undivided frequency. With window > 1 the scale of the Dice measures
-        therefore shifts: a pair always side by side gets a logDice of
-        14 − log2(window) (13 at a window of 2, 11.68 at 5) and not 14 as bigrams
+        Pairs of words are ordered: the right word occurs no more than window
+        words after the left one, every pair of positions counted once;
+        window = 1 gives bigrams. Inside the measure the frequency of the pair
+        is divided by the window (Church and Hanks 1990, as in NLTK), while
+        freq_pair keeps the undivided frequency; so with window > 1 a pair
+        always side by side gets a logDice of 14 − log2(window), not 14
         Words are compared as they are: case, lemmatization and stop words
         belong to the extraction
 
@@ -211,9 +206,8 @@ def calc_logdice(freq_a: int, freq_b: int, freq_ab: float, n: int) -> float:
 
     Description:
         14 + log2(2 · f_ab / (f_a + f_b)) by Rychlý (2008); does not depend on
-        the size of the text, at most 14, values below zero - a weak link. In
-        collocations the frequency of a pair is divided by the size of a window
-        above one, and the maximum becomes 14 − log2(window)
+        the size of the text, at most 14 (14 − log2(window) in collocations),
+        values below zero - a weak link
 
     References:
         https://www.sketchengine.eu/glossary/logdice/

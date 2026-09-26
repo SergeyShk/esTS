@@ -29,12 +29,11 @@ from .utils import get_nlp, is_punctuation, is_verbal_noun, safe_divide
 
 # Dependencies of the nominal part of a split predicate, in the order of preference
 SPLIT_PREDICATE_DEPS = ("compound", "obj", "nsubj", "iobj", "nmod", "obl")
-# Relations of an auxiliary and of a copula: the models use both for the auxiliary
-# of a passive in the present, and both keep a participle out of the clauses
+# Relations of an auxiliary: the models tag the auxiliary of a present passive as cop
 AUXILIARY_DEPS = ("aux", "cop")
 # Relations by which the models attach the gerund of a periphrasis to its verb
 PERIPHRASIS_DEPS = ("xcomp", "advcl")
-# Components a parse of the text does not need: the entities are never read
+# Components the statistics never read
 UNUSED_COMPONENTS = ["ner"]
 
 
@@ -43,25 +42,15 @@ class SyntaxStats:
     Class for computing the syntactic statistics of a text
 
     Description:
-        The statistics are computed on the dependency tree of Universal
-        Dependencies, so the source has to be parsed: a string is parsed with
-        the model es_core_news_sm or with the pipeline given in nlp, and a Doc
-        must carry the dependencies, which come from a parser, and the lemmas,
-        which come from a lemmatizer and tell a passive from a compound tense
-        and a light verb from any other
-        Punctuation marks, symbols and whitespace are not nodes of the tree:
-        the words are, the same words the other statistics count, and the
-        distances are counted in positions of words
-        The measures of a sentence - the longest dependency, the depth of the
-        tree, the number of leaves and of subtrees, the nodes per leaf - are
-        averaged over the sentences, the constructions are given per sentence,
-        and the passive and the modifiers are shares of the verbs and of the
-        nouns
-        The features follow the work of Ivanov, Solnyshkina and Solovyev (2018)
-        on the syntactic complexity of a text; the constructions are the ones
-        of the Spanish administrative style: the passive with ser and with se,
-        the participial and the gerund clauses, the chains of de, the split
-        predicates and the ratio of nouns to verbs
+        Measures of the dependency tree of Universal Dependencies (Ivanov,
+        Solnyshkina and Solovyev 2018) and the constructions of the Spanish
+        administrative style: the passive with ser and with se, the participial
+        and the gerund clauses, the chains of de and the split predicates
+        A Doc must carry the dependencies and the lemmas. Punctuation marks,
+        symbols and whitespace are not nodes of the tree, and distances are
+        counted in positions of words. The measures of a sentence (the longest
+        dependency, the depth, the nodes per leaf) are averaged over the
+        sentences, and the constructions are given per sentence
 
     References:
         https://universaldependencies.org/u/dep/
@@ -281,9 +270,8 @@ def is_word(token: Token) -> bool:
     Checking whether a token is a word - not a punctuation mark and not whitespace
 
     Description:
-        The same check the other statistics use for the words of a Doc object:
-        the symbols of the Unicode categories P and S (%, €, +, §) are no words
-        either, so every class of the library counts the same words of a text
+        The symbols of the Unicode categories P and S (%, €, +, §) are no words
+        either
 
     Arguments:
         token (Token): Token
@@ -464,9 +452,8 @@ def is_participle(token: Token) -> bool:
     Checking whether a token is a participle
 
     Description:
-        A word with VerbForm=Part, whatever part of speech the model gives it:
-        a participle that modifies a noun (la casa pintada) is annotated as an
-        adjective, the one of a compound tense (ha pintado) as a verb
+        A word with VerbForm=Part, whatever its part of speech: the models tag
+        a participle that modifies a noun (la casa pintada) as an adjective
 
     Arguments:
         token (Token): Token
@@ -508,11 +495,8 @@ def is_negation(token: Token) -> bool:
     Checking whether a token is a word of negation
 
     Description:
-        A word with Polarity=Neg, which the models give to no alone, or one of
-        the words of NEGATION_WORDS (nunca, jamás, nada, nadie, ninguno,
-        tampoco); the conjunction ni of ni... ni is not a negation
-        Every such word counts, so the negative concord of Spanish, where a
-        single negation is written twice (no vino nadie), gives two
+        A word with Polarity=Neg or one of NEGATION_WORDS; the conjunction ni
+        is not. Every such word counts, so no vino nadie gives two
 
     Arguments:
         token (Token): Token
@@ -530,9 +514,8 @@ def calc_valency(token: Token) -> int:
     Computing the valency of a token
 
     Description:
-        The number of dependent words without the coordinating (cc, conj) and
-        the parenthetical (parataxis) relations, as in the feature VERBS_DEP of
-        Ivanov, Solnyshkina and Solovyev (2018)
+        The number of dependent words, the relations cc, conj and parataxis
+        left out
 
     Arguments:
         token (Token): Token
@@ -548,9 +531,8 @@ def calc_coordination_chains(tokens: Iterable[Token]) -> list[int]:
     Computing the lengths of the coordination chains
 
     Description:
-        In Universal Dependencies every coordinated element is attached by conj
-        to the first of them, so a chain is a word with dependents of conj, and
-        its length is the number of the coordinated elements with the first one
+        A chain is a word with dependents of conj; its length is the number of
+        the coordinated elements, the first one included
 
     Arguments:
         tokens (Doc|Span|list[Token]): Sequence of tokens
@@ -571,14 +553,11 @@ def is_clause_head(token: Token) -> bool:
     Checking whether a token heads a clause
 
     Description:
-        A clause is headed by the head of the sentence or by a word with the
-        relation ccomp, advcl, acl or csubj, the participles and the gerunds
-        left out: the participial and the gerund clauses are counted apart
-        A parenthetical (parataxis) and a coordinated predicate (conj of the
-        head of a clause) head a clause of their own only when they are a verb
-        or carry a subject: the models attach to parataxis the parentheticals
-        (por ejemplo, claro, en primer lugar) that are no clauses
-        An infinitive under acl (el deseo de irse) is not a clause either
+        The head of the sentence or a word with the relation ccomp, advcl, acl
+        or csubj; participles and gerunds are counted apart, and an infinitive
+        under acl (el deseo de irse) is no clause. A parataxis or a conj of the
+        head of a clause counts only as a predicate (is_predicate), so that
+        parentheticals such as por ejemplo are no clauses
 
     Arguments:
         token (Token): Token
@@ -645,9 +624,7 @@ def count_noun_modifiers(token: Token) -> int:
 
     Description:
         The dependents with the relations amod, det, nmod, nummod and acl and
-        their subtypes; the coordinating and the appositive relations (conj,
-        appos) are left out, as in the feature NOUNS_DEP of Ivanov, Solnyshkina
-        and Solovyev (2018)
+        their subtypes; conj and appos are no modifiers
 
     Arguments:
         token (Token): Token
@@ -691,9 +668,8 @@ def calc_de_chains(tokens: Iterable[Token]) -> list[int]:
 
     Description:
         A chain is two or more nested complements with de: el aumento de la
-        eficiencia del uso de los recursos (length 3). The chain starts at the
-        complement whose head is not one itself, and its length is the number of
-        words in its longest branch
+        eficiencia del uso de los recursos (length 3); the length is the number
+        of complements in the longest branch
 
     Arguments:
         tokens (Doc|Span|list[Token]): Sequence of tokens
@@ -715,11 +691,8 @@ def is_participle_clause(token: Token) -> bool:
     Checking whether a token heads a participial clause
 
     Description:
-        A participle with at least one dependent, the coordinating and the
-        parenthetical relations left out (Ivanov, Solnyshkina and Solovyev 2018),
-        which is not the predicate of its clause: the participle of a compound
-        tense or of a passive carries an auxiliary (ha pintado, fue construida)
-        and is a predicate, not a clause of its own
+        A participle with a valency above 0 (calc_valency) and no auxiliary:
+        ha pintado and fue construida are predicates, not clauses
 
     Arguments:
         token (Token): Token
@@ -737,11 +710,9 @@ def is_gerund_clause(token: Token) -> bool:
     Checking whether a token heads a gerund clause
 
     Description:
-        A gerund with at least one dependent, the coordinating and the
-        parenthetical relations left out, which is not part of a periphrasis:
-        with an auxiliary (está cantando, va aumentando) or under a verb of
-        GERUND_PERIPHRASIS_VERBS, which the models attach as xcomp or advcl
-        instead (sigue trabajando, lleva años estudiando)
+        A gerund with a valency above 0 (calc_valency) outside a periphrasis:
+        with no auxiliary (está cantando) and not under a verb of
+        GERUND_PERIPHRASIS_VERBS (sigue trabajando)
 
     Arguments:
         token (Token): Token
@@ -774,15 +745,10 @@ def is_passive(token: Token) -> bool:
     Checking whether a token is a passive verb form
 
     Description:
-        A verb that is a participle with the auxiliary ser (la casa fue
-        construida) or carries the se of the passive (se construyó la casa);
-        a participle that modifies a noun (la casa construida por los obreros)
-        is an adjective for the models and is counted as a participial clause
-        instead. The Spanish models give the auxiliary of the passive the plain
-        relation aux and the subject the plain relation nsubj, so the lemma of
-        the auxiliary is what tells the passive from a compound tense (ha
-        construido); in the present the models often read the auxiliary as a
-        copula (el proyecto es financiado), and both relations count
+        A verb that is a participle with the auxiliary ser, as aux or cop (la
+        casa fue construida, el proyecto es financiado), or carries the se of
+        the passive (se construyó la casa). A participle that modifies a noun
+        (la casa construida por los obreros) is a participial clause instead
 
     Arguments:
         token (Token): Token
@@ -826,8 +792,8 @@ def is_agent(token: Token) -> bool:
     Checking whether a token is the agent of a passive
 
     Description:
-        A complement whose preposition is por: the Spanish models have no
-        relation obl:agent, and they annotate the agent as obl or as obj
+        A complement whose preposition is por, whatever its relation: the
+        models have no obl:agent
 
     Arguments:
         token (Token): Token
@@ -846,9 +812,7 @@ def is_light_verb(token: Token) -> bool:
     Checking whether a token is a light verb
 
     Description:
-        A verb with a lemma of LIGHT_VERBS (hacer, dar, tomar, tener, poner,
-        llevar, prestar, efectuar, realizar, proceder, proporcionar, ejercer),
-        which in a split predicate carries only the grammar
+        A verb with a lemma of LIGHT_VERBS (hacer, dar, tomar, realizar...)
 
     Arguments:
         token (Token): Token
@@ -864,12 +828,9 @@ def is_split_predicate_noun(token: Token, verb: Token) -> bool:
     Checking whether a token can be the nominal part of a split predicate
 
     Description:
-        A noun with a lemma derived from a verb (is_verbal_noun: revisión,
-        decisión, uso), or one of the nouns of the fixed expressions of
-        SPLIT_PREDICATE_NOUNS with the verb it is fixed with: cabo with llevar,
-        manifiesto with poner, parte with tomar. Outside its expression such a
-        noun is an ordinary one - dar traslado a las partes, poner en primer
-        lugar la seguridad - which is why the verb is checked as well
+        A noun with a lemma derived from a verb (is_verbal_noun: revisión, uso),
+        or a noun of SPLIT_PREDICATE_NOUNS with the verb of its fixed expression
+        (cabo with llevar, parte with tomar)
 
     Arguments:
         token (Token): Token
@@ -892,20 +853,13 @@ def find_split_predicates(tokens: Iterable[Token]) -> list[tuple[Token, Token]]:
 
     Description:
         A light verb (is_light_verb) with a nominal part of its own
-        (is_split_predicate_noun): hacer una revisión, tomar una decisión,
-        llevar a cabo la reforma, se procedió a la votación
-        A verb takes no more than one nominal part, preferred in the order
-        compound (the fixed dar comienzo, llevar a cabo, tomar parte, where the
-        object is the complement of the whole: dio comienzo a la sesión), obj,
-        nsubj (only with the se of the passive: se llevó a cabo la revisión),
-        iobj, nmod, obl
-        A complement with a preposition is left out - llevó el asunto a la
-        comisión is no split predicate - unless the pair is a fixed expression
-        of SPLIT_PREDICATE_NOUNS, the verb included (poner de manifiesto, but
-        not llevó el proyecto al comienzo de su carrera), or the verb takes its
-        nominal part with a preposition (PREPOSITIONAL_LIGHT_VERBS: se procedió
-        a la votación), whichever of obj and obl the model chooses for it. The agent of a
-        passive is left out as well
+        (is_split_predicate_noun): hacer una revisión, llevar a cabo la reforma,
+        se procedió a la votación
+        A verb takes one nominal part at most, preferred by relation in the
+        order compound, obj, nsubj (only with the se of the passive), iobj,
+        nmod, obl. A complement with a preposition is left out unless the pair
+        is a fixed expression of SPLIT_PREDICATE_NOUNS or the verb is one of
+        PREPOSITIONAL_LIGHT_VERBS; the agent of a passive is always left out
 
     Arguments:
         tokens (Doc|Span|list[Token]): Sequence of tokens

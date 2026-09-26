@@ -28,7 +28,7 @@ from .extractors import SentsExtractor
 from .utils import get_nlp, iter_doc_tokens, safe_divide
 
 CONNECTORS_FILE = Path(__file__).parent / "resources" / "connectors.tsv"
-# Components a parse of the text does not need: the entities are never read
+# Components the statistics never read
 UNUSED_COMPONENTS = ["ner"]
 
 
@@ -105,34 +105,14 @@ class CohesionStats:
         sentences and between all pairs of sentences, givenness (pronouns,
         demonstratives, lemmas already used) and temporal cohesion (repetition
         of the tense and of the mood of the verbs of adjacent sentences)
-        Sentences are compared by lemmas, and the features come from the
-        annotation of Universal Dependencies, so the source has to be annotated:
-        a string is parsed with the model es_core_news_sm or with the pipeline
-        given in nlp, and a Doc must carry the parts of speech, which come from
-        a morphologizer or from a tagger with an attribute ruler, and the lemmas,
-        which come from a lemmatizer. The sentences come from the annotation,
-        and from sents_extractor over the text when one is given or when the
-        pipeline sets no sentence boundaries
-        A noun is NOUN or PROPN, a pronoun is PRON or a determiner that points
-        at something - a possessive or a demonstrative or personal one, so mi
-        libro and este libro hold a pronoun while el libro and cada libro do
-        not - a demonstrative carries PronType=Dem, and a content word is one of
-        CONTENT_UD_POS. An argument is NOUN, PROPN or PRON, the determiners left
-        out, as the argument overlap of Coh-Metrix counts nouns and pronouns
-        proper
-        Connectors (porque, sin embargo, es decir, por ejemplo) are looked for
-        by their word forms in every sentence, in the dictionary of
-        resources/connectors.tsv: 255 discourse markers in the classes of
-        Martín Zorraquino and Portolés, each one primary - a conjunction, a
-        conjunctive locution or an adverb - or secondary, a lexicalized phrase;
-        the density is given per 1000 words
-        A one-word connector counts only with a part of speech of CONNECTOR_POS
-        or of CONNECTOR_POS_EXTRA for that word, never after a determiner, and,
-        for a proper noun, only at the start of a sentence, where the models read
-        a marker as one: el antes y el después holds one connector, y, and the
-        surname of Ana, Luego y Mas firmaron is none. A marker that heads a
-        prepositional phrase is dropped there as well - antes de la reunión, por
-        encima de 80, al final de la línea, sobre todo el texto
+        Sentences are compared by lemmas; the features of a word are the ones
+        of token_info. A Doc must carry the parts of speech (from a
+        morphologizer, or a tagger with an attribute ruler) and the lemmas
+        Connectors (porque, sin embargo, es decir) are found by find_connectors
+        in the dictionary of load_connectors, in the classes of Martín
+        Zorraquino and Portolés; a primary one is a conjunction, a conjunctive
+        locution or an adverb, a secondary one a lexicalized phrase. Their
+        density is given per 1000 words
 
     References:
         https://doi.org/10.1017/CBO9780511894664 (McNamara et al. 2014, Coh-Metrix)
@@ -340,14 +320,12 @@ def load_connectors() -> Mapping[str, tuple[str, str]]:
     Loading the dictionary of the connectors
 
     Description:
-        The file resources/connectors.tsv: the connector, its class of
-        CONNECTOR_CLASSES and its kind of CONNECTOR_TYPES; 255 discourse markers
-        in the classification of Martín Zorraquino and Portolés, checked against
-        the markers of the Spanish RST corpus and the index of Coh-Metrix-Esp
+        The file resources/connectors.tsv: 255 discourse markers, each with its
+        class of CONNECTOR_CLASSES and its kind of CONNECTOR_TYPES
 
     Returns:
-        Mapping[str, tuple[str, str]]: Class and kind by connector, read-only:
-            the dictionary is cached and shared by every caller
+        Mapping[str, tuple[str, str]]: Class and kind by connector, read-only
+            and shared by every caller
     """
     connectors: dict[str, tuple[str, str]] = {}
     with CONNECTORS_FILE.open(encoding="utf-8") as file:
@@ -378,10 +356,9 @@ def _normalize(connectors: Mapping[str, tuple[str, str]]) -> ConnectorIndex:
     Building the index of the dictionary of the connectors
 
     Description:
-        The key is the word forms in lower case separated by one space; for a
-        connector with a period (p. ej.) a key with spaces instead of them is
-        added as well, since the tokenizer separates the period; the patterns
-        are grouped by their first word
+        The key is the word forms in lower case separated by one space, plus a
+        key with the periods and hyphens split off (p. ej.), as the tokenizer
+        splits them; the patterns are grouped by their first word
     """
     entries: dict[str, tuple[str, str, str]] = {}
     patterns: dict[str, list[tuple[str, ...]]] = {}
@@ -479,27 +456,21 @@ def find_connectors(
     Finding the connectors of a sentence
 
     Description:
-        The connectors are looked for by their word forms in lower case: at every
-        position the longest one is taken (sin embargo does not fall apart into
-        sin), and the ones found do not overlap; the period inside a connector
-        (p. ej.) may be separated by the tokenizer
-        A marker that heads a prepositional phrase here is dropped, by the words
-        around it: antes de la reunión, por encima de 80, al final de la línea.
-        This holds with or without the parts of speech, the one rule of it that
-        reads a tag being sobre todo before a determiner
-        With the parts of speech of Universal Dependencies given, a one-word
-        connector counts only with a part of speech of CONNECTOR_POS or of
-        CONNECTOR_POS_EXTRA for that word, never after a determiner, and, for a
-        proper noun, only at the start of the sentence
+        Connectors are matched by their word forms in lower case, the longest
+        one at every position, without overlaps. A marker that heads a
+        prepositional phrase (antes de la reunión, por encima de 80) is dropped
+        With the parts of speech given, a one-word connector counts only with a
+        part of speech of CONNECTOR_POS or of CONNECTOR_POS_EXTRA for that word,
+        never after a determiner and, as a proper noun, only at the start of the
+        sentence
 
     Arguments:
         words (list[str]): Words of the sentence
         connectors (dict[str, tuple[str, str]]): Dictionary of the connectors -
             class and kind by connector; without it the dictionary of resources is used
         sent_index (int): Number of the sentence, written into the occurrences
-        pos (list[str]): Parts of speech of the words; without them only the
-            rules that read a tag are skipped, the guard on the surrounding
-            words holding either way
+        pos (list[str]): Parts of speech of the words; without them the rules
+            that read a tag are skipped
 
     Returns:
         list[Connector]: Occurrences of the connectors in the order of the words
@@ -521,13 +492,11 @@ def token_info(token: Token) -> WordInfo:
     Getting the features of a token by the annotation of Universal Dependencies
 
     Description:
-        A noun is NOUN or PROPN, a pronoun is PRON or a determiner that points at
-        something - a possessive (Poss=Yes) or a demonstrative or personal one
-        (PronType=Dem, Prs) - so that mi libro and este libro hold a pronoun while
-        el libro and cada libro do not; a demonstrative carries PronType=Dem; an
-        argument is NOUN, PROPN or PRON, the determiners left out, as the argument
-        overlap of Coh-Metrix counts nouns and pronouns proper; a content word is
-        one of CONTENT_UD_POS and no demonstrative
+        A noun is NOUN or PROPN; a pronoun is PRON or a possessive,
+        demonstrative or personal determiner (mi libro, este libro, but not el
+        libro or cada libro); a demonstrative carries PronType=Dem; an argument
+        is NOUN, PROPN or PRON; a content word is one of CONTENT_UD_POS and no
+        demonstrative
 
     Arguments:
         token (Token): Token
@@ -565,11 +534,9 @@ def split_doc_sents(source: Doc, sents_extractor: SentsExtractor) -> list[list[T
     Splitting the words of a Doc object with no sentence boundaries into sentences
 
     Description:
-        The sentences are extracted from the text by sents_extractor and found in
-        it in order; a word belongs to the sentence its token lies in. Words
-        outside the sentences found - the ones the extractor dropped by their
-        length - are left out, as they are for a string: if the extractor found
-        no sentence, there are no words
+        A word belongs to the sentence of sents_extractor its token lies in;
+        words outside the sentences found (dropped by the extractor) are left
+        out, so with no sentence found there are no words
 
     Arguments:
         source (Doc): Doc object
@@ -604,11 +571,9 @@ def calc_overlap(sets: Sequence[Collection[str]], adjacent: bool = True) -> floa
     Computing the share of pairs of sentences with a shared element
 
     Description:
-        The binary overlap of Coh-Metrix: a pair of sentences is cohesive when
-        they share at least one element (the lemma of a noun, of an argument or
-        of a content word); the share of such pairs among the adjacent ones
-        (CRFNO1, CRFAO1, CRFSO1) or among all the pairs of the text (CRFNOa,
-        CRFAOa, CRFSOa)
+        The binary overlap of Coh-Metrix (CRFNO1, CRFAO1, CRFSO1 over the
+        adjacent pairs, CRFNOa, CRFAOa, CRFSOa over all): a pair of sentences is
+        cohesive when they share at least one element
 
     Arguments:
         sets (list[set[str]]): Elements of every sentence
@@ -632,10 +597,8 @@ def calc_proportional_overlap(sets: Sequence[Collection[str]], adjacent: bool = 
     Computing the mean share of shared elements in pairs of sentences
 
     Description:
-        The proportional overlap of Coh-Metrix (CRFCWO1, CRFCWOa): for a pair of
-        sentences the Dice coefficient of the sets of lemmas is taken,
-        2·|A ∩ B| / (|A| + |B|), a pair with no elements getting 0; the result is
-        averaged over the adjacent pairs or over all of them
+        The proportional overlap of Coh-Metrix (CRFCWO1, CRFCWOa): the Dice
+        coefficient of a pair of sentences (dice) averaged over the pairs
 
     Arguments:
         sets (list[set[str]]): Elements of every sentence
@@ -673,20 +636,12 @@ def calc_overlaps(sets: Sequence[Collection[str]], proportional: bool = True) ->
 
     Description:
         Gives the values of calc_overlap and calc_proportional_overlap without
-        going through every pair of sentences: this is how CohesionStats computes
-        all of its overlaps
-        The adjacent pairs are walked directly; the number of all the pairs with
-        a shared element is counted over bit masks of the sentences an element
-        occurs in, and the sum of the Dice coefficients over all the pairs over
-        histograms of the lengths of the sentences of every element, so that the
-        time grows with the number of occurrences and not with the square of the
-        number of sentences
+        going through every pair of sentences
 
     Arguments:
         sets (list[set[str]]): Elements of every sentence
         proportional (bool): Compute the proportional overlap as well; without it
-            prop_adjacent and prop_all are nan and the Dice coefficients, about a
-            third of the work, are not computed
+            prop_adjacent and prop_all are nan
 
     Returns:
         Overlap: Shares of the pairs with a shared element and the mean Dice
@@ -713,11 +668,9 @@ def _count_sharing_pairs(sets: Sequence[frozenset[str]], block_size: int = 4096)
     Number of pairs of sentences with a shared element, over bit masks of the occurrences
 
     Description:
-        The sentences are taken in blocks: for every element a mask of the
-        sentences of the block it occurs in is built, the union of the masks of
-        the elements of sentence i gives every sentence of the block it is
-        cohesive with, and the bits to the right of i are counted; the memory is
-        bounded by the size of a block
+        Every element gets a mask of the sentences of a block it occurs in; the
+        union of the masks of sentence i gives the sentences it shares an
+        element with, and the bits after i are counted
     """
     total = 0
     for start in range(0, len(sets), block_size):
@@ -743,11 +696,9 @@ def _sum_dice(sets: Sequence[frozenset[str]]) -> float:
 
     Description:
         A pair of sentences of lengths k and l gives 2/(k + l) for every shared
-        element, so for every element it is enough to know how many of the
-        sentences holding it have each length: the sum over the pairs of an
-        element is (h·W·h - h·diag(W)) / 2, where h is the histogram of the
-        lengths and W[k, l] = 2/(k + l)
-        Elements of a single sentence make no pair and are skipped
+        element, so the sum over the pairs holding an element is
+        (h·W·h - h·diag(W)) / 2, where h is the histogram of the lengths of its
+        sentences and W[k, l] = 2/(k + l)
     """
     sizes = sorted({len(elements) for elements in sets if elements})
     columns = {size: column for column, size in enumerate(sizes)}
@@ -818,10 +769,10 @@ def calc_repetition(sents: Sequence[Sequence[str]]) -> float:
     Computing the share of adjacent pairs of sentences with the same dominant value
 
     Description:
-        The repetition of the tense and of the mood of Coh-Metrix (SMTEMP): for
-        every sentence the dominant value of the feature of its verbs is taken,
-        and a pair of adjacent sentences is cohesive when the values are equal;
-        a pair where one of the sentences has no verb with the feature is skipped
+        The repetition of the tense and of the mood of Coh-Metrix (SMTEMP): a
+        pair of adjacent sentences is cohesive when the dominant values of the
+        feature of their verbs are equal; a pair where one of the sentences has
+        no verb with the feature is skipped
 
     Arguments:
         sents (list[list[str]]): Values of the feature of the verbs of every sentence

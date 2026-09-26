@@ -91,7 +91,6 @@ def test_keyness():
     assert keywords[0] == Keyword(
         "gato", 2, 0, 200000.0, 0.0, g2, calc_p_value(g2), calc_log_ratio(2, 0, 10, 8), g2
     )
-    # The frequencies in the reference are floats for the words in it and out of it
     assert keywords[-1].freq_reference == 1
     assert {type(keyword.freq_reference) for keyword in keywords} == {float}
     assert keywords[-1].ipm_reference == 125000.0
@@ -186,8 +185,7 @@ def test_keyness_against_the_frequency_dictionary_alphabet(freq_dict):
 
 
 def test_keyness_against_the_frequency_dictionary_large_target(freq_dict):
-    # Beyond 10 million words a hapax out of the dictionary has less than 0.1 ipm,
-    # while the least frequency of the dictionary is only an upper bound for it
+    # The least frequency of the dictionary is only an upper bound for a hapax out of it
     target = {"gato": 100_000_000, "felinólogo": 1}
     negative = keyness(target, freq_dict, positive=False)
     assert "felinólogo" not in {keyword.word for keyword in negative}

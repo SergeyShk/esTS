@@ -96,7 +96,7 @@ def test_is_punctuation(token, expected):
         ("«¡Hola!» dijo. \"Adiós.\" 'Fin.'", ["«¡Hola!» dijo.", '"Adiós."', "'Fin.'"]),
         ("—Hola —dijo—. ¿Qué tal? —Bien.", ["—Hola —dijo—.", "¿Qué tal?", "—Bien."]),
         ("- Hola. - Adiós.", ["- Hola.", "- Adiós."]),
-        # the remark of the narrator after a dash continues the line of dialogue
+        # A remark of the narrator after a dash continues the sentence
         (
             "—¿Vienes? —preguntó María. —Sí —dijo él.",
             ["—¿Vienes? —preguntó María.", "—Sí —dijo él."],
@@ -232,7 +232,7 @@ def test_tokenize():
         ("cuatro.-¿Cinco?", ["cuatro", ".", "-", "¿", "Cinco", "?"]),
         ("capítulo -II-", ["capítulo", "-", "II", "-"]),
         ("Pues sí-¿y qué?", ["Pues", "sí", "-", "¿", "y", "qué", "?"]),
-        # The horizontal bar of some digitized texts is a raya
+        # The horizontal bar as a raya
         ("―¿Qué? ―dijo él―.", ["―", "¿", "Qué", "?", "―", "dijo", "él", "―", "."]),
         # The underscores of the italics of Project Gutenberg
         ("--_Siguro_ lux_--dijo", ["--", "_", "Siguro", "_", "lux", "_", "--", "dijo"]),
@@ -258,7 +258,7 @@ def test_add_dash_rules():
     assert [token.text for token in nlp("--No")] == ["--No"]
     add_dash_rules(nlp)
     assert [token.text for token in nlp("--No")] == ["--", "No"]
-    # The model of get_nlp has the rules, so its words are the words of the tokenizer
+    # The model of get_nlp has the rules
     text = "--No --dijo él. Y reírse—me decía:—¡Vete!"
     assert [token.text for token in get_nlp()(text)] == list(tokenize(text))
     # The rules a pipeline has already are kept, and a second call adds nothing

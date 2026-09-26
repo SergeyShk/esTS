@@ -27,25 +27,16 @@ class LexicalStats:
         Lexical sophistication in the manner of TAALES - how rare the words of
         the text are in the language: the mean frequency, range and dispersion
         of the lemmas by the frequency dictionary of Google Books Ngram
-        (FreqDict), the shares of the words of the frequency bands top-1000,
-        2000, 5000 and 10000 by the embedded list of the dictionary, the
-        surprisal and the perplexity by the unigram model of the dictionary,
-        the lexical density
-        A word is looked up by lemma_key, the key the dictionary is built with:
-        the lemma of simplemma of the word in lower case, and for a proper noun
-        (PROPN) the lower-case form when the dictionary has it, so París is
-        found as parís and not as the verb parir, while Estados of Estados
-        Unidos, which the dictionary counts under estado, falls back to its
-        lemma. The bands take the lower-case form of a proper noun, as the list
-        alone cannot tell París from parir. The parts of speech come from the
-        annotation, so the source has to be annotated: a string is parsed with
-        the model es_core_news_sm or with the pipeline given in nlp, and a Doc
-        must carry the parts of speech. A content word is one of CONTENT_UD_POS
-        and no demonstrative, as in CohesionStats
-        Numbers (2020, 5,5, 3.º) are no words: the dictionary and the list do
-        not have them, and they would look like the rarest words of the text.
-        The statistics by the dictionary need a downloaded FreqDict, the bands
-        and the lexical density are computed without it
+        (FreqDict), the shares of the frequency bands top-1000, 2000, 5000 and
+        10000 by its embedded list, the surprisal and the perplexity by its
+        unigram model, and the lexical density. A word is looked up by
+        lemma_key, a proper noun by its lower-case form when the dictionary has
+        it (keys). The source needs the parts of speech: a string is parsed
+        with the model es_core_news_sm or the pipeline in nlp, a Doc must carry
+        them. A content word is one of CONTENT_UD_POS and no demonstrative, as
+        in CohesionStats; numbers (2020, 5,5, 3.º) are no words. The statistics
+        by the dictionary need a downloaded FreqDict, the bands and the lexical
+        density do not
 
     References:
         https://doi.org/10.3758/s13428-017-0924-4 (Kyle, Crossley, Berger 2018, TAALES)
@@ -163,11 +154,8 @@ class LexicalStats:
 
         Description:
             A proper noun is looked up by its form when the dictionary has it
-            (París - parís) and by its lemma otherwise, as the dictionary was
-            built: a form that is not capitalized in 90% of its occurrences
-            is counted under its lemma, so Estados of Estados Unidos is in
-            estado, and a verb tagged PROPN at the start of a sentence (Miró)
-            is in mirar
+            (París - parís) and by its lemma otherwise (Estados - estado, a verb
+            tagged PROPN as Miró - mirar)
         """
         return tuple(
             lemma_key(word) if proper and lemma not in self.freq_dict else lemma
@@ -243,8 +231,7 @@ class LexicalStats:
             dict[int, float]: Share of the words with a lemma of the top N for every bound N
 
         Raises:
-            ParameterError: If a bound is out of 1 and the size of the list (10000):
-                beyond the list every share would be the one of the top 10000
+            ParameterError: If a bound is out of 1 and the size of the list (10000)
         """
         size = len(load_top_lemmas())
         for band in bands:
@@ -297,13 +284,11 @@ def load_top_lemmas() -> dict[str, int]:
     Loading the embedded list of the most frequent lemmas
 
     Description:
-        The 10000 most frequent lemmas of the frequency dictionary of Google
-        Books Ngram (FreqDict) by decreasing frequency, the parts of speech
-        summed and the proper nouns left out; letters other than the Spanish
-        words (a, e, o, u, y, á, é, ó) and lemmas of two letters or Roman
-        numerals unknown to simplemma (pp, vs, xix) are left out too. The file
-        resources/google_books_top10000.txt is derived from Google Books Ngram
-        under CC BY 3.0
+        The 10000 most frequent lemmas of FreqDict by decreasing frequency, the
+        parts of speech summed, without the proper nouns, the letters that are
+        no words and the lemmas of two letters or Roman numerals unknown to
+        simplemma (pp, vs, xix). The file resources/google_books_top10000.txt
+        is derived from Google Books Ngram under CC BY 3.0
 
     Returns:
         dict[str, int]: Rank of every lemma, from 1
@@ -337,9 +322,8 @@ def calc_surprisal(lemmas: Sequence[str], freq_dict: FreqDict) -> float:
 
     Description:
         The mean over the words of −log2 P(w), where P(w) = ipm / 10⁶; a word
-        out of the dictionary gets the minimum frequency of the dictionary
-        (0.1 ipm), so the surprisal is defined for every word. The perplexity
-        of the text is 2 to the power of the surprisal
+        out of the dictionary gets its minimum frequency (0.1 ipm). The
+        perplexity is 2 to the power of the surprisal
 
     Arguments:
         lemmas (list[str]): Keys of the words (lemma_key)

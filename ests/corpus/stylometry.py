@@ -16,10 +16,8 @@ from ..utils import check_sequence, get_nlp, is_punctuation, iter_doc_tokens
 ZERO_SEGMENTS = 0.5
 # Components the parts of speech of a list of words do not need
 UNUSED_COMPONENTS = ["parser", "lemmatizer", "ner"]
-# A list of words is tagged in chunks, each with words of context on both sides:
-# the memory of the model stays bounded, and the context is four times what the
-# encoder of es_core_news_sm sees (depth 4, window 1), so the tags are those of
-# the whole list
+# A list of words is tagged in chunks to bound the memory; the margin of context is
+# wider than what the encoder sees, so the tags are those of the whole list
 CHUNK_SIZE = 1000
 CHUNK_MARGIN = 16
 
@@ -54,10 +52,7 @@ def frequency_table(
         descending mean relative frequency over the texts, alphabetically when
         equal; a value is the frequency of the unit in the text divided by the
         length of the text. Culling keeps the units that occur in at least the
-        given share of the texts, as in stylo; n_mfw is the number of the most
-        frequent units. The means and the shares of texts come from the
-        counters of the texts, and the table is built for the selected units
-        alone: the memory grows as texts × n_mfw and not texts × vocabulary
+        given share of the texts, as in stylo
 
     Arguments:
         corpus (dict[str, list[str]]): Units of the texts by the names of the texts
@@ -118,12 +113,8 @@ def z_scores(table: pd.DataFrame) -> pd.DataFrame:
     Standardizing a table of frequencies by column
 
     Description:
-        z = (x − mean) / sd with the sample standard deviation, as scale() of R
-        and stylo; a column with the same frequency in every text gives zeros.
-        Such a column is found by its values and not by a zero deviation: the
-        rounding of the mean turns the deviation of equal frequencies into
-        noise (0.1 in three texts gives 1.7e-17), and dividing by it would blow
-        the column up
+        z = (x − mean) / sd with the sample standard deviation; a column with
+        the same frequency in every text gives zeros
 
     Arguments:
         table (DataFrame): Table of relative frequencies
@@ -160,19 +151,14 @@ def delta(
     Computing the distances between texts by Burrows's Delta and its variants
 
     Description:
-        The texts are described by the z-scores of the relative frequencies of
-        the n most frequent units of the corpus (frequency_table, z_scores),
-        and the distances are computed as in stylo: burrows - the Manhattan
-        distance between the z-scores divided by n (Burrows 2002); quadratic -
-        the Euclidean one divided by n (Argamon 2008, dist.argamon); eder - the
-        Manhattan one with the weights (n − rank + 2) / n by the rank of the
-        unit (dist.eder); cosine - the cosine distance 1 − cos (Smith and
-        Aldridge 2011, Evert et al. 2015, dist.wurzburg)
-        The units can be lower-case word forms (the usual choice for Delta) or
+        Over the z-scores of the relative frequencies of the n most frequent
+        units (frequency_table, z_scores), as in stylo: burrows - the Manhattan
+        distance divided by n (Burrows 2002); quadratic - the Euclidean one
+        divided by n (Argamon 2008); eder - the Manhattan one with the weights
+        (n − rank + 2) / n by the rank of the unit; cosine - 1 − cos (Smith and
+        Aldridge 2011, Evert et al. 2015). The units are word forms or
         character N-grams (CharNgramsExtractor). At least three texts are
-        needed: with two, the z-scores degenerate to ±1/√2 and the distances do
-        not depend on the frequencies; the cosine distance of identical texts
-        is 0
+        needed: with two, the z-scores degenerate to ±1/√2
 
     References:
         https://aclanthology.org/W15-0709.pdf
@@ -225,17 +211,13 @@ def delta_profiles(
     Computing the distances by Delta from texts to reference texts
 
     Description:
-        Authorship attribution: the most frequent units, the culling and the
-        mean and deviation of the z-scores come from the reference texts
-        (the profiles of the authors) or from a separate set statistics - for
-        instance, from the training windows, when the references are joined
-        from them and the profiles are too few to estimate the spread of the
-        frequencies; the texts under test samples are described by the same
-        units and scaled by the same statistics, and the distances are
-        computed by the variant of Delta, as in delta. The nearest reference in
-        a row is the presumed author; the texts under test affect neither the
-        list of units nor the scaling, so the result for a text does not depend
-        on the texts passed along with it
+        Authorship attribution: the most frequent units and the mean and
+        deviation of the z-scores come from the reference texts or from a
+        separate set statistics (the training windows, when the references are
+        too few); the samples are scaled by the same statistics and compared
+        by the variant of Delta, as in delta. The nearest reference in a row is
+        the presumed author; the result for a sample does not depend on the
+        other samples
 
     Arguments:
         reference (dict[str, list[str]]): Units of the reference texts by name
@@ -344,16 +326,13 @@ def zeta(
     Computing Zeta - the markers of preferred and avoided words
 
     Description:
-        Every text of both corpora is split into segments of about
-        segment_size words (the number of segments is the ratio of the length
-        to the size rounded half up, at least one), and for a word the share of
-        the segments of each corpus where it occurs is computed (DP).
+        Every text is split into equal segments of about segment_size words,
+        and DP is the share of the segments of a corpus where a word occurs.
         Zeta = DP_target − DP_comparison from −1 to 1 (Burrows 2007, Craig and
-        Kinney 2009 as written in stylo; the classic Zeta of Craig,
-        DP_target + (1 − DP_comparison), is greater by one), the logarithmic
-        Zeta = log2(DP_target / DP_comparison) (Schöch et al. 2018), a zero
-        share replaced by half a segment. The list starts with the words the
-        target corpus prefers and ends with the avoided ones
+        Kinney 2009, as in stylo; the classic Zeta of Craig is greater by one),
+        the logarithmic Zeta = log2(DP_target / DP_comparison) (Schöch et al.
+        2018), a zero share replaced by half a segment. The list starts with
+        the words the target corpus prefers and ends with the avoided ones
 
     References:
         https://dh2010.cch.kcl.ac.uk/academic-programme/abstracts/papers/html/ab-659.html
@@ -486,8 +465,7 @@ def mendenhall_curve(words: Sequence[str]) -> dict[int, float]:
     Computing the Mendenhall curve - the distribution of the words by length
 
     Description:
-        The share of the words of every length in characters (Mendenhall 1887);
-        a profile of the author comparable between texts whatever their size
+        The share of the words of every length in characters (Mendenhall 1887)
 
     Arguments:
         words (list[str]): Words of the text
@@ -554,20 +532,11 @@ def function_words_profile(
     Computing the profile of the function words - the shares of the function parts of speech
 
     Description:
-        The shares of the adpositions, the coordinating and subordinating
-        conjunctions, the particles, the pronouns, the determiners and the
-        interjections (FUNCTION_UD_POS) among the words of the text; function
-        words do not depend on the topic of the text, so their profile is a
-        classic feature of authorship
-        The parts of speech are those of the annotation of a Doc that carries
-        them; the words of a list or of a Doc without them are tagged by the
-        model of nlp in their context, so they are to be passed in the order
-        of the text; the punctuation of the list helps the tagging and is not
-        counted. The list goes through the model in chunks of CHUNK_SIZE words
-        with CHUNK_MARGIN words of context on each side, so the memory does not
-        grow with its length and the tags are those of one sequence. In Spanish
-        Universal Dependencies the negation no is an adverb and not a
-        particle, so PART is rare
+        The shares of the parts of speech of FUNCTION_UD_POS among the words
+        of the text. A Doc keeps its own tags; the words of a list or of an
+        untagged Doc are tagged by the model in context, so they go in the
+        order of the text; punctuation helps the tagging and is not counted.
+        The negation no is an adverb in Spanish UD, so PART is rare
 
     Arguments:
         source (list[str]|Doc): Words of the text or Doc object

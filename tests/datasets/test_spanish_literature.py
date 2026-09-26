@@ -38,7 +38,7 @@ def dataset(tmp_path_factory):
     path = tmp_path_factory.mktemp("ests_data")
     shutil.copy(BUNDLED_ARCHIVE, path / module.ARCHIVE)
     dataset = SpanishLiterature(data_dir=path)
-    # The archive is in the repository next to the code, the network is not needed
+    # The archive is bundled with the code, the network is not needed
     dataset.download()
     return dataset
 

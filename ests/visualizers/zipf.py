@@ -22,10 +22,9 @@ def zipf(
     Plotting Zipf's law from a counter of the frequencies of words
 
     Description:
-        The frequencies of the words by rank; show_theory adds the theoretical
-        curve of Zipf's law with the exponent alpha (zipf_theory), show_fit the
-        curve of the Zipf-Mandelbrot law f(r) = C / (r + q)^s fitted to the
-        frequencies of the counter (fit_zipf_mandelbrot)
+        The frequencies of the words by rank; show_theory adds the curve of
+        zipf_theory, show_fit the Zipf-Mandelbrot law f(r) = C / (r + q)^s
+        fitted by fit_zipf_mandelbrot
 
     Arguments:
         counter (Counter): Counter of the frequencies of words
@@ -102,11 +101,10 @@ def zipf_theory(size: int, num_ranks: int, alpha: float = 1.5, ax: Axes | None =
     Plotting the theoretical Zipf's law with the given parameters
 
     Description:
-        The frequency of rank r is proportional to r^(-α), the curve scaled so
-        that the frequency of the first rank equals size
+        The frequency of rank r is size · r^(-α)
 
     Arguments:
-        size (int): Frequency of the first rank, the coefficient of size · r^-alpha
+        size (int): Frequency of the first rank
         num_ranks (int): Number of ranks
         alpha (float): Exponent α
         ax (Axes): Axes for the plot; if not given, a new figure is created

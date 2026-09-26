@@ -72,14 +72,11 @@ class PhonStats:
     Class for computing the phonostatistics of a text
 
     Description:
-        The statistics are counted over the sounds of the transcription of the
-        words (transcribe), since Spanish writes some sounds with two letters
-        (ch, ll, rr, qu), some letters with no sound (h, the u of que and gui)
-        and one letter for two sounds (x): vowels - a, e, i, o, u; sonorants -
-        m, n, ɲ, l, r; voiced obstruents - b, d, g, ʝ; voiceless obstruents - p,
-        t, k, f, θ, s, x, tʃ. The pronunciation is the one of the standard of
-        Spain, with yeísmo and distinción. The syllables are the ones of
-        syllabify, by the orthographic rules
+        The statistics are counted over the sounds of the transcription
+        (transcribe), not the letters, in the standard of Spain with yeísmo and
+        distinción: vowels - a, e, i, o, u; sonorants - m, n, ɲ, l, r; voiced
+        obstruents - b, d, g, ʝ; voiceless obstruents - p, t, k, f, θ, s, x,
+        tʃ. The syllables are the ones of syllabify
 
     Example:
         >>> from ests import PhonStats
@@ -236,8 +233,7 @@ def transcribe(word: str) -> tuple[str, ...]:
 
     Description:
         The word is split into syllables (syllabify) and every syllable is read
-        by the rules of the Spanish orthography, which are regular enough to go
-        without a dictionary:
+        by the rules of the Spanish orthography:
             the vowels lose their accents and their diaeresis (á - a, ü - u);
             h has no sound (hora - o r a), but hi before a vowel at the start of
             a syllable is ʝ (hielo, deshielo), and ch is one sound, tʃ;
@@ -248,8 +244,7 @@ def transcribe(word: str) -> tuple[str, ...]:
             rr and r are one r; ñ is ɲ, j is x, v is b, z is θ;
             x is k s, and s at the start of a word (examen, xilófono);
             w is the vowel u (whisky)
-        The characters that are no Spanish letters (digits, hyphens) are left
-        out. The results are cached by word form
+        The characters that are no Spanish letters (digits, hyphens) are left out
 
     Arguments:
         word (str): Word
@@ -267,7 +262,7 @@ def transcribe(word: str) -> tuple[str, ...]:
 
 @lru_cache(maxsize=CACHE_SIZE)
 def _syllable_sounds(word: str) -> tuple[tuple[str, ...], ...]:
-    """Sounds of every syllable of a word, with a cache by word - see transcribe"""
+    """Sounds of every syllable of a word - see transcribe"""
     syllables = syllabify(word)
     return tuple(
         sounds
@@ -331,10 +326,9 @@ def cv_pattern(word: str) -> str:
 
     Description:
         The vowels are written V and the consonants C, over the sounds of the
-        transcription (transcribe): queso is CVCV, hora is VCV, examen VCCVCVC.
-        A syllable is read as a word of its own, so its initial x is s, as at
-        the start of a word: xi is CV, while the syllable xi of México counts
-        as CCV in PhonStats
+        transcription (transcribe): hora is VCV, examen VCCVCVC. A syllable is
+        read as a word of its own, so its initial x is s: xi is CV, while the
+        syllable xi of México counts as CCV in PhonStats
 
     Arguments:
         word (str): Word or syllable
@@ -384,10 +378,8 @@ def calc_consonant_clusters(text: Sequence[str]) -> dict[int, int]:
 
     Description:
         A cluster is a run of consonant sounds inside a word, across the
-        syllables: instrumento has the clusters n s t r (4), m (1) and n t (2).
-        The clusters of length 1 are the single consonants between vowels or at
-        the edges of a word. The digraphs are one sound (calle, perro, chico),
-        and x is two (extra - k s t r)
+        syllables, a single consonant included: instrumento has n s t r, m and
+        n t. The digraphs are one sound (calle, chico), x is two (extra - k s t r)
 
     Arguments:
         text (list[str]): List of words
@@ -414,7 +406,7 @@ def _consonant_clusters(counts: Counter[str]) -> dict[int, int]:
 
 @lru_cache(maxsize=CACHE_SIZE)
 def _clusters(word: str) -> tuple[int, ...]:
-    """Lengths of the consonant clusters of a word in order, with a cache by word"""
+    """Lengths of the consonant clusters of a word in order"""
     sizes = []
     size = 0
     for sound in transcribe(word):
@@ -435,10 +427,8 @@ def calc_hiatus(text: Sequence[str]) -> int:
 
     Description:
         A hiatus is two vowels next to each other in two syllables of a word,
-        as syllabify splits them: po-e-ta, dí-a, le-er, a-é-re-o (two). A
-        silent h between the vowels does not break the hiatus (bú-ho, a-ho-ra),
-        and the vowels of a diphthong are one syllable and no hiatus (cie-lo,
-        ciu-dad)
+        as syllabify splits them: po-e-ta, dí-a, a-é-re-o (two). A silent h
+        between the vowels keeps the hiatus (bú-ho), a diphthong is none (cie-lo)
 
     Arguments:
         text (list[str]): List of words
@@ -461,7 +451,7 @@ def _hiatus(counts: Counter[str]) -> int:
 
 @lru_cache(maxsize=CACHE_SIZE)
 def _word_hiatus(word: str) -> int:
-    """Number of hiatuses of a word, with a cache by word"""
+    """Number of hiatuses of a word"""
     return sum(
         1
         for previous, following in pairwise(_syllable_sounds(word))
@@ -496,7 +486,6 @@ def _cv_entropy(counts: Counter[str]) -> float:
     total = sum(patterns.values())
     if not total:
         return nan
-    # A single pattern gives -0.0, which prints with a sign
     return -sum(count / total * log2(count / total) for count in patterns.values()) or 0.0
 
 
@@ -517,10 +506,7 @@ def _sound_windows(
     Numbers of the words with every sound in every window and in the whole text
 
     Description:
-        A matrix of word forms by sounds is indexed by the words of the text,
-        and the cumulative sums over the words give the counts of the windows as
-        a difference with a shift of a window; None for a text shorter than the
-        window
+        None for a text shorter than the window
     """
     n_words = len(words)
     if n_words < window_len:
@@ -563,15 +549,12 @@ def calc_alliteration(text: Sequence[str], window_len: int = PHON_WINDOW_LEN) ->
     Computing the alliteration index
 
     Description:
-        The ratio of the observed number of windows of window_len neighbouring
-        words where one consonant sound occurs in two words or more to the
-        number expected if the consonants were spread over the words at
-        random, summed over the consonants. The expected number comes from the
-        frequencies of the consonants in the text itself, so the index tells
-        whether the repetitions cluster in neighbouring words, not how frequent
-        a sound is: about 1 - the repetitions are random, well above 1 -
-        alliteration. The consonants are the sounds of the transcription, so
-        casa and queso repeat k, and cena and casa do not
+        The number of windows of window_len neighbouring words where a
+        consonant sound occurs in two words or more, summed over the
+        consonants, to the number expected if the consonants of the text were
+        spread over its words at random: about 1 - random repetitions, well
+        above 1 - alliteration. The sounds count, not the letters: casa and
+        queso repeat k, cena and casa do not
 
     Arguments:
         text (list[str]): List of words
@@ -588,13 +571,8 @@ def calc_assonance(text: Sequence[str], window_len: int = PHON_WINDOW_LEN) -> fl
     Computing the assonance index
 
     Description:
-        The ratio of the observed number of windows of window_len neighbouring
-        words where one vowel occurs in two words or more to the number
-        expected if the vowels were spread over the words at random, summed
-        over the vowels. The expected number comes from the frequencies of the
-        vowels in the text itself, so the index tells whether the repetitions
-        cluster in neighbouring words, not how frequent a sound is. Every vowel
-        counts, stressed or not
+        The index of calc_alliteration over the vowels, stressed or not: about
+        1 - random repetitions, well above 1 - assonance
 
     Arguments:
         text (list[str]): List of words

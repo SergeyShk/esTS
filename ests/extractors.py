@@ -78,10 +78,7 @@ class SentsExtractor(Extractor):
         ('No tengas 100 euros', 'ten 100 amigos')
 
     Description:
-        The default tokenizer is the rule-based sentence splitter
-        ests.utils.sentenize: it knows the inverted marks "¿" and "¡",
-        quotes, ellipses, abbreviations and capital initials, and takes
-        a blank line as a sentence boundary
+        The default tokenizer is the rule-based splitter ests.utils.sentenize
 
     Arguments:
         tokenizer (pattern|callable): Tokenizer or regular expression
@@ -117,7 +114,7 @@ class SentsExtractor(Extractor):
 
         Returns:
             sents (tuple[str]): Tuple of extracted sentences without empty
-                and whitespace-only chunks (re.split leaves them after a final separator)
+                and whitespace-only ones
 
         Raises:
             SourceTypeError: If the tokenizer is set incorrectly
@@ -144,17 +141,11 @@ class WordsExtractor(Extractor):
         ('tener', 'euro', 'tener', 'amigo', 'tener_euro', 'euro_tener', 'tener_amigo')
 
     Description:
-        The default tokenizer is the rule-based tokenizer of the spaCy
-        Spanish language class (ests.utils.tokenize), which needs no trained
-        model; lemmas come from simplemma (ests.utils.lemmatize).
-        The filters are applied in order: punctuation, numbers, lemmatization,
-        lower case, stop words, word length. Stop words are compared
-        case-insensitively, so a lower-case list also filters "Los" or "La"
-        at the start of a sentence (a ready list is
-        spacy.lang.es.stop_words.STOP_WORDS, which also holds frequent verbs
-        like tener). Numbers include signed numbers, ranges, fractions,
-        dates, times, percentages and ordinals: -5, +7, 1990-1995, 1.500,50,
-        12/03/2020, 3:30, 10%, 3.º, 1.ª, 2do
+        The default tokenizer is ests.utils.tokenize, the lemmas come from
+        ests.utils.lemmatize. The filters are applied in order: punctuation,
+        numbers, lemmatization, lower case, stop words, word length. Numbers
+        include signed numbers, ranges, fractions, dates, times, percentages
+        and ordinals: -5, 1990-1995, 1.500,50, 12/03/2020, 3:30, 10%, 3.º, 2do
 
     Arguments:
         tokenizer (pattern|callable): Tokenizer or regular expression
@@ -219,12 +210,11 @@ class WordsExtractor(Extractor):
 
         Returns:
             words (tuple[str]): Tuple of extracted words without empty ones
-                (re.split leaves them after a final separator)
 
         Raises:
             SourceTypeError: If the tokenizer is set incorrectly
         """
-        # re.split leaves an empty string after a final separator, as for sentences
+        # re.split leaves an empty string after a final separator
         words = (word for word in self._tokenize(text) if word)
         if self.filter_punct:
             words = (word for word in words if not is_punctuation(word))
@@ -293,13 +283,10 @@ class CharNgramsExtractor(Extractor):
         ('gato', 'dorm', 'ormí', 'rmía', 'vent', 'enta', 'ntan', 'tana', 'perr', 'erro', 'suel', 'uelo')
 
     Description:
-        N-grams are taken with a sliding window over the string, whitespace
-        runs are collapsed into a single space beforehand, punctuation marks
-        are kept (Stamatatos 2009); with within_words N-grams do not cross
-        word boundaries: the text is split into words by the tokenizer,
-        punctuation is dropped, words shorter than N yield no N-grams.
-        Character N-grams are a feature for stylometry and authorship
-        attribution: they are taken as the units of a text instead of words
+        A sliding window over the text with whitespace runs collapsed into one
+        space and punctuation kept (Stamatatos 2009); with within_words, over
+        each word of the tokenizer, punctuation dropped, so words shorter than
+        N yield no N-grams
 
     Arguments:
         n (int): N-gram length in characters

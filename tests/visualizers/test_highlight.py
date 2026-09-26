@@ -115,7 +115,7 @@ def test_layers_default_doc(doc):
 
 
 def test_layers_default_blank_doc():
-    # a blank pipeline gives no parse; its sentences come from the rules of SentsExtractor
+    # a blank pipeline gives no parse
     ht = highlight(spacy.blank("es")(text))
     assert ht.layers == ("long_sents", "complex_words", "cliches")
 
@@ -164,7 +164,7 @@ def test_doc_without_the_sentence_boundaries(nlp):
 
 @pytest.mark.parametrize("layer", sorted(HIGHLIGHT_SYNTAX_LAYERS))
 def test_syntax_layers_without_the_lemmas(nlp, layer):
-    # the syntactic layers read the lemmas: ser of the passive, the light verbs
+    # the syntactic layers read the lemmas
     doc = nlp(text, disable=["lemmatizer"])
     with pytest.raises(ParameterError, match="parse and the lemmas"):
         highlight(doc, layers=layer)
@@ -240,7 +240,7 @@ def test_find_long_sents():
 
 
 def test_complex_words(ht):
-    # from 4 syllables by default: at 3 half the content words would be complex
+    # from 4 syllables by default
     assert "expedientes" in spans(ht, "complex_words")
     assert "comisión" not in spans(ht, "complex_words")
     three = highlight(text, layers="complex_words", complex_syl_factor=3)
@@ -276,8 +276,7 @@ def test_rare_words():
 
 
 def test_rare_words_proper_nouns(nlp):
-    # a proper noun of a tagged Doc keeps its form, parís, beyond the top 10000; a string
-    # without the parts of speech takes the lemma parir, as LexicalStats would
+    # a proper noun of a tagged Doc keeps its form, parís; a string takes the lemma parir
     doc = nlp("Viajó a París en tren.")
     assert "París" in spans(highlight(doc, layers="rare_words"), "rare_words")
     assert "París" not in spans(highlight(doc.text, layers="rare_words"), "rare_words")
@@ -319,7 +318,7 @@ def test_connectors(ht):
 
 
 def test_connectors_pos():
-    # a one-word connector counts with its part of speech only, pues as a verb is no connector
+    # pues tagged as a verb is no connector
     words = [Word(0, 4, "Pues"), Word(5, 7, "no"), Word(8, 12, "vino")]
     sents = [Sent(0, 13, 3)]
     assert len(find_connector_highlights(words, sents)) == 1
@@ -376,7 +375,6 @@ def test_doc_long_sents(nlp):
 
 
 def test_doc_text_layers(doc):
-    # the layers that read the words give the same fragments for a Doc and a string
     for layer in ("complex_words", "compound_prepositions", "cliches", "parentheticals"):
         assert spans(highlight(doc, layers=layer), layer) == spans(
             highlight(text, layers=layer), layer
@@ -405,7 +403,6 @@ def test_alliteration():
 
 
 def test_alliteration_within_sentences():
-    # the repetition is looked for inside a sentence, not across the period
     sample = "Boga. Boga."
     ht = highlight(sample, layers="alliteration", alliteration_threshold=0.5)
     assert ht.counts == {"alliteration": 0}
@@ -431,7 +428,7 @@ def test_calc_alliteration_runs():
 
 
 def test_calc_alliteration_runs_skips_the_stopwords():
-    # que neither breaks nor continues a run of k: the model of chance does not fit it
+    # que neither breaks nor continues a run of k
     assert calc_alliteration_runs(["que", "hacía", "y", "de", "que", "aquel"]) == []
     words = ["casa", "que", "con", "queso", "fresco"]
     assert calc_alliteration_runs(words, 0.01) == [(0, 5, "k")]
