@@ -2435,7 +2435,7 @@
 <p><strong>ests.exceptions</strong></p>
 </div>
 <h2 id="exceptions">Exceptions<a class="headerlink" href="#exceptions" title="Permanent link">&para;</a></h2>
-<p>All library exceptions inherit the base class <code>EstsError</code> and one of the built-in Python classes, so they can be caught both by their esTS name and by the familiar built-in type - existing code with <code>except ValueError</code> keeps working.</p>
+<p>All library exceptions inherit the base class <code>EstsError</code> and a built-in Python class, so they can be caught by either, and <code>except ValueError</code> keeps working.</p>
 <table>
 <thead>
 <tr>
@@ -2453,17 +2453,17 @@
 <tr>
 <td style="text-align: left;"><code>SourceTypeError</code></td>
 <td style="text-align: left;"><code>TypeError</code></td>
-<td style="text-align: left;">The data source is neither a string nor a <code>Doc</code>, a string or a <code>Doc</code> is passed where a list of words is expected, the texts of a visualizer are not a list of lists of words, the frequencies of <code>zipf</code> are not a <code>Counter</code>, the measure of <code>fingerprinting</code> or the tokenizer is not callable, the tokenizer returns a non-iterable object, a path is neither a string nor a <code>Path</code></td>
+<td style="text-align: left;">The source is not a string or a <code>Doc</code>; a string or a <code>Doc</code> is passed where a list of words is expected; the texts of a visualizer are not lists of words; the frequencies of <code>zipf</code> are not a <code>Counter</code>; the measure of <code>fingerprinting</code> or the tokenizer is not callable, or the tokenizer returns a non-iterable; a path is not a string or a <code>Path</code>; the stopwords or the clichés (style metrics, highlighting) are a string, not a list</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>SourceError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">The source has no words, no sentences, no texts or no collocations, lacks the annotation a statistic needs (the parts of speech, the lemmas, the dependency parse), is a string longer than the <code>max_length</code> of the pipeline, or no unit is left after culling; Delta and the principal components get fewer than three texts, a matrix of distances is not square or has an infinite distance, the pipeline of <code>function_words_profile</code> does not tag the parts of speech, no text of a comparison has a window of enough words, the keyword of <code>wordtree</code> is not found or has no word next to it</td>
+<td style="text-align: left;">The source has no words, sentences, texts or collocations, lacks the annotation a statistic needs (parts of speech, lemmas, dependency parse), is a string longer than the <code>max_length</code> of the pipeline (for the verbal nouns, has a sentence longer than it), or nothing is left after culling; Delta or the principal components get fewer than three texts; a matrix of distances is not square or has an infinite distance; the pipeline of <code>function_words_profile</code> does not tag parts of speech; no text of a comparison has a window of enough words; the keyword of <code>wordtree</code> is not found or has no word next to it</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>ParameterError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">A threshold, window, segment size, number of items, logarithm base, confidence level, number of bootstrap samples or bound of a frequency band (1-10,000) is out of range, a limit of records is negative, the sizes of the parts of <code>dispersion</code> do not add up to the words, the keyword of <code>kwic</code> is empty; an unknown preset, scale, metric name, measure, variant, field of a keyword, genre or part of speech</td>
+<td style="text-align: left;">Out of range: a threshold, window, segment size, number of items, logarithm base, confidence level, number of bootstrap samples or bound of a frequency band (1-10,000); a negative limit of records; parts of <code>dispersion</code> that do not add up to the words; an empty keyword of <code>kwic</code>. Unknown: a preset, scale, metric name, measure, variant, keyword field, genre or part of speech. Highlighting: an unknown layer or one the source does not allow (syntactic layers and verbal nouns on a string or on a <code>Doc</code> without the parse or the lemmas), layers that are neither a list nor a string, an alliteration threshold outside (0, 1], a number of words of a long sentence or of syllables of a complex word below 1</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>UnknownStatError</code></td>
@@ -2473,24 +2473,24 @@
 <tr>
 <td style="text-align: left;"><code>DatasetNotFoundError</code></td>
 <td style="text-align: left;"><code>OSError</code></td>
-<td style="text-align: left;">The model of spaCy is not installed or a dataset is not downloaded; the message shows the command that brings what is missing</td>
+<td style="text-align: left;">The spaCy model is not installed or a dataset is not downloaded; the message gives the command that fixes it</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>DataFileError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">The archive of a dataset is not a ZIP or TAR archive, cannot be extracted, has no files or has paths outside its directory, or the directory to extract it into cannot be created; a line of the file of a dataset cannot be read</td>
+<td style="text-align: left;">The archive of a dataset is not ZIP or TAR, cannot be extracted, is empty or has paths outside its directory, or its target directory cannot be created; a line of a dataset file cannot be read</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>DownloadError</code></td>
 <td style="text-align: left;"><code>RuntimeError</code></td>
-<td style="text-align: left;">The file could not be downloaded, its directory could not be created, or it failed the checksum verification twice</td>
+<td style="text-align: left;">The file could not be downloaded or its directory created, or it failed the checksum twice</td>
 </tr>
 </tbody>
 </table>
 <p>The classes are available from <code>ests</code> and from <code>ests.exceptions</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code>DatasetNotFoundError</code> is what a statistic of Universal Dependencies raises when the model <code>es_core_news_sm</code> is not installed, which is the first thing a new reader meets: <code>MorphStats("El gato duerme")</code> without the model says how to download it. The datasets raise it too while they are not downloaded (<code>SpanishLiterature().get_texts()</code> before <code>download()</code>), and so do the statistics of <code>LexicalStats</code> by the frequency dictionary; <code>DownloadError</code> comes from a download that failed or an archive that failed its SHA-256 checksum twice, <code>DataFileError</code> from an archive that cannot be extracted.</p>
+<p><code>DatasetNotFoundError</code> is the first error a new user usually meets: <code>MorphStats("El gato duerme")</code> without the model <code>es_core_news_sm</code> raises it with the download command. <code>SpanishLiterature().get_texts()</code> before <code>download()</code> and the statistics of <code>LexicalStats</code> by the frequency dictionary raise it too.</p>
 </div>
 <div class="admonition example">
 <p class="admonition-title">Example</p>

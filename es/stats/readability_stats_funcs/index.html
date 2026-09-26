@@ -2702,7 +2702,7 @@
 <p><strong>ests.readability_stats.calc_flesch_reading_easy()</strong></p>
 </div>
 <p>Cálculo de la facilidad de lectura de Flesch con coeficientes para el español. Cuanto mayor es el valor, más fácil es leer el texto; la escala va de 0 a 100.</p>
-<p>Los coeficientes por defecto son los de la <em>fórmula de perspicuidad</em> de Szigriszt-Pazos (1993), que Barrio-Cantalejo et al. (2008) validaron con textos para pacientes y dotaron de la escala INFLESZ:</p>
+<p>Los coeficientes por defecto son los de la <em>fórmula de perspicuidad</em> de Szigriszt-Pazos (1993), que se lee en la escala INFLESZ de Barrio-Cantalejo et al. (2008):</p>
 <table>
 <thead>
 <tr>
@@ -2739,7 +2739,7 @@
 </tr>
 </tbody>
 </table>
-<p>Los coeficientes de Fernández Huerta (1959) están disponibles con el <a href="../readability_stats/#presets">preajuste</a> <code>classic</code>. Él imprimió el último término como <code>1.02</code> por el número de frases por cada 100 palabras; Law (2011) mostró que eso invierte la fracción de la fórmula de Flesch en la que se basó la adaptación, así que se usa la longitud media de la oración, como en koRpus y textstat.</p>
+<p>Los coeficientes de Fernández Huerta (1959) están disponibles con el <a href="../readability_stats/#presets">preajuste</a> <code>classic</code>, con la corrección de Law (2011): el último término toma la longitud media de la oración.</p>
 <p>Fórmula:</p>
 <div class="arithmatex">\[
 c-a\times\frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}}-b\times\frac{\textrm{Número de sílabas}}{\textrm{Número de palabras}}
@@ -2798,7 +2798,7 @@ c-a\times\frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}}-b\ti
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_gutierrez_polini_index()</strong></p>
 </div>
-<p>Cálculo de la <em>fórmula de comprensibilidad</em> de Gutiérrez de Polini (1972), la primera fórmula concebida para el español y no adaptada del inglés. Cuanto mayor es el valor, más fácil es el texto. Se ajustó con textos escolares de sexto grado y no tiene escala propia: los valores de la prosa corriente están entre 30 y 50, y un texto por encima de 70 lo lee un niño pequeño.</p>
+<p>Cálculo de la <em>fórmula de comprensibilidad</em> de Gutiérrez de Polini (1972). Cuanto mayor es el valor, más fácil es el texto. Se ajustó con textos escolares de sexto grado y no tiene escala propia: la prosa corriente está entre 30 y 50, y un texto por encima de 70 lo lee un niño pequeño.</p>
 <p>Fórmula:</p>
 <div class="arithmatex">\[
 95.2-9.7\times\frac{\textrm{Número de letras}}{\textrm{Número de palabras}}-0.35\times\frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}}
@@ -2880,7 +2880,7 @@ c-a\times\frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}}-b\ti
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_mu_index()</strong></p>
 </div>
-<p>Cálculo de la Legibilidad µ de Muñoz Baquedano y Muñoz Urra (2006), que mide la variabilidad de la longitud de las palabras: la media del número de letras por palabra dividida por su varianza. La varianza es la muestral, dividida por <code>n − 1</code>, que es la <em>cuasivarianza</em> de los autores: la varianza poblacional multiplicada por el factor <code>n / (n − 1)</code> que lleva su fórmula impresa. Leído así, el ejemplo resuelto de su manual sale exacto (18 palabras, media 6.9444, varianza 13.5844, µ = 51.12); aplicar el factor una segunda vez, sobre la varianza muestral, daría 54.13. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (<code>nan</code>). Cuanto mayor es el valor, más fácil es el texto:</p>
+<p>Cálculo de la Legibilidad µ de Muñoz Baquedano y Muñoz Urra (2006), que mide la variabilidad de la longitud de las palabras: la media del número de letras por palabra dividida por su varianza. La varianza es la muestral, dividida por <code>n − 1</code> (la <em>cuasivarianza</em> de los autores), que reproduce el ejemplo resuelto de su manual. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (<code>nan</code>). Cuanto mayor es el valor, más fácil es el texto:</p>
 <table>
 <thead>
 <tr>
@@ -2993,7 +2993,7 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_sol_grade()</strong></p>
 </div>
-<p>Cálculo del grado SOL. Contreras et al. (1999) aplicaron el índice SMOG a textos en español y a sus traducciones al inglés y ajustaron la conversión <code>E = −2.51 + 0.74·S</code>, donde <code>S</code> es el índice SMOG del texto español y <code>E</code> el grado de la escala inglesa, los años de escolaridad; las fórmulas SOL deben su nombre a la palabra española sol. Cuanto mayor es el valor, más difícil es el texto.</p>
+<p>Cálculo del grado SOL de Contreras et al. (1999), la conversión <code>E = −2.51 + 0.74·S</code>, donde <code>S</code> es el índice SMOG del texto español y <code>E</code> el grado de la escala inglesa, los años de escolaridad. Cuanto mayor es el valor, más difícil es el texto.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3261,7 +3261,7 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <div class="admonition info">
 <p><strong>ests.readability_stats.flesch_reading_easy_to_grade()</strong></p>
 </div>
-<p>Conversión de la facilidad de lectura de Flesch en años de escolaridad, usada para incluir la facilidad de lectura en el grado de consenso por analogía con <code>text_standard</code> de textstat. Los umbrales son los de la escala del preajuste, porque el mismo valor significa cosas distintas en cada escala.</p>
+<p>Conversión de la facilidad de lectura de Flesch en años de escolaridad para el grado de consenso. Los umbrales son los de la escala del preajuste.</p>
 <p>Con el preajuste <code>general</code>, a través de los tipos de texto de los niveles INFLESZ y las etapas escolares de España:</p>
 <table>
 <thead>
@@ -3299,7 +3299,7 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 </tr>
 </tbody>
 </table>
-<p>Con el preajuste <code>classic</code>, a través de la tabla de interpretación de Flesch, cuyos niveles conservó Fernández Huerta: <code>90-100</code> - 5, <code>80-90</code> - 6, <code>70-80</code> - 7, <code>60-70</code> - 8.5, <code>50-60</code> - 10, <code>40-50</code> - 11, <code>30-40</code> - 12, por debajo de <code>30</code> - 13.</p>
+<p>Con el preajuste <code>classic</code>, a través de la tabla de interpretación de Flesch que conservó Fernández Huerta: <code>90-100</code> - 5, <code>80-90</code> - 6, <code>70-80</code> - 7, <code>60-70</code> - 8.5, <code>50-60</code> - 10, <code>40-50</code> - 11, <code>30-40</code> - 12, por debajo de <code>30</code> - 13.</p>
 <p>Los valores por encima de 100 corresponden al primer grado de la escala.</p>
 <p>Parámetros:</p>
 <table>
@@ -3330,7 +3330,7 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_consensus_grade()</strong></p>
 </div>
-<p>Cálculo del grado de consenso: la mediana de los valores redondeados de las fórmulas de grado, por analogía con <code>text_standard</code> de textstat, que usa la moda; la mediana resiste mejor una fórmula desviada. Los valores se redondean con el medio hacia arriba. La facilidad de lectura se convierte con <code>flesch_reading_easy_to_grade</code> según la escala del preajuste y se añade sin redondear.</p>
+<p>Cálculo del grado de consenso: la mediana de los valores de las fórmulas de grado, cada uno redondeado con el medio hacia arriba. La facilidad de lectura se convierte con <code>flesch_reading_easy_to_grade</code> según la escala del preajuste y se añade sin redondear.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3374,7 +3374,7 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <div class="admonition info">
 <p><strong>ests.readability_stats.grade_to_age()</strong></p>
 </div>
-<p>La etapa escolar y la edad del lector según el valor de una fórmula de grado, por las etapas del sistema educativo español contadas en años de escolaridad desde el primer curso de primaria a los seis años (véase la tabla de la <a href="../readability_stats/#interpretation">interpretación</a>). El valor se redondea con el medio hacia arriba, los valores por debajo de 1 corresponden a los cursos 1-3.</p>
+<p>La etapa del sistema educativo español y la edad del lector según el valor de una fórmula de grado (véase la tabla de la <a href="../readability_stats/#interpretation">interpretación</a>). El valor se redondea con el medio hacia arriba, los valores por debajo de 1 corresponden a los cursos 1-3.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3406,7 +3406,7 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_reading_time()</strong></p>
 </div>
-<p>Cálculo del tiempo de lectura de un texto en minutos. La velocidad por defecto es la de lectura silenciosa de los adultos en español, 278 palabras por minuto: la media de seis estudios en el metaanálisis de Brysbaert (2019), donde la lectura en voz alta da 191. Las normas por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) están en <code>ests.constants.READING_SPEED_NORMS</code> como pares (en voz alta, en silencio):</p>
+<p>Cálculo del tiempo de lectura de un texto en minutos. La velocidad por defecto es la de lectura silenciosa de los adultos en español, 278 palabras por minuto, según el metaanálisis de Brysbaert (2019). Las normas por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) están en <code>ests.constants.READING_SPEED_NORMS</code> como pares (en voz alta, en silencio):</p>
 <table>
 <thead>
 <tr>

@@ -3164,7 +3164,7 @@
 <p><strong>ests.diversity_stats.calc_ttr()</strong></p>
 </div>
 <p>Cálculo del Type-Token Ratio (TTR).</p>
-<p>La forma más simple y más criticada de calcular la diversidad léxica, que ignora el efecto de la longitud del texto.</p>
+<p>La medida más simple de la diversidad léxica; no está corregida por la longitud del texto.</p>
 <p>Fórmula:</p>
 <div class="arithmatex">\[
 \frac{\textrm{Número de lexemas}}{\textrm{Número de palabras}}
@@ -3283,7 +3283,7 @@
 <p>Una modificación logarítmica del TTR (Summer, 1966).</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>El valor depende de la base del logaritmo: 10 por defecto, como en koRpus y lexical-diversity; LexicalRichness, textcomplexity y zipfR usan el logaritmo natural. Véanse las <a href="../diversity_stats/#conventions">convenciones</a>.</p>
+<p>El valor depende de la base del logaritmo, 10 por defecto. Véanse las <a href="../diversity_stats/#conventions">convenciones</a>.</p>
 </div>
 <p>Fórmula:</p>
 <div class="arithmatex">\[
@@ -3319,10 +3319,10 @@
 <p><strong>ests.diversity_stats.calc_mttr()</strong></p>
 </div>
 <p>Cálculo del Maas Type-Token Ratio (MTTR).</p>
-<p>Una modificación logarítmica del TTR (Maas, 1972). La métrica más estable respecto a la longitud del texto.</p>
+<p>Una modificación logarítmica del TTR (Maas, 1972).</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>El valor depende de la base del logaritmo: 10 por defecto, como en koRpus y lexical-diversity; LexicalRichness, textcomplexity y zipfR usan el logaritmo natural. Véanse las <a href="../diversity_stats/#conventions">convenciones</a>.</p>
+<p>El valor depende de la base del logaritmo, 10 por defecto. Véanse las <a href="../diversity_stats/#conventions">convenciones</a>.</p>
 </div>
 <p>Fórmula:</p>
 <div class="arithmatex">\[
@@ -3361,7 +3361,7 @@
 <p>Una modificación logarítmica del TTR (Dugast, 1978).</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>El valor depende de la base del logaritmo: 10 por defecto, como en koRpus y lexical-diversity; LexicalRichness, textcomplexity y zipfR usan el logaritmo natural. Véanse las <a href="../diversity_stats/#conventions">convenciones</a>.</p>
+<p>El valor depende de la base del logaritmo, 10 por defecto. Véanse las <a href="../diversity_stats/#conventions">convenciones</a>.</p>
 </div>
 <p>Fórmula:</p>
 <div class="arithmatex">\[
@@ -3406,7 +3406,7 @@
 </ol>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>La ventana por defecto es de 50 palabras, como en lexical-diversity, TAALED y textacy; quanteda y koRpus usan 100. En los textos más cortos que la ventana se devuelve el TTR de todo el texto.</p>
+<p>En los textos más cortos que la ventana se devuelve el TTR de todo el texto.</p>
 </div>
 <p>Parámetros:</p>
 <table>
@@ -3447,7 +3447,7 @@
 </ol>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>El segmento por defecto es de 50 palabras, como en lexical-diversity, TAALED y textacy; quanteda y koRpus usan 100. En los textos más cortos que el segmento se devuelve el TTR de todo el texto; un último segmento incompleto se descarta.</p>
+<p>En los textos más cortos que el segmento se devuelve el TTR de todo el texto; un último segmento incompleto se descarta.</p>
 </div>
 <p>Parámetros:</p>
 <table>
@@ -3482,14 +3482,14 @@
 <p>Una modificación del MSTTR (McCarthy, 2005). Independiente de la longitud del texto.</p>
 <p>Algoritmo:</p>
 <ol>
-<li>El texto se divide en factores: tramos en los que el TTR baja hasta el umbral 0.72 inclusive (<code>TTR &lt;= 0.72</code>; lexical-diversity y TAALED usan una comparación estricta, véanse las <a href="../diversity_stats/#conventions">convenciones</a>)</li>
+<li>El texto se divide en factores: tramos en los que el TTR baja hasta el umbral 0.72 inclusive (<code>TTR &lt;= 0.72</code>, véanse las <a href="../diversity_stats/#conventions">convenciones</a>)</li>
 <li>Un factor incompleto al final del texto cuenta parcialmente, en proporción a lo que su TTR se acercó al umbral</li>
 <li>El número de palabras se divide por el número de factores</li>
 </ol>
 <p>La versión refinada del algoritmo hace dos pasadas por el texto, hacia delante y hacia atrás, y promedia los valores (McCarthy &amp; Jarvis, 2010).</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>La longitud mínima del factor procede de lexical-diversity de Kyle y no es estándar: koRpus la aplica solo a MA-MTLD, LexicalRichness y textcomplexity no la aplican. El umbral 0.72 varía entre 0.66 y 0.75 en la bibliografía. Si ningún factor se completa y el TTR nunca baja de 1, se devuelve infinito.</p>
+<p>La longitud mínima del factor no es estándar (lexical-diversity de Kyle). Si ningún factor se completa y el TTR nunca baja de 1, se devuelve infinito.</p>
 </div>
 <p>Parámetros:</p>
 <table>
@@ -3532,7 +3532,6 @@
 <p class="admonition-title">Aviso</p>
 <p>Si ningún factor se completa, la función devuelve <code>nan</code>. La métrica es inestable en textos cortos.</p>
 </div>
-<p>Los factores de todos los inicios se calculan a partir de la matriz de apariciones anteriores de cada palabra en bloques de inicios con numpy, en lugar de reconstruir conjuntos de lexemas (<code>_mtld_factor_lengths</code>): el número de lexemas de un tramo es el número de posiciones cuya aparición anterior está antes del inicio del tramo. El tiempo es lineal en la longitud del texto; los valores coinciden con la enumeración directa.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3651,8 +3650,7 @@
 <p><strong>ests.diversity_stats.calc_simpson_index()</strong></p>
 </div>
 <p>Cálculo del <a href="https://en.wikipedia.org/wiki/Diversity_index#Simpson_index">índice de Simpson</a>.</p>
-<p>El índice se usa ampliamente en biología para describir la probabilidad de que dos individuos extraídos al azar de una comunidad indefinidamente grande pertenezcan a especies distintas. Con ciertos supuestos describe también la diversidad léxica de un texto.</p>
-<p>Se calcula en la forma clásica sin reemplazo, como en quanteda, LexicalRichness y zipfR. Cuanto menor es el valor, más rico es el vocabulario.</p>
+<p>La probabilidad de que dos palabras extraídas del texto al azar sin reemplazo sean el mismo lexema. Cuanto menor es el valor, más rico es el vocabulario.</p>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
 <p>En los textos de menos de dos palabras el índice no está definido; la función devuelve <code>nan</code>. Lo mismo vale para el índice de Simpson inverso y el índice de Gini-Simpson.</p>
@@ -3750,10 +3748,9 @@
 <p>Cálculo del <a href="https://en.wikipedia.org/wiki/Hapax_legomenon">índice de hápax</a>.</p>
 <div class="admonition quote">
 <p class="admonition-title">Definición</p>
-<p>Un hápax (del griego ἅπαξ λεγόμενον, «dicho una sola vez») es una palabra que aparece una sola vez en un corpus de textos. Por ejemplo, <em>baciyelmo</em>, la bacía-yelmo de Sancho Panza, es un hápax de Cervantes (aparece en un solo capítulo del <em>Quijote</em>). El término es popular en los estudios bíblicos, donde se han encontrado varios cientos de palabras así.</p>
+<p>Un hápax (del griego ἅπαξ λεγόμενον, «dicho una sola vez») es una palabra que aparece una sola vez en un corpus de textos. Por ejemplo, <em>baciyelmo</em>, la bacía-yelmo de Sancho Panza, es un hápax de Cervantes (aparece en un solo capítulo del <em>Quijote</em>).</p>
 </div>
-<p>Los hápax de un autor se usan a menudo para atribuirle otra obra en la que aparecen esas palabras.</p>
-<p>La métrica coincide con la medida de Honoré (1979). Se usa el logaritmo natural, como en zipfR y textcomplexity.</p>
+<p>La métrica coincide con la medida de Honoré (1979), con el logaritmo natural.</p>
 <p>Fórmula:</p>
 <div class="arithmatex">\[
 100\times\frac{\ln {\textrm{(Número de palabras)}}}{1-\frac{\textrm{Número de hápax}}{\textrm{Número de lexemas}}}
@@ -3785,7 +3782,7 @@
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_frequency_spectrum()</strong></p>
 </div>
-<p>Cálculo del espectro de frecuencias: el número de lexemas <span class="arithmatex">\(V_i\)</span> que aparecen exactamente <span class="arithmatex">\(i\)</span> veces en el texto. La base de las medidas de Yule, Herdan, Sichel, Michéa, Baayen y de los modelos LNRE de zipfR. Todas las medidas siguientes se calculan a partir del espectro de frecuencias en tiempo lineal; las fórmulas están contrastadas con Tweedie y Baayen (1998), zipfR, quanteda, koRpus, LexicalRichness y textcomplexity.</p>
+<p>Cálculo del espectro de frecuencias: el número de lexemas <span class="arithmatex">\(V_i\)</span> que aparecen exactamente <span class="arithmatex">\(i\)</span> veces en el texto. Las medidas siguientes se calculan a partir de él; sus fórmulas están contrastadas con Tweedie y Baayen (1998).</p>
 <p>Notación: <span class="arithmatex">\(N\)</span> es el número de palabras, <span class="arithmatex">\(V\)</span> el número de lexemas, <span class="arithmatex">\(V_i\)</span> el número de lexemas con frecuencia <span class="arithmatex">\(i\)</span>, <span class="arithmatex">\(V_1\)</span> los hápax, <span class="arithmatex">\(V_2\)</span> los dis legomena, <span class="arithmatex">\(p_k\)</span> la frecuencia relativa de un lexema.</p>
 <p>Parámetros:</p>
 <table>
@@ -3810,7 +3807,7 @@
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_yule_k()</strong></p>
 </div>
-<p>Cálculo de la característica de Yule (Yule, 1944). Una de las pocas medidas teóricamente independientes de la longitud del texto (Tweedie &amp; Baayen, 1998); en la práctica converge a medida que el texto crece. Cuanto menor es el valor, más rico es el vocabulario. Proporcional al índice de Simpson: <span class="arithmatex">\(K \approx 10^4 \cdot D\)</span>. Un marcador estilométrico presente en todas las bibliotecas comparables.</p>
+<p>Cálculo de la característica de Yule (Yule, 1944). Una de las pocas medidas teóricamente independientes de la longitud del texto (Tweedie &amp; Baayen, 1998); en la práctica converge a medida que el texto crece. Cuanto menor es el valor, más rico es el vocabulario. Proporcional al índice de Simpson: <span class="arithmatex">\(K \approx 10^4 \cdot D\)</span>.</p>
 <p>Fórmula:</p>
 <div class="arithmatex">\[
 K = 10^4\times\frac{\sum_i i^2 V_i - N}{N^2}
@@ -3987,7 +3984,7 @@ W = N^{V^{-a}}, \quad a = 0.172
 <p>Cálculo de la medida de Dugast (Dugast, 1979). No confundir con la U de Dugast, la métrica <a href="#dugast-type-token-ratio-dttr">DTTR</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>El valor depende de la base del logaritmo: 10 por defecto, como en las métricas de Summer, Maas y U de Dugast; textcomplexity usa el logaritmo natural. La medida no está definida cuando <span class="arithmatex">\(\log N \le 1\)</span>, es decir, en los textos no más largos que la base del logaritmo; en ese caso la función devuelve <code>nan</code>.</p>
+<p>El valor depende de la base del logaritmo, 10 por defecto. La medida no está definida cuando <span class="arithmatex">\(\log N \le 1\)</span>, es decir, en los textos no más largos que la base del logaritmo; en ese caso la función devuelve <code>nan</code>.</p>
 </div>
 <p>Fórmula:</p>
 <div class="arithmatex">\[
@@ -4193,7 +4190,7 @@ H = -\sum_k p_k \log_2 p_k
 <p>Cálculo del exponente <span class="arithmatex">\(\alpha\)</span> de la <a href="https://en.wikipedia.org/wiki/Zipf's_law">ley de Zipf</a> <span class="arithmatex">\(f(r) \propto r^{-\alpha}\)</span>, donde <span class="arithmatex">\(r\)</span> es el rango de frecuencia de un lexema. Se estima por regresión lineal del logaritmo de la frecuencia sobre el logaritmo del rango. En los textos naturales <span class="arithmatex">\(\alpha\)</span> está cerca de 1.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>La estimación por mínimos cuadrados sobre los rangos está sesgada; para una estimación precisa se usa la máxima verosimilitud (por ejemplo, la biblioteca powerlaw). En los textos de un solo lexema la función devuelve <code>nan</code>.</p>
+<p>La estimación por mínimos cuadrados sobre los rangos está sesgada; la máxima verosimilitud es más precisa. En los textos de un solo lexema la función devuelve <code>nan</code>.</p>
 </div>
 <p>Parámetros:</p>
 <table>
@@ -4218,7 +4215,7 @@ H = -\sum_k p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.diversity_stats.fit_zipf_mandelbrot()</strong>, <strong>ests.diversity_stats.ZipfMandelbrot</strong></p>
 </div>
-<p>Ajuste de la <a href="https://en.wikipedia.org/wiki/Zipf–Mandelbrot_law">ley de Zipf-Mandelbrot</a> <span class="arithmatex">\(f(r) = C / (r + q)^s\)</span> a la distribución rango-frecuencia. Con <span class="arithmatex">\(q = 0\)</span> la ley se reduce a la ley de Zipf con exponente <span class="arithmatex">\(s\)</span>; el desplazamiento <span class="arithmatex">\(q\)</span> describe el aplanamiento de la curva en las palabras más frecuentes que la ley de Zipf no recoge. Los parámetros se ajustan por mínimos cuadrados en coordenadas logarítmicas (<code>scipy.optimize.least_squares</code>) con la aproximación inicial <span class="arithmatex">\(C = f(1)\)</span>, <span class="arithmatex">\(q = 1\)</span>, <span class="arithmatex">\(s = 1\)</span> y las restricciones <span class="arithmatex">\(q \ge 0\)</span>, <span class="arithmatex">\(s \ge 0\)</span>. Devuelve una tupla con nombre <code>ZipfMandelbrot</code> con los campos <code>c</code>, <code>q</code>, <code>s</code> y <code>r2</code>, el coeficiente de determinación del ajuste en coordenadas logarítmicas.</p>
+<p>Ajuste de la <a href="https://en.wikipedia.org/wiki/Zipf–Mandelbrot_law">ley de Zipf-Mandelbrot</a> <span class="arithmatex">\(f(r) = C / (r + q)^s\)</span> a la distribución rango-frecuencia. Con <span class="arithmatex">\(q = 0\)</span> la ley se reduce a la ley de Zipf con exponente <span class="arithmatex">\(s\)</span>; el desplazamiento <span class="arithmatex">\(q\)</span> describe el aplanamiento de la curva en las palabras más frecuentes que la ley de Zipf no recoge. Los parámetros se ajustan por mínimos cuadrados en coordenadas logarítmicas con las restricciones <span class="arithmatex">\(q \ge 0\)</span>, <span class="arithmatex">\(s \ge 0\)</span>. Devuelve una tupla con nombre <code>ZipfMandelbrot</code> con los campos <code>c</code>, <code>q</code>, <code>s</code> y <code>r2</code>, el coeficiente de determinación del ajuste en coordenadas logarítmicas.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>En los textos de menos de tres lexemas, con frecuencias idénticas de todos los lexemas y cuando el ajuste diverge, todos los campos son <code>nan</code>. En textos cortos los parámetros son inestables: la ley describe la distribución de frecuencias de corpus grandes.</p>
@@ -4257,7 +4254,7 @@ H = -\sum_k p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_heaps_beta()</strong>, <strong>ests.diversity_stats.fit_heaps()</strong>, <strong>ests.diversity_stats.vocabulary_growth()</strong></p>
 </div>
-<p>Cálculo del exponente <span class="arithmatex">\(\beta\)</span> de la <a href="https://en.wikipedia.org/wiki/Heaps'_law">ley de Heaps</a> <span class="arithmatex">\(V(N) = K \cdot N^{\beta}\)</span>, que describe el crecimiento del vocabulario con la longitud del texto. Se estima por regresión lineal del logaritmo del tamaño del vocabulario sobre el logaritmo de la longitud del texto a lo largo de la curva de crecimiento del vocabulario (<code>vocabulary_growth</code>: el tamaño del vocabulario tras cada palabra). En corpus de millones de palabras <span class="arithmatex">\(\beta\)</span> está entre 0.4 y 0.6; la regresión sobre toda la curva de crecimiento de un solo texto da más (0.6-0.9), porque al principio de un texto casi cada palabra es nueva, así que los valores solo son comparables entre textos de longitud parecida. <code>fit_heaps</code> devuelve una tupla con nombre <code>HeapsFit</code> con los dos parámetros <code>k</code>, <code>beta</code> y el coeficiente de determinación <code>r2</code>.</p>
+<p>Cálculo del exponente <span class="arithmatex">\(\beta\)</span> de la <a href="https://en.wikipedia.org/wiki/Heaps'_law">ley de Heaps</a> <span class="arithmatex">\(V(N) = K \cdot N^{\beta}\)</span>, que describe el crecimiento del vocabulario con la longitud del texto. Se estima por regresión lineal del logaritmo del tamaño del vocabulario sobre el logaritmo de la longitud del texto a lo largo de la curva de crecimiento del vocabulario (<code>vocabulary_growth</code>: el tamaño del vocabulario tras cada palabra). En corpus de millones de palabras <span class="arithmatex">\(\beta\)</span> está entre 0.4 y 0.6; sobre la curva de crecimiento de un solo texto es mayor (0.6-0.9), así que los valores solo son comparables entre textos de longitud parecida. <code>fit_heaps</code> devuelve una tupla con nombre <code>HeapsFit</code> con los dos parámetros <code>k</code>, <code>beta</code> y el coeficiente de determinación <code>r2</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>El valor depende del orden de las palabras y necesita varios cientos de palabras o más. En los textos de menos de dos palabras la función devuelve <code>nan</code>.</p>
@@ -4285,7 +4282,7 @@ H = -\sum_k p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_windowed()</strong></p>
 </div>
-<p>Cálculo por ventanas de cualquier métrica: su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Es la forma estándar de comparar textos de distinta longitud (<code>bootstrap</code> de textcomplexity, las curvas características de koRpus); el STTR de Kubát y Milička es un TTR por ventanas de 1000 palabras con un intervalo de confianza del 95 %. En los textos más cortos que la ventana la métrica se calcula sobre todo el texto como una sola ventana; las ventanas con un valor no definido (<code>nan</code>) se ignoran. Si la métrica es infinita en al menos una ventana (por ejemplo, el índice de Simpson inverso en una ventana de palabras únicas), la media es infinita y la desviación típica y el intervalo de confianza no están definidos. Devuelve una tupla con nombre <code>WindowStats</code> con los campos <code>mean</code>, <code>std</code>, <code>lower</code>, <code>upper</code> y <code>n_windows</code>.</p>
+<p>Cálculo por ventanas de cualquier métrica: su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Es la forma estándar de comparar textos de distinta longitud; el STTR de Kubát y Milička es un TTR por ventanas de 1000 palabras con un intervalo de confianza del 95 %. En los textos más cortos que la ventana la métrica se calcula sobre todo el texto como una sola ventana; las ventanas con un valor no definido (<code>nan</code>) se ignoran. Si la métrica es infinita en al menos una ventana (por ejemplo, el índice de Simpson inverso en una ventana de palabras únicas), la media es infinita y la desviación típica y el intervalo de confianza no están definidos. Devuelve una tupla con nombre <code>WindowStats</code> con los campos <code>mean</code>, <code>std</code>, <code>lower</code>, <code>upper</code> y <code>n_windows</code>.</p>
 <p>Parámetros:</p>
 <table>
 <thead>

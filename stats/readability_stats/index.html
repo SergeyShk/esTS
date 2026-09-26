@@ -2734,7 +2734,7 @@
 </tr>
 </tbody>
 </table>
-<p>The Flesch family is set by a preset (see <a href="#presets">below</a>): by default the coefficients of Szigriszt-Pazos, validated with the INFLESZ scale, and alternatively the coefficients of Fernández Huerta. The other formulas do not depend on the preset.</p>
+<p>The coefficients of the Flesch reading ease are set by a preset (see <a href="#presets">below</a>): Szigriszt-Pazos by default, Fernández Huerta as an alternative.</p>
 <p>The main presumptions of readability metrics:</p>
 <ul>
 <li>short sentences are easier to read than long ones;</li>
@@ -2871,17 +2871,17 @@
 <td style="text-align: center;"><code>general</code></td>
 <td style="text-align: center;">Szigriszt-Pazos (1993), fórmula de perspicuidad</td>
 <td style="text-align: center;"><code>206.835 − 1.0·ASL − 62.3·ASW</code></td>
-<td style="text-align: center;">INFLESZ (Barrio-Cantalejo et al., 2008), validated on texts for patients</td>
+<td style="text-align: center;">INFLESZ (Barrio-Cantalejo et al., 2008)</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>classic</code></td>
-<td style="text-align: center;">Fernández Huerta (1959), the first adaptation of Flesch to Spanish</td>
+<td style="text-align: center;">Fernández Huerta (1959)</td>
 <td style="text-align: center;"><code>206.84 − 1.02·ASL − 60·ASW</code></td>
 <td style="text-align: center;">the seven bands of the author</td>
 </tr>
 </tbody>
 </table>
-<p>Fernández Huerta printed the last term as <code>1.02</code> times the number of sentences per 100 words. Law (2011) showed that this inverts the fraction of the Flesch formula the adaptation was based on, so the mean sentence length is used here, as koRpus, textstat and legible.es do. The table of all coefficients is available as <code>ests.constants.READABILITY_PRESETS</code>.</p>
+<p>The formula of Fernández Huerta takes the mean sentence length, with the correction of Law (2011). The table of all coefficients is available as <code>ests.constants.READABILITY_PRESETS</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReadabilityStats</span>
@@ -2899,7 +2899,7 @@
 </div>
 <h2 id="interpretation">Interpretation<a class="headerlink" href="#interpretation" title="Permanent link">&para;</a></h2>
 <p>The <a href="#describe_level"><code>describe_level</code></a> method places the reading ease on the scale of the preset: INFLESZ for <code>general</code> (<code>muy difícil</code> below 40, <code>algo difícil</code> 40-55, <code>normal</code> 55-65, <code>bastante fácil</code> 65-80, <code>muy fácil</code> above 80) and the seven bands of Fernández Huerta for <code>classic</code>, with the scales of Szigriszt-Pazos or of the other author on request; Legibilidad µ has the seven bands of its authors (<code>muy difícil</code> 0-30, <code>difícil</code> 31-50, <code>un poco difícil</code> 51-60, <code>adecuado</code> 61-70, <code>un poco fácil</code> 71-80, <code>fácil</code> 81-90, <code>muy fácil</code> 91-100).</p>
-<p>The formulas that yield years of schooling (Crawford, SOL) are summarized in the <code>consensus_grade</code> attribute - the median of the rounded values plus the reading ease converted to a grade by the scale of the preset: through the text types of the INFLESZ bands for <code>general</code>, through the interpretation table of Flesch, whose bands Fernández Huerta kept, for <code>classic</code>. The <a href="#describe_grade"><code>describe_grade</code></a> method translates the consensus grade or an individual formula into a stage of the Spanish school system and reader age:</p>
+<p>The formulas that yield years of schooling (Crawford, SOL) are summarized in the <code>consensus_grade</code> attribute - the median of the rounded values plus the reading ease <a href="../readability_stats_funcs/#flesch_reading_easy_to_grade">converted to a grade</a> by the scale of the preset. The <a href="#describe_grade"><code>describe_grade</code></a> method translates the consensus grade or an individual formula into a stage of the Spanish school system and reader age:</p>
 <table>
 <thead>
 <tr>
@@ -2945,7 +2945,7 @@
 <p class="admonition-title">Warning</p>
 <p>Crawford was fitted on primary school readers and saturates for adult texts; SOL was fitted on health education materials. The consensus grade of a technical text mostly reflects the reading ease band.</p>
 </div>
-<p>The <code>reading_time</code> attribute estimates silent reading time at 278 words per minute, the mean of six studies of adult readers of Spanish in the meta-analysis of Brysbaert (2019). A different speed is accepted by the <a href="#reading_time_by_speed"><code>reading_time_by_speed</code></a> method, and the <a href="#reading_time_by_norm"><code>reading_time_by_norm</code></a> method computes the time aloud and silently by the norms of the <code>ests.constants.READING_SPEED_NORMS</code> table: the mean speeds of Spanish-speaking students by school year from the meta-analysis of Ripoll, Tapia and Aguado (2020) and of adults from Brysbaert (2019).</p>
+<p>The <code>reading_time</code> attribute estimates silent reading time at 278 words per minute, the speed of adult readers of Spanish in the meta-analysis of Brysbaert (2019). A different speed is accepted by the <a href="#reading_time_by_speed"><code>reading_time_by_speed</code></a> method, and the <a href="#reading_time_by_norm"><code>reading_time_by_norm</code></a> method computes the time aloud and silently by the norms of the <code>ests.constants.READING_SPEED_NORMS</code> table: the mean speeds of Spanish-speaking students by school year from the meta-analysis of Ripoll, Tapia and Aguado (2020) and of adults from Brysbaert (2019).</p>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="describe_level">describe_level<a class="headerlink" href="#describe_level" title="Permanent link">&para;</a></h3>
 <p>Returns the band of a readability scale for the reading ease or Legibilidad µ.</p>

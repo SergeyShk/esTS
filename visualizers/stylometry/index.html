@@ -2523,9 +2523,9 @@
 <p><strong>ests.visualizers.dendrogram_plot()</strong>, <strong>ests.visualizers.pca_plot()</strong>, <strong>ests.visualizers.mds_plot()</strong>, <strong>ests.visualizers.mendenhall_plot()</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>Plots for <a href="../../corpus/stylometry/">stylometry</a>: a dendrogram and the multidimensional scaling of the matrix of distances of <a href="../../corpus/stylometry/#delta"><code>delta</code></a>, the principal components of the frequencies of the most frequent words and the Mendenhall curves of several texts - the set stylo uses to look at how texts cluster by author. The functions take the axes <code>ax</code> and return <code>Axes</code>.</p>
+<p>Plots for <a href="../../corpus/stylometry/">stylometry</a>: a dendrogram and the multidimensional scaling of the matrix of distances of <a href="../../corpus/stylometry/#delta"><code>delta</code></a>, the principal components of the frequencies of the most frequent words and the Mendenhall curves of several texts. The functions take the axes <code>ax</code> and return <code>Axes</code>.</p>
 <h2 id="dendrogram_plot">Dendrogram<a class="headerlink" href="#dendrogram_plot" title="Permanent link">&para;</a></h2>
-<p>Hierarchical clustering by <code>scipy.cluster.hierarchy</code> over the matrix of distances between texts; Ward's method by default, as in stylo and in <a href="https://aclanthology.org/W15-0709.pdf">Evert et al. (2015)</a>, the labels of the leaves are the names of the texts of the index of the matrix.</p>
+<p>Hierarchical clustering by <code>scipy.cluster.hierarchy</code> over the matrix of distances between texts; Ward's method by default, as in <a href="https://aclanthology.org/W15-0709.pdf">Evert et al. (2015)</a>; the labels of the leaves are the names of the texts of the index of the matrix.</p>
 <table>
 <thead>
 <tr>
@@ -2557,7 +2557,7 @@
 </tbody>
 </table>
 <h2 id="pca_plot">Principal components<a class="headerlink" href="#pca_plot" title="Permanent link">&para;</a></h2>
-<p>Principal component analysis of the z-scores of the relative frequencies of the most frequent units (<a href="../../corpus/stylometry/#delta"><code>frequency_table</code></a>, <code>z_scores</code>) through the singular value decomposition, as <code>pca.visualization</code> of stylo: the texts on the plane of the first two components with their names, the shares of the explained variance in the labels of the axes.</p>
+<p>Principal component analysis of the z-scores of the relative frequencies of the most frequent units (<a href="../../corpus/stylometry/#delta"><code>frequency_table</code></a>, <code>z_scores</code>): the texts on the plane of the first two components with their names, the shares of the explained variance in the labels of the axes.</p>
 <table>
 <thead>
 <tr>
@@ -2694,7 +2694,7 @@
 <p><img alt="ests" class="center" src="../../img/stylometry.png" /></p>
 <p><img alt="ests" class="center" src="../../img/mds_mendenhall.png" /></p>
 </div>
-<p>Cosine Delta over the 100 most frequent words separates the authors: the dendrogram joins the novels of each author before it joins the two groups, and the first principal component, 43.9% of the variance, puts Galdós on one side and Unamuno on the other. The Mendenhall curves hardly differ - word length is a weak feature on its own.</p>
+<p>Cosine Delta over the 100 most frequent words separates the authors: the dendrogram joins the novels of each author before it joins the two groups, and the first principal component puts Galdós on one side and Unamuno on the other. The Mendenhall curves hardly differ - word length is a weak feature on its own.</p>
 
 
 

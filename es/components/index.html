@@ -2668,25 +2668,24 @@
 
 
 <h1 id="componentes">Componentes<a class="headerlink" href="#componentes" title="Permanent link">&para;</a></h1>
-<p>Conjunto de componentes para los pipelines de <a href="https://github.com/explosion/spaCy">spaCy</a>. Cada uno es una clase con dos métodos: <code>__init__</code>, que registra una extensión de <code>Doc</code> al inicializarse, y <code>__call__</code>, que toma un objeto <code>Doc</code> y lo devuelve con las estadísticas puestas. Con ellos un texto se anota y se mide en una sola pasada, y las estadísticas viajan con el documento.</p>
+<p>Conjunto de componentes para los pipelines de <a href="https://github.com/explosion/spaCy">spaCy</a>. Cada uno es una clase con dos métodos: <code>__init__</code>, que registra una extensión de <code>Doc</code> al inicializarse, y <code>__call__</code>, que toma un objeto <code>Doc</code> y lo devuelve con las estadísticas puestas.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>La escritura de componentes propios se describe en la sección correspondiente de la <a href="https://spacy.io/usage/processing-pipelines#custom-components">documentación de spaCy</a>. Los ejemplos de abajo usan el modelo <code>es_core_news_sm</code>, que se instala aparte: <code>python -m spacy download es_core_news_sm</code> (véase <a href="../installation/">instalación</a>).</p>
 </div>
 <h2 id="names">Nombres<a class="headerlink" href="#names" title="Permanent link">&para;</a></h2>
-<p>Las fábricas llevan el prefijo de la biblioteca - <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code> - porque el registro de spaCy es uno para todo el proceso: un <code>basic</code> a secas chocaría con el componente de cualquier otra biblioteca que registre ese nombre, y spaCy responde a un segundo registro con <code>ValueError [E004]</code>.</p>
-<p>Están declaradas como entry points de <code>spacy_factories</code>, así que un pipeline guardado con estos componentes - <code>nlp.to_disk(path)</code>, <code>spacy package</code>, una configuración de entrenamiento - se carga con <code>spacy.load(path)</code> en un proceso que nunca importa la biblioteca.</p>
-<p>El nombre del paso del pipeline es libre y es como se llama la extensión, así que la forma corta está a un argumento de distancia:</p>
+<p>Las fábricas llevan el prefijo de la biblioteca: <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code>. Están declaradas como entry points de <code>spacy_factories</code>, así que un pipeline guardado con estos componentes (<code>nlp.to_disk(path)</code>, <code>spacy package</code>) se carga con <code>spacy.load(path)</code> sin importar la biblioteca.</p>
+<p>El nombre del paso del pipeline es el nombre de la extensión:</p>
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_basic"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"basic"</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"El gato duerme"</span><span class="p">)</span>
 <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">basic</span><span class="o">.</span><span class="n">n_words</span>
 </code></pre></div>
-<p>Sin <code>name</code> el paso y la extensión conservan el nombre de la fábrica (<code>doc._.ests_basic</code>). El mismo componente puede añadirse dos veces con nombres distintos, que es como dos presets o dos juegos de parámetros conviven en un pipeline.</p>
+<p>Sin <code>name</code> el paso y la extensión conservan el nombre de la fábrica (<code>doc._.ests_basic</code>). El mismo componente puede añadirse dos veces con nombres distintos, por ejemplo con dos presets.</p>
 <div class="admonition warning">
 <p class="admonition-title">Serialización</p>
 <p>Un componente guarda un objeto de estadísticas en <code>doc._.&lt;name&gt;</code>, y spaCy no sabe serializarlo: <code>Doc.to_bytes()</code>, <code>DocBin(store_user_data=True)</code> y <code>nlp.pipe(..., n_process&gt;1)</code> fallan con estos componentes en el pipeline. Para guardar un documento, deje fuera los datos de usuario (<code>doc.to_bytes(exclude=["user_data"])</code>) o guarde <code>doc._.&lt;name&gt;.get_stats()</code> por su cuenta; para el multiproceso, calcule las estadísticas en el proceso principal después de <code>nlp.pipe</code>, sin los componentes.</p>
 </div>
-<p>Añadir un componente amplía el tokenizador de su pipeline con las reglas de las rayas de un diálogo pegadas a las palabras (<a href="../extractors/words/"><code>add_dash_rules</code></a>), que tiene la API de cadenas, así que las palabras de un componente son las palabras del resto de la biblioteca: <code>sí--dijo</code> son dos palabras y una raya, no una palabra. Las reglas solo separan esas rayas; un pipeline con un tokenizador propio que no es el <code>Tokenizer</code> de spaCy se queda como está.</p>
+<p>Añadir un componente amplía el tokenizador de su pipeline con las reglas de las rayas de un diálogo pegadas a las palabras (<a href="../extractors/words/"><code>add_dash_rules</code></a>), como en la API de cadenas: <code>sí--dijo</code> son dos palabras y una raya. Un tokenizador que no es el <code>Tokenizer</code> de spaCy se queda como está.</p>
 <h2 id="requirements">Qué necesita cada componente<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2760,8 +2759,8 @@
 </tr>
 </tbody>
 </table>
-<p>Un documento sin palabras - una cadena vacía, espacios, solo puntuación - pasa por cada componente sin tocarse, con su extensión en <code>None</code>, de modo que un documento así en un corpus no detiene <code>nlp.pipe</code>. Una anotación que falta es otra cosa: eso es un error del pipeline y se levanta.</p>
-<p>En el pipeline de <code>es_core_news_sm</code> las categorías gramaticales vienen del <code>morphologizer</code> (un <code>tagger</code> solo da la etiqueta del corpus y no la categoría de Universal Dependencies; con un <code>attribute_ruler</code> sí la da), el análisis del <code>parser</code> y los lemas del <code>lemmatizer</code>. Un componente al que le falta la anotación levanta <code>SourceError</code> cuando el documento pasa por él, también con componentes <code>excluded</code>: sin el <code>lemmatizer</code> todos los lemas son cadenas vacías, y eso haría que todos los sustantivos de un texto se repitieran entre sí.</p>
+<p>Un documento sin palabras - una cadena vacía, espacios, solo puntuación - pasa por cada componente sin tocarse, con su extensión en <code>None</code>.</p>
+<p>En el pipeline de <code>es_core_news_sm</code> las categorías gramaticales vienen del <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>; un <code>tagger</code> solo no las da), el análisis del <code>parser</code> y los lemas del <code>lemmatizer</code>. Un componente al que le falta la anotación, también con componentes <code>excluded</code>, levanta <code>SourceError</code> cuando el documento pasa por él.</p>
 <h2 id="basicstatscomponent">BasicStatsComponent<a class="headerlink" href="#basicstatscomponent" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.components.BasicStatsComponent</strong></p>
@@ -2855,8 +2854,8 @@
 </tr>
 </tbody>
 </table>
-<p>Un preset desconocido levanta <code>ParameterError</code> al añadir el componente, no al pasar un documento por él.</p>
-<p>Las métricas de legibilidad se calculan sobre las estadísticas básicas, así que un pipeline con los dos componentes las calcula dos veces salvo que <code>basic</code> nombre la extensión del primero: <code>nlp.add_pipe("ests_readability", config={"basic": "basic"})</code> después de un componente llamado <code>basic</code>. En las páginas españolas de este sitio eso lleva un documento de 0,025 s a 0,015 s, y el ahorro crece con cada preset añadido. Un nombre que no lleva estadísticas básicas, o un componente que corre después de este, levanta <code>SourceError</code>.</p>
+<p>Un preset desconocido levanta <code>ParameterError</code> al añadir el componente.</p>
+<p>Las métricas de legibilidad se calculan sobre las estadísticas básicas, así que un pipeline con los dos componentes las calcula dos veces salvo que <code>basic</code> nombre la extensión del primero: <code>nlp.add_pipe("ests_readability", config={"basic": "basic"})</code> después de un componente llamado <code>basic</code>. Un nombre que no lleva estadísticas básicas, o un componente que corre después de este, levanta <code>SourceError</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <p><em>Código</em>:</p>
@@ -2964,7 +2963,7 @@
 <div class="admonition info">
 <p><strong>ests.components.MorphStatsComponent</strong></p>
 </div>
-<p>El componente de las estadísticas morfológicas de un texto. Las categorías gramaticales y los rasgos se leen de la anotación del modelo, así que el pipeline necesita un <code>morphologizer</code> (o un <code>tagger</code> con un <code>attribute_ruler</code>) y un <code>lemmatizer</code> antes del componente.</p>
+<p>El componente de las estadísticas morfológicas de un texto. El pipeline necesita un <code>morphologizer</code> y un <code>lemmatizer</code> antes del componente.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3010,7 +3009,7 @@
 <div class="admonition info">
 <p><strong>ests.components.SyntaxStatsComponent</strong></p>
 </div>
-<p>El componente de las estadísticas sintácticas de un texto. Las estadísticas se calculan sobre el árbol de dependencias, así que el pipeline necesita un <code>parser</code> y un <code>lemmatizer</code> antes del componente.</p>
+<p>El componente de las estadísticas sintácticas de un texto. El pipeline necesita un <code>parser</code> y un <code>lemmatizer</code> antes del componente.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3056,7 +3055,7 @@
 <div class="admonition info">
 <p><strong>ests.components.CohesionStatsComponent</strong></p>
 </div>
-<p>El componente de las estadísticas de cohesión de un texto. Los rasgos se leen de la anotación del modelo, así que el pipeline necesita un <code>morphologizer</code> (o un <code>tagger</code> con un <code>attribute_ruler</code>) y un <code>lemmatizer</code> antes del componente.</p>
+<p>El componente de las estadísticas de cohesión de un texto. El pipeline necesita un <code>morphologizer</code> y un <code>lemmatizer</code> antes del componente.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3102,7 +3101,7 @@
 <div class="admonition info">
 <p><strong>ests.components.LexicalStatsComponent</strong></p>
 </div>
-<p>El componente de las estadísticas de complejidad léxica de un texto. Las palabras se buscan por su categoría gramatical, así que el pipeline necesita un <code>morphologizer</code> (o un <code>tagger</code> con un <code>attribute_ruler</code>) antes del componente; los lemas del modelo no se usan. El <a href="../datasets/freqdict/">diccionario de frecuencias</a> se crea una vez para el componente: las bandas de frecuencia y la densidad léxica se calculan sin él, las estadísticas por el diccionario lo necesitan descargado. Aquí los números no son palabras, así que un documento solo de números también pasa intacto.</p>
+<p>El componente de las estadísticas de complejidad léxica de un texto. El pipeline necesita un <code>morphologizer</code> antes del componente; los lemas del modelo no se usan. Las bandas de frecuencia y la densidad léxica se calculan sin el <a href="../datasets/freqdict/">diccionario de frecuencias</a>, las estadísticas por el diccionario lo necesitan descargado. Aquí los números no son palabras, así que un documento solo de números también pasa intacto.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3154,7 +3153,7 @@
 <div class="admonition info">
 <p><strong>ests.components.StyleStatsComponent</strong></p>
 </div>
-<p>El componente de las métricas de estilo de un texto. Las métricas SEO y los marcadores del estilo burocrático leen las palabras del documento; los sustantivos deverbales leen sus categorías gramaticales y lemas, así que para ellos el pipeline necesita un <code>morphologizer</code> y un <code>lemmatizer</code> antes del componente.</p>
+<p>El componente de las métricas de estilo de un texto. Los sustantivos deverbales necesitan un <code>morphologizer</code> y un <code>lemmatizer</code> antes del componente; las demás métricas solo leen las palabras.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3212,7 +3211,7 @@
 <div class="admonition info">
 <p><strong>ests.components.PhonStatsComponent</strong></p>
 </div>
-<p>El componente de la fonoestadística de un texto. Las estadísticas leen las palabras del documento y su transcripción, así que el componente no necesita ninguna anotación de un modelo.</p>
+<p>El componente de la fonoestadística de un texto. No necesita ninguna anotación de un modelo.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3264,7 +3263,7 @@
 <div class="admonition info">
 <p><strong>ests.components.VerseStatsComponent</strong></p>
 </div>
-<p>El componente de las estadísticas del verso de un texto. Las estadísticas leen el texto del documento con sus saltos de línea y sus líneas en blanco, así que el texto de un poema va a <code>nlp</code> tal cual, sin unir los versos; el componente no necesita ninguna anotación de un modelo. Un documento sin letras pasa intacto, y un texto con letras pero sin sílabas españolas da estadísticas vacías, como <code>VerseStats</code>.</p>
+<p>El componente de las estadísticas del verso de un texto. Las estadísticas leen los saltos de línea y las líneas en blanco del documento, así que pase el texto de un poema a <code>nlp</code> sin unir los versos; el componente no necesita ninguna anotación de un modelo. Un documento sin letras pasa intacto, y un texto con letras pero sin sílabas españolas da estadísticas vacías.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3315,7 +3314,7 @@
 </code></pre></div>
 </div>
 <h2 id="pipeline">Todo en un pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h2>
-<p>Los diez componentes pueden convivir, y entonces una sola pasada sobre un documento da todas las estadísticas de la biblioteca que un <code>Doc</code> puede llevar.</p>
+<p>Los diez componentes pueden compartir un pipeline.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <p><em>Código</em>:</p>

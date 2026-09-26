@@ -2582,7 +2582,7 @@
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
 <p>Módulo para calcular las principales métricas de <a href="https://en.wikipedia.org/wiki/Lexical_diversity">diversidad léxica</a> de un texto. La fuente de datos puede ser un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>.</p>
-<p>El módulo permite usar un objeto <a href="../../extractors/words/"><code>WordsExtractor</code></a> ya configurado para la segmentación en palabras que precede al cálculo; para un <code>Doc</code>, el extractor indicado se aplica al texto del <code>Doc</code>, y sin él las palabras salen de sus tokens. Sea cual sea la fuente y el extractor, las palabras se pasan a minúsculas, porque todas las métricas cuentan lexemas.</p>
+<p>Las palabras pueden extraerse con un <a href="../../extractors/words/"><code>WordsExtractor</code></a> ya configurado; para un <code>Doc</code>, el extractor indicado se aplica a su texto, y sin él las palabras salen de sus tokens. Las palabras siempre se pasan a minúsculas, porque todas las métricas cuentan lexemas.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>Las métricas se calculan al acceder al atributo correspondiente o al llamar al método <code>get_stats</code> del objeto <code>DiversityStats</code>.</p>
@@ -2643,7 +2643,7 @@
 </tbody>
 </table>
 <h2 id="conventions">Convenciones<a class="headerlink" href="#conventions" title="Permanent link">&para;</a></h2>
-<p>Los valores de algunas métricas dependen de parámetros que cada biblioteca elige de forma distinta. Los valores por defecto coinciden con koRpus y con lexical-diversity de Kyle, y todos son parámetros de la clase. La comparación con el umbral de MTLD es la única convención que no es un parámetro:</p>
+<p>Los valores de algunas métricas dependen de convenciones que difieren entre bibliotecas. Todas salvo la comparación con el umbral de MTLD son parámetros de la clase:</p>
 <table>
 <thead>
 <tr>
@@ -2670,8 +2670,8 @@
 </tr>
 <tr>
 <td style="text-align: center;">Comparación con el umbral de MTLD</td>
-<td style="text-align: center;">un factor se cierra con TTR ≤ 0.72; en McCarthy y Jarvis (2010) el factor termina cuando el TTR «alcanza» 0.720</td>
-<td style="text-align: center;">lexical-diversity y TAALED: <code>&lt;</code> estricto, así que en los factores donde el TTR da exactamente el umbral (18/25, 36/50) los valores de MTLD, MA-MTLD y MTLD-W divergen</td>
+<td style="text-align: center;">un factor se cierra con TTR ≤ 0.72 (McCarthy &amp; Jarvis, 2010)</td>
+<td style="text-align: center;">lexical-diversity y TAALED: <code>&lt;</code> estricto; los valores difieren cuando el TTR da exactamente el umbral</td>
 </tr>
 <tr>
 <td style="text-align: center;">Longitud mínima del factor de MTLD</td>
@@ -2880,11 +2880,11 @@
 </table>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>Cada métrica puede calcularse por separado llamando a la función correspondiente. La información detallada sobre las métricas de diversidad léxica y las funciones que las calculan está en la <a href="../diversity_stats_funcs/">sección</a> correspondiente.</p>
+<p>Cada métrica puede calcularse también con su función; las métricas y sus funciones se describen en la <a href="../diversity_stats_funcs/">sección</a> correspondiente.</p>
 </div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <h3 id="windowed">windowed<a class="headerlink" href="#windowed" title="Permanent link">&para;</a></h3>
-<p>Cálculo por ventanas de una métrica: su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Es la forma estándar de comparar textos de distinta longitud; el STTR de Kubát y Milička es un TTR por ventanas de 1000 palabras con un intervalo de confianza del 95 %. En los textos más cortos que la ventana la métrica se calcula sobre todo el texto como una sola ventana; las ventanas con un valor no definido (<code>nan</code>) se ignoran. Si la métrica es infinita en al menos una ventana, la media es infinita y la desviación típica y el intervalo de confianza no están definidos.</p>
+<p>Cálculo por ventanas de una métrica por su nombre, como en <a href="../diversity_stats_funcs/#calc_windowed"><code>calc_windowed</code></a>: su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Los casos límite (textos cortos, valores <code>nan</code> e infinitos) se describen allí.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -2937,7 +2937,6 @@
 </div>
 <h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
 <p>Devuelve un diccionario con las métricas de diversidad léxica calculadas.</p>
-<p>Ejemplo de cálculo de las métricas de diversidad léxica:</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <p><em>Código</em>:</p>
@@ -2988,7 +2987,7 @@
 </div>
 <h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
 <p>Muestra una tabla con las métricas de diversidad léxica calculadas.</p>
-<p>Para ilustrar el método reutilizamos el código del ejemplo anterior:</p>
+<p>El ejemplo continúa el anterior:</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <p><em>Código</em>:</p>

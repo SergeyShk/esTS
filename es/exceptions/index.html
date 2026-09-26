@@ -2435,7 +2435,7 @@
 <p><strong>ests.exceptions</strong></p>
 </div>
 <h2 id="excepciones">Excepciones<a class="headerlink" href="#excepciones" title="Permanent link">&para;</a></h2>
-<p>Todas las excepciones de la biblioteca heredan de la clase base <code>EstsError</code> y de una de las clases integradas de Python, así que pueden capturarse tanto por su nombre en esTS como por el tipo integrado habitual: el código existente con <code>except ValueError</code> sigue funcionando.</p>
+<p>Todas las excepciones de la biblioteca heredan de la clase base <code>EstsError</code> y de una clase integrada de Python, así que pueden capturarse por cualquiera de las dos, y <code>except ValueError</code> sigue funcionando.</p>
 <table>
 <thead>
 <tr>
@@ -2453,17 +2453,17 @@
 <tr>
 <td style="text-align: left;"><code>SourceTypeError</code></td>
 <td style="text-align: left;"><code>TypeError</code></td>
-<td style="text-align: left;">La fuente de datos no es una cadena ni un <code>Doc</code>, se pasa una cadena o un <code>Doc</code> donde se espera una lista de palabras, los textos de una visualización no son una lista de listas de palabras, las frecuencias de <code>zipf</code> no son un <code>Counter</code>, la medida de <code>fingerprinting</code> o el tokenizador no son invocables, el tokenizador devuelve un objeto no iterable, una ruta no es una cadena ni un <code>Path</code></td>
+<td style="text-align: left;">La fuente no es una cadena ni un <code>Doc</code>; se pasa una cadena o un <code>Doc</code> donde se espera una lista de palabras; los textos de una visualización no son listas de palabras; las frecuencias de <code>zipf</code> no son un <code>Counter</code>; la medida de <code>fingerprinting</code> o el tokenizador no son invocables, o el tokenizador devuelve un objeto no iterable; una ruta no es una cadena ni un <code>Path</code>; las palabras vacías o los clichés (métricas de estilo, resaltado) son una cadena y no una lista</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>SourceError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">La fuente no tiene palabras, oraciones, textos ni colocaciones, le falta la anotación que una estadística necesita (las categorías gramaticales, los lemas, el análisis de dependencias), es una cadena más larga que el <code>max_length</code> del pipeline o no queda ninguna unidad tras el filtrado; Delta y las componentes principales reciben menos de tres textos, una matriz de distancias no es cuadrada o tiene una distancia infinita, el pipeline de <code>function_words_profile</code> no etiqueta las categorías gramaticales, ningún texto de una comparación tiene una ventana de palabras suficientes, la palabra clave de <code>wordtree</code> no se encuentra o no tiene ninguna palabra al lado</td>
+<td style="text-align: left;">La fuente no tiene palabras, oraciones, textos ni colocaciones, le falta la anotación que una estadística necesita (categorías gramaticales, lemas, análisis de dependencias), es una cadena más larga que el <code>max_length</code> del pipeline (para los sustantivos deverbales, tiene una oración más larga que él) o no queda nada tras el filtrado; Delta o las componentes principales reciben menos de tres textos; una matriz de distancias no es cuadrada o tiene una distancia infinita; el pipeline de <code>function_words_profile</code> no etiqueta las categorías gramaticales; ningún texto de una comparación tiene una ventana de palabras suficientes; la palabra clave de <code>wordtree</code> no se encuentra o no tiene ninguna palabra al lado</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>ParameterError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">Un umbral, ventana, tamaño de segmento, número de elementos, base del logaritmo, nivel de confianza, número de muestras bootstrap o límite de una banda de frecuencia (1-10 000) fuera de rango, un límite de registros negativo, los tamaños de las partes de <code>dispersion</code> que no suman las palabras, la palabra clave de <code>kwic</code> vacía; un preajuste, escala, nombre de métrica, medida, variante, campo de una palabra clave, género o categoría gramatical desconocidos</td>
+<td style="text-align: left;">Fuera de rango: un umbral, ventana, tamaño de segmento, número de elementos, base del logaritmo, nivel de confianza, número de muestras bootstrap o límite de una banda de frecuencia (1-10 000); un límite de registros negativo; partes de <code>dispersion</code> que no suman las palabras; una palabra clave de <code>kwic</code> vacía. Desconocidos: un preajuste, escala, nombre de métrica, medida, variante, campo de una palabra clave, género o categoría gramatical. Resaltado: una capa desconocida o que la fuente no admite (las capas sintácticas y los sustantivos deverbales en una cadena o en un <code>Doc</code> sin el análisis o sin los lemas), capas que no son una lista ni una cadena, un umbral de la aliteración fuera de (0, 1], un número de palabras de una oración larga o de sílabas de una palabra compleja menor que 1</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>UnknownStatError</code></td>
@@ -2473,24 +2473,24 @@
 <tr>
 <td style="text-align: left;"><code>DatasetNotFoundError</code></td>
 <td style="text-align: left;"><code>OSError</code></td>
-<td style="text-align: left;">El modelo de spaCy no está instalado o un conjunto de datos no está descargado; el mensaje muestra el comando que trae lo que falta</td>
+<td style="text-align: left;">El modelo de spaCy no está instalado o un conjunto de datos no está descargado; el mensaje da el comando que lo resuelve</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>DataFileError</code></td>
 <td style="text-align: left;"><code>ValueError</code></td>
-<td style="text-align: left;">El archivo de un conjunto de datos no es un archivo ZIP ni TAR, no se puede extraer, no tiene ficheros o tiene rutas fuera de su directorio, o el directorio donde extraerlo no se puede crear; una línea del fichero de un conjunto de datos no se puede leer</td>
+<td style="text-align: left;">El archivo de un conjunto de datos no es ZIP ni TAR, no se puede extraer, está vacío o tiene rutas fuera de su directorio, o su directorio de destino no se puede crear; una línea de un fichero de un conjunto de datos no se puede leer</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>DownloadError</code></td>
 <td style="text-align: left;"><code>RuntimeError</code></td>
-<td style="text-align: left;">El archivo no se pudo descargar, su directorio no se pudo crear o no superó dos veces la comprobación de la suma de verificación</td>
+<td style="text-align: left;">El archivo no se pudo descargar o no se pudo crear su directorio, o no superó dos veces la suma de verificación</td>
 </tr>
 </tbody>
 </table>
 <p>Las clases están disponibles desde <code>ests</code> y desde <code>ests.exceptions</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p><code>DatasetNotFoundError</code> es lo que levanta una estadística de Universal Dependencies cuando el modelo <code>es_core_news_sm</code> no está instalado, que es lo primero con lo que se topa un lector nuevo: <code>MorphStats("El gato duerme")</code> sin el modelo dice cómo descargarlo. También la levantan los conjuntos de datos mientras no se han descargado (<code>SpanishLiterature().get_texts()</code> antes de <code>download()</code>), y las estadísticas de <code>LexicalStats</code> según el diccionario de frecuencias; <code>DownloadError</code> viene de una descarga fallida o de un archivo que no supera dos veces su suma de comprobación SHA-256, <code>DataFileError</code> de un archivo que no se puede extraer.</p>
+<p><code>DatasetNotFoundError</code> suele ser el primer error con el que se topa un usuario nuevo: <code>MorphStats("El gato duerme")</code> sin el modelo <code>es_core_news_sm</code> la levanta con el comando de descarga. También la levantan <code>SpanishLiterature().get_texts()</code> antes de <code>download()</code> y las estadísticas de <code>LexicalStats</code> según el diccionario de frecuencias.</p>
 </div>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>

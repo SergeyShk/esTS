@@ -2501,7 +2501,7 @@
 <p><strong>ests.corpus.dispersion()</strong>, <strong>ests.corpus.Dispersion</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>La dispersión de una palabra es lo uniformemente que se reparte por las partes de un texto o de un corpus. La frecuencia no distingue una palabra que aparece una vez en cada capítulo de otra reunida en uno solo; las medidas de dispersión (<a href="https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf">Gries 2008</a>, <a href="https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf">2020</a>) completan la frecuencia y sirven para elegir el vocabulario de diccionarios y de listas de palabras para estudiantes.</p>
+<p>La dispersión de una palabra es lo uniformemente que se reparte por las partes de un texto o de un corpus. La frecuencia no distingue una palabra que aparece una vez en cada capítulo de otra reunida en uno solo; las medidas de dispersión (<a href="https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf">Gries 2008</a>, <a href="https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf">2020</a>) completan la frecuencia.</p>
 <p>El texto se divide en partes: <code>parts</code> es el número de partes de tamaño aproximadamente igual o los tamaños de las partes en orden (oraciones, párrafos, capítulos, documentos de un corpus), que suman el número de palabras. Para cada palabra se calculan sus frecuencias por parte y seis medidas; Gries recomienda DP como la principal.</p>
 <p>Las palabras se comparan tal cual: la caja y la lematización corresponden a <a href="../../extractors/words/"><code>WordsExtractor</code></a>.</p>
 <h2 id="medidas">Medidas<a class="headerlink" href="#medidas" title="Permanent link">&para;</a></h2>
@@ -2554,7 +2554,7 @@
 </tr>
 </tbody>
 </table>
-<p>Las medidas están disponibles como las funciones <code>calc_dp</code>, <code>calc_dp_norm</code>, <code>calc_juilland_d</code>, <code>calc_carroll_d2</code>, <code>calc_rosengren_s</code>, <code>calc_kl_divergence</code> con los argumentos <code>(frequencies, sizes)</code> - las frecuencias de la palabra por parte y los tamaños de las partes - del módulo <code>ests.corpus.dispersion</code> (<code>from ests.corpus.dispersion import calc_dp</code>); sus nombres están en <code>ests.constants.DISPERSION_STATS_DESC</code>. Para una palabra de frecuencia nula todas las medidas son <code>nan</code>. La función <code>dispersion</code> calcula las mismas medidas para todas las palabras a la vez sobre las celdas no nulas de la matriz palabra × parte, así que la memoria es lineal en el número de palabras y una división por oraciones cuesta poco.</p>
+<p>Las medidas están disponibles como las funciones <code>calc_dp</code>, <code>calc_dp_norm</code>, <code>calc_juilland_d</code>, <code>calc_carroll_d2</code>, <code>calc_rosengren_s</code>, <code>calc_kl_divergence</code> con los argumentos <code>(frequencies, sizes)</code> - las frecuencias de la palabra por parte y los tamaños de las partes - del módulo <code>ests.corpus.dispersion</code> (<code>from ests.corpus.dispersion import calc_dp</code>); sus nombres están en <code>ests.constants.DISPERSION_STATS_DESC</code>. Para una palabra de frecuencia nula todas las medidas son <code>nan</code>.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

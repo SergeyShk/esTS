@@ -2479,9 +2479,9 @@
 <p><strong>ests.visualizers.heaps_plot()</strong>, <strong>ests.visualizers.frequency_spectrum_plot()</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>Two plots of the distribution of the words of a text that complement <a href="../zipf/">Zipf's law</a>: the growth of the vocabulary with the length of the text by Heaps' law and the frequency spectrum - how many word types occur exactly once, twice, three times. Both plots are in zipfR (<code>plot.vgc</code>, <code>plot.spc</code>). The functions take the axes <code>ax</code> and return <code>Axes</code>.</p>
+<p>Two plots of the distribution of the words of a text that complement <a href="../zipf/">Zipf's law</a>: the growth of the vocabulary with the length of the text by Heaps' law and the frequency spectrum - how many word types occur exactly once, twice, three times. The functions take the axes <code>ax</code> and return <code>Axes</code>.</p>
 <h2 id="heaps_plot">Heaps' law<a class="headerlink" href="#heaps_plot" title="Permanent link">&para;</a></h2>
-<p>The size of the vocabulary <span class="arithmatex">\(V\)</span> after every word of the text and the fitted curve <span class="arithmatex">\(V(N) = K \cdot N^{\beta}\)</span> of <a href="../../stats/diversity_stats_funcs/#heaps_beta"><code>fit_heaps</code></a> with its parameters in the legend. On corpora of millions of words <span class="arithmatex">\(\beta\)</span> lies around 0.4-0.6; over the whole curve of a single text it comes out higher, 0.6-0.9, since almost every word is new at the start of a text; the curve depends on the order of the words.</p>
+<p>The size of the vocabulary <span class="arithmatex">\(V\)</span> after every word of the text and the fitted curve <span class="arithmatex">\(V(N) = K \cdot N^{\beta}\)</span> of <a href="../../stats/diversity_stats_funcs/#heaps_beta"><code>fit_heaps</code></a> with its parameters in the legend; the curve depends on the order of the words.</p>
 <table>
 <thead>
 <tr>

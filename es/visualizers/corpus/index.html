@@ -2503,7 +2503,7 @@
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
 <p>Gráficos para las <a href="../../corpus/keyness/">medidas de corpus</a>: la dispersión léxica - dónde aparece una palabra en un texto -, un diagrama de las palabras clave que encuentra <a href="../../corpus/keyness/"><code>keyness</code></a> y una red de las colocaciones que encuentra <a href="../../corpus/collocations/"><code>collocations</code></a>. Las funciones de matplotlib reciben los ejes <code>ax</code> y devuelven <code>Axes</code>: sin <code>ax</code> se crea una figura nueva, con ellos el gráfico va a una rejilla propia; la red de colocaciones la construye graphviz y devuelve un <code>Graph</code>, como el <a href="../word_tree/">árbol de palabras</a>.</p>
 <h2 id="dispersion_plot">Dispersión léxica<a class="headerlink" href="#dispersion_plot" title="Permanent link">&para;</a></h2>
-<p>Una fila por cada palabra de <code>targets</code> y una marca en la posición de cada una de sus apariciones en el texto, como <code>dispersion_plot</code> de NLTK y <code>textplot_xray</code> de quanteda. Las palabras se comparan tal cual: la caja y la lematización corresponden a <a href="../../extractors/words/"><code>WordsExtractor</code></a>, y los lemas se buscan con <code>use_lexemes=True</code>.</p>
+<p>Una fila por cada palabra de <code>targets</code> y una marca en la posición de cada una de sus apariciones en el texto. Las palabras se comparan tal cual: la caja y la lematización corresponden a <a href="../../extractors/words/"><code>WordsExtractor</code></a>, y los lemas se buscan con <code>use_lexemes=True</code>.</p>
 <table>
 <thead>
 <tr>
@@ -2535,7 +2535,7 @@
 </tbody>
 </table>
 <h2 id="keyness_plot">Diagrama de palabras clave<a class="headerlink" href="#keyness_plot" title="Permanent link">&para;</a></h2>
-<p>Barras horizontales divergentes (<code>textplot_keyness</code> de quanteda): las palabras de <code>positive</code> a la derecha, las de <code>negative</code> - el resultado de <code>keyness</code> con <code>positive=False</code> - a la izquierda; la longitud de una barra es el valor absoluto del campo <code>field</code> (<code>score</code>, <code>g2</code>, <code>log_ratio</code>), así que el lado lo fija la lista y no el signo de la medida; <code>top_n</code> palabras por lado, y las palabras con un valor indefinido o infinito se omiten. Para la razón de momios (<code>score</code> de 0 a infinito, uno - momios iguales) indique <code>log=True</code>: se representa el valor absoluto de <span class="arithmatex">\(\log_2\)</span> del valor, simétrico en torno a uno.</p>
+<p>Barras horizontales divergentes: las palabras de <code>positive</code> a la derecha, las de <code>negative</code> - el resultado de <code>keyness</code> con <code>positive=False</code> - a la izquierda; la longitud de una barra es el valor absoluto del campo <code>field</code> (<code>score</code>, <code>g2</code>, <code>log_ratio</code>), así que el lado lo fija la lista y no el signo de la medida; <code>top_n</code> palabras por lado, y las palabras con un valor indefinido o infinito se omiten. Para la razón de momios (<code>score</code> de 0 a infinito, uno - momios iguales) indique <code>log=True</code>: se representa el valor absoluto de <span class="arithmatex">\(\log_2\)</span> del valor, simétrico en torno a uno.</p>
 <table>
 <thead>
 <tr>
@@ -2591,7 +2591,7 @@
 </tbody>
 </table>
 <h2 id="collocation_network">Red de colocaciones<a class="headerlink" href="#collocation_network" title="Permanent link">&para;</a></h2>
-<p>Un grafo no dirigido (<code>textplot_network</code> de quanteda): los nodos son las palabras con el tamaño de la letra según su frecuencia, las aristas son los pares con el grosor y la etiqueta según el valor de la medida; la disposición <code>neato</code>. Un par de una palabra consigo misma - una palabra repetida dentro de la ventana (<code>rojo rojo</code>) - sería un bucle y se deja fuera antes de tomar los <code>top_n</code> pares. Para dibujarlo hacen falta los ejecutables de <a href="https://graphviz.org/download/">Graphviz</a>; en Jupyter el grafo se muestra solo, y <code>graph.render("network")</code> guarda un archivo png, como para el árbol de palabras.</p>
+<p>Un grafo no dirigido: los nodos son las palabras con el tamaño de la letra según su frecuencia, las aristas son los pares con el grosor y la etiqueta según el valor de la medida; la disposición <code>neato</code>. Un par de una palabra consigo misma - una palabra repetida dentro de la ventana (<code>rojo rojo</code>) - sería un bucle y se deja fuera antes de tomar los <code>top_n</code> pares. Para dibujarlo hacen falta los ejecutables de <a href="https://graphviz.org/download/">Graphviz</a>; en Jupyter el grafo se muestra solo, y <code>graph.render("network")</code> guarda un archivo png.</p>
 <table>
 <thead>
 <tr>
@@ -2670,7 +2670,7 @@
 <p><img alt="ests" class="center" src="../../../img/keyness.png" /></p>
 <p><img alt="ests" class="center" src="../../../img/network.png" /></p>
 </div>
-<p>Nela recorre toda la novela, Florentina entra en su segunda mitad, y el doctor Golfín la abre y la cierra; la ceguera de Pablo (<code>ciego</code>) pertenece sobre todo a la primera mitad. Además de los nombres de los personajes, las palabras clave muestran la ortografía de las ediciones - <code>á</code> con la tilde de la ortografía antigua, que de las novelas de Galdós solo conserva la edición de <em>Torquemada en la hoguera</em>, y <code>fué</code>, que conservan las tres ediciones de Unamuno - y palabras de los temas de Unamuno: <code>acaso</code>, <code>hijo</code>. La red de colocaciones reúne los nombres y los lugares de <em>Marianela</em> en torno a <code>d.</code>, el <em>don</em> abreviado: Teodoro Golfín, Aldeacorba de Suso, las minas de Socartes.</p>
+<p>Nela recorre toda la novela, Florentina entra en su segunda mitad, y el doctor Golfín la abre y la cierra; la ceguera de Pablo (<code>ciego</code>) pertenece sobre todo a la primera mitad. Además de los nombres de los personajes, las palabras clave muestran la ortografía antigua de las ediciones (<code>á</code>, <code>fué</code>) y palabras de los temas de Unamuno: <code>acaso</code>, <code>hijo</code>. La red de colocaciones reúne los nombres y los lugares de <em>Marianela</em> en torno a <code>d.</code>, el <em>don</em> abreviado: Teodoro Golfín, Aldeacorba de Suso, las minas de Socartes.</p>
 
 
 

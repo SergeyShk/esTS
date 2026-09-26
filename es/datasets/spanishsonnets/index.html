@@ -2580,50 +2580,9 @@
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
 <p>Una colección de sonetos en español del <a href="https://github.com/pruizf/disco">Diachronic Spanish Sonnet Corpus</a> (DISCO 5.0): 4259 sonetos de 1167 autores de España, Hispanoamérica y Filipinas, del siglo XV a principios del XX, 60 209 versos. Cada verso lleva su patrón métrico y la etiqueta de su rima, así que la colección sirve para estudiar la métrica y la rima y para contrastar una escansión con la anotación del corpus.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Periodo</th>
-<th style="text-align: left;">Clave</th>
-<th style="text-align: center;">Sonetos</th>
-<th style="text-align: center;">Autores</th>
-<th style="text-align: left;">Los autores más representados</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">Siglos XV-XVII</td>
-<td style="text-align: left;"><code>15th-17th</code></td>
-<td style="text-align: center;">1088</td>
-<td style="text-align: center;">475</td>
-<td style="text-align: left;">Juan de Arguijo (72), Marqués de Santillana (42), Juan de Jauregui (23), Luis Martín de la Plaza (22)</td>
-</tr>
-<tr>
-<td style="text-align: left;">Siglo XVIII</td>
-<td style="text-align: left;"><code>18th</code></td>
-<td style="text-align: center;">321</td>
-<td style="text-align: center;">42</td>
-<td style="text-align: left;">Juan Nicasio Gallego (50), Juan Bautista Arriaza (28), Vicente García de la Huerta (25), Juan Meléndez Valdés (25)</td>
-</tr>
-<tr>
-<td style="text-align: left;">Siglo XIX</td>
-<td style="text-align: left;"><code>19th</code></td>
-<td style="text-align: center;">2845</td>
-<td style="text-align: center;">650</td>
-<td style="text-align: left;">Rubén Darío (140), José Santos Chocano (130), Clemente Althaus (52), Julio Flores Roa (52)</td>
-</tr>
-<tr>
-<td style="text-align: left;">Siglo XX</td>
-<td style="text-align: left;"><code>20th</code></td>
-<td style="text-align: center;">5</td>
-<td style="text-align: center;">1</td>
-<td style="text-align: left;">Cecilio Apóstol (5)</td>
-</tr>
-</tbody>
-</table>
-<p>295 sonetos son de mujeres. Por el país de nacimiento: España (2388), Cuba (719), Perú (204), México (191), Nicaragua (141), Colombia (100), Argentina (93), Uruguay (76), Venezuela (68) y 13 países más; el país de 38 sonetos es desconocido. La parte del siglo XIX de DISCO es una antología de España e Hispanoamérica, la del siglo XX reúne a los poetas filipinos en español.</p>
-<p>Solo se guardan los sonetos de dominio público, 4259 de 4523: los de los autores que murieron antes de 1946, los de los autores de los siglos XV-XVIII cuya muerte se desconoce y los de los autores de la antología del siglo XIX nacidos antes de 1866 o sin fechas. Los sonetos de los autores que murieron en 1946 o después se quedan fuera, entre ellos los de la mayoría de los poetas filipinos. Un autor de la antología sin fechas en la fuente también se queda fuera cuando las fechas de <a href="https://viaf.org">VIAF</a> que DISCO asoció con confianza alta dan una muerte en 1946 o después o un nacimiento en 1866 o después sin muerte (Luis Rodríguez Embil, 1879-1954, marcado solo como del siglo XIX): VIAF solo deja fuera a un autor y nunca sustituye las fechas de la fuente, ya que algunas de sus asociaciones son otras personas. Los años de vida se leen de la línea biográfica de la fuente donde DISCO tomó de ella un año posterior por el de la muerte (Echegaray murió en 1916, no en 1904, el año de su premio Nobel) o no vio un nacimiento o una muerte dados solos (<code>1585 - Siglo XVII</code>, <code>18¿? - 1892</code>); los años que siguen a un siglo en esa línea son de otras personas o sucesos y no se toman. El país de nacimiento también se lee de esa línea donde la nombra (Gertrudis Gómez de Avellaneda nació en Puerto Príncipe, Cuba, no en Haití). Los poetas filipinos, escritos en DISCO con el apellido primero, llevan el nombre primero como los demás; los interlocutores de los diálogos (<code>[Car]</code>, <code>[POETA]</code>) y las llamadas de las notas se quitan de los versos, como están fuera de sus patrones métricos.</p>
-<p>El archivo (1 MB) se guarda en el repositorio de la biblioteca, se descarga una vez en el directorio de datos, se verifica con su suma de comprobación SHA-256 y se extrae; los sonetos se leen de uno en uno de un fichero JSON Lines. Lo construye <code>scripts/build_spanish_sonnets.py</code> a partir de DISCO en un commit fijo.</p>
+<p>Los sonetos se reparten en cuatro periodos: <code>15th-17th</code> (1088 sonetos), <code>18th</code> (321), <code>19th</code> (2845, una antología de España e Hispanoamérica) y <code>20th</code> (5, del poeta filipino Cecilio Apóstol); 295 sonetos son de mujeres, y los autores nacieron en 22 países, la mayoría en España (2388 sonetos) y Cuba (719).</p>
+<p>Solo se guardan los sonetos de dominio público, 4259 de 4523: los de los autores que murieron antes de 1946, los de los autores de los siglos XV-XVIII cuya muerte se desconoce y los de los autores de la antología del siglo XIX nacidos antes de 1866 o sin fechas; la mayoría de los poetas filipinos se quedan fuera. Un autor de la antología sin fechas también se queda fuera cuando las fechas de <a href="https://viaf.org">VIAF</a> que DISCO asoció con confianza alta dan una muerte en 1946 o después o un nacimiento en 1866 o después sin muerte; VIAF solo deja fuera a un autor y nunca sustituye las fechas de la fuente. Los metadatos de DISCO se corrigen con la línea biográfica de la fuente: los años de vida donde DISCO tomó de ella un año posterior por el de la muerte o no vio un nacimiento o una muerte dados solos (Echegaray murió en 1916, no en 1904), el país de nacimiento donde la línea lo nombra (Gertrudis Gómez de Avellaneda nació en Cuba, no en Haití). Los poetas filipinos llevan el nombre antes del apellido, como los demás; los interlocutores de los diálogos (<code>[Car]</code>, <code>[POETA]</code>) y las llamadas de las notas se quitan de los versos, ya que no están en sus patrones métricos.</p>
+<p>El archivo (1 MB, un fichero JSON Lines) se guarda en el repositorio de la biblioteca y se descarga una vez en el directorio de datos; lo construye <code>scripts/build_spanish_sonnets.py</code> a partir de DISCO en un commit fijo.</p>
 <div class="admonition quote">
 <p class="admonition-title">Licencia y atribución</p>
 <p>DISCO se publica con la <a href="https://creativecommons.org/licenses/by/4.0/">licencia Creative Commons Reconocimiento 4.0 Internacional</a>, y este conjunto de datos también; el archivo lleva un <code>README.txt</code> con la fuente y los cambios. Cite la fuente así: Ruiz Fabo P., Bermúdez Sabel H., Martínez Cantón C., Calvo Tello J. Diachronic Spanish Sonnet Corpus (DISCO), version 5.0. Madrid: UNED, 2017-2023; y el artículo: Ruiz Fabo P., Bermúdez Sabel H., Martínez Cantón C., González-Blanco E. The Diachronic Spanish Sonnet Corpus: TEI and linked open data encoding, data distribution, and metrical findings. Digital Scholarship in the Humanities 36 (Supplement 1), 2021, i68-i80, <a href="https://doi.org/10.1093/llc/fqaa035">doi:10.1093/llc/fqaa035</a>.</p>
@@ -2699,7 +2658,7 @@
 <h3 id="check_data">check_data<a class="headerlink" href="#check_data" title="Permanent link">&para;</a></h3>
 <p>Comprueba que el fichero del conjunto de datos está en su sitio y devuelve <code>True</code>; un conjunto sin descargar levanta <code>DatasetNotFoundError</code>. Los demás métodos lo comprueban por sí mismos.</p>
 <h3 id="download">download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h3>
-<p>Descarga el archivo con verificación de la suma de comprobación y extrae el fichero. Un archivo dañado o sustituido se borra y se descarga de nuevo en la misma llamada; si el archivo está pero falta el fichero, se extrae otra vez. Una llamada repetida no descarga nada.</p>
+<p>Descarga el archivo, verifica su suma de comprobación SHA-256 y extrae el fichero. Un archivo dañado se descarga de nuevo, un fichero que falta se extrae otra vez; una llamada repetida no descarga nada.</p>
 <table>
 <thead>
 <tr>
@@ -2799,7 +2758,7 @@
 </code></pre></div>
 </div>
 <h3 id="get_records">get_records<a class="headerlink" href="#get_records" title="Permanent link">&para;</a></h3>
-<p>Extrae los registros (con encabezados) del conjunto de datos. Campos del registro: <code>id</code> - el identificador del soneto en DISCO, <code>period</code> - periodo, <code>author</code> - autor, <code>title</code> - título, <code>country</code> - el país de nacimiento del autor en español (vacío si se desconoce), <code>gender</code> - <code>F</code> o <code>M</code>, <code>birth</code> y <code>death</code> - los años de vida (<code>None</code> si se desconocen), <code>text</code> - texto, <code>meter</code> - el patrón métrico de cada verso, <code>rhyme</code> - la etiqueta de la rima de cada verso. En un patrón métrico <code>+</code> es una sílaba tónica y <code>-</code> una átona, así que su longitud es el número de sílabas métricas: 11 para un endecasílabo, 14 para un alejandrino. Las etiquetas iguales marcan los versos que riman entre sí, <code>-</code> un verso que no rima con ningún otro. Los registros van por periodo en el orden de <code>periods</code>, dentro de un periodo por el identificador de DISCO con sus números comparados como números (<code>1035e_269</code> antes de <code>1035e_1360</code>), que mantiene juntos los sonetos de un autor en el orden de su fuente.</p>
+<p>Extrae los registros (con encabezados) del conjunto de datos. Campos del registro: <code>id</code> - el identificador del soneto en DISCO, <code>period</code> - periodo, <code>author</code> - autor, <code>title</code> - título, <code>country</code> - el país de nacimiento del autor en español (vacío si se desconoce), <code>gender</code> - <code>F</code> o <code>M</code>, <code>birth</code> y <code>death</code> - los años de vida (<code>None</code> si se desconocen), <code>text</code> - texto, <code>meter</code> - el patrón métrico de cada verso, <code>rhyme</code> - la etiqueta de la rima de cada verso. En un patrón métrico <code>+</code> es una sílaba tónica y <code>-</code> una átona, así que su longitud es el número de sílabas métricas: 11 para un endecasílabo, 14 para un alejandrino. Las etiquetas iguales marcan los versos que riman entre sí, <code>-</code> un verso que no rima con ningún otro. Los registros van por periodo en el orden de <code>periods</code>, dentro de un periodo por el identificador de DISCO ordenado numéricamente (<code>1035e_269</code> antes de <code>1035e_1360</code>), que mantiene juntos los sonetos de un autor en el orden de su fuente.</p>
 <p>Los parámetros son los mismos que los de <code>get_texts</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
@@ -2833,11 +2792,11 @@
 </div>
 <div class="admonition warning">
 <p class="admonition-title">La anotación es automática</p>
-<p>Los patrones métricos y las etiquetas de la rima son la anotación automática de DISCO, no una manual: la escansión de ADSO (precisión 0,91) y, para los sonetos modernistas y filipinos, de Jumper (0,95); la rima de RhymeTagger. Son una referencia con la que comparar una escansión, no un patrón de oro: un patrón puede perder una sinalefa o un acento que haría un lector. 20 sonetos no tienen etiquetas de la rima, y las secuencias largas no las tienen después de la letra <code>N</code>: esa etiqueta es una cadena vacía.</p>
+<p>Los patrones métricos y las etiquetas de la rima son la anotación automática de DISCO (la escansión de ADSO, de Jumper para los sonetos modernistas y filipinos, la rima de RhymeTagger): una referencia con la que comparar una escansión, no un patrón de oro, ya que un patrón puede perder una sinalefa o un acento que haría un lector. Algunos sonetos no tienen etiquetas de la rima, y las secuencias largas no las tienen después de la letra <code>N</code>: esa etiqueta es una cadena vacía.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Sonetos, secuencias y títulos</p>
-<p>4211 registros son sonetos de 14 versos. Los demás son sonetos con estrambote (17 versos, etc.), unos pocos incompletos o de forma irregular («El soneto de trece versos» de Darío) y secuencias de sonetos que DISCO guarda en un solo fichero, de hasta 98 versos. Los sonetos de una secuencia en ficheros separados tienen el título <code>Part of:</code> y el título de la secuencia (397 registros). Los títulos y la ortografía son los de las fuentes de DISCO, algunos títulos en mayúsculas.</p>
+<p>4211 registros son sonetos de 14 versos; los demás son sonetos con estrambote, unos pocos incompletos o irregulares («El soneto de trece versos» de Darío) y secuencias de sonetos que DISCO guarda en un solo fichero, de hasta 98 versos. Los sonetos de una secuencia guardados en ficheros separados tienen el título <code>Part of:</code> y el título de la secuencia. Los títulos y la ortografía son los de las fuentes de DISCO, algunos títulos en mayúsculas.</p>
 </div>
 
 

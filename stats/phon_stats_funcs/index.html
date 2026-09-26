@@ -2591,7 +2591,7 @@
 <div class="admonition info">
 <p><strong>ests.phon_stats.transcribe()</strong></p>
 </div>
-<p>Transcribes a word into its sounds. The word is split into syllables (<a href="../../syllables/"><code>syllabify</code></a>) and every syllable is read by the rules of the Spanish orthography; the characters that are no Spanish letters (digits, hyphens) are left out, and the results are cached by word form.</p>
+<p>Transcribes a word into its sounds. The word is split into syllables (<a href="../../syllables/"><code>syllabify</code></a>) and every syllable is read by the rules of the Spanish orthography; the characters that are no Spanish letters (digits, hyphens) are left out.</p>
 <table>
 <thead>
 <tr>
@@ -2705,7 +2705,7 @@
 <div class="admonition info">
 <p><strong>ests.phon_stats.cv_pattern()</strong></p>
 </div>
-<p>The CV pattern of a word or a syllable: the vowels are written V and the consonants C, over the sounds of the transcription - <code>queso</code> is CVCV, <code>hora</code> VCV, <code>examen</code> VCCVCVC.</p>
+<p>The CV pattern of a word or a syllable: the vowels are written V and the consonants C, over the sounds of the transcription - <code>queso</code> is CVCV, <code>hora</code> VCV, <code>examen</code> VCCVCVC. A syllable is read as a word of its own, so its initial <code>x</code> is s, as at the start of a word: <code>xi</code> is CV, while the syllable <code>xi</code> of <code>México</code> counts as CCV in <code>PhonStats</code>.</p>
 <table>
 <thead>
 <tr>
@@ -2717,10 +2717,10 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>sounds</code></td>
-<td style="text-align: center;">tuple[str]</td>
+<td style="text-align: center;"><code>word</code></td>
+<td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Sounds of a word or a syllable</td>
+<td style="text-align: center;">Word or syllable</td>
 </tr>
 </tbody>
 </table>
@@ -2728,7 +2728,7 @@
 <div class="admonition info">
 <p><strong>ests.phon_stats.is_open_syllable()</strong></p>
 </div>
-<p>Checks whether a syllable is open: an open syllable ends in a vowel sound - <code>ca</code>, <code>que</code>, <code>hoy</code> (the final <code>y</code> is the vowel i); <code>car</code> and <code>pan</code> are closed.</p>
+<p>Checks whether a syllable is open: an open syllable ends in a vowel sound - <code>ca</code>, <code>que</code>, <code>hoy</code> (the final <code>y</code> is the vowel i); <code>car</code> and <code>pan</code> are closed. The syllable is read as a word of its own.</p>
 <table>
 <thead>
 <tr>
@@ -2741,9 +2741,9 @@
 <tbody>
 <tr>
 <td style="text-align: center;"><code>syllable</code></td>
-<td style="text-align: center;">tuple[str]</td>
+<td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Sounds of the syllable</td>
+<td style="text-align: center;">Syllable</td>
 </tr>
 </tbody>
 </table>

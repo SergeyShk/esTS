@@ -2734,7 +2734,7 @@
 </tr>
 </tbody>
 </table>
-<p>La familia de Flesch se fija con un preajuste (véase <a href="#presets">más abajo</a>): por defecto los coeficientes de Szigriszt-Pazos, validados con la escala INFLESZ, y como alternativa los de Fernández Huerta. Las demás fórmulas no dependen del preajuste.</p>
+<p>Los coeficientes de la facilidad de lectura de Flesch se fijan con un preajuste (véase <a href="#presets">más abajo</a>): Szigriszt-Pazos por defecto, Fernández Huerta como alternativa.</p>
 <p>Los supuestos principales de las métricas de legibilidad:</p>
 <ul>
 <li>las oraciones cortas se leen con más facilidad que las largas;</li>
@@ -2871,17 +2871,17 @@
 <td style="text-align: center;"><code>general</code></td>
 <td style="text-align: center;">Szigriszt-Pazos (1993), fórmula de perspicuidad</td>
 <td style="text-align: center;"><code>206.835 − 1.0·ASL − 62.3·ASW</code></td>
-<td style="text-align: center;">INFLESZ (Barrio-Cantalejo et al., 2008), validada con textos para pacientes</td>
+<td style="text-align: center;">INFLESZ (Barrio-Cantalejo et al., 2008)</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>classic</code></td>
-<td style="text-align: center;">Fernández Huerta (1959), la primera adaptación de Flesch al español</td>
+<td style="text-align: center;">Fernández Huerta (1959)</td>
 <td style="text-align: center;"><code>206.84 − 1.02·ASL − 60·ASW</code></td>
 <td style="text-align: center;">los siete niveles del autor</td>
 </tr>
 </tbody>
 </table>
-<p>Fernández Huerta imprimió el último término como <code>1.02</code> por el número de frases por cada 100 palabras. Law (2011) mostró que eso invierte la fracción de la fórmula de Flesch en la que se basó la adaptación, así que aquí se usa la longitud media de la oración, como hacen koRpus, textstat y legible.es. La tabla de todos los coeficientes está disponible como <code>ests.constants.READABILITY_PRESETS</code>.</p>
+<p>La fórmula de Fernández Huerta toma la longitud media de la oración, con la corrección de Law (2011). La tabla de todos los coeficientes está disponible como <code>ests.constants.READABILITY_PRESETS</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReadabilityStats</span>
@@ -2899,7 +2899,7 @@
 </div>
 <h2 id="interpretation">Interpretación<a class="headerlink" href="#interpretation" title="Permanent link">&para;</a></h2>
 <p>El método <a href="#describe_level"><code>describe_level</code></a> sitúa la facilidad de lectura en la escala del preajuste: INFLESZ para <code>general</code> (<code>muy difícil</code> por debajo de 40, <code>algo difícil</code> 40-55, <code>normal</code> 55-65, <code>bastante fácil</code> 65-80, <code>muy fácil</code> por encima de 80) y los siete niveles de Fernández Huerta para <code>classic</code>, y a petición las escalas de Szigriszt-Pazos o del otro autor; la Legibilidad µ tiene los siete niveles de sus autores (<code>muy difícil</code> 0-30, <code>difícil</code> 31-50, <code>un poco difícil</code> 51-60, <code>adecuado</code> 61-70, <code>un poco fácil</code> 71-80, <code>fácil</code> 81-90, <code>muy fácil</code> 91-100).</p>
-<p>Las fórmulas que dan años de escolaridad (Crawford, SOL) se resumen en el atributo <code>consensus_grade</code>: la mediana de los valores redondeados más la facilidad de lectura convertida en grado según la escala del preajuste: por los tipos de texto de los niveles INFLESZ para <code>general</code> y por la tabla de interpretación de Flesch, cuyos niveles conservó Fernández Huerta, para <code>classic</code>. El método <a href="#describe_grade"><code>describe_grade</code></a> traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:</p>
+<p>Las fórmulas que dan años de escolaridad (Crawford, SOL) se resumen en el atributo <code>consensus_grade</code>: la mediana de los valores redondeados más la facilidad de lectura <a href="../readability_stats_funcs/#flesch_reading_easy_to_grade">convertida en grado</a> según la escala del preajuste. El método <a href="#describe_grade"><code>describe_grade</code></a> traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:</p>
 <table>
 <thead>
 <tr>
@@ -2945,7 +2945,7 @@
 <p class="admonition-title">Aviso</p>
 <p>Crawford se ajustó con lecturas de primaria y se satura en los textos para adultos; SOL se ajustó con materiales de educación sanitaria. El grado de consenso de un texto técnico refleja sobre todo el nivel de la facilidad de lectura.</p>
 </div>
-<p>El atributo <code>reading_time</code> estima el tiempo de lectura silenciosa a 278 palabras por minuto, la media de seis estudios con lectores adultos de español en el metaanálisis de Brysbaert (2019). El método <a href="#reading_time_by_speed"><code>reading_time_by_speed</code></a> acepta otra velocidad, y el método <a href="#reading_time_by_norm"><code>reading_time_by_norm</code></a> calcula el tiempo en voz alta y en silencio según las normas de la tabla <code>ests.constants.READING_SPEED_NORMS</code>: las velocidades medias del alumnado hispanohablante por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) y las de los adultos según Brysbaert (2019).</p>
+<p>El atributo <code>reading_time</code> estima el tiempo de lectura silenciosa a 278 palabras por minuto, la velocidad de los lectores adultos de español en el metaanálisis de Brysbaert (2019). El método <a href="#reading_time_by_speed"><code>reading_time_by_speed</code></a> acepta otra velocidad, y el método <a href="#reading_time_by_norm"><code>reading_time_by_norm</code></a> calcula el tiempo en voz alta y en silencio según las normas de la tabla <code>ests.constants.READING_SPEED_NORMS</code>: las velocidades medias del alumnado hispanohablante por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) y las de los adultos según Brysbaert (2019).</p>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <h3 id="describe_level">describe_level<a class="headerlink" href="#describe_level" title="Permanent link">&para;</a></h3>
 <p>Devuelve el nivel de una escala de legibilidad para la facilidad de lectura o la Legibilidad µ.</p>

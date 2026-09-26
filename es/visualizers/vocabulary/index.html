@@ -2479,9 +2479,9 @@
 <p><strong>ests.visualizers.heaps_plot()</strong>, <strong>ests.visualizers.frequency_spectrum_plot()</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Dos gráficos de la distribución de las palabras de un texto que completan la <a href="../zipf/">ley de Zipf</a>: el crecimiento del vocabulario con la longitud del texto según la ley de Heaps y el espectro de frecuencias, cuántos tipos de palabra aparecen exactamente una, dos, tres veces. Ambos gráficos están en zipfR (<code>plot.vgc</code>, <code>plot.spc</code>). Las funciones reciben los ejes <code>ax</code> y devuelven <code>Axes</code>.</p>
+<p>Dos gráficos de la distribución de las palabras de un texto que completan la <a href="../zipf/">ley de Zipf</a>: el crecimiento del vocabulario con la longitud del texto según la ley de Heaps y el espectro de frecuencias, cuántos tipos de palabra aparecen exactamente una, dos, tres veces. Las funciones reciben los ejes <code>ax</code> y devuelven <code>Axes</code>.</p>
 <h2 id="heaps_plot">Ley de Heaps<a class="headerlink" href="#heaps_plot" title="Permanent link">&para;</a></h2>
-<p>El tamaño del vocabulario <span class="arithmatex">\(V\)</span> tras cada palabra del texto y la curva ajustada <span class="arithmatex">\(V(N) = K \cdot N^{\beta}\)</span> de <a href="../../stats/diversity_stats_funcs/#heaps_beta"><code>fit_heaps</code></a> con sus parámetros en la leyenda. En corpus de millones de palabras <span class="arithmatex">\(\beta\)</span> ronda 0.4-0.6; sobre la curva entera de un solo texto sale más alto, 0.6-0.9, porque al principio de un texto casi cada palabra es nueva; la curva depende del orden de las palabras.</p>
+<p>El tamaño del vocabulario <span class="arithmatex">\(V\)</span> tras cada palabra del texto y la curva ajustada <span class="arithmatex">\(V(N) = K \cdot N^{\beta}\)</span> de <a href="../../stats/diversity_stats_funcs/#heaps_beta"><code>fit_heaps</code></a> con sus parámetros en la leyenda; la curva depende del orden de las palabras.</p>
 <table>
 <thead>
 <tr>

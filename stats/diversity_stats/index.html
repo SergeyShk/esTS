@@ -2582,7 +2582,7 @@
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
 <p>A module for computing the main <a href="https://en.wikipedia.org/wiki/Lexical_diversity">lexical diversity</a> metrics of a text. The data source can be either a text or a <code>Doc</code> object of the <a href="https://github.com/explosion/spaCy">spaCy</a> library.</p>
-<p>The module allows using a pre-built <a href="../../extractors/words/"><code>WordsExtractor</code></a> object for the word tokenization needed before computing the statistics; for a <code>Doc</code> a given extractor is applied to the text of the <code>Doc</code>, without one the words come from its tokens. Whatever the source and the extractor, the words are lower-cased, since every metric counts lexemes.</p>
+<p>The words can be extracted by a pre-built <a href="../../extractors/words/"><code>WordsExtractor</code></a>; for a <code>Doc</code> a given extractor is applied to its text, without one the words come from its tokens. The words are always lower-cased, since every metric counts lexemes.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The metrics are computed by accessing the corresponding attribute or by calling the <code>get_stats</code> method of the <code>DiversityStats</code> object.</p>
@@ -2643,7 +2643,7 @@
 </tbody>
 </table>
 <h2 id="conventions">Conventions<a class="headerlink" href="#conventions" title="Permanent link">&para;</a></h2>
-<p>The values of some metrics depend on parameters that different libraries choose differently. The defaults match koRpus and Kyle's lexical-diversity, and all of them are class parameters. The comparison with the MTLD threshold is the only convention that is not a parameter:</p>
+<p>The values of some metrics depend on conventions that differ between libraries. All of them except the comparison with the MTLD threshold are class parameters:</p>
 <table>
 <thead>
 <tr>
@@ -2670,8 +2670,8 @@
 </tr>
 <tr>
 <td style="text-align: center;">Comparison with the MTLD threshold</td>
-<td style="text-align: center;">a factor closes at TTR ≤ 0.72 - in McCarthy and Jarvis (2010) a factor ends when TTR "reaches" 0.720</td>
-<td style="text-align: center;">lexical-diversity and TAALED - strict <code>&lt;</code>, so on factors where TTR hits the threshold exactly (18/25, 36/50) the MTLD, MA-MTLD and MTLD-W values diverge</td>
+<td style="text-align: center;">a factor closes at TTR ≤ 0.72 (McCarthy &amp; Jarvis, 2010)</td>
+<td style="text-align: center;">lexical-diversity and TAALED - strict <code>&lt;</code>; the values differ when TTR hits the threshold exactly</td>
 </tr>
 <tr>
 <td style="text-align: center;">Minimum MTLD factor length</td>
@@ -2880,11 +2880,11 @@
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Every metric can be computed separately by calling the corresponding function. Detailed information on the lexical diversity metrics and the functions used to compute them is available in the corresponding <a href="../diversity_stats_funcs/">section</a>.</p>
+<p>Every metric can also be computed by its function; the metrics and their functions are described in the corresponding <a href="../diversity_stats_funcs/">section</a>.</p>
 </div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="windowed">windowed<a class="headerlink" href="#windowed" title="Permanent link">&para;</a></h3>
-<p>Windowed computation of a metric: its value over consecutive text windows of equal length, the mean, the sample standard deviation and the confidence interval of the mean by Student's distribution. The standard way to compare texts of different lengths; Kubát and Milička's STTR is a windowed TTR with a 1000-word window and a 95% confidence interval. For texts shorter than the window the metric is computed over the whole text as a single window; windows with an undefined metric value (<code>nan</code>) are ignored. If the metric is infinite in at least one window, the mean is infinite and the standard deviation and confidence interval are undefined.</p>
+<p>Windowed computation of a metric by its name, as in <a href="../diversity_stats_funcs/#calc_windowed"><code>calc_windowed</code></a>: its value over consecutive text windows of equal length, the mean, the sample standard deviation and the confidence interval of the mean by Student's distribution. The edge cases (short texts, <code>nan</code> and infinite values) are described there.</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -2937,7 +2937,6 @@
 </div>
 <h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
 <p>Returns a dictionary with the computed lexical diversity metrics.</p>
-<p>An example of computing lexical diversity metrics:</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <p><em>Code</em>:</p>
@@ -2988,7 +2987,7 @@
 </div>
 <h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
 <p>Prints a table with the computed lexical diversity metrics.</p>
-<p>To illustrate the method, we reuse the code from the previous example:</p>
+<p>The example continues the previous one:</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <p><em>Code</em>:</p>

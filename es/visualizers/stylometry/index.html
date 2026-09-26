@@ -2523,9 +2523,9 @@
 <p><strong>ests.visualizers.dendrogram_plot()</strong>, <strong>ests.visualizers.pca_plot()</strong>, <strong>ests.visualizers.mds_plot()</strong>, <strong>ests.visualizers.mendenhall_plot()</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Gráficos para la <a href="../../corpus/stylometry/">estilometría</a>: un dendrograma y el escalamiento multidimensional de la matriz de distancias de <a href="../../corpus/stylometry/#delta"><code>delta</code></a>, las componentes principales de las frecuencias de las palabras más frecuentes y las curvas de Mendenhall de varios textos, el conjunto que usa stylo para ver cómo se agrupan los textos por autor. Las funciones reciben los ejes <code>ax</code> y devuelven <code>Axes</code>.</p>
+<p>Gráficos para la <a href="../../corpus/stylometry/">estilometría</a>: un dendrograma y el escalamiento multidimensional de la matriz de distancias de <a href="../../corpus/stylometry/#delta"><code>delta</code></a>, las componentes principales de las frecuencias de las palabras más frecuentes y las curvas de Mendenhall de varios textos. Las funciones reciben los ejes <code>ax</code> y devuelven <code>Axes</code>.</p>
 <h2 id="dendrogram_plot">Dendrograma<a class="headerlink" href="#dendrogram_plot" title="Permanent link">&para;</a></h2>
-<p>Agrupamiento jerárquico con <code>scipy.cluster.hierarchy</code> sobre la matriz de distancias entre textos; el método de Ward por defecto, como en stylo y en <a href="https://aclanthology.org/W15-0709.pdf">Evert et al. (2015)</a>; las etiquetas de las hojas son los nombres de los textos del índice de la matriz.</p>
+<p>Agrupamiento jerárquico con <code>scipy.cluster.hierarchy</code> sobre la matriz de distancias entre textos; el método de Ward por defecto, como en <a href="https://aclanthology.org/W15-0709.pdf">Evert et al. (2015)</a>; las etiquetas de las hojas son los nombres de los textos del índice de la matriz.</p>
 <table>
 <thead>
 <tr>
@@ -2557,7 +2557,7 @@
 </tbody>
 </table>
 <h2 id="pca_plot">Componentes principales<a class="headerlink" href="#pca_plot" title="Permanent link">&para;</a></h2>
-<p>Análisis de componentes principales de las puntuaciones z de las frecuencias relativas de las unidades más frecuentes (<a href="../../corpus/stylometry/#delta"><code>frequency_table</code></a>, <code>z_scores</code>) mediante la descomposición en valores singulares, como <code>pca.visualization</code> de stylo: los textos en el plano de las dos primeras componentes con sus nombres, y la proporción de la varianza explicada en las etiquetas de los ejes.</p>
+<p>Análisis de componentes principales de las puntuaciones z de las frecuencias relativas de las unidades más frecuentes (<a href="../../corpus/stylometry/#delta"><code>frequency_table</code></a>, <code>z_scores</code>): los textos en el plano de las dos primeras componentes con sus nombres, y la proporción de la varianza explicada en las etiquetas de los ejes.</p>
 <table>
 <thead>
 <tr>
@@ -2694,7 +2694,7 @@
 <p><img alt="ests" class="center" src="../../../img/stylometry.png" /></p>
 <p><img alt="ests" class="center" src="../../../img/mds_mendenhall.png" /></p>
 </div>
-<p>La Delta coseno sobre las 100 palabras más frecuentes separa a los autores: el dendrograma une las novelas de cada autor antes de unir los dos grupos, y la primera componente principal, el 43.9% de la varianza, pone a Galdós a un lado y a Unamuno al otro. Las curvas de Mendenhall apenas difieren: la longitud de las palabras es un rasgo débil por sí sola.</p>
+<p>La Delta coseno sobre las 100 palabras más frecuentes separa a los autores: el dendrograma une las novelas de cada autor antes de unir los dos grupos, y la primera componente principal pone a Galdós a un lado y a Unamuno al otro. Las curvas de Mendenhall apenas difieren: la longitud de las palabras es un rasgo débil por sí sola.</p>
 
 
 

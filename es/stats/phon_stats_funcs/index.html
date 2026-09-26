@@ -2591,7 +2591,7 @@
 <div class="admonition info">
 <p><strong>ests.phon_stats.transcribe()</strong></p>
 </div>
-<p>Transcribe una palabra en sus sonidos. La palabra se divide en sílabas (<a href="../../syllables/"><code>syllabify</code></a>) y cada sílaba se lee por las reglas de la ortografía española; los caracteres que no son letras del español (cifras, guiones) se omiten, y los resultados se guardan en caché por forma.</p>
+<p>Transcribe una palabra en sus sonidos. La palabra se divide en sílabas (<a href="../../syllables/"><code>syllabify</code></a>) y cada sílaba se lee por las reglas de la ortografía española; los caracteres que no son letras del español (cifras, guiones) se omiten.</p>
 <table>
 <thead>
 <tr>
@@ -2705,7 +2705,7 @@
 <div class="admonition info">
 <p><strong>ests.phon_stats.cv_pattern()</strong></p>
 </div>
-<p>El patrón CV de una palabra o de una sílaba: las vocales se escriben V y las consonantes C, sobre los sonidos de la transcripción - <code>queso</code> es CVCV, <code>hora</code> VCV, <code>examen</code> VCCVCVC.</p>
+<p>El patrón CV de una palabra o de una sílaba: las vocales se escriben V y las consonantes C, sobre los sonidos de la transcripción - <code>queso</code> es CVCV, <code>hora</code> VCV, <code>examen</code> VCCVCVC. Una sílaba se lee como una palabra por sí sola, así que su <code>x</code> inicial es s, como al comienzo de una palabra: <code>xi</code> es CV, mientras que la sílaba <code>xi</code> de <code>México</code> cuenta como CCV en <code>PhonStats</code>.</p>
 <table>
 <thead>
 <tr>
@@ -2717,10 +2717,10 @@
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>sounds</code></td>
-<td style="text-align: center;">tuple[str]</td>
+<td style="text-align: center;"><code>word</code></td>
+<td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Sonidos de una palabra o de una sílaba</td>
+<td style="text-align: center;">Palabra o sílaba</td>
 </tr>
 </tbody>
 </table>
@@ -2728,7 +2728,7 @@
 <div class="admonition info">
 <p><strong>ests.phon_stats.is_open_syllable()</strong></p>
 </div>
-<p>Comprueba si una sílaba es abierta: una sílaba abierta termina en un sonido vocálico - <code>ca</code>, <code>que</code>, <code>hoy</code> (la <code>y</code> final es la vocal i); <code>car</code> y <code>pan</code> son cerradas.</p>
+<p>Comprueba si una sílaba es abierta: una sílaba abierta termina en un sonido vocálico - <code>ca</code>, <code>que</code>, <code>hoy</code> (la <code>y</code> final es la vocal i); <code>car</code> y <code>pan</code> son cerradas. La sílaba se lee como una palabra por sí sola.</p>
 <table>
 <thead>
 <tr>
@@ -2741,9 +2741,9 @@
 <tbody>
 <tr>
 <td style="text-align: center;"><code>syllable</code></td>
-<td style="text-align: center;">tuple[str]</td>
+<td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Sonidos de la sílaba</td>
+<td style="text-align: center;">Sílaba</td>
 </tr>
 </tbody>
 </table>
