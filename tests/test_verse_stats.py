@@ -1,3 +1,4 @@
+import re
 import shutil
 import unicodedata
 from collections import Counter
@@ -10,7 +11,8 @@ import spacy
 
 from ests import VerseStats, verse_stats
 from ests.constants import VERSE_STATS_DESC
-from ests.datasets import SpanishSonnets
+from ests.datasets import SpanishLiterature, SpanishSonnets
+from ests.datasets import spanish_literature as literature_module
 from ests.datasets import spanish_sonnets as sonnets_module
 from ests.exceptions import SourceError, SourceTypeError
 from ests.verse_stats import (
@@ -93,6 +95,49 @@ hubo gaitas, tamboriles,
 flauta, bandurria y vihuela,
 fuegos a la valenciana
 y danza a la aragonesa."""
+# Traditional, Romance del conde Arnaldos: the even lines in á, nine of them in -ar
+ARNALDOS = """¡Quién hubiera tal ventura
+sobre las aguas del mar
+como hubo el conde Arnaldos
+la mañana de San Juan!
+Andando a buscar la caza
+para su falcón cebar,
+vio venir una galera
+que a tierra quiere llegar;
+las velas trae de sedas,
+la ejarcia de oro torzal,
+áncoras tiene de plata,
+tablas de fino coral.
+Marinero que la guía,
+diciendo viene un cantar,
+que la mar ponía en calma,
+los vientos hace amainar;
+los peces que andan al hondo,
+arriba los hace andar;
+las aves que van volando,
+al mástil vienen posar.
+Allí habló el conde Arnaldos,
+bien oiréis lo que dirá:
+—Por tu vida, el marinero,
+dígasme ora ese cantar.
+Respondióle el marinero,
+tal respuesta le fue a dar:
+—Yo no digo mi canción
+sino a quien conmigo va."""
+# Gustavo Adolfo Bécquer, Rimas LIII (the first two stanzas) and XXI
+RIMA_LIII = """Volverán las oscuras golondrinas
+en tu balcón sus nidos a colgar,
+y otra vez con el ala a sus cristales
+jugando llamarán.
+
+Pero aquellas que el vuelo refrenaban
+tu hermosura y mi dicha a contemplar,
+aquellas que aprendieron nuestros nombres...
+ésas... ¡no volverán!"""
+RIMA_XXI = """¿Qué es poesía?, dices mientras clavas
+en mi pupila tu pupila azul.
+¿Qué es poesía? ¿Y tú me lo preguntas?
+Poesía... eres tú."""
 STROPHES = {
     # Calderón de la Barca, La vida es sueño
     "décima": """Cuentan de un sabio que un día
@@ -133,6 +178,18 @@ no le veo la cara
 con el sombrero.""",
 }
 SONNETS_ARCHIVE = Path(__file__).parents[1] / "ests" / "datasets" / "data" / sonnets_module.ARCHIVE
+LITERATURE_ARCHIVE = (
+    Path(__file__).parents[1] / "ests" / "datasets" / "data" / literature_module.ARCHIVE
+)
+
+
+@pytest.fixture(scope="module")
+def literature(tmp_path_factory):
+    path = tmp_path_factory.mktemp("ests_data")
+    shutil.copy(LITERATURE_ARCHIVE, path / literature_module.ARCHIVE)
+    dataset = SpanishLiterature(data_dir=path)
+    dataset.download()
+    return dataset
 
 
 def scan(text, length=None):
@@ -409,8 +466,8 @@ def test_ending(word, consonant, assonant):
 def test_seseo():
     assert _ending("caza", seseo=False).consonant == "aθa"
     assert _ending("caza", seseo=True).consonant == "asa"
-    # voz and dos rhyme by assonance, with seseo in full
-    assert VerseStats("La voz\nde los dos").c_rhymes == {"asonante": 2}
+    # voz and dos rhyme with seseo only: two neighbouring lines of one assonance are none
+    assert VerseStats("La voz\nde los dos").c_rhymes == {}
     assert VerseStats("La voz\nde los dos", seseo=True).c_rhymes == {"consonante": 2}
 
 
@@ -431,6 +488,40 @@ def test_romance():
     assert (vs.form, vs.c_rhymes, vs.p_rhymed) == ("romance", {"asonante": 8}, 0.5)
     # a stanza of more than ten lines has no strophe
     assert vs.strophes == (None,)
+
+
+def test_alternate_assonance():
+    # The even lines in á rhyme by assonance, the nine in -ar among them as well
+    vs = VerseStats(ARNALDOS)
+    assert vs.rhyme_schemes[0][:20] == "-a-a-a-a-a-a-a-a-a-a"
+    assert vs.form == "romance"
+    assert vs.c_rhymes["asonante"] == 14
+    # the assonant lines of Bécquer rhyme in full two by two, colgar - contemplar
+    assert VerseStats(RIMA_LIII).rhyme_schemes == ("-A-a", "-A-a")
+    assert VerseStats(RIMA_XXI).rhyme_schemes == ("-A-a",)
+
+
+def test_changing_assonance(literature):
+    # La tierra de Alvargonzález changes its assonance from part to part, and a title of a
+    # part on a line of its own does not shift the even lines
+    text = next(literature.get_records(author="machado"))["text"]
+    start = text.index("Siendo mozo Alvargonzález")
+    vs = VerseStats(text[start : text.index("A UN OLMO SECO")])
+    assert vs.n_lines == 726
+    assert vs.form == "romance"
+    assert vs.p_rhymed > 0.45
+    assert vs.c_rhymes["asonante"] > 300
+
+
+def test_prose_is_unrhymed(literature):
+    # Sentences of prose as lines share an assonance by chance, which is no rhyme
+    text = next(literature.get_texts(author="galdos", genre="prose"))
+    sentences = [" ".join(sentence.split()) for sentence in re.split(r"(?<=[.!?])\s+", text)]
+    sentences = [sentence for sentence in sentences if 3 <= len(sentence.split()) <= 40]
+    for n_lines in (5, 6, 8, 14):
+        chunks = [sentences[i : i + n_lines] for i in range(0, 200 * n_lines, n_lines)]
+        assonant = sum("asonante" in VerseStats("\n".join(chunk)).c_rhymes for chunk in chunks)
+        assert assonant / len(chunks) < 0.05
 
 
 def test_assonance():
@@ -468,9 +559,11 @@ def test_strophe_schemes():
         ("aBabB",),
         {7: 3, 11: 2},
     )
-    # liras with no stanza breaks make a silva
+    # liras with no stanza breaks make a silva, a strophe or stanzas of one pattern do not
     silva = VerseStats(LIRAS.replace("\n\n", "\n"))
     assert (silva.strophes, silva.form) == ((None,), "silva")
+    assert VerseStats(RIMA_XXI).form is None
+    assert VerseStats(RIMA_LIII + "\n\n" + RIMA_LIII + "\n\n" + RIMA_LIII).form is None
     # a quintet of no strophe keeps its lines
     assert VerseStats("la luz\nel sol que va\nmi luz\nla voz\nel sol").strophes == (None,)
     # the other strophes by their lines alone

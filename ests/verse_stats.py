@@ -4,6 +4,7 @@ import unicodedata
 from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass
+from itertools import pairwise
 from math import nan
 from typing import Any, NamedTuple
 
@@ -13,6 +14,8 @@ from .constants import (
     ACCENTED_VOWELS,
     HIATUS_VOWELS,
     RHYME_MIN_ASSONANCE,
+    RHYME_MIN_ASSONANT_LINES,
+    RHYME_MIN_FREE,
     RHYME_WINDOW,
     VERSE_ARTE_MAYOR,
     VERSE_CLAUSULAS,
@@ -158,9 +161,9 @@ class VerseStats:
         it, across the stanzas, by its ending from the last stressed vowel:
         in full (consonante) if the sounds are the same - b and v, c and z (s
         with seseo), ll and y are one sound, h is silent -, by assonance
-        (asonante) if the stressed and the last vowels are, when the poem
-        rhymes by assonance: at least a third of its lines with no full rhyme
-        share one (RHYME_MIN_ASSONANCE), as the even lines of a romance. A rhyme
+        (asonante) if the stressed and the last vowels are, in a poem whose
+        rhyme is the assonance or on alternate lines with unrhymed lines between
+        them, as the even lines of a romance (_rhyme_groups). A rhyme
         scheme gives the rhyme groups letters in the order of the poem, upper-
         case for the lines of arte mayor (VERSE_ARTE_MAYOR syllables and more)
         and lower-case for the ones of arte menor, and a hyphen to an unrhymed
@@ -178,8 +181,8 @@ class VerseStats:
         in 97.4% and 99.6%; on the lines of simple verse the lengths agree in
         98.2% and 99.1%, and the rest are mostly the alejandrinos, which both
         count as simple verse, without the hemistichs. The pairs of rhyming
-        lines agree with the automatic rhyme of DISCO (RhymeTagger) in 99.2% of
-        ours and 97.9% of its own, and 15 sonnets rhyme by assonance, which it
+        lines agree with the automatic rhyme of DISCO (RhymeTagger) in 99.1% of
+        ours and 97.9% of its own, and 18 sonnets rhyme by assonance, which it
         mostly leaves unrhymed
 
     References:
@@ -282,11 +285,10 @@ class VerseStats:
         lines = _parse_lines(text)
         self._lines = lines
         self.lines = tuple(line.text for line in lines)
-        n_stanzas = lines[-1].stanza + 1 if lines else 0
-        self.stanzas = tuple(
-            tuple(line.text for line in lines if line.stanza == number)
-            for number in range(n_stanzas)
-        )
+        stanzas = _stanza_ranges(lines)
+        self._stanzas = stanzas
+        n_stanzas = len(stanzas)
+        self.stanzas = tuple(tuple(self.lines[number] for number in stanza) for stanza in stanzas)
         self.n_lines = len(lines)
         self.n_stanzas = n_stanzas
 
@@ -310,10 +312,9 @@ class VerseStats:
 
         self.seseo = seseo
         endings = [_ending(line.words[-1].text, seseo) for line in lines]
-        groups, kinds = _rhyme_groups(endings)
+        groups, kinds = _rhyme_groups(endings, stanzas)
         strophes = []
-        for stanza in range(n_stanzas):
-            numbers = [number for number, line in enumerate(lines) if line.stanza == stanza]
+        for numbers in stanzas:
             name, refitted = _strophe(
                 [lines[number] for number in numbers],
                 [groups[number] for number in numbers],
@@ -370,10 +371,7 @@ class VerseStats:
 
         labels = _scheme_labels(groups, [scansion.length for scansion in scansions])
         self.rhyme_schemes = tuple(
-            "".join(
-                label for label, line in zip(labels, lines, strict=True) if line.stanza == number
-            )
-            for number in range(n_stanzas)
+            "".join(labels[number] for number in stanza) for stanza in stanzas
         )
         rhymes = Counter(kind for kind in kinds if kind is not None)
         self.c_rhymes = {kind: rhymes[kind] for kind in VERSE_RHYMES if rhymes[kind]}
@@ -415,8 +413,8 @@ class VerseStats:
             str: Text with the stresses
         """
         return "\n\n".join(
-            "\n".join(_accentuate_line(line) for line in self._lines if line.stanza == number)
-            for number in range(self.n_stanzas)
+            "\n".join(_accentuate_line(self._lines[number]) for number in stanza)
+            for stanza in self._stanzas
         )
 
 
@@ -450,6 +448,16 @@ def _has_syllables(line: str) -> bool:
     if ROMAN_NUMERAL.fullmatch(line.strip()):
         return False
     return any(syllabify(match.group()) for match in WORD_PATTERN.finditer(line))
+
+
+def _stanza_ranges(lines: Sequence[_Line]) -> list[range]:
+    """Numbers of the lines of every stanza - the lines of a stanza follow one another"""
+    starts = [
+        number
+        for number, line in enumerate(lines)
+        if not number or line.stanza != lines[number - 1].stanza
+    ]
+    return [range(start, end) for start, end in pairwise([*starts, len(lines)])]
 
 
 def _parse_lines(text: str) -> list[_Line]:
@@ -922,35 +930,110 @@ def _chains(keys: Sequence[object]) -> list[int | None]:
     return groups
 
 
-def _rhyme_groups(endings: Sequence[_Ending]) -> tuple[list[int | None], list[str | None]]:
+def _rhyme_groups(
+    endings: Sequence[_Ending], stanzas: Sequence[range]
+) -> tuple[list[int | None], list[str | None]]:
     """
     Groups of rhyming lines and the kind of the rhyme of every line
 
     Description:
-        The lines rhyme by their full endings (consonante). If a poem has an
-        assonance systematic enough - of at least a third of its lines with no
-        full rhyme (RHYME_MIN_ASSONANCE), as the even lines of a romance -, it
-        rhymes by assonance: the groups follow the assonances, which take in
-        the full rhymes of the same vowels, and a group of different full
-        endings is asonante. Otherwise an assonance is no rhyme: in a sonnet
-        of -ado and -ano every line has its full rhyme
+        The lines rhyme by their full endings (consonante), and by assonance
+        (asonante) in two cases. A poem whose rhyme is the assonance - at least
+        a third of its lines with no full rhyme, and at least
+        RHYME_MIN_ASSONANT_LINES of them, share one (RHYME_MIN_ASSONANCE) -
+        rhymes by the assonances of all its lines: the groups follow them and take in the full rhymes of the same
+        vowels. Otherwise the assonance counts on alternate lines with the
+        lines between them unrhymed (_alternations), as the even lines of a
+        romance, which may change its assonance, or of a rima of Bécquer,
+        whose assonant lines may also rhyme in full; the full rhymes of those
+        lines join them. A group of different full endings is asonante. An
+        assonance of neighbouring lines is no rhyme: in a sonnet of -ado and
+        -ano every line has its full rhyme, and in a few lines of prose two
+        often share one by chance
     """
     full = _chains([ending.consonant for ending in endings])
     free = Counter(
         ending.assonant for ending, group in zip(endings, full, strict=True) if group is None
     )
-    if not free or max(free.values()) < max(2, RHYME_MIN_ASSONANCE * len(endings)):
-        return full, [VERSE_RHYMES[0] if group is not None else None for group in full]
-    groups = _chains([ending.assonant for ending in endings])
-    endings_by_group: dict[int, set[str]] = {}
+    if free and max(free.values()) >= max(
+        RHYME_MIN_ASSONANT_LINES, RHYME_MIN_ASSONANCE * len(endings)
+    ):
+        groups = _chains([ending.assonant for ending in endings])
+    else:
+        links = _alternations(endings, full, stanzas)
+        if not links:
+            return full, [VERSE_RHYMES[0] if group is not None else None for group in full]
+        groups = _join(full, links)
+    consonants: dict[int, set[str]] = {}
     for ending, group in zip(endings, groups, strict=True):
         if group is not None:
-            endings_by_group.setdefault(group, set()).add(ending.consonant)
+            consonants.setdefault(group, set()).add(ending.consonant)
     kinds = [
-        None if group is None else VERSE_RHYMES[len(endings_by_group[group]) > 1]
-        for group in groups
+        None if group is None else VERSE_RHYMES[len(consonants[group]) > 1] for group in groups
     ]
     return groups, kinds
+
+
+def _alternations(
+    endings: Sequence[_Ending], full: Sequence[int | None], stanzas: Sequence[range]
+) -> list[tuple[int, int]]:
+    """
+    Pairs of alternate lines that rhyme by assonance
+
+    Description:
+        A run of lines two apart with one assonance - the even lines of a
+        romance - rhymes if it has at least RHYME_MIN_ASSONANT_LINES lines and
+        three in four of the lines between them have no full rhyme
+        (RHYME_MIN_FREE), or if it is all the even lines of a stanza of an even
+        number of lines with the lines between them unrhymed, as the second and
+        the fourth line of a copla or a seguidilla
+    """
+    evens = {
+        tuple(range(stanza.start + 1, stanza.stop, 2))
+        for stanza in stanzas
+        if len(stanza) >= 4 and len(stanza) % 2 == 0
+    }
+    links = []
+    for start in (0, 1):
+        run = [start]
+        for number in [*range(start + 2, len(endings), 2), None]:
+            if number is not None and endings[number].assonant == endings[run[-1]].assonant:
+                run.append(number)
+                continue
+            between = [line + 1 for line in run[:-1]]
+            n_free = sum(full[line] is None for line in between)
+            if (
+                len(run) >= RHYME_MIN_ASSONANT_LINES and n_free >= RHYME_MIN_FREE * len(between)
+            ) or (tuple(run) in evens and n_free == len(between)):
+                links += list(pairwise(run))
+            if number is not None:
+                run = [number]
+    return links
+
+
+def _join(full: Sequence[int | None], links: Sequence[tuple[int, int]]) -> list[int | None]:
+    """Groups of the full rhymes joined by the links of assonance, numbered by their first line"""
+    parent = list(range(len(full)))
+
+    def root(line: int) -> int:
+        while parent[line] != line:
+            parent[line] = parent[parent[line]]
+            line = parent[line]
+        return line
+
+    first_of_group: dict[int, int] = {}
+    pairs = list(links)
+    for line, group in enumerate(full):
+        if group is not None:
+            pairs.append((first_of_group.setdefault(group, line), line))
+    for first, second in pairs:
+        parent[root(second)] = root(first)
+    linked = {line for pair in pairs for line in pair}
+    numbers: dict[int, int] = {}
+    return [
+        numbers.setdefault(root(line), len(numbers)) if line in linked else None
+        for line in range(len(full))
+    ]
 
 
 def _scheme_labels(groups: Sequence[int | None], lengths: Sequence[int]) -> list[str]:
@@ -1054,10 +1137,12 @@ def _form(verse: "VerseStats", labels: Sequence[str], kinds: Sequence[str | None
     Description:
         soneto - 14 lines of a meter of arte mayor in full rhyme, the quatrains
         ABBA or ABAB and the tercets on rhymes of their own (CDC DCD, CDE CDE);
-        romance - octosílabos from 8 lines, the even lines in one assonance
-        and the odd ones unrhymed, at least three in four; the strophe of all
-        the stanzas; silva - heptasílabos and endecasílabos with no meter and
-        no strophe; None otherwise
+        romance - octosílabos from 8 lines, three in four of the even lines of
+        the stanzas rhymed by assonance, which may change from part to part,
+        and three in four of the odd ones unrhymed; the strophe of all the stanzas; silva -
+        heptasílabos and endecasílabos with no meter, longer than a strophe
+        and with no pattern of lengths repeated by all its stanzas; None
+        otherwise
     """
     scheme = _relabel(labels)
     if (
@@ -1069,24 +1154,28 @@ def _form(verse: "VerseStats", labels: Sequence[str], kinds: Sequence[str | None
         and all(scheme[8:].count(letter) >= 2 for letter in scheme[8:])
     ):
         return "soneto"
-    even, odd = scheme[1::2], scheme[::2]
-    if verse.n_lines >= 8 and verse.meter == "octosílabo":
-        letter, count = Counter(even).most_common(1)[0]
-        assonant = any(
-            kind == VERSE_RHYMES[1]
-            for kind, label in zip(kinds[1::2], even, strict=True)
-            if label == letter
-        )
-        if (
-            letter != "-"
-            and assonant
-            and count >= 0.75 * len(even)
-            and odd.count(letter) <= 0.25 * len(odd)
-        ):
-            return "romance"
+    # The even and the odd lines of every stanza: a title of a part on a line of its own
+    # does not shift the lines of the next one
+    even = [kinds[stanza.start + i] for stanza in verse._stanzas for i in range(1, len(stanza), 2)]
+    odd = [kinds[stanza.start + i] for stanza in verse._stanzas for i in range(0, len(stanza), 2)]
+    if (
+        verse.n_lines >= 8
+        and verse.meter == "octosílabo"
+        and even.count(VERSE_RHYMES[1]) >= 0.75 * len(even)
+        and odd.count(None) >= 0.75 * len(odd)
+    ):
+        return "romance"
     if len(set(verse.strophes)) == 1 and verse.strophes[0] is not None:
         return verse.strophes[0]
-    if verse.meter is None and set(verse.c_feet) == {7, 11}:
+    patterns = {
+        tuple(len(verse.patterns[number]) for number in stanza) for stanza in verse._stanzas
+    }
+    if (
+        verse.meter is None
+        and set(verse.c_feet) == {7, 11}
+        and verse.n_lines > MAX_STROPHE_LINES
+        and (len(patterns) > 1 or verse.n_stanzas == 1)
+    ):
         return "silva"
     return None
 

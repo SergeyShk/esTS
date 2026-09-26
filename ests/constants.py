@@ -1131,11 +1131,17 @@ VERSE_MIN_LINES = 2
 # the quatrains of a sonnet rhyme ABBA ABBA and the tercets CDC DCD
 RHYME_WINDOW = 4
 VERSE_RHYMES = ("consonante", "asonante")
-# Least share of the lines of a poem with one assonance and no full rhyme for the poem to
-# rhyme by assonance, as the even lines of a romance: on the sonnets of SpanishSonnets 15
-# rhyme so, and of prose split into lines of a sentence it takes 14% of eight lines and
-# 1.9% of fourteen, against 72% and 14% at a quarter
+# Assonance: a poem rhymes by the assonance when at least a third of its lines with no
+# full rhyme share one, and at least four of them (the assonant sonnets of SpanishSonnets);
+# otherwise the assonance counts on alternate lines with unrhymed lines between them,
+# a run of at least four lines with three in four of the lines between free of a full
+# rhyme (a romance, a rima of Bécquer) or all the even lines of a stanza (a copla). Of
+# prose cut into sentences as lines it takes 0.1-3.6% of the texts of 5 to 40 lines and
+# 6.5% of the ones of 4, where two lines of a copla are enough; with three lines instead
+# of four, up to 22% of the texts of 9 lines and 13% of the ones of 40
 RHYME_MIN_ASSONANCE = 1 / 3
+RHYME_MIN_ASSONANT_LINES = 4
+RHYME_MIN_FREE = 0.75
 # Lines of arte mayor, of 9 syllables and more, take upper-case letters in a rhyme scheme,
 # the lines of arte menor lower-case ones: ABBA ABBA CDC DCD, abba, aBabB
 VERSE_ARTE_MAYOR = 9
