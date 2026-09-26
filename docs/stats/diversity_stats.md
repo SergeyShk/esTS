@@ -7,7 +7,7 @@
 
 A module for computing the main [lexical diversity](https://en.wikipedia.org/wiki/Lexical_diversity) metrics of a text. The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library.
 
-The module allows using a pre-built [`WordsExtractor`](../extractors/words.md) object for the word tokenization needed before computing the statistics; for a `Doc` a given extractor is applied to the text of the `Doc`, without one the words come from its tokens. Whatever the source and the extractor, the words are lower-cased, since every metric counts lexemes.
+The words can be extracted by a pre-built [`WordsExtractor`](../extractors/words.md); for a `Doc` a given extractor is applied to its text, without one the words come from its tokens. The words are always lower-cased, since every metric counts lexemes.
 
 !!! note "Note"
     The metrics are computed by accessing the corresponding attribute or by calling the `get_stats` method of the `DiversityStats` object.
@@ -26,14 +26,14 @@ The module allows using a pre-built [`WordsExtractor`](../extractors/words.md) o
 
 ## Conventions { #conventions }
 
-The values of some metrics depend on parameters that different libraries choose differently. The defaults match koRpus and Kyle's lexical-diversity, and all of them are class parameters. The comparison with the MTLD threshold is the only convention that is not a parameter:
+The values of some metrics depend on conventions that differ between libraries. All of them except the comparison with the MTLD threshold are class parameters:
 
 | Parameter | esTS | Other libraries |
 | :-------: | :--: | :-------------: |
 | Logarithm base for Summer, Maas, Dugast's U and Dugast's k | 10 | LexicalRichness, textcomplexity and zipfR - natural |
 | MATTR window and MSTTR segment | 50 | quanteda and koRpus - 100 |
 | TTR threshold for MTLD | 0.72 | 0.66-0.75 in the literature |
-| Comparison with the MTLD threshold | a factor closes at TTR ≤ 0.72 - in McCarthy and Jarvis (2010) a factor ends when TTR "reaches" 0.720 | lexical-diversity and TAALED - strict `<`, so on factors where TTR hits the threshold exactly (18/25, 36/50) the MTLD, MA-MTLD and MTLD-W values diverge |
+| Comparison with the MTLD threshold | a factor closes at TTR ≤ 0.72 (McCarthy & Jarvis, 2010) | lexical-diversity and TAALED - strict `<`; the values differ when TTR hits the threshold exactly |
 | Minimum MTLD factor length | 10 | koRpus applies it only to MA-MTLD, LexicalRichness and textcomplexity do not apply it |
 | HD-D sample size | 42 | 35-50 in the literature |
 
@@ -81,13 +81,13 @@ By Zenker and Kyle (2021) MATTR, MTLD and HD-D are stable on texts of 50-200 wor
 | `heaps_beta` | float | Heaps' law exponent |
 
 !!! note "Note"
-    Every metric can be computed separately by calling the corresponding function. Detailed information on the lexical diversity metrics and the functions used to compute them is available in the corresponding [section](diversity_stats_funcs.md).
+    Every metric can also be computed by its function; the metrics and their functions are described in the corresponding [section](diversity_stats_funcs.md).
 
 ## Methods
 
 ### windowed
 
-Windowed computation of a metric: its value over consecutive text windows of equal length, the mean, the sample standard deviation and the confidence interval of the mean by Student's distribution. The standard way to compare texts of different lengths; Kubát and Milička's STTR is a windowed TTR with a 1000-word window and a 95% confidence interval. For texts shorter than the window the metric is computed over the whole text as a single window; windows with an undefined metric value (`nan`) are ignored. If the metric is infinite in at least one window, the mean is infinite and the standard deviation and confidence interval are undefined.
+Windowed computation of a metric by its name, as in [`calc_windowed`](diversity_stats_funcs.md#calc_windowed): its value over consecutive text windows of equal length, the mean, the sample standard deviation and the confidence interval of the mean by Student's distribution. The edge cases (short texts, `nan` and infinite values) are described there.
 
 Parameters:
 
@@ -116,8 +116,6 @@ Returns a `WindowStats` named tuple with the fields `mean`, `std`, `lower`, `upp
 ### get_stats
 
 Returns a dictionary with the computed lexical diversity metrics.
-
-An example of computing lexical diversity metrics:
 
 !!! example "Example"
 
@@ -176,7 +174,7 @@ An example of computing lexical diversity metrics:
 
 Prints a table with the computed lexical diversity metrics.
 
-To illustrate the method, we reuse the code from the previous example:
+The example continues the previous one:
 
 !!! example "Example"
 

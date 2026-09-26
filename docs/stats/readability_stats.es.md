@@ -28,7 +28,7 @@ La legibilidad en este módulo se calcula a partir de medidas lingüísticas: la
 | SOL (Contreras et al.) | 1999 | años de escolaridad | SMOG convertido al español |
 | LIX, RIX | 1968, 1983 | índice, palabras largas por oración | niveles y cursos independientes de la lengua |
 
-La familia de Flesch se fija con un preajuste (véase [más abajo](#presets)): por defecto los coeficientes de Szigriszt-Pazos, validados con la escala INFLESZ, y como alternativa los de Fernández Huerta. Las demás fórmulas no dependen del preajuste.
+Los coeficientes de la facilidad de lectura de Flesch se fijan con un preajuste (véase [más abajo](#presets)): Szigriszt-Pazos por defecto, Fernández Huerta como alternativa.
 
 Los supuestos principales de las métricas de legibilidad:
 
@@ -73,10 +73,10 @@ Un preajuste fija los coeficientes `a`, `b`, `c` de la facilidad de lectura de F
 
 | Preajuste | Fuente | Fórmula | Escala |
 | :-------: | :----: | :-----: | :----: |
-| `general` | Szigriszt-Pazos (1993), fórmula de perspicuidad | `206.835 − 1.0·ASL − 62.3·ASW` | INFLESZ (Barrio-Cantalejo et al., 2008), validada con textos para pacientes |
-| `classic` | Fernández Huerta (1959), la primera adaptación de Flesch al español | `206.84 − 1.02·ASL − 60·ASW` | los siete niveles del autor |
+| `general` | Szigriszt-Pazos (1993), fórmula de perspicuidad | `206.835 − 1.0·ASL − 62.3·ASW` | INFLESZ (Barrio-Cantalejo et al., 2008) |
+| `classic` | Fernández Huerta (1959) | `206.84 − 1.02·ASL − 60·ASW` | los siete niveles del autor |
 
-Fernández Huerta imprimió el último término como `1.02` por el número de frases por cada 100 palabras. Law (2011) mostró que eso invierte la fracción de la fórmula de Flesch en la que se basó la adaptación, así que aquí se usa la longitud media de la oración, como hacen koRpus, textstat y legible.es. La tabla de todos los coeficientes está disponible como `ests.constants.READABILITY_PRESETS`.
+La fórmula de Fernández Huerta toma la longitud media de la oración, con la corrección de Law (2011). La tabla de todos los coeficientes está disponible como `ests.constants.READABILITY_PRESETS`.
 
 !!! example "Ejemplo"
 
@@ -97,7 +97,7 @@ Fernández Huerta imprimió el último término como `1.02` por el número de fr
 
 El método [`describe_level`](#describe_level) sitúa la facilidad de lectura en la escala del preajuste: INFLESZ para `general` (`muy difícil` por debajo de 40, `algo difícil` 40-55, `normal` 55-65, `bastante fácil` 65-80, `muy fácil` por encima de 80) y los siete niveles de Fernández Huerta para `classic`, y a petición las escalas de Szigriszt-Pazos o del otro autor; la Legibilidad µ tiene los siete niveles de sus autores (`muy difícil` 0-30, `difícil` 31-50, `un poco difícil` 51-60, `adecuado` 61-70, `un poco fácil` 71-80, `fácil` 81-90, `muy fácil` 91-100).
 
-Las fórmulas que dan años de escolaridad (Crawford, SOL) se resumen en el atributo `consensus_grade`: la mediana de los valores redondeados más la facilidad de lectura convertida en grado según la escala del preajuste: por los tipos de texto de los niveles INFLESZ para `general` y por la tabla de interpretación de Flesch, cuyos niveles conservó Fernández Huerta, para `classic`. El método [`describe_grade`](#describe_grade) traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:
+Las fórmulas que dan años de escolaridad (Crawford, SOL) se resumen en el atributo `consensus_grade`: la mediana de los valores redondeados más la facilidad de lectura [convertida en grado](readability_stats_funcs.md#flesch_reading_easy_to_grade) según la escala del preajuste. El método [`describe_grade`](#describe_grade) traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:
 
 | Grado | Etapa | Edad |
 | :---: | :---: | :--: |
@@ -111,7 +111,7 @@ Las fórmulas que dan años de escolaridad (Crawford, SOL) se resumen en el atri
 !!! warning "Aviso"
     Crawford se ajustó con lecturas de primaria y se satura en los textos para adultos; SOL se ajustó con materiales de educación sanitaria. El grado de consenso de un texto técnico refleja sobre todo el nivel de la facilidad de lectura.
 
-El atributo `reading_time` estima el tiempo de lectura silenciosa a 278 palabras por minuto, la media de seis estudios con lectores adultos de español en el metaanálisis de Brysbaert (2019). El método [`reading_time_by_speed`](#reading_time_by_speed) acepta otra velocidad, y el método [`reading_time_by_norm`](#reading_time_by_norm) calcula el tiempo en voz alta y en silencio según las normas de la tabla `ests.constants.READING_SPEED_NORMS`: las velocidades medias del alumnado hispanohablante por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) y las de los adultos según Brysbaert (2019).
+El atributo `reading_time` estima el tiempo de lectura silenciosa a 278 palabras por minuto, la velocidad de los lectores adultos de español en el metaanálisis de Brysbaert (2019). El método [`reading_time_by_speed`](#reading_time_by_speed) acepta otra velocidad, y el método [`reading_time_by_norm`](#reading_time_by_norm) calcula el tiempo en voz alta y en silencio según las normas de la tabla `ests.constants.READING_SPEED_NORMS`: las velocidades medias del alumnado hispanohablante por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) y las de los adultos según Brysbaert (2019).
 
 ## Métodos
 

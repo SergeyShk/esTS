@@ -9,9 +9,9 @@ Módulo para calcular las estadísticas básicas de un texto. La fuente de datos
 
 El módulo permite usar objetos [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) ya configurados para la segmentación en oraciones y palabras que precede al cálculo. Las sílabas se cuentan con [`count_syllables`](../syllables.md#count_syllables) y las letras con `str.isalpha`, así que las cifras, los guiones y los signos dentro de una palabra no son letras, mientras que los indicadores ordinales `º` y `ª` sí lo son (`3.º` es una palabra de una letra).
 
-Una oración de pura puntuación (`¿?`, una línea de puntos entre dos párrafos) no lleva ninguna palabra y no se cuenta: las fórmulas de legibilidad dividen por el número de oraciones.
+Una oración de pura puntuación (`¿?`, una línea de puntos entre dos párrafos) no lleva ninguna palabra y no se cuenta.
 
-Para un objeto `Doc` las palabras se toman de los tokens (los signos de puntuación y los símbolos como `€` o `%` se descartan) y las oraciones de la anotación; sin límites de oración (`spacy.blank`, un pipeline sin `parser` ni `senter`) las oraciones se extraen del texto con `SentsExtractor`. Un extractor indicado explícitamente se usa siempre, sobre el texto del `Doc`, de modo que el filtro de palabras vacías o un tokenizador propio funcionan igual con las dos clases de fuente.
+Para un objeto `Doc` las palabras se toman de los tokens (los signos de puntuación y los símbolos como `€` o `%` se descartan) y las oraciones de la anotación; sin límites de oración (`spacy.blank`, un pipeline sin `parser` ni `senter`) las oraciones se extraen del texto con `SentsExtractor`. Un extractor indicado explícitamente se usa siempre, sobre el texto del `Doc`.
 
 !!! note "Nota"
     Las estadísticas se calculan al inicializar el objeto `BasicStats`.
@@ -28,7 +28,7 @@ Para un objeto `Doc` las palabras se toman de los tokens (los signos de puntuaci
 | `long_word_letter_factor` | int | `7` | Número mínimo de letras de una palabra larga |
 
 !!! note "Nota"
-    Los umbrales por defecto siguen la tradición española de la legibilidad: una palabra compleja tiene tres o más sílabas, como en las adaptaciones españolas de SMOG y de la niebla de Gunning, y una palabra larga siete o más letras, como en LIX y RIX.
+    Los umbrales por defecto son los de las fórmulas de legibilidad: una palabra compleja tiene tres o más sílabas, como en SMOG, y una palabra larga siete o más letras, como en LIX y RIX.
 
 ## Atributos
 
@@ -86,7 +86,7 @@ Parámetros:
 | `min_letters` | int | `-` | Número mínimo de letras de la palabra |
 
 !!! note "Nota"
-    Estos métodos vuelven a contar las palabras complejas y largas con un umbral distinto del fijado al inicializar, que es lo que necesitan las fórmulas de legibilidad con umbrales propios.
+    Estos métodos vuelven a contar las palabras complejas y largas con un umbral distinto del fijado al inicializar.
 
 ### get_stats
 
@@ -185,9 +185,9 @@ Para ilustrar el método reutilizamos el código del ejemplo anterior:
 !!! info ""
     **ests.basic_stats.count_punctuations()**, **ests.basic_stats.punctuation_profile()**
 
-`count_punctuations(text)` cuenta los signos de puntuación por los tipos de `PUNCTUATION_TYPES`, la misma distribución que guarda el atributo `c_punctuations`: comas, puntos, signos de interrogación y de exclamación (incluidos los de apertura `¿` y `¡`, así que `¿Qué?` lleva dos signos de interrogación), puntos suspensivos (el carácter `…`, tres o más puntos, o dos puntos tras `?` y `!`: un solo signo cuyos puntos no cuentan como puntos, `¿Quién?..` es una interrogación y unos puntos suspensivos), dos puntos, puntos y comas, rayas (`—`, `–` y la barra horizontal `―`, y también una serie de dos o más guiones, un guion tras espacio, al principio de línea o tras un signo de cierre, ante un espacio o entre una letra y un signo de apertura o de cierre, como se escribe la raya en los corpus de texto plano: `--Hola --dijo Juan`, `-Hola -dijo Juan-.`, `- Se fueron - dijo`, `cuatro.-¿Cinco?`, `sí-¿y qué?`), guiones dentro de palabras, ante cifras y al final de línea dentro de una palabra (`teórico-práctico`, `1990-1995`, `-5`, `pala-` en un salto de línea), comillas latinas `«»`, comillas rectas, inglesas y simples `"“”‘’` de los tres niveles de la ortografía, paréntesis y los demás signos: cualquier otro carácter de `PUNCTUATIONS` o de las categorías Unicode P y S (`‹›`, `§`, `€`, `°`), el mismo conjunto que `is_punctuation` descarta de las palabras, de modo que ningún signo se pierde entre las palabras y los tipos. `punctuation_profile(text, n_words=None)` los convierte en frecuencias por cada 1000 palabras y añade `inverted_share`, la proporción de signos de apertura entre todos los signos de interrogación y exclamación: `0.5` cuando toda pregunta y exclamación empieza con `¿` o `¡` como exige la ortografía, menos cuando quien escribe los omite, como en textos informales y mensajes.
+`count_punctuations(text)` cuenta los signos de puntuación por los tipos de `PUNCTUATION_TYPES`, la misma distribución que guarda el atributo `c_punctuations`: comas, puntos, signos de interrogación y de exclamación (incluidos los de apertura `¿` y `¡`, así que `¿Qué?` lleva dos signos de interrogación), puntos suspensivos (el carácter `…`, tres o más puntos, o dos puntos tras `?` y `!`: un solo signo cuyos puntos no cuentan como puntos, `¿Quién?..` es una interrogación y unos puntos suspensivos), dos puntos, puntos y comas, rayas (`—`, `–` y la barra horizontal `―`, y también una serie de dos o más guiones, un guion tras espacio, al principio de línea o tras un signo de cierre, ante un espacio o entre una letra y un signo de apertura o de cierre, como se escribe la raya en texto plano: `--Hola --dijo Juan`, `- Se fueron - dijo`), guiones dentro de palabras, ante cifras y al final de línea dentro de una palabra (`teórico-práctico`, `-5`), comillas latinas `«»`, comillas rectas, inglesas y simples `"“”‘’` de los tres niveles de la ortografía, paréntesis y los demás signos: cualquier otro carácter de `PUNCTUATIONS` o de las categorías Unicode P y S (`‹›`, `§`, `€`, `°`), el mismo conjunto que `is_punctuation` descarta de las palabras. `punctuation_profile(text, n_words=None)` los convierte en frecuencias por cada 1000 palabras y añade `inverted_share`, la proporción de signos de apertura entre todos los signos de interrogación y exclamación: `0.5` cuando toda pregunta y exclamación empieza con `¿` o `¡` como exige la ortografía, menos cuando quien escribe los omite.
 
-El perfil es un rasgo editorial y estilométrico. Depende del formato del texto (comillas y rayas tipográficas, signos de apertura) y es fácil de falsear, así que conviene leerlo aparte de los rasgos lingüísticos.
+El perfil depende del formato del texto (comillas y rayas tipográficas, signos de apertura), así que conviene leerlo aparte de los rasgos lingüísticos.
 
 !!! example "Ejemplo"
 

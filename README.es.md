@@ -29,9 +29,9 @@
 
 ---
 
-**esTS** calcula para textos en español lo que normalmente exige juntar varias herramientas sueltas: estadísticas básicas, legibilidad, diversidad léxica, complejidad léxica, estilo, fonoestadística, morfología, sintaxis y cohesión, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
+**esTS** calcula estadísticas de textos en español: estadísticas básicas, legibilidad, diversidad léxica, complejidad léxica, estilo, fonoestadística, morfología, sintaxis y cohesión, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías y los rasgos de Universal Dependencies.
 
-La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy): las oraciones, las palabras y los N-gramas de caracteres se extraen por reglas, las sílabas y el acento se deducen de la ortografía, y solo las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica, los sustantivos deverbales de las métricas de estilo, el perfil de las palabras funcionales y la comparación de corpus necesitan un modelo entrenado.
+La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy); la mayoría de las estadísticas no necesita un modelo entrenado (véase Instalación).
 
 * **[Extracción de objetos](https://sergeyshk.github.io/esTS/es/extractors/sentences/)** - tokenizadores configurables de oraciones, palabras y N-gramas de caracteres que conocen los signos de apertura, la raya de diálogo y las abreviaturas del español
 * **[Sílabas y acento](https://sergeyshk.github.io/esTS/es/syllables/)** - silabificación por reglas y sílaba tónica deducida de la escritura, sin diccionario
@@ -40,14 +40,14 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Métricas de diversidad léxica](https://sergeyshk.github.io/esTS/es/stats/diversity_stats/)** - TTR y sus variantes, MATTR, MSTTR, MTLD, HD-D, índices de Simpson y de Yule, entropía, leyes de Zipf y de Heaps
 * **[Estadísticas morfológicas](https://sergeyshk.github.io/esTS/es/stats/morph_stats/)** - categorías gramaticales y quince rasgos morfológicos de Universal Dependencies, con los marcadores del español: los modos, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
 * **[Medidas de corpus](https://sergeyshk.github.io/esTS/es/corpus/keyness/)** - palabras clave frente a un corpus de referencia, colocaciones, la dispersión de una palabra por las partes de un texto, una concordancia KWIC y la estilometría de autoría: la Delta de Burrows con sus variantes, Zeta, la curva de Mendenhall, el perfil de las palabras funcionales; la comparación de dos corpus por 132 rasgos de un texto con tamaños del efecto
-* **[Visualizaciones](https://sergeyshk.github.io/esTS/es/visualizers/zipf/)** - ley de Zipf, huella literaria, árbol de palabras, dispersión léxica y palabras clave, red de colocaciones, dendrograma, PCA y MDS por la Delta, crecimiento del vocabulario, longitudes de las oraciones y el resaltado del texto por los fragmentos que cuentan las estadísticas: oraciones largas, pasivas, cadenas de de, clichés
-* **[Conjuntos de datos](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/)** - literatura en español de dominio público: 150 obras de 33 autores de España, Hispanoamérica y Filipinas en prosa, poesía, teatro y ensayo, con el género, los años y el país; 4259 sonetos de los siglos XV-XX con el patrón métrico y la rima de cada verso; un diccionario de frecuencias de 83 785 lemas según Google Books Ngram con ipm, rango y dispersión
+* **[Visualizaciones](https://sergeyshk.github.io/esTS/es/visualizers/zipf/)** - ley de Zipf, huella literaria, árbol de palabras, dispersión léxica y palabras clave, red de colocaciones, dendrograma, PCA y MDS por la Delta, crecimiento del vocabulario, longitudes de las oraciones y el resaltado de los fragmentos que cuentan las estadísticas, como las oraciones largas y las pasivas
+* **[Conjuntos de datos](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/)** - literatura en español de dominio público: 150 obras de 33 autores en cuatro géneros; 4259 sonetos de los siglos XV-XX con el patrón métrico y la rima de cada verso; un diccionario de frecuencias de 83 785 lemas según Google Books Ngram
 * **[Componentes de spaCy](https://sergeyshk.github.io/esTS/es/components/)** - cada clase de estadísticas como componente de un pipeline, con las estadísticas puestas en el `Doc` en una sola pasada
 * **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, con la densidad de 255 marcadores del discurso españoles
 * **[Estadísticas de complejidad léxica](https://sergeyshk.github.io/esTS/es/stats/lexical_stats/)** - cuán raras son las palabras de un texto en la lengua: la frecuencia, el rango y la dispersión de los lemas según un diccionario de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la sorpresa, la perplejidad y la densidad léxica
 * **[Métricas de estilo](https://sergeyshk.github.io/esTS/es/stats/style_stats/)** - los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías españolas de lenguaje claro: sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés
 * **[Fonoestadística](https://sergeyshk.github.io/esTS/es/stats/phon_stats/)** - proporciones de las clases de sonidos, grupos consonánticos, hiatos, sílabas abiertas, dureza e índices de aliteración y de asonancia, sobre los sonidos de una transcripción por reglas
-* **[Estadísticas del verso](https://sergeyshk.github.io/esTS/es/stats/verse_stats/)** - la escansión del verso español por su metro silábico: las sílabas métricas con la sinalefa y la ley del acento final, el metro de un poema y los hemistiquios del alejandrino, el perfil acentual y los tipos del endecasílabo, la rima consonante y asonante con su esquema, las estrofas y la forma de un poema
+* **[Estadísticas del verso](https://sergeyshk.github.io/esTS/es/stats/verse_stats/)** - la escansión del verso español por su metro silábico: las sílabas métricas, el metro de un poema, el perfil acentual y los tipos del endecasílabo, la rima consonante y asonante con su esquema, las estrofas y la forma de un poema
 * **[Estadísticas sintácticas](https://sergeyshk.github.io/esTS/es/stats/syntax_stats/)** - el árbol de dependencias por distancias, profundidad, cláusulas y coordinación, con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
 
 ## Instalación
@@ -64,13 +64,13 @@ O con [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad, la diversidad léxica, las métricas de estilo salvo los sustantivos deverbales, la fonoestadística y las estadísticas del verso no necesitan ningún modelo de spaCy; las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica de una cadena sí, igual que los sustantivos deverbales de las métricas de estilo, el perfil de las palabras funcionales, los rasgos de un texto y la comparación de corpus, y analizar un texto por su cuenta para pasar el `Doc` en lugar de una cadena:
+El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad, la diversidad léxica, las métricas de estilo salvo los sustantivos deverbales, la fonoestadística y las estadísticas del verso no necesitan ningún modelo de spaCy. Las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica de una cadena sí lo necesitan, igual que los sustantivos deverbales, el perfil de las palabras funcionales, los rasgos de un texto, la comparación de corpus y analizar un `Doc` por su cuenta:
 
 ```bash
 python -m spacy download es_core_news_sm
 ```
 
-Las estadísticas según el diccionario de frecuencias lo necesitan descargado una vez con `FreqDict().download()`. Los conjuntos de datos van al directorio `ests_data` junto al paquete instalado; otro se pasa en `data_dir` o se define en la variable de entorno `ESTS_DATA_DIR` antes de importar el paquete.
+Las estadísticas según el diccionario de frecuencias lo necesitan descargado una vez con `FreqDict().download()`. Los conjuntos de datos van al directorio `ests_data` junto al paquete instalado, o al que se pasa en `data_dir` o se define en `ESTS_DATA_DIR` antes de importar el paquete.
 
 ## Primeros pasos
 
@@ -111,7 +111,7 @@ Las estadísticas según el diccionario de frecuencias lo necesitan descargado u
 
 ### Extracción de objetos
 
-La biblioteca permite construir herramientas propias de extracción de oraciones, palabras y N-gramas de caracteres, que luego sirven para calcular las estadísticas. El segmentador de oraciones conoce los signos de apertura, la raya de una línea de diálogo con la remarca del narrador, y las abreviaturas e iniciales del español; el tokenizador de palabras mantiene enteros los clíticos, los ordinales y los números escritos a la española, y los lemas vienen de [simplemma](https://github.com/adbar/simplemma), que no necesita modelo.
+Herramientas configurables extraen de un texto las oraciones, las palabras y los N-gramas de caracteres para las estadísticas. El segmentador de oraciones conoce los signos de apertura, la raya de diálogo y las abreviaturas del español; el tokenizador de palabras mantiene enteros los clíticos, los ordinales y los números escritos a la española, y los lemas vienen de [simplemma](https://github.com/adbar/simplemma), que no necesita modelo.
 
 ```python
 >>> from ests import CharNgramsExtractor, SentsExtractor, WordsExtractor
@@ -134,7 +134,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/extractors/sente
 
 <br>
 
-La ortografía española codifica tanto los límites silábicos como el acento, así que la biblioteca no necesita diccionario: los diptongos, los hiatos y los triptongos, la `u` muda de `qu` y `gu`, la `y` vocálica, la `h` dentro de un diptongo y los grupos consonánticos dan las sílabas; la tilde, o la terminación de la palabra cuando no la hay, da la sílaba tónica. Los adverbios en `-mente` y los compuestos con guion llevan dos acentos.
+Las sílabas y el acento se deducen de la ortografía española, sin diccionario: la tilde, o la terminación de la palabra cuando no la hay, da la sílaba tónica. Los adverbios en `-mente` y los compuestos con guion llevan dos acentos.
 
 ```python
 >>> from ests.syllables import stress_type, syllabify, word_stress, word_stresses
@@ -179,7 +179,7 @@ La biblioteca permite extraer de un texto las siguientes estadísticas:
 *   la distribución de las palabras por número de letras
 *   la distribución de las palabras por número de sílabas
 
-Una palabra compleja tiene tres o más sílabas y una palabra larga siete o más letras, como las cuentan las fórmulas españolas de legibilidad. Cualquier estadística puede mostrarse en forma legible:
+Una palabra compleja tiene tres o más sílabas y una palabra larga siete o más letras. Cualquier estadística puede mostrarse en forma legible:
 
 ```python
 >>> from ests import BasicStats
@@ -222,9 +222,9 @@ La biblioteca permite calcular las siguientes métricas de legibilidad:
 *   índice de legibilidad LIX
 *   índice de legibilidad RIX
 
-Sobre las fórmulas trabaja una capa de interpretación: el nivel de una escala para la facilidad de lectura y para la Legibilidad µ, un grado de consenso como mediana de las fórmulas de grado, la etapa escolar y la edad del lector en España, y el tiempo de lectura según las normas de los lectores hispanohablantes.
+Sobre las fórmulas: el nivel de una escala para la facilidad de lectura y para la Legibilidad µ, un grado de consenso (la mediana de las fórmulas de grado), la etapa escolar y la edad del lector en España, y el tiempo de lectura.
 
-Los coeficientes de la facilidad de lectura se eligen con el argumento `preset`: por defecto la *fórmula de perspicuidad* de Szigriszt-Pazos con la escala INFLESZ validada con textos para pacientes (`general`); los coeficientes de Fernández Huerta con los niveles de su autor están disponibles como `classic`.
+Los coeficientes de la facilidad de lectura de Flesch se eligen con `preset`: por defecto la *fórmula de perspicuidad* de Szigriszt-Pazos con la escala INFLESZ (`general`), o Fernández Huerta con los niveles de su autor (`classic`).
 
 ```python
 >>> from pprint import pprint
@@ -284,7 +284,7 @@ La biblioteca permite calcular 32 métricas de diversidad léxica, entre ellas:
 *   entropía de Shannon, equitatividad y perplejidad
 *   la pendiente de la ley de Zipf, el ajuste de Zipf-Mandelbrot y el exponente de la ley de Heaps
 
-Cualquier métrica puede calcularse por ventanas de igual longitud, la forma estándar de comparar textos de distinta extensión: la media entre ventanas viene con su intervalo de confianza.
+Cualquier métrica puede calcularse por ventanas de igual longitud, para comparar textos de distinta extensión, con un intervalo de confianza de la media.
 
 ```python
 >>> from ests import DiversityStats
@@ -314,7 +314,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/diversity_
 
 <br>
 
-La biblioteca anota el texto con las categorías gramaticales y los rasgos morfológicos de Universal Dependencies, tal como los dan los modelos españoles de spaCy, y los cuenta:
+Las categorías gramaticales y los rasgos morfológicos de Universal Dependencies, tal como los dan los modelos españoles de spaCy:
 
 *   la categoría gramatical y quince rasgos: caso, definitud, grado, género, modo, tipo de numeral, número, persona, polaridad, cortesía, posesivo, tipo de pronombre, reflexivo, tiempo verbal y forma verbal
 *   la distribución de las palabras por los valores de cualquier rasgo y el análisis del texto palabra por palabra
@@ -338,7 +338,7 @@ La biblioteca anota el texto con las categorías gramaticales y los rasgos morfo
 0.5
 ```
 
-Las estadísticas necesitan un modelo de spaCy: el texto se analiza con `es_core_news_sm`, y en `nlp` puede indicarse cualquier otro pipeline.
+El texto se analiza con `es_core_news_sm`; en `nlp` puede indicarse otro pipeline.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/morph_stats/).
 
@@ -349,7 +349,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/morph_stat
 
 <br>
 
-La biblioteca mide el árbol de dependencias de Universal Dependencies y las construcciones que advierten las guías españolas de lenguaje claro:
+El árbol de dependencias de Universal Dependencies y las construcciones contra las que advierten las guías españolas de lenguaje claro:
 
 *   la complejidad del árbol: distancias de dependencia, profundidad, hojas y subárboles, valencia de los verbos personales, cadenas de coordinación, cláusulas y subordinadas, modificadores por sustantivo
 *   las construcciones: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos, el `se` impersonal, las palabras de negación, la razón entre sustantivos y verbos
@@ -374,7 +374,7 @@ La biblioteca mide el árbol de dependencias de Universal Dependencies y las con
 2.05
 ```
 
-Las estadísticas necesitan el análisis sintáctico: el texto se analiza con `es_core_news_sm`, y en `nlp` puede indicarse cualquier otro pipeline.
+El texto se analiza con `es_core_news_sm`; en `nlp` puede indicarse otro pipeline con analizador sintáctico.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/syntax_stats/).
 
@@ -385,7 +385,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/syntax_sta
 
 <br>
 
-La biblioteca mide la cohesión referencial a la manera de Coh-Metrix y de su adaptación española Coh-Metrix-Esp:
+La cohesión referencial a la manera de Coh-Metrix y de su adaptación española Coh-Metrix-Esp:
 
 *   la repetición de sustantivos, de argumentos y de palabras con contenido entre oraciones contiguas y entre todos los pares de oraciones, binaria y proporcional
 *   la información dada: pronombres, demostrativos y palabras con contenido cuyo lema ya se había usado
@@ -412,7 +412,7 @@ La biblioteca mide la cohesión referencial a la manera de Coh-Metrix y de su ad
 (86.96, 43.48)
 ```
 
-Las estadísticas necesitan la anotación: el texto se analiza con `es_core_news_sm`, y en `nlp` puede indicarse cualquier otro pipeline.
+El texto se analiza con `es_core_news_sm`; en `nlp` puede indicarse otro pipeline.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/).
 
@@ -423,7 +423,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/cohesion_s
 
 <br>
 
-Cuán raras son las palabras de un texto en la lengua, a la manera de TAALES: la frecuencia media, el rango y la dispersión de los lemas según el diccionario de frecuencias de Google Books Ngram, las proporciones de palabras de las bandas de frecuencia top-1000, 2000, 5000 y 10000, la sorpresa y la perplejidad según el modelo de unigramas del diccionario, la densidad léxica. Las bandas y la densidad funcionan sin más; las estadísticas según el diccionario lo necesitan descargado una vez.
+Cuán raras son las palabras de un texto en la lengua, a la manera de TAALES: la frecuencia media, el rango y la dispersión de los lemas según el diccionario de frecuencias de Google Books Ngram, las proporciones de las bandas de frecuencia top-1000, 2000, 5000 y 10000, la sorpresa y la perplejidad, la densidad léxica. Las estadísticas según el diccionario lo necesitan descargado una vez.
 
 ```python
 >>> from ests import LexicalStats
@@ -444,7 +444,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/lexical_st
 
 <br>
 
-Los indicadores SEO de Advego y Text.ru - náusea, contenido de agua, índice de spam, naturalidad según la ley de Zipf, densidad de palabras clave - y los marcadores del estilo burocrático contra los que advierten las guías españolas de lenguaje claro: los sustantivos deverbales, las locuciones prepositivas del estilo administrativo, las expresiones parentéticas y los clichés, cuyos verbos se encuentran en sus formas (`se procedió a`, `ha dado cumplimiento`).
+Los indicadores SEO de Advego y Text.ru - náusea, contenido de agua, índice de spam, naturalidad según la ley de Zipf, densidad de palabras clave - y los marcadores del estilo burocrático contra los que advierten las guías españolas de lenguaje claro: los sustantivos deverbales, las locuciones prepositivas del estilo administrativo, las expresiones parentéticas y los clichés.
 
 ```python
 >>> from ests import StyleStats
@@ -463,7 +463,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/style_stat
 
 <br>
 
-Las proporciones de las clases de sonidos, los grupos consonánticos, los hiatos, las sílabas abiertas, la dureza y los índices de aliteración y de asonancia, contados sobre los sonidos de una transcripción por reglas y no sobre las letras: la `h` y la `u` de `que` son mudas, `ll`, `ch` y `rr` son un sonido, la `x` son dos.
+Las proporciones de las clases de sonidos, los grupos consonánticos, los hiatos, las sílabas abiertas, la dureza y los índices de aliteración y de asonancia, contados sobre los sonidos de una transcripción por reglas y no sobre las letras: la `h` es muda, `ll` y `rr` son un sonido.
 
 ```python
 >>> from ests import PhonStats
@@ -482,7 +482,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/phon_stats
 
 <br>
 
-La escansión del verso español por su metro silábico: las sílabas métricas de un verso con la sinalefa y la ley del acento final, un verso ajustado al metro de su poema por un hiato, una diéresis o una sinéresis, el alejandrino leído por hemistiquios; el metro, el perfil acentual, los tipos del endecasílabo y las terminaciones de los versos; la rima consonante y asonante, su esquema según el uso español, las estrofas y la forma de un poema. No hacen falta ni modelo ni diccionario.
+La escansión del verso español por su metro silábico: las sílabas métricas de un verso con la sinalefa y la ley del acento final, ajustadas al metro del poema; el metro, el perfil acentual y los tipos del endecasílabo; la rima consonante y asonante con su esquema, las estrofas y la forma de un poema. No hacen falta ni modelo ni diccionario.
 
 ```python
 >>> from ests import VerseStats
@@ -527,7 +527,7 @@ Cada clase de estadísticas es también un componente de un pipeline, de modo qu
 (12, ('DET', 'NOUN'), 2.0)
 ```
 
-Las fábricas son `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` y `ests_verse`; el nombre del paso del pipeline es libre y es como se llama la extensión.
+Las fábricas son `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` y `ests_verse`; el nombre del paso del pipeline es el nombre de la extensión.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/components/).
 
@@ -538,14 +538,14 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/components/).
 
 <br>
 
-La biblioteca compara corpus y describe el uso de una palabra con las medidas de la lingüística de corpus:
+Las medidas de la lingüística de corpus que comparan corpus y describen el uso de una palabra:
 
 *   palabras clave de un corpus objetivo frente a uno de referencia o frente al diccionario de frecuencias de Google Books Ngram: la razón de verosimilitud con su valor p, Log Ratio, ji cuadrado, %DIFF, BIC, ELL y la razón de momios
-*   colocaciones por logDice, MI, MI³, t-score, Dice, razón de verosimilitud, NPMI y sensibilidad mínima, contrastadas con NLTK
+*   colocaciones por logDice, MI, MI³, t-score, Dice, razón de verosimilitud, NPMI y sensibilidad mínima
 *   la dispersión de una palabra por las partes de un texto: la DP de Gries, la DP normalizada, la D de Juilland, la D2 de Carroll, la S de Rosengren y la divergencia de Kullback-Leibler
 *   una concordancia KWIC por forma o por lema
 *   estilometría: las distancias entre textos por la Delta de Burrows y sus variantes, con la atribución de un texto a autores de referencia, los marcadores de palabras preferidas y evitadas por Zeta, el ji cuadrado de Kilgarriff, la curva de Mendenhall y el perfil de las palabras funcionales
-*   la comparación de dos corpus por 132 rasgos de un texto en ventanas de un tamaño parecido: la delta de Cliff, la d de Cohen y el AUC de cada rasgo, la prueba de Mann-Whitney con la corrección de Holm y un intervalo bootstrap de la diferencia de las medianas que remuestrea textos enteros
+*   la comparación de dos corpus por 132 rasgos de un texto en ventanas de un tamaño parecido: la delta de Cliff, la d de Cohen y el AUC de cada rasgo, la prueba de Mann-Whitney con la corrección de Holm y un intervalo bootstrap de la diferencia de las medianas
 
 ```python
 >>> from ests import WordsExtractor
@@ -582,11 +582,11 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/corpus/keyness/)
 
 <br>
 
-*   [spanish_literature](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/) - literatura en español de dominio público: 150 obras de 33 autores de España, Hispanoamérica y Filipinas, de Cervantes a los años veinte, en prosa, poesía, teatro y ensayo; 65 millones de caracteres
+*   [spanish_literature](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/) - literatura en español de dominio público: 150 obras de 33 autores de España, Hispanoamérica y Filipinas, de Cervantes a los años veinte, en prosa, poesía, teatro y ensayo
 *   [spanish_sonnets](https://sergeyshk.github.io/esTS/es/datasets/spanishsonnets/) - sonetos en español del Diachronic Spanish Sonnet Corpus (DISCO) de dominio público: 4259 sonetos de 1167 autores de los siglos XV-XX, cada verso con su patrón métrico y la etiqueta de su rima, la anotación automática de DISCO (CC BY 4.0)
-*   [freq_dict](https://sergeyshk.github.io/esTS/es/datasets/freqdict/) - un diccionario de frecuencias de 83 785 lemas del español a partir de los libros de Google Books Ngram de 1980-2019 (63 000 millones de palabras): ipm, rango y D de Juilland por años, número de libros y categoría gramatical (CC BY 3.0)
+*   [freq_dict](https://sergeyshk.github.io/esTS/es/datasets/freqdict/) - un diccionario de frecuencias de 83 785 lemas del español a partir de los libros de Google Books Ngram de 1980-2019: ipm, rango y D de Juilland por años, número de libros y categoría gramatical (CC BY 3.0)
 
-Los textos se recortan al texto del autor, sin portadas, notas de los transcriptores y de los editores, índices ni notas al pie, y llevan el género, el autor, el título, los años de la primera publicación y el país; los registros se pueden filtrar por cualquiera de ellos y por la longitud del texto.
+Los textos se recortan al texto del autor y llevan el género, el autor, el título, los años de la primera publicación y el país; los registros se pueden filtrar por cualquiera de ellos y por la longitud del texto.
 
 ```python
 >>> from ests.datasets import SpanishLiterature
@@ -601,7 +601,7 @@ La de Bringas 1884 413730
 Tormento 1884 477286
 ```
 
-El archivo (19 MB) se descarga una vez con `download()` en el directorio de datos y se verifica con su suma de comprobación SHA-256; antes de la descarga `get_texts()` y `get_records()` levantan `DatasetNotFoundError` con una indicación.
+El archivo (19 MB) se descarga una vez con `download()` en el directorio de datos; antes, `get_texts()` y `get_records()` levantan `DatasetNotFoundError`.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/).
 
@@ -613,13 +613,13 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/datasets/spanish
 <br>
 
 *   [Ley de Zipf](https://sergeyshk.github.io/esTS/es/visualizers/zipf/) con la curva teórica y el ajuste de Zipf-Mandelbrot
-*   [Huella literaria](https://sergeyshk.github.io/esTS/es/visualizers/fingerprinting/) (Literature Fingerprinting)
-*   [Árbol de palabras](https://sergeyshk.github.io/esTS/es/visualizers/word_tree/) (Word Tree)
+*   [Huella literaria](https://sergeyshk.github.io/esTS/es/visualizers/fingerprinting/)
+*   [Árbol de palabras](https://sergeyshk.github.io/esTS/es/visualizers/word_tree/)
 *   [Gráficos de corpus](https://sergeyshk.github.io/esTS/es/visualizers/corpus/): dispersión léxica, un diagrama de palabras clave, una red de colocaciones
 *   [Gráficos estilométricos](https://sergeyshk.github.io/esTS/es/visualizers/stylometry/): un dendrograma, las componentes principales y el escalamiento multidimensional por la Delta, las curvas de Mendenhall
 *   [Crecimiento del vocabulario y espectro de frecuencias](https://sergeyshk.github.io/esTS/es/visualizers/vocabulary/), [longitudes de las oraciones](https://sergeyshk.github.io/esTS/es/visualizers/sentences/) con una media móvil
 
-Los gráficos de matplotlib reciben los ejes `ax` y devuelven `Axes`, así que se pueden disponer en una misma figura; la red de colocaciones y el árbol de palabras son grafos de graphviz, cuyos ejecutables los dibujan. La Delta coseno separa tres novelas de Galdós de tres de Unamuno:
+Los gráficos de matplotlib reciben los ejes `ax` y devuelven `Axes`; la red de colocaciones y el árbol de palabras los dibujan los ejecutables de Graphviz. La Delta coseno separa tres novelas de Galdós de tres de Unamuno:
 
 ```python
 import matplotlib.pyplot as plt
@@ -679,7 +679,7 @@ Ejecute `make help` para ver la lista completa de comandos.
 
 La documentación es bilingüe: las páginas en inglés son `docs/*.md` y las españolas `docs/*.es.md` junto a ellas ([mkdocs-static-i18n](https://github.com/ultrabug/mkdocs-static-i18n)); al editar una página, actualice las dos versiones.
 
-La versión instalada está en `ests.__version__`. Todas las excepciones heredan de `ests.EstsError` y de una de las clases integradas (`SourceError`, `ParameterError` y `DataFileError` de `ValueError`, `SourceTypeError` de `TypeError`, `UnknownStatError` de `KeyError`, `DatasetNotFoundError` de `OSError`, `DownloadError` de `RuntimeError`), así que `except ValueError` sigue funcionando. La biblioteca no imprime nada por su cuenta: sus mensajes van al logger `ests` (`logging.getLogger("ests")`) y están en silencio por defecto.
+La versión instalada está en `ests.__version__`. Todas las excepciones heredan de `ests.EstsError` y de una clase integrada (`ValueError`, `TypeError`, `KeyError`, `OSError` o `RuntimeError`), así que `except ValueError` sigue funcionando. La biblioteca no imprime nada por su cuenta: sus mensajes van al logger `ests` y están en silencio por defecto. Más en la [documentación](https://sergeyshk.github.io/esTS/es/exceptions/).
 
 Antes de enviar cambios, instale los hooks que ejecutan los linters al hacer commit y las pruebas al hacer push:
 
@@ -689,7 +689,7 @@ uv run pre-commit install
 
 ## Contribuir
 
-Los informes de errores, las ideas y los pull requests son bienvenidos: las [issues](https://github.com/SergeyShk/esTS/issues) están abiertas. El flujo de trabajo, las comprobaciones previas a un pull request y la forma de presentar los cambios están descritos en [CONTRIBUTING.md](https://github.com/SergeyShk/esTS/blob/master/CONTRIBUTING.md); las normas de convivencia, en el [código de conducta](https://github.com/SergeyShk/esTS/blob/master/CODE_OF_CONDUCT.md).
+Los informes de errores, las ideas y los pull requests son bienvenidos en las [issues](https://github.com/SergeyShk/esTS/issues). El flujo de trabajo y las comprobaciones previas a un pull request están en [CONTRIBUTING.md](https://github.com/SergeyShk/esTS/blob/master/CONTRIBUTING.md); las normas de convivencia, en el [código de conducta](https://github.com/SergeyShk/esTS/blob/master/CODE_OF_CONDUCT.md).
 
 <details>
 <summary><b>Estructura del proyecto</b></summary>
@@ -703,7 +703,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos: las [iss
     *   lexical_stats.py - estadísticas de complejidad léxica
     *   components.py - componentes de un pipeline de spaCy
     *   corpus - medidas de la lingüística de corpus: palabras clave, colocaciones, dispersión, concordancia, estilometría, comparación de corpus
-    *   datasets - conjuntos de datos: literatura en español, diccionario de frecuencias
+    *   datasets - conjuntos de datos: literatura en español, sonetos en español, diccionario de frecuencias
     *   constants.py - constantes de la lengua española y de las métricas
     *   diversity_stats.py - métricas de diversidad léxica
     *   exceptions.py - excepciones de la biblioteca
@@ -732,7 +732,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos: las [iss
 
 ## Cómo citar
 
-Si usa **esTS** en su investigación o en su software, cítelo con la siguiente entrada BibTeX. Las citas ayudan al desarrollo y al mantenimiento continuos de la biblioteca. Los mismos metadatos están en [CITATION.cff](https://github.com/SergeyShk/esTS/blob/master/CITATION.cff): GitHub los muestra bajo el botón «Cite this repository». El Concept DOI [10.5281/zenodo.22924655](https://doi.org/10.5281/zenodo.22924655) en Zenodo apunta a todas las versiones de la biblioteca; el DOI de una versión concreta está en la página de su publicación.
+Si usa **esTS** en su investigación o en su software, cítelo con la siguiente entrada BibTeX. Los mismos metadatos están en [CITATION.cff](https://github.com/SergeyShk/esTS/blob/master/CITATION.cff) («Cite this repository» en GitHub). El Concept DOI [10.5281/zenodo.22924655](https://doi.org/10.5281/zenodo.22924655) apunta a todas las versiones de la biblioteca; el DOI de una versión concreta está en la página de su publicación.
 
 ```bibtex
 @software{esTS,

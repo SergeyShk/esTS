@@ -5,7 +5,7 @@
 
 ## Description
 
-The curve of the lengths of the sentences - the rhythm of a text: the length of every sentence in words in order, the moving average over a window of `window` sentences and an inset with the histogram of the lengths. Short and long sentences in turn are an editorial sign of a lively text, a flat curve - of a monotonous one. `sentence_lengths` extracts the lengths: the sentences of a string come from [`SentsExtractor`](../extractors/sentences.md) by the same rules - the inverted marks, the dashes of a dialogue, the abbreviations - and a word belongs to the sentence it starts in; the sentences of a `Doc` come from its boundaries (without them, from its text); ready lengths - any sequence of integers, a numpy array and a Series included - are used as they are; sentences without words are skipped. The function takes the axes `ax` and returns `Axes`.
+The curve of the lengths of the sentences - the rhythm of a text: the length of every sentence in words in order, the moving average over a window of `window` sentences and an inset with the histogram of the lengths. Short and long sentences in turn are an editorial sign of a lively text, a flat curve - of a monotonous one. `sentence_lengths` extracts the lengths: the sentences of a string come from [`SentsExtractor`](../extractors/sentences.md), and a word belongs to the sentence it starts in; the sentences of a `Doc` come from its boundaries (without them, from its text); ready lengths are used as they are; sentences without words are skipped. The function takes the axes `ax` and returns `Axes`.
 
 ## Parameters
 

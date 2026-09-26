@@ -9,7 +9,7 @@ Medidas de estilometría y de atribución de autoría: distancias entre textos p
 
 ## Delta de Burrows { #delta }
 
-Un corpus es un diccionario «nombre de un texto → unidades». `frequency_table` construye la tabla de frecuencias relativas: las filas son los textos, las columnas las `n_mfw` unidades más frecuentes por frecuencia relativa media descendente (alfabéticamente si empatan); `culling` conserva las unidades que aparecen al menos en la proporción de textos dada, como en stylo. `z_scores` estandariza las columnas con la desviación típica muestral, como `scale()` de R; una columna con la misma frecuencia en todos los textos da ceros. `delta` calcula a partir de las puntuaciones z una matriz simétrica de distancias (un `DataFrame` con los nombres de los textos), apta para el agrupamiento y el PCA; hacen falta al menos tres textos: con dos, las puntuaciones z degeneran en ±1/√2 y las distancias no dependen de las frecuencias.
+Un corpus es un diccionario «nombre de un texto → unidades». `frequency_table` construye la tabla de frecuencias relativas: las filas son los textos, las columnas las `n_mfw` unidades más frecuentes por frecuencia relativa media descendente (alfabéticamente si empatan); `culling` conserva las unidades que aparecen al menos en la proporción de textos dada, como en stylo. `z_scores` estandariza las columnas con la desviación típica muestral, como `scale()` de R; una columna con la misma frecuencia en todos los textos da ceros. `delta` calcula a partir de las puntuaciones z una matriz simétrica de distancias (un `DataFrame` con los nombres de los textos); hacen falta al menos tres textos: con dos, las puntuaciones z degeneran en ±1/√2 y las distancias no dependen de las frecuencias.
 
 Variantes (`DELTA_VARIANTS`), con las fórmulas de las fuentes de stylo; $n$ es el número de unidades, $z_A$ y $z_B$ los vectores de puntuaciones z de los textos:
 
@@ -20,7 +20,7 @@ Variantes (`DELTA_VARIANTS`), con las fórmulas de las fuentes de stylo; $n$ es 
 | Delta de Eder | `eder` | $\sum_i \frac{n - i + 2}{n} \lvert z_{A,i} - z_{B,i} \rvert$, $i$ - rango de la unidad por frecuencia | Eder, `dist.eder` |
 | Delta coseno | `cosine` | $1 - \frac{z_A \cdot z_B}{\lVert z_A \rVert \lVert z_B \rVert}$ | Smith y Aldridge (2011), [Evert et al. (2015)](https://aclanthology.org/W15-0709.pdf), `dist.wurzburg` |
 
-La Delta coseno es la que mejor agrupa los textos por autor en los experimentos de Evert et al.; la Delta de Burrows es la elección clásica. El número habitual de unidades es de 100 a 500 palabras más frecuentes, de 100 a 200 para los N-gramas de caracteres.
+La Delta coseno es la que mejor agrupa los textos por autor en los experimentos de Evert et al. El número habitual de unidades es de 100 a 500 palabras más frecuentes, de 100 a 200 para los N-gramas de caracteres.
 
 Parámetros de `delta`:
 
@@ -33,7 +33,7 @@ Parámetros de `delta`:
 
 `frequency_table(corpus, n_mfw=100, culling=0.0)` recibe los mismos parámetros, `z_scores(table)` la tabla.
 
-Para la atribución de autoría está `delta_profiles(reference, samples, n_mfw, variant, culling, statistics)`: las unidades más frecuentes, el filtrado y las estadísticas de las puntuaciones z se toman de los textos de referencia `reference` (los perfiles de los autores) o de un conjunto aparte `statistics` - por ejemplo, de las ventanas de entrenamiento, cuando los perfiles se unen a partir de ellas y son demasiado pocos para estimar la dispersión de las frecuencias; los textos a examinar `samples` se describen con las mismas unidades y se escalan con las mismas estadísticas. El resultado son las distancias de los textos examinados a los de referencia, y la referencia más cercana de una fila es el autor presunto. A diferencia de `delta` sobre un vocabulario común, los textos examinados no influyen ni en la lista de unidades ni en el escalado, así que el resultado para un texto no depende de los textos que se pasan con él.
+Para la atribución de autoría está `delta_profiles(reference, samples, n_mfw, variant, culling, statistics)`: las unidades más frecuentes, el filtrado y las estadísticas de las puntuaciones z se toman de los textos de referencia `reference` (los perfiles de los autores) o de un conjunto aparte `statistics` - por ejemplo, las ventanas de entrenamiento cuando los perfiles son demasiado pocos para estimar la dispersión de las frecuencias; los textos a examinar `samples` se describen con las mismas unidades y se escalan con las mismas estadísticas. El resultado son las distancias de los textos examinados a los de referencia, y la referencia más cercana de una fila es el autor presunto. A diferencia de `delta`, los textos examinados no influyen ni en las unidades ni en el escalado, así que el resultado para un texto no depende de los textos que se pasan con él.
 
 !!! example "Ejemplo"
 
@@ -104,7 +104,7 @@ El resultado es una lista de tuplas con nombre `ZetaScore(word, dp_target, dp_co
 
 ## Ji cuadrado de Kilgarriff { #kilgarriff_chi2 }
 
-La distancia entre dos corpus según [Kilgarriff (2001)](https://www.sketchengine.eu/wp-content/uploads/comparing_corpora_2001.pdf): para las `n_mfw` palabras más frecuentes del corpus conjunto las frecuencias esperadas en los corpus son proporcionales a sus tamaños, $\chi^2 = \sum (O - E)^2 / E$ sobre las palabras y ambos corpus. Cuanto mayor es el valor, más difieren los corpus; el valor crece con el tamaño de los corpus, así que los pares de corpus son comparables entre sí con tamaños iguales, como en los experimentos de Kilgarriff.
+La distancia entre dos corpus según [Kilgarriff (2001)](https://www.sketchengine.eu/wp-content/uploads/comparing_corpora_2001.pdf): para las `n_mfw` palabras más frecuentes del corpus conjunto las frecuencias esperadas en los corpus son proporcionales a sus tamaños, $\chi^2 = \sum (O - E)^2 / E$ sobre las palabras y ambos corpus. Cuanto mayor es el valor, más difieren los corpus; el valor crece con el tamaño de los corpus, así que los pares de corpus son comparables entre sí con tamaños iguales.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
@@ -141,7 +141,7 @@ La distancia entre dos corpus según [Kilgarriff (2001)](https://www.sketchengin
 
 Las proporciones de las adposiciones, las conjunciones coordinantes y subordinantes, las partículas, los pronombres, los determinantes y las interjecciones (`FUNCTION_UD_POS`: `ADP`, `CCONJ`, `SCONJ`, `PART`, `PRON`, `DET`, `INTJ`) entre las palabras del texto. Las palabras funcionales no dependen del tema, así que su perfil es un rasgo clásico de autoría desde Mosteller y Wallace (1964).
 
-Las categorías gramaticales son las de la anotación de un `Doc` que las lleva. Las palabras de una lista o de un `Doc` sin categorías gramaticales las etiqueta el modelo en su contexto, así que han de pasarse en el orden del texto; la puntuación de la lista ayuda al etiquetado y no se cuenta. La lista pasa por el modelo en trozos de 1000 palabras con 16 palabras de contexto a cada lado: la memoria no crece con la longitud de la lista, y las etiquetas son las de una sola secuencia. El pipeline es el modelo [`es_core_news_sm`](../installation.md#model) o el que se pasa en `nlp`, sin el analizador sintáctico, el lematizador ni el reconocedor de entidades, que las categorías gramaticales no necesitan; un pipeline que no las etiqueta (`spacy.blank("es")`) lanza `SourceError`. En las Universal Dependencies del español la negación *no* es un adverbio y no una partícula, así que `PART` es rara.
+Las categorías gramaticales son las de la anotación de un `Doc` que las lleva. Las palabras de una lista o de un `Doc` sin categorías gramaticales las etiqueta el modelo en su contexto, así que han de pasarse en el orden del texto; la puntuación de la lista ayuda al etiquetado y no se cuenta. El pipeline es el modelo [`es_core_news_sm`](../installation.md#model) o el que se pasa en `nlp`, sin el analizador sintáctico, el lematizador ni el reconocedor de entidades; un pipeline que no las etiqueta (`spacy.blank("es")`) lanza `SourceError`. En las Universal Dependencies del español la negación *no* es un adverbio y no una partícula, así que `PART` es rara.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |

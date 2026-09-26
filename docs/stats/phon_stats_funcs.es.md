@@ -5,7 +5,7 @@
 !!! info ""
     **ests.phon_stats.transcribe()**
 
-Transcribe una palabra en sus sonidos. La palabra se divide en sílabas ([`syllabify`](../syllables.md)) y cada sílaba se lee por las reglas de la ortografía española; los caracteres que no son letras del español (cifras, guiones) se omiten, y los resultados se guardan en caché por forma.
+Transcribe una palabra en sus sonidos. La palabra se divide en sílabas ([`syllabify`](../syllables.md)) y cada sílaba se lee por las reglas de la ortografía española; los caracteres que no son letras del español (cifras, guiones) se omiten.
 
 | Grafía | Sonido | Ejemplo |
 | :----- | :----: | :------ |

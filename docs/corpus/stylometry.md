@@ -9,7 +9,7 @@ Measures of stylometry and authorship attribution: distances between texts by th
 
 ## Burrows's Delta { #delta }
 
-A corpus is a dictionary "name of a text → units". `frequency_table` builds the table of relative frequencies: rows are the texts, columns the `n_mfw` most frequent units by descending mean relative frequency (alphabetically when equal); `culling` keeps the units that occur in at least the given share of the texts, as in stylo. `z_scores` standardizes the columns with the sample standard deviation, like `scale()` of R; a column with the same frequency in every text gives zeros. `delta` computes a symmetric matrix of distances from the z-scores (a `DataFrame` with the names of the texts), fit for clustering and PCA; at least three texts are needed - with two, the z-scores degenerate to ±1/√2 and the distances do not depend on the frequencies.
+A corpus is a dictionary "name of a text → units". `frequency_table` builds the table of relative frequencies: rows are the texts, columns the `n_mfw` most frequent units by descending mean relative frequency (alphabetically when equal); `culling` keeps the units that occur in at least the given share of the texts, as in stylo. `z_scores` standardizes the columns with the sample standard deviation, like `scale()` of R; a column with the same frequency in every text gives zeros. `delta` computes a symmetric matrix of distances from the z-scores (a `DataFrame` with the names of the texts); at least three texts are needed - with two, the z-scores degenerate to ±1/√2 and the distances do not depend on the frequencies.
 
 Variants (`DELTA_VARIANTS`), with the formulas of the sources of stylo; $n$ is the number of units, $z_A$ and $z_B$ the vectors of z-scores of the texts:
 
@@ -20,7 +20,7 @@ Variants (`DELTA_VARIANTS`), with the formulas of the sources of stylo; $n$ is t
 | Eder's Delta | `eder` | $\sum_i \frac{n - i + 2}{n} \lvert z_{A,i} - z_{B,i} \rvert$, $i$ - rank of the unit by frequency | Eder, `dist.eder` |
 | Cosine Delta | `cosine` | $1 - \frac{z_A \cdot z_B}{\lVert z_A \rVert \lVert z_B \rVert}$ | Smith and Aldridge (2011), [Evert et al. (2015)](https://aclanthology.org/W15-0709.pdf), `dist.wurzburg` |
 
-Cosine Delta clusters the texts by author best in the experiments of Evert et al.; Burrows's Delta is the classic choice. The usual number of units is 100 to 500 most frequent words, 100-200 for character N-grams.
+Cosine Delta clusters the texts by author best in the experiments of Evert et al. The usual number of units is 100 to 500 most frequent words, 100-200 for character N-grams.
 
 Parameters of `delta`:
 
@@ -33,7 +33,7 @@ Parameters of `delta`:
 
 `frequency_table(corpus, n_mfw=100, culling=0.0)` takes the same parameters, `z_scores(table)` the table.
 
-For authorship attribution there is `delta_profiles(reference, samples, n_mfw, variant, culling, statistics)`: the most frequent units, the culling and the statistics of the z-scores come from the reference texts `reference` (the profiles of the authors) or from a separate set `statistics` - for instance, from the training windows, when the profiles are joined from them and are too few to estimate the spread of the frequencies; the texts under test `samples` are described by the same units and scaled by the same statistics. The result is the distances from the texts under test to the reference ones, and the nearest reference in a row is the presumed author. Unlike `delta` over a joint vocabulary, the texts under test affect neither the list of units nor the scaling, so the result for a text does not depend on the texts passed along with it.
+For authorship attribution there is `delta_profiles(reference, samples, n_mfw, variant, culling, statistics)`: the most frequent units, the culling and the statistics of the z-scores come from the reference texts `reference` (the profiles of the authors) or from a separate set `statistics` - for instance, the training windows when the profiles are too few to estimate the spread of the frequencies; the texts under test `samples` are described by the same units and scaled by the same statistics. The result is the distances from the texts under test to the reference ones, and the nearest reference in a row is the presumed author. Unlike in `delta`, the texts under test affect neither the units nor the scaling, so the result for a text does not depend on the texts passed along with it.
 
 !!! example "Example"
 
@@ -104,7 +104,7 @@ The result is a list of `ZetaScore(word, dp_target, dp_comparison, zeta, log_zet
 
 ## Kilgarriff's chi-square { #kilgarriff_chi2 }
 
-The distance between two corpora after [Kilgarriff (2001)](https://www.sketchengine.eu/wp-content/uploads/comparing_corpora_2001.pdf): for the `n_mfw` most frequent words of the joint corpus the expected frequencies in the corpora are proportional to their sizes, $\chi^2 = \sum (O - E)^2 / E$ over the words and both corpora. The greater the value, the more the corpora differ; the value grows with the size of the corpora, so pairs of corpora are comparable with each other at equal sizes, as in the experiments of Kilgarriff.
+The distance between two corpora after [Kilgarriff (2001)](https://www.sketchengine.eu/wp-content/uploads/comparing_corpora_2001.pdf): for the `n_mfw` most frequent words of the joint corpus the expected frequencies in the corpora are proportional to their sizes, $\chi^2 = \sum (O - E)^2 / E$ over the words and both corpora. The greater the value, the more the corpora differ; the value grows with the size of the corpora, so pairs of corpora are comparable with each other at equal sizes.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
@@ -141,7 +141,7 @@ The distance between two corpora after [Kilgarriff (2001)](https://www.sketcheng
 
 The shares of the adpositions, the coordinating and subordinating conjunctions, the particles, the pronouns, the determiners and the interjections (`FUNCTION_UD_POS`: `ADP`, `CCONJ`, `SCONJ`, `PART`, `PRON`, `DET`, `INTJ`) among the words of the text. Function words do not depend on the topic, so their profile is a classic feature of authorship since Mosteller and Wallace (1964).
 
-The parts of speech are those of the annotation of a `Doc` that carries them. The words of a list or of a `Doc` without parts of speech are tagged by the model in their context, so they are to be passed in the order of the text; the punctuation of the list helps the tagging and is not counted. The list goes through the model in chunks of 1000 words with 16 words of context on each side: the memory does not grow with the length of the list, and the tags are those of one sequence. The pipeline is the model [`es_core_news_sm`](../installation.md#model) or the one passed in `nlp`, without the parser, the lemmatizer and the entity recognizer, which the parts of speech do not need; a pipeline that does not tag them (`spacy.blank("es")`) raises `SourceError`. In Spanish Universal Dependencies the negation *no* is an adverb and not a particle, so `PART` is rare.
+The parts of speech are those of the annotation of a `Doc` that carries them. The words of a list or of a `Doc` without parts of speech are tagged by the model in their context, so they are to be passed in the order of the text; the punctuation of the list helps the tagging and is not counted. The pipeline is the model [`es_core_news_sm`](../installation.md#model) or the one passed in `nlp`, without the parser, the lemmatizer and the entity recognizer; a pipeline that does not tag them (`spacy.blank("es")`) raises `SourceError`. In Spanish Universal Dependencies the negation *no* is an adverb and not a particle, so `PART` is rare.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |

@@ -556,7 +556,6 @@ def calc_mttr(text: Sequence[str], base: float = DIVERSITY_LOG_BASE) -> float:
 
     Description:
         A logarithmic modification of TTR (Maas, 1972)
-        The most stable metric with respect to text length
         The value depends on the logarithm base, 10 by default
 
     Arguments:

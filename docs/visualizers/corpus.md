@@ -9,7 +9,7 @@ Plots for the [corpus measures](../corpus/keyness.md): the lexical dispersion - 
 
 ## Lexical dispersion { #dispersion_plot }
 
-A row for every word of `targets` and a tick at the position of each of its occurrences in the text, as `dispersion_plot` of NLTK and `textplot_xray` of quanteda. Words are compared as they are: case and lemmatization belong to [`WordsExtractor`](../extractors/words.md), and lemmas are looked for with `use_lexemes=True`.
+A row for every word of `targets` and a tick at the position of each of its occurrences in the text. Words are compared as they are: case and lemmatization belong to [`WordsExtractor`](../extractors/words.md), and lemmas are looked for with `use_lexemes=True`.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
@@ -19,7 +19,7 @@ A row for every word of `targets` and a tick at the position of each of its occu
 
 ## Chart of keywords { #keyness_plot }
 
-Diverging horizontal bars (`textplot_keyness` of quanteda): the words of `positive` to the right, of `negative` - the result of `keyness` with `positive=False` - to the left, the length of a bar is the absolute value of the `field` (`score`, `g2`, `log_ratio`), so the side is set by the list and not by the sign of the measure; `top_n` words on each side, the words with an undefined or infinite value are skipped. For the odds ratio (`score` from 0 to infinity, one - equal odds) set `log=True`: the absolute $\log_2$ of the value is plotted, symmetric around one.
+Diverging horizontal bars: the words of `positive` to the right, of `negative` - the result of `keyness` with `positive=False` - to the left, the length of a bar is the absolute value of the `field` (`score`, `g2`, `log_ratio`), so the side is set by the list and not by the sign of the measure; `top_n` words on each side, the words with an undefined or infinite value are skipped. For the odds ratio (`score` from 0 to infinity, one - equal odds) set `log=True`: the absolute $\log_2$ of the value is plotted, symmetric around one.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
@@ -33,7 +33,7 @@ Diverging horizontal bars (`textplot_keyness` of quanteda): the words of `positi
 
 ## Network of collocations { #collocation_network }
 
-An undirected graph (`textplot_network` of quanteda): the nodes are the words with the size of the font by frequency, the edges the pairs with the width and the label by the value of the measure; the `neato` layout. A pair of a word with itself - a word repeated within the window (`rojo rojo`) - would be a loop and is left out before `top_n` pairs are taken. Rendering needs the executables of [Graphviz](https://graphviz.org/download/); in Jupyter the graph displays itself, and `graph.render("network")` saves a png file, as for the word tree.
+An undirected graph: the nodes are the words with the size of the font by frequency, the edges the pairs with the width and the label by the value of the measure; the `neato` layout. A pair of a word with itself - a word repeated within the window (`rojo rojo`) - would be a loop and is left out before `top_n` pairs are taken. Rendering needs the executables of [Graphviz](https://graphviz.org/download/); in Jupyter the graph displays itself, and `graph.render("network")` saves a png file.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
@@ -102,4 +102,4 @@ An undirected graph (`textplot_network` of quanteda): the nodes are the words wi
 
     ![ests](../img/network.png){: .center }
 
-Nela runs through the whole novel, Florentina enters in its second half, and the doctor Golfín opens and closes it; the blindness of Pablo (`ciego`) belongs mostly to the first half. Beside the names of the characters, the keywords show the spelling of the editions - `á` with the accent of the old orthography, which of the novels of Galdós only the edition of *Torquemada en la hoguera* keeps, and `fué`, which all three editions of Unamuno keep - and words of the themes of Unamuno: `acaso`, `hijo`. The network of collocations gathers the names and the places of *Marianela* around `d.`, the abbreviated *don*: Teodoro Golfín, Aldeacorba de Suso, the mines of Socartes.
+Nela runs through the whole novel, Florentina enters in its second half, and the doctor Golfín opens and closes it; the blindness of Pablo (`ciego`) belongs mostly to the first half. Beside the names of the characters, the keywords show the old spelling of the editions (`á`, `fué`) and words of the themes of Unamuno: `acaso`, `hijo`. The network of collocations gathers the names and the places of *Marianela* around `d.`, the abbreviated *don*: Teodoro Golfín, Aldeacorba de Suso, the mines of Socartes.

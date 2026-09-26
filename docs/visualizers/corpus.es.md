@@ -9,7 +9,7 @@ Gráficos para las [medidas de corpus](../corpus/keyness.md): la dispersión lé
 
 ## Dispersión léxica { #dispersion_plot }
 
-Una fila por cada palabra de `targets` y una marca en la posición de cada una de sus apariciones en el texto, como `dispersion_plot` de NLTK y `textplot_xray` de quanteda. Las palabras se comparan tal cual: la caja y la lematización corresponden a [`WordsExtractor`](../extractors/words.md), y los lemas se buscan con `use_lexemes=True`.
+Una fila por cada palabra de `targets` y una marca en la posición de cada una de sus apariciones en el texto. Las palabras se comparan tal cual: la caja y la lematización corresponden a [`WordsExtractor`](../extractors/words.md), y los lemas se buscan con `use_lexemes=True`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
@@ -19,7 +19,7 @@ Una fila por cada palabra de `targets` y una marca en la posición de cada una d
 
 ## Diagrama de palabras clave { #keyness_plot }
 
-Barras horizontales divergentes (`textplot_keyness` de quanteda): las palabras de `positive` a la derecha, las de `negative` - el resultado de `keyness` con `positive=False` - a la izquierda; la longitud de una barra es el valor absoluto del campo `field` (`score`, `g2`, `log_ratio`), así que el lado lo fija la lista y no el signo de la medida; `top_n` palabras por lado, y las palabras con un valor indefinido o infinito se omiten. Para la razón de momios (`score` de 0 a infinito, uno - momios iguales) indique `log=True`: se representa el valor absoluto de $\log_2$ del valor, simétrico en torno a uno.
+Barras horizontales divergentes: las palabras de `positive` a la derecha, las de `negative` - el resultado de `keyness` con `positive=False` - a la izquierda; la longitud de una barra es el valor absoluto del campo `field` (`score`, `g2`, `log_ratio`), así que el lado lo fija la lista y no el signo de la medida; `top_n` palabras por lado, y las palabras con un valor indefinido o infinito se omiten. Para la razón de momios (`score` de 0 a infinito, uno - momios iguales) indique `log=True`: se representa el valor absoluto de $\log_2$ del valor, simétrico en torno a uno.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
@@ -33,7 +33,7 @@ Barras horizontales divergentes (`textplot_keyness` de quanteda): las palabras d
 
 ## Red de colocaciones { #collocation_network }
 
-Un grafo no dirigido (`textplot_network` de quanteda): los nodos son las palabras con el tamaño de la letra según su frecuencia, las aristas son los pares con el grosor y la etiqueta según el valor de la medida; la disposición `neato`. Un par de una palabra consigo misma - una palabra repetida dentro de la ventana (`rojo rojo`) - sería un bucle y se deja fuera antes de tomar los `top_n` pares. Para dibujarlo hacen falta los ejecutables de [Graphviz](https://graphviz.org/download/); en Jupyter el grafo se muestra solo, y `graph.render("network")` guarda un archivo png, como para el árbol de palabras.
+Un grafo no dirigido: los nodos son las palabras con el tamaño de la letra según su frecuencia, las aristas son los pares con el grosor y la etiqueta según el valor de la medida; la disposición `neato`. Un par de una palabra consigo misma - una palabra repetida dentro de la ventana (`rojo rojo`) - sería un bucle y se deja fuera antes de tomar los `top_n` pares. Para dibujarlo hacen falta los ejecutables de [Graphviz](https://graphviz.org/download/); en Jupyter el grafo se muestra solo, y `graph.render("network")` guarda un archivo png.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
@@ -102,4 +102,4 @@ Un grafo no dirigido (`textplot_network` de quanteda): los nodos son las palabra
 
     ![ests](../img/network.png){: .center }
 
-Nela recorre toda la novela, Florentina entra en su segunda mitad, y el doctor Golfín la abre y la cierra; la ceguera de Pablo (`ciego`) pertenece sobre todo a la primera mitad. Además de los nombres de los personajes, las palabras clave muestran la ortografía de las ediciones - `á` con la tilde de la ortografía antigua, que de las novelas de Galdós solo conserva la edición de *Torquemada en la hoguera*, y `fué`, que conservan las tres ediciones de Unamuno - y palabras de los temas de Unamuno: `acaso`, `hijo`. La red de colocaciones reúne los nombres y los lugares de *Marianela* en torno a `d.`, el *don* abreviado: Teodoro Golfín, Aldeacorba de Suso, las minas de Socartes.
+Nela recorre toda la novela, Florentina entra en su segunda mitad, y el doctor Golfín la abre y la cierra; la ceguera de Pablo (`ciego`) pertenece sobre todo a la primera mitad. Además de los nombres de los personajes, las palabras clave muestran la ortografía antigua de las ediciones (`á`, `fué`) y palabras de los temas de Unamuno: `acaso`, `hijo`. La red de colocaciones reúne los nombres y los lugares de *Marianela* en torno a `d.`, el *don* abreviado: Teodoro Golfín, Aldeacorba de Suso, las minas de Socartes.

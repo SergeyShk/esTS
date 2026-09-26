@@ -5,7 +5,7 @@
 !!! info ""
     **ests.phon_stats.transcribe()**
 
-Transcribes a word into its sounds. The word is split into syllables ([`syllabify`](../syllables.md)) and every syllable is read by the rules of the Spanish orthography; the characters that are no Spanish letters (digits, hyphens) are left out, and the results are cached by word form.
+Transcribes a word into its sounds. The word is split into syllables ([`syllabify`](../syllables.md)) and every syllable is read by the rules of the Spanish orthography; the characters that are no Spanish letters (digits, hyphens) are left out.
 
 | Spelling | Sound | Example |
 | :------- | :---: | :------ |

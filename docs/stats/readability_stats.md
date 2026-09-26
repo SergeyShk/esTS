@@ -28,7 +28,7 @@ Readability in this module is computed from linguistic measures: the mean senten
 | SOL (Contreras et al.) | 1999 | years of schooling | SMOG converted to Spanish |
 | LIX, RIX | 1968, 1983 | index, long words per sentence | language-independent bands and grades |
 
-The Flesch family is set by a preset (see [below](#presets)): by default the coefficients of Szigriszt-Pazos, validated with the INFLESZ scale, and alternatively the coefficients of Fernández Huerta. The other formulas do not depend on the preset.
+The coefficients of the Flesch reading ease are set by a preset (see [below](#presets)): Szigriszt-Pazos by default, Fernández Huerta as an alternative.
 
 The main presumptions of readability metrics:
 
@@ -73,10 +73,10 @@ A preset sets the coefficients `a`, `b`, `c` of the Flesch reading ease `c − a
 
 | Preset | Source | Formula | Scale |
 | :----: | :----: | :-----: | :---: |
-| `general` | Szigriszt-Pazos (1993), fórmula de perspicuidad | `206.835 − 1.0·ASL − 62.3·ASW` | INFLESZ (Barrio-Cantalejo et al., 2008), validated on texts for patients |
-| `classic` | Fernández Huerta (1959), the first adaptation of Flesch to Spanish | `206.84 − 1.02·ASL − 60·ASW` | the seven bands of the author |
+| `general` | Szigriszt-Pazos (1993), fórmula de perspicuidad | `206.835 − 1.0·ASL − 62.3·ASW` | INFLESZ (Barrio-Cantalejo et al., 2008) |
+| `classic` | Fernández Huerta (1959) | `206.84 − 1.02·ASL − 60·ASW` | the seven bands of the author |
 
-Fernández Huerta printed the last term as `1.02` times the number of sentences per 100 words. Law (2011) showed that this inverts the fraction of the Flesch formula the adaptation was based on, so the mean sentence length is used here, as koRpus, textstat and legible.es do. The table of all coefficients is available as `ests.constants.READABILITY_PRESETS`.
+The formula of Fernández Huerta takes the mean sentence length, with the correction of Law (2011). The table of all coefficients is available as `ests.constants.READABILITY_PRESETS`.
 
 !!! example "Example"
 
@@ -97,7 +97,7 @@ Fernández Huerta printed the last term as `1.02` times the number of sentences 
 
 The [`describe_level`](#describe_level) method places the reading ease on the scale of the preset: INFLESZ for `general` (`muy difícil` below 40, `algo difícil` 40-55, `normal` 55-65, `bastante fácil` 65-80, `muy fácil` above 80) and the seven bands of Fernández Huerta for `classic`, with the scales of Szigriszt-Pazos or of the other author on request; Legibilidad µ has the seven bands of its authors (`muy difícil` 0-30, `difícil` 31-50, `un poco difícil` 51-60, `adecuado` 61-70, `un poco fácil` 71-80, `fácil` 81-90, `muy fácil` 91-100).
 
-The formulas that yield years of schooling (Crawford, SOL) are summarized in the `consensus_grade` attribute - the median of the rounded values plus the reading ease converted to a grade by the scale of the preset: through the text types of the INFLESZ bands for `general`, through the interpretation table of Flesch, whose bands Fernández Huerta kept, for `classic`. The [`describe_grade`](#describe_grade) method translates the consensus grade or an individual formula into a stage of the Spanish school system and reader age:
+The formulas that yield years of schooling (Crawford, SOL) are summarized in the `consensus_grade` attribute - the median of the rounded values plus the reading ease [converted to a grade](readability_stats_funcs.md#flesch_reading_easy_to_grade) by the scale of the preset. The [`describe_grade`](#describe_grade) method translates the consensus grade or an individual formula into a stage of the Spanish school system and reader age:
 
 | Grade | Stage | Age |
 | :---: | :---: | :-: |
@@ -111,7 +111,7 @@ The formulas that yield years of schooling (Crawford, SOL) are summarized in the
 !!! warning "Warning"
     Crawford was fitted on primary school readers and saturates for adult texts; SOL was fitted on health education materials. The consensus grade of a technical text mostly reflects the reading ease band.
 
-The `reading_time` attribute estimates silent reading time at 278 words per minute, the mean of six studies of adult readers of Spanish in the meta-analysis of Brysbaert (2019). A different speed is accepted by the [`reading_time_by_speed`](#reading_time_by_speed) method, and the [`reading_time_by_norm`](#reading_time_by_norm) method computes the time aloud and silently by the norms of the `ests.constants.READING_SPEED_NORMS` table: the mean speeds of Spanish-speaking students by school year from the meta-analysis of Ripoll, Tapia and Aguado (2020) and of adults from Brysbaert (2019).
+The `reading_time` attribute estimates silent reading time at 278 words per minute, the speed of adult readers of Spanish in the meta-analysis of Brysbaert (2019). A different speed is accepted by the [`reading_time_by_speed`](#reading_time_by_speed) method, and the [`reading_time_by_norm`](#reading_time_by_norm) method computes the time aloud and silently by the norms of the `ests.constants.READING_SPEED_NORMS` table: the mean speeds of Spanish-speaking students by school year from the meta-analysis of Ripoll, Tapia and Aguado (2020) and of adults from Brysbaert (2019).
 
 ## Methods
 

@@ -5,9 +5,9 @@
 
 ## Description
 
-A module for computing the syntactic statistics of a text on the dependency tree of [Universal Dependencies](https://universaldependencies.org/u/dep/). The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library, but it has to be parsed: a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, and a `Doc` must carry the dependencies, which come from a `parser`, and the lemmas, which come from a `lemmatizer` and are what tells a passive from a compound tense and a light verb from any other - a `Doc` of `spacy.blank("es")`, of a pipeline without a parser or of one with the `lemmatizer` excluded is not a valid source and raises `SourceError`.
+A module for computing the syntactic statistics of a text on the dependency tree of [Universal Dependencies](https://universaldependencies.org/u/dep/). The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library, but it has to be parsed: a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, and a `Doc` must carry the dependencies, which come from a `parser`, and the lemmas, which come from a `lemmatizer` - a `Doc` of `spacy.blank("es")`, of a pipeline without a parser or of one with the `lemmatizer` excluded raises `SourceError`.
 
-Punctuation marks, symbols (`%`, `€`, `+`) and whitespace are not nodes of the tree: the words are, the same words every other class of the library counts, and the distances are counted in positions of words. The measures of a sentence - the longest dependency, the depth of the tree, the number of leaves and of subtrees, the nodes per leaf - are averaged over the sentences, the constructions are given per sentence, and the passive and the modifiers are shares of the verbs and of the nouns.
+Punctuation marks, symbols (`%`, `€`, `+`) and whitespace are not nodes of the tree, and the distances are counted in positions of words. The measures of a single sentence - the longest dependency, the depth of the tree, the nodes per leaf - are averaged over the sentences.
 
 A text longer than the `max_length` of the pipeline - a million characters by default - raises `SourceError`: split it into parts, or raise `max_length` on a pipeline of your own and pass it in `nlp`.
 
@@ -23,7 +23,7 @@ A text longer than the `max_length` of the pipeline - a million characters by de
 
 ## Measures of complexity { #complexity }
 
-The measures of the tree follow the work of Ivanov, Solnyshkina and Solovyev on the syntactic complexity of a text: the dependency distance of Liu (2008) - the distance between a word and its head in positions of words - the depth of the tree, the leaves and the subtrees, the valency of the finite verbs, the coordination chains, the clauses and the modifiers of a noun.
+The measures follow the work of Ivanov, Solnyshkina and Solovyev on the syntactic complexity of a text; the dependency distance is the one of Liu (2008), the distance between a word and its head in positions of words.
 
 | Attribute | Type | Description |
 | :-------: | :--: | :---------: |
@@ -45,11 +45,11 @@ The measures of the tree follow the work of Ivanov, Solnyshkina and Solovyev on 
 | `modifiers_per_noun` | float | Mean number of modifiers of a noun |
 | `noun_verb_ratio` | float | Ratio of the number of nouns to the number of verb forms |
 
-A clause is headed by the head of a sentence or by a word with the relation `ccomp`, `advcl`, `acl` or `csubj`; the Spanish models use no subtypes, so a relative clause carries the plain `acl`. The participles and the gerunds head no clause of that kind - they are counted apart - and neither does an infinitive under `acl` (`el deseo de irse`). A parenthetical (`parataxis`) and a coordinated predicate (`conj` of the head of a clause) count only when they are a verb or carry a subject of their own.
+A clause is headed by the head of a sentence or by a word with the relation `ccomp`, `advcl`, `acl` or `csubj`, a relative clause included. The participles and the gerunds head no clause of that kind - they are counted apart - and neither does an infinitive under `acl` (`el deseo de irse`). A parenthetical (`parataxis`) and a coordinated predicate (`conj` of the head of a clause) count only when they are a verb or carry a subject of their own.
 
 ## Constructions of the administrative style { #constructions }
 
-The constructions are the ones the Spanish guides to clear language (*lenguaje claro*) warn about: the passive, the participial and the gerund clauses, the chains of `de`, the split predicates.
+The constructions are the ones the Spanish guides to clear language (*lenguaje claro*) warn about.
 
 | Attribute | Type | Description |
 | :-------: | :--: | :---------: |
@@ -68,17 +68,17 @@ The constructions are the ones the Spanish guides to clear language (*lenguaje c
 | `split_predicates_per_sent` | float | Split predicates per sentence |
 
 *   A **chain of `de`** is two or more nested complements introduced by `de` or its contraction `del`: `el aumento de la eficiencia del uso de los recursos` is a chain of length 3. A single complement (`el uso del agua`) is not a chain.
-*   A **participial clause** is a participle with at least one dependent that is not the predicate of its clause: `la casa, construida por los obreros, se vendió` has one, `el autor ha escrito el libro` has none, because the participle of a compound tense carries an auxiliary. A **gerund clause** is the same for a gerund, the periphrases left out: the ones the models build with an auxiliary (`está cantando`, `va aumentando`) and the ones they attach to their verb as `xcomp` or `advcl` (`sigue trabajando`, `lleva años estudiando`, `acabó reconociendo`).
-*   The **passive** is a participle with the auxiliary `ser` (`la casa fue construida`) or a verb with the `se` of the passive (`se construyó la casa`). The Spanish models give the auxiliary of the passive the plain relation `aux` and its subject the plain `nsubj`, so it is the lemma of the auxiliary that tells `fue construida` from `ha construido`; in the present they often read the auxiliary as a copula instead (`el proyecto es financiado`), and both relations count. A passive is **agentless** when no complement of it is introduced by `por`.
+*   A **participial clause** is a participle with at least one dependent that is not the predicate of its clause: `la casa, construida por los obreros, se vendió` has one, `el autor ha escrito el libro` has none, because the participle of a compound tense carries an auxiliary. A **gerund clause** is the same for a gerund, the periphrases left out, whether the models build them with an auxiliary (`está cantando`) or attach them to their verb as `xcomp` or `advcl` (`sigue trabajando`, `acabó reconociendo`).
+*   The **passive** is a participle with the auxiliary `ser` (`la casa fue construida`, also when the models read the auxiliary as a copula, `el proyecto es financiado`) or a verb with the `se` of the passive (`se construyó la casa`). A passive is **agentless** when no complement of it is introduced by `por`.
 *   A **split predicate** is a light verb (`hacer`, `dar`, `tomar`, `tener`, `poner`, `llevar`, `prestar`, `efectuar`, `realizar`, `proceder`, `proporcionar`, `ejercer`) with a nominal part derived from a verb (`revisión`, `decisión`, `uso`): `hacer una revisión` instead of `revisar`. The nouns of the fixed expressions - `cabo`, `manifiesto`, `parte`, `lugar`, `cuenta` - count only with the verb they are fixed with, `llevar a cabo` and `tomar parte` being split predicates while `dar traslado a las partes` and `poner en primer lugar la seguridad` are not. A complement with a preposition is the nominal part only in a fixed expression (`poner de manifiesto`) or with a verb that takes it that way (`proceder a la votación`); the agent of a passive never is. The pairs found are in the attribute `split_predicates`.
 *   A **word of negation** carries `Polarity=Neg`, which the models give to `no` alone, or is one of `nunca`, `jamás`, `nada`, `nadie`, `ninguno` and `tampoco`; the conjunction `ni` of `ni... ni` is not one. Every such word counts, so the negative concord of Spanish, where one negation is written twice (`no vino nadie`), gives two.
 
 !!! warning "Warning"
-    The statistics are as good as the parse. `es_core_news_sm` tells the three `se` of Spanish apart poorly: on the Spanish pages of this site it marks 60 as the `se` of a passive, 51 as the one of a pronominal verb and only 2 as impersonal, and it reads `se fue dando un portazo` as a passive. Read `se_passives_per_sent` and `impersonal_se_per_sent` together rather than apart. The agent of a passive is another weak spot - the models have no relation `obl:agent` and annotate `por los obreros` as an object as readily as an oblique - which is why the agent is looked for by its preposition and not by its relation.
+    The statistics are as good as the parse. `es_core_news_sm` tells the three `se` of Spanish apart poorly - it rarely marks an impersonal `se` and reads `se fue dando un portazo` as a passive - so read `se_passives_per_sent` and `impersonal_se_per_sent` together rather than apart.
 
 ## Counts { #counts }
 
-Besides the statistics the object keeps the counts they are built from, which are useful on their own.
+Besides the statistics the object keeps the counts they are built from.
 
 | Attribute | Type | Description |
 | :-------: | :--: | :---------: |

@@ -5,11 +5,11 @@
 
 ## Descripción
 
-Gráficos para la [estilometría](../corpus/stylometry.md): un dendrograma y el escalamiento multidimensional de la matriz de distancias de [`delta`](../corpus/stylometry.md#delta), las componentes principales de las frecuencias de las palabras más frecuentes y las curvas de Mendenhall de varios textos, el conjunto que usa stylo para ver cómo se agrupan los textos por autor. Las funciones reciben los ejes `ax` y devuelven `Axes`.
+Gráficos para la [estilometría](../corpus/stylometry.md): un dendrograma y el escalamiento multidimensional de la matriz de distancias de [`delta`](../corpus/stylometry.md#delta), las componentes principales de las frecuencias de las palabras más frecuentes y las curvas de Mendenhall de varios textos. Las funciones reciben los ejes `ax` y devuelven `Axes`.
 
 ## Dendrograma { #dendrogram_plot }
 
-Agrupamiento jerárquico con `scipy.cluster.hierarchy` sobre la matriz de distancias entre textos; el método de Ward por defecto, como en stylo y en [Evert et al. (2015)](https://aclanthology.org/W15-0709.pdf); las etiquetas de las hojas son los nombres de los textos del índice de la matriz.
+Agrupamiento jerárquico con `scipy.cluster.hierarchy` sobre la matriz de distancias entre textos; el método de Ward por defecto, como en [Evert et al. (2015)](https://aclanthology.org/W15-0709.pdf); las etiquetas de las hojas son los nombres de los textos del índice de la matriz.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
@@ -19,7 +19,7 @@ Agrupamiento jerárquico con `scipy.cluster.hierarchy` sobre la matriz de distan
 
 ## Componentes principales { #pca_plot }
 
-Análisis de componentes principales de las puntuaciones z de las frecuencias relativas de las unidades más frecuentes ([`frequency_table`](../corpus/stylometry.md#delta), `z_scores`) mediante la descomposición en valores singulares, como `pca.visualization` de stylo: los textos en el plano de las dos primeras componentes con sus nombres, y la proporción de la varianza explicada en las etiquetas de los ejes.
+Análisis de componentes principales de las puntuaciones z de las frecuencias relativas de las unidades más frecuentes ([`frequency_table`](../corpus/stylometry.md#delta), `z_scores`): los textos en el plano de las dos primeras componentes con sus nombres, y la proporción de la varianza explicada en las etiquetas de los ejes.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
@@ -101,4 +101,4 @@ Seis novelas del [corpus de literatura](../datasets/spanishliterature.md), tres 
 
     ![ests](../img/mds_mendenhall.png){: .center }
 
-La Delta coseno sobre las 100 palabras más frecuentes separa a los autores: el dendrograma une las novelas de cada autor antes de unir los dos grupos, y la primera componente principal, el 43.9% de la varianza, pone a Galdós a un lado y a Unamuno al otro. Las curvas de Mendenhall apenas difieren: la longitud de las palabras es un rasgo débil por sí sola.
+La Delta coseno sobre las 100 palabras más frecuentes separa a los autores: el dendrograma une las novelas de cada autor antes de unir los dos grupos, y la primera componente principal pone a Galdós a un lado y a Unamuno al otro. Las curvas de Mendenhall apenas difieren: la longitud de las palabras es un rasgo débil por sí sola.

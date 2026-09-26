@@ -5,7 +5,7 @@
 
 ## Description
 
-The dispersion of a word is how evenly it is spread over the parts of a text or of a corpus. Frequency does not tell a word that occurs once in every chapter from a word gathered in one of them; the measures of dispersion ([Gries 2008](https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf), [2020](https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf)) complement frequency and serve to choose the vocabulary of dictionaries and of word lists for learners.
+The dispersion of a word is how evenly it is spread over the parts of a text or of a corpus. Frequency does not tell a word that occurs once in every chapter from a word gathered in one of them; the measures of dispersion ([Gries 2008](https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf), [2020](https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf)) complement frequency.
 
 The text is split into parts: `parts` is the number of parts of about equal size or the sizes of the parts in order (sentences, paragraphs, chapters, documents of a corpus), which add up to the number of words. For every word its frequencies by part and six measures are computed; Gries recommends DP as the main one.
 
@@ -24,7 +24,7 @@ For $n$ parts of shares $s_i$ of the text, frequencies of the word by part $v_i$
 | Rosengren's S | `rosengren_s` | $\frac{(\sum \sqrt{s_i v_i})^2}{f}$ | 1 - in proportion, tends to $1/n$ when gathered in one of equal parts; Rosengren (1971) |
 | Kullback-Leibler divergence | `kl_divergence` | $\sum \frac{v_i}{f} \log_2 \frac{v_i / f}{s_i}$ | in bits; 0 - in proportion, grows when gathered in small parts; Gries (2020) |
 
-The measures are available as the functions `calc_dp`, `calc_dp_norm`, `calc_juilland_d`, `calc_carroll_d2`, `calc_rosengren_s`, `calc_kl_divergence` with the arguments `(frequencies, sizes)` - the frequencies of the word by part and the sizes of the parts - of the module `ests.corpus.dispersion` (`from ests.corpus.dispersion import calc_dp`); their names are in `ests.constants.DISPERSION_STATS_DESC`. For a word of zero frequency every measure is `nan`. The function `dispersion` computes the same measures for every word at once over the non-zero cells of the word × part matrix, so the memory is linear in the number of words and a split by sentences costs little.
+The measures are available as the functions `calc_dp`, `calc_dp_norm`, `calc_juilland_d`, `calc_carroll_d2`, `calc_rosengren_s`, `calc_kl_divergence` with the arguments `(frequencies, sizes)` - the frequencies of the word by part and the sizes of the parts - of the module `ests.corpus.dispersion` (`from ests.corpus.dispersion import calc_dp`); their names are in `ests.constants.DISPERSION_STATS_DESC`. For a word of zero frequency every measure is `nan`.
 
 ## Parameters
 

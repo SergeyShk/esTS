@@ -7,7 +7,7 @@
 
 Módulo para calcular la fonoestadística de un texto: las proporciones de las clases de sonidos, los grupos consonánticos, los hiatos, la variedad de la forma fónica de las palabras, las sílabas abiertas y los índices de aliteración y de asonancia, que dicen si las repeticiones de un sonido se agrupan en palabras vecinas. La fuente de datos puede ser un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy); no hace falta ningún modelo entrenado.
 
-Las estadísticas se cuentan sobre los sonidos de la transcripción de las palabras ([`transcribe`](phon_stats_funcs.md#transcribe)), no sobre las letras: el español escribe algunos sonidos con dos letras (`ch`, `ll`, `rr`, `qu`), algunas letras sin sonido (`h`, la `u` de `que` y `gui`) y una letra para dos sonidos (`x`), así que un recuento de letras haría de `calle` un grupo de dos consonantes y de `queso` una palabra de tres vocales. La ortografía del español es lo bastante regular como para leerse por reglas, sin diccionario. La pronunciación es la del estándar de España: yeísmo (`ll` e `y` son un solo sonido) y distinción (`c` ante `e` e `i` y `z` son θ, distinta de `s`).
+Las estadísticas se cuentan sobre los sonidos de la transcripción de las palabras ([`transcribe`](phon_stats_funcs.md#transcribe)), no sobre las letras: `ch`, `ll`, `rr` y `qu` son un sonido, la `h` y la `u` de `que` y `gui` ninguno, y la `x` dos. La pronunciación es la del estándar de España: yeísmo (`ll` e `y` son un solo sonido) y distinción (`c` ante `e` e `i` y `z` son θ, distinta de `s`).
 
 | Clase | Sonidos |
 | :---- | :------ |
@@ -132,4 +132,4 @@ Muestra una tabla con la fonoestadística calculada.
     Mean length of a syllable (sounds)            |   2.19
     ```
 
-Los índices de aliteración y de asonancia comparan las repeticiones con las que se esperan de las frecuencias de los sonidos del propio texto, así que dicen si un texto agrupa sus repeticiones en palabras vecinas. Sobre un libro entero se acercan a 1 tanto en verso como en prosa (0,95-0,98 para *Prosas profanas*, los poemas de Machado, *En las orillas del Sar*, *Marianela* y *Niebla* del [corpus de literatura](../datasets/spanishliterature.md)): las repeticiones de un poema son locales, y los lugares donde se agrupan los muestra la capa `alliteration` del [resaltado](../visualizers/highlight.md).
+Sobre un libro entero los índices de aliteración y de asonancia se acercan a 1 tanto en verso como en prosa, como en los libros del [corpus de literatura](../datasets/spanishliterature.md): las repeticiones de un poema son locales, y los lugares donde se agrupan los muestra la capa `alliteration` del [resaltado](../visualizers/highlight.md).
