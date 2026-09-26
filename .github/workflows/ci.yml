@@ -5,7 +5,6 @@ on:
     branches:
       - master
   pull_request:
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -34,12 +33,18 @@ jobs:
         run: uv run mypy
 
   test:
-    name: test (${{ matrix.python-version }})
-    runs-on: ubuntu-latest
+    name: test (${{ matrix.python-version }}${{ matrix.os != 'ubuntu-latest' && format(', {0}', matrix.os) || '' }})
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest]
         python-version: ["3.11", "3.12", "3.13", "3.14"]
+        include:
+          - os: windows-latest
+            python-version: "3.12"
+          - os: macos-latest
+            python-version: "3.12"
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -59,47 +64,10 @@ jobs:
         with:
           files: ./coverage.xml
           flags: unittests
-          name: ests-ubuntu-latest-${{ matrix.python-version }}
+          name: ests-${{ matrix.os }}-${{ matrix.python-version }}
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
           verbose: true
-
-  # Windows and macOS cost many times the minutes of Linux: they run on the pull request of
-  # a release (a release/* branch) and on demand. Each is a job of its own and not a matrix,
-  # so that a skipped one keeps the name of its required check and passes it
-  test-windows:
-    name: test (3.12, windows-latest)
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.head_ref, 'release/')
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-      - name: Setup uv
-        uses: astral-sh/setup-uv@v10.1.0
-        with:
-          enable-cache: true
-          python-version: "3.12"
-      - name: Install dependencies
-        run: uv sync --locked --all-groups
-      - name: Run tests
-        run: uv run pytest -m "not network" --cov ests --cov-fail-under 90
-
-  test-macos:
-    name: test (3.12, macos-latest)
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.head_ref, 'release/')
-    runs-on: macos-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-      - name: Setup uv
-        uses: astral-sh/setup-uv@v10.1.0
-        with:
-          enable-cache: true
-          python-version: "3.12"
-      - name: Install dependencies
-        run: uv sync --locked --all-groups
-      - name: Run tests
-        run: uv run pytest -m "not network" --cov ests --cov-fail-under 90
 
   network:
     if: github.event_name == 'push'
