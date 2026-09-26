@@ -172,6 +172,14 @@ def test_verse_component():
     assert doc._.verse.get_stats() == VerseStats(POEM).get_stats()
 
 
+def test_verse_component_seseo():
+    pipeline = spacy.blank("es")
+    pipeline.add_pipe("ests_verse", name="verse", config={"seseo": True}, last=True)
+    doc = pipeline("La voz\nde los dos")
+    assert doc._.verse.seseo
+    assert doc._.verse.c_rhymes == {"consonante": 2}
+
+
 @pytest.mark.parametrize("text", ["", "   ", "¿?", "...", "1810"])
 def test_verse_component_of_a_document_without_letters(text):
     pipeline = spacy.blank("es")
