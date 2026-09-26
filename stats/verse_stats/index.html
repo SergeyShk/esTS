@@ -1674,6 +1674,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rhyme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rhyme and strophes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2482,6 +2499,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rhyme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rhyme and strophes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2559,11 +2593,11 @@
 <p><strong>ests.verse_stats.VerseStats</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A module for computing the verse statistics of a text: the scansion of the lines, the meter and the number of metrical syllables, the rhythmic stresses and the stress profile, the types of the endecasílabo, the endings of the lines and the stanzas. The data source can be either a text with its line breaks or a <code>Doc</code> object of the <a href="https://github.com/explosion/spaCy">spaCy</a> library; no trained model and no dictionary are needed.</p>
-<p>The meter of Spanish verse is syllabic: a line is measured by its metrical syllables, and the stresses shape its rhythm. The words are split into syllables and stressed by the orthographic rules of <a href="../../syllables/"><code>syllabify</code></a> and <a href="../../syllables/#word_stresses"><code>word_stresses</code></a>, the unstressed words of the verse left aside. The syllables of a line are then counted as the verse reads them: the vowels at the boundary of two words make one syllable (a synalepha), the law of the final stress sets the length by the last stressed syllable, and a line may break a synalepha, split a diphthong or join a hiatus to reach the meter of its poem. A compound verse, the alejandrino above all, is read as two hemistichs. The algorithm and its accuracy on the sonnets of <a href="../../datasets/spanishsonnets/">DISCO</a> are described in the <a href="../verse_stats_funcs/">functions</a> section.</p>
+<p>A module for computing the verse statistics of a text: the scansion of the lines, the meter and the number of metrical syllables, the rhythmic stresses and the stress profile, the types of the endecasílabo, the endings of the lines, the rhyme, its scheme and the strophes. The data source can be either a text with its line breaks or a <code>Doc</code> object of the <a href="https://github.com/explosion/spaCy">spaCy</a> library; no trained model and no dictionary are needed.</p>
+<p>The meter of Spanish verse is syllabic: a line is measured by its metrical syllables, and the stresses shape its rhythm. The words are split into syllables and stressed by the orthographic rules of <a href="../../syllables/"><code>syllabify</code></a> and <a href="../../syllables/#word_stresses"><code>word_stresses</code></a>, the unstressed words of the verse left aside. The syllables of a line are then counted as the verse reads them: the vowels at the boundary of two words make one syllable (a synalepha), the law of the final stress sets the length by the last stressed syllable, and a line may break a synalepha, split a diphthong or join a hiatus to reach the meter of its poem. A compound verse, the alejandrino above all, is read as two hemistichs. The lines rhyme by their endings from the last stressed vowel, in full (consonante) or by assonance (asonante), and the stanzas and the poem are named by their lines and schemes. The algorithm and its accuracy on the sonnets of <a href="../../datasets/spanishsonnets/">DISCO</a> are described in the <a href="../verse_stats_funcs/">functions</a> section.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The statistics are computed when the <code>VerseStats</code> object is made. The rhyme and the strophes will follow.</p>
+<p>The statistics are computed when the <code>VerseStats</code> object is made.</p>
 </div>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
@@ -2581,6 +2615,12 @@
 <td style="text-align: center;">str/Doc</td>
 <td style="text-align: center;"><code>-</code></td>
 <td style="text-align: center;">Data source (a string or a Doc object)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>seseo</code></td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;"><code>False</code></td>
+<td style="text-align: center;">Pronounce <code>c</code> and <code>z</code> before <code>e</code> and <code>i</code> as <code>s</code> in the rhyme, as in Andalusia and in America: <code>voz</code> - <code>dos</code></td>
 </tr>
 </tbody>
 </table>
@@ -2699,6 +2739,36 @@
 <td style="text-align: center;">float</td>
 <td style="text-align: center;">Mean length of a line in metrical syllables</td>
 </tr>
+<tr>
+<td style="text-align: center;"><code>rhyme_schemes</code></td>
+<td style="text-align: center;">tuple[str, ...]</td>
+<td style="text-align: center;">Rhyme schemes of the stanzas</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>p_rhymed</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Share of the rhymed lines</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>c_rhymes</code></td>
+<td style="text-align: center;">dict[str, int]</td>
+<td style="text-align: center;">Distribution of the rhymed lines by the kind of the rhyme: <code>consonante</code>, <code>asonante</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>strophes</code></td>
+<td style="text-align: center;">tuple[str/None, ...]</td>
+<td style="text-align: center;">Names of the stanzas (<code>VERSE_STROPHES</code>)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>form</code></td>
+<td style="text-align: center;">str/None</td>
+<td style="text-align: center;">Form of the poem: <code>soneto</code>, <code>romance</code>, the strophe of all its stanzas, <code>silva</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>seseo</code></td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;">Whether the rhyme is read with seseo</td>
+</tr>
 </tbody>
 </table>
 <p>The meter is the length of most lines, and it is not determined (<code>None</code>) if more than a tenth of the lines (<code>VERSE_MAX_DEVIATIONS</code>) stay off it after the fitting: a polymetric poem (a silva of heptasílabos and endecasílabos, a sonnet with an estrambote of more than a tenth of heptasílabos), free verse and prose. A single line has no meter either (<code>VERSE_MIN_LINES</code>): any line of up to 18 syllables has a length with a name, and 36% of the sentences of twelve prose works of the <a href="../../datasets/spanishliterature/">corpus of literature</a> would get one, against 1.4% of two sentences as two lines and 0.1% of three. The lines of a poem without a meter are fitted to its common lengths - the ones of at least two lines and a tenth of them, as the 7 and the 11 syllables of a lira or a silva - if these take more than half of the lines, so that the distribution of the lengths and the types of the endecasílabo count the real lengths of a polymetric poem; the lines of free verse and prose keep their plain readings.</p>
@@ -2750,6 +2820,137 @@
 </tbody>
 </table>
 <p>A line with the 6th syllable stressed takes its type from its first stress; <code>4-6-10</code> counts as sáfico in some treatises. A line with none of the three sets is left out of <code>c_rhythms</code> and counted in <code>p_pyrrhics</code>. The metrical syllables of <code>stress_profile</code> are counted from zero, so the 6th syllable is the number 5. <code>stresses</code> indexes <code>syllables</code>, and the two agree with <code>patterns</code> up to the last stress of a simple verse; in a compound verse each hemistich takes its own length, so after an aguda or an esdrújula at the caesura <code>patterns</code> and <code>syllables</code> part, and <code>caesuras</code> tells where the second hemistich begins.</p>
+<h3 id="rhyme">Rhyme and strophes<a class="headerlink" href="#rhyme" title="Permanent link">&para;</a></h3>
+<p>A line rhymes by its ending from the last stressed vowel: in full (consonante) if the sounds are the same, by assonance (asonante) if the stressed and the last vowels are. The sounds are the ones of the ear: <code>b</code> and <code>v</code>, <code>c</code> and <code>z</code> (<code>s</code> with <code>seseo</code>), <code>ll</code> and <code>y</code> are one sound, <code>h</code> is silent, the tap <code>r</code> and the trill <code>rr</code> differ. The assonance leaves out the vowels between the stressed and the last one (<em>pálido</em> - a, o), takes the stressed vowel of a diphthong (<em>cielo</em> - e, o; <em>gracia</em> - a, a), reads a final <code>i</code> and <code>u</code> as <code>e</code> and <code>o</code> (<em>fácil</em> - a, e) and gives an aguda its stressed vowel alone. A line rhymes with the lines of the window of <code>RHYME_WINDOW</code> (4) lines before it, across the stanzas, so that the quatrains of a sonnet rhyme ABBA ABBA.</p>
+<p>The assonance counts in two cases. A poem whose rhyme is the assonance - at least a third of its lines with no full rhyme, and at least four of them, share one (<code>RHYME_MIN_ASSONANCE</code>, <code>RHYME_MIN_ASSONANT_LINES</code>) - rhymes by the assonances of all its lines, which take in the full rhymes of the same vowels: the assonant sonnets of DISCO. Otherwise the assonance counts on alternate lines with unrhymed lines between them: a run of at least four lines two apart with three in four of the lines between them free of a full rhyme (<code>RHYME_MIN_FREE</code>), or all the even lines of a stanza of an even number of lines, as the second and the fourth line of a copla. So a romance rhymes even when its assonance changes from part to part (<em>La tierra de Alvargonzález</em> of Machado goes é-a, á-a, é-o...) and when its assonant lines also rhyme in full two by two (<em>colgar</em> - <em>contemplar</em> in the rima LIII of Bécquer). An assonance of neighbouring lines is no rhyme: in a sonnet of <code>-ado</code> and <code>-ano</code> every line has its full rhyme and the groups stay apart, and the lines of prose do not rhyme by chance - sentences of prose as lines share an assonance that counts in 0.1-3.6% of the texts of 5 to 40 lines and in 6.5% of the ones of 4, where two lines of a copla are enough.</p>
+<p>The rhyme scheme follows the Spanish usage: the letters go in the order of the rhyme groups of the whole poem, upper-case for the lines of arte mayor (9 syllables and more, <code>VERSE_ARTE_MAYOR</code>) and lower-case for the lines of arte menor, a hyphen for an unrhymed line: a sonnet is ABBA ABBA CDC DCD, a redondilla abba, a lira aBabB, a romance -a-a-a-a. When the 26 letters run out, the letter of a group that no line in the window can join any more is taken again.</p>
+<p>A stanza is named by its lines, their lengths, its scheme and its rhyme (<code>VERSE_STROPHES</code>, the first that fits):</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Strophe</th>
+<th style="text-align: center;">Lines</th>
+<th style="text-align: left;">Lengths</th>
+<th style="text-align: left;">Schemes</th>
+<th style="text-align: center;">Rhyme</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">pareado</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">any</td>
+<td style="text-align: left;">aa</td>
+<td style="text-align: center;">any</td>
+</tr>
+<tr>
+<td style="text-align: left;">terceto</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">arte mayor</td>
+<td style="text-align: left;">aba, a-a, abc, aab, abb</td>
+<td style="text-align: center;">any</td>
+</tr>
+<tr>
+<td style="text-align: left;">tercerilla</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">arte menor</td>
+<td style="text-align: left;">aba, a-a</td>
+<td style="text-align: center;">any</td>
+</tr>
+<tr>
+<td style="text-align: left;">cuaderna vía</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">14 each</td>
+<td style="text-align: left;">aaaa</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">cuarteto, serventesio</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">arte mayor</td>
+<td style="text-align: left;">abba; abab</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">redondilla, cuarteta</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">arte menor</td>
+<td style="text-align: left;">abba; abab</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">seguidilla</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">7-5-7-5</td>
+<td style="text-align: left;">-a-a</td>
+<td style="text-align: center;">any</td>
+</tr>
+<tr>
+<td style="text-align: left;">copla</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">8 each</td>
+<td style="text-align: left;">-a-a</td>
+<td style="text-align: center;">asonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">lira</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">7-11-7-7-11</td>
+<td style="text-align: left;">ababb</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">quinteto, quintilla</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">arte mayor; arte menor</td>
+<td style="text-align: left;">ababa, abaab, abbab, aabab, aabba</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">estrofa manriqueña</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">8-8-4-8-8-4</td>
+<td style="text-align: left;">abcabc</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">sexta rima</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">arte mayor</td>
+<td style="text-align: left;">ababcc</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">sexteto</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">arte mayor</td>
+<td style="text-align: left;">aabccb, abcabc, abbacc, aabbcc</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">sextilla</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">arte menor</td>
+<td style="text-align: left;">aabccb, ababcc, abcabc, aabaab</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">octava real</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: left;">11 each</td>
+<td style="text-align: left;">abababcc</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">décima</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: left;">8 each</td>
+<td style="text-align: left;">abbaaccddc</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+</tbody>
+</table>
+<p>A stanza of a poem with no meter is fitted to the syllables of a strophe that asks for them, so that a single lira gets its 7 and 11 syllables. The form of a poem is <code>soneto</code> for 14 lines of a meter of arte mayor in full rhyme with the quatrains ABBA or ABAB and the tercets on rhymes of their own; <code>romance</code> for octosílabos from 8 lines with three in four of the even lines of the stanzas rhymed by assonance, which may change, and three in four of the odd ones unrhymed; the strophe of all the stanzas; <code>silva</code> for heptasílabos and endecasílabos with no meter, longer than a strophe (more than 10 lines) and with no pattern of lengths repeated by all its stanzas.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The scansion, the meter and the stresses can be obtained apart with the functions of the module. The algorithm and the functions are described in the corresponding <a href="../verse_stats_funcs/">section</a>.</p>
@@ -2778,6 +2979,7 @@
 <span class="w"> </span><span class="s1">'n_feet'</span>:<span class="w"> </span><span class="m">11</span>,
 <span class="w"> </span><span class="s1">'p_deviations'</span>:<span class="w"> </span><span class="m">0</span>.0,
 <span class="w"> </span><span class="s1">'p_pyrrhics'</span>:<span class="w"> </span><span class="m">0</span>.0,
+<span class="w"> </span><span class="s1">'p_rhymed'</span>:<span class="w"> </span><span class="m">1</span>.0,
 <span class="w"> </span><span class="s1">'p_masculine'</span>:<span class="w"> </span><span class="m">0</span>.0,
 <span class="w"> </span><span class="s1">'p_feminine'</span>:<span class="w"> </span><span class="m">1</span>.0,
 <span class="w"> </span><span class="s1">'p_dactylic'</span>:<span class="w"> </span><span class="m">0</span>.0<span class="o">}</span>
@@ -2798,6 +3000,46 @@
 <span class="c1"># ({'4-8-10': 2, '4-7-10': 1, '3-6-10': 1}, {'llana': 4})</span>
 <span class="n">vs</span><span class="o">.</span><span class="n">c_stressed_vowels</span>
 <span class="c1"># {'a': 8, 'e': 3, 'i': 2, 'u': 2, 'o': 1}</span>
+</code></pre></div>
+</div>
+<p>The rhyme of the whole sonnet and of a romance:</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.verse_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">rhyme_scheme</span>
+
+<span class="n">sonnet</span> <span class="o">=</span> <span class="s2">"""Cuando me paro a contemplar mi estado</span>
+<span class="s2">y a ver los pasos por do me han traído,</span>
+<span class="s2">hallo, según por do anduve perdido,</span>
+<span class="s2">que a mayor mal pudiera haber llegado;</span>
+
+<span class="s2">mas cuando del camino estó olvidado,</span>
+<span class="s2">a tanto mal no sé por dó he venido;</span>
+<span class="s2">sé que me acabo, y más he yo sentido</span>
+<span class="s2">ver acabar comigo mi cuidado.</span>
+
+<span class="s2">Yo acabaré, que me entregué sin arte</span>
+<span class="s2">a quien sabrá perderme y acabarme</span>
+<span class="s2">si quisiere, y aún sabrá querello;</span>
+
+<span class="s2">que pues mi voluntad puede matarme,</span>
+<span class="s2">la suya, que no es tanto de mi parte,</span>
+<span class="s2">pudiendo, ¿qué hará sino hacello?"""</span>
+<span class="n">vs</span> <span class="o">=</span> <span class="n">VerseStats</span><span class="p">(</span><span class="n">sonnet</span><span class="p">)</span>
+<span class="n">vs</span><span class="o">.</span><span class="n">rhyme_schemes</span><span class="p">,</span> <span class="n">vs</span><span class="o">.</span><span class="n">strophes</span><span class="p">,</span> <span class="n">vs</span><span class="o">.</span><span class="n">form</span>
+<span class="c1"># (('ABBA', 'ABBA', 'CDE', 'DCE'), ('cuarteto', 'cuarteto', 'terceto', 'terceto'), 'soneto')</span>
+
+<span class="c1"># The beginning of La tierra de Alvargonzález by Antonio Machado</span>
+<span class="n">romance</span> <span class="o">=</span> <span class="s2">"""Siendo mozo Alvargonzález,</span>
+<span class="s2">dueño de mediana hacienda,</span>
+<span class="s2">que en otras tierras se dice</span>
+<span class="s2">bienestar y aquí, opulencia,</span>
+<span class="s2">en la feria de Berlanga</span>
+<span class="s2">prendóse de una doncella,</span>
+<span class="s2">y la tomó por mujer</span>
+<span class="s2">al año de conocerla."""</span>
+<span class="n">vs</span> <span class="o">=</span> <span class="n">VerseStats</span><span class="p">(</span><span class="n">romance</span><span class="p">)</span>
+<span class="n">rhyme_scheme</span><span class="p">(</span><span class="n">romance</span><span class="p">),</span> <span class="n">vs</span><span class="o">.</span><span class="n">form</span><span class="p">,</span> <span class="n">vs</span><span class="o">.</span><span class="n">c_rhymes</span>
+<span class="c1"># ('-a-a-a-a', 'romance', {'asonante': 4})</span>
 </code></pre></div>
 </div>
 <h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
@@ -2828,6 +3070,7 @@ Meter<span class="w">                                         </span><span class
 Number<span class="w"> </span>of<span class="w"> </span>metrical<span class="w"> </span>syllables<span class="w">                  </span><span class="p">|</span><span class="w">      </span><span class="m">14</span>
 Share<span class="w"> </span>of<span class="w"> </span>lines<span class="w"> </span>off<span class="w"> </span>the<span class="w"> </span>meter<span class="w">                  </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.00
 Share<span class="w"> </span>of<span class="w"> </span>lines<span class="w"> </span>without<span class="w"> </span>the<span class="w"> </span>rhythmic<span class="w"> </span>stresses<span class="w">  </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.00
+Share<span class="w"> </span>of<span class="w"> </span>rhymed<span class="w"> </span>lines<span class="w">                         </span><span class="p">|</span><span class="w">     </span><span class="m">1</span>.00
 Share<span class="w"> </span>of<span class="w"> </span>oxytone<span class="w"> </span>endings<span class="w"> </span><span class="o">(</span>aguda<span class="o">)</span><span class="w">              </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.33
 Share<span class="w"> </span>of<span class="w"> </span>paroxytone<span class="w"> </span>endings<span class="w"> </span><span class="o">(</span>llana<span class="o">)</span><span class="w">           </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.67
 Share<span class="w"> </span>of<span class="w"> </span>proparoxytone<span class="w"> </span>endings<span class="w"> </span><span class="o">(</span>esdrújula<span class="o">)</span><span class="w">    </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.00

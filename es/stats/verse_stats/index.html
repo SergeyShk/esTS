@@ -1674,6 +1674,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Atributos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rhyme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rima y estrofas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2482,6 +2499,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Atributos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rhyme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rima y estrofas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2559,11 +2593,11 @@
 <p><strong>ests.verse_stats.VerseStats</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Módulo para calcular las estadísticas del verso de un texto: la escansión de los versos, el metro y el número de sílabas métricas, los acentos rítmicos y el perfil acentual, los tipos del endecasílabo, las terminaciones de los versos y las estrofas. La fuente de datos puede ser un texto con sus saltos de línea o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>; no hacen falta ni un modelo entrenado ni un diccionario.</p>
-<p>El metro del verso español es silábico: un verso se mide por sus sílabas métricas, y los acentos dan forma a su ritmo. Las palabras se dividen en sílabas y se acentúan por las reglas ortográficas de <a href="../../syllables/"><code>syllabify</code></a> y <a href="../../syllables/#word_stresses"><code>word_stresses</code></a>, dejando aparte las palabras átonas del verso. Después las sílabas de un verso se cuentan como las lee el verso: las vocales en el límite de dos palabras forman una sílaba (la sinalefa), la ley del acento final fija la medida por la última sílaba acentuada, y un verso puede deshacer una sinalefa, dividir un diptongo o unir un hiato para alcanzar el metro de su poema. Un verso compuesto, ante todo el alejandrino, se lee como dos hemistiquios. El algoritmo y su precisión sobre los sonetos de <a href="../../datasets/spanishsonnets/">DISCO</a> se describen en la <a href="../verse_stats_funcs/">sección</a> de las funciones.</p>
+<p>Módulo para calcular las estadísticas del verso de un texto: la escansión de los versos, el metro y el número de sílabas métricas, los acentos rítmicos y el perfil acentual, los tipos del endecasílabo, las terminaciones de los versos, la rima, su esquema y las estrofas. La fuente de datos puede ser un texto con sus saltos de línea o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>; no hacen falta ni un modelo entrenado ni un diccionario.</p>
+<p>El metro del verso español es silábico: un verso se mide por sus sílabas métricas, y los acentos dan forma a su ritmo. Las palabras se dividen en sílabas y se acentúan por las reglas ortográficas de <a href="../../syllables/"><code>syllabify</code></a> y <a href="../../syllables/#word_stresses"><code>word_stresses</code></a>, dejando aparte las palabras átonas del verso. Después las sílabas de un verso se cuentan como las lee el verso: las vocales en el límite de dos palabras forman una sílaba (la sinalefa), la ley del acento final fija la medida por la última sílaba acentuada, y un verso puede deshacer una sinalefa, dividir un diptongo o unir un hiato para alcanzar el metro de su poema. Un verso compuesto, ante todo el alejandrino, se lee como dos hemistiquios. Los versos riman por su terminación desde la última vocal acentuada, en consonante o en asonante, y las estrofas y el poema se nombran por sus versos y sus esquemas. El algoritmo y su precisión sobre los sonetos de <a href="../../datasets/spanishsonnets/">DISCO</a> se describen en la <a href="../verse_stats_funcs/">sección</a> de las funciones.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>Las estadísticas se calculan al crear el objeto <code>VerseStats</code>. La rima y las estrofas llegarán después.</p>
+<p>Las estadísticas se calculan al crear el objeto <code>VerseStats</code>.</p>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
 <table>
@@ -2581,6 +2615,12 @@
 <td style="text-align: center;">str/Doc</td>
 <td style="text-align: center;"><code>-</code></td>
 <td style="text-align: center;">Fuente de datos (una cadena o un objeto Doc)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>seseo</code></td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;"><code>False</code></td>
+<td style="text-align: center;">Pronunciar <code>c</code> y <code>z</code> ante <code>e</code> e <code>i</code> como <code>s</code> en la rima, como en Andalucía y en América: <code>voz</code> - <code>dos</code></td>
 </tr>
 </tbody>
 </table>
@@ -2699,6 +2739,36 @@
 <td style="text-align: center;">float</td>
 <td style="text-align: center;">Longitud media de un verso en sílabas métricas</td>
 </tr>
+<tr>
+<td style="text-align: center;"><code>rhyme_schemes</code></td>
+<td style="text-align: center;">tuple[str, ...]</td>
+<td style="text-align: center;">Esquemas de rima de las estrofas</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>p_rhymed</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;">Proporción de los versos con rima</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>c_rhymes</code></td>
+<td style="text-align: center;">dict[str, int]</td>
+<td style="text-align: center;">Distribución de los versos con rima por el tipo de la rima: <code>consonante</code>, <code>asonante</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>strophes</code></td>
+<td style="text-align: center;">tuple[str/None, ...]</td>
+<td style="text-align: center;">Nombres de las estrofas (<code>VERSE_STROPHES</code>)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>form</code></td>
+<td style="text-align: center;">str/None</td>
+<td style="text-align: center;">Forma del poema: <code>soneto</code>, <code>romance</code>, la estrofa de todas sus estrofas, <code>silva</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>seseo</code></td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;">Si la rima se lee con seseo</td>
+</tr>
 </tbody>
 </table>
 <p>El metro es la medida de la mayoría de los versos, y no se determina (<code>None</code>) si más de una décima parte de los versos (<code>VERSE_MAX_DEVIATIONS</code>) quedan fuera de él tras el ajuste: un poema polimétrico (una silva de heptasílabos y endecasílabos, un soneto con estrambote de más de una décima parte de heptasílabos), el verso libre y la prosa. Un solo verso tampoco tiene metro (<code>VERSE_MIN_LINES</code>): cualquier línea de hasta 18 sílabas tiene una medida con nombre, y lo tendría el 36% de las oraciones de doce obras en prosa del <a href="../../datasets/spanishliterature/">corpus de literatura</a>, frente al 1,4% de dos oraciones como dos versos y al 0,1% de tres. Los versos de un poema sin metro se ajustan a sus medidas comunes - las de al menos dos versos y una décima parte de ellos, como las 7 y las 11 sílabas de una lira o una silva - si estas ocupan más de la mitad de los versos, de modo que la distribución de las medidas y los tipos del endecasílabo cuentan las medidas reales de un poema polimétrico; los versos del verso libre y de la prosa conservan su lectura llana.</p>
@@ -2750,6 +2820,137 @@
 </tbody>
 </table>
 <p>Un verso con la 6.ª sílaba acentuada toma su tipo de su primer acento; <code>4-6-10</code> cuenta como sáfico en algunos tratados. Un verso sin ninguno de los tres conjuntos queda fuera de <code>c_rhythms</code> y se cuenta en <code>p_pyrrhics</code>. Las sílabas métricas de <code>stress_profile</code> se cuentan desde cero, así que la 6.ª sílaba es el número 5. <code>stresses</code> indexa <code>syllables</code>, y ambos coinciden con <code>patterns</code> hasta el último acento de un verso simple; en un verso compuesto cada hemistiquio tiene su propia medida, así que tras una aguda o una esdrújula en la cesura <code>patterns</code> y <code>syllables</code> se separan, y <code>caesuras</code> dice dónde empieza el segundo hemistiquio.</p>
+<h3 id="rhyme">Rima y estrofas<a class="headerlink" href="#rhyme" title="Permanent link">&para;</a></h3>
+<p>Un verso rima por su terminación desde la última vocal acentuada: en consonante si los sonidos son iguales, en asonante si lo son la vocal acentuada y la última. Los sonidos son los del oído: <code>b</code> y <code>v</code>, <code>c</code> y <code>z</code> (<code>s</code> con <code>seseo</code>), <code>ll</code> e <code>y</code> son un solo sonido, la <code>h</code> es muda, la vibrante simple <code>r</code> y la múltiple <code>rr</code> se distinguen. La asonancia deja fuera las vocales entre la acentuada y la última (<em>pálido</em> - a, o), toma la vocal acentuada de un diptongo (<em>cielo</em> - e, o; <em>gracia</em> - a, a), lee la <code>i</code> y la <code>u</code> finales como <code>e</code> y <code>o</code> (<em>fácil</em> - a, e) y da a una aguda solo su vocal acentuada. Un verso rima con los versos de la ventana de <code>RHYME_WINDOW</code> (4) versos anteriores, por encima de las estrofas, de modo que los cuartetos de un soneto riman ABBA ABBA.</p>
+<p>La asonancia cuenta en dos casos. Un poema cuya rima es la asonancia - al menos un tercio de sus versos sin rima consonante, y al menos cuatro de ellos, comparten una (<code>RHYME_MIN_ASSONANCE</code>, <code>RHYME_MIN_ASSONANT_LINES</code>) - rima por las asonancias de todos sus versos, que abarcan las rimas consonantes de las mismas vocales: los sonetos asonantados de DISCO. Si no, la asonancia cuenta en versos alternos con versos sin rima entre ellos: una serie de al menos cuatro versos de dos en dos con tres de cada cuatro de los versos intermedios sin rima consonante (<code>RHYME_MIN_FREE</code>), o todos los versos pares de una estrofa de un número par de versos, como el segundo y el cuarto de una copla. Así un romance rima aunque cambie de asonancia de una parte a otra (<em>La tierra de Alvargonzález</em> de Machado va en é-a, á-a, é-o...) y aunque sus versos asonantes rimen además en consonante de dos en dos (<em>colgar</em> - <em>contemplar</em> en la rima LIII de Bécquer). Una asonancia de versos vecinos no es rima: en un soneto de <code>-ado</code> y <code>-ano</code> cada verso tiene su rima consonante y los grupos se mantienen aparte, y los renglones de la prosa no riman por azar - las oraciones de prosa como versos comparten una asonancia que cuenta en el 0,1-3,6% de los textos de 5 a 40 versos y en el 6,5% de los de 4, donde bastan los dos versos de una copla.</p>
+<p>El esquema de rima sigue el uso español: las letras van en el orden de los grupos de rima de todo el poema, mayúsculas para los versos de arte mayor (9 sílabas o más, <code>VERSE_ARTE_MAYOR</code>) y minúsculas para los de arte menor, con un guion para un verso sin rima: un soneto es ABBA ABBA CDC DCD, una redondilla abba, una lira aBabB, un romance -a-a-a-a. Cuando se acaban las 26 letras, se vuelve a tomar la letra de un grupo al que ya no puede unirse ningún verso de la ventana.</p>
+<p>Una estrofa se nombra por sus versos, sus medidas, su esquema y su rima (<code>VERSE_STROPHES</code>, la primera que encaja):</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Estrofa</th>
+<th style="text-align: center;">Versos</th>
+<th style="text-align: left;">Medidas</th>
+<th style="text-align: left;">Esquemas</th>
+<th style="text-align: center;">Rima</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">pareado</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">cualquiera</td>
+<td style="text-align: left;">aa</td>
+<td style="text-align: center;">cualquiera</td>
+</tr>
+<tr>
+<td style="text-align: left;">terceto</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">arte mayor</td>
+<td style="text-align: left;">aba, a-a, abc, aab, abb</td>
+<td style="text-align: center;">cualquiera</td>
+</tr>
+<tr>
+<td style="text-align: left;">tercerilla</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">arte menor</td>
+<td style="text-align: left;">aba, a-a</td>
+<td style="text-align: center;">cualquiera</td>
+</tr>
+<tr>
+<td style="text-align: left;">cuaderna vía</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">14 cada uno</td>
+<td style="text-align: left;">aaaa</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">cuarteto, serventesio</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">arte mayor</td>
+<td style="text-align: left;">abba; abab</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">redondilla, cuarteta</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">arte menor</td>
+<td style="text-align: left;">abba; abab</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">seguidilla</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">7-5-7-5</td>
+<td style="text-align: left;">-a-a</td>
+<td style="text-align: center;">cualquiera</td>
+</tr>
+<tr>
+<td style="text-align: left;">copla</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">8 cada uno</td>
+<td style="text-align: left;">-a-a</td>
+<td style="text-align: center;">asonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">lira</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">7-11-7-7-11</td>
+<td style="text-align: left;">ababb</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">quinteto, quintilla</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: left;">arte mayor; arte menor</td>
+<td style="text-align: left;">ababa, abaab, abbab, aabab, aabba</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">estrofa manriqueña</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">8-8-4-8-8-4</td>
+<td style="text-align: left;">abcabc</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">sexta rima</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">arte mayor</td>
+<td style="text-align: left;">ababcc</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">sexteto</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">arte mayor</td>
+<td style="text-align: left;">aabccb, abcabc, abbacc, aabbcc</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">sextilla</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: left;">arte menor</td>
+<td style="text-align: left;">aabccb, ababcc, abcabc, aabaab</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">octava real</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: left;">11 cada uno</td>
+<td style="text-align: left;">abababcc</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">décima</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: left;">8 cada uno</td>
+<td style="text-align: left;">abbaaccddc</td>
+<td style="text-align: center;">consonante</td>
+</tr>
+</tbody>
+</table>
+<p>Una estrofa de un poema sin metro se ajusta a las sílabas de una estrofa que las pide, de modo que una lira sola recibe sus 7 y 11 sílabas. La forma de un poema es <code>soneto</code> para 14 versos de un metro de arte mayor en rima consonante con los cuartetos ABBA o ABAB y los tercetos en rimas propias; <code>romance</code> para octosílabos desde 8 versos con tres de cada cuatro de los versos pares de las estrofas en asonante, que puede cambiar, y tres de cada cuatro de los impares sin rima; la estrofa de todas las estrofas; <code>silva</code> para heptasílabos y endecasílabos sin metro, más largos que una estrofa (más de 10 versos) y sin un patrón de medidas repetido por todas sus estrofas.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>La escansión, el metro y los acentos se pueden obtener por separado con las funciones del módulo. El algoritmo y las funciones se describen en la <a href="../verse_stats_funcs/">sección</a> correspondiente.</p>
@@ -2778,6 +2979,7 @@
 <span class="w"> </span><span class="s1">'n_feet'</span>:<span class="w"> </span><span class="m">11</span>,
 <span class="w"> </span><span class="s1">'p_deviations'</span>:<span class="w"> </span><span class="m">0</span>.0,
 <span class="w"> </span><span class="s1">'p_pyrrhics'</span>:<span class="w"> </span><span class="m">0</span>.0,
+<span class="w"> </span><span class="s1">'p_rhymed'</span>:<span class="w"> </span><span class="m">1</span>.0,
 <span class="w"> </span><span class="s1">'p_masculine'</span>:<span class="w"> </span><span class="m">0</span>.0,
 <span class="w"> </span><span class="s1">'p_feminine'</span>:<span class="w"> </span><span class="m">1</span>.0,
 <span class="w"> </span><span class="s1">'p_dactylic'</span>:<span class="w"> </span><span class="m">0</span>.0<span class="o">}</span>
@@ -2798,6 +3000,46 @@
 <span class="c1"># ({'4-8-10': 2, '4-7-10': 1, '3-6-10': 1}, {'llana': 4})</span>
 <span class="n">vs</span><span class="o">.</span><span class="n">c_stressed_vowels</span>
 <span class="c1"># {'a': 8, 'e': 3, 'i': 2, 'u': 2, 'o': 1}</span>
+</code></pre></div>
+</div>
+<p>La rima del soneto entero y de un romance:</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.verse_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">rhyme_scheme</span>
+
+<span class="n">sonnet</span> <span class="o">=</span> <span class="s2">"""Cuando me paro a contemplar mi estado</span>
+<span class="s2">y a ver los pasos por do me han traído,</span>
+<span class="s2">hallo, según por do anduve perdido,</span>
+<span class="s2">que a mayor mal pudiera haber llegado;</span>
+
+<span class="s2">mas cuando del camino estó olvidado,</span>
+<span class="s2">a tanto mal no sé por dó he venido;</span>
+<span class="s2">sé que me acabo, y más he yo sentido</span>
+<span class="s2">ver acabar comigo mi cuidado.</span>
+
+<span class="s2">Yo acabaré, que me entregué sin arte</span>
+<span class="s2">a quien sabrá perderme y acabarme</span>
+<span class="s2">si quisiere, y aún sabrá querello;</span>
+
+<span class="s2">que pues mi voluntad puede matarme,</span>
+<span class="s2">la suya, que no es tanto de mi parte,</span>
+<span class="s2">pudiendo, ¿qué hará sino hacello?"""</span>
+<span class="n">vs</span> <span class="o">=</span> <span class="n">VerseStats</span><span class="p">(</span><span class="n">sonnet</span><span class="p">)</span>
+<span class="n">vs</span><span class="o">.</span><span class="n">rhyme_schemes</span><span class="p">,</span> <span class="n">vs</span><span class="o">.</span><span class="n">strophes</span><span class="p">,</span> <span class="n">vs</span><span class="o">.</span><span class="n">form</span>
+<span class="c1"># (('ABBA', 'ABBA', 'CDE', 'DCE'), ('cuarteto', 'cuarteto', 'terceto', 'terceto'), 'soneto')</span>
+
+<span class="c1"># El comienzo de La tierra de Alvargonzález de Antonio Machado</span>
+<span class="n">romance</span> <span class="o">=</span> <span class="s2">"""Siendo mozo Alvargonzález,</span>
+<span class="s2">dueño de mediana hacienda,</span>
+<span class="s2">que en otras tierras se dice</span>
+<span class="s2">bienestar y aquí, opulencia,</span>
+<span class="s2">en la feria de Berlanga</span>
+<span class="s2">prendóse de una doncella,</span>
+<span class="s2">y la tomó por mujer</span>
+<span class="s2">al año de conocerla."""</span>
+<span class="n">vs</span> <span class="o">=</span> <span class="n">VerseStats</span><span class="p">(</span><span class="n">romance</span><span class="p">)</span>
+<span class="n">rhyme_scheme</span><span class="p">(</span><span class="n">romance</span><span class="p">),</span> <span class="n">vs</span><span class="o">.</span><span class="n">form</span><span class="p">,</span> <span class="n">vs</span><span class="o">.</span><span class="n">c_rhymes</span>
+<span class="c1"># ('-a-a-a-a', 'romance', {'asonante': 4})</span>
 </code></pre></div>
 </div>
 <h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
@@ -2828,6 +3070,7 @@ Meter<span class="w">                                         </span><span class
 Number<span class="w"> </span>of<span class="w"> </span>metrical<span class="w"> </span>syllables<span class="w">                  </span><span class="p">|</span><span class="w">      </span><span class="m">14</span>
 Share<span class="w"> </span>of<span class="w"> </span>lines<span class="w"> </span>off<span class="w"> </span>the<span class="w"> </span>meter<span class="w">                  </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.00
 Share<span class="w"> </span>of<span class="w"> </span>lines<span class="w"> </span>without<span class="w"> </span>the<span class="w"> </span>rhythmic<span class="w"> </span>stresses<span class="w">  </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.00
+Share<span class="w"> </span>of<span class="w"> </span>rhymed<span class="w"> </span>lines<span class="w">                         </span><span class="p">|</span><span class="w">     </span><span class="m">1</span>.00
 Share<span class="w"> </span>of<span class="w"> </span>oxytone<span class="w"> </span>endings<span class="w"> </span><span class="o">(</span>aguda<span class="o">)</span><span class="w">              </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.33
 Share<span class="w"> </span>of<span class="w"> </span>paroxytone<span class="w"> </span>endings<span class="w"> </span><span class="o">(</span>llana<span class="o">)</span><span class="w">           </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.67
 Share<span class="w"> </span>of<span class="w"> </span>proparoxytone<span class="w"> </span>endings<span class="w"> </span><span class="o">(</span>esdrújula<span class="o">)</span><span class="w">    </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.00

@@ -1705,6 +1705,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#rhyme_scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Esquema de rima
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#split_stanzas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2446,6 +2457,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#rhyme_scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Esquema de rima
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#split_stanzas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2487,6 +2509,7 @@
 <li><strong>El verso compuesto.</strong> Un verso compuesto de dos hemistiquios iguales (<code>VERSE_HEMISTICHS</code>: 5 + 5, 6 + 6, 7 + 7, 8 + 8, 9 + 9) se prueba cuando más de la mitad de las lecturas llanas se dividen en sus hemistiquios y su medida difiere en una sílaba de la de la mayoría de los versos o es igual a ella; gana la lectura con menos versos fuera del metro, el verso compuesto en caso de empate. La cesura cae tras una palabra tónica, impide la sinalefa, y cada hemistiquio sigue la ley del acento final por su cuenta: el alejandrino <em>La princesa está pálida | en su silla de oro</em> es 7 + 7, la esdrújula ante la cesura pierde una sílaba y el hiato <em>de | oro</em> da una.</li>
 </ol>
 <p>La precisión se comprobó sobre los 60 209 versos de los 4259 sonetos de <a href="../../datasets/spanishsonnets/">SpanishSonnets</a>, frente a la escansión automática de DISCO y a la de <a href="https://github.com/linhd-postdata/rantanplan">rantanplan</a> (ejecutada aparte: necesita spaCy 2.2.4, que funciona con Python 3.8 como mucho). La medida de un verso coincide con DISCO en el 97,0% de los versos y con rantanplan en el 97,7%, el acento de una sílaba métrica de los versos de igual medida en el 97,4% y el 99,6%, el esquema entero de un verso en el 77% y el 96%. En los versos simples las medidas coinciden en el 98,2% y el 99,1%; la mayor parte del resto son alejandrinos, que ambos cuentan como versos simples, sin los hemistiquios. La mayoría de las demás diferencias con DISCO son elecciones suyas: acentúa los pronombres clíticos <code>me</code>, <code>te</code> y <code>le</code> en el 84% de sus apariciones y <code>tan</code> en el 96%, y da a las palabras con un <code>-os</code> enclítico (<em>encareceros</em>, <em>quereros</em>) un segundo acento y una sílaba de más.</p>
+<p>La rima se describe en el <a href="../verse_stats/#rhyme">módulo</a>. Frente a la rima automática de DISCO (RhymeTagger), el 99,1% de los pares de versos que riman que encontramos son pares suyos y encontramos el 97,9% de sus pares. Entre el resto están las rimas imperfectas que RhymeTagger aprende del corpus: <code>océanos</code> - <code>castellanos</code> del acento del Siglo de Oro, <code>cuidados</code> - <code>quedado</code>, <code>efecto</code> - <code>secreto</code> y <code>digno</code> - <code>divino</code> de los grupos cultos leídos como en el habla, <code>cesa</code> - <code>firmeza</code> de las sibilantes anteriores a la distinción, que <code>seseo</code> incorpora, y las rimas a más de cuatro versos de distancia. 18 sonetos riman en asonante - Juana Borrero, Vicente Wenceslao Querol, Carlos Valverde López, Rubén Darío -, y RhymeTagger deja sin rima la mayoría de sus versos. Con la rima, 3704 de los 4210 poemas de 14 versos son sonetos; los demás tienen sobre todo un verso cuya rima no es ninguna de las nuestras.</p>
 <h2 id="accentuate">Acentuación<a class="headerlink" href="#accentuate" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.verse_stats.accentuate()</strong></p>
@@ -2554,6 +2577,47 @@
     <span class="s2">"Que por mayo era, por mayo,</span><span class="se">\n</span><span class="s2">cuando hace la calor,</span><span class="se">\n</span><span class="s2">cuando los trigos encañan</span><span class="se">\n</span><span class="s2">y están los campos en flor,"</span>
 <span class="p">)</span>
 <span class="c1"># 'octosílabo'</span>
+</code></pre></div>
+</div>
+<h2 id="rhyme_scheme">Esquema de rima<a class="headerlink" href="#rhyme_scheme" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.verse_stats.rhyme_scheme()</strong></p>
+</div>
+<p>Determina el esquema de rima de un poema: los esquemas de las estrofas separados por espacios, las letras en el orden de los grupos de rima del poema, mayúsculas para los versos de arte mayor y minúsculas para los de arte menor, los versos sin rima como un guion.</p>
+<p>Parámetros:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>text</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Texto de un poema</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>seseo</code></td>
+<td style="text-align: center;">bool</td>
+<td style="text-align: center;"><code>False</code></td>
+<td style="text-align: center;">Pronunciar <code>c</code> y <code>z</code> ante <code>e</code> e <code>i</code> como <code>s</code> en la rima</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.verse_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">rhyme_scheme</span>
+
+<span class="c1"># Sor Juana Inés de la Cruz</span>
+<span class="n">rhyme_scheme</span><span class="p">(</span>
+    <span class="s2">"Hombres necios que acusáis</span><span class="se">\n</span><span class="s2">a la mujer sin razón,</span><span class="se">\n</span><span class="s2">sin ver que sois la ocasión</span><span class="se">\n</span><span class="s2">de lo mismo que culpáis."</span>
+<span class="p">)</span>
+<span class="c1"># 'abba'</span>
 </code></pre></div>
 </div>
 <h2 id="split_stanzas">Estrofas<a class="headerlink" href="#split_stanzas" title="Permanent link">&para;</a></h2>
