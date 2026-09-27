@@ -1,5 +1,6 @@
 import re
 
+import anyts
 import pytest
 from spacy.lang.es.stop_words import STOP_WORDS
 
@@ -19,6 +20,28 @@ def text():
         " entre los propios significados (el registro de diversas relaciones semánticas dentro del"
         " diccionario)."
     )
+
+
+@pytest.mark.parametrize(
+    ("extractor", "core"),
+    [
+        (SentsExtractor, anyts.SentsExtractor),
+        (WordsExtractor, anyts.WordsExtractor),
+        (CharNgramsExtractor, anyts.CharNgramsExtractor),
+    ],
+)
+def test_core_classes(extractor, core):
+    assert issubclass(extractor, core)
+    # The hooks are methods of the class, not tokenizers bound to the object
+    assert extractor().tokenizer is None
+
+
+def test_hooks():
+    assert list(SentsExtractor().sentenize("Sr. Pérez. ¿Vienes?")) == ["Sr. Pérez.", "¿Vienes?"]
+    assert list(WordsExtractor().tokenize("¡Dámelo ya!")) == ["¡", "Dámelo", "ya", "!"]
+    assert WordsExtractor().lemmatize("cantábamos") == "cantar"
+    assert WordsExtractor.number_pattern.fullmatch("3.º")
+    assert list(CharNgramsExtractor().tokenize("¿Qué?")) == ["¿", "Qué", "?"]
 
 
 class TestSentsExtractor:
@@ -46,11 +69,11 @@ class TestSentsExtractor:
         with pytest.raises(KeyError):
             SentsExtractor(tokenizer=failing).extract(text)
 
-    def test_extract_drops_empty(self):
+    def test_extract_strips_and_drops_empty(self):
         se = SentsExtractor(tokenizer=re.compile(r"[.]"))
         assert se.extract("El gato duerme. El perro ladra.") == (
             "El gato duerme",
-            " El perro ladra",
+            "El perro ladra",
         )
         assert se.extract("...") == ()
         assert SentsExtractor(tokenizer=re.compile(r"\n")).extract("Gato.\n\n\nPerro.") == (

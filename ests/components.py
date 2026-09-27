@@ -14,31 +14,27 @@ Description:
     Adding a component extends the tokenizer of its pipeline with add_dash_rules
 """
 
-from spacy.language import Language
-from spacy.tokens import Doc
-
-from .basic_stats import BasicStats
-from .cohesion_stats import CohesionStats
-from .constants import (
+from anyts.constants import (
     DIVERSITY_LOG_BASE,
     HDD_SAMPLE_SIZE,
     MATTR_WINDOW_LEN,
     MTLD_MIN_LEN,
     MTLD_TTR_THRESHOLD,
-    NAUSEA_TOP_N,
-    PHON_WINDOW_LEN,
 )
+from spacy.language import Language
+from spacy.tokens import Doc
+
+from .basic_stats import BasicStats
+from .cohesion_stats import CohesionStats
+from .constants import NAUSEA_TOP_N, PHON_WINDOW_LEN
 from .datasets.freq_dict import FreqDict
-from .diversity_stats import DiversityStats
-from .diversity_stats import check_params as check_diversity_params
+from .diversity_stats import DiversityStats, check_params as check_diversity_params
 from .exceptions import SourceError
 from .lexical_stats import LexicalStats, is_number
 from .morph_stats import MorphStats
-from .phon_stats import PhonStats
-from .phon_stats import check_params as check_phon_params
+from .phon_stats import PhonStats, check_params as check_phon_params
 from .readability_stats import ReadabilityStats, check_preset
-from .style_stats import StyleStats
-from .style_stats import check_params as check_style_params
+from .style_stats import StyleStats, check_params as check_style_params
 from .syntax_stats import SyntaxStats
 from .utils import add_dash_rules, has_words, iter_doc_tokens
 from .verse_stats import LETTER, VerseStats

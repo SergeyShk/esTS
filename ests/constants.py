@@ -335,52 +335,6 @@ READING_SPEED_NORMS: dict[str, tuple[int, int]] = {
     "adult": (191, 278),
 }
 
-# Lexical diversity: the conventions of koRpus and lexical-diversity
-MATTR_WINDOW_LEN = 50
-MTLD_TTR_THRESHOLD = 0.72
-MTLD_MIN_LEN = 10
-# Block of factor starts and window of offsets in the MA-MTLD and MTLD-W computation
-MTLD_BLOCK_SIZE = 4096
-MTLD_WINDOW_LEN = 32
-HDD_SAMPLE_SIZE = 42
-DIVERSITY_LOG_BASE = 10
-BRUNET_W_EXPONENT = 0.172
-DIVERSITY_STATS_DESC = {
-    "ttr": "Type-Token Ratio (TTR)",
-    "rttr": "Root Type-Token Ratio (RTTR)",
-    "cttr": "Corrected Type-Token Ratio (CTTR)",
-    "httr": "Herdan Type-Token Ratio (HTTR)",
-    "sttr": "Summer Type-Token Ratio (STTR)",
-    "mttr": "Maas Type-Token Ratio (MTTR)",
-    "dttr": "Dugast Type-Token Ratio (DTTR)",
-    "mattr": "Moving Average Type-Token Ratio (MATTR)",
-    "msttr": "Mean Segmental Type-Token Ratio (MSTTR)",
-    "mtld": "Measure of Textual Lexical Diversity (MTLD)",
-    "mamtld": "Moving Average Measure of Textual Lexical Diversity (MA-MTLD)",
-    "mtldw": "Moving Average Measure of Textual Lexical Diversity with Wrap (MTLD-W)",
-    "hdd": "Hypergeometric Distribution D (HD-D)",
-    "simpson_index": "Simpson's index (D)",
-    "inverse_simpson_index": "Inverse Simpson's index (1/D)",
-    "gini_simpson_index": "Gini-Simpson index (1-D)",
-    "hapax_index": "Hapax index (Honoré's R)",
-    "yule_k": "Yule's characteristic K",
-    "yule_i": "Yule's inverse characteristic I",
-    "herdan_vm": "Herdan's Vm",
-    "sichel_s": "Sichel's S",
-    "michea_m": "Michéa's M",
-    "brunet_w": "Brunet's W",
-    "dugast_k": "Dugast's k",
-    "baayen_p": "Baayen's P",
-    "hapax_ratio": "Hapax ratio",
-    "alpha2": "Exponent α₂",
-    "entropy": "Shannon entropy (bits)",
-    "evenness": "Evenness",
-    "perplexity": "Perplexity",
-    "zipf_alpha": "Zipf's law slope (α)",
-    "heaps_beta": "Heaps' law exponent (β)",
-}
-
-
 # Model of spaCy that the statistics on Universal Dependencies fall back to
 SPACY_MODEL = "es_core_news_sm"
 
@@ -506,7 +460,6 @@ COPULAS = ("ser", "estar")
 CLAUSE_DEPS = frozenset({"ccomp", "advcl", "acl", "csubj", "parataxis"})
 SUBORDINATE_CLAUSE_DEPS = frozenset({"ccomp", "advcl", "acl", "csubj"})
 SUBJECT_DEPS = frozenset({"nsubj", "csubj"})
-VALENCY_IGNORED_DEPS = frozenset({"cc", "conj", "parataxis", "punct"})
 NOUN_MODIFIER_DEPS = frozenset({"amod", "det", "nmod", "nummod", "acl"})
 # Prepositions of a chain of complements (el aumento de la eficiencia del uso) and
 # of the agent of a passive (construida por los obreros)
@@ -1169,47 +1122,11 @@ SOUND_SPELLINGS = {
     "θ": "c, z", "ʝ": "y, ll", "tʃ": "ch",
 }  # fmt: skip
 
-# Measures of keyness, of association of collocations, of dispersion of words and of stylometry
-KEYNESS_MEASURES = {
-    "log_likelihood": "Log-likelihood G²",
-    "chi2": "Chi-square with Yates's correction",
-    "diff": "Difference of normalized frequencies %DIFF",
-    "log_ratio": "Binary logarithm of the ratio of normalized frequencies",
-    "bic": "Bayesian information criterion",
-    "ell": "Effect size for the log-likelihood",
-    "odds_ratio": "Odds ratio",
-}
-# Critical values of G² with one degree of freedom, by the level of significance
-G2_CRITICAL_VALUES = {0.05: 3.84, 0.01: 6.63, 0.001: 10.83, 0.0001: 15.13}
-COLLOCATION_MEASURES = {
-    "mi": "Mutual information MI",
-    "mi3": "Cubic mutual information MI³",
-    "t_score": "t-score",
-    "dice": "Dice coefficient",
-    "logdice": "logDice",
-    "log_likelihood": "Log-likelihood G²",
-    "npmi": "Normalized pointwise mutual information",
-    "min_sensitivity": "Minimum sensitivity",
-}
-DISPERSION_STATS_DESC = {
-    "dp": "Deviation of proportions DP of Gries",
-    "dp_norm": "Normalized DP",
-    "juilland_d": "Juilland's D",
-    "carroll_d2": "Carroll's D2",
-    "rosengren_s": "Rosengren's S",
-    "kl_divergence": "Kullback-Leibler divergence",
-}
 # Marks that stay with the first word of a window of a text: quotes, brackets,
 # dashes of a dialogue and the inverted marks
 OPENING_MARKS = frozenset('«"„“‘([{—–―-¿¡')
 # Opening marks that close as well: the straight quote and the dashes of an aside
 SYMMETRIC_MARKS = frozenset('"—–―-')
-DELTA_VARIANTS = {
-    "burrows": "Burrows's Delta - Manhattan distance of the z-scores divided by the number of units",
-    "quadratic": "Argamon's quadratic Delta - Euclidean distance of the z-scores divided by the number of units",
-    "eder": "Eder's Delta - Manhattan distance of the z-scores weighted by rank",
-    "cosine": "Cosine Delta - cosine distance of the z-scores",
-}
 # Parts of speech of the function words: adpositions, conjunctions, particles,
 # pronouns, determiners and interjections
 FUNCTION_UD_POS = ("ADP", "CCONJ", "SCONJ", "PART", "PRON", "DET", "INTJ")

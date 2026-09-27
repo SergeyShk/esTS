@@ -1,24 +1,17 @@
-from math import isnan, sqrt
+from math import isnan
 
 import numpy as np
-import pandas as pd
 import pytest
-from scipy.stats import mannwhitneyu
 
 from ests.constants import MORPHOLOGY_MARKERS_DESC, MORPHOLOGY_STATS_DESC
 from ests.corpus import (
-    bootstrap_median_diff,
-    calc_cliff_delta,
-    calc_cohen_d,
     compare_corpora,
-    compare_features,
     corpus_features,
-    holm_correction,
     sentence_rhythm,
     split_windows,
     text_features,
 )
-from ests.corpus.compare import COMPARISON_COLUMNS, _resampled_medians, compare_values
+from ests.corpus.compare import COMPARISON_COLUMNS
 from ests.exceptions import ParameterError, SourceError, SourceTypeError
 from ests.morph_stats import FINITE_MOODS
 from ests.utils import get_nlp
@@ -226,19 +219,6 @@ def test_compare_corpora():
     assert result.loc["sents_std", "n_largos"] == 0
 
 
-def test_compare_features():
-    table_short = corpus_features(short, window=None)
-    table_long = corpus_features(long, window=None)
-    result = compare_features(table_short, table_long, labels=("cortos", "largos"), seed=1)
-    expected = compare_corpora(short, long, window=None, labels=("cortos", "largos"), seed=1)
-    pd.testing.assert_frame_equal(result, expected)
-    # A feature in one table only gives nan
-    extra = table_short.assign(extra=1.0)
-    assert isnan(compare_features(extra, table_long, n_bootstrap=10).loc["extra", "cliff_delta"])
-    with pytest.raises(ParameterError):
-        compare_features(table_short, table_long, n_bootstrap=0)
-
-
 def test_compare_corpora_rare_values():
     a = ["¡Ay! El gato duerme en casa. ¡Oh! El gato duerme en la cama."] * 3
     b = ["El gato duerme en casa. El gato duerme en la cama."] * 3
@@ -275,96 +255,3 @@ def test_compare_corpora_options():
     single = compare_corpora(short[:1], long, window=None, features=lengths, n_bootstrap=50)
     assert isnan(single.loc["length", "cliff_delta"])
     assert (single.loc["length", "n_A"], single.loc["length", "n_B"]) == (1, 3)
-
-
-def test_compare_values():
-    a = np.array([1.0, 2.0, 3.0, 4.0])
-    b = np.array([3.0, 4.0, 5.0, 6.0])
-    values = compare_values(a, b, n_bootstrap=100, rng=np.random.default_rng(0))
-    assert len(values) == len(COMPARISON_COLUMNS)
-    assert values[:5] == (2.5, 4.5, 2.5, 4.5, -2.0)
-    assert values[8] == pytest.approx(calc_cliff_delta(a, b))
-    assert values[9] == pytest.approx(mannwhitneyu(a, b)[0] / 16)
-    assert values[11] == pytest.approx(mannwhitneyu(a, b, alternative="two-sided")[1])
-    assert isnan(values[12])
-    assert values[13:] == (4, 4, 4, 4)
-    assert all(isnan(value) for value in compare_values(np.array([1.0]), b)[:13])
-    assert compare_values(np.array([1.0]), b)[13:] == (1, 4, 1, 4)
-    texts = np.array([0, 0, 1, 1])
-    assert compare_values(a, b, 100, np.random.default_rng(0), texts, texts)[13:] == (4, 4, 2, 2)
-
-
-def test_effect_sizes():
-    a = [2.0, 4.0, 6.0, 8.0]
-    b = [1.0, 3.0, 5.0, 7.0]
-    assert calc_cohen_d(a, b) == pytest.approx(1 / sqrt(20 / 3))
-    assert isnan(calc_cohen_d([1.0, 1.0], [1.0, 1.0]))
-    assert isnan(calc_cohen_d([1.0], [2.0, 3.0]))
-    assert calc_cliff_delta(a, b) == pytest.approx((10 - 6) / 16)
-    assert calc_cliff_delta([1, 1], [1, 1]) == 0.0
-    assert calc_cliff_delta([5, 6], [1, 2]) == 1.0
-    assert isnan(calc_cliff_delta([], [1.0]))
-    low, high = bootstrap_median_diff(a, b, n_bootstrap=500, rng=np.random.default_rng(0))
-    assert low <= 1.0 <= high
-    assert bootstrap_median_diff([3.0, 3.0, 3.0], [1.0, 1.0, 1.0], n_bootstrap=10) == (2.0, 2.0)
-    assert all(isnan(value) for value in bootstrap_median_diff([], [1.0]))
-    with pytest.raises(ParameterError):
-        bootstrap_median_diff(a, b, n_bootstrap=0)
-    with pytest.raises(ParameterError):
-        bootstrap_median_diff(a, b, confidence=1.0)
-
-
-def test_cluster_bootstrap():
-    # Windows alike within a text: resampling whole texts widens the interval
-    rng = np.random.default_rng(1)
-    texts = np.repeat(np.arange(4), 20)
-    a = np.repeat([10.0, 12.0, 14.0, 16.0], 20) + rng.normal(scale=0.1, size=80)
-    b = np.repeat([9.0, 11.0, 13.0, 15.0], 20) + rng.normal(scale=0.1, size=80)
-    windows = bootstrap_median_diff(a, b, n_bootstrap=500, rng=np.random.default_rng(0))
-    clusters = bootstrap_median_diff(
-        a, b, n_bootstrap=500, rng=np.random.default_rng(0), texts_a=texts, texts_b=texts
-    )
-    assert clusters[1] - clusters[0] > 1.5 * (windows[1] - windows[0])
-    assert clusters[0] <= 1.0 <= clusters[1]
-    assert all(
-        isnan(value) for value in bootstrap_median_diff(a, b, texts_a=np.zeros(80), texts_b=texts)
-    )
-    # The medians of the draws equal np.median of the drawn texts put together
-    values = rng.normal(size=40)
-    groups = rng.integers(0, 6, size=40)
-    medians = _resampled_medians(values, groups, 200, np.random.default_rng(0))
-    labels = np.unique(groups)
-    draws = np.random.default_rng(0).multinomial(
-        len(labels), np.full(len(labels), 1 / len(labels)), 200
-    )
-    expected = [
-        np.median(
-            np.concatenate(
-                [
-                    np.repeat(values[groups == label], n)
-                    for label, n in zip(labels, row, strict=True)
-                ]
-            )
-        )
-        for row in draws
-    ]
-    assert medians == pytest.approx(expected)
-
-
-def test_compare_features_texts():
-    # corpus_features marks the windows of a text, a table without the level takes rows as texts
-    table_a = corpus_features(short, window=3, features=lambda t: {"length": float(len(t))})
-    table_b = corpus_features(long, window=3, features=lambda t: {"length": float(len(t))})
-    result = compare_features(table_a, table_b, n_bootstrap=50)
-    assert result.loc["length", "n_texts_A"] == 3 < result.loc["length", "n_A"]
-    flat = compare_features(table_a.reset_index(drop=True), table_b, n_bootstrap=50)
-    assert flat.loc["length", "n_texts_A"] == flat.loc["length", "n_A"]
-
-
-def test_holm_correction():
-    adjusted = holm_correction([0.01, 0.04, 0.03, float("nan")])
-    assert adjusted[:3] == pytest.approx([0.03, 0.06, 0.06])
-    assert isnan(adjusted[3])
-    assert list(holm_correction([0.5, 0.9])) == [1.0, 1.0]
-    assert list(holm_correction([])) == []
-    assert all(isnan(value) for value in holm_correction([float("nan")]))

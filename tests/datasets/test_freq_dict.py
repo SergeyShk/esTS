@@ -6,8 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from ests.datasets import FreqDict
-from ests.datasets import freq_dict as module
+from ests.datasets import FreqDict, freq_dict as module
 from ests.datasets.freq_dict import Entry, lemma_key, load_entries, load_word_ipm
 from ests.exceptions import DatasetNotFoundError, ParameterError
 
