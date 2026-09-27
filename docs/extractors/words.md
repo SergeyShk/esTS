@@ -5,40 +5,36 @@
 
 ## Description
 
-A module for extracting words from a text. It allows using different tokenizers, filtering stop words, numbers and punctuation, lemmatizing, building N-grams, and setting the minimum and maximum length of extracted words.
+--8<-- "extractors/words.md:WordsExtractor"
+
+## Language hooks
+
+The class extends the `WordsExtractor` of the [anyTS](https://sergeyshk.github.io/anyTS/extractors/words/) core with the hooks of Spanish:
+
+| Hook | Spanish |
+| :--: | :-----: |
+| `tokenize(text)` | the rule-based tokenizer of the spaCy Spanish language class, `ests.utils.tokenize` |
+| `lemmatize(word)` | the lemmas of simplemma, `ests.utils.lemmatize` |
+| `number_pattern` | signed numbers, ranges, fractions, dates, times, percentages and ordinals: `-5`, `+7`, `1990-1995`, `1.500,50`, `12/03/2020`, `3:30`, `10%`, `3.º`, `1.ª`, `2do` |
 
 !!! note "Note"
-    The default tokenizer is the rule-based tokenizer of the [spaCy](https://github.com/explosion/spaCy) Spanish language class (`ests.utils.tokenize`); it needs no trained model. Punctuation marks, including `¿` and `¡`, numbers like `1.500,50`, `3.º`, `1990-1995` and abbreviations like `Sr.`, `EE. UU.` are single tokens; words with enclitic pronouns (`dámelo`) are not split. The dashes of a dialogue glued to the words are split off: `--No`, `sí--dijo`, `―dijo él―.` give the words `No`, `sí`, `dijo`, `él`, also next to the underscores of italics (`--_Siguro_`), while a hyphen between letters (`franco-alemán`) or before a digit (`-5`) stays in its token; a suffix quoted with its hyphen (`-mente`) loses it as well, and so does the number of an item of a list (`Artículo 1.- El objeto` gives the number `1`). `ests.utils.add_dash_rules(nlp)` adds the same rules to the ones a spaCy pipeline of one's own has; the model of `get_nlp` has them already, and the [components](../components.md) of the library add them to their pipeline.
+    The tokenizer needs no trained model. Punctuation marks, including `¿` and `¡`, numbers like `1.500,50`, `3.º`, `1990-1995` and abbreviations like `Sr.`, `EE. UU.` are single tokens; words with enclitic pronouns (`dámelo`) are not split. The dashes of a dialogue glued to the words are split off: `--No`, `sí--dijo`, `―dijo él―.` give the words `No`, `sí`, `dijo`, `él`, also next to the underscores of italics (`--_Siguro_`), while a hyphen between letters (`franco-alemán`) or before a digit (`-5`) stays in its token; a suffix quoted with its hyphen (`-mente`) loses it as well, and so does the number of an item of a list (`Artículo 1.- El objeto` gives the number `1`). `ests.utils.add_dash_rules(nlp)` adds the same rules to the ones a spaCy pipeline of one's own has; the model of `get_nlp` has them already, and the [components](../components.md) of the library add them to their pipeline.
 
 !!! note "Note"
-    Lemmas come from [simplemma](https://github.com/adbar/simplemma) (`ests.utils.lemmatize`), which works from a dictionary without a trained model: a known form is mapped to its lower-case lemma (`Tienes` - `tener`, `NIÑOS` - `niño`), an unknown form is returned unchanged (`Madrid`, `dámelo`).
+    [simplemma](https://github.com/adbar/simplemma) works from a dictionary without a trained model: a known form is mapped to its lower-case lemma (`Tienes` - `tener`, `NIÑOS` - `niño`), an unknown form is returned unchanged (`Madrid`, `dámelo`).
 
 ## Parameters
 
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `tokenizer` | Pattern/Callable | `None` | Tokenizer or regular expression |
-| `filter_punct` | bool | `True` | Filter punctuation marks |
-| `filter_nums` | bool | `False` | Filter numbers, including signed numbers, ranges, fractions, dates, times, percentages and ordinals (-5, +7, 1990-1995, 1.500,50, 12/03/2020, 3:30, 10%, 3.º, 1.ª, 2do) |
-| `use_lexemes` | bool | `False` | Use word lemmas |
-| `stopwords` | Collection[str] | `None` | Stop words, compared case-insensitively |
-| `lowercase` | bool | `False` | Convert words to lower case |
-| `ngram_range` | Tuple[int, int] | `(1, 1)` | Lower and upper bound of the N-gram size |
-| `min_len` | int | `0` | Minimum length of an extracted word |
-| `max_len` | int | `0` | Maximum length of an extracted word |
+--8<-- "extractors/words.md:WordsExtractor-parameters"
 
 !!! note "Note"
-    The filters are applied in order: punctuation, numbers, lemmatization, lower case, stop words, word length. A lower-case stop word list also filters `Los` or `La` at the start of a sentence. A punctuation mark is a token consisting entirely of marks and symbols, including multi-character ones: `?!`, `--`, `…`, `€`. Empty tokens are dropped before the filters. A ready stop word list is `spacy.lang.es.stop_words.STOP_WORDS`; note that it also holds frequent verbs like `tener`.
+    A ready stop word list is `spacy.lang.es.stop_words.STOP_WORDS`; note that it also holds frequent verbs like `tener`.
 
 ## Methods
 
 ### extract
 
-Extracts words from a text.
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `text` | str | `-` | Text string |
+--8<-- "extractors/words.md:WordsExtractor-extract"
 
 An example of word extraction with bigrams as tokens, after filtering numbers and stop words and lemmatizing:
 
@@ -66,7 +62,7 @@ An example of word extraction with bigrams as tokens, after filtering numbers an
 
 ### get_most_common
 
-Returns a counter of the top words of the text. It takes the number of top words to return as a parameter.
+--8<-- "extractors/words.md:WordsExtractor-get_most_common"
 
 To illustrate the method, we reuse the code from the previous example:
 
@@ -86,6 +82,3 @@ To illustrate the method, we reuse the code from the previous example:
     ``` bash
     [('tener', 2), ('euro', 1), ('amigo', 1)]
     ```
-
-!!! warning "Warning"
-    The method must be called after words have been extracted with `extract`.

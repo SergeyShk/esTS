@@ -1,4 +1,4 @@
-.PHONY: help uv deps lock lint ruff format mypy test test-cov clean clean-build clean-pyc clean-test build publish publish-test docs-build docs-serve docs-deploy
+.PHONY: help uv deps lock lint ruff format mypy test test-cov clean clean-build clean-pyc clean-test build publish publish-test docs-core docs-build docs-serve docs-deploy
 .DEFAULT_GOAL := help
 APP_PATH := ests
 TESTS_PATH := tests
@@ -39,10 +39,10 @@ format: deps ## Format the code
 mypy: deps ## Check types with mypy
 	uv run mypy
 
-test: deps ## Run the tests
+test: docs-core ## Run the tests
 	uv run pytest
 
-test-cov: deps ## Run the tests with a coverage threshold
+test-cov: docs-core ## Run the tests with a coverage threshold
 	uv run pytest --cov $(APP_PATH) --cov-fail-under 90 --cov-report term-missing
 
 clean: clean-build clean-pyc clean-test ## Remove all artifacts
@@ -71,12 +71,15 @@ publish: build ## Publish a release to PyPI
 publish-test: build ## Publish a release to TestPyPI
 	uv publish --index testpypi
 
-docs-build: deps ## Build the documentation
+docs-core: deps ## Fetch the pages of anyTS that the documentation includes
+	uv run python scripts/core_docs.py
+
+docs-build: docs-core ## Build the documentation
 	rm -fr site/
 	uv run mkdocs build --strict
 
-docs-serve: deps ## Serve the documentation locally
+docs-serve: docs-core ## Serve the documentation locally
 	uv run mkdocs serve
 
-docs-deploy: deps ## Deploy the documentation
+docs-deploy: docs-core ## Deploy the documentation
 	uv run mkdocs gh-deploy

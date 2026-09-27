@@ -5,14 +5,18 @@
 
 ## Descripción
 
-Extracción de colocaciones: pares de palabras que aparecen juntas más a menudo de lo que daría la independencia - expresiones fijas (`punto de vista`, `llevar a cabo`), terminología, la combinatoria de una palabra. Las medidas de asociación son las de [Sketch Engine](https://www.sketchengine.eu/wp-content/uploads/ske-statistics.pdf) y de [`nltk.metrics.association`](https://www.nltk.org/api/nltk.metrics.association.html).
+<!-- core: corpus/collocations.md:collocations d3372b1 -->
+Extracción de colocaciones: pares de palabras que aparecen juntas más a menudo de lo que daría la independencia - expresiones fijas, terminología, la combinatoria de una palabra. Las medidas de asociación son las de [Sketch Engine](https://www.sketchengine.eu/wp-content/uploads/ske-statistics.pdf) y de [`nltk.metrics.association`](https://www.nltk.org/api/nltk.metrics.association.html).
 
-Los pares de palabras son ordenados, como en NLTK: la palabra de la derecha aparece a no más de `window` palabras después de la de la izquierda, y cada par de posiciones se cuenta una vez; `window=1` da bigramas. Dentro de la medida la frecuencia del par se divide por el tamaño de la ventana (Church y Hanks 1990, como en NLTK), para que la frecuencia esperada no dependa de la ventana y Dice y la sensibilidad mínima no superen uno; el campo `freq_pair` guarda la frecuencia sin dividir. Con `window > 1` la escala de las medidas de Dice se desplaza por ello: un par siempre contiguo recibe un logDice de $14 - \log_2 window$ (13 con una ventana de 2) y no 14 como en Sketch Engine, que usa la coocurrencia sin dividir; el 14 solo lo alcanza un par que aparece a todas las distancias dentro de la ventana. El parámetro `node` conserva los pares con la palabra dada a la izquierda o a la derecha: la combinatoria de una palabra.
+Los pares de palabras son ordenados, como en NLTK: la palabra de la derecha aparece a no más de `window` palabras después de la de la izquierda, y cada par de posiciones se cuenta una vez; `window=1` da bigramas. Dentro de la medida la frecuencia del par se divide por el tamaño de la ventana (Church y Hanks 1990, como en NLTK), para que la frecuencia esperada no dependa de la ventana y Dice y la sensibilidad mínima no superen uno; el campo `freq_pair` guarda la frecuencia sin dividir. Con `window > 1` la escala de las medidas de Dice se desplaza por ello: un par siempre contiguo recibe un logDice de $14 - \log_2 window$ (13 con una ventana de 2) y no 14 como en Sketch Engine, que usa la coocurrencia sin dividir. El parámetro `node` conserva los pares con la palabra dada a la izquierda o a la derecha: la combinatoria de una palabra.
 
-Las palabras se comparan tal cual: la caja, la lematización y las palabras vacías corresponden a [`WordsExtractor`](../extractors/words.md); los lemas convienen a las expresiones fijas, las formas a las construcciones gramaticales.
+Las palabras se comparan tal cual: la caja, la lematización y las palabras vacías corresponden al extractor de palabras; los lemas convienen a las expresiones fijas, las formas a las construcciones gramaticales.
+
+El módulo `ests.corpus.collocations` reexporta la función y las medidas del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/collocations/) (`from ests.corpus.collocations import calc_logdice`). Las palabras se extraen con [`WordsExtractor`](../extractors/words.md); para las expresiones fijas del español como `punto de vista` o `llevar a cabo` conviene usar sus lemas (`use_lexemes=True`).
 
 ## Medidas
 
+<!-- core: corpus/collocations.md:collocations-measures fb0a1f7 -->
 Para un par de palabras de frecuencias $f_a$ y $f_b$, una frecuencia del par $f_{ab}$ y un número de palabras $N$:
 
 | Medida | Clave | Fórmula | Descripción |
@@ -21,15 +25,16 @@ Para un par de palabras de frecuencias $f_a$ y $f_b$, una frecuencia del par $f_
 | MI³ | `mi3` | $\log_2 \frac{f_{ab}^3 N}{f_a f_b}$ | Oakes (1998); favorece los pares frecuentes |
 | t-score | `t_score` | $\frac{f_{ab} - f_a f_b / N}{\sqrt{f_{ab}}}$ | Church et al. (1991); favorece los pares frecuentes |
 | Coeficiente de Dice | `dice` | $\frac{2 f_{ab}}{f_a + f_b}$ | no depende del tamaño del texto |
-| logDice | `logdice` | $14 + \log_2 \frac{2 f_{ab}}{f_a + f_b}$ | [Rychlý (2008)](https://www.sketchengine.eu/glossary/logdice/); no depende del tamaño del texto, como máximo 14 (con ventana $14 - \log_2 window$), por debajo de cero - un vínculo débil; la medida por defecto, como en Sketch Engine |
+| logDice | `logdice` | $14 + \log_2 \frac{2 f_{ab}}{f_a + f_b}$ | [Rychlý (2008)](https://www.sketchengine.eu/glossary/logdice/); no depende del tamaño del texto, como máximo 14, por debajo de cero - un vínculo débil; la medida por defecto, como en Sketch Engine |
 | Razón de verosimilitud | `log_likelihood` | $G^2 = 2 \sum O \ln \frac{O}{E}$ | Dunning (1993); sobre la tabla de contingencia 2×2, `nan` si una de las palabras ocupa todo el texto |
 | NPMI | `npmi` | $\frac{MI}{-\log_2 (f_{ab} / N)}$ | Bouma (2009); de −1 a 1, uno significa que las palabras solo aparecen juntas |
 | Sensibilidad mínima | `min_sensitivity` | $\min(\frac{f_{ab}}{f_a}, \frac{f_{ab}}{f_b})$ | Pedersen (1998); de 0 a 1 |
 
-Las medidas están disponibles como las funciones `calc_mi`, `calc_mi3`, `calc_t_score`, `calc_dice`, `calc_logdice`, `calc_log_likelihood`, `calc_npmi`, `calc_min_sensitivity` con los argumentos `(freq_a, freq_b, freq_ab, n)` del módulo `ests.corpus.collocations` (`from ests.corpus.collocations import calc_logdice`); sus nombres y descripciones están en `ests.constants.COLLOCATION_MEASURES`.
+Las medidas están disponibles como las funciones `calc_mi`, `calc_mi3`, `calc_t_score`, `calc_dice`, `calc_logdice`, `calc_log_likelihood`, `calc_npmi` y `calc_min_sensitivity` con los argumentos `(freq_a, freq_b, freq_ab, n)` del módulo `anyts.corpus.collocations`; sus nombres y descripciones están en `anyts.constants.COLLOCATION_MEASURES`.
 
 ## Parámetros
 
+<!-- core: corpus/collocations.md:collocations-parameters 3f013f4 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `words` | list[str] | `-` | Palabras del texto en orden |
@@ -41,6 +46,7 @@ Las medidas están disponibles como las funciones `calc_mi`, `calc_mi3`, `calc_t
 
 ## Resultado
 
+<!-- core: corpus/collocations.md:Collocation 77925e6 -->
 Una lista de tuplas con nombre `Collocation` por orden descendente de la medida y de la frecuencia del par (los empates, alfabéticamente); `pd.DataFrame(found)` da una tabla.
 
 | Campo | Tipo | Descripción |

@@ -52,7 +52,7 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 
 ## Instalación
 
-Se requiere Python 3.11 o superior.
+Se requiere Python 3.11 o superior. La parte independiente del idioma - los extractores, las métricas de diversidad léxica y las medidas de corpus - viene del núcleo [anyTS](https://github.com/SergeyShk/anyTS), que se instala con el paquete.
 
 ```bash
 pip install pyests
@@ -705,9 +705,9 @@ Los informes de errores, las ideas y los pull requests son bienvenidos en las [i
     *   corpus - medidas de la lingüística de corpus: palabras clave, colocaciones, dispersión, concordancia, estilometría, comparación de corpus
     *   datasets - conjuntos de datos: literatura en español, sonetos en español, diccionario de frecuencias
     *   constants.py - constantes de la lengua española y de las métricas
-    *   diversity_stats.py - métricas de diversidad léxica
+    *   diversity_stats.py - métricas de diversidad léxica del núcleo anyTS sobre una cadena o un Doc
     *   exceptions.py - excepciones de la biblioteca
-    *   extractors.py - herramientas de extracción de objetos del texto
+    *   extractors.py - los extractores del núcleo anyTS con los tokenizadores del español
     *   morph_stats.py - estadísticas morfológicas
     *   readability_stats.py - métricas de legibilidad
     *   style_stats.py - métricas de estilo

@@ -5,33 +5,27 @@
 
 ## Description
 
-A module for extracting sentences from a text. It allows using different tokenizers and setting the minimum and maximum length of extracted sentences.
+--8<-- "extractors/sentences.md:SentsExtractor"
+
+## Language hooks
+
+The class extends the `SentsExtractor` of the [anyTS](https://sergeyshk.github.io/anyTS/extractors/sentences/) core with the hook of Spanish: its default tokenizer, the method `sentenize(text)`, is the rule-based splitter `ests.utils.sentenize`.
 
 !!! note "Note"
-    The default tokenizer is the rule-based function `sentenize` from `ests.utils`. A sentence ends with a period, an exclamation or question mark or an ellipsis, optionally followed by closing quotes or brackets, when the next word starts with an upper-case letter, a digit, an inverted mark `¿ ¡`, an opening quote or bracket or a dash; a blank line ends a sentence too. Abbreviations (`Sr.`, `Dra.`, `p. ej.`, `EE. UU.`, `a. m.`), capital initials (`J. L. Borges`) and list markers at the start of a sentence or a line (`1.`, `2.1.`, `IV.`) do not end a sentence, even before an upper-case word: `Llegó a las 5 p. m. Luego se fue.` stays one sentence. A lower-case word after an ellipsis or an exclamation mark continues the sentence, and a single line break does not split it, so hard-wrapped texts are handled. The sentences are returned without surrounding whitespace.
+    A sentence ends with a period, an exclamation or question mark or an ellipsis, optionally followed by closing quotes or brackets, when the next word starts with an upper-case letter, a digit, an inverted mark `¿ ¡`, an opening quote or bracket or a dash; a blank line ends a sentence too. Abbreviations (`Sr.`, `Dra.`, `p. ej.`, `EE. UU.`, `a. m.`), capital initials (`J. L. Borges`) and list markers at the start of a sentence or a line (`1.`, `2.1.`, `IV.`) do not end a sentence, even before an upper-case word: `Llegó a las 5 p. m. Luego se fue.` stays one sentence. A lower-case word after an ellipsis or an exclamation mark continues the sentence, and a single line break does not split it, so hard-wrapped texts are handled.
 
 !!! note "Note"
     A spaCy pipeline can be passed as the tokenizer: `tokenizer=lambda text: (sent.text for sent in nlp(text).sents)`.
 
 ## Parameters
 
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `tokenizer` | Pattern/Callable | `None` | Tokenizer or regular expression |
-| `min_len` | int | `0` | Minimum length of an extracted sentence |
-| `max_len` | int | `0` | Maximum length of an extracted sentence |
+--8<-- "extractors/sentences.md:SentsExtractor-parameters"
 
 ## Methods
 
 ### extract
 
-Extracts sentences from a text.
-
-Parameters:
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `text` | str | `-` | Text string |
+--8<-- "extractors/sentences.md:SentsExtractor-extract"
 
 An example of sentence extraction with the default tokenizer:
 

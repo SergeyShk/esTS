@@ -5,29 +5,37 @@
 
 ## Descripción
 
-Módulo para extraer oraciones de un texto. Permite usar distintos tokenizadores y fijar la longitud mínima y máxima de las oraciones extraídas.
+<!-- core: extractors/sentences.md:SentsExtractor 491dff1 -->
+Clase para extraer oraciones de un texto. Permite usar distintos tokenizadores y fijar la longitud mínima y máxima de las oraciones extraídas.
+
+## Ganchos del idioma
+
+La clase extiende el `SentsExtractor` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/extractors/sentences/) con el gancho del español: su tokenizador por defecto, el método `sentenize(text)`, es el divisor por reglas `ests.utils.sentenize`.
 
 !!! note "Nota"
-    El tokenizador por defecto es la función `sentenize` de `ests.utils`, basada en reglas. Una oración termina con un punto, un signo de exclamación o de interrogación o unos puntos suspensivos, seguidos opcionalmente de comillas o paréntesis de cierre, cuando la palabra siguiente empieza por mayúscula, cifra, signo de apertura `¿ ¡`, comilla o paréntesis de apertura o raya; una línea en blanco también cierra la oración. Las abreviaturas (`Sr.`, `Dra.`, `p. ej.`, `EE. UU.`, `a. m.`), las iniciales (`J. L. Borges`) y los marcadores de lista al principio de la oración o de la línea (`1.`, `2.1.`, `IV.`) no cierran la oración, ni siquiera ante una mayúscula: `Llegó a las 5 p. m. Luego se fue.` queda como una sola oración. Una palabra en minúscula tras puntos suspensivos o signo de exclamación continúa la oración, y un salto de línea simple no la divide, así que los textos con líneas cortadas se tratan bien. Las oraciones se devuelven sin espacios en los extremos.
+    Una oración termina con un punto, un signo de exclamación o de interrogación o unos puntos suspensivos, seguidos opcionalmente de comillas o paréntesis de cierre, cuando la palabra siguiente empieza por mayúscula, cifra, signo de apertura `¿ ¡`, comilla o paréntesis de apertura o raya; una línea en blanco también cierra la oración. Las abreviaturas (`Sr.`, `Dra.`, `p. ej.`, `EE. UU.`, `a. m.`), las iniciales (`J. L. Borges`) y los marcadores de lista al principio de la oración o de la línea (`1.`, `2.1.`, `IV.`) no cierran la oración, ni siquiera ante una mayúscula: `Llegó a las 5 p. m. Luego se fue.` queda como una sola oración. Una palabra en minúscula tras puntos suspensivos o signo de exclamación continúa la oración, y un salto de línea simple no la divide, así que los textos con líneas cortadas se tratan bien.
 
 !!! note "Nota"
     Se puede pasar un pipeline de spaCy como tokenizador: `tokenizer=lambda text: (sent.text for sent in nlp(text).sents)`.
 
 ## Parámetros
 
+<!-- core: extractors/sentences.md:SentsExtractor-parameters 09bcb84 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
-| `tokenizer` | Pattern/Callable | `None` | Tokenizador o expresión regular |
-| `min_len` | int | `0` | Longitud mínima de la oración extraída |
-| `max_len` | int | `0` | Longitud máxima de la oración extraída |
+| `tokenizer` | Pattern/Callable | `None` | Tokenizador o expresión regular; por defecto, el método `sentenize` |
+| `min_len` | int | `0` | Longitud mínima de la oración extraída, `0` sin límite |
+| `max_len` | int | `0` | Longitud máxima de la oración extraída, `0` sin límite |
+
+!!! note "Nota"
+    Una expresión regular como tokenizador es un separador: el texto se divide con `re.split`. A las oraciones de cualquier tokenizador se les quitan los espacios de los extremos antes de aplicar los límites de longitud, y las vacías se descartan.
 
 ## Métodos
 
 ### extract
 
+<!-- core: extractors/sentences.md:SentsExtractor-extract 6c0a509 -->
 Extrae las oraciones de un texto.
-
-Parámetros:
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |

@@ -2,6 +2,10 @@ site_name: esTS
 site_description: "A library for extracting statistics from texts in Spanish"
 repo_url: https://github.com/SergeyShk/esTS
 
+# The pages of anyTS, whose sections the pages include; see scripts/core_docs.py
+exclude_docs: |
+  core/
+
 nav:
     - Home:
       - About: index.md
@@ -156,6 +160,9 @@ markdown_extensions:
   - pymdownx.highlight
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.snippets:
+      base_path: [docs/core]
+      check_paths: true
   - pymdownx.arithmatex:
       generic: True
   - pymdownx.emoji:

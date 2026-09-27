@@ -5,56 +5,39 @@
 
 ## Description
 
-Keyword extraction (keyness) for a target corpus against a reference one: the words that occur significantly more often in the target corpus than in the reference.
+--8<-- "corpus/keyness.md:keyness"
 
-For every word two values are computed that [Gabrielatos and Marchi](http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf) and [Hardie](http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/) recommend reading together: the log-likelihood $G^2$ with its p-value (the significance of the difference - whether there is one) and Log Ratio (the size of the effect - how large it is). The chosen measure `score` is computed as well and used for the sorting. The measures of significance ($G^2$, chi-square, BIC, ELL) are signed: negative when the word is more frequent in the reference; the measures of effect (%DIFF, Log Ratio, odds ratio) are directional by construction.
-
-The reference may be a list of words, a mapping of frequencies (its size is the sum of the counts) or the [frequency dictionary](../datasets/freqdict.md) `FreqDict` of Google Books Ngram. Against the dictionary the target has to be counted the way the dictionary was: word forms with the stop words kept, not lemmas - [`lemma_key`](../datasets/freqdict.md#lemma_key) is not idempotent (`estado` - `estar`), so `WordsExtractor(use_lexemes=True)` does not fit. The forms that are not made of the letters of `WORD_PATTERN` - numbers, words with a hyphen or a dot - are left out of the target and of its size. Both sides count the forms under their `lemma_key`, the proper nouns of the dictionary as well (`FreqDict.word_ipm`), so a keyword may carry the label of another lemma: *Roma* is counted under `romo`. The frequency of a key in the reference is its ipm times the size of the corpus of the dictionary (`CORPUS_SIZE`, 63 billion words of the books of 1980-2019). A word out of the dictionary gets its least frequency, 0.1 ipm (about 6300 occurrences), an upper bound of its true frequency: it backs a positive keyword and never a negative one, so a word out of the dictionary is no negative keyword. The dictionary describes the register of the books, so the negative keywords of a text are the words of scholarly prose (`de`, `social`, `país`).
-
-Against a list or a mapping, words are compared as they are: case, lemmatization and stop words belong to [`WordsExtractor`](../extractors/words.md), and both corpora have to be extracted the same way.
+The function wraps `keyness` of the [anyTS](https://sergeyshk.github.io/anyTS/corpus/keyness/) core and also takes the [frequency dictionary](../datasets/freqdict.md) `FreqDict` as the reference; the module `ests.corpus.keyness` re-exports the measures and `FrequencyReference` (`from ests.corpus.keyness import FrequencyReference`). Words are extracted with [`WordsExtractor`](../extractors/words.md).
 
 ## Measures
 
-For a word of frequency $a$ in a target corpus of size $c$ and of frequency $b$ in a reference corpus of size $d$, $N = c + d$:
-
-| Measure | Key | Formula | Description |
-| :------ | :-- | :------ | :---------- |
-| Log-likelihood | `log_likelihood` | $G^2 = 2\,(a \ln \frac{a}{E_1} + b \ln \frac{b}{E_2})$, $E_1 = \frac{c\,(a+b)}{N}$, $E_2 = \frac{d\,(a+b)}{N}$ | [Rayson and Garside (2000)](https://ucrel.lancs.ac.uk/llwizard.html); critical values `G2_CRITICAL_VALUES`: 3.84 for p < 0.05, 6.63 for p < 0.01, 10.83 for p < 0.001, 15.13 for p < 0.0001 |
-| Chi-square | `chi2` | $\chi^2 = \frac{N\,\max(\lvert a(d-b) - b(c-a) \rvert - N/2,\ 0)^2}{(a+b)(N-a-b)\,c\,d}$ | with Yates's correction over the 2×2 contingency table; when the correction exceeds the difference, the statistic is zero |
-| %DIFF | `diff` | $\frac{NF_a - NF_b}{NF_b} \cdot 100$ | [Gabrielatos and Marchi (2011)](http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf); $NF$ - frequency per million words |
-| Log Ratio | `log_ratio` | $\log_2 \frac{NF_a}{NF_b}$ | [Hardie (2014)](http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/); one means the word is twice as frequent in the target corpus |
-| BIC | `bic` | $\operatorname{sign}(G^2) \cdot (\lvert G^2 \rvert - \ln N)$ | Wilson (2013); in absolute value above 2 - positive evidence of a difference, above 6 - strong, above 10 - very strong; a negative value with $\lvert G^2 \rvert < \ln N$ means no evidence, not the opposite direction |
-| ELL | `ell` | $\frac{G^2}{N \ln \min(E_1, E_2)}$ | Johnson, Culpeper and Rayson (2007); size of the effect of $G^2$ from 0 to 1, `nan` when the least expected frequency is below $e$ - then $\ln \min(E_1, E_2) < 1$ and the measure exceeds one |
-| Odds ratio | `odds_ratio` | $\frac{a / (c - a)}{b / (d - b)}$ | one means equal odds; `inf` if the word fills the whole target corpus, 0 - the whole reference |
-
-A zero frequency in one of the corpora is replaced with 0.5 for %DIFF, Log Ratio and the odds ratio (Hardie 2014). The p-value of $G^2$ comes from the chi-square distribution with one degree of freedom (`calc_p_value`). The measures are available as the functions `calc_log_likelihood`, `calc_chi2`, `calc_diff`, `calc_log_ratio`, `calc_bic`, `calc_ell`, `calc_odds_ratio` with the arguments `(a, b, c, d)` of the module `ests.corpus.keyness` (`from ests.corpus.keyness import calc_log_likelihood`); their names and descriptions are in `ests.constants.KEYNESS_MEASURES`.
+--8<-- "corpus/keyness.md:keyness-measures"
 
 ## Parameters
 
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `target` | list[str]/dict[str, int] | `-` | Words of the target corpus or their frequencies; word forms against the frequency dictionary |
-| `reference` | list[str]/dict[str, float]/FreqDict | `-` | Words of the reference corpus, their frequencies or the frequency dictionary |
-| `measure` | str | `log_likelihood` | Measure of `KEYNESS_MEASURES` for `score` and the sorting |
-| `min_freq` | int | `1` | Minimum frequency of a keyword in its own corpus |
-| `positive` | bool | `True` | Positive keywords (more frequent in the target corpus) or negative ones (more frequent in the reference) |
-| `top_n` | int | `None` | Number of keywords; `None` - all of them |
+--8<-- "corpus/keyness.md:keyness-parameters"
+
+`reference` may also be `FreqDict`, against which `target` is word forms.
+
+## Reference by frequencies
+
+--8<-- "corpus/keyness.md:FrequencyReference"
+
+The frequency dictionary `FreqDict` of Google Books Ngram passed as `reference` is turned into such a reference:
+
+| Field | `FreqDict` |
+| :---: | :--------- |
+| `counts` | the ipm of `FreqDict.word_ipm`, the proper nouns included, converted to occurrences in the corpus of the dictionary |
+| `size` | `CORPUS_SIZE`, 63 billion words of the books of 1980-2019 |
+| `missing` | the least frequency of the dictionary, 0.1 ipm (about 6300 occurrences) |
+| `key` | [`lemma_key`](../datasets/freqdict.md#lemma_key): a keyword may carry the label of another lemma, *Roma* is counted under `romo` |
+| `keep` | the forms made of the letters of `WORD_PATTERN`; numbers and words with a hyphen or a dot are left out |
+
+The target has to be counted the way the dictionary was: word forms with the stop words kept, not lemmas - `lemma_key` is not idempotent (`estado` - `estar`), so `WordsExtractor(use_lexemes=True)` does not fit. The dictionary describes the register of the books, so the negative keywords of a text are the words of scholarly prose (`de`, `social`, `país`).
 
 ## Result
 
-A list of `Keyword` named tuples by descending keyness (ties broken by descending frequency and alphabetically, words of an undefined measure last); `pd.DataFrame(keywords)` gives a table.
-
-| Field | Type | Description |
-| :---: | :--: | :---------- |
-| `word` | str | Word |
-| `freq_target` | int | Frequency in the target corpus |
-| `freq_reference` | float | Frequency in the reference corpus |
-| `ipm_target` | float | Frequency in the target corpus per million words |
-| `ipm_reference` | float | Frequency in the reference corpus per million words |
-| `g2` | float | Signed $G^2$ |
-| `p_value` | float | p-value of $G^2$ |
-| `log_ratio` | float | Log Ratio |
-| `score` | float | Value of the chosen measure |
+--8<-- "corpus/keyness.md:Keyword"
 
 ## Example
 

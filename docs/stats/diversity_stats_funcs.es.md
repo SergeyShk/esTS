@@ -5,6 +5,7 @@
 !!! info ""
     **ests.diversity_stats.calc_ttr()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_ttr 0ca7ff2 -->
 Cálculo del Type-Token Ratio (TTR).
 
 La medida más simple de la diversidad léxica; no está corregida por la longitud del texto.
@@ -26,6 +27,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_rttr()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_rttr af268fd -->
 Cálculo del Root Type-Token Ratio (RTTR).
 
 Una modificación del TTR (Guiraud, 1960).
@@ -47,6 +49,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_cttr()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_cttr 30b14c8 -->
 Cálculo del Corrected Type-Token Ratio (CTTR).
 
 Una modificación del TTR (Carroll, 1964).
@@ -68,6 +71,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_httr()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_httr 30a5b0b -->
 Cálculo del Herdan Type-Token Ratio (HTTR).
 
 Una modificación logarítmica del TTR (Herdan, 1960).
@@ -89,12 +93,13 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_sttr()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_sttr 90d42f8 -->
 Cálculo del Summer Type-Token Ratio (STTR).
 
 Una modificación logarítmica del TTR (Summer, 1966).
 
 !!! note "Nota"
-    El valor depende de la base del logaritmo, 10 por defecto. Véanse las [convenciones](diversity_stats.md#conventions).
+    El valor depende de la base del logaritmo, 10 por defecto. Véanse las [convenciones](diversity_stats.md#conventions). En un texto de un solo lexema el numerador no está definido, y en un texto de no más palabras que la base el denominador $\log \log N$ es cero o negativo, así que ahí el valor es `nan`, igual que en toda ventana de `calc_windowed` así de corta.
 
 Fórmula:
 
@@ -114,6 +119,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_mttr()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_mttr 0e1fcfb -->
 Cálculo del Maas Type-Token Ratio (MTTR).
 
 Una modificación logarítmica del TTR (Maas, 1972).
@@ -139,12 +145,13 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_dttr()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_dttr 5a40f62 -->
 Cálculo del Dugast Type-Token Ratio (DTTR).
 
-Una modificación logarítmica del TTR (Dugast, 1978).
+Una modificación logarítmica del TTR (Dugast, 1978), el recíproco de la métrica de Maas.
 
 !!! note "Nota"
-    El valor depende de la base del logaritmo, 10 por defecto. Véanse las [convenciones](diversity_stats.md#conventions).
+    El valor depende de la base del logaritmo, 10 por defecto. Véanse las [convenciones](diversity_stats.md#conventions). Un texto sin palabras repetidas tiene un valor infinito, como las demás medidas recíprocas.
 
 Fórmula:
 
@@ -164,6 +171,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_mattr()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_mattr 57fa7d4 -->
 Cálculo del Moving Average Type-Token Ratio (MATTR).
 
 Una modificación del TTR con media móvil (Covington & McFall, 2010). Independiente de la longitud del texto.
@@ -189,6 +197,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_msttr()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_msttr 14ba8f3 -->
 Cálculo del Mean Segmental Type-Token Ratio (MSTTR).
 
 Una modificación del TTR por segmentación (Johnson, 1944). Independiente de la longitud del texto.
@@ -214,6 +223,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_mtld()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_mtld 0c88867 -->
 Cálculo de la Measure of Textual Lexical Diversity (MTLD).
 
 Una modificación del MSTTR (McCarthy, 2005). Independiente de la longitud del texto.
@@ -242,9 +252,10 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_mamtld()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_mamtld e26f25e -->
 Cálculo de la Moving Average Measure of Textual Lexical Diversity (MA-MTLD).
 
-Una modificación de MTLD con ventana móvil (MTLD-MA de koRpus): un factor empieza en cada posición del texto, el valor es la longitud media de los factores completados en dos pasadas, hacia delante y hacia atrás. Los factores no completados al final del texto se ignoran.
+Una modificación de MTLD con ventana móvil según el MTLD-MA de koRpus: un factor empieza en cada posición del texto, el valor es la longitud media de los factores completados en dos pasadas, hacia delante y hacia atrás. Los factores no completados al final del texto se ignoran. Los valores difieren de los de koRpus, que hace solo la pasada hacia delante, cierra un factor con un TTR estrictamente menor que el umbral y descarta los factores más cortos que su longitud mínima en lugar de extenderlos hasta ella.
 
 !!! warning "Aviso"
     Si ningún factor se completa, la función devuelve `nan`. La métrica es inestable en textos cortos.
@@ -262,6 +273,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_mtldw()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_mtldw e98c64b -->
 Cálculo de MTLD-W (`mtld_ma_wrap` de lexical-diversity, TAALED).
 
 Una modificación de MA-MTLD: un factor empieza en cada posición del texto, y los factores no completados al final del texto continúan desde su principio, así que todas las posiciones tienen el mismo peso. Un factor no puede ser más largo que el texto.
@@ -282,15 +294,10 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_hdd()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_hdd 78030e8 -->
 Cálculo de la Hypergeometric Distribution D (HD-D).
 
-La implementación más fiable del algoritmo VocD (McCarthy & Jarvis, 2010).
-
-Algoritmo:
-
-1. Muestreo aleatorio de segmentos de 32 a 50 palabras del texto
-2. Cálculo del TTR de cada segmento
-3. Promedio de los valores
+Una alternativa a vocd-D (McCarthy & Jarvis, 2010): en lugar de extraer segmentos aleatorios del texto, calcula exactamente el TTR esperado de una muestra aleatoria de `sample_size` palabras. Para cada lexema, la distribución hipergeométrica da la probabilidad de que la muestra lo contenga al menos una vez; la suma de estas probabilidades es el número esperado de lexemas en la muestra, y HD-D es ese número dividido por el tamaño de la muestra. El valor no depende del azar.
 
 !!! warning "Aviso"
     En los textos de menos de 50 palabras y más cortos que el tamaño de la muestra la métrica no está definida; la función devuelve `nan`.
@@ -300,13 +307,14 @@ Parámetros:
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `text` | list[str] | `-` | Lista de palabras |
-| `sample_size` | int | `42` | Longitud del segmento, de 35 a 50 en la bibliografía |
+| `sample_size` | int | `42` | Tamaño de la muestra en palabras, de 35 a 50 en la bibliografía |
 
 ## Índice de Simpson (D)
 
 !!! info ""
     **ests.diversity_stats.calc_simpson_index()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_simpson_index e0e51fd -->
 Cálculo del [índice de Simpson](https://en.wikipedia.org/wiki/Diversity_index#Simpson_index).
 
 La probabilidad de que dos palabras extraídas del texto al azar sin reemplazo sean el mismo lexema. Cuanto menor es el valor, más rico es el vocabulario.
@@ -333,6 +341,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_inverse_simpson_index()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_inverse_simpson_index a3699fb -->
 Cálculo del [índice de Simpson inverso](https://en.wikipedia.org/wiki/Diversity_index#Inverse_Simpson_index), el número de Hill de orden dos.
 
 Cuanto mayor es el valor, más rico es el vocabulario.
@@ -357,6 +366,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_gini_simpson_index()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_gini_simpson_index 144c629 -->
 Cálculo del [índice de Gini-Simpson](https://en.wikipedia.org/wiki/Diversity_index#Gini–Simpson_index).
 
 La probabilidad de que dos palabras del texto elegidas al azar sean distintas. Cuanto mayor es el valor, más rico es el vocabulario.
@@ -378,6 +388,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_hapax_index()**, alias **ests.diversity_stats.calc_honore_r()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_hapax_index a2acf89 -->
 Cálculo del [índice de hápax](https://en.wikipedia.org/wiki/Hapax_legomenon).
 
 !!! quote "Definición"
@@ -406,6 +417,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_frequency_spectrum()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_frequency_spectrum bd17b84 -->
 Cálculo del espectro de frecuencias: el número de lexemas $V_i$ que aparecen exactamente $i$ veces en el texto. Las medidas siguientes se calculan a partir de él; sus fórmulas están contrastadas con Tweedie y Baayen (1998).
 
 Notación: $N$ es el número de palabras, $V$ el número de lexemas, $V_i$ el número de lexemas con frecuencia $i$, $V_1$ los hápax, $V_2$ los dis legomena, $p_k$ la frecuencia relativa de un lexema.
@@ -421,6 +433,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_yule_k()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_yule_k c6ce18b -->
 Cálculo de la característica de Yule (Yule, 1944). Una de las pocas medidas teóricamente independientes de la longitud del texto (Tweedie & Baayen, 1998); en la práctica converge a medida que el texto crece. Cuanto menor es el valor, más rico es el vocabulario. Proporcional al índice de Simpson: $K \approx 10^4 \cdot D$.
 
 Fórmula:
@@ -440,6 +453,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_yule_i()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_yule_i ec2e097 -->
 Cálculo de la característica inversa de Yule. Cuanto mayor es el valor, más rico es el vocabulario; si todas las palabras del texto son únicas, el valor es infinito.
 
 Fórmula:
@@ -459,6 +473,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_herdan_vm()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_herdan_vm a64c307 -->
 Cálculo de la medida de Herdan (Herdan, 1955). Teóricamente independiente de la longitud del texto; cuanto menor es el valor, más rico es el vocabulario.
 
 Fórmula:
@@ -478,6 +493,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_sichel_s()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_sichel_s 524b27a -->
 Cálculo de la medida de Sichel (Sichel, 1975): la proporción de dis legomena, lexemas con frecuencia 2, entre todos los lexemas. Estable en textos de distinta longitud.
 
 Fórmula:
@@ -497,6 +513,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_michea_m()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_michea_m 2ad5820 -->
 Cálculo de la medida de Michéa (Michéa, 1969): el recíproco de la medida de Sichel. Si el texto no tiene dis legomena, el valor es infinito.
 
 Fórmula:
@@ -516,6 +533,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_brunet_w()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_brunet_w 4e786ba -->
 Cálculo de la medida de Brunet (Brunet, 1978). Los valores de los textos suelen estar entre 10 y 20; cuanto menor es el valor, más rico es el vocabulario.
 
 Fórmula:
@@ -536,6 +554,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_dugast_k()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_dugast_k 7933070 -->
 Cálculo de la medida de Dugast (Dugast, 1979). No confundir con la U de Dugast, la métrica [DTTR](#dugast-type-token-ratio-dttr).
 
 !!! note "Nota"
@@ -559,6 +578,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_baayen_p()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_baayen_p ca8ba21 -->
 Cálculo de la medida de Baayen (Baayen, 1991): la proporción de hápax entre todas las palabras del texto. Es la pendiente de la curva de crecimiento del vocabulario al final del texto: la probabilidad de que la siguiente palabra sea nueva (Evert, 2004).
 
 Fórmula:
@@ -578,6 +598,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_hapax_ratio()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_hapax_ratio 90c48e4 -->
 Cálculo de la proporción de hápax entre todos los lexemas del texto.
 
 Fórmula:
@@ -597,6 +618,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_alpha2()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_alpha2 9da8e4e -->
 Cálculo del exponente $\alpha_2$: una estimación del parámetro de Zipf-Mandelbrot a partir de la parte baja del espectro de frecuencias (Evert, 2004). Si el texto no tiene hápax, la función devuelve `nan`.
 
 Fórmula:
@@ -616,6 +638,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_entropy()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_entropy 52a4686 -->
 Cálculo de la [entropía de Shannon](https://en.wikipedia.org/wiki/Diversity_index#Shannon_index) de la distribución de lexemas en bits. Cuanto mayor es el valor, más rico es el vocabulario. El número de Hill de orden uno es $2^H$ ([perplejidad](#perplexity)), el de orden cero $V$, el de orden dos el [índice de Simpson inverso](#inverse_simpson_index).
 
 Fórmula:
@@ -635,6 +658,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_evenness()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_evenness ae195ae -->
 Cálculo de la equitatividad (equitatividad de Pielou): el cociente entre la entropía de Shannon y su máximo para el número de lexemas dado. Va de 0 a 1; en los textos de un solo lexema no está definida, la función devuelve `nan`.
 
 Fórmula:
@@ -654,6 +678,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_perplexity()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_perplexity 1533b66 -->
 Cálculo de la perplejidad: el número de Hill de orden uno, el número efectivo de lexemas del texto.
 
 Fórmula:
@@ -673,6 +698,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_zipf_alpha()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_zipf_alpha f6b5205 -->
 Cálculo del exponente $\alpha$ de la [ley de Zipf](https://en.wikipedia.org/wiki/Zipf's_law) $f(r) \propto r^{-\alpha}$, donde $r$ es el rango de frecuencia de un lexema. Se estima por regresión lineal del logaritmo de la frecuencia sobre el logaritmo del rango. En los textos naturales $\alpha$ está cerca de 1.
 
 !!! note "Nota"
@@ -689,6 +715,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.fit_zipf_mandelbrot()**, **ests.diversity_stats.ZipfMandelbrot**
 
+<!-- core: stats/diversity_stats_funcs.md:fit_zipf_mandelbrot 647bd16 -->
 Ajuste de la [ley de Zipf-Mandelbrot](https://en.wikipedia.org/wiki/Zipf–Mandelbrot_law) $f(r) = C / (r + q)^s$ a la distribución rango-frecuencia. Con $q = 0$ la ley se reduce a la ley de Zipf con exponente $s$; el desplazamiento $q$ describe el aplanamiento de la curva en las palabras más frecuentes que la ley de Zipf no recoge. Los parámetros se ajustan por mínimos cuadrados en coordenadas logarítmicas con las restricciones $q \ge 0$, $s \ge 0$. Devuelve una tupla con nombre `ZipfMandelbrot` con los campos `c`, `q`, `s` y `r2`, el coeficiente de determinación del ajuste en coordenadas logarítmicas.
 
 !!! note "Nota"
@@ -717,7 +744,8 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_heaps_beta()**, **ests.diversity_stats.fit_heaps()**, **ests.diversity_stats.vocabulary_growth()**
 
-Cálculo del exponente $\beta$ de la [ley de Heaps](https://en.wikipedia.org/wiki/Heaps'_law) $V(N) = K \cdot N^{\beta}$, que describe el crecimiento del vocabulario con la longitud del texto. Se estima por regresión lineal del logaritmo del tamaño del vocabulario sobre el logaritmo de la longitud del texto a lo largo de la curva de crecimiento del vocabulario (`vocabulary_growth`: el tamaño del vocabulario tras cada palabra). En corpus de millones de palabras $\beta$ está entre 0.4 y 0.6; sobre la curva de crecimiento de un solo texto es mayor (0.6-0.9), así que los valores solo son comparables entre textos de longitud parecida. `fit_heaps` devuelve una tupla con nombre `HeapsFit` con los dos parámetros `k`, `beta` y el coeficiente de determinación `r2`.
+<!-- core: stats/diversity_stats_funcs.md:calc_heaps_beta 1ed3900 -->
+Cálculo del exponente $\beta$ de la [ley de Heaps](https://en.wikipedia.org/wiki/Heaps'_law) $V(N) = K \cdot N^{\beta}$, que describe el crecimiento del vocabulario con la longitud del texto. Se estima por regresión lineal del logaritmo del tamaño del vocabulario sobre el logaritmo de la longitud del texto a lo largo de la curva de crecimiento del vocabulario. En corpus de millones de palabras $\beta$ está entre 0.4 y 0.6; sobre la curva de crecimiento de un solo texto es mayor (0.6-0.9), así que los valores solo son comparables entre textos de longitud parecida.
 
 !!! note "Nota"
     El valor depende del orden de las palabras y necesita varios cientos de palabras o más. En los textos de menos de dos palabras la función devuelve `nan`.
@@ -728,11 +756,18 @@ Parámetros:
 | :-------: | :--: | :---------: | :---------: |
 | `text` | list[str] | `-` | Lista de palabras |
 
+<!-- core: stats/diversity_stats_funcs.md:vocabulary_growth 39c0cb0 -->
+`vocabulary_growth` devuelve la curva de crecimiento del vocabulario: el tamaño del vocabulario tras cada palabra del texto.
+
+<!-- core: stats/diversity_stats_funcs.md:fit_heaps 2c0021b -->
+`fit_heaps` ajusta la ley sobre esta curva y devuelve una tupla con nombre `HeapsFit` con los parámetros `k`, `beta` y el coeficiente de determinación `r2`.
+
 ## Cálculo por ventanas { #calc_windowed }
 
 !!! info ""
     **ests.diversity_stats.calc_windowed()**
 
+<!-- core: stats/diversity_stats_funcs.md:calc_windowed f7b0e11 -->
 Cálculo por ventanas de cualquier métrica: su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Es la forma estándar de comparar textos de distinta longitud; el STTR de Kubát y Milička es un TTR por ventanas de 1000 palabras con un intervalo de confianza del 95 %. En los textos más cortos que la ventana la métrica se calcula sobre todo el texto como una sola ventana; las ventanas con un valor no definido (`nan`) se ignoran. Si la métrica es infinita en al menos una ventana (por ejemplo, el índice de Simpson inverso en una ventana de palabras únicas), la media es infinita y la desviación típica y el intervalo de confianza no están definidos. Devuelve una tupla con nombre `WindowStats` con los campos `mean`, `std`, `lower`, `upper` y `n_windows`.
 
 Parámetros:
