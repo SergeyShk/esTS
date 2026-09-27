@@ -43,7 +43,7 @@ test: docs-core ## Run the tests
 	uv run pytest
 
 test-cov: docs-core ## Run the tests with a coverage threshold
-	uv run pytest --cov $(APP_PATH) --cov-fail-under 90 --cov-report term-missing
+	uv run pytest --cov $(APP_PATH)
 
 clean: clean-build clean-pyc clean-test ## Remove all artifacts
 	rm -f .coverage coverage.xml

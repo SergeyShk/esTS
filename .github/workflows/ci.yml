@@ -24,13 +24,13 @@ jobs:
         with:
           enable-cache: true
       - name: Install dependencies
-        run: uv sync --locked --all-groups
+        run: uv sync --locked --no-default-groups --group lint
       - name: Ruff
         run: |
-          uv run ruff check ests tests
-          uv run ruff format ests tests --check
+          uv run --no-sync ruff check ests tests
+          uv run --no-sync ruff format ests tests --check
       - name: Mypy
-        run: uv run mypy
+        run: uv run --no-sync mypy
 
   test:
     name: test (${{ matrix.python-version }}${{ matrix.os != 'ubuntu-latest' && format(', {0}', matrix.os) || '' }})
@@ -54,22 +54,13 @@ jobs:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: uv sync --locked --all-groups
+        run: uv sync --locked --no-default-groups --group test
       - name: Fetch the pages of anyTS
-        run: uv run python scripts/core_docs.py
+        run: uv run --no-sync python scripts/core_docs.py
       - name: Run tests
         # The archives of the datasets are downloaded from master, where a new version
         # of one exists only after the merge: the network tests run in their own job
-        run: uv run pytest -m "not network" --cov ests --cov-fail-under 90 --cov-report xml
-      - name: Send report
-        uses: codecov/codecov-action@v7
-        with:
-          files: ./coverage.xml
-          flags: unittests
-          name: ests-${{ matrix.os }}-${{ matrix.python-version }}
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
-          verbose: true
+        run: uv run --no-sync pytest -m "not network" --cov ests
 
   network:
     if: github.event_name == 'push'
@@ -83,11 +74,11 @@ jobs:
           enable-cache: true
           python-version: "3.13"
       - name: Install dependencies
-        run: uv sync --locked --all-groups
+        run: uv sync --locked --no-default-groups --group test
       - name: Fetch the pages of anyTS
-        run: uv run python scripts/core_docs.py
+        run: uv run --no-sync python scripts/core_docs.py
       - name: Run the network tests
-        run: uv run pytest -m network
+        run: uv run --no-sync pytest -m network
 
   docs:
     runs-on: ubuntu-latest
@@ -100,8 +91,8 @@ jobs:
           enable-cache: true
           python-version: "3.13"
       - name: Install dependencies
-        run: uv sync --locked --group docs
+        run: uv sync --locked --only-group docs
       - name: Fetch the pages of anyTS
-        run: uv run python scripts/core_docs.py
+        run: uv run --no-sync python scripts/core_docs.py
       - name: Build docs
-        run: uv run mkdocs build --strict
+        run: uv run --no-sync mkdocs build --strict

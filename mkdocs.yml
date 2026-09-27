@@ -1,4 +1,5 @@
 site_name: esTS
+site_url: https://sergeyshk.github.io/esTS/
 site_description: "A library for extracting statistics from texts in Spanish"
 repo_url: https://github.com/SergeyShk/esTS
 
