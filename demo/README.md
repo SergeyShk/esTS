@@ -9,7 +9,7 @@ python_version: "3.11"
 app_file: app.py
 pinned: false
 license: mit
-short_description: Statistics of Spanish texts and the highlighting of fragments
+short_description: Statistics of Spanish texts and highlighting of fragments
 ---
 
 # esTS
