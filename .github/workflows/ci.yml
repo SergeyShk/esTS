@@ -27,8 +27,8 @@ jobs:
         run: uv sync --locked --no-default-groups --group lint
       - name: Ruff
         run: |
-          uv run --no-sync ruff check ests tests
-          uv run --no-sync ruff format ests tests --check
+          uv run --no-sync ruff check ests tests demo
+          uv run --no-sync ruff format ests tests demo --check
       - name: Mypy
         run: uv run --no-sync mypy
 
