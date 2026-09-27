@@ -15,6 +15,7 @@ import simplemma
 import spacy
 from anyts.utils import (
     check_sequence as check_sequence,
+    check_words,
     count_letters as count_letters,
     has_words as has_words,
     is_punctuation as is_punctuation,
@@ -418,11 +419,15 @@ def find_phrases(words: Sequence[str], phrases: Iterable[str]) -> list[tuple[int
         list[tuple[int, int]]: Bounds of the phrases found as slices of words;
             empty phrases are skipped
 
+    Raises:
+        SourceTypeError: If the words are not a list of strings
+
     Example:
         >>> from ests.utils import find_phrases
         >>> find_phrases(["Sin", "embargo", "no", "llegó"], ["sin embargo", "sin"])
         [(0, 2)]
     """
+    check_words(words)
     patterns = sorted(
         {pattern for phrase in phrases if (pattern := tuple(phrase.lower().split()))},
         key=len,

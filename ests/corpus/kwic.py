@@ -1,6 +1,7 @@
 from collections.abc import Sequence
 from typing import NamedTuple
 
+from anyts.utils import check_integer
 from spacy.tokens import Doc
 
 from ..exceptions import ParameterError, SourceTypeError
@@ -60,7 +61,7 @@ def kwic(
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc object
-        ParameterError: If the keyword is empty or the window negative
+        ParameterError: If the keyword is empty or the window is not an integer or is negative
 
     Example:
         >>> from ests.corpus import kwic
@@ -68,6 +69,12 @@ def kwic(
         >>> [line.keyword for line in kwic(text, "gato", by_lemma=True)]
         ['gato', 'gatos']
     """
+    pattern = [token.text for token in iter_doc_tokens(get_tokenizer()(keyword))]
+    if not pattern:
+        raise ParameterError("The keyword is not set")
+    check_integer(window, "window")
+    if window < 0:
+        raise ParameterError("The window cannot be negative")
     if isinstance(source, Doc):
         text = source.text
         tokens = list(iter_doc_tokens(source))
@@ -78,11 +85,6 @@ def kwic(
         lemmatized = False
     else:
         raise SourceTypeError("The data source is set incorrectly")
-    pattern = [token.text for token in iter_doc_tokens(get_tokenizer()(keyword))]
-    if not pattern:
-        raise ParameterError("The keyword is not set")
-    if window < 0:
-        raise ParameterError("The window cannot be negative")
     words = [(token.idx, token.idx + len(token), token.text) for token in tokens]
     readings = [
         _readings(token.text, by_lemma, ignore_case, token.lemma_ if lemmatized else "")
@@ -137,7 +139,7 @@ def format_kwic(concordances: Sequence[Concordance], width: int = 40) -> str:
         str: Concordance as text
 
     Raises:
-        ParameterError: If the width of a context is below one
+        ParameterError: If the width of a context is not an integer or is below one
 
     Example:
         >>> from ests.corpus import format_kwic, kwic
@@ -145,6 +147,7 @@ def format_kwic(concordances: Sequence[Concordance], width: int = 40) -> str:
             El  gato  duerme
             el  gato  come
     """
+    check_integer(width, "width of a context")
     if width < 1:
         raise ParameterError("The width of a context must be greater than 0")
     keyword_width = max((len(line.keyword) for line in concordances), default=0)

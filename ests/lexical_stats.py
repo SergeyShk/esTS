@@ -4,6 +4,7 @@ from math import log2, log10, nan
 from pathlib import Path
 from statistics import fmean
 
+from anyts.utils import check_integer, check_words
 from spacy.language import Language
 from spacy.tokens import Doc
 
@@ -231,10 +232,12 @@ class LexicalStats:
             dict[int, float]: Share of the words with a lemma of the top N for every bound N
 
         Raises:
-            ParameterError: If a bound is out of 1 and the size of the list (10000)
+            ParameterError: If a bound is not an integer or is out of 1 and the size of the
+                list (10000)
         """
         size = len(load_top_lemmas())
         for band in bands:
+            check_integer(band, "bound of a band")
             if not 1 <= band <= size:
                 raise ParameterError(f"A bound of a band must be between 1 and {size} - {band}")
         ranks = [get_rank(lemma) for lemma in set(self.lemmas)] if unique else list(self.ranks)
@@ -331,6 +334,10 @@ def calc_surprisal(lemmas: Sequence[str], freq_dict: FreqDict) -> float:
 
     Returns:
         float: Mean surprisal in bits, nan for an empty list
+
+    Raises:
+        SourceTypeError: If the lemmas are not a list of strings
     """
+    check_words(lemmas, "lemmas")
     floor = freq_dict.min_ipm
     return _mean([-log2(max(freq_dict.ipm(lemma), floor) / 1_000_000) for lemma in lemmas])

@@ -13,12 +13,13 @@ from anyts.corpus.stylometry import (
     z_scores as z_scores,
     zeta as zeta,
 )
+from anyts.utils import check_words
 from spacy.language import Language
 from spacy.tokens import Doc
 
 from ..constants import FUNCTION_UD_POS
 from ..exceptions import SourceError
-from ..utils import check_sequence, get_nlp, is_punctuation, iter_doc_tokens
+from ..utils import get_nlp, is_punctuation, iter_doc_tokens
 
 # Components the parts of speech of a list of words do not need
 UNUSED_COMPONENTS = ["parser", "lemmatizer", "ner"]
@@ -49,7 +50,7 @@ def function_words_profile(
         dict[str, float]: Shares by the parts of speech of FUNCTION_UD_POS
 
     Raises:
-        SourceTypeError: If a string is passed instead of a list of words
+        SourceTypeError: If the words are not a list of strings
         SourceError: If there are no words or the pipeline does not tag the
             parts of speech
         DatasetNotFoundError: If the default model is not installed
@@ -66,7 +67,7 @@ def function_words_profile(
         if isinstance(source, Doc):
             words = [token.text for token in source if not token.is_space]
         else:
-            check_sequence(source)
+            check_words(source)
             words = [word for word in source if word.strip()]
         tags = _tag_words(words, nlp)
     if not tags:

@@ -21,6 +21,7 @@ from anyts.constants import (
     MTLD_MIN_LEN,
     MTLD_TTR_THRESHOLD,
 )
+from anyts.utils import check_words
 from spacy.language import Language
 from spacy.tokens import Doc
 
@@ -229,7 +230,8 @@ class DiversityStatsComponent:
         log_base (float): Logarithm base for the Summer, Maas and Dugast metrics
 
     Raises:
-        ParameterError: If a parameter is out of its range
+        ParameterError: If a parameter is not an integer where one is expected or is out
+            of its range
     """
 
     def __init__(
@@ -523,7 +525,9 @@ class StyleStatsComponent:
             and the naturalness by Zipf's law
 
     Raises:
-        ParameterError: If the number of the most frequent words is below one
+        SourceTypeError: If the stopwords are not a list of strings
+        ParameterError: If the number of the most frequent words is not an integer or is
+            below one
     """
 
     def __init__(
@@ -534,6 +538,8 @@ class StyleStatsComponent:
         top_n: int = NAUSEA_TOP_N,
     ):
         check_style_params(top_n)
+        if stopwords is not None:
+            check_words(stopwords, "stopwords")
         add_dash_rules(nlp)
         self.name = name
         self.stopwords = stopwords
@@ -586,7 +592,7 @@ class PhonStatsComponent:
         window_len (int): Window in words for the alliteration and the assonance
 
     Raises:
-        ParameterError: If the window is below 2
+        ParameterError: If the window is not an integer or is below 2
     """
 
     def __init__(self, nlp: Language, name: str = "ests_phon", window_len: int = PHON_WINDOW_LEN):

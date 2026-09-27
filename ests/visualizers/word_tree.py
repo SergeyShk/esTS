@@ -5,6 +5,7 @@ from enum import Enum
 from itertools import count
 from typing import Any
 
+from anyts.utils import check_integer, check_words
 from graphviz import Digraph, nohtml
 
 from ..exceptions import ParameterError, SourceError, SourceTypeError
@@ -180,8 +181,12 @@ class WordTree:
         check_sequence(texts, "lists of words")
         if not all(isinstance(text, (list, tuple)) for text in texts):
             raise SourceTypeError("The texts must be a list of lists of words")
+        for text in texts:
+            check_words(text)
         if not texts:
             raise SourceError("The data source has no words")
+        check_integer(max_n, "size of the context")
+        check_integer(max_per_n, "number of examples")
         if max_n < 2:
             raise ParameterError("The size of the context must be at least 2")
         if max_per_n < 1:

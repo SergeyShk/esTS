@@ -16,6 +16,7 @@ from anyts.corpus.compare import (
     compare_values as compare_values,
     holm_correction as holm_correction,
 )
+from anyts.utils import check_integer, check_words
 from spacy.language import Language
 from spacy.tokens import Doc
 
@@ -27,7 +28,6 @@ from ..extractors import SentsExtractor, WordsExtractor
 from ..morph_stats import FINITE_MOODS, MorphStats
 from ..readability_stats import ReadabilityStats
 from ..utils import (
-    check_sequence,
     count_words_by_spans,
     get_nlp,
     iter_text_sents,
@@ -35,6 +35,18 @@ from ..utils import (
 )
 
 Features = Callable[[str], Mapping[str, float]]
+
+
+def _check_windows(window: int | None, min_words: int | None) -> None:
+    """Checking the size of a window and the smallest number of words in it"""
+    if window is not None:
+        check_integer(window, "size of a window")
+        if window < 1:
+            raise ParameterError("The size of a window must be greater than 0")
+    if min_words is not None:
+        check_integer(min_words, "smallest number of words in a window")
+        if min_words < 1:
+            raise ParameterError("The smallest number of words in a window must be greater than 0")
 
 
 def split_windows(text: str, window: int | None = 1000, min_words: int | None = None) -> list[str]:
@@ -64,7 +76,7 @@ def split_windows(text: str, window: int | None = 1000, min_words: int | None = 
             or shorter than min_words
 
     Raises:
-        ParameterError: If the size of a window or min_words is below one
+        ParameterError: If the size of a window or min_words is not an integer or is below one
 
     Example:
         >>> from ests.corpus import split_windows
@@ -73,10 +85,7 @@ def split_windows(text: str, window: int | None = 1000, min_words: int | None = 
         >>> split_windows('Dijo "adiós" y se fue ya', 2)
         ['Dijo "adiós"', 'y se', 'fue ya']
     """
-    if window is not None and window < 1:
-        raise ParameterError("The size of a window must be greater than 0")
-    if min_words is not None and min_words < 1:
-        raise ParameterError("The smallest number of words in a window must be greater than 0")
+    _check_windows(window, min_words)
     if min_words is None:
         min_words = 1 if window is None else max(1, window // 2)
     words = list(iter_text_words(text))
@@ -311,9 +320,9 @@ def corpus_features(
         DataFrame: Features of the windows
 
     Raises:
-        SourceTypeError: If a string is passed instead of a list of texts
+        SourceTypeError: If the texts are not a list of strings
         SourceError: If the corpus has no window of enough words
-        ParameterError: If the size of a window or min_words is below one
+        ParameterError: If the size of a window or min_words is not an integer or is below one
 
     Example:
         >>> from ests.corpus import corpus_features
@@ -325,7 +334,8 @@ def corpus_features(
              1        14.0
         1    0         7.0
     """
-    check_sequence(texts, "texts")
+    check_words(texts, "texts")
+    _check_windows(window, min_words)
     rows = {}
     for text_index, text in enumerate(texts):
         for window_index, chunk in enumerate(split_windows(text, window, min_words)):
@@ -387,10 +397,10 @@ def compare_corpora(
             with the names of the corpora in the columns)
 
     Raises:
-        SourceTypeError: If a string is passed instead of a list of texts
+        SourceTypeError: If the texts are not a list of strings
         SourceError: If one of the corpora has no window of enough words
         ParameterError: If the number of samples, the size of a window or
-            min_words is below one
+            min_words is not an integer or is below one
 
     Example:
         >>> from ests.corpus import compare_corpora
@@ -400,8 +410,12 @@ def compare_corpora(
         >>> result.loc["chars", ["mean_A", "mean_B", "cliff_delta"]].tolist()
         [14.0, 33.0, -1.0]
     """
+    check_integer(n_bootstrap, "number of bootstrap samples")
     if n_bootstrap < 1:
         raise ParameterError("The number of bootstrap samples must be greater than 0")
+    check_words(a, "texts")
+    check_words(b, "texts")
+    _check_windows(window, min_words)
     feature_function = features or text_features
     table_a = corpus_features(a, window, feature_function, min_words)
     table_b = corpus_features(b, window, feature_function, min_words)

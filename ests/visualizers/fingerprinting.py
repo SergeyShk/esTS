@@ -3,6 +3,7 @@ from math import ceil
 
 import matplotlib.pyplot as plt
 import numpy as np
+from anyts.utils import check_integer, check_words
 from matplotlib.axes import Axes
 from matplotlib.cm import ScalarMappable
 from matplotlib.colors import Normalize
@@ -61,15 +62,18 @@ def fingerprinting(
         SourceTypeError: If the texts are not a list of lists of words or the
             measure is not callable
         SourceError: If there are no texts or a text has no words
-        ParameterError: If the size of a segment is below one
+        ParameterError: If the size of a segment is not an integer or is below one
     """
     check_sequence(texts, "lists of words")
     if not all(isinstance(text, (list, tuple)) for text in texts):
         raise SourceTypeError("The texts must be a list of lists of words")
+    for text in texts:
+        check_words(text)
     if not texts or any(not text for text in texts):
         raise SourceError("The data source has no words")
     if metric is not None and not callable(metric):
         raise SourceTypeError("The measure must be callable")
+    check_integer(segment_len, "size of a segment")
     if segment_len < 1:
         raise ParameterError("The size of a segment must be greater than 0")
     measure = metric if metric is not None else calc_ttr
