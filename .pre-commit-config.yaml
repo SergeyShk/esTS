@@ -41,10 +41,18 @@ repos:
         types: [python]
         pass_filenames: false
 
+      - id: core-docs
+        name: core docs
+        stages: [pre-push]
+        language: system
+        entry: uv run python scripts/core_docs.py
+        pass_filenames: false
+        always_run: true
+
       - id: pytest
         name: pytest
         stages: [pre-push]
         language: system
-        entry: uv run pytest --cov ests
+        entry: uv run pytest -m "not network" --cov ests
         pass_filenames: false
         always_run: true
