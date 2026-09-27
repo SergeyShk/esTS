@@ -1,3 +1,9 @@
+# The ZeroGPU hardware of the Space wants its package imported before spaCy
+try:
+    import spaces
+except ImportError:
+    spaces = None
+
 import threading
 from collections import Counter
 from functools import lru_cache
@@ -159,6 +165,12 @@ if not freq_dict.filepath:
     except (RuntimeError, OSError) as error:
         print(f"The frequency dictionary is not available: {error}")
 plot_lock = threading.Lock()
+
+if spaces is not None:
+
+    @spaces.GPU
+    def gpu_placeholder() -> None:
+        """ZeroGPU starts a Space only with a GPU function; the demo computes on the CPU"""
 
 
 @lru_cache(maxsize=32)
