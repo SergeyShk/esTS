@@ -1796,6 +1796,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#referencia-por-frecuencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referencia por frecuencias
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#resultado" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2455,6 +2466,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#referencia-por-frecuencias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Referencia por frecuencias
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#resultado" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2498,14 +2520,16 @@
 
 <h1 id="palabras-clave">Palabras clave<a class="headerlink" href="#palabras-clave" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.corpus.keyness()</strong>, <strong>ests.corpus.Keyword</strong></p>
+<p><strong>ests.corpus.keyness()</strong>, <strong>ests.corpus.Keyword</strong>, <strong>ests.corpus.FrequencyReference</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/keyness.md:keyness a953274 -->
 <p>Extracción de palabras clave (keyness) de un corpus objetivo frente a uno de referencia: las palabras que aparecen significativamente más a menudo en el corpus objetivo que en el de referencia.</p>
 <p>Para cada palabra se calculan dos valores que <a href="http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf">Gabrielatos y Marchi</a> y <a href="http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/">Hardie</a> recomiendan leer juntos: la razón de verosimilitud <span class="arithmatex">\(G^2\)</span> con su valor p (la significación de la diferencia: si la hay) y Log Ratio (el tamaño del efecto: cuán grande es). Se calcula además la medida elegida <code>score</code>, que sirve para ordenar. Las medidas de significación (<span class="arithmatex">\(G^2\)</span>, ji cuadrado, BIC, ELL) llevan signo: negativo cuando la palabra es más frecuente en la referencia; las medidas de efecto (%DIFF, Log Ratio, razón de momios) tienen dirección por construcción.</p>
-<p>La referencia puede ser una lista de palabras, una correspondencia de frecuencias (su tamaño es la suma de los recuentos) o el <a href="../../datasets/freqdict/">diccionario de frecuencias</a> <code>FreqDict</code> de Google Books Ngram. Frente al diccionario el corpus objetivo tiene que contarse como se contó el diccionario: formas con las palabras vacías, no lemas - <a href="../../datasets/freqdict/#lemma_key"><code>lemma_key</code></a> no es idempotente (<code>estado</code> - <code>estar</code>), así que <code>WordsExtractor(use_lexemes=True)</code> no sirve. Las formas que no están hechas de las letras de <code>WORD_PATTERN</code> - números, palabras con guion o con punto - quedan fuera del objetivo y de su tamaño. Los dos lados cuentan las formas bajo su <code>lemma_key</code>, también los nombres propios del diccionario (<code>FreqDict.word_ipm</code>), así que una palabra clave puede llevar la etiqueta de otro lema: <em>Roma</em> se cuenta bajo <code>romo</code>. La frecuencia de una clave en la referencia es su ipm por el tamaño del corpus del diccionario (<code>CORPUS_SIZE</code>, 63 000 millones de palabras de los libros de 1980-2019). Una palabra fuera del diccionario recibe su frecuencia mínima, 0,1 ipm (unas 6300 apariciones), una cota superior de su frecuencia real: respalda una palabra clave positiva y nunca una negativa, así que una palabra fuera del diccionario no es palabra clave negativa. El diccionario describe el registro de los libros, así que las palabras clave negativas de un texto son las de la prosa académica (<code>de</code>, <code>social</code>, <code>país</code>).</p>
-<p>Frente a una lista o una correspondencia, las palabras se comparan tal cual: la caja, la lematización y las palabras vacías corresponden a <a href="../../extractors/words/"><code>WordsExtractor</code></a>, y los dos corpus tienen que extraerse del mismo modo.</p>
+<p>La referencia puede ser una lista de palabras, una correspondencia de frecuencias (su tamaño es la suma de los recuentos) o una <code>FrequencyReference</code>. Las palabras se comparan tal cual: la caja, la lematización y las palabras vacías corresponden al extractor de palabras, y los dos corpus tienen que extraerse del mismo modo.</p>
+<p>La función envuelve <code>keyness</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/keyness/">anyTS</a> y admite además como referencia el <a href="../../datasets/freqdict/">diccionario de frecuencias</a> <code>FreqDict</code>; <code>FrequencyReference</code> está en <code>ests.corpus</code> junto a ella, y las funciones de las medidas, en <code>ests.corpus.keyness</code>. Las palabras se extraen con <a href="../../extractors/words/"><code>WordsExtractor</code></a>.</p>
 <h2 id="medidas">Medidas<a class="headerlink" href="#medidas" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/keyness.md:keyness-measures 2a13cf3 -->
 <p>Para una palabra de frecuencia <span class="arithmatex">\(a\)</span> en un corpus objetivo de tamaño <span class="arithmatex">\(c\)</span> y de frecuencia <span class="arithmatex">\(b\)</span> en un corpus de referencia de tamaño <span class="arithmatex">\(d\)</span>, <span class="arithmatex">\(N = c + d\)</span>:</p>
 <table>
 <thead>
@@ -2551,7 +2575,7 @@
 <td style="text-align: left;">ELL</td>
 <td style="text-align: left;"><code>ell</code></td>
 <td style="text-align: left;"><span class="arithmatex">\(\frac{G^2}{N \ln \min(E_1, E_2)}\)</span></td>
-<td style="text-align: left;">Johnson, Culpeper y Rayson (2007); tamaño del efecto de <span class="arithmatex">\(G^2\)</span> de 0 a 1, <code>nan</code> cuando la menor frecuencia esperada es inferior a <span class="arithmatex">\(e\)</span> - entonces <span class="arithmatex">\(\ln \min(E_1, E_2) &lt; 1\)</span> y la medida supera uno</td>
+<td style="text-align: left;">Johnston, Berry y Mielke (2006); tamaño del efecto de <span class="arithmatex">\(G^2\)</span>, la proporción de la mayor desviación posible respecto de las frecuencias esperadas, de 0 a 1; <code>nan</code> cuando la menor frecuencia esperada es como máximo uno - entonces el logaritmo es cero o negativo; justo por encima de uno la medida crece sin límite</td>
 </tr>
 <tr>
 <td style="text-align: left;">Razón de momios</td>
@@ -2561,8 +2585,9 @@
 </tr>
 </tbody>
 </table>
-<p>Una frecuencia nula en uno de los corpus se sustituye por 0.5 para %DIFF, Log Ratio y la razón de momios (Hardie 2014). El valor p de <span class="arithmatex">\(G^2\)</span> sale de la distribución ji cuadrado con un grado de libertad (<code>calc_p_value</code>). Las medidas están disponibles como las funciones <code>calc_log_likelihood</code>, <code>calc_chi2</code>, <code>calc_diff</code>, <code>calc_log_ratio</code>, <code>calc_bic</code>, <code>calc_ell</code>, <code>calc_odds_ratio</code> con los argumentos <code>(a, b, c, d)</code> del módulo <code>ests.corpus.keyness</code> (<code>from ests.corpus.keyness import calc_log_likelihood</code>); sus nombres y descripciones están en <code>ests.constants.KEYNESS_MEASURES</code>.</p>
+<p>Una frecuencia nula en uno de los corpus se sustituye por 0.5 para %DIFF, Log Ratio y la razón de momios (Hardie 2014). El valor p de <span class="arithmatex">\(G^2\)</span> sale de la distribución ji cuadrado con un grado de libertad (<code>calc_p_value</code>). Las medidas están disponibles como las funciones <code>calc_log_likelihood</code>, <code>calc_chi2</code>, <code>calc_diff</code>, <code>calc_log_ratio</code>, <code>calc_bic</code>, <code>calc_ell</code> y <code>calc_odds_ratio</code> con los argumentos <code>(a, b, c, d)</code> del módulo <code>anyts.corpus.keyness</code>; sus nombres y descripciones están en <code>anyts.constants.KEYNESS_MEASURES</code>.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/keyness.md:keyness-parameters ac5e82f -->
 <table>
 <thead>
 <tr>
@@ -2577,13 +2602,13 @@
 <td style="text-align: center;"><code>target</code></td>
 <td style="text-align: center;">list[str]/dict[str, int]</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Palabras del corpus objetivo o sus frecuencias; formas frente al diccionario de frecuencias</td>
+<td style="text-align: center;">Palabras del corpus objetivo o sus frecuencias</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>reference</code></td>
-<td style="text-align: center;">list[str]/dict[str, float]/FreqDict</td>
+<td style="text-align: center;">list[str]/dict[str, float]/FrequencyReference</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Palabras del corpus de referencia, sus frecuencias o el diccionario de frecuencias</td>
+<td style="text-align: center;">Palabras del corpus de referencia, sus frecuencias o una referencia por frecuencias</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>measure</code></td>
@@ -2611,7 +2636,87 @@
 </tr>
 </tbody>
 </table>
+<p><code>reference</code> también puede ser <code>FreqDict</code>, frente al cual <code>target</code> son formas.</p>
+<h2 id="referencia-por-frecuencias">Referencia por frecuencias<a class="headerlink" href="#referencia-por-frecuencias" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/keyness.md:FrequencyReference 3fc867c -->
+<p><code>FrequencyReference(counts, size, missing=0.0, key=None, keep=None)</code> describe un corpus de referencia solo por sus frecuencias, como un diccionario de frecuencias construido a partir de un corpus demasiado grande para pasarlo como palabras:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Campo</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>counts</code></td>
+<td style="text-align: center;">dict[str, float]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: left;">Frecuencias de las claves en el corpus de referencia</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>size</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: left;">Tamaño del corpus de referencia en palabras</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>missing</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;"><code>0.0</code></td>
+<td style="text-align: left;">Frecuencia de una clave que falta en <code>counts</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>key</code></td>
+<td style="text-align: center;">callable</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: left;">Clave de una palabra del corpus objetivo en <code>counts</code>, como su lema; <code>None</code> - la propia palabra</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>keep</code></td>
+<td style="text-align: center;">callable</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: left;">Si una palabra del corpus objetivo se cuenta; <code>None</code> - todas las palabras</td>
+</tr>
+</tbody>
+</table>
+<p>Las palabras del objetivo que <code>keep</code> deja pasar se cuentan bajo su <code>key</code>, y las que deja fuera tampoco cuentan en el tamaño del objetivo; las palabras clave negativas salen solo de las claves de <code>counts</code> que <code>keep</code> deja pasar. La frecuencia de una clave que falta en <code>counts</code> es <code>missing</code>: un diccionario da su frecuencia mínima, una cota superior de la real, así que esa palabra puede ser palabra clave positiva pero nunca negativa.</p>
+<p>El diccionario de frecuencias <code>FreqDict</code> de Google Books Ngram pasado como <code>reference</code> se convierte en una referencia así:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Campo</th>
+<th style="text-align: left;"><code>FreqDict</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>counts</code></td>
+<td style="text-align: left;">los ipm de <code>FreqDict.word_ipm</code>, incluidos los nombres propios, convertidos en apariciones en el corpus del diccionario</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>size</code></td>
+<td style="text-align: left;"><code>CORPUS_SIZE</code>, 63 000 millones de palabras de los libros de 1980-2019</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>missing</code></td>
+<td style="text-align: left;">la frecuencia mínima del diccionario, 0,1 ipm (unas 6300 apariciones)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>key</code></td>
+<td style="text-align: left;"><a href="../../datasets/freqdict/#lemma_key"><code>lemma_key</code></a>: una palabra clave puede llevar la etiqueta de otro lema, <em>Roma</em> se cuenta bajo <code>romo</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>keep</code></td>
+<td style="text-align: left;">las formas hechas de las letras de <code>WORD_PATTERN</code>; los números y las palabras con guion o con punto quedan fuera</td>
+</tr>
+</tbody>
+</table>
+<p>El corpus objetivo tiene que contarse como se contó el diccionario: formas con las palabras vacías, no lemas - <code>lemma_key</code> no es idempotente (<code>estado</code> - <code>estar</code>), así que <code>WordsExtractor(use_lexemes=True)</code> no sirve. El diccionario describe el registro de los libros, así que las palabras clave negativas de un texto son las de la prosa académica (<code>de</code>, <code>social</code>, <code>país</code>).</p>
 <h2 id="resultado">Resultado<a class="headerlink" href="#resultado" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/keyness.md:Keyword 33ab9a7 -->
 <p>Una lista de tuplas con nombre <code>Keyword</code> por orden descendente de clave (los empates por frecuencia descendente y alfabéticamente, las palabras de medida indefinida al final); <code>pd.DataFrame(keywords)</code> da una tabla.</p>
 <table>
 <thead>

@@ -2501,8 +2501,9 @@
 <p><strong>ests.corpus.compare_corpora()</strong>, <strong>ests.corpus.compare_features()</strong>, <strong>ests.corpus.corpus_features()</strong>, <strong>ests.corpus.text_features()</strong>, <strong>ests.corpus.split_windows()</strong>, <strong>ests.corpus.sentence_rhythm()</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>Comparison of two corpora by every feature of a text at once: which statistics tell the corpora apart, and by how much. For single words <a href="../keyness/"><code>keyness</code></a> does the same, for the distances between texts - <a href="../stylometry/#delta"><code>delta</code></a>.</p>
-<p>The texts of both corpora are split into windows of about the same size, so that the features do not depend on the length of a text. In <code>split_windows</code> the number of windows is the ratio of the number of words to the size of a window rounded half up, at least one, and the parts are equal: at a window of 1000 a text of one to two windows gives windows of 750 to 1499 words, and a text shorter than <code>min_words</code> - half a window by default - gives none. A boundary goes before the opening marks of the first word of a window - dashes, quotes, brackets, <code>¿</code> and <code>¡</code> - while a straight quote or a dash glued to the end of the previous word stays with it (<code>"cuatro"</code>, <code>—dijo Juan—</code>). The features are computed for every window (<code>text_features</code> or a function of one's own), and for every feature the two sets of values are compared. The result is a <code>DataFrame</code> feature × statistics sorted by descending absolute Cliff's delta.</p>
+<p>Comparing two corpora feature by feature. Each corpus comes as a table of the features of its windows - texts split into parts of about the same size, so that the features do not depend on the length of the texts; a language library builds such tables from its texts. <code>compare_features(table_a, table_b, labels, n_bootstrap, seed)</code> compares the tables column by column and returns one row per feature, sorted by descending absolute Cliff's delta, the features without statistics last. The bootstrap resamples whole texts by the level <code>text</code> of the index of a table; a table without that level has every row taken for a text of its own. A column missing from one of the tables gives <code>nan</code>.</p>
+<p><code>compare_corpora</code> compares two corpora of Spanish texts by every feature of a text at once - which statistics tell the corpora apart, and by how much - with the <code>compare_features</code> of the <a href="https://sergeyshk.github.io/anyTS/corpus/compare/">anyTS</a> core. For single words <a href="../keyness/"><code>keyness</code></a> does the same, for the distances between texts - <a href="../stylometry/#delta"><code>delta</code></a>.</p>
+<p>In <code>split_windows</code> the number of windows is the ratio of the number of words to the size of a window rounded half up, at least one, and the parts are equal: at a window of 1000 a text of one to two windows gives windows of 750 to 1499 words, and a text shorter than <code>min_words</code> - half a window by default - gives none. A boundary goes before the opening marks of the first word of a window - dashes, quotes, brackets, <code>¿</code> and <code>¡</code> - while a straight quote or a dash glued to the end of the previous word stays with it (<code>"cuatro"</code>, <code>—dijo Juan—</code>). The features of every window are computed by <code>text_features</code> or a function of one's own.</p>
 <h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
 <p><code>text_features(text, nlp=None)</code> returns 132 features prefixed by their source:</p>
 <table>
@@ -2549,7 +2550,7 @@
 <p>Left out are the reading time, which only follows the number of words in a window, and the features that repeat others: the share of unique words (<code>diversity_ttr</code>), the words per sentence (<code>sents_mean</code>) and the markers of the moods (<code>morph_mood_*</code>).</p>
 <p>The parts of speech and the features of a single value - polarity, polite, poss, reflex - are shares of all the words (<code>morph_polarity_Neg</code> is the share of the negations), the other features shares of the words that carry them (<code>morph_mood_Sub</code> is the subjunctive among the moods). A value that does not occur in a window gives 0, a feature absent from the window altogether (no verbs - no tense) gives <code>nan</code>. A value of several values (<code>PronType=Int,Rel</code> of <em>que</em>) is shared equally among its parts, so the shares of a feature still sum to one.</p>
 <p>The morphology is parsed by the model <a href="../../installation/#model"><code>es_core_news_sm</code></a> without its parser, so the marker <code>morph_p_ser</code>, which reads the copulas from the dependencies, is left out; a pipeline passed in <code>nlp</code> runs whole but for the entity recognizer, so <code>functools.partial(text_features, nlp=get_nlp())</code> brings the parser and <code>morph_p_ser</code> back, and another model goes into the comparison the same way. A text longer than the <code>max_length</code> of the pipeline raises <code>SourceError</code>, so a novel is compared by windows and not whole.</p>
-<p><code>corpus_features(texts, window, features)</code> returns the matrix of the features of the windows indexed by (number of the text, number of the window) - for classifiers of one's own - and <code>compare_features(table_a, table_b, labels, n_bootstrap, seed)</code> compares two such tables: <code>compare_corpora</code> is <code>corpus_features</code> for each corpus followed by <code>compare_features</code>, and the split lets the features of several corpora be computed once and compared in pairs.</p>
+<p><code>corpus_features(texts, window, features)</code> returns the matrix of the features of the windows indexed by (number of the text, number of the window), for classifiers of one's own as well; the level <code>text</code> of the index is what the bootstrap of <code>compare_features</code> resamples. <code>compare_corpora</code> is <code>corpus_features</code> for each corpus followed by <code>compare_features</code>, and the split lets the features of several corpora be computed once and compared in pairs.</p>
 <p>The shares of spaces, letters and punctuation marks (<code>basic_p_spaces</code>, <code>basic_p_letters</code>, <code>basic_p_punctuations</code>) count the characters as they are: indents, double and non-breaking spaces of the files reflect the typesetting of an edition and not the text. In a corpus from different sources collapse them beforehand, for instance with <code>re.sub(r"[^\S\n]+", " ", text)</code>.</p>
 <h2 id="statistics">Statistics<a class="headerlink" href="#statistics" title="Permanent link">&para;</a></h2>
 <p>For a feature with the values <span class="arithmatex">\(x_1 \dots x_{n_A}\)</span> in corpus A and <span class="arithmatex">\(y_1 \dots y_{n_B}\)</span> in corpus B (undefined and infinite values dropped; with fewer than two values on a side - <code>nan</code>):</p>
@@ -2599,12 +2600,13 @@
 </tr>
 </tbody>
 </table>
-<p>Cliff's delta and the AUC come from the same U statistic and agree with each other; Cohen's d is sensitive to outliers and to departures from normality, so it is best read next to the delta.</p>
+<p>The names of the columns are <code>COMPARISON_COLUMNS</code>, with <code>A</code> and <code>B</code> replaced by the labels of the corpora. Cliff's delta and the AUC come from the same U statistic and agree with each other; Cohen's d is sensitive to outliers and to departures from normality, so it is best read next to the delta.</p>
 <div class="admonition warning">
 <p class="admonition-title">Windows of one text are not independent</p>
-<p>The test and the effect sizes take every window for an independent observation, and the windows of one text are not. With few texts in a corpus the p-values are too small and reflect the texts chosen as much as the corpora - in the example below two novels of one author differ in 32 features by the same test. The bootstrap resamples whole texts instead, the level <code>text</code> of the index that <code>corpus_features</code> sets (a cluster bootstrap), so its interval accounts for the spread between the texts; it needs at least two texts on each side and is rough with only a few. A table of one's own without that level has every row taken for a text of its own.</p>
+<p>The test and the effect sizes take every window for an independent observation, and the windows of one text are not. With few texts in a corpus the p-values are too small and reflect the texts chosen as much as the corpora. The bootstrap resamples whole texts instead (a cluster bootstrap), so its interval accounts for the spread between the texts; it needs at least two texts on each side and is rough with only a few.</p>
 </div>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
+<p>Parameters of <code>compare_corpora</code>:</p>
 <table>
 <thead>
 <tr>
@@ -2640,6 +2642,37 @@
 <td style="text-align: center;">Function of the features of a text; <code>None</code> - <code>text_features</code></td>
 </tr>
 <tr>
+<td style="text-align: center;"><code>min_words</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Smallest number of words in a window; <code>None</code> - half a window, or one when <code>window</code> is <code>None</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>labels</code>, <code>n_bootstrap</code> and <code>seed</code> go on to <code>compare_features</code>, whose parameters are:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>table_a</code></td>
+<td style="text-align: center;">DataFrame</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Features of the windows of the first corpus, one row per window</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>table_b</code></td>
+<td style="text-align: center;">DataFrame</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Features of the windows of the second corpus</td>
+</tr>
+<tr>
 <td style="text-align: center;"><code>labels</code></td>
 <td style="text-align: center;">tuple[str, str]</td>
 <td style="text-align: center;"><code>("A", "B")</code></td>
@@ -2656,12 +2689,6 @@
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>0</code></td>
 <td style="text-align: center;">Seed of the random number generator; <code>None</code> - a random one</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>min_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Smallest number of words in a window; <code>None</code> - half a window, or one when <code>window</code> is <code>None</code></td>
 </tr>
 </tbody>
 </table>
@@ -2735,7 +2762,7 @@ diversity_yule_k<span class="w">              </span><span class="m">104</span>.
 </code></pre></div>
 </div>
 <p>Galdós has the richer vocabulary: the measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Yule's K, which weighs the frequent words, gives a small effect (0.32), so the difference lies mostly in the rare vocabulary. His words and sentences are longer, with nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue: two and a half times as many dashes per 1000 words, three times as many exclamation marks, and more negations.</p>
-<p>The p-values take the 274 windows of six novels for independent (see the warning above); the interval of the difference of the medians resamples whole novels and is the safer guide - for the length of a sentence it spans 3.1 to 7.2 words, where the windows alone would give 3.8 to 6.3.</p>
+<p>The p-values take the 274 windows of six novels for independent (see the warning above), and by the same test two novels of one author differ in 32 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.1 to 7.2 words, where the windows alone would give 3.8 to 6.3.</p>
 <p>Features of one's own, for instance the syntactic ones, are passed as a function:</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>

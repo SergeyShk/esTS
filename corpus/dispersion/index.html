@@ -2503,7 +2503,8 @@
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
 <p>The dispersion of a word is how evenly it is spread over the parts of a text or of a corpus. Frequency does not tell a word that occurs once in every chapter from a word gathered in one of them; the measures of dispersion (<a href="https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf">Gries 2008</a>, <a href="https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf">2020</a>) complement frequency.</p>
 <p>The text is split into parts: <code>parts</code> is the number of parts of about equal size or the sizes of the parts in order (sentences, paragraphs, chapters, documents of a corpus), which add up to the number of words. For every word its frequencies by part and six measures are computed; Gries recommends DP as the main one.</p>
-<p>Words are compared as they are: case and lemmatization belong to <a href="../../extractors/words/"><code>WordsExtractor</code></a>.</p>
+<p>Words are compared as they are: case and lemmatization belong to the word extractor.</p>
+<p>The module <code>ests.corpus.dispersion</code> re-exports the function and the measures of the <a href="https://sergeyshk.github.io/anyTS/corpus/dispersion/">anyTS</a> core (<code>from ests.corpus.dispersion import calc_dp</code>). Words are extracted with <a href="../../extractors/words/"><code>WordsExtractor</code></a>.</p>
 <h2 id="measures">Measures<a class="headerlink" href="#measures" title="Permanent link">&para;</a></h2>
 <p>For <span class="arithmatex">\(n\)</span> parts of shares <span class="arithmatex">\(s_i\)</span> of the text, frequencies of the word by part <span class="arithmatex">\(v_i\)</span> and a total frequency <span class="arithmatex">\(f = \sum v_i\)</span>; <span class="arithmatex">\(p_i = v_i / n_i\)</span> is the relative frequency in a part of size <span class="arithmatex">\(n_i\)</span>:</p>
 <table>
@@ -2520,7 +2521,7 @@
 <td style="text-align: left;">Deviation of proportions DP</td>
 <td style="text-align: left;"><code>dp</code></td>
 <td style="text-align: left;"><span class="arithmatex">\(\frac{1}{2} \sum \left\lvert \frac{v_i}{f} - s_i \right\rvert\)</span></td>
-<td style="text-align: left;">0 - in proportion to the sizes of the parts, tends to 1 - in one part; Gries (2008)</td>
+<td style="text-align: left;">0 - in proportion to the sizes of the parts, <span class="arithmatex">\(1 - s_i\)</span> - all in part <span class="arithmatex">\(i\)</span>, so at most <span class="arithmatex">\(1 - \min s_i\)</span>; Gries (2008)</td>
 </tr>
 <tr>
 <td style="text-align: left;">Normalized DP</td>
@@ -2532,7 +2533,7 @@
 <td style="text-align: left;">Juilland's D</td>
 <td style="text-align: left;"><code>juilland_d</code></td>
 <td style="text-align: left;"><span class="arithmatex">\(1 - \frac{V}{\sqrt{n - 1}}\)</span>, <span class="arithmatex">\(V = \frac{\sigma(p)}{\mu(p)}\)</span></td>
-<td style="text-align: left;">1 - even, 0 - in one part; Juilland and Chang-Rodríguez (1964)</td>
+<td style="text-align: left;">1 - even, 0 - in one part; Juilland and Chang-Rodríguez (1964), with the population standard deviation <span class="arithmatex">\(\sigma\)</span> as in Gries (2020); Gries (2008) takes the sample one</td>
 </tr>
 <tr>
 <td style="text-align: left;">Carroll's D2</td>
@@ -2554,7 +2555,7 @@
 </tr>
 </tbody>
 </table>
-<p>The measures are available as the functions <code>calc_dp</code>, <code>calc_dp_norm</code>, <code>calc_juilland_d</code>, <code>calc_carroll_d2</code>, <code>calc_rosengren_s</code>, <code>calc_kl_divergence</code> with the arguments <code>(frequencies, sizes)</code> - the frequencies of the word by part and the sizes of the parts - of the module <code>ests.corpus.dispersion</code> (<code>from ests.corpus.dispersion import calc_dp</code>); their names are in <code>ests.constants.DISPERSION_STATS_DESC</code>. For a word of zero frequency every measure is <code>nan</code>.</p>
+<p>The measures are available as the functions <code>calc_dp</code>, <code>calc_dp_norm</code>, <code>calc_juilland_d</code>, <code>calc_carroll_d2</code>, <code>calc_rosengren_s</code> and <code>calc_kl_divergence</code> with the arguments <code>(frequencies, sizes)</code> - the frequencies of the word by part and the sizes of the parts - of the module <code>anyts.corpus.dispersion</code>; their names are in <code>anyts.constants.DISPERSION_STATS_DESC</code>. For a word of zero frequency every measure is <code>nan</code>.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

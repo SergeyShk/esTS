@@ -726,6 +726,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#language-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Language hooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2428,6 +2439,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#language-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Language hooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2491,10 +2513,12 @@
 <p><strong>ests.extractors.SentsExtractor</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A module for extracting sentences from a text. It allows using different tokenizers and setting the minimum and maximum length of extracted sentences.</p>
+<p>A class for extracting sentences from a text. It allows using different tokenizers and setting the minimum and maximum length of extracted sentences.</p>
+<h2 id="language-hooks">Language hooks<a class="headerlink" href="#language-hooks" title="Permanent link">&para;</a></h2>
+<p>The class extends the <code>SentsExtractor</code> of the <a href="https://sergeyshk.github.io/anyTS/extractors/sentences/">anyTS</a> core with the hook of Spanish: its default tokenizer, the method <code>sentenize(text)</code>, is the rule-based splitter <code>ests.utils.sentenize</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The default tokenizer is the rule-based function <code>sentenize</code> from <code>ests.utils</code>. A sentence ends with a period, an exclamation or question mark or an ellipsis, optionally followed by closing quotes or brackets, when the next word starts with an upper-case letter, a digit, an inverted mark <code>¿ ¡</code>, an opening quote or bracket or a dash; a blank line ends a sentence too. Abbreviations (<code>Sr.</code>, <code>Dra.</code>, <code>p. ej.</code>, <code>EE. UU.</code>, <code>a. m.</code>), capital initials (<code>J. L. Borges</code>) and list markers at the start of a sentence or a line (<code>1.</code>, <code>2.1.</code>, <code>IV.</code>) do not end a sentence, even before an upper-case word: <code>Llegó a las 5 p. m. Luego se fue.</code> stays one sentence. A lower-case word after an ellipsis or an exclamation mark continues the sentence, and a single line break does not split it, so hard-wrapped texts are handled. The sentences are returned without surrounding whitespace.</p>
+<p>A sentence ends with a period, an exclamation or question mark or an ellipsis, optionally followed by closing quotes or brackets, when the next word starts with an upper-case letter, a digit, an inverted mark <code>¿ ¡</code>, an opening quote or bracket or a dash; a blank line ends a sentence too. Abbreviations (<code>Sr.</code>, <code>Dra.</code>, <code>p. ej.</code>, <code>EE. UU.</code>, <code>a. m.</code>), capital initials (<code>J. L. Borges</code>) and list markers at the start of a sentence or a line (<code>1.</code>, <code>2.1.</code>, <code>IV.</code>) do not end a sentence, even before an upper-case word: <code>Llegó a las 5 p. m. Luego se fue.</code> stays one sentence. A lower-case word after an ellipsis or an exclamation mark continues the sentence, and a single line break does not split it, so hard-wrapped texts are handled.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -2515,26 +2539,29 @@
 <td style="text-align: center;"><code>tokenizer</code></td>
 <td style="text-align: center;">Pattern/Callable</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Tokenizer or regular expression</td>
+<td style="text-align: center;">Tokenizer or regular expression; by default the <code>sentenize</code> method</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>min_len</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Minimum length of an extracted sentence</td>
+<td style="text-align: center;">Minimum length of an extracted sentence, <code>0</code> for no bound</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>max_len</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Maximum length of an extracted sentence</td>
+<td style="text-align: center;">Maximum length of an extracted sentence, <code>0</code> for no bound</td>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A regular expression as the tokenizer is a separator: the text is split with <code>re.split</code>. The sentences of any tokenizer are stripped of whitespace at the edges, before the length bounds, and empty ones are dropped.</p>
+</div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
 <p>Extracts sentences from a text.</p>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>

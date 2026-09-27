@@ -2581,12 +2581,14 @@
 <p><strong>ests.diversity_stats.DiversityStats</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Módulo para calcular las principales métricas de <a href="https://en.wikipedia.org/wiki/Lexical_diversity">diversidad léxica</a> de un texto. La fuente de datos puede ser un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>.</p>
-<p>Las palabras pueden extraerse con un <a href="../../extractors/words/"><code>WordsExtractor</code></a> ya configurado; para un <code>Doc</code>, el extractor indicado se aplica a su texto, y sin él las palabras salen de sus tokens. Las palabras siempre se pasan a minúsculas, porque todas las métricas cuentan lexemas.</p>
+<!-- core: stats/diversity_stats.md:DiversityStats 2e4dbf8 -->
+<p>Clase para calcular las principales métricas de <a href="https://en.wikipedia.org/wiki/Lexical_diversity">diversidad léxica</a> de un texto a partir de sus palabras.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>Las métricas se calculan al acceder al atributo correspondiente o al llamar al método <code>get_stats</code> del objeto <code>DiversityStats</code>.</p>
 </div>
+<p>La clase extiende el <code>DiversityStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/diversity_stats/">anyTS</a>: en lugar de una lista de palabras recibe un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>.</p>
+<p>Las palabras pueden extraerse con un <a href="../../extractors/words/"><code>WordsExtractor</code></a> ya configurado; para un <code>Doc</code>, el extractor indicado se aplica a su texto, y sin él las palabras salen de sus tokens. Las palabras siempre se pasan a minúsculas, porque todas las métricas cuentan lexemas.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2642,13 +2644,16 @@
 </tr>
 </tbody>
 </table>
+<!-- core: stats/diversity_stats.md:check_params 07c0f60 -->
+<p>Los parámetros se comprueban con <code>check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)</code>, que lanza <code>ParameterError</code> si una ventana, un tamaño de muestra o una longitud mínima del factor están fuera de rango, si el umbral está fuera de (0, 1) o si la base del logaritmo no es mayor que 1; una biblioteca la llama antes de extraer las palabras, para que un parámetro erróneo se señale antes que un texto vacío.</p>
 <h2 id="conventions">Convenciones<a class="headerlink" href="#conventions" title="Permanent link">&para;</a></h2>
+<!-- core: stats/diversity_stats.md:DiversityStats-conventions b46d998 -->
 <p>Los valores de algunas métricas dependen de convenciones que difieren entre bibliotecas. Todas salvo la comparación con el umbral de MTLD son parámetros de la clase:</p>
 <table>
 <thead>
 <tr>
 <th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">esTS</th>
+<th style="text-align: center;">Por defecto</th>
 <th style="text-align: center;">Otras bibliotecas</th>
 </tr>
 </thead>
@@ -2676,7 +2681,7 @@
 <tr>
 <td style="text-align: center;">Longitud mínima del factor de MTLD</td>
 <td style="text-align: center;">10</td>
-<td style="text-align: center;">koRpus la aplica solo a MA-MTLD, LexicalRichness y textcomplexity no la aplican</td>
+<td style="text-align: center;">koRpus la aplica solo a MTLD-MA y descarta los factores más cortos en lugar de extenderlos, LexicalRichness y textcomplexity no la aplican</td>
 </tr>
 <tr>
 <td style="text-align: center;">Tamaño de la muestra de HD-D</td>
@@ -2687,6 +2692,7 @@
 </table>
 <p>Según Zenker y Kyle (2021), MATTR, MTLD y HD-D son estables en textos de 50-200 palabras o más, MTLD-W, MA-MTLD y Maas son inestables en textos cortos, y la familia de TTR nunca se estabiliza. Para comparar textos de distinta longitud use el <a href="#windowed">cálculo por ventanas</a> con intervalos de confianza.</p>
 <h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
+<!-- core: stats/diversity_stats.md:DiversityStats-attributes 2bd9615 -->
 <table>
 <thead>
 <tr>
@@ -2699,7 +2705,7 @@
 <tr>
 <td style="text-align: center;"><code>words</code></td>
 <td style="text-align: center;">tuple[str]</td>
-<td style="text-align: center;">Tupla de las palabras extraídas en minúsculas</td>
+<td style="text-align: center;">Tupla de las palabras</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>window_len</code>, <code>mtld_threshold</code>, <code>mtld_min_len</code>, <code>hdd_sample_size</code>, <code>log_base</code></td>
@@ -2884,6 +2890,7 @@
 </div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <h3 id="windowed">windowed<a class="headerlink" href="#windowed" title="Permanent link">&para;</a></h3>
+<!-- core: stats/diversity_stats.md:DiversityStats-windowed af6a479 -->
 <p>Cálculo por ventanas de una métrica por su nombre, como en <a href="../diversity_stats_funcs/#calc_windowed"><code>calc_windowed</code></a>: su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Los casos límite (textos cortos, valores <code>nan</code> e infinitos) se describen allí.</p>
 <p>Parámetros:</p>
 <table>
@@ -2936,6 +2943,7 @@
 </code></pre></div>
 </div>
 <h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
+<!-- core: stats/diversity_stats.md:DiversityStats-get_stats b65013e -->
 <p>Devuelve un diccionario con las métricas de diversidad léxica calculadas.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
@@ -2986,7 +2994,8 @@
 </code></pre></div>
 </div>
 <h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
-<p>Muestra una tabla con las métricas de diversidad léxica calculadas.</p>
+<!-- core: stats/diversity_stats.md:DiversityStats-print_stats be91444 -->
+<p>Muestra una tabla con las métricas de diversidad léxica calculadas, sus descripciones de <code>stats_desc</code> y los encabezados de <code>stats_headers</code>.</p>
 <p>El ejemplo continúa el anterior:</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>

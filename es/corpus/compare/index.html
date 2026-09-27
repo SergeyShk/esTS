@@ -2501,8 +2501,10 @@
 <p><strong>ests.corpus.compare_corpora()</strong>, <strong>ests.corpus.compare_features()</strong>, <strong>ests.corpus.corpus_features()</strong>, <strong>ests.corpus.text_features()</strong>, <strong>ests.corpus.split_windows()</strong>, <strong>ests.corpus.sentence_rhythm()</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Comparación de dos corpus por todos los rasgos de un texto a la vez: qué estadísticas distinguen los corpus y en qué medida. Para palabras sueltas hace lo mismo <a href="../keyness/"><code>keyness</code></a>, para las distancias entre textos, <a href="../stylometry/#delta"><code>delta</code></a>.</p>
-<p>Los textos de ambos corpus se dividen en ventanas de un tamaño parecido para que los rasgos no dependan de la longitud de un texto. En <code>split_windows</code> el número de ventanas es la razón del número de palabras al tamaño de una ventana redondeada al entero más próximo, al menos una, y las partes son iguales: con una ventana de 1000 un texto de una a dos ventanas da ventanas de 750 a 1499 palabras, y un texto más corto que <code>min_words</code> - media ventana por defecto - no da ninguna. Un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, <code>¿</code> y <code>¡</code> -, mientras que unas comillas rectas o una raya pegadas al final de la palabra anterior se quedan con ella (<code>"cuatro"</code>, <code>—dijo Juan—</code>). Los rasgos se calculan para cada ventana (<code>text_features</code> o una función propia), y para cada rasgo se comparan los dos conjuntos de valores. El resultado es un <code>DataFrame</code> rasgo × estadísticas ordenado por el valor absoluto descendente de la delta de Cliff.</p>
+<!-- core: corpus/compare.md:compare_features f0cc080 -->
+<p>Comparación de dos corpus rasgo por rasgo. Cada corpus llega como una tabla de los rasgos de sus ventanas - los textos divididos en partes de un tamaño parecido, para que los rasgos no dependan de la longitud de los textos -; una biblioteca de un idioma construye esas tablas a partir de sus textos. <code>compare_features(table_a, table_b, labels, n_bootstrap, seed)</code> compara las tablas columna por columna y devuelve una fila por rasgo, ordenadas por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel <code>text</code> del índice de una tabla; una tabla sin ese nivel toma cada fila por un texto aparte. Una columna que falta en una de las tablas da <code>nan</code>.</p>
+<p><code>compare_corpora</code> compara dos corpus de textos en español por todos los rasgos de un texto a la vez - qué estadísticas distinguen los corpus y en qué medida - con el <code>compare_features</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/compare/">anyTS</a>. Para palabras sueltas hace lo mismo <a href="../keyness/"><code>keyness</code></a>, para las distancias entre textos, <a href="../stylometry/#delta"><code>delta</code></a>.</p>
+<p>En <code>split_windows</code> el número de ventanas es la razón del número de palabras al tamaño de una ventana redondeada al entero más próximo, al menos una, y las partes son iguales: con una ventana de 1000 un texto de una a dos ventanas da ventanas de 750 a 1499 palabras, y un texto más corto que <code>min_words</code> - media ventana por defecto - no da ninguna. Un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, <code>¿</code> y <code>¡</code> -, mientras que unas comillas rectas o una raya pegadas al final de la palabra anterior se quedan con ella (<code>"cuatro"</code>, <code>—dijo Juan—</code>). Los rasgos de cada ventana los calcula <code>text_features</code> o una función propia.</p>
 <h2 id="rasgos">Rasgos<a class="headerlink" href="#rasgos" title="Permanent link">&para;</a></h2>
 <p><code>text_features(text, nlp=None)</code> devuelve 132 rasgos con un prefijo según su fuente:</p>
 <table>
@@ -2549,9 +2551,10 @@
 <p>Se dejan fuera el tiempo de lectura, que solo sigue el número de palabras de una ventana, y los rasgos que repiten otros: la proporción de palabras únicas (<code>diversity_ttr</code>), las palabras por oración (<code>sents_mean</code>) y los marcadores de los modos (<code>morph_mood_*</code>).</p>
 <p>Las categorías gramaticales y los rasgos de un solo valor - polaridad, cortesía, posesivo, reflexivo - son proporciones de todas las palabras (<code>morph_polarity_Neg</code> es la proporción de las negaciones), los demás rasgos, proporciones de las palabras que los llevan (<code>morph_mood_Sub</code> es el subjuntivo entre los modos). Un valor que no aparece en una ventana da 0; un rasgo ausente de la ventana por completo (sin verbos no hay tiempo) da <code>nan</code>. Un valor de varios valores (<code>PronType=Int,Rel</code> de <em>que</em>) se reparte a partes iguales entre sus partes, así que las proporciones de un rasgo siguen sumando uno.</p>
 <p>La morfología la analiza el modelo <a href="../../installation/#model"><code>es_core_news_sm</code></a> sin su analizador sintáctico, así que el marcador <code>morph_p_ser</code>, que lee las cópulas de las dependencias, se deja fuera; un pipeline pasado en <code>nlp</code> se ejecuta entero salvo el reconocedor de entidades, así que <code>functools.partial(text_features, nlp=get_nlp())</code> devuelve el analizador sintáctico y <code>morph_p_ser</code>, y otro modelo entra en la comparación del mismo modo. Un texto más largo que el <code>max_length</code> del pipeline lanza <code>SourceError</code>, así que una novela se compara por ventanas y no entera.</p>
-<p><code>corpus_features(texts, window, features)</code> devuelve la matriz de rasgos de las ventanas con el índice (número del texto, número de la ventana), para clasificadores propios, y <code>compare_features(table_a, table_b, labels, n_bootstrap, seed)</code> compara dos tablas así: <code>compare_corpora</code> es <code>corpus_features</code> para cada corpus seguido de <code>compare_features</code>, y la división permite calcular una vez los rasgos de varios corpus y compararlos por pares.</p>
+<p><code>corpus_features(texts, window, features)</code> devuelve la matriz de rasgos de las ventanas con el índice (número del texto, número de la ventana), también para clasificadores propios; el nivel <code>text</code> del índice es el que remuestrea el bootstrap de <code>compare_features</code>. <code>compare_corpora</code> es <code>corpus_features</code> para cada corpus seguido de <code>compare_features</code>, y la división permite calcular una vez los rasgos de varios corpus y compararlos por pares.</p>
 <p>Las proporciones de espacios, letras y signos de puntuación (<code>basic_p_spaces</code>, <code>basic_p_letters</code>, <code>basic_p_punctuations</code>) cuentan los caracteres tal cual: las sangrías, los espacios dobles y los de no separación de los archivos reflejan la composición de una edición y no el texto. En un corpus de fuentes distintas conviene colapsarlos antes, por ejemplo, con <code>re.sub(r"[^\S\n]+", " ", text)</code>.</p>
 <h2 id="estadisticas">Estadísticas<a class="headerlink" href="#estadisticas" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/compare.md:compare_features-statistics 63d4635 -->
 <p>Para un rasgo con los valores <span class="arithmatex">\(x_1 \dots x_{n_A}\)</span> en el corpus A y <span class="arithmatex">\(y_1 \dots y_{n_B}\)</span> en el corpus B (sin los valores indefinidos e infinitos; con menos de dos valores en un lado, <code>nan</code>):</p>
 <table>
 <thead>
@@ -2599,12 +2602,13 @@
 </tr>
 </tbody>
 </table>
-<p>La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.</p>
+<p>Los nombres de las columnas son <code>COMPARISON_COLUMNS</code>, con <code>A</code> y <code>B</code> sustituidas por las etiquetas de los corpus. La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.</p>
 <div class="admonition warning">
 <p class="admonition-title">Las ventanas de un texto no son independientes</p>
-<p>La prueba y los tamaños del efecto toman cada ventana por una observación independiente, y las ventanas de un texto no lo son. Con pocos textos en un corpus los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus: en el ejemplo de abajo dos novelas de un mismo autor difieren en 32 rasgos según la misma prueba. El bootstrap, en cambio, remuestrea textos enteros, el nivel <code>text</code> del índice que pone <code>corpus_features</code> (un bootstrap por conglomerados), así que su intervalo tiene en cuenta la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con solo unos pocos. Una tabla propia sin ese nivel toma cada fila por un texto aparte.</p>
+<p>La prueba y los tamaños del efecto toman cada ventana por una observación independiente, y las ventanas de un texto no lo son. Con pocos textos en un corpus los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus. El bootstrap, en cambio, remuestrea textos enteros (un bootstrap por conglomerados), así que su intervalo tiene en cuenta la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con solo unos pocos.</p>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<p>Parámetros de <code>compare_corpora</code>:</p>
 <table>
 <thead>
 <tr>
@@ -2640,6 +2644,38 @@
 <td style="text-align: center;">Función de los rasgos de un texto; <code>None</code> - <code>text_features</code></td>
 </tr>
 <tr>
+<td style="text-align: center;"><code>min_words</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Menor número de palabras de una ventana; <code>None</code> - media ventana, o una cuando <code>window</code> es <code>None</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>labels</code>, <code>n_bootstrap</code> y <code>seed</code> pasan a <code>compare_features</code>, cuyos parámetros son:</p>
+<!-- core: corpus/compare.md:compare_features-parameters 73b70e9 -->
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>table_a</code></td>
+<td style="text-align: center;">DataFrame</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Rasgos de las ventanas del primer corpus, una fila por ventana</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>table_b</code></td>
+<td style="text-align: center;">DataFrame</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Rasgos de las ventanas del segundo corpus</td>
+</tr>
+<tr>
 <td style="text-align: center;"><code>labels</code></td>
 <td style="text-align: center;">tuple[str, str]</td>
 <td style="text-align: center;"><code>("A", "B")</code></td>
@@ -2656,12 +2692,6 @@
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>0</code></td>
 <td style="text-align: center;">Semilla del generador de números aleatorios; <code>None</code> - una aleatoria</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>min_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Menor número de palabras de una ventana; <code>None</code> - media ventana, o una cuando <code>window</code> es <code>None</code></td>
 </tr>
 </tbody>
 </table>
@@ -2735,7 +2765,7 @@ diversity_yule_k<span class="w">              </span><span class="m">104</span>.
 </code></pre></div>
 </div>
 <p>Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto pequeño (0.32), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas por cada 1000 palabras, el triple de signos de exclamación, y más negaciones.</p>
-<p>Los valores p toman las 274 ventanas de seis novelas por independientes (véase la advertencia de arriba); el intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 7.2 palabras, donde las ventanas solas darían de 3.8 a 6.3.</p>
+<p>Los valores p toman las 274 ventanas de seis novelas por independientes (véase la advertencia de arriba), y según la misma prueba dos novelas de un mismo autor difieren en 32 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 7.2 palabras, donde las ventanas solas darían de 3.8 a 6.3.</p>
 <p>Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>

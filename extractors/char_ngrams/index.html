@@ -782,6 +782,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#language-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Language hooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2439,6 +2450,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#language-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Language hooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2513,12 +2535,10 @@
 <p><strong>ests.extractors.CharNgramsExtractor</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A module for extracting character N-grams from a text - sequences of N characters taken with a sliding window over the string. Character N-grams are a standard feature of stylometry and authorship attribution (Stamatatos 2009) and can replace words as the units of a text in measures such as Burrows's Delta.</p>
+<p>A class for extracting character N-grams from a text - sequences of N characters taken with a sliding window over the string. Character N-grams are a standard feature of stylometry and authorship attribution (Stamatatos 2009) and can replace words as the units of a text in measures such as Burrows's Delta.</p>
 <p>Whitespace runs are collapsed into a single space beforehand, punctuation marks are kept. With <code>within_words=True</code> N-grams do not cross word boundaries: the text is split into words by the tokenizer, punctuation is dropped, and words shorter than N yield no N-grams.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The default word tokenizer for <code>within_words</code> is the tokenizer of the <a href="https://github.com/explosion/spaCy">spaCy</a> Spanish language class (<code>ests.utils.tokenize</code>).</p>
-</div>
+<h2 id="language-hooks">Language hooks<a class="headerlink" href="#language-hooks" title="Permanent link">&para;</a></h2>
+<p>The class extends the <code>CharNgramsExtractor</code> of the <a href="https://sergeyshk.github.io/anyTS/extractors/char_ngrams/">anyTS</a> core with the hook of Spanish: its default word tokenizer for <code>within_words</code>, the method <code>tokenize(text)</code>, is the default tokenizer of <a href="../words/">WordsExtractor</a>, the rule-based tokenizer of the <a href="https://github.com/explosion/spaCy">spaCy</a> Spanish language class <code>ests.utils.tokenize</code>.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2552,7 +2572,7 @@
 <td style="text-align: center;"><code>tokenizer</code></td>
 <td style="text-align: center;">Pattern/Callable</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Word tokenizer for <code>within_words</code> or a regular expression</td>
+<td style="text-align: center;">Word tokenizer for <code>within_words</code> or a regular expression; by default the <code>tokenize</code> method</td>
 </tr>
 </tbody>
 </table>
@@ -2596,25 +2616,11 @@
 </code></pre></div>
 </div>
 <h3 id="get_most_common">get_most_common<a class="headerlink" href="#get_most_common" title="Permanent link">&para;</a></h3>
-<p>Returns the most frequent N-grams of the last extraction.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Number of N-grams</td>
-</tr>
-</tbody>
-</table>
+<p>Returns a counter of the top N-grams of the text. It takes the number of top N-grams to return as a parameter.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The method must be called after N-grams have been extracted with <code>extract</code>.</p>
+</div>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <div class="highlight"><pre><span></span><code><span class="n">ce</span> <span class="o">=</span> <span class="n">CharNgramsExtractor</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

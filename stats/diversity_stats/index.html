@@ -2581,12 +2581,13 @@
 <p><strong>ests.diversity_stats.DiversityStats</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A module for computing the main <a href="https://en.wikipedia.org/wiki/Lexical_diversity">lexical diversity</a> metrics of a text. The data source can be either a text or a <code>Doc</code> object of the <a href="https://github.com/explosion/spaCy">spaCy</a> library.</p>
-<p>The words can be extracted by a pre-built <a href="../../extractors/words/"><code>WordsExtractor</code></a>; for a <code>Doc</code> a given extractor is applied to its text, without one the words come from its tokens. The words are always lower-cased, since every metric counts lexemes.</p>
+<p>A class for computing the main <a href="https://en.wikipedia.org/wiki/Lexical_diversity">lexical diversity</a> metrics of a text from its words.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The metrics are computed by accessing the corresponding attribute or by calling the <code>get_stats</code> method of the <code>DiversityStats</code> object.</p>
 </div>
+<p>The class extends the <code>DiversityStats</code> of the <a href="https://sergeyshk.github.io/anyTS/stats/diversity_stats/">anyTS</a> core: instead of a list of words it takes a text or a <code>Doc</code> object of the <a href="https://github.com/explosion/spaCy">spaCy</a> library.</p>
+<p>The words can be extracted by a pre-built <a href="../../extractors/words/"><code>WordsExtractor</code></a>; for a <code>Doc</code> a given extractor is applied to its text, without one the words come from its tokens. The words are always lower-cased, since every metric counts lexemes.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2642,13 +2643,14 @@
 </tr>
 </tbody>
 </table>
+<p>The parameters are checked by <code>check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)</code>, which raises <code>ParameterError</code> for a window, a sample size or a minimum factor length out of range, a threshold outside (0, 1) or a logarithm base not above 1; a library calls it before extracting the words, so that a wrong parameter is reported before an empty text.</p>
 <h2 id="conventions">Conventions<a class="headerlink" href="#conventions" title="Permanent link">&para;</a></h2>
 <p>The values of some metrics depend on conventions that differ between libraries. All of them except the comparison with the MTLD threshold are class parameters:</p>
 <table>
 <thead>
 <tr>
 <th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">esTS</th>
+<th style="text-align: center;">Default</th>
 <th style="text-align: center;">Other libraries</th>
 </tr>
 </thead>
@@ -2676,7 +2678,7 @@
 <tr>
 <td style="text-align: center;">Minimum MTLD factor length</td>
 <td style="text-align: center;">10</td>
-<td style="text-align: center;">koRpus applies it only to MA-MTLD, LexicalRichness and textcomplexity do not apply it</td>
+<td style="text-align: center;">koRpus applies it only to MTLD-MA and drops the shorter factors instead of extending them, LexicalRichness and textcomplexity do not apply it</td>
 </tr>
 <tr>
 <td style="text-align: center;">HD-D sample size</td>
@@ -2699,7 +2701,7 @@
 <tr>
 <td style="text-align: center;"><code>words</code></td>
 <td style="text-align: center;">tuple[str]</td>
-<td style="text-align: center;">Tuple of extracted words in lower case</td>
+<td style="text-align: center;">Tuple of the words</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>window_len</code>, <code>mtld_threshold</code>, <code>mtld_min_len</code>, <code>hdd_sample_size</code>, <code>log_base</code></td>
@@ -2986,7 +2988,7 @@
 </code></pre></div>
 </div>
 <h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
-<p>Prints a table with the computed lexical diversity metrics.</p>
+<p>Prints a table with the computed lexical diversity metrics, their descriptions from <code>stats_desc</code> and the headers from <code>stats_headers</code>.</p>
 <p>The example continues the previous one:</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>

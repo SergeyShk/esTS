@@ -3283,7 +3283,7 @@
 <p>A logarithmic modification of TTR (Summer, 1966).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The value depends on the logarithm base, 10 by default. See <a href="../diversity_stats/#conventions">conventions</a>.</p>
+<p>The value depends on the logarithm base, 10 by default. See <a href="../diversity_stats/#conventions">conventions</a>. For a text of one lexeme the numerator is undefined, and for a text of no more words than the base the denominator <span class="arithmatex">\(\log \log N\)</span> is zero or negative, so the value is <code>nan</code> there, and so is every window of <code>calc_windowed</code> that short.</p>
 </div>
 <p>Formula:</p>
 <div class="arithmatex">\[
@@ -3358,10 +3358,10 @@
 <p><strong>ests.diversity_stats.calc_dttr()</strong></p>
 </div>
 <p>Computation of the Dugast Type-Token Ratio (DTTR).</p>
-<p>A logarithmic modification of TTR (Dugast, 1978).</p>
+<p>A logarithmic modification of TTR (Dugast, 1978), the reciprocal of the Maas metric.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The value depends on the logarithm base, 10 by default. See <a href="../diversity_stats/#conventions">conventions</a>.</p>
+<p>The value depends on the logarithm base, 10 by default. See <a href="../diversity_stats/#conventions">conventions</a>. A text without repeated words has an infinite value, like the other reciprocal measures.</p>
 </div>
 <p>Formula:</p>
 <div class="arithmatex">\[
@@ -3527,7 +3527,7 @@
 <p><strong>ests.diversity_stats.calc_mamtld()</strong></p>
 </div>
 <p>Computation of the Moving Average Measure of Textual Lexical Diversity (MA-MTLD).</p>
-<p>A moving-window modification of MTLD (koRpus MTLD-MA): a factor starts at every position of the text, the value is the mean length of completed factors over two passes, forward and backward. Factors not completed by the end of the text are ignored.</p>
+<p>A moving-window modification of MTLD after MTLD-MA of koRpus: a factor starts at every position of the text, the value is the mean length of completed factors over two passes, forward and backward. Factors not completed by the end of the text are ignored. The values differ from those of koRpus, which makes the forward pass only, closes a factor at TTR strictly below the threshold and drops the factors shorter than its minimum length instead of extending them to it.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>If no factor completes, the function returns <code>nan</code>. The metric is unstable on short texts.</p>
@@ -3609,13 +3609,7 @@
 <p><strong>ests.diversity_stats.calc_hdd()</strong></p>
 </div>
 <p>Computation of the Hypergeometric Distribution D (HD-D).</p>
-<p>The most reliable implementation of the VocD algorithm (McCarthy &amp; Jarvis, 2010).</p>
-<p>Algorithm:</p>
-<ol>
-<li>Random sampling of segments of 32 to 50 words from the text</li>
-<li>Computing TTR for every segment</li>
-<li>Averaging the values</li>
-</ol>
+<p>An alternative to vocd-D (McCarthy &amp; Jarvis, 2010): instead of drawing random segments of the text, it computes the expected TTR of a random sample of <code>sample_size</code> words exactly. For every lexeme the hypergeometric distribution gives the probability that the sample holds it at least once; the sum of these probabilities is the expected number of lexemes in the sample, and HD-D is that number divided by the sample size. The value involves no randomness.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>For texts shorter than 50 words and shorter than the sample size the metric is undefined; the function returns <code>nan</code>.</p>
@@ -3641,7 +3635,7 @@
 <td style="text-align: center;"><code>sample_size</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>42</code></td>
-<td style="text-align: center;">Segment length, 35 to 50 in the literature</td>
+<td style="text-align: center;">Sample size in words, 35 to 50 in the literature</td>
 </tr>
 </tbody>
 </table>
@@ -4254,7 +4248,7 @@ H = -\sum_k p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_heaps_beta()</strong>, <strong>ests.diversity_stats.fit_heaps()</strong>, <strong>ests.diversity_stats.vocabulary_growth()</strong></p>
 </div>
-<p>Computation of the exponent <span class="arithmatex">\(\beta\)</span> of <a href="https://en.wikipedia.org/wiki/Heaps'_law">Heaps' law</a> <span class="arithmatex">\(V(N) = K \cdot N^{\beta}\)</span>, which describes vocabulary growth with text length. Estimated by linear regression of log vocabulary size on log text length along the vocabulary growth curve (<code>vocabulary_growth</code> - the vocabulary size after every word). On corpora of millions of words <span class="arithmatex">\(\beta\)</span> lies within 0.4-0.6; over the growth curve of a single text it is higher (0.6-0.9), so the values are comparable only between texts of similar length. <code>fit_heaps</code> returns a <code>HeapsFit</code> named tuple with both parameters <code>k</code>, <code>beta</code> and the coefficient of determination <code>r2</code>.</p>
+<p>Computation of the exponent <span class="arithmatex">\(\beta\)</span> of <a href="https://en.wikipedia.org/wiki/Heaps'_law">Heaps' law</a> <span class="arithmatex">\(V(N) = K \cdot N^{\beta}\)</span>, which describes vocabulary growth with text length. Estimated by linear regression of log vocabulary size on log text length along the vocabulary growth curve. On corpora of millions of words <span class="arithmatex">\(\beta\)</span> lies within 0.4-0.6; over the growth curve of a single text it is higher (0.6-0.9), so the values are comparable only between texts of similar length.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The value depends on word order and needs several hundred words or more. For texts shorter than two words the function returns <code>nan</code>.</p>
@@ -4278,6 +4272,8 @@ H = -\sum_k p_k \log_2 p_k
 </tr>
 </tbody>
 </table>
+<p><code>vocabulary_growth</code> returns the vocabulary growth curve: the vocabulary size after every word of the text.</p>
+<p><code>fit_heaps</code> fits the law over this curve and returns a <code>HeapsFit</code> named tuple with the parameters <code>k</code>, <code>beta</code> and the coefficient of determination <code>r2</code>.</p>
 <h2 id="calc_windowed">Windowed computation<a class="headerlink" href="#calc_windowed" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_windowed()</strong></p>

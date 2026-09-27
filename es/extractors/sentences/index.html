@@ -726,6 +726,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ganchos-del-idioma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ganchos del idioma
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2428,6 +2439,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ganchos-del-idioma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ganchos del idioma
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2491,16 +2513,20 @@
 <p><strong>ests.extractors.SentsExtractor</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Módulo para extraer oraciones de un texto. Permite usar distintos tokenizadores y fijar la longitud mínima y máxima de las oraciones extraídas.</p>
+<!-- core: extractors/sentences.md:SentsExtractor 491dff1 -->
+<p>Clase para extraer oraciones de un texto. Permite usar distintos tokenizadores y fijar la longitud mínima y máxima de las oraciones extraídas.</p>
+<h2 id="ganchos-del-idioma">Ganchos del idioma<a class="headerlink" href="#ganchos-del-idioma" title="Permanent link">&para;</a></h2>
+<p>La clase extiende el <code>SentsExtractor</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/extractors/sentences/">anyTS</a> con el gancho del español: su tokenizador por defecto, el método <code>sentenize(text)</code>, es el divisor por reglas <code>ests.utils.sentenize</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>El tokenizador por defecto es la función <code>sentenize</code> de <code>ests.utils</code>, basada en reglas. Una oración termina con un punto, un signo de exclamación o de interrogación o unos puntos suspensivos, seguidos opcionalmente de comillas o paréntesis de cierre, cuando la palabra siguiente empieza por mayúscula, cifra, signo de apertura <code>¿ ¡</code>, comilla o paréntesis de apertura o raya; una línea en blanco también cierra la oración. Las abreviaturas (<code>Sr.</code>, <code>Dra.</code>, <code>p. ej.</code>, <code>EE. UU.</code>, <code>a. m.</code>), las iniciales (<code>J. L. Borges</code>) y los marcadores de lista al principio de la oración o de la línea (<code>1.</code>, <code>2.1.</code>, <code>IV.</code>) no cierran la oración, ni siquiera ante una mayúscula: <code>Llegó a las 5 p. m. Luego se fue.</code> queda como una sola oración. Una palabra en minúscula tras puntos suspensivos o signo de exclamación continúa la oración, y un salto de línea simple no la divide, así que los textos con líneas cortadas se tratan bien. Las oraciones se devuelven sin espacios en los extremos.</p>
+<p>Una oración termina con un punto, un signo de exclamación o de interrogación o unos puntos suspensivos, seguidos opcionalmente de comillas o paréntesis de cierre, cuando la palabra siguiente empieza por mayúscula, cifra, signo de apertura <code>¿ ¡</code>, comilla o paréntesis de apertura o raya; una línea en blanco también cierra la oración. Las abreviaturas (<code>Sr.</code>, <code>Dra.</code>, <code>p. ej.</code>, <code>EE. UU.</code>, <code>a. m.</code>), las iniciales (<code>J. L. Borges</code>) y los marcadores de lista al principio de la oración o de la línea (<code>1.</code>, <code>2.1.</code>, <code>IV.</code>) no cierran la oración, ni siquiera ante una mayúscula: <code>Llegó a las 5 p. m. Luego se fue.</code> queda como una sola oración. Una palabra en minúscula tras puntos suspensivos o signo de exclamación continúa la oración, y un salto de línea simple no la divide, así que los textos con líneas cortadas se tratan bien.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>Se puede pasar un pipeline de spaCy como tokenizador: <code>tokenizer=lambda text: (sent.text for sent in nlp(text).sents)</code>.</p>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<!-- core: extractors/sentences.md:SentsExtractor-parameters 09bcb84 -->
 <table>
 <thead>
 <tr>
@@ -2515,26 +2541,30 @@
 <td style="text-align: center;"><code>tokenizer</code></td>
 <td style="text-align: center;">Pattern/Callable</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Tokenizador o expresión regular</td>
+<td style="text-align: center;">Tokenizador o expresión regular; por defecto, el método <code>sentenize</code></td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>min_len</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Longitud mínima de la oración extraída</td>
+<td style="text-align: center;">Longitud mínima de la oración extraída, <code>0</code> sin límite</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>max_len</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Longitud máxima de la oración extraída</td>
+<td style="text-align: center;">Longitud máxima de la oración extraída, <code>0</code> sin límite</td>
 </tr>
 </tbody>
 </table>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Una expresión regular como tokenizador es un separador: el texto se divide con <code>re.split</code>. A las oraciones de cualquier tokenizador se les quitan los espacios de los extremos antes de aplicar los límites de longitud, y las vacías se descartan.</p>
+</div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
+<!-- core: extractors/sentences.md:SentsExtractor-extract 6c0a509 -->
 <p>Extrae las oraciones de un texto.</p>
-<p>Parámetros:</p>
 <table>
 <thead>
 <tr>

@@ -754,6 +754,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#language-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Language hooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2439,6 +2450,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#language-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Language hooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2513,14 +2535,38 @@
 <p><strong>ests.extractors.WordsExtractor</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A module for extracting words from a text. It allows using different tokenizers, filtering stop words, numbers and punctuation, lemmatizing, building N-grams, and setting the minimum and maximum length of extracted words.</p>
+<p>A class for extracting words from a text. It allows using different tokenizers, filtering stop words, numbers and punctuation, lemmatizing, building N-grams, and setting the minimum and maximum length of extracted words.</p>
+<h2 id="language-hooks">Language hooks<a class="headerlink" href="#language-hooks" title="Permanent link">&para;</a></h2>
+<p>The class extends the <code>WordsExtractor</code> of the <a href="https://sergeyshk.github.io/anyTS/extractors/words/">anyTS</a> core with the hooks of Spanish:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Hook</th>
+<th style="text-align: center;">Spanish</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>tokenize(text)</code></td>
+<td style="text-align: center;">the rule-based tokenizer of the spaCy Spanish language class, <code>ests.utils.tokenize</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>lemmatize(word)</code></td>
+<td style="text-align: center;">the lemmas of simplemma, <code>ests.utils.lemmatize</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>number_pattern</code></td>
+<td style="text-align: center;">signed numbers, ranges, fractions, dates, times, percentages and ordinals: <code>-5</code>, <code>+7</code>, <code>1990-1995</code>, <code>1.500,50</code>, <code>12/03/2020</code>, <code>3:30</code>, <code>10%</code>, <code>3.º</code>, <code>1.ª</code>, <code>2do</code></td>
+</tr>
+</tbody>
+</table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The default tokenizer is the rule-based tokenizer of the <a href="https://github.com/explosion/spaCy">spaCy</a> Spanish language class (<code>ests.utils.tokenize</code>); it needs no trained model. Punctuation marks, including <code>¿</code> and <code>¡</code>, numbers like <code>1.500,50</code>, <code>3.º</code>, <code>1990-1995</code> and abbreviations like <code>Sr.</code>, <code>EE. UU.</code> are single tokens; words with enclitic pronouns (<code>dámelo</code>) are not split. The dashes of a dialogue glued to the words are split off: <code>--No</code>, <code>sí--dijo</code>, <code>―dijo él―.</code> give the words <code>No</code>, <code>sí</code>, <code>dijo</code>, <code>él</code>, also next to the underscores of italics (<code>--_Siguro_</code>), while a hyphen between letters (<code>franco-alemán</code>) or before a digit (<code>-5</code>) stays in its token; a suffix quoted with its hyphen (<code>-mente</code>) loses it as well, and so does the number of an item of a list (<code>Artículo 1.- El objeto</code> gives the number <code>1</code>). <code>ests.utils.add_dash_rules(nlp)</code> adds the same rules to the ones a spaCy pipeline of one's own has; the model of <code>get_nlp</code> has them already, and the <a href="../../components/">components</a> of the library add them to their pipeline.</p>
+<p>The tokenizer needs no trained model. Punctuation marks, including <code>¿</code> and <code>¡</code>, numbers like <code>1.500,50</code>, <code>3.º</code>, <code>1990-1995</code> and abbreviations like <code>Sr.</code>, <code>EE. UU.</code> are single tokens; words with enclitic pronouns (<code>dámelo</code>) are not split. The dashes of a dialogue glued to the words are split off: <code>--No</code>, <code>sí--dijo</code>, <code>―dijo él―.</code> give the words <code>No</code>, <code>sí</code>, <code>dijo</code>, <code>él</code>, also next to the underscores of italics (<code>--_Siguro_</code>), while a hyphen between letters (<code>franco-alemán</code>) or before a digit (<code>-5</code>) stays in its token; a suffix quoted with its hyphen (<code>-mente</code>) loses it as well, and so does the number of an item of a list (<code>Artículo 1.- El objeto</code> gives the number <code>1</code>). <code>ests.utils.add_dash_rules(nlp)</code> adds the same rules to the ones a spaCy pipeline of one's own has; the model of <code>get_nlp</code> has them already, and the <a href="../../components/">components</a> of the library add them to their pipeline.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Lemmas come from <a href="https://github.com/adbar/simplemma">simplemma</a> (<code>ests.utils.lemmatize</code>), which works from a dictionary without a trained model: a known form is mapped to its lower-case lemma (<code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>), an unknown form is returned unchanged (<code>Madrid</code>, <code>dámelo</code>).</p>
+<p><a href="https://github.com/adbar/simplemma">simplemma</a> works from a dictionary without a trained model: a known form is mapped to its lower-case lemma (<code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>), an unknown form is returned unchanged (<code>Madrid</code>, <code>dámelo</code>).</p>
 </div>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
@@ -2537,7 +2583,7 @@
 <td style="text-align: center;"><code>tokenizer</code></td>
 <td style="text-align: center;">Pattern/Callable</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Tokenizer or regular expression</td>
+<td style="text-align: center;">Tokenizer or regular expression; by default the <code>tokenize</code> method</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>filter_punct</code></td>
@@ -2549,13 +2595,13 @@
 <td style="text-align: center;"><code>filter_nums</code></td>
 <td style="text-align: center;">bool</td>
 <td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Filter numbers, including signed numbers, ranges, fractions, dates, times, percentages and ordinals (-5, +7, 1990-1995, 1.500,50, 12/03/2020, 3:30, 10%, 3.º, 1.ª, 2do)</td>
+<td style="text-align: center;">Filter numbers matched by <code>number_pattern</code></td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>use_lexemes</code></td>
 <td style="text-align: center;">bool</td>
 <td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Use word lemmas</td>
+<td style="text-align: center;">Use word lemmas of the <code>lemmatize</code> method</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>stopwords</code></td>
@@ -2579,19 +2625,23 @@
 <td style="text-align: center;"><code>min_len</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Minimum length of an extracted word</td>
+<td style="text-align: center;">Minimum length of an extracted word, <code>0</code> for no bound</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>max_len</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Maximum length of an extracted word</td>
+<td style="text-align: center;">Maximum length of an extracted word, <code>0</code> for no bound</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The filters are applied in order: punctuation, numbers, lemmatization, lower case, stop words, word length. A lower-case stop word list also filters <code>Los</code> or <code>La</code> at the start of a sentence. A punctuation mark is a token consisting entirely of marks and symbols, including multi-character ones: <code>?!</code>, <code>--</code>, <code>…</code>, <code>€</code>. Empty tokens are dropped before the filters. A ready stop word list is <code>spacy.lang.es.stop_words.STOP_WORDS</code>; note that it also holds frequent verbs like <code>tener</code>.</p>
+<p>A regular expression as the tokenizer is a separator: the text is split with <code>re.split</code>. The filters are applied in order: punctuation, numbers, lemmatization, lower case, stop words, word length. A lower-case stop word list also filters a capitalized word at the start of a sentence. A punctuation mark is a token consisting entirely of marks and symbols, including multi-character ones: <code>?!</code>, <code>--</code>, <code>…</code>, <code>€</code> (see <code>is_punctuation</code>). Empty and whitespace tokens are dropped before the filters. N-grams join the words with <code>_</code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A ready stop word list is <code>spacy.lang.es.stop_words.STOP_WORDS</code>; note that it also holds frequent verbs like <code>tener</code>.</p>
 </div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
@@ -2634,6 +2684,10 @@
 </div>
 <h3 id="get_most_common">get_most_common<a class="headerlink" href="#get_most_common" title="Permanent link">&para;</a></h3>
 <p>Returns a counter of the top words of the text. It takes the number of top words to return as a parameter.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The method must be called after words have been extracted with <code>extract</code>.</p>
+</div>
 <p>To illustrate the method, we reuse the code from the previous example:</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
@@ -2646,10 +2700,6 @@
 <p><em>Result</em>:</p>
 <div class="highlight"><pre><span></span><code><span class="o">[(</span><span class="s1">'tener'</span>,<span class="w"> </span><span class="m">2</span><span class="o">)</span>,<span class="w"> </span><span class="o">(</span><span class="s1">'euro'</span>,<span class="w"> </span><span class="m">1</span><span class="o">)</span>,<span class="w"> </span><span class="o">(</span><span class="s1">'amigo'</span>,<span class="w"> </span><span class="m">1</span><span class="o">)]</span>
 </code></pre></div>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The method must be called after words have been extracted with <code>extract</code>.</p>
 </div>
 
 

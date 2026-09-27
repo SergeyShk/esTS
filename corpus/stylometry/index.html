@@ -2523,9 +2523,12 @@
 <p><strong>ests.corpus.delta()</strong>, <strong>ests.corpus.delta_profiles()</strong>, <strong>ests.corpus.frequency_table()</strong>, <strong>ests.corpus.z_scores()</strong>, <strong>ests.corpus.zeta()</strong>, <strong>ests.corpus.kilgarriff_chi2()</strong>, <strong>ests.corpus.mendenhall_curve()</strong>, <strong>ests.corpus.mendenhall_distance()</strong>, <strong>ests.corpus.function_words_profile()</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>Measures of stylometry and authorship attribution: distances between texts by the frequencies of the most frequent words (Burrows's Delta and its variants, as in <a href="https://github.com/computationalstylistics/stylo">stylo</a>), markers of preferred and avoided words (Zeta), Kilgarriff's chi-square distance between corpora, the Mendenhall curve and the profile of the function words as features of an author. The functions work on lists of units of a text: lower-case word forms (the usual choice for Delta), lemmas or character N-grams (<a href="../../extractors/char_ngrams/"><code>CharNgramsExtractor</code></a>) - case and lemmatization belong to <a href="../../extractors/words/"><code>WordsExtractor</code></a>.</p>
+<p>Measures of stylometry and authorship attribution: distances between texts by the frequencies of the most frequent words (Burrows's Delta and its variants, as in <a href="https://github.com/computationalstylistics/stylo">stylo</a>), markers of preferred and avoided words (Zeta), Kilgarriff's chi-square distance between corpora and the Mendenhall curve. The functions work on lists of units of a text: lower-case word forms (the usual choice for Delta), lemmas or character N-grams - case and lemmatization belong to the extractors.</p>
+<p>The functions are those of the <a href="https://sergeyshk.github.io/anyTS/corpus/stylometry/">anyTS</a> core, with the <a href="#function_words_profile">profile of the function words</a> of Spanish added as a feature of an author. The units of a text come from <a href="../../extractors/words/"><code>WordsExtractor</code></a> - word forms and lemmas - and <a href="../../extractors/char_ngrams/"><code>CharNgramsExtractor</code></a>.</p>
 <h2 id="delta">Burrows's Delta<a class="headerlink" href="#delta" title="Permanent link">&para;</a></h2>
-<p>A corpus is a dictionary "name of a text → units". <code>frequency_table</code> builds the table of relative frequencies: rows are the texts, columns the <code>n_mfw</code> most frequent units by descending mean relative frequency (alphabetically when equal); <code>culling</code> keeps the units that occur in at least the given share of the texts, as in stylo. <code>z_scores</code> standardizes the columns with the sample standard deviation, like <code>scale()</code> of R; a column with the same frequency in every text gives zeros. <code>delta</code> computes a symmetric matrix of distances from the z-scores (a <code>DataFrame</code> with the names of the texts); at least three texts are needed - with two, the z-scores degenerate to ±1/√2 and the distances do not depend on the frequencies.</p>
+<p>A corpus is a dictionary "name of a text → units". <code>frequency_table(corpus, n_mfw=100, culling=0.0)</code> builds the table of relative frequencies: rows are the texts, columns the <code>n_mfw</code> most frequent units by descending mean relative frequency (alphabetically when equal); <code>culling</code> keeps the units that occur in at least the given share of the texts, as in stylo.</p>
+<p><code>z_scores(table)</code> standardizes the columns with the sample standard deviation, like <code>scale()</code> of R; a column with the same frequency in every text gives zeros.</p>
+<p><code>delta</code> computes a symmetric matrix of distances from the z-scores (a <code>DataFrame</code> with the names of the texts); at least three texts are needed - with two, the z-scores degenerate to ±1/√2 and the distances do not depend on the frequencies.</p>
 <p>Variants (<code>DELTA_VARIANTS</code>), with the formulas of the sources of stylo; <span class="arithmatex">\(n\)</span> is the number of units, <span class="arithmatex">\(z_A\)</span> and <span class="arithmatex">\(z_B\)</span> the vectors of z-scores of the texts:</p>
 <table>
 <thead>
@@ -2564,7 +2567,6 @@
 </tbody>
 </table>
 <p>Cosine Delta clusters the texts by author best in the experiments of Evert et al. The usual number of units is 100 to 500 most frequent words, 100-200 for character N-grams.</p>
-<p>Parameters of <code>delta</code>:</p>
 <table>
 <thead>
 <tr>
@@ -2601,7 +2603,6 @@
 </tr>
 </tbody>
 </table>
-<p><code>frequency_table(corpus, n_mfw=100, culling=0.0)</code> takes the same parameters, <code>z_scores(table)</code> the table.</p>
 <p>For authorship attribution there is <code>delta_profiles(reference, samples, n_mfw, variant, culling, statistics)</code>: the most frequent units, the culling and the statistics of the z-scores come from the reference texts <code>reference</code> (the profiles of the authors) or from a separate set <code>statistics</code> - for instance, the training windows when the profiles are too few to estimate the spread of the frequencies; the texts under test <code>samples</code> are described by the same units and scaled by the same statistics. The result is the distances from the texts under test to the reference ones, and the nearest reference in a row is the presumed author. Unlike in <code>delta</code>, the texts under test affect neither the units nor the scaling, so the result for a text does not depend on the texts passed along with it.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
@@ -2735,7 +2736,8 @@
 </code></pre></div>
 </div>
 <h2 id="mendenhall">Mendenhall curve<a class="headerlink" href="#mendenhall" title="Permanent link">&para;</a></h2>
-<p><code>mendenhall_curve(words)</code> - the shares of the words of every length in characters (Mendenhall 1887), a profile of the author comparable between texts whatever their size; <code>mendenhall_distance(words_a, words_b)</code> - the Jensen-Shannon distance with base 2 between the curves, from 0 (the distributions coincide) to 1.</p>
+<p><code>mendenhall_curve(words)</code> - the shares of the words of every length in characters (Mendenhall 1887), a profile of the author comparable between texts whatever their size.</p>
+<p><code>mendenhall_distance(words_a, words_b)</code> - the Jensen-Shannon distance with base 2 between the curves, from 0 (the distributions coincide) to 1.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">mendenhall_curve</span><span class="p">,</span> <span class="n">mendenhall_distance</span>

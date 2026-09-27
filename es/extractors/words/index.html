@@ -754,6 +754,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ganchos-del-idioma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ganchos del idioma
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2439,6 +2450,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ganchos-del-idioma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ganchos del idioma
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2513,16 +2535,42 @@
 <p><strong>ests.extractors.WordsExtractor</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Módulo para extraer palabras de un texto. Permite usar distintos tokenizadores, filtrar palabras vacías, números y signos de puntuación, lematizar, construir N-gramas y fijar la longitud mínima y máxima de las palabras extraídas.</p>
+<!-- core: extractors/words.md:WordsExtractor 912c6ba -->
+<p>Clase para extraer palabras de un texto. Permite usar distintos tokenizadores, filtrar palabras vacías, números y signos de puntuación, lematizar, construir N-gramas y fijar la longitud mínima y máxima de las palabras extraídas.</p>
+<h2 id="ganchos-del-idioma">Ganchos del idioma<a class="headerlink" href="#ganchos-del-idioma" title="Permanent link">&para;</a></h2>
+<p>La clase extiende el <code>WordsExtractor</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/extractors/words/">anyTS</a> con los ganchos del español:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Gancho</th>
+<th style="text-align: center;">Español</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>tokenize(text)</code></td>
+<td style="text-align: center;">el tokenizador por reglas de la clase de idioma español de spaCy, <code>ests.utils.tokenize</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>lemmatize(word)</code></td>
+<td style="text-align: center;">los lemas de simplemma, <code>ests.utils.lemmatize</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>number_pattern</code></td>
+<td style="text-align: center;">números con signo, rangos, fracciones, fechas, horas, porcentajes y ordinales: <code>-5</code>, <code>+7</code>, <code>1990-1995</code>, <code>1.500,50</code>, <code>12/03/2020</code>, <code>3:30</code>, <code>10%</code>, <code>3.º</code>, <code>1.ª</code>, <code>2do</code></td>
+</tr>
+</tbody>
+</table>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>El tokenizador por defecto es el tokenizador por reglas de la clase de idioma español de <a href="https://github.com/explosion/spaCy">spaCy</a> (<code>ests.utils.tokenize</code>); no necesita un modelo entrenado. Los signos de puntuación, incluidos <code>¿</code> y <code>¡</code>, los números como <code>1.500,50</code>, <code>3.º</code>, <code>1990-1995</code> y las abreviaturas como <code>Sr.</code>, <code>EE. UU.</code> son tokens únicos; las palabras con pronombres enclíticos (<code>dámelo</code>) no se separan. Las rayas de un diálogo pegadas a las palabras se separan: <code>--No</code>, <code>sí--dijo</code>, <code>―dijo él―.</code> dan las palabras <code>No</code>, <code>sí</code>, <code>dijo</code>, <code>él</code>, también junto a los guiones bajos de la cursiva (<code>--_Siguro_</code>), mientras que un guion entre letras (<code>franco-alemán</code>) o ante una cifra (<code>-5</code>) se queda en su token; un sufijo citado con su guion (<code>-mente</code>) también lo pierde, y lo mismo el número de un punto de una lista (<code>Artículo 1.- El objeto</code> da el número <code>1</code>). <code>ests.utils.add_dash_rules(nlp)</code> añade las mismas reglas a las que ya tiene un pipeline de spaCy propio; el modelo de <code>get_nlp</code> ya las tiene, y los <a href="../../components/">componentes</a> de la biblioteca las añaden a su pipeline.</p>
+<p>El tokenizador no necesita un modelo entrenado. Los signos de puntuación, incluidos <code>¿</code> y <code>¡</code>, los números como <code>1.500,50</code>, <code>3.º</code>, <code>1990-1995</code> y las abreviaturas como <code>Sr.</code>, <code>EE. UU.</code> son tokens únicos; las palabras con pronombres enclíticos (<code>dámelo</code>) no se separan. Las rayas de un diálogo pegadas a las palabras se separan: <code>--No</code>, <code>sí--dijo</code>, <code>―dijo él―.</code> dan las palabras <code>No</code>, <code>sí</code>, <code>dijo</code>, <code>él</code>, también junto a los guiones bajos de la cursiva (<code>--_Siguro_</code>), mientras que un guion entre letras (<code>franco-alemán</code>) o ante una cifra (<code>-5</code>) se queda en su token; un sufijo citado con su guion (<code>-mente</code>) también lo pierde, y lo mismo el número de un punto de una lista (<code>Artículo 1.- El objeto</code> da el número <code>1</code>). <code>ests.utils.add_dash_rules(nlp)</code> añade las mismas reglas a las que ya tiene un pipeline de spaCy propio; el modelo de <code>get_nlp</code> ya las tiene, y los <a href="../../components/">componentes</a> de la biblioteca las añaden a su pipeline.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>Los lemas provienen de <a href="https://github.com/adbar/simplemma">simplemma</a> (<code>ests.utils.lemmatize</code>), que trabaja con un diccionario sin modelo entrenado: una forma conocida se convierte en su lema en minúsculas (<code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>), una forma desconocida se devuelve sin cambios (<code>Madrid</code>, <code>dámelo</code>).</p>
+<p><a href="https://github.com/adbar/simplemma">simplemma</a> trabaja con un diccionario sin modelo entrenado: una forma conocida se convierte en su lema en minúsculas (<code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>), una forma desconocida se devuelve sin cambios (<code>Madrid</code>, <code>dámelo</code>).</p>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<!-- core: extractors/words.md:WordsExtractor-parameters 379c3f1 -->
 <table>
 <thead>
 <tr>
@@ -2537,7 +2585,7 @@
 <td style="text-align: center;"><code>tokenizer</code></td>
 <td style="text-align: center;">Pattern/Callable</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Tokenizador o expresión regular</td>
+<td style="text-align: center;">Tokenizador o expresión regular; por defecto, el método <code>tokenize</code></td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>filter_punct</code></td>
@@ -2549,13 +2597,13 @@
 <td style="text-align: center;"><code>filter_nums</code></td>
 <td style="text-align: center;">bool</td>
 <td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Filtrar los números, incluidos números con signo, rangos, fracciones, fechas, horas, porcentajes y ordinales (-5, +7, 1990-1995, 1.500,50, 12/03/2020, 3:30, 10%, 3.º, 1.ª, 2do)</td>
+<td style="text-align: center;">Filtrar los números que reconoce <code>number_pattern</code></td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>use_lexemes</code></td>
 <td style="text-align: center;">bool</td>
 <td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Usar los lemas de las palabras</td>
+<td style="text-align: center;">Usar los lemas de las palabras del método <code>lemmatize</code></td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>stopwords</code></td>
@@ -2579,22 +2627,27 @@
 <td style="text-align: center;"><code>min_len</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Longitud mínima de la palabra extraída</td>
+<td style="text-align: center;">Longitud mínima de la palabra extraída, <code>0</code> sin límite</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>max_len</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Longitud máxima de la palabra extraída</td>
+<td style="text-align: center;">Longitud máxima de la palabra extraída, <code>0</code> sin límite</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Una lista de palabras vacías en minúsculas también filtra <code>Los</code> o <code>La</code> al principio de una oración. Un signo de puntuación es un token formado solo por signos y símbolos, también de varios caracteres: <code>?!</code>, <code>--</code>, <code>…</code>, <code>€</code>. Los tokens vacíos se descartan antes de los filtros. Una lista de palabras vacías ya hecha es <code>spacy.lang.es.stop_words.STOP_WORDS</code>; téngase en cuenta que incluye verbos frecuentes como <code>tener</code>.</p>
+<p>Una expresión regular como tokenizador es un separador: el texto se divide con <code>re.split</code>. Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Una lista de palabras vacías en minúsculas también filtra una palabra con mayúscula al principio de una oración. Un signo de puntuación es un token formado solo por signos y símbolos, también de varios caracteres: <code>?!</code>, <code>--</code>, <code>…</code>, <code>€</code> (véase <code>is_punctuation</code>). Los tokens vacíos y de espacios se descartan antes de los filtros. Los N-gramas unen las palabras con <code>_</code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>Una lista de palabras vacías ya hecha es <code>spacy.lang.es.stop_words.STOP_WORDS</code>; téngase en cuenta que incluye verbos frecuentes como <code>tener</code>.</p>
 </div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
+<!-- core: extractors/words.md:WordsExtractor-extract 67c60e1 -->
 <p>Extrae las palabras de un texto.</p>
 <table>
 <thead>
@@ -2633,7 +2686,12 @@
 </code></pre></div>
 </div>
 <h3 id="get_most_common">get_most_common<a class="headerlink" href="#get_most_common" title="Permanent link">&para;</a></h3>
+<!-- core: extractors/words.md:WordsExtractor-get_most_common 2fbfc88 -->
 <p>Devuelve un contador de las palabras más frecuentes del texto. Recibe como parámetro el número de palabras a devolver.</p>
+<div class="admonition warning">
+<p class="admonition-title">Aviso</p>
+<p>El método debe llamarse después de extraer las palabras con <code>extract</code>.</p>
+</div>
 <p>Para ilustrar el método reutilizamos el código del ejemplo anterior:</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
@@ -2646,10 +2704,6 @@
 <p><em>Resultado</em>:</p>
 <div class="highlight"><pre><span></span><code><span class="o">[(</span><span class="s1">'tener'</span>,<span class="w"> </span><span class="m">2</span><span class="o">)</span>,<span class="w"> </span><span class="o">(</span><span class="s1">'euro'</span>,<span class="w"> </span><span class="m">1</span><span class="o">)</span>,<span class="w"> </span><span class="o">(</span><span class="s1">'amigo'</span>,<span class="w"> </span><span class="m">1</span><span class="o">)]</span>
 </code></pre></div>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Aviso</p>
-<p>El método debe llamarse después de extraer las palabras con <code>extract</code>.</p>
 </div>
 
 
