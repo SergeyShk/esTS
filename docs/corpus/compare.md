@@ -1,7 +1,7 @@
 # Corpus comparison
 
 !!! info ""
-    **ests.corpus.compare_corpora()**, **ests.corpus.compare_features()**, **ests.corpus.corpus_features()**, **ests.corpus.text_features()**, **ests.corpus.split_windows()**, **ests.corpus.sentence_rhythm()**
+    **ests.corpus.compare_corpora()**, **ests.corpus.compare_features()**, **ests.corpus.corpus_features()**, **ests.corpus.text_features()**, **ests.corpus.split_windows()**, **ests.corpus.sentence_rhythm()**, **ests.corpus.calc_cohen_d()**, **ests.corpus.calc_cliff_delta()**, **ests.corpus.bootstrap_median_diff()**, **ests.corpus.holm_correction()**
 
 ## Description
 
@@ -53,6 +53,18 @@ Parameters of `compare_corpora`:
 `labels`, `n_bootstrap` and `seed` go on to `compare_features`, whose parameters are:
 
 --8<-- "corpus/compare.md:compare_features-parameters"
+
+## Functions of the statistics
+
+The statistics of a row are available one by one from `ests.corpus`:
+
+--8<-- "corpus/compare.md:calc_cohen_d"
+
+--8<-- "corpus/compare.md:calc_cliff_delta"
+
+--8<-- "corpus/compare.md:bootstrap_median_diff"
+
+--8<-- "corpus/compare.md:holm_correction"
 
 ## Usage example
 
