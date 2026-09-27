@@ -3,7 +3,7 @@ from collections.abc import Sequence
 from functools import cached_property
 from math import nan, sqrt
 
-from anyts.utils import check_integer, check_words
+from anyts.utils import check_integer, check_words, iter_doc_tokens, iter_doc_words, safe_divide
 from spacy.language import Language
 from spacy.tokens import Doc
 
@@ -18,16 +18,7 @@ from .constants import (
 )
 from .exceptions import ParameterError, SourceError, SourceTypeError
 from .extractors import WordsExtractor
-from .utils import (
-    find_phrases,
-    get_nlp,
-    is_verbal_noun,
-    iter_doc_tokens,
-    iter_doc_words,
-    iter_text_sents,
-    lemmatize,
-    safe_divide,
-)
+from .utils import find_phrases, get_nlp, is_verbal_noun, iter_text_sents, lemmatize
 
 # Components the parts of speech and the lemmas of the nouns do not need
 UNUSED_COMPONENTS = ["parser", "ner"]

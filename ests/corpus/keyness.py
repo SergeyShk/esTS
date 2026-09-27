@@ -2,8 +2,6 @@ from collections.abc import Mapping, Sequence
 
 import anyts.corpus
 from anyts.corpus.keyness import (
-    MEASURES as MEASURES,
-    ZERO_ADJUSTMENT as ZERO_ADJUSTMENT,
     FrequencyReference as FrequencyReference,
     Keyword as Keyword,
     calc_bic as calc_bic,

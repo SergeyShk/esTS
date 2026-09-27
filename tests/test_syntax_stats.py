@@ -2,24 +2,29 @@ from math import isnan
 
 import pytest
 import spacy
+from anyts.syntax import (
+    base_dep,
+    calc_coordination_chains,
+    calc_dependency_distances,
+    calc_tree_depth,
+    calc_valency,
+    count_children,
+    get_words,
+    has_feature,
+    is_root,
+    is_word,
+    subtree_len,
+)
 from spacy.tokens import Doc
 
 from ests import BasicStats, SyntaxStats
 from ests.constants import SYNTAX_STATS_DESC
 from ests.exceptions import SourceError, SourceTypeError
 from ests.syntax_stats import (
-    base_dep,
-    calc_coordination_chains,
     calc_de_chains,
-    calc_dependency_distances,
-    calc_tree_depth,
-    calc_valency,
-    count_children,
     count_noun_modifiers,
     find_split_predicates,
-    get_words,
     has_auxiliary,
-    has_feature,
     is_agent,
     is_agentless,
     is_clause_head,
@@ -34,11 +39,8 @@ from ests.syntax_stats import (
     is_participle_clause,
     is_passive,
     is_predicate,
-    is_root,
     is_split_predicate_noun,
     is_subordinate_clause_head,
-    is_word,
-    subtree_len,
 )
 from ests.utils import get_nlp
 

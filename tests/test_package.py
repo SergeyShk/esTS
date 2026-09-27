@@ -5,8 +5,8 @@ import shutil
 import subprocess
 import zipfile
 from pathlib import Path
+from types import ModuleType
 
-import anyts
 import pytest
 from spacy.language import Language
 
@@ -27,155 +27,31 @@ FACTORIES = {
     "ests_verse",
 }
 RESOURCES = {"connectors.tsv", "google_books_top10000.txt"}
-# Names that moved to the core, by the module of the library and the module of the core
-MOVED = {
-    ("exceptions", "exceptions"): [
-        "DataFileError",
-        "DatasetNotFoundError",
-        "DownloadError",
-        "ParameterError",
-        "SourceError",
-        "SourceTypeError",
-        "UnknownStatError",
-    ],
-    ("utils", "utils"): [
-        "check_sequence",
-        "count_letters",
-        "has_words",
-        "is_punctuation",
-        "iter_doc_tokens",
-        "iter_doc_words",
-        "safe_divide",
-    ],
-    ("extractors", "extractors"): ["Extractor", "Tokenizer"],
-    ("diversity_stats", "diversity_stats"): [
-        "Calculator",
-        "HeapsFit",
-        "WindowStats",
-        "ZipfMandelbrot",
-        "calc_alpha2",
-        "calc_baayen_p",
-        "calc_brunet_w",
-        "calc_cttr",
-        "calc_dttr",
-        "calc_dugast_k",
-        "calc_entropy",
-        "calc_evenness",
-        "calc_frequency_spectrum",
-        "calc_gini_simpson_index",
-        "calc_hapax_index",
-        "calc_hapax_ratio",
-        "calc_hdd",
-        "calc_heaps_beta",
-        "calc_herdan_vm",
-        "calc_honore_r",
-        "calc_httr",
-        "calc_inverse_simpson_index",
-        "calc_mamtld",
-        "calc_mattr",
-        "calc_michea_m",
-        "calc_msttr",
-        "calc_mtld",
-        "calc_mtldw",
-        "calc_mttr",
-        "calc_perplexity",
-        "calc_rttr",
-        "calc_sichel_s",
-        "calc_simpson_index",
-        "calc_sttr",
-        "calc_ttr",
-        "calc_windowed",
-        "calc_yule_i",
-        "calc_yule_k",
-        "calc_zipf_alpha",
-        "check_params",
-        "fit_heaps",
-        "fit_zipf_mandelbrot",
-        "vocabulary_growth",
-    ],
-    ("cohesion_stats", "cohesion"): [
-        "Overlap",
-        "calc_overlap",
-        "calc_overlaps",
-        "calc_proportional_overlap",
-        "calc_repetition",
-        "count_given",
-        "dice",
-        "dominant",
-    ],
-    ("syntax_stats", "syntax"): [
-        "base_dep",
-        "calc_coordination_chains",
-        "calc_dependency_distances",
-        "calc_tree_depth",
-        "calc_valency",
-        "count_children",
-        "get_children",
-        "get_words",
-        "has_feature",
-        "is_root",
-        "is_word",
-        "subtree_len",
-    ],
-    ("corpus.collocations", "corpus.collocations"): [
-        "MEASURES",
-        "Collocation",
-        "calc_dice",
-        "calc_log_likelihood",
-        "calc_logdice",
-        "calc_mi",
-        "calc_mi3",
-        "calc_min_sensitivity",
-        "calc_npmi",
-        "calc_t_score",
-        "collocations",
-    ],
-    ("corpus.dispersion", "corpus.dispersion"): [
-        "Dispersion",
-        "calc_carroll_d2",
-        "calc_dp",
-        "calc_dp_norm",
-        "calc_juilland_d",
-        "calc_kl_divergence",
-        "calc_rosengren_s",
-        "dispersion",
-    ],
-    ("corpus.keyness", "corpus.keyness"): [
-        "MEASURES",
-        "ZERO_ADJUSTMENT",
-        "FrequencyReference",
-        "Keyword",
-        "calc_bic",
-        "calc_chi2",
-        "calc_diff",
-        "calc_ell",
-        "calc_log_likelihood",
-        "calc_log_ratio",
-        "calc_odds_ratio",
-        "calc_p_value",
-    ],
-    ("corpus.stylometry", "corpus.stylometry"): [
-        "ZERO_SEGMENTS",
-        "ZetaScore",
-        "delta",
-        "delta_profiles",
-        "frequency_table",
-        "kilgarriff_chi2",
-        "mendenhall_curve",
-        "mendenhall_distance",
-        "z_scores",
-        "zeta",
-    ],
-    ("corpus.compare", "corpus.compare"): [
-        "COMPARISON_COLUMNS",
-        "Values",
-        "bootstrap_median_diff",
-        "calc_cliff_delta",
-        "calc_cohen_d",
-        "compare_features",
-        "compare_values",
-        "holm_correction",
-    ],
+# Modules of the library and the modules of the core they build on
+CORE_MODULES = {
+    "ests": "anyts",
+    "ests.exceptions": "anyts.exceptions",
+    "ests.utils": "anyts.utils",
+    "ests.extractors": "anyts.extractors",
+    "ests.diversity_stats": "anyts.diversity_stats",
+    "ests.cohesion_stats": "anyts.cohesion",
+    "ests.syntax_stats": "anyts.syntax",
+    "ests.corpus": "anyts.corpus",
+    "ests.corpus.collocations": "anyts.corpus.collocations",
+    "ests.corpus.dispersion": "anyts.corpus.dispersion",
+    "ests.corpus.keyness": "anyts.corpus.keyness",
+    "ests.corpus.stylometry": "anyts.corpus.stylometry",
+    "ests.corpus.compare": "anyts.corpus.compare",
+}
+# Names of the core the library defines for Spanish: subclasses with the hooks, a wrapper
+# taking the frequency dictionary and the pattern of Spanish numbers
+SPANISH = {
+    "CharNgramsExtractor",
+    "DiversityStats",
+    "NUMBER_PATTERN",
+    "SentsExtractor",
+    "WordsExtractor",
+    "keyness",
 }
 
 
@@ -210,19 +86,23 @@ def test_subpackage_exports(name):
     assert all(hasattr(module, attr) for attr in module.__all__)
 
 
-@pytest.mark.parametrize(("modules", "names"), MOVED.items(), ids=[m for m, _ in MOVED])
-def test_moved_names(modules, names):
-    """The names moved to the core are still there, as the objects of the core"""
-    library, core = (
-        importlib.import_module(f"{package}.{name}")
-        for package, name in zip(("ests", "anyts"), modules, strict=True)
-    )
-    for name in names:
-        assert getattr(library, name) is getattr(core, name), name
-
-
-def test_base_exception():
-    assert ests.EstsError is anyts.AnyTSError
+@pytest.mark.parametrize(("library", "core"), CORE_MODULES.items())
+def test_core_names(library, core):
+    """A name of the core in the library is the object of the core, not a copy of it"""
+    library_module, core_module = importlib.import_module(library), importlib.import_module(core)
+    for name, value in vars(core_module).items():
+        if (
+            name.startswith("_")
+            or isinstance(value, ModuleType)
+            or not hasattr(library_module, name)
+        ):
+            continue
+        own = getattr(library_module, name)
+        if name in SPANISH:
+            assert own is not value, name
+            assert not isinstance(value, type) or issubclass(own, value), name
+        else:
+            assert own is value, name
 
 
 def test_package_data():

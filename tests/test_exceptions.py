@@ -1,6 +1,7 @@
 import logging
 from importlib.metadata import version
 
+import anyts
 import pytest
 
 import ests
@@ -42,6 +43,14 @@ def test_raised_classes():
         WordsExtractor(ngram_range=(0, 1))
     with pytest.raises(ParameterError):
         WordsExtractor().get_most_common(0)
+
+
+def test_errors_of_the_core():
+    """The classes are those of the core, so they catch the errors its own code raises"""
+    with pytest.raises(EstsError):
+        anyts.WordsExtractor(min_len=-1)
+    with pytest.raises(ParameterError):
+        anyts.WordsExtractor(ngram_range=(0, 1))
 
 
 def test_unknown_stat_error_message():

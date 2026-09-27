@@ -3,7 +3,7 @@ from math import ceil
 
 import matplotlib.pyplot as plt
 import numpy as np
-from anyts.utils import check_integer, check_words
+from anyts.utils import check_integer, check_sequence, check_words
 from matplotlib.axes import Axes
 from matplotlib.cm import ScalarMappable
 from matplotlib.colors import Normalize
@@ -11,7 +11,6 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from ..diversity_stats import calc_ttr
 from ..exceptions import ParameterError, SourceError, SourceTypeError
-from ..utils import check_sequence
 
 # Size of a square and the margin between blocks, in the units of the drawing area
 SQUARE = 15

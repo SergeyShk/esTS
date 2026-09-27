@@ -4,7 +4,7 @@ from math import log2, log10, nan
 from pathlib import Path
 from statistics import fmean
 
-from anyts.utils import check_integer, check_words
+from anyts.utils import check_integer, check_words, iter_doc_tokens, safe_divide
 from spacy.language import Language
 from spacy.tokens import Doc
 
@@ -13,7 +13,7 @@ from .constants import FREQUENCY_BANDS, LEXICAL_STATS_DESC
 from .datasets.freq_dict import Entry, FreqDict, lemma_key
 from .exceptions import ParameterError, SourceError, SourceTypeError
 from .extractors import NUMBER_PATTERN
-from .utils import get_nlp, iter_doc_tokens, safe_divide
+from .utils import get_nlp
 
 TOP_LEMMAS_FILE = Path(__file__).parent / "resources" / "google_books_top10000.txt"
 # Components a parse of the text does not need: the lemmas come from lemma_key

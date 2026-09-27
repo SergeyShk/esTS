@@ -5,11 +5,10 @@ from enum import Enum
 from itertools import count
 from typing import Any
 
-from anyts.utils import check_integer, check_words
+from anyts.utils import check_integer, check_sequence, check_words
 from graphviz import Digraph, nohtml
 
 from ..exceptions import ParameterError, SourceError, SourceTypeError
-from ..utils import check_sequence
 
 
 class Direction(Enum):

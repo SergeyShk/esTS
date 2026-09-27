@@ -3,7 +3,6 @@ from collections.abc import Iterable
 from typing import ClassVar
 
 import anyts
-from anyts.extractors import Extractor as Extractor, Tokenizer as Tokenizer
 
 from .utils import lemmatize, sentenize, tokenize
 

@@ -21,7 +21,7 @@ from anyts.constants import (
     MTLD_MIN_LEN,
     MTLD_TTR_THRESHOLD,
 )
-from anyts.utils import check_words
+from anyts.utils import check_words, has_words, iter_doc_tokens
 from spacy.language import Language
 from spacy.tokens import Doc
 
@@ -37,7 +37,7 @@ from .phon_stats import PhonStats, check_params as check_phon_params
 from .readability_stats import ReadabilityStats, check_preset
 from .style_stats import StyleStats, check_params as check_style_params
 from .syntax_stats import SyntaxStats
-from .utils import add_dash_rules, has_words, iter_doc_tokens
+from .utils import add_dash_rules
 from .verse_stats import LETTER, VerseStats
 
 

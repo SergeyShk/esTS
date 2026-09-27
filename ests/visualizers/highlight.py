@@ -5,7 +5,8 @@ from dataclasses import dataclass
 from itertools import pairwise
 from typing import NamedTuple
 
-from anyts.utils import check_integer, check_words
+from anyts.syntax import base_dep, get_words, is_word
+from anyts.utils import check_integer, check_words, iter_doc_tokens
 from spacy.tokens import Doc, Token
 
 from ..cohesion_stats import find_connectors
@@ -37,24 +38,14 @@ from ..style_stats import expand_phrases, is_stopword
 from ..syllables import count_syllables
 from ..syntax_stats import (
     AUXILIARY_DEPS,
-    base_dep,
     find_split_predicates,
-    get_words,
     is_agentless,
     is_de_modifier,
     is_gerund_clause,
     is_participle_clause,
     is_passive,
-    is_word,
 )
-from ..utils import (
-    find_phrases,
-    is_verbal_noun,
-    iter_doc_tokens,
-    iter_text_sents,
-    iter_text_words,
-    lemmatize,
-)
+from ..utils import find_phrases, is_verbal_noun, iter_text_sents, iter_text_words, lemmatize
 
 SPANISH_WORD = re.compile(r"[a-záéíóúüñ]{2,}", re.IGNORECASE)
 # Line breaks of Unix, Windows and old Mac texts

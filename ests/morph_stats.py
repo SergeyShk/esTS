@@ -2,6 +2,7 @@ from collections import Counter, OrderedDict
 from math import nan
 from typing import Any
 
+from anyts.utils import iter_doc_tokens, safe_divide
 from spacy.language import Language
 from spacy.tokens import Doc, Token
 
@@ -13,7 +14,7 @@ from .constants import (
     PASSIVE_AUX,
 )
 from .exceptions import SourceError, SourceTypeError, UnknownStatError
-from .utils import get_nlp, iter_doc_tokens, safe_divide
+from .utils import get_nlp
 
 FINITE_MOODS = {
     "p_indicative": "Ind",

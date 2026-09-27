@@ -7,16 +7,8 @@ from statistics import fmean
 from types import MappingProxyType
 from typing import NamedTuple
 
-from anyts.cohesion import (
-    Overlap as Overlap,
-    calc_overlap as calc_overlap,
-    calc_overlaps as calc_overlaps,
-    calc_proportional_overlap as calc_proportional_overlap,
-    calc_repetition as calc_repetition,
-    count_given as count_given,
-    dice as dice,
-    dominant as dominant,
-)
+from anyts.cohesion import calc_overlaps, calc_repetition, count_given
+from anyts.utils import iter_doc_tokens, safe_divide
 from spacy.language import Language
 from spacy.tokens import Doc, Token
 
@@ -33,7 +25,7 @@ from .constants import (
 )
 from .exceptions import ParameterError, SourceError, SourceTypeError
 from .extractors import SentsExtractor
-from .utils import get_nlp, iter_doc_tokens, safe_divide
+from .utils import get_nlp
 
 CONNECTORS_FILE = Path(__file__).parent / "resources" / "connectors.tsv"
 # Components the statistics never read

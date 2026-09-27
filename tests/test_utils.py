@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 import spacy
+from anyts.utils import has_words, is_punctuation, iter_doc_tokens, iter_doc_words
 from spacy.tokens import Doc
 from spacy.util import compile_infix_regex
 
@@ -16,10 +17,6 @@ from ests.utils import (
     extract_archive,
     get_nlp,
     get_tokenizer,
-    has_words,
-    is_punctuation,
-    iter_doc_tokens,
-    iter_doc_words,
     iter_text_sents,
     iter_text_words,
     lemmatize,

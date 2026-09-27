@@ -1,6 +1,5 @@
 import re
 
-import anyts
 import pytest
 from spacy.lang.es.stop_words import STOP_WORDS
 
@@ -22,17 +21,9 @@ def text():
     )
 
 
-@pytest.mark.parametrize(
-    ("extractor", "core"),
-    [
-        (SentsExtractor, anyts.SentsExtractor),
-        (WordsExtractor, anyts.WordsExtractor),
-        (CharNgramsExtractor, anyts.CharNgramsExtractor),
-    ],
-)
-def test_core_classes(extractor, core):
-    assert issubclass(extractor, core)
-    # The hooks are methods of the class, not tokenizers bound to the object
+@pytest.mark.parametrize("extractor", [SentsExtractor, WordsExtractor, CharNgramsExtractor])
+def test_default_tokenizer_not_stored(extractor):
+    """The hooks are methods of the class, not tokenizers bound to the object"""
     assert extractor().tokenizer is None
 
 

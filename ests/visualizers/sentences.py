@@ -3,12 +3,12 @@ from numbers import Integral
 
 import matplotlib.pyplot as plt
 import numpy as np
-from anyts.utils import check_integer
+from anyts.utils import check_integer, iter_doc_words
 from matplotlib.axes import Axes
 from spacy.tokens import Doc
 
 from ..exceptions import ParameterError, SourceError, SourceTypeError
-from ..utils import count_words_by_spans, iter_doc_words, iter_text_sents, iter_text_words
+from ..utils import count_words_by_spans, iter_text_sents, iter_text_words
 
 
 def sentence_lengths_plot(

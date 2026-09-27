@@ -1,11 +1,11 @@
 from collections.abc import Sequence
 from typing import NamedTuple
 
-from anyts.utils import check_integer
+from anyts.utils import check_integer, iter_doc_tokens
 from spacy.tokens import Doc
 
 from ..exceptions import ParameterError, SourceTypeError
-from ..utils import get_tokenizer, iter_doc_tokens, lemmatize
+from ..utils import get_tokenizer, lemmatize
 
 
 class Concordance(NamedTuple):

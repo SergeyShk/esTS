@@ -2,7 +2,6 @@ from collections import Counter
 from collections.abc import Sequence
 
 from anyts.corpus.stylometry import (
-    ZERO_SEGMENTS as ZERO_SEGMENTS,
     ZetaScore as ZetaScore,
     delta as delta,
     delta_profiles as delta_profiles,
@@ -13,13 +12,13 @@ from anyts.corpus.stylometry import (
     z_scores as z_scores,
     zeta as zeta,
 )
-from anyts.utils import check_words
+from anyts.utils import check_words, is_punctuation, iter_doc_tokens
 from spacy.language import Language
 from spacy.tokens import Doc
 
 from ..constants import FUNCTION_UD_POS
 from ..exceptions import SourceError
-from ..utils import get_nlp, is_punctuation, iter_doc_tokens
+from ..utils import get_nlp
 
 # Components the parts of speech of a list of words do not need
 UNUSED_COMPONENTS = ["parser", "lemmatizer", "ner"]

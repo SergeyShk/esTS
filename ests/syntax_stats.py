@@ -4,19 +4,20 @@ from math import nan
 from statistics import fmean, pstdev
 
 from anyts.syntax import (
-    base_dep as base_dep,
-    calc_coordination_chains as calc_coordination_chains,
-    calc_dependency_distances as calc_dependency_distances,
-    calc_tree_depth as calc_tree_depth,
-    calc_valency as calc_valency,
-    count_children as count_children,
-    get_children as get_children,
-    get_words as get_words,
-    has_feature as has_feature,
-    is_root as is_root,
-    is_word as is_word,
-    subtree_len as subtree_len,
+    base_dep,
+    calc_coordination_chains,
+    calc_dependency_distances,
+    calc_tree_depth,
+    calc_valency,
+    count_children,
+    get_children,
+    get_words,
+    has_feature,
+    is_root,
+    is_word,
+    subtree_len,
 )
+from anyts.utils import safe_divide
 from spacy.language import Language
 from spacy.tokens import Doc, Token
 
@@ -38,7 +39,7 @@ from .constants import (
     SYNTAX_STATS_DESC,
 )
 from .exceptions import SourceError, SourceTypeError
-from .utils import get_nlp, is_verbal_noun, safe_divide
+from .utils import get_nlp, is_verbal_noun
 
 # Dependencies of the nominal part of a split predicate, in the order of preference
 SPLIT_PREDICATE_DEPS = ("compound", "obj", "nsubj", "iobj", "nmod", "obl")

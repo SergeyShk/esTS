@@ -1,6 +1,5 @@
 from math import e, isnan, log10
 
-import anyts
 import pytest
 import spacy
 from anyts.constants import DIVERSITY_STATS_DESC
@@ -40,10 +39,6 @@ riddle = (
 @pytest.fixture(scope="module")
 def ds():
     return DiversityStats(TEXT)
-
-
-def test_core_class():
-    assert isinstance(DiversityStats(RIDDLE_TEXT), anyts.DiversityStats)
 
 
 @pytest.mark.parametrize(

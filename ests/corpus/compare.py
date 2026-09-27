@@ -8,12 +8,10 @@ import numpy as np
 import pandas as pd
 from anyts.corpus.compare import (
     COMPARISON_COLUMNS as COMPARISON_COLUMNS,
-    Values as Values,
     bootstrap_median_diff as bootstrap_median_diff,
     calc_cliff_delta as calc_cliff_delta,
     calc_cohen_d as calc_cohen_d,
     compare_features as compare_features,
-    compare_values as compare_values,
     holm_correction as holm_correction,
 )
 from anyts.utils import check_integer, check_words

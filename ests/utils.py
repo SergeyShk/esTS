@@ -13,16 +13,7 @@ from pathlib import Path, PurePosixPath
 
 import simplemma
 import spacy
-from anyts.utils import (
-    check_sequence as check_sequence,
-    check_words,
-    count_letters as count_letters,
-    has_words as has_words,
-    is_punctuation as is_punctuation,
-    iter_doc_tokens as iter_doc_tokens,
-    iter_doc_words as iter_doc_words,
-    safe_divide as safe_divide,
-)
+from anyts.utils import check_words, iter_doc_words
 from spacy.language import Language
 from spacy.tokenizer import Tokenizer
 

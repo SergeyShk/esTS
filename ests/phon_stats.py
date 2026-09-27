@@ -5,7 +5,7 @@ from itertools import pairwise
 from math import log2, nan
 
 import numpy as np
-from anyts.utils import check_integer, check_words
+from anyts.utils import check_integer, check_words, iter_doc_words, safe_divide
 from spacy.tokens import Doc
 
 from .constants import (
@@ -19,7 +19,6 @@ from .constants import (
 from .exceptions import ParameterError, SourceError, SourceTypeError
 from .extractors import WordsExtractor
 from .syllables import syllabify
-from .utils import iter_doc_words, safe_divide
 
 CONSONANT_SOUNDS = SONORANT_SOUNDS | VOICED_SOUNDS | VOICELESS_SOUNDS
 SOUNDS = VOWEL_SOUNDS | CONSONANT_SOUNDS

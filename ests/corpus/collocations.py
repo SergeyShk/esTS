@@ -1,5 +1,4 @@
 from anyts.corpus.collocations import (
-    MEASURES as MEASURES,
     Collocation as Collocation,
     calc_dice as calc_dice,
     calc_log_likelihood as calc_log_likelihood,

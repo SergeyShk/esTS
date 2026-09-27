@@ -9,7 +9,6 @@ from anyts.constants import (
     MTLD_TTR_THRESHOLD,
 )
 from anyts.diversity_stats import (
-    Calculator as Calculator,
     HeapsFit as HeapsFit,
     WindowStats as WindowStats,
     ZipfMandelbrot as ZipfMandelbrot,
@@ -53,11 +52,11 @@ from anyts.diversity_stats import (
     fit_zipf_mandelbrot as fit_zipf_mandelbrot,
     vocabulary_growth as vocabulary_growth,
 )
+from anyts.utils import iter_doc_words
 from spacy.tokens import Doc
 
 from .exceptions import SourceTypeError
 from .extractors import WordsExtractor
-from .utils import iter_doc_words
 
 
 class DiversityStats(anyts.DiversityStats):
