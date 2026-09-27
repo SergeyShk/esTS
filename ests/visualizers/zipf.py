@@ -2,6 +2,7 @@ from collections import Counter
 
 import matplotlib.pyplot as plt
 import numpy as np
+from anyts.utils import check_integer
 from matplotlib.axes import Axes
 
 from ..diversity_stats import fit_zipf_mandelbrot
@@ -42,14 +43,18 @@ def zipf(
     Raises:
         SourceTypeError: If the value is not a Counter object
         SourceError: If the counter is empty
-        ParameterError: If the number of words is below one
+        ParameterError: If the number of words or of labels is not an integer, or the number
+            of words is below one
     """
     if not isinstance(counter, Counter):
         raise SourceTypeError("The counter of the frequencies of words must be a Counter object")
     if not counter:
         raise SourceError("The data source has no words")
-    if num_words is not None and num_words < 1:
-        raise ParameterError("The number of words must be greater than 0")
+    if num_words is not None:
+        check_integer(num_words, "number of words")
+        if num_words < 1:
+            raise ParameterError("The number of words must be greater than 0")
+    check_integer(num_labels, "number of labels")
     if ax is None:
         _, ax = plt.subplots()
     top_frequency = counter.most_common(1)[0][1]
@@ -113,8 +118,10 @@ def zipf_theory(size: int, num_ranks: int, alpha: float = 1.5, ax: Axes | None =
         Axes: Axes with the plot of the theoretical Zipf's law
 
     Raises:
-        ParameterError: If the number of ranks is below one or the exponent not above zero
+        ParameterError: If the number of ranks is not an integer or is below one, or the
+            exponent is not above zero
     """
+    check_integer(num_ranks, "number of ranks")
     if num_ranks < 1:
         raise ParameterError("The number of ranks must be greater than 0")
     if alpha <= 0:

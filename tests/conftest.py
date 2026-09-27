@@ -3,8 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from ests.datasets import FreqDict
-from ests.datasets import freq_dict as freq_dict_module
+from ests.datasets import FreqDict, freq_dict as freq_dict_module
 
 FREQ_DICT_ARCHIVE = (
     Path(__file__).parents[1] / "ests" / "datasets" / "data" / freq_dict_module.ARCHIVE

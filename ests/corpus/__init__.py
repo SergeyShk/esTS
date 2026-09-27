@@ -12,7 +12,7 @@ from .compare import (
     text_features,
 )
 from .dispersion import Dispersion, dispersion
-from .keyness import Keyword, keyness
+from .keyness import FrequencyReference, Keyword, keyness
 from .kwic import Concordance, format_kwic, kwic, print_kwic
 from .stylometry import (
     ZetaScore,
@@ -31,6 +31,7 @@ __all__ = [
     "Collocation",
     "Concordance",
     "Dispersion",
+    "FrequencyReference",
     "Keyword",
     "ZetaScore",
     "bootstrap_median_diff",

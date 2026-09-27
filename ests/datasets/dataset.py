@@ -5,6 +5,8 @@ from collections.abc import Callable, Iterator
 from pathlib import Path
 from typing import Any
 
+from anyts.utils import check_integer
+
 from ..exceptions import DownloadError, ParameterError
 from ..utils import download_file, extract_archive, sha256
 
@@ -124,8 +126,10 @@ def check_limit(limit: int | None) -> None:
         limit (int): Number of records
 
     Raises:
-        ParameterError: If the number of records is negative
+        ParameterError: If the number of records is not an integer or is negative
     """
+    if limit is not None:
+        check_integer(limit, "number of records")
     if limit is not None and limit < 0:
         raise ParameterError(f"The number of records must not be negative - {limit}")
 
@@ -163,16 +167,18 @@ def length_filters(min_len: int | None, max_len: int | None) -> Filters:
         Filters: List of predicates on a record
 
     Raises:
-        ParameterError: If the minimum length is not greater than 0
-        ParameterError: If the maximum length is not greater than 0
+        ParameterError: If the minimum or the maximum length is not an integer or is not
+            greater than 0
         ParameterError: If the minimum length is greater than the maximum one
     """
     filters: Filters = []
     if min_len is not None:
+        check_integer(min_len, "minimum length of the text")
         if min_len < 1:
             raise ParameterError("The minimum length of the text must be greater than 0")
         filters.append(lambda record: len(record["text"]) >= min_len)
     if max_len is not None:
+        check_integer(max_len, "maximum length of the text")
         if max_len < 1:
             raise ParameterError("The maximum length of the text must be greater than 0")
         filters.append(lambda record: len(record["text"]) <= max_len)

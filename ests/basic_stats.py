@@ -4,6 +4,7 @@ from collections import Counter
 from collections.abc import Iterable
 from typing import Any
 
+from anyts.utils import check_integer, count_letters, has_words, iter_doc_words
 from spacy.tokens import Doc, Span
 
 from .constants import (
@@ -14,10 +15,9 @@ from .constants import (
     PUNCTUATIONS,
     SPACES,
 )
-from .exceptions import SourceError, SourceTypeError
+from .exceptions import ParameterError, SourceError, SourceTypeError
 from .extractors import SentsExtractor, WordsExtractor
 from .syllables import count_syllables
-from .utils import count_letters, has_words, iter_doc_words
 
 ELLIPSIS_PATTERN = re.compile(r"…|\.{3,}|(?<=[?!])\.{2}")
 # The raya typed with hyphens (see count_punctuations); the underscore of the italics of
@@ -51,6 +51,13 @@ PUNCTUATION_CHARS = {
     "(": "parentheses",
     ")": "parentheses",
 }
+
+
+def _check_factor(value: int, what: str) -> None:
+    """Checking a threshold of the complex or long words: an integer from one"""
+    check_integer(value, what)
+    if value < 1:
+        raise ParameterError(f"The {what} must be greater than 0")
 
 
 class BasicStats:
@@ -139,6 +146,7 @@ class BasicStats:
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc object
         SourceError: If the source has no words
+        ParameterError: If a factor is not an integer or is below one
     """
 
     def __init__(
@@ -150,6 +158,8 @@ class BasicStats:
         complex_syl_factor: int = COMPLEX_SYL_FACTOR,
         long_word_letter_factor: int = LONG_WORD_LETTER_FACTOR,
     ):
+        _check_factor(complex_syl_factor, "minimum number of syllables in a complex word")
+        _check_factor(long_word_letter_factor, "minimum number of letters in a long word")
         sents: Iterable[Span] | Iterable[str]
         if isinstance(source, Doc):
             text = source.text
@@ -216,7 +226,11 @@ class BasicStats:
 
         Returns:
             int: Number of words
+
+        Raises:
+            ParameterError: If the minimum is not an integer
         """
+        check_integer(min_syllables, "minimum number of syllables")
         return sum(count for spw, count in self.c_syllables.items() if spw >= min_syllables)
 
     def count_words_by_letters(self, min_letters: int) -> int:
@@ -228,7 +242,11 @@ class BasicStats:
 
         Returns:
             int: Number of words
+
+        Raises:
+            ParameterError: If the minimum is not an integer
         """
+        check_integer(min_letters, "minimum number of letters")
         return sum(count for cpw, count in self.c_letters.items() if cpw >= min_letters)
 
     def get_stats(self) -> dict[str, Any]:

@@ -21,6 +21,7 @@ coverage.xml
 # Data and documentation
 ests_data
 site/
+docs/core/
 
 # Editors and OS
 .vscode

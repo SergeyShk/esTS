@@ -5,29 +5,34 @@
 
 ## Descripción
 
+<!-- core: corpus/dispersion.md:dispersion 14e4623 -->
 La dispersión de una palabra es lo uniformemente que se reparte por las partes de un texto o de un corpus. La frecuencia no distingue una palabra que aparece una vez en cada capítulo de otra reunida en uno solo; las medidas de dispersión ([Gries 2008](https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf), [2020](https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf)) completan la frecuencia.
 
 El texto se divide en partes: `parts` es el número de partes de tamaño aproximadamente igual o los tamaños de las partes en orden (oraciones, párrafos, capítulos, documentos de un corpus), que suman el número de palabras. Para cada palabra se calculan sus frecuencias por parte y seis medidas; Gries recomienda DP como la principal.
 
-Las palabras se comparan tal cual: la caja y la lematización corresponden a [`WordsExtractor`](../extractors/words.md).
+Las palabras se comparan tal cual: la caja y la lematización corresponden al extractor de palabras.
+
+El módulo `ests.corpus.dispersion` reexporta la función y las medidas del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/dispersion/) (`from ests.corpus.dispersion import calc_dp`). Las palabras se extraen con [`WordsExtractor`](../extractors/words.md).
 
 ## Medidas
 
+<!-- core: corpus/dispersion.md:dispersion-measures 09abba3 -->
 Para $n$ partes de proporciones $s_i$ del texto, frecuencias de la palabra por parte $v_i$ y una frecuencia total $f = \sum v_i$; $p_i = v_i / n_i$ es la frecuencia relativa en una parte de tamaño $n_i$:
 
 | Medida | Campo | Fórmula | Valores |
 | :----- | :---- | :------ | :------ |
-| Desviación de proporciones DP | `dp` | $\frac{1}{2} \sum \left\lvert \frac{v_i}{f} - s_i \right\rvert$ | 0 - en proporción a los tamaños de las partes, tiende a 1 - en una parte; Gries (2008) |
+| Desviación de proporciones DP | `dp` | $\frac{1}{2} \sum \left\lvert \frac{v_i}{f} - s_i \right\rvert$ | 0 - en proporción a los tamaños de las partes, $1 - s_i$ - solo en la parte $i$, así que como máximo $1 - \min s_i$; Gries (2008) |
 | DP normalizada | `dp_norm` | $\frac{DP}{1 - \min s_i}$ | el máximo es uno sea cual sea la división; Lijffijt y Gries (2012) |
-| D de Juilland | `juilland_d` | $1 - \frac{V}{\sqrt{n - 1}}$, $V = \frac{\sigma(p)}{\mu(p)}$ | 1 - uniforme, 0 - en una parte; Juilland y Chang-Rodríguez (1964) |
+| D de Juilland | `juilland_d` | $1 - \frac{V}{\sqrt{n - 1}}$, $V = \frac{\sigma(p)}{\mu(p)}$ | 1 - uniforme, 0 - en una parte; Juilland y Chang-Rodríguez (1964), con la desviación típica poblacional $\sigma$ como en Gries (2020); Gries (2008) toma la muestral |
 | D2 de Carroll | `carroll_d2` | $\frac{H(p)}{\log_2 n}$ | entropía de la distribución $p_i$; 1 - uniforme, 0 - en una parte; Carroll (1970) |
 | S de Rosengren | `rosengren_s` | $\frac{(\sum \sqrt{s_i v_i})^2}{f}$ | 1 - en proporción, tiende a $1/n$ cuando se reúne en una de partes iguales; Rosengren (1971) |
 | Divergencia de Kullback-Leibler | `kl_divergence` | $\sum \frac{v_i}{f} \log_2 \frac{v_i / f}{s_i}$ | en bits; 0 - en proporción, crece cuando se reúne en partes pequeñas; Gries (2020) |
 
-Las medidas están disponibles como las funciones `calc_dp`, `calc_dp_norm`, `calc_juilland_d`, `calc_carroll_d2`, `calc_rosengren_s`, `calc_kl_divergence` con los argumentos `(frequencies, sizes)` - las frecuencias de la palabra por parte y los tamaños de las partes - del módulo `ests.corpus.dispersion` (`from ests.corpus.dispersion import calc_dp`); sus nombres están en `ests.constants.DISPERSION_STATS_DESC`. Para una palabra de frecuencia nula todas las medidas son `nan`.
+Las medidas están disponibles como las funciones `calc_dp`, `calc_dp_norm`, `calc_juilland_d`, `calc_carroll_d2`, `calc_rosengren_s` y `calc_kl_divergence` con los argumentos `(frequencies, sizes)` - las frecuencias de la palabra por parte y los tamaños de las partes - del módulo `anyts.corpus.dispersion`; sus nombres están en `anyts.constants.DISPERSION_STATS_DESC`. Para una palabra de frecuencia nula todas las medidas son `nan`.
 
 ## Parámetros
 
+<!-- core: corpus/dispersion.md:dispersion-parameters a7f9e1c -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `words` | list[str] | `-` | Palabras del texto en orden |
@@ -37,6 +42,7 @@ Las medidas están disponibles como las funciones `calc_dp`, `calc_dp_norm`, `ca
 
 ## Resultado
 
+<!-- core: corpus/dispersion.md:Dispersion c55ea86 -->
 Una lista de tuplas con nombre `Dispersion` por frecuencia descendente: `word`, `freq` y las seis medidas de la tabla; `pd.DataFrame(result)` da una tabla.
 
 ## Ejemplo

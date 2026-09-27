@@ -14,33 +14,30 @@ Description:
     Adding a component extends the tokenizer of its pipeline with add_dash_rules
 """
 
-from spacy.language import Language
-from spacy.tokens import Doc
-
-from .basic_stats import BasicStats
-from .cohesion_stats import CohesionStats
-from .constants import (
+from anyts.constants import (
     DIVERSITY_LOG_BASE,
     HDD_SAMPLE_SIZE,
     MATTR_WINDOW_LEN,
     MTLD_MIN_LEN,
     MTLD_TTR_THRESHOLD,
-    NAUSEA_TOP_N,
-    PHON_WINDOW_LEN,
 )
+from anyts.utils import check_words, has_words, iter_doc_tokens
+from spacy.language import Language
+from spacy.tokens import Doc
+
+from .basic_stats import BasicStats
+from .cohesion_stats import CohesionStats
+from .constants import NAUSEA_TOP_N, PHON_WINDOW_LEN
 from .datasets.freq_dict import FreqDict
-from .diversity_stats import DiversityStats
-from .diversity_stats import check_params as check_diversity_params
+from .diversity_stats import DiversityStats, check_params as check_diversity_params
 from .exceptions import SourceError
 from .lexical_stats import LexicalStats, is_number
 from .morph_stats import MorphStats
-from .phon_stats import PhonStats
-from .phon_stats import check_params as check_phon_params
+from .phon_stats import PhonStats, check_params as check_phon_params
 from .readability_stats import ReadabilityStats, check_preset
-from .style_stats import StyleStats
-from .style_stats import check_params as check_style_params
+from .style_stats import StyleStats, check_params as check_style_params
 from .syntax_stats import SyntaxStats
-from .utils import add_dash_rules, has_words, iter_doc_tokens
+from .utils import add_dash_rules
 from .verse_stats import LETTER, VerseStats
 
 
@@ -233,7 +230,8 @@ class DiversityStatsComponent:
         log_base (float): Logarithm base for the Summer, Maas and Dugast metrics
 
     Raises:
-        ParameterError: If a parameter is out of its range
+        ParameterError: If a parameter is not an integer where one is expected or is out
+            of its range
     """
 
     def __init__(
@@ -527,7 +525,9 @@ class StyleStatsComponent:
             and the naturalness by Zipf's law
 
     Raises:
-        ParameterError: If the number of the most frequent words is below one
+        SourceTypeError: If the stopwords are not a list of strings
+        ParameterError: If the number of the most frequent words is not an integer or is
+            below one
     """
 
     def __init__(
@@ -538,6 +538,8 @@ class StyleStatsComponent:
         top_n: int = NAUSEA_TOP_N,
     ):
         check_style_params(top_n)
+        if stopwords is not None:
+            check_words(stopwords, "stopwords")
         add_dash_rules(nlp)
         self.name = name
         self.stopwords = stopwords
@@ -590,7 +592,7 @@ class PhonStatsComponent:
         window_len (int): Window in words for the alliteration and the assonance
 
     Raises:
-        ParameterError: If the window is below 2
+        ParameterError: If the window is not an integer or is below 2
     """
 
     def __init__(self, nlp: Language, name: str = "ests_phon", window_len: int = PHON_WINDOW_LEN):

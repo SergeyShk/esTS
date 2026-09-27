@@ -5,12 +5,15 @@
 
 ## Descripción
 
-Módulo para calcular las principales métricas de [diversidad léxica](https://en.wikipedia.org/wiki/Lexical_diversity) de un texto. La fuente de datos puede ser un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy).
-
-Las palabras pueden extraerse con un [`WordsExtractor`](../extractors/words.md) ya configurado; para un `Doc`, el extractor indicado se aplica a su texto, y sin él las palabras salen de sus tokens. Las palabras siempre se pasan a minúsculas, porque todas las métricas cuentan lexemas.
+<!-- core: stats/diversity_stats.md:DiversityStats 2e4dbf8 -->
+Clase para calcular las principales métricas de [diversidad léxica](https://en.wikipedia.org/wiki/Lexical_diversity) de un texto a partir de sus palabras.
 
 !!! note "Nota"
     Las métricas se calculan al acceder al atributo correspondiente o al llamar al método `get_stats` del objeto `DiversityStats`.
+
+La clase extiende el `DiversityStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/diversity_stats/): en lugar de una lista de palabras recibe un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy).
+
+Las palabras pueden extraerse con un [`WordsExtractor`](../extractors/words.md) ya configurado; para un `Doc`, el extractor indicado se aplica a su texto, y sin él las palabras salen de sus tokens. Las palabras siempre se pasan a minúsculas, porque todas las métricas cuentan lexemas.
 
 ## Parámetros
 
@@ -24,26 +27,31 @@ Las palabras pueden extraerse con un [`WordsExtractor`](../extractors/words.md) 
 | `hdd_sample_size` | int | `42` | Tamaño de la muestra para HD-D |
 | `log_base` | float | `10` | Base del logaritmo para las métricas de Summer, Maas y Dugast |
 
+<!-- core: stats/diversity_stats.md:check_params 07c0f60 -->
+Los parámetros se comprueban con `check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)`, que lanza `ParameterError` si una ventana, un tamaño de muestra o una longitud mínima del factor están fuera de rango, si el umbral está fuera de (0, 1) o si la base del logaritmo no es mayor que 1; una biblioteca la llama antes de extraer las palabras, para que un parámetro erróneo se señale antes que un texto vacío.
+
 ## Convenciones { #conventions }
 
+<!-- core: stats/diversity_stats.md:DiversityStats-conventions b46d998 -->
 Los valores de algunas métricas dependen de convenciones que difieren entre bibliotecas. Todas salvo la comparación con el umbral de MTLD son parámetros de la clase:
 
-| Parámetro | esTS | Otras bibliotecas |
-| :-------: | :--: | :---------------: |
+| Parámetro | Por defecto | Otras bibliotecas |
+| :-------: | :---------: | :---------------: |
 | Base del logaritmo para Summer, Maas, U de Dugast y k de Dugast | 10 | LexicalRichness, textcomplexity y zipfR: natural |
 | Ventana de MATTR y segmento de MSTTR | 50 | quanteda y koRpus: 100 |
 | Umbral de TTR para MTLD | 0.72 | 0.66-0.75 en la bibliografía |
 | Comparación con el umbral de MTLD | un factor se cierra con TTR ≤ 0.72 (McCarthy & Jarvis, 2010) | lexical-diversity y TAALED: `<` estricto; los valores difieren cuando el TTR da exactamente el umbral |
-| Longitud mínima del factor de MTLD | 10 | koRpus la aplica solo a MA-MTLD, LexicalRichness y textcomplexity no la aplican |
+| Longitud mínima del factor de MTLD | 10 | koRpus la aplica solo a MTLD-MA y descarta los factores más cortos en lugar de extenderlos, LexicalRichness y textcomplexity no la aplican |
 | Tamaño de la muestra de HD-D | 42 | 35-50 en la bibliografía |
 
 Según Zenker y Kyle (2021), MATTR, MTLD y HD-D son estables en textos de 50-200 palabras o más, MTLD-W, MA-MTLD y Maas son inestables en textos cortos, y la familia de TTR nunca se estabiliza. Para comparar textos de distinta longitud use el [cálculo por ventanas](#windowed) con intervalos de confianza.
 
 ## Atributos
 
+<!-- core: stats/diversity_stats.md:DiversityStats-attributes 2bd9615 -->
 | Atributo | Tipo | Descripción |
 | :------: | :--: | :---------: |
-| `words` | tuple[str] | Tupla de las palabras extraídas en minúsculas |
+| `words` | tuple[str] | Tupla de las palabras |
 | `window_len`, `mtld_threshold`, `mtld_min_len`, `hdd_sample_size`, `log_base` | int/float | Los parámetros de las métricas; cambiarlos en el objeto cambia las métricas |
 | `frequency_spectrum` | dict[int, int] | Espectro de frecuencias: número de lexemas con una frecuencia dada |
 | `ttr` | float | Type-Token Ratio (TTR) |
@@ -87,6 +95,7 @@ Según Zenker y Kyle (2021), MATTR, MTLD y HD-D son estables en textos de 50-200
 
 ### windowed
 
+<!-- core: stats/diversity_stats.md:DiversityStats-windowed af6a479 -->
 Cálculo por ventanas de una métrica por su nombre, como en [`calc_windowed`](diversity_stats_funcs.md#calc_windowed): su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Los casos límite (textos cortos, valores `nan` e infinitos) se describen allí.
 
 Parámetros:
@@ -115,6 +124,7 @@ Devuelve una tupla con nombre `WindowStats` con los campos `mean`, `std`, `lower
 
 ### get_stats
 
+<!-- core: stats/diversity_stats.md:DiversityStats-get_stats b65013e -->
 Devuelve un diccionario con las métricas de diversidad léxica calculadas.
 
 !!! example "Ejemplo"
@@ -172,7 +182,8 @@ Devuelve un diccionario con las métricas de diversidad léxica calculadas.
 
 ### print_stats
 
-Muestra una tabla con las métricas de diversidad léxica calculadas.
+<!-- core: stats/diversity_stats.md:DiversityStats-print_stats be91444 -->
+Muestra una tabla con las métricas de diversidad léxica calculadas, sus descripciones de `stats_desc` y los encabezados de `stats_headers`.
 
 El ejemplo continúa el anterior:
 

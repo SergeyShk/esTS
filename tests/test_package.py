@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import zipfile
 from pathlib import Path
+from types import ModuleType
 
 import pytest
 from spacy.language import Language
@@ -26,6 +27,32 @@ FACTORIES = {
     "ests_verse",
 }
 RESOURCES = {"connectors.tsv", "google_books_top10000.txt"}
+# Modules of the library and the modules of the core they build on
+CORE_MODULES = {
+    "ests": "anyts",
+    "ests.exceptions": "anyts.exceptions",
+    "ests.utils": "anyts.utils",
+    "ests.extractors": "anyts.extractors",
+    "ests.diversity_stats": "anyts.diversity_stats",
+    "ests.cohesion_stats": "anyts.cohesion",
+    "ests.syntax_stats": "anyts.syntax",
+    "ests.corpus": "anyts.corpus",
+    "ests.corpus.collocations": "anyts.corpus.collocations",
+    "ests.corpus.dispersion": "anyts.corpus.dispersion",
+    "ests.corpus.keyness": "anyts.corpus.keyness",
+    "ests.corpus.stylometry": "anyts.corpus.stylometry",
+    "ests.corpus.compare": "anyts.corpus.compare",
+}
+# Names of the core the library defines for Spanish: subclasses with the hooks, a wrapper
+# taking the frequency dictionary and the pattern of Spanish numbers
+SPANISH = {
+    "CharNgramsExtractor",
+    "DiversityStats",
+    "NUMBER_PATTERN",
+    "SentsExtractor",
+    "WordsExtractor",
+    "keyness",
+}
 
 
 def test_version():
@@ -57,6 +84,25 @@ def test_subpackage_exports(name):
     module = importlib.import_module(f"ests.{name}")
     assert module.__all__ == sorted(module.__all__)
     assert all(hasattr(module, attr) for attr in module.__all__)
+
+
+@pytest.mark.parametrize(("library", "core"), CORE_MODULES.items())
+def test_core_names(library, core):
+    """A name of the core in the library is the object of the core, not a copy of it"""
+    library_module, core_module = importlib.import_module(library), importlib.import_module(core)
+    for name, value in vars(core_module).items():
+        if (
+            name.startswith("_")
+            or isinstance(value, ModuleType)
+            or not hasattr(library_module, name)
+        ):
+            continue
+        own = getattr(library_module, name)
+        if name in SPANISH:
+            assert own is not value, name
+            assert not isinstance(value, type) or issubclass(own, value), name
+        else:
+            assert own is value, name
 
 
 def test_package_data():

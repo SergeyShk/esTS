@@ -11,9 +11,12 @@ import spacy
 
 from ests import VerseStats, verse_stats
 from ests.constants import VERSE_STATS_DESC
-from ests.datasets import SpanishLiterature, SpanishSonnets
-from ests.datasets import spanish_literature as literature_module
-from ests.datasets import spanish_sonnets as sonnets_module
+from ests.datasets import (
+    SpanishLiterature,
+    SpanishSonnets,
+    spanish_literature as literature_module,
+    spanish_sonnets as sonnets_module,
+)
 from ests.exceptions import SourceError, SourceTypeError
 from ests.verse_stats import (
     _default_joins,

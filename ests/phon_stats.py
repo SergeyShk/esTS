@@ -5,6 +5,7 @@ from itertools import pairwise
 from math import log2, nan
 
 import numpy as np
+from anyts.utils import check_integer, check_words, iter_doc_words, safe_divide
 from spacy.tokens import Doc
 
 from .constants import (
@@ -18,7 +19,6 @@ from .constants import (
 from .exceptions import ParameterError, SourceError, SourceTypeError
 from .extractors import WordsExtractor
 from .syllables import syllabify
-from .utils import iter_doc_words, safe_divide
 
 CONSONANT_SOUNDS = SONORANT_SOUNDS | VOICED_SOUNDS | VOICELESS_SOUNDS
 SOUNDS = VOWEL_SOUNDS | CONSONANT_SOUNDS
@@ -61,8 +61,9 @@ def check_params(window_len: int) -> None:
         window_len (int): Window in words for the alliteration and the assonance
 
     Raises:
-        ParameterError: If the window is below 2
+        ParameterError: If the window is not an integer or is below 2
     """
+    check_integer(window_len, "window")
     if window_len < 2:
         raise ParameterError("The window must be at least 2")
 
@@ -146,6 +147,7 @@ class PhonStats:
         words_extractor: WordsExtractor | None = None,
         window_len: int = PHON_WINDOW_LEN,
     ):
+        check_params(window_len)
         if isinstance(source, Doc):
             words = tuple(word.lower() for _, _, word in iter_doc_words(source))
         elif isinstance(source, str):
@@ -156,7 +158,6 @@ class PhonStats:
             raise SourceTypeError("The data source is set incorrectly")
         if not words:
             raise SourceError("The data source has no words")
-        check_params(window_len)
         self.words = words
         self.window_len = window_len
         self.syllables = tuple(tuple(syllabify(word)) for word in words)
@@ -387,11 +388,15 @@ def calc_consonant_clusters(text: Sequence[str]) -> dict[int, int]:
     Returns:
         dict[int, int]: Number of the clusters of every length
 
+    Raises:
+        SourceTypeError: If the words are not a list of strings
+
     Example:
         >>> from ests.phon_stats import calc_consonant_clusters
         >>> calc_consonant_clusters(["instrumento", "calle"])
         {1: 3, 2: 1, 4: 1}
     """
+    check_words(text)
     return _consonant_clusters(Counter(text))
 
 
@@ -436,11 +441,15 @@ def calc_hiatus(text: Sequence[str]) -> int:
     Returns:
         int: Number of hiatuses
 
+    Raises:
+        SourceTypeError: If the words are not a list of strings
+
     Example:
         >>> from ests.phon_stats import calc_hiatus
         >>> calc_hiatus(["poeta", "búho", "cielo", "aéreo"])
         4
     """
+    check_words(text)
     return _hiatus(Counter(text))
 
 
@@ -473,7 +482,11 @@ def calc_cv_entropy(text: Sequence[str]) -> float:
 
     Returns:
         float: Value of the entropy, nan if the text has no word with sounds
+
+    Raises:
+        SourceTypeError: If the words are not a list of strings
     """
+    check_words(text)
     return _cv_entropy(Counter(text))
 
 
@@ -562,7 +575,13 @@ def calc_alliteration(text: Sequence[str], window_len: int = PHON_WINDOW_LEN) ->
 
     Returns:
         float: Value of the index, nan for a text shorter than the window
+
+    Raises:
+        SourceTypeError: If the words are not a list of strings
+        ParameterError: If the window is not an integer or is below 2
     """
+    check_words(text)
+    check_params(window_len)
     return _calc_repetition_index(text, CONSONANT_SOUNDS, window_len)
 
 
@@ -580,5 +599,11 @@ def calc_assonance(text: Sequence[str], window_len: int = PHON_WINDOW_LEN) -> fl
 
     Returns:
         float: Value of the index, nan for a text shorter than the window
+
+    Raises:
+        SourceTypeError: If the words are not a list of strings
+        ParameterError: If the window is not an integer or is below 2
     """
+    check_words(text)
+    check_params(window_len)
     return _calc_repetition_index(text, VOWEL_SOUNDS, window_len)

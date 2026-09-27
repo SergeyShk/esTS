@@ -8,9 +8,11 @@ from pathlib import Path
 
 import pytest
 
-from ests.datasets import SpanishLiterature
-from ests.datasets import dataset as dataset_module
-from ests.datasets import spanish_literature as module
+from ests.datasets import (
+    SpanishLiterature,
+    dataset as dataset_module,
+    spanish_literature as module,
+)
 from ests.exceptions import DatasetNotFoundError, DownloadError, ParameterError
 
 BUNDLED_ARCHIVE = Path(__file__).parents[2] / "ests" / "datasets" / "data" / module.ARCHIVE

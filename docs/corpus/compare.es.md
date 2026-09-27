@@ -5,9 +5,12 @@
 
 ## Descripción
 
-Comparación de dos corpus por todos los rasgos de un texto a la vez: qué estadísticas distinguen los corpus y en qué medida. Para palabras sueltas hace lo mismo [`keyness`](keyness.md), para las distancias entre textos, [`delta`](stylometry.md#delta).
+<!-- core: corpus/compare.md:compare_features f0cc080 -->
+Comparación de dos corpus rasgo por rasgo. Cada corpus llega como una tabla de los rasgos de sus ventanas - los textos divididos en partes de un tamaño parecido, para que los rasgos no dependan de la longitud de los textos -; una biblioteca de un idioma construye esas tablas a partir de sus textos. `compare_features(table_a, table_b, labels, n_bootstrap, seed)` compara las tablas columna por columna y devuelve una fila por rasgo, ordenadas por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel `text` del índice de una tabla; una tabla sin ese nivel toma cada fila por un texto aparte. Una columna que falta en una de las tablas da `nan`.
 
-Los textos de ambos corpus se dividen en ventanas de un tamaño parecido para que los rasgos no dependan de la longitud de un texto. En `split_windows` el número de ventanas es la razón del número de palabras al tamaño de una ventana redondeada al entero más próximo, al menos una, y las partes son iguales: con una ventana de 1000 un texto de una a dos ventanas da ventanas de 750 a 1499 palabras, y un texto más corto que `min_words` - media ventana por defecto - no da ninguna. Un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, `¿` y `¡` -, mientras que unas comillas rectas o una raya pegadas al final de la palabra anterior se quedan con ella (`"cuatro"`, `—dijo Juan—`). Los rasgos se calculan para cada ventana (`text_features` o una función propia), y para cada rasgo se comparan los dos conjuntos de valores. El resultado es un `DataFrame` rasgo × estadísticas ordenado por el valor absoluto descendente de la delta de Cliff.
+`compare_corpora` compara dos corpus de textos en español por todos los rasgos de un texto a la vez - qué estadísticas distinguen los corpus y en qué medida - con el `compare_features` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/compare/). Para palabras sueltas hace lo mismo [`keyness`](keyness.md), para las distancias entre textos, [`delta`](stylometry.md#delta).
+
+En `split_windows` el número de ventanas es la razón del número de palabras al tamaño de una ventana redondeada al entero más próximo, al menos una, y las partes son iguales: con una ventana de 1000 un texto de una a dos ventanas da ventanas de 750 a 1499 palabras, y un texto más corto que `min_words` - media ventana por defecto - no da ninguna. Un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, `¿` y `¡` -, mientras que unas comillas rectas o una raya pegadas al final de la palabra anterior se quedan con ella (`"cuatro"`, `—dijo Juan—`). Los rasgos de cada ventana los calcula `text_features` o una función propia.
 
 ## Rasgos
 
@@ -28,12 +31,13 @@ Las categorías gramaticales y los rasgos de un solo valor - polaridad, cortesí
 
 La morfología la analiza el modelo [`es_core_news_sm`](../installation.md#model) sin su analizador sintáctico, así que el marcador `morph_p_ser`, que lee las cópulas de las dependencias, se deja fuera; un pipeline pasado en `nlp` se ejecuta entero salvo el reconocedor de entidades, así que `functools.partial(text_features, nlp=get_nlp())` devuelve el analizador sintáctico y `morph_p_ser`, y otro modelo entra en la comparación del mismo modo. Un texto más largo que el `max_length` del pipeline lanza `SourceError`, así que una novela se compara por ventanas y no entera.
 
-`corpus_features(texts, window, features)` devuelve la matriz de rasgos de las ventanas con el índice (número del texto, número de la ventana), para clasificadores propios, y `compare_features(table_a, table_b, labels, n_bootstrap, seed)` compara dos tablas así: `compare_corpora` es `corpus_features` para cada corpus seguido de `compare_features`, y la división permite calcular una vez los rasgos de varios corpus y compararlos por pares.
+`corpus_features(texts, window, features)` devuelve la matriz de rasgos de las ventanas con el índice (número del texto, número de la ventana), también para clasificadores propios; el nivel `text` del índice es el que remuestrea el bootstrap de `compare_features`. `compare_corpora` es `corpus_features` para cada corpus seguido de `compare_features`, y la división permite calcular una vez los rasgos de varios corpus y compararlos por pares.
 
 Las proporciones de espacios, letras y signos de puntuación (`basic_p_spaces`, `basic_p_letters`, `basic_p_punctuations`) cuentan los caracteres tal cual: las sangrías, los espacios dobles y los de no separación de los archivos reflejan la composición de una edición y no el texto. En un corpus de fuentes distintas conviene colapsarlos antes, por ejemplo, con `re.sub(r"[^\S\n]+", " ", text)`.
 
 ## Estadísticas
 
+<!-- core: corpus/compare.md:compare_features-statistics 63d4635 -->
 Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_{n_B}$ en el corpus B (sin los valores indefinidos e infinitos; con menos de dos valores en un lado, `nan`):
 
 | Columna | Descripción |
@@ -48,12 +52,14 @@ Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_
 | `n_A`, `n_B` | número de ventanas con un valor definido |
 | `n_texts_A`, `n_texts_B` | número de textos detrás de esas ventanas |
 
-La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.
+Los nombres de las columnas son `COMPARISON_COLUMNS`, con `A` y `B` sustituidas por las etiquetas de los corpus. La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.
 
 !!! warning "Las ventanas de un texto no son independientes"
-    La prueba y los tamaños del efecto toman cada ventana por una observación independiente, y las ventanas de un texto no lo son. Con pocos textos en un corpus los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus: en el ejemplo de abajo dos novelas de un mismo autor difieren en 32 rasgos según la misma prueba. El bootstrap, en cambio, remuestrea textos enteros, el nivel `text` del índice que pone `corpus_features` (un bootstrap por conglomerados), así que su intervalo tiene en cuenta la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con solo unos pocos. Una tabla propia sin ese nivel toma cada fila por un texto aparte.
+    La prueba y los tamaños del efecto toman cada ventana por una observación independiente, y las ventanas de un texto no lo son. Con pocos textos en un corpus los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus. El bootstrap, en cambio, remuestrea textos enteros (un bootstrap por conglomerados), así que su intervalo tiene en cuenta la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con solo unos pocos.
 
 ## Parámetros
+
+Parámetros de `compare_corpora`:
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
@@ -61,10 +67,18 @@ La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí
 | `b` | list[str] | `-` | Textos del segundo corpus |
 | `window` | int | `1000` | Tamaño de una ventana en palabras; `None` - los textos enteros |
 | `features` | callable | `None` | Función de los rasgos de un texto; `None` - `text_features` |
+| `min_words` | int | `None` | Menor número de palabras de una ventana; `None` - media ventana, o una cuando `window` es `None` |
+
+`labels`, `n_bootstrap` y `seed` pasan a `compare_features`, cuyos parámetros son:
+
+<!-- core: corpus/compare.md:compare_features-parameters 73b70e9 -->
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------: | :--: | :---------: | :---------: |
+| `table_a` | DataFrame | `-` | Rasgos de las ventanas del primer corpus, una fila por ventana |
+| `table_b` | DataFrame | `-` | Rasgos de las ventanas del segundo corpus |
 | `labels` | tuple[str, str] | `("A", "B")` | Nombres de los corpus para las columnas |
 | `n_bootstrap` | int | `1000` | Número de remuestras bootstrap |
 | `seed` | int | `0` | Semilla del generador de números aleatorios; `None` - una aleatoria |
-| `min_words` | int | `None` | Menor número de palabras de una ventana; `None` - media ventana, o una cuando `window` es `None` |
 
 ## Ejemplo de uso
 
@@ -144,7 +158,7 @@ Galdós frente a Unamuno, tres novelas de cada uno del [corpus de literatura](..
 
 Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto pequeño (0.32), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas por cada 1000 palabras, el triple de signos de exclamación, y más negaciones.
 
-Los valores p toman las 274 ventanas de seis novelas por independientes (véase la advertencia de arriba); el intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 7.2 palabras, donde las ventanas solas darían de 3.8 a 6.3.
+Los valores p toman las 274 ventanas de seis novelas por independientes (véase la advertencia de arriba), y según la misma prueba dos novelas de un mismo autor difieren en 32 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 7.2 palabras, donde las ventanas solas darían de 3.8 a 6.3.
 
 Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:
 

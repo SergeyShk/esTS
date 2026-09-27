@@ -4,7 +4,6 @@ import os
 import re
 import shutil
 import tarfile
-import unicodedata
 import urllib.parse
 import urllib.request
 import zipfile
@@ -14,15 +13,14 @@ from pathlib import Path, PurePosixPath
 
 import simplemma
 import spacy
+from anyts.utils import check_words, iter_doc_words
 from spacy.language import Language
 from spacy.tokenizer import Tokenizer
-from spacy.tokens import Doc, Span, Token
 
 from .constants import (
     ABBREVIATIONS,
     DASHES,
     DEFAULT_DATA_DIR,
-    PUNCTUATIONS,
     SENTENCE_OPENERS,
     SPACY_MODEL,
     TOKENIZER_INFIXES,
@@ -47,23 +45,6 @@ LIST_MARKER = re.compile(r"(?:^|\n)[ \t]*(?:\d+(?:\.\d+)*|[a-z]|[IVXLC]+)\.\Z")
 OPENING_CHARS = "(«“\"'["
 # Characters looked back from a period for an abbreviation or an initial
 LOOKBACK = 64
-
-
-def is_punctuation(token: str) -> bool:
-    """
-    Checking whether a token consists only of punctuation marks and symbols
-
-    Description:
-        Characters of PUNCTUATIONS and of the Unicode categories P and S,
-        so "?!", "--", "«" and "€" are punctuation too
-
-    Arguments:
-        token (str): Token
-
-    Returns:
-        bool: Result of the check
-    """
-    return all(char in PUNCTUATIONS or unicodedata.category(char)[0] in "PS" for char in token)
 
 
 def _opens_remark(text: str, position: int) -> bool:
@@ -299,43 +280,6 @@ def lemmatize(word: str) -> str:
     return simplemma.lemmatize(word, lang="es")
 
 
-def iter_doc_tokens(source: Doc | Span) -> Iterator[Token]:
-    """
-    Extracting the tokens of the words from a Doc or Span object
-
-    Description:
-        Whitespace tokens and the tokens of is_punctuation (symbols like %
-        and € included) are skipped
-
-    Arguments:
-        source (Doc|Span): Doc or Span object
-
-    Returns:
-        generator[Token]: Token of each word
-    """
-    for token in source:
-        if not token.is_space and not is_punctuation(token.text):
-            yield token
-
-
-def iter_doc_words(source: Doc | Span) -> Iterator[tuple[int, int, str]]:
-    """
-    Extracting words with positions from a Doc or Span object
-
-    Description:
-        The words of iter_doc_tokens with the positions of their tokens
-
-    Arguments:
-        source (Doc|Span): Doc or Span object
-
-    Returns:
-        generator[tuple[int, int, str]]: Position of the first character,
-            position after the last character and text of each word
-    """
-    for token in iter_doc_tokens(source):
-        yield token.idx, token.idx + len(token), token.text
-
-
 def iter_text_words(text: str) -> Iterator[tuple[int, int, str]]:
     """
     Extracting words with positions from a string
@@ -426,57 +370,6 @@ def get_nlp(model: str = SPACY_MODEL) -> Language:
     return _load_nlp(model)
 
 
-def has_words(source: str | Doc | Span) -> bool:
-    """
-    Checking whether a text holds a word
-
-    Description:
-        An empty text or one of whitespace and punctuation alone (¿?, ...)
-        holds no word
-
-    Arguments:
-        source (str|Doc|Span): Text, Doc or Span object
-
-    Returns:
-        bool: Result of the check
-
-    Example:
-        >>> from ests.utils import has_words
-        >>> has_words("El gato duerme"), has_words("¿?"), has_words("")
-        (True, False, False)
-    """
-    text = source if isinstance(source, str) else source.text
-    return any(not char.isspace() and not is_punctuation(char) for char in text)
-
-
-def check_sequence(value: object, what: str = "words") -> None:
-    """
-    Checking that an argument is a sequence of strings and not a text
-
-    Arguments:
-        value (object): Value to check
-        what (str): What is expected, for the message of the error
-
-    Raises:
-        SourceTypeError: If a string, a Doc or a Span is passed
-
-    Example:
-        >>> from ests.utils import check_sequence
-        >>> check_sequence(["el", "gato"])
-        >>> check_sequence("el gato")
-        Traceback (most recent call last):
-        ...
-        ests.exceptions.SourceTypeError: A list of words is expected, not a string
-    """
-    if isinstance(value, str):
-        raise SourceTypeError(f"A list of {what} is expected, not a string")
-    if isinstance(value, Doc | Span):
-        raise SourceTypeError(
-            f"A list of {what} is expected, not a {type(value).__name__}: "
-            "extract the words with WordsExtractor"
-        )
-
-
 def is_verbal_noun(lemma: str) -> bool:
     """
     Checking whether a lemma is a noun derived from a verb, by its suffix
@@ -517,11 +410,15 @@ def find_phrases(words: Sequence[str], phrases: Iterable[str]) -> list[tuple[int
         list[tuple[int, int]]: Bounds of the phrases found as slices of words;
             empty phrases are skipped
 
+    Raises:
+        SourceTypeError: If the words are not a list of strings
+
     Example:
         >>> from ests.utils import find_phrases
         >>> find_phrases(["Sin", "embargo", "no", "llegó"], ["sin embargo", "sin"])
         [(0, 2)]
     """
+    check_words(words)
     patterns = sorted(
         {pattern for phrase in phrases if (pattern := tuple(phrase.lower().split()))},
         key=len,
@@ -543,23 +440,6 @@ def find_phrases(words: Sequence[str], phrases: Iterable[str]) -> list[tuple[int
         else:
             position += 1
     return spans
-
-
-def count_letters(word: str) -> int:
-    """
-    Counting the letters of a string
-
-    Description:
-        Letters of any alphabet (str.isalpha); the ordinal indicators º and ª
-        are letters too, so 3.º has one
-
-    Arguments:
-        word (str): Word form
-
-    Returns:
-        int: Number of letters
-    """
-    return sum(map(str.isalpha, word))
 
 
 def to_path(path: str | Path) -> Path:
@@ -738,20 +618,3 @@ def sha256(path: Path) -> str:
         return ""
     with path.open("rb") as file:
         return hashlib.file_digest(file, "sha256").hexdigest()
-
-
-def safe_divide(num: float | int, den: float | int, default: float | int = 0) -> float:
-    """
-    Dividing two numbers safely
-
-    Arguments:
-        num (float|int): Numerator
-        den (float|int): Denominator
-        default (float|int): Value returned for a zero denominator
-
-    Returns:
-        float: Result of the division
-    """
-    if not den:
-        return default
-    return num / den

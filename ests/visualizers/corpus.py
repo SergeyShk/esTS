@@ -3,6 +3,7 @@ from collections.abc import Sequence
 from math import isfinite, isnan, log2, nan
 
 import matplotlib.pyplot as plt
+from anyts.utils import check_integer, check_words
 from graphviz import Graph, nohtml
 from matplotlib.axes import Axes
 from matplotlib.patches import Patch
@@ -10,7 +11,6 @@ from matplotlib.patches import Patch
 from ..corpus.collocations import Collocation
 from ..corpus.keyness import Keyword
 from ..exceptions import ParameterError, SourceError
-from ..utils import check_sequence
 
 
 def dispersion_plot(words: Sequence[str], targets: Sequence[str], ax: Axes | None = None) -> Axes:
@@ -31,11 +31,11 @@ def dispersion_plot(words: Sequence[str], targets: Sequence[str], ax: Axes | Non
         Axes: Axes with the plot
 
     Raises:
-        SourceTypeError: If a string or a Doc is passed instead of a list of words
+        SourceTypeError: If the words or the target words are not a list of strings
         SourceError: If there are no words or no target words
     """
-    check_sequence(words)
-    check_sequence(targets, "target words")
+    check_words(words)
+    check_words(targets, "target words")
     if not words or not targets:
         raise SourceError("The data source has no words")
     positions = [
@@ -89,11 +89,12 @@ def keyness_plot(
         Axes: Axes with the chart
 
     Raises:
-        ParameterError: If the field is unknown or top_n is below one
+        ParameterError: If the field is unknown or top_n is not an integer or is below one
         SourceError: If there are no keywords or the measure of every one is undefined
     """
     if field not in Keyword._fields[1:]:
         raise ParameterError(f"Unknown field of a keyword: {field}")
+    check_integer(top_n, "number of words")
     if top_n < 1:
         raise ParameterError("The number of words must be greater than 0")
     top = _bars(positive, field, log, 1)[:top_n]
@@ -160,7 +161,7 @@ def collocation_network(collocations: Sequence[Collocation], top_n: int | None =
         Graph: Graph of graphviz
 
     Raises:
-        ParameterError: If top_n is below one
+        ParameterError: If top_n is not an integer or is below one
         SourceError: If there are no collocations
 
     Example:
@@ -178,8 +179,10 @@ def collocation_network(collocations: Sequence[Collocation], top_n: int | None =
         }
         <BLANKLINE>
     """
-    if top_n is not None and top_n < 1:
-        raise ParameterError("The number of pairs must be greater than 0")
+    if top_n is not None:
+        check_integer(top_n, "number of pairs")
+        if top_n < 1:
+            raise ParameterError("The number of pairs must be greater than 0")
     pairs = [pair for pair in collocations if pair.left != pair.right]
     pairs = pairs[:top_n] if top_n else pairs
     if not pairs:

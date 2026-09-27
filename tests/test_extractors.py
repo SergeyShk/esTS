@@ -21,6 +21,20 @@ def text():
     )
 
 
+@pytest.mark.parametrize("extractor", [SentsExtractor, WordsExtractor, CharNgramsExtractor])
+def test_default_tokenizer_not_stored(extractor):
+    """The hooks are methods of the class, not tokenizers bound to the object"""
+    assert extractor().tokenizer is None
+
+
+def test_hooks():
+    assert list(SentsExtractor().sentenize("Sr. Pérez. ¿Vienes?")) == ["Sr. Pérez.", "¿Vienes?"]
+    assert list(WordsExtractor().tokenize("¡Dámelo ya!")) == ["¡", "Dámelo", "ya", "!"]
+    assert WordsExtractor().lemmatize("cantábamos") == "cantar"
+    assert WordsExtractor.number_pattern.fullmatch("3.º")
+    assert list(CharNgramsExtractor().tokenize("¿Qué?")) == ["¿", "Qué", "?"]
+
+
 class TestSentsExtractor:
     def test_init_value_error(self):
         with pytest.raises(ValueError):
@@ -46,11 +60,11 @@ class TestSentsExtractor:
         with pytest.raises(KeyError):
             SentsExtractor(tokenizer=failing).extract(text)
 
-    def test_extract_drops_empty(self):
+    def test_extract_strips_and_drops_empty(self):
         se = SentsExtractor(tokenizer=re.compile(r"[.]"))
         assert se.extract("El gato duerme. El perro ladra.") == (
             "El gato duerme",
-            " El perro ladra",
+            "El perro ladra",
         )
         assert se.extract("...") == ()
         assert SentsExtractor(tokenizer=re.compile(r"\n")).extract("Gato.\n\n\nPerro.") == (

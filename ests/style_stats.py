@@ -3,6 +3,7 @@ from collections.abc import Sequence
 from functools import cached_property
 from math import nan, sqrt
 
+from anyts.utils import check_integer, check_words, iter_doc_tokens, iter_doc_words, safe_divide
 from spacy.language import Language
 from spacy.tokens import Doc
 
@@ -17,17 +18,7 @@ from .constants import (
 )
 from .exceptions import ParameterError, SourceError, SourceTypeError
 from .extractors import WordsExtractor
-from .utils import (
-    check_sequence,
-    find_phrases,
-    get_nlp,
-    is_verbal_noun,
-    iter_doc_tokens,
-    iter_doc_words,
-    iter_text_sents,
-    lemmatize,
-    safe_divide,
-)
+from .utils import find_phrases, get_nlp, is_verbal_noun, iter_text_sents, lemmatize
 
 # Components the parts of speech and the lemmas of the nouns do not need
 UNUSED_COMPONENTS = ["parser", "ner"]
@@ -45,8 +36,9 @@ def check_params(top_n: int) -> None:
         top_n (int): Number of the most frequent words
 
     Raises:
-        ParameterError: If the number of the most frequent words is below one
+        ParameterError: If the number of the most frequent words is not an integer or is below one
     """
+    check_integer(top_n, "number of the most frequent words")
     if top_n < 1:
         raise ParameterError("The number of the most frequent words must be greater than 0")
 
@@ -113,11 +105,12 @@ class StyleStats:
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc, or the
-            stopwords or the clichés are a string
+            stopwords or the clichés are not a list of strings
         SourceError: If the source has no words; when the verbal nouns are read,
             if the source lacks the parts of speech or the lemmas or a sentence
             of a string is longer than the max_length of the pipeline
-        ParameterError: If the number of the most frequent words is below one
+        ParameterError: If the number of the most frequent words is not an integer or is
+            below one
     """
 
     def __init__(
@@ -129,6 +122,11 @@ class StyleStats:
         cliches: Sequence[str] | None = None,
         nlp: Language | None = None,
     ):
+        check_params(top_n)
+        if stopwords is not None:
+            check_words(stopwords, "stopwords")
+        if cliches is not None:
+            check_words(cliches, "clichés")
         # The Doc is not kept: this object in an extension of the Doc would make a cycle
         self._text: str | None = None
         self._nouns: list[str] | None = None
@@ -149,11 +147,6 @@ class StyleStats:
             raise SourceTypeError("The data source is set incorrectly")
         if not self.words:
             raise SourceError("The data source has no words")
-        check_params(top_n)
-        if stopwords is not None:
-            check_sequence(stopwords, "stopwords")
-        if cliches is not None:
-            check_sequence(cliches, "clichés")
         self.stopwords = tuple(stopwords) if stopwords is not None else None
         self.top_n = top_n
         self.cliches_list = tuple(cliches) if cliches is not None else OFFICIALESE_CLICHES
@@ -359,7 +352,11 @@ def calc_classic_nausea(text: Sequence[str]) -> float:
 
     Returns:
         float: Value of the nausea
+
+    Raises:
+        SourceTypeError: If the words are not a list of strings
     """
+    check_words(text)
     if not text:
         return 0.0
     return sqrt(max(Counter(text).values()))
@@ -382,7 +379,13 @@ def calc_academic_nausea(text: Sequence[str], top_n: int = NAUSEA_TOP_N) -> floa
 
     Returns:
         float: Value of the nausea in percent
+
+    Raises:
+        SourceTypeError: If the words are not a list of strings
+        ParameterError: If top_n is not an integer or is below one
     """
+    check_words(text)
+    check_params(top_n)
     top_freqs = sum(freq for _, freq in Counter(text).most_common(top_n))
     return safe_divide(100 * top_freqs, len(text))
 
@@ -406,7 +409,13 @@ def calc_water(text: Sequence[str], stopwords: Sequence[str] | None = None) -> f
 
     Returns:
         float: Value of the water content in percent
+
+    Raises:
+        SourceTypeError: If the words or the stopwords are not a list of strings
     """
+    check_words(text)
+    if stopwords is not None:
+        check_words(stopwords, "stopwords")
     if stopwords is not None:
         stopwords_set = {word.lower() for word in stopwords}
         n_stopwords = sum(1 for word in text if word.lower() in stopwords_set)
@@ -432,7 +441,11 @@ def calc_spam(text: Sequence[str]) -> float:
 
     Returns:
         float: Value of the spam score in percent
+
+    Raises:
+        SourceTypeError: If the words are not a list of strings
     """
+    check_words(text)
     n_words = len(text)
     return safe_divide(100 * (n_words - len(set(text))), n_words)
 
@@ -458,7 +471,13 @@ def calc_zipf_naturalness(text: Sequence[str], top_n: int = NAUSEA_TOP_N) -> flo
 
     Returns:
         float: Value of the naturalness in percent, nan if there are no ranks to compare
+
+    Raises:
+        SourceTypeError: If the words are not a list of strings
+        ParameterError: If top_n is not an integer or is below one
     """
+    check_words(text)
+    check_params(top_n)
     frequencies = sorted(Counter(text).values(), reverse=True)
     if not frequencies:
         return nan
@@ -492,7 +511,12 @@ def calc_keyword_density(text: Sequence[str], keywords: Sequence[str]) -> dict[s
 
     Returns:
         dict[str, float]: Density of every keyword in percent
+
+    Raises:
+        SourceTypeError: If the words or the keywords are not a list of strings
     """
+    check_words(text)
+    check_words(keywords, "keywords")
     n_words = len(text)
     lowered = [word.lower() for word in text]
     density = {}
@@ -540,11 +564,15 @@ def calc_verbal_nouns(nouns: Sequence[str]) -> float:
     Returns:
         float: Share in percent
 
+    Raises:
+        SourceTypeError: If the nouns are not a list of strings
+
     Example:
         >>> from ests.style_stats import calc_verbal_nouns
         >>> calc_verbal_nouns(["revisión", "proyecto", "nombramiento", "casa"])
         50.0
     """
+    check_words(nouns, "nouns")
     verbal = sum(1 for lemma in nouns if is_verbal_noun(lemma))
     return safe_divide(verbal, len(nouns), nan) * 100
 
@@ -568,6 +596,9 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> dict[str, str
         dict[str, str]: Phrases with their contractions and the forms of their
             verbs, each with the phrase of the list it spells out
 
+    Raises:
+        SourceTypeError: If the words or the phrases are not a list of strings
+
     Example:
         >>> from ests.style_stats import expand_phrases
         >>> expanded = expand_phrases(["se", "procedió", "al", "cierre"], ["proceder a"])
@@ -576,6 +607,8 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> dict[str, str
         >>> expanded["procedió al"]
         'proceder a'
     """
+    check_words(text)
+    check_words(phrases, "phrases")
     heads = {
         words[0]
         for phrase in phrases
@@ -628,7 +661,12 @@ def calc_phrase_density(text: Sequence[str], phrases: Sequence[str]) -> float:
 
     Returns:
         float: Occurrences per 100 words
+
+    Raises:
+        SourceTypeError: If the words or the phrases are not a list of strings
     """
+    check_words(text)
+    check_words(phrases, "phrases")
     return safe_divide(len(find_phrases(text, expand_phrases(text, phrases))), len(text)) * 100
 
 
@@ -645,5 +683,9 @@ def calc_parentheticals(text: Sequence[str]) -> float:
 
     Returns:
         float: Parenthetical expressions per 100 words
+
+    Raises:
+        SourceTypeError: If the words are not a list of strings
     """
+    check_words(text)
     return calc_phrase_density(text, PARENTHETICALS)

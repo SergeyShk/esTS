@@ -8,6 +8,7 @@ from itertools import pairwise
 from math import nan
 from typing import Any, NamedTuple
 
+from anyts.utils import safe_divide
 from spacy.tokens import Doc
 
 from .constants import (
@@ -32,7 +33,6 @@ from .constants import (
 )
 from .exceptions import SourceError, SourceTypeError
 from .syllables import WORD_PARTS, syllabify, word_stresses
-from .utils import safe_divide
 
 ACUTE = "\u0301"
 LETTER = re.compile(r"[^\W\d_]")

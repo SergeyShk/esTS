@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from itertools import pairwise
 from typing import NamedTuple
 
+from anyts.syntax import base_dep, get_words, is_word
+from anyts.utils import check_integer, check_words, iter_doc_tokens
 from spacy.tokens import Doc, Token
 
 from ..cohesion_stats import find_connectors
@@ -36,25 +38,14 @@ from ..style_stats import expand_phrases, is_stopword
 from ..syllables import count_syllables
 from ..syntax_stats import (
     AUXILIARY_DEPS,
-    base_dep,
     find_split_predicates,
-    get_words,
     is_agentless,
     is_de_modifier,
     is_gerund_clause,
     is_participle_clause,
     is_passive,
-    is_word,
 )
-from ..utils import (
-    check_sequence,
-    find_phrases,
-    is_verbal_noun,
-    iter_doc_tokens,
-    iter_text_sents,
-    iter_text_words,
-    lemmatize,
-)
+from ..utils import find_phrases, is_verbal_noun, iter_text_sents, iter_text_words, lemmatize
 
 SPANISH_WORD = re.compile(r"[a-záéíóúüñ]{2,}", re.IGNORECASE)
 # Line breaks of Unix, Windows and old Mac texts
@@ -205,6 +196,28 @@ class HighlightedText:
         cliches: Sequence[str] | None = None,
         alliteration_threshold: float = ALLITERATION_THRESHOLD,
     ):
+        check_integer(long_sent_word_factor, "number of words of a long sentence")
+        check_integer(complex_syl_factor, "number of syllables of a complex word")
+        if long_sent_word_factor < 1:
+            raise ParameterError("The number of words of a long sentence must be greater than 0")
+        if complex_syl_factor < 1:
+            raise ParameterError(
+                "The number of syllables of a complex word must be greater than 0"
+            )
+        try:
+            threshold_ok = 0 < alliteration_threshold <= 1
+        except TypeError:
+            threshold_ok = False
+        if not threshold_ok:
+            raise ParameterError(
+                "The threshold of the alliteration must lie in the interval (0, 1]"
+            )
+        if stopwords is not None:
+            check_words(stopwords, "stopwords")
+            stopwords = tuple(stopwords)
+        if cliches is not None:
+            check_words(cliches, "clichés")
+            cliches = tuple(cliches)
         tagged = False
         doc = None
         if isinstance(source, Doc):
@@ -226,26 +239,6 @@ class HighlightedText:
             raise SourceTypeError("The data source is set incorrectly")
         if not words:
             raise SourceError("The data source has no words")
-        if long_sent_word_factor < 1:
-            raise ParameterError("The number of words of a long sentence must be greater than 0")
-        if complex_syl_factor < 1:
-            raise ParameterError(
-                "The number of syllables of a complex word must be greater than 0"
-            )
-        try:
-            threshold_ok = 0 < alliteration_threshold <= 1
-        except TypeError:
-            threshold_ok = False
-        if not threshold_ok:
-            raise ParameterError(
-                "The threshold of the alliteration must lie in the interval (0, 1]"
-            )
-        if stopwords is not None:
-            check_sequence(stopwords, "stopwords")
-            stopwords = tuple(stopwords)
-        if cliches is not None:
-            check_sequence(cliches, "clichés")
-            cliches = tuple(cliches)
         available = [
             layer
             for layer in HIGHLIGHT_LAYERS_DESC

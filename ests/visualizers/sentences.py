@@ -3,11 +3,12 @@ from numbers import Integral
 
 import matplotlib.pyplot as plt
 import numpy as np
+from anyts.utils import check_integer, iter_doc_words
 from matplotlib.axes import Axes
 from spacy.tokens import Doc
 
 from ..exceptions import ParameterError, SourceError, SourceTypeError
-from ..utils import count_words_by_spans, iter_doc_words, iter_text_sents, iter_text_words
+from ..utils import count_words_by_spans, iter_text_sents, iter_text_words
 
 
 def sentence_lengths_plot(
@@ -36,9 +37,10 @@ def sentence_lengths_plot(
 
     Raises:
         SourceTypeError: If the data source is set incorrectly
-        ParameterError: If the window is below one
+        ParameterError: If the window is not an integer or is below one
         SourceError: If there are no sentences
     """
+    check_integer(window, "window")
     if window < 1:
         raise ParameterError("The window must be at least one")
     lengths = sentence_lengths(source)

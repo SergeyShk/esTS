@@ -52,7 +52,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 
 ## Installation
 
-Requires Python 3.11 or newer.
+Requires Python 3.11 or newer. The language-independent part - the extractors, the lexical diversity metrics and the corpus measures - comes from the [anyTS](https://github.com/SergeyShk/anyTS) core, installed with the package.
 
 ```bash
 pip install pyests
@@ -705,9 +705,9 @@ Bug reports, ideas and pull requests are welcome in the [issues](https://github.
     *   corpus - measures of corpus linguistics: keywords, collocations, dispersion, concordance, stylometry, comparison of corpora
     *   datasets - datasets: Spanish-language literature, Spanish sonnets, the frequency dictionary
     *   constants.py - constants of the Spanish language and of the metrics
-    *   diversity_stats.py - lexical diversity metrics
+    *   diversity_stats.py - lexical diversity metrics of the anyTS core over a string or a Doc
     *   exceptions.py - library exceptions
-    *   extractors.py - tools for object extraction from a text
+    *   extractors.py - the extractors of the anyTS core with the Spanish tokenizers
     *   morph_stats.py - morphological statistics
     *   readability_stats.py - readability metrics
     *   style_stats.py - style metrics

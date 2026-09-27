@@ -5,11 +5,21 @@
 
 ## Descripción
 
-Medidas de estilometría y de atribución de autoría: distancias entre textos por las frecuencias de las palabras más frecuentes (la Delta de Burrows y sus variantes, como en [stylo](https://github.com/computationalstylistics/stylo)), marcadores de palabras preferidas y evitadas (Zeta), la distancia ji cuadrado de Kilgarriff entre corpus, la curva de Mendenhall y el perfil de las palabras funcionales como rasgos de un autor. Las funciones trabajan con listas de unidades de un texto: formas de palabra en minúsculas (la elección habitual para Delta), lemas o N-gramas de caracteres ([`CharNgramsExtractor`](../extractors/char_ngrams.md)); la caja y la lematización corresponden a [`WordsExtractor`](../extractors/words.md).
+<!-- core: corpus/stylometry.md:stylometry 280727d -->
+Medidas de estilometría y de atribución de autoría: distancias entre textos por las frecuencias de las palabras más frecuentes (la Delta de Burrows y sus variantes, como en [stylo](https://github.com/computationalstylistics/stylo)), marcadores de palabras preferidas y evitadas (Zeta), la distancia ji cuadrado de Kilgarriff entre corpus y la curva de Mendenhall. Las funciones trabajan con listas de unidades de un texto: formas de palabra en minúsculas (la elección habitual para Delta), lemas o N-gramas de caracteres; la caja y la lematización corresponden a los extractores.
+
+Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/stylometry/), con el [perfil de las palabras funcionales](#function_words_profile) del español añadido como rasgo de un autor. Las unidades de un texto las dan [`WordsExtractor`](../extractors/words.md) - formas de palabra y lemas - y [`CharNgramsExtractor`](../extractors/char_ngrams.md).
 
 ## Delta de Burrows { #delta }
 
-Un corpus es un diccionario «nombre de un texto → unidades». `frequency_table` construye la tabla de frecuencias relativas: las filas son los textos, las columnas las `n_mfw` unidades más frecuentes por frecuencia relativa media descendente (alfabéticamente si empatan); `culling` conserva las unidades que aparecen al menos en la proporción de textos dada, como en stylo. `z_scores` estandariza las columnas con la desviación típica muestral, como `scale()` de R; una columna con la misma frecuencia en todos los textos da ceros. `delta` calcula a partir de las puntuaciones z una matriz simétrica de distancias (un `DataFrame` con los nombres de los textos); hacen falta al menos tres textos: con dos, las puntuaciones z degeneran en ±1/√2 y las distancias no dependen de las frecuencias.
+<!-- core: corpus/stylometry.md:frequency_table 69b1455 -->
+Un corpus es un diccionario «nombre de un texto → unidades». `frequency_table(corpus, n_mfw=100, culling=0.0)` construye la tabla de frecuencias relativas: las filas son los textos, las columnas las `n_mfw` unidades más frecuentes por frecuencia relativa media descendente (alfabéticamente si empatan); `culling` conserva las unidades que aparecen al menos en la proporción de textos dada, como en stylo.
+
+<!-- core: corpus/stylometry.md:z_scores 410148c -->
+`z_scores(table)` estandariza las columnas con la desviación típica muestral, como `scale()` de R; una columna con la misma frecuencia en todos los textos da ceros.
+
+<!-- core: corpus/stylometry.md:delta 65dbfdb -->
+`delta` calcula a partir de las puntuaciones z una matriz simétrica de distancias (un `DataFrame` con los nombres de los textos); hacen falta al menos tres textos: con dos, las puntuaciones z degeneran en ±1/√2 y las distancias no dependen de las frecuencias.
 
 Variantes (`DELTA_VARIANTS`), con las fórmulas de las fuentes de stylo; $n$ es el número de unidades, $z_A$ y $z_B$ los vectores de puntuaciones z de los textos:
 
@@ -22,8 +32,6 @@ Variantes (`DELTA_VARIANTS`), con las fórmulas de las fuentes de stylo; $n$ es 
 
 La Delta coseno es la que mejor agrupa los textos por autor en los experimentos de Evert et al. El número habitual de unidades es de 100 a 500 palabras más frecuentes, de 100 a 200 para los N-gramas de caracteres.
 
-Parámetros de `delta`:
-
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `corpus` | dict[str, list[str]] | `-` | Unidades de los textos por los nombres de los textos |
@@ -31,8 +39,7 @@ Parámetros de `delta`:
 | `variant` | str | `burrows` | Variante de Delta de `DELTA_VARIANTS` |
 | `culling` | float | `0.0` | Menor proporción de textos en la que aparece una unidad |
 
-`frequency_table(corpus, n_mfw=100, culling=0.0)` recibe los mismos parámetros, `z_scores(table)` la tabla.
-
+<!-- core: corpus/stylometry.md:delta_profiles 0675201 -->
 Para la atribución de autoría está `delta_profiles(reference, samples, n_mfw, variant, culling, statistics)`: las unidades más frecuentes, el filtrado y las estadísticas de las puntuaciones z se toman de los textos de referencia `reference` (los perfiles de los autores) o de un conjunto aparte `statistics` - por ejemplo, las ventanas de entrenamiento cuando los perfiles son demasiado pocos para estimar la dispersión de las frecuencias; los textos a examinar `samples` se describen con las mismas unidades y se escalan con las mismas estadísticas. El resultado son las distancias de los textos examinados a los de referencia, y la referencia más cercana de una fila es el autor presunto. A diferencia de `delta`, los textos examinados no influyen ni en las unidades ni en el escalado, así que el resultado para un texto no depende de los textos que se pasan con él.
 
 !!! example "Ejemplo"
@@ -78,6 +85,7 @@ Para la atribución de autoría está `delta_profiles(reference, samples, n_mfw,
 
 ## Zeta { #zeta }
 
+<!-- core: corpus/stylometry.md:zeta 8dd3de6 -->
 Marcadores de palabras preferidas y evitadas según Burrows (2007) y Craig y Kinney (2009). Cada texto de ambos corpus se divide en segmentos de unas `segment_size` palabras (el número de segmentos es la razón de la longitud al tamaño redondeada al entero más próximo, al menos uno), y para una palabra se calcula la proporción de segmentos de cada corpus en los que aparece ($DP$). Zeta es la diferencia de las proporciones $DP_{target} - DP_{comparison}$, de −1 a 1 (`zeta.craig` en la notación de stylo; la Zeta clásica de Craig $DP_{target} + (1 - DP_{comparison})$ es mayor en uno), la Zeta logarítmica es $\log_2 \frac{DP_{target}}{DP_{comparison}}$ ([Schöch et al. 2018](https://zeta-project.eu/en/keyness-measures/burrows-zeta-logarithmic-zeta/)), con una proporción nula sustituida por medio segmento. La lista empieza por las palabras que prefiere el corpus objetivo y termina por las evitadas.
 
 | Parámetro | Tipo | Por defecto | Descripción |
@@ -104,6 +112,7 @@ El resultado es una lista de tuplas con nombre `ZetaScore(word, dp_target, dp_co
 
 ## Ji cuadrado de Kilgarriff { #kilgarriff_chi2 }
 
+<!-- core: corpus/stylometry.md:kilgarriff_chi2 0e5a690 -->
 La distancia entre dos corpus según [Kilgarriff (2001)](https://www.sketchengine.eu/wp-content/uploads/comparing_corpora_2001.pdf): para las `n_mfw` palabras más frecuentes del corpus conjunto las frecuencias esperadas en los corpus son proporcionales a sus tamaños, $\chi^2 = \sum (O - E)^2 / E$ sobre las palabras y ambos corpus. Cuanto mayor es el valor, más difieren los corpus; el valor crece con el tamaño de los corpus, así que los pares de corpus son comparables entre sí con tamaños iguales.
 
 | Parámetro | Tipo | Por defecto | Descripción |
@@ -123,7 +132,11 @@ La distancia entre dos corpus según [Kilgarriff (2001)](https://www.sketchengin
 
 ## Curva de Mendenhall { #mendenhall }
 
-`mendenhall_curve(words)` - las proporciones de las palabras de cada longitud en caracteres (Mendenhall 1887), un perfil del autor comparable entre textos sea cual sea su tamaño; `mendenhall_distance(words_a, words_b)` - la distancia de Jensen-Shannon con base 2 entre las curvas, de 0 (las distribuciones coinciden) a 1.
+<!-- core: corpus/stylometry.md:mendenhall_curve a7a66c3 -->
+`mendenhall_curve(words)` - las proporciones de las palabras de cada longitud en caracteres (Mendenhall 1887), un perfil del autor comparable entre textos sea cual sea su tamaño.
+
+<!-- core: corpus/stylometry.md:mendenhall_distance 60f301b -->
+`mendenhall_distance(words_a, words_b)` - la distancia de Jensen-Shannon con base 2 entre las curvas, de 0 (las distribuciones coinciden) a 1.
 
 !!! example "Ejemplo"
 
