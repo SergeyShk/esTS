@@ -10,6 +10,8 @@
       
       
       
+        <link rel="canonical" href="https://sergeyshk.github.io/esTS/corpus/compare/">
+      
       
         <link rel="prev" href="../stylometry/">
       
@@ -1947,6 +1949,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#functions-of-the-statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functions of the statistics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#usage-example" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2466,6 +2479,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#functions-of-the-statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functions of the statistics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#usage-example" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2498,7 +2522,7 @@
 
 <h1 id="corpus-comparison">Corpus comparison<a class="headerlink" href="#corpus-comparison" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.corpus.compare_corpora()</strong>, <strong>ests.corpus.compare_features()</strong>, <strong>ests.corpus.corpus_features()</strong>, <strong>ests.corpus.text_features()</strong>, <strong>ests.corpus.split_windows()</strong>, <strong>ests.corpus.sentence_rhythm()</strong></p>
+<p><strong>ests.corpus.compare_corpora()</strong>, <strong>ests.corpus.compare_features()</strong>, <strong>ests.corpus.corpus_features()</strong>, <strong>ests.corpus.text_features()</strong>, <strong>ests.corpus.split_windows()</strong>, <strong>ests.corpus.sentence_rhythm()</strong>, <strong>ests.corpus.calc_cohen_d()</strong>, <strong>ests.corpus.calc_cliff_delta()</strong>, <strong>ests.corpus.bootstrap_median_diff()</strong>, <strong>ests.corpus.holm_correction()</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
 <p>Comparing two corpora feature by feature. Each corpus comes as a table of the features of its windows - texts split into parts of about the same size, so that the features do not depend on the length of the texts; a language library builds such tables from its texts. <code>compare_features(table_a, table_b, labels, n_bootstrap, seed)</code> compares the tables column by column and returns one row per feature, sorted by descending absolute Cliff's delta, the features without statistics last. The bootstrap resamples whole texts by the level <code>text</code> of the index of a table; a table without that level has every row taken for a text of its own. A column missing from one of the tables gives <code>nan</code>.</p>
@@ -2692,6 +2716,12 @@
 </tr>
 </tbody>
 </table>
+<h2 id="functions-of-the-statistics">Functions of the statistics<a class="headerlink" href="#functions-of-the-statistics" title="Permanent link">&para;</a></h2>
+<p>The statistics of a row are available one by one from <code>ests.corpus</code>:</p>
+<p><code>calc_cohen_d(values_a, values_b)</code> - Cohen's d with the pooled sample variances (ddof=1); <code>nan</code> with fewer than two values on a side or without spread.</p>
+<p><code>calc_cliff_delta(values_a, values_b)</code> - Cliff's delta, the share of the pairs where the first value is greater minus the share where it is smaller; <code>nan</code> for an empty set or an undefined value. It is computed by sorting, in <span class="arithmatex">\(O((n_A + n_B) \log n_B)\)</span> time and linear memory.</p>
+<p><code>bootstrap_median_diff(values_a, values_b, n_bootstrap=1000, rng=None, confidence=0.95, texts_a=None, texts_b=None)</code> - the percentile bootstrap interval of the difference of the medians. With <code>texts_a</code> and <code>texts_b</code> whole texts are resampled, and the median of a draw is that of the values of the drawn texts put together; with fewer than two texts on a side the interval is <code>nan</code>.</p>
+<p><code>holm_correction(p_values)</code> - Holm's correction for multiple comparisons: the p-values are sorted in ascending order, the i-th is multiplied by (m − i + 1), where m is the number of defined values, then the running maximum is taken and capped at one; <code>nan</code> stays <code>nan</code>, and a p-value outside [0, 1] raises <code>ParameterError</code>.</p>
 <h2 id="usage-example">Usage example<a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h2>
 <p>Galdós against Unamuno, three novels each from the <a href="../../datasets/spanishliterature/">corpus of literature</a>: <em>Marianela</em>, <em>Misericordia</em> and <em>Torquemada en la hoguera</em> against <em>Niebla</em>, <em>Abel Sánchez</em> and <em>La tía Tula</em>.</p>
 <div class="admonition example">

@@ -1,591 +1,591 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
-        <loc>None./</loc>
+        <loc>https://sergeyshk.github.io/esTS/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="None"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/"/>
     </url>
     <url>
-        <loc>Noneauthors/</loc>
+        <loc>https://sergeyshk.github.io/esTS/authors/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneauthors/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/authors/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/authors/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/authors/"/>
     </url>
     <url>
-        <loc>Nonecomponents/</loc>
+        <loc>https://sergeyshk.github.io/esTS/components/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecomponents/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/components/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/components/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/components/"/>
     </url>
     <url>
-        <loc>Noneexceptions/</loc>
+        <loc>https://sergeyshk.github.io/esTS/exceptions/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneexceptions/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/exceptions/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/exceptions/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/exceptions/"/>
     </url>
     <url>
-        <loc>Noneinstallation/</loc>
+        <loc>https://sergeyshk.github.io/esTS/installation/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneinstallation/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/installation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/installation/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/installation/"/>
     </url>
     <url>
-        <loc>Nonesyllables/</loc>
+        <loc>https://sergeyshk.github.io/esTS/syllables/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonesyllables/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/syllables/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/syllables/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/syllables/"/>
     </url>
     <url>
-        <loc>Nonecorpus/collocations/</loc>
+        <loc>https://sergeyshk.github.io/esTS/corpus/collocations/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/collocations/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/collocations/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/corpus/collocations/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/corpus/collocations/"/>
     </url>
     <url>
-        <loc>Nonecorpus/compare/</loc>
+        <loc>https://sergeyshk.github.io/esTS/corpus/compare/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/compare/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/compare/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/corpus/compare/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/corpus/compare/"/>
     </url>
     <url>
-        <loc>Nonecorpus/dispersion/</loc>
+        <loc>https://sergeyshk.github.io/esTS/corpus/dispersion/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/dispersion/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/dispersion/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/corpus/dispersion/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/corpus/dispersion/"/>
     </url>
     <url>
-        <loc>Nonecorpus/keyness/</loc>
+        <loc>https://sergeyshk.github.io/esTS/corpus/keyness/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/keyness/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/keyness/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/corpus/keyness/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/corpus/keyness/"/>
     </url>
     <url>
-        <loc>Nonecorpus/kwic/</loc>
+        <loc>https://sergeyshk.github.io/esTS/corpus/kwic/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/kwic/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/kwic/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/corpus/kwic/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/corpus/kwic/"/>
     </url>
     <url>
-        <loc>Nonecorpus/stylometry/</loc>
+        <loc>https://sergeyshk.github.io/esTS/corpus/stylometry/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/stylometry/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/stylometry/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/corpus/stylometry/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/corpus/stylometry/"/>
     </url>
     <url>
-        <loc>Nonedatasets/freqdict/</loc>
+        <loc>https://sergeyshk.github.io/esTS/datasets/freqdict/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonedatasets/freqdict/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/datasets/freqdict/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/datasets/freqdict/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/datasets/freqdict/"/>
     </url>
     <url>
-        <loc>Nonedatasets/spanishliterature/</loc>
+        <loc>https://sergeyshk.github.io/esTS/datasets/spanishliterature/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonedatasets/spanishliterature/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/datasets/spanishliterature/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/datasets/spanishliterature/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/"/>
     </url>
     <url>
-        <loc>Nonedatasets/spanishsonnets/</loc>
+        <loc>https://sergeyshk.github.io/esTS/datasets/spanishsonnets/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonedatasets/spanishsonnets/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/datasets/spanishsonnets/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/datasets/spanishsonnets/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/datasets/spanishsonnets/"/>
     </url>
     <url>
-        <loc>Noneextractors/char_ngrams/</loc>
+        <loc>https://sergeyshk.github.io/esTS/extractors/char_ngrams/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneextractors/char_ngrams/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/extractors/char_ngrams/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/extractors/char_ngrams/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/extractors/char_ngrams/"/>
     </url>
     <url>
-        <loc>Noneextractors/sentences/</loc>
+        <loc>https://sergeyshk.github.io/esTS/extractors/sentences/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneextractors/sentences/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/extractors/sentences/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/extractors/sentences/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/extractors/sentences/"/>
     </url>
     <url>
-        <loc>Noneextractors/words/</loc>
+        <loc>https://sergeyshk.github.io/esTS/extractors/words/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneextractors/words/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/extractors/words/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/extractors/words/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/extractors/words/"/>
     </url>
     <url>
-        <loc>Nonestats/basic_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/basic_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/basic_stats/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/basic_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/basic_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/basic_stats/"/>
     </url>
     <url>
-        <loc>Nonestats/cohesion_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/cohesion_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/cohesion_stats/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/cohesion_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/cohesion_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/"/>
     </url>
     <url>
-        <loc>Nonestats/diversity_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/diversity_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/diversity_stats/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/diversity_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/diversity_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/diversity_stats/"/>
     </url>
     <url>
-        <loc>Nonestats/diversity_stats_funcs/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/diversity_stats_funcs/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/diversity_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/diversity_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/diversity_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/diversity_stats_funcs/"/>
     </url>
     <url>
-        <loc>Nonestats/lexical_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/lexical_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/lexical_stats/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/lexical_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/lexical_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/lexical_stats/"/>
     </url>
     <url>
-        <loc>Nonestats/lexical_stats_funcs/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/lexical_stats_funcs/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/lexical_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/lexical_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/lexical_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/lexical_stats_funcs/"/>
     </url>
     <url>
-        <loc>Nonestats/morph_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/morph_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/morph_stats/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/morph_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/morph_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/morph_stats/"/>
     </url>
     <url>
-        <loc>Nonestats/phon_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/phon_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/phon_stats/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/phon_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/phon_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/phon_stats/"/>
     </url>
     <url>
-        <loc>Nonestats/phon_stats_funcs/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/phon_stats_funcs/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/phon_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/phon_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/phon_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/phon_stats_funcs/"/>
     </url>
     <url>
-        <loc>Nonestats/readability_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/readability_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/readability_stats/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/readability_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/readability_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/readability_stats/"/>
     </url>
     <url>
-        <loc>Nonestats/readability_stats_funcs/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/readability_stats_funcs/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/readability_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/readability_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/readability_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/readability_stats_funcs/"/>
     </url>
     <url>
-        <loc>Nonestats/style_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/style_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/style_stats/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/style_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/style_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/style_stats/"/>
     </url>
     <url>
-        <loc>Nonestats/style_stats_funcs/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/style_stats_funcs/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/style_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/style_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/style_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/style_stats_funcs/"/>
     </url>
     <url>
-        <loc>Nonestats/syntax_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/syntax_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/syntax_stats/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/syntax_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/syntax_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/syntax_stats/"/>
     </url>
     <url>
-        <loc>Nonestats/verse_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/verse_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/verse_stats/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/verse_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/verse_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/verse_stats/"/>
     </url>
     <url>
-        <loc>Nonestats/verse_stats_funcs/</loc>
+        <loc>https://sergeyshk.github.io/esTS/stats/verse_stats_funcs/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/verse_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/verse_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/verse_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/verse_stats_funcs/"/>
     </url>
     <url>
-        <loc>Nonevisualizers/corpus/</loc>
+        <loc>https://sergeyshk.github.io/esTS/visualizers/corpus/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/corpus/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/corpus/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/corpus/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/corpus/"/>
     </url>
     <url>
-        <loc>Nonevisualizers/fingerprinting/</loc>
+        <loc>https://sergeyshk.github.io/esTS/visualizers/fingerprinting/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/fingerprinting/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/fingerprinting/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/fingerprinting/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/fingerprinting/"/>
     </url>
     <url>
-        <loc>Nonevisualizers/highlight/</loc>
+        <loc>https://sergeyshk.github.io/esTS/visualizers/highlight/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/highlight/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/highlight/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/highlight/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/highlight/"/>
     </url>
     <url>
-        <loc>Nonevisualizers/sentences/</loc>
+        <loc>https://sergeyshk.github.io/esTS/visualizers/sentences/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/sentences/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/sentences/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/sentences/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/sentences/"/>
     </url>
     <url>
-        <loc>Nonevisualizers/stylometry/</loc>
+        <loc>https://sergeyshk.github.io/esTS/visualizers/stylometry/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/stylometry/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/stylometry/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/stylometry/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/stylometry/"/>
     </url>
     <url>
-        <loc>Nonevisualizers/vocabulary/</loc>
+        <loc>https://sergeyshk.github.io/esTS/visualizers/vocabulary/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/vocabulary/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/vocabulary/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/vocabulary/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/vocabulary/"/>
     </url>
     <url>
-        <loc>Nonevisualizers/word_tree/</loc>
+        <loc>https://sergeyshk.github.io/esTS/visualizers/word_tree/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/word_tree/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/word_tree/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/word_tree/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/word_tree/"/>
     </url>
     <url>
-        <loc>Nonevisualizers/zipf/</loc>
+        <loc>https://sergeyshk.github.io/esTS/visualizers/zipf/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/zipf/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/zipf/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/zipf/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/zipf/"/>
     </url>
     <url>
-        <loc>Nonees/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="None"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/"/>
     </url>
     <url>
-        <loc>Nonees/authors/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/authors/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/authors/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneauthors/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/authors/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/authors/"/>
     </url>
     <url>
-        <loc>Nonees/components/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/components/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/components/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecomponents/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/components/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/components/"/>
     </url>
     <url>
-        <loc>Nonees/exceptions/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/exceptions/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/exceptions/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneexceptions/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/exceptions/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/exceptions/"/>
     </url>
     <url>
-        <loc>Nonees/installation/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/installation/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/installation/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneinstallation/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/installation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/installation/"/>
     </url>
     <url>
-        <loc>Nonees/syllables/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/syllables/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/syllables/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonesyllables/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/syllables/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/syllables/"/>
     </url>
     <url>
-        <loc>Nonees/corpus/collocations/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/corpus/collocations/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/collocations/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/collocations/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/corpus/collocations/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/corpus/collocations/"/>
     </url>
     <url>
-        <loc>Nonees/corpus/compare/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/corpus/compare/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/compare/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/compare/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/corpus/compare/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/corpus/compare/"/>
     </url>
     <url>
-        <loc>Nonees/corpus/dispersion/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/corpus/dispersion/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/dispersion/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/dispersion/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/corpus/dispersion/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/corpus/dispersion/"/>
     </url>
     <url>
-        <loc>Nonees/corpus/keyness/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/corpus/keyness/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/keyness/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/keyness/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/corpus/keyness/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/corpus/keyness/"/>
     </url>
     <url>
-        <loc>Nonees/corpus/kwic/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/corpus/kwic/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/kwic/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/kwic/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/corpus/kwic/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/corpus/kwic/"/>
     </url>
     <url>
-        <loc>Nonees/corpus/stylometry/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/corpus/stylometry/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/corpus/stylometry/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonecorpus/stylometry/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/corpus/stylometry/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/corpus/stylometry/"/>
     </url>
     <url>
-        <loc>Nonees/datasets/freqdict/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/datasets/freqdict/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/datasets/freqdict/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonedatasets/freqdict/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/datasets/freqdict/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/datasets/freqdict/"/>
     </url>
     <url>
-        <loc>Nonees/datasets/spanishliterature/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/datasets/spanishliterature/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonedatasets/spanishliterature/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/datasets/spanishliterature/"/>
     </url>
     <url>
-        <loc>Nonees/datasets/spanishsonnets/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/datasets/spanishsonnets/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/datasets/spanishsonnets/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonedatasets/spanishsonnets/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/datasets/spanishsonnets/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/datasets/spanishsonnets/"/>
     </url>
     <url>
-        <loc>Nonees/extractors/char_ngrams/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/extractors/char_ngrams/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/extractors/char_ngrams/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneextractors/char_ngrams/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/extractors/char_ngrams/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/extractors/char_ngrams/"/>
     </url>
     <url>
-        <loc>Nonees/extractors/sentences/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/extractors/sentences/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/extractors/sentences/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneextractors/sentences/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/extractors/sentences/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/extractors/sentences/"/>
     </url>
     <url>
-        <loc>Nonees/extractors/words/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/extractors/words/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/extractors/words/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Noneextractors/words/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/extractors/words/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/extractors/words/"/>
     </url>
     <url>
-        <loc>Nonees/stats/basic_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/basic_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/basic_stats/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/basic_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/basic_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/basic_stats/"/>
     </url>
     <url>
-        <loc>Nonees/stats/cohesion_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/cohesion_stats/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/cohesion_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/cohesion_stats/"/>
     </url>
     <url>
-        <loc>Nonees/stats/diversity_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/diversity_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/diversity_stats/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/diversity_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/diversity_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/diversity_stats/"/>
     </url>
     <url>
-        <loc>Nonees/stats/diversity_stats_funcs/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/diversity_stats_funcs/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/diversity_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/diversity_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/diversity_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/diversity_stats_funcs/"/>
     </url>
     <url>
-        <loc>Nonees/stats/lexical_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/lexical_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/lexical_stats/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/lexical_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/lexical_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/lexical_stats/"/>
     </url>
     <url>
-        <loc>Nonees/stats/lexical_stats_funcs/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/lexical_stats_funcs/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/lexical_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/lexical_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/lexical_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/lexical_stats_funcs/"/>
     </url>
     <url>
-        <loc>Nonees/stats/morph_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/morph_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/morph_stats/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/morph_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/morph_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/morph_stats/"/>
     </url>
     <url>
-        <loc>Nonees/stats/phon_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/phon_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/phon_stats/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/phon_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/phon_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/phon_stats/"/>
     </url>
     <url>
-        <loc>Nonees/stats/phon_stats_funcs/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/phon_stats_funcs/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/phon_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/phon_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/phon_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/phon_stats_funcs/"/>
     </url>
     <url>
-        <loc>Nonees/stats/readability_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/readability_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/readability_stats/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/readability_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/readability_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/readability_stats/"/>
     </url>
     <url>
-        <loc>Nonees/stats/readability_stats_funcs/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/readability_stats_funcs/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/readability_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/readability_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/readability_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/readability_stats_funcs/"/>
     </url>
     <url>
-        <loc>Nonees/stats/style_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/style_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/style_stats/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/style_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/style_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/style_stats/"/>
     </url>
     <url>
-        <loc>Nonees/stats/style_stats_funcs/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/style_stats_funcs/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/style_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/style_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/style_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/style_stats_funcs/"/>
     </url>
     <url>
-        <loc>Nonees/stats/syntax_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/syntax_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/syntax_stats/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/syntax_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/syntax_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/syntax_stats/"/>
     </url>
     <url>
-        <loc>Nonees/stats/verse_stats/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/verse_stats/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/verse_stats/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/verse_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/verse_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/verse_stats/"/>
     </url>
     <url>
-        <loc>Nonees/stats/verse_stats_funcs/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/verse_stats_funcs/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/stats/verse_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonestats/verse_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/verse_stats_funcs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/verse_stats_funcs/"/>
     </url>
     <url>
-        <loc>Nonees/visualizers/corpus/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/visualizers/corpus/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/corpus/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/corpus/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/corpus/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/corpus/"/>
     </url>
     <url>
-        <loc>Nonees/visualizers/fingerprinting/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/visualizers/fingerprinting/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/fingerprinting/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/fingerprinting/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/fingerprinting/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/fingerprinting/"/>
     </url>
     <url>
-        <loc>Nonees/visualizers/highlight/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/visualizers/highlight/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/highlight/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/highlight/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/highlight/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/highlight/"/>
     </url>
     <url>
-        <loc>Nonees/visualizers/sentences/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/visualizers/sentences/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/sentences/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/sentences/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/sentences/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/sentences/"/>
     </url>
     <url>
-        <loc>Nonees/visualizers/stylometry/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/visualizers/stylometry/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/stylometry/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/stylometry/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/stylometry/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/stylometry/"/>
     </url>
     <url>
-        <loc>Nonees/visualizers/vocabulary/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/visualizers/vocabulary/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/vocabulary/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/vocabulary/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/vocabulary/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/vocabulary/"/>
     </url>
     <url>
-        <loc>Nonees/visualizers/word_tree/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/visualizers/word_tree/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/word_tree/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/word_tree/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/word_tree/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/word_tree/"/>
     </url>
     <url>
-        <loc>Nonees/visualizers/zipf/</loc>
+        <loc>https://sergeyshk.github.io/esTS/es/visualizers/zipf/</loc>
         <lastmod>2026-09-27</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="Nonees/visualizers/zipf/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="Nonevisualizers/zipf/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/zipf/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/zipf/"/>
     </url>
 </urlset>

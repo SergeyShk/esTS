@@ -10,6 +10,8 @@
       
       
       
+        <link rel="canonical" href="https://sergeyshk.github.io/esTS/es/corpus/compare/">
+      
       
         <link rel="prev" href="../stylometry/">
       
@@ -1947,6 +1949,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#funciones-de-las-estadisticas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Funciones de las estadísticas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ejemplo-de-uso" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2466,6 +2479,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#funciones-de-las-estadisticas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Funciones de las estadísticas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#ejemplo-de-uso" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2498,7 +2522,7 @@
 
 <h1 id="comparacion-de-corpus">Comparación de corpus<a class="headerlink" href="#comparacion-de-corpus" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.corpus.compare_corpora()</strong>, <strong>ests.corpus.compare_features()</strong>, <strong>ests.corpus.corpus_features()</strong>, <strong>ests.corpus.text_features()</strong>, <strong>ests.corpus.split_windows()</strong>, <strong>ests.corpus.sentence_rhythm()</strong></p>
+<p><strong>ests.corpus.compare_corpora()</strong>, <strong>ests.corpus.compare_features()</strong>, <strong>ests.corpus.corpus_features()</strong>, <strong>ests.corpus.text_features()</strong>, <strong>ests.corpus.split_windows()</strong>, <strong>ests.corpus.sentence_rhythm()</strong>, <strong>ests.corpus.calc_cohen_d()</strong>, <strong>ests.corpus.calc_cliff_delta()</strong>, <strong>ests.corpus.bootstrap_median_diff()</strong>, <strong>ests.corpus.holm_correction()</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
 <!-- core: corpus/compare.md:compare_features f0cc080 -->
@@ -2695,6 +2719,16 @@
 </tr>
 </tbody>
 </table>
+<h2 id="funciones-de-las-estadisticas">Funciones de las estadísticas<a class="headerlink" href="#funciones-de-las-estadisticas" title="Permanent link">&para;</a></h2>
+<p>Las estadísticas de una fila están disponibles una a una desde <code>ests.corpus</code>:</p>
+<!-- core: corpus/compare.md:calc_cohen_d c27397e -->
+<p><code>calc_cohen_d(values_a, values_b)</code>: la d de Cohen con las varianzas muestrales combinadas (ddof=1); <code>nan</code> con menos de dos valores en un lado o sin dispersión.</p>
+<!-- core: corpus/compare.md:calc_cliff_delta 896afa2 -->
+<p><code>calc_cliff_delta(values_a, values_b)</code>: la delta de Cliff, la proporción de pares en que el primer valor es mayor menos la proporción en que es menor; <code>nan</code> para un conjunto vacío o un valor indefinido. Se calcula por ordenación, en tiempo <span class="arithmatex">\(O((n_A + n_B) \log n_B)\)</span> y memoria lineal.</p>
+<!-- core: corpus/compare.md:bootstrap_median_diff e93949a -->
+<p><code>bootstrap_median_diff(values_a, values_b, n_bootstrap=1000, rng=None, confidence=0.95, texts_a=None, texts_b=None)</code>: el intervalo bootstrap de percentiles de la diferencia de las medianas. Con <code>texts_a</code> y <code>texts_b</code> se remuestrean textos enteros, y la mediana de una extracción es la de los valores de los textos extraídos juntos; con menos de dos textos en un lado el intervalo es <code>nan</code>.</p>
+<!-- core: corpus/compare.md:holm_correction e61edf0 -->
+<p><code>holm_correction(p_values)</code>: la corrección de Holm para comparaciones múltiples: los valores p se ordenan de menor a mayor, el i-ésimo se multiplica por (m − i + 1), donde m es el número de valores definidos, luego se toma el máximo acumulado y se limita a uno; <code>nan</code> sigue siendo <code>nan</code>, y un valor p fuera de [0, 1] lanza <code>ParameterError</code>.</p>
 <h2 id="ejemplo-de-uso">Ejemplo de uso<a class="headerlink" href="#ejemplo-de-uso" title="Permanent link">&para;</a></h2>
 <p>Galdós frente a Unamuno, tres novelas de cada uno del <a href="../../datasets/spanishliterature/">corpus de literatura</a>: <em>Marianela</em>, <em>Misericordia</em> y <em>Torquemada en la hoguera</em> frente a <em>Niebla</em>, <em>Abel Sánchez</em> y <em>La tía Tula</em>.</p>
 <div class="admonition example">
