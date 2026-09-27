@@ -1,7 +1,7 @@
 # Comparación de corpus
 
 !!! info ""
-    **ests.corpus.compare_corpora()**, **ests.corpus.compare_features()**, **ests.corpus.corpus_features()**, **ests.corpus.text_features()**, **ests.corpus.split_windows()**, **ests.corpus.sentence_rhythm()**
+    **ests.corpus.compare_corpora()**, **ests.corpus.compare_features()**, **ests.corpus.corpus_features()**, **ests.corpus.text_features()**, **ests.corpus.split_windows()**, **ests.corpus.sentence_rhythm()**, **ests.corpus.calc_cohen_d()**, **ests.corpus.calc_cliff_delta()**, **ests.corpus.bootstrap_median_diff()**, **ests.corpus.holm_correction()**
 
 ## Descripción
 
@@ -79,6 +79,22 @@ Parámetros de `compare_corpora`:
 | `labels` | tuple[str, str] | `("A", "B")` | Nombres de los corpus para las columnas |
 | `n_bootstrap` | int | `1000` | Número de remuestras bootstrap |
 | `seed` | int | `0` | Semilla del generador de números aleatorios; `None` - una aleatoria |
+
+## Funciones de las estadísticas
+
+Las estadísticas de una fila están disponibles una a una desde `ests.corpus`:
+
+<!-- core: corpus/compare.md:calc_cohen_d c27397e -->
+`calc_cohen_d(values_a, values_b)`: la d de Cohen con las varianzas muestrales combinadas (ddof=1); `nan` con menos de dos valores en un lado o sin dispersión.
+
+<!-- core: corpus/compare.md:calc_cliff_delta 896afa2 -->
+`calc_cliff_delta(values_a, values_b)`: la delta de Cliff, la proporción de pares en que el primer valor es mayor menos la proporción en que es menor; `nan` para un conjunto vacío o un valor indefinido. Se calcula por ordenación, en tiempo $O((n_A + n_B) \log n_B)$ y memoria lineal.
+
+<!-- core: corpus/compare.md:bootstrap_median_diff e93949a -->
+`bootstrap_median_diff(values_a, values_b, n_bootstrap=1000, rng=None, confidence=0.95, texts_a=None, texts_b=None)`: el intervalo bootstrap de percentiles de la diferencia de las medianas. Con `texts_a` y `texts_b` se remuestrean textos enteros, y la mediana de una extracción es la de los valores de los textos extraídos juntos; con menos de dos textos en un lado el intervalo es `nan`.
+
+<!-- core: corpus/compare.md:holm_correction e61edf0 -->
+`holm_correction(p_values)`: la corrección de Holm para comparaciones múltiples: los valores p se ordenan de menor a mayor, el i-ésimo se multiplica por (m − i + 1), donde m es el número de valores definidos, luego se toma el máximo acumulado y se limita a uno; `nan` sigue siendo `nan`, y un valor p fuera de [0, 1] lanza `ParameterError`.
 
 ## Ejemplo de uso
 
