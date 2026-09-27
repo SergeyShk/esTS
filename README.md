@@ -13,6 +13,7 @@
 </p>
 
 <p align="center">
+  <a href="https://huggingface.co/spaces/SergeyShk/esTS">Demo</a> ·
   <a href="https://sergeyshk.github.io/esTS/">Documentation</a> ·
   <a href="https://pypi.org/project/pyests/">PyPI</a> ·
   <a href="https://github.com/SergeyShk/esTS/blob/master/README.es.md">Español</a>
@@ -24,6 +25,7 @@
   <a href="https://github.com/SergeyShk/esTS/actions/workflows/ci.yml"><img src="https://github.com/SergeyShk/esTS/actions/workflows/ci.yml/badge.svg" alt="Build"></a>
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
   <a href="https://github.com/SergeyShk/esTS/blob/master/LICENSE.txt"><img src="https://img.shields.io/github/license/sergeyshk/esTS.svg" alt="License"></a>
+  <a href="https://huggingface.co/spaces/SergeyShk/esTS"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Spaces-demo-blue" alt="Demo on Hugging Face Spaces"></a>
   <a href="https://doi.org/10.5281/zenodo.22924655"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.22924655.svg" alt="DOI"></a>
 </p>
 
@@ -31,7 +33,7 @@
 
 **esTS** computes statistics of Spanish texts: basic statistics, readability, lexical diversity, lexical sophistication, style, phonostatistics, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
 
-The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy); most statistics need no trained model (see Installation).
+The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy); most statistics need no trained model (see Installation). Try it without installing in the [demo on Hugging Face Spaces](https://huggingface.co/spaces/SergeyShk/esTS): paste a text and get its readability, the metrics, the plots and the highlighting of its fragments.
 
 * **[Object extraction](https://sergeyshk.github.io/esTS/extractors/sentences/)** - configurable sentence, word and character N-gram tokenizers that know the inverted marks, the dialogue dash and the abbreviations of Spanish
 * **[Syllables and stress](https://sergeyshk.github.io/esTS/syllables/)** - rule-based syllabification and the stressed syllable derived from the spelling, with no dictionary

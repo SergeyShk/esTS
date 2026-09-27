@@ -49,6 +49,7 @@ The pull request description answers two questions: what was done and why. If it
 - `ests/` - the package.
 - `tests/` - tests mirroring the package; `tests/test_docs.py` keeps the two documentation languages in sync.
 - `docs/` - MkDocs (Material) documentation, `mkdocs.yml` - navigation and its Spanish translation.
-- `.github/workflows/` - CI (`ci.yml`), publishing (`publish.yml`), documentation (`docs.yml`).
+- `demo/` - the Gradio demo for Hugging Face Spaces (`make demo` runs it locally).
+- `.github/workflows/` - CI (`ci.yml`), publishing (`publish.yml`), documentation (`docs.yml`), the demo (`demo.yml`, on a release and by hand).
 
 The version lives only in `pyproject.toml`; releases are made through GitHub Releases, changes are described in the release notes, there is no separate CHANGELOG file.

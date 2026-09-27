@@ -110,7 +110,7 @@ dev = [
 [tool.ruff]
 target-version = "py311"
 line-length = 99
-src = ["ests", "tests"]
+src = ["ests", "tests", "demo"]
 extend-include = ["*.ipynb"]
 
 [tool.ruff.lint]

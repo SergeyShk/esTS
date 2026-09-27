@@ -1,7 +1,9 @@
-.PHONY: help uv deps lock lint ruff format mypy test test-cov clean clean-build clean-pyc clean-test build publish publish-test docs-core docs-build docs-serve docs-deploy
+.PHONY: help uv deps lock lint ruff format mypy test test-cov clean clean-build clean-pyc clean-test build publish publish-test docs-core docs-build docs-serve docs-deploy demo demo-login demo-upload
 .DEFAULT_GOAL := help
 APP_PATH := ests
 TESTS_PATH := tests
+DEMO_PATH := demo
+HF_SPACE := SergeyShk/esTS
 
 help: ## Show the list of commands
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "%-20s %s\n", $$1, $$2}'
@@ -26,15 +28,15 @@ lint: ruff mypy ## Run all code checks
 
 ruff: deps ## Check and format the code with ruff
 ifeq ($(MODE), ci)
-	uv run ruff check $(APP_PATH) $(TESTS_PATH)
-	uv run ruff format $(APP_PATH) $(TESTS_PATH) --check
+	uv run ruff check $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH)
+	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) --check
 else
-	uv run ruff check $(APP_PATH) $(TESTS_PATH) --fix
-	uv run ruff format $(APP_PATH) $(TESTS_PATH)
+	uv run ruff check $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) --fix
+	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH)
 endif
 
 format: deps ## Format the code
-	uv run ruff format $(APP_PATH) $(TESTS_PATH)
+	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH)
 
 mypy: deps ## Check types with mypy
 	uv run mypy
@@ -83,3 +85,12 @@ docs-serve: docs-core ## Serve the documentation locally
 
 docs-deploy: docs-core ## Deploy the documentation
 	uv run mkdocs gh-deploy
+
+demo: deps ## Run the demo locally
+	uv run --with "gradio>=6.28,<7" python $(DEMO_PATH)/app.py
+
+demo-login: uv ## Log in to Hugging Face to upload the demo
+	uvx --from huggingface_hub hf auth login
+
+demo-upload: uv ## Upload the demo to its Space on Hugging Face
+	uvx --from huggingface_hub hf upload $(HF_SPACE) $(DEMO_PATH) . --repo-type space --delete "__pycache__/*" --exclude "__pycache__/*"
