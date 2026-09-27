@@ -71,8 +71,8 @@ publish: build ## Publish a release to PyPI
 publish-test: build ## Publish a release to TestPyPI
 	uv publish --index testpypi
 
-docs-core: deps ## Fetch the pages of anyTS that the documentation includes
-	uv run python scripts/core_docs.py
+docs-core: deps ## Fetch the pages of anyTS that the documentation includes; ANYTS_DIR=../anyTS takes a local clone
+	uv run python scripts/core_docs.py $(ANYTS_DIR)
 
 docs-build: docs-core ## Build the documentation
 	rm -fr site/

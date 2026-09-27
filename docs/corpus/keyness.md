@@ -1,13 +1,13 @@
 # Keywords
 
 !!! info ""
-    **ests.corpus.keyness()**, **ests.corpus.Keyword**
+    **ests.corpus.keyness()**, **ests.corpus.Keyword**, **ests.corpus.FrequencyReference**
 
 ## Description
 
 --8<-- "corpus/keyness.md:keyness"
 
-The function wraps `keyness` of the [anyTS](https://sergeyshk.github.io/anyTS/corpus/keyness/) core and also takes the [frequency dictionary](../datasets/freqdict.md) `FreqDict` as the reference; the module `ests.corpus.keyness` re-exports the measures and `FrequencyReference` (`from ests.corpus.keyness import FrequencyReference`). Words are extracted with [`WordsExtractor`](../extractors/words.md).
+The function wraps `keyness` of the [anyTS](https://sergeyshk.github.io/anyTS/corpus/keyness/) core and also takes the [frequency dictionary](../datasets/freqdict.md) `FreqDict` as the reference; `FrequencyReference` is in `ests.corpus` next to it, and the functions of the measures in `ests.corpus.keyness`. Words are extracted with [`WordsExtractor`](../extractors/words.md).
 
 ## Measures
 

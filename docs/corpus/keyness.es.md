@@ -1,7 +1,7 @@
 # Palabras clave
 
 !!! info ""
-    **ests.corpus.keyness()**, **ests.corpus.Keyword**
+    **ests.corpus.keyness()**, **ests.corpus.Keyword**, **ests.corpus.FrequencyReference**
 
 ## Descripción
 
@@ -12,7 +12,7 @@ Para cada palabra se calculan dos valores que [Gabrielatos y Marchi](http://epri
 
 La referencia puede ser una lista de palabras, una correspondencia de frecuencias (su tamaño es la suma de los recuentos) o una `FrequencyReference`. Las palabras se comparan tal cual: la caja, la lematización y las palabras vacías corresponden al extractor de palabras, y los dos corpus tienen que extraerse del mismo modo.
 
-La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/keyness/) y admite además como referencia el [diccionario de frecuencias](../datasets/freqdict.md) `FreqDict`; el módulo `ests.corpus.keyness` reexporta las medidas y `FrequencyReference` (`from ests.corpus.keyness import FrequencyReference`). Las palabras se extraen con [`WordsExtractor`](../extractors/words.md).
+La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/keyness/) y admite además como referencia el [diccionario de frecuencias](../datasets/freqdict.md) `FreqDict`; `FrequencyReference` está en `ests.corpus` junto a ella, y las funciones de las medidas, en `ests.corpus.keyness`. Las palabras se extraen con [`WordsExtractor`](../extractors/words.md).
 
 ## Medidas
 
