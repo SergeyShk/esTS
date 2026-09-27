@@ -175,7 +175,7 @@ if spaces is not None:
 
 @lru_cache(maxsize=32)
 def parse(text: str) -> Doc:
-    return nlp(text)
+    return nlp(text, disable=["ner"])
 
 
 def format_value(value: float | int | str | None) -> str:
