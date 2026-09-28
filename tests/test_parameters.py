@@ -3,6 +3,7 @@
 from collections import Counter
 
 import matplotlib
+import numpy as np
 import pytest
 
 from ests import (
@@ -100,6 +101,9 @@ INTEGERS = {
         None, None, None, 1850.5, None, None, None
     ),
     "ReadabilityStats(preset)": lambda: ReadabilityStats(TEXT, preset=["general"]),
+    "SpanishLiterature(author)": lambda: SpanishLiterature._get_filters(
+        None, 5, None, None, None, None, None
+    ),
 }
 
 NOT_STRINGS = [1, 2]
@@ -154,11 +158,9 @@ WORD_LISTS = {
     "function_words_profile(nlp)": lambda: function_words_profile(WORDS, nlp="x"),
     "split_windows": lambda: split_windows(WORDS),
     "sentence_rhythm": lambda: sentence_rhythm("texto"),
+    "sentence_rhythm(elements)": lambda: sentence_rhythm(["4", "8"]),
     "count_punctuations": lambda: count_punctuations(None),
     "kwic(keyword)": lambda: kwic(TEXT, 5),
-    "SpanishLiterature(author)": lambda: SpanishLiterature._get_filters(
-        None, 5, None, None, None, None, None
-    ),
 }
 
 
@@ -197,6 +199,9 @@ def test_frequency_dictionary(freq_dict):
         freq_dict.ipm(None)
     with pytest.raises(ParameterError):
         next(freq_dict.get_records(min_ipm="1"))
+    # A threshold from an array or a column is a number too
+    assert next(freq_dict.get_records(min_ipm=np.int64(100)))
+    assert next(freq_dict.get_records(min_ipm=np.float32(100)))
     with pytest.raises(ParameterError):
         next(freq_dict.get_records(pos=["NOUN"]))
 

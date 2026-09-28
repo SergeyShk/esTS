@@ -293,7 +293,7 @@ def count_punctuations(text: str) -> dict[str, int]:
         words, before digits and at a line break inside a word
         (teórico-práctico, -5, pala-\nbra), guillemets «», straight and curly
         quotes "“”‘’, parentheses and other marks: any other character of
-        anyts.utils.is_punctuation
+        PUNCTUATIONS or of the Unicode categories P and S
 
     Arguments:
         text (str): Text string

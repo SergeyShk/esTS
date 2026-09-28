@@ -222,10 +222,11 @@ class SpanishSonnets(Dataset):
             iterator[dict[str, object]]: Records
 
         Raises:
-            ParameterError: If the period or the gender is unknown
-            ParameterError: If a length is not greater than 0 or the minimum is
-                greater than the maximum
-            ParameterError: If the number of records is negative
+            ParameterError: If the period or the gender is unknown, or the author or
+                the country is not a string
+            ParameterError: If a length is not an integer, not greater than 0 or
+                the minimum is greater than the maximum
+            ParameterError: If the number of records is not an integer or is negative
         """
         filters = self._get_filters(period, author, country, gender, min_len, max_len)
         check_limit(limit)
@@ -282,7 +283,8 @@ class SpanishSonnets(Dataset):
             Filters: Predicates on the records
 
         Raises:
-            ParameterError: If the period or the gender is unknown
+            ParameterError: If the period or the gender is unknown, or the author or
+                the country is not a string
         """
         filters: Filters = []
         if period is not None:

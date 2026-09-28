@@ -104,8 +104,10 @@ class ReadabilityStats:
         print_stats: Printing the computed readability metrics with descriptions
 
     Raises:
+        SourceTypeError: If the source is neither a string, a Doc nor a BasicStats object,
+            or an extractor is of another type
         SourceError: If the source has no words or no sentences
-        ParameterError: If the coefficient preset is unknown
+        ParameterError: If the coefficient preset is not a string or is unknown
     """
 
     def __init__(

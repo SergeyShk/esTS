@@ -148,3 +148,8 @@ def test_print_kwic(capsys):
     lines = kwic(text, "gato", window=2)
     print_kwic(lines, width=10)
     assert capsys.readouterr().out == format_kwic(lines, width=10) + "\n"
+
+
+def test_kwic_byte_order_mark():
+    text = "\ufeffGato y gato."
+    assert len(kwic(text, "gato")) == len(kwic(get_nlp()(text), "gato")) == 2

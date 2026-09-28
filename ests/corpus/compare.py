@@ -2,6 +2,7 @@ from collections import defaultdict
 from collections.abc import Callable, Mapping, Sequence
 from itertools import pairwise
 from math import floor, isnan, nan
+from numbers import Integral
 from typing import Any
 
 import numpy as np
@@ -276,7 +277,7 @@ def sentence_rhythm(lengths: Sequence[int]) -> dict[str, float]:
         dict[str, float]: Features sents_mean, sents_std, sents_cv, sents_autocorr
 
     Raises:
-        SourceTypeError: If the lengths are a string or not a list
+        SourceTypeError: If the lengths are not a list of integers
 
     Example:
         >>> from ests.corpus import sentence_rhythm
@@ -284,6 +285,8 @@ def sentence_rhythm(lengths: Sequence[int]) -> dict[str, float]:
         {'sents_mean': 5.25, 'sents_std': 2.754, 'sents_cv': 0.525, 'sents_autocorr': -0.794}
     """
     check_sequence(lengths, "sentence lengths")
+    if not all(isinstance(length, Integral) for length in lengths):
+        raise SourceTypeError("The sentence lengths must be integers")
     values = np.asarray(lengths, dtype=float)
     if not len(values):
         return dict.fromkeys(("sents_mean", "sents_std", "sents_cv", "sents_autocorr"), nan)

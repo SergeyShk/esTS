@@ -246,6 +246,13 @@ class SpanishLiterature(Dataset):
 
         Returns:
             iterator[dict[str, object]]: Records
+
+        Raises:
+            ParameterError: If the genre is unknown, the author or the country is not a string
+                or a year is not an integer, or the earliest year is greater than the latest
+            ParameterError: If a length is not an integer, not greater than 0 or the minimum is
+                greater than the maximum
+            ParameterError: If the number of records is not an integer or is negative
         """
         fields, lengths = self._get_filters(
             genre, author, country, year_from, year_to, min_len, max_len
@@ -327,7 +334,8 @@ class SpanishLiterature(Dataset):
             tuple[Filters, Filters]: Predicates on the fields and on the length of the text
 
         Raises:
-            ParameterError: If the genre is unknown
+            ParameterError: If the genre is unknown, or the author or the country is not
+                a string
             ParameterError: If a year is not an integer or the earliest year is greater
                 than the latest one
             ParameterError: If a length of the text is not greater than 0
