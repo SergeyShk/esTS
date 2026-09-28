@@ -5,9 +5,9 @@
 
 ## Description
 
---8<-- "corpus/compare.md:compare_features"
+`compare_corpora` compares two corpora of Spanish texts by every feature of a text at once - which statistics tell the corpora apart, and by how much. For single words [`keyness`](keyness.md) does the same, for the distances between texts - [`delta`](stylometry.md#delta). It builds the tables of the features of the windows of both corpora and compares them with the `compare_features` of the [anyTS](https://sergeyshk.github.io/anyTS/corpus/compare/) core:
 
-`compare_corpora` compares two corpora of Spanish texts by every feature of a text at once - which statistics tell the corpora apart, and by how much - with the `compare_features` of the [anyTS](https://sergeyshk.github.io/anyTS/corpus/compare/) core. For single words [`keyness`](keyness.md) does the same, for the distances between texts - [`delta`](stylometry.md#delta).
+--8<-- "corpus/compare.md:compare_features"
 
 In `split_windows` the number of windows is the ratio of the number of words to the size of a window rounded half up, at least one, and the parts are equal: at a window of 1000 a text of one to two windows gives windows of 750 to 1499 words, and a text shorter than `min_words` - half a window by default - gives none. A boundary goes before the opening marks of the first word of a window - dashes, quotes, brackets, `¿` and `¡` - while a straight quote or a dash glued to the end of the previous word stays with it (`"cuatro"`, `—dijo Juan—`). The features of every window are computed by `text_features` or a function of one's own.
 

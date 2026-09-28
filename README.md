@@ -698,6 +698,7 @@ Bug reports, ideas and pull requests are welcome in the [issues](https://github.
 
 <br>
 
+*   **demo** - the demo on Hugging Face Spaces (Gradio)
 *   **docs** - project documentation
 *   **ests**:
     *   basic_stats.py - basic text statistics
@@ -719,7 +720,7 @@ Bug reports, ideas and pull requests are welcome in the [issues](https://github.
     *   syllables.py - syllabification and stress
     *   utils.py - helper tools
     *   visualizers - plots: Zipf's law, fingerprinting, word tree, corpus and stylometric plots, vocabulary growth, sentence lengths, text highlighting
-*   **scripts** - scripts that build the archives of the datasets
+*   **scripts** - scripts that build the archives of the datasets and fetch the anyTS pages of the documentation
 *   **tests** - tests mirroring the package structure
 
 </details>

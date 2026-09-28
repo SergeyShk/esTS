@@ -75,7 +75,7 @@ El corpus objetivo tiene que contarse como se contó el diccionario: formas con 
 ## Resultado
 
 <!-- core: corpus/keyness.md:Keyword 33ab9a7 -->
-Una lista de tuplas con nombre `Keyword` por orden descendente de clave (los empates por frecuencia descendente y alfabéticamente, las palabras de medida indefinida al final); `pd.DataFrame(keywords)` da una tabla.
+Una lista de tuplas con nombre `Keyword` por keyness descendente (los empates por frecuencia descendente y alfabéticamente, las palabras de medida indefinida al final); `pd.DataFrame(keywords)` da una tabla.
 
 | Campo | Tipo | Descripción |
 | :---: | :--: | :---------- |
