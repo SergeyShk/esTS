@@ -32,8 +32,10 @@ def check_preset(preset: str) -> None:
         preset (str): Name of the preset
 
     Raises:
-        ParameterError: If the preset is unknown
+        ParameterError: If the preset is not a string or is unknown
     """
+    if not isinstance(preset, str):
+        raise ParameterError(f"The preset must be a string, not {type(preset).__name__}")
     if preset not in READABILITY_PRESETS:
         raise ParameterError(
             f"Unknown coefficient preset: {preset}. "
@@ -102,8 +104,10 @@ class ReadabilityStats:
         print_stats: Printing the computed readability metrics with descriptions
 
     Raises:
+        SourceTypeError: If the source is neither a string, a Doc nor a BasicStats object,
+            or an extractor is of another type
         SourceError: If the source has no words or no sentences
-        ParameterError: If the coefficient preset is unknown
+        ParameterError: If the coefficient preset is not a string or is unknown
     """
 
     def __init__(

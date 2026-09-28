@@ -319,6 +319,26 @@ def test_lemmatize(word, expected):
     assert lemmatize(word) == expected
 
 
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("\ufeffHola mundo. \ufeff Adiós.", ["Hola", "mundo", ".", "Adiós", "."]),
+        ("\ufeff—Hola —dijo.", ["—", "Hola", "—", "dijo", "."]),
+        ("\ufeff¿Vienes? ¡Sí!", ["¿", "Vienes", "?", "¡", "Sí", "!"]),
+    ],
+)
+def test_tokenize_byte_order_mark(text, expected):
+    """A text read with utf-8 from a file saved with a byte order mark"""
+    assert list(tokenize(text)) == expected
+    words = [token for token in expected if not is_punctuation(token)]
+    assert [word for _, _, word in iter_text_words(text)] == words
+    assert [token.text for token in iter_doc_tokens(get_nlp()(text))] == words
+
+
+def test_lemmatize_empty():
+    assert lemmatize("") == ""
+
+
 def test_lemmatize_cached():
     lemmatize.cache_clear()
     assert lemmatize("amigos") == "amigo"

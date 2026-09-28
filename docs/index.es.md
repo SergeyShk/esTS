@@ -95,6 +95,7 @@ Punctuation marks   |    2
 
 ??? note "Estructura del proyecto"
 
+    *   **demo** - la demo en Hugging Face Spaces (Gradio)
     *   **docs** - documentación del proyecto
     *   **ests**:
         *   basic_stats.py - estadísticas básicas del texto
@@ -116,5 +117,5 @@ Punctuation marks   |    2
         *   syllables.py - silabificación y acento
         *   utils.py - herramientas auxiliares
         *   visualizers - gráficos: ley de Zipf, huella literaria, árbol de palabras, gráficos de corpus y estilométricos, crecimiento del vocabulario, longitudes de las oraciones, resaltado del texto
-    *   **scripts** - scripts que construyen los archivos de los conjuntos de datos
+    *   **scripts** - scripts que construyen los archivos de los conjuntos de datos y traen las páginas de anyTS de la documentación
     *   **tests** - pruebas que reproducen la estructura del paquete

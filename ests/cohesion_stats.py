@@ -7,6 +7,7 @@ from statistics import fmean
 from types import MappingProxyType
 from typing import NamedTuple
 
+import anyts
 from anyts.cohesion import calc_overlaps, calc_repetition, count_given
 from anyts.utils import iter_doc_tokens, safe_divide
 from spacy.language import Language
@@ -173,7 +174,9 @@ class CohesionStats:
         print_stats: Printing the computed cohesion statistics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object
+        SourceTypeError: If the source is neither a string nor a Doc object, the extractor
+            or the pipeline is of another type, or the connectors are not a dictionary
+            of phrases and pairs of strings
         SourceError: If the source has no words, no annotation of the parts of
             speech or no lemmas, or is a string longer than the max_length of
             the pipeline
@@ -188,6 +191,11 @@ class CohesionStats:
         connectors: Mapping[str, tuple[str, str]] | None = None,
         nlp: Language | None = None,
     ):
+        if sents_extractor is not None and not isinstance(sents_extractor, anyts.SentsExtractor):
+            raise SourceTypeError("The sentence extractor must be a SentsExtractor")
+        if nlp is not None and not isinstance(nlp, Language):
+            raise SourceTypeError("The pipeline must be a spaCy Language")
+        index = _normalize_connectors() if connectors is None else _normalize(connectors)
         if isinstance(source, str):
             pipeline = nlp or get_nlp()
             if len(source) > pipeline.max_length:
@@ -254,7 +262,6 @@ class CohesionStats:
         self.mood_repetition = calc_repetition(moods)
         self.temporal_cohesion = fmean((self.tense_repetition, self.mood_repetition))
 
-        index = _normalize_connectors() if connectors is None else _normalize(connectors)
         pos = [[token.pos_ or None for token in sent] for sent in sents]
         self.connector_spans = tuple(
             connector
@@ -345,7 +352,21 @@ def _normalize(connectors: Mapping[str, tuple[str, str]]) -> ConnectorIndex:
     """
     entries: dict[str, tuple[str, str, str]] = {}
     patterns: dict[str, list[tuple[str, ...]]] = {}
-    for connector, (cls, kind) in connectors.items():
+    if not isinstance(connectors, Mapping):
+        raise SourceTypeError(
+            "The connectors must be a dictionary of a phrase and its class and kind"
+        )
+    for connector, value in connectors.items():
+        if not (
+            isinstance(connector, str)
+            and isinstance(value, tuple | list)
+            and len(value) == 2
+            and all(isinstance(item, str) for item in value)
+        ):
+            raise SourceTypeError(
+                f"A connector must be a phrase with a pair of its class and kind: {connector!r}"
+            )
+        cls, kind = value
         if cls not in CONNECTOR_CLASSES or kind not in CONNECTOR_TYPES:
             raise ParameterError(f"Unknown class or kind of a connector: {cls}, {kind}")
         key = " ".join(connector.lower().split())

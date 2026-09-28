@@ -146,7 +146,8 @@ class DiversityStats(anyts.DiversityStats):
         print_stats: Printing the computed lexical diversity metrics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object
+        SourceTypeError: If the source is neither a string nor a Doc object, or the
+            extractor is not a WordsExtractor
         SourceError: If the source has no words
         ParameterError: If the parameters of the metrics are set incorrectly
     """
@@ -161,6 +162,8 @@ class DiversityStats(anyts.DiversityStats):
         hdd_sample_size: int = HDD_SAMPLE_SIZE,
         log_base: float = DIVERSITY_LOG_BASE,
     ):
+        if words_extractor is not None and not isinstance(words_extractor, anyts.WordsExtractor):
+            raise SourceTypeError("The word extractor must be a WordsExtractor")
         check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)
         if isinstance(source, Doc) and words_extractor is None:
             words: Sequence[str] = [word for _, _, word in iter_doc_words(source)]

@@ -27,9 +27,9 @@ in the [`demo`](https://github.com/SergeyShk/esTS/tree/master/demo) folder of th
 updated with every release.
 
 To run it locally from the repository - `make demo`, to upload it to the Space - `make demo-login`
-and `make demo-upload`. Without the repository:
+and `make demo-upload`. From a clone of the Space:
 
 ```bash
-pip install -r demo/requirements.txt
-python demo/app.py
+pip install -r requirements.txt
+python app.py
 ```

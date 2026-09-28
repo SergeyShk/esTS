@@ -3,6 +3,7 @@ from collections.abc import Sequence
 from functools import cached_property
 from math import nan, sqrt
 
+import anyts
 from anyts.utils import check_integer, check_words, iter_doc_tokens, iter_doc_words, safe_divide
 from spacy.language import Language
 from spacy.tokens import Doc
@@ -105,7 +106,8 @@ class StyleStats:
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc, or the
-            stopwords or the clichés are not a list of strings
+            stopwords or the clichés are not a list of strings, or the extractor or the
+            pipeline is of another type
         SourceError: If the source has no words; when the verbal nouns are read,
             if the source lacks the parts of speech or the lemmas or a sentence
             of a string is longer than the max_length of the pipeline
@@ -122,6 +124,10 @@ class StyleStats:
         cliches: Sequence[str] | None = None,
         nlp: Language | None = None,
     ):
+        if words_extractor is not None and not isinstance(words_extractor, anyts.WordsExtractor):
+            raise SourceTypeError("The word extractor must be a WordsExtractor")
+        if nlp is not None and not isinstance(nlp, Language):
+            raise SourceTypeError("The pipeline must be a spaCy Language")
         check_params(top_n)
         if stopwords is not None:
             check_words(stopwords, "stopwords")

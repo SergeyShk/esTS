@@ -4,6 +4,7 @@ from functools import lru_cache
 from itertools import pairwise
 from math import log2, nan
 
+import anyts
 import numpy as np
 from anyts.utils import check_integer, check_words, iter_doc_words, safe_divide
 from spacy.tokens import Doc
@@ -136,7 +137,8 @@ class PhonStats:
         print_stats: Printing the computed phonostatistics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc
+        SourceTypeError: If the source is neither a string nor a Doc, or the extractor is
+            not a WordsExtractor
         SourceError: If the source has no words
         ParameterError: If the window is below 2
     """
@@ -147,6 +149,8 @@ class PhonStats:
         words_extractor: WordsExtractor | None = None,
         window_len: int = PHON_WINDOW_LEN,
     ):
+        if words_extractor is not None and not isinstance(words_extractor, anyts.WordsExtractor):
+            raise SourceTypeError("The word extractor must be a WordsExtractor")
         check_params(window_len)
         if isinstance(source, Doc):
             words = tuple(word.lower() for _, _, word in iter_doc_words(source))

@@ -115,7 +115,8 @@ class MorphStats:
         print_markers: Printing the computed markers of Spanish with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object
+        SourceTypeError: If the source is neither a string nor a Doc object, or the
+            pipeline is not a spaCy Language
         SourceError: If the source has no words, no annotation of the parts of
             speech or no lemmas, or is a string longer than the max_length of
             the pipeline
@@ -123,6 +124,8 @@ class MorphStats:
     """
 
     def __init__(self, source: str | Doc, nlp: Language | None = None):
+        if nlp is not None and not isinstance(nlp, Language):
+            raise SourceTypeError("The pipeline must be a spaCy Language")
         if isinstance(source, str):
             pipeline = nlp or get_nlp()
             if len(source) > pipeline.max_length:

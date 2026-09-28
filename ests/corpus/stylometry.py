@@ -17,7 +17,7 @@ from spacy.language import Language
 from spacy.tokens import Doc
 
 from ..constants import FUNCTION_UD_POS
-from ..exceptions import SourceError
+from ..exceptions import SourceError, SourceTypeError
 from ..utils import get_nlp
 
 # Components the parts of speech of a list of words do not need
@@ -49,7 +49,8 @@ def function_words_profile(
         dict[str, float]: Shares by the parts of speech of FUNCTION_UD_POS
 
     Raises:
-        SourceTypeError: If the words are not a list of strings
+        SourceTypeError: If the words are not a list of strings or the pipeline is not a
+            spaCy Language
         SourceError: If there are no words or the pipeline does not tag the
             parts of speech
         DatasetNotFoundError: If the default model is not installed
@@ -60,6 +61,8 @@ def function_words_profile(
         >>> profile["DET"], profile["ADP"]
         (0.3333333333333333, 0.16666666666666666)
     """
+    if nlp is not None and not isinstance(nlp, Language):
+        raise SourceTypeError("The pipeline must be a spaCy Language")
     if isinstance(source, Doc) and source.has_annotation("POS"):
         tags = [token.pos_ for token in iter_doc_tokens(source)]
     else:

@@ -5,11 +5,12 @@ from collections.abc import Iterator
 from functools import cache
 from importlib.metadata import version
 from itertools import islice
+from numbers import Real
 from pathlib import Path
 from typing import Any, NamedTuple
 
 from ..constants import DEFAULT_DATA_DIR
-from ..exceptions import DatasetNotFoundError, ParameterError
+from ..exceptions import DatasetNotFoundError, ParameterError, SourceTypeError
 from ..utils import lemmatize, to_path
 from .dataset import Dataset, check_limit, fetch_archive
 
@@ -250,9 +251,19 @@ class FreqDict(Dataset):
             iterator[dict[str, object]]: Records of the dictionary
 
         Raises:
-            ParameterError: If the part of speech is unknown
-            ParameterError: If the number of records is negative
+            ParameterError: If the part of speech is unknown or the minimum frequency is
+                not a number
+            ParameterError: If the number of records is not an integer or is negative
         """
+        if pos is not None and not isinstance(pos, str):
+            raise ParameterError(f"The part of speech must be a string, not {type(pos).__name__}")
+        threshold: object = min_ipm
+        if threshold is not None and (
+            isinstance(threshold, bool) or not isinstance(threshold, Real)
+        ):
+            raise ParameterError(
+                f"The minimum frequency must be a number, not {type(min_ipm).__name__}"
+            )
         if pos is not None and pos not in POS_TAGS:
             raise ParameterError(f"Unknown part of speech {pos}, expected one of {POS_TAGS}")
         check_limit(limit)
@@ -331,6 +342,9 @@ class FreqDict(Dataset):
         Returns:
             Entry|None: Entry of the dictionary, None if the lemma is not in it
 
+        Raises:
+            SourceTypeError: If the lemma is not a string
+
         Example:
             >>> from ests.datasets import FreqDict
             >>> from ests.datasets.freq_dict import lemma_key
@@ -338,6 +352,8 @@ class FreqDict(Dataset):
             >>> fd.lookup("usted"), fd.ipm(lemma_key("usted"))
             (None, 1396.74)
         """
+        if not isinstance(lemma, str):
+            raise SourceTypeError(f"The lemma must be a string, not {type(lemma).__name__}")
         return self.entries.get(lemma.lower())
 
     def ipm(self, lemma: str) -> float:
@@ -349,6 +365,9 @@ class FreqDict(Dataset):
 
         Returns:
             float: Occurrences per million words, 0 if the lemma is not in the dictionary
+
+        Raises:
+            SourceTypeError: If the lemma is not a string
         """
         entry = self.lookup(lemma)
         return entry.ipm if entry else 0.0

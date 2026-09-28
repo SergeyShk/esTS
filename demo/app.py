@@ -49,6 +49,7 @@ from ests.constants import (
 )
 from ests.corpus import collocations, keyness
 from ests.datasets import FreqDict
+from ests.exceptions import SourceError
 from ests.style_stats import is_stopword
 from ests.utils import get_nlp
 from ests.visualizers import highlight, sentence_lengths_plot, zipf
@@ -234,11 +235,12 @@ def keywords_table(forms: tuple[str, ...]) -> pd.DataFrame:
     ]
     if not freq_dict.filepath or not forms:
         return pd.DataFrame(columns=columns)
-    keywords = [
-        keyword
-        for keyword in keyness(forms, freq_dict, min_freq=2)
-        if not is_stopword(keyword.word)
-    ][:KEYWORDS_TOP_N]
+    try:
+        found = keyness(forms, freq_dict, min_freq=2)
+    except SourceError:
+        # No word of the text is made of the letters of the dictionary
+        return pd.DataFrame(columns=columns)
+    keywords = [keyword for keyword in found if not is_stopword(keyword.word)][:KEYWORDS_TOP_N]
     return pd.DataFrame(
         [
             (

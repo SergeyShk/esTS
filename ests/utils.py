@@ -45,6 +45,8 @@ LIST_MARKER = re.compile(r"(?:^|\n)[ \t]*(?:\d+(?:\.\d+)*|[a-z]|[IVXLC]+)\.\Z")
 OPENING_CHARS = "(«“\"'["
 # Characters looked back from a period for an abbreviation or an initial
 LOOKBACK = 64
+# Byte order mark glued to the start of a text read with utf-8 instead of utf-8-sig
+BYTE_ORDER_MARK = "\ufeff"
 
 
 def _opens_remark(text: str, position: int) -> bool:
@@ -192,7 +194,9 @@ def add_dash_rules(nlp: Language) -> None:
         The rules of TOKENIZER_PREFIXES, TOKENIZER_SUFFIXES and TOKENIZER_INFIXES
         split the dashes glued to the words off (--No, -dijo, reírse—me,
         dijo:—¡Mis) and leave a hyphen between letters (franco-alemán) or before
-        a digit (-5) alone; get_tokenizer and get_nlp have them already.
+        a digit (-5) alone; a byte order mark glued to the start of a text is
+        split off as well, so the marks after it are split as usual;
+        get_tokenizer and get_nlp have them already.
         A rule the tokenizer has is not added twice; a tokenizer that is not
         the Tokenizer of spaCy, or whose rules are not regular expressions,
         is left as it is
@@ -213,7 +217,9 @@ def add_dash_rules(nlp: Language) -> None:
     tokenizer = nlp.tokenizer
     if not isinstance(tokenizer, Tokenizer):
         return
-    prefixes = _extend_rules(tokenizer.prefix_search, [f"^{rule}" for rule in TOKENIZER_PREFIXES])
+    prefixes = _extend_rules(
+        tokenizer.prefix_search, [f"^{rule}" for rule in (BYTE_ORDER_MARK, *TOKENIZER_PREFIXES)]
+    )
     suffixes = _extend_rules(tokenizer.suffix_search, [f"{rule}$" for rule in TOKENIZER_SUFFIXES])
     infixes = _extend_rules(tokenizer.infix_finditer, list(TOKENIZER_INFIXES))
     if prefixes is not None:
@@ -250,7 +256,8 @@ def tokenize(text: str) -> Iterator[str]:
         Whitespace tokens are dropped; punctuation marks (¿, ¡), numbers
         (1.500,50, 3.º, 1990-1995), abbreviations (Sr., EE. UU.) and words
         with enclitic pronouns (dámelo) are single tokens; the dashes of
-        a dialogue are split off by add_dash_rules
+        a dialogue are split off by add_dash_rules; a byte order mark glued to
+        the start of a token is dropped
 
     Arguments:
         text (str): Text string
@@ -258,7 +265,11 @@ def tokenize(text: str) -> Iterator[str]:
     Returns:
         iterator[str]: Iterator of tokens
     """
-    return (token.text for token in get_tokenizer()(text) if not token.is_space)
+    return (
+        word
+        for token in get_tokenizer()(text)
+        if not token.is_space and (word := token.text.lstrip(BYTE_ORDER_MARK))
+    )
 
 
 @lru_cache(maxsize=131072)
@@ -277,7 +288,7 @@ def lemmatize(word: str) -> str:
     Returns:
         str: Lemma
     """
-    return simplemma.lemmatize(word, lang="es")
+    return simplemma.lemmatize(word, lang="es") if word != "" else word
 
 
 def iter_text_words(text: str) -> Iterator[tuple[int, int, str]]:

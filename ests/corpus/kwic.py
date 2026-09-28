@@ -60,7 +60,8 @@ def kwic(
         list[Concordance]: Occurrences in the order of the text
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object
+        SourceTypeError: If the source is neither a string nor a Doc object or the keyword
+            is not a string
         ParameterError: If the keyword is empty or the window is not an integer or is negative
 
     Example:
@@ -69,6 +70,8 @@ def kwic(
         >>> [line.keyword for line in kwic(text, "gato", by_lemma=True)]
         ['gato', 'gatos']
     """
+    if not isinstance(keyword, str):
+        raise SourceTypeError(f"The keyword must be a string, not {type(keyword).__name__}")
     pattern = [token.text for token in iter_doc_tokens(get_tokenizer()(keyword))]
     if not pattern:
         raise ParameterError("The keyword is not set")

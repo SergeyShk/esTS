@@ -3,11 +3,25 @@
 from collections import Counter
 
 import matplotlib
+import numpy as np
 import pytest
 
-from ests import BasicStats, PhonStats, StyleStats
+from ests import (
+    BasicStats,
+    CohesionStats,
+    DiversityStats,
+    LexicalStats,
+    MorphStats,
+    PhonStats,
+    ReadabilityStats,
+    StyleStats,
+    SyntaxStats,
+    WordsExtractor,
+)
+from ests.basic_stats import count_punctuations, punctuation_profile
 from ests.corpus import compare_corpora, corpus_features, format_kwic, function_words_profile, kwic
-from ests.corpus.compare import split_windows
+from ests.corpus.compare import sentence_rhythm, split_windows, text_features
+from ests.datasets import SpanishLiterature
 from ests.datasets.dataset import check_limit, length_filters
 from ests.exceptions import ParameterError, SourceTypeError
 from ests.lexical_stats import calc_surprisal
@@ -81,6 +95,15 @@ INTEGERS = {
     "zipf(num_words)": lambda: zipf(Counter(WORDS), num_words=2.5),
     "zipf(num_labels)": lambda: zipf(Counter(WORDS), num_labels=2.5),
     "zipf_theory(num_ranks)": lambda: zipf_theory(100, 2.5),
+    "punctuation_profile(n_words)": lambda: punctuation_profile(TEXT, n_words=2.5),
+    "punctuation_profile(negative n_words)": lambda: punctuation_profile(TEXT, n_words=-1),
+    "SpanishLiterature(year_from)": lambda: SpanishLiterature._get_filters(
+        None, None, None, 1850.5, None, None, None
+    ),
+    "ReadabilityStats(preset)": lambda: ReadabilityStats(TEXT, preset=["general"]),
+    "SpanishLiterature(author)": lambda: SpanishLiterature._get_filters(
+        None, 5, None, None, None, None, None
+    ),
 }
 
 NOT_STRINGS = [1, 2]
@@ -115,6 +138,29 @@ WORD_LISTS = {
     "fingerprinting": lambda: fingerprinting([NOT_STRINGS]),
     "wordtree": lambda: wordtree([NOT_STRINGS], "gato"),
     "highlight(stopwords)": lambda: highlight(TEXT, stopwords=NOT_STRINGS),
+    "BasicStats(sents_extractor)": lambda: BasicStats(TEXT, sents_extractor="x"),
+    "BasicStats(words_extractor)": lambda: BasicStats(TEXT, words_extractor=WordsExtractor),
+    "DiversityStats(words_extractor)": lambda: DiversityStats(TEXT, words_extractor="x"),
+    "PhonStats(words_extractor)": lambda: PhonStats(TEXT, words_extractor="x"),
+    "StyleStats(nlp)": lambda: StyleStats(TEXT, nlp="es_core_news_sm"),
+    "StyleStats(words_extractor)": lambda: StyleStats(TEXT, words_extractor="x"),
+    "CohesionStats(nlp)": lambda: CohesionStats(TEXT, nlp="x"),
+    "LexicalStats(nlp)": lambda: LexicalStats(TEXT, nlp="x"),
+    "CohesionStats(sents_extractor)": lambda: CohesionStats(TEXT, sents_extractor="x"),
+    "CohesionStats(connectors)": lambda: CohesionStats(TEXT, connectors=["porque"]),
+    "CohesionStats(connector)": lambda: CohesionStats(TEXT, connectors={"porque": "causal"}),
+    "MorphStats(nlp)": lambda: MorphStats(TEXT, nlp="es_core_news_sm"),
+    "SyntaxStats(nlp)": lambda: SyntaxStats(TEXT, nlp="es_core_news_sm"),
+    "LexicalStats(freq_dict)": lambda: LexicalStats(TEXT, freq_dict="x"),
+    "calc_surprisal(freq_dict)": lambda: calc_surprisal(WORDS, "x"),
+    "text_features": lambda: text_features(None),
+    "text_features(nlp)": lambda: text_features(TEXT, nlp="x"),
+    "function_words_profile(nlp)": lambda: function_words_profile(WORDS, nlp="x"),
+    "split_windows": lambda: split_windows(WORDS),
+    "sentence_rhythm": lambda: sentence_rhythm("texto"),
+    "sentence_rhythm(elements)": lambda: sentence_rhythm(["4", "8"]),
+    "count_punctuations": lambda: count_punctuations(None),
+    "kwic(keyword)": lambda: kwic(TEXT, 5),
 }
 
 
@@ -144,3 +190,23 @@ def test_compare_corpora_checks_before_the_features():
     with pytest.raises(SourceTypeError):
         compare_corpora([TEXT], NOT_STRINGS, features=features)
     assert calls == []
+
+
+def test_frequency_dictionary(freq_dict):
+    with pytest.raises(SourceTypeError):
+        freq_dict.lookup(5)
+    with pytest.raises(SourceTypeError):
+        freq_dict.ipm(None)
+    with pytest.raises(ParameterError):
+        next(freq_dict.get_records(min_ipm="1"))
+    # A threshold from an array or a column is a number too
+    assert next(freq_dict.get_records(min_ipm=np.int64(100)))
+    assert next(freq_dict.get_records(min_ipm=np.float32(100)))
+    with pytest.raises(ParameterError):
+        next(freq_dict.get_records(pos=["NOUN"]))
+
+
+def test_cohesion_checks_the_connectors_before_parsing():
+    # A string over the limit of the pipeline fails only when it comes to parsing
+    with pytest.raises(SourceTypeError):
+        CohesionStats("a " * 1_000_000, connectors=["porque"])

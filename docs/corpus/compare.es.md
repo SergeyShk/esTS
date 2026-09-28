@@ -5,12 +5,12 @@
 
 ## Descripción
 
+`compare_corpora` compara dos corpus de textos en español por todos los rasgos de un texto a la vez - qué estadísticas distinguen los corpus y en qué medida. Para palabras sueltas hace lo mismo [`keyness`](keyness.md), para las distancias entre textos, [`delta`](stylometry.md#delta). Construye las tablas de los rasgos de las ventanas de los dos corpus y las compara con el `compare_features` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/compare/):
+
 <!-- core: corpus/compare.md:compare_features f0cc080 -->
 Comparación de dos corpus rasgo por rasgo. Cada corpus llega como una tabla de los rasgos de sus ventanas - los textos divididos en partes de un tamaño parecido, para que los rasgos no dependan de la longitud de los textos -; una biblioteca de un idioma construye esas tablas a partir de sus textos. `compare_features(table_a, table_b, labels, n_bootstrap, seed)` compara las tablas columna por columna y devuelve una fila por rasgo, ordenadas por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel `text` del índice de una tabla; una tabla sin ese nivel toma cada fila por un texto aparte. Una columna que falta en una de las tablas da `nan`.
 
-`compare_corpora` compara dos corpus de textos en español por todos los rasgos de un texto a la vez - qué estadísticas distinguen los corpus y en qué medida - con el `compare_features` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/compare/). Para palabras sueltas hace lo mismo [`keyness`](keyness.md), para las distancias entre textos, [`delta`](stylometry.md#delta).
-
-En `split_windows` el número de ventanas es la razón del número de palabras al tamaño de una ventana redondeada al entero más próximo, al menos una, y las partes son iguales: con una ventana de 1000 un texto de una a dos ventanas da ventanas de 750 a 1499 palabras, y un texto más corto que `min_words` - media ventana por defecto - no da ninguna. Un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, `¿` y `¡` -, mientras que unas comillas rectas o una raya pegadas al final de la palabra anterior se quedan con ella (`"cuatro"`, `—dijo Juan—`). Los rasgos de cada ventana los calcula `text_features` o una función propia.
+En `split_windows` el número de ventanas es la razón del número de palabras al tamaño de una ventana redondeada con el medio hacia arriba, al menos una, y las partes son iguales: con una ventana de 1000 un texto de una a dos ventanas da ventanas de 750 a 1499 palabras, y un texto más corto que `min_words` - media ventana por defecto - no da ninguna. Un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, `¿` y `¡` -, mientras que unas comillas rectas o una raya pegadas al final de la palabra anterior se quedan con ella (`"cuatro"`, `—dijo Juan—`). Los rasgos de cada ventana los calcula `text_features` o una función propia.
 
 ## Rasgos
 
