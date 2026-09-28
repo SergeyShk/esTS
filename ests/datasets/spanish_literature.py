@@ -4,6 +4,8 @@ from itertools import islice
 from pathlib import Path
 from typing import Any
 
+from anyts.utils import check_integer
+
 from ..constants import DEFAULT_DATA_DIR
 from ..exceptions import DatasetNotFoundError, ParameterError
 from ..utils import to_path
@@ -326,10 +328,14 @@ class SpanishLiterature(Dataset):
 
         Raises:
             ParameterError: If the genre is unknown
-            ParameterError: If the earliest year is greater than the latest one
+            ParameterError: If a year is not an integer or the earliest year is greater
+                than the latest one
             ParameterError: If a length of the text is not greater than 0
             ParameterError: If the minimum length is greater than the maximum one
         """
+        for year, what in ((year_from, "earliest year"), (year_to, "latest year")):
+            if year is not None:
+                check_integer(year, what)
         filters: Filters = []
         if genre is not None:
             if genre not in GENRES:

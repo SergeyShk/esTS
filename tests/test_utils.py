@@ -319,6 +319,17 @@ def test_lemmatize(word, expected):
     assert lemmatize(word) == expected
 
 
+def test_tokenize_byte_order_mark():
+    """A text read with utf-8 from a file saved with a byte order mark"""
+    text = "\ufeffHola mundo. \ufeff Adiós."
+    assert list(tokenize(text)) == ["Hola", "mundo", ".", "Adiós", "."]
+    assert [word for _, _, word in iter_text_words(text)] == ["Hola", "mundo", "Adiós"]
+
+
+def test_lemmatize_empty():
+    assert lemmatize("") == ""
+
+
 def test_lemmatize_cached():
     lemmatize.cache_clear()
     assert lemmatize("amigos") == "amigo"

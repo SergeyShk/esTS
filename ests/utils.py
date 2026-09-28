@@ -250,7 +250,8 @@ def tokenize(text: str) -> Iterator[str]:
         Whitespace tokens are dropped; punctuation marks (¿, ¡), numbers
         (1.500,50, 3.º, 1990-1995), abbreviations (Sr., EE. UU.) and words
         with enclitic pronouns (dámelo) are single tokens; the dashes of
-        a dialogue are split off by add_dash_rules
+        a dialogue are split off by add_dash_rules; a byte order mark glued to
+        the start of a token is dropped
 
     Arguments:
         text (str): Text string
@@ -258,7 +259,11 @@ def tokenize(text: str) -> Iterator[str]:
     Returns:
         iterator[str]: Iterator of tokens
     """
-    return (token.text for token in get_tokenizer()(text) if not token.is_space)
+    return (
+        word
+        for token in get_tokenizer()(text)
+        if not token.is_space and (word := token.text.lstrip("\ufeff"))
+    )
 
 
 @lru_cache(maxsize=131072)
@@ -277,7 +282,7 @@ def lemmatize(word: str) -> str:
     Returns:
         str: Lemma
     """
-    return simplemma.lemmatize(word, lang="es")
+    return simplemma.lemmatize(word, lang="es") if word else word
 
 
 def iter_text_words(text: str) -> Iterator[tuple[int, int, str]]:

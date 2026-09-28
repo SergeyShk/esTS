@@ -32,8 +32,10 @@ def check_preset(preset: str) -> None:
         preset (str): Name of the preset
 
     Raises:
-        ParameterError: If the preset is unknown
+        ParameterError: If the preset is not a string or is unknown
     """
+    if not isinstance(preset, str):
+        raise ParameterError(f"The preset must be a string, not {type(preset).__name__}")
     if preset not in READABILITY_PRESETS:
         raise ParameterError(
             f"Unknown coefficient preset: {preset}. "

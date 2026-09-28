@@ -97,7 +97,8 @@ class LexicalStats:
         print_stats: Printing the computed statistics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc
+        SourceTypeError: If the source is neither a string nor a Doc, or the dictionary or
+            the pipeline is of another type
         SourceError: If the source has no words, lacks the parts of speech or
             is a string longer than the max_length of the pipeline
         DatasetNotFoundError: When a statistic by the dictionary is read and the
@@ -110,6 +111,10 @@ class LexicalStats:
         freq_dict: FreqDict | None = None,
         nlp: Language | None = None,
     ):
+        if freq_dict is not None and not isinstance(freq_dict, FreqDict):
+            raise SourceTypeError("The frequency dictionary must be a FreqDict")
+        if nlp is not None and not isinstance(nlp, Language):
+            raise SourceTypeError("The pipeline must be a spaCy Language")
         if isinstance(source, str):
             pipeline = nlp or get_nlp()
             if len(source) > pipeline.max_length:
@@ -336,8 +341,11 @@ def calc_surprisal(lemmas: Sequence[str], freq_dict: FreqDict) -> float:
         float: Mean surprisal in bits, nan for an empty list
 
     Raises:
-        SourceTypeError: If the lemmas are not a list of strings
+        SourceTypeError: If the lemmas are not a list of strings or the dictionary is not
+            a FreqDict
     """
+    if not isinstance(freq_dict, FreqDict):
+        raise SourceTypeError("The frequency dictionary must be a FreqDict")
     check_words(lemmas, "lemmas")
     floor = freq_dict.min_ipm
     return _mean([-log2(max(freq_dict.ipm(lemma), floor) / 1_000_000) for lemma in lemmas])

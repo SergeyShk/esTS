@@ -14,14 +14,14 @@ from anyts.corpus.compare import (
     compare_features as compare_features,
     holm_correction as holm_correction,
 )
-from anyts.utils import check_integer, check_words
+from anyts.utils import check_integer, check_sequence, check_words
 from spacy.language import Language
 from spacy.tokens import Doc
 
 from ..basic_stats import BasicStats, punctuation_profile
 from ..constants import MORPHOLOGY_STATS_DESC, OPENING_MARKS, SYMMETRIC_MARKS
 from ..diversity_stats import DiversityStats
-from ..exceptions import ParameterError, SourceError
+from ..exceptions import ParameterError, SourceError, SourceTypeError
 from ..extractors import SentsExtractor, WordsExtractor
 from ..morph_stats import FINITE_MOODS, MorphStats
 from ..readability_stats import ReadabilityStats
@@ -75,6 +75,7 @@ def split_windows(text: str, window: int | None = 1000, min_words: int | None = 
 
     Raises:
         ParameterError: If the size of a window or min_words is not an integer or is below one
+        SourceTypeError: If the text is not a string
 
     Example:
         >>> from ests.corpus import split_windows
@@ -83,6 +84,8 @@ def split_windows(text: str, window: int | None = 1000, min_words: int | None = 
         >>> split_windows('Dijo "adiós" y se fue ya', 2)
         ['Dijo "adiós"', 'y se', 'fue ya']
     """
+    if not isinstance(text, str):
+        raise SourceTypeError(f"A text string is expected, not {type(text).__name__}")
     _check_windows(window, min_words)
     if min_words is None:
         min_words = 1 if window is None else max(1, window // 2)
@@ -146,6 +149,7 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         dict[str, float]: Features; the undefined values are nan
 
     Raises:
+        SourceTypeError: If the text is not a string or the pipeline is not a spaCy Language
         SourceError: If the text has no words or is longer than the max_length
             of the pipeline
         DatasetNotFoundError: If the default model is not installed
@@ -156,6 +160,10 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         >>> features["sents_mean"], round(features["morph_pos_DET"], 3)
         (5.5, 0.273)
     """
+    if not isinstance(text, str):
+        raise SourceTypeError(f"A text string is expected, not {type(text).__name__}")
+    if nlp is not None and not isinstance(nlp, Language):
+        raise SourceTypeError("The pipeline must be a spaCy Language")
     positions = list(iter_text_words(text))
     spans = [(start, stop) for start, stop, _ in iter_text_sents(text)]
     words = _FixedWordsExtractor(tuple(word for _, _, word in positions))
@@ -267,11 +275,15 @@ def sentence_rhythm(lengths: Sequence[int]) -> dict[str, float]:
     Returns:
         dict[str, float]: Features sents_mean, sents_std, sents_cv, sents_autocorr
 
+    Raises:
+        SourceTypeError: If the lengths are a string or not a list
+
     Example:
         >>> from ests.corpus import sentence_rhythm
         >>> {key: round(value, 3) for key, value in sentence_rhythm([4, 8, 2, 7]).items()}
         {'sents_mean': 5.25, 'sents_std': 2.754, 'sents_cv': 0.525, 'sents_autocorr': -0.794}
     """
+    check_sequence(lengths, "sentence lengths")
     values = np.asarray(lengths, dtype=float)
     if not len(values):
         return dict.fromkeys(("sents_mean", "sents_std", "sents_cv", "sents_autocorr"), nan)

@@ -84,6 +84,12 @@ def test_init_doc_lowercase():
     assert DiversityStats(doc).ttr == DiversityStats(RIDDLE_TEXT).ttr
 
 
+def test_init_byte_order_mark():
+    """The words of a string and of its Doc are the same with a byte order mark"""
+    text = "\ufeff" + RIDDLE_TEXT
+    assert DiversityStats(text).words == DiversityStats(spacy.blank("es")(text)).words == riddle
+
+
 def test_init_extractor_lowercase():
     """Words are lower-cased whatever the extractor, so the metrics stay case-insensitive"""
     text = "Los tesauros son una clase especial. Los TESAUROS son Una clase."

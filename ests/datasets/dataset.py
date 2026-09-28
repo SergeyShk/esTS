@@ -7,7 +7,7 @@ from typing import Any
 
 from anyts.utils import check_integer
 
-from ..exceptions import DownloadError, ParameterError
+from ..exceptions import DownloadError, ParameterError, SourceTypeError
 from ..utils import download_file, extract_archive, sha256
 
 Filter = Callable[[dict[str, Any]], bool]
@@ -150,7 +150,12 @@ def substring_filter(field: str, value: str) -> Filter:
 
     Returns:
         Filter: Predicate on a record
+
+    Raises:
+        SourceTypeError: If the value is not a string
     """
+    if not isinstance(value, str):
+        raise SourceTypeError(f"The {field} must be a string, not {type(value).__name__}")
     needle = _fold(value)
     return lambda record: needle in _fold(record[field])
 

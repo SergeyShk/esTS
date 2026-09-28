@@ -4,6 +4,7 @@ from collections import Counter
 from collections.abc import Iterable
 from typing import Any
 
+import anyts
 from anyts.utils import check_integer, count_letters, has_words, iter_doc_words
 from spacy.tokens import Doc, Span
 
@@ -144,7 +145,8 @@ class BasicStats:
         count_words_by_letters: Number of words with at least the given number of letters
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object
+        SourceTypeError: If the source is neither a string nor a Doc object, or an extractor
+            is of another type
         SourceError: If the source has no words
         ParameterError: If a factor is not an integer or is below one
     """
@@ -158,6 +160,10 @@ class BasicStats:
         complex_syl_factor: int = COMPLEX_SYL_FACTOR,
         long_word_letter_factor: int = LONG_WORD_LETTER_FACTOR,
     ):
+        if sents_extractor is not None and not isinstance(sents_extractor, anyts.SentsExtractor):
+            raise SourceTypeError("The sentence extractor must be a SentsExtractor")
+        if words_extractor is not None and not isinstance(words_extractor, anyts.WordsExtractor):
+            raise SourceTypeError("The word extractor must be a WordsExtractor")
         _check_factor(complex_syl_factor, "minimum number of syllables in a complex word")
         _check_factor(long_word_letter_factor, "minimum number of letters in a long word")
         sents: Iterable[Span] | Iterable[str]
@@ -287,14 +293,19 @@ def count_punctuations(text: str) -> dict[str, int]:
         words, before digits and at a line break inside a word
         (teórico-práctico, -5, pala-\nbra), guillemets «», straight and curly
         quotes "“”‘’, parentheses and other marks: any other character of
-        is_punctuation
+        anyts.utils.is_punctuation
 
     Arguments:
         text (str): Text string
 
     Returns:
         dict[str, int]: Number of marks of each type in the order of PUNCTUATION_TYPES
+
+    Raises:
+        SourceTypeError: If the text is not a string
     """
+    if not isinstance(text, str):
+        raise SourceTypeError(f"A text string is expected, not {type(text).__name__}")
     counts = dict.fromkeys(PUNCTUATION_TYPES, 0)
     # Dashes first, so that one after an ellipsis still sees it (sé...-dijo)
     rest, counts["dash"] = DASH_PATTERN.subn("", text)
@@ -330,7 +341,15 @@ def punctuation_profile(text: str, n_words: int | None = None) -> dict[str, floa
         dict[str, float]: Frequencies of the types per 1000 words and
             inverted_share; nan without words or without question and
             exclamation marks
+
+    Raises:
+        SourceTypeError: If the text is not a string
+        ParameterError: If the number of words is not an integer or is negative
     """
+    if n_words is not None:
+        check_integer(n_words, "number of words")
+        if n_words < 0:
+            raise ParameterError("The number of words cannot be negative")
     if n_words is None:
         n_words = len(WordsExtractor().extract(text))
     counts = count_punctuations(text)
