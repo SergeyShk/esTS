@@ -20,11 +20,14 @@ jobs:
         if: github.event_name == 'release'
         run: |
           sed -i 's|^pyests @ .*|pyests==${{ github.event.release.tag_name }}|' demo/requirements.txt
-          for attempt in $(seq 1 30); do
-            curl -sf "https://pypi.org/pypi/pyests/${{ github.event.release.tag_name }}/json" > /dev/null && exit 0
+          # The index pip reads is refreshed later than the JSON of the release
+          for attempt in $(seq 1 60); do
+            curl -sf -H "Accept: application/vnd.pypi.simple.v1+json" https://pypi.org/simple/pyests/ \
+              | jq -e --arg version "${{ github.event.release.tag_name }}" '.versions | index($version)' > /dev/null \
+              && exit 0
             sleep 30
           done
-          echo "pyests ${{ github.event.release.tag_name }} is not on PyPI" && exit 1
+          echo "pyests ${{ github.event.release.tag_name }} is not in the index of PyPI" && exit 1
       - name: Upload demo to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
