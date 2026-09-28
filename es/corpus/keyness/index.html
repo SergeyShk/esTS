@@ -2719,7 +2719,7 @@
 <p>El corpus objetivo tiene que contarse como se contó el diccionario: formas con las palabras vacías, no lemas - <code>lemma_key</code> no es idempotente (<code>estado</code> - <code>estar</code>), así que <code>WordsExtractor(use_lexemes=True)</code> no sirve. El diccionario describe el registro de los libros, así que las palabras clave negativas de un texto son las de la prosa académica (<code>de</code>, <code>social</code>, <code>país</code>).</p>
 <h2 id="resultado">Resultado<a class="headerlink" href="#resultado" title="Permanent link">&para;</a></h2>
 <!-- core: corpus/keyness.md:Keyword 33ab9a7 -->
-<p>Una lista de tuplas con nombre <code>Keyword</code> por orden descendente de clave (los empates por frecuencia descendente y alfabéticamente, las palabras de medida indefinida al final); <code>pd.DataFrame(keywords)</code> da una tabla.</p>
+<p>Una lista de tuplas con nombre <code>Keyword</code> por keyness descendente (los empates por frecuencia descendente y alfabéticamente, las palabras de medida indefinida al final); <code>pd.DataFrame(keywords)</code> da una tabla.</p>
 <table>
 <thead>
 <tr>
