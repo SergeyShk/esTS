@@ -195,7 +195,7 @@ def add_dash_rules(nlp: Language) -> None:
         split the dashes glued to the words off (--No, -dijo, reírse—me,
         dijo:—¡Mis) and leave a hyphen between letters (franco-alemán) or before
         a digit (-5) alone; a byte order mark glued to the start of a text is
-        split off as well, so the marks after it are split as usual (\ufeff¿Hola);
+        split off as well, so the marks after it are split as usual;
         get_tokenizer and get_nlp have them already.
         A rule the tokenizer has is not added twice; a tokenizer that is not
         the Tokenizer of spaCy, or whose rules are not regular expressions,
