@@ -79,7 +79,7 @@ def test_get_stats_values(ss):
     stats = ss.get_stats()
     assert stats["mean_dependency_distance"] == pytest.approx(2.3333333, rel=1e-6)
     assert stats["tree_depth"] == 4
-    assert stats["clauses_per_sent"] == 1.5
+    assert stats["clauses_per_sent"] == 2
     assert stats["p_complex_sents"] == 0.5
     assert stats["noun_verb_ratio"] == 1
 
@@ -373,7 +373,11 @@ def test_split_predicate_prefers_the_fixed_part(nlp):
         ("Quiere ser elegido.", 2),
         ("Llegó a ser rey.", 1),
         ("Suele ser amable.", 1),
-        ("Acostumbraba a salir de noche.", 1),
+        ("Cree haber ganado.", 2),
+        ("Dijo que había llegado.", 2),
+        ("Dijo que estaba cantando.", 2),
+        ("Ha podido salir.", 1),
+        ("Está acostumbrado a vivir solo.", 2),
     ],
 )
 def test_clause_head_of_an_infinitive(nlp, text, clauses):

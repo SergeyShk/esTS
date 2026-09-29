@@ -372,8 +372,9 @@ def is_clause_head(token: Token) -> bool:
     Description:
         The head of the sentence or a word with the relation ccomp, advcl, acl
         or csubj, and an infinitive under xcomp (is_infinitive_clause: quiere
-        salir); participles and gerunds are counted apart, and an infinitive
-        under acl (el deseo de irse) is no clause. A parataxis or a conj of the
+        salir); a participle or a gerund heads its clause with an auxiliary
+        (había llegado, estaba cantando) and is counted apart without one,
+        and an infinitive under acl (el deseo de irse) is no clause. A parataxis or a conj of the
         head of a clause counts only as a predicate (is_predicate), so that
         parentheticals such as por ejemplo are no clauses
 
@@ -389,7 +390,7 @@ def is_clause_head(token: Token) -> bool:
         return True
     if token.dep_ == "xcomp":
         return is_infinitive_clause(token)
-    if is_participle(token) or is_gerund(token):
+    if (is_participle(token) or is_gerund(token)) and not has_auxiliary(token):
         return False
     if token.dep_ not in CLAUSE_DEPS:
         return token.dep_ == "conj" and is_clause_head(token.head) and is_predicate(token)
@@ -444,8 +445,9 @@ def is_infinitive_clause(token: Token) -> bool:
 
     Description:
         A verb infinitive that completes its head (quiere salir, le hizo
-        reír), also the infinitive ser or estar of a copular or passive
-        complement (quiere ser médico, quiere ser elegido), unless the two
+        reír), also the infinitive ser, estar or haber of a copular, passive
+        or compound complement (quiere ser médico, quiere ser elegido, cree
+        haber ganado), unless the two
         make a periphrasis (is_infinitive_periphrasis: puede salir, vuelve a
         salir) or the head is a verb of RAISING_VERBS (parece dormir);
         a predicative adjective (parece cansado) is no clause
@@ -459,7 +461,7 @@ def is_infinitive_clause(token: Token) -> bool:
     infinitive = (token.pos_ in ("VERB", "AUX") and is_infinitive(token)) or any(
         base_dep(child) in AUXILIARY_DEPS
         and is_infinitive(child)
-        and child.lemma_.lower() in COPULAS
+        and child.lemma_.lower() in (*COPULAS, "haber")
         for child in token.children
     )
     return (

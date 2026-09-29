@@ -164,6 +164,10 @@ def test_is_punctuation(token, expected):
         ),
         ("¿Vienes?--Sí.", ["¿Vienes?", "--Sí."]),
         ("Era tarde.--«Ven», dijo.", ["Era tarde.", "--«Ven», dijo."]),
+        # A single hyphen before a word numbers an article or joins two names
+        ("Artículo 1.- Objeto del reglamento.", ["Artículo 1.- Objeto del reglamento."]),
+        ("PRIMERO.- Aprobar el plan.", ["PRIMERO.- Aprobar el plan."]),
+        ("EE.UU.-China firmaron.", ["EE.UU.-China firmaron."]),
     ],
 )
 def test_sentenize(text, expected):

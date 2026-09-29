@@ -514,7 +514,6 @@ INFINITIVE_PERIPHRASES: dict[str, frozenset[str | None]] = {
     "poder": frozenset({None}),
     "deber": frozenset({None, "de"}),
     "soler": frozenset({None}),
-    "acostumbrar": frozenset({None, "a"}),
     "tener": frozenset({"que"}),
     "haber": frozenset({"de", "que"}),
     "ir": frozenset({"a"}),
