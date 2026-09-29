@@ -3082,7 +3082,7 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.1" },
     { name = "scipy", specifier = ">=1.11" },
     { name = "simplemma", specifier = ">=2.0,<3" },
-    { name = "spacy", specifier = ">=3.7" },
+    { name = "spacy", specifier = ">=3.8" },
 ]
 
 [package.metadata.requires-dev]
