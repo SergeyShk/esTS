@@ -1,6 +1,6 @@
 import random
 from collections import Counter
-from math import isnan, log2, nan
+from math import comb, isnan, log2, nan
 
 import pytest
 import spacy
@@ -10,7 +10,6 @@ from ests.constants import PHON_STATS_DESC
 from ests.phon_stats import (
     CONSONANT_SOUNDS,
     VOWEL_SOUNDS,
-    _calc_repetition_index,
     calc_alliteration,
     calc_assonance,
     calc_consonant_clusters,
@@ -175,19 +174,22 @@ def test_alliteration():
     # the repetitions of m and r gather at the start of the text - more often than expected
     clustered = ["mar", "mero", "mira", "gato", "lis", "sol", "gol", "pez"]
     assert calc_alliteration(clustered, window_len=2) > 1
-    # the expected number comes from the text itself: with m in every word the repetitions
-    # of m are no more than expected
-    assert calc_alliteration(["mar", "mesa", "mío", "mudo"], window_len=2) <= 1
+    # the expected number comes from the text itself: m in every word repeats in every
+    # window, as expected
+    assert calc_alliteration(["mar", "mesa", "mío", "mudo"], window_len=2) == 1.0
     # a window longer than the text
     assert isnan(calc_alliteration(["mamá", "mima"], window_len=3))
-    # no consonant repeats in a window
-    assert calc_alliteration(["dos", "pie", "luz"], window_len=2) == 0.0
-    # the sounds count, not the letters: casa and queso repeat k
-    assert calc_alliteration(["casa", "queso"], window_len=2) > 0.0
+    # s could repeat but never meets itself in a window
+    assert calc_alliteration(["dos", "pie", "mar", "sol"], window_len=2) == 0.0
+    # no consonant is shared by two words, so none can repeat
+    assert isnan(calc_alliteration(["dos", "pie", "luz"], window_len=2))
+    # the sounds count, not the letters: casa and queso repeat k and s, cena and casa nothing
+    assert calc_alliteration(["casa", "queso"], window_len=2) == 1.0
+    assert isnan(calc_alliteration(["cena", "casa"], window_len=2))
 
 
 def repetition_index_by_windows(text, sounds, window_len):
-    # a direct count over the windows - the reference for the vectorized computation
+    # a direct count over the windows against the words in random order
     tokens = [{sound for sound in transcribe(word) if sound in sounds} for word in text]
     n_words = len(tokens)
     if n_words < window_len:
@@ -199,9 +201,9 @@ def repetition_index_by_windows(text, sounds, window_len):
         observed += sum(1 for count in counts.values() if count >= 2)
     expected = 0.0
     for count in Counter(sound for token in tokens for sound in token).values():
-        p = count / n_words
-        p_single = window_len * p * (1 - p) ** (window_len - 1)
-        expected += n_windows * (1 - (1 - p) ** window_len - p_single)
+        rest = n_words - count
+        fewer = comb(rest, window_len) + count * comb(rest, window_len - 1)
+        expected += n_windows * (1 - fewer / comb(n_words, window_len))
     return observed / expected if expected else nan
 
 
@@ -214,19 +216,21 @@ def test_repetition_index_matches_windows(window_len):
             "".join(rng.choice(alphabet) for _ in range(rng.randint(1, 8)))
             for _ in range(rng.randint(0, 30))
         ]
-        for sounds in (CONSONANT_SOUNDS, VOWEL_SOUNDS):
+        for sounds, calc in (
+            (CONSONANT_SOUNDS, calc_alliteration),
+            (VOWEL_SOUNDS, calc_assonance),
+        ):
             expected = repetition_index_by_windows(words, sounds, window_len)
-            actual = _calc_repetition_index(words, sounds, window_len)
-            assert actual == pytest.approx(expected, nan_ok=True)
+            assert calc(words, window_len) == pytest.approx(expected, nan_ok=True)
 
 
 def test_assonance(ps):
     # a gathers in the first three words and i in the next two: 3 windows with a repetition
-    # against 1.94 expected
+    # against 5 * (C(3, 2) + C(2, 2)) / C(6, 2) = 4/3 expected
     clustered = ["pan", "mar", "sal", "mil", "pis", "sol"]
-    assert calc_assonance(clustered, window_len=2) == pytest.approx(3 / (5 / 4 + 5 / 9 + 5 / 36))
-    assert calc_assonance(["pan", "mar", "sal", "sal"], window_len=2) == pytest.approx(1.0)
-    assert calc_assonance(["pan", "pie", "sol"], window_len=2) == 0.0
+    assert calc_assonance(clustered, window_len=2) == pytest.approx(9 / 4)
+    assert calc_assonance(["pan", "mar", "sal", "sal"], window_len=2) == 1.0
+    assert isnan(calc_assonance(["pan", "pie", "sol"], window_len=2))
     assert ps.assonance == pytest.approx(calc_assonance(ps.words))
     assert PhonStats(text, window_len=5).alliteration != pytest.approx(ps.alliteration)
 
