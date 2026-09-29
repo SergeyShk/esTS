@@ -79,8 +79,8 @@ Devuelve un diccionario con la fonoestadística calculada.
     #  'p_hiatus': 0.0,
     #  'cv_entropy': 2.75,
     #  'hardness': 0.4583333333333333,
-    #  'alliteration': 0.9175627240143369,
-    #  'assonance': 0.6708595387840671,
+    #  'alliteration': 0.9333333333333333,
+    #  'assonance': 0.7526881720430108,
     #  'p_open_syllables': 0.42857142857142855,
     #  'mean_syllable_len': 2.857142857142857}
 
@@ -126,10 +126,10 @@ Muestra una tabla con la fonoestadística calculada.
     Hiatuses per word                             |   0.00
     Entropy of the CV patterns of words (bits)    |   3.55
     Hardness                                      |   0.39
-    Alliteration index                            |   0.83
-    Assonance index                               |   0.86
+    Alliteration index                            |   0.87
+    Assonance index                               |   0.87
     Share of open syllables                       |   0.74
     Mean length of a syllable (sounds)            |   2.19
     ```
 
-Sobre un libro entero los índices de aliteración y de asonancia se acercan a 1 tanto en verso como en prosa, como en los libros del [corpus de literatura](../datasets/spanishliterature.md): las repeticiones de un poema son locales, y los lugares donde se agrupan los muestra la capa `alliteration` del [resaltado](../visualizers/highlight.md).
+Con las palabras en orden aleatorio los índices valen 1 de media: los 150 libros del [corpus de literatura](../datasets/spanishliterature.md) con sus palabras barajadas dan de 0,98 a 1,01. En los libros tal como están escritos el índice de aliteración queda algo por debajo de 1 tanto en verso como en prosa, de 0,90 a 0,99 con una mediana de 0,95, y el de asonancia cerca de 1, de 0,99 a 1,01: en un libro entero las palabras vecinas comparten una consonante algo menos a menudo que al azar. Los 4259 [sonetos](../datasets/spanishsonnets.md) dan medianas de 0,92 y 0,98, con gran dispersión en textos tan cortos (de 0,59 a 1,30 la aliteración). Las repeticiones de un poema son locales, y los lugares donde se agrupan los muestra la capa `alliteration` del [resaltado](../visualizers/highlight.md).
