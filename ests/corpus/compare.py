@@ -334,7 +334,7 @@ def corpus_features(
         DataFrame: Features of the windows
 
     Raises:
-        SourceTypeError: If the texts are not a list of strings
+        SourceTypeError: If the texts are not a list of strings or the features are no function
         SourceError: If the corpus has no window of enough words
         ParameterError: If the size of a window or min_words is not an integer or is below one
 
@@ -349,6 +349,8 @@ def corpus_features(
         1    0         7.0
     """
     check_words(texts, "texts")
+    if not callable(features):
+        raise SourceTypeError(f"The features must be a function, not {type(features).__name__}")
     _check_windows(window, min_words)
     rows = {}
     for text_index, text in enumerate(texts):
@@ -412,7 +414,7 @@ def compare_corpora(
             with the names of the corpora in the columns)
 
     Raises:
-        SourceTypeError: If the texts are not a list of strings
+        SourceTypeError: If the texts are not a list of strings or the features are no function
         SourceError: If one of the corpora has no window of enough words
         ParameterError: If the names of the corpora are not two strings that give
             distinct columns, the number of samples, the size of a window or min_words
@@ -430,7 +432,7 @@ def compare_corpora(
     check_words(a, "texts")
     check_words(b, "texts")
     _check_windows(window, min_words)
-    feature_function = features or text_features
+    feature_function = text_features if features is None else features
     table_a = corpus_features(a, window, feature_function, min_words)
     table_b = corpus_features(b, window, feature_function, min_words)
     return compare_features(table_a, table_b, labels, n_bootstrap, seed)

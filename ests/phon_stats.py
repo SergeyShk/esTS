@@ -252,11 +252,16 @@ def transcribe(word: str) -> tuple[str, ...]:
     Returns:
         tuple[str]: Sounds of the word
 
+    Raises:
+        SourceTypeError: If the word is not a string
+
     Example:
         >>> from ests.phon_stats import transcribe
         >>> transcribe("hechizo"), transcribe("guerrilla"), transcribe("examen")
         (('e', 'tʃ', 'i', 'θ', 'o'), ('g', 'e', 'r', 'i', 'ʝ', 'a'), ('e', 'k', 's', 'a', 'm', 'e', 'n'))
     """
+    if not isinstance(word, str):
+        raise SourceTypeError(f"The word must be a string, not {type(word).__name__}")
     return tuple(sound for syllable in _syllable_sounds(word) for sound in syllable)
 
 

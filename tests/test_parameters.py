@@ -17,6 +17,7 @@ from ests import (
     WordsExtractor,
 )
 from ests.basic_stats import punctuation_profile
+from ests.cohesion_stats import find_connectors
 from ests.corpus import compare_corpora, corpus_features, function_words_profile, kwic
 from ests.corpus.compare import sentence_rhythm, split_windows, text_features
 from ests.datasets import SpanishLiterature
@@ -28,6 +29,7 @@ from ests.phon_stats import (
     calc_consonant_clusters,
     calc_cv_entropy,
     calc_hiatus,
+    transcribe,
 )
 from ests.readability_stats import flesch_reading_easy_to_grade
 from ests.style_stats import (
@@ -41,7 +43,9 @@ from ests.style_stats import (
     calc_water,
     calc_zipf_naturalness,
     expand_phrases,
+    is_stopword,
 )
+from ests.syllables import count_syllables, stress_type, syllabify
 from ests.utils import find_phrases
 from ests.visualizers import (
     highlight,
@@ -75,6 +79,7 @@ INTEGERS = {
     "highlight(complex_syl_factor)": lambda: highlight(TEXT, complex_syl_factor=True),
     "punctuation_profile(n_words)": lambda: punctuation_profile(TEXT, n_words=2.5),
     "punctuation_profile(negative n_words)": lambda: punctuation_profile(TEXT, n_words=-1),
+    "find_connectors(pos)": lambda: find_connectors(["pero", "no"], pos=["CCONJ"]),
     "SpanishLiterature(year_from)": lambda: SpanishLiterature._get_filters(
         None, None, None, 1850.5, None, None, None
     ),
@@ -133,6 +138,14 @@ WORD_LISTS = {
     "sentence_rhythm": lambda: sentence_rhythm("texto"),
     "sentence_rhythm(elements)": lambda: sentence_rhythm(["4", "8"]),
     "kwic(keyword)": lambda: kwic(TEXT, 5),
+    "syllabify": lambda: syllabify(None),
+    "count_syllables": lambda: count_syllables(["gato"]),
+    "stress_type": lambda: stress_type(5),
+    "transcribe": lambda: transcribe(["casa"]),
+    "is_stopword": lambda: is_stopword(None),
+    "find_connectors": lambda: find_connectors("pero no"),
+    "compare_corpora(features)": lambda: compare_corpora([TEXT], [TEXT], features=1),
+    "corpus_features(features)": lambda: corpus_features([TEXT], features="text_features"),
 }
 
 

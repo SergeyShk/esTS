@@ -346,11 +346,16 @@ def is_stopword(word: str) -> bool:
     Returns:
         bool: Result of the check
 
+    Raises:
+        SourceTypeError: If the word is not a string
+
     Example:
         >>> from ests.style_stats import is_stopword
         >>> is_stopword("Aquel"), is_stopword("sin"), is_stopword("trigo")
         (True, True, False)
     """
+    if not isinstance(word, str):
+        raise SourceTypeError(f"The word must be a string, not {type(word).__name__}")
     word = word.lower()
     return word in STOPWORDS or word in PARENTHETICAL_WORDS
 
