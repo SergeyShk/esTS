@@ -508,17 +508,18 @@ def calc_alliteration(text: Sequence[str], window_len: int = PHON_WINDOW_LEN) ->
     Description:
         The number of windows of window_len neighbouring words where a
         consonant sound occurs in two words or more, summed over the
-        consonants, to the number expected if the consonants of the text were
-        spread over its words at random: about 1 - random repetitions, well
-        above 1 - alliteration. The sounds count, not the letters: casa and
-        queso repeat k, cena and casa do not
+        consonants, to the number expected if the words stood in random order
+        (calc_repetition_index of anyts.phonetics): about 1 - random
+        repetitions, well above 1 - alliteration. The sounds count, not the
+        letters: casa and queso repeat k, cena and casa do not
 
     Arguments:
         text (list[str]): List of words
         window_len (int): Window in words
 
     Returns:
-        float: Value of the index, nan for a text shorter than the window
+        float: Value of the index, nan for a text shorter than the window or
+            without a consonant shared by two words
 
     Raises:
         SourceTypeError: If the words are not a list of strings
@@ -542,7 +543,8 @@ def calc_assonance(text: Sequence[str], window_len: int = PHON_WINDOW_LEN) -> fl
         window_len (int): Window in words
 
     Returns:
-        float: Value of the index, nan for a text shorter than the window
+        float: Value of the index, nan for a text shorter than the window or
+            without a vowel shared by two words
 
     Raises:
         SourceTypeError: If the words are not a list of strings

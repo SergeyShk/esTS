@@ -114,13 +114,16 @@ $$
 !!! info ""
     **ests.phon_stats.calc_alliteration()**
 
-La razón del número observado de ventanas de `window_len` palabras vecinas en las que un sonido consonántico aparece en dos palabras o más al número esperado si las consonantes se repartieran al azar entre las palabras, sumado sobre las consonantes. El número esperado sale de las frecuencias de las consonantes del propio texto, así que el índice dice si las repeticiones se agrupan en palabras vecinas, no cuán frecuente es un sonido: cerca de 1 - las repeticiones son aleatorias, bastante por encima de 1 - aliteración. Las consonantes son los sonidos de la transcripción, así que `casa` y `queso` repiten k, y `cena` y `casa` no; `nan` para un texto más corto que la ventana.
+<!-- core: stats/phonetics.md:calc_repetition_index 4e25d01 -->
+El índice de repetición: el número de ventanas de `window_len` palabras vecinas donde un rasgo - una letra o un sonido, según elija una biblioteca - aparece en dos palabras o más, sumado sobre los rasgos, dividido por el número esperado si las palabras estuvieran en orden aleatorio. Una ventana de palabras barajadas es una muestra de ellas sin reposición, así que, para un rasgo presente en \(K\) de las \(N\) palabras del texto, una ventana de \(w\) palabras lo contiene en dos palabras o más con la probabilidad hipergeométrica
 
 $$
-\frac{\sum_c O_c}{\sum_c (W - w + 1) \left(1 - (1 - p_c)^w - w p_c (1 - p_c)^{w - 1}\right)}
+P = 1 - \frac{\binom{N-K}{w} + K \binom{N-K}{w-1}}{\binom{N}{w}}
 $$
 
-donde $O_c$ es el número de ventanas con la consonante $c$ en dos palabras o más, $W$ el número de palabras, $w$ la ventana y $p_c$ la proporción de las palabras con la consonante $c$.
+y el número esperado es la suma de estas probabilidades sobre los rasgos multiplicada por las \(N - w + 1\) ventanas. La esperanza sale del propio texto, así que el índice dice si las repeticiones se agrupan en palabras vecinas, no cuán frecuente es un rasgo: vale 1 de media sobre los órdenes de las palabras y queda bastante por encima de 1 cuando las repeticiones se acercan más que al azar. Una palabra cuenta un rasgo una vez, lo contenga las veces que lo contenga; `nan` para un texto más corto que la ventana y para un texto en el que ningún rasgo lo comparten dos palabras.
+
+Los rasgos son los sonidos consonánticos de la transcripción, así que `casa` y `queso` repiten k, y `cena` y `casa` no.
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
@@ -132,7 +135,7 @@ donde $O_c$ es el número de ventanas con la consonante $c$ en dos palabras o m�
 !!! info ""
     **ests.phon_stats.calc_assonance()**
 
-La misma razón sobre las vocales: el número observado de ventanas de `window_len` palabras vecinas en las que una vocal aparece en dos palabras o más frente al número esperado por las frecuencias de las vocales del texto. Cuentan todas las vocales, tónicas o no; `nan` para un texto más corto que la ventana.
+El índice de `calc_alliteration` sobre las vocales: el número observado de ventanas de `window_len` palabras vecinas en las que una vocal aparece en dos palabras o más frente al número esperado con las palabras en orden aleatorio. Cuentan todas las vocales, tónicas o no; `nan` para un texto más corto que la ventana o sin una vocal que compartan dos palabras.
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
