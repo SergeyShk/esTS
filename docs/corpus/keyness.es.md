@@ -16,12 +16,12 @@ La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/a
 
 ## Medidas
 
-<!-- core: corpus/keyness.md:keyness-measures 2a13cf3 -->
+<!-- core: corpus/keyness.md:keyness-measures 7d98aa3 -->
 Para una palabra de frecuencia $a$ en un corpus objetivo de tamaño $c$ y de frecuencia $b$ en un corpus de referencia de tamaño $d$, $N = c + d$:
 
 | Medida | Clave | Fórmula | Descripción |
 | :----- | :---- | :------ | :---------- |
-| Razón de verosimilitud | `log_likelihood` | $G^2 = 2\,(a \ln \frac{a}{E_1} + b \ln \frac{b}{E_2})$, $E_1 = \frac{c\,(a+b)}{N}$, $E_2 = \frac{d\,(a+b)}{N}$ | [Rayson y Garside (2000)](https://ucrel.lancs.ac.uk/llwizard.html); valores críticos `G2_CRITICAL_VALUES`: 3.84 para p < 0.05, 6.63 para p < 0.01, 10.83 para p < 0.001, 15.13 para p < 0.0001 |
+| Razón de verosimilitud | `log_likelihood` | $G^2 = 2\,(a \ln \frac{a}{E_1} + b \ln \frac{b}{E_2})$, $E_1 = \frac{c\,(a+b)}{N}$, $E_2 = \frac{d\,(a+b)}{N}$ | [Rayson y Garside (2000)](https://ucrel.lancs.ac.uk/llwizard.html); valores críticos `anyts.constants.G2_CRITICAL_VALUES`: 3.84 para p < 0.05, 6.63 para p < 0.01, 10.83 para p < 0.001, 15.13 para p < 0.0001 |
 | Ji cuadrado | `chi2` | $\chi^2 = \frac{N\,\max(\lvert a(d-b) - b(c-a) \rvert - N/2,\ 0)^2}{(a+b)(N-a-b)\,c\,d}$ | con la corrección de Yates sobre la tabla de contingencia 2×2; si la corrección supera la diferencia, el estadístico es cero |
 | %DIFF | `diff` | $\frac{NF_a - NF_b}{NF_b} \cdot 100$ | [Gabrielatos y Marchi (2011)](http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf); $NF$ - frecuencia por millón de palabras |
 | Log Ratio | `log_ratio` | $\log_2 \frac{NF_a}{NF_b}$ | [Hardie (2014)](http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/); uno significa que la palabra es el doble de frecuente en el corpus objetivo |
@@ -33,12 +33,12 @@ Una frecuencia nula en uno de los corpus se sustituye por 0.5 para %DIFF, Log Ra
 
 ## Parámetros
 
-<!-- core: corpus/keyness.md:keyness-parameters ac5e82f -->
+<!-- core: corpus/keyness.md:keyness-parameters 6f31f0b -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `target` | list[str]/dict[str, int] | `-` | Palabras del corpus objetivo o sus frecuencias |
 | `reference` | list[str]/dict[str, float]/FrequencyReference | `-` | Palabras del corpus de referencia, sus frecuencias o una referencia por frecuencias |
-| `measure` | str | `log_likelihood` | Medida de `KEYNESS_MEASURES` para `score` y el orden |
+| `measure` | str | `log_likelihood` | Medida de `anyts.constants.KEYNESS_MEASURES` para `score` y el orden |
 | `min_freq` | int | `1` | Frecuencia mínima de una palabra clave en su propio corpus |
 | `positive` | bool | `True` | Palabras clave positivas (más frecuentes en el corpus objetivo) o negativas (más frecuentes en la referencia) |
 | `top_n` | int | `None` | Número de palabras clave; `None` - todas |

@@ -1,5 +1,5 @@
 from collections import Counter
-from collections.abc import Sequence
+from collections.abc import Collection, Mapping, Sequence, Set
 from functools import cached_property
 from math import nan, sqrt
 
@@ -78,11 +78,11 @@ class StyleStats:
     Arguments:
         source (str|Doc): Data source (a string or a Doc object)
         words_extractor (WordsExtractor): Word extraction tool
-        stopwords (list[str]): Stopwords for the water content; STOPWORDS and
+        stopwords (list[str]|set[str]): Stopwords for the water content; STOPWORDS and
             the one-word parenthetical expressions if not set
         top_n (int): Number of the most frequent words for the academic nausea
             and the naturalness by Zipf's law
-        cliches (list[str]): List of clichés; OFFICIALESE_CLICHES if not set
+        cliches (list[str]|set[str]): List or set of clichés; OFFICIALESE_CLICHES if not set
         nlp (Language): Pipeline that parses a string for the verbal nouns;
             get_nlp() if not set
 
@@ -106,8 +106,8 @@ class StyleStats:
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc, or the
-            stopwords or the clichés are not a list of strings, or the extractor or the
-            pipeline is of another type
+            stopwords or the clichés are not a list or a set of strings, or the extractor
+            or the pipeline is of another type
         SourceError: If the source has no words; when the verbal nouns are read,
             if the source lacks the parts of speech or the lemmas or a sentence
             of a string is longer than the max_length of the pipeline
@@ -119,9 +119,9 @@ class StyleStats:
         self,
         source: str | Doc,
         words_extractor: WordsExtractor | None = None,
-        stopwords: Sequence[str] | None = None,
+        stopwords: Collection[str] | None = None,
         top_n: int = NAUSEA_TOP_N,
-        cliches: Sequence[str] | None = None,
+        cliches: Collection[str] | None = None,
         nlp: Language | None = None,
     ):
         if words_extractor is not None and not isinstance(words_extractor, anyts.WordsExtractor):
@@ -130,9 +130,9 @@ class StyleStats:
             raise SourceTypeError("The pipeline must be a spaCy Language")
         check_params(top_n)
         if stopwords is not None:
-            check_words(stopwords, "stopwords")
+            check_words(stopwords, "stopwords", ordered=False)
         if cliches is not None:
-            check_words(cliches, "clichés")
+            check_words(cliches, "clichés", ordered=False)
         # The Doc is not kept: this object in an extension of the Doc would make a cycle
         self._text: str | None = None
         self._nouns: list[str] | None = None
@@ -153,9 +153,9 @@ class StyleStats:
             raise SourceTypeError("The data source is set incorrectly")
         if not self.words:
             raise SourceError("The data source has no words")
-        self.stopwords = tuple(stopwords) if stopwords is not None else None
+        self.stopwords = in_order(stopwords) if stopwords is not None else None
         self.top_n = top_n
-        self.cliches_list = tuple(cliches) if cliches is not None else OFFICIALESE_CLICHES
+        self.cliches_list = in_order(cliches) if cliches is not None else OFFICIALESE_CLICHES
         self.nlp = nlp
 
     @property
@@ -252,6 +252,20 @@ class StyleStats:
         stats = self.get_stats()
         for stat, desc in STYLE_STATS_DESC.items():
             print(f"{desc:50}|{stats[stat]:^10.2f}")
+
+
+def in_order(words: Collection[str]) -> tuple[str, ...]:
+    """
+    Putting a collection of words in a fixed order
+
+    Arguments:
+        words (list[str]|set[str]): Words; a set or a mapping is sorted, a list,
+            an array or a Series keeps its order
+
+    Returns:
+        tuple[str]: Words in order
+    """
+    return tuple(sorted(words)) if isinstance(words, Set | Mapping) else tuple(words)
 
 
 def _split_text(text: str, max_length: int) -> list[str]:
@@ -396,7 +410,7 @@ def calc_academic_nausea(text: Sequence[str], top_n: int = NAUSEA_TOP_N) -> floa
     return safe_divide(100 * top_freqs, len(text))
 
 
-def calc_water(text: Sequence[str], stopwords: Sequence[str] | None = None) -> float:
+def calc_water(text: Sequence[str], stopwords: Collection[str] | None = None) -> float:
     """
     Computing the water content
 
@@ -411,17 +425,18 @@ def calc_water(text: Sequence[str], stopwords: Sequence[str] | None = None) -> f
 
     Arguments:
         text (list[str]): List of words
-        stopwords (list[str]): List of stopwords; is_stopword if not set
+        stopwords (list[str]|set[str]): List or set of stopwords; is_stopword if not set
 
     Returns:
         float: Value of the water content in percent
 
     Raises:
-        SourceTypeError: If the words or the stopwords are not a list of strings
+        SourceTypeError: If the words are not a list of strings or the stopwords are not
+            a list or a set of strings
     """
     check_words(text)
     if stopwords is not None:
-        check_words(stopwords, "stopwords")
+        check_words(stopwords, "stopwords", ordered=False)
     if stopwords is not None:
         stopwords_set = {word.lower() for word in stopwords}
         n_stopwords = sum(1 for word in text if word.lower() in stopwords_set)
@@ -498,7 +513,7 @@ def calc_zipf_naturalness(text: Sequence[str], top_n: int = NAUSEA_TOP_N) -> flo
     return max(0.0, 100 * (1 - deviation))
 
 
-def calc_keyword_density(text: Sequence[str], keywords: Sequence[str]) -> dict[str, float]:
+def calc_keyword_density(text: Sequence[str], keywords: Collection[str]) -> dict[str, float]:
     """
     Computing the density of keywords
 
@@ -513,20 +528,21 @@ def calc_keyword_density(text: Sequence[str], keywords: Sequence[str]) -> dict[s
 
     Arguments:
         text (list[str]): List of words
-        keywords (list[str]): Keywords or phrases
+        keywords (list[str]|set[str]): Keywords or phrases
 
     Returns:
         dict[str, float]: Density of every keyword in percent
 
     Raises:
-        SourceTypeError: If the words or the keywords are not a list of strings
+        SourceTypeError: If the words are not a list of strings or the keywords are not
+            a list or a set of strings
     """
     check_words(text)
-    check_words(keywords, "keywords")
+    check_words(keywords, "keywords", ordered=False)
     n_words = len(text)
     lowered = [word.lower() for word in text]
     density = {}
-    for keyword in keywords:
+    for keyword in in_order(keywords):
         parts = keyword.lower().split()
         size = len(parts)
         if not size:
@@ -583,7 +599,7 @@ def calc_verbal_nouns(nouns: Sequence[str]) -> float:
     return safe_divide(verbal, len(nouns), nan) * 100
 
 
-def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> dict[str, str]:
+def expand_phrases(text: Sequence[str], phrases: Collection[str]) -> dict[str, str]:
     """
     Spelling out the phrases in the forms a text has
 
@@ -592,18 +608,21 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> dict[str, str
         whose first word is an infinitive (dar cumplimiento) takes the forms of
         the text with that lemma (dio cumplimiento): the lemma of lemmatize, a
         pronominal one counting for its verb (llevarse - llevar), or of
-        IRREGULAR_VERB_FORMS (dado, hecho, dese)
+        IRREGULAR_VERB_FORMS (dado, hecho, dese). When phrases spell out the
+        same words, a phrase written so wins over the forms of another, then
+        the first phrase of a list or of a set in sorted order
 
     Arguments:
         text (list[str]): List of words
-        phrases (list[str]): Phrases, words separated by spaces
+        phrases (list[str]|set[str]): Phrases, words separated by spaces
 
     Returns:
         dict[str, str]: Phrases with their contractions and the forms of their
             verbs, each with the phrase of the list it spells out
 
     Raises:
-        SourceTypeError: If the words or the phrases are not a list of strings
+        SourceTypeError: If the words are not a list of strings or the phrases are not
+            a list or a set of strings
 
     Example:
         >>> from ests.style_stats import expand_phrases
@@ -614,7 +633,7 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> dict[str, str
         'proceder a'
     """
     check_words(text)
-    check_words(phrases, "phrases")
+    check_words(phrases, "phrases", ordered=False)
     heads = {
         words[0]
         for phrase in phrases
@@ -630,27 +649,31 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> dict[str, str
                 lemma = lemma.removesuffix("se")
             if lemma in forms:
                 forms[lemma].add(form)
+    ordered = [
+        (phrase, words) for phrase in in_order(phrases) if (words := phrase.lower().split())
+    ]
+    # The spelling of a phrase itself wins over the forms of another phrase
     expanded: dict[str, str] = {}
-    for phrase in phrases:
-        words = phrase.lower().split()
-        if not words:
+    for phrase, words in ordered:
+        expanded.setdefault(" ".join(words), phrase)
+    for phrase, words in ordered:
+        firsts = forms.get(words[0], {words[0]})
+        if len(words) == 1:
+            for first in firsts:
+                expanded.setdefault(first, phrase)
             continue
         endings = [words[-1]]
         if words[-1] == "a":
             endings.append("al")
         elif words[-1] == "de":
             endings.append("del")
-        firsts = forms.get(words[0], {words[0]})
-        if len(words) == 1:
-            expanded.update(dict.fromkeys(firsts, phrase))
-            continue
         for first in firsts:
             for ending in endings:
                 expanded.setdefault(" ".join([first, *words[1:-1], ending]), phrase)
     return expanded
 
 
-def calc_phrase_density(text: Sequence[str], phrases: Sequence[str]) -> float:
+def calc_phrase_density(text: Sequence[str], phrases: Collection[str]) -> float:
     """
     Computing the density of the phrases of a list
 
@@ -663,16 +686,17 @@ def calc_phrase_density(text: Sequence[str], phrases: Sequence[str]) -> float:
 
     Arguments:
         text (list[str]): List of words
-        phrases (list[str]): Phrases, words separated by spaces
+        phrases (list[str]|set[str]): Phrases, words separated by spaces
 
     Returns:
         float: Occurrences per 100 words
 
     Raises:
-        SourceTypeError: If the words or the phrases are not a list of strings
+        SourceTypeError: If the words are not a list of strings or the phrases are not
+            a list or a set of strings
     """
     check_words(text)
-    check_words(phrases, "phrases")
+    check_words(phrases, "phrases", ordered=False)
     return safe_divide(len(find_phrases(text, expand_phrases(text, phrases))), len(text)) * 100
 
 

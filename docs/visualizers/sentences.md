@@ -5,16 +5,15 @@
 
 ## Description
 
-The curve of the lengths of the sentences - the rhythm of a text: the length of every sentence in words in order, the moving average over a window of `window` sentences and an inset with the histogram of the lengths. Short and long sentences in turn are an editorial sign of a lively text, a flat curve - of a monotonous one. `sentence_lengths` extracts the lengths: the sentences of a string come from [`SentsExtractor`](../extractors/sentences.md), and a word belongs to the sentence it starts in; the sentences of a `Doc` come from its boundaries (without them, from its text); ready lengths are used as they are; sentences without words are skipped. The function takes the axes `ax` and returns `Axes`.
+--8<-- "visualizers/sentences.md:sentence_lengths_plot"
+
+`sentence_lengths(source, sents_extractor=None, words_extractor=None)` extracts the lengths: a string is split into sentences by the sentence extractor and every sentence into words by the word extractor; the sentences of a `Doc` come from its boundaries and its words from its tokens, punctuation and symbols left out, while a `Doc` without boundaries is counted as its text, by the extractors; sentences without words are skipped. Ready lengths - a sequence or an iterator of integers that are not negative - are used as they are; a table, a set, a mapping, bytes or a length that is not an integer raise `SourceTypeError`, a negative length `SourceError`.
+
+The functions are those of the [anyTS](https://sergeyshk.github.io/anyTS/visualizers/sentences/) core; for a string esTS passes its Spanish [`SentsExtractor`](../extractors/sentences.md) and [`WordsExtractor`](../extractors/words.md) by default, and the `sents_extractor` and `words_extractor` parameters replace them. The default labels are the English ones of `VISUALIZER_LABELS` in `anyts.constants`; `labels` replaces any of them.
 
 ## Parameters
 
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `source` | str/Doc/Iterable[int] | `-` | Text, Doc object or lengths of the sentences (a list, a numpy array, a Series) |
-| `window` | int | `10` | Window of the moving average in sentences |
-| `inset` | bool | `True` | Show the inset with the histogram |
-| `ax` | Axes | `None` | Axes for the plot |
+--8<-- "visualizers/sentences.md:sentence_lengths_plot-parameters"
 
 ## Usage example
 

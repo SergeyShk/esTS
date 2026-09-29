@@ -4,7 +4,7 @@
 
 *   `python` 3.11 o superior
 *   `spaCy` 3.7 o superior
-*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.1, el núcleo independiente del idioma: los extractores, las métricas de diversidad léxica y las medidas de corpus vienen de él con el tokenizador, el lematizador y el segmentador de oraciones del español
+*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.2.1 o superior dentro de 0.2, el núcleo independiente del idioma: los extractores, las estadísticas básicas y las fórmulas comunes de legibilidad, las métricas de diversidad léxica, las medidas de corpus, los gráficos y el mecanismo del resaltado vienen de él con el tokenizador, el lematizador, el segmentador de oraciones y las sílabas del español
 *   `numpy`, `scipy`, `pandas`, `simplemma` 2
 *   `matplotlib` y `graphviz` para las [visualizaciones](visualizers/zipf.md)
 

@@ -5,9 +5,9 @@
 !!! info ""
     **ests.readability_stats.calc_flesch_reading_easy()**
 
-Computation of the Flesch reading ease with Spanish coefficients. The higher the value, the easier the text is to read; the scale runs from 0 to 100.
+--8<-- "stats/readability_stats_funcs.md:calc_flesch_reading_easy"
 
-The default coefficients are those of the *fórmula de perspicuidad* of Szigriszt-Pazos (1993), read on the INFLESZ scale of Barrio-Cantalejo et al. (2008):
+The default coefficients of esTS are those of the *fórmula de perspicuidad* of Szigriszt-Pazos (1993), read on the INFLESZ scale of Barrio-Cantalejo et al. (2008):
 
 | Value | Level | Text type |
 | :---: | :---: | :-------- |
@@ -18,12 +18,6 @@ The default coefficients are those of the *fórmula de perspicuidad* of Szigrisz
 | `0-40` | muy difícil | scientific and technical texts |
 
 The coefficients of Fernández Huerta (1959) are available through the `classic` [preset](readability_stats.md#presets), with the correction of Law (2011): the last term takes the mean sentence length.
-
-Formula:
-
-$$
-c-a\times\frac{\textrm{Number of words}}{\textrm{Number of sentences}}-b\times\frac{\textrm{Number of syllables}}{\textrm{Number of words}}
-$$
 
 Parameters:
 
@@ -89,7 +83,9 @@ Source: Crawford, A. N. Fórmula y gráfico para determinar la comprensibilidad 
 !!! info ""
     **ests.readability_stats.calc_mu_index()**
 
-Computation of Legibilidad µ of Muñoz Baquedano and Muñoz Urra (2006), which measures the variability of word length: the mean of the number of letters per word divided by its variance. The variance is the sample one, divided by `n − 1` (the *cuasivarianza* of the authors), which reproduces the worked example of their manual. Words without letters (numbers) are left out; with fewer than two words or without variability the index is undefined (`nan`). The higher the value, the easier the text:
+--8<-- "stats/readability_stats_funcs.md:calc_mu_index"
+
+The variance divided by `n − 1` is the *cuasivarianza* of the authors, which reproduces the worked example of their manual; the distribution is `BasicStats.c_letters`. The bands of the authors:
 
 | Value | Level |
 | :---: | :---: |
@@ -101,18 +97,6 @@ Computation of Legibilidad µ of Muñoz Baquedano and Muñoz Urra (2006), which 
 | `31-50` | difícil |
 | `0-30` | muy difícil |
 
-Formula:
-
-$$
-\frac{\bar{x}}{s^2}\times100
-$$
-
-Parameters:
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `c_letters` | dict[int, int] | `-` | Distribution of words by number of letters (`BasicStats.c_letters`) |
-
 Source: Muñoz Baquedano, M. Legibilidad y variabilidad de los textos. *Boletín de Investigación Educacional*, 21(2), 2006; the program and manual at [legibilidadmu.cl](https://www.legibilidadmu.cl/).
 
 ## SMOG index { #calc_smog_index }
@@ -120,22 +104,19 @@ Source: Muñoz Baquedano, M. Legibilidad y variabilidad de los textos. *Boletín
 !!! info ""
     **ests.readability_stats.calc_smog_index()**
 
-Computation of the SMOG index of McLaughlin (1969) with the polysyllables being the words of three or more syllables. Fitted on English; for Spanish it is the input of the SOL formula.
+--8<-- "stats/readability_stats_funcs.md:calc_smog_index"
 
-Formula:
-
-$$
-a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of sentences}}}+b
-$$
+Fitted on English; for Spanish it is the input of the [SOL formula](#calc_sol_grade), and `ReadabilityStats` passes the words of three or more syllables.
 
 Parameters:
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
-| `n_complex` | int | `-` | Number of words of three or more syllables |
+| `n_complex` | int | `-` | Number of polysyllabic words |
 | `n_sents` | int | `-` | Number of sentences |
-| `a` | float | `1.043` | Coefficient a |
-| `b` | float | `3.1291` | Coefficient b |
+| `a` | float | `1.043` | Coefficient a, at the square root |
+| `b` | float | `30` | Coefficient b, the number of sentences of the sample |
+| `c` | float | `3.1291` | Coefficient c, the constant |
 
 ## SOL grade { #calc_sol_grade }
 
@@ -160,61 +141,14 @@ Source: Contreras, A., García-Alonso, R., Echenique, M., Daye-Contreras, F. The
 !!! info ""
     **ests.readability_stats.calc_lix()**
 
-Computation of the [LIX readability index](https://en.wikipedia.org/wiki/Lix_(readability_test)) of Björnsson (1968), which does not depend on the language. The higher the value, the harder the text:
-
-| Value | Difficulty level |
-| :---: | :--------------- |
-| `0-30` | very easy texts, children's books |
-| `30-40` | easy texts, fiction, newspaper articles |
-| `40-50` | texts of medium difficulty, magazine articles |
-| `50-60` | hard texts, popular science, official texts |
-| `60-100` | very hard texts, laws and bureaucratic language |
-
-A long word has more than six letters, so `ReadabilityStats` passes the number of words of seven or more letters.
-
-Formula:
-
-$$
-\frac{\textrm{Number of words}}{\textrm{Number of sentences}}+\frac{100\times\textrm{Number of long words}}{\textrm{Number of words}}
-$$
-
-Parameters:
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `n_long_words` | int | `-` | Number of long words |
-| `n_words` | int | `-` | Number of words |
-| `n_sents` | int | `-` | Number of sentences |
+--8<-- "stats/readability_stats_funcs.md:calc_lix"
 
 ## RIX readability index { #calc_rix }
 
 !!! info ""
     **ests.readability_stats.calc_rix()**
 
-Computation of the RIX readability index (Anderson, 1983), the simplified companion of LIX: long words per sentence. The higher the value, the harder the text:
-
-| Value | Grade |
-| :---: | :---: |
-| `< 0.2` | 1 |
-| `0.2-0.5` | 2 |
-| `0.5-0.8` | 3 |
-| `0.8-1.3` | 4 |
-| `1.3-1.8` | 5 |
-| `1.8-2.4` | 6 |
-| `2.4-3.0` | 7 |
-| `3.0-3.7` | 8 |
-| `3.7-4.5` | 9 |
-| `4.5-5.3` | 10 |
-| `5.3-6.2` | 11 |
-| `6.2-7.2` | 12 |
-| `> 7.2` | college |
-
-Parameters:
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `n_long_words` | int | `-` | Number of long words |
-| `n_sents` | int | `-` | Number of sentences |
+--8<-- "stats/readability_stats_funcs.md:calc_rix"
 
 ## Reading ease level { #flesch_reading_easy_to_level }
 
@@ -285,7 +219,7 @@ Parameters:
 !!! info ""
     **ests.readability_stats.calc_consensus_grade()**
 
-Computation of the consensus grade: the median of the values of the grade formulas, each rounded half up. The reading ease is converted with `flesch_reading_easy_to_grade` by the scale of the preset and added without rounding.
+Computation of the consensus grade: the median of the values of the grade formulas, each rounded half up. The reading ease is converted with `flesch_reading_easy_to_grade` by the scale of the preset and added without rounding. No values at all, a grade that is not a finite number and an unknown preset raise `ParameterError`.
 
 Parameters:
 
@@ -309,7 +243,7 @@ Parameters:
 !!! info ""
     **ests.readability_stats.grade_to_age()**
 
-The school stage of the Spanish school system and reader age by the value of a grade formula (see the [interpretation](readability_stats.md#interpretation) table). The value is rounded half up, values below 1 belong to grades 1-3.
+The school stage of the Spanish school system and reader age by the value of a grade formula (see the [interpretation](readability_stats.md#interpretation) table). The value is rounded half up, values below 1 belong to grades 1-3; a grade that is not a finite number raises `ParameterError`.
 
 Parameters:
 
@@ -331,7 +265,9 @@ Parameters:
 !!! info ""
     **ests.readability_stats.calc_reading_time()**
 
-Computation of the reading time of a text in minutes. The default speed is the silent reading speed of adults in Spanish, 278 words per minute, from the meta-analysis of Brysbaert (2019). The norms of school years from the meta-analysis of Ripoll, Tapia and Aguado (2020) are available in `ests.constants.READING_SPEED_NORMS` as pairs (aloud, silent):
+--8<-- "stats/readability_stats_funcs.md:calc_reading_time"
+
+The default speed is the silent reading speed of adults in Spanish, 278 words per minute, from the meta-analysis of Brysbaert (2019). The norms of school years from the meta-analysis of Ripoll, Tapia and Aguado (2020) are available in `ests.constants.READING_SPEED_NORMS` as pairs (aloud, silent):
 
 | Norm | Aloud | Silent |
 | :--: | :---: | :----: |
@@ -353,6 +289,6 @@ Parameters:
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
 | `n_words` | int | `-` | Number of words |
-| `wpm` | int | `278` | Reading speed, words per minute |
+| `wpm` | float | `278` | Reading speed, words per minute |
 
 Sources: Brysbaert, M. How many words do we read per minute? A review and meta-analysis of reading rate. *Journal of Memory and Language*, 109, 2019. Ripoll, J. C., Tapia, M. M., Aguado, G. Velocidad lectora en alumnado hispanohablante: un metaanálisis. *Revista de Psicodidáctica*, 25(2), 2020.

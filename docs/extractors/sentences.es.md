@@ -20,12 +20,12 @@ La clase extiende el `SentsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 
 ## Parámetros
 
-<!-- core: extractors/sentences.md:SentsExtractor-parameters 09bcb84 -->
+<!-- core: extractors/sentences.md:SentsExtractor-parameters d136320 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `tokenizer` | Pattern/Callable | `None` | Tokenizador o expresión regular; por defecto, el método `sentenize` |
-| `min_len` | int | `0` | Longitud mínima de la oración extraída, `0` sin límite |
-| `max_len` | int | `0` | Longitud máxima de la oración extraída, `0` sin límite |
+| `min_len` | int | `0` | Longitud mínima de la oración extraída en caracteres, `0` sin límite |
+| `max_len` | int | `0` | Longitud máxima de la oración extraída en caracteres, `0` sin límite |
 
 !!! note "Nota"
     Una expresión regular como tokenizador es un separador: el texto se divide con `re.split`. A las oraciones de cualquier tokenizador se les quitan los espacios de los extremos antes de aplicar los límites de longitud, y las vacías se descartan.

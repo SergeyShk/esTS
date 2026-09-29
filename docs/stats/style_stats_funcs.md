@@ -53,7 +53,7 @@ $$
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
 | `text` | list[str] | `-` | List of words |
-| `stopwords` | list[str] | `None` | List of stopwords; if not given, `is_stopword` is used |
+| `stopwords` | list[str]/set[str] | `None` | List or set of stopwords; if not given, `is_stopword` is used |
 
 ## Stopword { #is_stopword }
 
@@ -113,7 +113,7 @@ The frequency of every keyword per 100 words of the text ([Text.ru](https://text
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
 | `text` | list[str] | `-` | List of words |
-| `keywords` | list[str] | `-` | Keywords or phrases |
+| `keywords` | list[str]/set[str] | `-` | Keywords or phrases |
 
 ## Verbal nouns { #calc_verbal_nouns }
 
@@ -140,7 +140,7 @@ The share of the nouns derived from a verb among the lemmas of the nouns of a te
 !!! info ""
     **ests.style_stats.calc_phrase_density()**, **ests.style_stats.expand_phrases()**
 
-The number of occurrences of the phrases of a list per 100 words - the compound prepositions (`COMPOUND_PREPOSITIONS`), the parenthetical expressions (`PARENTHETICALS`) and the clichés (`OFFICIALESE_CLICHES`). At every position the longest phrase is taken, and the phrases found do not overlap. `expand_phrases` spells the phrases out in the forms of the text: a phrase ending in `a` or `de` also takes the contraction with the article (`a efectos del`, `conforme al`), and a phrase whose first word is an infinitive takes the forms of the text with that lemma (`proceder a` - `procedió a`, `ser de aplicación` - `es de aplicación`). The lemma is the one of simplemma, and a pronominal lemma counts for its verb (`llévese` - `llevar`); the forms simplemma does not lemmatize - the irregular participles (`ha dado`, `ha hecho`) and the imperative `dese` - are given by `IRREGULAR_VERB_FORMS`. The words after the verb rule out the readings as a noun (`el hecho`, `el puesto`).
+The number of occurrences of the phrases of a list per 100 words - the compound prepositions (`COMPOUND_PREPOSITIONS`), the parenthetical expressions (`PARENTHETICALS`) and the clichés (`OFFICIALESE_CLICHES`). At every position the longest phrase is taken, and the phrases found do not overlap. `expand_phrases` spells the phrases out in the forms of the text: a phrase ending in `a` or `de` also takes the contraction with the article (`a efectos del`, `conforme al`), and a phrase whose first word is an infinitive takes the forms of the text with that lemma (`proceder a` - `procedió a`, `ser de aplicación` - `es de aplicación`). The lemma is the one of simplemma, and a pronominal lemma counts for its verb (`llévese` - `llevar`); the forms simplemma does not lemmatize - the irregular participles (`ha dado`, `ha hecho`) and the imperative `dese` - are given by `IRREGULAR_VERB_FORMS`. The words after the verb rule out the readings as a noun (`el hecho`, `el puesto`). When two phrases spell out the same words, a phrase written so wins over the forms of another (`a efectos del` stays itself next to `a efectos de`), and then the first phrase of a list, or of a set in sorted order.
 
 The compound prepositions (42) and the clichés (74) are the ones the Spanish guides to plain language and style manuals of the administrations flag:
 
@@ -167,7 +167,7 @@ Left out are the forms the guides recommend (`sobre la base de`) or accept (`de 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
 | `text` | list[str] | `-` | List of words |
-| `phrases` | list[str] | `-` | Phrases, words separated by spaces |
+| `phrases` | list[str]/set[str] | `-` | Phrases, words separated by spaces |
 
 ## Parenthetical expressions { #calc_parentheticals }
 

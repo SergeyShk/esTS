@@ -5,20 +5,27 @@
 
 ## Descripción
 
-Gráficos para las [medidas de corpus](../corpus/keyness.md): la dispersión léxica - dónde aparece una palabra en un texto -, un diagrama de las palabras clave que encuentra [`keyness`](../corpus/keyness.md) y una red de las colocaciones que encuentra [`collocations`](../corpus/collocations.md). Las funciones de matplotlib reciben los ejes `ax` y devuelven `Axes`: sin `ax` se crea una figura nueva, con ellos el gráfico va a una rejilla propia; la red de colocaciones la construye graphviz y devuelve un `Graph`, como el [árbol de palabras](word_tree.md).
+Gráficos para las [medidas de corpus](../corpus/keyness.md): la dispersión léxica - dónde aparece una palabra en un texto -, un diagrama de las palabras clave que encuentra [`keyness`](../corpus/keyness.md) y una red de las colocaciones que encuentra [`collocations`](../corpus/collocations.md). Las funciones de matplotlib reciben los ejes `ax` y devuelven `Axes`: sin `ax` se crea una figura nueva, con ellos el gráfico va a una rejilla propia; la red de colocaciones la construye graphviz y devuelve un `Graph`, como el [árbol de palabras](word_tree.md) devuelve un `Digraph`.
+
+Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visualizers/corpus/). Las etiquetas por defecto de los gráficos de matplotlib son las inglesas de `VISUALIZER_LABELS` en `anyts.constants`; `labels` sustituye cualquiera de ellas.
 
 ## Dispersión léxica { #dispersion_plot }
 
-Una fila por cada palabra de `targets` y una marca en la posición de cada una de sus apariciones en el texto. Las palabras se comparan tal cual: la caja y la lematización corresponden a [`WordsExtractor`](../extractors/words.md), y los lemas se buscan con `use_lexemes=True`.
+<!-- core: visualizers/corpus.md:dispersion_plot 604b589 -->
+Una fila por cada palabra de `targets` y una marca en la posición de cada una de sus apariciones en el texto. Las palabras se comparan tal cual: la caja y la lematización corresponden a la extracción de las palabras.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `words` | list[str] | `-` | Palabras del texto en orden |
 | `targets` | list[str] | `-` | Palabras cuyas apariciones se muestran |
 | `ax` | Axes | `None` | Ejes para el gráfico |
+| `labels` | dict[str, str] | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel` |
+
+Las palabras las extrae [`WordsExtractor`](../extractors/words.md): en minúsculas con `lowercase=True`, los lemas con `use_lexemes=True`.
 
 ## Diagrama de palabras clave { #keyness_plot }
 
+<!-- core: visualizers/corpus.md:keyness_plot e860f91 -->
 Barras horizontales divergentes: las palabras de `positive` a la derecha, las de `negative` - el resultado de `keyness` con `positive=False` - a la izquierda; la longitud de una barra es el valor absoluto del campo `field` (`score`, `g2`, `log_ratio`), así que el lado lo fija la lista y no el signo de la medida; `top_n` palabras por lado, y las palabras con un valor indefinido o infinito se omiten. Para la razón de momios (`score` de 0 a infinito, uno - momios iguales) indique `log=True`: se representa el valor absoluto de $\log_2$ del valor, simétrico en torno a uno.
 
 | Parámetro | Tipo | Por defecto | Descripción |
@@ -26,14 +33,15 @@ Barras horizontales divergentes: las palabras de `positive` a la derecha, las de
 | `positive` | list[Keyword] | `-` | Palabras clave positivas |
 | `negative` | list[Keyword] | `()` | Palabras clave negativas |
 | `top_n` | int | `20` | Número de palabras por lado |
-| `labels` | tuple[str, str] | `("target corpus", "reference corpus")` | Etiquetas de la leyenda |
+| `labels` | dict[str, str]/tuple[str, str] | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel` y `xlabel_log` (cadenas de formato con `field`), `target` y `reference` (la leyenda); un par de cadenas fija solo la leyenda |
 | `field` | str | `score` | Campo de `Keyword` cuyos valores se representan |
 | `log` | bool | `False` | Representar $\log_2$ del valor, para la razón de momios |
 | `ax` | Axes | `None` | Ejes para el gráfico |
 
 ## Red de colocaciones { #collocation_network }
 
-Un grafo no dirigido: los nodos son las palabras con el tamaño de la letra según su frecuencia, las aristas son los pares con el grosor y la etiqueta según el valor de la medida; la disposición `neato`. Un par de una palabra consigo misma - una palabra repetida dentro de la ventana (`rojo rojo`) - sería un bucle y se deja fuera antes de tomar los `top_n` pares. Para dibujarlo hacen falta los ejecutables de [Graphviz](https://graphviz.org/download/); en Jupyter el grafo se muestra solo, y `graph.render("network")` guarda un archivo png.
+<!-- core: visualizers/corpus.md:collocation_network 080cdcf -->
+Un grafo no dirigido: los nodos son las palabras con el tamaño de la letra según su frecuencia, las aristas son los pares con el grosor y la etiqueta según el valor de la medida; la disposición `neato`. Un par de una palabra consigo misma - una palabra repetida dentro de la ventana - sería un bucle y se deja fuera antes de tomar los `top_n` pares. Para dibujarlo hacen falta los ejecutables de [Graphviz](https://graphviz.org/download/); en Jupyter el grafo se muestra solo, y `graph.render("network")` guarda un archivo png.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |

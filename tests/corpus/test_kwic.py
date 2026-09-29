@@ -48,6 +48,30 @@ def test_kwic_of_a_phrase():
     assert kwic(text, "querer la ventana", window=1, by_lemma=True) == expected
 
 
+def test_kwic_phrase_stays_within_a_sentence():
+    text = "Vi al gato. Duerme mucho. El gato duerme."
+    assert [line.start for line in kwic(text, "gato duerme")] == [29]
+    assert [line.keyword for line in kwic(text, "gato. Duerme")] == ["gato. Duerme", "gato duerme"]
+    assert [line.start for line in kwic(get_nlp()(text), "gato duerme")] == [29]
+
+
+@pytest.mark.parametrize(
+    ("text", "keyword", "found"),
+    [
+        (
+            "Tú eres un hombre honrado... piensa en tus hijas.",
+            "honrado piensa",
+            "honrado... piensa",
+        ),
+        ("Iba de caza, pero ¡ay! tomaba el sendero de la montaña.", "ay tomaba", "ay! tomaba"),
+    ],
+)
+def test_kwic_phrase_within_a_spanish_sentence(text, keyword, found):
+    """A string, a blank Doc and a parsed Doc end a sentence by the Spanish rules"""
+    for source in (text, spacy.blank("es")(text), get_nlp()(text)):
+        assert [line.keyword for line in kwic(source, keyword)] == [found]
+
+
 def test_kwic_of_an_absent_word():
     assert kwic(text, "perro") == []
 

@@ -1,13 +1,14 @@
 # Resaltado del texto
 
 !!! info ""
-    **ests.visualizers.highlight()**
+    **ests.visualizers.highlight()**, **ests.visualizers.HighlightedText**, **ests.visualizers.Highlight**
 
 ## Descripción
 
-Resaltado de los fragmentos del texto que cuentan las estadísticas de la biblioteca, a la manera de los correctores de estilo. La fuente de datos puede ser un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy).
+<!-- core: visualizers/highlight.md:HighlightedText ca113fe -->
+El mecanismo del resaltado de un texto por capas, a la manera de los correctores de estilo: cada capa marca los fragmentos de un texto que cuenta una estadística - las oraciones largas, las palabras complejas, la pasiva. La fuente de datos puede ser un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy). El resultado se muestra en Jupyter como HTML con estilos y una leyenda; el método `to_html` devuelve el mismo marcado para la documentación y las aplicaciones web, y los fragmentos se guardan en el atributo `highlights` para una representación propia. Los fragmentos de capas distintas pueden solaparse.
 
-La función devuelve un objeto `HighlightedText`, que Jupyter muestra como HTML con estilos y una leyenda; el método `to_html` devuelve el mismo marcado para la documentación y las aplicaciones web. Los fragmentos se guardan en el atributo `highlights` y quedan disponibles para una representación propia.
+La función `highlight` devuelve un objeto `HighlightedText` de esTS, que extiende el `HighlightedText` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visualizers/highlight/) con las capas de la biblioteca, su búsqueda y sus parámetros, y el prefijo `ests` de las clases CSS.
 
 Capas del resaltado:
 
@@ -24,12 +25,12 @@ Capas del resaltado:
 | Estilo burocrático | `verbal_nouns` | Sustantivos deverbales | [StyleStats](../stats/style_stats.md) |
 | | `compound_prepositions` | Locuciones prepositivas de `COMPOUND_PREPOSITIONS` | [StyleStats](../stats/style_stats.md) |
 | | `cliches` | Clichés de `OFFICIALESE_CLICHES` o del parámetro `cliches` | [StyleStats](../stats/style_stats.md) |
-| Estilo | `stopwords` | Palabras vacías de `STOPWORDS` o de la lista pasada, el agua del texto | [StyleStats](../stats/style_stats.md) |
+| Estilo | `stopwords` | Palabras vacías de `STOPWORDS` o del parámetro `stopwords`, el agua del texto | [StyleStats](../stats/style_stats.md) |
 | | `parentheticals` | Expresiones parentéticas | [StyleStats](../stats/style_stats.md) |
 | | `connectors` | Marcadores del discurso, con la clase y el tipo en la nota | [CohesionStats](../stats/cohesion_stats.md) |
 | Fónica | `alliteration` | Repeticiones de un sonido consonántico en palabras vecinas, poco probables por las frecuencias de los sonidos del español; la nota da el sonido y las letras que lo escriben | [PhonStats](../stats/phon_stats.md) |
 
-Los grupos se definen en `ests.constants.HIGHLIGHT_LAYER_GROUPS`. Las capas del grupo «Sintaxis» necesitan un `Doc` con análisis y lematizador (los modelos `es_core_news_sm`, `es_core_news_md`, `es_core_news_lg`), como [SyntaxStats](../stats/syntax_stats.md); `verbal_nouns` necesita un `Doc` con las categorías gramaticales y los lemas. Un `Doc` sin los límites de las oraciones (un pipeline vacío, un pipeline sin analizador) se divide con las reglas de [SentsExtractor](../extractors/sentences.md). Por defecto se activan las capas de `HIGHLIGHT_DEFAULT_LAYERS` que la fuente permite - oraciones largas, palabras complejas, pasiva, cadenas de `de`, predicados escindidos, clichés; `layers="all"` activa todas las permitidas. Las capas se solapan (una locución prepositiva está hecha de palabras vacías), así que elija las que necesite.
+Los grupos se definen en `ests.constants.HIGHLIGHT_LAYER_GROUPS`, las anotaciones de un `Doc` que necesita una capa en `HIGHLIGHT_LAYER_ANNOTATIONS` y los estilos de las capas en `HIGHLIGHT_LAYER_STYLES`. Las capas del grupo «Sintaxis» necesitan un `Doc` con análisis y lematizador (los modelos `es_core_news_sm`, `es_core_news_md`, `es_core_news_lg`), como [SyntaxStats](../stats/syntax_stats.md); `verbal_nouns` necesita un `Doc` con las categorías gramaticales y los lemas. Un `Doc` sin los límites de las oraciones (un pipeline vacío, un pipeline sin analizador) se divide con las reglas de [SentsExtractor](../extractors/sentences.md). Por defecto se activan las capas de `HIGHLIGHT_DEFAULT_LAYERS` que la fuente permite - oraciones largas, palabras complejas, pasiva, cadenas de `de`, predicados escindidos, clichés; `layers="all"` activa todas las permitidas. Las capas se solapan (una locución prepositiva está hecha de palabras vacías), así que elija las que necesite.
 
 Una oración es larga a partir de 30 palabras, el límite de las guías españolas de lenguaje claro (la [Comunidad de Madrid](https://www.comunidad.madrid/transparencia/sites/default/files/ckeditor/guia_tramites_claros-comunidad_madrid-noviembre_2021.pdf) y el [Gobierno de la Ciudad de Buenos Aires](https://gcba.github.io/programadelenguajeclaro/Manual%20de%20lenguaje%20claro%202024%20(Final).pdf)), y una palabra es compleja a partir de cuatro sílabas; `complex_syl_factor=3`, el límite de `BasicStats`, muestra las palabras de `n_complex_words`.
 
@@ -38,37 +39,57 @@ Una oración es larga a partir de 30 palabras, el límite de las guías español
 
 ## Parámetros
 
+<!-- core: visualizers/highlight.md:HighlightedText-parameters 94d89c2 -->
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
 | `source` | str/Doc | `-` | Fuente de datos (una cadena o un objeto Doc) |
-| `layers` | list[str]/str | `None` | Capas del resaltado; si no se dan, las capas de `HIGHLIGHT_DEFAULT_LAYERS` que la fuente permite; `"all"` - todas las permitidas |
+| `layers` | list[str]/str | `None` | Capas del resaltado; si no se dan, las capas por defecto que la fuente permite; `"all"` - todas las permitidas |
+
+Una fuente que no es ni una cadena ni un `Doc` lanza `SourceTypeError`, una fuente sin palabras `SourceError`; unas capas que no son un nombre ni una lista de nombres, una capa desconocida o una que necesita una anotación que le falta a la fuente lanzan `ParameterError`.
+
+Los parámetros de las capas de esTS:
+
+| Parámetro | Tipo | Valor por defecto | Descripción |
+| :-------: | :--: | :---------------: | :---------: |
 | `long_sent_word_factor` | int | `30` | Número mínimo de palabras de una oración larga |
 | `complex_syl_factor` | int | `4` | Número mínimo de sílabas de una palabra compleja |
-| `stopwords` | list[str] | `None` | Lista de palabras vacías; si no se da, `STOPWORDS` y las expresiones parentéticas de una palabra |
-| `cliches` | list[str] | `None` | Lista de clichés; si no se da, `OFFICIALESE_CLICHES` |
+| `stopwords` | list[str]/set[str] | `None` | Lista o conjunto de palabras vacías; si no se da, `STOPWORDS` y las expresiones parentéticas de una palabra |
+| `cliches` | list[str]/set[str] | `None` | Lista o conjunto de clichés; si no se da, `OFFICIALESE_CLICHES` |
 | `alliteration_threshold` | float | `0.001` | Probabilidad de una repetición de una consonante con un reparto independiente de los sonidos, por debajo de la cual la repetición es aliteración |
+
+Un umbral que no es un entero de al menos uno o una probabilidad fuera de (0, 1] lanza `ParameterError`, unas palabras vacías o unos clichés que no son cadenas `SourceTypeError`.
 
 ## Atributos
 
+<!-- core: visualizers/highlight.md:HighlightedText-attributes d9379e7 -->
 | Atributo | Tipo | Descripción |
 | :------: | :--: | :---------: |
 | `text` | str | Texto de la fuente de datos |
 | `layers` | tuple[str] | Capas activadas, en el orden de dibujo |
-| `highlights` | tuple[Highlight] | Fragmentos resaltados en el orden del texto |
+| `highlights` | tuple[Highlight] | Fragmentos resaltados, ordenados por su inicio y luego por su final descendente |
 | `counts` | dict[str, int] | Número de fragmentos de cada capa |
 
-Un fragmento `Highlight` es un objeto inmutable con los campos `start` y `end` (posiciones en el texto), `layer` (la capa) y `note` (la explicación de la ventana emergente: el número de palabras de la oración, de sílabas de la palabra, la longitud de la cadena, la expresión de la lista).
+<!-- core: visualizers/highlight.md:Highlight 58d8a45 -->
+Un fragmento `Highlight` es un objeto inmutable con los campos `start` y `end` (posiciones en el texto), `layer` (la capa) y `note` (la explicación de la ventana emergente).
+
+La nota de un fragmento da el número de palabras de la oración, de sílabas de la palabra, la longitud de la cadena o la expresión de la lista.
 
 ## Métodos
 
 ### to_html
 
-Devuelve el marcado HTML del texto resaltado: un `div` de la clase `ests-highlight` con la leyenda y sus recuentos y el texto, donde los segmentos resaltados van dentro de un `span` de las clases `ests-hl` y `ests-hl-<capa>`, y las notas van al atributo `title`. Los fragmentos solapados de capas distintas dan segmentos con varias clases. Los saltos de línea (`\n`, `\r\n`, `\r`) se guardan como referencias de caracteres, una por salto, así que el marcado puede insertarse en Markdown.
+<!-- core: visualizers/highlight.md:HighlightedText-to_html a16305c -->
+Devuelve el marcado HTML del texto resaltado: un `div` de la clase `<prefix>-highlight` con la leyenda y sus recuentos y el texto, donde los segmentos resaltados van dentro de un `span` de las clases `<prefix>-hl` y `<prefix>-hl-<capa>`, y las notas van al atributo `title`; `<prefix>` es el prefijo de las clases CSS. Los fragmentos solapados de capas distintas dan segmentos con varias clases, en el orden de dibujo. Los saltos de línea (`\n`, `\r\n`, `\r`) se guardan como referencias de caracteres, una por salto, así que el marcado puede insertarse en Markdown.
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
 | `legend` | bool | `True` | Añadir la leyenda con los recuentos de los fragmentos |
 | `css` | bool | `True` | Añadir los estilos de las capas |
+
+### css
+
+<!-- core: visualizers/highlight.md:HighlightedText-css 42034ba -->
+El método de clase `css()` devuelve los estilos que añade `to_html`: el contenedor, la leyenda y el texto con las clases de `css_prefix`, las declaraciones de `layer_styles` de cada capa y un color oscuro del texto en las capas con fondo.
 
 ## Ejemplo de uso
 
@@ -122,7 +143,7 @@ _Resultado_ (pase el cursor sobre un fragmento para ver su nota):
 .ests-highlight-legend .ests-hl { padding: 0 0.3em; }
 .ests-highlight-count { opacity: 0.6; margin-left: 0.3em; }
 .ests-highlight-text { white-space: pre-wrap; }
-.ests-highlight .ests-hl.ests-hl-long_sents, .ests-highlight .ests-hl.ests-hl-complex_words, .ests-highlight .ests-hl.ests-hl-rare_words, .ests-highlight .ests-hl.ests-hl-stopwords, .ests-highlight .ests-hl.ests-hl-passive, .ests-highlight .ests-hl.ests-hl-verbal_nouns, .ests-highlight .ests-hl.ests-hl-compound_prepositions, .ests-highlight .ests-hl.ests-hl-cliches, .ests-highlight .ests-hl.ests-hl-parentheticals { color: #1f2328; border-radius: 2px; }
+.ests-highlight .ests-hl.ests-hl-long_sents, .ests-highlight .ests-hl.ests-hl-stopwords, .ests-highlight .ests-hl.ests-hl-complex_words, .ests-highlight .ests-hl.ests-hl-rare_words, .ests-highlight .ests-hl.ests-hl-passive, .ests-highlight .ests-hl.ests-hl-verbal_nouns, .ests-highlight .ests-hl.ests-hl-compound_prepositions, .ests-highlight .ests-hl.ests-hl-cliches, .ests-highlight .ests-hl.ests-hl-parentheticals { color: #1f2328; border-radius: 2px; }
 .ests-hl-long_sents { background: #fef9c3; }
 .ests-hl-stopwords { background: #bae6fd; }
 .ests-hl-complex_words { background: #fed7aa; }

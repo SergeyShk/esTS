@@ -7,23 +7,15 @@
 
 Two plots of the distribution of the words of a text that complement [Zipf's law](zipf.md): the growth of the vocabulary with the length of the text by Heaps' law and the frequency spectrum - how many word types occur exactly once, twice, three times. The functions take the axes `ax` and return `Axes`.
 
+The functions are those of the [anyTS](https://sergeyshk.github.io/anyTS/visualizers/vocabulary/) core; the fit of Heaps' law is described in [`fit_heaps`](../stats/diversity_stats_funcs.md#heaps_beta) and the spectrum in [`calc_frequency_spectrum`](../stats/diversity_stats_funcs.md#frequency_spectrum). The default labels are the English ones of `VISUALIZER_LABELS` in `anyts.constants`; `labels` replaces any of them.
+
 ## Heaps' law { #heaps_plot }
 
-The size of the vocabulary $V$ after every word of the text and the fitted curve $V(N) = K \cdot N^{\beta}$ of [`fit_heaps`](../stats/diversity_stats_funcs.md#heaps_beta) with its parameters in the legend; the curve depends on the order of the words.
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `words` | list[str] | `-` | Words of the text in order |
-| `ax` | Axes | `None` | Axes for the plot |
+--8<-- "visualizers/vocabulary.md:heaps_plot"
 
 ## Frequency spectrum { #frequency_spectrum_plot }
 
-The number of word types $V(m)$ that occur exactly $m$ times ([`calc_frequency_spectrum`](../stats/diversity_stats_funcs.md#frequency_spectrum)) in logarithmic coordinates; the left edge is the hapaxes. The spectrum underlies the measures of diversity of Yule, Sichel, Michéa and Honoré, and its shape shows how far the vocabulary of the text is from being exhausted.
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `words` | list[str] | `-` | Words of the text |
-| `ax` | Axes | `None` | Axes for the plot |
+--8<-- "visualizers/vocabulary.md:frequency_spectrum_plot"
 
 ## Usage example
 

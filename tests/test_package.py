@@ -42,16 +42,53 @@ CORE_MODULES = {
     "ests.corpus.keyness": "anyts.corpus.keyness",
     "ests.corpus.stylometry": "anyts.corpus.stylometry",
     "ests.corpus.compare": "anyts.corpus.compare",
+    "ests.corpus.kwic": "anyts.corpus.kwic",
+    "ests.basic_stats": "anyts.basic_stats",
+    "ests.readability_stats": "anyts.readability_stats",
+    "ests.components": "anyts.components",
+    "ests.datasets.freq_dict": "anyts.datasets",
+    "ests.datasets.spanish_literature": "anyts.datasets",
+    "ests.datasets.spanish_sonnets": "anyts.datasets",
+    "ests.visualizers": "anyts.visualizers",
+    "ests.visualizers.corpus": "anyts.visualizers.corpus",
+    "ests.visualizers.fingerprinting": "anyts.visualizers.fingerprinting",
+    "ests.visualizers.highlight": "anyts.visualizers.highlight",
+    "ests.visualizers.sentences": "anyts.visualizers.sentences",
+    "ests.visualizers.stylometry": "anyts.visualizers.stylometry",
+    "ests.visualizers.vocabulary": "anyts.visualizers.vocabulary",
+    "ests.visualizers.word_tree": "anyts.visualizers.word_tree",
+    "ests.visualizers.zipf": "anyts.visualizers.zipf",
 }
-# Names of the core the library defines for Spanish: subclasses with the hooks, a wrapper
-# taking the frequency dictionary and the pattern of Spanish numbers
+# Names of the core the library defines for itself: subclasses with the Spanish hooks,
+# wrappers with the Spanish defaults, the pattern of Spanish numbers, the tables of the
+# Spanish readability and the User-Agent of the downloads
 SPANISH = {
+    "BasicStats",
     "CharNgramsExtractor",
     "DiversityStats",
+    "GRADE_AGE_LEVELS",
+    "HighlightedText",
     "NUMBER_PATTERN",
+    "POSTGRADUATE_LEVEL",
+    "READABILITY_GRADE_STATS",
+    "READABILITY_PRESETS",
+    "READABILITY_STATS_DESC",
+    "READING_EASE_GRADES",
+    "READING_SPEED_NORMS",
+    "READING_SPEED_WPM",
+    "ReadabilityStats",
     "SentsExtractor",
+    "USER_AGENT",
     "WordsExtractor",
+    "calc_consensus_grade",
+    "calc_flesch_reading_easy",
+    "calc_reading_time",
+    "flesch_reading_easy_to_grade",
+    "grade_to_age",
     "keyness",
+    "kwic",
+    "sentence_lengths",
+    "sentence_lengths_plot",
 }
 
 
@@ -90,7 +127,9 @@ def test_subpackage_exports(name):
 def test_core_names(library, core):
     """A name of the core in the library is the object of the core, not a copy of it"""
     library_module, core_module = importlib.import_module(library), importlib.import_module(core)
-    for name, value in vars(core_module).items():
+    # dir, not vars: a lazy package of the core imports its names on first use
+    for name in dir(core_module):
+        value = getattr(core_module, name)
         if (
             name.startswith("_")
             or isinstance(value, ModuleType)

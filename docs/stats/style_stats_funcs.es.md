@@ -53,7 +53,7 @@ $$
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
 | `text` | list[str] | `-` | Lista de palabras |
-| `stopwords` | list[str] | `None` | Lista de palabras vacías; si no se da, se usa `is_stopword` |
+| `stopwords` | list[str]/set[str] | `None` | Lista o conjunto de palabras vacías; si no se da, se usa `is_stopword` |
 
 ## Palabra vacía { #is_stopword }
 
@@ -113,7 +113,7 @@ La frecuencia de cada palabra clave por cada 100 palabras del texto ([Text.ru](h
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
 | `text` | list[str] | `-` | Lista de palabras |
-| `keywords` | list[str] | `-` | Palabras o frases clave |
+| `keywords` | list[str]/set[str] | `-` | Palabras o frases clave |
 
 ## Sustantivos deverbales { #calc_verbal_nouns }
 
@@ -140,7 +140,7 @@ La proporción de los sustantivos derivados de un verbo entre los lemas de los s
 !!! info ""
     **ests.style_stats.calc_phrase_density()**, **ests.style_stats.expand_phrases()**
 
-El número de apariciones de las expresiones de una lista por cada 100 palabras: las locuciones prepositivas (`COMPOUND_PREPOSITIONS`), las expresiones parentéticas (`PARENTHETICALS`) y los clichés (`OFFICIALESE_CLICHES`). En cada posición se toma la expresión más larga, y las expresiones encontradas no se solapan. `expand_phrases` escribe las expresiones en las formas del texto: una expresión que termina en `a` o `de` también recibe la contracción con el artículo (`a efectos del`, `conforme al`), y una expresión cuya primera palabra es un infinitivo recibe las formas del texto con ese lema (`proceder a` - `procedió a`, `ser de aplicación` - `es de aplicación`). El lema es el de simplemma, y un lema pronominal vale por su verbo (`llévese` - `llevar`); las formas que simplemma no lematiza - los participios irregulares (`ha dado`, `ha hecho`) y el imperativo `dese` - las da `IRREGULAR_VERB_FORMS`. Las palabras que siguen al verbo descartan la lectura como sustantivo (`el hecho`, `el puesto`).
+El número de apariciones de las expresiones de una lista por cada 100 palabras: las locuciones prepositivas (`COMPOUND_PREPOSITIONS`), las expresiones parentéticas (`PARENTHETICALS`) y los clichés (`OFFICIALESE_CLICHES`). En cada posición se toma la expresión más larga, y las expresiones encontradas no se solapan. `expand_phrases` escribe las expresiones en las formas del texto: una expresión que termina en `a` o `de` también recibe la contracción con el artículo (`a efectos del`, `conforme al`), y una expresión cuya primera palabra es un infinitivo recibe las formas del texto con ese lema (`proceder a` - `procedió a`, `ser de aplicación` - `es de aplicación`). El lema es el de simplemma, y un lema pronominal vale por su verbo (`llévese` - `llevar`); las formas que simplemma no lematiza - los participios irregulares (`ha dado`, `ha hecho`) y el imperativo `dese` - las da `IRREGULAR_VERB_FORMS`. Las palabras que siguen al verbo descartan la lectura como sustantivo (`el hecho`, `el puesto`). Cuando dos expresiones dan las mismas palabras, una expresión escrita así gana a las formas de otra (`a efectos del` sigue siendo ella misma junto a `a efectos de`), y después la primera expresión de una lista, o de un conjunto en orden alfabético.
 
 Las locuciones prepositivas (42) y los clichés (74) son los que señalan las guías españolas de lenguaje claro y los manuales de estilo de las administraciones:
 
@@ -167,7 +167,7 @@ Quedan fuera las formas que las guías recomiendan (`sobre la base de`) o acepta
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |
 | `text` | list[str] | `-` | Lista de palabras |
-| `phrases` | list[str] | `-` | Expresiones, palabras separadas por espacios |
+| `phrases` | list[str]/set[str] | `-` | Expresiones, palabras separadas por espacios |
 
 ## Expresiones parentéticas { #calc_parentheticals }
 

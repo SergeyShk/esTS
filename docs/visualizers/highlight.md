@@ -1,13 +1,13 @@
 # Text highlighting
 
 !!! info ""
-    **ests.visualizers.highlight()**
+    **ests.visualizers.highlight()**, **ests.visualizers.HighlightedText**, **ests.visualizers.Highlight**
 
 ## Description
 
-Highlighting of the fragments of a text the statistics of the library count, in the manner of the style checkers. The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library.
+--8<-- "visualizers/highlight.md:HighlightedText"
 
-The function returns a `HighlightedText` object, which Jupyter shows as HTML with styles and a legend; the `to_html` method returns the same markup for documentation and web applications. The fragments are kept in the attribute `highlights` and are there for a rendering of your own.
+The function `highlight` returns a `HighlightedText` object of esTS, which extends the `HighlightedText` of the [anyTS](https://sergeyshk.github.io/anyTS/visualizers/highlight/) core with the layers of the library, their search and their parameters, and the prefix `ests` of the CSS classes.
 
 Layers of the highlighting:
 
@@ -24,12 +24,12 @@ Layers of the highlighting:
 | Officialese | `verbal_nouns` | Nouns derived from a verb | [StyleStats](../stats/style_stats.md) |
 | | `compound_prepositions` | Compound prepositions of `COMPOUND_PREPOSITIONS` | [StyleStats](../stats/style_stats.md) |
 | | `cliches` | Clichés of `OFFICIALESE_CLICHES` or of the parameter `cliches` | [StyleStats](../stats/style_stats.md) |
-| Style | `stopwords` | Stopwords of `STOPWORDS` or of the list passed, the water of the text | [StyleStats](../stats/style_stats.md) |
+| Style | `stopwords` | Stopwords of `STOPWORDS` or of the parameter `stopwords`, the water of the text | [StyleStats](../stats/style_stats.md) |
 | | `parentheticals` | Parenthetical expressions | [StyleStats](../stats/style_stats.md) |
 | | `connectors` | Discourse markers, the class and the kind in the note | [CohesionStats](../stats/cohesion_stats.md) |
 | Phonics | `alliteration` | Repetitions of a consonant sound in neighbouring words, unlikely by the frequencies of the Spanish sounds; the note gives the sound and the letters that write it | [PhonStats](../stats/phon_stats.md) |
 
-The groups are defined in `ests.constants.HIGHLIGHT_LAYER_GROUPS`. The layers of the group "Syntax" need a `Doc` with a parse and a lemmatizer (the models `es_core_news_sm`, `es_core_news_md`, `es_core_news_lg`), as [SyntaxStats](../stats/syntax_stats.md) does; `verbal_nouns` needs a `Doc` with the parts of speech and the lemmas. A `Doc` without the sentence boundaries (a blank pipeline, a pipeline without the parser) is split by the rules of [SentsExtractor](../extractors/sentences.md). The layers of `HIGHLIGHT_DEFAULT_LAYERS` the source allows are on by default - long sentences, complex words, passive, chains of `de`, split predicates, clichés; `layers="all"` turns on every layer allowed. The layers overlap (a compound preposition is made of stopwords), so pick the ones you need.
+The groups are defined in `ests.constants.HIGHLIGHT_LAYER_GROUPS`, the annotations of a `Doc` a layer needs in `HIGHLIGHT_LAYER_ANNOTATIONS` and the styles of the layers in `HIGHLIGHT_LAYER_STYLES`. The layers of the group "Syntax" need a `Doc` with a parse and a lemmatizer (the models `es_core_news_sm`, `es_core_news_md`, `es_core_news_lg`), as [SyntaxStats](../stats/syntax_stats.md) does; `verbal_nouns` needs a `Doc` with the parts of speech and the lemmas. A `Doc` without the sentence boundaries (a blank pipeline, a pipeline without the parser) is split by the rules of [SentsExtractor](../extractors/sentences.md). The layers of `HIGHLIGHT_DEFAULT_LAYERS` the source allows are on by default - long sentences, complex words, passive, chains of `de`, split predicates, clichés; `layers="all"` turns on every layer allowed. The layers overlap (a compound preposition is made of stopwords), so pick the ones you need.
 
 A sentence is long from 30 words, the bound of the Spanish guides to plain language (the [Comunidad de Madrid](https://www.comunidad.madrid/transparencia/sites/default/files/ckeditor/guia_tramites_claros-comunidad_madrid-noviembre_2021.pdf) and the [Gobierno de la Ciudad de Buenos Aires](https://gcba.github.io/programadelenguajeclaro/Manual%20de%20lenguaje%20claro%202024%20(Final).pdf)), and a word is complex from four syllables; `complex_syl_factor=3`, the bound of `BasicStats`, shows the words of `n_complex_words`.
 
@@ -38,37 +38,37 @@ A sentence is long from 30 words, the bound of the Spanish guides to plain langu
 
 ## Parameters
 
+--8<-- "visualizers/highlight.md:HighlightedText-parameters"
+
+The parameters of the layers of esTS:
+
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
-| `source` | str/Doc | `-` | Data source (a string or a Doc object) |
-| `layers` | list[str]/str | `None` | Layers of the highlighting; if not given, the layers of `HIGHLIGHT_DEFAULT_LAYERS` the source allows; `"all"` - every layer allowed |
 | `long_sent_word_factor` | int | `30` | Minimum number of words of a long sentence |
 | `complex_syl_factor` | int | `4` | Minimum number of syllables of a complex word |
-| `stopwords` | list[str] | `None` | List of stopwords; if not given, `STOPWORDS` and the one-word parenthetical expressions |
-| `cliches` | list[str] | `None` | List of clichés; if not given, `OFFICIALESE_CLICHES` |
+| `stopwords` | list[str]/set[str] | `None` | List or set of stopwords; if not given, `STOPWORDS` and the one-word parenthetical expressions |
+| `cliches` | list[str]/set[str] | `None` | List or set of clichés; if not given, `OFFICIALESE_CLICHES` |
 | `alliteration_threshold` | float | `0.001` | Probability of a repetition of a consonant under an independent spread of the sounds, below which the repetition is alliteration |
+
+A threshold that is not an integer of at least one or a probability outside (0, 1] raises `ParameterError`, stopwords or clichés that are not strings `SourceTypeError`.
 
 ## Attributes
 
-| Attribute | Type | Description |
-| :-------: | :--: | :---------: |
-| `text` | str | Text of the data source |
-| `layers` | tuple[str] | Layers turned on, in the order of drawing |
-| `highlights` | tuple[Highlight] | Highlighted fragments in the order of the text |
-| `counts` | dict[str, int] | Number of fragments of every layer |
+--8<-- "visualizers/highlight.md:HighlightedText-attributes"
 
-A `Highlight` fragment is an immutable object with the fields `start` and `end` (positions in the text), `layer` (the layer) and `note` (the explanation for the tooltip: the number of words of the sentence, of syllables of the word, the length of the chain, the phrase of the list).
+--8<-- "visualizers/highlight.md:Highlight"
+
+The note of a fragment gives the number of words of the sentence, of syllables of the word, the length of the chain or the phrase of the list.
 
 ## Methods
 
 ### to_html
 
-Returns the HTML markup of the highlighted text: a `div` of the class `ests-highlight` with the legend and its counts and the text, where the highlighted segments are wrapped in a `span` of the classes `ests-hl` and `ests-hl-<layer>`, the notes going to the attribute `title`. Overlapping fragments of different layers give segments with several classes. Line breaks (`\n`, `\r\n`, `\r`) are kept as character references, one per break, so the markup can be put into Markdown.
+--8<-- "visualizers/highlight.md:HighlightedText-to_html"
 
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `legend` | bool | `True` | Add the legend with the counts of the fragments |
-| `css` | bool | `True` | Add the styles of the layers |
+### css
+
+--8<-- "visualizers/highlight.md:HighlightedText-css"
 
 ## Usage example
 
@@ -122,7 +122,7 @@ _Result_ (hover over a fragment to see its note):
 .ests-highlight-legend .ests-hl { padding: 0 0.3em; }
 .ests-highlight-count { opacity: 0.6; margin-left: 0.3em; }
 .ests-highlight-text { white-space: pre-wrap; }
-.ests-highlight .ests-hl.ests-hl-long_sents, .ests-highlight .ests-hl.ests-hl-complex_words, .ests-highlight .ests-hl.ests-hl-rare_words, .ests-highlight .ests-hl.ests-hl-stopwords, .ests-highlight .ests-hl.ests-hl-passive, .ests-highlight .ests-hl.ests-hl-verbal_nouns, .ests-highlight .ests-hl.ests-hl-compound_prepositions, .ests-highlight .ests-hl.ests-hl-cliches, .ests-highlight .ests-hl.ests-hl-parentheticals { color: #1f2328; border-radius: 2px; }
+.ests-highlight .ests-hl.ests-hl-long_sents, .ests-highlight .ests-hl.ests-hl-stopwords, .ests-highlight .ests-hl.ests-hl-complex_words, .ests-highlight .ests-hl.ests-hl-rare_words, .ests-highlight .ests-hl.ests-hl-passive, .ests-highlight .ests-hl.ests-hl-verbal_nouns, .ests-highlight .ests-hl.ests-hl-compound_prepositions, .ests-highlight .ests-hl.ests-hl-cliches, .ests-highlight .ests-hl.ests-hl-parentheticals { color: #1f2328; border-radius: 2px; }
 .ests-hl-long_sents { background: #fef9c3; }
 .ests-hl-stopwords { background: #bae6fd; }
 .ests-hl-complex_words { background: #fed7aa; }

@@ -18,10 +18,10 @@ Un corpus es un diccionario «nombre de un texto → unidades». `frequency_tabl
 <!-- core: corpus/stylometry.md:z_scores 410148c -->
 `z_scores(table)` estandariza las columnas con la desviación típica muestral, como `scale()` de R; una columna con la misma frecuencia en todos los textos da ceros.
 
-<!-- core: corpus/stylometry.md:delta 65dbfdb -->
+<!-- core: corpus/stylometry.md:delta 8a87278 -->
 `delta` calcula a partir de las puntuaciones z una matriz simétrica de distancias (un `DataFrame` con los nombres de los textos); hacen falta al menos tres textos: con dos, las puntuaciones z degeneran en ±1/√2 y las distancias no dependen de las frecuencias.
 
-Variantes (`DELTA_VARIANTS`), con las fórmulas de las fuentes de stylo; $n$ es el número de unidades, $z_A$ y $z_B$ los vectores de puntuaciones z de los textos:
+Variantes (`anyts.constants.DELTA_VARIANTS`), con las fórmulas de las fuentes de stylo; $n$ es el número de unidades, $z_A$ y $z_B$ los vectores de puntuaciones z de los textos:
 
 | Variante | Clave | Fórmula | Fuente |
 | :------- | :---- | :------ | :----- |
@@ -32,11 +32,13 @@ Variantes (`DELTA_VARIANTS`), con las fórmulas de las fuentes de stylo; $n$ es 
 
 La Delta coseno es la que mejor agrupa los textos por autor en los experimentos de Evert et al. El número habitual de unidades es de 100 a 500 palabras más frecuentes, de 100 a 200 para los N-gramas de caracteres.
 
+Parámetros de `delta`:
+
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `corpus` | dict[str, list[str]] | `-` | Unidades de los textos por los nombres de los textos |
 | `n_mfw` | int | `100` | Número de las unidades más frecuentes; `None` - todas |
-| `variant` | str | `burrows` | Variante de Delta de `DELTA_VARIANTS` |
+| `variant` | str | `burrows` | Variante de Delta de `anyts.constants.DELTA_VARIANTS` |
 | `culling` | float | `0.0` | Menor proporción de textos en la que aparece una unidad |
 
 <!-- core: corpus/stylometry.md:delta_profiles 0675201 -->

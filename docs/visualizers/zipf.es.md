@@ -5,14 +5,18 @@
 
 ## Descripción
 
+<!-- core: visualizers/zipf.md:zipf 2fecb35 -->
 El gráfico de la [ley de Zipf](https://es.wikipedia.org/wiki/Ley_de_Zipf) a partir de un contador de frecuencias de palabras.
 
 !!! quote "Definición"
 
     La ley de Zipf (la ley de rango y frecuencia) es una regularidad empírica de la distribución de las frecuencias de las palabras en una lengua natural: si todas las palabras de una lengua, o de un texto lo bastante largo, se ordenan por frecuencia descendente, la frecuencia de la n-ésima palabra de la lista es aproximadamente inversamente proporcional a su número n, el rango de la palabra. La segunda palabra más frecuente aparece más o menos la mitad de veces que la primera, la tercera un tercio, y así sucesivamente.
 
+Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visualizers/zipf/). Las etiquetas por defecto son las inglesas de `VISUALIZER_LABELS` en `anyts.constants`; `labels` sustituye cualquiera de ellas, por ejemplo `labels={"title": "Ley de Zipf"}`.
+
 ## Parámetros
 
+<!-- core: visualizers/zipf.md:zipf-parameters 0d42d39 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `counter` | Counter | `-` | Contador de frecuencias de palabras |
@@ -21,10 +25,16 @@ El gráfico de la [ley de Zipf](https://es.wikipedia.org/wiki/Ley_de_Zipf) a par
 | `log` | bool | `True` | Usar una escala logarítmica |
 | `show_theory` | bool | `False` | Dibujar la ley de Zipf teórica |
 | `alpha` | float | `1.5` | Exponente α de la ley de Zipf teórica, mayor que cero |
-| `show_fit` | bool | `False` | Dibujar el ajuste de Zipf-Mandelbrot $f(r) = C / (r + q)^s$ de [`fit_zipf_mandelbrot`](../stats/diversity_stats_funcs.md#fit_zipf_mandelbrot) |
+| `show_fit` | bool | `False` | Dibujar el ajuste de Zipf-Mandelbrot $f(r) = C / (r + q)^s$ de `fit_zipf_mandelbrot` |
 | `ax` | Axes | `None` | Ejes de matplotlib para el gráfico; si no se dan, se crea una figura nueva |
+| `labels` | dict[str, str] | `None` | Etiquetas del gráfico sobre las de por defecto: `title`, `xlabel`, `ylabel`, `experimental` y `theoretical` (las curvas), `fit` (una cadena de formato con `q` y `s`) |
 
-La función devuelve los `Axes` con el gráfico; un `num_words` mayor que el número de tipos de palabra no alarga las curvas más allá de los datos, un contador vacío lanza `SourceError`, y un `num_words` menor que uno lanza `ParameterError`. `zipf_theory(size, num_ranks, alpha, ax)` dibuja solo la curva teórica, $f(r) = size \cdot r^{-\alpha}$ para los rangos de 1 a `num_ranks`.
+La función devuelve los `Axes` con el gráfico; un `num_words` mayor que el número de tipos de palabra no alarga las curvas más allá de los datos, un contador cuyas palabras no son cadenas lanza `SourceTypeError`, un contador vacío o una frecuencia que no es mayor que cero `SourceError`, y un `num_words` menor que uno o un exponente que no es un número finito mayor que cero `ParameterError`, todo ello antes de crear una figura.
+
+El ajuste de Zipf-Mandelbrot se describe en [`fit_zipf_mandelbrot`](../stats/diversity_stats_funcs.md#fit_zipf_mandelbrot).
+
+<!-- core: visualizers/zipf.md:zipf_theory bce12a7 -->
+`zipf_theory(size, num_ranks, alpha=1.5, ax=None, labels=None)` dibuja solo la curva teórica, $f(r) = size \cdot r^{-\alpha}$ para los rangos de 1 a `num_ranks`; su etiqueta es la clave `theoretical`.
 
 ## Ejemplo de uso
 

@@ -20,9 +20,9 @@ The markers of the officialese style are counted over the unfiltered word forms 
 | :-------: | :--: | :-----: | :---------: |
 | `source` | str/Doc | `-` | Data source (a string or a Doc object) |
 | `words_extractor` | WordsExtractor | `None` | Word extraction tool |
-| `stopwords` | list[str] | `None` | Stopwords for the water content; if not given, `STOPWORDS` and the one-word parenthetical expressions are used |
+| `stopwords` | list[str]/set[str] | `None` | Stopwords for the water content; if not given, `STOPWORDS` and the one-word parenthetical expressions are used |
 | `top_n` | int | `10` | Number of the most frequent words for the academic nausea and the naturalness by Zipf's law |
-| `cliches` | list[str] | `None` | List of clichés; if not given, `OFFICIALESE_CLICHES` is used |
+| `cliches` | list[str]/set[str] | `None` | List or set of clichés; if not given, `OFFICIALESE_CLICHES` is used |
 | `nlp` | Language | `None` | Pipeline of spaCy that parses a string for the verbal nouns; without it the model `es_core_news_sm` is loaded |
 
 ## Attributes

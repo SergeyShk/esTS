@@ -294,13 +294,13 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_hdd()**
 
-<!-- core: stats/diversity_stats_funcs.md:calc_hdd 78030e8 -->
+<!-- core: stats/diversity_stats_funcs.md:calc_hdd 6bf82ff -->
 Cálculo de la Hypergeometric Distribution D (HD-D).
 
 Una alternativa a vocd-D (McCarthy & Jarvis, 2010): en lugar de extraer segmentos aleatorios del texto, calcula exactamente el TTR esperado de una muestra aleatoria de `sample_size` palabras. Para cada lexema, la distribución hipergeométrica da la probabilidad de que la muestra lo contenga al menos una vez; la suma de estas probabilidades es el número esperado de lexemas en la muestra, y HD-D es ese número dividido por el tamaño de la muestra. El valor no depende del azar.
 
 !!! warning "Aviso"
-    En los textos de menos de 50 palabras y más cortos que el tamaño de la muestra la métrica no está definida; la función devuelve `nan`.
+    En los textos de menos de 50 palabras o más cortos que el tamaño de la muestra la métrica no está definida; la función devuelve `nan`.
 
 Parámetros:
 
@@ -715,7 +715,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.fit_zipf_mandelbrot()**, **ests.diversity_stats.ZipfMandelbrot**
 
-<!-- core: stats/diversity_stats_funcs.md:fit_zipf_mandelbrot 647bd16 -->
+<!-- core: stats/diversity_stats_funcs.md:fit_zipf_mandelbrot 56dd01c -->
 Ajuste de la [ley de Zipf-Mandelbrot](https://en.wikipedia.org/wiki/Zipf–Mandelbrot_law) $f(r) = C / (r + q)^s$ a la distribución rango-frecuencia. Con $q = 0$ la ley se reduce a la ley de Zipf con exponente $s$; el desplazamiento $q$ describe el aplanamiento de la curva en las palabras más frecuentes que la ley de Zipf no recoge. Los parámetros se ajustan por mínimos cuadrados en coordenadas logarítmicas con las restricciones $q \ge 0$, $s \ge 0$. Devuelve una tupla con nombre `ZipfMandelbrot` con los campos `c`, `q`, `s` y `r2`, el coeficiente de determinación del ajuste en coordenadas logarítmicas.
 
 !!! note "Nota"
@@ -725,7 +725,7 @@ Parámetros:
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
-| `text` | list[str] | `-` | Lista de palabras |
+| `text` | list[str]/Counter | `-` | Lista de palabras o un contador de sus frecuencias |
 
 !!! example "Ejemplo"
 

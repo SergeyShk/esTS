@@ -1,6 +1,7 @@
 from collections import Counter
 from math import isnan
 
+import anyts.basic_stats
 import pytest
 import spacy
 from spacy.lang.es.stop_words import STOP_WORDS
@@ -13,6 +14,7 @@ from ests.constants import (
     READABILITY_STATS_DESC,
     READING_SPEED_NORMS,
 )
+from ests.exceptions import SourceTypeError
 from ests.readability_stats import (
     calc_consensus_grade,
     calc_crawford_grade,
@@ -80,6 +82,15 @@ def test_init_basic_stats(rs):
     assert from_basic.bs is basic
     assert from_basic.preset == "classic"
     assert ReadabilityStats(basic).get_stats() == rs.get_stats()
+
+
+def test_init_basic_stats_of_the_core():
+    class Stats(anyts.basic_stats.BasicStats):
+        def count_syllables(self, word):
+            return 1
+
+    with pytest.raises(SourceTypeError, match="BasicStats"):
+        ReadabilityStats(Stats(TEXT))
 
 
 def test_init_doc(rs):
@@ -205,6 +216,16 @@ def test_sol_grade(rs):
     assert calc_sol_grade(0, 1) == pytest.approx(-0.194466, abs=0.000001)
 
 
+def test_formulas_of_the_core(rs):
+    """The English formulas of the core stay attributes, outside get_stats"""
+    n_complex = rs.bs.count_words_by_syllables(3)
+    assert rs.smog_index == calc_smog_index(n_complex, rs.bs.n_sents)
+    assert rs.sol_grade == pytest.approx(-2.51 + 0.74 * rs.smog_index)
+    for stat in ("flesch_kincaid_grade", "coleman_liau_index", "gunning_fog_index"):
+        assert isinstance(getattr(rs, stat), float)
+        assert stat not in rs.get_stats()
+
+
 def test_lix(rs):
     assert rs.lix == pytest.approx(84.23404255319149)
     assert calc_lix(5, 10, 1) == 60.0
@@ -219,6 +240,11 @@ def test_consensus_grade(rs):
     assert rs.consensus_grade == 13.0
     grades = [getattr(rs, stat) for stat in READABILITY_GRADE_STATS]
     assert rs.consensus_grade == calc_consensus_grade(grades, rs.flesch_reading_easy, rs.preset)
+
+
+@pytest.mark.parametrize(("preset", "grade"), [("general", 8.0), ("classic", 8.5)])
+def test_reading_ease_to_grade(preset, grade):
+    assert ReadabilityStats(TEXT, preset=preset).reading_ease_to_grade(60) == grade
 
 
 def test_calc_consensus_grade():

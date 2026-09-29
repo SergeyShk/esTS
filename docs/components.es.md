@@ -1,15 +1,16 @@
 # Componentes
 
-Conjunto de componentes para los pipelines de [spaCy](https://github.com/explosion/spaCy). Cada uno es una clase con dos métodos: `__init__`, que registra una extensión de `Doc` al inicializarse, y `__call__`, que toma un objeto `Doc` y lo devuelve con las estadísticas puestas.
+<!-- core: components.md:StatsComponent e3962ed -->
+La base de los componentes de [spaCy](https://github.com/explosion/spaCy) que ponen las estadísticas de un texto en una extensión de `Doc`: un componente registra la extensión al añadirse a un pipeline y, para cada documento, calcula las estadísticas y las pone en `doc._.<name>`. La escritura de componentes en general se describe en la [documentación de spaCy](https://spacy.io/usage/processing-pipelines#custom-components).
+
+Los componentes de esTS son subclases del `StatsComponent` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/components/), una por cada clase de estadísticas.
 
 !!! note "Nota"
-    La escritura de componentes propios se describe en la sección correspondiente de la [documentación de spaCy](https://spacy.io/usage/processing-pipelines#custom-components). Los ejemplos de abajo usan el modelo `es_core_news_sm`, que se instala aparte: `python -m spacy download es_core_news_sm` (véase [instalación](installation.md)).
+    Los ejemplos de abajo usan el modelo `es_core_news_sm`, que se instala aparte: `python -m spacy download es_core_news_sm` (véase [instalación](installation.md)).
 
 ## Nombres { #names }
 
 Las fábricas llevan el prefijo de la biblioteca: `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`. Están declaradas como entry points de `spacy_factories`, así que un pipeline guardado con estos componentes (`nlp.to_disk(path)`, `spacy package`) se carga con `spacy.load(path)` sin importar la biblioteca.
-
-El nombre del paso del pipeline es el nombre de la extensión:
 
 ``` python
 nlp.add_pipe("ests_basic", name="basic", last=True)
@@ -17,8 +18,10 @@ doc = nlp("El gato duerme")
 doc._.basic.n_words
 ```
 
-Sin `name` el paso y la extensión conservan el nombre de la fábrica (`doc._.ests_basic`). El mismo componente puede añadirse dos veces con nombres distintos, por ejemplo con dos presets.
+<!-- core: components.md:StatsComponent-names 9314eeb -->
+El nombre del paso del pipeline es el nombre de la extensión: `nlp.add_pipe(factory, name="basic")` pone las estadísticas en `doc._.basic`. Sin `name` el paso y la extensión conservan el nombre de la fábrica. La extensión sigue al paso cuando el pipeline lo renombra (`nlp.rename_pipe`), y un nombre ocupado por una extensión de otro paquete lanza `ParameterError` en lugar de reemplazarla. Un componente tomado de otro pipeline (`add_pipe(name, source=other)`) es el mismo objeto en ambos, así que con un nombre nuevo escribe también en esa extensión del otro pipeline; un componente propio sale de la fábrica, `add_pipe(factory, name=...)`. El mismo componente puede añadirse dos veces con nombres distintos, con parámetros distintos. Un documento sin palabras - una cadena vacía, espacios, pura puntuación - pasa por un componente sin cambios, con su extensión en `None`.
 
+<!-- core: components.md:StatsComponent-serialization d6d5068 -->
 !!! warning "Serialización"
     Un componente guarda un objeto de estadísticas en `doc._.<name>`, y spaCy no sabe serializarlo: `Doc.to_bytes()`, `DocBin(store_user_data=True)` y `nlp.pipe(..., n_process>1)` fallan con estos componentes en el pipeline. Para guardar un documento, deje fuera los datos de usuario (`doc.to_bytes(exclude=["user_data"])`) o guarde `doc._.<name>.get_stats()` por su cuenta; para el multiproceso, calcule las estadísticas en el proceso principal después de `nlp.pipe`, sin los componentes.
 
@@ -38,8 +41,6 @@ Añadir un componente amplía el tokenizador de su pipeline con las reglas de la
 | `StyleStatsComponent` | `ests_style` | [StyleStats](stats/style_stats.md) | categorías gramaticales y lemas para los sustantivos deverbales |
 | `PhonStatsComponent` | `ests_phon` | [PhonStats](stats/phon_stats.md) | nada |
 | `VerseStatsComponent` | `ests_verse` | [VerseStats](stats/verse_stats.md) | nada; los saltos de línea del texto |
-
-Un documento sin palabras - una cadena vacía, espacios, solo puntuación - pasa por cada componente sin tocarse, con su extensión en `None`.
 
 En el pipeline de `es_core_news_sm` las categorías gramaticales vienen del `morphologizer` (o de un `tagger` con un `attribute_ruler`; un `tagger` solo no las da), el análisis del `parser` y los lemas del `lemmatizer`. Un componente al que le falta la anotación, también con componentes `excluded`, levanta `SourceError` cuando el documento pasa por él.
 

@@ -5,7 +5,14 @@
 
 ## Descripción
 
-Módulo para calcular las principales métricas de [legibilidad](https://es.wikipedia.org/wiki/Legibilidad) de la tradición española. La fuente de datos puede ser un texto, un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy) o unas [estadísticas básicas](basic_stats.md) `BasicStats` ya calculadas; en ese caso el texto no se vuelve a analizar.
+Las métricas de legibilidad de la tradición española.
+
+<!-- core: stats/readability_stats.md:ReadabilityStats f313e5b -->
+Las métricas de [legibilidad](https://es.wikipedia.org/wiki/Legibilidad) de un texto a partir de sus estadísticas básicas: la longitud media de la oración en palabras, la longitud media de la palabra en sílabas o en letras, la proporción de palabras polisílabas y de palabras largas y la variabilidad de la longitud de las palabras. La fuente de datos puede ser un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) o unas estadísticas básicas ya calculadas, y entonces el texto no se vuelve a contar; los extractores se pasan a las estadísticas básicas de un texto o de un `Doc`, mientras que las ya calculadas se toman tal cual. Las letras de las fórmulas son las de las palabras contadas, así que un extractor de palabras que descarta palabras no alarga la palabra media.
+
+Las métricas son propiedades que se calculan en cada acceso, así que un cambio de los `coefficients` de un objeto se aplica en el acto.
+
+Una fuente que no es ni una cadena, ni un `Doc`, ni unas estadísticas básicas, unas estadísticas básicas de otra clase que las de la biblioteca y un extractor de otro tipo lanzan `SourceTypeError`, una fuente sin palabras o sin oraciones `SourceError`, un preajuste desconocido o que no es una cadena `ParameterError`.
 
 !!! quote "Definición"
 
@@ -36,10 +43,11 @@ Los supuestos principales de las métricas de legibilidad:
 *   las palabras largas dificultan la lectura;
 *   el lector se frena ante palabras poco frecuentes o desconocidas.
 
-El módulo permite usar objetos [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) ya configurados para la segmentación en oraciones y palabras que precede al cálculo.
+## Ganchos del idioma
 
-!!! note "Nota"
-    Las métricas se calculan al acceder al atributo correspondiente o al llamar al método `get_stats` del objeto `ReadabilityStats`.
+La clase extiende el `ReadabilityStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/readability_stats/) con las fórmulas y las tablas del español: las [estadísticas básicas](basic_stats.md) de esTS, que toman por defecto los [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) del español, los preajustes de la facilidad de lectura de Flesch, las fórmulas de Gutiérrez de Polini, Crawford y SOL, las fórmulas de grado del grado de consenso (Crawford y SOL), las etapas escolares de España y las velocidades de lectura de los lectores en español.
+
+Las fórmulas del núcleo con sus coeficientes ingleses - `flesch_kincaid_grade`, `coleman_liau_index`, `automated_readability_index`, `smog_index` y `gunning_fog_index` - siguen siendo atributos del objeto, fuera de `get_stats`: están ajustadas con textos ingleses, y `smog_index` es la entrada de SOL.
 
 ## Parámetros
 
@@ -65,7 +73,7 @@ El módulo permite usar objetos [`SentsExtractor`](../extractors/sentences.md) y
 | `reading_time` | float | Tiempo de lectura en minutos a 278 palabras por minuto |
 | `bs` | BasicStats | Estadísticas básicas del texto |
 | `preset` | str | Nombre del preajuste de coeficientes |
-| `coefficients` | dict[str, tuple[float, float, float]] | Coeficientes de las fórmulas del preajuste |
+| `coefficients` | dict[str, tuple[float, float, float]] | Coeficientes de las fórmulas del preajuste, una copia que se puede cambiar para un objeto |
 
 ## Preajustes de coeficientes { #presets }
 
@@ -97,7 +105,10 @@ La fórmula de Fernández Huerta toma la longitud media de la oración, con la c
 
 El método [`describe_level`](#describe_level) sitúa la facilidad de lectura en la escala del preajuste: INFLESZ para `general` (`muy difícil` por debajo de 40, `algo difícil` 40-55, `normal` 55-65, `bastante fácil` 65-80, `muy fácil` por encima de 80) y los siete niveles de Fernández Huerta para `classic`, y a petición las escalas de Szigriszt-Pazos o del otro autor; la Legibilidad µ tiene los siete niveles de sus autores (`muy difícil` 0-30, `difícil` 31-50, `un poco difícil` 51-60, `adecuado` 61-70, `un poco fácil` 71-80, `fácil` 81-90, `muy fácil` 91-100).
 
-Las fórmulas que dan años de escolaridad (Crawford, SOL) se resumen en el atributo `consensus_grade`: la mediana de los valores redondeados más la facilidad de lectura [convertida en grado](readability_stats_funcs.md#flesch_reading_easy_to_grade) según la escala del preajuste. El método [`describe_grade`](#describe_grade) traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:
+<!-- core: stats/readability_stats.md:ReadabilityStats-consensus 40f0d09 -->
+Las fórmulas que dan años de escolaridad (`grade_stats`) se resumen en el atributo `consensus_grade`: la mediana de sus valores redondeados con el medio hacia arriba, junto con la facilidad de lectura convertida en años de escolaridad (`reading_ease_to_grade`) sin redondear.
+
+Las fórmulas de grado de esTS son Crawford y SOL, y la facilidad de lectura se [convierte en grado](readability_stats_funcs.md#flesch_reading_easy_to_grade) según la escala del preajuste. El método [`describe_grade`](#describe_grade) traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:
 
 | Grado | Etapa | Edad |
 | :---: | :---: | :--: |
@@ -143,13 +154,16 @@ Parámetros:
 
 ### describe_grade
 
-Devuelve la etapa escolar y la edad del lector para el grado de consenso o una fórmula de grado concreta.
+<!-- core: stats/readability_stats.md:ReadabilityStats-describe_grade af0b5e5 -->
+Devuelve la etapa escolar y la edad del lector para el grado de consenso o una fórmula de grado; otra métrica lanza `ParameterError`.
 
 Parámetros:
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
-| `stat` | str | `consensus_grade` | Nombre de la fórmula de grado (`consensus_grade`, `crawford_grade`, `sol_grade`) |
+| `stat` | str | `consensus_grade` | Nombre de la fórmula de grado |
+
+Las fórmulas de grado son `consensus_grade`, `crawford_grade` y `sol_grade`.
 
 !!! example "Ejemplo"
 
@@ -162,23 +176,27 @@ Parámetros:
 
 ### reading_time_by_speed
 
-Devuelve el tiempo de lectura del texto en minutos a la velocidad indicada.
+<!-- core: stats/readability_stats.md:ReadabilityStats-reading_time_by_speed 7c6fa90 -->
+Devuelve el tiempo de lectura del texto en minutos a la velocidad indicada; una velocidad que no es un número positivo lanza `ParameterError`.
 
 Parámetros:
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
-| `wpm` | int | `-` | Velocidad de lectura, palabras por minuto |
+| `wpm` | float | `-` | Velocidad de lectura, palabras por minuto |
 
 ### reading_time_by_norm
 
-Devuelve el tiempo de lectura del texto en minutos en voz alta y en silencio según una norma de la tabla `ests.constants.READING_SPEED_NORMS`: de `grade_1` a `grade_11` (años de escolaridad: primaria 1-6, ESO 7-10, bachillerato 11) o `adult`.
+<!-- core: stats/readability_stats.md:ReadabilityStats-reading_time_by_norm dcb8ada -->
+Devuelve los tiempos de lectura del texto en minutos a las velocidades de una norma de `reading_speed_norms`, en su orden; una norma desconocida lanza `ParameterError`.
 
 Parámetros:
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `norm` | str | `-` | Nombre de la norma de velocidad de lectura |
+
+Las normas de la tabla `ests.constants.READING_SPEED_NORMS` son de `grade_1` a `grade_11` (años de escolaridad: primaria 1-6, ESO 7-10, bachillerato 11) y `adult`, cada una con las velocidades en voz alta y en silencio, así que el método devuelve los tiempos de lectura en voz alta y en silencio.
 
 !!! example "Ejemplo"
 
@@ -191,7 +209,8 @@ Parámetros:
 
 ### get_stats
 
-Devuelve un diccionario con las métricas de legibilidad calculadas.
+<!-- core: stats/readability_stats.md:ReadabilityStats-get_stats c9e4353 -->
+Devuelve un diccionario con las métricas de legibilidad calculadas de `stats_desc`.
 
 !!! example "Ejemplo"
 
@@ -225,7 +244,8 @@ Devuelve un diccionario con las métricas de legibilidad calculadas.
 
 ### print_stats
 
-Muestra una tabla con las métricas de legibilidad calculadas.
+<!-- core: stats/readability_stats.md:ReadabilityStats-print_stats 62374bb -->
+Muestra una tabla con las métricas de legibilidad calculadas, sus descripciones de `stats_desc` y los encabezados de `stats_headers`.
 
 !!! example "Ejemplo"
 

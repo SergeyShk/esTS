@@ -10,10 +10,12 @@ Description:
     The factories are entry points of spacy_factories, so a saved pipeline loads
     with spacy.load() without importing the package
     A document with no words passes untouched, its extension left at None; a
-    pipeline without an annotation a component needs raises SourceError
+    pipeline without an annotation a component needs raises SourceError, and
+    a name taken by an extension of another package raises ParameterError
     Adding a component extends the tokenizer of its pipeline with add_dash_rules
 """
 
+from anyts.components import StatsComponent
 from anyts.constants import (
     DIVERSITY_LOG_BASE,
     HDD_SAMPLE_SIZE,
@@ -21,7 +23,7 @@ from anyts.constants import (
     MTLD_MIN_LEN,
     MTLD_TTR_THRESHOLD,
 )
-from anyts.utils import check_words, has_words, iter_doc_tokens
+from anyts.utils import check_words, iter_doc_tokens
 from spacy.language import Language
 from spacy.tokens import Doc
 
@@ -30,7 +32,6 @@ from .cohesion_stats import CohesionStats
 from .constants import NAUSEA_TOP_N, PHON_WINDOW_LEN
 from .datasets.freq_dict import FreqDict
 from .diversity_stats import DiversityStats, check_params as check_diversity_params
-from .exceptions import SourceError
 from .lexical_stats import LexicalStats, is_number
 from .morph_stats import MorphStats
 from .phon_stats import PhonStats, check_params as check_phon_params
@@ -41,8 +42,15 @@ from .utils import add_dash_rules
 from .verse_stats import LETTER, VerseStats
 
 
+class _Component(StatsComponent):
+    """Component of esTS: extends the tokenizer of its pipeline with add_dash_rules"""
+
+    def prepare(self, nlp: Language) -> None:
+        add_dash_rules(nlp)
+
+
 @Language.factory("ests_basic")
-class BasicStatsComponent:
+class BasicStatsComponent(_Component):
     """
     Class for the component of the basic statistics of a text
 
@@ -67,29 +75,14 @@ class BasicStatsComponent:
     """
 
     def __init__(self, nlp: Language, name: str = "ests_basic"):
-        add_dash_rules(nlp)
-        self.name = name
-        Doc.set_extension(self.name, default=None, force=True)
+        super().__init__(nlp, name)
 
-    def __call__(self, doc: Doc) -> Doc:
-        """
-        Adding the computed statistics to the component
-
-        Arguments:
-            doc (Doc): Doc object
-
-        Returns:
-            doc (Doc): Modified Doc object; untouched if it has no words
-        """
-        if not has_words(doc):
-            return doc
-        bs = BasicStats(doc)
-        doc._.set(self.name, bs)
-        return doc
+    def compute(self, doc: Doc) -> BasicStats:
+        return BasicStats(doc)
 
 
 @Language.factory("ests_readability")
-class ReadabilityStatsComponent:
+class ReadabilityStatsComponent(_Component):
     """
     Class for the component of the readability metrics of a text
 
@@ -146,54 +139,19 @@ class ReadabilityStatsComponent:
         basic: str | None = None,
     ):
         check_preset(preset)
-        add_dash_rules(nlp)
-        self.name = name
         self.preset = preset
         self.basic = basic
-        Doc.set_extension(self.name, default=None, force=True)
+        super().__init__(nlp, name)
 
-    def __call__(self, doc: Doc) -> Doc:
-        """
-        Adding the computed metrics to the component
-
-        Arguments:
-            doc (Doc): Doc object
-
-        Returns:
-            doc (Doc): Modified Doc object; untouched if it has no words
-        """
-        if not has_words(doc):
-            return doc
-        rs = ReadabilityStats(self.__source(doc), preset=self.preset)
-        doc._.set(self.name, rs)
-        return doc
-
-    def __source(self, doc: Doc) -> Doc | BasicStats:
-        """
-        Source of the metrics: the basic statistics of another component or the document
-
-        Arguments:
-            doc (Doc): Doc object
-
-        Returns:
-            Doc|BasicStats: Source of the metrics
-
-        Raises:
-            SourceError: If the named extension holds no basic statistics
-        """
-        if self.basic is None:
-            return doc
-        stats = doc._.get(self.basic) if Doc.has_extension(self.basic) else None
-        if not isinstance(stats, BasicStats):
-            raise SourceError(
-                f"The extension {self.basic} holds no basic statistics: add the component "
-                f"ests_basic with the name {self.basic} before {self.name}"
-            )
-        return stats
+    def compute(self, doc: Doc) -> ReadabilityStats:
+        source: Doc | BasicStats = doc
+        if self.basic is not None:
+            source = self.from_extension(doc, self.basic, BasicStats, "ests_basic")
+        return ReadabilityStats(source, preset=self.preset)
 
 
 @Language.factory("ests_diversity")
-class DiversityStatsComponent:
+class DiversityStatsComponent(_Component):
     """
     Class for the component of the lexical diversity metrics of a text
 
@@ -245,28 +203,15 @@ class DiversityStatsComponent:
         log_base: float = DIVERSITY_LOG_BASE,
     ):
         check_diversity_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)
-        add_dash_rules(nlp)
-        self.name = name
         self.window_len = window_len
         self.mtld_threshold = mtld_threshold
         self.mtld_min_len = mtld_min_len
         self.hdd_sample_size = hdd_sample_size
         self.log_base = log_base
-        Doc.set_extension(self.name, default=None, force=True)
+        super().__init__(nlp, name)
 
-    def __call__(self, doc: Doc) -> Doc:
-        """
-        Adding the computed metrics to the component
-
-        Arguments:
-            doc (Doc): Doc object
-
-        Returns:
-            doc (Doc): Modified Doc object; untouched if it has no words
-        """
-        if not has_words(doc):
-            return doc
-        ds = DiversityStats(
+    def compute(self, doc: Doc) -> DiversityStats:
+        return DiversityStats(
             doc,
             window_len=self.window_len,
             mtld_threshold=self.mtld_threshold,
@@ -274,12 +219,10 @@ class DiversityStatsComponent:
             hdd_sample_size=self.hdd_sample_size,
             log_base=self.log_base,
         )
-        doc._.set(self.name, ds)
-        return doc
 
 
 @Language.factory("ests_morph")
-class MorphStatsComponent:
+class MorphStatsComponent(_Component):
     """
     Class for the component of the morphological statistics of a text
 
@@ -307,29 +250,14 @@ class MorphStatsComponent:
     """
 
     def __init__(self, nlp: Language, name: str = "ests_morph"):
-        add_dash_rules(nlp)
-        self.name = name
-        Doc.set_extension(self.name, default=None, force=True)
+        super().__init__(nlp, name)
 
-    def __call__(self, doc: Doc) -> Doc:
-        """
-        Adding the computed statistics to the component
-
-        Arguments:
-            doc (Doc): Doc object
-
-        Returns:
-            doc (Doc): Modified Doc object; untouched if it has no words
-        """
-        if not has_words(doc):
-            return doc
-        ms = MorphStats(doc)
-        doc._.set(self.name, ms)
-        return doc
+    def compute(self, doc: Doc) -> MorphStats:
+        return MorphStats(doc)
 
 
 @Language.factory("ests_syntax")
-class SyntaxStatsComponent:
+class SyntaxStatsComponent(_Component):
     """
     Class for the component of the syntactic statistics of a text
 
@@ -357,29 +285,14 @@ class SyntaxStatsComponent:
     """
 
     def __init__(self, nlp: Language, name: str = "ests_syntax"):
-        add_dash_rules(nlp)
-        self.name = name
-        Doc.set_extension(self.name, default=None, force=True)
+        super().__init__(nlp, name)
 
-    def __call__(self, doc: Doc) -> Doc:
-        """
-        Adding the computed statistics to the component
-
-        Arguments:
-            doc (Doc): Doc object
-
-        Returns:
-            doc (Doc): Modified Doc object; untouched if it has no words
-        """
-        if not has_words(doc):
-            return doc
-        ss = SyntaxStats(doc)
-        doc._.set(self.name, ss)
-        return doc
+    def compute(self, doc: Doc) -> SyntaxStats:
+        return SyntaxStats(doc)
 
 
 @Language.factory("ests_cohesion")
-class CohesionStatsComponent:
+class CohesionStatsComponent(_Component):
     """
     Class for the component of the cohesion statistics of a text
 
@@ -407,29 +320,14 @@ class CohesionStatsComponent:
     """
 
     def __init__(self, nlp: Language, name: str = "ests_cohesion"):
-        add_dash_rules(nlp)
-        self.name = name
-        Doc.set_extension(self.name, default=None, force=True)
+        super().__init__(nlp, name)
 
-    def __call__(self, doc: Doc) -> Doc:
-        """
-        Adding the computed statistics to the component
-
-        Arguments:
-            doc (Doc): Doc object
-
-        Returns:
-            doc (Doc): Modified Doc object; untouched if it has no words
-        """
-        if not has_words(doc):
-            return doc
-        cs = CohesionStats(doc)
-        doc._.set(self.name, cs)
-        return doc
+    def compute(self, doc: Doc) -> CohesionStats:
+        return CohesionStats(doc)
 
 
 @Language.factory("ests_lexical")
-class LexicalStatsComponent:
+class LexicalStatsComponent(_Component):
     """
     Class for the component of the lexical sophistication statistics of a text
 
@@ -465,30 +363,19 @@ class LexicalStatsComponent:
     """
 
     def __init__(self, nlp: Language, name: str = "ests_lexical", data_dir: str | None = None):
-        add_dash_rules(nlp)
-        self.name = name
         self.freq_dict = FreqDict(data_dir) if data_dir else FreqDict()
-        Doc.set_extension(self.name, default=None, force=True)
+        super().__init__(nlp, name)
 
-    def __call__(self, doc: Doc) -> Doc:
-        """
-        Adding the computed statistics to the component
+    def accepts(self, doc: Doc) -> bool:
+        """A document gets the statistics when it has a word other than a number"""
+        return any(not is_number(token.text) for token in iter_doc_tokens(doc))
 
-        Arguments:
-            doc (Doc): Doc object
-
-        Returns:
-            doc (Doc): Modified Doc object; untouched if it has no words other than numbers
-        """
-        if not any(not is_number(token.text) for token in iter_doc_tokens(doc)):
-            return doc
-        ls = LexicalStats(doc, freq_dict=self.freq_dict)
-        doc._.set(self.name, ls)
-        return doc
+    def compute(self, doc: Doc) -> LexicalStats:
+        return LexicalStats(doc, freq_dict=self.freq_dict)
 
 
 @Language.factory("ests_style")
-class StyleStatsComponent:
+class StyleStatsComponent(_Component):
     """
     Class for the component of the style metrics of a text
 
@@ -540,31 +427,16 @@ class StyleStatsComponent:
         check_style_params(top_n)
         if stopwords is not None:
             check_words(stopwords, "stopwords")
-        add_dash_rules(nlp)
-        self.name = name
         self.stopwords = stopwords
         self.top_n = top_n
-        Doc.set_extension(self.name, default=None, force=True)
+        super().__init__(nlp, name)
 
-    def __call__(self, doc: Doc) -> Doc:
-        """
-        Adding the computed metrics to the component
-
-        Arguments:
-            doc (Doc): Doc object
-
-        Returns:
-            doc (Doc): Modified Doc object; untouched if it has no words
-        """
-        if not has_words(doc):
-            return doc
-        ss = StyleStats(doc, stopwords=self.stopwords, top_n=self.top_n)
-        doc._.set(self.name, ss)
-        return doc
+    def compute(self, doc: Doc) -> StyleStats:
+        return StyleStats(doc, stopwords=self.stopwords, top_n=self.top_n)
 
 
 @Language.factory("ests_phon")
-class PhonStatsComponent:
+class PhonStatsComponent(_Component):
     """
     Class for the component of the phonostatistics of a text
 
@@ -597,30 +469,15 @@ class PhonStatsComponent:
 
     def __init__(self, nlp: Language, name: str = "ests_phon", window_len: int = PHON_WINDOW_LEN):
         check_phon_params(window_len)
-        add_dash_rules(nlp)
-        self.name = name
         self.window_len = window_len
-        Doc.set_extension(self.name, default=None, force=True)
+        super().__init__(nlp, name)
 
-    def __call__(self, doc: Doc) -> Doc:
-        """
-        Adding the computed statistics to the component
-
-        Arguments:
-            doc (Doc): Doc object
-
-        Returns:
-            doc (Doc): Modified Doc object; untouched if it has no words
-        """
-        if not has_words(doc):
-            return doc
-        ps = PhonStats(doc, window_len=self.window_len)
-        doc._.set(self.name, ps)
-        return doc
+    def compute(self, doc: Doc) -> PhonStats:
+        return PhonStats(doc, window_len=self.window_len)
 
 
 @Language.factory("ests_verse")
-class VerseStatsComponent:
+class VerseStatsComponent(_Component):
     """
     Class for the component of the verse statistics of a text
 
@@ -651,22 +508,12 @@ class VerseStatsComponent:
     """
 
     def __init__(self, nlp: Language, name: str = "ests_verse", seseo: bool = False):
-        add_dash_rules(nlp)
-        self.name = name
         self.seseo = seseo
-        Doc.set_extension(self.name, default=None, force=True)
+        super().__init__(nlp, name)
 
-    def __call__(self, doc: Doc) -> Doc:
-        """
-        Adding the computed statistics to the component
+    def accepts(self, doc: Doc) -> bool:
+        """A document gets the statistics when it has a letter"""
+        return LETTER.search(doc.text) is not None
 
-        Arguments:
-            doc (Doc): Doc object
-
-        Returns:
-            doc (Doc): Modified Doc object; untouched if it has no letter
-        """
-        if not LETTER.search(doc.text):
-            return doc
-        doc._.set(self.name, VerseStats(doc, seseo=self.seseo))
-        return doc
+    def compute(self, doc: Doc) -> VerseStats:
+        return VerseStats(doc, seseo=self.seseo)

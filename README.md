@@ -54,7 +54,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 
 ## Installation
 
-Requires Python 3.11 or newer. The language-independent part - the extractors, the lexical diversity metrics and the corpus measures - comes from the [anyTS](https://github.com/SergeyShk/anyTS) core, installed with the package.
+Requires Python 3.11 or newer. The language-independent part - the extractors, the basic statistics and the common readability formulas, the lexical diversity metrics, the corpus measures and the plots - comes from the [anyTS](https://github.com/SergeyShk/anyTS) core, installed with the package.
 
 ```bash
 pip install pyests
@@ -701,7 +701,7 @@ Bug reports, ideas and pull requests are welcome in the [issues](https://github.
 *   **demo** - the demo on Hugging Face Spaces (Gradio)
 *   **docs** - project documentation
 *   **ests**:
-    *   basic_stats.py - basic text statistics
+    *   basic_stats.py - basic text statistics of the anyTS core with the Spanish syllables
     *   cohesion_stats.py - cohesion statistics
     *   lexical_stats.py - lexical sophistication statistics
     *   components.py - components of a spaCy pipeline
@@ -712,7 +712,7 @@ Bug reports, ideas and pull requests are welcome in the [issues](https://github.
     *   exceptions.py - library exceptions
     *   extractors.py - the extractors of the anyTS core with the Spanish tokenizers
     *   morph_stats.py - morphological statistics
-    *   readability_stats.py - readability metrics
+    *   readability_stats.py - readability metrics: the Spanish formulas over those of the anyTS core
     *   style_stats.py - style metrics
     *   phon_stats.py - phonostatistics
     *   syntax_stats.py - syntactic statistics

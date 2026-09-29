@@ -5,10 +5,18 @@ from itertools import islice
 from pathlib import Path
 from typing import Any
 
-from ..constants import DEFAULT_DATA_DIR
+from anyts.datasets import (
+    Dataset,
+    Filters,
+    check_limit,
+    fetch_archive,
+    length_filters,
+    substring_filter,
+    to_path,
+)
+
+from ..constants import DEFAULT_DATA_DIR, USER_AGENT
 from ..exceptions import DataFileError, DatasetNotFoundError, ParameterError
-from ..utils import to_path
-from .dataset import Dataset, Filters, check_limit, fetch_archive, length_filters, substring_filter
 
 NAME = "spanish_sonnets"
 VERSION = 1
@@ -155,7 +163,7 @@ class SpanishSonnets(Dataset):
             DownloadError: If the archive cannot be downloaded or fails the checksum
         """
         missing = not self._filepath.is_file()
-        fetch_archive(DOWNLOAD_URL, self._archive, ARCHIVE_SHA256, missing, force)
+        fetch_archive(DOWNLOAD_URL, self._archive, ARCHIVE_SHA256, missing, force, USER_AGENT)
         self.check_data()
 
     def get_texts(

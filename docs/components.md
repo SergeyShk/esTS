@@ -1,15 +1,15 @@
 # Components
 
-A set of components for [spaCy](https://github.com/explosion/spaCy) pipelines. Each one is a class with two methods: `__init__`, which registers an extension of `Doc` at initialization, and `__call__`, which takes a `Doc` object and returns it with the statistics attached.
+--8<-- "components.md:StatsComponent"
+
+The components of esTS are subclasses of the `StatsComponent` of the [anyTS](https://sergeyshk.github.io/anyTS/components/) core, one for every class of statistics.
 
 !!! note "Note"
-    Writing components of your own is described in the corresponding section of the [documentation of spaCy](https://spacy.io/usage/processing-pipelines#custom-components). The examples below use the model `es_core_news_sm`, which is installed apart: `python -m spacy download es_core_news_sm` (see [installation](installation.md)).
+    The examples below use the model `es_core_news_sm`, which is installed apart: `python -m spacy download es_core_news_sm` (see [installation](installation.md)).
 
 ## Names { #names }
 
 The factories carry the prefix of the library: `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`. They are declared as entry points of `spacy_factories`, so a pipeline saved with these components (`nlp.to_disk(path)`, `spacy package`) loads with `spacy.load(path)` without importing the library.
-
-The name of the pipe is the name of the extension:
 
 ``` python
 nlp.add_pipe("ests_basic", name="basic", last=True)
@@ -17,10 +17,9 @@ doc = nlp("El gato duerme")
 doc._.basic.n_words
 ```
 
-Without `name` the pipe and the extension keep the name of the factory (`doc._.ests_basic`). The same component can be added twice under different names, for example with two presets.
+--8<-- "components.md:StatsComponent-names"
 
-!!! warning "Serialization"
-    A component keeps an object of statistics in `doc._.<name>`, and spaCy cannot serialize it: `Doc.to_bytes()`, `DocBin(store_user_data=True)` and `nlp.pipe(..., n_process>1)` fail with these components in the pipeline. To save a document, leave the user data out (`doc.to_bytes(exclude=["user_data"])`) or keep `doc._.<name>.get_stats()` on your own; for multiprocessing compute the statistics in the main process after `nlp.pipe`, without the components.
+--8<-- "components.md:StatsComponent-serialization"
 
 Adding a component extends the tokenizer of its pipeline with the rules for the dashes of a dialogue glued to the words ([`add_dash_rules`](extractors/words.md)), as in the string API: `sí--dijo` is two words and a dash. A tokenizer that is not the `Tokenizer` of spaCy is left as it is.
 
@@ -38,8 +37,6 @@ Adding a component extends the tokenizer of its pipeline with the rules for the 
 | `StyleStatsComponent` | `ests_style` | [StyleStats](stats/style_stats.md) | parts of speech and lemmas for the verbal nouns |
 | `PhonStatsComponent` | `ests_phon` | [PhonStats](stats/phon_stats.md) | nothing |
 | `VerseStatsComponent` | `ests_verse` | [VerseStats](stats/verse_stats.md) | nothing; the line breaks of the text |
-
-A document with no words - an empty string, whitespace, punctuation alone - passes through every component untouched, its extension left at `None`.
 
 In the pipeline of `es_core_news_sm` the parts of speech come from the `morphologizer` (or a `tagger` with an `attribute_ruler`; a `tagger` alone does not give them), the parse from the `parser` and the lemmas from the `lemmatizer`. A component whose annotation is missing, `excluded` components included, raises `SourceError` when the document goes through it.
 

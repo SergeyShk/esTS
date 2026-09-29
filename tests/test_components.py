@@ -6,6 +6,7 @@ import sys
 import pytest
 import spacy
 from spacy.language import Language
+from spacy.tokens import Doc
 
 from ests import (
     BasicStats,
@@ -215,7 +216,7 @@ def test_readability_reuses_the_basic_statistics(nlp):
 def test_readability_reuse_of_a_missing_component():
     pipeline = spacy.load("es_core_news_sm")
     pipeline.add_pipe("ests_readability", name="stats", config={"basic": "basic"}, last=True)
-    with pytest.raises(SourceError, match="holds no basic statistics"):
+    with pytest.raises(SourceError, match="holds no BasicStats"):
         pipeline(TEXT)
 
 
@@ -223,7 +224,7 @@ def test_readability_reuse_of_a_component_that_runs_later():
     pipeline = spacy.load("es_core_news_sm")
     pipeline.add_pipe("ests_readability", name="stats", config={"basic": "basic"}, last=True)
     pipeline.add_pipe("ests_basic", name="basic", last=True)
-    with pytest.raises(SourceError, match="holds no basic statistics"):
+    with pytest.raises(SourceError, match="holds no BasicStats"):
         pipeline(TEXT)
 
 
@@ -280,6 +281,22 @@ def test_extension_is_set_by_the_name():
     doc = pipeline("El gato duerme")
     assert doc._.basic_stats is not None
     assert doc.has_extension("basic_stats")
+
+
+def test_extension_of_another_package():
+    Doc.set_extension("foreign_stats", getter=lambda doc: len(doc))
+    try:
+        with pytest.raises(ParameterError, match="another package"):
+            spacy.blank("es").add_pipe("ests_basic", name="foreign_stats")
+    finally:
+        Doc.remove_extension("foreign_stats")
+
+
+def test_renamed_component_writes_to_its_new_name():
+    pipeline = spacy.blank("es")
+    pipeline.add_pipe("ests_basic", name="basic_before")
+    pipeline.rename_pipe("basic_before", "basic_after")
+    assert pipeline("El gato duerme")._.basic_after.n_words == 3
 
 
 def test_lexical_component(nlp, freq_dict):

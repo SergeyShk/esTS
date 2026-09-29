@@ -12,6 +12,7 @@ from anyts.corpus.compare import (
     bootstrap_median_diff as bootstrap_median_diff,
     calc_cliff_delta as calc_cliff_delta,
     calc_cohen_d as calc_cohen_d,
+    check_comparison_params as check_comparison_params,
     compare_features as compare_features,
     holm_correction as holm_correction,
 )
@@ -367,7 +368,7 @@ def compare_corpora(
     features: Features | None = None,
     labels: tuple[str, str] = ("A", "B"),
     n_bootstrap: int = 1000,
-    seed: int | None = 0,
+    seed: int | np.random.Generator | None = 0,
     min_words: int | None = None,
 ) -> pd.DataFrame:
     """
@@ -401,7 +402,8 @@ def compare_corpora(
         features (callable): Function of the features of a text; None - text_features
         labels (tuple[str, str]): Names of the corpora for the columns (mean_<a>, ...)
         n_bootstrap (int): Number of bootstrap samples
-        seed (int): Seed of the random number generator; None - a random one
+        seed (int|Generator): Seed of the random number generator or the generator
+            itself; None - a random one
         min_words (int): Smallest number of words in a window; None - half a
             window, or one when window is None
 
@@ -412,8 +414,9 @@ def compare_corpora(
     Raises:
         SourceTypeError: If the texts are not a list of strings
         SourceError: If one of the corpora has no window of enough words
-        ParameterError: If the number of samples, the size of a window or
-            min_words is not an integer or is below one
+        ParameterError: If the names of the corpora are not two strings that give
+            distinct columns, the number of samples, the size of a window or min_words
+            is not an integer or is below one, or the seed is set incorrectly
 
     Example:
         >>> from ests.corpus import compare_corpora
@@ -423,9 +426,7 @@ def compare_corpora(
         >>> result.loc["chars", ["mean_A", "mean_B", "cliff_delta"]].tolist()
         [14.0, 33.0, -1.0]
     """
-    check_integer(n_bootstrap, "number of bootstrap samples")
-    if n_bootstrap < 1:
-        raise ParameterError("The number of bootstrap samples must be greater than 0")
+    check_comparison_params(labels, n_bootstrap, seed)
     check_words(a, "texts")
     check_words(b, "texts")
     _check_windows(window, min_words)

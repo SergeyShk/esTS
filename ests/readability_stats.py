@@ -1,13 +1,18 @@
-from collections.abc import Iterable, Mapping
-from math import floor, isnan, sqrt
-from statistics import median
+from collections.abc import Iterable
+from math import isnan
 
+import anyts.readability_stats
+from anyts.readability_stats import (
+    calc_lix as calc_lix,
+    calc_mu_index as calc_mu_index,
+    calc_rix as calc_rix,
+    calc_smog_index as calc_smog_index,
+)
 from spacy.tokens import Doc
 
 from .basic_stats import BasicStats
 from .constants import (
     GRADE_AGE_LEVELS,
-    LIX_LONG_WORD_LETTER_FACTOR,
     MU_SCALE,
     POSTGRADUATE_LEVEL,
     PRESET_SCALES,
@@ -18,9 +23,8 @@ from .constants import (
     READING_EASE_SCALES,
     READING_SPEED_NORMS,
     READING_SPEED_WPM,
-    SMOG_COMPLEX_SYL_FACTOR,
 )
-from .exceptions import ParameterError, SourceError
+from .exceptions import ParameterError
 from .extractors import SentsExtractor, WordsExtractor
 
 
@@ -43,7 +47,7 @@ def check_preset(preset: str) -> None:
         )
 
 
-class ReadabilityStats:
+class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
     """
     Class for computing the main readability metrics of a text
 
@@ -94,8 +98,12 @@ class ReadabilityStats:
         rix (float): RIX readability index
         consensus_grade (float): Consensus grade over the grade formulas and the reading ease
         reading_time (float): Reading time in minutes at 278 words per minute
+        flesch_kincaid_grade, coleman_liau_index, automated_readability_index,
+            smog_index, gunning_fog_index (float): The formulas of the core with
+            their English coefficients, outside get_stats
 
     Methods:
+        reading_ease_to_grade: Years of schooling for a value of the reading ease by the preset
         describe_level: Band of a reading ease scale or of the µ scale for a metric
         describe_grade: School stage and reader age for the consensus grade or a grade formula
         reading_time_by_speed: Reading time at a given speed
@@ -105,10 +113,19 @@ class ReadabilityStats:
 
     Raises:
         SourceTypeError: If the source is neither a string, a Doc nor a BasicStats object,
-            or an extractor is of another type
+            the basic statistics are not those of esTS, or an extractor is of another type
         SourceError: If the source has no words or no sentences
         ParameterError: If the coefficient preset is not a string or is unknown
     """
+
+    basic_stats_class = BasicStats
+    presets = READABILITY_PRESETS
+    grade_stats = READABILITY_GRADE_STATS
+    stats_desc = READABILITY_STATS_DESC
+    grade_age_levels = GRADE_AGE_LEVELS
+    postgraduate_level = POSTGRADUATE_LEVEL
+    reading_speed = READING_SPEED_WPM
+    reading_speed_norms = READING_SPEED_NORMS
 
     def __init__(
         self,
@@ -117,24 +134,7 @@ class ReadabilityStats:
         words_extractor: WordsExtractor | None = None,
         preset: str = "general",
     ):
-        check_preset(preset)
-        self.preset = preset
-        self.coefficients = dict(READABILITY_PRESETS[preset])
-        if isinstance(source, BasicStats):
-            self.bs = source
-        else:
-            self.bs = BasicStats(source, sents_extractor, words_extractor)
-        if not self.bs.n_sents:
-            raise SourceError("The data source has no sentences")
-
-    @property
-    def flesch_reading_easy(self) -> float:
-        return calc_flesch_reading_easy(
-            self.bs.n_syllables,
-            self.bs.n_words,
-            self.bs.n_sents,
-            *self.coefficients["flesch_reading_easy"],
-        )
+        super().__init__(source, sents_extractor, words_extractor, preset)
 
     @property
     def gutierrez_polini_index(self) -> float:
@@ -147,37 +147,22 @@ class ReadabilityStats:
         return calc_crawford_grade(self.bs.n_syllables, self.bs.n_words, self.bs.n_sents)
 
     @property
-    def mu_index(self) -> float:
-        return calc_mu_index(self.bs.c_letters)
-
-    @property
     def sol_grade(self) -> float:
         return calc_sol_grade(
-            self.bs.count_words_by_syllables(SMOG_COMPLEX_SYL_FACTOR), self.bs.n_sents
+            self.bs.count_words_by_syllables(self.smog_complex_syl_factor), self.bs.n_sents
         )
 
-    @property
-    def lix(self) -> float:
-        return calc_lix(
-            self.bs.count_words_by_letters(LIX_LONG_WORD_LETTER_FACTOR),
-            self.bs.n_words,
-            self.bs.n_sents,
-        )
+    def reading_ease_to_grade(self, flesch_reading_easy: float) -> float:
+        """
+        Converting the Flesch reading ease into years of schooling by the scale of the preset
 
-    @property
-    def rix(self) -> float:
-        return calc_rix(
-            self.bs.count_words_by_letters(LIX_LONG_WORD_LETTER_FACTOR), self.bs.n_sents
-        )
+        Arguments:
+            flesch_reading_easy (float): Value of the reading ease
 
-    @property
-    def consensus_grade(self) -> float:
-        grades = [getattr(self, stat) for stat in READABILITY_GRADE_STATS]
-        return calc_consensus_grade(grades, self.flesch_reading_easy, self.preset)
-
-    @property
-    def reading_time(self) -> float:
-        return calc_reading_time(self.bs.n_words)
+        Returns:
+            float: Years of schooling
+        """
+        return flesch_reading_easy_to_grade(flesch_reading_easy, self.preset)
 
     def describe_level(self, stat: str = "flesch_reading_easy", scale: str | None = None) -> str:
         """
@@ -209,79 +194,6 @@ class ReadabilityStats:
             f"The metric {stat} has no interpretation scale. "
             "Metrics with a scale: ('flesch_reading_easy', 'mu_index')"
         )
-
-    def describe_grade(self, stat: str = "consensus_grade") -> str:
-        """
-        Getting the school stage and reader age by the value of a grade formula
-
-        Arguments:
-            stat (str): Name of the grade formula, the consensus grade by default
-
-        Returns:
-            str: School stage and reader age
-
-        Raises:
-            ParameterError: If the metric is not a grade formula
-        """
-        grade_stats = ("consensus_grade", *READABILITY_GRADE_STATS)
-        if stat not in grade_stats:
-            raise ParameterError(
-                f"The metric {stat} is not a grade formula. Grade formulas: {grade_stats}"
-            )
-        return grade_to_age(getattr(self, stat))
-
-    def reading_time_by_speed(self, wpm: int) -> float:
-        """
-        Computing the reading time of the text at a given speed
-
-        Arguments:
-            wpm (int): Reading speed, words per minute
-
-        Returns:
-            float: Reading time in minutes
-        """
-        return calc_reading_time(self.bs.n_words, wpm)
-
-    def reading_time_by_norm(self, norm: str) -> tuple[float, float]:
-        """
-        Computing the reading time of the text aloud and silently by a norm
-
-        Arguments:
-            norm (str): Name of the norm from READING_SPEED_NORMS: grade_1 to
-                grade_11 (years of schooling) or adult
-
-        Returns:
-            tuple[float, float]: Reading time in minutes aloud and silently
-
-        Raises:
-            ParameterError: If the norm is unknown
-        """
-        if norm not in READING_SPEED_NORMS:
-            raise ParameterError(
-                f"Unknown reading speed norm: {norm}. "
-                f"Available norms: {tuple(READING_SPEED_NORMS)}"
-            )
-        aloud, silent = READING_SPEED_NORMS[norm]
-        return calc_reading_time(self.bs.n_words, aloud), calc_reading_time(
-            self.bs.n_words, silent
-        )
-
-    def get_stats(self) -> dict[str, float]:
-        """
-        Getting the computed readability metrics of the text
-
-        Returns:
-            dict[str, float]: Dictionary of the computed readability metrics
-        """
-        return {stat: getattr(self, stat) for stat in READABILITY_STATS_DESC}
-
-    def print_stats(self):
-        """Printing the computed readability metrics with descriptions"""
-        print(f"{'Metric':^45}|{'Value':^10}")
-        print("-" * 55)
-        stats = self.get_stats()
-        for stat, value in READABILITY_STATS_DESC.items():
-            print(f"{value:45}|{stats[stat]:^10.2f}")
 
 
 def calc_flesch_reading_easy(
@@ -330,7 +242,7 @@ def calc_flesch_reading_easy(
     Returns:
         float: Value of the index
     """
-    return c - (a * n_words / n_sents) - (b * n_syllables / n_words)
+    return anyts.readability_stats.calc_flesch_reading_easy(n_syllables, n_words, n_sents, a, b, c)
 
 
 def calc_gutierrez_polini_index(n_letters: int, n_words: int, n_sents: int) -> float:
@@ -383,71 +295,6 @@ def calc_crawford_grade(n_syllables: int, n_words: int, n_sents: int) -> float:
     return (-0.205 * 100 * n_sents / n_words) + (0.049 * 100 * n_syllables / n_words) - 3.407
 
 
-def calc_mu_index(c_letters: Mapping[int, int]) -> float:
-    """
-    Computing Legibilidad µ
-
-    Description:
-        The mean number of letters per word divided by its sample variance
-        (divided by n - 1), times 100 (Muñoz Baquedano and Muñoz Urra, 2006)
-        The higher the value, the easier the text; the scale (mu_to_level):
-            91-100 - muy fácil
-            81-90 - fácil
-            71-80 - un poco fácil
-            61-70 - adecuado
-            51-60 - un poco difícil
-            31-50 - difícil
-            0-30 - muy difícil
-        Words without letters (numbers) are left out; with fewer than two
-        words or without variability the index is undefined (nan)
-
-    References:
-        Muñoz Baquedano, M. Legibilidad y variabilidad de los textos.
-            Boletín de Investigación Educacional, 21(2), 2006
-        https://www.legibilidadmu.cl/
-
-    Arguments:
-        c_letters (dict[int, int]): Distribution of words by number of letters
-
-    Returns:
-        float: Value of the index
-    """
-    counts = {letters: count for letters, count in c_letters.items() if letters > 0}
-    n = sum(counts.values())
-    if n < 2:
-        return float("nan")
-    mean = sum(letters * count for letters, count in counts.items()) / n
-    variance = sum(count * (letters - mean) ** 2 for letters, count in counts.items()) / (n - 1)
-    if not variance:
-        return float("nan")
-    return mean / variance * 100
-
-
-def calc_smog_index(n_complex: int, n_sents: int, a: float = 1.043, b: float = 3.1291) -> float:
-    """
-    Computing the SMOG index
-
-    Description:
-        a * sqrt(30 * polysyllables / sentences) + b (McLaughlin, 1969), the
-        polysyllables being the words of three or more syllables. Fitted on
-        English; for Spanish it is the input of calc_sol_grade
-
-    References:
-        McLaughlin, G. H. SMOG grading: a new readability formula.
-            Journal of Reading, 12(8), 1969
-
-    Arguments:
-        n_complex (int): Number of words of three or more syllables
-        n_sents (int): Number of sentences
-        a (float): Coefficient a
-        b (float): Coefficient b
-
-    Returns:
-        float: Value of the index
-    """
-    return a * sqrt(30 * n_complex / n_sents) + b
-
-
 def calc_sol_grade(n_complex: int, n_sents: int, a: float = 0.74, b: float = -2.51) -> float:
     """
     Computing the SOL grade
@@ -473,68 +320,6 @@ def calc_sol_grade(n_complex: int, n_sents: int, a: float = 0.74, b: float = -2.
         float: Value of the grade
     """
     return b + a * calc_smog_index(n_complex, n_sents)
-
-
-def calc_lix(n_long_words: int, n_words: int, n_sents: int) -> float:
-    """
-    Computing the LIX readability index
-
-    Description:
-        The mean sentence length plus the percentage of long words (Björnsson,
-        1968), language-independent. The higher the value, the harder the text:
-            0-30 - very easy texts, children's books
-            30-40 - easy texts, fiction, newspaper articles
-            40-50 - texts of medium difficulty, magazine articles
-            50-60 - hard texts, popular science, official texts
-            60-100 - very hard texts, laws and bureaucratic language
-        A long word has more than six letters
-
-    References:
-        https://en.wikipedia.org/wiki/Lix_(readability_test)
-
-    Arguments:
-        n_long_words (int): Number of long words
-        n_words (int): Number of words
-        n_sents (int): Number of sentences
-
-    Returns:
-        float: Value of the index
-    """
-    return (n_words / n_sents) + (100 * n_long_words / n_words)
-
-
-def calc_rix(n_long_words: int, n_sents: int) -> float:
-    """
-    Computing the RIX readability index
-
-    Description:
-        Long words (more than six letters) per sentence (Anderson, 1983),
-        language-independent. The higher the value, the harder the text:
-            < 0.2 - grade 1
-            0.2-0.5 - grade 2
-            0.5-0.8 - grade 3
-            0.8-1.3 - grade 4
-            1.3-1.8 - grade 5
-            1.8-2.4 - grade 6
-            2.4-3.0 - grade 7
-            3.0-3.7 - grade 8
-            3.7-4.5 - grade 9
-            4.5-5.3 - grade 10
-            5.3-6.2 - grade 11
-            6.2-7.2 - grade 12
-            > 7.2 - college
-
-    References:
-        https://en.wikipedia.org/wiki/Lix_(readability_test)
-
-    Arguments:
-        n_long_words (int): Number of long words
-        n_sents (int): Number of sentences
-
-    Returns:
-        float: Value of the index
-    """
-    return n_long_words / n_sents
 
 
 def flesch_reading_easy_to_level(flesch_reading_easy: float, scale: str = "inflesz") -> str:
@@ -618,10 +403,9 @@ def flesch_reading_easy_to_grade(flesch_reading_easy: float, preset: str = "gene
         ParameterError: If the preset is unknown
     """
     check_preset(preset)
-    for threshold, grade in READING_EASE_GRADES[preset]:
-        if flesch_reading_easy >= threshold:
-            return grade
-    return 13
+    return anyts.readability_stats.flesch_reading_easy_to_grade(
+        flesch_reading_easy, READING_EASE_GRADES[preset], 13
+    )
 
 
 def calc_consensus_grade(
@@ -644,14 +428,15 @@ def calc_consensus_grade(
         float: Consensus grade
 
     Raises:
-        ParameterError: If the list of values is empty or the preset is unknown
+        ParameterError: If there are no values, a grade is not a finite number or
+            the preset is unknown
     """
-    values = [float(floor(grade + 0.5)) for grade in grades]
-    if flesch_reading_easy is not None:
-        values.append(flesch_reading_easy_to_grade(flesch_reading_easy, preset))
-    if not values:
-        raise ParameterError("The list of grade formulas is empty")
-    return float(median(values))
+    check_preset(preset)
+    return anyts.readability_stats.calc_consensus_grade(
+        grades,
+        flesch_reading_easy,
+        lambda value: flesch_reading_easy_to_grade(value, preset),
+    )
 
 
 def grade_to_age(grade: float) -> str:
@@ -676,16 +461,14 @@ def grade_to_age(grade: float) -> str:
 
     Returns:
         str: School stage and reader age
+
+    Raises:
+        ParameterError: If the grade is not a finite number
     """
-    rounded = floor(grade + 0.5)
-    for _, high, education, age in GRADE_AGE_LEVELS:
-        if rounded <= high:
-            return f"{education} ({age})"
-    education, age = POSTGRADUATE_LEVEL
-    return f"{education} ({age})"
+    return anyts.readability_stats.grade_to_age(grade, GRADE_AGE_LEVELS, POSTGRADUATE_LEVEL)
 
 
-def calc_reading_time(n_words: int, wpm: int = READING_SPEED_WPM) -> float:
+def calc_reading_time(n_words: int, wpm: float = READING_SPEED_WPM) -> float:
     """
     Computing the reading time of a text
 
@@ -702,14 +485,12 @@ def calc_reading_time(n_words: int, wpm: int = READING_SPEED_WPM) -> float:
 
     Arguments:
         n_words (int): Number of words
-        wpm (int): Reading speed, words per minute
+        wpm (float): Reading speed, words per minute
 
     Returns:
         float: Reading time in minutes
 
     Raises:
-        ParameterError: If the reading speed is not positive
+        ParameterError: If the reading speed is not a positive number
     """
-    if wpm <= 0:
-        raise ParameterError("The reading speed must be greater than 0")
-    return n_words / wpm
+    return anyts.readability_stats.calc_reading_time(n_words, wpm)
