@@ -114,6 +114,8 @@ $$
 !!! info ""
     **ests.phon_stats.calc_alliteration()**
 
+El índice es `calc_repetition_index` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/phonetics/) sobre los sonidos consonánticos de las palabras:
+
 <!-- core: stats/phonetics.md:calc_repetition_index 4e25d01 -->
 El índice de repetición: el número de ventanas de `window_len` palabras vecinas donde un rasgo - una letra o un sonido, según elija una biblioteca - aparece en dos palabras o más, sumado sobre los rasgos, dividido por el número esperado si las palabras estuvieran en orden aleatorio. Una ventana de palabras barajadas es una muestra de ellas sin reposición, así que, para un rasgo presente en \(K\) de las \(N\) palabras del texto, una ventana de \(w\) palabras lo contiene en dos palabras o más con la probabilidad hipergeométrica
 
@@ -121,7 +123,7 @@ $$
 P = 1 - \frac{\binom{N-K}{w} + K \binom{N-K}{w-1}}{\binom{N}{w}}
 $$
 
-y el número esperado es la suma de estas probabilidades sobre los rasgos multiplicada por las \(N - w + 1\) ventanas. La esperanza sale del propio texto, así que el índice dice si las repeticiones se agrupan en palabras vecinas, no cuán frecuente es un rasgo: vale 1 de media sobre los órdenes de las palabras y queda bastante por encima de 1 cuando las repeticiones se acercan más que al azar. Una palabra cuenta un rasgo una vez, lo contenga las veces que lo contenga; `nan` para un texto más corto que la ventana y para un texto en el que ningún rasgo lo comparten dos palabras.
+y el número esperado es la suma de estas probabilidades sobre los rasgos multiplicada por las \(N - w + 1\) ventanas. La esperanza sale del propio texto, así que el índice dice si las repeticiones se agrupan en palabras vecinas, no cuán frecuente es un rasgo: vale 1 de media sobre los órdenes de las palabras y queda bastante por encima de 1 cuando las repeticiones se acercan más que al azar. Una palabra cuenta un rasgo una vez, lo contenga las veces que lo contenga; `nan` para un texto más corto que la ventana y para un texto en el que ningún rasgo aparezca en dos palabras.
 
 Los rasgos son los sonidos consonánticos de la transcripción, así que `casa` y `queso` repiten k, y `cena` y `casa` no.
 

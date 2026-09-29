@@ -183,8 +183,8 @@ def test_alliteration():
     assert calc_alliteration(["dos", "pie", "mar", "sol"], window_len=2) == 0.0
     # no consonant is shared by two words, so none can repeat
     assert isnan(calc_alliteration(["dos", "pie", "luz"], window_len=2))
-    # the sounds count, not the letters: casa and queso repeat k and s, cena and casa nothing
-    assert calc_alliteration(["casa", "queso"], window_len=2) == 1.0
+    # the sounds count, not the letters: casa and quien share only k, cena and casa nothing
+    assert calc_alliteration(["casa", "quien"], window_len=2) == 1.0
     assert isnan(calc_alliteration(["cena", "casa"], window_len=2))
 
 

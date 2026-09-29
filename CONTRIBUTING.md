@@ -52,4 +52,4 @@ The pull request description answers two questions: what was done and why. If it
 - `demo/` - the Gradio demo for Hugging Face Spaces (`make demo` runs it locally).
 - `.github/workflows/` - CI (`ci.yml`), publishing (`publish.yml`), documentation (`docs.yml`), the demo (`demo.yml`, on a release and by hand).
 
-The version lives only in `pyproject.toml`; releases are made through GitHub Releases, changes are described in the release notes, there is no separate CHANGELOG file.
+The version lives in `pyproject.toml` and `CITATION.cff`, changed together; releases are made through GitHub Releases, changes are described in the release notes, there is no separate CHANGELOG file.
