@@ -24,7 +24,6 @@ from spacy.tokens import Doc, Token
 from .constants import (
     AGENT_PREPOSITION,
     CLAUSE_DEPS,
-    COPULAS,
     DE_PREPOSITIONS,
     GERUND_PERIPHRASIS_VERBS,
     INFINITIVE_PERIPHRASES,
@@ -371,12 +370,15 @@ def is_clause_head(token: Token) -> bool:
 
     Description:
         The head of the sentence or a word with the relation ccomp, advcl, acl
-        or csubj, and an infinitive under xcomp (is_infinitive_clause: quiere
-        salir); a participle or a gerund heads its clause with an auxiliary
-        (había llegado, estaba cantando) and is counted apart without one,
-        and an infinitive under acl (el deseo de irse) is no clause. A parataxis or a conj of the
-        head of a clause counts only as a predicate (is_predicate), so that
-        parentheticals such as por ejemplo are no clauses
+        or csubj, and under xcomp an infinitive (is_infinitive_clause: quiere
+        salir) or a finite predicate, which the models give to some finite
+        complements. The form of a predicate (predicate_form) decides:
+        a participle or a gerund is counted apart (llegando tarde, habiendo
+        llegado tarde), an infinitive under acl is no clause (el deseo de
+        irse, el miedo de ser robado), and había llegado and estaba cantando
+        are finite. A parataxis or a conj of the head of a clause counts only
+        as a predicate (is_predicate), so that parentheticals such as por
+        ejemplo are no clauses
 
     Arguments:
         token (Token): Token
@@ -388,15 +390,16 @@ def is_clause_head(token: Token) -> bool:
         return False
     if is_root(token):
         return True
-    if token.dep_ == "xcomp":
-        return is_infinitive_clause(token)
-    if (is_participle(token) or is_gerund(token)) and not has_auxiliary(token):
+    form = predicate_form(token)
+    if form in ("Ger", "Part"):
         return False
+    if token.dep_ == "xcomp":
+        return form == "Fin" or is_infinitive_clause(token)
     if token.dep_ not in CLAUSE_DEPS:
         return token.dep_ == "conj" and is_clause_head(token.head) and is_predicate(token)
     if token.dep_ == "parataxis":
         return is_predicate(token)
-    return not (token.dep_ == "acl" and is_infinitive(token))
+    return not (token.dep_ == "acl" and form == "Inf")
 
 
 def is_predicate(token: Token) -> bool:
@@ -444,10 +447,9 @@ def is_infinitive_clause(token: Token) -> bool:
     Checking whether an infinitive under xcomp heads a clause of its own
 
     Description:
-        A verb infinitive that completes its head (quiere salir, le hizo
-        reír), also the infinitive ser, estar or haber of a copular, passive
-        or compound complement (quiere ser médico, quiere ser elegido, cree
-        haber ganado), unless the two
+        A predicate in the form of an infinitive (predicate_form) that
+        completes its head (quiere salir, le hizo reír, quiere ser médico,
+        quiere ser elegido, cree haber ganado), unless the two
         make a periphrasis (is_infinitive_periphrasis: puede salir, vuelve a
         salir) or the head is a verb of RAISING_VERBS (parece dormir);
         a predicative adjective (parece cansado) is no clause
@@ -458,14 +460,8 @@ def is_infinitive_clause(token: Token) -> bool:
     Returns:
         bool: Result of the check
     """
-    infinitive = (token.pos_ in ("VERB", "AUX") and is_infinitive(token)) or any(
-        base_dep(child) in AUXILIARY_DEPS
-        and is_infinitive(child)
-        and child.lemma_.lower() in (*COPULAS, "haber")
-        for child in token.children
-    )
     return (
-        infinitive
+        predicate_form(token) == "Inf"
         and not is_infinitive_periphrasis(token)
         and _head_verb(token, RAISING_VERBS) not in RAISING_VERBS
     )
@@ -615,9 +611,11 @@ def is_gerund_clause(token: Token) -> bool:
     Checking whether a token heads a gerund clause
 
     Description:
-        A gerund with a valency above 0 (calc_valency) outside a periphrasis:
-        with no auxiliary (está cantando) and not under a verb of
-        GERUND_PERIPHRASIS_VERBS (sigue trabajando)
+        A predicate in the form of a gerund (predicate_form: llegando tarde,
+        habiendo llegado tarde) with a valency above 0, its auxiliaries left
+        out (calc_valency), outside a periphrasis: está cantando is finite,
+        and a gerund under a verb of GERUND_PERIPHRASIS_VERBS (sigue
+        trabajando) is none
 
     Arguments:
         token (Token): Token
@@ -625,11 +623,50 @@ def is_gerund_clause(token: Token) -> bool:
     Returns:
         bool: Result of the check
     """
-    if not is_gerund(token) or is_root(token) or has_auxiliary(token):
+    if predicate_form(token) != "Ger" or is_root(token):
         return False
     if token.dep_ in PERIPHRASIS_DEPS and token.head.lemma_.lower() in GERUND_PERIPHRASIS_VERBS:
         return False
-    return calc_valency(token) > 0
+    return _valency(token) > 0
+
+
+def _valency(token: Token) -> int:
+    """Valency of a predicate without its auxiliaries and copulas"""
+    return calc_valency(token) - sum(
+        1 for child in token.children if base_dep(child) in AUXILIARY_DEPS
+    )
+
+
+def predicate_form(token: Token) -> str:
+    """
+    Getting the verb form of a predicate
+
+    Description:
+        The form of the first auxiliary or copula of a word with a verb form
+        (había llegado is finite, de haber matado an infinitive, siendo
+        elegido a gerund) or of the word itself without one. A participle
+        auxiliary counts as finite: sido and estado follow a form of haber,
+        which the models may attach to another word (hubieras sido albañil)
+
+    Arguments:
+        token (Token): Token
+
+    Returns:
+        str: Fin, Inf, Ger or Part, an empty string for a word with no verb form
+    """
+    forms = [
+        _verb_form(child)
+        for child in token.children
+        if base_dep(child) in AUXILIARY_DEPS and _verb_form(child)
+    ]
+    if not forms:
+        return _verb_form(token)
+    return "Fin" if forms[0] == "Part" else forms[0]
+
+
+def _verb_form(token: Token) -> str:
+    """Verb form of a token, an empty string without one"""
+    return next(iter(token.morph.get("VerbForm", [])), "")
 
 
 def has_auxiliary(token: Token) -> bool:

@@ -41,6 +41,7 @@ from ests.syntax_stats import (
     is_predicate,
     is_split_predicate_noun,
     is_subordinate_clause_head,
+    predicate_form,
 )
 from ests.utils import get_nlp
 
@@ -293,6 +294,23 @@ def test_has_auxiliary(nlp):
     assert not has_auxiliary(tokens[1])
 
 
+@pytest.mark.parametrize(
+    ("text", "index", "form"),
+    [
+        ("La casa fue construida", -1, "Fin"),
+        ("Dijo que había llegado", -1, "Fin"),
+        ("Negó la acusación de haber matado", -1, "Inf"),
+        ("Habiendo llegado tarde", 1, "Ger"),
+        ("Llegando tarde", 0, "Ger"),
+        ("Quiere salir", 1, "Inf"),
+        ("La casa construida", -1, "Part"),
+        ("La casa fue construida", 1, ""),
+    ],
+)
+def test_predicate_form(nlp, text, index, form):
+    assert predicate_form(words(nlp, text)[index]) == form
+
+
 def test_participle_clause(nlp):
     tokens = words(nlp, "La casa, construida por los obreros, se vendió")
     assert [token.text for token in tokens if is_participle_clause(token)] == ["construida"]
@@ -388,6 +406,26 @@ def test_clause_head_of_an_infinitive(nlp, text, clauses):
 
 
 @pytest.mark.parametrize(
+    ("text", "clauses", "gerund_clauses"),
+    [
+        ("Tenía el deseo de irse.", 1, []),
+        ("Negó la acusación de haber matado a su padre.", 1, []),
+        ("Tenía miedo de ser robado.", 1, []),
+        ("Tenía el deseo de ser feliz.", 1, []),
+        ("Llegando tarde, se fue.", 1, ["Llegando"]),
+        ("Habiendo llegado tarde, se fue.", 1, ["llegado"]),
+        ("Siendo elegido presidente, viajó a Roma.", 1, ["elegido"]),
+        ("Era una mujer que podía ser su hija.", 2, []),
+    ],
+)
+def test_clause_head_by_the_form_of_the_predicate(nlp, text, clauses, gerund_clauses):
+    """The first auxiliary or copula gives the form of a predicate"""
+    doc = nlp(text)
+    assert sum(is_clause_head(token) for token in doc) == clauses
+    assert [token.text for token in doc if is_gerund_clause(token)] == gerund_clauses
+
+
+@pytest.mark.parametrize(
     ("words", "deps", "lemmas", "expected"),
     [
         # a word between the verb and the infinitive that links nothing
@@ -432,6 +470,61 @@ def test_clause_head_of_an_infinitive_under_a_misread_verb(nlp):
         morphs=["", "VerbForm=Inf"],
     )
     assert not is_clause_head(doc[1])
+
+
+@pytest.mark.parametrize(
+    ("words", "heads", "deps", "morphs", "form", "clause"),
+    [
+        # a participle auxiliary follows a form of haber attached to another word
+        (
+            ["Dijo", "hubieras", "sido", "albañil"],
+            [0, 0, 3, 0],
+            ["ROOT", "dep", "cop", "ccomp"],
+            ["VerbForm=Fin", "VerbForm=Fin", "VerbForm=Part", ""],
+            "Fin",
+            True,
+        ),
+        # the old spelling á parsed as an auxiliary has no verb form
+        (
+            ["Voy", "á", "decir"],
+            [0, 2, 0],
+            ["ROOT", "aux", "xcomp"],
+            ["VerbForm=Fin", "", "VerbForm=Inf"],
+            "Inf",
+            False,
+        ),
+        # a finite complement the model gives xcomp
+        (
+            ["Dijo", "viene"],
+            [0, 0],
+            ["ROOT", "xcomp"],
+            ["VerbForm=Fin", "VerbForm=Fin"],
+            "Fin",
+            True,
+        ),
+        # a relative clause with a finite auxiliary under acl
+        (
+            ["regalos", "que", "van", "a", "dar"],
+            [0, 4, 4, 4, 0],
+            ["ROOT", "obj", "aux", "mark", "acl"],
+            ["", "", "VerbForm=Fin", "", "VerbForm=Inf"],
+            "Fin",
+            True,
+        ),
+    ],
+)
+def test_clause_head_by_a_built_form(nlp, words, heads, deps, morphs, form, clause):
+    doc = Doc(
+        nlp.vocab,
+        words=words,
+        heads=heads,
+        deps=deps,
+        pos=["AUX" if dep in ("aux", "cop") else "VERB" for dep in deps],
+        lemmas=[{"Voy": "ir", "á": "á"}.get(word, word.lower()) for word in words],
+        morphs=morphs,
+    )
+    assert predicate_form(doc[-1]) == form
+    assert is_clause_head(doc[-1]) is clause
 
 
 def test_clause_head_of_a_punctuation_mark(nlp):
