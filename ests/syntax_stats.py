@@ -386,7 +386,8 @@ def is_clause_head(token: Token) -> bool:
         are finite. A parataxis or a conj of the head of a clause counts only
         as a predicate (is_predicate), so that parentheticals such as por
         ejemplo are no clauses, and an infinitive the models attach as conj
-        to tener que or hay que makes a periphrasis with it (tiene que salir)
+        to a verb of INFINITIVE_PERIPHRASES makes a periphrasis with it
+        (tiene que salir, va a salir)
 
     Arguments:
         token (Token): Token
