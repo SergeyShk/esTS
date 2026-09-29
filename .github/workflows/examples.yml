@@ -20,8 +20,12 @@ jobs:
           enable-cache: true
           python-version: "3.13"
       - name: Install Graphviz
-        run: sudo apt-get install -y graphviz
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz
       - name: Install dependencies
         run: uv sync --locked --all-groups
       - name: Run notebooks
-        run: uv run --no-sync pytest --nbmake examples -p no:cacheprovider
+        run: uv run --no-sync pytest --nbmake --overwrite examples -p no:cacheprovider
+      - name: Compare the outputs with the committed ones
+        run: uv run --no-sync python scripts/check_notebooks.py

@@ -1,6 +1,6 @@
 # Examples
 
-Notebooks with the library at work on its datasets. The outputs of the cells are kept, so the notebooks read on GitHub without running; the button opens a notebook in Google Colab, where it installs the library and the spaCy model itself.
+Notebooks with the library at work on its datasets. The outputs of the cells are kept, so the notebooks read on GitHub without running; the button opens a notebook in Google Colab, where it installs the library - esTS 0.6 or newer - and the spaCy model itself.
 
 | Notebook | What it shows | Colab |
 |---|---|---|
@@ -9,4 +9,4 @@ Notebooks with the library at work on its datasets. The outputs of the cells are
 | [03_sonnets.ipynb](https://github.com/SergeyShk/esTS/blob/master/examples/03_sonnets.ipynb) | Meter, types of the endecasílabo, rhyme schemes and sound of the 4,259 sonnets of `SpanishSonnets` from the 15th century to the 20th, checked against the annotation of DISCO, with the seseo of the American poets | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SergeyShk/esTS/blob/master/examples/03_sonnets.ipynb) |
 | [04_corpus_measures.ipynb](https://github.com/SergeyShk/esTS/blob/master/examples/04_corpus_measures.ipynb) | The prose of Spain and of Spanish America about 1900: keywords against each other and against the frequency dictionary, the dispersion of regional words, collocations, a concordance of voseo, the laws of Zipf and Heaps and the comparison of the corpora | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SergeyShk/esTS/blob/master/examples/04_corpus_measures.ipynb) |
 
-Locally: `uv sync --group examples`, then `uv run jupyter lab examples/`. `make notebooks` runs every notebook again, writes the outputs into the files and strips the metadata of the run; a workflow runs them every week.
+Locally: `uv sync --group examples`, then `uv run jupyter lab examples/`. `make notebooks` runs every notebook again, writes the outputs into the files and strips the metadata of the run; a workflow runs them every week and fails when an output the prose quotes has moved.
