@@ -6,7 +6,7 @@
 
 **esTS** computes statistics of Spanish texts: basic statistics, readability, lexical diversity, lexical sophistication, style, phonostatistics, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech, the features and the dependencies of Universal Dependencies.
 
-The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy); most statistics need no trained model ([Installation](installation.md#model)). Try it without installing in the [demo on Hugging Face Spaces](https://huggingface.co/spaces/SergeyShk/esTS): paste a text and get its readability, the metrics, the plots and the highlighting of its fragments.
+The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy); most statistics need no trained model ([Installation](installation.md#model)). Try it without installing in the [demo on Hugging Face Spaces](https://huggingface.co/spaces/SergeyShk/esTS): paste a text and get its readability, the metrics, the plots and the highlighting of its fragments. The [notebooks](examples.md) show the library on its datasets - a short story through every tool, prose authors, sonnets and corpus measures; the first one opens in [Colab](https://colab.research.google.com/github/SergeyShk/esTS/blob/master/examples/01_text_walkthrough.ipynb).
 
 ## Features
 
@@ -117,5 +117,6 @@ Punctuation marks   |    2
         *   syllables.py - syllabification and stress
         *   utils.py - helper tools
         *   visualizers - plots: Zipf's law, fingerprinting, word tree, corpus and stylometric plots, vocabulary growth, sentence lengths, text highlighting
+    *   **examples** - notebooks with examples
     *   **scripts** - scripts that build the archives of the datasets and fetch the anyTS pages of the documentation
     *   **tests** - tests mirroring the package structure

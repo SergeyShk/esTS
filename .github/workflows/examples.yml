@@ -1,0 +1,31 @@
+name: examples
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  notebooks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v10.1.0
+        with:
+          enable-cache: true
+          python-version: "3.13"
+      - name: Install Graphviz
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz
+      - name: Install dependencies
+        run: uv sync --locked --all-groups
+      - name: Run notebooks
+        run: uv run --no-sync pytest --nbmake --overwrite examples -p no:cacheprovider
+      - name: Compare the outputs with the committed ones
+        run: uv run --no-sync python scripts/check_notebooks.py

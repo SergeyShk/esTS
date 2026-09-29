@@ -15,6 +15,7 @@
 <p align="center">
   <a href="https://huggingface.co/spaces/SergeyShk/esTS">Demo</a> ·
   <a href="https://sergeyshk.github.io/esTS/">Documentation</a> ·
+  <a href="https://sergeyshk.github.io/esTS/examples/">Examples</a> ·
   <a href="https://pypi.org/project/pyests/">PyPI</a> ·
   <a href="https://github.com/SergeyShk/esTS/blob/master/README.es.md">Español</a>
 </p>
@@ -26,6 +27,7 @@
   <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Ruff"></a>
   <a href="https://github.com/SergeyShk/esTS/blob/master/LICENSE.txt"><img src="https://img.shields.io/github/license/sergeyshk/esTS.svg" alt="License"></a>
   <a href="https://huggingface.co/spaces/SergeyShk/esTS"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Spaces-demo-blue" alt="Demo on Hugging Face Spaces"></a>
+  <a href="https://colab.research.google.com/github/SergeyShk/esTS/blob/master/examples/01_text_walkthrough.ipynb"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"></a>
   <a href="https://doi.org/10.5281/zenodo.22924655"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.22924655.svg" alt="DOI"></a>
 </p>
 
@@ -33,7 +35,7 @@
 
 **esTS** computes statistics of Spanish texts: basic statistics, readability, lexical diversity, lexical sophistication, style, phonostatistics, morphology, syntax and cohesion - by published formulas with the coefficients and the scales of their authors, and by the parts of speech and the features of Universal Dependencies.
 
-The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy); most statistics need no trained model (see Installation). Try it without installing in the [demo on Hugging Face Spaces](https://huggingface.co/spaces/SergeyShk/esTS): paste a text and get its readability, the metrics, the plots and the highlighting of its fragments.
+The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy); most statistics need no trained model (see Installation). Try it without installing in the [demo on Hugging Face Spaces](https://huggingface.co/spaces/SergeyShk/esTS): paste a text and get its readability, the metrics, the plots and the highlighting of its fragments. The [notebooks](https://sergeyshk.github.io/esTS/examples/) show the library on its datasets - a short story through every tool, prose authors, sonnets and corpus measures; the first one opens in [Colab](https://colab.research.google.com/github/SergeyShk/esTS/blob/master/examples/01_text_walkthrough.ipynb).
 
 * **[Object extraction](https://sergeyshk.github.io/esTS/extractors/sentences/)** - configurable sentence, word and character N-gram tokenizers that know the inverted marks, the dialogue dash and the abbreviations of Spanish
 * **[Syllables and stress](https://sergeyshk.github.io/esTS/syllables/)** - rule-based syllabification and the stressed syllable derived from the spelling, with no dictionary
@@ -720,6 +722,7 @@ Bug reports, ideas and pull requests are welcome in the [issues](https://github.
     *   syllables.py - syllabification and stress
     *   utils.py - helper tools
     *   visualizers - plots: Zipf's law, fingerprinting, word tree, corpus and stylometric plots, vocabulary growth, sentence lengths, text highlighting
+*   **examples** - notebooks with examples
 *   **scripts** - scripts that build the archives of the datasets and fetch the anyTS pages of the documentation
 *   **tests** - tests mirroring the package structure
 

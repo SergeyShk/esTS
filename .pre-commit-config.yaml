@@ -13,6 +13,12 @@ repos:
         exclude: ^ests/datasets/data/
       - id: check-merge-conflict
 
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.8.1
+    hooks:
+      - id: nbstripout
+        args: [--keep-output, --keep-count, --extra-keys, metadata.language_info.version]
+
   - repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.12.12
     hooks:

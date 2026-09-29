@@ -6,7 +6,7 @@
 
 **esTS** calcula estadísticas de textos en español: estadísticas básicas, legibilidad, diversidad léxica, complejidad léxica, estilo, fonoestadística, morfología, sintaxis y cohesión, con fórmulas publicadas y con los coeficientes y las escalas de sus autores, y con las categorías, los rasgos y las dependencias de Universal Dependencies.
 
-La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy); la mayoría de las estadísticas no necesita un modelo entrenado ([Instalación](installation.md#model)). Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://huggingface.co/spaces/SergeyShk/esTS): pegue un texto y obtenga su legibilidad, las métricas, los gráficos y el resaltado de sus fragmentos.
+La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy); la mayoría de las estadísticas no necesita un modelo entrenado ([Instalación](installation.md#model)). Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://huggingface.co/spaces/SergeyShk/esTS): pegue un texto y obtenga su legibilidad, las métricas, los gráficos y el resaltado de sus fragmentos. Los [cuadernos](examples.md) muestran la biblioteca sobre sus conjuntos de datos - un cuento analizado con todas las herramientas, los prosistas, los sonetos y las medidas de corpus; el primero se abre en [Colab](https://colab.research.google.com/github/SergeyShk/esTS/blob/master/examples/01_text_walkthrough.ipynb).
 
 ## Funcionalidad
 
@@ -117,5 +117,6 @@ Punctuation marks   |    2
         *   syllables.py - silabificación y acento
         *   utils.py - herramientas auxiliares
         *   visualizers - gráficos: ley de Zipf, huella literaria, árbol de palabras, gráficos de corpus y estilométricos, crecimiento del vocabulario, longitudes de las oraciones, resaltado del texto
+    *   **examples** - cuadernos con ejemplos
     *   **scripts** - scripts que construyen los archivos de los conjuntos de datos y traen las páginas de anyTS de la documentación
     *   **tests** - pruebas que reproducen la estructura del paquete
