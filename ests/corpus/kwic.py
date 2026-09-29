@@ -8,7 +8,7 @@ from anyts.corpus.kwic import (
 )
 from spacy.tokens import Doc, Token
 
-from ..utils import iter_text_words, lemmatize
+from ..utils import iter_text_sents, iter_text_words, lemmatize
 
 
 def kwic(
@@ -28,8 +28,9 @@ def kwic(
         (EE. UU. is one word); punctuation and symbols are not words. By lemma,
         a word matches by its lemma of simplemma and, in a Doc with lemmas, by
         the lemma of the model too; the keyword is lemmatized by simplemma.
-        A phrase does not run across the end of a paragraph or of a sentence
-        unless the keyword has one in the same place
+        A phrase does not run across the end of a paragraph or of a sentence -
+        a boundary of a Doc, or the end of a sentence of sentenize in a text
+        without boundaries - unless the keyword has one in the same place
         The context is window words on each side as written, with the
         punctuation between them; whitespace collapses to one space;
         occurrences do not overlap. Accents are part of the word form: solo and
@@ -65,6 +66,7 @@ def kwic(
         ignore_case,
         tokenize=iter_text_words,
         lemmatize=_lemmas,
+        sentenize=iter_text_sents,
     )
 
 
