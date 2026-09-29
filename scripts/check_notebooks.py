@@ -12,6 +12,7 @@ Usage:
     uv run python scripts/check_notebooks.py [NOTEBOOK ...]
 """
 
+import difflib
 import re
 import subprocess
 import sys
@@ -60,6 +61,15 @@ def main() -> int:
         if len(old) != len(new) or changed:
             failed += 1
             print(f"{relative}: the outputs of code cells {changed} changed")
+            for index in changed:
+                diff = difflib.unified_diff(
+                    "\n".join(old[index]).splitlines(),
+                    "\n".join(new[index]).splitlines(),
+                    f"cell {index}, committed",
+                    f"cell {index}, now",
+                    lineterm="",
+                )
+                print("\n".join(diff))
         else:
             print(f"{relative}: the same outputs")
     return 1 if failed else 0
