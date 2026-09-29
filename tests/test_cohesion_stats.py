@@ -196,7 +196,7 @@ def test_unknown_connector_class(connectors):
 
 def test_load_connectors():
     connectors = load_connectors()
-    assert len(connectors) == 255
+    assert len(connectors) == 250
     assert connectors["sin embargo"] == ("adversative", "secondary")
     assert all(cls in CONNECTOR_CLASSES for cls, _ in connectors.values())
     assert all(kind in CONNECTOR_TYPES for _, kind in connectors.values())
@@ -209,6 +209,26 @@ def test_load_connectors_cached():
 def test_load_connectors_is_read_only():
     with pytest.raises(TypeError):
         load_connectors()["ojalá"] = ("temporal", "primary")  # type: ignore[index]
+
+
+@pytest.mark.parametrize(
+    ("text", "found"),
+    [
+        ("Pues bien no vino", []),
+        ("No vino pues estaba enfermo", ["pues"]),
+        ("En cuanto a la casa", []),
+        ("En cuanto llegó se fue", ["en cuanto"]),
+        ("Y encima llueve", ["y", "encima"]),
+        ("Encima llueve", ["encima"]),
+        ("Está encima de la mesa", []),
+        ("Pasó por encima", []),
+        ("Es algo así como un perro", []),
+        ("Así como los gatos", ["así como"]),
+    ],
+)
+def test_find_connectors_in_context(text, found):
+    """A marker that opens a reply or belongs to a phrase of its own is no connector"""
+    assert [c.text for c in find_connectors(text.split())] == found
 
 
 def test_find_connectors_longest_match():

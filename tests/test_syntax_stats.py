@@ -41,6 +41,7 @@ from ests.syntax_stats import (
     is_predicate,
     is_split_predicate_noun,
     is_subordinate_clause_head,
+    predicate_form,
 )
 from ests.utils import get_nlp
 
@@ -79,7 +80,7 @@ def test_get_stats_values(ss):
     stats = ss.get_stats()
     assert stats["mean_dependency_distance"] == pytest.approx(2.3333333, rel=1e-6)
     assert stats["tree_depth"] == 4
-    assert stats["clauses_per_sent"] == 1.5
+    assert stats["clauses_per_sent"] == 2
     assert stats["p_complex_sents"] == 0.5
     assert stats["noun_verb_ratio"] == 1
 
@@ -293,6 +294,23 @@ def test_has_auxiliary(nlp):
     assert not has_auxiliary(tokens[1])
 
 
+@pytest.mark.parametrize(
+    ("text", "index", "form"),
+    [
+        ("La casa fue construida", -1, "Fin"),
+        ("Dijo que había llegado", -1, "Fin"),
+        ("Negó la acusación de haber matado", -1, "Inf"),
+        ("Habiendo llegado tarde", 1, "Ger"),
+        ("Llegando tarde", 0, "Ger"),
+        ("Quiere salir", 1, "Inf"),
+        ("La casa construida", -1, "Part"),
+        ("La casa fue construida", 1, ""),
+    ],
+)
+def test_predicate_form(nlp, text, index, form):
+    assert predicate_form(words(nlp, text)[index]) == form
+
+
 def test_participle_clause(nlp):
     tokens = words(nlp, "La casa, construida por los obreros, se vendió")
     assert [token.text for token in tokens if is_participle_clause(token)] == ["construida"]
@@ -355,6 +373,175 @@ def test_split_predicates(nlp, text, expected):
 def test_split_predicate_prefers_the_fixed_part(nlp):
     found = find_split_predicates(words(nlp, "Dio comienzo a la sesión"))
     assert [noun.text for _, noun in found] == ["comienzo"]
+
+
+@pytest.mark.parametrize(
+    ("text", "clauses"),
+    [
+        ("Quiere salir.", 2),
+        ("Le hizo reír.", 2),
+        ("Puede salir.", 1),
+        ("Suele salir.", 1),
+        ("Empezó a reír.", 1),
+        ("Acaba de salir.", 1),
+        ("Volvió á salir.", 1),
+        ("Parece dormir.", 1),
+        ("Parece cansado.", 1),
+        ("Quiere ser médico.", 2),
+        ("Quiere ser elegido.", 2),
+        ("Llegó a ser rey.", 1),
+        ("Suele ser amable.", 1),
+        ("Cree haber ganado.", 2),
+        ("Dijo que había llegado.", 2),
+        ("Dijo que estaba cantando.", 2),
+        ("Ha podido salir.", 1),
+        ("Está acostumbrado a vivir solo.", 2),
+    ],
+)
+def test_clause_head_of_an_infinitive(nlp, text, clauses):
+    """An infinitive under xcomp is a clause unless it makes a periphrasis with its verb"""
+    doc = nlp(text)
+    assert sum(is_clause_head(token) for token in doc) == clauses
+    assert sum(is_subordinate_clause_head(token) for token in doc) == clauses - 1
+
+
+@pytest.mark.parametrize(
+    ("text", "clauses", "gerund_clauses"),
+    [
+        ("Tenía el deseo de irse.", 1, []),
+        ("Negó la acusación de haber matado a su padre.", 1, []),
+        ("Tenía miedo de ser robado.", 1, []),
+        ("Tenía el deseo de ser feliz.", 1, []),
+        ("Llegando tarde, se fue.", 1, ["Llegando"]),
+        ("Habiendo llegado tarde, se fue.", 1, ["llegado"]),
+        ("Siendo elegido presidente, viajó a Roma.", 1, ["elegido"]),
+        ("Era una mujer que podía ser su hija.", 2, []),
+        ("Sé que os habéis posado aquí.", 2, []),
+    ],
+)
+def test_clause_head_by_the_form_of_the_predicate(nlp, text, clauses, gerund_clauses):
+    """The first auxiliary or copula gives the form of a predicate"""
+    doc = nlp(text)
+    assert sum(is_clause_head(token) for token in doc) == clauses
+    assert [token.text for token in doc if is_gerund_clause(token)] == gerund_clauses
+
+
+@pytest.mark.parametrize(
+    ("words", "deps", "lemmas", "expected"),
+    [
+        # a word between the verb and the infinitive that links nothing
+        (
+            ["Suele", "siempre", "salir"],
+            ["ROOT", "advmod", "xcomp"],
+            ["soler", "siempre", "salir"],
+            False,
+        ),
+        (
+            ["Quiere", "siempre", "salir"],
+            ["ROOT", "advmod", "xcomp"],
+            ["querer", "siempre", "salir"],
+            True,
+        ),
+        # the old spelling á parsed as a dependent of the verb
+        (["Volvió", "á", "salir"], ["ROOT", "obj", "xcomp"], ["volver", "á", "salir"], False),
+    ],
+)
+def test_clause_head_of_an_infinitive_by_its_link(nlp, words, deps, lemmas, expected):
+    doc = Doc(
+        nlp.vocab,
+        words=words,
+        heads=[0, 0 if deps[1] == "obj" else 2, 0],
+        deps=deps,
+        pos=["VERB", "ADV" if deps[1] == "advmod" else "ADP", "VERB"],
+        lemmas=lemmas,
+        morphs=["", "", "VerbForm=Inf"],
+    )
+    assert is_clause_head(doc[2]) is expected
+
+
+def test_clause_head_of_an_infinitive_under_a_misread_verb(nlp):
+    """A verb the model reads as a proper noun is looked up by its lemma of simplemma"""
+    doc = Doc(
+        nlp.vocab,
+        words=["Solía", "salir"],
+        heads=[0, 0],
+        deps=["ROOT", "xcomp"],
+        pos=["PROPN", "VERB"],
+        lemmas=["Solía", "salir"],
+        morphs=["", "VerbForm=Inf"],
+    )
+    assert not is_clause_head(doc[1])
+
+
+@pytest.mark.parametrize(
+    ("auxiliary", "form"),
+    [("habéis", "Fin"), ("haberse", "Inf"), ("habiéndose", "Ger"), ("á", "Part")],
+)
+def test_predicate_form_of_an_auxiliary_without_a_form(nlp, auxiliary, form):
+    """A form of a verb of AUXILIARY_VERBS is read by its ending, anything else skipped"""
+    doc = Doc(
+        nlp.vocab,
+        words=[auxiliary, "llegado"],
+        heads=[1, 1],
+        deps=["aux", "ROOT"],
+        morphs=["", "VerbForm=Part"],
+    )
+    assert predicate_form(doc[1]) == form
+
+
+@pytest.mark.parametrize(
+    ("words", "heads", "deps", "morphs", "form", "clause"),
+    [
+        # a participle auxiliary follows a form of haber attached to another word
+        (
+            ["Dijo", "hubieras", "sido", "albañil"],
+            [0, 0, 3, 0],
+            ["ROOT", "dep", "cop", "ccomp"],
+            ["VerbForm=Fin", "VerbForm=Fin", "VerbForm=Part", ""],
+            "Fin",
+            True,
+        ),
+        # the old spelling á parsed as an auxiliary has no verb form
+        (
+            ["Voy", "á", "decir"],
+            [0, 2, 0],
+            ["ROOT", "aux", "xcomp"],
+            ["VerbForm=Fin", "", "VerbForm=Inf"],
+            "Inf",
+            False,
+        ),
+        # a finite complement the model gives xcomp
+        (
+            ["Dijo", "viene"],
+            [0, 0],
+            ["ROOT", "xcomp"],
+            ["VerbForm=Fin", "VerbForm=Fin"],
+            "Fin",
+            True,
+        ),
+        # a relative clause with a finite auxiliary under acl
+        (
+            ["regalos", "que", "van", "a", "dar"],
+            [0, 4, 4, 4, 0],
+            ["ROOT", "obj", "aux", "mark", "acl"],
+            ["", "", "VerbForm=Fin", "", "VerbForm=Inf"],
+            "Fin",
+            True,
+        ),
+    ],
+)
+def test_clause_head_by_a_built_form(nlp, words, heads, deps, morphs, form, clause):
+    doc = Doc(
+        nlp.vocab,
+        words=words,
+        heads=heads,
+        deps=deps,
+        pos=["AUX" if dep in ("aux", "cop") else "VERB" for dep in deps],
+        lemmas=[{"Voy": "ir", "á": "á"}.get(word, word.lower()) for word in words],
+        morphs=morphs,
+    )
+    assert predicate_form(doc[-1]) == form
+    assert is_clause_head(doc[-1]) is clause
 
 
 def test_clause_head_of_a_punctuation_mark(nlp):

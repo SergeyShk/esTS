@@ -114,13 +114,11 @@ $$
 !!! info ""
     **ests.phon_stats.calc_alliteration()**
 
-The ratio of the observed number of windows of `window_len` neighbouring words where one consonant sound occurs in two words or more to the number expected if the consonants were spread over the words at random, summed over the consonants. The expected number comes from the frequencies of the consonants in the text itself, so the index tells whether the repetitions cluster in neighbouring words, not how frequent a sound is: about 1 - the repetitions are random, well above 1 - alliteration. The consonants are the sounds of the transcription, so `casa` and `queso` repeat k, and `cena` and `casa` do not; `nan` for a text shorter than the window.
+The index is `calc_repetition_index` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/phonetics/) core over the consonant sounds of the words:
 
-$$
-\frac{\sum_c O_c}{\sum_c (W - w + 1) \left(1 - (1 - p_c)^w - w p_c (1 - p_c)^{w - 1}\right)}
-$$
+--8<-- "stats/phonetics.md:calc_repetition_index"
 
-where $O_c$ is the number of windows with the consonant $c$ in two words or more, $W$ the number of words, $w$ the window and $p_c$ the share of the words with the consonant $c$.
+The features are the consonant sounds of the transcription, so `casa` and `queso` repeat k, and `cena` and `casa` do not.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
@@ -132,7 +130,7 @@ where $O_c$ is the number of windows with the consonant $c$ in two words or more
 !!! info ""
     **ests.phon_stats.calc_assonance()**
 
-The same ratio over the vowels: the observed number of windows of `window_len` neighbouring words where one vowel occurs in two words or more against the number expected by the frequencies of the vowels in the text. Every vowel counts, stressed or not; `nan` for a text shorter than the window.
+The index of `calc_alliteration` over the vowels: the observed number of windows of `window_len` neighbouring words where a vowel occurs in two words or more against the number expected for the words in random order. Every vowel counts, stressed or not; `nan` for a text shorter than the window or without a vowel shared by two words.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |

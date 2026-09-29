@@ -5,7 +5,7 @@
 
 ## Description
 
-A module for computing the cohesion statistics of a text in the manner of [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) and of its Spanish adaptation [Coh-Metrix-Esp](https://aclanthology.org/W16-4105/): the overlap of nouns, of arguments and of content words between sentences, givenness, temporal cohesion and the density of the discourse markers.
+A module for computing the cohesion statistics of a text in the manner of [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) and of its Spanish adaptation [Coh-Metrix-Esp](https://aclanthology.org/L16-1745/): the overlap of nouns, of arguments and of content words between sentences, givenness, temporal cohesion and the density of the discourse markers.
 
 Sentences are compared by lemmas, and the features come from the annotation of [Universal Dependencies](https://universaldependencies.org/u/feat/), so the source has to be annotated: a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, and a `Doc` must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer`; a source without either raises `SourceError`. Without sentence boundaries - a pipeline with no parser - the sentences are taken from the text by [`SentsExtractor`](../extractors/sentences.md).
 
@@ -53,7 +53,7 @@ Temporal cohesion follows SMTEMP of Coh-Metrix: for every sentence the dominant 
 
 ## Connectors { #connectors }
 
-The discourse markers (*marcadores del discurso*) of the classification of Martín Zorraquino and Portolés, 255 of them in `ests/resources/connectors.tsv`, in seven classes and two kinds: primary - conjunctions, conjunctive locutions and adverbs (`porque`, `aunque`, `además`) - and secondary, the lexicalized phrases (`sin embargo`, `por lo tanto`, `es decir`). The density is given per 1000 words.
+The discourse markers (*marcadores del discurso*) of Martín Zorraquino and Portolés (1999) and the conjunctions of the NGLE, 250 of them in `ests/resources/connectors.tsv`, grouped in seven classes of the library - the causal, adversative, temporal and additive connectives of Coh-Metrix, with the concessive, conditional and reformulative ones added - and in two kinds: primary - conjunctions, conjunctive locutions and adverbs (`porque`, `aunque`, `además`) - and secondary, the lexicalized phrases (`sin embargo`, `por lo tanto`, `es decir`). The density is given per 1000 words.
 
 | Attribute | Type | Description |
 | :-------: | :--: | :---------: |
@@ -68,9 +68,11 @@ The discourse markers (*marcadores del discurso*) of the classification of Mart�
 | `connectors_primary` | float | Primary connectors per 1000 words |
 | `connectors_secondary` | float | Secondary connectors per 1000 words |
 
+The reformulative class holds the operators of concretion as well (`por ejemplo`, `en particular`, `sobre todo`), and the ordinals (`en primer lugar`) are additive. `si` also opens indirect questions and exclamations (`no sé si vendrá`, `¡pero si es él!`) - about a quarter of its occurrences in the corpus of literature - and `siempre que` is temporal with the indicative and conditional with the subjunctive; both are counted in their class.
+
 The connectors are looked for by their word forms in lower case: at every position the longest one is taken, so `sin embargo` does not fall apart into `sin`, and the ones found do not overlap. The occurrences are in the attribute `connector_spans` and their distribution in `c_connectors`.
 
-Two rules keep the ordinary uses of those words out. A one-word connector counts only with a part of speech of `CONNECTOR_POS` - a conjunction, a particle, an adverb, an adposition, an interjection - and never after a determiner, so `el antes y el después` holds one connector, `y`, and not three; a proper noun counts only at the start of a sentence, where the models read a marker as one (`Primeramente`), so the surname of `Ana, Luego y Mas firmaron` is no connector. And a marker that is also the head of a prepositional phrase is dropped there: `antes de la reunión` and `sobre todo el texto` count nothing, while `antes, firmó el acta` and `sobre todo cuando llueve` count their marker.
+Three rules keep the ordinary uses of those words out. A one-word connector counts only with a part of speech of `CONNECTOR_POS` - a conjunction, a particle, an adverb, an adposition, an interjection - and never after a determiner, so `el antes y el después` holds one connector, `y`, and not three; a proper noun counts only at the start of a sentence, where the models read a marker as one (`Primeramente`), so the surname of `Ana, Luego y Mas firmaron` is no connector. And a marker that is also the head of a prepositional phrase is dropped there: `antes de la reunión` and `sobre todo el texto` count nothing, while `antes, firmó el acta` and `sobre todo cuando llueve` count their marker; `en cuanto a` and `algo así como` count nothing. And a few markers depend on their place: `pues` opening a sentence opens a reply (`Pues bien`) and is no connector (`CONNECTOR_NOT_AT_START`), and `encima` counts only at the start of a sentence or after `y`, `e`, `ni` or `pero` (`y encima llueve`, `CONNECTOR_ONLY_AFTER`).
 
 Your own dictionary can be passed in `connectors`: a mapping from the connector to its class of `CONNECTOR_CLASSES` and its kind of `CONNECTOR_TYPES`, an unknown one raising `ParameterError`.
 
@@ -130,7 +132,7 @@ Returns a dictionary with the computed cohesion statistics.
     'content_overlap_adjacent': 0.3333333333333333,
     'content_overlap_all': 0.5,
     'content_overlap_prop_adjacent': 0.08333333333333333,
-    'content_overlap_prop_all': 0.12037037037037039,
+    'content_overlap_prop_all': 0.12037037037037035,
     'p_pronouns': 0.034482758620689655,
     'pronoun_noun_ratio': 0.09090909090909091,
     'p_demonstratives': 0.0,

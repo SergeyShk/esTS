@@ -53,4 +53,4 @@ The pull request description answers two questions: what was done and why. If it
 - `examples/` - notebooks with examples; their dependencies are a group of their own (`uv sync --group examples`), after a change the notebooks run with `make notebooks`, the outputs stay in the files and nbstripout removes the metadata of the run.
 - `.github/workflows/` - CI (`ci.yml`), publishing (`publish.yml`), documentation (`docs.yml`), the demo (`demo.yml`, on a release and by hand), the notebooks (`examples.yml`, every week and by hand; it fails when an output quoted by the prose has moved, `scripts/check_notebooks.py`).
 
-The version lives only in `pyproject.toml`; releases are made through GitHub Releases, changes are described in the release notes, there is no separate CHANGELOG file.
+The version lives in `pyproject.toml` and `CITATION.cff`, changed together; releases are made through GitHub Releases, changes are described in the release notes, there is no separate CHANGELOG file.

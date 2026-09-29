@@ -79,8 +79,8 @@ Returns a dictionary with the computed phonostatistics.
     #  'p_hiatus': 0.0,
     #  'cv_entropy': 2.75,
     #  'hardness': 0.4583333333333333,
-    #  'alliteration': 0.9175627240143369,
-    #  'assonance': 0.6708595387840671,
+    #  'alliteration': 0.9333333333333333,
+    #  'assonance': 0.7526881720430108,
     #  'p_open_syllables': 0.42857142857142855,
     #  'mean_syllable_len': 2.857142857142857}
 
@@ -126,10 +126,10 @@ Prints a table with the computed phonostatistics.
     Hiatuses per word                             |   0.00
     Entropy of the CV patterns of words (bits)    |   3.55
     Hardness                                      |   0.39
-    Alliteration index                            |   0.83
-    Assonance index                               |   0.86
+    Alliteration index                            |   0.87
+    Assonance index                               |   0.87
     Share of open syllables                       |   0.74
     Mean length of a syllable (sounds)            |   2.19
     ```
 
-Over a whole book the indices of alliteration and assonance come near 1 for verse and prose alike, as on the books of the [corpus of literature](../datasets/spanishliterature.md): the repetitions of a poem are local, and the places where they gather are shown by the layer `alliteration` of the [highlighting](../visualizers/highlight.md).
+For words in random order the indices average to 1: the 150 books of the [corpus of literature](../datasets/spanishliterature.md) with their words shuffled give 0.98 to 1.01. On the books as written the index of alliteration is a little below 1 for verse and prose alike, 0.90 to 0.99 with a median of 0.95, and the index of assonance about 1, 0.99 to 1.01: over a whole book neighbouring words share a consonant a little less often than chance. The 4,259 [sonnets](../datasets/spanishsonnets.md) give medians of 0.92 and 0.98, with a wide spread over such short texts (0.59 to 1.30 for alliteration). The repetitions of a poem are local, and the places where they gather are shown by the layer `alliteration` of the [highlighting](../visualizers/highlight.md).

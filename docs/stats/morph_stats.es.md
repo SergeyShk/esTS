@@ -74,7 +74,7 @@ Las estadísticas cuentan los quince rasgos de la tabla siguiente; el valor `Unk
 | `verb_form` | Forma verbal | Fin, Inf, Part, Ger |
 
 !!! warning "Advertencia"
-    Las estadísticas valen lo que vale la anotación del modelo. `es_core_news_sm` analiza mal los verbos con pronombres enclíticos (`dámelo`, `cuéntamelo` salen como sustantivos con lemas inventados) y etiqueta los imperativos de `tú` como indicativo (`Abre la ventana` recibe `Mood=Ind`), de modo que `p_imperative` se queda corto y `p_indicative` absorbe las órdenes. Indicar un modelo mayor en `nlp` no lo cambia; solo lee mejor el vocabulario raro y antiguo.
+    Las estadísticas valen lo que vale la anotación del modelo. `es_core_news_sm` analiza mal los verbos con pronombres enclíticos (`dámelo`, `cuéntamelo` salen como sustantivos con lemas inventados) y etiqueta los imperativos de `tú` como indicativo (`Abre la ventana` recibe `Mood=Ind`), de modo que `p_imperative` se queda corto y `p_indicative` absorbe las órdenes: en el diálogo del corpus de literatura encuentra alrededor de un imperativo de cada diez. `es_core_news_lg` apenas mejora (15 %); el modelo de transformadores `es_dep_news_trf` indicado en `nlp` encuentra el 87 %, y en el teatro `p_imperative` sube del 1,6 % al 7,5 %, a costa de cerca de 1 GB con PyTorch y cinco veces más tiempo en una CPU, y necesita antes unir los saltos de línea simples de un texto con líneas cortadas.
 
 ## Métodos
 

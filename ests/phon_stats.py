@@ -5,7 +5,7 @@ from itertools import pairwise
 from math import log2, nan
 
 import anyts
-import numpy as np
+from anyts.phonetics import calc_repetition_index
 from anyts.utils import check_integer, check_words, iter_doc_words, safe_divide
 from spacy.tokens import Doc
 
@@ -22,10 +22,6 @@ from .extractors import WordsExtractor
 from .syllables import syllabify
 
 CONSONANT_SOUNDS = SONORANT_SOUNDS | VOICED_SOUNDS | VOICELESS_SOUNDS
-SOUNDS = VOWEL_SOUNDS | CONSONANT_SOUNDS
-SOUNDS_ORDER = sorted(SOUNDS)
-CONSONANT_COLUMNS = [i for i, sound in enumerate(SOUNDS_ORDER) if sound in CONSONANT_SOUNDS]
-VOWEL_COLUMNS = [i for i, sound in enumerate(SOUNDS_ORDER) if sound in VOWEL_SOUNDS]
 CACHE_SIZE = 1 << 16
 # Vowel letters by their sound, the accents and the diaeresis dropped
 VOWEL_LETTERS = {
@@ -94,8 +90,8 @@ class PhonStats:
         'p_hiatus': 0.0,
         'cv_entropy': 2.75,
         'hardness': 0.458...,
-        'alliteration': 0.917...,
-        'assonance': 0.670...,
+        'alliteration': 0.933...,
+        'assonance': 0.752...,
         'p_open_syllables': 0.428...,
         'mean_syllable_len': 2.857...}
         >>> ps.sounds[0], ps.syllables[-1]
@@ -199,9 +195,8 @@ class PhonStats:
         self.p_hiatus = _hiatus(counts) / len(words)
         self.cv_entropy = _cv_entropy(counts)
         self.hardness = safe_divide(self.n_voiceless, self.n_vowels + self.n_sonorants, nan)
-        windows = _sound_windows(self.sounds, SOUNDS_ORDER, window_len)
-        self.alliteration = _repetition_index(windows, CONSONANT_COLUMNS, len(words), window_len)
-        self.assonance = _repetition_index(windows, VOWEL_COLUMNS, len(words), window_len)
+        self.alliteration = calc_repetition_index(self.sounds, window_len, CONSONANT_SOUNDS)
+        self.assonance = calc_repetition_index(self.sounds, window_len, VOWEL_SOUNDS)
         n_syllables = sum(syllables.values())
         self.p_open_syllables = safe_divide(
             sum(count for syllable, count in syllables.items() if _is_open(syllable)),
@@ -506,61 +501,6 @@ def _cv_entropy(counts: Counter[str]) -> float:
     return -sum(count / total * log2(count / total) for count in patterns.values()) or 0.0
 
 
-def _calc_repetition_index(text: Sequence[str], sounds: frozenset[str], window_len: int) -> float:
-    """
-    Ratio of the observed number of windows with a sound repeated in different
-    words to the number expected if the sounds were spread over the words at random
-    """
-    alphabet = sorted(sounds)
-    windows = _sound_windows([transcribe(word) for word in text], alphabet, window_len)
-    return _repetition_index(windows, list(range(len(alphabet))), len(text), window_len)
-
-
-def _sound_windows(
-    words: Sequence[tuple[str, ...]], alphabet: Sequence[str], window_len: int
-) -> tuple[np.ndarray, np.ndarray] | None:
-    """
-    Numbers of the words with every sound in every window and in the whole text
-
-    Description:
-        None for a text shorter than the window
-    """
-    n_words = len(words)
-    if n_words < window_len:
-        return None
-    unique = list(dict.fromkeys(words))
-    presence = np.array(
-        [[sound in word for sound in alphabet] for word in unique], dtype=np.int32
-    ).reshape(len(unique), len(alphabet))
-    indices = dict(zip(unique, range(len(unique)), strict=True))
-    rows = np.fromiter(map(indices.__getitem__, words), dtype=np.int64, count=n_words)
-    cumulative = np.zeros((n_words + 1, len(alphabet)), dtype=np.int32)
-    np.cumsum(presence[rows], axis=0, out=cumulative[1:])
-    return cumulative[window_len:] - cumulative[:-window_len], cumulative[-1]
-
-
-def _repetition_index(
-    windows: tuple[np.ndarray, np.ndarray] | None,
-    columns: Sequence[int],
-    n_words: int,
-    window_len: int,
-) -> float:
-    """Index of the repetitions by the counts of the windows for the columns of some sounds"""
-    if windows is None:
-        return nan
-    in_window, totals = windows
-    n_windows = n_words - window_len + 1
-    observed = int((in_window[:, columns] >= 2).sum())
-    expected = 0.0
-    for count in totals[columns]:
-        if not count:
-            continue
-        p = int(count) / n_words
-        p_single = window_len * p * (1 - p) ** (window_len - 1)
-        expected += n_windows * (1 - (1 - p) ** window_len - p_single)
-    return safe_divide(observed, expected, nan)
-
-
 def calc_alliteration(text: Sequence[str], window_len: int = PHON_WINDOW_LEN) -> float:
     """
     Computing the alliteration index
@@ -568,17 +508,18 @@ def calc_alliteration(text: Sequence[str], window_len: int = PHON_WINDOW_LEN) ->
     Description:
         The number of windows of window_len neighbouring words where a
         consonant sound occurs in two words or more, summed over the
-        consonants, to the number expected if the consonants of the text were
-        spread over its words at random: about 1 - random repetitions, well
-        above 1 - alliteration. The sounds count, not the letters: casa and
-        queso repeat k, cena and casa do not
+        consonants, to the number expected if the words stood in random order
+        (calc_repetition_index of anyts.phonetics): about 1 - random
+        repetitions, well above 1 - alliteration. The sounds count, not the
+        letters: casa and queso repeat k, cena and casa do not
 
     Arguments:
         text (list[str]): List of words
         window_len (int): Window in words
 
     Returns:
-        float: Value of the index, nan for a text shorter than the window
+        float: Value of the index, nan for a text shorter than the window or
+            without a consonant shared by two words
 
     Raises:
         SourceTypeError: If the words are not a list of strings
@@ -586,7 +527,7 @@ def calc_alliteration(text: Sequence[str], window_len: int = PHON_WINDOW_LEN) ->
     """
     check_words(text)
     check_params(window_len)
-    return _calc_repetition_index(text, CONSONANT_SOUNDS, window_len)
+    return calc_repetition_index(list(map(transcribe, text)), window_len, CONSONANT_SOUNDS)
 
 
 def calc_assonance(text: Sequence[str], window_len: int = PHON_WINDOW_LEN) -> float:
@@ -602,7 +543,8 @@ def calc_assonance(text: Sequence[str], window_len: int = PHON_WINDOW_LEN) -> fl
         window_len (int): Window in words
 
     Returns:
-        float: Value of the index, nan for a text shorter than the window
+        float: Value of the index, nan for a text shorter than the window or
+            without a vowel shared by two words
 
     Raises:
         SourceTypeError: If the words are not a list of strings
@@ -610,4 +552,4 @@ def calc_assonance(text: Sequence[str], window_len: int = PHON_WINDOW_LEN) -> fl
     """
     check_words(text)
     check_params(window_len)
-    return _calc_repetition_index(text, VOWEL_SOUNDS, window_len)
+    return calc_repetition_index(list(map(transcribe, text)), window_len, VOWEL_SOUNDS)
