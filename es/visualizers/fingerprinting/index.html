@@ -2459,13 +2459,12 @@
 <p><strong>ests.visualizers.fingerprinting()</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Visualización de la huella literaria (literature fingerprinting).</p>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>La huella literaria se describe en detalle en este <a href="https://www.uni-konstanz.de/mmsp/pubsys/publishedFiles/KeOe07.pdf">artículo</a>.</p>
-</div>
-<p>Cada texto se corta en segmentos de <code>segment_len</code> palabras con un paso deslizante de una décima parte del segmento, y para cada segmento se calcula una medida de diversidad léxica. Un texto es un bloque de cuadrados en el orden de sus segmentos, fila a fila, de 8 filas de alto, o una sola columna cuando tiene a lo sumo 8 segmentos; un bloque más ancho que una fila del área de dibujo se parte en filas de esa anchura. Los bloques se colocan de izquierda a derecha y pasan a la fila siguiente dentro de un área de <code>2 · x_size</code> de ancho, que crece hacia abajo desde <code>2 · y_size</code> cuando necesitan más altura. El color de un cuadrado es el valor de la medida en la escala de la barra de colores, de su menor a su mayor valor finito en todos los textos. Los segmentos en los que la medida no está definida (<code>nan</code> en segmentos demasiado cortos para ella) y las celdas vacías de un bloque son de un gris claro, distinto de cualquier valor, incluido el cero. Los segmentos se deslizan hasta el final del texto: el último empieza un paso después del último segmento completo y lo corta el final del texto, y un texto más corto que un segmento es un solo segmento corto de ese tipo. Una lista sin textos o un texto sin palabras levanta <code>SourceError</code>.</p>
+<!-- core: visualizers/fingerprinting.md:fingerprinting 142b0c1 -->
+<p>Visualización de la huella literaria (literature fingerprinting, <a href="https://www.uni-konstanz.de/mmsp/pubsys/publishedFiles/KeOe07.pdf">Keim y Oelke 2007</a>).</p>
+<p>Cada texto se corta en segmentos de <code>segment_len</code> palabras con un paso deslizante de una décima parte del segmento, y para cada segmento se calcula una medida de diversidad léxica. Un texto es un bloque de cuadrados en el orden de sus segmentos, fila a fila, de 8 filas de alto, o una sola columna cuando tiene a lo sumo 8 segmentos; un bloque más ancho que una fila del área de dibujo se parte en filas de esa anchura. Los bloques se colocan de izquierda a derecha y pasan a la fila siguiente dentro de un área de <code>2 · x_size</code> de ancho, que crece hacia abajo desde <code>2 · y_size</code> cuando necesitan más altura. El color de un cuadrado es el valor de la medida en la escala de la barra de colores, de su menor a su mayor valor finito en todos los textos. Los segmentos en los que la medida no está definida (<code>nan</code> en segmentos demasiado cortos para ella) y las celdas vacías de un bloque son de un gris claro, distinto de cualquier valor, incluido el cero. Todos los segmentos tienen <code>segment_len</code> palabras, así que los valores son comparables: cuando el paso deja palabras tras el último segmento, un segmento más termina con el texto, y un texto que no es más largo que un segmento es un solo segmento. Una lista sin textos o un texto sin palabras lanza <code>SourceError</code>.</p>
+<p>La función es la del núcleo <a href="https://sergeyshk.github.io/anyTS/visualizers/fingerprinting/">anyTS</a>; las medidas de <a href="../../stats/diversity_stats/">diversidad léxica</a> de esTS, funciones de una lista de palabras como <code>calc_ttr</code> o <code>calc_simpson_index</code>, sirven de <code>metric</code>. El título por defecto es el inglés de <code>VISUALIZER_LABELS</code> en <code>anyts.constants</code>; <code>labels</code> lo sustituye.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<!-- core: visualizers/fingerprinting.md:fingerprinting-parameters d8f7f8a -->
 <table>
 <thead>
 <tr>
@@ -2492,13 +2491,13 @@
 <td style="text-align: center;"><code>metric</code></td>
 <td style="text-align: center;">Callable</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Función de una medida de <a href="../../stats/diversity_stats/">diversidad léxica</a>; <code>calc_ttr</code> por defecto</td>
+<td style="text-align: center;">Función de una medida de diversidad léxica; <code>calc_ttr</code> por defecto</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>x_size</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>800</code></td>
-<td style="text-align: center;">Mitad de la anchura del área de dibujo</td>
+<td style="text-align: center;">Mitad de la anchura del área de dibujo, mayor que 25 (el margen entre los bloques)</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>y_size</code></td>
@@ -2517,6 +2516,12 @@
 <td style="text-align: center;">Axes</td>
 <td style="text-align: center;"><code>None</code></td>
 <td style="text-align: center;">Ejes de matplotlib para el gráfico; si no se dan, se crea una figura de 15×10</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>labels</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Etiquetas sobre las de por defecto: <code>title</code></td>
 </tr>
 </tbody>
 </table>

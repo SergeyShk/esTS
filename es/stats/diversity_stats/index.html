@@ -2646,8 +2646,8 @@
 </tr>
 </tbody>
 </table>
-<!-- core: stats/diversity_stats.md:check_params 07c0f60 -->
-<p>Los parámetros se comprueban con <code>check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)</code>, que lanza <code>ParameterError</code> si una ventana, un tamaño de muestra o una longitud mínima del factor están fuera de rango, si el umbral está fuera de (0, 1) o si la base del logaritmo no es mayor que 1; una biblioteca la llama antes de extraer las palabras, para que un parámetro erróneo se señale antes que un texto vacío.</p>
+<!-- core: stats/diversity_stats.md:check_params 1ed1a29 -->
+<p>Los parámetros se comprueban con <code>check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)</code>, que lanza <code>ParameterError</code> si una ventana, un tamaño de muestra o una longitud mínima del factor están fuera de rango, si el umbral está fuera de (0, 1) o si la base del logaritmo no es mayor que 1. Llamada antes de extraer las palabras, señala un parámetro erróneo antes que un texto vacío.</p>
 <h2 id="conventions">Convenciones<a class="headerlink" href="#conventions" title="Permanent link">&para;</a></h2>
 <!-- core: stats/diversity_stats.md:DiversityStats-conventions b46d998 -->
 <p>Los valores de algunas métricas dependen de convenciones que difieren entre bibliotecas. Todas salvo la comparación con el umbral de MTLD son parámetros de la clase:</p>

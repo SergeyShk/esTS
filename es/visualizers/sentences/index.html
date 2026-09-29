@@ -2459,8 +2459,12 @@
 <p><strong>ests.visualizers.sentence_lengths_plot()</strong>, <strong>ests.visualizers.sentence_lengths()</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>La curva de las longitudes de las oraciones, el ritmo de un texto: la longitud de cada oración en palabras en orden, la media móvil sobre una ventana de <code>window</code> oraciones y un recuadro con el histograma de las longitudes. Oraciones cortas y largas que se alternan son un signo editorial de un texto vivo; una curva plana, de uno monótono. <code>sentence_lengths</code> extrae las longitudes: las oraciones de una cadena salen de <a href="../../extractors/sentences/"><code>SentsExtractor</code></a>, y una palabra pertenece a la oración en la que empieza; las oraciones de un <code>Doc</code> salen de sus límites (sin ellos, de su texto); las longitudes ya hechas se usan tal cual; las oraciones sin palabras se omiten. La función recibe los ejes <code>ax</code> y devuelve <code>Axes</code>.</p>
+<!-- core: visualizers/sentences.md:sentence_lengths_plot 85736ab -->
+<p>La curva de las longitudes de las oraciones, el ritmo de un texto: la longitud de cada oración en palabras en orden, la media móvil sobre una ventana de <code>window</code> oraciones y un recuadro con el histograma de las longitudes. Oraciones cortas y largas que se alternan son un signo editorial de un texto vivo; una curva plana, de uno monótono. La función recibe los ejes <code>ax</code> y devuelve <code>Axes</code>.</p>
+<p><code>sentence_lengths(source, sents_extractor=None, words_extractor=None)</code> extrae las longitudes: una cadena se divide en oraciones con el extractor de oraciones y cada oración en palabras con el extractor de palabras; las oraciones de un <code>Doc</code> salen de sus límites y sus palabras de sus tokens, sin la puntuación ni los símbolos, mientras que un <code>Doc</code> sin límites se cuenta como su texto, con los extractores; las oraciones sin palabras se omiten. Las longitudes ya hechas - una secuencia o un iterador de enteros no negativos - se usan tal cual; una tabla, un conjunto, un mapeo, bytes o una longitud que no es un entero lanzan <code>SourceTypeError</code>, una longitud negativa <code>SourceError</code>.</p>
+<p>Las funciones son las del núcleo <a href="https://sergeyshk.github.io/anyTS/visualizers/sentences/">anyTS</a>; para una cadena esTS pasa por defecto sus extractores del español, <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> y <a href="../../extractors/words/"><code>WordsExtractor</code></a>, y los parámetros <code>sents_extractor</code> y <code>words_extractor</code> los sustituyen. Las etiquetas por defecto son las inglesas de <code>VISUALIZER_LABELS</code> en <code>anyts.constants</code>; <code>labels</code> sustituye cualquiera de ellas.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<!-- core: visualizers/sentences.md:sentence_lengths_plot-parameters 5e37f4a -->
 <table>
 <thead>
 <tr>
@@ -2494,6 +2498,24 @@
 <td style="text-align: center;">Axes</td>
 <td style="text-align: center;"><code>None</code></td>
 <td style="text-align: center;">Ejes para el gráfico</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>labels</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code>, <code>ylabel</code>, <code>length</code> (la curva), <code>average</code> (una cadena de formato con <code>window</code>), <code>distribution</code> (el recuadro)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>sents_extractor</code></td>
+<td style="text-align: center;">SentsExtractor</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Extractor de las oraciones de una cadena; por defecto, el extractor de oraciones de la biblioteca</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>words_extractor</code></td>
+<td style="text-align: center;">WordsExtractor</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Extractor de las palabras de una oración de una cadena; por defecto, el extractor de palabras de la biblioteca</td>
 </tr>
 </tbody>
 </table>

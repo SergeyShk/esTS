@@ -2482,8 +2482,10 @@
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
 <p>Dos gráficos de la distribución de las palabras de un texto que completan la <a href="../zipf/">ley de Zipf</a>: el crecimiento del vocabulario con la longitud del texto según la ley de Heaps y el espectro de frecuencias, cuántos tipos de palabra aparecen exactamente una, dos, tres veces. Las funciones reciben los ejes <code>ax</code> y devuelven <code>Axes</code>.</p>
+<p>Las funciones son las del núcleo <a href="https://sergeyshk.github.io/anyTS/visualizers/vocabulary/">anyTS</a>; el ajuste de la ley de Heaps se describe en <a href="../../stats/diversity_stats_funcs/#heaps_beta"><code>fit_heaps</code></a> y el espectro en <a href="../../stats/diversity_stats_funcs/#frequency_spectrum"><code>calc_frequency_spectrum</code></a>. Las etiquetas por defecto son las inglesas de <code>VISUALIZER_LABELS</code> en <code>anyts.constants</code>; <code>labels</code> sustituye cualquiera de ellas.</p>
 <h2 id="heaps_plot">Ley de Heaps<a class="headerlink" href="#heaps_plot" title="Permanent link">&para;</a></h2>
-<p>El tamaño del vocabulario <span class="arithmatex">\(V\)</span> tras cada palabra del texto y la curva ajustada <span class="arithmatex">\(V(N) = K \cdot N^{\beta}\)</span> de <a href="../../stats/diversity_stats_funcs/#heaps_beta"><code>fit_heaps</code></a> con sus parámetros en la leyenda; la curva depende del orden de las palabras.</p>
+<!-- core: visualizers/vocabulary.md:heaps_plot a5a763e -->
+<p>El tamaño del vocabulario <span class="arithmatex">\(V\)</span> tras cada palabra del texto y la curva ajustada <span class="arithmatex">\(V(N) = K \cdot N^{\beta}\)</span> de <code>fit_heaps</code> con sus parámetros en la leyenda; la curva depende del orden de las palabras.</p>
 <table>
 <thead>
 <tr>
@@ -2506,10 +2508,17 @@
 <td style="text-align: center;"><code>None</code></td>
 <td style="text-align: center;">Ejes para el gráfico</td>
 </tr>
+<tr>
+<td style="text-align: center;"><code>labels</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code>, <code>ylabel</code>, <code>growth</code> (la curva), <code>fit</code> (una cadena de formato con <code>k</code> y <code>beta</code>)</td>
+</tr>
 </tbody>
 </table>
 <h2 id="frequency_spectrum_plot">Espectro de frecuencias<a class="headerlink" href="#frequency_spectrum_plot" title="Permanent link">&para;</a></h2>
-<p>El número de tipos de palabra <span class="arithmatex">\(V(m)\)</span> que aparecen exactamente <span class="arithmatex">\(m\)</span> veces (<a href="../../stats/diversity_stats_funcs/#frequency_spectrum"><code>calc_frequency_spectrum</code></a>) en coordenadas logarítmicas; el borde izquierdo son los hápax. El espectro está en la base de las medidas de diversidad de Yule, Sichel, Michéa y Honoré, y su forma muestra lo lejos que está el vocabulario del texto de agotarse.</p>
+<!-- core: visualizers/vocabulary.md:frequency_spectrum_plot 22fd438 -->
+<p>El número de tipos de palabra <span class="arithmatex">\(V(m)\)</span> que aparecen exactamente <span class="arithmatex">\(m\)</span> veces (<code>calc_frequency_spectrum</code>) en coordenadas logarítmicas; el borde izquierdo son los hápax. El espectro está en la base de las medidas de diversidad de Yule, Sichel, Michéa y Honoré, y su forma muestra lo lejos que está el vocabulario del texto de agotarse.</p>
 <table>
 <thead>
 <tr>
@@ -2531,6 +2540,12 @@
 <td style="text-align: center;">Axes</td>
 <td style="text-align: center;"><code>None</code></td>
 <td style="text-align: center;">Ejes para el gráfico</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>labels</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code>, <code>ylabel</code></td>
 </tr>
 </tbody>
 </table>

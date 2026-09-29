@@ -2572,7 +2572,7 @@
 <p><a href="https://github.com/adbar/simplemma">simplemma</a> trabaja con un diccionario sin modelo entrenado: una forma conocida se convierte en su lema en minúsculas (<code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>), una forma desconocida se devuelve sin cambios (<code>Madrid</code>, <code>dámelo</code>).</p>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: extractors/words.md:WordsExtractor-parameters 379c3f1 -->
+<!-- core: extractors/words.md:WordsExtractor-parameters a447ca0 -->
 <table>
 <thead>
 <tr>
@@ -2629,19 +2629,19 @@
 <td style="text-align: center;"><code>min_len</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Longitud mínima de la palabra extraída, <code>0</code> sin límite</td>
+<td style="text-align: center;">Longitud mínima de la palabra extraída en caracteres, <code>0</code> sin límite</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>max_len</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Longitud máxima de la palabra extraída, <code>0</code> sin límite</td>
+<td style="text-align: center;">Longitud máxima de la palabra extraída en caracteres, <code>0</code> sin límite</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>Una expresión regular como tokenizador es un separador: el texto se divide con <code>re.split</code>. Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Una lista de palabras vacías en minúsculas también filtra una palabra con mayúscula al principio de una oración. Un signo de puntuación es un token formado solo por signos y símbolos, también de varios caracteres: <code>?!</code>, <code>--</code>, <code>…</code>, <code>€</code> (véase <code>is_punctuation</code>). Los tokens vacíos y de espacios se descartan antes de los filtros. Los N-gramas unen las palabras con <code>_</code>.</p>
+<p>Una expresión regular como tokenizador es un separador: el texto se divide con <code>re.split</code>. Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Una lista de palabras vacías en minúsculas también filtra una palabra con mayúscula al principio de una oración. Un signo de puntuación es un token formado solo por signos y símbolos, también de varios caracteres: <code>?!</code>, <code>--</code>, <code>…</code>, <code>€</code> (véase <code>anyts.utils.is_punctuation</code>). Los tokens vacíos y de espacios se descartan antes de los filtros. Los N-gramas unen las palabras con <code>_</code>.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
@@ -2688,8 +2688,26 @@
 </code></pre></div>
 </div>
 <h3 id="get_most_common">get_most_common<a class="headerlink" href="#get_most_common" title="Permanent link">&para;</a></h3>
-<!-- core: extractors/words.md:WordsExtractor-get_most_common 2fbfc88 -->
-<p>Devuelve un contador de las palabras más frecuentes del texto. Recibe como parámetro el número de palabras a devolver.</p>
+<!-- core: extractors/words.md:WordsExtractor-get_most_common a834177 -->
+<p>Devuelve las palabras más frecuentes del texto como una lista de pares (palabra, frecuencia), la más frecuente primero.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>n</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>10</code></td>
+<td style="text-align: center;">Número de palabras más frecuentes</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
 <p>El método debe llamarse después de extraer las palabras con <code>extract</code>.</p>

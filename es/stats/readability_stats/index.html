@@ -1003,6 +1003,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ganchos-del-idioma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ganchos del idioma
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2520,6 +2531,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ganchos-del-idioma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ganchos del idioma
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2671,7 +2693,11 @@
 <p><strong>ests.readability_stats.ReadabilityStats</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Módulo para calcular las principales métricas de <a href="https://es.wikipedia.org/wiki/Legibilidad">legibilidad</a> de la tradición española. La fuente de datos puede ser un texto, un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a> o unas <a href="../basic_stats/">estadísticas básicas</a> <code>BasicStats</code> ya calculadas; en ese caso el texto no se vuelve a analizar.</p>
+<p>Las métricas de legibilidad de la tradición española.</p>
+<!-- core: stats/readability_stats.md:ReadabilityStats f313e5b -->
+<p>Las métricas de <a href="https://es.wikipedia.org/wiki/Legibilidad">legibilidad</a> de un texto a partir de sus estadísticas básicas: la longitud media de la oración en palabras, la longitud media de la palabra en sílabas o en letras, la proporción de palabras polisílabas y de palabras largas y la variabilidad de la longitud de las palabras. La fuente de datos puede ser un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> o unas estadísticas básicas ya calculadas, y entonces el texto no se vuelve a contar; los extractores se pasan a las estadísticas básicas de un texto o de un <code>Doc</code>, mientras que las ya calculadas se toman tal cual. Las letras de las fórmulas son las de las palabras contadas, así que un extractor de palabras que descarta palabras no alarga la palabra media.</p>
+<p>Las métricas son propiedades que se calculan en cada acceso, así que un cambio de los <code>coefficients</code> de un objeto se aplica en el acto.</p>
+<p>Una fuente que no es ni una cadena, ni un <code>Doc</code>, ni unas estadísticas básicas, unas estadísticas básicas de otra clase que las de la biblioteca y un extractor de otro tipo lanzan <code>SourceTypeError</code>, una fuente sin palabras o sin oraciones <code>SourceError</code>, un preajuste desconocido o que no es una cadena <code>ParameterError</code>.</p>
 <div class="admonition quote">
 <p class="admonition-title">Definición</p>
 <p>La legibilidad es la propiedad de un texto que caracteriza la facilidad con que una persona lo percibe al leerlo.</p>
@@ -2743,11 +2769,9 @@
 <li>las palabras largas dificultan la lectura;</li>
 <li>el lector se frena ante palabras poco frecuentes o desconocidas.</li>
 </ul>
-<p>El módulo permite usar objetos <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> y <a href="../../extractors/words/"><code>WordsExtractor</code></a> ya configurados para la segmentación en oraciones y palabras que precede al cálculo.</p>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Las métricas se calculan al acceder al atributo correspondiente o al llamar al método <code>get_stats</code> del objeto <code>ReadabilityStats</code>.</p>
-</div>
+<h2 id="ganchos-del-idioma">Ganchos del idioma<a class="headerlink" href="#ganchos-del-idioma" title="Permanent link">&para;</a></h2>
+<p>La clase extiende el <code>ReadabilityStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/readability_stats/">anyTS</a> con las fórmulas y las tablas del español: las <a href="../basic_stats/">estadísticas básicas</a> de esTS, que toman por defecto los <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> y <a href="../../extractors/words/"><code>WordsExtractor</code></a> del español, los preajustes de la facilidad de lectura de Flesch, las fórmulas de Gutiérrez de Polini, Crawford y SOL, las fórmulas de grado del grado de consenso (Crawford y SOL), las etapas escolares de España y las velocidades de lectura de los lectores en español.</p>
+<p>Las fórmulas del núcleo con sus coeficientes ingleses - <code>flesch_kincaid_grade</code>, <code>coleman_liau_index</code>, <code>automated_readability_index</code>, <code>smog_index</code> y <code>gunning_fog_index</code> - siguen siendo atributos del objeto, fuera de <code>get_stats</code>: están ajustadas con textos ingleses, y <code>smog_index</code> es la entrada de SOL.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2853,7 +2877,7 @@
 <tr>
 <td style="text-align: center;"><code>coefficients</code></td>
 <td style="text-align: center;">dict[str, tuple[float, float, float]]</td>
-<td style="text-align: center;">Coeficientes de las fórmulas del preajuste</td>
+<td style="text-align: center;">Coeficientes de las fórmulas del preajuste, una copia que se puede cambiar para un objeto</td>
 </tr>
 </tbody>
 </table>
@@ -2901,7 +2925,9 @@
 </div>
 <h2 id="interpretation">Interpretación<a class="headerlink" href="#interpretation" title="Permanent link">&para;</a></h2>
 <p>El método <a href="#describe_level"><code>describe_level</code></a> sitúa la facilidad de lectura en la escala del preajuste: INFLESZ para <code>general</code> (<code>muy difícil</code> por debajo de 40, <code>algo difícil</code> 40-55, <code>normal</code> 55-65, <code>bastante fácil</code> 65-80, <code>muy fácil</code> por encima de 80) y los siete niveles de Fernández Huerta para <code>classic</code>, y a petición las escalas de Szigriszt-Pazos o del otro autor; la Legibilidad µ tiene los siete niveles de sus autores (<code>muy difícil</code> 0-30, <code>difícil</code> 31-50, <code>un poco difícil</code> 51-60, <code>adecuado</code> 61-70, <code>un poco fácil</code> 71-80, <code>fácil</code> 81-90, <code>muy fácil</code> 91-100).</p>
-<p>Las fórmulas que dan años de escolaridad (Crawford, SOL) se resumen en el atributo <code>consensus_grade</code>: la mediana de los valores redondeados más la facilidad de lectura <a href="../readability_stats_funcs/#flesch_reading_easy_to_grade">convertida en grado</a> según la escala del preajuste. El método <a href="#describe_grade"><code>describe_grade</code></a> traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:</p>
+<!-- core: stats/readability_stats.md:ReadabilityStats-consensus 40f0d09 -->
+<p>Las fórmulas que dan años de escolaridad (<code>grade_stats</code>) se resumen en el atributo <code>consensus_grade</code>: la mediana de sus valores redondeados con el medio hacia arriba, junto con la facilidad de lectura convertida en años de escolaridad (<code>reading_ease_to_grade</code>) sin redondear.</p>
+<p>Las fórmulas de grado de esTS son Crawford y SOL, y la facilidad de lectura se <a href="../readability_stats_funcs/#flesch_reading_easy_to_grade">convierte en grado</a> según la escala del preajuste. El método <a href="#describe_grade"><code>describe_grade</code></a> traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:</p>
 <table>
 <thead>
 <tr>
@@ -2991,7 +3017,8 @@
 </code></pre></div>
 </div>
 <h3 id="describe_grade">describe_grade<a class="headerlink" href="#describe_grade" title="Permanent link">&para;</a></h3>
-<p>Devuelve la etapa escolar y la edad del lector para el grado de consenso o una fórmula de grado concreta.</p>
+<!-- core: stats/readability_stats.md:ReadabilityStats-describe_grade af0b5e5 -->
+<p>Devuelve la etapa escolar y la edad del lector para el grado de consenso o una fórmula de grado; otra métrica lanza <code>ParameterError</code>.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3007,10 +3034,11 @@
 <td style="text-align: center;"><code>stat</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>consensus_grade</code></td>
-<td style="text-align: center;">Nombre de la fórmula de grado (<code>consensus_grade</code>, <code>crawford_grade</code>, <code>sol_grade</code>)</td>
+<td style="text-align: center;">Nombre de la fórmula de grado</td>
 </tr>
 </tbody>
 </table>
+<p>Las fórmulas de grado son <code>consensus_grade</code>, <code>crawford_grade</code> y <code>sol_grade</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <div class="highlight"><pre><span></span><code><span class="n">rs</span><span class="o">.</span><span class="n">describe_grade</span><span class="p">()</span>
@@ -3020,7 +3048,8 @@
 </code></pre></div>
 </div>
 <h3 id="reading_time_by_speed">reading_time_by_speed<a class="headerlink" href="#reading_time_by_speed" title="Permanent link">&para;</a></h3>
-<p>Devuelve el tiempo de lectura del texto en minutos a la velocidad indicada.</p>
+<!-- core: stats/readability_stats.md:ReadabilityStats-reading_time_by_speed 7c6fa90 -->
+<p>Devuelve el tiempo de lectura del texto en minutos a la velocidad indicada; una velocidad que no es un número positivo lanza <code>ParameterError</code>.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3034,14 +3063,15 @@
 <tbody>
 <tr>
 <td style="text-align: center;"><code>wpm</code></td>
-<td style="text-align: center;">int</td>
+<td style="text-align: center;">float</td>
 <td style="text-align: center;"><code>-</code></td>
 <td style="text-align: center;">Velocidad de lectura, palabras por minuto</td>
 </tr>
 </tbody>
 </table>
 <h3 id="reading_time_by_norm">reading_time_by_norm<a class="headerlink" href="#reading_time_by_norm" title="Permanent link">&para;</a></h3>
-<p>Devuelve el tiempo de lectura del texto en minutos en voz alta y en silencio según una norma de la tabla <code>ests.constants.READING_SPEED_NORMS</code>: de <code>grade_1</code> a <code>grade_11</code> (años de escolaridad: primaria 1-6, ESO 7-10, bachillerato 11) o <code>adult</code>.</p>
+<!-- core: stats/readability_stats.md:ReadabilityStats-reading_time_by_norm dcb8ada -->
+<p>Devuelve los tiempos de lectura del texto en minutos a las velocidades de una norma de <code>reading_speed_norms</code>, en su orden; una norma desconocida lanza <code>ParameterError</code>.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3061,6 +3091,7 @@
 </tr>
 </tbody>
 </table>
+<p>Las normas de la tabla <code>ests.constants.READING_SPEED_NORMS</code> son de <code>grade_1</code> a <code>grade_11</code> (años de escolaridad: primaria 1-6, ESO 7-10, bachillerato 11) y <code>adult</code>, cada una con las velocidades en voz alta y en silencio, así que el método devuelve los tiempos de lectura en voz alta y en silencio.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <div class="highlight"><pre><span></span><code><span class="n">rs</span><span class="o">.</span><span class="n">reading_time_by_speed</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
@@ -3070,7 +3101,8 @@
 </code></pre></div>
 </div>
 <h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
-<p>Devuelve un diccionario con las métricas de legibilidad calculadas.</p>
+<!-- core: stats/readability_stats.md:ReadabilityStats-get_stats c9e4353 -->
+<p>Devuelve un diccionario con las métricas de legibilidad calculadas de <code>stats_desc</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <p><em>Código</em>:</p>
@@ -3097,7 +3129,8 @@
 </code></pre></div>
 </div>
 <h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
-<p>Muestra una tabla con las métricas de legibilidad calculadas.</p>
+<!-- core: stats/readability_stats.md:ReadabilityStats-print_stats 62374bb -->
+<p>Muestra una tabla con las métricas de legibilidad calculadas, sus descripciones de <code>stats_desc</code> y los encabezados de <code>stats_headers</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <p><em>Código</em>:</p>

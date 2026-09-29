@@ -2522,11 +2522,11 @@
 
 <h1 id="corpus-comparison">Corpus comparison<a class="headerlink" href="#corpus-comparison" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.corpus.compare_corpora()</strong>, <strong>ests.corpus.compare_features()</strong>, <strong>ests.corpus.corpus_features()</strong>, <strong>ests.corpus.text_features()</strong>, <strong>ests.corpus.split_windows()</strong>, <strong>ests.corpus.sentence_rhythm()</strong>, <strong>ests.corpus.calc_cohen_d()</strong>, <strong>ests.corpus.calc_cliff_delta()</strong>, <strong>ests.corpus.bootstrap_median_diff()</strong>, <strong>ests.corpus.holm_correction()</strong></p>
+<p><strong>ests.corpus.compare_corpora()</strong>, <strong>ests.corpus.compare_features()</strong>, <strong>ests.corpus.check_comparison_params()</strong>, <strong>ests.corpus.corpus_features()</strong>, <strong>ests.corpus.text_features()</strong>, <strong>ests.corpus.split_windows()</strong>, <strong>ests.corpus.sentence_rhythm()</strong>, <strong>ests.corpus.calc_cohen_d()</strong>, <strong>ests.corpus.calc_cliff_delta()</strong>, <strong>ests.corpus.bootstrap_median_diff()</strong>, <strong>ests.corpus.holm_correction()</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
 <p><code>compare_corpora</code> compares two corpora of Spanish texts by every feature of a text at once - which statistics tell the corpora apart, and by how much. For single words <a href="../keyness/"><code>keyness</code></a> does the same, for the distances between texts - <a href="../stylometry/#delta"><code>delta</code></a>. It builds the tables of the features of the windows of both corpora and compares them with the <code>compare_features</code> of the <a href="https://sergeyshk.github.io/anyTS/corpus/compare/">anyTS</a> core:</p>
-<p>Comparing two corpora feature by feature. Each corpus comes as a table of the features of its windows - texts split into parts of about the same size, so that the features do not depend on the length of the texts; a language library builds such tables from its texts. <code>compare_features(table_a, table_b, labels, n_bootstrap, seed)</code> compares the tables column by column and returns one row per feature, sorted by descending absolute Cliff's delta, the features without statistics last. The bootstrap resamples whole texts by the level <code>text</code> of the index of a table; a table without that level has every row taken for a text of its own. A column missing from one of the tables gives <code>nan</code>.</p>
+<p>Comparing two corpora feature by feature. Each corpus comes as a table of the features of its windows - texts split into parts of about the same size, so that the features do not depend on the length of the texts. <code>compare_features(table_a, table_b, labels, n_bootstrap, seed)</code> compares the tables column by column and returns one row per feature, sorted by descending absolute Cliff's delta, the features without statistics last. The bootstrap resamples whole texts by the level <code>text</code> of the index of a table; a table without that level has every row taken for a text of its own. A column missing from one of the tables gives <code>nan</code>.</p>
 <p>In <code>split_windows</code> the number of windows is the ratio of the number of words to the size of a window rounded half up, at least one, and the parts are equal: at a window of 1000 a text of one to two windows gives windows of 750 to 1499 words, and a text shorter than <code>min_words</code> - half a window by default - gives none. A boundary goes before the opening marks of the first word of a window - dashes, quotes, brackets, <code>¿</code> and <code>¡</code> - while a straight quote or a dash glued to the end of the previous word stays with it (<code>"cuatro"</code>, <code>—dijo Juan—</code>). The features of every window are computed by <code>text_features</code> or a function of one's own.</p>
 <h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
 <p><code>text_features(text, nlp=None)</code> returns 132 features prefixed by their source:</p>
@@ -2624,7 +2624,7 @@
 </tr>
 </tbody>
 </table>
-<p>The names of the columns are <code>COMPARISON_COLUMNS</code>, with <code>A</code> and <code>B</code> replaced by the labels of the corpora. Cliff's delta and the AUC come from the same U statistic and agree with each other; Cohen's d is sensitive to outliers and to departures from normality, so it is best read next to the delta.</p>
+<p>The names of the columns are <code>anyts.corpus.COMPARISON_COLUMNS</code>, with <code>A</code> and <code>B</code> replaced by the labels of the corpora. Cliff's delta and the AUC come from the same U statistic and agree with each other; Cohen's d is sensitive to outliers and to departures from normality, so it is best read next to the delta.</p>
 <div class="admonition warning">
 <p class="admonition-title">Windows of one text are not independent</p>
 <p>The test and the effect sizes take every window for an independent observation, and the windows of one text are not. With few texts in a corpus the p-values are too small and reflect the texts chosen as much as the corpora. The bootstrap resamples whole texts instead (a cluster bootstrap), so its interval accounts for the spread between the texts; it needs at least two texts on each side and is rough with only a few.</p>
@@ -2700,7 +2700,7 @@
 <td style="text-align: center;"><code>labels</code></td>
 <td style="text-align: center;">tuple[str, str]</td>
 <td style="text-align: center;"><code>("A", "B")</code></td>
-<td style="text-align: center;">Names of the corpora for the columns</td>
+<td style="text-align: center;">Names of the corpora for the columns, two strings that give distinct columns</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>n_bootstrap</code></td>
@@ -2710,12 +2710,14 @@
 </tr>
 <tr>
 <td style="text-align: center;"><code>seed</code></td>
-<td style="text-align: center;">int</td>
+<td style="text-align: center;">int/Generator</td>
 <td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Seed of the random number generator; <code>None</code> - a random one</td>
+<td style="text-align: center;">Seed of the random number generator, a non-negative integer, or a numpy <code>Generator</code>; <code>None</code> - a random one</td>
 </tr>
 </tbody>
 </table>
+<p><code>check_comparison_params(labels=("A", "B"), n_bootstrap=1000, seed=0)</code> checks the parameters of <code>compare_features</code> and raises <code>ParameterError</code> unless the labels are two strings that give distinct columns (<code>("diff", "B")</code> would repeat <code>median_diff</code>), the number of bootstrap samples is an integer of at least one and the seed is <code>None</code>, a non-negative integer or a numpy <code>Generator</code>. Called before the tables are built from texts, it reports a wrong parameter before the texts are processed.</p>
+<p><code>compare_corpora</code> calls it first, so a wrong name of a corpus or seed fails before any text is parsed.</p>
 <h2 id="functions-of-the-statistics">Functions of the statistics<a class="headerlink" href="#functions-of-the-statistics" title="Permanent link">&para;</a></h2>
 <p>The statistics of a row are available one by one from <code>ests.corpus</code>:</p>
 <p><code>calc_cohen_d(values_a, values_b)</code> - Cohen's d with the pooled sample variances (ddof=1); <code>nan</code> with fewer than two values on a side or without spread.</p>

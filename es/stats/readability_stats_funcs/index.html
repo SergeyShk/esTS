@@ -2703,8 +2703,14 @@
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_flesch_reading_easy()</strong></p>
 </div>
-<p>Cálculo de la facilidad de lectura de Flesch con coeficientes para el español. Cuanto mayor es el valor, más fácil es leer el texto; la escala va de 0 a 100.</p>
-<p>Los coeficientes por defecto son los de la <em>fórmula de perspicuidad</em> de Szigriszt-Pazos (1993), que se lee en la escala INFLESZ de Barrio-Cantalejo et al. (2008):</p>
+<!-- core: stats/readability_stats_funcs.md:calc_flesch_reading_easy 978f8ef -->
+<p>Cálculo de la facilidad de lectura de Flesch (Flesch, 1948).</p>
+<p>Cuanto mayor es el valor, más fácil es el texto; la escala va nominalmente de 0 a 100, aunque los textos más sencillos pasan de 100 y los más difíciles bajan de 0.</p>
+<p>Fórmula:</p>
+<div class="arithmatex">\[
+c - a \cdot \frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}} - b \cdot \frac{\textrm{Número de sílabas}}{\textrm{Número de palabras}}
+\]</div>
+<p>Los coeficientes por defecto de esTS son los de la <em>fórmula de perspicuidad</em> de Szigriszt-Pazos (1993), que se lee en la escala INFLESZ de Barrio-Cantalejo et al. (2008):</p>
 <table>
 <thead>
 <tr>
@@ -2742,10 +2748,6 @@
 </tbody>
 </table>
 <p>Los coeficientes de Fernández Huerta (1959) están disponibles con el <a href="../readability_stats/#presets">preajuste</a> <code>classic</code>, con la corrección de Law (2011): el último término toma la longitud media de la oración.</p>
-<p>Fórmula:</p>
-<div class="arithmatex">\[
-c-a\times\frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}}-b\times\frac{\textrm{Número de sílabas}}{\textrm{Número de palabras}}
-\]</div>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -2882,7 +2884,34 @@ c-a\times\frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}}-b\ti
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_mu_index()</strong></p>
 </div>
-<p>Cálculo de la Legibilidad µ de Muñoz Baquedano y Muñoz Urra (2006), que mide la variabilidad de la longitud de las palabras: la media del número de letras por palabra dividida por su varianza. La varianza es la muestral, dividida por <code>n − 1</code> (la <em>cuasivarianza</em> de los autores), que reproduce el ejemplo resuelto de su manual. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (<code>nan</code>). Cuanto mayor es el valor, más fácil es el texto:</p>
+<!-- core: stats/readability_stats_funcs.md:calc_mu_index cec1984 -->
+<p>Cálculo de la Legibilidad µ (Muñoz Baquedano y Muñoz Urra, 2006).</p>
+<p>La media del número de letras por palabra dividida por su varianza muestral, por 100; no hay coeficientes que ajustar, y cuanto mayor es el valor, más fácil es el texto. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (<code>nan</code>).</p>
+<p>Fórmula:</p>
+<div class="arithmatex">\[
+100 \cdot \frac{\bar{x}}{s^2}, \quad s^2 = \frac{\sum (x_i - \bar{x})^2}{n - 1}
+\]</div>
+<p>donde <span class="arithmatex">\(x_i\)</span> es el número de letras de una palabra y <span class="arithmatex">\(n\)</span> el número de palabras.</p>
+<p>Parámetros:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>c_letters</code></td>
+<td style="text-align: center;">dict[int, int]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Distribución de las palabras por número de letras</td>
+</tr>
+</tbody>
+</table>
+<p>La varianza dividida por <code>n − 1</code> es la <em>cuasivarianza</em> de los autores, que reproduce el ejemplo resuelto de su manual; la distribución es <code>BasicStats.c_letters</code>. Las bandas de los autores:</p>
 <table>
 <thead>
 <tr>
@@ -2921,39 +2950,19 @@ c-a\times\frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}}-b\ti
 </tr>
 </tbody>
 </table>
-<p>Fórmula:</p>
-<div class="arithmatex">\[
-\frac{\bar{x}}{s^2}\times100
-\]</div>
-<p>Parámetros:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>c_letters</code></td>
-<td style="text-align: center;">dict[int, int]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Distribución de las palabras por número de letras (<code>BasicStats.c_letters</code>)</td>
-</tr>
-</tbody>
-</table>
 <p>Fuente: Muñoz Baquedano, M. Legibilidad y variabilidad de los textos. <em>Boletín de Investigación Educacional</em>, 21(2), 2006; el programa y el manual en <a href="https://www.legibilidadmu.cl/">legibilidadmu.cl</a>.</p>
 <h2 id="calc_smog_index">Índice SMOG<a class="headerlink" href="#calc_smog_index" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_smog_index()</strong></p>
 </div>
-<p>Cálculo del índice SMOG de McLaughlin (1969), donde las palabras polisílabas son las de tres o más sílabas. Ajustado para el inglés; para el español es la entrada de la fórmula SOL.</p>
+<!-- core: stats/readability_stats_funcs.md:calc_smog_index b721fe1 -->
+<p>Cálculo del índice SMOG (McLaughlin, 1969).</p>
+<p>Los años de escolaridad necesarios para leer el texto a partir de las palabras polisílabas por oración; cuanto mayor es el valor, más difícil es el texto. En la fórmula original las palabras polisílabas tienen tres o más sílabas y <code>b</code> lleva su número a una muestra de 30 oraciones.</p>
 <p>Fórmula:</p>
 <div class="arithmatex">\[
-a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de oraciones}}}+b
+a \cdot \sqrt{b \cdot \frac{\textrm{Número de palabras polisílabas}}{\textrm{Número de oraciones}}} + c
 \]</div>
+<p>Ajustado para el inglés; para el español es la entrada de la <a href="#calc_sol_grade">fórmula SOL</a>, y <code>ReadabilityStats</code> pasa las palabras de tres o más sílabas.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -2969,7 +2978,7 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <td style="text-align: center;"><code>n_complex</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Número de palabras de tres o más sílabas</td>
+<td style="text-align: center;">Número de palabras polisílabas</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>n_sents</code></td>
@@ -2981,13 +2990,19 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <td style="text-align: center;"><code>a</code></td>
 <td style="text-align: center;">float</td>
 <td style="text-align: center;"><code>1.043</code></td>
-<td style="text-align: center;">Coeficiente a</td>
+<td style="text-align: center;">Coeficiente a, ante la raíz cuadrada</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>b</code></td>
 <td style="text-align: center;">float</td>
+<td style="text-align: center;"><code>30</code></td>
+<td style="text-align: center;">Coeficiente b, el número de oraciones de la muestra</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>c</code></td>
+<td style="text-align: center;">float</td>
 <td style="text-align: center;"><code>3.1291</code></td>
-<td style="text-align: center;">Coeficiente b</td>
+<td style="text-align: center;">Coeficiente c, la constante</td>
 </tr>
 </tbody>
 </table>
@@ -3038,12 +3053,14 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_lix()</strong></p>
 </div>
-<p>Cálculo del <a href="https://en.wikipedia.org/wiki/Lix_(readability_test)">índice de legibilidad LIX</a> de Björnsson (1968), que no depende de la lengua. Cuanto mayor es el valor, más difícil es el texto:</p>
+<!-- core: stats/readability_stats_funcs.md:calc_lix 65d7ed6 -->
+<p>Cálculo del índice de legibilidad LIX (Björnsson, 1968).</p>
+<p>La longitud media de la oración más el porcentaje de palabras largas, las de más de seis letras; no hay coeficientes que ajustar. Cuanto mayor es el valor, más difícil es el texto:</p>
 <table>
 <thead>
 <tr>
 <th style="text-align: center;">Valor</th>
-<th style="text-align: left;">Nivel de dificultad</th>
+<th style="text-align: left;">Texto</th>
 </tr>
 </thead>
 <tbody>
@@ -3069,10 +3086,9 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 </tr>
 </tbody>
 </table>
-<p>Una palabra larga tiene más de seis letras, así que <code>ReadabilityStats</code> pasa el número de palabras de siete o más letras.</p>
 <p>Fórmula:</p>
 <div class="arithmatex">\[
-\frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}}+\frac{100\times\textrm{Número de palabras largas}}{\textrm{Número de palabras}}
+\frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}} + \frac{100 \cdot \textrm{Número de palabras largas}}{\textrm{Número de palabras}}
 \]</div>
 <p>Parámetros:</p>
 <table>
@@ -3109,7 +3125,9 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_rix()</strong></p>
 </div>
-<p>Cálculo del índice de legibilidad RIX (Anderson, 1983), el compañero simplificado de LIX: palabras largas por oración. Cuanto mayor es el valor, más difícil es el texto:</p>
+<!-- core: stats/readability_stats_funcs.md:calc_rix ab7c550 -->
+<p>Cálculo del índice de legibilidad RIX (Anderson, 1983).</p>
+<p>Las palabras largas, de más de seis letras, por oración; no hay coeficientes que ajustar. Cuanto mayor es el valor, más difícil es el texto:</p>
 <table>
 <thead>
 <tr>
@@ -3172,6 +3190,10 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 </tr>
 </tbody>
 </table>
+<p>Fórmula:</p>
+<div class="arithmatex">\[
+\frac{\textrm{Número de palabras largas}}{\textrm{Número de oraciones}}
+\]</div>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3332,7 +3354,7 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_consensus_grade()</strong></p>
 </div>
-<p>Cálculo del grado de consenso: la mediana de los valores de las fórmulas de grado, cada uno redondeado con el medio hacia arriba. La facilidad de lectura se convierte con <code>flesch_reading_easy_to_grade</code> según la escala del preajuste y se añade sin redondear.</p>
+<p>Cálculo del grado de consenso: la mediana de los valores de las fórmulas de grado, cada uno redondeado con el medio hacia arriba. La facilidad de lectura se convierte con <code>flesch_reading_easy_to_grade</code> según la escala del preajuste y se añade sin redondear. La ausencia de valores, un grado que no es un número finito y un preajuste desconocido lanzan <code>ParameterError</code>.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3376,7 +3398,7 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <div class="admonition info">
 <p><strong>ests.readability_stats.grade_to_age()</strong></p>
 </div>
-<p>La etapa del sistema educativo español y la edad del lector según el valor de una fórmula de grado (véase la tabla de la <a href="../readability_stats/#interpretation">interpretación</a>). El valor se redondea con el medio hacia arriba, los valores por debajo de 1 corresponden a los cursos 1-3.</p>
+<p>La etapa del sistema educativo español y la edad del lector según el valor de una fórmula de grado (véase la tabla de la <a href="../readability_stats/#interpretation">interpretación</a>). El valor se redondea con el medio hacia arriba, los valores por debajo de 1 corresponden a los cursos 1-3; un grado que no es un número finito lanza <code>ParameterError</code>.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3408,7 +3430,9 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_reading_time()</strong></p>
 </div>
-<p>Cálculo del tiempo de lectura de un texto en minutos. La velocidad por defecto es la de lectura silenciosa de los adultos en español, 278 palabras por minuto, según el metaanálisis de Brysbaert (2019). Las normas por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) están en <code>ests.constants.READING_SPEED_NORMS</code> como pares (en voz alta, en silencio):</p>
+<!-- core: stats/readability_stats_funcs.md:calc_reading_time 725bd9c -->
+<p>Cálculo del tiempo de lectura de un texto en minutos: el número de palabras dividido por la velocidad de lectura; una velocidad que no es un número positivo lanza <code>ParameterError</code>.</p>
+<p>La velocidad por defecto es la de lectura silenciosa de los adultos en español, 278 palabras por minuto, según el metaanálisis de Brysbaert (2019). Las normas por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) están en <code>ests.constants.READING_SPEED_NORMS</code> como pares (en voz alta, en silencio):</p>
 <table>
 <thead>
 <tr>
@@ -3499,7 +3523,7 @@ a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de 
 </tr>
 <tr>
 <td style="text-align: center;"><code>wpm</code></td>
-<td style="text-align: center;">int</td>
+<td style="text-align: center;">float</td>
 <td style="text-align: center;"><code>278</code></td>
 <td style="text-align: center;">Velocidad de lectura, palabras por minuto</td>
 </tr>

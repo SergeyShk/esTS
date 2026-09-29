@@ -2503,9 +2503,11 @@
 <p><strong>ests.visualizers.dispersion_plot()</strong>, <strong>ests.visualizers.keyness_plot()</strong>, <strong>ests.visualizers.collocation_network()</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Gráficos para las <a href="../../corpus/keyness/">medidas de corpus</a>: la dispersión léxica - dónde aparece una palabra en un texto -, un diagrama de las palabras clave que encuentra <a href="../../corpus/keyness/"><code>keyness</code></a> y una red de las colocaciones que encuentra <a href="../../corpus/collocations/"><code>collocations</code></a>. Las funciones de matplotlib reciben los ejes <code>ax</code> y devuelven <code>Axes</code>: sin <code>ax</code> se crea una figura nueva, con ellos el gráfico va a una rejilla propia; la red de colocaciones la construye graphviz y devuelve un <code>Graph</code>, como el <a href="../word_tree/">árbol de palabras</a>.</p>
+<p>Gráficos para las <a href="../../corpus/keyness/">medidas de corpus</a>: la dispersión léxica - dónde aparece una palabra en un texto -, un diagrama de las palabras clave que encuentra <a href="../../corpus/keyness/"><code>keyness</code></a> y una red de las colocaciones que encuentra <a href="../../corpus/collocations/"><code>collocations</code></a>. Las funciones de matplotlib reciben los ejes <code>ax</code> y devuelven <code>Axes</code>: sin <code>ax</code> se crea una figura nueva, con ellos el gráfico va a una rejilla propia; la red de colocaciones la construye graphviz y devuelve un <code>Graph</code>, como el <a href="../word_tree/">árbol de palabras</a> devuelve un <code>Digraph</code>.</p>
+<p>Las funciones son las del núcleo <a href="https://sergeyshk.github.io/anyTS/visualizers/corpus/">anyTS</a>. Las etiquetas por defecto de los gráficos de matplotlib son las inglesas de <code>VISUALIZER_LABELS</code> en <code>anyts.constants</code>; <code>labels</code> sustituye cualquiera de ellas.</p>
 <h2 id="dispersion_plot">Dispersión léxica<a class="headerlink" href="#dispersion_plot" title="Permanent link">&para;</a></h2>
-<p>Una fila por cada palabra de <code>targets</code> y una marca en la posición de cada una de sus apariciones en el texto. Las palabras se comparan tal cual: la caja y la lematización corresponden a <a href="../../extractors/words/"><code>WordsExtractor</code></a>, y los lemas se buscan con <code>use_lexemes=True</code>.</p>
+<!-- core: visualizers/corpus.md:dispersion_plot 604b589 -->
+<p>Una fila por cada palabra de <code>targets</code> y una marca en la posición de cada una de sus apariciones en el texto. Las palabras se comparan tal cual: la caja y la lematización corresponden a la extracción de las palabras.</p>
 <table>
 <thead>
 <tr>
@@ -2534,9 +2536,17 @@
 <td style="text-align: center;"><code>None</code></td>
 <td style="text-align: center;">Ejes para el gráfico</td>
 </tr>
+<tr>
+<td style="text-align: center;"><code>labels</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code></td>
+</tr>
 </tbody>
 </table>
+<p>Las palabras las extrae <a href="../../extractors/words/"><code>WordsExtractor</code></a>: en minúsculas con <code>lowercase=True</code>, los lemas con <code>use_lexemes=True</code>.</p>
 <h2 id="keyness_plot">Diagrama de palabras clave<a class="headerlink" href="#keyness_plot" title="Permanent link">&para;</a></h2>
+<!-- core: visualizers/corpus.md:keyness_plot e860f91 -->
 <p>Barras horizontales divergentes: las palabras de <code>positive</code> a la derecha, las de <code>negative</code> - el resultado de <code>keyness</code> con <code>positive=False</code> - a la izquierda; la longitud de una barra es el valor absoluto del campo <code>field</code> (<code>score</code>, <code>g2</code>, <code>log_ratio</code>), así que el lado lo fija la lista y no el signo de la medida; <code>top_n</code> palabras por lado, y las palabras con un valor indefinido o infinito se omiten. Para la razón de momios (<code>score</code> de 0 a infinito, uno - momios iguales) indique <code>log=True</code>: se representa el valor absoluto de <span class="arithmatex">\(\log_2\)</span> del valor, simétrico en torno a uno.</p>
 <table>
 <thead>
@@ -2568,9 +2578,9 @@
 </tr>
 <tr>
 <td style="text-align: center;"><code>labels</code></td>
-<td style="text-align: center;">tuple[str, str]</td>
-<td style="text-align: center;"><code>("target corpus", "reference corpus")</code></td>
-<td style="text-align: center;">Etiquetas de la leyenda</td>
+<td style="text-align: center;">dict[str, str]/tuple[str, str]</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code> y <code>xlabel_log</code> (cadenas de formato con <code>field</code>), <code>target</code> y <code>reference</code> (la leyenda); un par de cadenas fija solo la leyenda</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>field</code></td>
@@ -2593,7 +2603,8 @@
 </tbody>
 </table>
 <h2 id="collocation_network">Red de colocaciones<a class="headerlink" href="#collocation_network" title="Permanent link">&para;</a></h2>
-<p>Un grafo no dirigido: los nodos son las palabras con el tamaño de la letra según su frecuencia, las aristas son los pares con el grosor y la etiqueta según el valor de la medida; la disposición <code>neato</code>. Un par de una palabra consigo misma - una palabra repetida dentro de la ventana (<code>rojo rojo</code>) - sería un bucle y se deja fuera antes de tomar los <code>top_n</code> pares. Para dibujarlo hacen falta los ejecutables de <a href="https://graphviz.org/download/">Graphviz</a>; en Jupyter el grafo se muestra solo, y <code>graph.render("network")</code> guarda un archivo png.</p>
+<!-- core: visualizers/corpus.md:collocation_network 080cdcf -->
+<p>Un grafo no dirigido: los nodos son las palabras con el tamaño de la letra según su frecuencia, las aristas son los pares con el grosor y la etiqueta según el valor de la medida; la disposición <code>neato</code>. Un par de una palabra consigo misma - una palabra repetida dentro de la ventana - sería un bucle y se deja fuera antes de tomar los <code>top_n</code> pares. Para dibujarlo hacen falta los ejecutables de <a href="https://graphviz.org/download/">Graphviz</a>; en Jupyter el grafo se muestra solo, y <code>graph.render("network")</code> guarda un archivo png.</p>
 <table>
 <thead>
 <tr>

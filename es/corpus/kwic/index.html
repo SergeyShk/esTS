@@ -1860,6 +1860,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ganchos-del-idioma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ganchos del idioma
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2424,6 +2435,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#ganchos-del-idioma" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ganchos del idioma
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2481,12 +2503,13 @@
 <p><strong>ests.corpus.kwic()</strong>, <strong>ests.corpus.format_kwic()</strong>, <strong>ests.corpus.print_kwic()</strong>, <strong>ests.corpus.Concordance</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Una concordancia KWIC (keyword in context) - todas las apariciones de una palabra o de una expresión con su contexto a la izquierda y a la derecha.</p>
-<p>Las apariciones se buscan entre las palabras del texto: por la forma sin distinguir la caja, distinguiéndola (<code>ignore_case=False</code>) o por el lema (<code>by_lemma=True</code>: <code>gatos</code> se encuentra por <code>gato</code>, y una expresión se da por lemas - <code>mirar a el pájaro</code> - o tal como se escribe, porque cada una de sus palabras se lematiza). El texto y la palabra clave se dividen en palabras del mismo modo, con el tokenizador del pipeline español vacío, así que <code>EE. UU.</code> es una palabra en los dos, y la puntuación y los símbolos no son palabras de ninguno: <code>¿Dónde</code> encuentra <code>Dónde</code>, <code>20 €</code> encuentra <code>20</code>. Las tildes forman parte de la forma: <code>solo</code> y <code>sólo</code> son dos formas.</p>
-<p>Por lema, la palabra clave se lematiza con simplemma, y una palabra del texto se encuentra por su lema de simplemma y, en un <code>Doc</code> que lleva lemas, también por el lema del modelo. En <code>Mi amigo vino con una botella de vino</code> el modelo da <code>venir</code> al verbo, así que <code>venir</code> encuentra el verbo, donde simplemma, que no ve el contexto, no encontraría nada; <code>vino</code> encuentra los dos, porque simplemma lee el verbo como <code>vino</code>.</p>
-<p>El contexto son <code>window</code> palabras a cada lado tal como están escritas en el texto, con la puntuación entre ellas; los espacios se reducen a uno, y las apariciones no se solapan.</p>
-<p><code>format_kwic</code> alinea las líneas en la palabra clave: el contexto de la izquierda se recorta por la izquierda y se alinea a la derecha, el de la derecha se recorta por la derecha; <code>print_kwic</code> imprime el resultado.</p>
+<!-- core: corpus/kwic.md:kwic dadc1ee -->
+<p>Una concordancia KWIC (keyword in context) - todas las apariciones de una palabra o de una expresión con su contexto a la izquierda y a la derecha. Las apariciones se buscan entre las palabras del texto por la forma, sin distinguir la caja o distinguiéndola (<code>ignore_case=False</code>), o por el lema (<code>by_lemma=True</code>), donde las palabras de la palabra clave se lematizan como palabras de una cadena: con un lematizador una expresión puede escribirse en cualquier forma, sin él se da por lemas. Las palabras de una cadena y de la palabra clave salen del tokenizador, las de un <code>Doc</code> de sus tokens, así que un tokenizador que divide una cadena como lo hace el pipeline encuentra en un <code>Doc</code> lo que encuentra en su texto; la puntuación y los símbolos no son palabras. Las formas se comparan en la forma compuesta de Unicode (NFC), sin guiones blandos. Una expresión no cruza el final de un párrafo o de una oración - un límite de un <code>Doc</code> en cualquier punto entre sus palabras, incluido un signo de apertura, o en un texto sin límites el comienzo de una oración del segmentador de oraciones, por defecto un signo final ante un espacio - salvo que la palabra clave tenga un signo final o el comienzo de una oración en el mismo lugar (<code>Sr. García</code>). El contexto son <code>window</code> palabras a cada lado tal como están escritas en el texto, con la puntuación entre ellas; los espacios se reducen a uno, y las apariciones no se solapan.</p>
+<h2 id="ganchos-del-idioma">Ganchos del idioma<a class="headerlink" href="#ganchos-del-idioma" title="Permanent link">&para;</a></h2>
+<p>La función llama al <code>kwic</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/kwic/">anyTS</a> con los ganchos del español. El texto y la palabra clave se dividen en palabras del mismo modo, con el tokenizador del pipeline español vacío, así que <code>EE. UU.</code> es una palabra en los dos, y la puntuación y los símbolos no son palabras de ninguno: <code>¿Dónde</code> encuentra <code>Dónde</code>, <code>20 €</code> encuentra <code>20</code>. Las formas y los lemas se pasan a minúsculas; las tildes forman parte de la forma: <code>solo</code> y <code>sólo</code> son dos formas. Las oraciones de una cadena, y del texto de un <code>Doc</code> sin límites, son las de <a href="../../extractors/sentences/"><code>SentsExtractor</code></a>: unos puntos suspensivos o una exclamación seguidos de una palabra en minúscula no terminan la oración, así que <code>honrado piensa</code> encuentra <code>honrado... piensa</code>.</p>
+<p>Por lema, la palabra clave se lematiza con simplemma, así que una expresión se da por lemas - <code>mirar a el pájaro</code> - o tal como se escribe, y una palabra del texto se encuentra por su lema de simplemma y, en un <code>Doc</code> que lleva lemas, también por el lema del modelo: <code>gatos</code> se encuentra por <code>gato</code>. En <code>Mi amigo vino con una botella de vino</code> el modelo da <code>venir</code> al verbo, así que <code>venir</code> encuentra el verbo, donde simplemma, que no ve el contexto, no encontraría nada; <code>vino</code> encuentra los dos, porque simplemma lee el verbo como <code>vino</code>.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/kwic.md:kwic-parameters e17a79b -->
 <table>
 <thead>
 <tr>
@@ -2507,7 +2530,7 @@
 <td style="text-align: center;"><code>keyword</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Palabra o expresión (palabras separadas por espacios)</td>
+<td style="text-align: center;">Palabra o expresión</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>window</code></td>
@@ -2529,8 +2552,13 @@
 </tr>
 </tbody>
 </table>
-<p><code>format_kwic(concordances, width=40)</code> y <code>print_kwic(concordances, width=40)</code>: <code>width</code> es la anchura de un contexto en caracteres, al menos uno; los saltos de línea dentro de la expresión se sustituyen por espacios.</p>
+<p>Una palabra clave sin palabras y una ventana negativa lanzan <code>ParameterError</code>; una fuente que no es ni una cadena ni un <code>Doc</code>, una palabra clave que no es una cadena y un gancho que no es invocable lanzan <code>SourceTypeError</code>.</p>
+<!-- core: corpus/kwic.md:format_kwic 532aaaa -->
+<p><code>format_kwic(concordances, width=40)</code> alinea las líneas en la palabra clave: el contexto de la izquierda se recorta por la izquierda y se alinea a la derecha, el de la derecha se recorta por la derecha; <code>width</code> es la anchura de un contexto en caracteres, al menos uno. Las líneas pueden venir de cualquier iterable y se toman en la forma compuesta de Unicode (NFC), para que las anchuras cuenten los caracteres tal como se ven.</p>
+<!-- core: corpus/kwic.md:print_kwic 92f3d36 -->
+<p><code>print_kwic(concordances, width=40)</code> imprime el resultado de <code>format_kwic</code>.</p>
 <h2 id="resultado">Resultado<a class="headerlink" href="#resultado" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/kwic.md:Concordance f0916bd -->
 <p>Una lista de tuplas con nombre <code>Concordance</code> en el orden del texto.</p>
 <table>
 <thead>

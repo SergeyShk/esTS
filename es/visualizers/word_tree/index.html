@@ -2459,12 +2459,11 @@
 <p><strong>ests.visualizers.wordtree()</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>La construcción de un <a href="https://www.weblyzard.com/word-tree/">árbol de palabras</a> que muestra los contextos de una palabra clave en un texto: en cada lista de palabras - una oración, por ejemplo - se cuentan los N-gramas de hasta <code>max_n</code> palabras que empiezan o terminan en la palabra clave. Cada nivel del árbol conserva los <code>max_per_n</code> N-gramas más frecuentes que continúan uno más corto ya conservado, alfabéticamente si empatan. Los N-gramas conservados se unen en dos árboles, las palabras tras la palabra clave y ante ella, con el tamaño de la letra según la frecuencia.</p>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>El árbol de palabras se describe en detalle en este <a href="https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/2011/Gruppe05/Homepage/Paper/wordtree-paper-wattenberg.pdf">artículo</a>.</p>
-</div>
+<!-- core: visualizers/word_tree.md:wordtree 7b85f86 -->
+<p>La construcción de un <a href="https://www.weblyzard.com/word-tree/">árbol de palabras</a> que muestra los contextos de una palabra clave en un texto: en cada lista de palabras - una oración, por ejemplo - se cuentan los N-gramas de hasta <code>max_n</code> palabras que empiezan o terminan en la palabra clave. Cada nivel del árbol conserva los <code>max_per_n</code> N-gramas más frecuentes que continúan uno más corto ya conservado, alfabéticamente si empatan. Los N-gramas conservados se unen en dos árboles, las palabras tras la palabra clave y ante ella, con el tamaño de la letra según la frecuencia (<a href="https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/2011/Gruppe05/Homepage/Paper/wordtree-paper-wattenberg.pdf">Wattenberg y Viégas 2008</a>). Para dibujarlo hacen falta los ejecutables de <a href="https://graphviz.org/download/">Graphviz</a>.</p>
+<p>La función es la del núcleo <a href="https://sergeyshk.github.io/anyTS/visualizers/word_tree/">anyTS</a>.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<!-- core: visualizers/word_tree.md:wordtree-parameters d32a474 -->
 <table>
 <thead>
 <tr>
@@ -2503,7 +2502,7 @@
 <td style="text-align: center;"><code>**kwargs</code></td>
 <td style="text-align: center;">-</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Parámetros de dibujo: <code>max_font_size</code> (por defecto <code>30</code>), <code>min_font_size</code> (<code>12</code>), <code>font_interp</code> - una función que interpola el tamaño de la letra a partir de la frecuencia</td>
+<td style="text-align: center;">Parámetros de dibujo: <code>max_font_size</code> (por defecto <code>30</code>), <code>min_font_size</code> (<code>12</code>), <code>font_interp</code> - una función de la frecuencia relativa de un nodo, su frecuencia entre la mayor (de 0 a 1], que da la parte del intervalo de <code>min_font_size</code> a <code>max_font_size</code>, de 0 a 1; la raíz cúbica por defecto</td>
 </tr>
 </tbody>
 </table>
@@ -2530,10 +2529,6 @@
 </code></pre></div>
 <p><em>Resultado</em>:</p>
 <p><img alt="ests" class="center" src="../../../img/wordtree.png" /></p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Advertencia</p>
-<p>Para dibujar el árbol hacen falta los ejecutables de <a href="https://graphviz.org/download/">Graphviz</a>.</p>
 </div>
 
 

@@ -2670,19 +2670,19 @@
 
 
 <h1 id="components">Components<a class="headerlink" href="#components" title="Permanent link">&para;</a></h1>
-<p>A set of components for <a href="https://github.com/explosion/spaCy">spaCy</a> pipelines. Each one is a class with two methods: <code>__init__</code>, which registers an extension of <code>Doc</code> at initialization, and <code>__call__</code>, which takes a <code>Doc</code> object and returns it with the statistics attached.</p>
+<p>The base of the components of <a href="https://github.com/explosion/spaCy">spaCy</a> that put the statistics of a text into an extension of <code>Doc</code>: a component registers the extension when it is added to a pipeline and, for every document, computes the statistics and puts them into <code>doc._.&lt;name&gt;</code>. Writing components in general is described in the <a href="https://spacy.io/usage/processing-pipelines#custom-components">documentation of spaCy</a>.</p>
+<p>The components of esTS are subclasses of the <code>StatsComponent</code> of the <a href="https://sergeyshk.github.io/anyTS/components/">anyTS</a> core, one for every class of statistics.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Writing components of your own is described in the corresponding section of the <a href="https://spacy.io/usage/processing-pipelines#custom-components">documentation of spaCy</a>. The examples below use the model <code>es_core_news_sm</code>, which is installed apart: <code>python -m spacy download es_core_news_sm</code> (see <a href="../installation/">installation</a>).</p>
+<p>The examples below use the model <code>es_core_news_sm</code>, which is installed apart: <code>python -m spacy download es_core_news_sm</code> (see <a href="../installation/">installation</a>).</p>
 </div>
 <h2 id="names">Names<a class="headerlink" href="#names" title="Permanent link">&para;</a></h2>
 <p>The factories carry the prefix of the library: <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code>. They are declared as entry points of <code>spacy_factories</code>, so a pipeline saved with these components (<code>nlp.to_disk(path)</code>, <code>spacy package</code>) loads with <code>spacy.load(path)</code> without importing the library.</p>
-<p>The name of the pipe is the name of the extension:</p>
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_basic"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"basic"</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"El gato duerme"</span><span class="p">)</span>
 <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">basic</span><span class="o">.</span><span class="n">n_words</span>
 </code></pre></div>
-<p>Without <code>name</code> the pipe and the extension keep the name of the factory (<code>doc._.ests_basic</code>). The same component can be added twice under different names, for example with two presets.</p>
+<p>The name of the pipe is the name of the extension: <code>nlp.add_pipe(factory, name="basic")</code> puts the statistics into <code>doc._.basic</code>. Without <code>name</code> the pipe and the extension keep the name of the factory. The extension follows the pipe when the pipeline renames it (<code>nlp.rename_pipe</code>), and a name taken by an extension of another package raises <code>ParameterError</code> instead of replacing it. A component taken from another pipeline (<code>add_pipe(name, source=other)</code>) is the same object in both, so under a new name it writes to that extension in the other pipeline too; a component of its own comes from the factory, <code>add_pipe(factory, name=...)</code>. The same component can be added twice under different names, with different parameters. A document with no words - an empty string, whitespace, punctuation alone - passes through a component untouched, its extension left at <code>None</code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Serialization</p>
 <p>A component keeps an object of statistics in <code>doc._.&lt;name&gt;</code>, and spaCy cannot serialize it: <code>Doc.to_bytes()</code>, <code>DocBin(store_user_data=True)</code> and <code>nlp.pipe(..., n_process&gt;1)</code> fail with these components in the pipeline. To save a document, leave the user data out (<code>doc.to_bytes(exclude=["user_data"])</code>) or keep <code>doc._.&lt;name&gt;.get_stats()</code> on your own; for multiprocessing compute the statistics in the main process after <code>nlp.pipe</code>, without the components.</p>
@@ -2761,7 +2761,6 @@
 </tr>
 </tbody>
 </table>
-<p>A document with no words - an empty string, whitespace, punctuation alone - passes through every component untouched, its extension left at <code>None</code>.</p>
 <p>In the pipeline of <code>es_core_news_sm</code> the parts of speech come from the <code>morphologizer</code> (or a <code>tagger</code> with an <code>attribute_ruler</code>; a <code>tagger</code> alone does not give them), the parse from the <code>parser</code> and the lemmas from the <code>lemmatizer</code>. A component whose annotation is missing, <code>excluded</code> components included, raises <code>SourceError</code> when the document goes through it.</p>
 <h2 id="basicstatscomponent">BasicStatsComponent<a class="headerlink" href="#basicstatscomponent" title="Permanent link">&para;</a></h2>
 <div class="admonition info">

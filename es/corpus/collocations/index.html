@@ -2503,9 +2503,9 @@
 <p><strong>ests.corpus.collocations()</strong>, <strong>ests.corpus.Collocation</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/collocations.md:collocations d3372b1 -->
+<!-- core: corpus/collocations.md:collocations 90cd7f5 -->
 <p>Extracción de colocaciones: pares de palabras que aparecen juntas más a menudo de lo que daría la independencia - expresiones fijas, terminología, la combinatoria de una palabra. Las medidas de asociación son las de <a href="https://www.sketchengine.eu/wp-content/uploads/ske-statistics.pdf">Sketch Engine</a> y de <a href="https://www.nltk.org/api/nltk.metrics.association.html"><code>nltk.metrics.association</code></a>.</p>
-<p>Los pares de palabras son ordenados, como en NLTK: la palabra de la derecha aparece a no más de <code>window</code> palabras después de la de la izquierda, y cada par de posiciones se cuenta una vez; <code>window=1</code> da bigramas. Dentro de la medida la frecuencia del par se divide por el tamaño de la ventana (Church y Hanks 1990, como en NLTK), para que la frecuencia esperada no dependa de la ventana y Dice y la sensibilidad mínima no superen uno; el campo <code>freq_pair</code> guarda la frecuencia sin dividir. Con <code>window &gt; 1</code> la escala de las medidas de Dice se desplaza por ello: un par siempre contiguo recibe un logDice de <span class="arithmatex">\(14 - \log_2 window\)</span> (13 con una ventana de 2) y no 14 como en Sketch Engine, que usa la coocurrencia sin dividir. El parámetro <code>node</code> conserva los pares con la palabra dada a la izquierda o a la derecha: la combinatoria de una palabra.</p>
+<p>Los pares de palabras son ordenados, como en NLTK: la palabra de la derecha aparece a no más de <code>window</code> palabras después de la de la izquierda, y cada par de posiciones se cuenta una vez; <code>window=1</code> da bigramas. Dentro de la medida la frecuencia del par se divide por el tamaño de la ventana (Church y Hanks 1990, como en NLTK), para que la frecuencia esperada no dependa de la ventana y Dice y la sensibilidad mínima no superen uno; el campo <code>freq_pair</code> guarda la frecuencia sin dividir. Con <code>window &gt; 1</code> la escala de las medidas de Dice se desplaza por ello: un par siempre contiguo recibe un logDice de <span class="arithmatex">\(14 - \log_2 window\)</span> (13 con una ventana de 2) y no 14 como en Sketch Engine, que usa la coocurrencia sin dividir; 14 solo lo alcanza un par que aparece a todas las distancias dentro de la ventana. El parámetro <code>node</code> conserva los pares con la palabra dada a la izquierda o a la derecha: la combinatoria de una palabra.</p>
 <p>Las palabras se comparan tal cual: la caja, la lematización y las palabras vacías corresponden al extractor de palabras; los lemas convienen a las expresiones fijas, las formas a las construcciones gramaticales.</p>
 <p>El módulo <code>ests.corpus.collocations</code> reexporta la función y las medidas del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/collocations/">anyTS</a> (<code>from ests.corpus.collocations import calc_logdice</code>). Las palabras se extraen con <a href="../../extractors/words/"><code>WordsExtractor</code></a>; para las expresiones fijas del español como <code>punto de vista</code> o <code>llevar a cabo</code> conviene usar sus lemas (<code>use_lexemes=True</code>).</p>
 <h2 id="medidas">Medidas<a class="headerlink" href="#medidas" title="Permanent link">&para;</a></h2>
@@ -2573,7 +2573,7 @@
 </table>
 <p>Las medidas están disponibles como las funciones <code>calc_mi</code>, <code>calc_mi3</code>, <code>calc_t_score</code>, <code>calc_dice</code>, <code>calc_logdice</code>, <code>calc_log_likelihood</code>, <code>calc_npmi</code> y <code>calc_min_sensitivity</code> con los argumentos <code>(freq_a, freq_b, freq_ab, n)</code> del módulo <code>anyts.corpus.collocations</code>; sus nombres y descripciones están en <code>anyts.constants.COLLOCATION_MEASURES</code>.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/collocations.md:collocations-parameters 3f013f4 -->
+<!-- core: corpus/collocations.md:collocations-parameters 459ab39 -->
 <table>
 <thead>
 <tr>
@@ -2600,7 +2600,7 @@
 <td style="text-align: center;"><code>measure</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>logdice</code></td>
-<td style="text-align: center;">Medida de <code>COLLOCATION_MEASURES</code></td>
+<td style="text-align: center;">Medida de <code>anyts.constants.COLLOCATION_MEASURES</code></td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>min_freq</code></td>

@@ -2459,12 +2459,15 @@
 <p><strong>ests.visualizers.zipf()</strong>, <strong>ests.visualizers.zipf_theory()</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
+<!-- core: visualizers/zipf.md:zipf 2fecb35 -->
 <p>El gráfico de la <a href="https://es.wikipedia.org/wiki/Ley_de_Zipf">ley de Zipf</a> a partir de un contador de frecuencias de palabras.</p>
 <div class="admonition quote">
 <p class="admonition-title">Definición</p>
 <p>La ley de Zipf (la ley de rango y frecuencia) es una regularidad empírica de la distribución de las frecuencias de las palabras en una lengua natural: si todas las palabras de una lengua, o de un texto lo bastante largo, se ordenan por frecuencia descendente, la frecuencia de la n-ésima palabra de la lista es aproximadamente inversamente proporcional a su número n, el rango de la palabra. La segunda palabra más frecuente aparece más o menos la mitad de veces que la primera, la tercera un tercio, y así sucesivamente.</p>
 </div>
+<p>Las funciones son las del núcleo <a href="https://sergeyshk.github.io/anyTS/visualizers/zipf/">anyTS</a>. Las etiquetas por defecto son las inglesas de <code>VISUALIZER_LABELS</code> en <code>anyts.constants</code>; <code>labels</code> sustituye cualquiera de ellas, por ejemplo <code>labels={"title": "Ley de Zipf"}</code>.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<!-- core: visualizers/zipf.md:zipf-parameters 0d42d39 -->
 <table>
 <thead>
 <tr>
@@ -2515,7 +2518,7 @@
 <td style="text-align: center;"><code>show_fit</code></td>
 <td style="text-align: center;">bool</td>
 <td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Dibujar el ajuste de Zipf-Mandelbrot <span class="arithmatex">\(f(r) = C / (r + q)^s\)</span> de <a href="../../stats/diversity_stats_funcs/#fit_zipf_mandelbrot"><code>fit_zipf_mandelbrot</code></a></td>
+<td style="text-align: center;">Dibujar el ajuste de Zipf-Mandelbrot <span class="arithmatex">\(f(r) = C / (r + q)^s\)</span> de <code>fit_zipf_mandelbrot</code></td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>ax</code></td>
@@ -2523,9 +2526,18 @@
 <td style="text-align: center;"><code>None</code></td>
 <td style="text-align: center;">Ejes de matplotlib para el gráfico; si no se dan, se crea una figura nueva</td>
 </tr>
+<tr>
+<td style="text-align: center;"><code>labels</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Etiquetas del gráfico sobre las de por defecto: <code>title</code>, <code>xlabel</code>, <code>ylabel</code>, <code>experimental</code> y <code>theoretical</code> (las curvas), <code>fit</code> (una cadena de formato con <code>q</code> y <code>s</code>)</td>
+</tr>
 </tbody>
 </table>
-<p>La función devuelve los <code>Axes</code> con el gráfico; un <code>num_words</code> mayor que el número de tipos de palabra no alarga las curvas más allá de los datos, un contador vacío lanza <code>SourceError</code>, y un <code>num_words</code> menor que uno lanza <code>ParameterError</code>. <code>zipf_theory(size, num_ranks, alpha, ax)</code> dibuja solo la curva teórica, <span class="arithmatex">\(f(r) = size \cdot r^{-\alpha}\)</span> para los rangos de 1 a <code>num_ranks</code>.</p>
+<p>La función devuelve los <code>Axes</code> con el gráfico; un <code>num_words</code> mayor que el número de tipos de palabra no alarga las curvas más allá de los datos, un contador cuyas palabras no son cadenas lanza <code>SourceTypeError</code>, un contador vacío o una frecuencia que no es mayor que cero <code>SourceError</code>, y un <code>num_words</code> menor que uno o un exponente que no es un número finito mayor que cero <code>ParameterError</code>, todo ello antes de crear una figura.</p>
+<p>El ajuste de Zipf-Mandelbrot se describe en <a href="../../stats/diversity_stats_funcs/#fit_zipf_mandelbrot"><code>fit_zipf_mandelbrot</code></a>.</p>
+<!-- core: visualizers/zipf.md:zipf_theory bce12a7 -->
+<p><code>zipf_theory(size, num_ranks, alpha=1.5, ax=None, labels=None)</code> dibuja solo la curva teórica, <span class="arithmatex">\(f(r) = size \cdot r^{-\alpha}\)</span> para los rangos de 1 a <code>num_ranks</code>; su etiqueta es la clave <code>theoretical</code>.</p>
 <h2 id="ejemplo-de-uso">Ejemplo de uso<a class="headerlink" href="#ejemplo-de-uso" title="Permanent link">&para;</a></h2>
 <p>Los lemas de <em>Marianela</em> de Galdós del <a href="../../datasets/spanishliterature/">corpus de literatura</a>.</p>
 <div class="admonition example">

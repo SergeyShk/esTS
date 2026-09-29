@@ -2533,9 +2533,9 @@
 <p>Un corpus es un diccionario «nombre de un texto → unidades». <code>frequency_table(corpus, n_mfw=100, culling=0.0)</code> construye la tabla de frecuencias relativas: las filas son los textos, las columnas las <code>n_mfw</code> unidades más frecuentes por frecuencia relativa media descendente (alfabéticamente si empatan); <code>culling</code> conserva las unidades que aparecen al menos en la proporción de textos dada, como en stylo.</p>
 <!-- core: corpus/stylometry.md:z_scores 410148c -->
 <p><code>z_scores(table)</code> estandariza las columnas con la desviación típica muestral, como <code>scale()</code> de R; una columna con la misma frecuencia en todos los textos da ceros.</p>
-<!-- core: corpus/stylometry.md:delta 65dbfdb -->
+<!-- core: corpus/stylometry.md:delta 8a87278 -->
 <p><code>delta</code> calcula a partir de las puntuaciones z una matriz simétrica de distancias (un <code>DataFrame</code> con los nombres de los textos); hacen falta al menos tres textos: con dos, las puntuaciones z degeneran en ±1/√2 y las distancias no dependen de las frecuencias.</p>
-<p>Variantes (<code>DELTA_VARIANTS</code>), con las fórmulas de las fuentes de stylo; <span class="arithmatex">\(n\)</span> es el número de unidades, <span class="arithmatex">\(z_A\)</span> y <span class="arithmatex">\(z_B\)</span> los vectores de puntuaciones z de los textos:</p>
+<p>Variantes (<code>anyts.constants.DELTA_VARIANTS</code>), con las fórmulas de las fuentes de stylo; <span class="arithmatex">\(n\)</span> es el número de unidades, <span class="arithmatex">\(z_A\)</span> y <span class="arithmatex">\(z_B\)</span> los vectores de puntuaciones z de los textos:</p>
 <table>
 <thead>
 <tr>
@@ -2573,6 +2573,7 @@
 </tbody>
 </table>
 <p>La Delta coseno es la que mejor agrupa los textos por autor en los experimentos de Evert et al. El número habitual de unidades es de 100 a 500 palabras más frecuentes, de 100 a 200 para los N-gramas de caracteres.</p>
+<p>Parámetros de <code>delta</code>:</p>
 <table>
 <thead>
 <tr>
@@ -2599,7 +2600,7 @@
 <td style="text-align: center;"><code>variant</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>burrows</code></td>
-<td style="text-align: center;">Variante de Delta de <code>DELTA_VARIANTS</code></td>
+<td style="text-align: center;">Variante de Delta de <code>anyts.constants.DELTA_VARIANTS</code></td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>culling</code></td>

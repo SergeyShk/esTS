@@ -2522,12 +2522,12 @@
 
 <h1 id="comparacion-de-corpus">Comparación de corpus<a class="headerlink" href="#comparacion-de-corpus" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.corpus.compare_corpora()</strong>, <strong>ests.corpus.compare_features()</strong>, <strong>ests.corpus.corpus_features()</strong>, <strong>ests.corpus.text_features()</strong>, <strong>ests.corpus.split_windows()</strong>, <strong>ests.corpus.sentence_rhythm()</strong>, <strong>ests.corpus.calc_cohen_d()</strong>, <strong>ests.corpus.calc_cliff_delta()</strong>, <strong>ests.corpus.bootstrap_median_diff()</strong>, <strong>ests.corpus.holm_correction()</strong></p>
+<p><strong>ests.corpus.compare_corpora()</strong>, <strong>ests.corpus.compare_features()</strong>, <strong>ests.corpus.check_comparison_params()</strong>, <strong>ests.corpus.corpus_features()</strong>, <strong>ests.corpus.text_features()</strong>, <strong>ests.corpus.split_windows()</strong>, <strong>ests.corpus.sentence_rhythm()</strong>, <strong>ests.corpus.calc_cohen_d()</strong>, <strong>ests.corpus.calc_cliff_delta()</strong>, <strong>ests.corpus.bootstrap_median_diff()</strong>, <strong>ests.corpus.holm_correction()</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
 <p><code>compare_corpora</code> compara dos corpus de textos en español por todos los rasgos de un texto a la vez - qué estadísticas distinguen los corpus y en qué medida. Para palabras sueltas hace lo mismo <a href="../keyness/"><code>keyness</code></a>, para las distancias entre textos, <a href="../stylometry/#delta"><code>delta</code></a>. Construye las tablas de los rasgos de las ventanas de los dos corpus y las compara con el <code>compare_features</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/compare/">anyTS</a>:</p>
-<!-- core: corpus/compare.md:compare_features f0cc080 -->
-<p>Comparación de dos corpus rasgo por rasgo. Cada corpus llega como una tabla de los rasgos de sus ventanas - los textos divididos en partes de un tamaño parecido, para que los rasgos no dependan de la longitud de los textos -; una biblioteca de un idioma construye esas tablas a partir de sus textos. <code>compare_features(table_a, table_b, labels, n_bootstrap, seed)</code> compara las tablas columna por columna y devuelve una fila por rasgo, ordenadas por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel <code>text</code> del índice de una tabla; una tabla sin ese nivel toma cada fila por un texto aparte. Una columna que falta en una de las tablas da <code>nan</code>.</p>
+<!-- core: corpus/compare.md:compare_features 9eaeeac -->
+<p>Comparación de dos corpus rasgo por rasgo. Cada corpus llega como una tabla de los rasgos de sus ventanas - los textos divididos en partes de un tamaño parecido, para que los rasgos no dependan de la longitud de los textos. <code>compare_features(table_a, table_b, labels, n_bootstrap, seed)</code> compara las tablas columna por columna y devuelve una fila por rasgo, ordenadas por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel <code>text</code> del índice de una tabla; una tabla sin ese nivel toma cada fila por un texto aparte. Una columna que falta en una de las tablas da <code>nan</code>.</p>
 <p>En <code>split_windows</code> el número de ventanas es la razón del número de palabras al tamaño de una ventana redondeada con el medio hacia arriba, al menos una, y las partes son iguales: con una ventana de 1000 un texto de una a dos ventanas da ventanas de 750 a 1499 palabras, y un texto más corto que <code>min_words</code> - media ventana por defecto - no da ninguna. Un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, <code>¿</code> y <code>¡</code> -, mientras que unas comillas rectas o una raya pegadas al final de la palabra anterior se quedan con ella (<code>"cuatro"</code>, <code>—dijo Juan—</code>). Los rasgos de cada ventana los calcula <code>text_features</code> o una función propia.</p>
 <h2 id="rasgos">Rasgos<a class="headerlink" href="#rasgos" title="Permanent link">&para;</a></h2>
 <p><code>text_features(text, nlp=None)</code> devuelve 132 rasgos con un prefijo según su fuente:</p>
@@ -2578,7 +2578,7 @@
 <p><code>corpus_features(texts, window, features)</code> devuelve la matriz de rasgos de las ventanas con el índice (número del texto, número de la ventana), también para clasificadores propios; el nivel <code>text</code> del índice es el que remuestrea el bootstrap de <code>compare_features</code>. <code>compare_corpora</code> es <code>corpus_features</code> para cada corpus seguido de <code>compare_features</code>, y la división permite calcular una vez los rasgos de varios corpus y compararlos por pares.</p>
 <p>Las proporciones de espacios, letras y signos de puntuación (<code>basic_p_spaces</code>, <code>basic_p_letters</code>, <code>basic_p_punctuations</code>) cuentan los caracteres tal cual: las sangrías, los espacios dobles y los de no separación de los archivos reflejan la composición de una edición y no el texto. En un corpus de fuentes distintas conviene colapsarlos antes, por ejemplo, con <code>re.sub(r"[^\S\n]+", " ", text)</code>.</p>
 <h2 id="estadisticas">Estadísticas<a class="headerlink" href="#estadisticas" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/compare.md:compare_features-statistics 63d4635 -->
+<!-- core: corpus/compare.md:compare_features-statistics 42e948a -->
 <p>Para un rasgo con los valores <span class="arithmatex">\(x_1 \dots x_{n_A}\)</span> en el corpus A y <span class="arithmatex">\(y_1 \dots y_{n_B}\)</span> en el corpus B (sin los valores indefinidos e infinitos; con menos de dos valores en un lado, <code>nan</code>):</p>
 <table>
 <thead>
@@ -2626,7 +2626,7 @@
 </tr>
 </tbody>
 </table>
-<p>Los nombres de las columnas son <code>COMPARISON_COLUMNS</code>, con <code>A</code> y <code>B</code> sustituidas por las etiquetas de los corpus. La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.</p>
+<p>Los nombres de las columnas son <code>anyts.corpus.COMPARISON_COLUMNS</code>, con <code>A</code> y <code>B</code> sustituidas por las etiquetas de los corpus. La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.</p>
 <div class="admonition warning">
 <p class="admonition-title">Las ventanas de un texto no son independientes</p>
 <p>La prueba y los tamaños del efecto toman cada ventana por una observación independiente, y las ventanas de un texto no lo son. Con pocos textos en un corpus los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus. El bootstrap, en cambio, remuestrea textos enteros (un bootstrap por conglomerados), así que su intervalo tiene en cuenta la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con solo unos pocos.</p>
@@ -2676,7 +2676,7 @@
 </tbody>
 </table>
 <p><code>labels</code>, <code>n_bootstrap</code> y <code>seed</code> pasan a <code>compare_features</code>, cuyos parámetros son:</p>
-<!-- core: corpus/compare.md:compare_features-parameters 73b70e9 -->
+<!-- core: corpus/compare.md:compare_features-parameters 7c141e7 -->
 <table>
 <thead>
 <tr>
@@ -2703,7 +2703,7 @@
 <td style="text-align: center;"><code>labels</code></td>
 <td style="text-align: center;">tuple[str, str]</td>
 <td style="text-align: center;"><code>("A", "B")</code></td>
-<td style="text-align: center;">Nombres de los corpus para las columnas</td>
+<td style="text-align: center;">Nombres de los corpus para las columnas, dos cadenas que den columnas distintas</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>n_bootstrap</code></td>
@@ -2713,12 +2713,15 @@
 </tr>
 <tr>
 <td style="text-align: center;"><code>seed</code></td>
-<td style="text-align: center;">int</td>
+<td style="text-align: center;">int/Generator</td>
 <td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Semilla del generador de números aleatorios; <code>None</code> - una aleatoria</td>
+<td style="text-align: center;">Semilla del generador de números aleatorios, un entero no negativo, o un <code>Generator</code> de numpy; <code>None</code> - una aleatoria</td>
 </tr>
 </tbody>
 </table>
+<!-- core: corpus/compare.md:check_comparison_params f445b8d -->
+<p><code>check_comparison_params(labels=("A", "B"), n_bootstrap=1000, seed=0)</code> comprueba los parámetros de <code>compare_features</code> y lanza <code>ParameterError</code> salvo que las etiquetas sean dos cadenas que den columnas distintas (<code>("diff", "B")</code> repetiría <code>median_diff</code>), el número de remuestras bootstrap sea un entero de al menos uno y la semilla sea <code>None</code>, un entero no negativo o un <code>Generator</code> de numpy. Llamada antes de construir las tablas a partir de los textos, señala un parámetro erróneo antes de procesar los textos.</p>
+<p><code>compare_corpora</code> la llama primero, así que un nombre de corpus o una semilla erróneos fallan antes de analizar ningún texto.</p>
 <h2 id="funciones-de-las-estadisticas">Funciones de las estadísticas<a class="headerlink" href="#funciones-de-las-estadisticas" title="Permanent link">&para;</a></h2>
 <p>Las estadísticas de una fila están disponibles una a una desde <code>ests.corpus</code>:</p>
 <!-- core: corpus/compare.md:calc_cohen_d c27397e -->

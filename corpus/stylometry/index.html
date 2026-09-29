@@ -2531,7 +2531,7 @@
 <p>A corpus is a dictionary "name of a text → units". <code>frequency_table(corpus, n_mfw=100, culling=0.0)</code> builds the table of relative frequencies: rows are the texts, columns the <code>n_mfw</code> most frequent units by descending mean relative frequency (alphabetically when equal); <code>culling</code> keeps the units that occur in at least the given share of the texts, as in stylo.</p>
 <p><code>z_scores(table)</code> standardizes the columns with the sample standard deviation, like <code>scale()</code> of R; a column with the same frequency in every text gives zeros.</p>
 <p><code>delta</code> computes a symmetric matrix of distances from the z-scores (a <code>DataFrame</code> with the names of the texts); at least three texts are needed - with two, the z-scores degenerate to ±1/√2 and the distances do not depend on the frequencies.</p>
-<p>Variants (<code>DELTA_VARIANTS</code>), with the formulas of the sources of stylo; <span class="arithmatex">\(n\)</span> is the number of units, <span class="arithmatex">\(z_A\)</span> and <span class="arithmatex">\(z_B\)</span> the vectors of z-scores of the texts:</p>
+<p>Variants (<code>anyts.constants.DELTA_VARIANTS</code>), with the formulas of the sources of stylo; <span class="arithmatex">\(n\)</span> is the number of units, <span class="arithmatex">\(z_A\)</span> and <span class="arithmatex">\(z_B\)</span> the vectors of z-scores of the texts:</p>
 <table>
 <thead>
 <tr>
@@ -2569,6 +2569,7 @@
 </tbody>
 </table>
 <p>Cosine Delta clusters the texts by author best in the experiments of Evert et al. The usual number of units is 100 to 500 most frequent words, 100-200 for character N-grams.</p>
+<p>Parameters of <code>delta</code>:</p>
 <table>
 <thead>
 <tr>
@@ -2595,7 +2596,7 @@
 <td style="text-align: center;"><code>variant</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>burrows</code></td>
-<td style="text-align: center;">Variant of Delta of <code>DELTA_VARIANTS</code></td>
+<td style="text-align: center;">Variant of Delta of <code>anyts.constants.DELTA_VARIANTS</code></td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>culling</code></td>

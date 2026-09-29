@@ -2621,8 +2621,26 @@
 </code></pre></div>
 </div>
 <h3 id="get_most_common">get_most_common<a class="headerlink" href="#get_most_common" title="Permanent link">&para;</a></h3>
-<!-- core: extractors/char_ngrams.md:CharNgramsExtractor-get_most_common eeabff0 -->
-<p>Devuelve un contador de los N-gramas más frecuentes del texto. Recibe como parámetro el número de N-gramas a devolver.</p>
+<!-- core: extractors/char_ngrams.md:CharNgramsExtractor-get_most_common 80bd729 -->
+<p>Devuelve los N-gramas más frecuentes del texto como una lista de pares (N-grama, frecuencia), el más frecuente primero.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>n</code></td>
+<td style="text-align: center;">int</td>
+<td style="text-align: center;"><code>10</code></td>
+<td style="text-align: center;">Número de N-gramas más frecuentes</td>
+</tr>
+</tbody>
+</table>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
 <p>El método debe llamarse después de extraer los N-gramas con <code>extract</code>.</p>

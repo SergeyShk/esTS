@@ -2380,6 +2380,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#css" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        css
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2494,6 +2505,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#css" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        css
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2532,11 +2554,12 @@
 
 <h1 id="resaltado-del-texto">Resaltado del texto<a class="headerlink" href="#resaltado-del-texto" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.visualizers.highlight()</strong></p>
+<p><strong>ests.visualizers.highlight()</strong>, <strong>ests.visualizers.HighlightedText</strong>, <strong>ests.visualizers.Highlight</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Resaltado de los fragmentos del texto que cuentan las estadísticas de la biblioteca, a la manera de los correctores de estilo. La fuente de datos puede ser un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>.</p>
-<p>La función devuelve un objeto <code>HighlightedText</code>, que Jupyter muestra como HTML con estilos y una leyenda; el método <code>to_html</code> devuelve el mismo marcado para la documentación y las aplicaciones web. Los fragmentos se guardan en el atributo <code>highlights</code> y quedan disponibles para una representación propia.</p>
+<!-- core: visualizers/highlight.md:HighlightedText ca113fe -->
+<p>El mecanismo del resaltado de un texto por capas, a la manera de los correctores de estilo: cada capa marca los fragmentos de un texto que cuenta una estadística - las oraciones largas, las palabras complejas, la pasiva. La fuente de datos puede ser un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>. El resultado se muestra en Jupyter como HTML con estilos y una leyenda; el método <code>to_html</code> devuelve el mismo marcado para la documentación y las aplicaciones web, y los fragmentos se guardan en el atributo <code>highlights</code> para una representación propia. Los fragmentos de capas distintas pueden solaparse.</p>
+<p>La función <code>highlight</code> devuelve un objeto <code>HighlightedText</code> de esTS, que extiende el <code>HighlightedText</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/visualizers/highlight/">anyTS</a> con las capas de la biblioteca, su búsqueda y sus parámetros, y el prefijo <code>ests</code> de las clases CSS.</p>
 <p>Capas del resaltado:</p>
 <table>
 <thead>
@@ -2617,7 +2640,7 @@
 <tr>
 <td style="text-align: left;">Estilo</td>
 <td style="text-align: center;"><code>stopwords</code></td>
-<td style="text-align: center;">Palabras vacías de <code>STOPWORDS</code> o de la lista pasada, el agua del texto</td>
+<td style="text-align: center;">Palabras vacías de <code>STOPWORDS</code> o del parámetro <code>stopwords</code>, el agua del texto</td>
 <td style="text-align: center;"><a href="../../stats/style_stats/">StyleStats</a></td>
 </tr>
 <tr>
@@ -2640,13 +2663,14 @@
 </tr>
 </tbody>
 </table>
-<p>Los grupos se definen en <code>ests.constants.HIGHLIGHT_LAYER_GROUPS</code>. Las capas del grupo «Sintaxis» necesitan un <code>Doc</code> con análisis y lematizador (los modelos <code>es_core_news_sm</code>, <code>es_core_news_md</code>, <code>es_core_news_lg</code>), como <a href="../../stats/syntax_stats/">SyntaxStats</a>; <code>verbal_nouns</code> necesita un <code>Doc</code> con las categorías gramaticales y los lemas. Un <code>Doc</code> sin los límites de las oraciones (un pipeline vacío, un pipeline sin analizador) se divide con las reglas de <a href="../../extractors/sentences/">SentsExtractor</a>. Por defecto se activan las capas de <code>HIGHLIGHT_DEFAULT_LAYERS</code> que la fuente permite - oraciones largas, palabras complejas, pasiva, cadenas de <code>de</code>, predicados escindidos, clichés; <code>layers="all"</code> activa todas las permitidas. Las capas se solapan (una locución prepositiva está hecha de palabras vacías), así que elija las que necesite.</p>
+<p>Los grupos se definen en <code>ests.constants.HIGHLIGHT_LAYER_GROUPS</code>, las anotaciones de un <code>Doc</code> que necesita una capa en <code>HIGHLIGHT_LAYER_ANNOTATIONS</code> y los estilos de las capas en <code>HIGHLIGHT_LAYER_STYLES</code>. Las capas del grupo «Sintaxis» necesitan un <code>Doc</code> con análisis y lematizador (los modelos <code>es_core_news_sm</code>, <code>es_core_news_md</code>, <code>es_core_news_lg</code>), como <a href="../../stats/syntax_stats/">SyntaxStats</a>; <code>verbal_nouns</code> necesita un <code>Doc</code> con las categorías gramaticales y los lemas. Un <code>Doc</code> sin los límites de las oraciones (un pipeline vacío, un pipeline sin analizador) se divide con las reglas de <a href="../../extractors/sentences/">SentsExtractor</a>. Por defecto se activan las capas de <code>HIGHLIGHT_DEFAULT_LAYERS</code> que la fuente permite - oraciones largas, palabras complejas, pasiva, cadenas de <code>de</code>, predicados escindidos, clichés; <code>layers="all"</code> activa todas las permitidas. Las capas se solapan (una locución prepositiva está hecha de palabras vacías), así que elija las que necesite.</p>
 <p>Una oración es larga a partir de 30 palabras, el límite de las guías españolas de lenguaje claro (la <a href="https://www.comunidad.madrid/transparencia/sites/default/files/ckeditor/guia_tramites_claros-comunidad_madrid-noviembre_2021.pdf">Comunidad de Madrid</a> y el <a href="https://gcba.github.io/programadelenguajeclaro/Manual%20de%20lenguaje%20claro%202024%20(Final).pdf">Gobierno de la Ciudad de Buenos Aires</a>), y una palabra es compleja a partir de cuatro sílabas; <code>complex_syl_factor=3</code>, el límite de <code>BasicStats</code>, muestra las palabras de <code>n_complex_words</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>Una aliteración se busca dentro de una oración como una secuencia de dos palabras vecinas o más con el mismo sonido consonántico en su raíz. Los sonidos son los de la <a href="../../stats/phon_stats_funcs/#transcribe">transcripción</a>, así que <code>casa</code> y <code>queso</code> repiten k; la raíz es el comienzo común de las transcripciones de la forma y de su lema (<code>cantaban</code> - k a n t a), lo que deja fuera las terminaciones que se repiten por la concordancia (<code>las casas blancas</code>). La probabilidad de una secuencia con un reparto independiente de los sonidos es el producto sobre sus palabras de la probabilidad de encontrar la consonante entre los sonidos de la raíz, <span class="arithmatex">\(1 - (1 - f)^n\)</span>, donde <span class="arithmatex">\(f\)</span> es la frecuencia del sonido en el <a href="../../datasets/spanishliterature/">corpus de literatura</a> y <span class="arithmatex">\(n\)</span> el número de sonidos de la raíz; una secuencia se resalta cuando la probabilidad queda por debajo de <code>alliteration_threshold</code>. La repetición de un sonido raro se nota en dos o tres palabras (<code>deje la abeja</code>), mientras que la <code>s</code> de <code>los suspiros se escapan</code> es demasiado frecuente para contar en dos palabras. Las palabras de menos de tres letras (<code>de</code>, <code>la</code>, <code>el</code>) y las palabras vacías (<code>que</code>, <code>los</code>, <code>con</code>) no cortan ni continúan una secuencia. El índice de aliteración de <a href="../../stats/phon_stats/">PhonStats</a> mide cómo se agrupan las repeticiones en todo el texto; el resaltado muestra dónde están.</p>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<!-- core: visualizers/highlight.md:HighlightedText-parameters 94d89c2 -->
 <table>
 <thead>
 <tr>
@@ -2667,8 +2691,22 @@
 <td style="text-align: center;"><code>layers</code></td>
 <td style="text-align: center;">list[str]/str</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Capas del resaltado; si no se dan, las capas de <code>HIGHLIGHT_DEFAULT_LAYERS</code> que la fuente permite; <code>"all"</code> - todas las permitidas</td>
+<td style="text-align: center;">Capas del resaltado; si no se dan, las capas por defecto que la fuente permite; <code>"all"</code> - todas las permitidas</td>
 </tr>
+</tbody>
+</table>
+<p>Una fuente que no es ni una cadena ni un <code>Doc</code> lanza <code>SourceTypeError</code>, una fuente sin palabras <code>SourceError</code>; unas capas que no son un nombre ni una lista de nombres, una capa desconocida o una que necesita una anotación que le falta a la fuente lanzan <code>ParameterError</code>.</p>
+<p>Los parámetros de las capas de esTS:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Valor por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td style="text-align: center;"><code>long_sent_word_factor</code></td>
 <td style="text-align: center;">int</td>
@@ -2683,15 +2721,15 @@
 </tr>
 <tr>
 <td style="text-align: center;"><code>stopwords</code></td>
-<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;">list[str]/set[str]</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Lista de palabras vacías; si no se da, <code>STOPWORDS</code> y las expresiones parentéticas de una palabra</td>
+<td style="text-align: center;">Lista o conjunto de palabras vacías; si no se da, <code>STOPWORDS</code> y las expresiones parentéticas de una palabra</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>cliches</code></td>
-<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;">list[str]/set[str]</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Lista de clichés; si no se da, <code>OFFICIALESE_CLICHES</code></td>
+<td style="text-align: center;">Lista o conjunto de clichés; si no se da, <code>OFFICIALESE_CLICHES</code></td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>alliteration_threshold</code></td>
@@ -2701,7 +2739,9 @@
 </tr>
 </tbody>
 </table>
+<p>Un umbral que no es un entero de al menos uno o una probabilidad fuera de (0, 1] lanza <code>ParameterError</code>, unas palabras vacías o unos clichés que no son cadenas <code>SourceTypeError</code>.</p>
 <h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
+<!-- core: visualizers/highlight.md:HighlightedText-attributes d9379e7 -->
 <table>
 <thead>
 <tr>
@@ -2724,7 +2764,7 @@
 <tr>
 <td style="text-align: center;"><code>highlights</code></td>
 <td style="text-align: center;">tuple[Highlight]</td>
-<td style="text-align: center;">Fragmentos resaltados en el orden del texto</td>
+<td style="text-align: center;">Fragmentos resaltados, ordenados por su inicio y luego por su final descendente</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>counts</code></td>
@@ -2733,10 +2773,13 @@
 </tr>
 </tbody>
 </table>
-<p>Un fragmento <code>Highlight</code> es un objeto inmutable con los campos <code>start</code> y <code>end</code> (posiciones en el texto), <code>layer</code> (la capa) y <code>note</code> (la explicación de la ventana emergente: el número de palabras de la oración, de sílabas de la palabra, la longitud de la cadena, la expresión de la lista).</p>
+<!-- core: visualizers/highlight.md:Highlight 58d8a45 -->
+<p>Un fragmento <code>Highlight</code> es un objeto inmutable con los campos <code>start</code> y <code>end</code> (posiciones en el texto), <code>layer</code> (la capa) y <code>note</code> (la explicación de la ventana emergente).</p>
+<p>La nota de un fragmento da el número de palabras de la oración, de sílabas de la palabra, la longitud de la cadena o la expresión de la lista.</p>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <h3 id="to_html">to_html<a class="headerlink" href="#to_html" title="Permanent link">&para;</a></h3>
-<p>Devuelve el marcado HTML del texto resaltado: un <code>div</code> de la clase <code>ests-highlight</code> con la leyenda y sus recuentos y el texto, donde los segmentos resaltados van dentro de un <code>span</code> de las clases <code>ests-hl</code> y <code>ests-hl-&lt;capa&gt;</code>, y las notas van al atributo <code>title</code>. Los fragmentos solapados de capas distintas dan segmentos con varias clases. Los saltos de línea (<code>\n</code>, <code>\r\n</code>, <code>\r</code>) se guardan como referencias de caracteres, una por salto, así que el marcado puede insertarse en Markdown.</p>
+<!-- core: visualizers/highlight.md:HighlightedText-to_html a16305c -->
+<p>Devuelve el marcado HTML del texto resaltado: un <code>div</code> de la clase <code>&lt;prefix&gt;-highlight</code> con la leyenda y sus recuentos y el texto, donde los segmentos resaltados van dentro de un <code>span</code> de las clases <code>&lt;prefix&gt;-hl</code> y <code>&lt;prefix&gt;-hl-&lt;capa&gt;</code>, y las notas van al atributo <code>title</code>; <code>&lt;prefix&gt;</code> es el prefijo de las clases CSS. Los fragmentos solapados de capas distintas dan segmentos con varias clases, en el orden de dibujo. Los saltos de línea (<code>\n</code>, <code>\r\n</code>, <code>\r</code>) se guardan como referencias de caracteres, una por salto, así que el marcado puede insertarse en Markdown.</p>
 <table>
 <thead>
 <tr>
@@ -2761,6 +2804,9 @@
 </tr>
 </tbody>
 </table>
+<h3 id="css">css<a class="headerlink" href="#css" title="Permanent link">&para;</a></h3>
+<!-- core: visualizers/highlight.md:HighlightedText-css 42034ba -->
+<p>El método de clase <code>css()</code> devuelve los estilos que añade <code>to_html</code>: el contenedor, la leyenda y el texto con las clases de <code>css_prefix</code>, las declaraciones de <code>layer_styles</code> de cada capa y un color oscuro del texto en las capas con fondo.</p>
 <h2 id="ejemplo-de-uso">Ejemplo de uso<a class="headerlink" href="#ejemplo-de-uso" title="Permanent link">&para;</a></h2>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
@@ -2809,7 +2855,7 @@
 .ests-highlight-legend .ests-hl { padding: 0 0.3em; }
 .ests-highlight-count { opacity: 0.6; margin-left: 0.3em; }
 .ests-highlight-text { white-space: pre-wrap; }
-.ests-highlight .ests-hl.ests-hl-long_sents, .ests-highlight .ests-hl.ests-hl-complex_words, .ests-highlight .ests-hl.ests-hl-rare_words, .ests-highlight .ests-hl.ests-hl-stopwords, .ests-highlight .ests-hl.ests-hl-passive, .ests-highlight .ests-hl.ests-hl-verbal_nouns, .ests-highlight .ests-hl.ests-hl-compound_prepositions, .ests-highlight .ests-hl.ests-hl-cliches, .ests-highlight .ests-hl.ests-hl-parentheticals { color: #1f2328; border-radius: 2px; }
+.ests-highlight .ests-hl.ests-hl-long_sents, .ests-highlight .ests-hl.ests-hl-stopwords, .ests-highlight .ests-hl.ests-hl-complex_words, .ests-highlight .ests-hl.ests-hl-rare_words, .ests-highlight .ests-hl.ests-hl-passive, .ests-highlight .ests-hl.ests-hl-verbal_nouns, .ests-highlight .ests-hl.ests-hl-compound_prepositions, .ests-highlight .ests-hl.ests-hl-cliches, .ests-highlight .ests-hl.ests-hl-parentheticals { color: #1f2328; border-radius: 2px; }
 .ests-hl-long_sents { background: #fef9c3; }
 .ests-hl-stopwords { background: #bae6fd; }
 .ests-hl-complex_words { background: #fed7aa; }

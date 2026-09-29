@@ -1860,6 +1860,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#language-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Language hooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2424,6 +2435,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#language-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Language hooks
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2481,11 +2503,10 @@
 <p><strong>ests.corpus.kwic()</strong>, <strong>ests.corpus.format_kwic()</strong>, <strong>ests.corpus.print_kwic()</strong>, <strong>ests.corpus.Concordance</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A KWIC concordance (keyword in context) - every occurrence of a word or a phrase with its context on the left and on the right.</p>
-<p>The occurrences are looked for among the words of the text: by the word form ignoring case, respecting it (<code>ignore_case=False</code>) or by the lemma (<code>by_lemma=True</code>: <code>gatos</code> is found by <code>gato</code>, a phrase is given by lemmas - <code>mirar a el pájaro</code> - or as it is written, since every word of it is lemmatized). The text and the keyword are split into words the same way, by the tokenizer of the blank Spanish pipeline, so <code>EE. UU.</code> is one word in both, and punctuation and symbols are words of neither: <code>¿Dónde</code> finds <code>Dónde</code>, <code>20 €</code> finds <code>20</code>. Accents are part of the word form: <code>solo</code> and <code>sólo</code> are two forms.</p>
-<p>By lemma, the keyword is lemmatized by simplemma, and a word of the text is found by its lemma of simplemma and, in a <code>Doc</code> that carries lemmas, by the lemma of the model as well. In <code>Mi amigo vino con una botella de vino</code> the model gives <code>venir</code> to the verb, so <code>venir</code> finds the verb, where simplemma, which sees no context, would find nothing; <code>vino</code> finds both, since simplemma reads the verb as <code>vino</code>.</p>
-<p>The context is <code>window</code> words on each side as they are written in the text, with the punctuation between them; whitespace collapses into one space, and occurrences do not overlap.</p>
-<p><code>format_kwic</code> aligns the lines on the keyword: the left context is cut on the left and aligned to the right, the right one is cut on the right; <code>print_kwic</code> prints the result.</p>
+<p>A KWIC concordance (keyword in context) - every occurrence of a word or a phrase with its context on the left and on the right. The occurrences are looked for among the words of the text by the word form, ignoring case or respecting it (<code>ignore_case=False</code>), or by the lemma (<code>by_lemma=True</code>), where the words of the keyword are lemmatized as words of a string: with a lemmatizer a phrase may be written in any form, without one it is given by lemmas. The words of a string and of the keyword come from the tokenizer, those of a <code>Doc</code> from its tokens, so a tokenizer that splits a string as the pipeline does finds in a <code>Doc</code> what it finds in its text; punctuation and symbols are not words. The forms are compared in the composed form of Unicode (NFC), without soft hyphens. A phrase does not run across the end of a paragraph or of a sentence - a boundary of a <code>Doc</code> anywhere between its words, an opening mark included, or in a text without boundaries the start of a sentence of the sentence splitter, by default a final mark before whitespace - unless the keyword has a final mark or the start of a sentence in the same place (<code>U.S. Army</code>). The context is <code>window</code> words on each side as they are written in the text, with the punctuation between them; whitespace collapses into one space, and occurrences do not overlap.</p>
+<h2 id="language-hooks">Language hooks<a class="headerlink" href="#language-hooks" title="Permanent link">&para;</a></h2>
+<p>The function calls the <code>kwic</code> of the <a href="https://sergeyshk.github.io/anyTS/corpus/kwic/">anyTS</a> core with the hooks of Spanish. The text and the keyword are split into words the same way, by the tokenizer of the blank Spanish pipeline, so <code>EE. UU.</code> is one word in both, and punctuation and symbols are words of neither: <code>¿Dónde</code> finds <code>Dónde</code>, <code>20 €</code> finds <code>20</code>. The word forms and the lemmas are lower-cased; accents are part of the word form: <code>solo</code> and <code>sólo</code> are two forms. The sentences of a string, and of the text of a <code>Doc</code> without boundaries, are those of <a href="../../extractors/sentences/"><code>SentsExtractor</code></a>: an ellipsis or an exclamation followed by a lower-case word does not end a sentence, so <code>honrado piensa</code> finds <code>honrado... piensa</code>.</p>
+<p>By lemma, the keyword is lemmatized by simplemma, so a phrase is given by lemmas - <code>mirar a el pájaro</code> - or as it is written, and a word of the text is found by its lemma of simplemma and, in a <code>Doc</code> that carries lemmas, by the lemma of the model as well: <code>gatos</code> is found by <code>gato</code>. In <code>Mi amigo vino con una botella de vino</code> the model gives <code>venir</code> to the verb, so <code>venir</code> finds the verb, where simplemma, which sees no context, would find nothing; <code>vino</code> finds both, since simplemma reads the verb as <code>vino</code>.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2507,7 +2528,7 @@
 <td style="text-align: center;"><code>keyword</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Word or phrase (words separated by spaces)</td>
+<td style="text-align: center;">Word or phrase</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>window</code></td>
@@ -2529,7 +2550,9 @@
 </tr>
 </tbody>
 </table>
-<p><code>format_kwic(concordances, width=40)</code> and <code>print_kwic(concordances, width=40)</code>: <code>width</code> is the width of a context in characters, at least one; line breaks inside the keyword phrase are replaced with spaces.</p>
+<p>A keyword without words and a negative window raise <code>ParameterError</code>; a source that is neither a string nor a <code>Doc</code>, a keyword that is not a string and a hook that is not callable raise <code>SourceTypeError</code>.</p>
+<p><code>format_kwic(concordances, width=40)</code> aligns the lines on the keyword: the left context is cut on the left and aligned to the right, the right one is cut on the right; <code>width</code> is the width of a context in characters, at least one. The lines may come from any iterable and are taken in the composed form of Unicode (NFC), so that the widths count the characters as they are shown.</p>
+<p><code>print_kwic(concordances, width=40)</code> prints the result of <code>format_kwic</code>.</p>
 <h2 id="result">Result<a class="headerlink" href="#result" title="Permanent link">&para;</a></h2>
 <p>A list of <code>Concordance</code> named tuples in the order of the text.</p>
 <table>

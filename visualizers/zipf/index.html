@@ -2464,6 +2464,7 @@
 <p class="admonition-title">Definition</p>
 <p>Zipf's law (the rank-frequency law) is an empirical regularity of the distribution of the frequencies of words in a natural language: if all the words of a language, or of a long enough text, are ordered by descending frequency, the frequency of the n-th word of the list is roughly inversely proportional to its number n, the rank of the word. The second most frequent word occurs about half as often as the first, the third a third as often, and so on.</p>
 </div>
+<p>The functions are those of the <a href="https://sergeyshk.github.io/anyTS/visualizers/zipf/">anyTS</a> core. The default labels are the English ones of <code>VISUALIZER_LABELS</code> in <code>anyts.constants</code>; <code>labels</code> replaces any of them, for instance <code>labels={"title": "Ley de Zipf"}</code>.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2515,7 +2516,7 @@
 <td style="text-align: center;"><code>show_fit</code></td>
 <td style="text-align: center;">bool</td>
 <td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Plot the Zipf-Mandelbrot fit <span class="arithmatex">\(f(r) = C / (r + q)^s\)</span> of <a href="../../stats/diversity_stats_funcs/#fit_zipf_mandelbrot"><code>fit_zipf_mandelbrot</code></a></td>
+<td style="text-align: center;">Plot the Zipf-Mandelbrot fit <span class="arithmatex">\(f(r) = C / (r + q)^s\)</span> of <code>fit_zipf_mandelbrot</code></td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>ax</code></td>
@@ -2523,9 +2524,17 @@
 <td style="text-align: center;"><code>None</code></td>
 <td style="text-align: center;">Axes of matplotlib for the plot; if not given, a new figure is created</td>
 </tr>
+<tr>
+<td style="text-align: center;"><code>labels</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Labels of the plot over the defaults: <code>title</code>, <code>xlabel</code>, <code>ylabel</code>, <code>experimental</code> and <code>theoretical</code> (the curves), <code>fit</code> (a format string with <code>q</code> and <code>s</code>)</td>
+</tr>
 </tbody>
 </table>
-<p>The function returns the <code>Axes</code> with the plot; a <code>num_words</code> greater than the number of word types does not extend the curves beyond the data, an empty counter raises <code>SourceError</code>, and a <code>num_words</code> below one raises <code>ParameterError</code>. <code>zipf_theory(size, num_ranks, alpha, ax)</code> plots the theoretical curve alone, <span class="arithmatex">\(f(r) = size \cdot r^{-\alpha}\)</span> for the ranks from 1 to <code>num_ranks</code>.</p>
+<p>The function returns the <code>Axes</code> with the plot; a <code>num_words</code> greater than the number of word types does not extend the curves beyond the data, a counter whose words are not strings raises <code>SourceTypeError</code>, an empty counter or a frequency that is not above zero <code>SourceError</code>, and a <code>num_words</code> below one or an exponent that is not a finite number above zero <code>ParameterError</code> - all before a figure is created.</p>
+<p>The Zipf-Mandelbrot fit is described in <a href="../../stats/diversity_stats_funcs/#fit_zipf_mandelbrot"><code>fit_zipf_mandelbrot</code></a>.</p>
+<p><code>zipf_theory(size, num_ranks, alpha=1.5, ax=None, labels=None)</code> plots the theoretical curve alone, <span class="arithmatex">\(f(r) = size \cdot r^{-\alpha}\)</span> for the ranks from 1 to <code>num_ranks</code>; its label is the key <code>theoretical</code>.</p>
 <h2 id="usage-example">Usage example<a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h2>
 <p>The lemmas of <em>Marianela</em> by Galdós from the <a href="../../datasets/spanishliterature/">corpus of literature</a>.</p>
 <div class="admonition example">

@@ -2531,7 +2531,7 @@
 <p>La referencia puede ser una lista de palabras, una correspondencia de frecuencias (su tamaño es la suma de los recuentos) o una <code>FrequencyReference</code>. Las palabras se comparan tal cual: la caja, la lematización y las palabras vacías corresponden al extractor de palabras, y los dos corpus tienen que extraerse del mismo modo.</p>
 <p>La función envuelve <code>keyness</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/keyness/">anyTS</a> y admite además como referencia el <a href="../../datasets/freqdict/">diccionario de frecuencias</a> <code>FreqDict</code>; <code>FrequencyReference</code> está en <code>ests.corpus</code> junto a ella, y las funciones de las medidas, en <code>ests.corpus.keyness</code>. Las palabras se extraen con <a href="../../extractors/words/"><code>WordsExtractor</code></a>.</p>
 <h2 id="medidas">Medidas<a class="headerlink" href="#medidas" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/keyness.md:keyness-measures 2a13cf3 -->
+<!-- core: corpus/keyness.md:keyness-measures 7d98aa3 -->
 <p>Para una palabra de frecuencia <span class="arithmatex">\(a\)</span> en un corpus objetivo de tamaño <span class="arithmatex">\(c\)</span> y de frecuencia <span class="arithmatex">\(b\)</span> en un corpus de referencia de tamaño <span class="arithmatex">\(d\)</span>, <span class="arithmatex">\(N = c + d\)</span>:</p>
 <table>
 <thead>
@@ -2547,7 +2547,7 @@
 <td style="text-align: left;">Razón de verosimilitud</td>
 <td style="text-align: left;"><code>log_likelihood</code></td>
 <td style="text-align: left;"><span class="arithmatex">\(G^2 = 2\,(a \ln \frac{a}{E_1} + b \ln \frac{b}{E_2})\)</span>, <span class="arithmatex">\(E_1 = \frac{c\,(a+b)}{N}\)</span>, <span class="arithmatex">\(E_2 = \frac{d\,(a+b)}{N}\)</span></td>
-<td style="text-align: left;"><a href="https://ucrel.lancs.ac.uk/llwizard.html">Rayson y Garside (2000)</a>; valores críticos <code>G2_CRITICAL_VALUES</code>: 3.84 para p &lt; 0.05, 6.63 para p &lt; 0.01, 10.83 para p &lt; 0.001, 15.13 para p &lt; 0.0001</td>
+<td style="text-align: left;"><a href="https://ucrel.lancs.ac.uk/llwizard.html">Rayson y Garside (2000)</a>; valores críticos <code>anyts.constants.G2_CRITICAL_VALUES</code>: 3.84 para p &lt; 0.05, 6.63 para p &lt; 0.01, 10.83 para p &lt; 0.001, 15.13 para p &lt; 0.0001</td>
 </tr>
 <tr>
 <td style="text-align: left;">Ji cuadrado</td>
@@ -2589,7 +2589,7 @@
 </table>
 <p>Una frecuencia nula en uno de los corpus se sustituye por 0.5 para %DIFF, Log Ratio y la razón de momios (Hardie 2014). El valor p de <span class="arithmatex">\(G^2\)</span> sale de la distribución ji cuadrado con un grado de libertad (<code>calc_p_value</code>). Las medidas están disponibles como las funciones <code>calc_log_likelihood</code>, <code>calc_chi2</code>, <code>calc_diff</code>, <code>calc_log_ratio</code>, <code>calc_bic</code>, <code>calc_ell</code> y <code>calc_odds_ratio</code> con los argumentos <code>(a, b, c, d)</code> del módulo <code>anyts.corpus.keyness</code>; sus nombres y descripciones están en <code>anyts.constants.KEYNESS_MEASURES</code>.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/keyness.md:keyness-parameters ac5e82f -->
+<!-- core: corpus/keyness.md:keyness-parameters 6f31f0b -->
 <table>
 <thead>
 <tr>
@@ -2616,7 +2616,7 @@
 <td style="text-align: center;"><code>measure</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>log_likelihood</code></td>
-<td style="text-align: center;">Medida de <code>KEYNESS_MEASURES</code> para <code>score</code> y el orden</td>
+<td style="text-align: center;">Medida de <code>anyts.constants.KEYNESS_MEASURES</code> para <code>score</code> y el orden</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>min_freq</code></td>

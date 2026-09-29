@@ -3622,12 +3622,12 @@
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_hdd()</strong></p>
 </div>
-<!-- core: stats/diversity_stats_funcs.md:calc_hdd 78030e8 -->
+<!-- core: stats/diversity_stats_funcs.md:calc_hdd 6bf82ff -->
 <p>Cálculo de la Hypergeometric Distribution D (HD-D).</p>
 <p>Una alternativa a vocd-D (McCarthy &amp; Jarvis, 2010): en lugar de extraer segmentos aleatorios del texto, calcula exactamente el TTR esperado de una muestra aleatoria de <code>sample_size</code> palabras. Para cada lexema, la distribución hipergeométrica da la probabilidad de que la muestra lo contenga al menos una vez; la suma de estas probabilidades es el número esperado de lexemas en la muestra, y HD-D es ese número dividido por el tamaño de la muestra. El valor no depende del azar.</p>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
-<p>En los textos de menos de 50 palabras y más cortos que el tamaño de la muestra la métrica no está definida; la función devuelve <code>nan</code>.</p>
+<p>En los textos de menos de 50 palabras o más cortos que el tamaño de la muestra la métrica no está definida; la función devuelve <code>nan</code>.</p>
 </div>
 <p>Parámetros:</p>
 <table>
@@ -4243,7 +4243,7 @@ H = -\sum_k p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.diversity_stats.fit_zipf_mandelbrot()</strong>, <strong>ests.diversity_stats.ZipfMandelbrot</strong></p>
 </div>
-<!-- core: stats/diversity_stats_funcs.md:fit_zipf_mandelbrot 647bd16 -->
+<!-- core: stats/diversity_stats_funcs.md:fit_zipf_mandelbrot 56dd01c -->
 <p>Ajuste de la <a href="https://en.wikipedia.org/wiki/Zipf–Mandelbrot_law">ley de Zipf-Mandelbrot</a> <span class="arithmatex">\(f(r) = C / (r + q)^s\)</span> a la distribución rango-frecuencia. Con <span class="arithmatex">\(q = 0\)</span> la ley se reduce a la ley de Zipf con exponente <span class="arithmatex">\(s\)</span>; el desplazamiento <span class="arithmatex">\(q\)</span> describe el aplanamiento de la curva en las palabras más frecuentes que la ley de Zipf no recoge. Los parámetros se ajustan por mínimos cuadrados en coordenadas logarítmicas con las restricciones <span class="arithmatex">\(q \ge 0\)</span>, <span class="arithmatex">\(s \ge 0\)</span>. Devuelve una tupla con nombre <code>ZipfMandelbrot</code> con los campos <code>c</code>, <code>q</code>, <code>s</code> y <code>r2</code>, el coeficiente de determinación del ajuste en coordenadas logarítmicas.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
@@ -4262,9 +4262,9 @@ H = -\sum_k p_k \log_2 p_k
 <tbody>
 <tr>
 <td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;">list[str]/Counter</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Lista de palabras</td>
+<td style="text-align: center;">Lista de palabras o un contador de sus frecuencias</td>
 </tr>
 </tbody>
 </table>

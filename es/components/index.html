@@ -2670,19 +2670,22 @@
 
 
 <h1 id="componentes">Componentes<a class="headerlink" href="#componentes" title="Permanent link">&para;</a></h1>
-<p>Conjunto de componentes para los pipelines de <a href="https://github.com/explosion/spaCy">spaCy</a>. Cada uno es una clase con dos métodos: <code>__init__</code>, que registra una extensión de <code>Doc</code> al inicializarse, y <code>__call__</code>, que toma un objeto <code>Doc</code> y lo devuelve con las estadísticas puestas.</p>
+<!-- core: components.md:StatsComponent e3962ed -->
+<p>La base de los componentes de <a href="https://github.com/explosion/spaCy">spaCy</a> que ponen las estadísticas de un texto en una extensión de <code>Doc</code>: un componente registra la extensión al añadirse a un pipeline y, para cada documento, calcula las estadísticas y las pone en <code>doc._.&lt;name&gt;</code>. La escritura de componentes en general se describe en la <a href="https://spacy.io/usage/processing-pipelines#custom-components">documentación de spaCy</a>.</p>
+<p>Los componentes de esTS son subclases del <code>StatsComponent</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/components/">anyTS</a>, una por cada clase de estadísticas.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>La escritura de componentes propios se describe en la sección correspondiente de la <a href="https://spacy.io/usage/processing-pipelines#custom-components">documentación de spaCy</a>. Los ejemplos de abajo usan el modelo <code>es_core_news_sm</code>, que se instala aparte: <code>python -m spacy download es_core_news_sm</code> (véase <a href="../installation/">instalación</a>).</p>
+<p>Los ejemplos de abajo usan el modelo <code>es_core_news_sm</code>, que se instala aparte: <code>python -m spacy download es_core_news_sm</code> (véase <a href="../installation/">instalación</a>).</p>
 </div>
 <h2 id="names">Nombres<a class="headerlink" href="#names" title="Permanent link">&para;</a></h2>
 <p>Las fábricas llevan el prefijo de la biblioteca: <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code>. Están declaradas como entry points de <code>spacy_factories</code>, así que un pipeline guardado con estos componentes (<code>nlp.to_disk(path)</code>, <code>spacy package</code>) se carga con <code>spacy.load(path)</code> sin importar la biblioteca.</p>
-<p>El nombre del paso del pipeline es el nombre de la extensión:</p>
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_basic"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"basic"</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"El gato duerme"</span><span class="p">)</span>
 <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">basic</span><span class="o">.</span><span class="n">n_words</span>
 </code></pre></div>
-<p>Sin <code>name</code> el paso y la extensión conservan el nombre de la fábrica (<code>doc._.ests_basic</code>). El mismo componente puede añadirse dos veces con nombres distintos, por ejemplo con dos presets.</p>
+<!-- core: components.md:StatsComponent-names 9314eeb -->
+<p>El nombre del paso del pipeline es el nombre de la extensión: <code>nlp.add_pipe(factory, name="basic")</code> pone las estadísticas en <code>doc._.basic</code>. Sin <code>name</code> el paso y la extensión conservan el nombre de la fábrica. La extensión sigue al paso cuando el pipeline lo renombra (<code>nlp.rename_pipe</code>), y un nombre ocupado por una extensión de otro paquete lanza <code>ParameterError</code> en lugar de reemplazarla. Un componente tomado de otro pipeline (<code>add_pipe(name, source=other)</code>) es el mismo objeto en ambos, así que con un nombre nuevo escribe también en esa extensión del otro pipeline; un componente propio sale de la fábrica, <code>add_pipe(factory, name=...)</code>. El mismo componente puede añadirse dos veces con nombres distintos, con parámetros distintos. Un documento sin palabras - una cadena vacía, espacios, pura puntuación - pasa por un componente sin cambios, con su extensión en <code>None</code>.</p>
+<!-- core: components.md:StatsComponent-serialization d6d5068 -->
 <div class="admonition warning">
 <p class="admonition-title">Serialización</p>
 <p>Un componente guarda un objeto de estadísticas en <code>doc._.&lt;name&gt;</code>, y spaCy no sabe serializarlo: <code>Doc.to_bytes()</code>, <code>DocBin(store_user_data=True)</code> y <code>nlp.pipe(..., n_process&gt;1)</code> fallan con estos componentes en el pipeline. Para guardar un documento, deje fuera los datos de usuario (<code>doc.to_bytes(exclude=["user_data"])</code>) o guarde <code>doc._.&lt;name&gt;.get_stats()</code> por su cuenta; para el multiproceso, calcule las estadísticas en el proceso principal después de <code>nlp.pipe</code>, sin los componentes.</p>
@@ -2761,7 +2764,6 @@
 </tr>
 </tbody>
 </table>
-<p>Un documento sin palabras - una cadena vacía, espacios, solo puntuación - pasa por cada componente sin tocarse, con su extensión en <code>None</code>.</p>
 <p>En el pipeline de <code>es_core_news_sm</code> las categorías gramaticales vienen del <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>; un <code>tagger</code> solo no las da), el análisis del <code>parser</code> y los lemas del <code>lemmatizer</code>. Un componente al que le falta la anotación, también con componentes <code>excluded</code>, levanta <code>SourceError</code> cuando el documento pasa por él.</p>
 <h2 id="basicstatscomponent">BasicStatsComponent<a class="headerlink" href="#basicstatscomponent" title="Permanent link">&para;</a></h2>
 <div class="admonition info">

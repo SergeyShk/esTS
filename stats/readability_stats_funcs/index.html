@@ -2703,8 +2703,13 @@
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_flesch_reading_easy()</strong></p>
 </div>
-<p>Computation of the Flesch reading ease with Spanish coefficients. The higher the value, the easier the text is to read; the scale runs from 0 to 100.</p>
-<p>The default coefficients are those of the <em>fórmula de perspicuidad</em> of Szigriszt-Pazos (1993), read on the INFLESZ scale of Barrio-Cantalejo et al. (2008):</p>
+<p>Computation of the Flesch reading ease (Flesch, 1948).</p>
+<p>The higher the value, the easier the text; the scale runs nominally from 0 to 100, though the simplest texts go above 100 and the hardest below 0.</p>
+<p>Formula:</p>
+<div class="arithmatex">\[
+c - a \cdot \frac{\textrm{Number of words}}{\textrm{Number of sentences}} - b \cdot \frac{\textrm{Number of syllables}}{\textrm{Number of words}}
+\]</div>
+<p>The default coefficients of esTS are those of the <em>fórmula de perspicuidad</em> of Szigriszt-Pazos (1993), read on the INFLESZ scale of Barrio-Cantalejo et al. (2008):</p>
 <table>
 <thead>
 <tr>
@@ -2742,10 +2747,6 @@
 </tbody>
 </table>
 <p>The coefficients of Fernández Huerta (1959) are available through the <code>classic</code> <a href="../readability_stats/#presets">preset</a>, with the correction of Law (2011): the last term takes the mean sentence length.</p>
-<p>Formula:</p>
-<div class="arithmatex">\[
-c-a\times\frac{\textrm{Number of words}}{\textrm{Number of sentences}}-b\times\frac{\textrm{Number of syllables}}{\textrm{Number of words}}
-\]</div>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -2882,7 +2883,33 @@ c-a\times\frac{\textrm{Number of words}}{\textrm{Number of sentences}}-b\times\f
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_mu_index()</strong></p>
 </div>
-<p>Computation of Legibilidad µ of Muñoz Baquedano and Muñoz Urra (2006), which measures the variability of word length: the mean of the number of letters per word divided by its variance. The variance is the sample one, divided by <code>n − 1</code> (the <em>cuasivarianza</em> of the authors), which reproduces the worked example of their manual. Words without letters (numbers) are left out; with fewer than two words or without variability the index is undefined (<code>nan</code>). The higher the value, the easier the text:</p>
+<p>Computation of Legibilidad µ (Muñoz Baquedano and Muñoz Urra, 2006).</p>
+<p>The mean number of letters per word divided by its sample variance, times 100; there are no coefficients to fit, and the higher the value, the easier the text. Words without letters (numbers) are left out; with fewer than two words or without variability the index is undefined (<code>nan</code>).</p>
+<p>Formula:</p>
+<div class="arithmatex">\[
+100 \cdot \frac{\bar{x}}{s^2}, \quad s^2 = \frac{\sum (x_i - \bar{x})^2}{n - 1}
+\]</div>
+<p>where <span class="arithmatex">\(x_i\)</span> is the number of letters of a word and <span class="arithmatex">\(n\)</span> the number of words.</p>
+<p>Parameters:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>c_letters</code></td>
+<td style="text-align: center;">dict[int, int]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Distribution of words by number of letters</td>
+</tr>
+</tbody>
+</table>
+<p>The variance divided by <code>n − 1</code> is the <em>cuasivarianza</em> of the authors, which reproduces the worked example of their manual; the distribution is <code>BasicStats.c_letters</code>. The bands of the authors:</p>
 <table>
 <thead>
 <tr>
@@ -2921,39 +2948,18 @@ c-a\times\frac{\textrm{Number of words}}{\textrm{Number of sentences}}-b\times\f
 </tr>
 </tbody>
 </table>
-<p>Formula:</p>
-<div class="arithmatex">\[
-\frac{\bar{x}}{s^2}\times100
-\]</div>
-<p>Parameters:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>c_letters</code></td>
-<td style="text-align: center;">dict[int, int]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Distribution of words by number of letters (<code>BasicStats.c_letters</code>)</td>
-</tr>
-</tbody>
-</table>
 <p>Source: Muñoz Baquedano, M. Legibilidad y variabilidad de los textos. <em>Boletín de Investigación Educacional</em>, 21(2), 2006; the program and manual at <a href="https://www.legibilidadmu.cl/">legibilidadmu.cl</a>.</p>
 <h2 id="calc_smog_index">SMOG index<a class="headerlink" href="#calc_smog_index" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_smog_index()</strong></p>
 </div>
-<p>Computation of the SMOG index of McLaughlin (1969) with the polysyllables being the words of three or more syllables. Fitted on English; for Spanish it is the input of the SOL formula.</p>
+<p>Computation of the SMOG index (McLaughlin, 1969).</p>
+<p>The years of schooling needed to read the text from the polysyllabic words per sentence; the higher the value, the harder the text. In the original formula the polysyllabic words have three or more syllables and <code>b</code> brings their number to a sample of 30 sentences.</p>
 <p>Formula:</p>
 <div class="arithmatex">\[
-a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of sentences}}}+b
+a \cdot \sqrt{b \cdot \frac{\textrm{Number of polysyllabic words}}{\textrm{Number of sentences}}} + c
 \]</div>
+<p>Fitted on English; for Spanish it is the input of the <a href="#calc_sol_grade">SOL formula</a>, and <code>ReadabilityStats</code> passes the words of three or more syllables.</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -2969,7 +2975,7 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 <td style="text-align: center;"><code>n_complex</code></td>
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Number of words of three or more syllables</td>
+<td style="text-align: center;">Number of polysyllabic words</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>n_sents</code></td>
@@ -2981,13 +2987,19 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 <td style="text-align: center;"><code>a</code></td>
 <td style="text-align: center;">float</td>
 <td style="text-align: center;"><code>1.043</code></td>
-<td style="text-align: center;">Coefficient a</td>
+<td style="text-align: center;">Coefficient a, at the square root</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>b</code></td>
 <td style="text-align: center;">float</td>
+<td style="text-align: center;"><code>30</code></td>
+<td style="text-align: center;">Coefficient b, the number of sentences of the sample</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>c</code></td>
+<td style="text-align: center;">float</td>
 <td style="text-align: center;"><code>3.1291</code></td>
-<td style="text-align: center;">Coefficient b</td>
+<td style="text-align: center;">Coefficient c, the constant</td>
 </tr>
 </tbody>
 </table>
@@ -3038,12 +3050,13 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_lix()</strong></p>
 </div>
-<p>Computation of the <a href="https://en.wikipedia.org/wiki/Lix_(readability_test)">LIX readability index</a> of Björnsson (1968), which does not depend on the language. The higher the value, the harder the text:</p>
+<p>Computation of the LIX readability index (Björnsson, 1968).</p>
+<p>The mean sentence length plus the percentage of long words, the words of more than six letters; there are no coefficients to fit. The higher the value, the harder the text:</p>
 <table>
 <thead>
 <tr>
 <th style="text-align: center;">Value</th>
-<th style="text-align: left;">Difficulty level</th>
+<th style="text-align: left;">Text</th>
 </tr>
 </thead>
 <tbody>
@@ -3069,10 +3082,9 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 </tr>
 </tbody>
 </table>
-<p>A long word has more than six letters, so <code>ReadabilityStats</code> passes the number of words of seven or more letters.</p>
 <p>Formula:</p>
 <div class="arithmatex">\[
-\frac{\textrm{Number of words}}{\textrm{Number of sentences}}+\frac{100\times\textrm{Number of long words}}{\textrm{Number of words}}
+\frac{\textrm{Number of words}}{\textrm{Number of sentences}} + \frac{100 \cdot \textrm{Number of long words}}{\textrm{Number of words}}
 \]</div>
 <p>Parameters:</p>
 <table>
@@ -3109,7 +3121,8 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_rix()</strong></p>
 </div>
-<p>Computation of the RIX readability index (Anderson, 1983), the simplified companion of LIX: long words per sentence. The higher the value, the harder the text:</p>
+<p>Computation of the RIX readability index (Anderson, 1983).</p>
+<p>The long words, of more than six letters, per sentence; there are no coefficients to fit. The higher the value, the harder the text:</p>
 <table>
 <thead>
 <tr>
@@ -3172,6 +3185,10 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 </tr>
 </tbody>
 </table>
+<p>Formula:</p>
+<div class="arithmatex">\[
+\frac{\textrm{Number of long words}}{\textrm{Number of sentences}}
+\]</div>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -3332,7 +3349,7 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_consensus_grade()</strong></p>
 </div>
-<p>Computation of the consensus grade: the median of the values of the grade formulas, each rounded half up. The reading ease is converted with <code>flesch_reading_easy_to_grade</code> by the scale of the preset and added without rounding.</p>
+<p>Computation of the consensus grade: the median of the values of the grade formulas, each rounded half up. The reading ease is converted with <code>flesch_reading_easy_to_grade</code> by the scale of the preset and added without rounding. No values at all, a grade that is not a finite number and an unknown preset raise <code>ParameterError</code>.</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -3376,7 +3393,7 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 <div class="admonition info">
 <p><strong>ests.readability_stats.grade_to_age()</strong></p>
 </div>
-<p>The school stage of the Spanish school system and reader age by the value of a grade formula (see the <a href="../readability_stats/#interpretation">interpretation</a> table). The value is rounded half up, values below 1 belong to grades 1-3.</p>
+<p>The school stage of the Spanish school system and reader age by the value of a grade formula (see the <a href="../readability_stats/#interpretation">interpretation</a> table). The value is rounded half up, values below 1 belong to grades 1-3; a grade that is not a finite number raises <code>ParameterError</code>.</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -3408,7 +3425,8 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 <div class="admonition info">
 <p><strong>ests.readability_stats.calc_reading_time()</strong></p>
 </div>
-<p>Computation of the reading time of a text in minutes. The default speed is the silent reading speed of adults in Spanish, 278 words per minute, from the meta-analysis of Brysbaert (2019). The norms of school years from the meta-analysis of Ripoll, Tapia and Aguado (2020) are available in <code>ests.constants.READING_SPEED_NORMS</code> as pairs (aloud, silent):</p>
+<p>Computation of the reading time of a text in minutes: the number of words divided by the reading speed; a speed that is not a positive number raises <code>ParameterError</code>.</p>
+<p>The default speed is the silent reading speed of adults in Spanish, 278 words per minute, from the meta-analysis of Brysbaert (2019). The norms of school years from the meta-analysis of Ripoll, Tapia and Aguado (2020) are available in <code>ests.constants.READING_SPEED_NORMS</code> as pairs (aloud, silent):</p>
 <table>
 <thead>
 <tr>
@@ -3499,7 +3517,7 @@ a\times\sqrt{30\times\frac{\textrm{Number of polysyllables}}{\textrm{Number of s
 </tr>
 <tr>
 <td style="text-align: center;"><code>wpm</code></td>
-<td style="text-align: center;">int</td>
+<td style="text-align: center;">float</td>
 <td style="text-align: center;"><code>278</code></td>
 <td style="text-align: center;">Reading speed, words per minute</td>
 </tr>

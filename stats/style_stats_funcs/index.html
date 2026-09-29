@@ -2699,9 +2699,9 @@
 </tr>
 <tr>
 <td style="text-align: center;"><code>stopwords</code></td>
-<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;">list[str]/set[str]</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">List of stopwords; if not given, <code>is_stopword</code> is used</td>
+<td style="text-align: center;">List or set of stopwords; if not given, <code>is_stopword</code> is used</td>
 </tr>
 </tbody>
 </table>
@@ -2812,7 +2812,7 @@
 </tr>
 <tr>
 <td style="text-align: center;"><code>keywords</code></td>
-<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;">list[str]/set[str]</td>
 <td style="text-align: center;"><code>-</code></td>
 <td style="text-align: center;">Keywords or phrases</td>
 </tr>
@@ -2853,7 +2853,7 @@
 <div class="admonition info">
 <p><strong>ests.style_stats.calc_phrase_density()</strong>, <strong>ests.style_stats.expand_phrases()</strong></p>
 </div>
-<p>The number of occurrences of the phrases of a list per 100 words - the compound prepositions (<code>COMPOUND_PREPOSITIONS</code>), the parenthetical expressions (<code>PARENTHETICALS</code>) and the clichés (<code>OFFICIALESE_CLICHES</code>). At every position the longest phrase is taken, and the phrases found do not overlap. <code>expand_phrases</code> spells the phrases out in the forms of the text: a phrase ending in <code>a</code> or <code>de</code> also takes the contraction with the article (<code>a efectos del</code>, <code>conforme al</code>), and a phrase whose first word is an infinitive takes the forms of the text with that lemma (<code>proceder a</code> - <code>procedió a</code>, <code>ser de aplicación</code> - <code>es de aplicación</code>). The lemma is the one of simplemma, and a pronominal lemma counts for its verb (<code>llévese</code> - <code>llevar</code>); the forms simplemma does not lemmatize - the irregular participles (<code>ha dado</code>, <code>ha hecho</code>) and the imperative <code>dese</code> - are given by <code>IRREGULAR_VERB_FORMS</code>. The words after the verb rule out the readings as a noun (<code>el hecho</code>, <code>el puesto</code>).</p>
+<p>The number of occurrences of the phrases of a list per 100 words - the compound prepositions (<code>COMPOUND_PREPOSITIONS</code>), the parenthetical expressions (<code>PARENTHETICALS</code>) and the clichés (<code>OFFICIALESE_CLICHES</code>). At every position the longest phrase is taken, and the phrases found do not overlap. <code>expand_phrases</code> spells the phrases out in the forms of the text: a phrase ending in <code>a</code> or <code>de</code> also takes the contraction with the article (<code>a efectos del</code>, <code>conforme al</code>), and a phrase whose first word is an infinitive takes the forms of the text with that lemma (<code>proceder a</code> - <code>procedió a</code>, <code>ser de aplicación</code> - <code>es de aplicación</code>). The lemma is the one of simplemma, and a pronominal lemma counts for its verb (<code>llévese</code> - <code>llevar</code>); the forms simplemma does not lemmatize - the irregular participles (<code>ha dado</code>, <code>ha hecho</code>) and the imperative <code>dese</code> - are given by <code>IRREGULAR_VERB_FORMS</code>. The words after the verb rule out the readings as a noun (<code>el hecho</code>, <code>el puesto</code>). When two phrases spell out the same words, a phrase written so wins over the forms of another (<code>a efectos del</code> stays itself next to <code>a efectos de</code>), and then the first phrase of a list, or of a set in sorted order.</p>
 <p>The compound prepositions (42) and the clichés (74) are the ones the Spanish guides to plain language and style manuals of the administrations flag:</p>
 <table>
 <thead>
@@ -2960,7 +2960,7 @@
 </tr>
 <tr>
 <td style="text-align: center;"><code>phrases</code></td>
-<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;">list[str]/set[str]</td>
 <td style="text-align: center;"><code>-</code></td>
 <td style="text-align: center;">Phrases, words separated by spaces</td>
 </tr>

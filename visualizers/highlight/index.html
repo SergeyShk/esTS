@@ -2380,6 +2380,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#css" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        css
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2494,6 +2505,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#css" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        css
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2532,11 +2554,11 @@
 
 <h1 id="text-highlighting">Text highlighting<a class="headerlink" href="#text-highlighting" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.visualizers.highlight()</strong></p>
+<p><strong>ests.visualizers.highlight()</strong>, <strong>ests.visualizers.HighlightedText</strong>, <strong>ests.visualizers.Highlight</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>Highlighting of the fragments of a text the statistics of the library count, in the manner of the style checkers. The data source can be either a text or a <code>Doc</code> object of the <a href="https://github.com/explosion/spaCy">spaCy</a> library.</p>
-<p>The function returns a <code>HighlightedText</code> object, which Jupyter shows as HTML with styles and a legend; the <code>to_html</code> method returns the same markup for documentation and web applications. The fragments are kept in the attribute <code>highlights</code> and are there for a rendering of your own.</p>
+<p>The machinery of the highlighting of a text by layers, in the manner of the style checkers: every layer marks the fragments of a text that a statistic counts - long sentences, complex words, the passive. The data source can be either a text or a <code>Doc</code> object of <a href="https://github.com/explosion/spaCy">spaCy</a>. The result shows in Jupyter as HTML with styles and a legend; the method <code>to_html</code> returns the same markup for documentation and web applications, and the fragments are kept in the attribute <code>highlights</code> for a rendering of one's own. Fragments of different layers may overlap.</p>
+<p>The function <code>highlight</code> returns a <code>HighlightedText</code> object of esTS, which extends the <code>HighlightedText</code> of the <a href="https://sergeyshk.github.io/anyTS/visualizers/highlight/">anyTS</a> core with the layers of the library, their search and their parameters, and the prefix <code>ests</code> of the CSS classes.</p>
 <p>Layers of the highlighting:</p>
 <table>
 <thead>
@@ -2617,7 +2639,7 @@
 <tr>
 <td style="text-align: left;">Style</td>
 <td style="text-align: center;"><code>stopwords</code></td>
-<td style="text-align: center;">Stopwords of <code>STOPWORDS</code> or of the list passed, the water of the text</td>
+<td style="text-align: center;">Stopwords of <code>STOPWORDS</code> or of the parameter <code>stopwords</code>, the water of the text</td>
 <td style="text-align: center;"><a href="../../stats/style_stats/">StyleStats</a></td>
 </tr>
 <tr>
@@ -2640,7 +2662,7 @@
 </tr>
 </tbody>
 </table>
-<p>The groups are defined in <code>ests.constants.HIGHLIGHT_LAYER_GROUPS</code>. The layers of the group "Syntax" need a <code>Doc</code> with a parse and a lemmatizer (the models <code>es_core_news_sm</code>, <code>es_core_news_md</code>, <code>es_core_news_lg</code>), as <a href="../../stats/syntax_stats/">SyntaxStats</a> does; <code>verbal_nouns</code> needs a <code>Doc</code> with the parts of speech and the lemmas. A <code>Doc</code> without the sentence boundaries (a blank pipeline, a pipeline without the parser) is split by the rules of <a href="../../extractors/sentences/">SentsExtractor</a>. The layers of <code>HIGHLIGHT_DEFAULT_LAYERS</code> the source allows are on by default - long sentences, complex words, passive, chains of <code>de</code>, split predicates, clichés; <code>layers="all"</code> turns on every layer allowed. The layers overlap (a compound preposition is made of stopwords), so pick the ones you need.</p>
+<p>The groups are defined in <code>ests.constants.HIGHLIGHT_LAYER_GROUPS</code>, the annotations of a <code>Doc</code> a layer needs in <code>HIGHLIGHT_LAYER_ANNOTATIONS</code> and the styles of the layers in <code>HIGHLIGHT_LAYER_STYLES</code>. The layers of the group "Syntax" need a <code>Doc</code> with a parse and a lemmatizer (the models <code>es_core_news_sm</code>, <code>es_core_news_md</code>, <code>es_core_news_lg</code>), as <a href="../../stats/syntax_stats/">SyntaxStats</a> does; <code>verbal_nouns</code> needs a <code>Doc</code> with the parts of speech and the lemmas. A <code>Doc</code> without the sentence boundaries (a blank pipeline, a pipeline without the parser) is split by the rules of <a href="../../extractors/sentences/">SentsExtractor</a>. The layers of <code>HIGHLIGHT_DEFAULT_LAYERS</code> the source allows are on by default - long sentences, complex words, passive, chains of <code>de</code>, split predicates, clichés; <code>layers="all"</code> turns on every layer allowed. The layers overlap (a compound preposition is made of stopwords), so pick the ones you need.</p>
 <p>A sentence is long from 30 words, the bound of the Spanish guides to plain language (the <a href="https://www.comunidad.madrid/transparencia/sites/default/files/ckeditor/guia_tramites_claros-comunidad_madrid-noviembre_2021.pdf">Comunidad de Madrid</a> and the <a href="https://gcba.github.io/programadelenguajeclaro/Manual%20de%20lenguaje%20claro%202024%20(Final).pdf">Gobierno de la Ciudad de Buenos Aires</a>), and a word is complex from four syllables; <code>complex_syl_factor=3</code>, the bound of <code>BasicStats</code>, shows the words of <code>n_complex_words</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -2667,8 +2689,22 @@
 <td style="text-align: center;"><code>layers</code></td>
 <td style="text-align: center;">list[str]/str</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Layers of the highlighting; if not given, the layers of <code>HIGHLIGHT_DEFAULT_LAYERS</code> the source allows; <code>"all"</code> - every layer allowed</td>
+<td style="text-align: center;">Layers of the highlighting; if not given, the default layers the source allows; <code>"all"</code> - every layer allowed</td>
 </tr>
+</tbody>
+</table>
+<p>A source that is neither a string nor a <code>Doc</code> raises <code>SourceTypeError</code>, a source without words <code>SourceError</code>; layers that are not a name or a list of names, a layer that is unknown or one that needs an annotation the source lacks raise <code>ParameterError</code>.</p>
+<p>The parameters of the layers of esTS:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td style="text-align: center;"><code>long_sent_word_factor</code></td>
 <td style="text-align: center;">int</td>
@@ -2683,15 +2719,15 @@
 </tr>
 <tr>
 <td style="text-align: center;"><code>stopwords</code></td>
-<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;">list[str]/set[str]</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">List of stopwords; if not given, <code>STOPWORDS</code> and the one-word parenthetical expressions</td>
+<td style="text-align: center;">List or set of stopwords; if not given, <code>STOPWORDS</code> and the one-word parenthetical expressions</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>cliches</code></td>
-<td style="text-align: center;">list[str]</td>
+<td style="text-align: center;">list[str]/set[str]</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">List of clichés; if not given, <code>OFFICIALESE_CLICHES</code></td>
+<td style="text-align: center;">List or set of clichés; if not given, <code>OFFICIALESE_CLICHES</code></td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>alliteration_threshold</code></td>
@@ -2701,6 +2737,7 @@
 </tr>
 </tbody>
 </table>
+<p>A threshold that is not an integer of at least one or a probability outside (0, 1] raises <code>ParameterError</code>, stopwords or clichés that are not strings <code>SourceTypeError</code>.</p>
 <h2 id="attributes">Attributes<a class="headerlink" href="#attributes" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2724,7 +2761,7 @@
 <tr>
 <td style="text-align: center;"><code>highlights</code></td>
 <td style="text-align: center;">tuple[Highlight]</td>
-<td style="text-align: center;">Highlighted fragments in the order of the text</td>
+<td style="text-align: center;">Highlighted fragments, sorted by their start and then by descending end</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>counts</code></td>
@@ -2733,10 +2770,11 @@
 </tr>
 </tbody>
 </table>
-<p>A <code>Highlight</code> fragment is an immutable object with the fields <code>start</code> and <code>end</code> (positions in the text), <code>layer</code> (the layer) and <code>note</code> (the explanation for the tooltip: the number of words of the sentence, of syllables of the word, the length of the chain, the phrase of the list).</p>
+<p>A <code>Highlight</code> fragment is an immutable object with the fields <code>start</code> and <code>end</code> (positions in the text), <code>layer</code> (the layer) and <code>note</code> (the explanation for the tooltip).</p>
+<p>The note of a fragment gives the number of words of the sentence, of syllables of the word, the length of the chain or the phrase of the list.</p>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="to_html">to_html<a class="headerlink" href="#to_html" title="Permanent link">&para;</a></h3>
-<p>Returns the HTML markup of the highlighted text: a <code>div</code> of the class <code>ests-highlight</code> with the legend and its counts and the text, where the highlighted segments are wrapped in a <code>span</code> of the classes <code>ests-hl</code> and <code>ests-hl-&lt;layer&gt;</code>, the notes going to the attribute <code>title</code>. Overlapping fragments of different layers give segments with several classes. Line breaks (<code>\n</code>, <code>\r\n</code>, <code>\r</code>) are kept as character references, one per break, so the markup can be put into Markdown.</p>
+<p>Returns the HTML markup of the highlighted text: a <code>div</code> of the class <code>&lt;prefix&gt;-highlight</code> with the legend and its counts and the text, where the highlighted segments are wrapped in a <code>span</code> of the classes <code>&lt;prefix&gt;-hl</code> and <code>&lt;prefix&gt;-hl-&lt;layer&gt;</code>, the notes going to the attribute <code>title</code>; <code>&lt;prefix&gt;</code> is the prefix of the CSS classes. Overlapping fragments of different layers give segments with several classes, in the order of drawing. Line breaks (<code>\n</code>, <code>\r\n</code>, <code>\r</code>) are kept as character references, one per break, so the markup can be put into Markdown.</p>
 <table>
 <thead>
 <tr>
@@ -2761,6 +2799,8 @@
 </tr>
 </tbody>
 </table>
+<h3 id="css">css<a class="headerlink" href="#css" title="Permanent link">&para;</a></h3>
+<p>The class method <code>css()</code> returns the styles <code>to_html</code> adds: the container, the legend and the text under the classes of <code>css_prefix</code>, the declarations of <code>layer_styles</code> for every layer, and a dark colour of the text on the layers with a background.</p>
 <h2 id="usage-example">Usage example<a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h2>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
@@ -2809,7 +2849,7 @@
 .ests-highlight-legend .ests-hl { padding: 0 0.3em; }
 .ests-highlight-count { opacity: 0.6; margin-left: 0.3em; }
 .ests-highlight-text { white-space: pre-wrap; }
-.ests-highlight .ests-hl.ests-hl-long_sents, .ests-highlight .ests-hl.ests-hl-complex_words, .ests-highlight .ests-hl.ests-hl-rare_words, .ests-highlight .ests-hl.ests-hl-stopwords, .ests-highlight .ests-hl.ests-hl-passive, .ests-highlight .ests-hl.ests-hl-verbal_nouns, .ests-highlight .ests-hl.ests-hl-compound_prepositions, .ests-highlight .ests-hl.ests-hl-cliches, .ests-highlight .ests-hl.ests-hl-parentheticals { color: #1f2328; border-radius: 2px; }
+.ests-highlight .ests-hl.ests-hl-long_sents, .ests-highlight .ests-hl.ests-hl-stopwords, .ests-highlight .ests-hl.ests-hl-complex_words, .ests-highlight .ests-hl.ests-hl-rare_words, .ests-highlight .ests-hl.ests-hl-passive, .ests-highlight .ests-hl.ests-hl-verbal_nouns, .ests-highlight .ests-hl.ests-hl-compound_prepositions, .ests-highlight .ests-hl.ests-hl-cliches, .ests-highlight .ests-hl.ests-hl-parentheticals { color: #1f2328; border-radius: 2px; }
 .ests-hl-long_sents { background: #fef9c3; }
 .ests-hl-stopwords { background: #bae6fd; }
 .ests-hl-complex_words { background: #fed7aa; }
