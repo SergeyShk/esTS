@@ -396,6 +396,9 @@ def test_split_predicate_prefers_the_fixed_part(nlp):
         ("Dijo que estaba cantando.", 2),
         ("Ha podido salir.", 1),
         ("Está acostumbrado a vivir solo.", 2),
+        ("Tiene que salir.", 1),
+        ("Hay que salir.", 1),
+        ("Tengo de hallar la verdad.", 1),
     ],
 )
 def test_clause_head_of_an_infinitive(nlp, text, clauses):
