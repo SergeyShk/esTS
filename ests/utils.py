@@ -22,15 +22,15 @@ from .constants import (
 from .exceptions import DatasetNotFoundError
 
 # End of a sentence: terminal marks, optionally closing quotes or brackets and a dash
-# that closes a line of dialogue at the end of a line (¡Traidores!--), before whitespace,
+# that closes a line of dialogue (¡Traidores!--), before whitespace,
 # the end of the text or a dash glued to them that opens a line of dialogue (baja.--Tiene)
 # - a raya or a run of hyphens before the next word or opening mark within the line, not
 # a digit and not the punctuation after a closing dash, or a single hyphen before an
 # opening mark (cuatro.-¿Cinco?), since one before a word numbers an article (Artículo
 # 1.- Objeto); or a blank line
 SENTENCE_END = re.compile(
-    r"(?P<marks>[.!?…]+)(?P<closers>[»”’\"')\]]*)"
-    rf"(?P<dash>(?:--+|[—–―][{DASHES}]*)(?=[ \t]*+(?:\n|$)))?"
+    r"(?<![.!?…])(?P<marks>[.!?…]++)(?P<closers>[»”’\"')\]]*)"
+    rf"(?P<dash>(?:--+|[—–―][{DASHES}]*)(?=\s|$))?"
     rf"(?=\s|$|(?:--+|[—–―][{DASHES}]*)[ \t]*+[^\s\d.,;:!?…{DASHES}]|-[¿¡«“])"
     r"|(?P<break>\n[ \t\r\f\v]*\n)"
 )
@@ -91,10 +91,10 @@ def _ends_sentence(text: str, start: int, match: re.Match[str]) -> bool:
         return False
     if first in DASHES and _opens_remark(text, following.end()):
         return False
-    if match.group("marks") != "." or match.group("closers") or match.group("dash"):
+    if match.group("marks") != "." or match.group("closers"):
         return True
-    window_start = max(start, match.end() - LOOKBACK)
-    window = text[window_start : match.end()]
+    window_start = max(start, match.end("marks") - LOOKBACK)
+    window = text[window_start : match.end("marks")]
     if LIST_MARKER.search(window):
         return False
     tokens = [stripped for token in window.split() if (stripped := token.lstrip(OPENING_CHARS))]
@@ -115,8 +115,9 @@ def sentenize(text: str) -> Iterator[str]:
         an ellipsis, possibly followed by closing quotes or brackets, when
         the next word starts with an upper-case letter, a digit, an inverted
         mark, an opening quote or bracket or a dash, also a dash glued to
-        the mark (baja.--Tiene), while a glued dash at the end of a line
-        stays with its sentence; a blank line ends one too. A dash before
+        the mark (baja.--Tiene), while a glued dash before whitespace closes
+        a line of dialogue and stays with its sentence; a blank line ends one
+        too. A dash before
         a lower-case word opens a remark of the narrator and keeps the
         sentence going. A single period after an abbreviation
         (Sr., p. ej., EE. UU.), a capital initial or a list marker opening
