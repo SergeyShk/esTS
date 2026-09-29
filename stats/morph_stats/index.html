@@ -2864,7 +2864,7 @@
 </table>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>The statistics are as good as the annotation of the model. <code>es_core_news_sm</code> mis-analyses verbs with enclitic pronouns (<code>dámelo</code>, <code>cuéntamelo</code> come out as nouns with invented lemmas) and tags the imperatives of <code>tú</code> as indicative (<code>Abre la ventana</code> gets <code>Mood=Ind</code>), so <code>p_imperative</code> under-reports and <code>p_indicative</code> absorbs the orders. A bigger model passed in <code>nlp</code> does not change that; it only reads rare and old vocabulary better.</p>
+<p>The statistics are as good as the annotation of the model. <code>es_core_news_sm</code> mis-analyses verbs with enclitic pronouns (<code>dámelo</code>, <code>cuéntamelo</code> come out as nouns with invented lemmas) and tags the imperatives of <code>tú</code> as indicative (<code>Abre la ventana</code> gets <code>Mood=Ind</code>), so <code>p_imperative</code> under-reports and <code>p_indicative</code> absorbs the orders: in the dialogue of the corpus of literature it finds about one imperative in ten. <code>es_core_news_lg</code> does little better (15%); the transformer model <code>es_dep_news_trf</code> passed in <code>nlp</code> finds 87% of them, and in drama <code>p_imperative</code> rises from 1.6% to 7.5% - at the cost of about 1 GB with PyTorch and five times the time on a CPU, and it needs the single line breaks of a hard-wrapped text joined first.</p>
 </div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
