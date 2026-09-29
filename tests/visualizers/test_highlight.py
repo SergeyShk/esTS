@@ -308,11 +308,12 @@ def test_connectors(ht):
 
 def test_connectors_pos():
     # pues tagged as a verb is no connector
-    words = [Word(0, 4, "Pues"), Word(5, 7, "no"), Word(8, 12, "vino")]
-    sents = [Sent(0, 13, 3)]
+    words = [Word(0, 2, "No"), Word(3, 7, "vino"), Word(8, 12, "pues"), Word(13, 19, "llovía")]
+    sents = [Sent(0, 20, 4)]
     assert len(find_connector_highlights(words, sents)) == 1
     tagged = [
-        word._replace(pos=pos) for word, pos in zip(words, ["VERB", "ADV", "VERB"], strict=True)
+        word._replace(pos=pos)
+        for word, pos in zip(words, ["ADV", "VERB", "VERB", "VERB"], strict=True)
     ]
     assert find_connector_highlights(tagged, sents) == []
 

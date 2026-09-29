@@ -19,6 +19,8 @@ from .constants import (
     CONNECTOR_BLOCKED_AFTER_POS,
     CONNECTOR_BLOCKED_BEFORE,
     CONNECTOR_CLASSES,
+    CONNECTOR_NOT_AT_START,
+    CONNECTOR_ONLY_AFTER,
     CONNECTOR_POS,
     CONNECTOR_POS_EXTRA,
     CONNECTOR_TYPES,
@@ -93,15 +95,15 @@ class CohesionStats:
         of token_info. A Doc must carry the parts of speech (from a
         morphologizer, or a tagger with an attribute ruler) and the lemmas
         Connectors (porque, sin embargo, es decir) are found by find_connectors
-        in the dictionary of load_connectors, in the classes of Martín
-        Zorraquino and Portolés; a primary one is a conjunction, a conjunctive
+        in the dictionary of load_connectors, grouped in the classes of
+        Coh-Metrix; a primary one is a conjunction, a conjunctive
         locution or an adverb, a secondary one a lexicalized phrase. Their
         density is given per 1000 words
 
     References:
         https://doi.org/10.1017/CBO9780511894664 (McNamara et al. 2014, Coh-Metrix)
         https://doi.org/10.3758/s13428-015-0651-7 (Crossley et al. 2016, TAACO)
-        https://www.aclweb.org/anthology/W16-4105 (Quispesaravia et al. 2016, Coh-Metrix-Esp)
+        https://aclanthology.org/L16-1745/ (Quispesaravia et al. 2016, Coh-Metrix-Esp)
 
     Example:
         >>> from ests import CohesionStats
@@ -310,7 +312,7 @@ def load_connectors() -> Mapping[str, tuple[str, str]]:
     Loading the dictionary of the connectors
 
     Description:
-        The file resources/connectors.tsv: 255 discourse markers, each with its
+        The file resources/connectors.tsv: 250 discourse markers, each with its
         class of CONNECTOR_CLASSES and its kind of CONNECTOR_TYPES
 
     Returns:
@@ -439,11 +441,16 @@ def _is_phrase(
     end: int,
     pos: Sequence[str | None] | None,
 ) -> bool:
-    """Whether the words of a marker are a phrase of their own here, antes de la reunión"""
+    """Whether the words of a marker are no marker here: antes de la reunión, Pues bien"""
     following = words[end] if end < len(words) else ""
+    previous = words[position - 1] if position else ""
     if following in CONNECTOR_BLOCKED_AFTER.get(text, frozenset()):
         return True
-    if position and words[position - 1] in CONNECTOR_BLOCKED_BEFORE.get(text, frozenset()):
+    if previous in CONNECTOR_BLOCKED_BEFORE.get(text, frozenset()):
+        return True
+    if position == 0 and text in CONNECTOR_NOT_AT_START:
+        return True
+    if position and text in CONNECTOR_ONLY_AFTER and previous not in CONNECTOR_ONLY_AFTER[text]:
         return True
     if pos is None or end >= len(pos):
         return False

@@ -26,11 +26,13 @@ from .constants import (
     CLAUSE_DEPS,
     DE_PREPOSITIONS,
     GERUND_PERIPHRASIS_VERBS,
+    INFINITIVE_PERIPHRASES,
     LIGHT_VERBS,
     NEGATION_WORDS,
     NOUN_MODIFIER_DEPS,
     PASSIVE_AUX,
     PREPOSITIONAL_LIGHT_VERBS,
+    RAISING_VERBS,
     SE_IMPERSONAL_DEP,
     SE_PASSIVE_DEP,
     SPLIT_PREDICATE_NOUNS,
@@ -47,6 +49,11 @@ SPLIT_PREDICATE_DEPS = ("compound", "obj", "nsubj", "iobj", "nmod", "obl")
 AUXILIARY_DEPS = ("aux", "cop")
 # Relations by which the models attach the gerund of a periphrasis to its verb
 PERIPHRASIS_DEPS = ("xcomp", "advcl")
+# Relations of the word that links an infinitive to the verb of its periphrasis
+LINKING_DEPS = ("mark", "case", "cc")
+LINKING_WORDS = frozenset(
+    word for words in INFINITIVE_PERIPHRASES.values() for word in words if word
+)
 # Components the statistics never read
 UNUSED_COMPONENTS = ["ner"]
 
@@ -363,7 +370,8 @@ def is_clause_head(token: Token) -> bool:
 
     Description:
         The head of the sentence or a word with the relation ccomp, advcl, acl
-        or csubj; participles and gerunds are counted apart, and an infinitive
+        or csubj, and an infinitive under xcomp (is_infinitive_clause: quiere
+        salir); participles and gerunds are counted apart, and an infinitive
         under acl (el deseo de irse) is no clause. A parataxis or a conj of the
         head of a clause counts only as a predicate (is_predicate), so that
         parentheticals such as por ejemplo are no clauses
@@ -380,6 +388,8 @@ def is_clause_head(token: Token) -> bool:
         return True
     if is_participle(token) or is_gerund(token):
         return False
+    if token.dep_ == "xcomp":
+        return is_infinitive_clause(token)
     if token.dep_ not in CLAUSE_DEPS:
         return token.dep_ == "conj" and is_clause_head(token.head) and is_predicate(token)
     if token.dep_ == "parataxis":
@@ -411,8 +421,8 @@ def is_subordinate_clause_head(token: Token) -> bool:
     Checking whether a token heads a subordinate clause
 
     Description:
-        The head of a clause with the relation ccomp, advcl, acl or csubj, and
-        a coordinated predicate of a subordinate clause
+        The head of a clause with the relation ccomp, advcl, acl, csubj or
+        xcomp, and a coordinated predicate of a subordinate clause
 
     Arguments:
         token (Token): Token
@@ -422,9 +432,76 @@ def is_subordinate_clause_head(token: Token) -> bool:
     """
     if not is_clause_head(token) or is_root(token):
         return False
-    if token.dep_ in SUBORDINATE_CLAUSE_DEPS:
+    if token.dep_ in SUBORDINATE_CLAUSE_DEPS or token.dep_ == "xcomp":
         return True
     return token.dep_ == "conj" and is_subordinate_clause_head(token.head)
+
+
+def is_infinitive_clause(token: Token) -> bool:
+    """
+    Checking whether an infinitive under xcomp heads a clause of its own
+
+    Description:
+        A verb infinitive that completes its head (quiere salir, le hizo
+        reír), unless the two make a periphrasis (is_infinitive_periphrasis:
+        puede salir, vuelve a salir) or the head is a verb of RAISING_VERBS
+        (parece dormir); a predicative adjective (parece cansado) is no clause
+
+    Arguments:
+        token (Token): Token
+
+    Returns:
+        bool: Result of the check
+    """
+    return (
+        token.pos_ in ("VERB", "AUX")
+        and is_infinitive(token)
+        and not is_infinitive_periphrasis(token)
+        and _head_verb(token) not in RAISING_VERBS
+    )
+
+
+def is_infinitive_periphrasis(token: Token) -> bool:
+    """
+    Checking whether an infinitive makes a periphrasis with its head
+
+    Description:
+        The head is a verb of INFINITIVE_PERIPHRASES and the infinitive is
+        linked to it by one of the words of that verb: a mark, case or cc
+        before the infinitive or the word right before it, the old spelling
+        á read as a; the verbs taking no word (puede salir) need none
+
+    Arguments:
+        token (Token): Token
+
+    Returns:
+        bool: Result of the check
+    """
+    allowed = INFINITIVE_PERIPHRASES.get(_head_verb(token))
+    if allowed is None:
+        return False
+    links: set[str | None] = {
+        _linking_word(child)
+        for child in token.children
+        if child.i < token.i and base_dep(child) in LINKING_DEPS
+    }
+    # The models parse the old spelling á as a dependent of the head
+    if token.i - 1 > token.head.i:
+        previous = _linking_word(token.doc[token.i - 1])
+        if previous in LINKING_WORDS:
+            links.add(previous)
+    return bool(allowed & (links or {None}))
+
+
+def _head_verb(token: Token) -> str:
+    """Lemma of the head of a token; its first word, as the lemmatizer can give hacer él"""
+    words = token.head.lemma_.lower().split()
+    return words[0] if words else ""
+
+
+def _linking_word(token: Token) -> str:
+    """Text of a word that may link an infinitive, the old spelling á read as a"""
+    return token.text.lower().replace("á", "a")
 
 
 def count_noun_modifiers(token: Token) -> int:

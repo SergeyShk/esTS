@@ -2,7 +2,7 @@
 
 ## connectors.tsv
 
-255 Spanish discourse markers with their class and kind, compiled for the library by the classification of Martín Zorraquino and Portolés (1999); used by `CohesionStats`.
+250 Spanish discourse markers with their class and kind: the markers of Martín Zorraquino and Portolés (1999) and the conjunctions of the NGLE, grouped for the library in the seven classes of Coh-Metrix; used by `CohesionStats`.
 
 ## google_books_top10000.txt
 

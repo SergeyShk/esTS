@@ -357,6 +357,60 @@ def test_split_predicate_prefers_the_fixed_part(nlp):
     assert [noun.text for _, noun in found] == ["comienzo"]
 
 
+@pytest.mark.parametrize(
+    ("text", "clauses"),
+    [
+        ("Quiere salir.", 2),
+        ("Le hizo reír.", 2),
+        ("Puede salir.", 1),
+        ("Suele salir.", 1),
+        ("Empezó a reír.", 1),
+        ("Acaba de salir.", 1),
+        ("Volvió á salir.", 1),
+        ("Parece dormir.", 1),
+        ("Parece cansado.", 1),
+    ],
+)
+def test_clause_head_of_an_infinitive(nlp, text, clauses):
+    """An infinitive under xcomp is a clause unless it makes a periphrasis with its verb"""
+    doc = nlp(text)
+    assert sum(is_clause_head(token) for token in doc) == clauses
+    assert sum(is_subordinate_clause_head(token) for token in doc) == clauses - 1
+
+
+@pytest.mark.parametrize(
+    ("words", "deps", "lemmas", "expected"),
+    [
+        # a word between the verb and the infinitive that links nothing
+        (
+            ["Suele", "siempre", "salir"],
+            ["ROOT", "advmod", "xcomp"],
+            ["soler", "siempre", "salir"],
+            False,
+        ),
+        (
+            ["Quiere", "siempre", "salir"],
+            ["ROOT", "advmod", "xcomp"],
+            ["querer", "siempre", "salir"],
+            True,
+        ),
+        # the old spelling á parsed as a dependent of the verb
+        (["Volvió", "á", "salir"], ["ROOT", "obj", "xcomp"], ["volver", "á", "salir"], False),
+    ],
+)
+def test_clause_head_of_an_infinitive_by_its_link(nlp, words, deps, lemmas, expected):
+    doc = Doc(
+        nlp.vocab,
+        words=words,
+        heads=[0, 0 if deps[1] == "obj" else 2, 0],
+        deps=deps,
+        pos=["VERB", "ADV" if deps[1] == "advmod" else "ADP", "VERB"],
+        lemmas=lemmas,
+        morphs=["", "", "VerbForm=Inf"],
+    )
+    assert is_clause_head(doc[2]) is expected
+
+
 def test_clause_head_of_a_punctuation_mark(nlp):
     assert not is_clause_head(nlp("La casa es blanca.")[-1])
 
