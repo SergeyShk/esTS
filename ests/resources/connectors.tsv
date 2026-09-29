@@ -90,7 +90,7 @@ de cualquier forma	concessive	secondary
 de cualquier manera	concessive	secondary
 en todo caso	concessive	secondary
 en cualquier caso	concessive	secondary
-después de todo	concessive	secondary
+después de todo	reformulative	secondary
 bien es verdad que	concessive	secondary
 cierto es que	concessive	secondary
 cuando	temporal	primary
@@ -104,8 +104,6 @@ luego que	temporal	primary
 después que	temporal	primary
 tan pronto como	temporal	primary
 en cuanto	temporal	primary
-apenas	temporal	primary
-nada más	temporal	secondary
 una vez que	temporal	primary
 cada vez que	temporal	primary
 siempre que	temporal	primary
@@ -133,14 +131,14 @@ finalmente	temporal	primary
 por fin	temporal	secondary
 al fin	temporal	secondary
 por último	temporal	secondary
-en último lugar	temporal	secondary
+en último lugar	additive	secondary
 al principio	temporal	secondary
 al comienzo	temporal	secondary
 al final	temporal	secondary
-en primer lugar	temporal	secondary
-en segundo lugar	temporal	secondary
-en tercer lugar	temporal	secondary
-primeramente	temporal	primary
+en primer lugar	additive	secondary
+en segundo lugar	additive	secondary
+en tercer lugar	additive	secondary
+primeramente	additive	primary
 desde entonces	temporal	secondary
 a partir de entonces	temporal	secondary
 hasta ahora	temporal	secondary
@@ -166,9 +164,7 @@ de igual manera	additive	secondary
 de la misma manera	additive	secondary
 de la misma forma	additive	secondary
 al igual que	additive	secondary
-lo mismo que	additive	secondary
 así como	additive	primary
-es más	additive	secondary
 más aún	additive	secondary
 aún más	additive	secondary
 ni siquiera	additive	secondary
@@ -209,7 +205,6 @@ en ese caso	conditional	secondary
 en tal caso	conditional	secondary
 es decir	reformulative	secondary
 o sea	reformulative	secondary
-esto es	reformulative	secondary
 a saber	reformulative	secondary
 dicho de otro modo	reformulative	secondary
 dicho de otra manera	reformulative	secondary

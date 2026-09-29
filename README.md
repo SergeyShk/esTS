@@ -45,7 +45,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, vocabulary growth, sentence lengths, and the highlighting of the fragments the statistics count, such as long sentences and passives
 * **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors in four genres; 4,259 sonnets of the 15th-20th centuries with the metrical pattern and the rhyme of every line; a frequency dictionary of 83,785 lemmas by Google Books Ngram
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
-* **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 255 Spanish discourse markers
+* **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 250 Spanish discourse markers
 * **[Lexical sophistication statistics](https://sergeyshk.github.io/esTS/stats/lexical_stats/)** - how rare the words of a text are in the language: the frequency, range and dispersion of the lemmas by a dictionary of Google Books Ngram, the frequency bands top-1000 to 10000, surprisal, perplexity and lexical density
 * **[Style metrics](https://sergeyshk.github.io/esTS/stats/style_stats/)** - the SEO indicators of Advego and Text.ru (nausea, water content, spam score, naturalness by Zipf's law, keyword density) and the markers of the officialese style by the Spanish guides to plain language: verbal nouns, compound prepositions, parenthetical expressions and clichés
 * **[Phonostatistics](https://sergeyshk.github.io/esTS/stats/phon_stats/)** - the shares of the classes of sounds, consonant clusters, hiatuses, open syllables, hardness and the indices of alliteration and assonance, over the sounds of a rule-based transcription
@@ -392,7 +392,7 @@ Referential cohesion in the manner of Coh-Metrix and its Spanish adaptation Coh-
 *   the overlap of nouns, of arguments and of content words between adjacent sentences and between all pairs of sentences, binary and proportional
 *   givenness: pronouns, demonstratives and the content words whose lemma was already used
 *   temporal cohesion: the repetition of the tense and of the mood of the verbs of adjacent sentences
-*   the density of 255 Spanish discourse markers by class - causal, adversative, concessive, temporal, additive, conditional, reformulative - and by kind
+*   the density of 250 Spanish discourse markers by class - causal, adversative, concessive, temporal, additive, conditional, reformulative - and by kind
 
 ```python
 >>> from ests import CohesionStats

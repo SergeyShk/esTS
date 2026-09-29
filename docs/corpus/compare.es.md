@@ -166,10 +166,10 @@ Galdós frente a Unamuno, tres novelas de cada uno del [corpus de literatura](..
 
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
     basic_letters_per_word          4.437           4.132   0.255    0.356    1.676        0.782  0.891     0.0
-    readability_lix                38.221          29.469   7.443   10.806    1.085        0.700  0.850     0.0
+    readability_lix                38.220          29.469   7.437   10.668    1.088        0.703  0.852     0.0
     morph_p_gerund                  0.068           0.036   0.028    0.036    1.503        0.736  0.868     0.0
     morph_polarity_Neg              0.018           0.028  -0.013   -0.010   -1.130       -0.547  0.226     0.0
-    sents_mean                     16.650          11.409   3.129    7.173    0.841        0.618  0.809     0.0
+    sents_mean                     16.650          11.409   3.219    6.998    0.844        0.623  0.811     0.0
     punct_dash                     19.019          46.351 -40.474  -15.844   -1.315       -0.618  0.191     0.0
     punct_exclamation               8.016          23.928 -23.896   -3.779   -1.271       -0.629  0.186     0.0
     diversity_yule_k              104.859         110.355 -14.143   -1.203   -0.625       -0.318  0.341     0.0
@@ -179,7 +179,7 @@ Galdós frente a Unamuno, tres novelas de cada uno del [corpus de literatura](..
 
 Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto pequeño (0.32), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas por cada 1000 palabras, el triple de signos de exclamación, y más negaciones.
 
-Los valores p toman las 274 ventanas de seis novelas por independientes (véase la advertencia de arriba), y según la misma prueba dos novelas de un mismo autor difieren en 32 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 7.2 palabras, donde las ventanas solas darían de 3.8 a 6.3.
+Los valores p toman las 274 ventanas de seis novelas por independientes (véase la advertencia de arriba), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 41 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.2 a 7.0 palabras, donde las ventanas solas darían de 3.7 a 6.3.
 
 Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:
 

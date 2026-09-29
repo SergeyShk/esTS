@@ -141,6 +141,33 @@ def test_is_punctuation(token, expected):
         ("Página 1. Luego.", ["Página 1.", "Luego."]),
         ("1990. Luego.", ["1990. Luego."]),
         ("―¿Vienes? ―preguntó ella. ―Sí.", ["―¿Vienes? ―preguntó ella.", "―Sí."]),
+        # A dash glued to the mark, as the editions of Project Gutenberg type it
+        ("Está muy baja.--Tiene fiebre.", ["Está muy baja.", "--Tiene fiebre."]),
+        ("Uno, cuatro.-¿Cinco?", ["Uno, cuatro.", "-¿Cinco?"]),
+        ("Era tarde.—Ven.", ["Era tarde.", "—Ven."]),
+        ("Dijo que sí.--dijo él.", ["Dijo que sí.--dijo él."]),
+        ("Sí. --dijo él. Luego salió.", ["Sí. --dijo él.", "Luego salió."]),
+        ("Del 3.-5 de mayo.", ["Del 3.-5 de mayo."]),
+        ("El Sr.--Pérez llegó.", ["El Sr.--Pérez llegó."]),
+        # A closing dash before punctuation or a blank line keeps its sentence
+        (
+            "Se verían las piernas--¡qué horror!--, los pantalones.",
+            ["Se verían las piernas--¡qué horror!--, los pantalones."],
+        ),
+        (
+            "--Eso--dijo él vivamente...--. Es preciso.",
+            ["--Eso--dijo él vivamente...--.", "Es preciso."],
+        ),
+        (
+            "--La educaré.--\n\nLas mujeres eran pobres.",
+            ["--La educaré.--", "Las mujeres eran pobres."],
+        ),
+        ("¿Vienes?--Sí.", ["¿Vienes?", "--Sí."]),
+        ("Era tarde.--«Ven», dijo.", ["Era tarde.", "--«Ven», dijo."]),
+        # A single hyphen before a word numbers an article or joins two names
+        ("Artículo 1.- Objeto del reglamento.", ["Artículo 1.- Objeto del reglamento."]),
+        ("PRIMERO.- Aprobar el plan.", ["PRIMERO.- Aprobar el plan."]),
+        ("EE.UU.-China firmaron.", ["EE.UU.-China firmaron."]),
     ],
 )
 def test_sentenize(text, expected):

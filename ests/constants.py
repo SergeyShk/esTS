@@ -409,6 +409,12 @@ MORPHOLOGY_MARKERS_DESC = {
 
 # The two copulas of Spanish, by lemma
 COPULAS = ("ser", "estar")
+# Verbs the models attach as auxiliaries or copulas, by lemma
+AUXILIARY_VERBS = frozenset(
+    {"haber", "ser", "estar", "ir", "poder", "deber", "querer", "soler", "tener", "saber"}
+)
+# Enclitic pronouns after an infinitive, a gerund or an imperative (decírselo)
+ENCLITICS = ("me", "te", "se", "nos", "os", "lo", "la", "los", "las", "le", "les")
 
 
 # Dependencies that head a clause; the Spanish models give acl for a relative clause too
@@ -508,6 +514,36 @@ SPLIT_PREDICATE_NOUNS = {
 }
 # Light verbs whose nominal part comes with a preposition: se procedió a la votación
 PREPOSITIONAL_LIGHT_VERBS = frozenset({"proceder"})
+# Verbs of the periphrases with an infinitive (NGLE, ch. 28) and the words that link them
+# to the infinitive, None - no word: puede salir, vuelve a salir, acaba de salir
+INFINITIVE_PERIPHRASES: dict[str, frozenset[str | None]] = {
+    "poder": frozenset({None}),
+    "deber": frozenset({None, "de"}),
+    "soler": frozenset({None}),
+    "tener": frozenset({"que"}),
+    "haber": frozenset({"de", "que"}),
+    "ir": frozenset({"a"}),
+    "venir": frozenset({"a"}),
+    "pasar": frozenset({"a"}),
+    "volver": frozenset({"a"}),
+    "tornar": frozenset({"a"}),
+    "empezar": frozenset({"a", "por"}),
+    "comenzar": frozenset({"a", "por"}),
+    "principiar": frozenset({"a"}),
+    "poner": frozenset({"a"}),
+    "echar": frozenset({"a"}),
+    "romper": frozenset({"a"}),
+    "llegar": frozenset({"a"}),
+    "alcanzar": frozenset({"a"}),
+    "acabar": frozenset({"de", "por"}),
+    "terminar": frozenset({"de", "por"}),
+    "dejar": frozenset({"de"}),
+    "cesar": frozenset({"de"}),
+    "parar": frozenset({"de"}),
+    "estar": frozenset({"por", "para"}),
+}
+# Verbs that take the subject of their infinitive: parece dormir
+RAISING_VERBS = frozenset({"parecer"})
 # Verbs of the periphrases with a gerund: sigue trabajando, lleva años estudiando
 GERUND_PERIPHRASIS_VERBS = frozenset(
     {"seguir", "continuar", "ir", "venir", "andar", "llevar", "quedar", "acabar"}
@@ -549,7 +585,8 @@ SYNTAX_STATS_DESC = {
 
 # Parts of speech of a content word, as Universal Dependencies names them
 CONTENT_UD_POS = frozenset({"NOUN", "PROPN", "ADJ", "VERB", "ADV"})
-# Classes of the discourse markers, by Martín Zorraquino and Portolés
+# Classes of the discourse markers: those of Coh-Metrix (causal, adversative, temporal, additive)
+# with the concessive, conditional and reformulative ones
 CONNECTOR_CLASSES = {
     "causal": "causal",
     "adversative": "adversative",
@@ -582,8 +619,13 @@ CONNECTOR_BLOCKED_AFTER = {
     "al principio": frozenset({"de", "del"}),
     "al comienzo": frozenset({"de", "del"}),
     "luego": frozenset({"de", "del"}),
+    "en cuanto": frozenset({"a", "al", "á"}),
 }
-CONNECTOR_BLOCKED_BEFORE = {"encima": frozenset({"por"})}
+CONNECTOR_BLOCKED_BEFORE = {"así como": frozenset({"algo"})}
+# Markers counted only at the start of a sentence or after these words (y encima llueve)
+CONNECTOR_ONLY_AFTER = {"encima": frozenset({"y", "e", "ni", "pero"})}
+# Markers not counted at the start of a sentence, where they open a reply (Pues bien...)
+CONNECTOR_NOT_AT_START = frozenset({"pues"})
 # Parts of speech of the next word that make a marker a phrase of its own (sobre todo el)
 CONNECTOR_BLOCKED_AFTER_POS = {"sobre todo": frozenset({"DET"})}
 

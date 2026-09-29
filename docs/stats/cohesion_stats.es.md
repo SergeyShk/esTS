@@ -5,7 +5,7 @@
 
 ## Descripción
 
-Módulo para calcular las estadísticas de cohesión de un texto a la manera de [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) y de su adaptación española [Coh-Metrix-Esp](https://aclanthology.org/W16-4105/): la repetición de sustantivos, de argumentos y de palabras con contenido entre oraciones, la información dada, la cohesión temporal y la densidad de los marcadores del discurso.
+Módulo para calcular las estadísticas de cohesión de un texto a la manera de [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) y de su adaptación española [Coh-Metrix-Esp](https://aclanthology.org/L16-1745/): la repetición de sustantivos, de argumentos y de palabras con contenido entre oraciones, la información dada, la cohesión temporal y la densidad de los marcadores del discurso.
 
 Las oraciones se comparan por lemas, y los rasgos vienen de la anotación de [Universal Dependencies](https://universaldependencies.org/u/feat/), así que la fuente tiene que estar anotada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, y un `Doc` debe llevar las categorías gramaticales, que vienen de un `morphologizer` (o de un `tagger` con un `attribute_ruler`), y los lemas, que vienen de un `lemmatizer`; una fuente sin unas u otros levanta `SourceError`. Sin límites de oración - un pipeline sin analizador - las oraciones se toman del texto con [`SentsExtractor`](../extractors/sentences.md).
 
@@ -53,7 +53,7 @@ La cohesión temporal sigue el SMTEMP de Coh-Metrix: de cada oración se toma el
 
 ## Conectores { #connectors }
 
-Los marcadores del discurso de la clasificación de Martín Zorraquino y Portolés, 255 en `ests/resources/connectors.tsv`, en siete clases y dos tipos: primarios - conjunciones, locuciones conjuntivas y adverbios (`porque`, `aunque`, `además`) - y secundarios, las locuciones lexicalizadas (`sin embargo`, `por lo tanto`, `es decir`). La densidad se da por 1000 palabras.
+Los marcadores del discurso de Martín Zorraquino y Portolés (1999) y las conjunciones de la NGLE, 250 en `ests/resources/connectors.tsv`, agrupados en siete clases de la biblioteca - los conectores causales, adversativos, temporales y aditivos de Coh-Metrix, con los concesivos, condicionales y reformulativos añadidos - y en dos tipos: primarios - conjunciones, locuciones conjuntivas y adverbios (`porque`, `aunque`, `además`) - y secundarios, las locuciones lexicalizadas (`sin embargo`, `por lo tanto`, `es decir`). La densidad se da por 1000 palabras.
 
 | Atributo | Tipo | Descripción |
 | :------: | :--: | :---------: |
@@ -68,9 +68,11 @@ Los marcadores del discurso de la clasificación de Martín Zorraquino y Portol�
 | `connectors_primary` | float | Conectores primarios por 1000 palabras |
 | `connectors_secondary` | float | Conectores secundarios por 1000 palabras |
 
+La clase reformulativa incluye también los operadores de concreción (`por ejemplo`, `en particular`, `sobre todo`), y los ordinales (`en primer lugar`) son aditivos. `si` abre también interrogativas indirectas y exclamaciones (`no sé si vendrá`, `¡pero si es él!`) - cerca de una cuarta parte de sus apariciones en el corpus de literatura -, y `siempre que` es temporal con indicativo y condicional con subjuntivo; ambos se cuentan en su clase.
+
 Los conectores se buscan por sus formas en minúscula: en cada posición se toma el más largo, de modo que `sin embargo` no se rompe en `sin`, y los hallados no se solapan. Las apariciones están en el atributo `connector_spans` y su distribución en `c_connectors`.
 
-Dos reglas dejan fuera los usos corrientes de esas palabras. Un conector de una palabra cuenta solo con una categoría de `CONNECTOR_POS` - conjunción, partícula, adverbio, adposición, interjección - y nunca tras un determinante, así que `el antes y el después` lleva un conector, `y`, y no tres; un nombre propio cuenta solo al principio de la oración, donde los modelos leen así un marcador (`Primeramente`), de modo que el apellido de `Ana, Luego y Mas firmaron` no es conector. Y un marcador que además encabeza un sintagma preposicional se descarta ahí: `antes de la reunión` y `sobre todo el texto` no cuentan nada, mientras que `antes, firmó el acta` y `sobre todo cuando llueve` cuentan su marcador.
+Tres reglas dejan fuera los usos corrientes de esas palabras. Un conector de una palabra cuenta solo con una categoría de `CONNECTOR_POS` - conjunción, partícula, adverbio, adposición, interjección - y nunca tras un determinante, así que `el antes y el después` lleva un conector, `y`, y no tres; un nombre propio cuenta solo al principio de la oración, donde los modelos leen así un marcador (`Primeramente`), de modo que el apellido de `Ana, Luego y Mas firmaron` no es conector. Y un marcador que además encabeza un sintagma preposicional se descarta ahí: `antes de la reunión` y `sobre todo el texto` no cuentan nada, mientras que `antes, firmó el acta` y `sobre todo cuando llueve` cuentan su marcador; tampoco cuentan `en cuanto a` ni `algo así como`. Y algunos marcadores dependen de su lugar: `pues` al principio de la oración abre una réplica (`Pues bien`) y no es conector (`CONNECTOR_NOT_AT_START`), y `encima` cuenta solo al principio de la oración o tras `y`, `e`, `ni` o `pero` (`y encima llueve`, `CONNECTOR_ONLY_AFTER`).
 
 En `connectors` puede pasarse un diccionario propio: del conector a su clase de `CONNECTOR_CLASSES` y su tipo de `CONNECTOR_TYPES`, y uno desconocido levanta `ParameterError`.
 
@@ -130,7 +132,7 @@ Devuelve un diccionario con las estadísticas de cohesión calculadas.
     'content_overlap_adjacent': 0.3333333333333333,
     'content_overlap_all': 0.5,
     'content_overlap_prop_adjacent': 0.08333333333333333,
-    'content_overlap_prop_all': 0.12037037037037039,
+    'content_overlap_prop_all': 0.12037037037037035,
     'p_pronouns': 0.034482758620689655,
     'pronoun_noun_ratio': 0.09090909090909091,
     'p_demonstratives': 0.0,

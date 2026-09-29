@@ -21,12 +21,19 @@ from .constants import (
 )
 from .exceptions import DatasetNotFoundError
 
-# End of a sentence: terminal marks, optionally closing quotes or brackets,
-# before whitespace or the end of the text; or a blank line
+# End of a sentence: terminal marks, optionally closing quotes or brackets, before
+# whitespace, the end of the text or a dash glued to them that opens a line of dialogue
+# (baja.--Tiene) - a raya or a run of hyphens before the next word or opening mark
+# within the line, not a digit and not the punctuation after a closing dash, or a single
+# hyphen before an opening mark (cuatro.-¿Cinco?), since one before a word numbers an
+# article (Artículo 1.- Objeto); or a blank line
 SENTENCE_END = re.compile(
-    r"(?P<marks>[.!?…]+)(?P<closers>[»”’\"')\]]*)(?=\s|$)|(?P<break>\n[ \t\r\f\v]*\n)"
+    r"(?P<marks>[.!?…]+)(?P<closers>[»”’\"')\]]*)"
+    rf"(?=\s|$|(?:--+|[—–―][{DASHES}]*)[ \t]*\n?[ \t]*[^\s\d.,;:!?…{DASHES}]|-[¿¡«“])"
+    r"|(?P<break>\n[ \t\r\f\v]*\n)"
 )
 NON_SPACE = re.compile(r"\S")
+NON_DASH = re.compile(rf"[^\s{DASHES}]")
 INITIAL = re.compile(r"[A-ZÁÉÍÓÚÜÑ]\.")
 # Marker of a list (1. 2.1. b. IV.) that opens a sentence or a line, at the end of the window
 LIST_MARKER = re.compile(r"(?:^|\n)[ \t]*(?:\d+(?:\.\d+)*|[a-z]|[IVXLC]+)\.\Z")
@@ -52,7 +59,7 @@ def _opens_remark(text: str, position: int) -> bool:
     Returns:
         bool: Result of the check
     """
-    following = NON_SPACE.search(text, position)
+    following = NON_DASH.search(text, position)
     return following is not None and following.group().islower()
 
 
@@ -105,9 +112,10 @@ def sentenize(text: str) -> Iterator[str]:
         A sentence ends with a period, an exclamation or question mark or
         an ellipsis, possibly followed by closing quotes or brackets, when
         the next word starts with an upper-case letter, a digit, an inverted
-        mark, an opening quote or bracket or a dash; a blank line ends one
-        too. A dash before a lower-case word opens a remark of the narrator
-        and keeps the sentence going. A single period after an abbreviation
+        mark, an opening quote or bracket or a dash, also a dash glued to
+        the mark (baja.--Tiene); a blank line ends one too. A dash before
+        a lower-case word opens a remark of the narrator and keeps the
+        sentence going. A single period after an abbreviation
         (Sr., p. ej., EE. UU.), a capital initial or a list marker opening
         a sentence or a line (1. 2.1. IV.) does not end a sentence, nor does
         a single line break. Sentences are stripped of surrounding whitespace

@@ -135,10 +135,10 @@ Galdós against Unamuno, three novels each from the [corpus of literature](../da
 
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
     basic_letters_per_word          4.437           4.132   0.255    0.356    1.676        0.782  0.891     0.0
-    readability_lix                38.221          29.469   7.443   10.806    1.085        0.700  0.850     0.0
+    readability_lix                38.220          29.469   7.437   10.668    1.088        0.703  0.852     0.0
     morph_p_gerund                  0.068           0.036   0.028    0.036    1.503        0.736  0.868     0.0
     morph_polarity_Neg              0.018           0.028  -0.013   -0.010   -1.130       -0.547  0.226     0.0
-    sents_mean                     16.650          11.409   3.129    7.173    0.841        0.618  0.809     0.0
+    sents_mean                     16.650          11.409   3.219    6.998    0.844        0.623  0.811     0.0
     punct_dash                     19.019          46.351 -40.474  -15.844   -1.315       -0.618  0.191     0.0
     punct_exclamation               8.016          23.928 -23.896   -3.779   -1.271       -0.629  0.186     0.0
     diversity_yule_k              104.859         110.355 -14.143   -1.203   -0.625       -0.318  0.341     0.0
@@ -148,7 +148,7 @@ Galdós against Unamuno, three novels each from the [corpus of literature](../da
 
 Galdós has the richer vocabulary: the measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Yule's K, which weighs the frequent words, gives a small effect (0.32), so the difference lies mostly in the rare vocabulary. His words and sentences are longer, with nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue: two and a half times as many dashes per 1000 words, three times as many exclamation marks, and more negations.
 
-The p-values take the 274 windows of six novels for independent (see the warning above), and by the same test two novels of one author differ in 32 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.1 to 7.2 words, where the windows alone would give 3.8 to 6.3.
+The p-values take the 274 windows of six novels for independent (see the warning above), and by the same test two novels of Galdós, *Marianela* and *Misericordia*, differ in 41 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.2 to 7.0 words, where the windows alone would give 3.7 to 6.3.
 
 Features of one's own, for instance the syntactic ones, are passed as a function:
 
