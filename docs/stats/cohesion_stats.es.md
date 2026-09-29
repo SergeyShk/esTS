@@ -53,7 +53,7 @@ La cohesión temporal sigue el SMTEMP de Coh-Metrix: de cada oración se toma el
 
 ## Conectores { #connectors }
 
-Los marcadores del discurso de Martín Zorraquino y Portolés (1999) y las conjunciones de la NGLE, 250 en `ests/resources/connectors.tsv`, agrupados en las siete clases de Coh-Metrix y en dos tipos: primarios - conjunciones, locuciones conjuntivas y adverbios (`porque`, `aunque`, `además`) - y secundarios, las locuciones lexicalizadas (`sin embargo`, `por lo tanto`, `es decir`). La densidad se da por 1000 palabras.
+Los marcadores del discurso de Martín Zorraquino y Portolés (1999) y las conjunciones de la NGLE, 250 en `ests/resources/connectors.tsv`, agrupados en siete clases de la biblioteca - los conectores causales, adversativos, temporales y aditivos de Coh-Metrix, con los concesivos, condicionales y reformulativos añadidos - y en dos tipos: primarios - conjunciones, locuciones conjuntivas y adverbios (`porque`, `aunque`, `además`) - y secundarios, las locuciones lexicalizadas (`sin embargo`, `por lo tanto`, `es decir`). La densidad se da por 1000 palabras.
 
 | Atributo | Tipo | Descripción |
 | :------: | :--: | :---------: |

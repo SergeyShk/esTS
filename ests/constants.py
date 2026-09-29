@@ -514,6 +514,7 @@ INFINITIVE_PERIPHRASES: dict[str, frozenset[str | None]] = {
     "poder": frozenset({None}),
     "deber": frozenset({None, "de"}),
     "soler": frozenset({None}),
+    "acostumbrar": frozenset({None, "a"}),
     "tener": frozenset({"que"}),
     "haber": frozenset({"de", "que"}),
     "ir": frozenset({"a"}),
@@ -579,7 +580,8 @@ SYNTAX_STATS_DESC = {
 
 # Parts of speech of a content word, as Universal Dependencies names them
 CONTENT_UD_POS = frozenset({"NOUN", "PROPN", "ADJ", "VERB", "ADV"})
-# Classes of the discourse markers, as in Coh-Metrix
+# Classes of the discourse markers: those of Coh-Metrix (causal, adversative, temporal, additive)
+# with the concessive, conditional and reformulative ones
 CONNECTOR_CLASSES = {
     "causal": "causal",
     "adversative": "adversative",

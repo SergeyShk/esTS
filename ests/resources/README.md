@@ -2,7 +2,7 @@
 
 ## connectors.tsv
 
-250 Spanish discourse markers with their class and kind: the markers of Martín Zorraquino and Portolés (1999) and the conjunctions of the NGLE, grouped for the library in the seven classes of Coh-Metrix; used by `CohesionStats`.
+250 Spanish discourse markers with their class and kind: the markers of Martín Zorraquino and Portolés (1999) and the conjunctions of the NGLE, grouped for the library in seven classes - the causal, adversative, temporal and additive connectives of Coh-Metrix, with the concessive, conditional and reformulative ones added; used by `CohesionStats`.
 
 ## google_books_top10000.txt
 

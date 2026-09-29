@@ -95,8 +95,8 @@ class CohesionStats:
         of token_info. A Doc must carry the parts of speech (from a
         morphologizer, or a tagger with an attribute ruler) and the lemmas
         Connectors (porque, sin embargo, es decir) are found by find_connectors
-        in the dictionary of load_connectors, grouped in the classes of
-        Coh-Metrix; a primary one is a conjunction, a conjunctive
+        in the dictionary of load_connectors, in seven classes; a primary one
+        is a conjunction, a conjunctive
         locution or an adverb, a secondary one a lexicalized phrase. Their
         density is given per 1000 words
 
@@ -406,7 +406,7 @@ def _find(
             if tuple(normalized[position:end]) != pattern:
                 continue
             text, cls, kind = index.entries[" ".join(pattern)]
-            if _is_phrase(text, normalized, position, end, pos):
+            if _is_blocked(text, normalized, position, end, pos):
                 continue
             if (
                 len(pattern) == 1
@@ -434,7 +434,7 @@ def _is_connector_pos(word: str, pos: Sequence[str | None], position: int) -> bo
     )
 
 
-def _is_phrase(
+def _is_blocked(
     text: str,
     words: Sequence[str],
     position: int,
@@ -468,8 +468,12 @@ def find_connectors(
 
     Description:
         Connectors are matched by their word forms in lower case, the longest
-        one at every position, without overlaps. A marker that heads a
-        prepositional phrase (antes de la reunión, por encima de 80) is dropped
+        one at every position, without overlaps. The words are those of one
+        sentence without punctuation, the first one its start. A marker that
+        heads a prepositional phrase (antes de la reunión, por encima de 80)
+        is dropped, and so are one of CONNECTOR_NOT_AT_START opening the
+        sentence (Pues bien) and one of CONNECTOR_ONLY_AFTER inside the
+        sentence after another word than those listed (encima)
         With the parts of speech given, a one-word connector counts only with a
         part of speech of CONNECTOR_POS or of CONNECTOR_POS_EXTRA for that word,
         never after a determiner and, as a proper noun, only at the start of the

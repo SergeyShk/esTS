@@ -22,10 +22,12 @@ from .constants import (
 from .exceptions import DatasetNotFoundError
 
 # End of a sentence: terminal marks, optionally closing quotes or brackets, before
-# whitespace, the end of the text or a dash glued to them and followed by no digit
-# (baja.--Tiene); or a blank line
+# whitespace, the end of the text or a dash glued to them that opens a line of dialogue
+# (baja.--Tiene) - the next word or opening mark within the line, no digit and no
+# punctuation, which follow a closing dash; or a blank line
 SENTENCE_END = re.compile(
-    r"(?P<marks>[.!?…]+)(?P<closers>[»”’\"')\]]*)(?=\s|$|[-—–―]+\s*[^\s\d—–―-])"
+    r"(?P<marks>[.!?…]+)(?P<closers>[»”’\"')\]]*)"
+    rf"(?=\s|$|[{DASHES}]+[ \t]*\n?[ \t]*[^\s\d.,;:!?…{DASHES}])"
     r"|(?P<break>\n[ \t\r\f\v]*\n)"
 )
 NON_SPACE = re.compile(r"\S")

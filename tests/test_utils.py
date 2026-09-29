@@ -149,6 +149,21 @@ def test_is_punctuation(token, expected):
         ("Sí. --dijo él. Luego salió.", ["Sí. --dijo él.", "Luego salió."]),
         ("Del 3.-5 de mayo.", ["Del 3.-5 de mayo."]),
         ("El Sr.--Pérez llegó.", ["El Sr.--Pérez llegó."]),
+        # A closing dash before punctuation or a blank line keeps its sentence
+        (
+            "Se verían las piernas--¡qué horror!--, los pantalones.",
+            ["Se verían las piernas--¡qué horror!--, los pantalones."],
+        ),
+        (
+            "--Eso--dijo él vivamente...--. Es preciso.",
+            ["--Eso--dijo él vivamente...--.", "Es preciso."],
+        ),
+        (
+            "--La educaré.--\n\nLas mujeres eran pobres.",
+            ["--La educaré.--", "Las mujeres eran pobres."],
+        ),
+        ("¿Vienes?--Sí.", ["¿Vienes?", "--Sí."]),
+        ("Era tarde.--«Ven», dijo.", ["Era tarde.", "--«Ven», dijo."]),
     ],
 )
 def test_sentenize(text, expected):

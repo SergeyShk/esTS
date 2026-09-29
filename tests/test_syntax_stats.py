@@ -369,6 +369,11 @@ def test_split_predicate_prefers_the_fixed_part(nlp):
         ("Volvió á salir.", 1),
         ("Parece dormir.", 1),
         ("Parece cansado.", 1),
+        ("Quiere ser médico.", 2),
+        ("Quiere ser elegido.", 2),
+        ("Llegó a ser rey.", 1),
+        ("Suele ser amable.", 1),
+        ("Acostumbraba a salir de noche.", 1),
     ],
 )
 def test_clause_head_of_an_infinitive(nlp, text, clauses):
@@ -409,6 +414,20 @@ def test_clause_head_of_an_infinitive_by_its_link(nlp, words, deps, lemmas, expe
         morphs=["", "", "VerbForm=Inf"],
     )
     assert is_clause_head(doc[2]) is expected
+
+
+def test_clause_head_of_an_infinitive_under_a_misread_verb(nlp):
+    """A verb the model reads as a proper noun is looked up by its lemma of simplemma"""
+    doc = Doc(
+        nlp.vocab,
+        words=["Solía", "salir"],
+        heads=[0, 0],
+        deps=["ROOT", "xcomp"],
+        pos=["PROPN", "VERB"],
+        lemmas=["Solía", "salir"],
+        morphs=["", "VerbForm=Inf"],
+    )
+    assert not is_clause_head(doc[1])
 
 
 def test_clause_head_of_a_punctuation_mark(nlp):

@@ -1,5 +1,5 @@
 from collections import Counter
-from collections.abc import Iterable
+from collections.abc import Collection, Iterable
 from math import nan
 from statistics import fmean, pstdev
 
@@ -24,6 +24,7 @@ from spacy.tokens import Doc, Token
 from .constants import (
     AGENT_PREPOSITION,
     CLAUSE_DEPS,
+    COPULAS,
     DE_PREPOSITIONS,
     GERUND_PERIPHRASIS_VERBS,
     INFINITIVE_PERIPHRASES,
@@ -41,7 +42,7 @@ from .constants import (
     SYNTAX_STATS_DESC,
 )
 from .exceptions import SourceError, SourceTypeError
-from .utils import get_nlp, is_verbal_noun
+from .utils import get_nlp, is_verbal_noun, lemmatize
 
 # Dependencies of the nominal part of a split predicate, in the order of preference
 SPLIT_PREDICATE_DEPS = ("compound", "obj", "nsubj", "iobj", "nmod", "obl")
@@ -386,10 +387,10 @@ def is_clause_head(token: Token) -> bool:
         return False
     if is_root(token):
         return True
-    if is_participle(token) or is_gerund(token):
-        return False
     if token.dep_ == "xcomp":
         return is_infinitive_clause(token)
+    if is_participle(token) or is_gerund(token):
+        return False
     if token.dep_ not in CLAUSE_DEPS:
         return token.dep_ == "conj" and is_clause_head(token.head) and is_predicate(token)
     if token.dep_ == "parataxis":
@@ -443,9 +444,11 @@ def is_infinitive_clause(token: Token) -> bool:
 
     Description:
         A verb infinitive that completes its head (quiere salir, le hizo
-        reír), unless the two make a periphrasis (is_infinitive_periphrasis:
-        puede salir, vuelve a salir) or the head is a verb of RAISING_VERBS
-        (parece dormir); a predicative adjective (parece cansado) is no clause
+        reír), also the infinitive ser or estar of a copular or passive
+        complement (quiere ser médico, quiere ser elegido), unless the two
+        make a periphrasis (is_infinitive_periphrasis: puede salir, vuelve a
+        salir) or the head is a verb of RAISING_VERBS (parece dormir);
+        a predicative adjective (parece cansado) is no clause
 
     Arguments:
         token (Token): Token
@@ -453,11 +456,16 @@ def is_infinitive_clause(token: Token) -> bool:
     Returns:
         bool: Result of the check
     """
+    infinitive = (token.pos_ in ("VERB", "AUX") and is_infinitive(token)) or any(
+        base_dep(child) in AUXILIARY_DEPS
+        and is_infinitive(child)
+        and child.lemma_.lower() in COPULAS
+        for child in token.children
+    )
     return (
-        token.pos_ in ("VERB", "AUX")
-        and is_infinitive(token)
+        infinitive
         and not is_infinitive_periphrasis(token)
-        and _head_verb(token) not in RAISING_VERBS
+        and _head_verb(token, RAISING_VERBS) not in RAISING_VERBS
     )
 
 
@@ -477,7 +485,7 @@ def is_infinitive_periphrasis(token: Token) -> bool:
     Returns:
         bool: Result of the check
     """
-    allowed = INFINITIVE_PERIPHRASES.get(_head_verb(token))
+    allowed = INFINITIVE_PERIPHRASES.get(_head_verb(token, INFINITIVE_PERIPHRASES))
     if allowed is None:
         return False
     links: set[str | None] = {
@@ -493,10 +501,19 @@ def is_infinitive_periphrasis(token: Token) -> bool:
     return bool(allowed & (links or {None}))
 
 
-def _head_verb(token: Token) -> str:
-    """Lemma of the head of a token; its first word, as the lemmatizer can give hacer él"""
+def _head_verb(token: Token, verbs: Collection[str]) -> str:
+    """
+    Lemma of the head of a token looked up among some verbs
+
+    Description:
+        The first word of the lemma of the model (it can give hacer él); when
+        it is none of the verbs, the lemma of lemmatize, since the model can
+        read a verb opening a sentence as a proper noun (Solía salir) or
+        invent a lemma for an old form (debiérar)
+    """
     words = token.head.lemma_.lower().split()
-    return words[0] if words else ""
+    lemma = words[0] if words else ""
+    return lemma if lemma in verbs else lemmatize(token.head.text.lower())
 
 
 def _linking_word(token: Token) -> str:
