@@ -20,9 +20,9 @@ Los marcadores del estilo burocrático se cuentan sobre las formas sin filtrar (
 | :-------: | :--: | :---------------: | :---------: |
 | `source` | str/Doc | `-` | Fuente de datos (una cadena o un objeto Doc) |
 | `words_extractor` | WordsExtractor | `None` | Herramienta de extracción de palabras |
-| `stopwords` | list[str] | `None` | Palabras vacías para el contenido de agua; si no se dan, se usan `STOPWORDS` y las expresiones parentéticas de una palabra |
+| `stopwords` | list[str]/set[str] | `None` | Palabras vacías para el contenido de agua; si no se dan, se usan `STOPWORDS` y las expresiones parentéticas de una palabra |
 | `top_n` | int | `10` | Número de las palabras más frecuentes para la náusea académica y la naturalidad según Zipf |
-| `cliches` | list[str] | `None` | Lista de clichés; si no se da, se usa `OFFICIALESE_CLICHES` |
+| `cliches` | list[str]/set[str] | `None` | Lista o conjunto de clichés; si no se da, se usa `OFFICIALESE_CLICHES` |
 | `nlp` | Language | `None` | Pipeline de spaCy que analiza una cadena para los sustantivos deverbales; sin él se carga el modelo `es_core_news_sm` |
 
 ## Atributos

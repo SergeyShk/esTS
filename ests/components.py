@@ -412,7 +412,7 @@ class StyleStatsComponent(_Component):
             and the naturalness by Zipf's law
 
     Raises:
-        SourceTypeError: If the stopwords are not a list or a set of strings
+        SourceTypeError: If the stopwords are not a list of strings
         ParameterError: If the number of the most frequent words is not an integer or is
             below one
     """
@@ -426,7 +426,7 @@ class StyleStatsComponent(_Component):
     ):
         check_style_params(top_n)
         if stopwords is not None:
-            check_words(stopwords, "stopwords", ordered=False)
+            check_words(stopwords, "stopwords")
         self.stopwords = stopwords
         self.top_n = top_n
         super().__init__(nlp, name)

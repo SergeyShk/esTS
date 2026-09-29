@@ -1,5 +1,5 @@
 import re
-from collections.abc import Callable, Iterable, Iterator, Sequence
+from collections.abc import Callable, Collection, Iterable, Iterator, Sequence
 
 import anyts.visualizers.highlight
 from anyts.syntax import base_dep, get_words, is_word
@@ -38,7 +38,7 @@ from ..datasets.freq_dict import lemma_key
 from ..exceptions import ParameterError
 from ..lexical_stats import get_rank
 from ..phon_stats import CONSONANT_SOUNDS, transcribe
-from ..style_stats import expand_phrases, is_stopword
+from ..style_stats import expand_phrases, in_order, is_stopword
 from ..syllables import count_syllables
 from ..syntax_stats import (
     AUXILIARY_DEPS,
@@ -110,9 +110,9 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
             layer the source allows
         long_sent_word_factor (int): Minimum number of words of a long sentence
         complex_syl_factor (int): Minimum number of syllables of a complex word
-        stopwords (list[str]): Stopwords; STOPWORDS and the one-word parenthetical
+        stopwords (list[str]|set[str]): Stopwords; STOPWORDS and the one-word parenthetical
             expressions if not set
-        cliches (list[str]): List of clichés; OFFICIALESE_CLICHES if not set
+        cliches (list[str]|set[str]): List or set of clichés; OFFICIALESE_CLICHES if not set
         alliteration_threshold (float): Probability of a repetition of a consonant
             under an independent spread of the sounds, below which the repetition
             is alliteration
@@ -147,8 +147,8 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
         layers: Sequence[str] | str | None = None,
         long_sent_word_factor: int = LONG_SENT_WORD_FACTOR,
         complex_syl_factor: int = HIGHLIGHT_COMPLEX_SYL_FACTOR,
-        stopwords: Sequence[str] | None = None,
-        cliches: Sequence[str] | None = None,
+        stopwords: Collection[str] | None = None,
+        cliches: Collection[str] | None = None,
         alliteration_threshold: float = ALLITERATION_THRESHOLD,
     ):
         check_integer(long_sent_word_factor, "number of words of a long sentence")
@@ -166,10 +166,10 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
             )
         if stopwords is not None:
             check_words(stopwords, "stopwords", ordered=False)
-            stopwords = tuple(stopwords)
+            stopwords = in_order(stopwords)
         if cliches is not None:
             check_words(cliches, "clichés", ordered=False)
-            cliches = tuple(cliches)
+            cliches = in_order(cliches)
         self._long_sent_word_factor = long_sent_word_factor
         self._complex_syl_factor = complex_syl_factor
         self._stopwords = stopwords
@@ -222,8 +222,8 @@ def highlight(
     layers: Sequence[str] | str | None = None,
     long_sent_word_factor: int = LONG_SENT_WORD_FACTOR,
     complex_syl_factor: int = HIGHLIGHT_COMPLEX_SYL_FACTOR,
-    stopwords: Sequence[str] | None = None,
-    cliches: Sequence[str] | None = None,
+    stopwords: Collection[str] | None = None,
+    cliches: Collection[str] | None = None,
     alliteration_threshold: float = ALLITERATION_THRESHOLD,
 ) -> HighlightedText:
     """
@@ -240,9 +240,9 @@ def highlight(
             layer the source allows
         long_sent_word_factor (int): Minimum number of words of a long sentence
         complex_syl_factor (int): Minimum number of syllables of a complex word
-        stopwords (list[str]): Stopwords; STOPWORDS and the one-word parenthetical
+        stopwords (list[str]|set[str]): Stopwords; STOPWORDS and the one-word parenthetical
             expressions if not set
-        cliches (list[str]): List of clichés; OFFICIALESE_CLICHES if not set
+        cliches (list[str]|set[str]): List or set of clichés; OFFICIALESE_CLICHES if not set
         alliteration_threshold (float): Probability of a repetition of a consonant
             under an independent spread of the sounds, below which the repetition
             is alliteration
@@ -316,7 +316,7 @@ def find_complex_words(words: Iterable[Word], complex_syl_factor: int) -> list[H
 
 
 def find_stopwords(
-    words: Iterable[Word], stopwords: Sequence[str] | None = None
+    words: Iterable[Word], stopwords: Collection[str] | None = None
 ) -> list[Highlight]:
     """
     Finding the stopwords
@@ -326,7 +326,7 @@ def find_stopwords(
 
     Arguments:
         words (list[Word]): Words with their positions
-        stopwords (list[str]): List of stopwords; is_stopword if not set
+        stopwords (list[str]|set[str]): List or set of stopwords; is_stopword if not set
 
     Returns:
         list[Highlight]: Fragments of the layer stopwords
@@ -429,13 +429,13 @@ def find_compound_prepositions(words: Sequence[Word]) -> list[Highlight]:
     )
 
 
-def find_cliches(words: Sequence[Word], cliches: Sequence[str] | None = None) -> list[Highlight]:
+def find_cliches(words: Sequence[Word], cliches: Collection[str] | None = None) -> list[Highlight]:
     """
     Finding the clichés
 
     Arguments:
         words (list[Word]): Words with their positions
-        cliches (list[str]): List of clichés; OFFICIALESE_CLICHES if not set
+        cliches (list[str]|set[str]): List or set of clichés; OFFICIALESE_CLICHES if not set
 
     Returns:
         list[Highlight]: Fragments of the layer cliches

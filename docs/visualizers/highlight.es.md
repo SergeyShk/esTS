@@ -25,7 +25,7 @@ Capas del resaltado:
 | Estilo burocrático | `verbal_nouns` | Sustantivos deverbales | [StyleStats](../stats/style_stats.md) |
 | | `compound_prepositions` | Locuciones prepositivas de `COMPOUND_PREPOSITIONS` | [StyleStats](../stats/style_stats.md) |
 | | `cliches` | Clichés de `OFFICIALESE_CLICHES` o del parámetro `cliches` | [StyleStats](../stats/style_stats.md) |
-| Estilo | `stopwords` | Palabras vacías de `STOPWORDS` o de la lista pasada, el agua del texto | [StyleStats](../stats/style_stats.md) |
+| Estilo | `stopwords` | Palabras vacías de `STOPWORDS` o del parámetro `stopwords`, el agua del texto | [StyleStats](../stats/style_stats.md) |
 | | `parentheticals` | Expresiones parentéticas | [StyleStats](../stats/style_stats.md) |
 | | `connectors` | Marcadores del discurso, con la clase y el tipo en la nota | [CohesionStats](../stats/cohesion_stats.md) |
 | Fónica | `alliteration` | Repeticiones de un sonido consonántico en palabras vecinas, poco probables por las frecuencias de los sonidos del español; la nota da el sonido y las letras que lo escriben | [PhonStats](../stats/phon_stats.md) |
@@ -53,8 +53,8 @@ Los parámetros de las capas de esTS:
 | :-------: | :--: | :---------------: | :---------: |
 | `long_sent_word_factor` | int | `30` | Número mínimo de palabras de una oración larga |
 | `complex_syl_factor` | int | `4` | Número mínimo de sílabas de una palabra compleja |
-| `stopwords` | list[str] | `None` | Lista o conjunto de palabras vacías; si no se da, `STOPWORDS` y las expresiones parentéticas de una palabra |
-| `cliches` | list[str] | `None` | Lista o conjunto de clichés; si no se da, `OFFICIALESE_CLICHES` |
+| `stopwords` | list[str]/set[str] | `None` | Lista o conjunto de palabras vacías; si no se da, `STOPWORDS` y las expresiones parentéticas de una palabra |
+| `cliches` | list[str]/set[str] | `None` | Lista o conjunto de clichés; si no se da, `OFFICIALESE_CLICHES` |
 | `alliteration_threshold` | float | `0.001` | Probabilidad de una repetición de una consonante con un reparto independiente de los sonidos, por debajo de la cual la repetición es aliteración |
 
 Un umbral que no es un entero de al menos uno o una probabilidad fuera de (0, 1] lanza `ParameterError`, unas palabras vacías o unos clichés que no son cadenas `SourceTypeError`.

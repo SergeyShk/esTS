@@ -343,6 +343,11 @@ def test_sets_of_words():
     phrases = frozenset({"sin embargo"})
     assert calc_phrase_density(words, phrases) == calc_phrase_density(words, ["sin embargo"])
     assert expand_phrases(words, phrases) == expand_phrases(words, ["sin embargo"])
+    # A phrase written so wins over the forms of another, whatever the order of a set
+    colliding = ["a", "efectos", "del"]
+    expected = {"a efectos de": "a efectos de", "a efectos del": "a efectos del"}
+    assert expand_phrases(colliding, {"a efectos de", "a efectos del"}) == expected
+    assert expand_phrases(colliding, ["a efectos de", "a efectos del"]) == expected
     by_set = StyleStats(text, stopwords={"el", "la"}, cliches={"a la mayor brevedad"})
     by_list = StyleStats(text, stopwords=["el", "la"], cliches=["a la mayor brevedad"])
     assert by_set.get_stats() == by_list.get_stats()

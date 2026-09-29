@@ -24,7 +24,7 @@ Layers of the highlighting:
 | Officialese | `verbal_nouns` | Nouns derived from a verb | [StyleStats](../stats/style_stats.md) |
 | | `compound_prepositions` | Compound prepositions of `COMPOUND_PREPOSITIONS` | [StyleStats](../stats/style_stats.md) |
 | | `cliches` | Clichés of `OFFICIALESE_CLICHES` or of the parameter `cliches` | [StyleStats](../stats/style_stats.md) |
-| Style | `stopwords` | Stopwords of `STOPWORDS` or of the list passed, the water of the text | [StyleStats](../stats/style_stats.md) |
+| Style | `stopwords` | Stopwords of `STOPWORDS` or of the parameter `stopwords`, the water of the text | [StyleStats](../stats/style_stats.md) |
 | | `parentheticals` | Parenthetical expressions | [StyleStats](../stats/style_stats.md) |
 | | `connectors` | Discourse markers, the class and the kind in the note | [CohesionStats](../stats/cohesion_stats.md) |
 | Phonics | `alliteration` | Repetitions of a consonant sound in neighbouring words, unlikely by the frequencies of the Spanish sounds; the note gives the sound and the letters that write it | [PhonStats](../stats/phon_stats.md) |
@@ -46,8 +46,8 @@ The parameters of the layers of esTS:
 | :-------: | :--: | :-----: | :---------: |
 | `long_sent_word_factor` | int | `30` | Minimum number of words of a long sentence |
 | `complex_syl_factor` | int | `4` | Minimum number of syllables of a complex word |
-| `stopwords` | list[str] | `None` | List or set of stopwords; if not given, `STOPWORDS` and the one-word parenthetical expressions |
-| `cliches` | list[str] | `None` | List or set of clichés; if not given, `OFFICIALESE_CLICHES` |
+| `stopwords` | list[str]/set[str] | `None` | List or set of stopwords; if not given, `STOPWORDS` and the one-word parenthetical expressions |
+| `cliches` | list[str]/set[str] | `None` | List or set of clichés; if not given, `OFFICIALESE_CLICHES` |
 | `alliteration_threshold` | float | `0.001` | Probability of a repetition of a consonant under an independent spread of the sounds, below which the repetition is alliteration |
 
 A threshold that is not an integer of at least one or a probability outside (0, 1] raises `ParameterError`, stopwords or clichés that are not strings `SourceTypeError`.
