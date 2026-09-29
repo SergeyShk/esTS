@@ -144,6 +144,7 @@ WORD_LISTS = {
     "transcribe": lambda: transcribe(["casa"]),
     "is_stopword": lambda: is_stopword(None),
     "find_connectors": lambda: find_connectors("pero no"),
+    "find_connectors(pos)": lambda: find_connectors(["pero", "no"], pos="CC"),
     "compare_corpora(features)": lambda: compare_corpora([TEXT], [TEXT], features=1),
     "corpus_features(features)": lambda: corpus_features([TEXT], features="text_features"),
 }

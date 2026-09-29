@@ -162,6 +162,9 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
 
         Returns:
             float: Years of schooling
+
+        Raises:
+            ParameterError: If the reading ease is not a finite number
         """
         return flesch_reading_easy_to_grade(flesch_reading_easy, self.preset)
 
@@ -409,7 +412,7 @@ def flesch_reading_easy_to_grade(flesch_reading_easy: float, preset: str = "gene
         float: Years of schooling
 
     Raises:
-        ParameterError: If the preset is unknown
+        ParameterError: If the preset is unknown or the reading ease is not a finite number
     """
     check_preset(preset)
     return anyts.readability_stats.flesch_reading_easy_to_grade(
@@ -437,8 +440,8 @@ def calc_consensus_grade(
         float: Consensus grade
 
     Raises:
-        ParameterError: If there are no values, a grade is not a finite number or
-            the preset is unknown
+        ParameterError: If there are no values, a grade or the reading ease is not a
+            finite number or the preset is unknown
     """
     check_preset(preset)
     return anyts.readability_stats.calc_consensus_grade(

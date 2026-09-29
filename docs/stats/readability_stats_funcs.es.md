@@ -299,7 +299,7 @@ Con el preajuste `general`, a través de los tipos de texto de los niveles INFLE
 
 Con el preajuste `classic`, a través de la tabla de interpretación de Flesch que conservó Fernández Huerta: `90-100` - 5, `80-90` - 6, `70-80` - 7, `60-70` - 8.5, `50-60` - 10, `40-50` - 11, `30-40` - 12, por debajo de `30` - 13.
 
-Los valores por encima de 100 corresponden al primer grado de la escala.
+Los valores por encima de 100 corresponden al primer grado de la escala; un valor que no es un número finito (el `nan` de un texto sin palabras u oraciones, un infinito) lanza `ParameterError`.
 
 Parámetros:
 
@@ -313,7 +313,7 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.calc_consensus_grade()**
 
-Cálculo del grado de consenso: la mediana de los valores de las fórmulas de grado, cada uno redondeado al entero más próximo (las mitades hacia arriba). La facilidad de lectura se convierte con `flesch_reading_easy_to_grade` según la escala del preajuste y se añade sin redondear. La ausencia de valores, un grado que no es un número finito y un preajuste desconocido lanzan `ParameterError`.
+Cálculo del grado de consenso: la mediana de los valores de las fórmulas de grado, cada uno redondeado al entero más próximo (las mitades hacia arriba). La facilidad de lectura se convierte con `flesch_reading_easy_to_grade` según la escala del preajuste y se añade sin redondear. La ausencia de valores, un grado o una facilidad de lectura que no es un número finito y un preajuste desconocido lanzan `ParameterError`.
 
 Parámetros:
 

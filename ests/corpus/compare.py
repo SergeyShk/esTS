@@ -334,7 +334,7 @@ def corpus_features(
         DataFrame: Features of the windows
 
     Raises:
-        SourceTypeError: If the texts are not a list of strings or the features are no function
+        SourceTypeError: If the texts are not a list of strings or the features are not a function
         SourceError: If the corpus has no window of enough words
         ParameterError: If the size of a window or min_words is not an integer or is below one
 
@@ -414,7 +414,7 @@ def compare_corpora(
             with the names of the corpora in the columns)
 
     Raises:
-        SourceTypeError: If the texts are not a list of strings or the features are no function
+        SourceTypeError: If the texts are not a list of strings or the features are not a function
         SourceError: If one of the corpora has no window of enough words
         ParameterError: If the names of the corpora are not two strings that give
             distinct columns, the number of samples, the size of a window or min_words

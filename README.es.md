@@ -575,7 +575,7 @@ Las medidas de la lingüística de corpus que comparan corpus y describen el uso
 (['gato', 'ventana'], ['dormir', 'perro'])
 ```
 
-Las palabras se comparan tal cual, así que la caja, los lemas y las palabras vacías se eligen en la extracción.
+Las palabras se comparan tal cual, así que las mayúsculas y minúsculas, los lemas y las palabras vacías se eligen en la extracción.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/corpus/keyness/).
 

@@ -207,7 +207,7 @@ With the `general` preset, through the text types of the INFLESZ bands and the s
 
 With the `classic` preset, through the interpretation table of Flesch kept by Fernández Huerta: `90-100` - 5, `80-90` - 6, `70-80` - 7, `60-70` - 8.5, `50-60` - 10, `40-50` - 11, `30-40` - 12, below `30` - 13.
 
-Values above 100 belong to the first grade of the scale.
+Values above 100 belong to the first grade of the scale; a value that is not a finite number (the `nan` of a text without words or sentences, an infinity) raises `ParameterError`.
 
 Parameters:
 
@@ -221,7 +221,7 @@ Parameters:
 !!! info ""
     **ests.readability_stats.calc_consensus_grade()**
 
-Computation of the consensus grade: the median of the values of the grade formulas, each rounded half up. The reading ease is converted with `flesch_reading_easy_to_grade` by the scale of the preset and added without rounding. No values at all, a grade that is not a finite number and an unknown preset raise `ParameterError`.
+Computation of the consensus grade: the median of the values of the grade formulas, each rounded half up. The reading ease is converted with `flesch_reading_easy_to_grade` by the scale of the preset and added without rounding. No values at all, a grade or a reading ease that is not a finite number and an unknown preset raise `ParameterError`.
 
 Parameters:
 

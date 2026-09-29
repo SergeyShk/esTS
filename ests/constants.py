@@ -870,7 +870,7 @@ OFFICIALESE_CLICHES = (
     "y para que así conste",
 )
 # Forms of the verbs of the clichés that simplemma leaves as they are, by their
-# infinitive: the participles it misses (ha dado cumplimiento) and the imperative with se (dese)
+# infinitive: some participles (ha dado cumplimiento) and the imperative with se (dese)
 IRREGULAR_VERB_FORMS = {
     "dado": "dar",
     "dados": "dar",
