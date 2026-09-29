@@ -2496,7 +2496,7 @@
 <li>calcular <a href="stats/syntax_stats/">estadísticas sintácticas</a> sobre el árbol de dependencias (distancias, profundidad, cláusulas, coordinación) con las construcciones del estilo administrativo: la pasiva con <code>ser</code> y con <code>se</code>, las cláusulas de participio y de gerundio, las cadenas de <code>de</code>, los predicados escindidos</li>
 <li>calcular <a href="stats/cohesion_stats/">estadísticas de cohesión</a> a la manera de Coh-Metrix (repetición de sustantivos, argumentos y palabras con contenido entre oraciones, información dada, cohesión temporal) con la densidad de 250 marcadores del discurso por clase</li>
 <li>calcular <a href="stats/lexical_stats/">estadísticas de complejidad léxica</a> a la manera de TAALES: cuán raras son las palabras de un texto según un <a href="datasets/freqdict/">diccionario de frecuencias</a> de Google Books Ngram (frecuencia, rango, dispersión, sorpresa) y según las bandas de frecuencia del top-1000 al 10000, con la densidad léxica</li>
-<li>calcular <a href="stats/style_stats/">métricas de estilo</a>: los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías españolas de lenguaje claro - sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés</li>
+<li>calcular <a href="stats/style_stats/">métricas de estilo</a>: los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías de lenguaje claro en español - sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés</li>
 <li>calcular la <a href="stats/phon_stats/">fonoestadística</a> sobre los sonidos de una transcripción por reglas: proporciones de las clases de sonidos, grupos consonánticos, hiatos, sílabas abiertas, dureza e índices de aliteración y de asonancia</li>
 <li>escandir el <a href="stats/verse_stats/">verso</a> por su metro silábico: las sílabas métricas, el metro de un poema, el perfil acentual y los tipos del endecasílabo, la rima consonante y asonante con su esquema, las estrofas y la forma de un poema</li>
 <li>comparar corpus con las medidas de la lingüística de corpus: <a href="corpus/keyness/">palabras clave</a> frente a un corpus de referencia o al diccionario de frecuencias, <a href="corpus/collocations/">colocaciones</a>, la <a href="corpus/dispersion/">dispersión</a> de una palabra por las partes de un texto y una <a href="corpus/kwic/">concordancia KWIC</a>, y atribuir la autoría por <a href="corpus/stylometry/">estilometría</a>: la Delta de Burrows, Zeta, la curva de Mendenhall, las palabras funcionales; encontrar los rasgos que distinguen dos corpus <a href="corpus/compare/">comparándolos</a> por 132 rasgos de un texto</li>
@@ -2508,7 +2508,7 @@
 <p>Se requiere Python 3.11 o superior.</p>
 <div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyests
 </code></pre></div>
-<p>El distribuible en PyPI se llama <code>pyests</code> y el paquete que instala es <code>ests</code>. Las dependencias, el modelo de spaCy y los conjuntos de datos están en la página de <a href="installation/">Instalación</a>.</p>
+<p>La distribución en PyPI se llama <code>pyests</code> y el paquete que instala es <code>ests</code>. Las dependencias, el modelo de spaCy y los conjuntos de datos están en la página de <a href="installation/">Instalación</a>.</p>
 <h2 id="primeros-pasos">Primeros pasos<a class="headerlink" href="#primeros-pasos" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">BasicStats</span><span class="p">,</span> <span class="n">DiversityStats</span><span class="p">,</span> <span class="n">ReadabilityStats</span>
 
@@ -2587,7 +2587,7 @@
 </ul>
 </li>
 <li><strong>examples</strong> - cuadernos con ejemplos</li>
-<li><strong>scripts</strong> - scripts que construyen los archivos de los conjuntos de datos y traen las páginas de anyTS de la documentación</li>
+<li><strong>scripts</strong> - scripts que construyen los archivos de los conjuntos de datos, traen las páginas de anyTS de la documentación y comprueban las salidas de los cuadernos</li>
 <li><strong>tests</strong> - pruebas que reproducen la estructura del paquete</li>
 </ul>
 </details>

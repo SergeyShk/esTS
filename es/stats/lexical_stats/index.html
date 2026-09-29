@@ -2590,8 +2590,8 @@
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
 <p>Un módulo para calcular las estadísticas de complejidad léxica de un texto a la manera de <a href="https://doi.org/10.3758/s13428-017-0924-4">TAALES</a> - cuán raras son las palabras del texto en la lengua: la frecuencia media, el rango y la dispersión de los lemas según el <a href="../../datasets/freqdict/">diccionario de frecuencias</a> de Google Books Ngram, las proporciones de palabras de las bandas de frecuencia top-1000, 2000, 5000 y 10000 según la lista integrada de los lemas más frecuentes, la sorpresa (surprisal) y la perplejidad según el modelo de unigramas del diccionario, la densidad léxica. A diferencia de las <a href="../diversity_stats/">métricas de diversidad léxica</a>, que comparan las palabras del texto entre sí, aquí las palabras se comparan con las frecuencias de la lengua.</p>
-<p>Una palabra se busca por <a href="../../datasets/freqdict/#lemma_key"><code>lemma_key</code></a>, su lema de simplemma en minúsculas; un nombre propio, por su forma en minúsculas cuando el diccionario la tiene (<code>París</code> como <code>parís</code>, no como el verbo <code>parir</code>), y si no, por su lema (<code>Estados</code> de <em>Estados Unidos</em> en <code>estado</code>, un <code>Miró</code> a principio de oración etiquetado <code>PROPN</code> en <code>mirar</code>; el atributo <code>keys</code>). Si una palabra es un nombre propio, y si es una palabra con contenido, sale de la anotación, así que la fuente tiene que estar anotada: una cadena se analiza con <a href="../../installation/#model"><code>es_core_news_sm</code></a> o con el pipeline pasado en <code>nlp</code>, y un <code>Doc</code> debe llevar las categorías gramaticales (un <code>morphologizer</code>, o un <code>tagger</code> con un <code>attribute_ruler</code>); una fuente sin ellas levanta <code>SourceError</code>. Los lemas del modelo no se usan. Una palabra con contenido se define como en <a href="../cohesion_stats/"><code>CohesionStats</code></a>: una de <code>CONTENT_UD_POS</code> (sustantivos, nombres propios, adjetivos, verbos, adverbios) y no demostrativa. Los números (<code>2020</code>, <code>5,5</code>, <code>3.º</code>) no se cuentan como palabras.</p>
-<p>Un texto más largo que el <code>max_length</code> del pipeline - un millón de caracteres por defecto - levanta <code>SourceError</code>: divídalo en partes, o suba <code>max_length</code> en un pipeline propio y páselo en <code>nlp</code>.</p>
+<p>Una palabra se busca por <a href="../../datasets/freqdict/#lemma_key"><code>lemma_key</code></a>, su lema de simplemma en minúsculas; un nombre propio, por su forma en minúsculas cuando el diccionario la tiene (<code>París</code> como <code>parís</code>, no como el verbo <code>parir</code>), y si no, por su lema (<code>Estados</code> de <em>Estados Unidos</em> en <code>estado</code>, un <code>Miró</code> a principio de oración etiquetado <code>PROPN</code> en <code>mirar</code>; el atributo <code>keys</code>). Si una palabra es un nombre propio, y si es una palabra con contenido, sale de la anotación, así que la fuente tiene que estar anotada: una cadena se analiza con <a href="../../installation/#model"><code>es_core_news_sm</code></a> o con el pipeline pasado en <code>nlp</code>, y un <code>Doc</code> debe llevar las categorías gramaticales (un <code>morphologizer</code>, o un <code>tagger</code> con un <code>attribute_ruler</code>); una fuente sin ellas lanza <code>SourceError</code>. Los lemas del modelo no se usan. Una palabra con contenido se define como en <a href="../cohesion_stats/"><code>CohesionStats</code></a>: una de <code>CONTENT_UD_POS</code> (sustantivos, nombres propios, adjetivos, verbos, adverbios) y no demostrativa. Los números (<code>2020</code>, <code>5,5</code>, <code>3.º</code>) no se cuentan como palabras.</p>
+<p>Un texto más largo que el <code>max_length</code> del pipeline - un millón de caracteres por defecto - lanza <code>SourceError</code>: divídalo en partes, o suba <code>max_length</code> en un pipeline propio y páselo en <code>nlp</code>.</p>
 <p>Recursos:</p>
 <table>
 <thead>
@@ -2605,7 +2605,7 @@
 <tr>
 <td style="text-align: left;"><a href="../../datasets/freqdict/"><code>FreqDict</code></a> - 83 785 lemas de Google Books Ngram (1980-2019) con ipm, rango y dispersión</td>
 <td style="text-align: left;"><code>coverage</code>, <code>mean_ipm*</code>, <code>mean_log_ipm*</code>, <code>mean_range</code>, <code>mean_dispersion</code>, <code>surprisal</code>, <code>perplexity</code></td>
-<td style="text-align: left;">se descarga una vez con <code>FreqDict().download()</code>; sin el diccionario, leer estas estadísticas y <code>get_stats</code> levanta <code>DatasetNotFoundError</code></td>
+<td style="text-align: left;">se descarga una vez con <code>FreqDict().download()</code>; sin el diccionario, leer estas estadísticas y <code>get_stats</code> lanza <code>DatasetNotFoundError</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">La lista integrada de los 10 000 lemas más frecuentes del mismo diccionario (<code>ests/resources/google_books_top10000.txt</code>, CC BY 3.0)</td>
@@ -2673,7 +2673,7 @@
 <tr>
 <td style="text-align: center;"><code>ranks</code></td>
 <td style="text-align: center;">tuple[int/None]</td>
-<td style="text-align: center;">Tupla de los rangos de los lemas según la lista integrada, <code>None</code> fuera del top 10000</td>
+<td style="text-align: center;">Tupla de las posiciones de los lemas según la lista integrada, <code>None</code> fuera del top 10000</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>entries</code></td>
@@ -2779,7 +2779,7 @@
 </div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <h3 id="band_coverage">band_coverage<a class="headerlink" href="#band_coverage" title="Permanent link">&para;</a></h3>
-<p>Devuelve las proporciones de palabras con un lema del top N para cada límite N. Un límite fuera de 1 y 10000 - el tamaño de la lista - levanta <code>ParameterError</code>.</p>
+<p>Devuelve las proporciones de palabras con un lema del top N para cada límite N. Un límite fuera de 1 y 10000 - el tamaño de la lista - lanza <code>ParameterError</code>.</p>
 <table>
 <thead>
 <tr>

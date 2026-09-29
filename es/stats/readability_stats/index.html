@@ -2722,10 +2722,10 @@
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
 <p>Las métricas de legibilidad de la tradición española.</p>
-<!-- core: stats/readability_stats.md:ReadabilityStats f313e5b -->
+<!-- core: stats/readability_stats.md:ReadabilityStats 7ee1446 -->
 <p>Las métricas de <a href="https://es.wikipedia.org/wiki/Legibilidad">legibilidad</a> de un texto a partir de sus estadísticas básicas: la longitud media de la oración en palabras, la longitud media de la palabra en sílabas o en letras, la proporción de palabras polisílabas y de palabras largas y la variabilidad de la longitud de las palabras. La fuente de datos puede ser un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> o unas estadísticas básicas ya calculadas, y entonces el texto no se vuelve a contar; los extractores se pasan a las estadísticas básicas de un texto o de un <code>Doc</code>, mientras que las ya calculadas se toman tal cual. Las letras de las fórmulas son las de las palabras contadas, así que un extractor de palabras que descarta palabras no alarga la palabra media.</p>
 <p>Las métricas son propiedades que se calculan en cada acceso, así que un cambio de los <code>coefficients</code> de un objeto se aplica en el acto.</p>
-<p>Una fuente que no es ni una cadena, ni un <code>Doc</code>, ni unas estadísticas básicas, unas estadísticas básicas de otra clase que las de la biblioteca y un extractor de otro tipo lanzan <code>SourceTypeError</code>, una fuente sin palabras o sin oraciones <code>SourceError</code>, un preajuste desconocido o que no es una cadena <code>ParameterError</code>.</p>
+<p>Una fuente que no es ni una cadena, ni un <code>Doc</code>, ni unas estadísticas básicas, unas estadísticas básicas de una clase distinta de las de la biblioteca y un extractor de otro tipo lanzan <code>SourceTypeError</code>, una fuente sin palabras o sin oraciones <code>SourceError</code>, un preajuste desconocido o que no es una cadena <code>ParameterError</code>.</p>
 <div class="admonition quote">
 <p class="admonition-title">Definición</p>
 <p>La legibilidad es la propiedad de un texto que caracteriza la facilidad con que una persona lo percibe al leerlo.</p>
@@ -2768,7 +2768,7 @@
 <td style="text-align: left;">Crawford</td>
 <td style="text-align: center;">1989</td>
 <td style="text-align: left;">años de escolaridad</td>
-<td style="text-align: left;">primaria española, cursos 1-6</td>
+<td style="text-align: left;">primaria en español, cursos 1-6</td>
 </tr>
 <tr>
 <td style="text-align: left;">Legibilidad µ (Muñoz Baquedano y Muñoz Urra)</td>
@@ -2954,7 +2954,7 @@
 <h2 id="interpretation">Interpretación<a class="headerlink" href="#interpretation" title="Permanent link">&para;</a></h2>
 <p>El método <a href="#describe_level"><code>describe_level</code></a> sitúa la facilidad de lectura en la escala del preajuste: INFLESZ para <code>general</code> (<code>muy difícil</code> por debajo de 40, <code>algo difícil</code> 40-55, <code>normal</code> 55-65, <code>bastante fácil</code> 65-80, <code>muy fácil</code> por encima de 80) y los siete niveles de Fernández Huerta para <code>classic</code>, y a petición las escalas de Szigriszt-Pazos o del otro autor; la Legibilidad µ tiene los siete niveles de sus autores (<code>muy difícil</code> 0-30, <code>difícil</code> 31-50, <code>un poco difícil</code> 51-60, <code>adecuado</code> 61-70, <code>un poco fácil</code> 71-80, <code>fácil</code> 81-90, <code>muy fácil</code> 91-100).</p>
 <!-- core: stats/readability_stats.md:ReadabilityStats-consensus 40f0d09 -->
-<p>Las fórmulas que dan años de escolaridad (<code>grade_stats</code>) se resumen en el atributo <code>consensus_grade</code>: la mediana de sus valores redondeados con el medio hacia arriba, junto con la facilidad de lectura convertida en años de escolaridad (<code>reading_ease_to_grade</code>) sin redondear.</p>
+<p>Las fórmulas que dan años de escolaridad (<code>grade_stats</code>) se resumen en el atributo <code>consensus_grade</code>: la mediana de sus valores redondeados al entero más próximo (las mitades hacia arriba), junto con la facilidad de lectura convertida en años de escolaridad (<code>reading_ease_to_grade</code>) sin redondear.</p>
 <p>Las fórmulas de grado de esTS son Crawford y SOL, y la facilidad de lectura se <a href="../readability_stats_funcs/#flesch_reading_easy_to_grade">convierte en grado</a> según la escala del preajuste. El método <a href="#describe_grade"><code>describe_grade</code></a> traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:</p>
 <table>
 <thead>

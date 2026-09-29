@@ -2860,7 +2860,7 @@ H = -\sum_{k} p_k \log_2 p_k
 <p><strong>ests.phon_stats.calc_alliteration()</strong></p>
 </div>
 <p>The index is <code>calc_repetition_index</code> of the <a href="https://sergeyshk.github.io/anyTS/stats/phonetics/">anyTS</a> core over the consonant sounds of the words:</p>
-<p>The repetition index: the number of windows of <code>window_len</code> neighbouring words where a feature - a letter or a sound, as a library chooses - occurs in two words or more, summed over the features, to the number expected if the words stood in random order. A window of shuffled words is a sample of them without replacement, so for a feature found in <span class="arithmatex">\(K\)</span> of the <span class="arithmatex">\(N\)</span> words of the text a window of <span class="arithmatex">\(w\)</span> words holds it in two words or more with the hypergeometric probability</p>
+<p>The repetition index: the ratio of the number of windows of <code>window_len</code> neighbouring words where a feature - a letter or a sound, as a library chooses - occurs in two words or more, summed over the features, to the number expected if the words stood in random order. A window of shuffled words is a sample of them without replacement, so for a feature found in <span class="arithmatex">\(K\)</span> of the <span class="arithmatex">\(N\)</span> words of the text, a window of <span class="arithmatex">\(w\)</span> words holds it in two words or more with the hypergeometric probability</p>
 <div class="arithmatex">\[
 P = 1 - \frac{\binom{N-K}{w} + K \binom{N-K}{w-1}}{\binom{N}{w}}
 \]</div>

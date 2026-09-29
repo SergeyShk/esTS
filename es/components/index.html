@@ -2792,7 +2792,7 @@
 </tr>
 </tbody>
 </table>
-<p>En el pipeline de <code>es_core_news_sm</code> las categorías gramaticales vienen del <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>; un <code>tagger</code> solo no las da), el análisis del <code>parser</code> y los lemas del <code>lemmatizer</code>. Un componente al que le falta la anotación, también con componentes <code>excluded</code>, levanta <code>SourceError</code> cuando el documento pasa por él.</p>
+<p>En el pipeline de <code>es_core_news_sm</code> las categorías gramaticales vienen del <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>; un <code>tagger</code> solo no las da), el análisis del <code>parser</code> y los lemas del <code>lemmatizer</code>. Un componente al que le falta la anotación, también con componentes <code>excluded</code>, lanza <code>SourceError</code> cuando el documento pasa por él.</p>
 <h2 id="basicstatscomponent">BasicStatsComponent<a class="headerlink" href="#basicstatscomponent" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.components.BasicStatsComponent</strong></p>
@@ -2876,7 +2876,7 @@
 <td style="text-align: center;"><code>preset</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>"general"</code></td>
-<td style="text-align: center;">Preset de los coeficientes (<code>general</code>, <code>classic</code>)</td>
+<td style="text-align: center;">Preajuste de los coeficientes (<code>general</code>, <code>classic</code>)</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>basic</code></td>
@@ -2886,8 +2886,8 @@
 </tr>
 </tbody>
 </table>
-<p>Un preset desconocido levanta <code>ParameterError</code> al añadir el componente.</p>
-<p>Las métricas de legibilidad se calculan sobre las estadísticas básicas, así que un pipeline con los dos componentes las calcula dos veces salvo que <code>basic</code> nombre la extensión del primero: <code>nlp.add_pipe("ests_readability", config={"basic": "basic"})</code> después de un componente llamado <code>basic</code>. Un nombre que no lleva estadísticas básicas, o un componente que corre después de este, levanta <code>SourceError</code>.</p>
+<p>Un preajuste desconocido lanza <code>ParameterError</code> al añadir el componente.</p>
+<p>Las métricas de legibilidad se calculan sobre las estadísticas básicas, así que un pipeline con los dos componentes las calcula dos veces salvo que <code>basic</code> nombre la extensión del primero: <code>nlp.add_pipe("ests_readability", config={"basic": "basic"})</code> después de un componente llamado <code>basic</code>. Un nombre que no lleva estadísticas básicas, o un componente que corre después de este, lanza <code>SourceError</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <p><em>Código</em>:</p>
@@ -2969,7 +2969,7 @@
 </tr>
 </tbody>
 </table>
-<p>Un parámetro fuera de su rango levanta <code>ParameterError</code> al añadir el componente.</p>
+<p>Un parámetro fuera de su rango lanza <code>ParameterError</code> al añadir el componente.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <p><em>Código</em>:</p>

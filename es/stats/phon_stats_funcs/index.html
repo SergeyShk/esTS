@@ -2860,7 +2860,7 @@ H = -\sum_{k} p_k \log_2 p_k
 <p><strong>ests.phon_stats.calc_alliteration()</strong></p>
 </div>
 <p>El índice es <code>calc_repetition_index</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/phonetics/">anyTS</a> sobre los sonidos consonánticos de las palabras:</p>
-<!-- core: stats/phonetics.md:calc_repetition_index 4e25d01 -->
+<!-- core: stats/phonetics.md:calc_repetition_index 8d65261 -->
 <p>El índice de repetición: el número de ventanas de <code>window_len</code> palabras vecinas donde un rasgo - una letra o un sonido, según elija una biblioteca - aparece en dos palabras o más, sumado sobre los rasgos, dividido por el número esperado si las palabras estuvieran en orden aleatorio. Una ventana de palabras barajadas es una muestra de ellas sin reposición, así que, para un rasgo presente en <span class="arithmatex">\(K\)</span> de las <span class="arithmatex">\(N\)</span> palabras del texto, una ventana de <span class="arithmatex">\(w\)</span> palabras lo contiene en dos palabras o más con la probabilidad hipergeométrica</p>
 <div class="arithmatex">\[
 P = 1 - \frac{\binom{N-K}{w} + K \binom{N-K}{w-1}}{\binom{N}{w}}

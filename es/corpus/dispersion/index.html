@@ -2532,9 +2532,9 @@
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
 <!-- core: corpus/dispersion.md:dispersion 14e4623 -->
-<p>La dispersión de una palabra es lo uniformemente que se reparte por las partes de un texto o de un corpus. La frecuencia no distingue una palabra que aparece una vez en cada capítulo de otra reunida en uno solo; las medidas de dispersión (<a href="https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf">Gries 2008</a>, <a href="https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf">2020</a>) completan la frecuencia.</p>
+<p>La dispersión de una palabra es lo uniformemente que se reparte por las partes de un texto o de un corpus. La frecuencia no distingue una palabra que aparece una vez en cada capítulo de otra reunida en uno solo; las medidas de dispersión (<a href="https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf">Gries 2008</a>, <a href="https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf">2020</a>) complementan la frecuencia.</p>
 <p>El texto se divide en partes: <code>parts</code> es el número de partes de tamaño aproximadamente igual o los tamaños de las partes en orden (oraciones, párrafos, capítulos, documentos de un corpus), que suman el número de palabras. Para cada palabra se calculan sus frecuencias por parte y seis medidas; Gries recomienda DP como la principal.</p>
-<p>Las palabras se comparan tal cual: la caja y la lematización corresponden al extractor de palabras.</p>
+<p>Las palabras se comparan tal cual: las mayúsculas y minúsculas y la lematización corresponden al extractor de palabras.</p>
 <p>El módulo <code>ests.corpus.dispersion</code> reexporta la función y las medidas del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/dispersion/">anyTS</a> (<code>from ests.corpus.dispersion import calc_dp</code>). Las palabras se extraen con <a href="../../extractors/words/"><code>WordsExtractor</code></a>.</p>
 <h2 id="medidas">Medidas<a class="headerlink" href="#medidas" title="Permanent link">&para;</a></h2>
 <!-- core: corpus/dispersion.md:dispersion-measures 09abba3 -->

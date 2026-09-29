@@ -2677,7 +2677,7 @@
 <!-- core: stats/diversity_stats.md:check_params 1ed1a29 -->
 <p>Los parámetros se comprueban con <code>check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)</code>, que lanza <code>ParameterError</code> si una ventana, un tamaño de muestra o una longitud mínima del factor están fuera de rango, si el umbral está fuera de (0, 1) o si la base del logaritmo no es mayor que 1. Llamada antes de extraer las palabras, señala un parámetro erróneo antes que un texto vacío.</p>
 <h2 id="conventions">Convenciones<a class="headerlink" href="#conventions" title="Permanent link">&para;</a></h2>
-<!-- core: stats/diversity_stats.md:DiversityStats-conventions b46d998 -->
+<!-- core: stats/diversity_stats.md:DiversityStats-conventions a759359 -->
 <p>Los valores de algunas métricas dependen de convenciones que difieren entre bibliotecas. Todas salvo la comparación con el umbral de MTLD son parámetros de la clase:</p>
 <table>
 <thead>
@@ -2805,7 +2805,7 @@
 <tr>
 <td style="text-align: center;"><code>mtldw</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">MTLD con ventana móvil y texto envuelto (MTLD-W)</td>
+<td style="text-align: center;">MTLD con ventana móvil y vuelta al inicio del texto (MTLD-W)</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>hdd</code></td>
@@ -2830,7 +2830,7 @@
 <tr>
 <td style="text-align: center;"><code>hapax_index</code></td>
 <td style="text-align: center;">float</td>
-<td style="text-align: center;">Índice de hápax, también R de Honoré</td>
+<td style="text-align: center;">Índice de hápax, también llamado R de Honoré</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>honore_r</code></td>

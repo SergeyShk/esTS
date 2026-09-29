@@ -2686,7 +2686,7 @@
 <p>El conjunto de datos se recorre por sus registros como <code>get_records()</code> sin filtros: <code>for record in ss</code> pasa por los sonetos de uno en uno.</p>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <h3 id="check_data">check_data<a class="headerlink" href="#check_data" title="Permanent link">&para;</a></h3>
-<p>Comprueba que el fichero del conjunto de datos está en su sitio y devuelve <code>True</code>; un conjunto sin descargar levanta <code>DatasetNotFoundError</code>. Los demás métodos lo comprueban por sí mismos.</p>
+<p>Comprueba que el fichero del conjunto de datos está en su sitio y devuelve <code>True</code>; un conjunto sin descargar lanza <code>DatasetNotFoundError</code>. Los demás métodos lo comprueban por sí mismos.</p>
 <h3 id="download">download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h3>
 <p>Descarga el archivo, verifica su suma de comprobación SHA-256 y extrae el fichero. Un archivo dañado se descarga de nuevo, un fichero que falta se extrae otra vez; una llamada repetida no descarga nada.</p>
 <table>
@@ -2773,7 +2773,7 @@
 </tr>
 </tbody>
 </table>
-<p>Los filtros se combinan; <code>author="dario"</code> encuentra a Rubén Darío, <code>country="mexico"</code> encuentra <code>México</code>. Un periodo o un género desconocidos, una longitud menor que uno, una longitud mínima mayor que la máxima y un límite negativo levantan <code>ParameterError</code>.</p>
+<p>Los filtros se combinan; <code>author="dario"</code> encuentra a Rubén Darío, <code>country="mexico"</code> encuentra <code>México</code>. Un periodo o un género desconocidos, una longitud menor que uno, una longitud mínima mayor que la máxima y un límite negativo lanzan <code>ParameterError</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanishSonnets</span>
