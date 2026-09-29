@@ -163,6 +163,14 @@ def test_is_punctuation(token, expected):
             ["--La educaré.--", "Las mujeres eran pobres."],
         ),
         ("¿Vienes?--Sí.", ["¿Vienes?", "--Sí."]),
+        # A dash at the end of a line closes its line of dialogue
+        (
+            "Para asombro de Mahoma.--\nOtra lengua clama.",
+            ["Para asombro de Mahoma.--", "Otra lengua clama."],
+        ),
+        ("¡Traidores!--  \n¡Adiós!", ["¡Traidores!--", "¡Adiós!"]),
+        ("¡Está lejos!--\n  al ángel de la muerte.", ["¡Está lejos!--\n  al ángel de la muerte."]),
+        ("Fin.--" + " " * 100_000 + "1", ["Fin.--" + " " * 100_000 + "1"]),
         ("Era tarde.--«Ven», dijo.", ["Era tarde.", "--«Ven», dijo."]),
         # A single hyphen before a word numbers an article or joins two names
         ("Artículo 1.- Objeto del reglamento.", ["Artículo 1.- Objeto del reglamento."]),
