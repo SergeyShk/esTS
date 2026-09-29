@@ -116,7 +116,7 @@ $$
 
 El índice es `calc_repetition_index` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/phonetics/) sobre los sonidos consonánticos de las palabras:
 
-<!-- core: stats/phonetics.md:calc_repetition_index 4e25d01 -->
+<!-- core: stats/phonetics.md:calc_repetition_index 8d65261 -->
 El índice de repetición: el número de ventanas de `window_len` palabras vecinas donde un rasgo - una letra o un sonido, según elija una biblioteca - aparece en dos palabras o más, sumado sobre los rasgos, dividido por el número esperado si las palabras estuvieran en orden aleatorio. Una ventana de palabras barajadas es una muestra de ellas sin reposición, así que, para un rasgo presente en \(K\) de las \(N\) palabras del texto, una ventana de \(w\) palabras lo contiene en dos palabras o más con la probabilidad hipergeométrica
 
 $$

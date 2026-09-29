@@ -32,7 +32,7 @@ Los parámetros se comprueban con `check_params(window_len, mtld_threshold, mtld
 
 ## Convenciones { #conventions }
 
-<!-- core: stats/diversity_stats.md:DiversityStats-conventions b46d998 -->
+<!-- core: stats/diversity_stats.md:DiversityStats-conventions a759359 -->
 Los valores de algunas métricas dependen de convenciones que difieren entre bibliotecas. Todas salvo la comparación con el umbral de MTLD son parámetros de la clase:
 
 | Parámetro | Por defecto | Otras bibliotecas |

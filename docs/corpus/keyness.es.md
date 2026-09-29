@@ -5,10 +5,10 @@
 
 ## Descripción
 
-<!-- core: corpus/keyness.md:keyness a953274 -->
+<!-- core: corpus/keyness.md:keyness 0018a96 -->
 Extracción de palabras clave (keyness) de un corpus objetivo frente a uno de referencia: las palabras que aparecen significativamente más a menudo en el corpus objetivo que en el de referencia.
 
-Para cada palabra se calculan dos valores que [Gabrielatos y Marchi](http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf) y [Hardie](http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/) recomiendan leer juntos: la razón de verosimilitud $G^2$ con su valor p (la significación de la diferencia: si la hay) y Log Ratio (el tamaño del efecto: cuán grande es). Se calcula además la medida elegida `score`, que sirve para ordenar. Las medidas de significación ($G^2$, ji cuadrado, BIC, ELL) llevan signo: negativo cuando la palabra es más frecuente en la referencia; las medidas de efecto (%DIFF, Log Ratio, razón de momios) tienen dirección por construcción.
+Para cada palabra se calculan dos valores que [Gabrielatos y Marchi](http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf) y [Hardie](http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/) recomiendan leer juntos: la razón de verosimilitud $G^2$ con su valor p (la significación de la diferencia: si la hay) y Log Ratio (el tamaño del efecto: cuán grande es). Se calcula además la medida elegida `score`, que sirve para ordenar. Las medidas de significación ($G^2$, ji cuadrado, BIC) y ELL, el tamaño del efecto de $G^2$, llevan signo: negativo cuando la palabra es más frecuente en la referencia; las demás medidas de efecto (%DIFF, Log Ratio, razón de momios) tienen dirección por construcción.
 
 La referencia puede ser una lista de palabras, una correspondencia de frecuencias (su tamaño es la suma de los recuentos) o una `FrequencyReference`. Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematización y las palabras vacías corresponden al extractor de palabras, y los dos corpus tienen que extraerse del mismo modo.
 

@@ -7,12 +7,12 @@
 
 Las métricas de legibilidad de la tradición española.
 
-<!-- core: stats/readability_stats.md:ReadabilityStats f313e5b -->
+<!-- core: stats/readability_stats.md:ReadabilityStats 7ee1446 -->
 Las métricas de [legibilidad](https://es.wikipedia.org/wiki/Legibilidad) de un texto a partir de sus estadísticas básicas: la longitud media de la oración en palabras, la longitud media de la palabra en sílabas o en letras, la proporción de palabras polisílabas y de palabras largas y la variabilidad de la longitud de las palabras. La fuente de datos puede ser un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) o unas estadísticas básicas ya calculadas, y entonces el texto no se vuelve a contar; los extractores se pasan a las estadísticas básicas de un texto o de un `Doc`, mientras que las ya calculadas se toman tal cual. Las letras de las fórmulas son las de las palabras contadas, así que un extractor de palabras que descarta palabras no alarga la palabra media.
 
 Las métricas son propiedades que se calculan en cada acceso, así que un cambio de los `coefficients` de un objeto se aplica en el acto.
 
-Una fuente que no es ni una cadena, ni un `Doc`, ni unas estadísticas básicas, unas estadísticas básicas de otra clase que las de la biblioteca y un extractor de otro tipo lanzan `SourceTypeError`, una fuente sin palabras o sin oraciones `SourceError`, un preajuste desconocido o que no es una cadena `ParameterError`.
+Una fuente que no es ni una cadena, ni un `Doc`, ni unas estadísticas básicas, unas estadísticas básicas de una clase distinta de las de la biblioteca y un extractor de otro tipo lanzan `SourceTypeError`, una fuente sin palabras o sin oraciones `SourceError`, un preajuste desconocido o que no es una cadena `ParameterError`.
 
 !!! quote "Definición"
 

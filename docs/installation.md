@@ -4,7 +4,7 @@
 
 *   `python` 3.11 or newer
 *   `spaCy` 3.8 or newer
-*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.2.2 or newer within 0.2, the language-independent core: the extractors, the basic statistics and the common readability formulas, the lexical diversity metrics, the corpus measures, the plots and the machinery of the highlighting come from it with the tokenizer, the lemmatizer, the sentence splitter and the syllables of Spanish
+*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.2.3 or newer within 0.2, the language-independent core: the extractors, the basic statistics and the common readability formulas, the lexical diversity metrics, the corpus measures, the plots and the machinery of the highlighting come from it with the tokenizer, the lemmatizer, the sentence splitter and the syllables of Spanish
 *   `numpy`, `scipy`, `pandas`, `simplemma` 2
 *   `matplotlib` and `graphviz` for the [visualizers](visualizers/zipf.md)
 
