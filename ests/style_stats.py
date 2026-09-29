@@ -1,5 +1,5 @@
 from collections import Counter
-from collections.abc import Collection, Sequence
+from collections.abc import Collection, Mapping, Sequence, Set
 from functools import cached_property
 from math import nan, sqrt
 
@@ -259,12 +259,13 @@ def in_order(words: Collection[str]) -> tuple[str, ...]:
     Putting a collection of words in a fixed order
 
     Arguments:
-        words (list[str]|set[str]): Words; a set is sorted, a list keeps its order
+        words (list[str]|set[str]): Words; a set or a mapping is sorted, a list,
+            an array or a Series keeps its order
 
     Returns:
         tuple[str]: Words in order
     """
-    return tuple(words) if isinstance(words, Sequence) else tuple(sorted(words))
+    return tuple(sorted(words)) if isinstance(words, Set | Mapping) else tuple(words)
 
 
 def _split_text(text: str, max_length: int) -> list[str]:

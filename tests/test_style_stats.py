@@ -1,5 +1,7 @@
 from math import isnan
 
+import numpy as np
+import pandas as pd
 import pytest
 import spacy
 
@@ -348,6 +350,9 @@ def test_sets_of_words():
     expected = {"a efectos de": "a efectos de", "a efectos del": "a efectos del"}
     assert expand_phrases(colliding, {"a efectos de", "a efectos del"}) == expected
     assert expand_phrases(colliding, ["a efectos de", "a efectos del"]) == expected
+    # An array or a Series keeps its order, as a list does
+    for keywords in (np.array(["perro", "gato"]), pd.Series(["perro", "gato"])):
+        assert list(calc_keyword_density(words, keywords)) == ["perro", "gato"]
     by_set = StyleStats(text, stopwords={"el", "la"}, cliches={"a la mayor brevedad"})
     by_list = StyleStats(text, stopwords=["el", "la"], cliches=["a la mayor brevedad"])
     assert by_set.get_stats() == by_list.get_stats()
