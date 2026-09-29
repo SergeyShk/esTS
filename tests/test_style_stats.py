@@ -333,3 +333,16 @@ def test_print_stats(ss, capsys):
     ss.print_stats()
     output = capsys.readouterr().out
     assert all(desc in output for desc in STYLE_STATS_DESC.values())
+
+
+def test_sets_of_words():
+    """Stopwords, clichés, keywords and phrases may be sets, the order of a list not counting"""
+    words = ["sin", "embargo", "el", "gato", "duerme", "sin", "embargo"]
+    assert calc_water(words, {"el"}) == calc_water(words, ["el"])
+    assert calc_keyword_density(words, {"gato"}) == calc_keyword_density(words, ["gato"])
+    phrases = frozenset({"sin embargo"})
+    assert calc_phrase_density(words, phrases) == calc_phrase_density(words, ["sin embargo"])
+    assert expand_phrases(words, phrases) == expand_phrases(words, ["sin embargo"])
+    by_set = StyleStats(text, stopwords={"el", "la"}, cliches={"a la mayor brevedad"})
+    by_list = StyleStats(text, stopwords=["el", "la"], cliches=["a la mayor brevedad"])
+    assert by_set.get_stats() == by_list.get_stats()

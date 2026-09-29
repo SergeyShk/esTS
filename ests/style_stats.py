@@ -106,8 +106,8 @@ class StyleStats:
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc, or the
-            stopwords or the clichés are not a list of strings, or the extractor or the
-            pipeline is of another type
+            stopwords or the clichés are not a list or a set of strings, or the extractor
+            or the pipeline is of another type
         SourceError: If the source has no words; when the verbal nouns are read,
             if the source lacks the parts of speech or the lemmas or a sentence
             of a string is longer than the max_length of the pipeline
@@ -130,9 +130,9 @@ class StyleStats:
             raise SourceTypeError("The pipeline must be a spaCy Language")
         check_params(top_n)
         if stopwords is not None:
-            check_words(stopwords, "stopwords")
+            check_words(stopwords, "stopwords", ordered=False)
         if cliches is not None:
-            check_words(cliches, "clichés")
+            check_words(cliches, "clichés", ordered=False)
         # The Doc is not kept: this object in an extension of the Doc would make a cycle
         self._text: str | None = None
         self._nouns: list[str] | None = None
@@ -417,11 +417,12 @@ def calc_water(text: Sequence[str], stopwords: Sequence[str] | None = None) -> f
         float: Value of the water content in percent
 
     Raises:
-        SourceTypeError: If the words or the stopwords are not a list of strings
+        SourceTypeError: If the words are not a list of strings or the stopwords are not
+            a list or a set of strings
     """
     check_words(text)
     if stopwords is not None:
-        check_words(stopwords, "stopwords")
+        check_words(stopwords, "stopwords", ordered=False)
     if stopwords is not None:
         stopwords_set = {word.lower() for word in stopwords}
         n_stopwords = sum(1 for word in text if word.lower() in stopwords_set)
@@ -519,10 +520,11 @@ def calc_keyword_density(text: Sequence[str], keywords: Sequence[str]) -> dict[s
         dict[str, float]: Density of every keyword in percent
 
     Raises:
-        SourceTypeError: If the words or the keywords are not a list of strings
+        SourceTypeError: If the words are not a list of strings or the keywords are not
+            a list or a set of strings
     """
     check_words(text)
-    check_words(keywords, "keywords")
+    check_words(keywords, "keywords", ordered=False)
     n_words = len(text)
     lowered = [word.lower() for word in text]
     density = {}
@@ -603,7 +605,8 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> dict[str, str
             verbs, each with the phrase of the list it spells out
 
     Raises:
-        SourceTypeError: If the words or the phrases are not a list of strings
+        SourceTypeError: If the words are not a list of strings or the phrases are not
+            a list or a set of strings
 
     Example:
         >>> from ests.style_stats import expand_phrases
@@ -614,7 +617,7 @@ def expand_phrases(text: Sequence[str], phrases: Sequence[str]) -> dict[str, str
         'proceder a'
     """
     check_words(text)
-    check_words(phrases, "phrases")
+    check_words(phrases, "phrases", ordered=False)
     heads = {
         words[0]
         for phrase in phrases
@@ -669,10 +672,11 @@ def calc_phrase_density(text: Sequence[str], phrases: Sequence[str]) -> float:
         float: Occurrences per 100 words
 
     Raises:
-        SourceTypeError: If the words or the phrases are not a list of strings
+        SourceTypeError: If the words are not a list of strings or the phrases are not
+            a list or a set of strings
     """
     check_words(text)
-    check_words(phrases, "phrases")
+    check_words(phrases, "phrases", ordered=False)
     return safe_divide(len(find_phrases(text, expand_phrases(text, phrases))), len(text)) * 100
 
 

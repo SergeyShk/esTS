@@ -9,10 +9,11 @@ from numbers import Real
 from pathlib import Path
 from typing import Any, NamedTuple
 
-from ..constants import DEFAULT_DATA_DIR
+from anyts.datasets import Dataset, check_limit, fetch_archive, to_path
+
+from ..constants import DEFAULT_DATA_DIR, USER_AGENT
 from ..exceptions import DatasetNotFoundError, ParameterError, SourceTypeError
-from ..utils import lemmatize, to_path
-from .dataset import Dataset, check_limit, fetch_archive
+from ..utils import lemmatize
 
 NAME = "freq_dict"
 VERSION = 1
@@ -203,7 +204,7 @@ class FreqDict(Dataset):
             DownloadError: If the archive cannot be downloaded or fails the checksum
         """
         missing = not self._filepath.is_file()
-        fetch_archive(DOWNLOAD_URL, self._archive, ARCHIVE_SHA256, missing, force)
+        fetch_archive(DOWNLOAD_URL, self._archive, ARCHIVE_SHA256, missing, force, USER_AGENT)
         self.check_data()
         load_entries.cache_clear()
         load_min_ipm.cache_clear()

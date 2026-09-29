@@ -6,13 +6,10 @@ import tarfile
 from collections import Counter
 from pathlib import Path
 
+import anyts.datasets as dataset_module
 import pytest
 
-from ests.datasets import (
-    SpanishLiterature,
-    dataset as dataset_module,
-    spanish_literature as module,
-)
+from ests.datasets import SpanishLiterature, spanish_literature as module
 from ests.exceptions import DatasetNotFoundError, DownloadError, ParameterError
 
 BUNDLED_ARCHIVE = Path(__file__).parents[2] / "ests" / "datasets" / "data" / module.ARCHIVE
@@ -72,7 +69,7 @@ def small(tmp_path, monkeypatch):
     monkeypatch.setattr(module, "ARCHIVE_SHA256", hashlib.sha256(archive).hexdigest())
     calls = []
 
-    def fake_download(url, filename, dirpath, force=False):
+    def fake_download(url, dirpath, filename=None, force=False, user_agent=None):
         calls.append(force)
         path = Path(dirpath) / filename
         if path.is_file() and not force:
@@ -183,7 +180,7 @@ def test_download_interrupted_extraction(small, monkeypatch):
         dataset.download()
     # The earlier directory stays as it was and the partial one is gone
     assert kept.read_text(encoding="utf-8") == "Texto anterior."
-    assert not (dataset.data_dir / f"{ROOT}.part").exists()
+    assert not list(dataset.data_dir.glob("*.part"))
     monkeypatch.setattr(dataset_module, "extract_archive", extract)
     dataset.download()
     assert dataset.check_data()

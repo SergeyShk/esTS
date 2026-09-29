@@ -1,7 +1,5 @@
 """The functions of the library check their counts and lists of words as the core does"""
 
-from collections import Counter
-
 import matplotlib
 import numpy as np
 import pytest
@@ -18,11 +16,10 @@ from ests import (
     SyntaxStats,
     WordsExtractor,
 )
-from ests.basic_stats import count_punctuations, punctuation_profile
-from ests.corpus import compare_corpora, corpus_features, format_kwic, function_words_profile, kwic
+from ests.basic_stats import punctuation_profile
+from ests.corpus import compare_corpora, corpus_features, function_words_profile, kwic
 from ests.corpus.compare import sentence_rhythm, split_windows, text_features
 from ests.datasets import SpanishLiterature
-from ests.datasets.dataset import check_limit, length_filters
 from ests.exceptions import ParameterError, SourceTypeError
 from ests.lexical_stats import calc_surprisal
 from ests.phon_stats import (
@@ -32,6 +29,7 @@ from ests.phon_stats import (
     calc_cv_entropy,
     calc_hiatus,
 )
+from ests.readability_stats import flesch_reading_easy_to_grade
 from ests.style_stats import (
     calc_academic_nausea,
     calc_classic_nausea,
@@ -46,17 +44,8 @@ from ests.style_stats import (
 )
 from ests.utils import find_phrases
 from ests.visualizers import (
-    collocation_network,
-    dispersion_plot,
-    fingerprinting,
-    frequency_spectrum_plot,
-    heaps_plot,
     highlight,
-    keyness_plot,
     sentence_lengths_plot,
-    wordtree,
-    zipf,
-    zipf_theory,
 )
 
 matplotlib.use("Agg")
@@ -76,31 +65,21 @@ INTEGERS = {
     "count_words_by_syllables": lambda: BasicStats(TEXT).count_words_by_syllables(2.5),
     "count_words_by_letters": lambda: BasicStats(TEXT).count_words_by_letters(True),
     "kwic(window)": lambda: kwic(TEXT, "gato", window=1.5),
-    "format_kwic(width)": lambda: format_kwic([], width=1.5),
     "split_windows(window)": lambda: split_windows(TEXT, 1.5),
     "split_windows(window=True)": lambda: split_windows(TEXT, True),
     "split_windows(min_words)": lambda: split_windows(TEXT, 10, min_words=2.0),
     "corpus_features(window)": lambda: corpus_features([TEXT], window=2.5),
     "compare_corpora(n_bootstrap)": lambda: compare_corpora([TEXT], [TEXT], n_bootstrap=1.5),
-    "check_limit": lambda: check_limit(1.5),
-    "length_filters": lambda: length_filters(10.0, None),
     "sentence_lengths_plot(window)": lambda: sentence_lengths_plot(TEXT, window=2.5),
-    "keyness_plot(top_n)": lambda: keyness_plot([], top_n=1.5),
-    "collocation_network(top_n)": lambda: collocation_network([], top_n=1.5),
-    "fingerprinting(segment_len)": lambda: fingerprinting([WORDS], segment_len=2.5),
-    "wordtree(max_n)": lambda: wordtree([WORDS], "gato", max_n=2.5),
-    "wordtree(max_per_n)": lambda: wordtree([WORDS], "gato", max_per_n=2.0),
     "highlight(long_sent_word_factor)": lambda: highlight(TEXT, long_sent_word_factor=2.5),
     "highlight(complex_syl_factor)": lambda: highlight(TEXT, complex_syl_factor=True),
-    "zipf(num_words)": lambda: zipf(Counter(WORDS), num_words=2.5),
-    "zipf(num_labels)": lambda: zipf(Counter(WORDS), num_labels=2.5),
-    "zipf_theory(num_ranks)": lambda: zipf_theory(100, 2.5),
     "punctuation_profile(n_words)": lambda: punctuation_profile(TEXT, n_words=2.5),
     "punctuation_profile(negative n_words)": lambda: punctuation_profile(TEXT, n_words=-1),
     "SpanishLiterature(year_from)": lambda: SpanishLiterature._get_filters(
         None, None, None, 1850.5, None, None, None
     ),
     "ReadabilityStats(preset)": lambda: ReadabilityStats(TEXT, preset=["general"]),
+    "flesch_reading_easy_to_grade(preset)": lambda: flesch_reading_easy_to_grade(60, ["general"]),
     "SpanishLiterature(author)": lambda: SpanishLiterature._get_filters(
         None, 5, None, None, None, None, None
     ),
@@ -131,12 +110,6 @@ WORD_LISTS = {
     "StyleStats(cliches)": lambda: StyleStats(TEXT, cliches="por medio de"),
     "corpus_features": lambda: corpus_features(NOT_STRINGS),
     "compare_corpora": lambda: compare_corpora([TEXT], NOT_STRINGS),
-    "dispersion_plot": lambda: dispersion_plot(NOT_STRINGS, ["gato"]),
-    "dispersion_plot(targets)": lambda: dispersion_plot(WORDS, NOT_STRINGS),
-    "heaps_plot": lambda: heaps_plot(NOT_STRINGS),
-    "frequency_spectrum_plot": lambda: frequency_spectrum_plot(NOT_STRINGS),
-    "fingerprinting": lambda: fingerprinting([NOT_STRINGS]),
-    "wordtree": lambda: wordtree([NOT_STRINGS], "gato"),
     "highlight(stopwords)": lambda: highlight(TEXT, stopwords=NOT_STRINGS),
     "BasicStats(sents_extractor)": lambda: BasicStats(TEXT, sents_extractor="x"),
     "BasicStats(words_extractor)": lambda: BasicStats(TEXT, words_extractor=WordsExtractor),
@@ -159,7 +132,6 @@ WORD_LISTS = {
     "split_windows": lambda: split_windows(WORDS),
     "sentence_rhythm": lambda: sentence_rhythm("texto"),
     "sentence_rhythm(elements)": lambda: sentence_rhythm(["4", "8"]),
-    "count_punctuations": lambda: count_punctuations(None),
     "kwic(keyword)": lambda: kwic(TEXT, 5),
 }
 
@@ -187,6 +159,10 @@ def test_compare_corpora_checks_before_the_features():
         compare_corpora([TEXT], [TEXT], features=features, n_bootstrap=1.5)
     with pytest.raises(ParameterError):
         compare_corpora([TEXT], [TEXT], window=2.5, features=features)
+    with pytest.raises(ParameterError):
+        compare_corpora([TEXT], [TEXT], features=features, seed=-1)
+    with pytest.raises(ParameterError):
+        compare_corpora([TEXT], [TEXT], features=features, labels=("diff", "B"))
     with pytest.raises(SourceTypeError):
         compare_corpora([TEXT], NOT_STRINGS, features=features)
     assert calls == []

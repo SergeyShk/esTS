@@ -1,32 +1,25 @@
 import pytest
 import spacy
+from anyts.visualizers.highlight import Sent, Word
 
 from ests import StyleStats
 from ests.constants import (
     HIGHLIGHT_DEFAULT_LAYERS,
+    HIGHLIGHT_LAYER_ANNOTATIONS,
     HIGHLIGHT_LAYER_GROUPS,
     HIGHLIGHT_LAYERS_DESC,
-    HIGHLIGHT_SYNTAX_LAYERS,
-    HIGHLIGHT_TAGGED_LAYERS,
 )
 from ests.exceptions import ParameterError, SourceError, SourceTypeError
-from ests.utils import get_nlp
+from ests.utils import get_nlp, iter_text_words
 from ests.visualizers import Highlight, HighlightedText, highlight
 from ests.visualizers.highlight import (
-    CSS,
-    Sent,
-    Word,
     calc_alliteration_runs,
     find_alliteration,
     find_complex_words,
     find_connector_highlights,
     find_long_sents,
     get_stem_sounds,
-    get_text_sents,
-    get_text_words,
-    group_words_by_sents,
     plural,
-    split_segments,
 )
 
 text = (
@@ -46,10 +39,11 @@ long_sent = (
     + "."
 )
 TEXT_LAYERS = [
-    layer
-    for layer in HIGHLIGHT_LAYERS_DESC
-    if layer not in HIGHLIGHT_SYNTAX_LAYERS | HIGHLIGHT_TAGGED_LAYERS
+    layer for layer in HIGHLIGHT_LAYERS_DESC if layer not in HIGHLIGHT_LAYER_ANNOTATIONS
 ]
+SYNTAX_LAYERS = sorted(
+    layer for layer, needs in HIGHLIGHT_LAYER_ANNOTATIONS.items() if "DEP" in needs
+)
 
 
 @pytest.fixture(scope="module")
@@ -74,7 +68,7 @@ def spans(ht, layer):
 def test_init_value_error():
     with pytest.raises(SourceError):
         highlight("¿? ...")
-    for threshold in (0, 1.5, "0.1"):
+    for threshold in (0, 1.5, float("nan"), True, "0.1"):
         with pytest.raises(ParameterError, match="alliteration"):
             highlight(text, alliteration_threshold=threshold)
     with pytest.raises(ParameterError):
@@ -94,6 +88,12 @@ def test_init_string_lists():
         highlight(text, stopwords="el la")
     with pytest.raises(SourceTypeError):
         highlight(text, cliches="a la mayor brevedad")
+
+
+def test_init_sets_of_words():
+    by_set = highlight(text, layers=["stopwords", "cliches"], stopwords={"el"}, cliches={"se"})
+    by_list = highlight(text, layers=["stopwords", "cliches"], stopwords=["el"], cliches=["se"])
+    assert by_set.highlights == by_list.highlights
 
 
 def test_layers_generator():
@@ -123,7 +123,7 @@ def test_layers_default_blank_doc():
 def test_layer_groups():
     layers = [layer for group in HIGHLIGHT_LAYER_GROUPS.values() for layer in group]
     assert sorted(layers) == sorted(HIGHLIGHT_LAYERS_DESC)
-    assert frozenset(HIGHLIGHT_LAYER_GROUPS["Syntax"]) == HIGHLIGHT_SYNTAX_LAYERS
+    assert sorted(HIGHLIGHT_LAYER_GROUPS["Syntax"]) == SYNTAX_LAYERS
 
 
 def test_layers_selection(doc):
@@ -162,7 +162,7 @@ def test_doc_without_the_sentence_boundaries(nlp):
     assert highlight(doc, layers="long_sents").counts == {"long_sents": 1}
 
 
-@pytest.mark.parametrize("layer", sorted(HIGHLIGHT_SYNTAX_LAYERS))
+@pytest.mark.parametrize("layer", SYNTAX_LAYERS)
 def test_syntax_layers_without_the_lemmas(nlp, layer):
     # the syntactic layers read the lemmas
     doc = nlp(text, disable=["lemmatizer"])
@@ -192,25 +192,14 @@ def test_highlights_sorted(ht):
     assert positions == sorted(positions)
 
 
-def test_get_text_words():
-    words = get_text_words("¿Hola, mundo?")
-    assert words == [Word(1, 5, "Hola"), Word(7, 12, "mundo")]
-
-
-def test_get_text_sents():
+def test_words_and_sents_of_a_string():
     sample = "Hola, mundo. ¿Qué tal estás?"
-    sents = get_text_sents(sample, get_text_words(sample))
-    assert sents == [Sent(0, 12, 2), Sent(13, 28, 3)]
-
-
-def test_get_text_sents_without_words():
-    assert get_text_sents("Hola.", []) == [Sent(0, 5, 0)]
-
-
-def test_group_words_by_sents():
-    words = [Word(0, 4, "Hola"), Word(6, 11, "mundo"), Word(13, 16, "Qué"), Word(30, 33, "fin")]
-    sents = [Sent(0, 12, 2), Sent(13, 28, 1)]
-    assert group_words_by_sents(words, sents) == [words[:2], [words[2]]]
+    ht = highlight(sample, layers="long_sents", long_sent_word_factor=1)
+    assert list(ht.iter_words("¿Hola, mundo?")) == [(1, 5, "Hola"), (7, 12, "mundo")]
+    assert [(ht.text[h.start : h.end], h.note) for h in ht.highlights] == [
+        ("Hola, mundo.", "long sentence, 2 words"),
+        ("¿Qué tal estás?", "long sentence, 3 words"),
+    ]
 
 
 def test_doc_sents_whitespace_start(nlp):
@@ -407,7 +396,8 @@ def test_alliteration_within_sentences():
     ht = highlight(sample, layers="alliteration", alliteration_threshold=0.5)
     assert ht.counts == {"alliteration": 0}
     # without the sentences, b and g repeat across the period
-    assert len(find_alliteration(get_text_words(sample), 0.5)) == 2
+    words = [Word(start, end, word) for start, end, word in iter_text_words(sample)]
+    assert len(find_alliteration(words, 0.5)) == 2
 
 
 def test_alliteration_threshold():
@@ -453,19 +443,6 @@ def test_get_stem_sounds(word, expected):
     assert get_stem_sounds(word) == tuple(expected.split())
 
 
-def test_split_segments():
-    highlights = [Highlight(0, 4, "a"), Highlight(2, 6, "b")]
-    segments = [
-        (start, end, [h.layer for h in active])
-        for start, end, active in split_segments(8, highlights)
-    ]
-    assert segments == [(0, 2, ["a"]), (2, 4, ["a", "b"]), (4, 6, ["b"]), (6, 8, [])]
-
-
-def test_split_segments_empty():
-    assert list(split_segments(3, [])) == [(0, 3, [])]
-
-
 def test_to_html(ht):
     markup = ht.to_html()
     assert markup.startswith('<div class="ests-highlight"><style>')
@@ -495,7 +472,7 @@ def test_css_paints_the_stopwords_first():
     # the densest layer comes first, so that every other background covers it
     backgrounds = [
         line.split()[0].removeprefix(".ests-hl-")
-        for line in CSS.splitlines()
+        for line in HighlightedText.css().splitlines()
         if line.startswith(".ests-hl-") and "background" in line
     ]
     assert backgrounds[:2] == ["long_sents", "stopwords"]

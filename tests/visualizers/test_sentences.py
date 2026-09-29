@@ -6,6 +6,7 @@ import pytest
 import spacy
 from matplotlib.axes import Axes
 
+from ests import SentsExtractor, WordsExtractor
 from ests.exceptions import ParameterError, SourceError, SourceTypeError
 from ests.utils import get_nlp
 from ests.visualizers import sentence_lengths, sentence_lengths_plot
@@ -42,6 +43,15 @@ def test_sentence_lengths():
         sentence_lengths(42)
 
 
+def test_sentence_lengths_by_the_extractors():
+    words = WordsExtractor(stopwords=["el", "la", "los", "a"])
+    assert sentence_lengths(text, words_extractor=words) == [4, 6, 1, 5]
+    one_sentence = SentsExtractor(tokenizer=lambda text: [text])
+    assert sentence_lengths(text, sents_extractor=one_sentence) == [22]
+    with pytest.raises(SourceTypeError):
+        sentence_lengths(text, words_extractor="x")
+
+
 def test_sentence_lengths_plot():
     ax = sentence_lengths_plot(text, window=2)
     assert isinstance(ax, Axes)
@@ -54,6 +64,8 @@ def test_sentence_lengths_plot():
     assert ax.child_axes[0].get_title() == "Distribution"
     assert ax.get_ylim()[1] == pytest.approx(8 * 1.7)
     assert ax.get_title() == "Sentence lengths"
+    ax = sentence_lengths_plot(text, labels={"title": "Longitud de las oraciones"})
+    assert ax.get_title() == "Longitud de las oraciones"
     ax = sentence_lengths_plot([3, 5, 2], window=10, inset=False)
     assert len(ax.get_lines()) == 1
     assert not ax.child_axes

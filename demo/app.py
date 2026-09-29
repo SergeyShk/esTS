@@ -33,7 +33,6 @@ from ests import (
     WordsExtractor,
 )
 from ests.constants import (
-    BASIC_STATS_DESC,
     COHESION_STATS_DESC,
     HIGHLIGHT_DEFAULT_LAYERS,
     HIGHLIGHT_LAYER_GROUPS,
@@ -364,7 +363,7 @@ def compute(text: str, layers: list[str]) -> dict:
     lemmas = WordsExtractor(use_lexemes=True, lowercase=True, filter_nums=True).extract(text)
     pos_table, morph_table, markers_table = morph_tables(ms)
     verse_table, verse_lines = verse_tables(doc)
-    basic = {key: value for key, value in bs.get_stats().items() if key in BASIC_STATS_DESC}
+    basic = {key: value for key, value in bs.get_stats().items() if key in BasicStats.stats_desc}
     enough_words = bs.n_words >= ZIPF_MIN_WORDS
     enough_sents = bs.n_sents >= SENTENCES_MIN
     return {
@@ -383,7 +382,7 @@ def compute(text: str, layers: list[str]) -> dict:
         "phon": stats_table(ps.get_stats(), PHON_STATS_DESC),
         "verse": verse_table,
         "verse_lines": verse_lines,
-        "basic": stats_table(basic, BASIC_STATS_DESC),
+        "basic": stats_table(basic, BasicStats.stats_desc),
         "keywords": keywords_table(forms),
         "collocations": collocations_table(lemmas),
         "zipf": zipf_image(lemmas) if enough_words else None,

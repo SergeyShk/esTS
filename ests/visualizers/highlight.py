@@ -1,12 +1,16 @@
-import html
 import re
 from collections.abc import Callable, Iterable, Iterator, Sequence
-from dataclasses import dataclass
-from itertools import pairwise
-from typing import NamedTuple
 
+import anyts.visualizers.highlight
 from anyts.syntax import base_dep, get_words, is_word
-from anyts.utils import check_integer, check_words, iter_doc_tokens
+from anyts.utils import check_integer, check_number, check_words
+from anyts.visualizers.highlight import (
+    Highlight as Highlight,
+    Sent,
+    Word,
+    group_words_by_sents,
+    tokens_span,
+)
 from spacy.tokens import Doc, Token
 
 from ..cohesion_stats import find_connectors
@@ -18,9 +22,9 @@ from ..constants import (
     CONNECTOR_TYPES,
     HIGHLIGHT_COMPLEX_SYL_FACTOR,
     HIGHLIGHT_DEFAULT_LAYERS,
+    HIGHLIGHT_LAYER_ANNOTATIONS,
+    HIGHLIGHT_LAYER_STYLES,
     HIGHLIGHT_LAYERS_DESC,
-    HIGHLIGHT_SYNTAX_LAYERS,
-    HIGHLIGHT_TAGGED_LAYERS,
     LONG_SENT_WORD_FACTOR,
     OFFICIALESE_CLICHES,
     PARENTHETICALS,
@@ -31,7 +35,7 @@ from ..constants import (
     VOWEL_SOUNDS,
 )
 from ..datasets.freq_dict import lemma_key
-from ..exceptions import ParameterError, SourceError, SourceTypeError
+from ..exceptions import ParameterError
 from ..lexical_stats import get_rank
 from ..phon_stats import CONSONANT_SOUNDS, transcribe
 from ..style_stats import expand_phrases, is_stopword
@@ -48,66 +52,9 @@ from ..syntax_stats import (
 from ..utils import find_phrases, is_verbal_noun, iter_text_sents, iter_text_words, lemmatize
 
 SPANISH_WORD = re.compile(r"[a-záéíóúüñ]{2,}", re.IGNORECASE)
-# Line breaks of Unix, Windows and old Mac texts
-LINE_BREAK = re.compile(r"\r\n?|\n")
-CSS = """\
-.ests-highlight { line-height: 1.7; }
-.ests-highlight-legend { display: flex; flex-wrap: wrap; gap: 0.4em 1.2em; margin-bottom: 0.8em; font-size: 0.9em; }
-.ests-highlight-legend .ests-hl { padding: 0 0.3em; }
-.ests-highlight-count { opacity: 0.6; margin-left: 0.3em; }
-.ests-highlight-text { white-space: pre-wrap; }
-.ests-highlight .ests-hl.ests-hl-long_sents, .ests-highlight .ests-hl.ests-hl-complex_words, .ests-highlight .ests-hl.ests-hl-rare_words, .ests-highlight .ests-hl.ests-hl-stopwords, .ests-highlight .ests-hl.ests-hl-passive, .ests-highlight .ests-hl.ests-hl-verbal_nouns, .ests-highlight .ests-hl.ests-hl-compound_prepositions, .ests-highlight .ests-hl.ests-hl-cliches, .ests-highlight .ests-hl.ests-hl-parentheticals { color: #1f2328; border-radius: 2px; }
-.ests-hl-long_sents { background: #fef9c3; }
-.ests-hl-stopwords { background: #bae6fd; }
-.ests-hl-complex_words { background: #fed7aa; }
-.ests-hl-rare_words { background: #e5e7eb; }
-.ests-hl-passive { background: #fecaca; }
-.ests-hl-verbal_nouns { background: #e9d5ff; }
-.ests-hl-compound_prepositions { background: #a7f3d0; }
-.ests-hl-cliches { background: #fbcfe8; }
-.ests-hl-parentheticals { background: #d9f99d; }
-.ests-hl-participle_clauses { border-bottom: 2px solid #7c3aed; }
-.ests-hl-gerund_clauses { border-bottom: 2px solid #0d9488; }
-.ests-hl-de_chains { border-bottom: 2px solid #b45309; }
-.ests-hl-split_predicates { border-bottom: 2px solid #dc2626; }
-.ests-hl-connectors { border-bottom: 2px dashed #2563eb; }
-.ests-hl-alliteration { text-decoration-line: underline; text-decoration-style: dotted; text-decoration-color: #db2777; text-decoration-thickness: 2px; text-underline-offset: 3px; }
-"""
 
 
-class Word(NamedTuple):
-    start: int
-    end: int
-    text: str
-    pos: str | None = None
-    lemma: str | None = None
-
-
-class Sent(NamedTuple):
-    start: int
-    end: int
-    n_words: int
-
-
-@dataclass(frozen=True)
-class Highlight:
-    """
-    Highlighted fragment of a text
-
-    Arguments:
-        start (int): Position of the first character of the fragment
-        end (int): Position after the last character of the fragment
-        layer (str): Layer of the highlighting
-        note (str): Explanation of the fragment for the tooltip
-    """
-
-    start: int
-    end: int
-    layer: str
-    note: str = ""
-
-
-class HighlightedText:
+class HighlightedText(anyts.visualizers.highlight.HighlightedText):
     """
     Class for highlighting a text by layers, in the manner of the style checkers
 
@@ -178,13 +125,21 @@ class HighlightedText:
 
     Methods:
         to_html: Getting the HTML markup of the highlighted text
+        css: Getting the styles of the layers
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc
         SourceError: If the source has no words
-        ParameterError: If a layer is unknown or not allowed by the source
-        ParameterError: If a threshold of a layer is out of its range
+        SourceTypeError: If the stopwords or the clichés are not a list or a set of strings
+        ParameterError: If a layer is unknown or not allowed by the source, or a
+            threshold of a layer is out of its range
     """
+
+    layers_desc = HIGHLIGHT_LAYERS_DESC
+    default_layers = HIGHLIGHT_DEFAULT_LAYERS
+    layer_annotations = HIGHLIGHT_LAYER_ANNOTATIONS
+    layer_styles = HIGHLIGHT_LAYER_STYLES
+    css_prefix = "ests"
 
     def __init__(
         self,
@@ -204,124 +159,62 @@ class HighlightedText:
             raise ParameterError(
                 "The number of syllables of a complex word must be greater than 0"
             )
-        try:
-            threshold_ok = 0 < alliteration_threshold <= 1
-        except TypeError:
-            threshold_ok = False
-        if not threshold_ok:
+        check_number(alliteration_threshold, "threshold of the alliteration")
+        if not 0 < alliteration_threshold <= 1:
             raise ParameterError(
                 "The threshold of the alliteration must lie in the interval (0, 1]"
             )
         if stopwords is not None:
-            check_words(stopwords, "stopwords")
+            check_words(stopwords, "stopwords", ordered=False)
             stopwords = tuple(stopwords)
         if cliches is not None:
-            check_words(cliches, "clichés")
+            check_words(cliches, "clichés", ordered=False)
             cliches = tuple(cliches)
-        tagged = False
-        doc = None
-        if isinstance(source, Doc):
-            self.text = source.text
-            tagged = source.has_annotation("POS") and source.has_annotation("LEMMA")
-            words = get_doc_words(source, tagged)
-            sents = (
-                get_doc_sents(source)
-                if source.has_annotation("SENT_START")
-                else get_text_sents(self.text, words)
-            )
-            parsed = source.has_annotation("DEP") and source.has_annotation("LEMMA")
-            doc = source if parsed else None
-        elif isinstance(source, str):
-            self.text = source
-            words = get_text_words(source)
-            sents = get_text_sents(source, words)
-        else:
-            raise SourceTypeError("The data source is set incorrectly")
-        if not words:
-            raise SourceError("The data source has no words")
-        available = [
-            layer
-            for layer in HIGHLIGHT_LAYERS_DESC
-            if not (layer in HIGHLIGHT_SYNTAX_LAYERS and doc is None)
-            and not (layer in HIGHLIGHT_TAGGED_LAYERS and not tagged)
-        ]
-        self.layers = select_layers(layers, available)
+        self._long_sent_word_factor = long_sent_word_factor
+        self._complex_syl_factor = complex_syl_factor
+        self._stopwords = stopwords
+        self._cliches = cliches
+        self._alliteration_threshold = alliteration_threshold
+        super().__init__(source, layers)
 
-        finders: dict[str, Callable[[], list[Highlight]]] = {
-            "long_sents": lambda: find_long_sents(sents, long_sent_word_factor),
-            "complex_words": lambda: find_complex_words(words, complex_syl_factor),
-            "rare_words": lambda: find_rare_words(words),
-            "stopwords": lambda: find_stopwords(words, stopwords),
-            "verbal_nouns": lambda: find_verbal_nouns(words),
-            "compound_prepositions": lambda: find_compound_prepositions(words),
-            "cliches": lambda: find_cliches(words, cliches),
-            "parentheticals": lambda: find_parentheticals(words),
-            "connectors": lambda: find_connector_highlights(words, sents),
-            "alliteration": lambda: find_alliteration(words, alliteration_threshold, sents),
-            "passive": lambda: find_passive(doc) if doc else [],
-            "participle_clauses": lambda: find_participle_clauses(doc) if doc else [],
-            "gerund_clauses": lambda: find_gerund_clauses(doc) if doc else [],
-            "de_chains": lambda: find_de_chains(doc) if doc else [],
-            "split_predicates": lambda: find_split_predicate_highlights(doc) if doc else [],
-        }
-        highlights = [h for layer in self.layers for h in finders[layer]()]
-        self.highlights = tuple(sorted(highlights, key=lambda h: (h.start, -h.end)))
+    def iter_words(self, text: str) -> Iterator[tuple[int, int, str]]:
+        """The words of a string by iter_text_words, without the punctuation"""
+        return iter_text_words(text)
 
-    @property
-    def counts(self) -> dict[str, int]:
-        return {
-            layer: sum(1 for h in self.highlights if h.layer == layer) for layer in self.layers
-        }
+    def iter_sents(self, text: str) -> Iterator[tuple[int, int, str]]:
+        """The sentences of a string by iter_text_sents"""
+        return iter_text_sents(text)
 
-    def to_html(self, legend: bool = True, css: bool = True) -> str:
+    def find(
+        self, layer: str, words: Sequence[Word], sents: Sequence[Sent], doc: Doc | None
+    ) -> list[Highlight]:
         """
-        Getting the HTML markup of the highlighted text
-
-        Description:
-            A div of the class ests-highlight with the legend and the text, where
-            a highlighted segment is a span of the classes ests-hl and
-            ests-hl-<layer> with the notes in its title. Line breaks become
-            character references, so the markup can go into Markdown with no
-            blank line inside the block
+        Finding the fragments of a layer
 
         Arguments:
-            legend (bool): Add the legend with the counts of the fragments
-            css (bool): Add the styles of the layers
+            layer (str): Layer of the highlighting
+            words (list[Word]): Words of the text with their positions
+            sents (list[Sent]): Sentences of the text with their positions
+            doc (Doc): Doc object of the source; None for a string
 
         Returns:
-            str: HTML markup
+            list[Highlight]: Fragments of the layer
         """
-        parts = ['<div class="ests-highlight">']
-        if css:
-            parts.append(f"<style>{CSS}</style>")
-        if legend:
-            items = "".join(
-                f'<span><span class="ests-hl ests-hl-{layer}">{HIGHLIGHT_LAYERS_DESC[layer]}</span>'
-                f'<span class="ests-highlight-count">{count}</span></span>'
-                for layer, count in self.counts.items()
-            )
-            parts.append(f'<div class="ests-highlight-legend">{items}</div>')
-        parts.append(f'<div class="ests-highlight-text">{self._render_text()}</div></div>')
-        return "".join(parts)
-
-    def _repr_html_(self) -> str:
-        return self.to_html()
-
-    def __repr__(self) -> str:
-        return f"HighlightedText(counts={self.counts})"
-
-    def _render_text(self) -> str:
-        chunks = []
-        for start, end, active in split_segments(len(self.text), self.highlights):
-            chunk = LINE_BREAK.sub("&#10;", html.escape(self.text[start:end]))
-            if active:
-                active.sort(key=lambda h: self.layers.index(h.layer))
-                classes = " ".join(f"ests-hl-{h.layer}" for h in active)
-                notes = "; ".join(dict.fromkeys(h.note for h in active if h.note))
-                title = f' title="{html.escape(notes)}"' if notes else ""
-                chunk = f'<span class="ests-hl {classes}"{title}>{chunk}</span>'
-            chunks.append(chunk)
-        return "".join(chunks)
+        if layer in SYNTAX_FINDERS:
+            return SYNTAX_FINDERS[layer](doc) if doc is not None else []
+        finders: dict[str, Callable[[], list[Highlight]]] = {
+            "long_sents": lambda: find_long_sents(sents, self._long_sent_word_factor),
+            "complex_words": lambda: find_complex_words(words, self._complex_syl_factor),
+            "rare_words": lambda: find_rare_words(words),
+            "stopwords": lambda: find_stopwords(words, self._stopwords),
+            "verbal_nouns": lambda: find_verbal_nouns(words),
+            "compound_prepositions": lambda: find_compound_prepositions(words),
+            "cliches": lambda: find_cliches(words, self._cliches),
+            "parentheticals": lambda: find_parentheticals(words),
+            "connectors": lambda: find_connector_highlights(words, sents),
+            "alliteration": lambda: find_alliteration(words, self._alliteration_threshold, sents),
+        }
+        return finders[layer]()
 
 
 def highlight(
@@ -366,138 +259,6 @@ def highlight(
         cliches=cliches,
         alliteration_threshold=alliteration_threshold,
     )
-
-
-def select_layers(layers: Sequence[str] | str | None, available: Sequence[str]) -> tuple[str, ...]:
-    """
-    Selecting the layers of the highlighting
-
-    Arguments:
-        layers (list[str]|str): Layers asked for; the layers of
-            HIGHLIGHT_DEFAULT_LAYERS among the available ones if not set, "all" -
-            every available layer
-        available (list[str]): Layers the data source allows
-
-    Returns:
-        tuple[str]: Layers in the order of drawing
-
-    Raises:
-        ParameterError: If a layer is unknown or not allowed by the source, or
-            the layers are not a list of names
-    """
-    if layers is None:
-        return tuple(layer for layer in HIGHLIGHT_DEFAULT_LAYERS if layer in available)
-    if layers == "all":
-        return tuple(available)
-    if isinstance(layers, str):
-        layers = [layers]
-    try:
-        layers = list(layers)
-    except TypeError as e:
-        raise ParameterError("The layers must be a list of names or a string") from e
-    for layer in layers:
-        if layer not in HIGHLIGHT_LAYERS_DESC:
-            raise ParameterError(f"Unknown layer of the highlighting: {layer}")
-        if layer not in available:
-            requirement = (
-                "a Doc with the parts of speech and the lemmas"
-                if layer in HIGHLIGHT_TAGGED_LAYERS
-                else "a Doc with a dependency parse and the lemmas"
-            )
-            raise ParameterError(f"The layer {layer} needs {requirement}")
-    return tuple(layer for layer in HIGHLIGHT_LAYERS_DESC if layer in layers)
-
-
-def get_text_words(text: str) -> list[Word]:
-    """
-    Extracting the words of a string with their positions
-
-    Description:
-        The words of iter_text_words, without the punctuation
-
-    Arguments:
-        text (str): Text string
-
-    Returns:
-        list[Word]: Words with their positions
-    """
-    return [Word(start, end, text) for start, end, text in iter_text_words(text)]
-
-
-def get_text_sents(text: str, words: Sequence[Word]) -> list[Sent]:
-    """
-    Extracting the sentences of a string with their positions and numbers of words
-
-    Description:
-        The sentences of iter_text_sents; a word belongs to the sentence of its
-        first character
-
-    Arguments:
-        text (str): Text string
-        words (list[Word]): Words of the text with their positions
-
-    Returns:
-        list[Sent]: Sentences with their positions and numbers of words
-    """
-    sents = []
-    index = 0
-    for start, end, _ in iter_text_sents(text):
-        n_words = 0
-        while index < len(words) and words[index].start < end:
-            n_words += words[index].start >= start
-            index += 1
-        sents.append(Sent(start, end, n_words))
-    return sents
-
-
-def get_doc_words(doc: Doc, tagged: bool) -> list[Word]:
-    """
-    Extracting the words of a Doc object with their positions
-
-    Description:
-        The words of iter_doc_tokens
-
-    Arguments:
-        doc (Doc): Doc object
-        tagged (bool): Whether the Doc has the parts of speech and the lemmas
-
-    Returns:
-        list[Word]: Words with their positions
-    """
-    return [
-        Word(
-            token.idx,
-            token.idx + len(token),
-            token.text,
-            token.pos_ if tagged else None,
-            token.lemma_ if tagged else None,
-        )
-        for token in iter_doc_tokens(doc)
-    ]
-
-
-def get_doc_sents(doc: Doc) -> list[Sent]:
-    """
-    Extracting the sentences of a Doc object with their positions and numbers of words
-
-    Description:
-        The whitespace tokens at the edges of a sentence are left out of its
-        positions
-
-    Arguments:
-        doc (Doc): Doc object with the sentence boundaries
-
-    Returns:
-        list[Sent]: Sentences with their positions and numbers of words
-    """
-    sents = []
-    for sent in doc.sents:
-        tokens = [token for token in sent if not token.is_space]
-        if tokens:
-            start = min(token.idx for token in tokens)
-            end = max(token.idx + len(token) for token in tokens)
-            sents.append(Sent(start, end, sum(1 for _ in iter_doc_tokens(sent))))
-    return sents
 
 
 def plural(n: int, noun: str) -> str:
@@ -732,32 +493,6 @@ def find_connector_highlights(words: Sequence[Word], sents: Sequence[Sent]) -> l
     return highlights
 
 
-def group_words_by_sents(words: Sequence[Word], sents: Sequence[Sent]) -> list[list[Word]]:
-    """
-    Grouping the words by sentences
-
-    Description:
-        The words and the sentences must be ordered by position; a word belongs
-        to the sentence of its first character, the words out of the sentences
-        are skipped
-
-    Arguments:
-        words (list[Word]): Words with their positions
-        sents (list[Sent]): Sentences with their positions
-
-    Returns:
-        list[list[Word]]: Words of every sentence
-    """
-    groups: list[list[Word]] = [[] for _ in sents]
-    index = 0
-    for word in words:
-        while index < len(sents) and sents[index].end <= word.start:
-            index += 1
-        if index < len(sents) and sents[index].start <= word.start:
-            groups[index].append(word)
-    return groups
-
-
 def get_stem_sounds(word: str) -> tuple[str, ...]:
     """
     Getting the sounds of the stem of a word form
@@ -870,23 +605,6 @@ def find_alliteration(
                 Highlight(group[start].start, group[stop - 1].end, "alliteration", note)
             )
     return highlights
-
-
-def tokens_span(tokens: Iterable[Token]) -> tuple[int, int]:
-    """
-    Computing the positions of the fragment of a text that covers some words
-
-    Description:
-        The punctuation marks and the whitespace tokens are left out
-
-    Arguments:
-        tokens (Doc|Span|list[Token]): Sequence of tokens
-
-    Returns:
-        tuple[int, int]: Position of the first character and position after the last one
-    """
-    words = get_words(tokens)
-    return min(token.idx for token in words), max(token.idx + len(token) for token in words)
 
 
 def find_passive(doc: Doc) -> list[Highlight]:
@@ -1025,32 +743,11 @@ def find_de_chains(doc: Doc) -> list[Highlight]:
     return highlights
 
 
-def split_segments(
-    length: int, highlights: Sequence[Highlight]
-) -> Iterator[tuple[int, int, list[Highlight]]]:
-    """
-    Splitting a text into segments with the same set of fragments
-
-    Description:
-        The bounds of the segments are the starts and the ends of all the
-        fragments; overlapping and nested fragments of different layers give
-        segments with several layers
-
-    Arguments:
-        length (int): Length of the text
-        highlights (list[Highlight]): Fragments sorted by their start
-
-    Returns:
-        iterator[tuple[int, int, list[Highlight]]]: Positions of a segment and
-            the fragments that cover it
-    """
-    bounds = sorted({0, length, *(h.start for h in highlights), *(h.end for h in highlights)})
-    pending = sorted(highlights, key=lambda h: h.start)
-    active: list[Highlight] = []
-    index = 0
-    for start, end in pairwise(bounds):
-        while index < len(pending) and pending[index].start <= start:
-            active.append(pending[index])
-            index += 1
-        active = [h for h in active if h.end > start]
-        yield start, end, list(active)
+# Finders of the layers read from the dependency tree of a Doc
+SYNTAX_FINDERS: dict[str, Callable[[Doc], list[Highlight]]] = {
+    "passive": find_passive,
+    "participle_clauses": find_participle_clauses,
+    "gerund_clauses": find_gerund_clauses,
+    "de_chains": find_de_chains,
+    "split_predicates": find_split_predicate_highlights,
+}

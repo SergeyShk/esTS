@@ -1,9 +1,5 @@
 import os
-import string
 from pathlib import Path
-
-# Punctuation marks and symbols, with the Spanish inverted marks, dashes and quotes
-PUNCTUATIONS = string.punctuation + "¿¡—–…«»“”‘’·"
 
 # Characters besides an upper-case letter or a digit that may open a sentence
 SENTENCE_OPENERS = "¿¡«“\"'([—–―-"
@@ -191,51 +187,7 @@ NON_ADVERBS_MENTE = frozenset(
     }
 )
 
-# Whitespace counted as spaces by the basic statistics
-SPACES = [" ", "\t"]
-
-# Minimum syllables of a complex word, as in the Spanish readability formulas,
-# and minimum letters of a long word, as in LIX and RIX
-COMPLEX_SYL_FACTOR = 3
-LONG_WORD_LETTER_FACTOR = 7
-
-# Types of punctuation marks; ¿ and ¡ count as question and exclamation marks
-PUNCTUATION_TYPES = {
-    "comma": "Commas",
-    "period": "Periods",
-    "question": "Question marks",
-    "exclamation": "Exclamation marks",
-    "ellipsis": "Ellipses",
-    "colon": "Colons",
-    "semicolon": "Semicolons",
-    "dash": "Dashes",
-    "hyphen": "Hyphens",
-    "angle_quotes": "Guillemets",
-    "straight_quotes": "Straight and curly quotes",
-    "parentheses": "Parentheses",
-    "other": "Other marks",
-}
-
-BASIC_STATS_DESC = {
-    "n_sents": "Sentences",
-    "n_words": "Words",
-    "n_unique_words": "Unique words",
-    "n_long_words": "Long words",
-    "n_complex_words": "Complex words",
-    "n_simple_words": "Simple words",
-    "n_monosyllable_words": "Monosyllabic words",
-    "n_polysyllable_words": "Polysyllabic words",
-    "n_chars": "Characters",
-    "n_letters": "Letters",
-    "n_spaces": "Spaces",
-    "n_syllables": "Syllables",
-    "n_punctuations": "Punctuation marks",
-}
-
-# Readability: thresholds of the formulas that differ from the basic statistics
-LIX_LONG_WORD_LETTER_FACTOR = 7
-SMOG_COMPLEX_SYL_FACTOR = 3
-
+# Readability: the Spanish formulas and the grade formulas of the consensus grade
 READABILITY_STATS_DESC = {
     "flesch_reading_easy": "Flesch reading ease (Szigriszt-Pazos)",
     "gutierrez_polini_index": "Gutiérrez de Polini comprehensibility",
@@ -344,6 +296,9 @@ DEFAULT_DATA_DIR = (
     if os.environ.get("ESTS_DATA_DIR")
     else Path(__file__).parent.parent.resolve() / "ests_data"
 )
+
+# User-Agent header of the downloads of the datasets
+USER_AGENT = "esTS"
 
 # Morphological features counted by the statistics, by the name of the statistic
 MORPHOLOGY_FEATURES = {
@@ -1091,12 +1046,38 @@ HIGHLIGHT_DEFAULT_LAYERS = (
     "split_predicates",
     "cliches",
 )
-# Layers read from the dependency tree, which a Doc with a parse gives
-HIGHLIGHT_SYNTAX_LAYERS = frozenset(
-    {"passive", "participle_clauses", "gerund_clauses", "de_chains", "split_predicates"}
-)
-# Layers read from the parts of speech and the lemmas of a Doc
-HIGHLIGHT_TAGGED_LAYERS = frozenset({"verbal_nouns"})
+# Annotations of a Doc a layer needs: the syntactic layers read the dependency tree, the
+# verbal nouns the parts of speech; the other layers are available for a string too
+HIGHLIGHT_LAYER_ANNOTATIONS = {
+    "passive": ("DEP", "LEMMA"),
+    "participle_clauses": ("DEP", "LEMMA"),
+    "gerund_clauses": ("DEP", "LEMMA"),
+    "de_chains": ("DEP", "LEMMA"),
+    "split_predicates": ("DEP", "LEMMA"),
+    "verbal_nouns": ("POS", "LEMMA"),
+}
+# CSS declarations of the layers; a later one wins where the backgrounds of layers overlap
+HIGHLIGHT_LAYER_STYLES = {
+    "long_sents": "background: #fef9c3;",
+    "stopwords": "background: #bae6fd;",
+    "complex_words": "background: #fed7aa;",
+    "rare_words": "background: #e5e7eb;",
+    "passive": "background: #fecaca;",
+    "verbal_nouns": "background: #e9d5ff;",
+    "compound_prepositions": "background: #a7f3d0;",
+    "cliches": "background: #fbcfe8;",
+    "parentheticals": "background: #d9f99d;",
+    "participle_clauses": "border-bottom: 2px solid #7c3aed;",
+    "gerund_clauses": "border-bottom: 2px solid #0d9488;",
+    "de_chains": "border-bottom: 2px solid #b45309;",
+    "split_predicates": "border-bottom: 2px solid #dc2626;",
+    "connectors": "border-bottom: 2px dashed #2563eb;",
+    "alliteration": (
+        "text-decoration-line: underline; text-decoration-style: dotted; "
+        "text-decoration-color: #db2777; text-decoration-thickness: 2px; "
+        "text-underline-offset: 3px;"
+    ),
+}
 # Number of words from which a sentence is long, by the Spanish guides to plain language
 # (Comunidad de Madrid 2021, Gobierno and Legislatura de la Ciudad de Buenos Aires 2024)
 LONG_SENT_WORD_FACTOR = 30

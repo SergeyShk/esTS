@@ -49,9 +49,11 @@ wheels = [
 
 [[package]]
 name = "anyts"
-version = "0.1.0"
+version = "0.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
+    { name = "graphviz" },
+    { name = "matplotlib" },
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "numpy", version = "2.5.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "pandas" },
@@ -59,9 +61,9 @@ dependencies = [
     { name = "scipy", version = "1.18.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "spacy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6e/07/c8644870302a7f4ab3e458a9c3e5e93e162cf8af15f450ebb64c8165949a/anyts-0.1.0.tar.gz", hash = "sha256:f8168bc0fc94c04870611f5dc5892495ba5bef9d10239e54f85731015ccaad88", size = 47366, upload-time = "2026-09-27T16:22:19.361Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b5/6f/b2cafeaf2e05c58f2f877d0b8ce69d9e6a945ffdd9306dcb85062ba37f88/anyts-0.2.0.tar.gz", hash = "sha256:7684e9940846d771c630f64b927601a937f4398e7e44824fbc3080ece44427db", size = 95508, upload-time = "2026-09-28T21:25:40.707Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8d/0b/4de8bb873f248e66ebaadbf3c2fb23de768c101990ef871cfbbe87fe9163/anyts-0.1.0-py3-none-any.whl", hash = "sha256:a8665dd31d80edb8144cf4d535510d12354dcb7f0d33ab3444e33b06004ef1d1", size = 54090, upload-time = "2026-09-27T16:22:18.298Z" },
+    { url = "https://files.pythonhosted.org/packages/55/27/d93b2f7286e4bde9d3c9c47532b0176ce0d6d59842fac83aa20b61022d9e/anyts-0.2.0-py3-none-any.whl", hash = "sha256:dad8ab492751a3835b3af916d37b895988753abcdedbbfcb0676d66a894529d6", size = 111183, upload-time = "2026-09-28T21:25:39.373Z" },
 ]
 
 [[package]]
@@ -2153,7 +2155,7 @@ wheels = [
 
 [[package]]
 name = "pyests"
-version = "0.5.0"
+version = "0.6.0.dev1"
 source = { editable = "." }
 dependencies = [
     { name = "anyts" },
@@ -2200,7 +2202,7 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "anyts", specifier = ">=0.1,<0.2" },
+    { name = "anyts", specifier = ">=0.2,<0.3" },
     { name = "graphviz", specifier = ">=0.20.3" },
     { name = "matplotlib", specifier = ">=3.8" },
     { name = "numpy", specifier = ">=1.26" },

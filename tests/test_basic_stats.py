@@ -2,10 +2,10 @@ from math import isnan
 
 import pytest
 import spacy
+from anyts.constants import BASIC_STATS_DESC, PUNCTUATION_TYPES
 
 from ests import BasicStats
 from ests.basic_stats import count_punctuations, punctuation_profile
-from ests.constants import BASIC_STATS_DESC, PUNCTUATION_TYPES
 from ests.utils import get_nlp
 
 TEXT = (
