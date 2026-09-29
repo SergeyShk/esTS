@@ -7,44 +7,23 @@
 
 Plots for [stylometry](../corpus/stylometry.md): a dendrogram and the multidimensional scaling of the matrix of distances of [`delta`](../corpus/stylometry.md#delta), the principal components of the frequencies of the most frequent words and the Mendenhall curves of several texts. The functions take the axes `ax` and return `Axes`.
 
+The functions are those of the [anyTS](https://sergeyshk.github.io/anyTS/visualizers/stylometry/) core; the frequencies of the principal components come from [`frequency_table`](../corpus/stylometry.md#delta) and the curves from [`mendenhall_curve`](../corpus/stylometry.md#mendenhall). The default labels are the English ones of `VISUALIZER_LABELS` in `anyts.constants`; `labels` replaces any of them.
+
 ## Dendrogram { #dendrogram_plot }
 
-Hierarchical clustering by `scipy.cluster.hierarchy` over the matrix of distances between texts; Ward's method by default, as in [Evert et al. (2015)](https://aclanthology.org/W15-0709.pdf); the labels of the leaves are the names of the texts of the index of the matrix.
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `distances` | DataFrame | `-` | Symmetric matrix of distances with the names of the texts |
-| `method` | str | `ward` | Method of `scipy.cluster.hierarchy.linkage` to join the clusters |
-| `ax` | Axes | `None` | Axes for the plot |
+--8<-- "visualizers/stylometry.md:dendrogram_plot"
 
 ## Principal components { #pca_plot }
 
-Principal component analysis of the z-scores of the relative frequencies of the most frequent units ([`frequency_table`](../corpus/stylometry.md#delta), `z_scores`): the texts on the plane of the first two components with their names, the shares of the explained variance in the labels of the axes.
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `corpus` | dict[str, list[str]] | `-` | Units of the texts by the names of the texts |
-| `n_mfw` | int | `100` | Number of the most frequent units; `None` - all of them |
-| `culling` | float | `0.0` | Smallest share of the texts a unit occurs in |
-| `ax` | Axes | `None` | Axes for the plot |
+--8<-- "visualizers/stylometry.md:pca_plot"
 
 ## Multidimensional scaling { #mds_plot }
 
-Classical multidimensional scaling (Torgerson 1952) of any matrix of distances: the double centering of the matrix of squared distances and the two leading eigenvectors; the distances between the points approximate the distances of the matrix.
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `distances` | DataFrame | `-` | Symmetric matrix of distances with the names of the texts |
-| `ax` | Axes | `None` | Axes for the plot |
+--8<-- "visualizers/stylometry.md:mds_plot"
 
 ## Mendenhall curves { #mendenhall_plot }
 
-The shares of the words by length in characters ([`mendenhall_curve`](../corpus/stylometry.md#mendenhall)) of every text on one plot - a comparison of the profiles of authors. A curve runs over every length from one to the longest word of its text, and a length that no word has is drawn at zero.
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `corpus` | dict[str, list[str]] | `-` | Words of the texts by the names of the texts |
-| `ax` | Axes | `None` | Axes for the plot |
+--8<-- "visualizers/stylometry.md:mendenhall_plot"
 
 ## Usage example
 

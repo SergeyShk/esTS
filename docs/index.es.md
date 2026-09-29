@@ -98,7 +98,7 @@ Punctuation marks   |    2
     *   **demo** - la demo en Hugging Face Spaces (Gradio)
     *   **docs** - documentación del proyecto
     *   **ests**:
-        *   basic_stats.py - estadísticas básicas del texto
+        *   basic_stats.py - estadísticas básicas del texto del núcleo anyTS con las sílabas del español
         *   cohesion_stats.py - estadísticas de cohesión
         *   lexical_stats.py - estadísticas de complejidad léxica
         *   components.py - componentes de un pipeline de spaCy
@@ -109,7 +109,7 @@ Punctuation marks   |    2
         *   exceptions.py - excepciones de la biblioteca
         *   extractors.py - los extractores del núcleo anyTS con los tokenizadores del español
         *   morph_stats.py - estadísticas morfológicas
-        *   readability_stats.py - métricas de legibilidad
+        *   readability_stats.py - métricas de legibilidad: las fórmulas del español sobre las del núcleo anyTS
         *   style_stats.py - métricas de estilo
         *   phon_stats.py - fonoestadística
         *   syntax_stats.py - estadísticas sintácticas

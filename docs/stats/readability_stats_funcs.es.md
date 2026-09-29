@@ -5,9 +5,18 @@
 !!! info ""
     **ests.readability_stats.calc_flesch_reading_easy()**
 
-Cálculo de la facilidad de lectura de Flesch con coeficientes para el español. Cuanto mayor es el valor, más fácil es leer el texto; la escala va de 0 a 100.
+<!-- core: stats/readability_stats_funcs.md:calc_flesch_reading_easy 978f8ef -->
+Cálculo de la facilidad de lectura de Flesch (Flesch, 1948).
 
-Los coeficientes por defecto son los de la *fórmula de perspicuidad* de Szigriszt-Pazos (1993), que se lee en la escala INFLESZ de Barrio-Cantalejo et al. (2008):
+Cuanto mayor es el valor, más fácil es el texto; la escala va nominalmente de 0 a 100, aunque los textos más sencillos pasan de 100 y los más difíciles bajan de 0.
+
+Fórmula:
+
+$$
+c - a \cdot \frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}} - b \cdot \frac{\textrm{Número de sílabas}}{\textrm{Número de palabras}}
+$$
+
+Los coeficientes por defecto de esTS son los de la *fórmula de perspicuidad* de Szigriszt-Pazos (1993), que se lee en la escala INFLESZ de Barrio-Cantalejo et al. (2008):
 
 | Valor | Nivel | Tipo de texto |
 | :---: | :---: | :------------ |
@@ -18,12 +27,6 @@ Los coeficientes por defecto son los de la *fórmula de perspicuidad* de Szigris
 | `0-40` | muy difícil | textos científicos y técnicos |
 
 Los coeficientes de Fernández Huerta (1959) están disponibles con el [preajuste](readability_stats.md#presets) `classic`, con la corrección de Law (2011): el último término toma la longitud media de la oración.
-
-Fórmula:
-
-$$
-c-a\times\frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}}-b\times\frac{\textrm{Número de sílabas}}{\textrm{Número de palabras}}
-$$
 
 Parámetros:
 
@@ -89,7 +92,26 @@ Fuente: Crawford, A. N. Fórmula y gráfico para determinar la comprensibilidad 
 !!! info ""
     **ests.readability_stats.calc_mu_index()**
 
-Cálculo de la Legibilidad µ de Muñoz Baquedano y Muñoz Urra (2006), que mide la variabilidad de la longitud de las palabras: la media del número de letras por palabra dividida por su varianza. La varianza es la muestral, dividida por `n − 1` (la *cuasivarianza* de los autores), que reproduce el ejemplo resuelto de su manual. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (`nan`). Cuanto mayor es el valor, más fácil es el texto:
+<!-- core: stats/readability_stats_funcs.md:calc_mu_index cec1984 -->
+Cálculo de la Legibilidad µ (Muñoz Baquedano y Muñoz Urra, 2006).
+
+La media del número de letras por palabra dividida por su varianza muestral, por 100; no hay coeficientes que ajustar, y cuanto mayor es el valor, más fácil es el texto. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (`nan`).
+
+Fórmula:
+
+$$
+100 \cdot \frac{\bar{x}}{s^2}, \quad s^2 = \frac{\sum (x_i - \bar{x})^2}{n - 1}
+$$
+
+donde $x_i$ es el número de letras de una palabra y $n$ el número de palabras.
+
+Parámetros:
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------: | :--: | :---------: | :---------: |
+| `c_letters` | dict[int, int] | `-` | Distribución de las palabras por número de letras |
+
+La varianza dividida por `n − 1` es la *cuasivarianza* de los autores, que reproduce el ejemplo resuelto de su manual; la distribución es `BasicStats.c_letters`. Las bandas de los autores:
 
 | Valor | Nivel |
 | :---: | :---: |
@@ -101,18 +123,6 @@ Cálculo de la Legibilidad µ de Muñoz Baquedano y Muñoz Urra (2006), que mide
 | `31-50` | difícil |
 | `0-30` | muy difícil |
 
-Fórmula:
-
-$$
-\frac{\bar{x}}{s^2}\times100
-$$
-
-Parámetros:
-
-| Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `c_letters` | dict[int, int] | `-` | Distribución de las palabras por número de letras (`BasicStats.c_letters`) |
-
 Fuente: Muñoz Baquedano, M. Legibilidad y variabilidad de los textos. *Boletín de Investigación Educacional*, 21(2), 2006; el programa y el manual en [legibilidadmu.cl](https://www.legibilidadmu.cl/).
 
 ## Índice SMOG { #calc_smog_index }
@@ -120,22 +130,28 @@ Fuente: Muñoz Baquedano, M. Legibilidad y variabilidad de los textos. *Boletín
 !!! info ""
     **ests.readability_stats.calc_smog_index()**
 
-Cálculo del índice SMOG de McLaughlin (1969), donde las palabras polisílabas son las de tres o más sílabas. Ajustado para el inglés; para el español es la entrada de la fórmula SOL.
+<!-- core: stats/readability_stats_funcs.md:calc_smog_index b721fe1 -->
+Cálculo del índice SMOG (McLaughlin, 1969).
+
+Los años de escolaridad necesarios para leer el texto a partir de las palabras polisílabas por oración; cuanto mayor es el valor, más difícil es el texto. En la fórmula original las palabras polisílabas tienen tres o más sílabas y `b` lleva su número a una muestra de 30 oraciones.
 
 Fórmula:
 
 $$
-a\times\sqrt{30\times\frac{\textrm{Número de polisílabas}}{\textrm{Número de oraciones}}}+b
+a \cdot \sqrt{b \cdot \frac{\textrm{Número de palabras polisílabas}}{\textrm{Número de oraciones}}} + c
 $$
+
+Ajustado para el inglés; para el español es la entrada de la [fórmula SOL](#calc_sol_grade), y `ReadabilityStats` pasa las palabras de tres o más sílabas.
 
 Parámetros:
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
-| `n_complex` | int | `-` | Número de palabras de tres o más sílabas |
+| `n_complex` | int | `-` | Número de palabras polisílabas |
 | `n_sents` | int | `-` | Número de oraciones |
-| `a` | float | `1.043` | Coeficiente a |
-| `b` | float | `3.1291` | Coeficiente b |
+| `a` | float | `1.043` | Coeficiente a, ante la raíz cuadrada |
+| `b` | float | `30` | Coeficiente b, el número de oraciones de la muestra |
+| `c` | float | `3.1291` | Coeficiente c, la constante |
 
 ## Grado SOL { #calc_sol_grade }
 
@@ -160,22 +176,23 @@ Fuente: Contreras, A., García-Alonso, R., Echenique, M., Daye-Contreras, F. The
 !!! info ""
     **ests.readability_stats.calc_lix()**
 
-Cálculo del [índice de legibilidad LIX](https://en.wikipedia.org/wiki/Lix_(readability_test)) de Björnsson (1968), que no depende de la lengua. Cuanto mayor es el valor, más difícil es el texto:
+<!-- core: stats/readability_stats_funcs.md:calc_lix 65d7ed6 -->
+Cálculo del índice de legibilidad LIX (Björnsson, 1968).
 
-| Valor | Nivel de dificultad |
-| :---: | :------------------ |
+La longitud media de la oración más el porcentaje de palabras largas, las de más de seis letras; no hay coeficientes que ajustar. Cuanto mayor es el valor, más difícil es el texto:
+
+| Valor | Texto |
+| :---: | :---- |
 | `0-30` | textos muy fáciles, libros infantiles |
 | `30-40` | textos fáciles, narrativa, artículos de periódico |
 | `40-50` | textos de dificultad media, artículos de revista |
 | `50-60` | textos difíciles, divulgación científica, textos oficiales |
 | `60-100` | textos muy difíciles, leyes y lenguaje burocrático |
 
-Una palabra larga tiene más de seis letras, así que `ReadabilityStats` pasa el número de palabras de siete o más letras.
-
 Fórmula:
 
 $$
-\frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}}+\frac{100\times\textrm{Número de palabras largas}}{\textrm{Número de palabras}}
+\frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}} + \frac{100 \cdot \textrm{Número de palabras largas}}{\textrm{Número de palabras}}
 $$
 
 Parámetros:
@@ -191,7 +208,10 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.calc_rix()**
 
-Cálculo del índice de legibilidad RIX (Anderson, 1983), el compañero simplificado de LIX: palabras largas por oración. Cuanto mayor es el valor, más difícil es el texto:
+<!-- core: stats/readability_stats_funcs.md:calc_rix ab7c550 -->
+Cálculo del índice de legibilidad RIX (Anderson, 1983).
+
+Las palabras largas, de más de seis letras, por oración; no hay coeficientes que ajustar. Cuanto mayor es el valor, más difícil es el texto:
 
 | Valor | Curso |
 | :---: | :---: |
@@ -208,6 +228,12 @@ Cálculo del índice de legibilidad RIX (Anderson, 1983), el compañero simplifi
 | `5.3-6.2` | 11 |
 | `6.2-7.2` | 12 |
 | `> 7.2` | universidad |
+
+Fórmula:
+
+$$
+\frac{\textrm{Número de palabras largas}}{\textrm{Número de oraciones}}
+$$
 
 Parámetros:
 
@@ -285,7 +311,7 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.calc_consensus_grade()**
 
-Cálculo del grado de consenso: la mediana de los valores de las fórmulas de grado, cada uno redondeado con el medio hacia arriba. La facilidad de lectura se convierte con `flesch_reading_easy_to_grade` según la escala del preajuste y se añade sin redondear.
+Cálculo del grado de consenso: la mediana de los valores de las fórmulas de grado, cada uno redondeado con el medio hacia arriba. La facilidad de lectura se convierte con `flesch_reading_easy_to_grade` según la escala del preajuste y se añade sin redondear. La ausencia de valores, un grado que no es un número finito y un preajuste desconocido lanzan `ParameterError`.
 
 Parámetros:
 
@@ -309,7 +335,7 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.grade_to_age()**
 
-La etapa del sistema educativo español y la edad del lector según el valor de una fórmula de grado (véase la tabla de la [interpretación](readability_stats.md#interpretation)). El valor se redondea con el medio hacia arriba, los valores por debajo de 1 corresponden a los cursos 1-3.
+La etapa del sistema educativo español y la edad del lector según el valor de una fórmula de grado (véase la tabla de la [interpretación](readability_stats.md#interpretation)). El valor se redondea con el medio hacia arriba, los valores por debajo de 1 corresponden a los cursos 1-3; un grado que no es un número finito lanza `ParameterError`.
 
 Parámetros:
 
@@ -331,7 +357,10 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.calc_reading_time()**
 
-Cálculo del tiempo de lectura de un texto en minutos. La velocidad por defecto es la de lectura silenciosa de los adultos en español, 278 palabras por minuto, según el metaanálisis de Brysbaert (2019). Las normas por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) están en `ests.constants.READING_SPEED_NORMS` como pares (en voz alta, en silencio):
+<!-- core: stats/readability_stats_funcs.md:calc_reading_time 725bd9c -->
+Cálculo del tiempo de lectura de un texto en minutos: el número de palabras dividido por la velocidad de lectura; una velocidad que no es un número positivo lanza `ParameterError`.
+
+La velocidad por defecto es la de lectura silenciosa de los adultos en español, 278 palabras por minuto, según el metaanálisis de Brysbaert (2019). Las normas por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) están en `ests.constants.READING_SPEED_NORMS` como pares (en voz alta, en silencio):
 
 | Norma | En voz alta | En silencio |
 | :---: | :---------: | :---------: |
@@ -353,6 +382,6 @@ Parámetros:
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `n_words` | int | `-` | Número de palabras |
-| `wpm` | int | `278` | Velocidad de lectura, palabras por minuto |
+| `wpm` | float | `278` | Velocidad de lectura, palabras por minuto |
 
 Fuentes: Brysbaert, M. How many words do we read per minute? A review and meta-analysis of reading rate. *Journal of Memory and Language*, 109, 2019. Ripoll, J. C., Tapia, M. M., Aguado, G. Velocidad lectora en alumnado hispanohablante: un metaanálisis. *Revista de Psicodidáctica*, 25(2), 2020.

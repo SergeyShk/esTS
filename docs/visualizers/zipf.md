@@ -5,26 +5,17 @@
 
 ## Description
 
-Plotting [Zipf's law](https://en.wikipedia.org/wiki/Zipf%27s_law) from a counter of the frequencies of words.
+--8<-- "visualizers/zipf.md:zipf"
 
-!!! quote "Definition"
-
-    Zipf's law (the rank-frequency law) is an empirical regularity of the distribution of the frequencies of words in a natural language: if all the words of a language, or of a long enough text, are ordered by descending frequency, the frequency of the n-th word of the list is roughly inversely proportional to its number n, the rank of the word. The second most frequent word occurs about half as often as the first, the third a third as often, and so on.
+The functions are those of the [anyTS](https://sergeyshk.github.io/anyTS/visualizers/zipf/) core. The default labels are the English ones of `VISUALIZER_LABELS` in `anyts.constants`; `labels` replaces any of them, for instance `labels={"title": "Ley de Zipf"}`.
 
 ## Parameters
 
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `counter` | Counter | `-` | Counter of the frequencies of words |
-| `num_words` | int | `None` | Number of the most frequent words |
-| `num_labels` | int | `10` | Number of the words labelled on the plot |
-| `log` | bool | `True` | Use a logarithmic scale |
-| `show_theory` | bool | `False` | Plot the theoretical Zipf's law |
-| `alpha` | float | `1.5` | Exponent α of the theoretical Zipf's law, greater than zero |
-| `show_fit` | bool | `False` | Plot the Zipf-Mandelbrot fit $f(r) = C / (r + q)^s$ of [`fit_zipf_mandelbrot`](../stats/diversity_stats_funcs.md#fit_zipf_mandelbrot) |
-| `ax` | Axes | `None` | Axes of matplotlib for the plot; if not given, a new figure is created |
+--8<-- "visualizers/zipf.md:zipf-parameters"
 
-The function returns the `Axes` with the plot; a `num_words` greater than the number of word types does not extend the curves beyond the data, an empty counter raises `SourceError`, and a `num_words` below one raises `ParameterError`. `zipf_theory(size, num_ranks, alpha, ax)` plots the theoretical curve alone, $f(r) = size \cdot r^{-\alpha}$ for the ranks from 1 to `num_ranks`.
+The Zipf-Mandelbrot fit is described in [`fit_zipf_mandelbrot`](../stats/diversity_stats_funcs.md#fit_zipf_mandelbrot).
+
+--8<-- "visualizers/zipf.md:zipf_theory"
 
 ## Usage example
 

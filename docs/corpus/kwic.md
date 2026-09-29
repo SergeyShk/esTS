@@ -5,39 +5,25 @@
 
 ## Description
 
-A KWIC concordance (keyword in context) - every occurrence of a word or a phrase with its context on the left and on the right.
+--8<-- "corpus/kwic.md:kwic"
 
-The occurrences are looked for among the words of the text: by the word form ignoring case, respecting it (`ignore_case=False`) or by the lemma (`by_lemma=True`: `gatos` is found by `gato`, a phrase is given by lemmas - `mirar a el pájaro` - or as it is written, since every word of it is lemmatized). The text and the keyword are split into words the same way, by the tokenizer of the blank Spanish pipeline, so `EE. UU.` is one word in both, and punctuation and symbols are words of neither: `¿Dónde` finds `Dónde`, `20 €` finds `20`. Accents are part of the word form: `solo` and `sólo` are two forms.
+## Language hooks
 
-By lemma, the keyword is lemmatized by simplemma, and a word of the text is found by its lemma of simplemma and, in a `Doc` that carries lemmas, by the lemma of the model as well. In `Mi amigo vino con una botella de vino` the model gives `venir` to the verb, so `venir` finds the verb, where simplemma, which sees no context, would find nothing; `vino` finds both, since simplemma reads the verb as `vino`.
+The function calls the `kwic` of the [anyTS](https://sergeyshk.github.io/anyTS/corpus/kwic/) core with the hooks of Spanish. The text and the keyword are split into words the same way, by the tokenizer of the blank Spanish pipeline, so `EE. UU.` is one word in both, and punctuation and symbols are words of neither: `¿Dónde` finds `Dónde`, `20 €` finds `20`. The word forms and the lemmas are lower-cased; accents are part of the word form: `solo` and `sólo` are two forms.
 
-The context is `window` words on each side as they are written in the text, with the punctuation between them; whitespace collapses into one space, and occurrences do not overlap.
-
-`format_kwic` aligns the lines on the keyword: the left context is cut on the left and aligned to the right, the right one is cut on the right; `print_kwic` prints the result.
+By lemma, the keyword is lemmatized by simplemma, so a phrase is given by lemmas - `mirar a el pájaro` - or as it is written, and a word of the text is found by its lemma of simplemma and, in a `Doc` that carries lemmas, by the lemma of the model as well: `gatos` is found by `gato`. In `Mi amigo vino con una botella de vino` the model gives `venir` to the verb, so `venir` finds the verb, where simplemma, which sees no context, would find nothing; `vino` finds both, since simplemma reads the verb as `vino`.
 
 ## Parameters
 
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `source` | str/Doc | `-` | Text or Doc object |
-| `keyword` | str | `-` | Word or phrase (words separated by spaces) |
-| `window` | int | `5` | Number of words of context on each side |
-| `by_lemma` | bool | `False` | Compare lemmas instead of word forms |
-| `ignore_case` | bool | `True` | Ignore case when comparing word forms |
+--8<-- "corpus/kwic.md:kwic-parameters"
 
-`format_kwic(concordances, width=40)` and `print_kwic(concordances, width=40)`: `width` is the width of a context in characters, at least one; line breaks inside the keyword phrase are replaced with spaces.
+--8<-- "corpus/kwic.md:format_kwic"
+
+--8<-- "corpus/kwic.md:print_kwic"
 
 ## Result
 
-A list of `Concordance` named tuples in the order of the text.
-
-| Field | Type | Description |
-| :---: | :--: | :---------- |
-| `start` | int | Position of the first character of the occurrence in the text |
-| `end` | int | Position after the last character of the occurrence |
-| `left` | str | Context on the left |
-| `keyword` | str | Occurrence as written in the text |
-| `right` | str | Context on the right |
+--8<-- "corpus/kwic.md:Concordance"
 
 ## Example
 

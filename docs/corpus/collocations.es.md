@@ -5,10 +5,10 @@
 
 ## Descripción
 
-<!-- core: corpus/collocations.md:collocations d3372b1 -->
+<!-- core: corpus/collocations.md:collocations 90cd7f5 -->
 Extracción de colocaciones: pares de palabras que aparecen juntas más a menudo de lo que daría la independencia - expresiones fijas, terminología, la combinatoria de una palabra. Las medidas de asociación son las de [Sketch Engine](https://www.sketchengine.eu/wp-content/uploads/ske-statistics.pdf) y de [`nltk.metrics.association`](https://www.nltk.org/api/nltk.metrics.association.html).
 
-Los pares de palabras son ordenados, como en NLTK: la palabra de la derecha aparece a no más de `window` palabras después de la de la izquierda, y cada par de posiciones se cuenta una vez; `window=1` da bigramas. Dentro de la medida la frecuencia del par se divide por el tamaño de la ventana (Church y Hanks 1990, como en NLTK), para que la frecuencia esperada no dependa de la ventana y Dice y la sensibilidad mínima no superen uno; el campo `freq_pair` guarda la frecuencia sin dividir. Con `window > 1` la escala de las medidas de Dice se desplaza por ello: un par siempre contiguo recibe un logDice de $14 - \log_2 window$ (13 con una ventana de 2) y no 14 como en Sketch Engine, que usa la coocurrencia sin dividir. El parámetro `node` conserva los pares con la palabra dada a la izquierda o a la derecha: la combinatoria de una palabra.
+Los pares de palabras son ordenados, como en NLTK: la palabra de la derecha aparece a no más de `window` palabras después de la de la izquierda, y cada par de posiciones se cuenta una vez; `window=1` da bigramas. Dentro de la medida la frecuencia del par se divide por el tamaño de la ventana (Church y Hanks 1990, como en NLTK), para que la frecuencia esperada no dependa de la ventana y Dice y la sensibilidad mínima no superen uno; el campo `freq_pair` guarda la frecuencia sin dividir. Con `window > 1` la escala de las medidas de Dice se desplaza por ello: un par siempre contiguo recibe un logDice de $14 - \log_2 window$ (13 con una ventana de 2) y no 14 como en Sketch Engine, que usa la coocurrencia sin dividir; 14 solo lo alcanza un par que aparece a todas las distancias dentro de la ventana. El parámetro `node` conserva los pares con la palabra dada a la izquierda o a la derecha: la combinatoria de una palabra.
 
 Las palabras se comparan tal cual: la caja, la lematización y las palabras vacías corresponden al extractor de palabras; los lemas convienen a las expresiones fijas, las formas a las construcciones gramaticales.
 
@@ -34,12 +34,12 @@ Las medidas están disponibles como las funciones `calc_mi`, `calc_mi3`, `calc_t
 
 ## Parámetros
 
-<!-- core: corpus/collocations.md:collocations-parameters 3f013f4 -->
+<!-- core: corpus/collocations.md:collocations-parameters 459ab39 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `words` | list[str] | `-` | Palabras del texto en orden |
 | `window` | int | `5` | Mayor distancia entre las palabras de un par |
-| `measure` | str | `logdice` | Medida de `COLLOCATION_MEASURES` |
+| `measure` | str | `logdice` | Medida de `anyts.constants.COLLOCATION_MEASURES` |
 | `min_freq` | int | `2` | Frecuencia mínima de un par |
 | `node` | str | `None` | Palabra cuya combinatoria se busca; `None` - todos los pares |
 | `top_n` | int | `None` | Número de colocaciones; `None` - todas |

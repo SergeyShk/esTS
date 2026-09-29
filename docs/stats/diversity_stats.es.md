@@ -27,8 +27,8 @@ Las palabras pueden extraerse con un [`WordsExtractor`](../extractors/words.md) 
 | `hdd_sample_size` | int | `42` | Tamaño de la muestra para HD-D |
 | `log_base` | float | `10` | Base del logaritmo para las métricas de Summer, Maas y Dugast |
 
-<!-- core: stats/diversity_stats.md:check_params 07c0f60 -->
-Los parámetros se comprueban con `check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)`, que lanza `ParameterError` si una ventana, un tamaño de muestra o una longitud mínima del factor están fuera de rango, si el umbral está fuera de (0, 1) o si la base del logaritmo no es mayor que 1; una biblioteca la llama antes de extraer las palabras, para que un parámetro erróneo se señale antes que un texto vacío.
+<!-- core: stats/diversity_stats.md:check_params 1ed1a29 -->
+Los parámetros se comprueban con `check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)`, que lanza `ParameterError` si una ventana, un tamaño de muestra o una longitud mínima del factor están fuera de rango, si el umbral está fuera de (0, 1) o si la base del logaritmo no es mayor que 1. Llamada antes de extraer las palabras, señala un parámetro erróneo antes que un texto vacío.
 
 ## Convenciones { #conventions }
 

@@ -54,7 +54,7 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 
 ## Instalación
 
-Se requiere Python 3.11 o superior. La parte independiente del idioma - los extractores, las métricas de diversidad léxica y las medidas de corpus - viene del núcleo [anyTS](https://github.com/SergeyShk/anyTS), que se instala con el paquete.
+Se requiere Python 3.11 o superior. La parte independiente del idioma - los extractores, las estadísticas básicas y las fórmulas comunes de legibilidad, las métricas de diversidad léxica, las medidas de corpus y los gráficos - viene del núcleo [anyTS](https://github.com/SergeyShk/anyTS), que se instala con el paquete.
 
 ```bash
 pip install pyests
@@ -701,7 +701,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos en las [i
 *   **demo** - la demo en Hugging Face Spaces (Gradio)
 *   **docs** - documentación del proyecto
 *   **ests**:
-    *   basic_stats.py - estadísticas básicas del texto
+    *   basic_stats.py - estadísticas básicas del texto del núcleo anyTS con las sílabas del español
     *   cohesion_stats.py - estadísticas de cohesión
     *   lexical_stats.py - estadísticas de complejidad léxica
     *   components.py - componentes de un pipeline de spaCy
@@ -712,7 +712,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos en las [i
     *   exceptions.py - excepciones de la biblioteca
     *   extractors.py - los extractores del núcleo anyTS con los tokenizadores del español
     *   morph_stats.py - estadísticas morfológicas
-    *   readability_stats.py - métricas de legibilidad
+    *   readability_stats.py - métricas de legibilidad: las fórmulas del español sobre las del núcleo anyTS
     *   style_stats.py - métricas de estilo
     *   phon_stats.py - fonoestadística
     *   syntax_stats.py - estadísticas sintácticas

@@ -1,7 +1,7 @@
 # Corpus comparison
 
 !!! info ""
-    **ests.corpus.compare_corpora()**, **ests.corpus.compare_features()**, **ests.corpus.corpus_features()**, **ests.corpus.text_features()**, **ests.corpus.split_windows()**, **ests.corpus.sentence_rhythm()**, **ests.corpus.calc_cohen_d()**, **ests.corpus.calc_cliff_delta()**, **ests.corpus.bootstrap_median_diff()**, **ests.corpus.holm_correction()**
+    **ests.corpus.compare_corpora()**, **ests.corpus.compare_features()**, **ests.corpus.check_comparison_params()**, **ests.corpus.corpus_features()**, **ests.corpus.text_features()**, **ests.corpus.split_windows()**, **ests.corpus.sentence_rhythm()**, **ests.corpus.calc_cohen_d()**, **ests.corpus.calc_cliff_delta()**, **ests.corpus.bootstrap_median_diff()**, **ests.corpus.holm_correction()**
 
 ## Description
 
@@ -53,6 +53,10 @@ Parameters of `compare_corpora`:
 `labels`, `n_bootstrap` and `seed` go on to `compare_features`, whose parameters are:
 
 --8<-- "corpus/compare.md:compare_features-parameters"
+
+--8<-- "corpus/compare.md:check_comparison_params"
+
+`compare_corpora` calls it first, so a wrong name of a corpus or seed fails before any text is parsed.
 
 ## Functions of the statistics
 

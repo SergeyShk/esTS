@@ -26,7 +26,7 @@ La clase extiende el `WordsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 
 ## Parámetros
 
-<!-- core: extractors/words.md:WordsExtractor-parameters 379c3f1 -->
+<!-- core: extractors/words.md:WordsExtractor-parameters a447ca0 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `tokenizer` | Pattern/Callable | `None` | Tokenizador o expresión regular; por defecto, el método `tokenize` |
@@ -36,11 +36,11 @@ La clase extiende el `WordsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 | `stopwords` | Collection[str] | `None` | Palabras vacías, comparadas sin distinguir mayúsculas |
 | `lowercase` | bool | `False` | Convertir las palabras a minúsculas |
 | `ngram_range` | Tuple[int, int] | `(1, 1)` | Límite inferior y superior del tamaño de los N-gramas |
-| `min_len` | int | `0` | Longitud mínima de la palabra extraída, `0` sin límite |
-| `max_len` | int | `0` | Longitud máxima de la palabra extraída, `0` sin límite |
+| `min_len` | int | `0` | Longitud mínima de la palabra extraída en caracteres, `0` sin límite |
+| `max_len` | int | `0` | Longitud máxima de la palabra extraída en caracteres, `0` sin límite |
 
 !!! note "Nota"
-    Una expresión regular como tokenizador es un separador: el texto se divide con `re.split`. Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Una lista de palabras vacías en minúsculas también filtra una palabra con mayúscula al principio de una oración. Un signo de puntuación es un token formado solo por signos y símbolos, también de varios caracteres: `?!`, `--`, `…`, `€` (véase `is_punctuation`). Los tokens vacíos y de espacios se descartan antes de los filtros. Los N-gramas unen las palabras con `_`.
+    Una expresión regular como tokenizador es un separador: el texto se divide con `re.split`. Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Una lista de palabras vacías en minúsculas también filtra una palabra con mayúscula al principio de una oración. Un signo de puntuación es un token formado solo por signos y símbolos, también de varios caracteres: `?!`, `--`, `…`, `€` (véase `anyts.utils.is_punctuation`). Los tokens vacíos y de espacios se descartan antes de los filtros. Los N-gramas unen las palabras con `_`.
 
 !!! note "Nota"
     Una lista de palabras vacías ya hecha es `spacy.lang.es.stop_words.STOP_WORDS`; téngase en cuenta que incluye verbos frecuentes como `tener`.
@@ -82,8 +82,12 @@ Ejemplo de extracción de palabras con bigramas como tokens, tras filtrar númer
 
 ### get_most_common
 
-<!-- core: extractors/words.md:WordsExtractor-get_most_common 2fbfc88 -->
-Devuelve un contador de las palabras más frecuentes del texto. Recibe como parámetro el número de palabras a devolver.
+<!-- core: extractors/words.md:WordsExtractor-get_most_common a834177 -->
+Devuelve las palabras más frecuentes del texto como una lista de pares (palabra, frecuencia), la más frecuente primero.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------: | :--: | :---------: | :---------: |
+| `n` | int | `10` | Número de palabras más frecuentes |
 
 !!! warning "Aviso"
     El método debe llamarse después de extraer las palabras con `extract`.

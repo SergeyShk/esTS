@@ -56,8 +56,12 @@ Extrae los N-gramas de un texto.
 
 ### get_most_common
 
-<!-- core: extractors/char_ngrams.md:CharNgramsExtractor-get_most_common eeabff0 -->
-Devuelve un contador de los N-gramas más frecuentes del texto. Recibe como parámetro el número de N-gramas a devolver.
+<!-- core: extractors/char_ngrams.md:CharNgramsExtractor-get_most_common 80bd729 -->
+Devuelve los N-gramas más frecuentes del texto como una lista de pares (N-grama, frecuencia), el más frecuente primero.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------: | :--: | :---------: | :---------: |
+| `n` | int | `10` | Número de N-gramas más frecuentes |
 
 !!! warning "Aviso"
     El método debe llamarse después de extraer los N-gramas con `extract`.

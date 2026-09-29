@@ -1,14 +1,14 @@
 # Comparación de corpus
 
 !!! info ""
-    **ests.corpus.compare_corpora()**, **ests.corpus.compare_features()**, **ests.corpus.corpus_features()**, **ests.corpus.text_features()**, **ests.corpus.split_windows()**, **ests.corpus.sentence_rhythm()**, **ests.corpus.calc_cohen_d()**, **ests.corpus.calc_cliff_delta()**, **ests.corpus.bootstrap_median_diff()**, **ests.corpus.holm_correction()**
+    **ests.corpus.compare_corpora()**, **ests.corpus.compare_features()**, **ests.corpus.check_comparison_params()**, **ests.corpus.corpus_features()**, **ests.corpus.text_features()**, **ests.corpus.split_windows()**, **ests.corpus.sentence_rhythm()**, **ests.corpus.calc_cohen_d()**, **ests.corpus.calc_cliff_delta()**, **ests.corpus.bootstrap_median_diff()**, **ests.corpus.holm_correction()**
 
 ## Descripción
 
 `compare_corpora` compara dos corpus de textos en español por todos los rasgos de un texto a la vez - qué estadísticas distinguen los corpus y en qué medida. Para palabras sueltas hace lo mismo [`keyness`](keyness.md), para las distancias entre textos, [`delta`](stylometry.md#delta). Construye las tablas de los rasgos de las ventanas de los dos corpus y las compara con el `compare_features` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/compare/):
 
-<!-- core: corpus/compare.md:compare_features f0cc080 -->
-Comparación de dos corpus rasgo por rasgo. Cada corpus llega como una tabla de los rasgos de sus ventanas - los textos divididos en partes de un tamaño parecido, para que los rasgos no dependan de la longitud de los textos -; una biblioteca de un idioma construye esas tablas a partir de sus textos. `compare_features(table_a, table_b, labels, n_bootstrap, seed)` compara las tablas columna por columna y devuelve una fila por rasgo, ordenadas por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel `text` del índice de una tabla; una tabla sin ese nivel toma cada fila por un texto aparte. Una columna que falta en una de las tablas da `nan`.
+<!-- core: corpus/compare.md:compare_features 9eaeeac -->
+Comparación de dos corpus rasgo por rasgo. Cada corpus llega como una tabla de los rasgos de sus ventanas - los textos divididos en partes de un tamaño parecido, para que los rasgos no dependan de la longitud de los textos. `compare_features(table_a, table_b, labels, n_bootstrap, seed)` compara las tablas columna por columna y devuelve una fila por rasgo, ordenadas por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel `text` del índice de una tabla; una tabla sin ese nivel toma cada fila por un texto aparte. Una columna que falta en una de las tablas da `nan`.
 
 En `split_windows` el número de ventanas es la razón del número de palabras al tamaño de una ventana redondeada con el medio hacia arriba, al menos una, y las partes son iguales: con una ventana de 1000 un texto de una a dos ventanas da ventanas de 750 a 1499 palabras, y un texto más corto que `min_words` - media ventana por defecto - no da ninguna. Un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, `¿` y `¡` -, mientras que unas comillas rectas o una raya pegadas al final de la palabra anterior se quedan con ella (`"cuatro"`, `—dijo Juan—`). Los rasgos de cada ventana los calcula `text_features` o una función propia.
 
@@ -37,7 +37,7 @@ Las proporciones de espacios, letras y signos de puntuación (`basic_p_spaces`, 
 
 ## Estadísticas
 
-<!-- core: corpus/compare.md:compare_features-statistics 63d4635 -->
+<!-- core: corpus/compare.md:compare_features-statistics 42e948a -->
 Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_{n_B}$ en el corpus B (sin los valores indefinidos e infinitos; con menos de dos valores en un lado, `nan`):
 
 | Columna | Descripción |
@@ -52,7 +52,7 @@ Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_
 | `n_A`, `n_B` | número de ventanas con un valor definido |
 | `n_texts_A`, `n_texts_B` | número de textos detrás de esas ventanas |
 
-Los nombres de las columnas son `COMPARISON_COLUMNS`, con `A` y `B` sustituidas por las etiquetas de los corpus. La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.
+Los nombres de las columnas son `anyts.corpus.COMPARISON_COLUMNS`, con `A` y `B` sustituidas por las etiquetas de los corpus. La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.
 
 !!! warning "Las ventanas de un texto no son independientes"
     La prueba y los tamaños del efecto toman cada ventana por una observación independiente, y las ventanas de un texto no lo son. Con pocos textos en un corpus los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus. El bootstrap, en cambio, remuestrea textos enteros (un bootstrap por conglomerados), así que su intervalo tiene en cuenta la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con solo unos pocos.
@@ -71,14 +71,19 @@ Parámetros de `compare_corpora`:
 
 `labels`, `n_bootstrap` y `seed` pasan a `compare_features`, cuyos parámetros son:
 
-<!-- core: corpus/compare.md:compare_features-parameters 73b70e9 -->
+<!-- core: corpus/compare.md:compare_features-parameters 7c141e7 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `table_a` | DataFrame | `-` | Rasgos de las ventanas del primer corpus, una fila por ventana |
 | `table_b` | DataFrame | `-` | Rasgos de las ventanas del segundo corpus |
-| `labels` | tuple[str, str] | `("A", "B")` | Nombres de los corpus para las columnas |
+| `labels` | tuple[str, str] | `("A", "B")` | Nombres de los corpus para las columnas, dos cadenas que den columnas distintas |
 | `n_bootstrap` | int | `1000` | Número de remuestras bootstrap |
-| `seed` | int | `0` | Semilla del generador de números aleatorios; `None` - una aleatoria |
+| `seed` | int/Generator | `0` | Semilla del generador de números aleatorios, un entero no negativo, o un `Generator` de numpy; `None` - una aleatoria |
+
+<!-- core: corpus/compare.md:check_comparison_params f445b8d -->
+`check_comparison_params(labels=("A", "B"), n_bootstrap=1000, seed=0)` comprueba los parámetros de `compare_features` y lanza `ParameterError` salvo que las etiquetas sean dos cadenas que den columnas distintas (`("diff", "B")` repetiría `median_diff`), el número de remuestras bootstrap sea un entero de al menos uno y la semilla sea `None`, un entero no negativo o un `Generator` de numpy. Llamada antes de construir las tablas a partir de los textos, señala un parámetro erróneo antes de procesar los textos.
+
+`compare_corpora` la llama primero, así que un nombre de corpus o una semilla erróneos fallan antes de analizar ningún texto.
 
 ## Funciones de las estadísticas
 

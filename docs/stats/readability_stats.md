@@ -5,7 +5,9 @@
 
 ## Description
 
-A module for computing the main text [readability](https://en.wikipedia.org/wiki/Readability) metrics of the Spanish tradition. The data source can be a text, a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library, or already computed [basic statistics](basic_stats.md) `BasicStats` - then the text is not parsed again.
+The readability metrics of the Spanish tradition.
+
+--8<-- "stats/readability_stats.md:ReadabilityStats"
 
 !!! quote "Definition"
 
@@ -36,10 +38,11 @@ The main presumptions of readability metrics:
 *   long words make reading harder;
 *   a reader slows down at low-frequency and/or unfamiliar words.
 
-The module allows using pre-built [`SentsExtractor`](../extractors/sentences.md) and [`WordsExtractor`](../extractors/words.md) objects for the sentence and word tokenization needed before computing the statistics.
+## Language hooks
 
-!!! note "Note"
-    The metrics are computed by accessing the corresponding attribute or by calling the `get_stats` method of the `ReadabilityStats` object.
+The class extends the `ReadabilityStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/readability_stats/) core with the Spanish formulas and tables: the [basic statistics](basic_stats.md) of esTS, which take the Spanish [`SentsExtractor`](../extractors/sentences.md) and [`WordsExtractor`](../extractors/words.md) by default, the presets of the Flesch reading ease, the formulas of Gutiérrez de Polini, Crawford and SOL, the grade formulas of the consensus grade (Crawford and SOL), the school stages of Spain and the reading speeds of Spanish readers.
+
+The formulas of the core with their English coefficients - `flesch_kincaid_grade`, `coleman_liau_index`, `automated_readability_index`, `smog_index` and `gunning_fog_index` - stay attributes of the object, outside `get_stats`: they are fitted on English texts, and `smog_index` is the input of SOL.
 
 ## Parameters
 
@@ -65,7 +68,7 @@ The module allows using pre-built [`SentsExtractor`](../extractors/sentences.md)
 | `reading_time` | float | Reading time in minutes at 278 words per minute |
 | `bs` | BasicStats | Basic text statistics |
 | `preset` | str | Name of the coefficient preset |
-| `coefficients` | dict[str, tuple[float, float, float]] | Formula coefficients of the preset |
+| `coefficients` | dict[str, tuple[float, float, float]] | Formula coefficients of the preset, a copy that can be changed for one object |
 
 ## Coefficient presets { #presets }
 
@@ -97,7 +100,9 @@ The formula of Fernández Huerta takes the mean sentence length, with the correc
 
 The [`describe_level`](#describe_level) method places the reading ease on the scale of the preset: INFLESZ for `general` (`muy difícil` below 40, `algo difícil` 40-55, `normal` 55-65, `bastante fácil` 65-80, `muy fácil` above 80) and the seven bands of Fernández Huerta for `classic`, with the scales of Szigriszt-Pazos or of the other author on request; Legibilidad µ has the seven bands of its authors (`muy difícil` 0-30, `difícil` 31-50, `un poco difícil` 51-60, `adecuado` 61-70, `un poco fácil` 71-80, `fácil` 81-90, `muy fácil` 91-100).
 
-The formulas that yield years of schooling (Crawford, SOL) are summarized in the `consensus_grade` attribute - the median of the rounded values plus the reading ease [converted to a grade](readability_stats_funcs.md#flesch_reading_easy_to_grade) by the scale of the preset. The [`describe_grade`](#describe_grade) method translates the consensus grade or an individual formula into a stage of the Spanish school system and reader age:
+--8<-- "stats/readability_stats.md:ReadabilityStats-consensus"
+
+The grade formulas of esTS are Crawford and SOL, and the reading ease is [converted to a grade](readability_stats_funcs.md#flesch_reading_easy_to_grade) by the scale of the preset. The [`describe_grade`](#describe_grade) method translates the consensus grade or an individual formula into a stage of the Spanish school system and reader age:
 
 | Grade | Stage | Age |
 | :---: | :---: | :-: |
@@ -143,13 +148,9 @@ Parameters:
 
 ### describe_grade
 
-Returns the school stage and reader age for the consensus grade or an individual grade formula.
+--8<-- "stats/readability_stats.md:ReadabilityStats-describe_grade"
 
-Parameters:
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `stat` | str | `consensus_grade` | Name of the grade formula (`consensus_grade`, `crawford_grade`, `sol_grade`) |
+The grade formulas are `consensus_grade`, `crawford_grade` and `sol_grade`.
 
 !!! example "Example"
 
@@ -162,23 +163,13 @@ Parameters:
 
 ### reading_time_by_speed
 
-Returns the reading time of the text in minutes at the given speed.
-
-Parameters:
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `wpm` | int | `-` | Reading speed, words per minute |
+--8<-- "stats/readability_stats.md:ReadabilityStats-reading_time_by_speed"
 
 ### reading_time_by_norm
 
-Returns the reading time of the text in minutes aloud and silently by a norm of the `ests.constants.READING_SPEED_NORMS` table: `grade_1` to `grade_11` (years of schooling: primary school 1-6, ESO 7-10, bachillerato 11) or `adult`.
+--8<-- "stats/readability_stats.md:ReadabilityStats-reading_time_by_norm"
 
-Parameters:
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `norm` | str | `-` | Name of the reading speed norm |
+The norms of the `ests.constants.READING_SPEED_NORMS` table are `grade_1` to `grade_11` (years of schooling: primary school 1-6, ESO 7-10, bachillerato 11) and `adult`, each with the speeds aloud and silently, so the method returns the reading times aloud and silently.
 
 !!! example "Example"
 
@@ -191,7 +182,7 @@ Parameters:
 
 ### get_stats
 
-Returns a dictionary with the computed readability metrics.
+--8<-- "stats/readability_stats.md:ReadabilityStats-get_stats"
 
 !!! example "Example"
 
@@ -225,7 +216,7 @@ Returns a dictionary with the computed readability metrics.
 
 ### print_stats
 
-Prints a table with the computed readability metrics.
+--8<-- "stats/readability_stats.md:ReadabilityStats-print_stats"
 
 !!! example "Example"
 
