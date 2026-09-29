@@ -47,6 +47,19 @@ def test_is_punctuation(token, expected):
 @pytest.mark.parametrize(
     ("text", "expected"),
     [
+        ("Fin.--" + " " * 100_000 + "1", ["Fin.--", "1"]),
+        ("Grita" + "!" * 100_000 + "x", ["Grita" + "!" * 100_000 + "x"]),
+    ],
+    ids=["spaces after a glued dash", "a run of marks"],
+)
+def test_sentenize_long_runs(text, expected):
+    """The rules read long runs of spaces and of marks once"""
+    assert list(sentenize(text)) == expected
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
         ("", []),
         ("   \n\n  ", []),
         ("Sin punto final", ["Sin punto final"]),
@@ -170,13 +183,11 @@ def test_is_punctuation(token, expected):
         ),
         ("¡Traidores!--  \n¡Adiós!", ["¡Traidores!--", "¡Adiós!"]),
         ("¡Está lejos!--\n  al ángel de la muerte.", ["¡Está lejos!--\n  al ángel de la muerte."]),
-        ("Fin.--" + " " * 100_000 + "1", ["Fin.--", "1"]),
         ("La viuda.-- El niño llegó.", ["La viuda.--", "El niño llegó."]),
         ("Mahoma.--\r\nOtra lengua.", ["Mahoma.--", "Otra lengua."]),
         # An abbreviation, an initial or a list marker before a closing dash ends nothing
         ("El Sr.--\nGarcía vino.", ["El Sr.--\nGarcía vino."]),
         ("IV.--\nDe los fines.", ["IV.--\nDe los fines."]),
-        ("Grita" + "!" * 100_000 + "x", ["Grita" + "!" * 100_000 + "x"]),
         ("Era tarde.--«Ven», dijo.", ["Era tarde.", "--«Ven», dijo."]),
         # A single hyphen before a word numbers an article or joins two names
         ("Artículo 1.- Objeto del reglamento.", ["Artículo 1.- Objeto del reglamento."]),
