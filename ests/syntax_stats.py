@@ -211,10 +211,9 @@ class SyntaxStats:
         finite_verbs = [token for token in words if is_finite_verb(token)]
         chains = [length for sent in sents for length in calc_coordination_chains(sent)]
         self.n_coordination_chains = len(chains)
-        self.n_clauses = sum(1 for token in words if is_clause_head(token))
-        subordinate = [
-            sum(1 for token in sent if is_subordinate_clause_head(token)) for sent in sents
-        ]
+        heads = [[token for token in sent if is_clause_head(token)] for sent in sents]
+        self.n_clauses = sum(len(sent) for sent in heads)
+        subordinate = [sum(1 for token in sent if _is_subordinate(token)) for sent in heads]
         self.n_subordinate_clauses = sum(subordinate)
         self.n_complex_sents = sum(1 for count in subordinate if count)
         nouns = [token for token in words if token.pos_ in ("NOUN", "PROPN")]
@@ -449,7 +448,12 @@ def is_subordinate_clause_head(token: Token) -> bool:
     Returns:
         bool: Result of the check
     """
-    if not is_clause_head(token) or is_root(token):
+    return is_clause_head(token) and _is_subordinate(token)
+
+
+def _is_subordinate(token: Token) -> bool:
+    """Whether a clause head heads a subordinate clause"""
+    if is_root(token):
         return False
     if token.dep_ in SUBORDINATE_CLAUSE_DEPS or token.dep_ == "xcomp":
         return True
