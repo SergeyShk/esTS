@@ -42,7 +42,7 @@ Añadir un componente amplía el tokenizador de su pipeline con las reglas de la
 | `PhonStatsComponent` | `ests_phon` | [PhonStats](stats/phon_stats.md) | nada |
 | `VerseStatsComponent` | `ests_verse` | [VerseStats](stats/verse_stats.md) | nada; los saltos de línea del texto |
 
-En el pipeline de `es_core_news_sm` las categorías gramaticales vienen del `morphologizer` (o de un `tagger` con un `attribute_ruler`; un `tagger` solo no las da), el análisis del `parser` y los lemas del `lemmatizer`. Un componente al que le falta la anotación, también con componentes `excluded`, levanta `SourceError` cuando el documento pasa por él.
+En el pipeline de `es_core_news_sm` las categorías gramaticales vienen del `morphologizer` (o de un `tagger` con un `attribute_ruler`; un `tagger` solo no las da), el análisis del `parser` y los lemas del `lemmatizer`. Un componente al que le falta la anotación, también con componentes `excluded`, lanza `SourceError` cuando el documento pasa por él.
 
 ## BasicStatsComponent
 
@@ -97,12 +97,12 @@ Parámetros:
 | :-------: | :--: | :---------: | :---------: |
 | `nlp` | Language | `-` | Objeto Language |
 | `name` | str | `"ests_readability"` | Nombre del componente en el pipeline |
-| `preset` | str | `"general"` | Preset de los coeficientes (`general`, `classic`) |
+| `preset` | str | `"general"` | Preajuste de los coeficientes (`general`, `classic`) |
 | `basic` | str | `None` | Nombre de la extensión de un componente de estadísticas básicas, cuyo objeto se usa en lugar de calcularlas otra vez |
 
-Un preset desconocido levanta `ParameterError` al añadir el componente.
+Un preajuste desconocido lanza `ParameterError` al añadir el componente.
 
-Las métricas de legibilidad se calculan sobre las estadísticas básicas, así que un pipeline con los dos componentes las calcula dos veces salvo que `basic` nombre la extensión del primero: `nlp.add_pipe("ests_readability", config={"basic": "basic"})` después de un componente llamado `basic`. Un nombre que no lleva estadísticas básicas, o un componente que corre después de este, levanta `SourceError`.
+Las métricas de legibilidad se calculan sobre las estadísticas básicas, así que un pipeline con los dos componentes las calcula dos veces salvo que `basic` nombre la extensión del primero: `nlp.add_pipe("ests_readability", config={"basic": "basic"})` después de un componente llamado `basic`. Un nombre que no lleva estadísticas básicas, o un componente que corre después de este, lanza `SourceError`.
 
 !!! example "Ejemplo"
 
@@ -149,7 +149,7 @@ Parámetros:
 | `hdd_sample_size` | int | `42` | Tamaño de la muestra de HD-D |
 | `log_base` | float | `10` | Base del logaritmo de las métricas de Summer, Maas y Dugast |
 
-Un parámetro fuera de su rango levanta `ParameterError` al añadir el componente.
+Un parámetro fuera de su rango lanza `ParameterError` al añadir el componente.
 
 !!! example "Ejemplo"
 

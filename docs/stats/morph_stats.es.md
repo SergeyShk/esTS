@@ -7,9 +7,9 @@
 
 Módulo para calcular las estadísticas morfológicas de un texto. La fuente de datos puede ser un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy).
 
-Las categorías gramaticales y los rasgos morfológicos se dan en los términos de [Universal Dependencies](https://universaldependencies.org/u/feat/). Un texto se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`; un `Doc` debe llevar las categorías gramaticales, que vienen de un `morphologizer` (o de un `tagger` con un `attribute_ruler`), y los lemas, que vienen de un `lemmatizer`: un `Doc` de `spacy.blank("es")` o de un pipeline con el `lemmatizer` excluido levanta `SourceError`. Las palabras se toman de los tokens y los signos de puntuación y los símbolos se descartan.
+Las categorías gramaticales y los rasgos morfológicos se dan en los términos de [Universal Dependencies](https://universaldependencies.org/u/feat/). Un texto se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`; un `Doc` debe llevar las categorías gramaticales, que vienen de un `morphologizer` (o de un `tagger` con un `attribute_ruler`), y los lemas, que vienen de un `lemmatizer`: un `Doc` de `spacy.blank("es")` o de un pipeline con el `lemmatizer` excluido lanza `SourceError`. Las palabras se toman de los tokens y los signos de puntuación y los símbolos se descartan.
 
-Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto - levanta `SourceError`: divídalo en partes o suba `max_length` en un pipeline propio y páselo en `nlp`.
+Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto - lanza `SourceError`: divídalo en partes o suba `max_length` en un pipeline propio y páselo en `nlp`.
 
 !!! note "Nota"
     Las estadísticas se calculan al inicializar el objeto `MorphStats`.

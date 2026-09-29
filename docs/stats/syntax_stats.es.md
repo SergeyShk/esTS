@@ -5,11 +5,11 @@
 
 ## Descripción
 
-Módulo para calcular las estadísticas sintácticas de un texto sobre el árbol de dependencias de [Universal Dependencies](https://universaldependencies.org/u/dep/). La fuente de datos puede ser un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy), pero tiene que estar analizada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, y un `Doc` debe llevar las dependencias, que vienen de un `parser`, y los lemas, que vienen de un `lemmatizer`: un `Doc` de `spacy.blank("es")`, de un pipeline sin analizador o de uno con el `lemmatizer` excluido levanta `SourceError`.
+Módulo para calcular las estadísticas sintácticas de un texto sobre el árbol de dependencias de [Universal Dependencies](https://universaldependencies.org/u/dep/). La fuente de datos puede ser un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy), pero tiene que estar analizada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, y un `Doc` debe llevar las dependencias, que vienen de un `parser`, y los lemas, que vienen de un `lemmatizer`: un `Doc` de `spacy.blank("es")`, de un pipeline sin analizador o de uno con el `lemmatizer` excluido lanza `SourceError`.
 
 Los signos de puntuación, los símbolos (`%`, `€`, `+`) y los espacios no son nodos del árbol, y las distancias se cuentan en posiciones de palabras. Las medidas de una sola oración - la dependencia más larga, la profundidad del árbol, los nodos por hoja - se promedian sobre las oraciones.
 
-Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto - levanta `SourceError`: divídalo en partes o suba `max_length` en un pipeline propio y páselo en `nlp`.
+Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto - lanza `SourceError`: divídalo en partes o suba `max_length` en un pipeline propio y páselo en `nlp`.
 
 !!! note "Nota"
     Las estadísticas se calculan al inicializar el objeto `SyntaxStats`.
@@ -35,7 +35,7 @@ Las medidas siguen el trabajo de Ivanov, Solnyshkina y Solovyev sobre la complej
 | `leaves_per_sent` | float | Hojas por oración |
 | `subtrees_per_sent` | float | Subárboles por oración |
 | `nodes_per_leaf` | float | Media por oración de las palabras por hoja |
-| `verb_valency` | float | Número medio de dependientes de un verbo personal |
+| `verb_valency` | float | Número medio de dependientes de un verbo en forma personal |
 | `coordination_chains_per_sent` | float | Cadenas de coordinación por oración |
 | `mean_coordination_chain_len` | float | Longitud media de una cadena de coordinación |
 | `clauses_per_sent` | float | Cláusulas por oración |
@@ -49,7 +49,7 @@ Una cláusula la encabeza el núcleo de una oración o una palabra con la relaci
 
 ## Construcciones del estilo administrativo { #constructions }
 
-Las construcciones son las que advierten las guías españolas de lenguaje claro.
+Las construcciones son las que advierten las guías de lenguaje claro en español.
 
 | Atributo | Tipo | Descripción |
 | :------: | :--: | :---------: |

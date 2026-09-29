@@ -1,6 +1,6 @@
 # Examples
 
-Notebooks with examples of the library at work. The outputs of the cells are kept, so the notebooks read without running; the button opens a notebook in Google Colab, where it installs the library - esTS 0.6 or newer - and the spaCy model itself.
+Notebooks with examples of the library at work. The outputs of the cells are kept, so the notebooks read without running; the button opens a notebook in Google Colab, where it installs the library - esTS 0.6 or newer - and, where a notebook needs it, the spaCy model.
 
 | Notebook | What it shows | Colab |
 |---|---|---|

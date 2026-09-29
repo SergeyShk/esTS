@@ -12,7 +12,7 @@ Las dependencias se instalan con el paquete. El [árbol de palabras](visualizers
 
 ## Desde PyPI
 
-El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`:
+La distribución en PyPI se llama `pyests` y el paquete que instala es `ests`:
 
 ``` bash
 pip install pyests

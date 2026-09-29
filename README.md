@@ -49,7 +49,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
 * **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 250 Spanish discourse markers
 * **[Lexical sophistication statistics](https://sergeyshk.github.io/esTS/stats/lexical_stats/)** - how rare the words of a text are in the language: the frequency, range and dispersion of the lemmas by a dictionary of Google Books Ngram, the frequency bands top-1000 to 10000, surprisal, perplexity and lexical density
-* **[Style metrics](https://sergeyshk.github.io/esTS/stats/style_stats/)** - the SEO indicators of Advego and Text.ru (nausea, water content, spam score, naturalness by Zipf's law, keyword density) and the markers of the officialese style by the Spanish guides to plain language: verbal nouns, compound prepositions, parenthetical expressions and clichés
+* **[Style metrics](https://sergeyshk.github.io/esTS/stats/style_stats/)** - the SEO indicators of Advego and Text.ru (nausea, water content, spam score, naturalness by Zipf's law, keyword density) and the markers of the officialese style by the Spanish-language guides to plain language: verbal nouns, compound prepositions, parenthetical expressions and clichés
 * **[Phonostatistics](https://sergeyshk.github.io/esTS/stats/phon_stats/)** - the shares of the classes of sounds, consonant clusters, hiatuses, open syllables, hardness and the indices of alliteration and assonance, over the sounds of a rule-based transcription
 * **[Verse statistics](https://sergeyshk.github.io/esTS/stats/verse_stats/)** - the scansion of Spanish verse by its syllabic meter: the metrical syllables, the meter of a poem, the stress profile and the types of the endecasílabo, the rhyme in full and by assonance with its scheme, the strophes and the form of a poem
 * **[Syntactic statistics](https://sergeyshk.github.io/esTS/stats/syntax_stats/)** - the dependency tree by distances, depth, clauses and coordination, with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
@@ -353,7 +353,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/morph_stats/)
 
 <br>
 
-The dependency tree of Universal Dependencies and the constructions that the Spanish guides to clear language warn about:
+The dependency tree of Universal Dependencies and the constructions that the Spanish-language guides to plain language warn about:
 
 *   the complexity of the tree: dependency distances, depth, leaves and subtrees, valency of the finite verbs, coordination chains, clauses and subordinate clauses, modifiers per noun
 *   the constructions: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates, the impersonal `se`, the words of negation, the ratio of nouns to verbs
@@ -448,7 +448,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/lexical_stats
 
 <br>
 
-The SEO indicators of Advego and Text.ru - nausea, water content, spam score, naturalness by Zipf's law, keyword density - and the markers of the officialese style that the Spanish guides to plain language warn about: the nouns derived from a verb, the compound prepositions of the administrative style, the parenthetical expressions and the clichés.
+The SEO indicators of Advego and Text.ru - nausea, water content, spam score, naturalness by Zipf's law, keyword density - and the markers of the officialese style that the Spanish-language guides to plain language warn about: the nouns derived from a verb, the compound prepositions of the administrative style, the parenthetical expressions and the clichés.
 
 ```python
 >>> from ests import StyleStats
@@ -723,7 +723,7 @@ Bug reports, ideas and pull requests are welcome in the [issues](https://github.
     *   utils.py - helper tools
     *   visualizers - plots: Zipf's law, fingerprinting, word tree, corpus and stylometric plots, vocabulary growth, sentence lengths, text highlighting
 *   **examples** - notebooks with examples
-*   **scripts** - scripts that build the archives of the datasets and fetch the anyTS pages of the documentation
+*   **scripts** - scripts that build the archives of the datasets, fetch the anyTS pages of the documentation and check the outputs of the notebooks
 *   **tests** - tests mirroring the package structure
 
 </details>

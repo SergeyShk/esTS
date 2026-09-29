@@ -259,7 +259,7 @@ def test_find_connectors_pos_filter():
     ("text", "expected"),
     [
         ("El antes y el después no importan.", ["y"]),
-        ("Ana, Luego y Mas firmaron el acta.", ["luego", "y"]),
+        ("Habló con Juan Luego ayer.", []),
         ("Resumiendo, el texto es claro.", ["resumiendo"]),
         ("Primeramente, hay que leer.", ["primeramente"]),
     ],

@@ -30,7 +30,7 @@ La legibilidad en este módulo se calcula a partir de medidas lingüísticas: la
 | Fernández Huerta | 1959 | facilidad de lectura de Flesch, 0-100 | siete niveles del autor |
 | Szigriszt-Pazos (fórmula de perspicuidad) | 1993 | facilidad de lectura de Flesch, 0-100 | escala INFLESZ (Barrio-Cantalejo et al., 2008), cinco niveles |
 | Gutiérrez de Polini (fórmula de comprensibilidad) | 1972 | 0-100, más alto es más fácil | sin escala propia; ajustada con textos de sexto grado |
-| Crawford | 1989 | años de escolaridad | primaria española, cursos 1-6 |
+| Crawford | 1989 | años de escolaridad | primaria en español, cursos 1-6 |
 | Legibilidad µ (Muñoz Baquedano y Muñoz Urra) | 2006 | 0-100, más alto es más fácil | siete niveles de los autores |
 | SOL (Contreras et al.) | 1999 | años de escolaridad | SMOG convertido al español |
 | LIX, RIX | 1968, 1983 | índice, palabras largas por oración | niveles y cursos independientes de la lengua |
@@ -106,7 +106,7 @@ La fórmula de Fernández Huerta toma la longitud media de la oración, con la c
 El método [`describe_level`](#describe_level) sitúa la facilidad de lectura en la escala del preajuste: INFLESZ para `general` (`muy difícil` por debajo de 40, `algo difícil` 40-55, `normal` 55-65, `bastante fácil` 65-80, `muy fácil` por encima de 80) y los siete niveles de Fernández Huerta para `classic`, y a petición las escalas de Szigriszt-Pazos o del otro autor; la Legibilidad µ tiene los siete niveles de sus autores (`muy difícil` 0-30, `difícil` 31-50, `un poco difícil` 51-60, `adecuado` 61-70, `un poco fácil` 71-80, `fácil` 81-90, `muy fácil` 91-100).
 
 <!-- core: stats/readability_stats.md:ReadabilityStats-consensus 40f0d09 -->
-Las fórmulas que dan años de escolaridad (`grade_stats`) se resumen en el atributo `consensus_grade`: la mediana de sus valores redondeados con el medio hacia arriba, junto con la facilidad de lectura convertida en años de escolaridad (`reading_ease_to_grade`) sin redondear.
+Las fórmulas que dan años de escolaridad (`grade_stats`) se resumen en el atributo `consensus_grade`: la mediana de sus valores redondeados al entero más próximo (las mitades hacia arriba), junto con la facilidad de lectura convertida en años de escolaridad (`reading_ease_to_grade`) sin redondear.
 
 Las fórmulas de grado de esTS son Crawford y SOL, y la facilidad de lectura se [convierte en grado](readability_stats_funcs.md#flesch_reading_easy_to_grade) según la escala del preajuste. El método [`describe_grade`](#describe_grade) traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:
 

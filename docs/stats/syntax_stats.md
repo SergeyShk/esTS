@@ -49,7 +49,7 @@ A clause is headed by the head of a sentence or by a word with the relation `cco
 
 ## Constructions of the administrative style { #constructions }
 
-The constructions are the ones the Spanish guides to clear language (*lenguaje claro*) warn about.
+The constructions are the ones the Spanish-language guides to plain language (*lenguaje claro*) warn about.
 
 | Attribute | Type | Description |
 | :-------: | :--: | :---------: |

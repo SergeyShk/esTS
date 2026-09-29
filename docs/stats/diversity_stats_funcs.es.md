@@ -268,7 +268,7 @@ Parámetros:
 | `min_len` | int | `10` | Longitud mínima del factor |
 | `threshold` | float | `0.72` | Umbral de TTR para completar un factor |
 
-## MTLD con ventana móvil y texto envuelto (MTLD-W)
+## MTLD con ventana móvil y vuelta al inicio del texto (MTLD-W)
 
 !!! info ""
     **ests.diversity_stats.calc_mtldw()**

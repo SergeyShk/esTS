@@ -30,7 +30,7 @@ def kwic(
         the lemma of the model too; the keyword is lemmatized by simplemma.
         A phrase does not run across the end of a paragraph or of a sentence -
         a boundary of a Doc, or the end of a sentence of sentenize in a text
-        without boundaries - unless the keyword has one in the same place
+        without boundaries - unless the keyword has one in the same place.
         The context is window words on each side as written, with the
         punctuation between them; whitespace collapses to one space;
         occurrences do not overlap. Accents are part of the word form: solo and

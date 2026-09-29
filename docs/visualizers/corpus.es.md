@@ -12,7 +12,7 @@ Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visu
 ## Dispersión léxica { #dispersion_plot }
 
 <!-- core: visualizers/corpus.md:dispersion_plot 604b589 -->
-Una fila por cada palabra de `targets` y una marca en la posición de cada una de sus apariciones en el texto. Las palabras se comparan tal cual: la caja y la lematización corresponden a la extracción de las palabras.
+Una fila por cada palabra de `targets` y una marca en la posición de cada una de sus apariciones en el texto. Las palabras se comparan tal cual: las mayúsculas y minúsculas y la lematización corresponden a la extracción de las palabras.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |

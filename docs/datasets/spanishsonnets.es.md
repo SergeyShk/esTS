@@ -40,7 +40,7 @@ El conjunto de datos se recorre por sus registros como `get_records()` sin filtr
 
 ### check_data
 
-Comprueba que el fichero del conjunto de datos está en su sitio y devuelve `True`; un conjunto sin descargar levanta `DatasetNotFoundError`. Los demás métodos lo comprueban por sí mismos.
+Comprueba que el fichero del conjunto de datos está en su sitio y devuelve `True`; un conjunto sin descargar lanza `DatasetNotFoundError`. Los demás métodos lo comprueban por sí mismos.
 
 ### download
 
@@ -75,7 +75,7 @@ Extrae los textos (sin encabezados) del conjunto de datos: los versos de un sone
 | `max_len` | int | `None` | Longitud máxima del texto (en caracteres) |
 | `limit` | int | `None` | Número de textos |
 
-Los filtros se combinan; `author="dario"` encuentra a Rubén Darío, `country="mexico"` encuentra `México`. Un periodo o un género desconocidos, una longitud menor que uno, una longitud mínima mayor que la máxima y un límite negativo levantan `ParameterError`.
+Los filtros se combinan; `author="dario"` encuentra a Rubén Darío, `country="mexico"` encuentra `México`. Un periodo o un género desconocidos, una longitud menor que uno, una longitud mínima mayor que la máxima y un límite negativo lanzan `ParameterError`.
 
 !!! example "Ejemplo"
 

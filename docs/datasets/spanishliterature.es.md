@@ -199,7 +199,7 @@ El conjunto de datos se recorre por sus registros como `get_records()` sin filtr
 
 ### check_data
 
-Comprueba que la lista de obras y el fichero de cada obra están en su sitio y devuelve `True`; un conjunto sin descargar o al que le falta un fichero levanta `DatasetNotFoundError`. Los demás métodos lo comprueban por sí mismos.
+Comprueba que la lista de obras y el fichero de cada obra están en su sitio y devuelve `True`; un conjunto sin descargar o al que le falta un fichero lanza `DatasetNotFoundError`. Los demás métodos lo comprueban por sí mismos.
 
 ### download
 
@@ -239,7 +239,7 @@ Extrae los textos (sin encabezados) del conjunto de datos.
 | `max_len` | int | `None` | Longitud máxima del texto (en caracteres) |
 | `limit` | int | `None` | Número de textos |
 
-Los filtros se combinan; `author="galdos"` encuentra a Benito Pérez Galdós, `country="mexico"` encuentra `México`. Un género desconocido, un primer año posterior al último, una longitud menor que uno, una longitud mínima mayor que la máxima y un límite negativo levantan `ParameterError`.
+Los filtros se combinan; `author="galdos"` encuentra a Benito Pérez Galdós, `country="mexico"` encuentra `México`. Un género desconocido, un primer año posterior al último, una longitud menor que uno, una longitud mínima mayor que la máxima y un límite negativo lanzan `ParameterError`.
 
 !!! example "Ejemplo"
 
@@ -280,7 +280,7 @@ Los parámetros son los mismos que los de `get_texts`.
     ```
 
 !!! warning "La ortografía sigue a la edición"
-    Los textos conservan la ortografía de las ediciones transcritas: 62 de ellos tienen las tildes de su época (`á` como preposición, `fué`, `dió`), 87 las modernas, entre ellos una docena de textos que los transcriptores del Proyecto Gutenberg modernizaron; Galdós tiene textos de los dos tipos. Como `á` y `a` son palabras distintas para una lista de frecuencias, la estilometría sobre las palabras más frecuentes puede separar los textos por su edición y no por su autor: quite la tilde de los monosílabos (`á`, `é`, `ó`, `ú`, `fué`, `dió`, `vió`) antes de una comparación así. A Abel Sánchez le faltan la mayoría de los `¿` y `¡` de apertura, como a su edición.
+    Los textos conservan la ortografía de las ediciones transcritas: 62 de ellos tienen las tildes de su época (`á` como preposición, `fué`, `dió`), 87 las modernas, entre ellos una docena de textos que los transcriptores del Proyecto Gutenberg modernizaron, y uno, *La vuelta de Martín Fierro*, una mezcla; Galdós tiene textos de los dos tipos. Como `á` y `a` son palabras distintas para una lista de frecuencias, la estilometría sobre las palabras más frecuentes puede separar los textos por su edición y no por su autor: quite la tilde de los monosílabos (`á`, `é`, `ó`, `ú`, `fué`, `dió`, `vió`) antes de una comparación así. A Abel Sánchez le faltan la mayoría de los `¿` y `¡` de apertura, como a su edición.
 
 !!! note "Ediciones y contenido"
     Varias obras siguen ediciones posteriores revisadas por sus autores (la Opera Omnia de Valle-Inclán, las obras completas de Pereda, Palacio Valdés y Blasco Ibáñez, la sexta edición, muy ampliada, de Reglas y consejos sobre investigación científica), con el año de la primera publicación. Algunos registros son selecciones o tomos sueltos: Tradiciones peruanas (27 tradiciones), Recuerdos del tiempo viejo I (el primero de tres tomos), El payador (el único tomo publicado); los Entremeses son los ocho de 1615, sin los tres de atribución dudosa, y las Novelas ejemplares van sin La tía fingida. Dos registros contienen dos obras cada uno, como dicen sus títulos: Insolación y Morriña y Sonata de otoño. Sonata de invierno. En algunas comedias del Siglo de Oro quedan los corchetes de los editores alrededor de las acotaciones y de los nombres que añadieron.

@@ -1,6 +1,6 @@
 # Ejemplos
 
-Cuadernos con la biblioteca en funcionamiento sobre sus conjuntos de datos. Las salidas de las celdas se conservan, así que los cuadernos se leen en GitHub sin ejecutarlos; el botón abre un cuaderno en Google Colab, donde instala por sí mismo la biblioteca - esTS 0.6 o posterior - y el modelo de spaCy. Los cuadernos están en inglés.
+Cuadernos con la biblioteca en funcionamiento sobre sus conjuntos de datos. Las salidas de las celdas se conservan, así que los cuadernos se leen en GitHub sin ejecutarlos; el botón abre un cuaderno en Google Colab, donde instala la biblioteca - esTS 0.6 o posterior - y, si el cuaderno lo necesita, el modelo de spaCy. Los cuadernos están en inglés.
 
 | Cuaderno | Qué muestra | Colab |
 |---|---|---|

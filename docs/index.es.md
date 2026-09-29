@@ -19,7 +19,7 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 *   calcular [estadísticas sintácticas](stats/syntax_stats.md) sobre el árbol de dependencias (distancias, profundidad, cláusulas, coordinación) con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
 *   calcular [estadísticas de cohesión](stats/cohesion_stats.md) a la manera de Coh-Metrix (repetición de sustantivos, argumentos y palabras con contenido entre oraciones, información dada, cohesión temporal) con la densidad de 250 marcadores del discurso por clase
 *   calcular [estadísticas de complejidad léxica](stats/lexical_stats.md) a la manera de TAALES: cuán raras son las palabras de un texto según un [diccionario de frecuencias](datasets/freqdict.md) de Google Books Ngram (frecuencia, rango, dispersión, sorpresa) y según las bandas de frecuencia del top-1000 al 10000, con la densidad léxica
-*   calcular [métricas de estilo](stats/style_stats.md): los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías españolas de lenguaje claro - sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés
+*   calcular [métricas de estilo](stats/style_stats.md): los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías de lenguaje claro en español - sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés
 *   calcular la [fonoestadística](stats/phon_stats.md) sobre los sonidos de una transcripción por reglas: proporciones de las clases de sonidos, grupos consonánticos, hiatos, sílabas abiertas, dureza e índices de aliteración y de asonancia
 *   escandir el [verso](stats/verse_stats.md) por su metro silábico: las sílabas métricas, el metro de un poema, el perfil acentual y los tipos del endecasílabo, la rima consonante y asonante con su esquema, las estrofas y la forma de un poema
 *   comparar corpus con las medidas de la lingüística de corpus: [palabras clave](corpus/keyness.md) frente a un corpus de referencia o al diccionario de frecuencias, [colocaciones](corpus/collocations.md), la [dispersión](corpus/dispersion.md) de una palabra por las partes de un texto y una [concordancia KWIC](corpus/kwic.md), y atribuir la autoría por [estilometría](corpus/stylometry.md): la Delta de Burrows, Zeta, la curva de Mendenhall, las palabras funcionales; encontrar los rasgos que distinguen dos corpus [comparándolos](corpus/compare.md) por 132 rasgos de un texto
@@ -35,7 +35,7 @@ Se requiere Python 3.11 o superior.
 pip install pyests
 ```
 
-El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las dependencias, el modelo de spaCy y los conjuntos de datos están en la página de [Instalación](installation.md).
+La distribución en PyPI se llama `pyests` y el paquete que instala es `ests`. Las dependencias, el modelo de spaCy y los conjuntos de datos están en la página de [Instalación](installation.md).
 
 ## Primeros pasos
 
@@ -118,5 +118,5 @@ Punctuation marks   |    2
         *   utils.py - herramientas auxiliares
         *   visualizers - gráficos: ley de Zipf, huella literaria, árbol de palabras, gráficos de corpus y estilométricos, crecimiento del vocabulario, longitudes de las oraciones, resaltado del texto
     *   **examples** - cuadernos con ejemplos
-    *   **scripts** - scripts que construyen los archivos de los conjuntos de datos y traen las páginas de anyTS de la documentación
+    *   **scripts** - scripts que construyen los archivos de los conjuntos de datos, traen las páginas de anyTS de la documentación y comprueban las salidas de los cuadernos
     *   **tests** - pruebas que reproducen la estructura del paquete

@@ -21,7 +21,7 @@ Todas las excepciones de la biblioteca heredan de la clase base `EstsError` y de
 Las clases están disponibles desde `ests` y desde `ests.exceptions`. Son las clases del núcleo [anyTS](https://sergeyshk.github.io/anyTS/exceptions/) con los mismos nombres, y `EstsError` es su `AnyTSError`: alias, no subclases, así que `except EstsError` captura también los errores que lanza el código del núcleo, y una traza muestra `anyts.exceptions.SourceTypeError`.
 
 !!! note "Nota"
-    `DatasetNotFoundError` suele ser el primer error con el que se topa un usuario nuevo: `MorphStats("El gato duerme")` sin el modelo `es_core_news_sm` la levanta con el comando de descarga. También la levantan `SpanishLiterature().get_texts()` antes de `download()` y las estadísticas de `LexicalStats` según el diccionario de frecuencias.
+    `DatasetNotFoundError` suele ser el primer error con el que se topa un usuario nuevo: `MorphStats("El gato duerme")` sin el modelo `es_core_news_sm` la lanza con el comando de descarga. También la lanzan `SpanishLiterature().get_texts()` antes de `download()` y las estadísticas de `LexicalStats` según el diccionario de frecuencias.
 
 !!! example "Ejemplo"
 
