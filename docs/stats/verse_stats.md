@@ -271,8 +271,8 @@ Returns the text with the stresses marked: an acute accent (U+0301) is put after
     _Result_:
 
     ``` bash
-    Cuando me páro a contemplár mi estádo
-    y a vér los pásos por do me hán traído,
-    hállo, según por do andúve perdído,
-    que a mayór mál pudiéra habér llegádo.
+    Cuando me páro a contemplár mi estádo
+    y a vér los pásos por do me hán traído,
+    hállo, según por do andúve perdído,
+    que a mayór mál pudiéra habér llegádo.
     ```

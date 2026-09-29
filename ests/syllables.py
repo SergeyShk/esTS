@@ -13,6 +13,7 @@ from .constants import (
     VOWELS,
     WEAK_VOWELS,
 )
+from .exceptions import SourceTypeError
 
 CACHE_SIZE = 1 << 16
 WORD_PARTS = re.compile(r"[^\W\d_]+")
@@ -59,6 +60,9 @@ def syllabify(word: str) -> list[str]:
 
     Returns:
         list[str]: List of syllables
+
+    Raises:
+        SourceTypeError: If the word is not a string
     """
     return list(_syllables(word))
 
@@ -75,6 +79,9 @@ def count_syllables(word: str) -> int:
 
     Returns:
         int: Number of syllables
+
+    Raises:
+        SourceTypeError: If the word is not a string
     """
     return len(_syllables(word))
 
@@ -97,6 +104,9 @@ def word_stress(word: str) -> int | None:
 
     Returns:
         int|None: Index of the stressed syllable, None for a word without vowels
+
+    Raises:
+        SourceTypeError: If the word is not a string
     """
     stresses = _stresses(word)
     return stresses[-1] if stresses else None
@@ -120,6 +130,9 @@ def word_stresses(word: str) -> list[int]:
 
     Returns:
         list[int]: Indices of the stressed syllables in ascending order
+
+    Raises:
+        SourceTypeError: If the word is not a string
     """
     return list(_stresses(word))
 
@@ -139,6 +152,9 @@ def stress_type(word: str) -> str | None:
 
     Returns:
         str|None: Type of the word, None for a word without vowels
+
+    Raises:
+        SourceTypeError: If the word is not a string
     """
     syllables = _syllables(word)
     stress = word_stress(word)
@@ -149,12 +165,20 @@ def stress_type(word: str) -> str | None:
 
 def _syllables(word: str) -> tuple[str, ...]:
     """Syllables of a word as a tuple - see syllabify"""
+    _check_word(word)
     return _analyze(word)[0]
 
 
 def _stresses(word: str) -> tuple[int, ...]:
     """Stressed syllables of a word - see word_stresses"""
+    _check_word(word)
     return _analyze(word)[1]
+
+
+def _check_word(word: object) -> None:
+    """Checking that a word is a string"""
+    if not isinstance(word, str):
+        raise SourceTypeError(f"The word must be a string, not {type(word).__name__}")
 
 
 @lru_cache(maxsize=CACHE_SIZE)

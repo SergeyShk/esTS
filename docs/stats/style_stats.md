@@ -5,7 +5,7 @@
 
 ## Description
 
-A module for computing the style metrics of a text: the SEO indicators of the [Advego](https://advego.com/text/seo/) and [Text.ru](https://text.ru/seo) services - nausea, water content, spam score, naturalness of the distribution of words by Zipf's law and keyword density - and the lexical markers of the officialese style that the Spanish guides to plain language warn about: the nouns derived from a verb, the compound prepositions of the administrative style, the parenthetical expressions and the clichés. The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library.
+A module for computing the style metrics of a text: the SEO indicators of the [Advego](https://advego.com/text/seo/) and [Text.ru](https://text.ru/seo) services - nausea, water content, spam score, naturalness of the distribution of words by Zipf's law and keyword density - and the lexical markers of the officialese style that the Spanish-language guides to plain language warn about: the nouns derived from a verb, the compound prepositions of the administrative style, the parenthetical expressions and the clichés. The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library.
 
 The services do not publish their formulas; the commonly accepted definitions are implemented and described in the [functions](style_stats_funcs.md) section. By default words are extracted in lower case without lemmatization, so the forms of one word count as different words, as in Advego. To compute by lemmas, pass a [`WordsExtractor`](../extractors/words.md) object with `use_lexemes=True` and `lowercase=True`.
 
@@ -136,4 +136,4 @@ The same notice written in the administrative style and in plain language.
      'cliches': 0.0}
     ```
 
-The notice of 56 words has three compound prepositions (`en el marco del`, `a efectos de`, `en virtud de`), five clichés (`dar cumplimiento`, `se procedió a`, `se llevará a cabo`, `a la mayor brevedad`, `en tiempo y forma`) and one parenthetical expression, and almost half of its nouns are derived from a verb; the plain version has none of the markers. The anaphoric `de la misma`, which the guides also advise against, is not counted.
+The notice of 56 words has three compound prepositions (`en el marco del`, `a efectos de`, `en virtud de`), five clichés (`dar cumplimiento`, `se procedió a`, `se llevará a cabo`, `a la mayor brevedad`, `en tiempo y forma`) and one parenthetical expression, and almost half of its nouns are derived from a verb; the plain version has no compound prepositions, parenthetical expressions or clichés, and a quarter of its nouns are derived from a verb. The anaphoric `de la misma`, which the guides also advise against, is not counted.

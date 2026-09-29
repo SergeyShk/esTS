@@ -32,7 +32,7 @@ Los parámetros se comprueban con `check_params(window_len, mtld_threshold, mtld
 
 ## Convenciones { #conventions }
 
-<!-- core: stats/diversity_stats.md:DiversityStats-conventions b46d998 -->
+<!-- core: stats/diversity_stats.md:DiversityStats-conventions a759359 -->
 Los valores de algunas métricas dependen de convenciones que difieren entre bibliotecas. Todas salvo la comparación con el umbral de MTLD son parámetros de la clase:
 
 | Parámetro | Por defecto | Otras bibliotecas |
@@ -65,12 +65,12 @@ Según Zenker y Kyle (2021), MATTR, MTLD y HD-D son estables en textos de 50-200
 | `msttr` | float | Mean Segmental Type-Token Ratio (MSTTR) |
 | `mtld` | float | Measure of Textual Lexical Diversity (MTLD) |
 | `mamtld` | float | Moving Average Measure of Textual Lexical Diversity (MA-MTLD) |
-| `mtldw` | float | MTLD con ventana móvil y texto envuelto (MTLD-W) |
+| `mtldw` | float | MTLD con ventana móvil y vuelta al inicio del texto (MTLD-W) |
 | `hdd` | float | Hypergeometric Distribution D (HD-D) |
 | `simpson_index` | float | Índice de Simpson (D) |
 | `inverse_simpson_index` | float | Índice de Simpson inverso (1/D) |
 | `gini_simpson_index` | float | Índice de Gini-Simpson (1-D) |
-| `hapax_index` | float | Índice de hápax, también R de Honoré |
+| `hapax_index` | float | Índice de hápax, también llamado R de Honoré |
 | `honore_r` | float | Alias del índice de hápax |
 | `yule_k` | float | Característica de Yule (K de Yule) |
 | `yule_i` | float | Característica inversa de Yule (I de Yule) |

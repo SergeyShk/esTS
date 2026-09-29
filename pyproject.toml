@@ -1,6 +1,6 @@
 [project]
 name = "pyests"
-version = "0.6.0.dev3"
+version = "0.6.0.dev4"
 description = "Spanish Texts Statistics"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -39,14 +39,14 @@ classifiers = [
     "Natural Language :: Spanish",
 ]
 dependencies = [
-    "anyts>=0.2.2,<0.3",
+    "anyts>=0.2.3,<0.3",
     "graphviz>=0.20.3",
     "matplotlib>=3.8",
     "numpy>=1.26",
     "pandas>=2.1",
     "scipy>=1.11",
     "simplemma>=2.0,<3",
-    "spacy>=3.7",
+    "spacy>=3.8",
 ]
 
 [project.urls]

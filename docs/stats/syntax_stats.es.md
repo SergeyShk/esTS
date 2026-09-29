@@ -5,11 +5,11 @@
 
 ## Descripción
 
-Módulo para calcular las estadísticas sintácticas de un texto sobre el árbol de dependencias de [Universal Dependencies](https://universaldependencies.org/u/dep/). La fuente de datos puede ser un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy), pero tiene que estar analizada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, y un `Doc` debe llevar las dependencias, que vienen de un `parser`, y los lemas, que vienen de un `lemmatizer`: un `Doc` de `spacy.blank("es")`, de un pipeline sin analizador o de uno con el `lemmatizer` excluido levanta `SourceError`.
+Módulo para calcular las estadísticas sintácticas de un texto sobre el árbol de dependencias de [Universal Dependencies](https://universaldependencies.org/u/dep/). La fuente de datos puede ser un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy), pero tiene que estar analizada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, y un `Doc` debe llevar las dependencias, que vienen de un `parser`, y los lemas, que vienen de un `lemmatizer`: un `Doc` de `spacy.blank("es")`, de un pipeline sin analizador o de uno con el `lemmatizer` excluido lanza `SourceError`.
 
 Los signos de puntuación, los símbolos (`%`, `€`, `+`) y los espacios no son nodos del árbol, y las distancias se cuentan en posiciones de palabras. Las medidas de una sola oración - la dependencia más larga, la profundidad del árbol, los nodos por hoja - se promedian sobre las oraciones.
 
-Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto - levanta `SourceError`: divídalo en partes o suba `max_length` en un pipeline propio y páselo en `nlp`.
+Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto - lanza `SourceError`: divídalo en partes o suba `max_length` en un pipeline propio y páselo en `nlp`.
 
 !!! note "Nota"
     Las estadísticas se calculan al inicializar el objeto `SyntaxStats`.
@@ -35,7 +35,7 @@ Las medidas siguen el trabajo de Ivanov, Solnyshkina y Solovyev sobre la complej
 | `leaves_per_sent` | float | Hojas por oración |
 | `subtrees_per_sent` | float | Subárboles por oración |
 | `nodes_per_leaf` | float | Media por oración de las palabras por hoja |
-| `verb_valency` | float | Número medio de dependientes de un verbo personal |
+| `verb_valency` | float | Número medio de dependientes de un verbo en forma personal |
 | `coordination_chains_per_sent` | float | Cadenas de coordinación por oración |
 | `mean_coordination_chain_len` | float | Longitud media de una cadena de coordinación |
 | `clauses_per_sent` | float | Cláusulas por oración |
@@ -45,11 +45,11 @@ Las medidas siguen el trabajo de Ivanov, Solnyshkina y Solovyev sobre la complej
 | `modifiers_per_noun` | float | Número medio de modificadores de un sustantivo |
 | `noun_verb_ratio` | float | Razón entre el número de sustantivos y el de formas verbales |
 
-Una cláusula la encabeza el núcleo de una oración o una palabra con la relación `ccomp`, `advcl`, `acl` o `csubj`, incluida una oración de relativo. La forma de un predicado es la de su primer auxiliar o cópula con forma verbal, o la de la propia palabra si no lo tiene; un auxiliar que el modelo deja sin forma se lee por su terminación cuando es un verbo de `AUXILIARY_VERBS` (`habéis llegado`) y se omite en otro caso (la grafía antigua `á`), y un auxiliar en participio (`sido`, `estado`) cuenta como forma personal, porque sigue a una forma de `haber` que los modelos pueden colgar de otra palabra. Un predicado en forma personal encabeza su cláusula (`dijo que había llegado`, `estaba cantando`, `los regalos que te van a dar`), también bajo `xcomp`, que los modelos dan a algunos complementos en forma personal. Un predicado en forma de participio o de gerundio no encabeza una cláusula de esa clase - esos predicados se cuentan aparte (`llegando tarde`, `habiendo llegado tarde`) -, ni tampoco uno en forma de infinitivo bajo `acl` (`el deseo de irse`, `el miedo de ser robado`). Un infinitivo bajo `xcomp` encabeza una cláusula subordinada (`quiere salir`, `le hizo reír`, `quiere ser médico`, `quiere ser elegido`, `cree haber ganado`) salvo que forme perífrasis con su verbo (`suele salir`, `acaba de salir`: los verbos y los nexos de `INFINITIVE_PERIPHRASES`, NGLE cap. 28) o que el verbo sea `parecer` (`parece dormir`); un adjetivo predicativo bajo `xcomp` (`parece cansado`) no es cláusula. Un inciso (`parataxis`) y un predicado coordinado (`conj` del núcleo de una cláusula) cuentan solo cuando son un verbo o llevan sujeto propio.
+Una cláusula la encabeza el núcleo de una oración o una palabra con la relación `ccomp`, `advcl`, `acl` o `csubj`, incluida una oración de relativo. La forma de un predicado es la de su primer auxiliar o cópula con forma verbal, o la de la propia palabra si no lo tiene; un auxiliar que el modelo deja sin forma se lee por su terminación cuando es un verbo de `AUXILIARY_VERBS` (`habéis llegado`) y se omite en otro caso (la grafía antigua `á`), y un auxiliar en participio (`sido`, `estado`) cuenta como forma personal, porque sigue a una forma de `haber` que los modelos pueden colgar de otra palabra. Un predicado en forma personal encabeza su cláusula (`dijo que había llegado`, `estaba cantando`, `los regalos que te van a dar`), también bajo `xcomp`, que los modelos dan a algunos complementos en forma personal. Un predicado en forma de participio o de gerundio no encabeza una cláusula de esa clase - esos predicados se cuentan aparte (`llegando tarde`, `habiendo llegado tarde`) -, ni tampoco uno en forma de infinitivo bajo `acl` (`el deseo de irse`, `el miedo de ser robado`). Un infinitivo bajo `xcomp` encabeza una cláusula subordinada (`quiere salir`, `le hizo reír`, `quiere ser médico`, `quiere ser elegido`, `cree haber ganado`) salvo que forme perífrasis con su verbo (`suele salir`, `acaba de salir`: los verbos y los nexos de `INFINITIVE_PERIPHRASES`, NGLE cap. 28) o que el verbo sea `parecer` (`parece dormir`); un adjetivo predicativo bajo `xcomp` (`parece cansado`) no es cláusula. Tampoco encabeza una cláusula una perífrasis cuyo infinitivo cuelgan los modelos del verbo como `conj` (`tiene que salir`, `va a salir`). Un inciso (`parataxis`) y un predicado coordinado (`conj` del núcleo de una cláusula) cuentan solo cuando son un verbo o llevan sujeto propio.
 
 ## Construcciones del estilo administrativo { #constructions }
 
-Las construcciones son las que advierten las guías españolas de lenguaje claro.
+Las construcciones son las que advierten las guías de lenguaje claro en español.
 
 | Atributo | Tipo | Descripción |
 | :------: | :--: | :---------: |

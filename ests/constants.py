@@ -742,7 +742,7 @@ STOPWORDS = frozenset(
         "ja", "oh", "ojalá", "olé", "uf", "uy",
     }
 )  # fmt: skip
-# Compound prepositions of the administrative style, flagged by the Spanish guides to
+# Compound prepositions of the administrative style, flagged by the Spanish-language guides to
 # plain language: the RAE and the CGPJ (Libro de estilo de la Justicia, 2017), the RAE and
 # the ASALE (Guía panhispánica de lenguaje claro y accesible, 2024), the European
 # Commission (Cómo escribir con claridad, 2015) and the style manuals of the
@@ -870,7 +870,7 @@ OFFICIALESE_CLICHES = (
     "y para que así conste",
 )
 # Forms of the verbs of the clichés that simplemma leaves as they are, by their
-# infinitive: irregular participles (ha dado cumplimiento) and the imperative with se (dese)
+# infinitive: some participles (ha dado cumplimiento) and the imperative with se (dese)
 IRREGULAR_VERB_FORMS = {
     "dado": "dar",
     "dados": "dar",
@@ -1120,7 +1120,7 @@ HIGHLIGHT_LAYER_STYLES = {
         "text-underline-offset: 3px;"
     ),
 }
-# Number of words from which a sentence is long, by the Spanish guides to plain language
+# Number of words from which a sentence is long, by the Spanish-language guides to plain language
 # (Comunidad de Madrid 2021, Gobierno and Legislatura de la Ciudad de Buenos Aires 2024)
 LONG_SENT_WORD_FACTOR = 30
 # Number of syllables from which the highlighting marks a word as complex

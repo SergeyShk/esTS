@@ -3,8 +3,8 @@
 ## Requisitos
 
 *   `python` 3.11 o superior
-*   `spaCy` 3.7 o superior
-*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.2.2 o superior dentro de 0.2, el núcleo independiente del idioma: los extractores, las estadísticas básicas y las fórmulas comunes de legibilidad, las métricas de diversidad léxica, las medidas de corpus, los gráficos y el mecanismo del resaltado vienen de él con el tokenizador, el lematizador, el segmentador de oraciones y las sílabas del español
+*   `spaCy` 3.8 o superior
+*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.2.3 o superior dentro de 0.2, el núcleo independiente del idioma: los extractores, las estadísticas básicas y las fórmulas comunes de legibilidad, las métricas de diversidad léxica, las medidas de corpus, los gráficos y el mecanismo del resaltado vienen de él con el tokenizador, el lematizador, el segmentador de oraciones y las sílabas del español
 *   `numpy`, `scipy`, `pandas`, `simplemma` 2
 *   `matplotlib` y `graphviz` para las [visualizaciones](visualizers/zipf.md)
 
@@ -12,7 +12,7 @@ Las dependencias se instalan con el paquete. El [árbol de palabras](visualizers
 
 ## Desde PyPI
 
-El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`:
+La distribución en PyPI se llama `pyests` y el paquete que instala es `ests`:
 
 ``` bash
 pip install pyests

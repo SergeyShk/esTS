@@ -25,7 +25,7 @@ Readability in this module is computed from linguistic measures: the mean senten
 | Fernández Huerta | 1959 | Flesch reading ease, 0-100 | seven bands of the author |
 | Szigriszt-Pazos (fórmula de perspicuidad) | 1993 | Flesch reading ease, 0-100 | INFLESZ scale (Barrio-Cantalejo et al., 2008), five bands |
 | Gutiérrez de Polini (fórmula de comprensibilidad) | 1972 | 0-100, higher is easier | no scale of its own; fitted on sixth-grade texts |
-| Crawford | 1989 | years of schooling | Spanish primary school, grades 1-6 |
+| Crawford | 1989 | years of schooling | Spanish-language primary school, grades 1-6 |
 | Legibilidad µ (Muñoz Baquedano and Muñoz Urra) | 2006 | 0-100, higher is easier | seven bands of the authors |
 | SOL (Contreras et al.) | 1999 | years of schooling | SMOG converted to Spanish |
 | LIX, RIX | 1968, 1983 | index, long words per sentence | language-independent bands and grades |

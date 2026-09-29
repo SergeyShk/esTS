@@ -9,7 +9,7 @@ from typing import NamedTuple
 
 import anyts
 from anyts.cohesion import calc_overlaps, calc_repetition, count_given
-from anyts.utils import iter_doc_tokens, safe_divide
+from anyts.utils import check_sequence, check_words, iter_doc_tokens, safe_divide
 from spacy.language import Language
 from spacy.tokens import Doc, Token
 
@@ -491,13 +491,21 @@ def find_connectors(
         list[Connector]: Occurrences of the connectors in the order of the words
 
     Raises:
-        ParameterError: If the dictionary has an unknown class or kind
+        SourceTypeError: If the words are not a list of strings or the parts of speech are
+            not a list
+        ParameterError: If the dictionary has an unknown class or kind, or the parts
+            of speech are not as many as the words
 
     Example:
         >>> from ests.cohesion_stats import find_connectors
         >>> find_connectors(["Sin", "embargo", "no", "vino"])
         [Connector(sent=0, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary')]
     """
+    check_words(words)
+    if pos is not None:
+        check_sequence(pos, "parts of speech")
+        if len(pos) != len(words):
+            raise ParameterError("The parts of speech must be as many as the words")
     index = _normalize_connectors() if connectors is None else _normalize(connectors)
     return _find(words, index, sent_index, pos)
 

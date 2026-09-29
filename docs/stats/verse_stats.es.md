@@ -271,8 +271,8 @@ Devuelve el texto con los acentos marcados: se pone un acento agudo (U+0301) tra
     _Resultado_:
 
     ``` bash
-    Cuando me páro a contemplár mi estádo
-    y a vér los pásos por do me hán traído,
-    hállo, según por do andúve perdído,
-    que a mayór mál pudiéra habér llegádo.
+    Cuando me páro a contemplár mi estádo
+    y a vér los pásos por do me hán traído,
+    hállo, según por do andúve perdído,
+    que a mayór mál pudiéra habér llegádo.
     ```

@@ -5,7 +5,7 @@
 
 ## Descripción
 
-Dos gráficos de la distribución de las palabras de un texto que completan la [ley de Zipf](zipf.md): el crecimiento del vocabulario con la longitud del texto según la ley de Heaps y el espectro de frecuencias, cuántos tipos de palabra aparecen exactamente una, dos, tres veces. Las funciones reciben los ejes `ax` y devuelven `Axes`.
+Dos gráficos de la distribución de las palabras de un texto que complementan la [ley de Zipf](zipf.md): el crecimiento del vocabulario con la longitud del texto según la ley de Heaps y el espectro de frecuencias, cuántos tipos de palabra aparecen exactamente una, dos, tres veces. Las funciones reciben los ejes `ax` y devuelven `Axes`.
 
 Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visualizers/vocabulary/); el ajuste de la ley de Heaps se describe en [`fit_heaps`](../stats/diversity_stats_funcs.md#heaps_beta) y el espectro en [`calc_frequency_spectrum`](../stats/diversity_stats_funcs.md#frequency_spectrum). Las etiquetas por defecto son las inglesas de `VISUALIZER_LABELS` en `anyts.constants`; `labels` sustituye cualquiera de ellas.
 

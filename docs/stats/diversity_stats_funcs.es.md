@@ -268,7 +268,7 @@ Parámetros:
 | `min_len` | int | `10` | Longitud mínima del factor |
 | `threshold` | float | `0.72` | Umbral de TTR para completar un factor |
 
-## MTLD con ventana móvil y texto envuelto (MTLD-W)
+## MTLD con ventana móvil y vuelta al inicio del texto (MTLD-W)
 
 !!! info ""
     **ests.diversity_stats.calc_mtldw()**
@@ -341,8 +341,8 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_inverse_simpson_index()**
 
-<!-- core: stats/diversity_stats_funcs.md:calc_inverse_simpson_index a3699fb -->
-Cálculo del [índice de Simpson inverso](https://en.wikipedia.org/wiki/Diversity_index#Inverse_Simpson_index), el número de Hill de orden dos.
+<!-- core: stats/diversity_stats_funcs.md:calc_inverse_simpson_index 1fdfcd2 -->
+Cálculo del [índice de Simpson inverso](https://en.wikipedia.org/wiki/Diversity_index#Inverse_Simpson_index), una estimación del número de Hill de orden dos ($1/\sum_k p_k^2$) a partir de pares extraídos sin reposición.
 
 Cuanto mayor es el valor, más rico es el vocabulario.
 
@@ -388,12 +388,12 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_hapax_index()**, alias **ests.diversity_stats.calc_honore_r()**
 
-<!-- core: stats/diversity_stats_funcs.md:calc_hapax_index a2acf89 -->
+<!-- core: stats/diversity_stats_funcs.md:calc_hapax_index 4a5bc5c -->
 Cálculo del [índice de hápax](https://en.wikipedia.org/wiki/Hapax_legomenon).
 
 !!! quote "Definición"
 
-    Un hápax (del griego ἅπαξ λεγόμενον, «dicho una sola vez») es una palabra que aparece una sola vez en un corpus de textos. Por ejemplo, *baciyelmo*, la bacía-yelmo de Sancho Panza, es un hápax de Cervantes (aparece en un solo capítulo del *Quijote*).
+    Un hápax (del griego ἅπαξ λεγόμενον, «dicho una sola vez») es una palabra que aparece una sola vez en un corpus de textos. Por ejemplo, *baciyelmo*, la palabra con que Sancho Panza llama a la bacía que don Quijote toma por yelmo, es un hápax de Cervantes (aparece una sola vez, en el capítulo 44 de la primera parte del *Quijote*).
 
 La métrica coincide con la medida de Honoré (1979), con el logaritmo natural.
 
@@ -638,8 +638,8 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_entropy()**
 
-<!-- core: stats/diversity_stats_funcs.md:calc_entropy 52a4686 -->
-Cálculo de la [entropía de Shannon](https://en.wikipedia.org/wiki/Diversity_index#Shannon_index) de la distribución de lexemas en bits. Cuanto mayor es el valor, más rico es el vocabulario. El número de Hill de orden uno es $2^H$ ([perplejidad](#perplexity)), el de orden cero $V$, el de orden dos el [índice de Simpson inverso](#inverse_simpson_index).
+<!-- core: stats/diversity_stats_funcs.md:calc_entropy 6da50d2 -->
+Cálculo de la [entropía de Shannon](https://en.wikipedia.org/wiki/Diversity_index#Shannon_index) de la distribución de lexemas en bits. Cuanto mayor es el valor, más rico es el vocabulario. El número de Hill de orden uno es $2^H$ ([perplejidad](#perplexity)), y el de orden cero, $V$; el [índice de Simpson inverso](#inverse_simpson_index) estima el de orden dos.
 
 Fórmula:
 
@@ -767,8 +767,8 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_windowed()**
 
-<!-- core: stats/diversity_stats_funcs.md:calc_windowed f7b0e11 -->
-Cálculo por ventanas de cualquier métrica: su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Es la forma estándar de comparar textos de distinta longitud; el STTR de Kubát y Milička es un TTR por ventanas de 1000 palabras con un intervalo de confianza del 95 %. En los textos más cortos que la ventana la métrica se calcula sobre todo el texto como una sola ventana; las ventanas con un valor no definido (`nan`) se ignoran. Si la métrica es infinita en al menos una ventana (por ejemplo, el índice de Simpson inverso en una ventana de palabras únicas), la media es infinita y la desviación típica y el intervalo de confianza no están definidos. Devuelve una tupla con nombre `WindowStats` con los campos `mean`, `std`, `lower`, `upper` y `n_windows`.
+<!-- core: stats/diversity_stats_funcs.md:calc_windowed b59de2a -->
+Cálculo por ventanas de cualquier métrica: su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Es la forma estándar de comparar textos de distinta longitud; el TTR estandarizado de Kubát y Milička (no el STTR de Summer) es un TTR por ventanas de 1000 palabras con un intervalo de confianza del 95 %. En los textos más cortos que la ventana la métrica se calcula sobre todo el texto como una sola ventana; las ventanas con un valor no definido (`nan`) se ignoran. Si la métrica es infinita en al menos una ventana (por ejemplo, el índice de Simpson inverso en una ventana de palabras únicas), la media es infinita y la desviación típica y el intervalo de confianza no están definidos. Devuelve una tupla con nombre `WindowStats` con los campos `mean`, `std`, `lower`, `upper` y `n_windows`.
 
 Parámetros:
 

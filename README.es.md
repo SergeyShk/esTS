@@ -49,7 +49,7 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Componentes de spaCy](https://sergeyshk.github.io/esTS/es/components/)** - cada clase de estadísticas como componente de un pipeline, con las estadísticas puestas en el `Doc` en una sola pasada
 * **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, con la densidad de 250 marcadores del discurso españoles
 * **[Estadísticas de complejidad léxica](https://sergeyshk.github.io/esTS/es/stats/lexical_stats/)** - cuán raras son las palabras de un texto en la lengua: la frecuencia, el rango y la dispersión de los lemas según un diccionario de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la sorpresa, la perplejidad y la densidad léxica
-* **[Métricas de estilo](https://sergeyshk.github.io/esTS/es/stats/style_stats/)** - los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías españolas de lenguaje claro: sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés
+* **[Métricas de estilo](https://sergeyshk.github.io/esTS/es/stats/style_stats/)** - los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías de lenguaje claro en español: sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés
 * **[Fonoestadística](https://sergeyshk.github.io/esTS/es/stats/phon_stats/)** - proporciones de las clases de sonidos, grupos consonánticos, hiatos, sílabas abiertas, dureza e índices de aliteración y de asonancia, sobre los sonidos de una transcripción por reglas
 * **[Estadísticas del verso](https://sergeyshk.github.io/esTS/es/stats/verse_stats/)** - la escansión del verso español por su metro silábico: las sílabas métricas, el metro de un poema, el perfil acentual y los tipos del endecasílabo, la rima consonante y asonante con su esquema, las estrofas y la forma de un poema
 * **[Estadísticas sintácticas](https://sergeyshk.github.io/esTS/es/stats/syntax_stats/)** - el árbol de dependencias por distancias, profundidad, cláusulas y coordinación, con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
@@ -68,7 +68,7 @@ O con [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-El distribuible en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad, la diversidad léxica, las métricas de estilo salvo los sustantivos deverbales, la fonoestadística y las estadísticas del verso no necesitan ningún modelo de spaCy. Las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica de una cadena sí lo necesitan, igual que los sustantivos deverbales, el perfil de las palabras funcionales, los rasgos de un texto, la comparación de corpus y analizar un `Doc` por su cuenta:
+La distribución en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad, la diversidad léxica, las métricas de estilo salvo los sustantivos deverbales, la fonoestadística y las estadísticas del verso no necesitan ningún modelo de spaCy. Las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica de una cadena sí lo necesitan, igual que los sustantivos deverbales, el perfil de las palabras funcionales, los rasgos de un texto, la comparación de corpus y analizar un `Doc` por su cuenta:
 
 ```bash
 python -m spacy download es_core_news_sm
@@ -353,7 +353,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/morph_stat
 
 <br>
 
-El árbol de dependencias de Universal Dependencies y las construcciones contra las que advierten las guías españolas de lenguaje claro:
+El árbol de dependencias de Universal Dependencies y las construcciones contra las que advierten las guías de lenguaje claro en español:
 
 *   la complejidad del árbol: distancias de dependencia, profundidad, hojas y subárboles, valencia de los verbos personales, cadenas de coordinación, cláusulas y subordinadas, modificadores por sustantivo
 *   las construcciones: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos, el `se` impersonal, las palabras de negación, la razón entre sustantivos y verbos
@@ -448,7 +448,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/lexical_st
 
 <br>
 
-Los indicadores SEO de Advego y Text.ru - náusea, contenido de agua, índice de spam, naturalidad según la ley de Zipf, densidad de palabras clave - y los marcadores del estilo burocrático contra los que advierten las guías españolas de lenguaje claro: los sustantivos deverbales, las locuciones prepositivas del estilo administrativo, las expresiones parentéticas y los clichés.
+Los indicadores SEO de Advego y Text.ru - náusea, contenido de agua, índice de spam, naturalidad según la ley de Zipf, densidad de palabras clave - y los marcadores del estilo burocrático contra los que advierten las guías de lenguaje claro en español: los sustantivos deverbales, las locuciones prepositivas del estilo administrativo, las expresiones parentéticas y los clichés.
 
 ```python
 >>> from ests import StyleStats
@@ -575,7 +575,7 @@ Las medidas de la lingüística de corpus que comparan corpus y describen el uso
 (['gato', 'ventana'], ['dormir', 'perro'])
 ```
 
-Las palabras se comparan tal cual, así que la caja, los lemas y las palabras vacías se eligen en la extracción.
+Las palabras se comparan tal cual, así que las mayúsculas y minúsculas, los lemas y las palabras vacías se eligen en la extracción.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/corpus/keyness/).
 
@@ -605,7 +605,7 @@ La de Bringas 1884 413730
 Tormento 1884 477286
 ```
 
-El archivo (19 MB) se descarga una vez con `download()` en el directorio de datos; antes, `get_texts()` y `get_records()` levantan `DatasetNotFoundError`.
+El archivo (19 MB) se descarga una vez con `download()` en el directorio de datos; antes, `get_texts()` y `get_records()` lanzan `DatasetNotFoundError`.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/).
 
@@ -723,7 +723,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos en las [i
     *   utils.py - herramientas auxiliares
     *   visualizers - gráficos: ley de Zipf, huella literaria, árbol de palabras, gráficos de corpus y estilométricos, crecimiento del vocabulario, longitudes de las oraciones, resaltado del texto
 *   **examples** - cuadernos con ejemplos
-*   **scripts** - scripts que construyen los archivos de los conjuntos de datos y traen las páginas de anyTS de la documentación
+*   **scripts** - scripts que construyen los archivos de los conjuntos de datos, traen las páginas de anyTS de la documentación y comprueban las salidas de los cuadernos
 *   **tests** - pruebas que reproducen la estructura del paquete
 
 </details>
