@@ -416,6 +416,7 @@ def test_clause_head_of_an_infinitive(nlp, text, clauses):
         ("Habiendo llegado tarde, se fue.", 1, ["llegado"]),
         ("Siendo elegido presidente, viajó a Roma.", 1, ["elegido"]),
         ("Era una mujer que podía ser su hija.", 2, []),
+        ("Sé que os habéis posado aquí.", 2, []),
     ],
 )
 def test_clause_head_by_the_form_of_the_predicate(nlp, text, clauses, gerund_clauses):
@@ -470,6 +471,22 @@ def test_clause_head_of_an_infinitive_under_a_misread_verb(nlp):
         morphs=["", "VerbForm=Inf"],
     )
     assert not is_clause_head(doc[1])
+
+
+@pytest.mark.parametrize(
+    ("auxiliary", "form"),
+    [("habéis", "Fin"), ("haberse", "Inf"), ("habiéndose", "Ger"), ("á", "Part")],
+)
+def test_predicate_form_of_an_auxiliary_without_a_form(nlp, auxiliary, form):
+    """A form of a verb of AUXILIARY_VERBS is read by its ending, anything else skipped"""
+    doc = Doc(
+        nlp.vocab,
+        words=[auxiliary, "llegado"],
+        heads=[1, 1],
+        deps=["aux", "ROOT"],
+        morphs=["", "VerbForm=Part"],
+    )
+    assert predicate_form(doc[1]) == form
 
 
 @pytest.mark.parametrize(

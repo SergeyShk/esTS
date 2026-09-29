@@ -409,6 +409,12 @@ MORPHOLOGY_MARKERS_DESC = {
 
 # The two copulas of Spanish, by lemma
 COPULAS = ("ser", "estar")
+# Verbs the models attach as auxiliaries or copulas, by lemma
+AUXILIARY_VERBS = frozenset(
+    {"haber", "ser", "estar", "ir", "poder", "deber", "querer", "soler", "tener", "saber"}
+)
+# Enclitic pronouns after an infinitive, a gerund or an imperative (decírselo)
+ENCLITICS = ("me", "te", "se", "nos", "os", "lo", "la", "los", "las", "le", "les")
 
 
 # Dependencies that head a clause; the Spanish models give acl for a relative clause too

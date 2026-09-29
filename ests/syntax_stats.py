@@ -1,3 +1,4 @@
+import re
 from collections import Counter
 from collections.abc import Collection, Iterable
 from math import nan
@@ -23,8 +24,10 @@ from spacy.tokens import Doc, Token
 
 from .constants import (
     AGENT_PREPOSITION,
+    AUXILIARY_VERBS,
     CLAUSE_DEPS,
     DE_PREPOSITIONS,
+    ENCLITICS,
     GERUND_PERIPHRASIS_VERBS,
     INFINITIVE_PERIPHRASES,
     LIGHT_VERBS,
@@ -49,6 +52,11 @@ SPLIT_PREDICATE_DEPS = ("compound", "obj", "nsubj", "iobj", "nmod", "obl")
 AUXILIARY_DEPS = ("aux", "cop")
 # Relations by which the models attach the gerund of a periphrasis to its verb
 PERIPHRASIS_DEPS = ("xcomp", "advcl")
+# The endings of the infinitive and the gerund, enclitics after them
+NONFINITE_ENDINGS = (
+    ("Inf", re.compile(rf"r(?:{'|'.join(ENCLITICS)})*$")),
+    ("Ger", re.compile(rf"ndo(?:{'|'.join(ENCLITICS)})*$")),
+)
 # Relations of the word that links an infinitive to the verb of its periphrasis
 LINKING_DEPS = ("mark", "case", "cc")
 LINKING_WORDS = frozenset(
@@ -644,9 +652,12 @@ def predicate_form(token: Token) -> str:
     Description:
         The form of the first auxiliary or copula of a word with a verb form
         (había llegado is finite, de haber matado an infinitive, siendo
-        elegido a gerund) or of the word itself without one. A participle
-        auxiliary counts as finite: sido and estado follow a form of haber,
-        which the models may attach to another word (hubieras sido albañil)
+        elegido a gerund) or of the word itself without one. An auxiliary the
+        model leaves without a form is read by its ending when it is a verb of
+        AUXILIARY_VERBS (habéis llegado) and skipped otherwise (the old
+        spelling á). A participle auxiliary counts as finite: sido and estado
+        follow a form of haber, which the models may attach to another word
+        (hubieras sido albañil)
 
     Arguments:
         token (Token): Token
@@ -655,9 +666,9 @@ def predicate_form(token: Token) -> str:
         str: Fin, Inf, Ger or Part, an empty string for a word with no verb form
     """
     forms = [
-        _verb_form(child)
+        form
         for child in token.children
-        if base_dep(child) in AUXILIARY_DEPS and _verb_form(child)
+        if base_dep(child) in AUXILIARY_DEPS and (form := _auxiliary_form(child))
     ]
     if not forms:
         return _verb_form(token)
@@ -667,6 +678,16 @@ def predicate_form(token: Token) -> str:
 def _verb_form(token: Token) -> str:
     """Verb form of a token, an empty string without one"""
     return next(iter(token.morph.get("VerbForm", [])), "")
+
+
+def _auxiliary_form(token: Token) -> str:
+    """Verb form of an auxiliary, by its ending when the model gives none"""
+    if form := _verb_form(token):
+        return form
+    word = token.text.lower()
+    if lemmatize(word) not in AUXILIARY_VERBS:
+        return ""
+    return next((form for form, ending in NONFINITE_ENDINGS if ending.search(word)), "Fin")
 
 
 def has_auxiliary(token: Token) -> bool:
