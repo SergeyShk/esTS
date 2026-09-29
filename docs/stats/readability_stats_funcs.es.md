@@ -1,5 +1,7 @@
 # Funciones de las métricas
 
+Una fórmula de recuentos da `nan` cuando el número de palabras o de oraciones por el que divide es cero.
+
 ## Facilidad de lectura de Flesch { #calc_flesch_reading_easy }
 
 !!! info ""

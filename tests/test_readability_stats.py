@@ -458,3 +458,21 @@ def test_print_stats(capsys, rs):
     captured = capsys.readouterr()
     assert captured.out.count("|") == len(READABILITY_STATS_DESC) + 1
     assert "Legibilidad µ" in captured.out
+
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        lambda: calc_gutierrez_polini_index(10, 0, 1),
+        lambda: calc_gutierrez_polini_index(10, 5, 0),
+        lambda: calc_crawford_grade(10, 0, 2),
+        lambda: calc_sol_grade(3, 0),
+        lambda: calc_flesch_reading_easy(10, 5, 0),
+    ],
+)
+def test_formulas_without_words_or_sentences(value):
+    assert isnan(value())
+
+
+def test_crawford_grade_without_sentences():
+    assert calc_crawford_grade(10, 5, 0) == pytest.approx(0.049 * 100 * 10 / 5 - 3.407)

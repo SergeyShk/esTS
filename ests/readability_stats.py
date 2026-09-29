@@ -1,5 +1,5 @@
 from collections.abc import Iterable
-from math import isnan
+from math import isnan, nan
 
 import anyts.readability_stats
 from anyts.readability_stats import (
@@ -8,6 +8,7 @@ from anyts.readability_stats import (
     calc_rix as calc_rix,
     calc_smog_index as calc_smog_index,
 )
+from anyts.utils import safe_divide
 from spacy.tokens import Doc
 
 from .basic_stats import BasicStats
@@ -240,7 +241,7 @@ def calc_flesch_reading_easy(
         c (float): Coefficient c, the constant
 
     Returns:
-        float: Value of the index
+        float: Value of the index, nan without words or sentences
     """
     return anyts.readability_stats.calc_flesch_reading_easy(n_syllables, n_words, n_sents, a, b, c)
 
@@ -265,9 +266,13 @@ def calc_gutierrez_polini_index(n_letters: int, n_words: int, n_sents: int) -> f
         n_sents (int): Number of sentences
 
     Returns:
-        float: Value of the formula
+        float: Value of the formula, nan without words or sentences
     """
-    return 95.2 - (9.7 * n_letters / n_words) - (0.35 * n_words / n_sents)
+    return (
+        95.2
+        - safe_divide(9.7 * n_letters, n_words, nan)
+        - safe_divide(0.35 * n_words, n_sents, nan)
+    )
 
 
 def calc_crawford_grade(n_syllables: int, n_words: int, n_sents: int) -> float:
@@ -290,9 +295,13 @@ def calc_crawford_grade(n_syllables: int, n_words: int, n_sents: int) -> float:
         n_sents (int): Number of sentences
 
     Returns:
-        float: Value of the formula
+        float: Value of the formula, nan without words
     """
-    return (-0.205 * 100 * n_sents / n_words) + (0.049 * 100 * n_syllables / n_words) - 3.407
+    return (
+        safe_divide(-0.205 * 100 * n_sents, n_words, nan)
+        + safe_divide(0.049 * 100 * n_syllables, n_words, nan)
+        - 3.407
+    )
 
 
 def calc_sol_grade(n_complex: int, n_sents: int, a: float = 0.74, b: float = -2.51) -> float:
@@ -317,7 +326,7 @@ def calc_sol_grade(n_complex: int, n_sents: int, a: float = 0.74, b: float = -2.
         b (float): Coefficient b, the constant
 
     Returns:
-        float: Value of the grade
+        float: Value of the grade, nan without sentences
     """
     return b + a * calc_smog_index(n_complex, n_sents)
 
