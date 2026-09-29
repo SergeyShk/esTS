@@ -101,6 +101,7 @@ docs = [
     "mkdocs-static-i18n>=1.2",
     "pymdown-extensions>=10.0",
 ]
+examples = ["jupyterlab>=4.3", "nbmake>=1.5", "nbstripout>=0.8"]
 dev = [
     { include-group = "test" },
     { include-group = "lint" },

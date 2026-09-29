@@ -11,6 +11,7 @@ nav:
     - Home:
       - About: index.md
       - Installation: installation.md
+      - Examples: examples.md
       - Exceptions and logging: exceptions.md
       - Authors: authors.md
     - Extraction:
@@ -97,6 +98,7 @@ plugins:
             Home: Inicio
             About: Acerca de
             Installation: Instalación
+            Examples: Ejemplos
             Exceptions and logging: Excepciones y registro
             Authors: Autores
             Extraction: Extracción

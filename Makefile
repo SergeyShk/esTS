@@ -1,8 +1,9 @@
-.PHONY: help uv deps lock lint ruff format mypy test test-cov clean clean-build clean-pyc clean-test build publish publish-test docs-core docs-build docs-serve docs-deploy demo demo-login demo-upload
+.PHONY: help uv deps lock lint ruff format mypy test test-cov clean clean-build clean-pyc clean-test build publish publish-test docs-core docs-build docs-serve docs-deploy notebooks demo demo-login demo-upload
 .DEFAULT_GOAL := help
 APP_PATH := ests
 TESTS_PATH := tests
 DEMO_PATH := demo
+EXAMPLES_PATH := examples
 HF_SPACE := SergeyShk/esTS
 
 help: ## Show the list of commands
@@ -28,15 +29,15 @@ lint: ruff mypy ## Run all code checks
 
 ruff: deps ## Check and format the code with ruff
 ifeq ($(MODE), ci)
-	uv run ruff check $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH)
-	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) --check
+	uv run ruff check $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) $(EXAMPLES_PATH)
+	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) $(EXAMPLES_PATH) --check
 else
-	uv run ruff check $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) --fix
-	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH)
+	uv run ruff check $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) $(EXAMPLES_PATH) --fix
+	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) $(EXAMPLES_PATH)
 endif
 
 format: deps ## Format the code
-	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH)
+	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) $(EXAMPLES_PATH)
 
 mypy: deps ## Check types with mypy
 	uv run mypy
@@ -85,6 +86,11 @@ docs-serve: docs-core ## Serve the documentation locally
 
 docs-deploy: docs-core ## Deploy the documentation
 	uv run mkdocs gh-deploy
+
+notebooks: uv ## Run the notebooks of examples/ and write their output into the files
+	uv sync --group examples
+	uv run pytest --nbmake --overwrite $(EXAMPLES_PATH) -p no:cacheprovider
+	uv run nbstripout --keep-output --keep-count --extra-keys metadata.language_info.version $(EXAMPLES_PATH)/*.ipynb
 
 demo: deps ## Run the demo locally
 	uv run --with "gradio>=6.28,<7" python $(DEMO_PATH)/app.py
