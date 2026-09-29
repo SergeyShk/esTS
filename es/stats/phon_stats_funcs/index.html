@@ -2831,11 +2831,14 @@ H = -\sum_{k} p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.phon_stats.calc_alliteration()</strong></p>
 </div>
-<p>La razón del número observado de ventanas de <code>window_len</code> palabras vecinas en las que un sonido consonántico aparece en dos palabras o más al número esperado si las consonantes se repartieran al azar entre las palabras, sumado sobre las consonantes. El número esperado sale de las frecuencias de las consonantes del propio texto, así que el índice dice si las repeticiones se agrupan en palabras vecinas, no cuán frecuente es un sonido: cerca de 1 - las repeticiones son aleatorias, bastante por encima de 1 - aliteración. Las consonantes son los sonidos de la transcripción, así que <code>casa</code> y <code>queso</code> repiten k, y <code>cena</code> y <code>casa</code> no; <code>nan</code> para un texto más corto que la ventana.</p>
+<p>El índice es <code>calc_repetition_index</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/phonetics/">anyTS</a> sobre los sonidos consonánticos de las palabras:</p>
+<!-- core: stats/phonetics.md:calc_repetition_index 4e25d01 -->
+<p>El índice de repetición: el número de ventanas de <code>window_len</code> palabras vecinas donde un rasgo - una letra o un sonido, según elija una biblioteca - aparece en dos palabras o más, sumado sobre los rasgos, dividido por el número esperado si las palabras estuvieran en orden aleatorio. Una ventana de palabras barajadas es una muestra de ellas sin reposición, así que, para un rasgo presente en <span class="arithmatex">\(K\)</span> de las <span class="arithmatex">\(N\)</span> palabras del texto, una ventana de <span class="arithmatex">\(w\)</span> palabras lo contiene en dos palabras o más con la probabilidad hipergeométrica</p>
 <div class="arithmatex">\[
-\frac{\sum_c O_c}{\sum_c (W - w + 1) \left(1 - (1 - p_c)^w - w p_c (1 - p_c)^{w - 1}\right)}
+P = 1 - \frac{\binom{N-K}{w} + K \binom{N-K}{w-1}}{\binom{N}{w}}
 \]</div>
-<p>donde <span class="arithmatex">\(O_c\)</span> es el número de ventanas con la consonante <span class="arithmatex">\(c\)</span> en dos palabras o más, <span class="arithmatex">\(W\)</span> el número de palabras, <span class="arithmatex">\(w\)</span> la ventana y <span class="arithmatex">\(p_c\)</span> la proporción de las palabras con la consonante <span class="arithmatex">\(c\)</span>.</p>
+<p>y el número esperado es la suma de estas probabilidades sobre los rasgos multiplicada por las <span class="arithmatex">\(N - w + 1\)</span> ventanas. La esperanza sale del propio texto, así que el índice dice si las repeticiones se agrupan en palabras vecinas, no cuán frecuente es un rasgo: vale 1 de media sobre los órdenes de las palabras y queda bastante por encima de 1 cuando las repeticiones se acercan más que al azar. Una palabra cuenta un rasgo una vez, lo contenga las veces que lo contenga; <code>nan</code> para un texto más corto que la ventana y para un texto en el que ningún rasgo aparezca en dos palabras.</p>
+<p>Los rasgos son los sonidos consonánticos de la transcripción, así que <code>casa</code> y <code>queso</code> repiten k, y <code>cena</code> y <code>casa</code> no.</p>
 <table>
 <thead>
 <tr>
@@ -2864,7 +2867,7 @@ H = -\sum_{k} p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.phon_stats.calc_assonance()</strong></p>
 </div>
-<p>La misma razón sobre las vocales: el número observado de ventanas de <code>window_len</code> palabras vecinas en las que una vocal aparece en dos palabras o más frente al número esperado por las frecuencias de las vocales del texto. Cuentan todas las vocales, tónicas o no; <code>nan</code> para un texto más corto que la ventana.</p>
+<p>El índice de <code>calc_alliteration</code> sobre las vocales: el número observado de ventanas de <code>window_len</code> palabras vecinas en las que una vocal aparece en dos palabras o más frente al número esperado con las palabras en orden aleatorio. Cuentan todas las vocales, tónicas o no; <code>nan</code> para un texto más corto que la ventana o sin una vocal que compartan dos palabras.</p>
 <table>
 <thead>
 <tr>

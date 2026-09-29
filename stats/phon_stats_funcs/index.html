@@ -2831,11 +2831,13 @@ H = -\sum_{k} p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.phon_stats.calc_alliteration()</strong></p>
 </div>
-<p>The ratio of the observed number of windows of <code>window_len</code> neighbouring words where one consonant sound occurs in two words or more to the number expected if the consonants were spread over the words at random, summed over the consonants. The expected number comes from the frequencies of the consonants in the text itself, so the index tells whether the repetitions cluster in neighbouring words, not how frequent a sound is: about 1 - the repetitions are random, well above 1 - alliteration. The consonants are the sounds of the transcription, so <code>casa</code> and <code>queso</code> repeat k, and <code>cena</code> and <code>casa</code> do not; <code>nan</code> for a text shorter than the window.</p>
+<p>The index is <code>calc_repetition_index</code> of the <a href="https://sergeyshk.github.io/anyTS/stats/phonetics/">anyTS</a> core over the consonant sounds of the words:</p>
+<p>The repetition index: the number of windows of <code>window_len</code> neighbouring words where a feature - a letter or a sound, as a library chooses - occurs in two words or more, summed over the features, to the number expected if the words stood in random order. A window of shuffled words is a sample of them without replacement, so for a feature found in <span class="arithmatex">\(K\)</span> of the <span class="arithmatex">\(N\)</span> words of the text a window of <span class="arithmatex">\(w\)</span> words holds it in two words or more with the hypergeometric probability</p>
 <div class="arithmatex">\[
-\frac{\sum_c O_c}{\sum_c (W - w + 1) \left(1 - (1 - p_c)^w - w p_c (1 - p_c)^{w - 1}\right)}
+P = 1 - \frac{\binom{N-K}{w} + K \binom{N-K}{w-1}}{\binom{N}{w}}
 \]</div>
-<p>where <span class="arithmatex">\(O_c\)</span> is the number of windows with the consonant <span class="arithmatex">\(c\)</span> in two words or more, <span class="arithmatex">\(W\)</span> the number of words, <span class="arithmatex">\(w\)</span> the window and <span class="arithmatex">\(p_c\)</span> the share of the words with the consonant <span class="arithmatex">\(c\)</span>.</p>
+<p>and the expected number is the sum of these probabilities over the features times the <span class="arithmatex">\(N - w + 1\)</span> windows. The expectation comes from the text itself, so the index tells whether the repetitions gather in neighbouring words, not how frequent a feature is: it averages to 1 over the orders of the words, and is well above 1 when the repetitions come closer than chance. A word counts a feature once, however often it holds it; <code>nan</code> for a text shorter than the window and for a text where no feature is shared by two words.</p>
+<p>The features are the consonant sounds of the transcription, so <code>casa</code> and <code>queso</code> repeat k, and <code>cena</code> and <code>casa</code> do not.</p>
 <table>
 <thead>
 <tr>
@@ -2864,7 +2866,7 @@ H = -\sum_{k} p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.phon_stats.calc_assonance()</strong></p>
 </div>
-<p>The same ratio over the vowels: the observed number of windows of <code>window_len</code> neighbouring words where one vowel occurs in two words or more against the number expected by the frequencies of the vowels in the text. Every vowel counts, stressed or not; <code>nan</code> for a text shorter than the window.</p>
+<p>The index of <code>calc_alliteration</code> over the vowels: the observed number of windows of <code>window_len</code> neighbouring words where a vowel occurs in two words or more against the number expected for the words in random order. Every vowel counts, stressed or not; <code>nan</code> for a text shorter than the window or without a vowel shared by two words.</p>
 <table>
 <thead>
 <tr>
