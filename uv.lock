@@ -3023,7 +3023,7 @@ wheels = [
 
 [[package]]
 name = "pyests"
-version = "0.6.1.dev1"
+version = "0.6.1"
 source = { editable = "." }
 dependencies = [
     { name = "anyts" },
