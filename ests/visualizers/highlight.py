@@ -2,7 +2,7 @@ import re
 from collections.abc import Callable, Collection, Iterable, Iterator, Sequence
 
 import anyts.visualizers.highlight
-from anyts.syntax import base_dep, get_words, is_word
+from anyts.syntax import base_dep, is_word, subtree_len
 from anyts.utils import check_integer, check_number, check_words
 from anyts.visualizers.highlight import (
     Highlight as Highlight,
@@ -641,6 +641,33 @@ def find_passive(doc: Doc) -> list[Highlight]:
     return highlights
 
 
+def _subtree(token: Token) -> list[Token]:
+    """
+    Getting the tokens of the subtree of a token
+
+    Description:
+        Unlike Token.subtree, the walk keeps the tokens it has visited, so it
+        ends on a broken parse whose heads form a loop
+
+    Arguments:
+        token (Token): Token
+
+    Returns:
+        list[Token]: Tokens of the subtree
+    """
+    tokens = []
+    stack = [token]
+    seen = {token.i}
+    while stack:
+        current = stack.pop()
+        tokens.append(current)
+        for child in current.children:
+            if child.i not in seen:
+                seen.add(child.i)
+                stack.append(child)
+    return tokens
+
+
 def find_participle_clauses(doc: Doc) -> list[Highlight]:
     """
     Finding the participial clauses
@@ -654,8 +681,8 @@ def find_participle_clauses(doc: Doc) -> list[Highlight]:
     highlights = []
     for token in doc:
         if is_participle_clause(token):
-            start, end = tokens_span(token.subtree)
-            n_words = len(get_words(token.subtree))
+            start, end = tokens_span(_subtree(token))
+            n_words = subtree_len(token)
             note = f"participial clause, {plural(n_words, 'word')}"
             highlights.append(Highlight(start, end, "participle_clauses", note))
     return highlights
@@ -674,8 +701,8 @@ def find_gerund_clauses(doc: Doc) -> list[Highlight]:
     highlights = []
     for token in doc:
         if is_gerund_clause(token):
-            start, end = tokens_span(token.subtree)
-            n_words = len(get_words(token.subtree))
+            start, end = tokens_span(_subtree(token))
+            n_words = subtree_len(token)
             note = f"gerund clause, {plural(n_words, 'word')}"
             highlights.append(Highlight(start, end, "gerund_clauses", note))
     return highlights

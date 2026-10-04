@@ -1,6 +1,7 @@
 import pytest
 import spacy
 from anyts.visualizers.highlight import Sent, Word
+from spacy.tokens import Doc
 
 from ests import StyleStats
 from ests.constants import (
@@ -338,6 +339,22 @@ def test_participle_clauses(doc):
 def test_gerund_clauses(nlp):
     ht = highlight(nlp(gerund), layers="gerund_clauses")
     assert spans(ht, "gerund_clauses") == ["analizando con cuidado los datos del proyecto"]
+
+
+def test_clauses_of_a_loop():
+    # casa construida ayer - a broken parse hangs construida and ayer on each other
+    doc = Doc(
+        spacy.blank("es").vocab,
+        words=["casa", "construida", "ayer", "."],
+        heads=[0, 2, 1, 0],
+        deps=["ROOT", "acl", "obl", "punct"],
+        pos=["NOUN", "VERB", "ADV", "PUNCT"],
+        morphs=["", "VerbForm=Part", "", ""],
+        lemmas=["casa", "construir", "ayer", "."],
+    )
+    ht = highlight(doc, layers="participle_clauses")
+    assert spans(ht, "participle_clauses") == ["construida ayer"]
+    assert ht.highlights[0].note == "participial clause, 2 words"
 
 
 def test_de_chains(doc):
