@@ -8,7 +8,7 @@ from ests.corpus.keyness import (
 )
 from ests.datasets import FreqDict
 from ests.datasets.freq_dict import CORPUS_SIZE
-from ests.exceptions import DatasetNotFoundError, ParameterError
+from ests.exceptions import DatasetNotFoundError, ParameterError, SourceTypeError
 
 target = ["gato", "estaba", "en", "ventana", "y", "miraba", "en", "pájaros", "gato", "dormía"]
 reference = ["perro", "yacía", "en", "suelo", "y", "descansaba", "perro", "comía"]
@@ -103,6 +103,19 @@ def test_keyness_against_the_frequency_dictionary_large_target(freq_dict):
 def test_keyness_without_the_dictionary(tmp_path):
     with pytest.raises(DatasetNotFoundError):
         keyness(["gato"], FreqDict(data_dir=tmp_path))
+
+
+def test_keyness_checks_before_the_dictionary(tmp_path):
+    """Wrong parameters and targets fail before the frequency dictionary is read"""
+    freq_dict = FreqDict(data_dir=tmp_path)
+    with pytest.raises(ParameterError):
+        keyness(["gato"], freq_dict, measure="tf_idf")
+    with pytest.raises(ParameterError):
+        keyness(["gato"], freq_dict, top_n=0)
+    with pytest.raises(ParameterError):
+        keyness(["gato"], freq_dict, min_freq=1.5)
+    with pytest.raises(SourceTypeError):
+        keyness("el gato duerme", freq_dict)
 
 
 @pytest.mark.parametrize(

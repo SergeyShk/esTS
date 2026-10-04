@@ -12,6 +12,7 @@ from anyts.corpus.keyness import (
     calc_log_ratio as calc_log_ratio,
     calc_odds_ratio as calc_odds_ratio,
     calc_p_value as calc_p_value,
+    check_keyness_params,
 )
 
 from ..datasets.freq_dict import CORPUS_SIZE, WORD_PATTERN, FreqDict, lemma_key
@@ -82,6 +83,7 @@ def keyness(
         [('gato', 2.77)]
     """
     if isinstance(reference, FreqDict):
+        check_keyness_params(measure, min_freq, top_n, target)
         reference = _frequency_reference(reference)
     return anyts.corpus.keyness(target, reference, measure, min_freq, positive, top_n)
 
