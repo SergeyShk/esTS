@@ -25,7 +25,7 @@ The full list of commands is in `make help`.
 Before submitting a pull request, these must pass:
 
 ```bash
-make lint        # ruff check, ruff format --check, mypy
+make lint        # ruff check --fix, ruff format (code and Python in Markdown), mypy
 make test        # pytest: tests and docstring examples (doctest)
 make docs-build  # mkdocs build --strict, if the documentation changed
 ```

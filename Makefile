@@ -4,6 +4,8 @@ APP_PATH := ests
 TESTS_PATH := tests
 DEMO_PATH := demo
 EXAMPLES_PATH := examples
+# The ruff-format pre-commit hook formats the Python of Markdown code blocks as well
+MARKDOWN_FILES := $(shell git ls-files '*.md')
 HF_SPACE := SergeyShk/esTS
 
 help: ## Show the list of commands
@@ -30,14 +32,14 @@ lint: ruff mypy ## Run all code checks
 ruff: deps ## Check and format the code with ruff
 ifeq ($(MODE), ci)
 	uv run ruff check $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) $(EXAMPLES_PATH)
-	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) $(EXAMPLES_PATH) --check
+	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) $(EXAMPLES_PATH) $(MARKDOWN_FILES) --check
 else
 	uv run ruff check $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) $(EXAMPLES_PATH) --fix
-	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) $(EXAMPLES_PATH)
+	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) $(EXAMPLES_PATH) $(MARKDOWN_FILES)
 endif
 
 format: deps ## Format the code
-	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) $(EXAMPLES_PATH)
+	uv run ruff format $(APP_PATH) $(TESTS_PATH) $(DEMO_PATH) $(EXAMPLES_PATH) $(MARKDOWN_FILES)
 
 mypy: deps ## Check types with mypy
 	uv run mypy
