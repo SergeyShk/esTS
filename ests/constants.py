@@ -23,22 +23,28 @@ TOKENIZER_INFIXES = (
     rf"(?<={_LETTER}){_CLOSING}+(?={_DASH})",
     rf"(?<=[-—–―]){_OPENING}",
 )
-# Abbreviations the tokenizer of spaCy keeps whole in one case only, added in the other
-# one so that both are a single token: the lower case of Sr. or EE. UU. and the capital
-# of pág.; one-letter abbreviations stay out, since a. or c. may be a word before a period
+# Abbreviations the tokenizer of spaCy keeps whole in some cases only (Sr., pág., EE. UU.),
+# made whole in lower case, capitalized and in upper case alike; the one-letter ones are
+# whole in every case already
 TOKENIZER_ABBREVIATIONS = (
+    "aprox.",
     "av.",
     "avda.",
     "cía.",
+    "dpto.",
     "dr.",
     "dra.",
     "ee. uu.",
     "ee.uu.",
+    "ej.",
+    "fig.",
     "gral.",
     "ing.",
     "lic.",
+    "núm.",
     "prof.",
     "profa.",
+    "pág.",
     "sr.",
     "sra.",
     "srta.",
@@ -46,13 +52,7 @@ TOKENIZER_ABBREVIATIONS = (
     "uds.",
     "vd.",
     "vds.",
-    "Aprox.",
-    "Dpto.",
-    "Ej.",
-    "Fig.",
-    "Núm.",
-    "Pág.",
-    "Vol.",
+    "vol.",
 )
 
 # Abbreviations after which a sentence does not end even before an upper-case word or

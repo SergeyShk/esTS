@@ -200,9 +200,10 @@ def add_dash_rules(nlp: Language) -> None:
         dijo:—¡Mis) and leave a hyphen between letters (franco-alemán) or before
         a digit (-5) alone; a byte order mark glued to the start of a text is
         split off as well, so the marks after it are split as usual. The
-        abbreviations of TOKENIZER_ABBREVIATIONS become single tokens in the
-        case the tokenizer of spaCy splits (sr., Pág.), as in the other one;
-        get_tokenizer and get_nlp have the rules already.
+        abbreviations of TOKENIZER_ABBREVIATIONS become single tokens in lower
+        case, capitalized and in upper case (sr., Sr., SR.), in the cases a
+        tokenizer already keeps one of them whole; get_tokenizer and get_nlp
+        have the rules already.
         A rule the tokenizer has is not added twice; a tokenizer that is not
         the Tokenizer of spaCy, or whose rules are not regular expressions,
         is left as it is
@@ -235,21 +236,14 @@ def add_dash_rules(nlp: Language) -> None:
     if infixes is not None:
         tokenizer.infix_finditer = infixes.finditer
     rules = tokenizer.rules
-    for form in TOKENIZER_ABBREVIATIONS:
-        if form in rules:
+    for abbreviation in TOKENIZER_ABBREVIATIONS:
+        forms = (abbreviation, abbreviation[:1].upper() + abbreviation[1:], abbreviation.upper())
+        pairs = [rules[form] for form in forms if len(rules.get(form, ())) == 1]
+        if not pairs:
             continue
-        pairs = [rules[other] for other in _case_forms(form) if len(rules.get(other, ())) == 1]
-        attrs: dict[int, str] = pairs[0][0] if pairs else {}
-        tokenizer.add_special_case(form, [{**attrs, ORTH: form}])
-
-
-def _case_forms(form: str) -> tuple[str, ...]:
-    """The forms of an abbreviation in other cases: lower, capitalized and upper"""
-    return tuple(
-        other
-        for other in (form.lower(), form[:1].upper() + form[1:], form.upper())
-        if other != form
-    )
+        for form in forms:
+            if form not in rules:
+                tokenizer.add_special_case(form, [{**pairs[0][0], ORTH: form}])
 
 
 def _extend_rules(method: object, rules: list[str]) -> re.Pattern[str] | None:
