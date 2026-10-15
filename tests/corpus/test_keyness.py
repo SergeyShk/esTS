@@ -1,6 +1,6 @@
 import pytest
 
-from ests.corpus import Keyword, keyness
+from ests.corpus import Keyword, check_keyness_params, keyness
 from ests.corpus.keyness import (
     calc_log_likelihood,
     calc_log_ratio,
@@ -116,6 +116,15 @@ def test_keyness_checks_before_the_dictionary(tmp_path):
         keyness(["gato"], freq_dict, min_freq=1.5)
     with pytest.raises(SourceTypeError):
         keyness("el gato duerme", freq_dict)
+
+
+def test_check_keyness_params():
+    """The check of keyness runs on its own, before a frequency dictionary is read"""
+    assert check_keyness_params("log_ratio", 2, 10, ["gato", "perro"]) is None
+    with pytest.raises(ParameterError):
+        check_keyness_params("tf_idf")
+    with pytest.raises(SourceTypeError):
+        check_keyness_params(target="el gato duerme")
 
 
 @pytest.mark.parametrize(

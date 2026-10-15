@@ -1,7 +1,7 @@
 # Palabras clave
 
 !!! info ""
-    **ests.corpus.keyness()**, **ests.corpus.Keyword**, **ests.corpus.FrequencyReference**
+    **ests.corpus.keyness()**, **ests.corpus.check_keyness_params()**, **ests.corpus.Keyword**, **ests.corpus.FrequencyReference**
 
 ## Descripción
 
@@ -10,7 +10,7 @@ Extracción de palabras clave (keyness) de un corpus objetivo frente a uno de re
 
 Para cada palabra se calculan dos valores que [Gabrielatos y Marchi](http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf) y [Hardie](http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/) recomiendan leer juntos: la razón de verosimilitud $G^2$ con su valor p (la significación de la diferencia: si la hay) y Log Ratio (el tamaño del efecto: cuán grande es). Se calcula además la medida elegida `score`, que sirve para ordenar. Las medidas de significación ($G^2$, ji cuadrado, BIC) y ELL, el tamaño del efecto de $G^2$, llevan signo: negativo cuando la palabra es más frecuente en la referencia; las demás medidas de efecto (%DIFF, Log Ratio, razón de momios) tienen dirección por construcción.
 
-La referencia puede ser una lista de palabras, una correspondencia de frecuencias (su tamaño es la suma de los recuentos) o una `FrequencyReference`. Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematización y las palabras vacías corresponden al extractor de palabras, y los dos corpus tienen que extraerse del mismo modo.
+La referencia puede ser una lista de palabras, un mapeo de frecuencias (su tamaño es la suma de los recuentos) o una `FrequencyReference`. Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematización y las palabras vacías corresponden al extractor de palabras, y los dos corpus tienen que extraerse del mismo modo.
 
 La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/keyness/) y admite además como referencia el [diccionario de frecuencias](../datasets/freqdict.md) `FreqDict`; `FrequencyReference` está en `ests.corpus` junto a ella, y las funciones de las medidas, en `ests.corpus.keyness`. Las palabras se extraen con [`WordsExtractor`](../extractors/words.md).
 
@@ -44,6 +44,11 @@ Una frecuencia nula en uno de los corpus se sustituye por 0.5 para %DIFF, Log Ra
 | `top_n` | int | `None` | Número de palabras clave; `None` - todas |
 
 `reference` también puede ser `FreqDict`, frente al cual `target` son formas.
+
+<!-- core: corpus/keyness.md:check_keyness_params 1b312d2 -->
+`check_keyness_params(measure="log_likelihood", min_freq=1, top_n=None, target=None)` comprueba los parámetros de `keyness` y lanza `ParameterError` salvo que la medida sea una de `KEYNESS_MEASURES`, la frecuencia mínima un entero y el número de palabras clave `None` o un entero de al menos uno; con `target` lanza además `SourceTypeError` salvo que el corpus objetivo sea una lista de cadenas o un mapeo de cadenas a frecuencias enteras, y `SourceError` para una frecuencia negativa, nan o infinita. Una biblioteca que construye la referencia a partir de un diccionario de frecuencias la llama primero, para que un parámetro o un corpus objetivo erróneos fallen antes de leer el diccionario.
+
+En esTS `keyness` la llama por sí misma antes de leer `FreqDict`.
 
 ## Referencia por frecuencias
 

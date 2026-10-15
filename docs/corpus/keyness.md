@@ -1,7 +1,7 @@
 # Keywords
 
 !!! info ""
-    **ests.corpus.keyness()**, **ests.corpus.Keyword**, **ests.corpus.FrequencyReference**
+    **ests.corpus.keyness()**, **ests.corpus.check_keyness_params()**, **ests.corpus.Keyword**, **ests.corpus.FrequencyReference**
 
 ## Description
 
@@ -18,6 +18,10 @@ The function wraps `keyness` of the [anyTS](https://sergeyshk.github.io/anyTS/co
 --8<-- "corpus/keyness.md:keyness-parameters"
 
 `reference` may also be `FreqDict`, against which `target` is word forms.
+
+--8<-- "corpus/keyness.md:check_keyness_params"
+
+In esTS `keyness` calls it itself before it reads `FreqDict`.
 
 ## Reference by frequencies
 
