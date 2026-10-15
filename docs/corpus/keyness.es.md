@@ -1,7 +1,7 @@
 # Palabras clave
 
 !!! info ""
-    **ests.corpus.keyness()**, **ests.corpus.Keyword**, **ests.corpus.FrequencyReference**
+    **ests.corpus.keyness()**, **ests.corpus.check_keyness_params()**, **ests.corpus.Keyword**, **ests.corpus.FrequencyReference**
 
 ## Descripción
 
@@ -44,6 +44,11 @@ Una frecuencia nula en uno de los corpus se sustituye por 0.5 para %DIFF, Log Ra
 | `top_n` | int | `None` | Número de palabras clave; `None` - todas |
 
 `reference` también puede ser `FreqDict`, frente al cual `target` son formas.
+
+<!-- core: corpus/keyness.md:check_keyness_params 1b312d2 -->
+`check_keyness_params(measure="log_likelihood", min_freq=1, top_n=None, target=None)` comprueba los parámetros de `keyness` y lanza `ParameterError` salvo que la medida sea una de `KEYNESS_MEASURES`, la frecuencia mínima un entero y el número de palabras clave `None` o un entero de al menos uno; con `target` lanza además `SourceTypeError` salvo que el corpus objetivo sea una lista de cadenas o un mapeo de cadenas a frecuencias enteras, y `SourceError` para una frecuencia negativa, nan o infinita. Una biblioteca que construye la referencia a partir de un diccionario de frecuencias la llama antes, para que un parámetro o un corpus objetivo erróneos fallen antes de leer el diccionario.
+
+En esTS `keyness` la llama por sí misma antes de leer `FreqDict`.
 
 ## Referencia por frecuencias
 
