@@ -25,7 +25,7 @@ El nombre del paso del pipeline es el nombre de la extensión: `nlp.add_pipe(fac
 !!! warning "Serialización"
     Un componente guarda un objeto de estadísticas en `doc._.<name>`, y spaCy no sabe serializarlo: `Doc.to_bytes()`, `DocBin(store_user_data=True)` y `nlp.pipe(..., n_process>1)` fallan con estos componentes en el pipeline. Para guardar un documento, deje fuera los datos de usuario (`doc.to_bytes(exclude=["user_data"])`) o guarde `doc._.<name>.get_stats()` por su cuenta; para el multiproceso, calcule las estadísticas en el proceso principal después de `nlp.pipe`, sin los componentes.
 
-Añadir un componente amplía el tokenizador de su pipeline con las reglas de las rayas de un diálogo pegadas a las palabras ([`add_dash_rules`](extractors/words.md)), como en la API de cadenas: `sí--dijo` son dos palabras y una raya. Un tokenizador que no es el `Tokenizer` de spaCy se queda como está.
+Añadir un componente amplía el tokenizador de su pipeline con las reglas de las rayas de un diálogo pegadas a las palabras y de las abreviaturas en cualquier caja ([`add_dash_rules`](extractors/words.md)), como en la API de cadenas: `sí--dijo` son dos palabras y una raya, `SR.` una palabra. Un tokenizador que no es el `Tokenizer` de spaCy se queda como está.
 
 ## Qué necesita cada componente { #requirements }
 
@@ -483,6 +483,7 @@ Los diez componentes pueden compartir un pipeline.
     import spacy
 
     nlp = spacy.load("es_core_news_sm")
+    nlp.add_pipe("ests_blank_lines", before="parser")
     factories = (
         "basic",
         "readability",

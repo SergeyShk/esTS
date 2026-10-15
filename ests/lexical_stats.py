@@ -13,11 +13,16 @@ from .constants import FREQUENCY_BANDS, LEXICAL_STATS_DESC
 from .datasets.freq_dict import Entry, FreqDict, lemma_key
 from .exceptions import ParameterError, SourceError, SourceTypeError
 from .extractors import NUMBER_PATTERN
-from .utils import get_nlp
+from .utils import _check_encoding, get_nlp
 
 TOP_LEMMAS_FILE = Path(__file__).parent / "resources" / "google_books_top10000.txt"
 # Components a parse of the text does not need: the lemmas come from lemma_key
 UNUSED_COMPONENTS = ["parser", "lemmatizer", "ner"]
+
+
+def _without_period(word: str) -> str:
+    """A word without the period of an abbreviation (Sr., pág.), the form the dictionary has"""
+    return word[:-1] if len(word) > 1 and word.endswith(".") else word
 
 
 class LexicalStats:
@@ -123,6 +128,7 @@ class LexicalStats:
                     f"pipeline ({pipeline.max_length}): split it into parts or raise "
                     "max_length on a pipeline of your own and pass it in nlp"
                 )
+            _check_encoding(source)
             source = pipeline(source, disable=UNUSED_COMPONENTS)
         elif not isinstance(source, Doc):
             raise SourceTypeError("The data source is set incorrectly")
@@ -138,7 +144,7 @@ class LexicalStats:
         self.words = tuple(token.text for token in tokens)
         self._proper = tuple(token.pos_ == "PROPN" for token in tokens)
         self.lemmas = tuple(
-            lemma_key(token.text, proper)
+            lemma_key(_without_period(token.text), proper)
             for token, proper in zip(tokens, self._proper, strict=True)
         )
         self._content = tuple(token_info(token).content for token in tokens)
@@ -164,7 +170,7 @@ class LexicalStats:
             tagged PROPN as Miró - mirar)
         """
         return tuple(
-            lemma_key(word) if proper and lemma not in self.freq_dict else lemma
+            lemma_key(_without_period(word)) if proper and lemma not in self.freq_dict else lemma
             for word, lemma, proper in zip(self.words, self.lemmas, self._proper, strict=True)
         )
 
@@ -237,8 +243,8 @@ class LexicalStats:
             dict[int, float]: Share of the words with a lemma of the top N for every bound N
 
         Raises:
-            ParameterError: If the bounds are not a list of integers or a bound is out of 1
-                and the size of the list (10000)
+            ParameterError: If the bounds are not an iterable of integers (a string included)
+                or a bound is out of 1 and the size of the list (10000)
         """
         if isinstance(bands, str | bytes) or not isinstance(bands, Iterable):
             raise ParameterError(

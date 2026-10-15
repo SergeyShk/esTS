@@ -44,7 +44,7 @@ from .constants import (
     SYNTAX_STATS_DESC,
 )
 from .exceptions import SourceError, SourceTypeError
-from .utils import get_nlp, is_verbal_noun, lemmatize
+from .utils import _check_encoding, get_nlp, is_verbal_noun, lemmatize
 
 # Dependencies of the nominal part of a split predicate, in the order of preference
 SPLIT_PREDICATE_DEPS = ("compound", "obj", "nsubj", "iobj", "nmod", "obl")
@@ -181,6 +181,7 @@ class SyntaxStats:
                     f"pipeline ({pipeline.max_length}): split it into parts or raise "
                     "max_length on a pipeline of your own and pass it in nlp"
                 )
+            _check_encoding(source)
             source = pipeline(source, disable=UNUSED_COMPONENTS)
         elif not isinstance(source, Doc):
             raise SourceTypeError("The data source is set incorrectly")
@@ -453,12 +454,14 @@ def is_subordinate_clause_head(token: Token) -> bool:
 
 
 def _is_subordinate(token: Token) -> bool:
-    """Whether a clause head heads a subordinate clause"""
-    if is_root(token):
-        return False
-    if token.dep_ in SUBORDINATE_CLAUSE_DEPS or token.dep_ == "xcomp":
-        return True
-    return token.dep_ == "conj" and is_subordinate_clause_head(token.head)
+    """Whether a clause head heads a subordinate clause, up its chain of conjuncts"""
+    while not is_root(token):
+        if token.dep_ in SUBORDINATE_CLAUSE_DEPS or token.dep_ == "xcomp":
+            return True
+        if token.dep_ != "conj" or not is_clause_head(token.head):
+            return False
+        token = token.head
+    return False
 
 
 def is_infinitive_clause(token: Token) -> bool:

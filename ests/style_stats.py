@@ -25,6 +25,8 @@ from .utils import find_phrases, get_nlp, is_verbal_noun, iter_text_sents, lemma
 UNUSED_COMPONENTS = ["parser", "ner"]
 # One-word parenthetical expressions, which the water counts as stopwords
 PARENTHETICAL_WORDS = frozenset(phrase for phrase in PARENTHETICALS if " " not in phrase)
+# The word forms of is_stopword
+STOPWORD_FORMS = STOPWORDS | PARENTHETICAL_WORDS
 # Endings of the infinitive, whose phrases stand for the forms of the verb
 INFINITIVE_ENDINGS = ("ar", "er", "ir", "ír")
 
@@ -437,8 +439,7 @@ def is_stopword(word: str) -> bool:
     """
     if not isinstance(word, str):
         raise SourceTypeError(f"The word must be a string, not {type(word).__name__}")
-    word = word.lower()
-    return word in STOPWORDS or word in PARENTHETICAL_WORDS
+    return word.lower() in STOPWORD_FORMS
 
 
 def calc_classic_nausea(text: Sequence[str]) -> float:
@@ -542,7 +543,7 @@ def find_nausea_words(
         stopwords_set = {word.lower() for word in stopwords}
         significant = [word for word in text if word.lower() not in stopwords_set]
     else:
-        significant = [word for word in text if not is_stopword(word)]
+        significant = [word for word in text if word.lower() not in STOPWORD_FORMS]
     return dict(Counter(significant).most_common(top_n))
 
 
@@ -577,7 +578,7 @@ def calc_water(text: Sequence[str], stopwords: Collection[str] | None = None) ->
         stopwords_set = {word.lower() for word in stopwords}
         n_stopwords = sum(1 for word in text if word.lower() in stopwords_set)
     else:
-        n_stopwords = sum(1 for word in text if is_stopword(word))
+        n_stopwords = sum(1 for word in text if word.lower() in STOPWORD_FORMS)
     return safe_divide(100 * n_stopwords, len(text))
 
 

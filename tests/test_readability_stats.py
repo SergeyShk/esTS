@@ -2,6 +2,7 @@ from collections import Counter
 from math import isnan
 
 import anyts.basic_stats
+import numpy as np
 import pytest
 import spacy
 from spacy.lang.es.stop_words import STOP_WORDS
@@ -428,6 +429,13 @@ def test_describe_level(rs):
         rs.describe_level(scale="unknown")
     with pytest.raises(ParameterError, match="choice of scales"):
         rs.describe_level("mu_index", scale="szigriszt")
+    # A name or a scale that is not a string is no metric and no scale
+    for stat in (["lix"], np.array(["lix"]), None):
+        assert rs.level_scale(stat) is None
+        with pytest.raises(ParameterError, match="no scale of bands"):
+            rs.describe_level(stat)
+    with pytest.raises(ParameterError, match="Unknown scale"):
+        rs.describe_level(scale=[])
 
 
 @pytest.mark.parametrize(

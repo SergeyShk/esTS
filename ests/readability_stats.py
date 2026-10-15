@@ -197,7 +197,7 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
             tuple[tuple[float, str], ...] | None: Lower bounds and their bands, None
                 for a metric without a scale
         """
-        if stat == "flesch_reading_easy":
+        if isinstance(stat, str) and stat == "flesch_reading_easy":
             return READING_EASE_SCALES[PRESET_SCALES[self.preset]]
         return super().level_scale(stat)
 
@@ -380,7 +380,7 @@ def flesch_reading_easy_to_level(flesch_reading_easy: float, scale: str = "infle
     Raises:
         ParameterError: If the scale is unknown or the value is not a finite number
     """
-    if scale not in READING_EASE_SCALES:
+    if not isinstance(scale, str) or scale not in READING_EASE_SCALES:
         raise ParameterError(
             f"Unknown scale: {scale}. Available scales: {tuple(READING_EASE_SCALES)}"
         )

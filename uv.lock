@@ -3023,7 +3023,7 @@ wheels = [
 
 [[package]]
 name = "pyests"
-version = "0.7.0.dev8"
+version = "0.7.0.dev9"
 source = { editable = "." }
 dependencies = [
     { name = "anyts" },
@@ -3082,13 +3082,13 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.1" },
     { name = "scipy", specifier = ">=1.11" },
     { name = "simplemma", specifier = ">=2.0,<3" },
-    { name = "spacy", specifier = ">=3.8" },
+    { name = "spacy", specifier = ">=3.8.15" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "es-core-news-sm", url = "https://github.com/explosion/spacy-models/releases/download/es_core_news_sm-3.8.0/es_core_news_sm-3.8.0-py3-none-any.whl" },
-    { name = "mkdocs", specifier = ">=1.6" },
+    { name = "mkdocs", specifier = ">=1.6,<2" },
     { name = "mkdocs-material", specifier = ">=9.5" },
     { name = "mkdocs-static-i18n", specifier = ">=1.2" },
     { name = "mypy", specifier = ">=1.14" },
@@ -3099,7 +3099,7 @@ dev = [
     { name = "ruff", specifier = ">=0.9" },
 ]
 docs = [
-    { name = "mkdocs", specifier = ">=1.6" },
+    { name = "mkdocs", specifier = ">=1.6,<2" },
     { name = "mkdocs-material", specifier = ">=9.5" },
     { name = "mkdocs-static-i18n", specifier = ">=1.2" },
     { name = "pymdown-extensions", specifier = ">=10.0" },

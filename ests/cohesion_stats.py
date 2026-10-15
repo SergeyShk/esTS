@@ -28,7 +28,7 @@ from .constants import (
 )
 from .exceptions import ParameterError, SourceError, SourceTypeError
 from .extractors import SentsExtractor
-from .utils import get_nlp
+from .utils import _check_encoding, get_nlp
 
 CONNECTORS_FILE = Path(__file__).parent / "resources" / "connectors.tsv"
 # Components the statistics never read
@@ -206,6 +206,7 @@ class CohesionStats:
                     f"pipeline ({pipeline.max_length}): split it into parts or raise "
                     "max_length on a pipeline of your own and pass it in nlp"
                 )
+            _check_encoding(source)
             source = pipeline(source, disable=UNUSED_COMPONENTS)
         elif not isinstance(source, Doc):
             raise SourceTypeError("The data source is set incorrectly")

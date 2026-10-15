@@ -30,6 +30,7 @@ from ests.style_stats import (
     find_parentheticals,
     is_parenthetical,
     is_stopword,
+    noun_lemmas,
 )
 from ests.utils import get_nlp
 
@@ -215,6 +216,7 @@ def test_keyword_density():
 
 def test_verbal_nouns(ss, nlp):
     assert calc_verbal_nouns(["revisión", "proyecto", "nombramiento", "casa"]) == 50.0
+    assert calc_verbal_nouns(noun_lemmas(nlp(text))) == ss.verbal_nouns
     assert calc_verbal_nouns(["uso", "viaje", "Aprendizaje"]) == 100.0
     assert isnan(calc_verbal_nouns([]))
     # revisión x2, nombramiento, comisión, votación, uso among the 15 nouns of the model

@@ -537,7 +537,7 @@ Every statistics class is also a component of a pipeline, so a text is annotated
 (12, ('DET', 'NOUN'), 2.0)
 ```
 
-The factories are `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` and `ests_verse`; the name of the pipe is the name of the extension.
+The factories are `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` and `ests_verse`; the name of the pipe is the name of the extension. The component `ests_blank_lines`, before the parser, starts a sentence after a blank line, as the string API does; the pipeline of `ests.utils.get_nlp` has it.
 
 More in the [documentation](https://sergeyshk.github.io/esTS/components/).
 

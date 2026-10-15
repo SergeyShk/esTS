@@ -63,7 +63,7 @@ Las medias según el diccionario se calculan solo sobre las palabras encontradas
 
 ### band_coverage
 
-Devuelve las proporciones de palabras con un lema del top N para cada límite N. Unos límites que no son una lista de enteros y un límite fuera de 1 y 10000 - el tamaño de la lista - lanzan `ParameterError`.
+Devuelve las proporciones de palabras con un lema del top N para cada límite N. Unos límites que no son un iterable de enteros (una cadena incluida) y un límite fuera de 1 y 10000 - el tamaño de la lista - lanzan `ParameterError`.
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |

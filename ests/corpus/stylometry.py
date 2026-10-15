@@ -18,7 +18,7 @@ from spacy.tokens import Doc
 
 from ..constants import FUNCTION_UD_POS
 from ..exceptions import SourceError, SourceTypeError
-from ..utils import get_nlp
+from ..utils import _check_encoding, get_nlp
 
 # Components the parts of speech of a list of words do not need
 UNUSED_COMPONENTS = ["parser", "lemmatizer", "ner"]
@@ -82,6 +82,7 @@ def _tag_words(words: Sequence[str], nlp: Language | None) -> list[str]:
     """Parts of speech of the words that are not punctuation, tagged by the model in context"""
     if all(is_punctuation(word) for word in words):
         return []
+    _check_encoding("".join(words))
     pipeline = nlp or get_nlp()
     starts = range(0, len(words), CHUNK_SIZE)
     chunks = (

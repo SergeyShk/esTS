@@ -14,7 +14,7 @@ from .constants import (
     PASSIVE_AUX,
 )
 from .exceptions import SourceError, SourceTypeError, UnknownStatError
-from .utils import get_nlp
+from .utils import _check_encoding, get_nlp
 
 FINITE_MOODS = {
     "p_indicative": "Ind",
@@ -134,6 +134,7 @@ class MorphStats:
                     f"pipeline ({pipeline.max_length}): split it into parts or raise "
                     "max_length on a pipeline of your own and pass it in nlp"
                 )
+            _check_encoding(source)
             source = pipeline(source, disable=UNUSED_COMPONENTS)
         elif not isinstance(source, Doc):
             raise SourceTypeError("The data source is set incorrectly")
