@@ -512,10 +512,10 @@ def calc_zipf_naturalness(text: Sequence[str], top_n: int = NAUSEA_TOP_N) -> flo
     if n_ranks < 2:
         return nan
     deviation = sum(
-        abs(freq - top_freq / rank) / (top_freq / rank)
-        for rank, freq in enumerate(frequencies[1:n_ranks], start=2)
-    ) / (n_ranks - 1)
-    return max(0.0, 100 * (1 - deviation))
+        abs(freq * rank - top_freq) for rank, freq in enumerate(frequencies[1:n_ranks], start=2)
+    )
+    span = top_freq * (n_ranks - 1)
+    return max(0.0, 100 * (span - deviation) / span)
 
 
 def calc_keyword_density(text: Sequence[str], keywords: Collection[str]) -> dict[str, float]:

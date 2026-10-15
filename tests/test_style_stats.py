@@ -165,6 +165,9 @@ def test_zipf_naturalness():
     assert calc_zipf_naturalness(["a"] * 4 + ["b"] * 3 + ["c"]) == pytest.approx(
         100 * (1 - (1 / 2 + 1 / 4) / 2)
     )
+    # integer deviations 5, 13, 3 and 1 against the span of 44: exactly the norm of 50%
+    exact = ["a"] * 11 + ["b"] * 8 + ["c"] * 8 + ["d"] * 2 + ["e"] * 2
+    assert calc_zipf_naturalness(exact, top_n=5) == 50.0
     # no ranks to compare: hapaxes alone, one word type, top_n below 2
     assert isnan(calc_zipf_naturalness(["a", "b", "c"]))
     assert isnan(calc_zipf_naturalness(["a", "a", "a"]))

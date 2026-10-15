@@ -256,3 +256,11 @@ def test_print_stats(capsys, ps):
     ps.print_stats()
     captured = capsys.readouterr()
     assert captured.out.count("|") == len(PHON_STATS_DESC) + 1
+
+
+def test_no_sounds():
+    """A text without sounds has every share and ratio undefined rather than 0"""
+    assert all(isnan(value) for value in PhonStats("123 456 7.89 2024").get_stats().values())
+    vowels = PhonStats("a e o")
+    assert vowels.p_vowels == 1.0
+    assert isnan(vowels.p_heavy_clusters)

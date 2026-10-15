@@ -16,7 +16,7 @@ The statistics are counted over the sounds of the transcription of the words ([`
 | Voiced obstruents | b (`b`, `v`), d, g, ʝ (`y`, `ll`) |
 | Voiceless obstruents | p, t, k (`c`, `qu`, `k`), f, θ (`c`, `z`), s, x (`j`, `g`), tʃ (`ch`) |
 
-The syllables are the ones of [`syllabify`](../syllables.md), by the orthographic rules, and a hiatus is two vowels in two neighbouring syllables of a word (`po-e-ta`, `dí-a`, `bú-ho`).
+The syllables are the ones of [`syllabify`](../syllables.md), by the orthographic rules, and a hiatus is two vowels in two neighbouring syllables of a word (`po-e-ta`, `dí-a`, `bú-ho`). A text without sounds (numbers) has every share and ratio undefined - `nan`, and a text without consonants the share of the heavy clusters.
 
 !!! note "Note"
     The statistics are computed when the `PhonStats` object is made. The statistics and the functions that compute them are described in the corresponding [section](phon_stats_funcs.md).
