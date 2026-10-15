@@ -224,7 +224,7 @@ class LexicalStats:
         ]
 
     def band_coverage(
-        self, bands: Sequence[int] = FREQUENCY_BANDS, unique: bool = False
+        self, bands: Iterable[int] = FREQUENCY_BANDS, unique: bool = False
     ) -> dict[int, float]:
         """
         Shares of the words by the frequency bands of the embedded list
