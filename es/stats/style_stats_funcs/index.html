@@ -2669,9 +2669,9 @@
 </table>
 <h2 id="calc_academic_nausea">Náusea académica<a class="headerlink" href="#calc_academic_nausea" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
-<p><strong>ests.style_stats.calc_academic_nausea()</strong></p>
+<p><strong>ests.style_stats.calc_academic_nausea()</strong>, <strong>ests.style_stats.find_nausea_words()</strong></p>
 </div>
-<p>La náusea académica de <a href="https://advego.com/text/seo/">Advego</a>: la proporción de las apariciones de las palabras más frecuentes del texto en porcentaje. La fórmula exacta de Advego no se ha publicado: la frecuencia sumada de las <code>top_n</code> palabras más frecuentes se divide entre el número de palabras. La norma de Advego es 5-15%.</p>
+<p>La náusea académica de <a href="https://advego.com/text/seo/">Advego</a>: la proporción de las apariciones de las palabras significativas más frecuentes del texto en porcentaje. La fórmula exacta de Advego no se ha publicado: la frecuencia sumada de las <code>top_n</code> palabras más frecuentes sin las palabras vacías se divide entre el número de todas las palabras. Con las palabras vacías, las diez primeras de casi cualquier texto serían <code>de</code>, <code>la</code>, <code>que</code>, <code>el</code>, y su náusea quedaría por encima de la norma. <code>find_nausea_words</code> devuelve estas palabras con sus apariciones, de la más frecuente a la menos y las de igual frecuencia en el orden del texto; las palabras vacías son las de la lista pasada, sin distinguir mayúsculas, o las de <a href="#is_stopword"><code>is_stopword</code></a>. La norma de Advego es 5-15%, para textos de varios cientos de palabras: en un texto corto las diez primeras son una parte grande de las palabras, sea cual sea el estilo.</p>
 <p>Fórmula:</p>
 <div class="arithmatex">\[
 100\times\frac{\sum_{k \in \textrm{top}_n} n_k}{N}
@@ -2697,6 +2697,12 @@
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>10</code></td>
 <td style="text-align: center;">Número de las palabras más frecuentes</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>stopwords</code></td>
+<td style="text-align: center;">list[str]/set[str]</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Palabras vacías que se dejan fuera de las palabras más frecuentes; <code>is_stopword</code> si no se dan</td>
 </tr>
 </tbody>
 </table>

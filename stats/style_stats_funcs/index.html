@@ -2669,9 +2669,9 @@
 </table>
 <h2 id="calc_academic_nausea">Academic nausea<a class="headerlink" href="#calc_academic_nausea" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
-<p><strong>ests.style_stats.calc_academic_nausea()</strong></p>
+<p><strong>ests.style_stats.calc_academic_nausea()</strong>, <strong>ests.style_stats.find_nausea_words()</strong></p>
 </div>
-<p>The academic nausea of <a href="https://advego.com/text/seo/">Advego</a> - the share of the occurrences of the most frequent words of the text in percent. The exact formula of Advego is not published: the summed frequency of the <code>top_n</code> most frequent words is divided by the number of words. The norm of Advego is 5-15%.</p>
+<p>The academic nausea of <a href="https://advego.com/text/seo/">Advego</a> - the share of the occurrences of the most frequent significant words of the text in percent. The exact formula of Advego is not published: the summed frequency of the <code>top_n</code> most frequent words without the stopwords is divided by the number of all words. With the stopwords the top ten of almost any text would be <code>de</code>, <code>la</code>, <code>que</code>, <code>el</code>, and its nausea above the norm. <code>find_nausea_words</code> returns these words with their occurrences, the most frequent first and words of equal frequency in the order of the text; the stopwords are those of the list passed, in any case, or of <a href="#is_stopword"><code>is_stopword</code></a>. The norm of Advego is 5-15%, for texts of several hundred words: in a short text the top ten is a large share of the words whatever the style.</p>
 <p>Formula:</p>
 <div class="arithmatex">\[
 100\times\frac{\sum_{k \in \textrm{top}_n} n_k}{N}
@@ -2697,6 +2697,12 @@
 <td style="text-align: center;">int</td>
 <td style="text-align: center;"><code>10</code></td>
 <td style="text-align: center;">Number of the most frequent words</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>stopwords</code></td>
+<td style="text-align: center;">list[str]/set[str]</td>
+<td style="text-align: center;"><code>None</code></td>
+<td style="text-align: center;">Stopwords left out of the most frequent words; <code>is_stopword</code> if not given</td>
 </tr>
 </tbody>
 </table>
