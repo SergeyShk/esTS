@@ -26,6 +26,7 @@ from ests.style_stats import (
     calc_water,
     calc_zipf_naturalness,
     expand_phrases,
+    find_nausea_words,
     find_parentheticals,
     is_parenthetical,
     is_stopword,
@@ -133,10 +134,32 @@ def test_classic_nausea(ss):
 
 
 def test_academic_nausea():
+    # The stopwords en, en, un are left out of the most frequent words, not of the text
     assert calc_academic_nausea(riddle, 1) == pytest.approx(100 * 2 / 12)
-    assert calc_academic_nausea(riddle, 3) == pytest.approx(100 * 6 / 12)
-    assert calc_academic_nausea(riddle, 100) == 100.0
-    assert StyleStats(riddle_text, top_n=3).academic_nausea == pytest.approx(100 * 6 / 12)
+    assert calc_academic_nausea(riddle, 3) == pytest.approx(100 * 5 / 12)
+    assert calc_academic_nausea(riddle, 100) == pytest.approx(100 * 9 / 12)
+    assert calc_academic_nausea(riddle, 100, stopwords=[]) == 100.0
+    assert StyleStats(riddle_text, top_n=3).academic_nausea == pytest.approx(100 * 5 / 12)
+    assert calc_academic_nausea([], 3) == 0.0
+
+
+def test_find_nausea_words():
+    assert find_nausea_words(riddle, 3) == {"tres": 2, "tristes": 2, "tigres": 1}
+    # A list of stopwords is compared in any case and replaces is_stopword
+    assert find_nausea_words(riddle, 2, stopwords=["TRES", "Tristes"]) == {"en": 2, "tigres": 1}
+    assert find_nausea_words([], 3) == {}
+
+
+def test_nausea_words():
+    ss = StyleStats(riddle_text, top_n=2, nausea_stopwords={"tres"})
+    assert ss.nausea_stopwords == ("tres",)
+    assert ss.nausea_words() == {"tristes": 2, "en": 2}
+    assert ss.academic_nausea == pytest.approx(100 * 4 / 12)
+    # The stopwords of the water stay apart
+    assert StyleStats(riddle_text, stopwords=["tres"], top_n=2).nausea_words() == {
+        "tres": 2,
+        "tristes": 2,
+    }
 
 
 def test_water(ss):

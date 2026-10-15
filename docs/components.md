@@ -329,6 +329,7 @@ Parameters:
 | `name` | str | `"ests_style"` | Name of the component in the pipeline |
 | `stopwords` | list[str] | `None` | Stopwords for the water content; `STOPWORDS` and the one-word parenthetical expressions if not given |
 | `top_n` | int | `10` | Number of the most frequent words for the academic nausea and the naturalness by Zipf's law |
+| `nausea_stopwords` | list[str] | `None` | Stopwords left out of the most frequent words of the academic nausea; `is_stopword` if not given |
 
 !!! example "Example"
 

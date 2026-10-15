@@ -43,6 +43,7 @@ from ests.style_stats import (
     calc_water,
     calc_zipf_naturalness,
     expand_phrases,
+    find_nausea_words,
     find_parentheticals,
     is_stopword,
 )
@@ -114,6 +115,8 @@ WORD_LISTS = {
     "calc_surprisal": lambda: calc_surprisal(NOT_STRINGS, None),
     "find_phrases": lambda: find_phrases(NOT_STRINGS, []),
     "StyleStats(stopwords)": lambda: StyleStats(TEXT, stopwords=NOT_STRINGS),
+    "StyleStats(nausea_stopwords)": lambda: StyleStats(TEXT, nausea_stopwords=NOT_STRINGS),
+    "find_nausea_words(stopwords)": lambda: find_nausea_words(WORDS, 10, NOT_STRINGS),
     "StyleStats(cliches)": lambda: StyleStats(TEXT, cliches="por medio de"),
     "corpus_features": lambda: corpus_features(NOT_STRINGS),
     "compare_corpora": lambda: compare_corpora([TEXT], NOT_STRINGS),

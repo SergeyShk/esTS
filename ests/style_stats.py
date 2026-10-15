@@ -85,6 +85,8 @@ class StyleStats:
         cliches (list[str]|set[str]): List or set of clichés; OFFICIALESE_CLICHES if not set
         nlp (Language): Pipeline that parses a string for the verbal nouns;
             get_nlp() if not set
+        nausea_stopwords (list[str]|set[str]): Stopwords left out of the most frequent words
+            of the academic nausea; is_stopword if not set
 
     Attributes:
         words (tuple[str]): Tuple of the extracted words
@@ -101,13 +103,15 @@ class StyleStats:
 
     Methods:
         keyword_density: Density of keywords and phrases
+        nausea_words: Most frequent significant words of the academic nausea
         markers: Markers of the officialese style found in the text
         get_stats: Getting the computed style metrics of the text
         print_stats: Printing the computed style metrics with descriptions
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc, or the
-            stopwords or the clichés are not a list or a set of strings, or the extractor
+            stopwords, the nausea stopwords or the clichés are not a list or a set of
+            strings, or the extractor
             or the pipeline is of another type
         SourceError: If the source has no words; when the verbal nouns or the markers
             are read, if the source lacks the parts of speech or the lemmas or a sentence
@@ -124,6 +128,7 @@ class StyleStats:
         top_n: int = NAUSEA_TOP_N,
         cliches: Collection[str] | None = None,
         nlp: Language | None = None,
+        nausea_stopwords: Collection[str] | None = None,
     ):
         if words_extractor is not None and not isinstance(words_extractor, anyts.WordsExtractor):
             raise SourceTypeError("The word extractor must be a WordsExtractor")
@@ -132,6 +137,8 @@ class StyleStats:
         check_params(top_n)
         if stopwords is not None:
             check_words(stopwords, "stopwords", ordered=False)
+        if nausea_stopwords is not None:
+            check_words(nausea_stopwords, "nausea stopwords", ordered=False)
         if cliches is not None:
             check_words(cliches, "clichés", ordered=False)
         # The Doc is not kept: this object in an extension of the Doc would make a cycle
@@ -155,6 +162,9 @@ class StyleStats:
         if not self.words:
             raise SourceError("The data source has no words")
         self.stopwords = in_order(stopwords) if stopwords is not None else None
+        self.nausea_stopwords = (
+            in_order(nausea_stopwords) if nausea_stopwords is not None else None
+        )
         self.top_n = top_n
         self.cliches_list = in_order(cliches) if cliches is not None else OFFICIALESE_CLICHES
         self.nlp = nlp
@@ -165,7 +175,7 @@ class StyleStats:
 
     @property
     def academic_nausea(self) -> float:
-        return calc_academic_nausea(self.words, self.top_n)
+        return calc_academic_nausea(self.words, self.top_n, self.nausea_stopwords)
 
     @property
     def water(self) -> float:
@@ -240,6 +250,21 @@ class StyleStats:
             dict[str, float]: Density of every keyword in percent
         """
         return calc_keyword_density(self.words, keywords)
+
+    def nausea_words(self) -> dict[str, int]:
+        """
+        Getting the most frequent significant words of the academic nausea
+
+        Returns:
+            dict[str, int]: Occurrences of the top_n most frequent words without the
+                stopwords, the most frequent first
+
+        Example:
+            >>> from ests import StyleStats
+            >>> StyleStats("El gato y el perro, el gato y el ratón").nausea_words()
+            {'gato': 2, 'perro': 1, 'ratón': 1}
+        """
+        return find_nausea_words(self.words, self.top_n, self.nausea_stopwords)
 
     def markers(self) -> dict[str, tuple[str, ...]]:
         """
@@ -444,13 +469,20 @@ def calc_classic_nausea(text: Sequence[str]) -> float:
     return sqrt(max(Counter(text).values()))
 
 
-def calc_academic_nausea(text: Sequence[str], top_n: int = NAUSEA_TOP_N) -> float:
+def calc_academic_nausea(
+    text: Sequence[str],
+    top_n: int = NAUSEA_TOP_N,
+    stopwords: Collection[str] | None = None,
+) -> float:
     """
     Computing the academic nausea
 
     Description:
-        The summed frequency of the top_n most frequent words per 100 words
-        (Advego). The norm of Advego is 5-15%
+        The summed frequency of the top_n most frequent significant words
+        (find_nausea_words) per 100 words of the text (Advego); the exact
+        formula of Advego is not published. With the stopwords the top ten of
+        almost any text is de, la, que, el, and its nausea is above the norm
+        of Advego, 5-15%
 
     References:
         https://advego.com/text/seo/
@@ -458,18 +490,59 @@ def calc_academic_nausea(text: Sequence[str], top_n: int = NAUSEA_TOP_N) -> floa
     Arguments:
         text (list[str]): List of words
         top_n (int): Number of the most frequent words
+        stopwords (list[str]|set[str]): Stopwords left out of the most frequent words;
+            is_stopword if not set
 
     Returns:
         float: Value of the nausea in percent
 
     Raises:
-        SourceTypeError: If the words are not a list of strings
+        SourceTypeError: If the words or the stopwords are not a list of strings
         ParameterError: If top_n is not an integer or is below one
+    """
+    top_freqs = sum(find_nausea_words(text, top_n, stopwords).values())
+    return safe_divide(100 * top_freqs, len(text))
+
+
+def find_nausea_words(
+    text: Sequence[str],
+    top_n: int = NAUSEA_TOP_N,
+    stopwords: Collection[str] | None = None,
+) -> dict[str, int]:
+    """
+    Finding the most frequent significant words of the academic nausea
+
+    Description:
+        The top_n most frequent words without the stopwords - those of the
+        list passed, in any case, or of is_stopword - with their occurrences,
+        the most frequent first
+
+    Arguments:
+        text (list[str]): List of words
+        top_n (int): Number of the most frequent words
+        stopwords (list[str]|set[str]): Stopwords; is_stopword if not set
+
+    Returns:
+        dict[str, int]: Occurrences of every word
+
+    Raises:
+        SourceTypeError: If the words or the stopwords are not a list of strings
+        ParameterError: If top_n is not an integer or is below one
+
+    Example:
+        >>> from ests.style_stats import find_nausea_words
+        >>> find_nausea_words(["gato", "y", "gato", "y", "perro"], top_n=1)
+        {'gato': 2}
     """
     check_words(text)
     check_params(top_n)
-    top_freqs = sum(freq for _, freq in Counter(text).most_common(top_n))
-    return safe_divide(100 * top_freqs, len(text))
+    if stopwords is not None:
+        check_words(stopwords, "stopwords", ordered=False)
+        stopwords_set = {word.lower() for word in stopwords}
+        significant = [word for word in text if word.lower() not in stopwords_set]
+    else:
+        significant = [word for word in text if not is_stopword(word)]
+    return dict(Counter(significant).most_common(top_n))
 
 
 def calc_water(text: Sequence[str], stopwords: Collection[str] | None = None) -> float:

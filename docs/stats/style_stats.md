@@ -24,6 +24,7 @@ The markers of the officialese style are counted over the unfiltered word forms 
 | `top_n` | int | `10` | Number of the most frequent words for the academic nausea and the naturalness by Zipf's law |
 | `cliches` | list[str]/set[str] | `None` | List or set of clichés; if not given, `OFFICIALESE_CLICHES` is used |
 | `nlp` | Language | `None` | Pipeline of spaCy that parses a string for the verbal nouns; without it the model `es_core_news_sm` is loaded |
+| `nausea_stopwords` | list[str]/set[str] | `None` | Stopwords left out of the most frequent words of the academic nausea; if not given, those of `is_stopword` |
 
 ## Attributes
 
@@ -74,6 +75,19 @@ Parameters:
     text = "Tres tristes tigres tragaban trigo en un trigal, en tres tristes trastos"
     StyleStats(text).keyword_density("tres tristes", "trigo")
     # {'tres tristes': 16.666666666666668, 'trigo': 8.333333333333334}
+    ```
+
+### nausea_words
+
+Returns the most frequent significant words the academic nausea is counted from: the `top_n` most frequent words without the stopwords of `nausea_stopwords`, or of [`is_stopword`](style_stats_funcs.md#is_stopword) when they are not given, with their occurrences, the most frequent first.
+
+!!! example "Example"
+
+    ``` python
+    from ests import StyleStats
+
+    StyleStats("El gato y el perro, el gato y el ratón").nausea_words()
+    # {'gato': 2, 'perro': 1, 'ratón': 1}
     ```
 
 ### markers
@@ -133,7 +147,7 @@ The same notice written in the administrative style and in plain language.
                           Metric                      |  Value
     ------------------------------------------------------------
     Classic nausea                                    |   2.83
-    Academic nausea (%)                               |  55.36
+    Academic nausea (%)                               |  17.86
     Water content (%)                                 |  57.14
     Spam score (%)                                    |  37.50
     Naturalness by Zipf's law (%)                     |  53.57
@@ -143,7 +157,7 @@ The same notice written in the administrative style and in plain language.
     Officialese clichés (per 100 words)               |   8.93
 
     {'classic_nausea': 1.4142135623730951,
-     'academic_nausea': 47.82608695652174,
+     'academic_nausea': 43.47826086956522,
      'water': 43.47826086956522,
      'spam': 4.3478260869565215,
      'zipf_naturalness': 100.0,
