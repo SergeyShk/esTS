@@ -285,8 +285,8 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.scale_level()**
 
-<!-- core: stats/readability_stats_funcs.md:scale_level 2322dde -->
-El nivel de una escala para un valor: la escala se da como los límites inferiores de sus niveles en orden descendente, el valor cae en el primer nivel cuyo límite alcanza, y el nivel más bajo queda abierto por debajo. Un valor que no es un número finito y una escala vacía lanzan `ParameterError`.
+<!-- core: stats/readability_stats_funcs.md:scale_level 70c84a3 -->
+El nivel de una escala para un valor: la escala se da como los límites inferiores de sus niveles en orden descendente, el valor cae en el primer nivel cuyo límite alcanza, y el nivel más bajo queda abierto por debajo. Un valor que no es un número finito y una escala vacía o que no es una lista de pares de un límite inferior finito y un nivel lanzan `ParameterError`.
 
 Parámetros:
 
