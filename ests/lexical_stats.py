@@ -21,8 +21,11 @@ UNUSED_COMPONENTS = ["parser", "lemmatizer", "ner"]
 
 
 def _without_period(word: str) -> str:
-    """A word without the period of an abbreviation (Sr., pág.), the form the dictionary has"""
-    return word[:-1] if len(word) > 1 and word.endswith(".") else word
+    """
+    A word without the period of an abbreviation (Sr., pág.), the form the dictionary has;
+    an initial (D., J.) keeps it, since its letter is another word
+    """
+    return word[:-1] if len(word) > 2 and word.endswith(".") else word
 
 
 class LexicalStats:

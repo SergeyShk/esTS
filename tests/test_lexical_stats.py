@@ -93,6 +93,19 @@ def test_verb_tagged_as_proper_noun(freq_dict):
     assert ls.surprisal == pytest.approx(calc_surprisal(ls.keys, freq_dict))
 
 
+def test_abbreviations(freq_dict):
+    ls = LexicalStats("El Sr. Pérez y la SRA. Gómez leen la pág. 5, etc.", freq_dict)
+    assert [ls.keys[ls.words.index(word)] for word in ("Sr.", "SRA.", "pág.", "etc.")] == [
+        "sr",
+        "sra",
+        "página",
+        "etcétera",
+    ]
+    assert ls.coverage == 1.0
+    initials = LexicalStats("Llegó D. Francisco con J. López", freq_dict)
+    assert [initials.entries[initials.words.index(word)] for word in ("D.", "J.")] == [None, None]
+
+
 def test_numbers_are_no_words(freq_dict):
     ls = LexicalStats("En 2020 hubo 3 gatos y 1,5 perros", freq_dict)
     assert ls.words == ("En", "hubo", "gatos", "y", "perros")

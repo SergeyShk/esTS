@@ -191,10 +191,11 @@ def test_wheel_contents(tmp_path):
 def test_installation_bounds(page):
     """The installation page states the lower bounds of anyTS and spaCy of the package"""
     requirements = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
-    bounds = dict(
-        re.match(r"([a-z]+)>=([\d.]+)", requirement).groups()
+    bounds = {
+        match[1]: match[2]
         for requirement in requirements["project"]["dependencies"]
-    )
+        if (match := re.match(r"(anyts|spacy)>=([\d.]+)", requirement))
+    }
     text = (ROOT / "docs" / page).read_text(encoding="utf-8")
     assert f"`spaCy` {bounds['spacy']} " in text
     assert f"(https://sergeyshk.github.io/anyTS/) {bounds['anyts']} " in text

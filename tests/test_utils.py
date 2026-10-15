@@ -283,6 +283,12 @@ def test_tokenize():
             ["Pharsalia", "--", "_", "quiere", "nivolas", "_", "—", "concluyó"],
         ),
         ("_e-mail_", ["_", "e-mail", "_"]),
+        # A dotted acronym keeps its period, the marks after it are split off
+        ("la S.A.—dijo", ["la", "S.A.", "—", "dijo"]),
+        ("el año 50 a.C.,—dijo", ["el", "año", "50", "a.C.", ",", "—", "dijo"]),
+        ("»P.D.--El", ["»", "P.D.", "--", "El"]),
+        ("la S.A.»—dijo", ["la", "S.A.", "»", "—", "dijo"]),
+        ("¿Qué...a?—preguntó", ["¿", "Qué", "...", "a", "?", "—", "preguntó"]),
         # A hyphen between letters or before a digit is left alone
         ("franco-alemán e-mail", ["franco-alemán", "e-mail"]),
         ("-5 grados, 1990-1995, 1990–1995", ["-5", "grados", ",", "1990-1995", ",", "1990–1995"]),
