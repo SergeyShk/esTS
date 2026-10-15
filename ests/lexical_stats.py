@@ -17,7 +17,7 @@ from .utils import get_nlp
 
 TOP_LEMMAS_FILE = Path(__file__).parent / "resources" / "google_books_top10000.txt"
 # Components a parse of the text does not need: the lemmas come from lemma_key
-UNUSED_COMPONENTS = ["ests_blank_lines", "parser", "lemmatizer", "ner"]
+UNUSED_COMPONENTS = ["parser", "lemmatizer", "ner"]
 
 
 class LexicalStats:

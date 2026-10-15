@@ -5,10 +5,10 @@
 
 ## Descripción
 
-<!-- core: stats/basic_stats.md:BasicStats 1991b2a -->
+<!-- core: stats/basic_stats.md:BasicStats ba50d56 -->
 Las estadísticas básicas de un texto: el número de sus oraciones, palabras, caracteres, letras, espacios, sílabas y signos de puntuación, las distribuciones de las palabras por letras y por sílabas, y las palabras largas, complejas, simples, monosílabas y polisílabas. La fuente de datos puede ser un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy). Las letras se cuentan con `str.isalpha`, así que las cifras, los guiones y los signos dentro de una palabra no son letras.
 
-Las palabras de una cadena salen del extractor de palabras y sus oraciones del extractor de oraciones. Las palabras de un `Doc` salen de sus tokens (los signos de puntuación y los símbolos como `€` o `%` se descartan) y sus oraciones de sus límites, o del extractor de oraciones cuando no los tiene; un extractor indicado explícitamente se usa sobre el texto del `Doc`. Una línea en blanco termina una oración de una cadena y de un `Doc` sin límites; un `Doc` con límites sigue la regla cuando su pipeline inicia una oración tras una línea en blanco (`start_sents_after_blank_lines`, que una biblioteca del idioma registra con su propio nombre) antes del parser, `senter` o `sentencizer`. Una oración de pura puntuación no lleva ninguna palabra y no se cuenta.
+Las palabras de una cadena salen del extractor de palabras y sus oraciones del extractor de oraciones. Las palabras de un `Doc` salen de sus tokens (los signos de puntuación y los símbolos como `€` o `%` se descartan) y sus oraciones de sus límites, o del extractor de oraciones cuando no los tiene o solo tiene algunos (`has_sents`); un extractor indicado explícitamente se usa sobre el texto del `Doc`. Una línea en blanco termina una oración de una cadena y de un `Doc` sin límites; un `Doc` con límites sigue la regla cuando su pipeline inicia una oración tras una línea en blanco (`start_sents_after_blank_lines`, que una biblioteca del idioma registra con su propio nombre) antes del parser, `senter` o `sentencizer`. Una oración de pura puntuación no lleva ninguna palabra y no se cuenta.
 
 !!! note "Nota"
     Las estadísticas se calculan al inicializar el objeto `BasicStats`.

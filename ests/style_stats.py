@@ -22,7 +22,7 @@ from .extractors import WordsExtractor
 from .utils import find_phrases, get_nlp, is_verbal_noun, iter_text_sents, lemmatize
 
 # Components the parts of speech and the lemmas of the nouns do not need
-UNUSED_COMPONENTS = ["ests_blank_lines", "parser", "ner"]
+UNUSED_COMPONENTS = ["parser", "ner"]
 # One-word parenthetical expressions, which the water counts as stopwords
 PARENTHETICAL_WORDS = frozenset(phrase for phrase in PARENTHETICALS if " " not in phrase)
 # Endings of the infinitive, whose phrases stand for the forms of the verb

@@ -339,8 +339,7 @@ def get_nlp(model: str = SPACY_MODEL) -> Language:
     Description:
         The tokenizer of the pipeline gets the rules of add_dash_rules, and the
         component ests_blank_lines goes before the parser, senter or sentencizer,
-        so a blank line ends a sentence of a Doc as of a string; a run without
-        the parser leaves it out too, since on its own it splits only paragraphs
+        so a blank line ends a sentence of a Doc as of a string
 
     Arguments:
         model (str): Name of the model

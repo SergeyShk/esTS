@@ -434,14 +434,14 @@ Parámetros:
 !!! info ""
     **ests_blank_lines** (`anyts.components.start_sents_after_blank_lines`)
 
-<!-- core: components.md:start_sents_after_blank_lines 67f0d3c -->
-Un componente que inicia una oración en el primer token tras una línea en blanco - un salto de línea, espacios opcionales y otro salto de línea -, para que un título, un elemento de una lista o un párrafo sin signo final sean una oración propia, como en el extractor de oraciones. Va antes del componente que fija las oraciones - el parser, `senter` o `sentencizer` -, que conserva los inicios encontrados y coloca los demás; los espacios ante tal inicio se quedan con la oración anterior. Por sí solo el componente no divide las oraciones dentro de un párrafo. Un documento ya analizado lanza `SourceError`, porque spaCy conserva sus oraciones. Una biblioteca del idioma registra el componente con su prefijo, `Language.component("<prefix>_blank_lines", func=start_sents_after_blank_lines)`.
+<!-- core: components.md:start_sents_after_blank_lines 256a9a9 -->
+Un componente que inicia una oración en el primer token tras una línea en blanco - un salto de línea, espacios opcionales y otro salto de línea -, para que un título, un elemento de una lista o un párrafo sin signo final sean una oración propia, como en el extractor de oraciones. Va antes del componente que fija las oraciones - el parser, `senter` o `sentencizer` -, que conserva los inicios encontrados y coloca los demás; los espacios ante tal inicio se quedan con la oración anterior. Por sí solo el componente no divide las oraciones dentro de un párrafo, y sus inicios son límites parciales (`has_sents`), así que las estadísticas toman las oraciones de tal documento de su texto. Un documento ya analizado lanza `SourceError`, porque spaCy conserva sus oraciones. Una biblioteca del idioma registra el componente con su prefijo, `Language.component("<prefix>_blank_lines", func=start_sents_after_blank_lines)`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `doc` | Doc | `-` | Objeto Doc |
 
-En esTS el componente está registrado como `ests_blank_lines`. Sin él, el modelo `es_core_news_sm` pega un párrafo sin signo final a la oración siguiente, y las estadísticas de un `Doc` difieren de las de la misma cadena. El pipeline de `ests.utils.get_nlp`, que analiza las cadenas de las estadísticas morfológicas, sintácticas, de cohesión y léxicas, lo tiene antes del parser. Un pipeline ejecutado sin su parser (`disable=["parser"]`) deja fuera también el componente: por sí solo divide el texto solo en párrafos.
+En esTS el componente está registrado como `ests_blank_lines`. Sin él, el modelo `es_core_news_sm` pega un párrafo sin signo final a la oración siguiente, y las estadísticas de un `Doc` difieren de las de la misma cadena. El pipeline de `ests.utils.get_nlp`, que analiza las cadenas de las estadísticas morfológicas, sintácticas, de cohesión y léxicas, lo tiene antes del parser.
 
 !!! example "Ejemplo"
 

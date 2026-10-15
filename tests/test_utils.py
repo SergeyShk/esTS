@@ -4,8 +4,7 @@ from anyts.utils import has_words, is_punctuation, iter_doc_tokens, iter_doc_wor
 from spacy.tokens import Doc
 from spacy.util import compile_infix_regex
 
-from ests import lexical_stats, style_stats
-from ests.corpus import stylometry
+from ests import BasicStats, CohesionStats
 from ests.exceptions import DatasetNotFoundError
 from ests.utils import (
     add_dash_rules,
@@ -17,6 +16,7 @@ from ests.utils import (
     sentenize,
     tokenize,
 )
+from ests.visualizers import sentence_lengths
 
 
 @pytest.mark.parametrize(
@@ -430,18 +430,15 @@ def test_get_nlp_starts_a_sentence_after_a_blank_line():
     assert sents == list(sentenize(text))
 
 
-@pytest.mark.parametrize(
-    "disable",
-    [
-        lexical_stats.UNUSED_COMPONENTS,
-        style_stats.UNUSED_COMPONENTS,
-        stylometry.UNUSED_COMPONENTS,
-    ],
-)
-def test_get_nlp_without_the_parser_sets_no_sentences(disable):
-    """Alone, the component of the blank lines would make every paragraph a sentence"""
-    doc = get_nlp()("Novedades\n\nImportación rápida. Menos errores", disable=disable)
-    assert not doc.has_annotation("SENT_START")
+def test_get_nlp_without_the_parser():
+    """The starts of ests_blank_lines alone leave the sentences to the extractor"""
+    text = (
+        "El perro come carne. La casa es grande. El gato duerme\n\nEl perro corre. La casa arde."
+    )
+    doc = get_nlp()(text, disable=["parser"])
+    assert BasicStats(doc).n_sents == BasicStats(text).n_sents == 5
+    assert sentence_lengths(doc) == sentence_lengths(text) == [4, 4, 3, 3, 3]
+    assert CohesionStats(doc).noun_overlap_adjacent == 0.0
 
 
 def test_get_nlp_not_installed():

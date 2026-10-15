@@ -432,7 +432,7 @@ Parameters:
 
 --8<-- "components.md:start_sents_after_blank_lines"
 
-In esTS the component is registered as `ests_blank_lines`. Without it the `es_core_news_sm` model glues a paragraph without a final mark to the next sentence, and the statistics of a `Doc` differ from those of the same string. The pipeline of `ests.utils.get_nlp`, which parses the strings of the morphological, syntactic, cohesion and lexical statistics, has it before the parser. A pipeline run without its parser (`disable=["parser"]`) leaves the component out as well: on its own it splits the text only into paragraphs.
+In esTS the component is registered as `ests_blank_lines`. Without it the `es_core_news_sm` model glues a paragraph without a final mark to the next sentence, and the statistics of a `Doc` differ from those of the same string. The pipeline of `ests.utils.get_nlp`, which parses the strings of the morphological, syntactic, cohesion and lexical statistics, has it before the parser.
 
 !!! example "Example"
 

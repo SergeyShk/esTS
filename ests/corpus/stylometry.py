@@ -21,7 +21,7 @@ from ..exceptions import SourceError, SourceTypeError
 from ..utils import get_nlp
 
 # Components the parts of speech of a list of words do not need
-UNUSED_COMPONENTS = ["ests_blank_lines", "parser", "lemmatizer", "ner"]
+UNUSED_COMPONENTS = ["parser", "lemmatizer", "ner"]
 # A list of words is tagged in chunks to bound the memory; the margin of context is
 # wider than what the encoder sees, so the tags are those of the whole list
 CHUNK_SIZE = 1000
