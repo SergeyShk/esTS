@@ -6,6 +6,7 @@ except ImportError:
 
 import threading
 from collections import Counter
+from collections.abc import Callable
 from functools import lru_cache
 from importlib.metadata import version
 from io import BytesIO
@@ -186,9 +187,17 @@ def format_value(value: float | int | str | None) -> str:
     return str(value)
 
 
-def stats_table(stats: dict[str, float], desc: dict[str, str]) -> pd.DataFrame:
-    rows = [(desc[key], format_value(stats[key])) for key in desc if key in stats]
-    return pd.DataFrame(rows, columns=["Metric", "Value"])
+def stats_table(
+    stats: dict[str, float],
+    desc: dict[str, str],
+    describe: Callable[[str], str | None] | None = None,
+) -> pd.DataFrame:
+    keys = [key for key in desc if key in stats]
+    if describe is None:
+        rows = [(desc[key], format_value(stats[key])) for key in keys]
+        return pd.DataFrame(rows, columns=["Metric", "Value"])
+    rows_read = [(desc[key], format_value(stats[key]), describe(key) or "-") for key in keys]
+    return pd.DataFrame(rows_read, columns=["Metric", "Value", "Reading"])
 
 
 def format_reading_time(minutes: float) -> str:
@@ -206,7 +215,7 @@ def readability_summary(rs: ReadabilityStats) -> str:
         f"### {grade[:1].upper()}{grade[1:]}\n\n"
         f"Consensus grade - **{rs.consensus_grade:.1f}**, "
         f"Flesch reading ease by Szigriszt-Pazos - **{rs.flesch_reading_easy:.0f}** "
-        f"({rs.describe_level()} on the INFLESZ scale), "
+        f"({rs.describe('flesch_reading_easy')} on the INFLESZ scale), "
         f"reading time - **{format_reading_time(rs.reading_time)}**."
     )
 
@@ -370,7 +379,7 @@ def compute(text: str, layers: list[str]) -> dict:
         "text": text,
         "highlight": highlight(doc, layers=layers).to_html(),
         "summary": readability_summary(rs),
-        "readability": stats_table(rs.get_stats(), READABILITY_STATS_DESC),
+        "readability": stats_table(rs.get_stats(), READABILITY_STATS_DESC, rs.describe),
         "diversity": stats_table(ds.get_stats(), DiversityStats.stats_desc),
         "pos": pos_table,
         "morph": morph_table,

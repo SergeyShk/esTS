@@ -9,7 +9,7 @@ from typing import NamedTuple
 
 import anyts
 from anyts.cohesion import calc_overlaps, calc_repetition, count_given
-from anyts.utils import check_sequence, check_words, iter_doc_tokens, safe_divide
+from anyts.utils import check_sequence, check_words, has_sents, iter_doc_tokens, safe_divide
 from spacy.language import Language
 from spacy.tokens import Doc, Token
 
@@ -209,7 +209,7 @@ class CohesionStats:
             source = pipeline(source, disable=UNUSED_COMPONENTS)
         elif not isinstance(source, Doc):
             raise SourceTypeError("The data source is set incorrectly")
-        if sents_extractor is not None or not source.has_annotation("SENT_START"):
+        if sents_extractor is not None or not has_sents(source):
             sents = split_doc_sents(source, sents_extractor or SentsExtractor())
         else:
             sents = [list(iter_doc_tokens(sent)) for sent in source.sents]

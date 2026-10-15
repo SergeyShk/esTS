@@ -20,7 +20,7 @@ La clase extiende el `SentsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 
 ## Parámetros
 
-<!-- core: extractors/sentences.md:SentsExtractor-parameters d136320 -->
+<!-- core: extractors/sentences.md:SentsExtractor-parameters 5bc6821 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `tokenizer` | Pattern/Callable | `None` | Tokenizador o expresión regular; por defecto, el método `sentenize` |
@@ -28,7 +28,7 @@ La clase extiende el `SentsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 | `max_len` | int | `0` | Longitud máxima de la oración extraída en caracteres, `0` sin límite |
 
 !!! note "Nota"
-    Una expresión regular como tokenizador es un separador: el texto se divide con `re.split`. A las oraciones de cualquier tokenizador se les quitan los espacios de los extremos antes de aplicar los límites de longitud, y las vacías se descartan.
+    Una expresión regular como tokenizador es un separador: el texto se divide con `re.split`. Una línea en blanco - un salto de línea, espacios opcionales y otro salto de línea - termina una oración con cualquier tokenizador: el texto se divide primero por las líneas en blanco y cada parte pasa al tokenizador, así que un título o un párrafo sin signo final es una oración propia, y también lo es una parte sin palabras, como una línea de asteriscos entre secciones, que las estadísticas descartan como oración sin palabras. A las oraciones de cualquier tokenizador se les quitan los espacios de los extremos antes de aplicar los límites de longitud, y las vacías se descartan.
 
 ## Métodos
 

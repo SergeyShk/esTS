@@ -226,7 +226,7 @@ The library allows counting the following readability metrics:
 *   LIX readability measure
 *   RIX readability measure
 
-On top of the formulas: the band of a scale for the reading ease and for Legibilidad µ, a consensus grade (the median of the grade formulas), the school stage and the reader age in Spain, and reading time.
+On top of the formulas: the band of a scale for the reading ease, Legibilidad µ and LIX, the reading of any metric, a consensus grade (the median of the grade formulas), the school stage and the reader age in Spain, and reading time.
 
 The coefficients of the Flesch reading ease are selected by `preset`: by default the *fórmula de perspicuidad* of Szigriszt-Pazos with the INFLESZ scale (`general`), or Fernández Huerta with the bands of its author (`classic`).
 
@@ -265,6 +265,9 @@ Reading time (min)                           |   0.04
 'algo difícil'
 
 >>> rs.describe_grade()
+'ESO (12-16 years)'
+
+>>> rs.describe("rix")
 'ESO (12-16 years)'
 ```
 

@@ -4,6 +4,7 @@ from functools import lru_cache
 
 import simplemma
 import spacy
+from anyts.extractors import BLANK_LINE
 from anyts.utils import check_words, count_words_by_spans as count_words_by_spans, iter_doc_words
 from spacy.language import Language
 from spacy.tokenizer import Tokenizer
@@ -27,12 +28,12 @@ from .exceptions import DatasetNotFoundError
 # of hyphens before the next word or opening mark within the line, not a digit and not
 # the punctuation after a closing dash, or a single hyphen before an opening mark
 # (cuatro.-¿Cinco?), since one before a word numbers an article (Artículo 1.- Objeto);
-# or a blank line
+# or a blank line, as in the SentsExtractor of the core
 SENTENCE_END = re.compile(
     r"(?<![.!?…])(?P<marks>[.!?…]++)(?P<closers>[»”’\"')\]]*)"
     rf"(?P<dash>(?:--+|[—–―][{DASHES}]*)(?=\s|$))?"
     rf"(?=\s|$|(?:--+|[—–―][{DASHES}]*)[ \t]*+[^\s\d.,;:!?…{DASHES}]|-[¿¡«“])"
-    r"|(?P<break>\n[ \t\r\f\v]*\n)"
+    rf"|(?P<break>{BLANK_LINE.pattern})"
 )
 NON_SPACE = re.compile(r"\S")
 NON_DASH = re.compile(rf"[^\s{DASHES}]")
@@ -44,6 +45,8 @@ OPENING_CHARS = "(«“\"'["
 LOOKBACK = 64
 # Byte order mark glued to the start of a text read with utf-8 instead of utf-8-sig
 BYTE_ORDER_MARK = "\ufeff"
+# Components of spaCy that set the sentences of a Doc
+SENTENCE_SETTERS = ("parser", "senter", "sentencizer")
 
 
 def _opens_remark(text: str, position: int) -> bool:
@@ -323,6 +326,9 @@ def _load_nlp(model: str) -> Language:
             f"The spaCy model {model} is not installed: python -m spacy download {model}"
         ) from error
     add_dash_rules(nlp)
+    setters = [name for name in nlp.pipe_names if name in SENTENCE_SETTERS]
+    if setters and "ests_blank_lines" not in nlp.component_names:
+        nlp.add_pipe("ests_blank_lines", before=setters[0])
     return nlp
 
 
@@ -331,7 +337,9 @@ def get_nlp(model: str = SPACY_MODEL) -> Language:
     Loading a spaCy pipeline, once per process
 
     Description:
-        The tokenizer of the pipeline gets the rules of add_dash_rules
+        The tokenizer of the pipeline gets the rules of add_dash_rules, and the
+        component ests_blank_lines goes before the parser, senter or sentencizer,
+        so a blank line ends a sentence of a Doc as of a string
 
     Arguments:
         model (str): Name of the model

@@ -1,12 +1,15 @@
-from collections.abc import Iterable
-from math import isnan, nan
+from collections.abc import Iterable, Mapping
+from math import nan
+from typing import ClassVar
 
 import anyts.readability_stats
+from anyts.constants import LIX_LEVELS
 from anyts.readability_stats import (
     calc_lix as calc_lix,
     calc_mu_index as calc_mu_index,
     calc_rix as calc_rix,
     calc_smog_index as calc_smog_index,
+    scale_level as scale_level,
 )
 from anyts.utils import safe_divide
 from spacy.tokens import Doc
@@ -55,9 +58,9 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
     Description:
         The Spanish readability formulas, their interpretation scales, the school
         stage and reader age of Spain and the reading time. The preset selects the
-        coefficients of the Flesch reading ease and its scale, used by describe_level
-        and by the consensus grade: general - Szigriszt-Pazos (1993) with the INFLESZ
-        scale, classic - Fernández Huerta (1959) with his own bands
+        coefficients of the Flesch reading ease and its scale, used by describe_level,
+        describe and the consensus grade: general - Szigriszt-Pazos (1993) with the
+        INFLESZ scale, classic - Fernández Huerta (1959) with his own bands
 
     Example:
         >>> from ests import ReadabilityStats
@@ -76,6 +79,8 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
         >>> rs.describe_level()
         'algo difícil'
         >>> rs.describe_grade()
+        'ESO (12-16 years)'
+        >>> rs.describe("rix")
         'ESO (12-16 years)'
 
     Arguments:
@@ -105,8 +110,10 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
 
     Methods:
         reading_ease_to_grade: Years of schooling for a value of the reading ease by the preset
-        describe_level: Band of a reading ease scale or of the µ scale for a metric
+        level_scale: Interpretation scale of a metric, the reading ease by the preset
+        describe_level: Band of the scale of the reading ease, Legibilidad µ or LIX
         describe_grade: School stage and reader age for the consensus grade or a grade formula
+        describe: Reading of any metric by its scale, None for a metric without one
         reading_time_by_speed: Reading time at a given speed
         reading_time_by_norm: Reading time aloud and silently by a norm of READING_SPEED_NORMS
         get_stats: Getting the computed readability metrics of the text
@@ -125,6 +132,11 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
     stats_desc = READABILITY_STATS_DESC
     grade_age_levels = GRADE_AGE_LEVELS
     postgraduate_level = POSTGRADUATE_LEVEL
+    # The reading ease by the preset (level_scale); RIX by years of schooling (grade_scales)
+    level_scales: ClassVar[Mapping[str, tuple[tuple[float, str], ...]]] = {
+        "mu_index": MU_SCALE,
+        "lix": LIX_LEVELS,
+    }
     reading_speed = READING_SPEED_WPM
     reading_speed_norms = READING_SPEED_NORMS
 
@@ -168,36 +180,50 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
         """
         return flesch_reading_easy_to_grade(flesch_reading_easy, self.preset)
 
-    def describe_level(self, stat: str = "flesch_reading_easy", scale: str | None = None) -> str:
+    def level_scale(self, stat: str) -> tuple[tuple[float, str], ...] | None:
         """
-        Getting the band of a readability scale for a metric
+        Getting the interpretation scale of a metric
+
+        Description:
+            The reading ease by the scale of the preset (general - inflesz,
+            classic - fernandez_huerta), Legibilidad µ by MU_SCALE and LIX by
+            the text types of Björnsson; RIX is read by years of schooling, as
+            a stage of the Spanish school system
 
         Arguments:
-            stat (str): Name of the metric: flesch_reading_easy or mu_index
+            stat (str): Name of the metric
+
+        Returns:
+            tuple[tuple[float, str], ...] | None: Lower bounds and their bands, None
+                for a metric without a scale
+        """
+        if stat == "flesch_reading_easy":
+            return READING_EASE_SCALES[PRESET_SCALES[self.preset]]
+        return super().level_scale(stat)
+
+    def describe_level(self, stat: str = "flesch_reading_easy", scale: str | None = None) -> str:
+        """
+        Getting the band of the interpretation scale of a metric
+
+        Arguments:
+            stat (str): Name of the metric: flesch_reading_easy, mu_index or lix
             scale (str): Scale for the reading ease: inflesz, szigriszt or
                 fernandez_huerta; without it the scale of the preset is used
-                (general - inflesz, classic - fernandez_huerta); the µ index
-                has a single scale of its own and accepts no other
+                (level_scale)
 
         Returns:
             str: Band of the scale
 
         Raises:
-            ParameterError: If the metric has no scale, the scale is unknown
-                or a scale is given for the µ index
+            ParameterError: If the metric has no scale of bands or its value is not
+                a finite number, the scale is unknown or a scale is given for
+                another metric
         """
-        if stat == "flesch_reading_easy":
-            return flesch_reading_easy_to_level(
-                self.flesch_reading_easy, scale or PRESET_SCALES[self.preset]
-            )
-        if stat == "mu_index":
-            if scale is not None:
-                raise ParameterError("Legibilidad µ has a single scale, scale must not be set")
-            return mu_to_level(self.mu_index)
-        raise ParameterError(
-            f"The metric {stat} has no interpretation scale. "
-            "Metrics with a scale: ('flesch_reading_easy', 'mu_index')"
-        )
+        if scale is None:
+            return super().describe_level(stat)
+        if stat != "flesch_reading_easy":
+            raise ParameterError(f"Only the reading ease has a choice of scales, not {stat}")
+        return flesch_reading_easy_to_level(self.flesch_reading_easy, scale)
 
 
 def calc_flesch_reading_easy(
@@ -352,13 +378,13 @@ def flesch_reading_easy_to_level(flesch_reading_easy: float, scale: str = "infle
         str: Band of the scale
 
     Raises:
-        ParameterError: If the scale is unknown
+        ParameterError: If the scale is unknown or the value is not a finite number
     """
     if scale not in READING_EASE_SCALES:
         raise ParameterError(
             f"Unknown scale: {scale}. Available scales: {tuple(READING_EASE_SCALES)}"
         )
-    return _level(flesch_reading_easy, READING_EASE_SCALES[scale])
+    return scale_level(flesch_reading_easy, READING_EASE_SCALES[scale])
 
 
 def mu_to_level(mu_index: float) -> str:
@@ -366,24 +392,18 @@ def mu_to_level(mu_index: float) -> str:
     Getting the band of the µ scale for Legibilidad µ
 
     Description:
-        The seven bands of Muñoz Baquedano and Muñoz Urra (2006) from
-        MU_SCALE; an undefined index (nan) has no band and gives an empty string
+        The seven bands of Muñoz Baquedano and Muñoz Urra (2006) from MU_SCALE
 
     Arguments:
         mu_index (float): Value of Legibilidad µ
 
     Returns:
         str: Band of the scale
+
+    Raises:
+        ParameterError: If the value is not a finite number
     """
-    return _level(mu_index, MU_SCALE)
-
-
-def _level(value: float, scale: tuple[tuple[float, str], ...]) -> str:
-    """Band of a scale given as lower bounds in descending order; the lowest band is open below"""
-    for threshold, level in scale:
-        if value >= threshold:
-            return level
-    return "" if isnan(value) else scale[-1][1]
+    return scale_level(mu_index, MU_SCALE)
 
 
 def flesch_reading_easy_to_grade(flesch_reading_easy: float, preset: str = "general") -> float:

@@ -9,7 +9,7 @@ The components of esTS are subclasses of the `StatsComponent` of the [anyTS](htt
 
 ## Names { #names }
 
-The factories carry the prefix of the library: `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`. They are declared as entry points of `spacy_factories`, so a pipeline saved with these components (`nlp.to_disk(path)`, `spacy package`) loads with `spacy.load(path)` without importing the library.
+The factories carry the prefix of the library: `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`, and the component of sentence boundaries [`ests_blank_lines`](#blank_lines). They are declared as entry points of `spacy_factories`, so a pipeline saved with these components (`nlp.to_disk(path)`, `spacy package`) loads with `spacy.load(path)` without importing the library.
 
 ``` python
 nlp.add_pipe("ests_basic", name="basic", last=True)
@@ -423,6 +423,41 @@ Parameters:
 
     ``` bash
     ('octosílabo', {'aguda': 2, 'llana': 2})
+    ```
+
+## Blank lines { #blank_lines }
+
+!!! info ""
+    **ests_blank_lines** (`anyts.components.start_sents_after_blank_lines`)
+
+--8<-- "components.md:start_sents_after_blank_lines"
+
+In esTS the component is registered as `ests_blank_lines`. Without it the `es_core_news_sm` model glues a paragraph without a final mark to the next sentence, and the statistics of a `Doc` differ from those of the same string. The pipeline of `ests.utils.get_nlp`, which parses the strings of the morphological, syntactic, cohesion and lexical statistics, has it before the parser.
+
+!!! example "Example"
+
+    _Code_:
+
+    ``` python
+    # Import the libraries
+    import ests
+    import spacy
+
+    # Load the spaCy model
+    nlp = spacy.load("es_core_news_sm")
+
+    # Add the component before the parser
+    nlp.add_pipe("ests_blank_lines", before="parser")
+
+    # Sentences of the document
+    doc = nlp("Novedades\n\nImportación rápida. Menos errores")
+    [sent.text.strip() for sent in doc.sents]
+    ```
+
+    _Result_:
+
+    ``` bash
+    ['Novedades', 'Importación rápida.', 'Menos errores']
     ```
 
 ## Everything in one pipeline { #pipeline }

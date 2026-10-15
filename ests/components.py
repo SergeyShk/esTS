@@ -13,9 +13,12 @@ Description:
     pipeline without an annotation a component needs raises SourceError, and
     a name taken by an extension of another package raises ParameterError
     Adding a component extends the tokenizer of its pipeline with add_dash_rules
+    ests_blank_lines - the component start_sents_after_blank_lines of the core:
+    starts a sentence after a blank line when added before the parser, senter
+    or sentencizer; get_nlp has it already
 """
 
-from anyts.components import StatsComponent
+from anyts.components import StatsComponent, start_sents_after_blank_lines
 from anyts.constants import (
     DIVERSITY_LOG_BASE,
     HDD_SAMPLE_SIZE,
@@ -40,6 +43,8 @@ from .style_stats import StyleStats, check_params as check_style_params
 from .syntax_stats import SyntaxStats
 from .utils import add_dash_rules
 from .verse_stats import LETTER, VerseStats
+
+Language.component("ests_blank_lines", func=start_sents_after_blank_lines)
 
 
 class _Component(StatsComponent):

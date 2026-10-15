@@ -14,7 +14,7 @@ from ests.constants import (
     READABILITY_STATS_DESC,
     READING_SPEED_NORMS,
 )
-from ests.exceptions import SourceTypeError
+from ests.exceptions import ParameterError, SourceTypeError, UnknownStatError
 from ests.readability_stats import (
     calc_consensus_grade,
     calc_crawford_grade,
@@ -368,11 +368,17 @@ def test_flesch_reading_easy_to_level_error():
         (30, "muy difícil"),
         (0, "muy difícil"),
         (533.3, "muy fácil"),
-        (float("nan"), ""),
     ],
 )
 def test_mu_to_level(value, level):
     assert mu_to_level(value) == level
+
+
+def test_level_of_an_undefined_value():
+    with pytest.raises(ParameterError, match="finite"):
+        mu_to_level(float("nan"))
+    with pytest.raises(ParameterError, match="finite"):
+        flesch_reading_easy_to_level(float("nan"))
 
 
 @pytest.mark.parametrize(
@@ -412,13 +418,70 @@ def test_describe_level(rs):
     assert rs.describe_level(scale="szigriszt") == "árido"
     assert rs.describe_level(scale="fernandez_huerta") == "muy difícil"
     assert rs.describe_level("mu_index") == "difícil"
+    assert rs.describe_level("lix") == "very hard texts, laws and bureaucratic language"
     assert rs.describe_level(scale="inflesz") == rs.describe_level()
-    with pytest.raises(ValueError):
-        rs.describe_level("lix")
-    with pytest.raises(ValueError):
+    with pytest.raises(ParameterError, match="no scale of bands"):
+        rs.describe_level("rix")
+    with pytest.raises(ParameterError, match="no scale of bands"):
+        rs.describe_level("gutierrez_polini_index")
+    with pytest.raises(ParameterError):
         rs.describe_level(scale="unknown")
-    with pytest.raises(ValueError, match="single scale"):
+    with pytest.raises(ParameterError, match="choice of scales"):
         rs.describe_level("mu_index", scale="szigriszt")
+
+
+@pytest.mark.parametrize(
+    ("preset", "expected"),
+    [
+        (
+            "general",
+            {
+                "flesch_reading_easy": "algo difícil",
+                "gutierrez_polini_index": None,
+                "crawford_grade": "primary school, grades 4-6 (9-12 years)",
+                "mu_index": "difícil",
+                "sol_grade": "ESO (12-16 years)",
+                "lix": "very hard texts, laws and bureaucratic language",
+                "rix": "ESO (12-16 years)",
+                "consensus_grade": "ESO (12-16 years)",
+                "reading_time": None,
+            },
+        ),
+        ("classic", {"flesch_reading_easy": "bastante difícil"}),
+    ],
+)
+def test_describe(preset, expected):
+    rs = ReadabilityStats(QUOTE, preset=preset)
+    for stat, reading in expected.items():
+        assert rs.describe(stat) == reading
+    assert rs.describe("flesch_reading_easy") == rs.describe_level()
+    for stat in (
+        "flesch_kincaid_grade",
+        "coleman_liau_index",
+        "automated_readability_index",
+        "smog_index",
+        "gunning_fog_index",
+    ):
+        assert rs.describe(stat) is None
+
+
+def test_describe_rix_by_the_school_stages():
+    # RIX 5.0 is grade 10 of Anderson, the last year of ESO
+    assert ReadabilityStats(QUOTE).rix == 5.0
+    assert ReadabilityStats(QUOTE).describe("rix") == grade_to_age(10)
+
+
+def test_describe_an_undefined_value():
+    rs = ReadabilityStats("Sol.")
+    assert isnan(rs.mu_index)
+    assert rs.describe("mu_index") is None
+    with pytest.raises(ParameterError, match="finite"):
+        rs.describe_level("mu_index")
+
+
+def test_describe_unknown_metric(rs):
+    with pytest.raises(UnknownStatError):
+        rs.describe("unknown")
 
 
 def test_reading_time(rs):

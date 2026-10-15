@@ -45,7 +45,7 @@ Los supuestos principales de las métricas de legibilidad:
 
 ## Ganchos del idioma
 
-La clase extiende el `ReadabilityStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/readability_stats/) con las fórmulas y las tablas del español: las [estadísticas básicas](basic_stats.md) de esTS, que toman por defecto los [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) del español, los preajustes de la facilidad de lectura de Flesch, las fórmulas de Gutiérrez de Polini, Crawford y SOL, las fórmulas de grado del grado de consenso (Crawford y SOL), las etapas escolares de España y las velocidades de lectura de los lectores en español.
+La clase extiende el `ReadabilityStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/readability_stats/) con las fórmulas y las tablas del español: las [estadísticas básicas](basic_stats.md) de esTS, que toman por defecto los [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) del español, los preajustes de la facilidad de lectura de Flesch, las fórmulas de Gutiérrez de Polini, Crawford y SOL, las fórmulas de grado del grado de consenso (Crawford y SOL), las etapas escolares de España, las escalas de interpretación y las velocidades de lectura de los lectores en español. La escala de la facilidad de lectura sigue el preajuste (`level_scale`), así que `describe_level` y `describe` leen el valor igual que el grado de consenso.
 
 Las fórmulas del núcleo con sus coeficientes ingleses - `flesch_kincaid_grade`, `coleman_liau_index`, `automated_readability_index`, `smog_index` y `gunning_fog_index` - siguen siendo atributos del objeto, fuera de `get_stats`: están ajustadas con textos ingleses, y `smog_index` es la entrada de SOL.
 
@@ -103,10 +103,10 @@ La fórmula de Fernández Huerta toma la longitud media de la oración, con la c
 
 ## Interpretación { #interpretation }
 
-El método [`describe_level`](#describe_level) sitúa la facilidad de lectura en la escala del preajuste: INFLESZ para `general` (`muy difícil` por debajo de 40, `algo difícil` 40-55, `normal` 55-65, `bastante fácil` 65-80, `muy fácil` por encima de 80) y los siete niveles de Fernández Huerta para `classic`, y a petición las escalas de Szigriszt-Pazos o del otro autor; la Legibilidad µ tiene los siete niveles de sus autores (`muy difícil` 0-30, `difícil` 31-50, `un poco difícil` 51-60, `adecuado` 61-70, `un poco fácil` 71-80, `fácil` 81-90, `muy fácil` 91-100).
+El método [`describe_level`](#describe_level) sitúa la facilidad de lectura en la escala del preajuste: INFLESZ para `general` (`muy difícil` por debajo de 40, `algo difícil` 40-55, `normal` 55-65, `bastante fácil` 65-80, `muy fácil` por encima de 80) y los siete niveles de Fernández Huerta para `classic`, y a petición las escalas de Szigriszt-Pazos o del otro autor; la Legibilidad µ tiene los siete niveles de sus autores (`muy difícil` 0-30, `difícil` 31-50, `un poco difícil` 51-60, `adecuado` 61-70, `un poco fácil` 71-80, `fácil` 81-90, `muy fácil` 91-100), y LIX los tipos de texto de Björnsson ([`calc_lix`](readability_stats_funcs.md#calc_lix)). RIX no tiene aquí niveles propios: sus grados de Anderson ([`calc_rix`](readability_stats_funcs.md#calc_rix)) son años de escolaridad, y [`describe`](#describe) los lee como una etapa del sistema educativo español.
 
-<!-- core: stats/readability_stats.md:ReadabilityStats-consensus 40f0d09 -->
-Las fórmulas que dan años de escolaridad (`grade_stats`) se resumen en el atributo `consensus_grade`: la mediana de sus valores redondeados al entero más próximo (las mitades hacia arriba), junto con la facilidad de lectura convertida en años de escolaridad (`reading_ease_to_grade`) sin redondear.
+<!-- core: stats/readability_stats.md:ReadabilityStats-consensus 7e17a01 -->
+Las fórmulas que dan años de escolaridad (`grade_stats`) se resumen en el atributo `consensus_grade`: la mediana de sus valores redondeados al entero más próximo (las mitades hacia arriba), junto con la facilidad de lectura convertida en años de escolaridad (`reading_ease_to_grade`) sin redondear. Una biblioteca alinea los límites de `reading_ease_grades` con su escala de la facilidad de lectura, para que el grado de consenso y `describe` lean el valor igual.
 
 Las fórmulas de grado de esTS son Crawford y SOL, y la facilidad de lectura se [convierte en grado](readability_stats_funcs.md#flesch_reading_easy_to_grade) según la escala del preajuste. El método [`describe_grade`](#describe_grade) traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:
 
@@ -128,14 +128,14 @@ El atributo `reading_time` estima el tiempo de lectura silenciosa a 278 palabras
 
 ### describe_level
 
-Devuelve el nivel de una escala de legibilidad para la facilidad de lectura o la Legibilidad µ.
+Devuelve el nivel de la escala de interpretación de la facilidad de lectura, la Legibilidad µ o LIX. Una métrica sin escala de niveles, un valor no definido (nan) y una escala indicada para una métrica que no es la facilidad de lectura lanzan `ParameterError`.
 
 Parámetros:
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
-| `stat` | str | `flesch_reading_easy` | Nombre de la métrica (`flesch_reading_easy`, `mu_index`) |
-| `scale` | str | `None` | Escala para la facilidad de lectura (`inflesz`, `szigriszt`, `fernandez_huerta`); sin ella se usa la escala del preajuste; la Legibilidad µ tiene una sola escala y no admite otra |
+| `stat` | str | `flesch_reading_easy` | Nombre de la métrica (`flesch_reading_easy`, `mu_index`, `lix`) |
+| `scale` | str | `None` | Escala para la facilidad de lectura (`inflesz`, `szigriszt`, `fernandez_huerta`); sin ella se usa la escala del preajuste |
 
 !!! example "Ejemplo"
 
@@ -150,6 +150,8 @@ Parámetros:
     # 'normal'
     rs.describe_level("mu_index")
     # 'difícil'
+    rs.describe_level("lix")
+    # 'very hard texts, laws and bureaucratic language'
     ```
 
 ### describe_grade
@@ -172,6 +174,34 @@ Las fórmulas de grado son `consensus_grade`, `crawford_grade` y `sol_grade`.
     # 'ESO (12-16 years)'
     rs.describe_grade("crawford_grade")
     # 'primary school, grades 4-6 (9-12 years)'
+    ```
+
+### describe
+
+<!-- core: stats/readability_stats.md:ReadabilityStats-describe 6148d1e -->
+Devuelve la lectura de cualquier métrica según su escala: para el grado de consenso y una fórmula de grado, la etapa escolar y la edad del lector (`describe_grade`); para una métrica con escala de niveles (`level_scale`), su nivel; para otra métrica de `grade_scales`, la etapa y la edad de los años de escolaridad que da su escala; y `None` para una métrica sin escala o con un valor no definido (nan). Un nombre que no está en `stats_desc` ni es una propiedad pública de la clase lanza `UnknownStatError`.
+
+Parámetros:
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------: | :--: | :---------: | :---------: |
+| `stat` | str | `-` | Nombre de la métrica |
+
+En esTS las fórmulas de grado se leen como etapas del sistema educativo español, y también RIX a través de los grados de Anderson; la fórmula de Gutiérrez de Polini, el tiempo de lectura y las fórmulas del núcleo con sus coeficientes ingleses (`flesch_kincaid_grade`, `coleman_liau_index`, `automated_readability_index`, `smog_index`, `gunning_fog_index`) no tienen escala.
+
+!!! example "Ejemplo"
+
+    ``` python
+    {stat: rs.describe(stat) for stat in rs.get_stats()}
+    # {'flesch_reading_easy': 'algo difícil',
+    #  'gutierrez_polini_index': None,
+    #  'crawford_grade': 'primary school, grades 4-6 (9-12 years)',
+    #  'mu_index': 'difícil',
+    #  'sol_grade': 'ESO (12-16 years)',
+    #  'lix': 'very hard texts, laws and bureaucratic language',
+    #  'rix': 'ESO (12-16 years)',
+    #  'consensus_grade': 'ESO (12-16 years)',
+    #  'reading_time': None}
     ```
 
 ### reading_time_by_speed
