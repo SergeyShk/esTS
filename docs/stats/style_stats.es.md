@@ -9,7 +9,7 @@ Módulo para calcular las métricas de estilo de un texto: los indicadores SEO d
 
 Los servicios no publican sus fórmulas; se implementan las definiciones generalmente aceptadas, descritas en la sección de [funciones](style_stats_funcs.md). Por defecto las palabras se extraen en minúsculas sin lematizar, así que las formas de una palabra cuentan como palabras distintas, como en Advego. Para calcular por lemas, pase un objeto [`WordsExtractor`](../extractors/words.md) con `use_lexemes=True` y `lowercase=True`.
 
-Los marcadores del estilo burocrático se cuentan sobre las formas sin filtrar (`forms`), sea cual sea el extractor, según las listas `COMPOUND_PREPOSITIONS`, `PARENTHETICALS` y `OFFICIALESE_CLICHES` de `ests.constants`. Una expresión que termina en `a` o `de` también encuentra la contracción con el artículo (`a efectos del`), y una expresión que empieza por un infinitivo vale por las formas del verbo (`proceder a` encuentra `se procedió a`); véase [densidad de expresiones](style_stats_funcs.md#calc_phrase_density). Los sustantivos deverbales necesitan las categorías gramaticales y los lemas: un `Doc` da su propia anotación, y una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline pasado en `nlp` la primera vez que se lee `verbal_nouns`; las demás métricas de una cadena no necesitan modelo. Una cadena más larga que el `max_length` del pipeline se analiza en partes de oraciones enteras; solo una oración más larga que él lanza `SourceError`.
+Los marcadores del estilo burocrático se cuentan sobre las formas sin filtrar (`forms`), sea cual sea el extractor, según las listas `COMPOUND_PREPOSITIONS`, `PARENTHETICALS` y `OFFICIALESE_CLICHES` de `ests.constants`. Una expresión que termina en `a` o `de` también encuentra la contracción con el artículo (`a efectos del`), y una expresión que empieza por un infinitivo vale por las formas del verbo (`proceder a` encuentra `se procedió a`); véase [densidad de expresiones](style_stats_funcs.md#calc_phrase_density). Los sustantivos deverbales necesitan las categorías gramaticales y los lemas: un `Doc` da su propia anotación, y una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline pasado en `nlp` la primera vez que se lee `verbal_nouns` o [`markers`](#markers); las demás métricas de una cadena no necesitan modelo. Una cadena más larga que el `max_length` del pipeline se analiza en partes de oraciones enteras; solo una oración más larga que él lanza `SourceError`.
 
 !!! note "Nota"
     Las métricas se calculan al acceder al atributo correspondiente o al llamar al método `get_stats` del objeto `StyleStats`. Las normas de los servicios están pensadas para textos de varios cientos de palabras; en textos cortos la náusea y el spam dicen poco.
@@ -74,6 +74,23 @@ Parámetros:
     text = "Tres tristes tigres tragaban trigo en un trigal, en tres tristes trastos"
     StyleStats(text).keyword_density("tres tristes", "trigo")
     # {'tres tristes': 16.666666666666668, 'trigo': 8.333333333333334}
+    ```
+
+### markers
+
+Devuelve los marcadores del estilo burocrático encontrados: para cada una de las métricas `verbal_nouns`, `compound_prepositions`, `parentheticals` y `cliches`, las palabras y expresiones con las que se cuenta, en el orden del texto y en minúsculas. Una expresión se encuentra con sus contracciones y las formas de su verbo ([`expand_phrases`](style_stats_funcs.md#calc_phrase_density)); los sustantivos deverbales necesitan las categorías gramaticales y los lemas, como su métrica, así que una cadena se analiza con el modelo y un `Doc` sin ellos lanza `SourceError`.
+
+!!! example "Ejemplo"
+
+    ``` python
+    from ests import StyleStats
+
+    text = "Sin embargo, se procedió a la revisión en el marco del proyecto"
+    StyleStats(text).markers()
+    # {'verbal_nouns': ('revisión',),
+    #  'compound_prepositions': ('en el marco del',),
+    #  'parentheticals': ('sin embargo',),
+    #  'cliches': ('procedió a',)}
     ```
 
 ### get_stats

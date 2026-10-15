@@ -459,6 +459,9 @@ The SEO indicators of Advego and Text.ru - nausea, water content, spam score, na
 >>> ss = StyleStats("Se procedió a la revisión del expediente en el marco del plan a la mayor brevedad.")
 >>> ss.compound_prepositions, ss.cliches, ss.verbal_nouns
 (6.25, 12.5, 20.0)
+
+>>> ss.markers()
+{'verbal_nouns': ('revisión',), 'compound_prepositions': ('en el marco del',), 'parentheticals': (), 'cliches': ('procedió a', 'a la mayor brevedad')}
 ```
 
 More in the [documentation](https://sergeyshk.github.io/esTS/stats/style_stats/).

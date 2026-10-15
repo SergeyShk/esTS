@@ -101,6 +101,7 @@ class StyleStats:
 
     Methods:
         keyword_density: Density of keywords and phrases
+        markers: Markers of the officialese style found in the text
         get_stats: Getting the computed style metrics of the text
         print_stats: Printing the computed style metrics with descriptions
 
@@ -108,8 +109,8 @@ class StyleStats:
         SourceTypeError: If the source is neither a string nor a Doc, or the
             stopwords or the clichés are not a list or a set of strings, or the extractor
             or the pipeline is of another type
-        SourceError: If the source has no words; when the verbal nouns are read,
-            if the source lacks the parts of speech or the lemmas or a sentence
+        SourceError: If the source has no words; when the verbal nouns or the markers
+            are read, if the source lacks the parts of speech or the lemmas or a sentence
             of a string is longer than the max_length of the pipeline
         ParameterError: If the number of the most frequent words is not an integer or is
             below one
@@ -135,13 +136,13 @@ class StyleStats:
             check_words(cliches, "clichés", ordered=False)
         # The Doc is not kept: this object in an extension of the Doc would make a cycle
         self._text: str | None = None
-        self._nouns: list[str] | None = None
+        self._nouns: list[tuple[str, str]] | None = None
         self._annotation_error = ""
         if isinstance(source, Doc):
             self.words = tuple(text.lower() for _, _, text in iter_doc_words(source))
             self.forms = self.words
             try:
-                self._nouns = noun_lemmas(source)
+                self._nouns = _doc_nouns(source)
             except SourceError as error:
                 self._annotation_error = str(error)
         elif isinstance(source, str):
@@ -180,11 +181,7 @@ class StyleStats:
 
     @cached_property
     def verbal_nouns(self) -> float:
-        if self._nouns is None:
-            if self._text is None:
-                raise SourceError(self._annotation_error)
-            self._nouns = self._parse(self._text)
-        return calc_verbal_nouns(self._nouns)
+        return calc_verbal_nouns([lemma for _, lemma in self._get_nouns()])
 
     @property
     def compound_prepositions(self) -> float:
@@ -198,9 +195,17 @@ class StyleStats:
     def cliches(self) -> float:
         return calc_phrase_density(self.forms, self.cliches_list)
 
-    def _parse(self, text: str) -> list[str]:
+    def _get_nouns(self) -> list[tuple[str, str]]:
+        """The nouns in lower case with their lemmas, a string parsed when they are first read"""
+        if self._nouns is None:
+            if self._text is None:
+                raise SourceError(self._annotation_error)
+            self._nouns = self._parse(self._text)
+        return self._nouns
+
+    def _parse(self, text: str) -> list[tuple[str, str]]:
         """
-        Parsing a string for the lemmas of the nouns
+        Parsing a string for the nouns and their lemmas
 
         Description:
             The pipeline of nlp or get_nlp(), without the parser and the named
@@ -211,7 +216,7 @@ class StyleStats:
             text (str): Text
 
         Returns:
-            list[str]: Lemmas of the tokens tagged NOUN
+            list[tuple[str, str]]: Tokens tagged NOUN in lower case with their lemmas
 
         Raises:
             SourceError: If a sentence is longer than the max_length of the pipeline
@@ -219,9 +224,9 @@ class StyleStats:
         pipeline = self.nlp or get_nlp()
         parts = _split_text(text, pipeline.max_length)
         return [
-            lemma
+            noun
             for doc in pipeline.pipe(parts, disable=UNUSED_COMPONENTS)
-            for lemma in noun_lemmas(doc)
+            for noun in _doc_nouns(doc)
         ]
 
     def keyword_density(self, *keywords: str) -> dict[str, float]:
@@ -235,6 +240,49 @@ class StyleStats:
             dict[str, float]: Density of every keyword in percent
         """
         return calc_keyword_density(self.words, keywords)
+
+    def markers(self) -> dict[str, tuple[str, ...]]:
+        """
+        Getting the markers of the officialese style found in the text
+
+        Description:
+            The words and phrases the metrics verbal_nouns, compound_prepositions,
+            parentheticals and cliches are counted from, in the order of the text
+            and in lower case; a phrase is found with its contractions and the
+            forms of its verb (expand_phrases). The verbal nouns need the parts of
+            speech and the lemmas, as their metric does
+
+        Returns:
+            dict[str, tuple[str, ...]]: Name of the metric - the words and phrases found
+
+        Raises:
+            SourceError: If the source lacks the parts of speech or the lemmas, or a
+                sentence of a string is longer than the max_length of the pipeline
+
+        Example:
+            >>> from ests import StyleStats
+            >>> StyleStats("Sin embargo, se procedió a la revisión en el marco del proyecto").markers()
+            {'verbal_nouns': ('revisión',),
+             'compound_prepositions': ('en el marco del',),
+             'parentheticals': ('sin embargo',),
+             'cliches': ('procedió a',)}
+        """
+        forms = self.forms
+        found = {
+            "compound_prepositions": find_phrases(
+                forms, expand_phrases(forms, COMPOUND_PREPOSITIONS)
+            ),
+            "parentheticals": find_parentheticals(forms),
+            "cliches": find_phrases(forms, expand_phrases(forms, self.cliches_list)),
+        }
+        verbal = tuple(form for form, lemma in self._get_nouns() if is_verbal_noun(lemma))
+        return {
+            "verbal_nouns": verbal,
+            **{
+                name: tuple(" ".join(forms[start:end]) for start, end in spans)
+                for name, spans in found.items()
+            },
+        }
 
     def get_stats(self) -> dict[str, float]:
         """
@@ -320,6 +368,11 @@ def noun_lemmas(doc: Doc) -> list[str]:
     Raises:
         SourceError: If the Doc lacks the parts of speech or the lemmas
     """
+    return [lemma for _, lemma in _doc_nouns(doc)]
+
+
+def _doc_nouns(doc: Doc) -> list[tuple[str, str]]:
+    """The tokens of a Doc tagged NOUN, in lower case, with their lemmas"""
     if not doc.has_annotation("POS"):
         raise SourceError(
             "The data source has no annotation of the parts of speech: "
@@ -329,7 +382,11 @@ def noun_lemmas(doc: Doc) -> list[str]:
         raise SourceError(
             "The data source has no lemmas: parse the text with a pipeline that has a lemmatizer"
         )
-    return [token.lemma_ for token in iter_doc_tokens(doc) if token.pos_ == "NOUN"]
+    return [
+        (token.text.lower(), token.lemma_)
+        for token in iter_doc_tokens(doc)
+        if token.pos_ == "NOUN"
+    ]
 
 
 def is_stopword(word: str) -> bool:
@@ -723,4 +780,30 @@ def calc_parentheticals(text: Sequence[str]) -> float:
         SourceTypeError: If the words are not a list of strings
     """
     check_words(text)
-    return calc_phrase_density(text, PARENTHETICALS)
+    return safe_divide(len(find_parentheticals(text)), len(text)) * 100
+
+
+def find_parentheticals(text: Sequence[str]) -> list[tuple[int, int]]:
+    """
+    Finding the parenthetical expressions
+
+    Description:
+        The expressions of PARENTHETICALS with the contractions of
+        expand_phrases, as in calc_parentheticals
+
+    Arguments:
+        text (list[str]): List of words
+
+    Returns:
+        list[tuple[int, int]]: Bounds of the expressions found as slices of text, in order
+
+    Raises:
+        SourceTypeError: If the words are not a list of strings
+
+    Example:
+        >>> from ests.style_stats import find_parentheticals
+        >>> find_parentheticals(["sin", "embargo", "el", "gato", "finalmente", "duerme"])
+        [(0, 2), (4, 5)]
+    """
+    check_words(text)
+    return find_phrases(text, expand_phrases(text, PARENTHETICALS))

@@ -9,7 +9,7 @@ A module for computing the style metrics of a text: the SEO indicators of the [A
 
 The services do not publish their formulas; the commonly accepted definitions are implemented and described in the [functions](style_stats_funcs.md) section. By default words are extracted in lower case without lemmatization, so the forms of one word count as different words, as in Advego. To compute by lemmas, pass a [`WordsExtractor`](../extractors/words.md) object with `use_lexemes=True` and `lowercase=True`.
 
-The markers of the officialese style are counted over the unfiltered word forms (`forms`) whatever the extractor passed, by the lists `COMPOUND_PREPOSITIONS`, `PARENTHETICALS` and `OFFICIALESE_CLICHES` of `ests.constants`. A phrase ending in `a` or `de` also matches the contraction with the article (`a efectos del`), and a phrase that starts with an infinitive stands for the forms of the verb (`proceder a` finds `se procedió a`); see [phrase density](style_stats_funcs.md#calc_phrase_density). The verbal nouns need the parts of speech and the lemmas: a `Doc` gives its own annotation, and a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp` the first time `verbal_nouns` is read - the other metrics of a string need no model. A string longer than the `max_length` of the pipeline is parsed in parts of whole sentences; only a single sentence longer than it raises `SourceError`.
+The markers of the officialese style are counted over the unfiltered word forms (`forms`) whatever the extractor passed, by the lists `COMPOUND_PREPOSITIONS`, `PARENTHETICALS` and `OFFICIALESE_CLICHES` of `ests.constants`. A phrase ending in `a` or `de` also matches the contraction with the article (`a efectos del`), and a phrase that starts with an infinitive stands for the forms of the verb (`proceder a` finds `se procedió a`); see [phrase density](style_stats_funcs.md#calc_phrase_density). The verbal nouns need the parts of speech and the lemmas: a `Doc` gives its own annotation, and a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp` the first time `verbal_nouns` or [`markers`](#markers) is read - the other metrics of a string need no model. A string longer than the `max_length` of the pipeline is parsed in parts of whole sentences; only a single sentence longer than it raises `SourceError`.
 
 !!! note "Note"
     The metrics are computed by accessing the corresponding attribute or by calling the `get_stats` method of the `StyleStats` object. The norms of the services are meant for texts of several hundred words; on short texts nausea and spam are uninformative.
@@ -74,6 +74,23 @@ Parameters:
     text = "Tres tristes tigres tragaban trigo en un trigal, en tres tristes trastos"
     StyleStats(text).keyword_density("tres tristes", "trigo")
     # {'tres tristes': 16.666666666666668, 'trigo': 8.333333333333334}
+    ```
+
+### markers
+
+Returns the markers of the officialese style found: for each of the metrics `verbal_nouns`, `compound_prepositions`, `parentheticals` and `cliches`, the words and phrases it is counted from, in the order of the text and in lower case. A phrase is found with its contractions and the forms of its verb ([`expand_phrases`](style_stats_funcs.md#calc_phrase_density)); the verbal nouns need the parts of speech and the lemmas, as their metric does, so a string is parsed by the model and a `Doc` without them raises `SourceError`.
+
+!!! example "Example"
+
+    ``` python
+    from ests import StyleStats
+
+    text = "Sin embargo, se procedió a la revisión en el marco del proyecto"
+    StyleStats(text).markers()
+    # {'verbal_nouns': ('revisión',),
+    #  'compound_prepositions': ('en el marco del',),
+    #  'parentheticals': ('sin embargo',),
+    #  'cliches': ('procedió a',)}
     ```
 
 ### get_stats

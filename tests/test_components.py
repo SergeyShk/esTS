@@ -143,6 +143,7 @@ def test_style_parameters(nlp):
     doc = pipeline(TEXT)
     expected = StyleStats(nlp(TEXT), stopwords=["el", "en"], top_n=3).get_stats()
     assert doc._.stats.get_stats() == expected
+    assert doc._.stats.markers() == StyleStats(TEXT).markers()
     with pytest.raises(ParameterError):
         pipeline.add_pipe("ests_style", name="wrong", config={"top_n": 0})
 
