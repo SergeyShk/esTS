@@ -990,6 +990,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#blank_lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blank lines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2667,6 +2678,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#blank_lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blank lines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2705,7 +2727,7 @@
 <p>The examples below use the model <code>es_core_news_sm</code>, which is installed apart: <code>python -m spacy download es_core_news_sm</code> (see <a href="../installation/">installation</a>).</p>
 </div>
 <h2 id="names">Names<a class="headerlink" href="#names" title="Permanent link">&para;</a></h2>
-<p>The factories carry the prefix of the library: <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code>. They are declared as entry points of <code>spacy_factories</code>, so a pipeline saved with these components (<code>nlp.to_disk(path)</code>, <code>spacy package</code>) loads with <code>spacy.load(path)</code> without importing the library.</p>
+<p>The factories carry the prefix of the library: <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code>, and the component of sentence boundaries <a href="#blank_lines"><code>ests_blank_lines</code></a>. They are declared as entry points of <code>spacy_factories</code>, so a pipeline saved with these components (<code>nlp.to_disk(path)</code>, <code>spacy package</code>) loads with <code>spacy.load(path)</code> without importing the library.</p>
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_basic"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"basic"</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"El gato duerme"</span><span class="p">)</span>
 <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">basic</span><span class="o">.</span><span class="n">n_words</span>
@@ -3340,6 +3362,51 @@
 </code></pre></div>
 <p><em>Result</em>:</p>
 <div class="highlight"><pre><span></span><code><span class="o">(</span><span class="s1">'octosílabo'</span>,<span class="w"> </span><span class="o">{</span><span class="s1">'aguda'</span>:<span class="w"> </span><span class="m">2</span>,<span class="w"> </span><span class="s1">'llana'</span>:<span class="w"> </span><span class="m">2</span><span class="o">})</span>
+</code></pre></div>
+</div>
+<h2 id="blank_lines">Blank lines<a class="headerlink" href="#blank_lines" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests_blank_lines</strong> (<code>anyts.components.start_sents_after_blank_lines</code>)</p>
+</div>
+<p>A component that starts a sentence at the first token after a blank line - a line break, optional whitespace and another line break - so that a heading, a list item or a paragraph without a final mark is a sentence of its own, as in the sentence extractor. It goes before the component that sets the sentences - the parser, <code>senter</code> or <code>sentencizer</code> - which keeps the starts it finds and places the others; the whitespace before such a start stays with the sentence before it. On its own the component leaves the sentences within a paragraph unsplit, and its starts are partial boundaries (<code>has_sents</code>), so the statistics take the sentences of such a document from its text. A parsed document raises <code>SourceError</code>, since spaCy keeps its sentences. A language library registers the component under its prefix, <code>Language.component("&lt;prefix&gt;_blank_lines", func=start_sents_after_blank_lines)</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>doc</code></td>
+<td style="text-align: center;">Doc</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Doc object</td>
+</tr>
+</tbody>
+</table>
+<p>In esTS the component is registered as <code>ests_blank_lines</code>. Without it the <code>es_core_news_sm</code> model glues a paragraph without a final mark to the next sentence, and the statistics of a <code>Doc</code> differ from those of the same string. The pipeline of <code>ests.utils.get_nlp</code>, which parses the strings of the morphological, syntactic, cohesion and lexical statistics, has it before the parser.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<p><em>Code</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Import the libraries</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">spacy</span>
+
+<span class="c1"># Load the spaCy model</span>
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"es_core_news_sm"</span><span class="p">)</span>
+
+<span class="c1"># Add the component before the parser</span>
+<span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_blank_lines"</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="s2">"parser"</span><span class="p">)</span>
+
+<span class="c1"># Sentences of the document</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"Novedades</span><span class="se">\n\n</span><span class="s2">Importación rápida. Menos errores"</span><span class="p">)</span>
+<span class="p">[</span><span class="n">sent</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">sents</span><span class="p">]</span>
+</code></pre></div>
+<p><em>Result</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span><span class="s1">'Novedades'</span>,<span class="w"> </span><span class="s1">'Importación rápida.'</span>,<span class="w"> </span><span class="s1">'Menos errores'</span><span class="o">]</span>
 </code></pre></div>
 </div>
 <h2 id="pipeline">Everything in one pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h2>

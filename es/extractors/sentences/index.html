@@ -2556,7 +2556,7 @@
 <p>Se puede pasar un pipeline de spaCy como tokenizador: <code>tokenizer=lambda text: (sent.text for sent in nlp(text).sents)</code>.</p>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: extractors/sentences.md:SentsExtractor-parameters d136320 -->
+<!-- core: extractors/sentences.md:SentsExtractor-parameters 5bc6821 -->
 <table>
 <thead>
 <tr>
@@ -2589,7 +2589,7 @@
 </table>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>Una expresión regular como tokenizador es un separador: el texto se divide con <code>re.split</code>. A las oraciones de cualquier tokenizador se les quitan los espacios de los extremos antes de aplicar los límites de longitud, y las vacías se descartan.</p>
+<p>Una expresión regular como tokenizador es un separador: el texto se divide con <code>re.split</code>. Una línea en blanco - un salto de línea, espacios opcionales y otro salto de línea - termina una oración con cualquier tokenizador: el texto se divide primero por las líneas en blanco y cada parte pasa al tokenizador, así que un título o un párrafo sin signo final es una oración propia, y también lo es una parte sin palabras, como una línea de asteriscos entre secciones, que las estadísticas descartan como oración sin palabras. A las oraciones de cualquier tokenizador se les quitan los espacios de los extremos antes de aplicar los límites de longitud, y las vacías se descartan.</p>
 </div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>

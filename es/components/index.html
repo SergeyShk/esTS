@@ -990,6 +990,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#blank_lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Líneas en blanco
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2667,6 +2678,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#blank_lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Líneas en blanco
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2706,7 +2728,7 @@
 <p>Los ejemplos de abajo usan el modelo <code>es_core_news_sm</code>, que se instala aparte: <code>python -m spacy download es_core_news_sm</code> (véase <a href="../installation/">instalación</a>).</p>
 </div>
 <h2 id="names">Nombres<a class="headerlink" href="#names" title="Permanent link">&para;</a></h2>
-<p>Las fábricas llevan el prefijo de la biblioteca: <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code>. Están declaradas como entry points de <code>spacy_factories</code>, así que un pipeline guardado con estos componentes (<code>nlp.to_disk(path)</code>, <code>spacy package</code>) se carga con <code>spacy.load(path)</code> sin importar la biblioteca.</p>
+<p>Las fábricas llevan el prefijo de la biblioteca: <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code>, y el componente de los límites de oración <a href="#blank_lines"><code>ests_blank_lines</code></a>. Están declaradas como entry points de <code>spacy_factories</code>, así que un pipeline guardado con estos componentes (<code>nlp.to_disk(path)</code>, <code>spacy package</code>) se carga con <code>spacy.load(path)</code> sin importar la biblioteca.</p>
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_basic"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"basic"</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"El gato duerme"</span><span class="p">)</span>
 <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">basic</span><span class="o">.</span><span class="n">n_words</span>
@@ -3343,6 +3365,52 @@
 </code></pre></div>
 <p><em>Resultado</em>:</p>
 <div class="highlight"><pre><span></span><code><span class="o">(</span><span class="s1">'octosílabo'</span>,<span class="w"> </span><span class="o">{</span><span class="s1">'aguda'</span>:<span class="w"> </span><span class="m">2</span>,<span class="w"> </span><span class="s1">'llana'</span>:<span class="w"> </span><span class="m">2</span><span class="o">})</span>
+</code></pre></div>
+</div>
+<h2 id="blank_lines">Líneas en blanco<a class="headerlink" href="#blank_lines" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests_blank_lines</strong> (<code>anyts.components.start_sents_after_blank_lines</code>)</p>
+</div>
+<!-- core: components.md:start_sents_after_blank_lines 256a9a9 -->
+<p>Un componente que inicia una oración en el primer token tras una línea en blanco - un salto de línea, espacios opcionales y otro salto de línea -, para que un título, un elemento de una lista o un párrafo sin signo final sean una oración propia, como en el extractor de oraciones. Va antes del componente que fija las oraciones - el parser, <code>senter</code> o <code>sentencizer</code> -, que conserva los inicios encontrados y coloca los demás; los espacios ante tal inicio se quedan con la oración anterior. Por sí solo el componente no divide las oraciones dentro de un párrafo, y sus inicios son límites parciales (<code>has_sents</code>), así que las estadísticas toman las oraciones de tal documento de su texto. Un documento ya analizado lanza <code>SourceError</code>, porque spaCy conserva sus oraciones. Una biblioteca del idioma registra el componente con su prefijo, <code>Language.component("&lt;prefix&gt;_blank_lines", func=start_sents_after_blank_lines)</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>doc</code></td>
+<td style="text-align: center;">Doc</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Objeto Doc</td>
+</tr>
+</tbody>
+</table>
+<p>En esTS el componente está registrado como <code>ests_blank_lines</code>. Sin él, el modelo <code>es_core_news_sm</code> pega un párrafo sin signo final a la oración siguiente, y las estadísticas de un <code>Doc</code> difieren de las de la misma cadena. El pipeline de <code>ests.utils.get_nlp</code>, que analiza las cadenas de las estadísticas morfológicas, sintácticas, de cohesión y léxicas, lo tiene antes del parser.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<p><em>Código</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Importar las bibliotecas</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">spacy</span>
+
+<span class="c1"># Cargar el modelo de spaCy</span>
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"es_core_news_sm"</span><span class="p">)</span>
+
+<span class="c1"># Añadir el componente antes del parser</span>
+<span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_blank_lines"</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="s2">"parser"</span><span class="p">)</span>
+
+<span class="c1"># Oraciones del documento</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"Novedades</span><span class="se">\n\n</span><span class="s2">Importación rápida. Menos errores"</span><span class="p">)</span>
+<span class="p">[</span><span class="n">sent</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">sents</span><span class="p">]</span>
+</code></pre></div>
+<p><em>Resultado</em>:</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span><span class="s1">'Novedades'</span>,<span class="w"> </span><span class="s1">'Importación rápida.'</span>,<span class="w"> </span><span class="s1">'Menos errores'</span><span class="o">]</span>
 </code></pre></div>
 </div>
 <h2 id="pipeline">Todo en un pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h2>

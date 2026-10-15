@@ -4344,7 +4344,7 @@ H = -\sum_k p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_windowed()</strong></p>
 </div>
-<!-- core: stats/diversity_stats_funcs.md:calc_windowed b59de2a -->
+<!-- core: stats/diversity_stats_funcs.md:calc_windowed 29b5120 -->
 <p>Cálculo por ventanas de cualquier métrica: su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Es la forma estándar de comparar textos de distinta longitud; el TTR estandarizado de Kubát y Milička (no el STTR de Summer) es un TTR por ventanas de 1000 palabras con un intervalo de confianza del 95 %. En los textos más cortos que la ventana la métrica se calcula sobre todo el texto como una sola ventana; las ventanas con un valor no definido (<code>nan</code>) se ignoran. Si la métrica es infinita en al menos una ventana (por ejemplo, el índice de Simpson inverso en una ventana de palabras únicas), la media es infinita y la desviación típica y el intervalo de confianza no están definidos. Devuelve una tupla con nombre <code>WindowStats</code> con los campos <code>mean</code>, <code>std</code>, <code>lower</code>, <code>upper</code> y <code>n_windows</code>.</p>
 <p>Parámetros:</p>
 <table>
@@ -4386,6 +4386,12 @@ H = -\sum_k p_k \log_2 p_k
 <td style="text-align: center;">float</td>
 <td style="text-align: center;"><code>0.95</code></td>
 <td style="text-align: center;">Nivel de confianza</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>messages</code></td>
+<td style="text-align: center;">dict[str, str]</td>
+<td style="text-align: center;"><code>MESSAGES</code></td>
+<td style="text-align: center;">Mensajes de los errores por clave, argumento con nombre</td>
 </tr>
 </tbody>
 </table>

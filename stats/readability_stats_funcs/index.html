@@ -1158,6 +1158,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#scale_level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Band of a scale
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#flesch_reading_easy_to_grade" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2663,6 +2674,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#scale_level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Band of a scale
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#flesch_reading_easy_to_grade" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3247,7 +3269,7 @@ a \cdot \sqrt{b \cdot \frac{\textrm{Number of polysyllabic words}}{\textrm{Numbe
 <div class="admonition info">
 <p><strong>ests.readability_stats.flesch_reading_easy_to_level()</strong></p>
 </div>
-<p>The band of a scale for the Flesch reading ease. The scales of <code>ests.constants.READING_EASE_SCALES</code>: <code>inflesz</code> (Barrio-Cantalejo et al., 2008, five bands for the Szigriszt-Pazos coefficients), <code>szigriszt</code> (Szigriszt-Pazos, 1993, integer bands: <code>muy difícil</code> 0-15, <code>árido</code> 16-35, <code>bastante difícil</code> 36-50, <code>normal</code> 51-65, <code>bastante fácil</code> 66-75, <code>fácil</code> 76-85, <code>muy fácil</code> 86-100) and <code>fernandez_huerta</code> (Fernández Huerta, 1959: <code>muy difícil</code> below 30, <code>difícil</code> 30-50, <code>bastante difícil</code> 50-60, <code>normal</code> 60-70, <code>bastante fácil</code> 70-80, <code>fácil</code> 80-90, <code>muy fácil</code> above 90).</p>
+<p>The band of a scale for the Flesch reading ease. The scales of <code>ests.constants.READING_EASE_SCALES</code>: <code>inflesz</code> (Barrio-Cantalejo et al., 2008, five bands for the Szigriszt-Pazos coefficients), <code>szigriszt</code> (Szigriszt-Pazos, 1993, integer bands: <code>muy difícil</code> 0-15, <code>árido</code> 16-35, <code>bastante difícil</code> 36-50, <code>normal</code> 51-65, <code>bastante fácil</code> 66-75, <code>fácil</code> 76-85, <code>muy fácil</code> 86-100) and <code>fernandez_huerta</code> (Fernández Huerta, 1959: <code>muy difícil</code> below 30, <code>difícil</code> 30-50, <code>bastante difícil</code> 50-60, <code>normal</code> 60-70, <code>bastante fácil</code> 70-80, <code>fácil</code> 80-90, <code>muy fácil</code> above 90). An unknown scale and a value that is not a finite number raise <code>ParameterError</code>.</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -3285,7 +3307,7 @@ a \cdot \sqrt{b \cdot \frac{\textrm{Number of polysyllabic words}}{\textrm{Numbe
 <div class="admonition info">
 <p><strong>ests.readability_stats.mu_to_level()</strong></p>
 </div>
-<p>The band of the µ scale of Muñoz Baquedano and Muñoz Urra (2006) for Legibilidad µ; an undefined index (<code>nan</code>) has no band and gives an empty string.</p>
+<p>The band of the µ scale of Muñoz Baquedano and Muñoz Urra (2006) for Legibilidad µ; a value that is not a finite number, such as the undefined index (<code>nan</code>), raises <code>ParameterError</code>.</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -3305,6 +3327,45 @@ a \cdot \sqrt{b \cdot \frac{\textrm{Number of polysyllabic words}}{\textrm{Numbe
 </tr>
 </tbody>
 </table>
+<h2 id="scale_level">Band of a scale<a class="headerlink" href="#scale_level" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.readability_stats.scale_level()</strong></p>
+</div>
+<p>The band of a scale for a value: the scale is given as the lower bounds of its bands in descending order, the value falls into the first band whose bound it reaches, and the lowest band is open below. A value that is not a finite number and an empty scale raise <code>ParameterError</code>.</p>
+<p>Parameters:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>value</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Value of a metric</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>scale</code></td>
+<td style="text-align: center;">list[tuple[float, Any]]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Lower bounds and their bands in descending order</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">MU_SCALE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.readability_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">scale_level</span>
+
+<span class="n">scale_level</span><span class="p">(</span><span class="mf">50.9</span><span class="p">,</span> <span class="n">MU_SCALE</span><span class="p">)</span>
+<span class="c1"># 'difícil'</span>
+</code></pre></div>
+</div>
 <h2 id="flesch_reading_easy_to_grade">Reading ease to grade<a class="headerlink" href="#flesch_reading_easy_to_grade" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.readability_stats.flesch_reading_easy_to_grade()</strong></p>

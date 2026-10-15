@@ -1120,6 +1120,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#describe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        describe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#reading_time_by_speed" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2648,6 +2659,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#describe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        describe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#reading_time_by_speed" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2798,7 +2820,7 @@
 <li>el lector se frena ante palabras poco frecuentes o desconocidas.</li>
 </ul>
 <h2 id="ganchos-del-idioma">Ganchos del idioma<a class="headerlink" href="#ganchos-del-idioma" title="Permanent link">&para;</a></h2>
-<p>La clase extiende el <code>ReadabilityStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/readability_stats/">anyTS</a> con las fórmulas y las tablas del español: las <a href="../basic_stats/">estadísticas básicas</a> de esTS, que toman por defecto los <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> y <a href="../../extractors/words/"><code>WordsExtractor</code></a> del español, los preajustes de la facilidad de lectura de Flesch, las fórmulas de Gutiérrez de Polini, Crawford y SOL, las fórmulas de grado del grado de consenso (Crawford y SOL), las etapas escolares de España y las velocidades de lectura de los lectores en español.</p>
+<p>La clase extiende el <code>ReadabilityStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/readability_stats/">anyTS</a> con las fórmulas y las tablas del español: las <a href="../basic_stats/">estadísticas básicas</a> de esTS, que toman por defecto los <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> y <a href="../../extractors/words/"><code>WordsExtractor</code></a> del español, los preajustes de la facilidad de lectura de Flesch, las fórmulas de Gutiérrez de Polini, Crawford y SOL, las fórmulas de grado del grado de consenso (Crawford y SOL), las etapas escolares de España, las escalas de interpretación y las velocidades de lectura de los lectores en español. La escala de la facilidad de lectura sigue el preajuste (<code>level_scale</code>), así que <code>describe_level</code> y <code>describe</code> leen el valor igual que el grado de consenso.</p>
 <p>Las fórmulas del núcleo con sus coeficientes ingleses - <code>flesch_kincaid_grade</code>, <code>coleman_liau_index</code>, <code>automated_readability_index</code>, <code>smog_index</code> y <code>gunning_fog_index</code> - siguen siendo atributos del objeto, fuera de <code>get_stats</code>: están ajustadas con textos ingleses, y <code>smog_index</code> es la entrada de SOL.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
 <table>
@@ -2952,9 +2974,9 @@
 <p>Cada métrica puede calcularse por separado llamando a la función correspondiente. La información detallada sobre las métricas de legibilidad y las funciones que las calculan está en la <a href="../readability_stats_funcs/">sección</a> correspondiente.</p>
 </div>
 <h2 id="interpretation">Interpretación<a class="headerlink" href="#interpretation" title="Permanent link">&para;</a></h2>
-<p>El método <a href="#describe_level"><code>describe_level</code></a> sitúa la facilidad de lectura en la escala del preajuste: INFLESZ para <code>general</code> (<code>muy difícil</code> por debajo de 40, <code>algo difícil</code> 40-55, <code>normal</code> 55-65, <code>bastante fácil</code> 65-80, <code>muy fácil</code> por encima de 80) y los siete niveles de Fernández Huerta para <code>classic</code>, y a petición las escalas de Szigriszt-Pazos o del otro autor; la Legibilidad µ tiene los siete niveles de sus autores (<code>muy difícil</code> 0-30, <code>difícil</code> 31-50, <code>un poco difícil</code> 51-60, <code>adecuado</code> 61-70, <code>un poco fácil</code> 71-80, <code>fácil</code> 81-90, <code>muy fácil</code> 91-100).</p>
-<!-- core: stats/readability_stats.md:ReadabilityStats-consensus 40f0d09 -->
-<p>Las fórmulas que dan años de escolaridad (<code>grade_stats</code>) se resumen en el atributo <code>consensus_grade</code>: la mediana de sus valores redondeados al entero más próximo (las mitades hacia arriba), junto con la facilidad de lectura convertida en años de escolaridad (<code>reading_ease_to_grade</code>) sin redondear.</p>
+<p>El método <a href="#describe_level"><code>describe_level</code></a> sitúa la facilidad de lectura en la escala del preajuste: INFLESZ para <code>general</code> (<code>muy difícil</code> por debajo de 40, <code>algo difícil</code> 40-55, <code>normal</code> 55-65, <code>bastante fácil</code> 65-80, <code>muy fácil</code> por encima de 80) y los siete niveles de Fernández Huerta para <code>classic</code>, y a petición las escalas de Szigriszt-Pazos o del otro autor; la Legibilidad µ tiene los siete niveles de sus autores (<code>muy difícil</code> 0-30, <code>difícil</code> 31-50, <code>un poco difícil</code> 51-60, <code>adecuado</code> 61-70, <code>un poco fácil</code> 71-80, <code>fácil</code> 81-90, <code>muy fácil</code> 91-100), y LIX los tipos de texto de Björnsson (<a href="../readability_stats_funcs/#calc_lix"><code>calc_lix</code></a>). RIX no tiene aquí niveles propios: sus grados de Anderson (<a href="../readability_stats_funcs/#calc_rix"><code>calc_rix</code></a>) son años de escolaridad, y <a href="#describe"><code>describe</code></a> los lee como una etapa del sistema educativo español.</p>
+<!-- core: stats/readability_stats.md:ReadabilityStats-consensus 7e17a01 -->
+<p>Las fórmulas que dan años de escolaridad (<code>grade_stats</code>) se resumen en el atributo <code>consensus_grade</code>: la mediana de sus valores redondeados al entero más próximo (las mitades hacia arriba), junto con la facilidad de lectura convertida en años de escolaridad (<code>reading_ease_to_grade</code>) sin redondear. Una biblioteca alinea los límites de <code>reading_ease_grades</code> con su escala de la facilidad de lectura, para que el grado de consenso y <code>describe</code> lean el valor igual.</p>
 <p>Las fórmulas de grado de esTS son Crawford y SOL, y la facilidad de lectura se <a href="../readability_stats_funcs/#flesch_reading_easy_to_grade">convierte en grado</a> según la escala del preajuste. El método <a href="#describe_grade"><code>describe_grade</code></a> traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:</p>
 <table>
 <thead>
@@ -3004,7 +3026,7 @@
 <p>El atributo <code>reading_time</code> estima el tiempo de lectura silenciosa a 278 palabras por minuto, la velocidad de los lectores adultos de español en el metaanálisis de Brysbaert (2019). El método <a href="#reading_time_by_speed"><code>reading_time_by_speed</code></a> acepta otra velocidad, y el método <a href="#reading_time_by_norm"><code>reading_time_by_norm</code></a> calcula el tiempo en voz alta y en silencio según las normas de la tabla <code>ests.constants.READING_SPEED_NORMS</code>: las velocidades medias del alumnado hispanohablante por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) y las de los adultos según Brysbaert (2019).</p>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <h3 id="describe_level">describe_level<a class="headerlink" href="#describe_level" title="Permanent link">&para;</a></h3>
-<p>Devuelve el nivel de una escala de legibilidad para la facilidad de lectura o la Legibilidad µ.</p>
+<p>Devuelve el nivel de la escala de interpretación de la facilidad de lectura, la Legibilidad µ o LIX. Una métrica sin escala de niveles, un valor no definido (nan) y una escala indicada para una métrica que no es la facilidad de lectura lanzan <code>ParameterError</code>.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3020,13 +3042,13 @@
 <td style="text-align: center;"><code>stat</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>flesch_reading_easy</code></td>
-<td style="text-align: center;">Nombre de la métrica (<code>flesch_reading_easy</code>, <code>mu_index</code>)</td>
+<td style="text-align: center;">Nombre de la métrica (<code>flesch_reading_easy</code>, <code>mu_index</code>, <code>lix</code>)</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>scale</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Escala para la facilidad de lectura (<code>inflesz</code>, <code>szigriszt</code>, <code>fernandez_huerta</code>); sin ella se usa la escala del preajuste; la Legibilidad µ tiene una sola escala y no admite otra</td>
+<td style="text-align: center;">Escala para la facilidad de lectura (<code>inflesz</code>, <code>szigriszt</code>, <code>fernandez_huerta</code>); sin ella se usa la escala del preajuste</td>
 </tr>
 </tbody>
 </table>
@@ -3042,6 +3064,8 @@
 <span class="c1"># 'normal'</span>
 <span class="n">rs</span><span class="o">.</span><span class="n">describe_level</span><span class="p">(</span><span class="s2">"mu_index"</span><span class="p">)</span>
 <span class="c1"># 'difícil'</span>
+<span class="n">rs</span><span class="o">.</span><span class="n">describe_level</span><span class="p">(</span><span class="s2">"lix"</span><span class="p">)</span>
+<span class="c1"># 'very hard texts, laws and bureaucratic language'</span>
 </code></pre></div>
 </div>
 <h3 id="describe_grade">describe_grade<a class="headerlink" href="#describe_grade" title="Permanent link">&para;</a></h3>
@@ -3073,6 +3097,43 @@
 <span class="c1"># 'ESO (12-16 years)'</span>
 <span class="n">rs</span><span class="o">.</span><span class="n">describe_grade</span><span class="p">(</span><span class="s2">"crawford_grade"</span><span class="p">)</span>
 <span class="c1"># 'primary school, grades 4-6 (9-12 years)'</span>
+</code></pre></div>
+</div>
+<h3 id="describe">describe<a class="headerlink" href="#describe" title="Permanent link">&para;</a></h3>
+<!-- core: stats/readability_stats.md:ReadabilityStats-describe 6148d1e -->
+<p>Devuelve la lectura de cualquier métrica según su escala: para el grado de consenso y una fórmula de grado, la etapa escolar y la edad del lector (<code>describe_grade</code>); para una métrica con escala de niveles (<code>level_scale</code>), su nivel; para otra métrica de <code>grade_scales</code>, la etapa y la edad de los años de escolaridad que da su escala; y <code>None</code> para una métrica sin escala o con un valor no definido (nan). Un nombre que no está en <code>stats_desc</code> ni es una propiedad pública de la clase lanza <code>UnknownStatError</code>.</p>
+<p>Parámetros:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>stat</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Nombre de la métrica</td>
+</tr>
+</tbody>
+</table>
+<p>En esTS las fórmulas de grado se leen como etapas del sistema educativo español, y también RIX a través de los grados de Anderson; la fórmula de Gutiérrez de Polini, el tiempo de lectura y las fórmulas del núcleo con sus coeficientes ingleses (<code>flesch_kincaid_grade</code>, <code>coleman_liau_index</code>, <code>automated_readability_index</code>, <code>smog_index</code>, <code>gunning_fog_index</code>) no tienen escala.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="n">stat</span><span class="p">:</span> <span class="n">rs</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span> <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">rs</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()}</span>
+<span class="c1"># {'flesch_reading_easy': 'algo difícil',</span>
+<span class="c1">#  'gutierrez_polini_index': None,</span>
+<span class="c1">#  'crawford_grade': 'primary school, grades 4-6 (9-12 years)',</span>
+<span class="c1">#  'mu_index': 'difícil',</span>
+<span class="c1">#  'sol_grade': 'ESO (12-16 years)',</span>
+<span class="c1">#  'lix': 'very hard texts, laws and bureaucratic language',</span>
+<span class="c1">#  'rix': 'ESO (12-16 years)',</span>
+<span class="c1">#  'consensus_grade': 'ESO (12-16 years)',</span>
+<span class="c1">#  'reading_time': None}</span>
 </code></pre></div>
 </div>
 <h3 id="reading_time_by_speed">reading_time_by_speed<a class="headerlink" href="#reading_time_by_speed" title="Permanent link">&para;</a></h3>

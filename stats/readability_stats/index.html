@@ -1120,6 +1120,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#describe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        describe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#reading_time_by_speed" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2648,6 +2659,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#describe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        describe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#reading_time_by_speed" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2797,7 +2819,7 @@
 <li>a reader slows down at low-frequency and/or unfamiliar words.</li>
 </ul>
 <h2 id="language-hooks">Language hooks<a class="headerlink" href="#language-hooks" title="Permanent link">&para;</a></h2>
-<p>The class extends the <code>ReadabilityStats</code> of the <a href="https://sergeyshk.github.io/anyTS/stats/readability_stats/">anyTS</a> core with the Spanish formulas and tables: the <a href="../basic_stats/">basic statistics</a> of esTS, which take the Spanish <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> and <a href="../../extractors/words/"><code>WordsExtractor</code></a> by default, the presets of the Flesch reading ease, the formulas of Gutiérrez de Polini, Crawford and SOL, the grade formulas of the consensus grade (Crawford and SOL), the school stages of Spain and the reading speeds of Spanish readers.</p>
+<p>The class extends the <code>ReadabilityStats</code> of the <a href="https://sergeyshk.github.io/anyTS/stats/readability_stats/">anyTS</a> core with the Spanish formulas and tables: the <a href="../basic_stats/">basic statistics</a> of esTS, which take the Spanish <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> and <a href="../../extractors/words/"><code>WordsExtractor</code></a> by default, the presets of the Flesch reading ease, the formulas of Gutiérrez de Polini, Crawford and SOL, the grade formulas of the consensus grade (Crawford and SOL), the school stages of Spain, the interpretation scales and the reading speeds of Spanish readers. The scale of the reading ease follows the preset (<code>level_scale</code>), so <code>describe_level</code> and <code>describe</code> read the value as the consensus grade does.</p>
 <p>The formulas of the core with their English coefficients - <code>flesch_kincaid_grade</code>, <code>coleman_liau_index</code>, <code>automated_readability_index</code>, <code>smog_index</code> and <code>gunning_fog_index</code> - stay attributes of the object, outside <code>get_stats</code>: they are fitted on English texts, and <code>smog_index</code> is the input of SOL.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
@@ -2951,8 +2973,8 @@
 <p>Every metric can be computed separately by calling the corresponding function. Detailed information on the readability metrics and the functions used to compute them is available in the corresponding <a href="../readability_stats_funcs/">section</a>.</p>
 </div>
 <h2 id="interpretation">Interpretation<a class="headerlink" href="#interpretation" title="Permanent link">&para;</a></h2>
-<p>The <a href="#describe_level"><code>describe_level</code></a> method places the reading ease on the scale of the preset: INFLESZ for <code>general</code> (<code>muy difícil</code> below 40, <code>algo difícil</code> 40-55, <code>normal</code> 55-65, <code>bastante fácil</code> 65-80, <code>muy fácil</code> above 80) and the seven bands of Fernández Huerta for <code>classic</code>, with the scales of Szigriszt-Pazos or of the other author on request; Legibilidad µ has the seven bands of its authors (<code>muy difícil</code> 0-30, <code>difícil</code> 31-50, <code>un poco difícil</code> 51-60, <code>adecuado</code> 61-70, <code>un poco fácil</code> 71-80, <code>fácil</code> 81-90, <code>muy fácil</code> 91-100).</p>
-<p>The formulas that give years of schooling (<code>grade_stats</code>) are summarized in the <code>consensus_grade</code> attribute: the median of their values rounded half up, together with the reading ease converted into years of schooling (<code>reading_ease_to_grade</code>) without rounding.</p>
+<p>The <a href="#describe_level"><code>describe_level</code></a> method places the reading ease on the scale of the preset: INFLESZ for <code>general</code> (<code>muy difícil</code> below 40, <code>algo difícil</code> 40-55, <code>normal</code> 55-65, <code>bastante fácil</code> 65-80, <code>muy fácil</code> above 80) and the seven bands of Fernández Huerta for <code>classic</code>, with the scales of Szigriszt-Pazos or of the other author on request; Legibilidad µ has the seven bands of its authors (<code>muy difícil</code> 0-30, <code>difícil</code> 31-50, <code>un poco difícil</code> 51-60, <code>adecuado</code> 61-70, <code>un poco fácil</code> 71-80, <code>fácil</code> 81-90, <code>muy fácil</code> 91-100), and LIX the text types of Björnsson (<a href="../readability_stats_funcs/#calc_lix"><code>calc_lix</code></a>). RIX has no bands of its own here: its grades of Anderson (<a href="../readability_stats_funcs/#calc_rix"><code>calc_rix</code></a>) are years of schooling, and <a href="#describe"><code>describe</code></a> reads them as a stage of the Spanish school system.</p>
+<p>The formulas that give years of schooling (<code>grade_stats</code>) are summarized in the <code>consensus_grade</code> attribute: the median of their values rounded half up, together with the reading ease converted into years of schooling (<code>reading_ease_to_grade</code>) without rounding. A library aligns the bounds of <code>reading_ease_grades</code> with its scale of the reading ease, so that the consensus grade and <code>describe</code> read the value alike.</p>
 <p>The grade formulas of esTS are Crawford and SOL, and the reading ease is <a href="../readability_stats_funcs/#flesch_reading_easy_to_grade">converted to a grade</a> by the scale of the preset. The <a href="#describe_grade"><code>describe_grade</code></a> method translates the consensus grade or an individual formula into a stage of the Spanish school system and reader age:</p>
 <table>
 <thead>
@@ -3002,7 +3024,7 @@
 <p>The <code>reading_time</code> attribute estimates silent reading time at 278 words per minute, the speed of adult readers of Spanish in the meta-analysis of Brysbaert (2019). A different speed is accepted by the <a href="#reading_time_by_speed"><code>reading_time_by_speed</code></a> method, and the <a href="#reading_time_by_norm"><code>reading_time_by_norm</code></a> method computes the time aloud and silently by the norms of the <code>ests.constants.READING_SPEED_NORMS</code> table: the mean speeds of Spanish-speaking students by school year from the meta-analysis of Ripoll, Tapia and Aguado (2020) and of adults from Brysbaert (2019).</p>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="describe_level">describe_level<a class="headerlink" href="#describe_level" title="Permanent link">&para;</a></h3>
-<p>Returns the band of a readability scale for the reading ease or Legibilidad µ.</p>
+<p>Returns the band of the interpretation scale of the reading ease, Legibilidad µ or LIX. A metric without a scale of bands, an undefined value (nan) and a scale given for a metric other than the reading ease raise <code>ParameterError</code>.</p>
 <p>Parameters:</p>
 <table>
 <thead>
@@ -3018,13 +3040,13 @@
 <td style="text-align: center;"><code>stat</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>flesch_reading_easy</code></td>
-<td style="text-align: center;">Name of the metric (<code>flesch_reading_easy</code>, <code>mu_index</code>)</td>
+<td style="text-align: center;">Name of the metric (<code>flesch_reading_easy</code>, <code>mu_index</code>, <code>lix</code>)</td>
 </tr>
 <tr>
 <td style="text-align: center;"><code>scale</code></td>
 <td style="text-align: center;">str</td>
 <td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Scale for the reading ease (<code>inflesz</code>, <code>szigriszt</code>, <code>fernandez_huerta</code>); without it the scale of the preset is used; Legibilidad µ has a single scale and accepts no other</td>
+<td style="text-align: center;">Scale for the reading ease (<code>inflesz</code>, <code>szigriszt</code>, <code>fernandez_huerta</code>); without it the scale of the preset is used</td>
 </tr>
 </tbody>
 </table>
@@ -3040,6 +3062,8 @@
 <span class="c1"># 'normal'</span>
 <span class="n">rs</span><span class="o">.</span><span class="n">describe_level</span><span class="p">(</span><span class="s2">"mu_index"</span><span class="p">)</span>
 <span class="c1"># 'difícil'</span>
+<span class="n">rs</span><span class="o">.</span><span class="n">describe_level</span><span class="p">(</span><span class="s2">"lix"</span><span class="p">)</span>
+<span class="c1"># 'very hard texts, laws and bureaucratic language'</span>
 </code></pre></div>
 </div>
 <h3 id="describe_grade">describe_grade<a class="headerlink" href="#describe_grade" title="Permanent link">&para;</a></h3>
@@ -3070,6 +3094,42 @@
 <span class="c1"># 'ESO (12-16 years)'</span>
 <span class="n">rs</span><span class="o">.</span><span class="n">describe_grade</span><span class="p">(</span><span class="s2">"crawford_grade"</span><span class="p">)</span>
 <span class="c1"># 'primary school, grades 4-6 (9-12 years)'</span>
+</code></pre></div>
+</div>
+<h3 id="describe">describe<a class="headerlink" href="#describe" title="Permanent link">&para;</a></h3>
+<p>Returns the reading of any metric by its scale: for the consensus grade and a grade formula the school stage and reader age (<code>describe_grade</code>), for a metric with a scale of bands (<code>level_scale</code>) its band, for another metric of <code>grade_scales</code> the stage and age of the years of schooling its scale gives, and <code>None</code> for a metric without a scale or with an undefined value (nan). A name that is neither in <code>stats_desc</code> nor a public property of the class raises <code>UnknownStatError</code>.</p>
+<p>Parameters:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parameter</th>
+<th style="text-align: center;">Type</th>
+<th style="text-align: center;">Default</th>
+<th style="text-align: center;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>stat</code></td>
+<td style="text-align: center;">str</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Name of the metric</td>
+</tr>
+</tbody>
+</table>
+<p>In esTS the grade formulas are read as stages of the Spanish school system, and so is RIX through the grades of Anderson; the formula of Gutiérrez de Polini, the reading time and the formulas of the core with their English coefficients (<code>flesch_kincaid_grade</code>, <code>coleman_liau_index</code>, <code>automated_readability_index</code>, <code>smog_index</code>, <code>gunning_fog_index</code>) have no scale.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="n">stat</span><span class="p">:</span> <span class="n">rs</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span> <span class="k">for</span> <span class="n">stat</span> <span class="ow">in</span> <span class="n">rs</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()}</span>
+<span class="c1"># {'flesch_reading_easy': 'algo difícil',</span>
+<span class="c1">#  'gutierrez_polini_index': None,</span>
+<span class="c1">#  'crawford_grade': 'primary school, grades 4-6 (9-12 years)',</span>
+<span class="c1">#  'mu_index': 'difícil',</span>
+<span class="c1">#  'sol_grade': 'ESO (12-16 years)',</span>
+<span class="c1">#  'lix': 'very hard texts, laws and bureaucratic language',</span>
+<span class="c1">#  'rix': 'ESO (12-16 years)',</span>
+<span class="c1">#  'consensus_grade': 'ESO (12-16 years)',</span>
+<span class="c1">#  'reading_time': None}</span>
 </code></pre></div>
 </div>
 <h3 id="reading_time_by_speed">reading_time_by_speed<a class="headerlink" href="#reading_time_by_speed" title="Permanent link">&para;</a></h3>

@@ -1158,6 +1158,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#scale_level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nivel de una escala
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#flesch_reading_easy_to_grade" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2663,6 +2674,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#scale_level" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nivel de una escala
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#flesch_reading_easy_to_grade" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3252,7 +3274,7 @@ a \cdot \sqrt{b \cdot \frac{\textrm{Número de palabras polisílabas}}{\textrm{N
 <div class="admonition info">
 <p><strong>ests.readability_stats.flesch_reading_easy_to_level()</strong></p>
 </div>
-<p>El nivel de una escala para la facilidad de lectura de Flesch. Las escalas de <code>ests.constants.READING_EASE_SCALES</code>: <code>inflesz</code> (Barrio-Cantalejo et al., 2008, cinco niveles para los coeficientes de Szigriszt-Pazos), <code>szigriszt</code> (Szigriszt-Pazos, 1993, niveles enteros: <code>muy difícil</code> 0-15, <code>árido</code> 16-35, <code>bastante difícil</code> 36-50, <code>normal</code> 51-65, <code>bastante fácil</code> 66-75, <code>fácil</code> 76-85, <code>muy fácil</code> 86-100) y <code>fernandez_huerta</code> (Fernández Huerta, 1959: <code>muy difícil</code> por debajo de 30, <code>difícil</code> 30-50, <code>bastante difícil</code> 50-60, <code>normal</code> 60-70, <code>bastante fácil</code> 70-80, <code>fácil</code> 80-90, <code>muy fácil</code> por encima de 90).</p>
+<p>El nivel de una escala para la facilidad de lectura de Flesch. Las escalas de <code>ests.constants.READING_EASE_SCALES</code>: <code>inflesz</code> (Barrio-Cantalejo et al., 2008, cinco niveles para los coeficientes de Szigriszt-Pazos), <code>szigriszt</code> (Szigriszt-Pazos, 1993, niveles enteros: <code>muy difícil</code> 0-15, <code>árido</code> 16-35, <code>bastante difícil</code> 36-50, <code>normal</code> 51-65, <code>bastante fácil</code> 66-75, <code>fácil</code> 76-85, <code>muy fácil</code> 86-100) y <code>fernandez_huerta</code> (Fernández Huerta, 1959: <code>muy difícil</code> por debajo de 30, <code>difícil</code> 30-50, <code>bastante difícil</code> 50-60, <code>normal</code> 60-70, <code>bastante fácil</code> 70-80, <code>fácil</code> 80-90, <code>muy fácil</code> por encima de 90). Una escala desconocida y un valor que no es un número finito lanzan <code>ParameterError</code>.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3290,7 +3312,7 @@ a \cdot \sqrt{b \cdot \frac{\textrm{Número de palabras polisílabas}}{\textrm{N
 <div class="admonition info">
 <p><strong>ests.readability_stats.mu_to_level()</strong></p>
 </div>
-<p>El nivel de la escala µ de Muñoz Baquedano y Muñoz Urra (2006) para la Legibilidad µ; un índice no definido (<code>nan</code>) no tiene nivel y devuelve una cadena vacía.</p>
+<p>El nivel de la escala µ de Muñoz Baquedano y Muñoz Urra (2006) para la Legibilidad µ; un valor que no es un número finito, como el índice no definido (<code>nan</code>), lanza <code>ParameterError</code>.</p>
 <p>Parámetros:</p>
 <table>
 <thead>
@@ -3310,6 +3332,46 @@ a \cdot \sqrt{b \cdot \frac{\textrm{Número de palabras polisílabas}}{\textrm{N
 </tr>
 </tbody>
 </table>
+<h2 id="scale_level">Nivel de una escala<a class="headerlink" href="#scale_level" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p><strong>ests.readability_stats.scale_level()</strong></p>
+</div>
+<!-- core: stats/readability_stats_funcs.md:scale_level 2322dde -->
+<p>El nivel de una escala para un valor: la escala se da como los límites inferiores de sus niveles en orden descendente, el valor cae en el primer nivel cuyo límite alcanza, y el nivel más bajo queda abierto por debajo. Un valor que no es un número finito y una escala vacía lanzan <code>ParameterError</code>.</p>
+<p>Parámetros:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Parámetro</th>
+<th style="text-align: center;">Tipo</th>
+<th style="text-align: center;">Por defecto</th>
+<th style="text-align: center;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>value</code></td>
+<td style="text-align: center;">float</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Valor de una métrica</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>scale</code></td>
+<td style="text-align: center;">list[tuple[float, Any]]</td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;">Límites inferiores y sus niveles en orden descendente</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">MU_SCALE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.readability_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">scale_level</span>
+
+<span class="n">scale_level</span><span class="p">(</span><span class="mf">50.9</span><span class="p">,</span> <span class="n">MU_SCALE</span><span class="p">)</span>
+<span class="c1"># 'difícil'</span>
+</code></pre></div>
+</div>
 <h2 id="flesch_reading_easy_to_grade">De facilidad de lectura a grado<a class="headerlink" href="#flesch_reading_easy_to_grade" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.readability_stats.flesch_reading_easy_to_grade()</strong></p>
