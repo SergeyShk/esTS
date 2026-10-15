@@ -67,9 +67,9 @@ def sentence_lengths(
         A string is split into sentences by sents_extractor and every sentence
         into words by words_extractor, the Spanish SentsExtractor and
         WordsExtractor by default; a Doc by its sentence boundaries, or as its
-        text without them; ready lengths (a sequence or an iterator of integers
-        that are not negative) are used as they are. Sentences without words
-        are skipped
+        text without them or with partial ones (has_sents); ready lengths (a
+        sequence or an iterator of integers that are not negative) are used as
+        they are. Sentences without words are skipped
 
     Arguments:
         source (str|Doc|Iterable[int]): Text, Doc object or ready lengths
