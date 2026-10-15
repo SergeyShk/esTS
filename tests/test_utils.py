@@ -1,10 +1,12 @@
 import pytest
 import spacy
 from anyts.utils import has_words, is_punctuation, iter_doc_tokens, iter_doc_words
+from spacy.attrs import NORM, ORTH
 from spacy.tokens import Doc
 from spacy.util import compile_infix_regex
 
 from ests import BasicStats, CohesionStats
+from ests.constants import ABBREVIATIONS, TOKENIZER_ABBREVIATIONS
 from ests.exceptions import DatasetNotFoundError
 from ests.utils import (
     add_dash_rules,
@@ -291,6 +293,62 @@ def test_tokenize():
 )
 def test_tokenize_dialogue_dashes(text, expected):
     assert list(tokenize(text)) == expected
+
+
+@pytest.mark.parametrize(
+    "abbreviation", sorted(word for word in ABBREVIATIONS if len(word) > 2 and " " not in word)
+)
+def test_abbreviation_case(abbreviation):
+    """An abbreviation is one token in lower case, capitalized and in upper case, or in none"""
+    forms = (abbreviation, abbreviation[:1].upper() + abbreviation[1:], abbreviation.upper())
+    assert len({list(tokenize(form)) == [form] for form in forms}) == 1
+
+
+def test_tokenizer_abbreviations():
+    assert all(form == form.lower() and len(form) > 2 for form in TOKENIZER_ABBREVIATIONS)
+    # Every abbreviation with a period that spaCy keeps whole is whole in every case or in none
+    rules = spacy.blank("es").tokenizer.rules
+    spacy_forms = {
+        form.lower()
+        for form in rules
+        if form[:1].isalpha() and form.endswith(".") and len(form) > 2
+    }
+    for abbreviation in spacy_forms - {"dna."}:
+        forms = (abbreviation, abbreviation[:1].upper() + abbreviation[1:], abbreviation.upper())
+        assert len({list(tokenize(form)) == [form] for form in forms}) == 1, abbreviation
+    assert list(tokenize("el sr. Pérez, SR. OBISPO, la Pág. 5 y ee. uu.")) == [
+        "el",
+        "sr.",
+        "Pérez",
+        ",",
+        "SR.",
+        "OBISPO",
+        ",",
+        "la",
+        "Pág.",
+        "5",
+        "y",
+        "ee. uu.",
+    ]
+    # A form takes the attributes of the one the tokenizer of spaCy has
+    rules = get_tokenizer().rules
+    for form in ("ud.", "Ud.", "UD."):
+        assert rules[form] == [{ORTH: form, NORM: "usted"}]
+    # Interjections are left alone, and a tokenizer without any form gets none
+    assert list(tokenize("--Ej...")) == ["--", "Ej", "..."]
+    other = spacy.blank("xx")
+    add_dash_rules(other)
+    assert [token.text for token in other("el Sr. X y el sr. X")] == [
+        "el",
+        "Sr",
+        ".",
+        "X",
+        "y",
+        "el",
+        "sr",
+        ".",
+        "X",
+    ]
 
 
 def test_add_dash_rules():

@@ -30,6 +30,11 @@ def test_kwic_without_context():
 def test_kwic_by_case():
     assert [line.keyword for line in kwic("Gato y gato", "gato")] == ["Gato", "gato"]
     assert [line.keyword for line in kwic("Gato y gato", "gato", ignore_case=False)] == ["gato"]
+    # An abbreviation is one word in every case, so the case of the keyword does not matter
+    assert [line.keyword for line in kwic("Era el Sr. Pérez.", "sr. pérez")] == ["Sr. Pérez"]
+    assert [line.keyword for line in kwic("Vive en ee. uu. ahora", "EE. UU.")] == ["ee. uu."]
+    assert [line.keyword for line in kwic("DEL ILMO. SR. OBISPO", "sr. obispo")] == ["SR. OBISPO"]
+    assert [line.keyword for line in kwic("Ver PÁG. 5", "Pág. 5")] == ["PÁG. 5"]
 
 
 def test_kwic_by_lemma():
