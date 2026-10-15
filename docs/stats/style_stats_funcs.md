@@ -172,9 +172,9 @@ Left out are the forms the guides recommend (`sobre la base de`) or accept (`de 
 ## Parenthetical expressions { #calc_parentheticals }
 
 !!! info ""
-    **ests.style_stats.calc_parentheticals()**, **ests.style_stats.is_parenthetical()**
+    **ests.style_stats.calc_parentheticals()**, **ests.style_stats.find_parentheticals()**, **ests.style_stats.is_parenthetical()**
 
-The parenthetical expressions of `PARENTHETICALS` (`sin embargo`, `es decir`, `por ejemplo`, `finalmente`) per 100 words; `is_parenthetical` checks a word against the one-word expressions of the list. The punctuation is not looked at, so the list holds the expressions set off by commas or standing at the edge of a sentence in most of their occurrences in the [corpus of literature](../datasets/spanishliterature.md), with the series of order (`en primer lugar`, `en segundo lugar`). The adverbs of doubt (`tal vez`, `quizá`), `sobre todo`, `sin duda` and `además` are not in the list.
+The parenthetical expressions of `PARENTHETICALS` (`sin embargo`, `es decir`, `por ejemplo`, `finalmente`) per 100 words; `find_parentheticals` returns the bounds of the expressions found as slices of the list of words, and `is_parenthetical` checks a word against the one-word expressions of the list. The punctuation is not looked at, so the list holds the expressions set off by commas or standing at the edge of a sentence in most of their occurrences in the [corpus of literature](../datasets/spanishliterature.md), with the series of order (`en primer lugar`, `en segundo lugar`). The adverbs of doubt (`tal vez`, `quizá`), `sobre todo`, `sin duda` and `además` are not in the list.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |

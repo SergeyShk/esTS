@@ -76,6 +76,23 @@ Parameters:
     # {'tres tristes': 16.666666666666668, 'trigo': 8.333333333333334}
     ```
 
+### markers
+
+Returns the markers of the officialese style found: for each of the metrics `verbal_nouns`, `compound_prepositions`, `parentheticals` and `cliches`, the words and phrases it is counted from, in the order of the text and in lower case. A phrase is found with its contractions and the forms of its verb ([`expand_phrases`](style_stats_funcs.md#calc_phrase_density)); the verbal nouns need the parts of speech and the lemmas, as their metric does, so a `Doc` without them raises `SourceError`.
+
+!!! example "Example"
+
+    ``` python
+    from ests import StyleStats
+
+    text = "Sin embargo, se procedió a la revisión en el marco del proyecto"
+    StyleStats(text).markers()
+    # {'verbal_nouns': ('revisión',),
+    #  'compound_prepositions': ('en el marco del',),
+    #  'parentheticals': ('sin embargo',),
+    #  'cliches': ('procedió a',)}
+    ```
+
 ### get_stats
 
 Returns a dictionary with the computed style metrics.

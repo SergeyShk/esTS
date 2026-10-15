@@ -172,9 +172,9 @@ Quedan fuera las formas que las guías recomiendan (`sobre la base de`) o acepta
 ## Expresiones parentéticas { #calc_parentheticals }
 
 !!! info ""
-    **ests.style_stats.calc_parentheticals()**, **ests.style_stats.is_parenthetical()**
+    **ests.style_stats.calc_parentheticals()**, **ests.style_stats.find_parentheticals()**, **ests.style_stats.is_parenthetical()**
 
-Las expresiones parentéticas de `PARENTHETICALS` (`sin embargo`, `es decir`, `por ejemplo`, `finalmente`) por cada 100 palabras; `is_parenthetical` comprueba una palabra con las expresiones de una palabra de la lista. La puntuación no se mira, así que la lista contiene las expresiones que van entre comas o en el borde de una oración en la mayoría de sus apariciones en el [corpus de literatura](../datasets/spanishliterature.md), con las series de orden (`en primer lugar`, `en segundo lugar`). Los adverbios de duda (`tal vez`, `quizá`), `sobre todo`, `sin duda` y `además` no están en la lista.
+Las expresiones parentéticas de `PARENTHETICALS` (`sin embargo`, `es decir`, `por ejemplo`, `finalmente`) por cada 100 palabras; `find_parentheticals` devuelve los límites de las expresiones encontradas como cortes de la lista de palabras, e `is_parenthetical` comprueba una palabra con las expresiones de una palabra de la lista. La puntuación no se mira, así que la lista contiene las expresiones que van entre comas o en el borde de una oración en la mayoría de sus apariciones en el [corpus de literatura](../datasets/spanishliterature.md), con las series de orden (`en primer lugar`, `en segundo lugar`). Los adverbios de duda (`tal vez`, `quizá`), `sobre todo`, `sin duda` y `además` no están en la lista.
 
 | Parámetro | Tipo | Valor por defecto | Descripción |
 | :-------: | :--: | :---------------: | :---------: |

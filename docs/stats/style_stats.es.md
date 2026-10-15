@@ -76,6 +76,23 @@ Parámetros:
     # {'tres tristes': 16.666666666666668, 'trigo': 8.333333333333334}
     ```
 
+### markers
+
+Devuelve los marcadores del estilo administrativo encontrados: para cada una de las métricas `verbal_nouns`, `compound_prepositions`, `parentheticals` y `cliches`, las palabras y frases con las que se cuenta, en el orden del texto y en minúsculas. Una frase se encuentra con sus contracciones y las formas de su verbo ([`expand_phrases`](style_stats_funcs.md#calc_phrase_density)); los sustantivos deverbales necesitan las partes de la oración y los lemas, como su métrica, así que un `Doc` sin ellos lanza `SourceError`.
+
+!!! example "Ejemplo"
+
+    ``` python
+    from ests import StyleStats
+
+    text = "Sin embargo, se procedió a la revisión en el marco del proyecto"
+    StyleStats(text).markers()
+    # {'verbal_nouns': ('revisión',),
+    #  'compound_prepositions': ('en el marco del',),
+    #  'parentheticals': ('sin embargo',),
+    #  'cliches': ('procedió a',)}
+    ```
+
 ### get_stats
 
 Devuelve un diccionario con las métricas de estilo calculadas.

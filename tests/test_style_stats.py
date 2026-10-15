@@ -26,6 +26,7 @@ from ests.style_stats import (
     calc_water,
     calc_zipf_naturalness,
     expand_phrases,
+    find_parentheticals,
     is_parenthetical,
     is_stopword,
 )
@@ -249,6 +250,8 @@ def test_parentheticals(ss):
     assert ss.parentheticals == pytest.approx(100 * 3 / len(ss.forms))
     assert is_parenthetical("Finalmente")
     assert not is_parenthetical("embargo")
+    assert find_parentheticals(words) == [(0, 2), (2, 3), (5, 7)]
+    assert find_parentheticals([]) == []
 
 
 def test_officialese():
@@ -326,6 +329,37 @@ def test_phrase_density():
 def test_custom_cliches():
     ss = StyleStats(riddle_text, cliches=["tres tristes", "trigal en"])
     assert ss.cliches == pytest.approx(100 * 3 / 12)
+    assert ss.markers()["cliches"] == ("tres tristes", "trigal en", "tres tristes")
+
+
+def test_markers(nlp):
+    ss = StyleStats(officialese)
+    markers = ss.markers()
+    assert markers == {
+        "verbal_nouns": ("revisión", "cumplimiento", "resolución"),
+        "compound_prepositions": ("a efectos del", "en el marco de", "conforme al"),
+        "parentheticals": ("no obstante",),
+        "cliches": ("procedió a", "dio cumplimiento", "a la mayor brevedad"),
+    }
+    # The markers are the ones the metrics count
+    for name in ("compound_prepositions", "parentheticals", "cliches"):
+        assert getattr(ss, name) == pytest.approx(100 * len(markers[name]) / len(ss.forms))
+    assert StyleStats(nlp(officialese)).markers() == markers
+    # revisión twice, in the order of the text
+    assert StyleStats(text).markers()["verbal_nouns"] == (
+        "revisión",
+        "nombramiento",
+        "comisión",
+        "votación",
+        "uso",
+        "revisión",
+    )
+
+
+def test_markers_without_the_annotation():
+    ss = StyleStats(spacy.blank("es")(officialese))
+    with pytest.raises(SourceError, match="parts of speech"):
+        ss.markers()
 
 
 def test_get_stats(ss):
