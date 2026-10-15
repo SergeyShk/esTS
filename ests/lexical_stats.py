@@ -1,4 +1,4 @@
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from functools import cache, cached_property
 from math import log2, log10, nan
 from pathlib import Path
@@ -224,7 +224,7 @@ class LexicalStats:
         ]
 
     def band_coverage(
-        self, bands: Sequence[int] = FREQUENCY_BANDS, unique: bool = False
+        self, bands: Iterable[int] = FREQUENCY_BANDS, unique: bool = False
     ) -> dict[int, float]:
         """
         Shares of the words by the frequency bands of the embedded list
@@ -237,9 +237,14 @@ class LexicalStats:
             dict[int, float]: Share of the words with a lemma of the top N for every bound N
 
         Raises:
-            ParameterError: If a bound is not an integer or is out of 1 and the size of the
-                list (10000)
+            ParameterError: If the bounds are not a list of integers or a bound is out of 1
+                and the size of the list (10000)
         """
+        if isinstance(bands, str | bytes) or not isinstance(bands, Iterable):
+            raise ParameterError(
+                f"The bounds of the bands must be a list, not {type(bands).__name__}"
+            )
+        bands = tuple(bands)
         size = len(load_top_lemmas())
         for band in bands:
             check_integer(band, "bound of a band")

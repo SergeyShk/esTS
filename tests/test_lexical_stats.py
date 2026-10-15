@@ -166,7 +166,9 @@ def test_bands(ls):
     assert unique[1000] == pytest.approx(6 / 9)
 
 
-@pytest.mark.parametrize("bands", [(0,), (-5,), (10_001,), (1000, 20_000)])
+@pytest.mark.parametrize(
+    "bands", [(0,), (-5,), (10_001,), (1000, 20_000), 100, None, "100", (100.5,), (True,)]
+)
 def test_band_bounds(ls, bands):
     with pytest.raises(ParameterError):
         ls.band_coverage(bands=bands)
@@ -174,6 +176,8 @@ def test_band_bounds(ls, bands):
 
 def test_band_bounds_limits(ls):
     assert set(ls.band_coverage(bands=(1, 10_000))) == {1, 10_000}
+    # An iterator of bounds is read once
+    assert set(ls.band_coverage(bands=iter((1, 100)))) == {1, 100}
 
 
 def test_top_lemmas():

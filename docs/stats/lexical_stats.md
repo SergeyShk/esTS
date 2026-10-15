@@ -63,7 +63,7 @@ The means by the dictionary are computed over the words found only, `nan` withou
 
 ### band_coverage
 
-Returns the shares of the words with a lemma of the top N for every bound N. A bound out of 1 and 10000 - the size of the list - raises `ParameterError`.
+Returns the shares of the words with a lemma of the top N for every bound N. Bounds that are not a list of integers and a bound out of 1 and 10000 - the size of the list - raise `ParameterError`.
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
