@@ -22,9 +22,9 @@ where $n_k$ is the number of occurrences of the word $k$.
 ## Academic nausea { #calc_academic_nausea }
 
 !!! info ""
-    **ests.style_stats.calc_academic_nausea()**
+    **ests.style_stats.calc_academic_nausea()**, **ests.style_stats.find_nausea_words()**
 
-The academic nausea of [Advego](https://advego.com/text/seo/) - the share of the occurrences of the most frequent words of the text in percent. The exact formula of Advego is not published: the summed frequency of the `top_n` most frequent words is divided by the number of words. The norm of Advego is 5-15%.
+The academic nausea of [Advego](https://advego.com/text/seo/) - the share of the occurrences of the most frequent significant words of the text in percent. The exact formula of Advego is not published: the summed frequency of the `top_n` most frequent words without the stopwords is divided by the number of all words. With the stopwords the top ten of almost any text would be `de`, `la`, `que`, `el`, and its nausea above the norm. `find_nausea_words` returns these words with their occurrences, the most frequent first and words of equal frequency in the order of the text; the stopwords are those of the list passed, in any case, or of [`is_stopword`](#is_stopword). The norm of Advego is 5-15%, for texts of several hundred words: in a short text the top ten is a large share of the words whatever the style.
 
 Formula:
 
@@ -36,6 +36,7 @@ $$
 | :-------: | :--: | :-----: | :---------: |
 | `text` | list[str] | `-` | List of words |
 | `top_n` | int | `10` | Number of the most frequent words |
+| `stopwords` | list[str]/set[str] | `None` | Stopwords left out of the most frequent words; `is_stopword` if not given |
 
 ## Water content { #calc_water }
 

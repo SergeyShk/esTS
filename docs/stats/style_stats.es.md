@@ -24,6 +24,7 @@ Los marcadores del estilo burocrático se cuentan sobre las formas sin filtrar (
 | `top_n` | int | `10` | Número de las palabras más frecuentes para la náusea académica y la naturalidad según Zipf |
 | `cliches` | list[str]/set[str] | `None` | Lista o conjunto de clichés; si no se da, se usa `OFFICIALESE_CLICHES` |
 | `nlp` | Language | `None` | Pipeline de spaCy que analiza una cadena para los sustantivos deverbales; sin él se carga el modelo `es_core_news_sm` |
+| `nausea_stopwords` | list[str]/set[str] | `None` | Palabras vacías que se dejan fuera de las palabras más frecuentes de la náusea académica; si no se dan, las de `is_stopword` |
 
 ## Atributos
 
@@ -74,6 +75,19 @@ Parámetros:
     text = "Tres tristes tigres tragaban trigo en un trigal, en tres tristes trastos"
     StyleStats(text).keyword_density("tres tristes", "trigo")
     # {'tres tristes': 16.666666666666668, 'trigo': 8.333333333333334}
+    ```
+
+### nausea_words
+
+Devuelve las palabras significativas más frecuentes con las que se cuenta la náusea académica: las `top_n` palabras más frecuentes sin las palabras vacías de `nausea_stopwords`, o de [`is_stopword`](style_stats_funcs.md#is_stopword) si no se dan, con sus apariciones, de la más frecuente a la menos y las de igual frecuencia en el orden del texto.
+
+!!! example "Ejemplo"
+
+    ``` python
+    from ests import StyleStats
+
+    StyleStats("El gato y el perro, el gato y el ratón").nausea_words()
+    # {'gato': 2, 'perro': 1, 'ratón': 1}
     ```
 
 ### markers
@@ -133,7 +147,7 @@ El mismo aviso escrito en estilo administrativo y en lenguaje claro.
                           Metric                      |  Value
     ------------------------------------------------------------
     Classic nausea                                    |   2.83
-    Academic nausea (%)                               |  55.36
+    Academic nausea (%)                               |  17.86
     Water content (%)                                 |  57.14
     Spam score (%)                                    |  37.50
     Naturalness by Zipf's law (%)                     |  53.57
@@ -143,7 +157,7 @@ El mismo aviso escrito en estilo administrativo y en lenguaje claro.
     Officialese clichés (per 100 words)               |   8.93
 
     {'classic_nausea': 1.4142135623730951,
-     'academic_nausea': 47.82608695652174,
+     'academic_nausea': 43.47826086956522,
      'water': 43.47826086956522,
      'spam': 4.3478260869565215,
      'zipf_naturalness': 100.0,
@@ -153,4 +167,4 @@ El mismo aviso escrito en estilo administrativo y en lenguaje claro.
      'cliches': 0.0}
     ```
 
-El aviso de 56 palabras tiene tres locuciones prepositivas (`en el marco del`, `a efectos de`, `en virtud de`), cinco clichés (`dar cumplimiento`, `se procedió a`, `se llevará a cabo`, `a la mayor brevedad`, `en tiempo y forma`) y una expresión parentética, y casi la mitad de sus sustantivos son deverbales; la versión clara no tiene locuciones prepositivas, expresiones parentéticas ni clichés, y una cuarta parte de sus sustantivos son deverbales. El anafórico `de la misma`, que las guías también desaconsejan, no se cuenta.
+El aviso de 56 palabras tiene tres locuciones prepositivas (`en el marco del`, `a efectos de`, `en virtud de`), cinco clichés (`dar cumplimiento`, `se procedió a`, `se llevará a cabo`, `a la mayor brevedad`, `en tiempo y forma`) y una expresión parentética, y casi la mitad de sus sustantivos son deverbales; la versión clara no tiene locuciones prepositivas, expresiones parentéticas ni clichés, y una cuarta parte de sus sustantivos son deverbales. El anafórico `de la misma`, que las guías también desaconsejan, no se cuenta. La náusea académica no dice nada del estilo aquí: ninguno de los avisos repite una palabra significativa, así que son diez palabras sobre la longitud del texto, 10/56 y 10/23.

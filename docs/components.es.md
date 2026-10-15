@@ -333,6 +333,7 @@ Parámetros:
 | `name` | str | `"ests_style"` | Nombre del componente en el pipeline |
 | `stopwords` | list[str] | `None` | Palabras vacías para el contenido de agua; `STOPWORDS` y las expresiones parentéticas de una palabra si no se indican |
 | `top_n` | int | `10` | Número de las palabras más frecuentes para la náusea académica y la naturalidad según Zipf |
+| `nausea_stopwords` | list[str] | `None` | Palabras vacías que se dejan fuera de las palabras más frecuentes de la náusea académica; `is_stopword` si no se dan |
 
 !!! example "Ejemplo"
 

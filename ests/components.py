@@ -415,9 +415,11 @@ class StyleStatsComponent(_Component):
             the one-word parenthetical expressions if not set
         top_n (int): Number of the most frequent words for the academic nausea
             and the naturalness by Zipf's law
+        nausea_stopwords (list[str]): Stopwords left out of the most frequent words
+            of the academic nausea; is_stopword if not set
 
     Raises:
-        SourceTypeError: If the stopwords are not a list of strings
+        SourceTypeError: If the stopwords or the nausea stopwords are not a list of strings
         ParameterError: If the number of the most frequent words is not an integer or is
             below one
     """
@@ -428,16 +430,25 @@ class StyleStatsComponent(_Component):
         name: str = "ests_style",
         stopwords: list[str] | None = None,
         top_n: int = NAUSEA_TOP_N,
+        nausea_stopwords: list[str] | None = None,
     ):
         check_style_params(top_n)
         if stopwords is not None:
             check_words(stopwords, "stopwords")
+        if nausea_stopwords is not None:
+            check_words(nausea_stopwords, "nausea stopwords")
         self.stopwords = stopwords
         self.top_n = top_n
+        self.nausea_stopwords = nausea_stopwords
         super().__init__(nlp, name)
 
     def compute(self, doc: Doc) -> StyleStats:
-        return StyleStats(doc, stopwords=self.stopwords, top_n=self.top_n)
+        return StyleStats(
+            doc,
+            stopwords=self.stopwords,
+            top_n=self.top_n,
+            nausea_stopwords=self.nausea_stopwords,
+        )
 
 
 @Language.factory("ests_phon")
