@@ -1502,6 +1502,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#markers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        markers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#get_stats" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2549,6 +2560,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#markers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        markers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#get_stats" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2613,7 +2635,7 @@
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
 <p>A module for computing the style metrics of a text: the SEO indicators of the <a href="https://advego.com/text/seo/">Advego</a> and <a href="https://text.ru/seo">Text.ru</a> services - nausea, water content, spam score, naturalness of the distribution of words by Zipf's law and keyword density - and the lexical markers of the officialese style that the Spanish-language guides to plain language warn about: the nouns derived from a verb, the compound prepositions of the administrative style, the parenthetical expressions and the clichés. The data source can be either a text or a <code>Doc</code> object of the <a href="https://github.com/explosion/spaCy">spaCy</a> library.</p>
 <p>The services do not publish their formulas; the commonly accepted definitions are implemented and described in the <a href="../style_stats_funcs/">functions</a> section. By default words are extracted in lower case without lemmatization, so the forms of one word count as different words, as in Advego. To compute by lemmas, pass a <a href="../../extractors/words/"><code>WordsExtractor</code></a> object with <code>use_lexemes=True</code> and <code>lowercase=True</code>.</p>
-<p>The markers of the officialese style are counted over the unfiltered word forms (<code>forms</code>) whatever the extractor passed, by the lists <code>COMPOUND_PREPOSITIONS</code>, <code>PARENTHETICALS</code> and <code>OFFICIALESE_CLICHES</code> of <code>ests.constants</code>. A phrase ending in <code>a</code> or <code>de</code> also matches the contraction with the article (<code>a efectos del</code>), and a phrase that starts with an infinitive stands for the forms of the verb (<code>proceder a</code> finds <code>se procedió a</code>); see <a href="../style_stats_funcs/#calc_phrase_density">phrase density</a>. The verbal nouns need the parts of speech and the lemmas: a <code>Doc</code> gives its own annotation, and a string is parsed with <a href="../../installation/#model"><code>es_core_news_sm</code></a> or with the pipeline passed in <code>nlp</code> the first time <code>verbal_nouns</code> is read - the other metrics of a string need no model. A string longer than the <code>max_length</code> of the pipeline is parsed in parts of whole sentences; only a single sentence longer than it raises <code>SourceError</code>.</p>
+<p>The markers of the officialese style are counted over the unfiltered word forms (<code>forms</code>) whatever the extractor passed, by the lists <code>COMPOUND_PREPOSITIONS</code>, <code>PARENTHETICALS</code> and <code>OFFICIALESE_CLICHES</code> of <code>ests.constants</code>. A phrase ending in <code>a</code> or <code>de</code> also matches the contraction with the article (<code>a efectos del</code>), and a phrase that starts with an infinitive stands for the forms of the verb (<code>proceder a</code> finds <code>se procedió a</code>); see <a href="../style_stats_funcs/#calc_phrase_density">phrase density</a>. The verbal nouns need the parts of speech and the lemmas: a <code>Doc</code> gives its own annotation, and a string is parsed with <a href="../../installation/#model"><code>es_core_news_sm</code></a> or with the pipeline passed in <code>nlp</code> the first time <code>verbal_nouns</code> or <a href="#markers"><code>markers</code></a> is read - the other metrics of a string need no model. A string longer than the <code>max_length</code> of the pipeline is parsed in parts of whole sentences; only a single sentence longer than it raises <code>SourceError</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The metrics are computed by accessing the corresponding attribute or by calling the <code>get_stats</code> method of the <code>StyleStats</code> object. The norms of the services are meant for texts of several hundred words; on short texts nausea and spam are uninformative.</p>
@@ -2798,6 +2820,20 @@
 <span class="n">text</span> <span class="o">=</span> <span class="s2">"Tres tristes tigres tragaban trigo en un trigal, en tres tristes trastos"</span>
 <span class="n">StyleStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">keyword_density</span><span class="p">(</span><span class="s2">"tres tristes"</span><span class="p">,</span> <span class="s2">"trigo"</span><span class="p">)</span>
 <span class="c1"># {'tres tristes': 16.666666666666668, 'trigo': 8.333333333333334}</span>
+</code></pre></div>
+</div>
+<h3 id="markers">markers<a class="headerlink" href="#markers" title="Permanent link">&para;</a></h3>
+<p>Returns the markers of the officialese style found: for each of the metrics <code>verbal_nouns</code>, <code>compound_prepositions</code>, <code>parentheticals</code> and <code>cliches</code>, the words and phrases it is counted from, in the order of the text and in lower case. A phrase is found with its contractions and the forms of its verb (<a href="../style_stats_funcs/#calc_phrase_density"><code>expand_phrases</code></a>); the verbal nouns need the parts of speech and the lemmas, as their metric does, so a string is parsed by the model and a <code>Doc</code> without them raises <code>SourceError</code>.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">StyleStats</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"Sin embargo, se procedió a la revisión en el marco del proyecto"</span>
+<span class="n">StyleStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">markers</span><span class="p">()</span>
+<span class="c1"># {'verbal_nouns': ('revisión',),</span>
+<span class="c1">#  'compound_prepositions': ('en el marco del',),</span>
+<span class="c1">#  'parentheticals': ('sin embargo',),</span>
+<span class="c1">#  'cliches': ('procedió a',)}</span>
 </code></pre></div>
 </div>
 <h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>

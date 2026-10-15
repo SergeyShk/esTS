@@ -2996,9 +2996,9 @@
 </table>
 <h2 id="calc_parentheticals">Expresiones parentéticas<a class="headerlink" href="#calc_parentheticals" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
-<p><strong>ests.style_stats.calc_parentheticals()</strong>, <strong>ests.style_stats.is_parenthetical()</strong></p>
+<p><strong>ests.style_stats.calc_parentheticals()</strong>, <strong>ests.style_stats.find_parentheticals()</strong>, <strong>ests.style_stats.is_parenthetical()</strong></p>
 </div>
-<p>Las expresiones parentéticas de <code>PARENTHETICALS</code> (<code>sin embargo</code>, <code>es decir</code>, <code>por ejemplo</code>, <code>finalmente</code>) por cada 100 palabras; <code>is_parenthetical</code> comprueba una palabra con las expresiones de una palabra de la lista. La puntuación no se mira, así que la lista contiene las expresiones que van entre comas o en el borde de una oración en la mayoría de sus apariciones en el <a href="../../datasets/spanishliterature/">corpus de literatura</a>, con las series de orden (<code>en primer lugar</code>, <code>en segundo lugar</code>). Los adverbios de duda (<code>tal vez</code>, <code>quizá</code>), <code>sobre todo</code>, <code>sin duda</code> y <code>además</code> no están en la lista.</p>
+<p>Las expresiones parentéticas de <code>PARENTHETICALS</code> (<code>sin embargo</code>, <code>es decir</code>, <code>por ejemplo</code>, <code>finalmente</code>) por cada 100 palabras; <code>find_parentheticals</code> devuelve los límites de las expresiones encontradas como cortes de la lista de palabras, e <code>is_parenthetical</code> comprueba una palabra con las expresiones de una palabra de la lista. La puntuación no se mira, así que la lista contiene las expresiones que van entre comas o en el borde de una oración en la mayoría de sus apariciones en el <a href="../../datasets/spanishliterature/">corpus de literatura</a>, con las series de orden (<code>en primer lugar</code>, <code>en segundo lugar</code>). Los adverbios de duda (<code>tal vez</code>, <code>quizá</code>), <code>sobre todo</code>, <code>sin duda</code> y <code>además</code> no están en la lista.</p>
 <table>
 <thead>
 <tr>

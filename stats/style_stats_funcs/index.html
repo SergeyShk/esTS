@@ -2996,9 +2996,9 @@
 </table>
 <h2 id="calc_parentheticals">Parenthetical expressions<a class="headerlink" href="#calc_parentheticals" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
-<p><strong>ests.style_stats.calc_parentheticals()</strong>, <strong>ests.style_stats.is_parenthetical()</strong></p>
+<p><strong>ests.style_stats.calc_parentheticals()</strong>, <strong>ests.style_stats.find_parentheticals()</strong>, <strong>ests.style_stats.is_parenthetical()</strong></p>
 </div>
-<p>The parenthetical expressions of <code>PARENTHETICALS</code> (<code>sin embargo</code>, <code>es decir</code>, <code>por ejemplo</code>, <code>finalmente</code>) per 100 words; <code>is_parenthetical</code> checks a word against the one-word expressions of the list. The punctuation is not looked at, so the list holds the expressions set off by commas or standing at the edge of a sentence in most of their occurrences in the <a href="../../datasets/spanishliterature/">corpus of literature</a>, with the series of order (<code>en primer lugar</code>, <code>en segundo lugar</code>). The adverbs of doubt (<code>tal vez</code>, <code>quizá</code>), <code>sobre todo</code>, <code>sin duda</code> and <code>además</code> are not in the list.</p>
+<p>The parenthetical expressions of <code>PARENTHETICALS</code> (<code>sin embargo</code>, <code>es decir</code>, <code>por ejemplo</code>, <code>finalmente</code>) per 100 words; <code>find_parentheticals</code> returns the bounds of the expressions found as slices of the list of words, and <code>is_parenthetical</code> checks a word against the one-word expressions of the list. The punctuation is not looked at, so the list holds the expressions set off by commas or standing at the edge of a sentence in most of their occurrences in the <a href="../../datasets/spanishliterature/">corpus of literature</a>, with the series of order (<code>en primer lugar</code>, <code>en segundo lugar</code>). The adverbs of doubt (<code>tal vez</code>, <code>quizá</code>), <code>sobre todo</code>, <code>sin duda</code> and <code>además</code> are not in the list.</p>
 <table>
 <thead>
 <tr>
