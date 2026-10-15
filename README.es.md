@@ -226,7 +226,7 @@ La biblioteca permite calcular las siguientes métricas de legibilidad:
 *   índice de legibilidad LIX
 *   índice de legibilidad RIX
 
-Sobre las fórmulas: el nivel de una escala para la facilidad de lectura y para la Legibilidad µ, un grado de consenso (la mediana de las fórmulas de grado), la etapa escolar y la edad del lector en España, y el tiempo de lectura.
+Sobre las fórmulas: el nivel de una escala para la facilidad de lectura, la Legibilidad µ y LIX, la lectura de cualquier métrica, un grado de consenso (la mediana de las fórmulas de grado), la etapa escolar y la edad del lector en España, y el tiempo de lectura.
 
 Los coeficientes de la facilidad de lectura de Flesch se eligen con `preset`: por defecto la *fórmula de perspicuidad* de Szigriszt-Pazos con la escala INFLESZ (`general`), o Fernández Huerta con los niveles de su autor (`classic`).
 
@@ -265,6 +265,9 @@ Reading time (min)                           |   0.04
 'algo difícil'
 
 >>> rs.describe_grade()
+'ESO (12-16 years)'
+
+>>> rs.describe("rix")
 'ESO (12-16 years)'
 ```
 

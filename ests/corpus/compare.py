@@ -211,7 +211,9 @@ def _parse(text: str, nlp: Language | None) -> Doc:
             f"pipeline ({pipeline.max_length}): split it into windows or raise "
             "max_length on a pipeline of your own and pass it in nlp"
         )
-    return pipeline(text, disable=["parser", "ner"] if nlp is None else ["ner"])
+    return pipeline(
+        text, disable=["ests_blank_lines", "parser", "ner"] if nlp is None else ["ner"]
+    )
 
 
 def _morph_features(morph: MorphStats, parsed: bool) -> dict[str, float]:

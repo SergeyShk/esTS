@@ -157,7 +157,7 @@ Source: Contreras, A., García-Alonso, R., Echenique, M., Daye-Contreras, F. The
 !!! info ""
     **ests.readability_stats.flesch_reading_easy_to_level()**
 
-The band of a scale for the Flesch reading ease. The scales of `ests.constants.READING_EASE_SCALES`: `inflesz` (Barrio-Cantalejo et al., 2008, five bands for the Szigriszt-Pazos coefficients), `szigriszt` (Szigriszt-Pazos, 1993, integer bands: `muy difícil` 0-15, `árido` 16-35, `bastante difícil` 36-50, `normal` 51-65, `bastante fácil` 66-75, `fácil` 76-85, `muy fácil` 86-100) and `fernandez_huerta` (Fernández Huerta, 1959: `muy difícil` below 30, `difícil` 30-50, `bastante difícil` 50-60, `normal` 60-70, `bastante fácil` 70-80, `fácil` 80-90, `muy fácil` above 90).
+The band of a scale for the Flesch reading ease. The scales of `ests.constants.READING_EASE_SCALES`: `inflesz` (Barrio-Cantalejo et al., 2008, five bands for the Szigriszt-Pazos coefficients), `szigriszt` (Szigriszt-Pazos, 1993, integer bands: `muy difícil` 0-15, `árido` 16-35, `bastante difícil` 36-50, `normal` 51-65, `bastante fácil` 66-75, `fácil` 76-85, `muy fácil` 86-100) and `fernandez_huerta` (Fernández Huerta, 1959: `muy difícil` below 30, `difícil` 30-50, `bastante difícil` 50-60, `normal` 60-70, `bastante fácil` 70-80, `fácil` 80-90, `muy fácil` above 90). An unknown scale and a value that is not a finite number raise `ParameterError`.
 
 Parameters:
 
@@ -180,13 +180,30 @@ Parameters:
 !!! info ""
     **ests.readability_stats.mu_to_level()**
 
-The band of the µ scale of Muñoz Baquedano and Muñoz Urra (2006) for Legibilidad µ; an undefined index (`nan`) has no band and gives an empty string.
+The band of the µ scale of Muñoz Baquedano and Muñoz Urra (2006) for Legibilidad µ; a value that is not a finite number, such as the undefined index (`nan`), raises `ParameterError`.
 
 Parameters:
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
 | `mu_index` | float | `-` | Value of Legibilidad µ |
+
+## Band of a scale { #scale_level }
+
+!!! info ""
+    **ests.readability_stats.scale_level()**
+
+--8<-- "stats/readability_stats_funcs.md:scale_level"
+
+!!! example "Example"
+
+    ``` python
+    from ests.constants import MU_SCALE
+    from ests.readability_stats import scale_level
+
+    scale_level(50.9, MU_SCALE)
+    # 'difícil'
+    ```
 
 ## Reading ease to grade { #flesch_reading_easy_to_grade }
 

@@ -10,7 +10,7 @@ Los componentes de esTS son subclases del `StatsComponent` del núcleo [anyTS](h
 
 ## Nombres { #names }
 
-Las fábricas llevan el prefijo de la biblioteca: `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`. Están declaradas como entry points de `spacy_factories`, así que un pipeline guardado con estos componentes (`nlp.to_disk(path)`, `spacy package`) se carga con `spacy.load(path)` sin importar la biblioteca.
+Las fábricas llevan el prefijo de la biblioteca: `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`, y el componente de los límites de oración [`ests_blank_lines`](#blank_lines). Están declaradas como entry points de `spacy_factories`, así que un pipeline guardado con estos componentes (`nlp.to_disk(path)`, `spacy package`) se carga con `spacy.load(path)` sin importar la biblioteca.
 
 ``` python
 nlp.add_pipe("ests_basic", name="basic", last=True)
@@ -427,6 +427,46 @@ Parámetros:
 
     ``` bash
     ('octosílabo', {'aguda': 2, 'llana': 2})
+    ```
+
+## Líneas en blanco { #blank_lines }
+
+!!! info ""
+    **ests_blank_lines** (`anyts.components.start_sents_after_blank_lines`)
+
+<!-- core: components.md:start_sents_after_blank_lines 67f0d3c -->
+Un componente que inicia una oración en el primer token tras una línea en blanco - un salto de línea, espacios opcionales y otro salto de línea -, para que un título, un elemento de una lista o un párrafo sin signo final sean una oración propia, como en el extractor de oraciones. Va antes del componente que fija las oraciones - el parser, `senter` o `sentencizer` -, que conserva los inicios encontrados y coloca los demás; los espacios ante tal inicio se quedan con la oración anterior. Por sí solo el componente no divide las oraciones dentro de un párrafo. Un documento ya analizado lanza `SourceError`, porque spaCy conserva sus oraciones. Una biblioteca del idioma registra el componente con su prefijo, `Language.component("<prefix>_blank_lines", func=start_sents_after_blank_lines)`.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------: | :--: | :---------: | :---------: |
+| `doc` | Doc | `-` | Objeto Doc |
+
+En esTS el componente está registrado como `ests_blank_lines`. Sin él, el modelo `es_core_news_sm` pega un párrafo sin signo final a la oración siguiente, y las estadísticas de un `Doc` difieren de las de la misma cadena. El pipeline de `ests.utils.get_nlp`, que analiza las cadenas de las estadísticas morfológicas, sintácticas, de cohesión y léxicas, lo tiene antes del parser. Un pipeline ejecutado sin su parser (`disable=["parser"]`) deja fuera también el componente: por sí solo divide el texto solo en párrafos.
+
+!!! example "Ejemplo"
+
+    _Código_:
+
+    ``` python
+    # Importar las bibliotecas
+    import ests
+    import spacy
+
+    # Cargar el modelo de spaCy
+    nlp = spacy.load("es_core_news_sm")
+
+    # Añadir el componente antes del parser
+    nlp.add_pipe("ests_blank_lines", before="parser")
+
+    # Oraciones del documento
+    doc = nlp("Novedades\n\nImportación rápida. Menos errores")
+    [sent.text.strip() for sent in doc.sents]
+    ```
+
+    _Resultado_:
+
+    ``` bash
+    ['Novedades', 'Importación rápida.', 'Menos errores']
     ```
 
 ## Todo en un pipeline { #pipeline }

@@ -767,7 +767,7 @@ Parámetros:
 !!! info ""
     **ests.diversity_stats.calc_windowed()**
 
-<!-- core: stats/diversity_stats_funcs.md:calc_windowed b59de2a -->
+<!-- core: stats/diversity_stats_funcs.md:calc_windowed 29b5120 -->
 Cálculo por ventanas de cualquier métrica: su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Es la forma estándar de comparar textos de distinta longitud; el TTR estandarizado de Kubát y Milička (no el STTR de Summer) es un TTR por ventanas de 1000 palabras con un intervalo de confianza del 95 %. En los textos más cortos que la ventana la métrica se calcula sobre todo el texto como una sola ventana; las ventanas con un valor no definido (`nan`) se ignoran. Si la métrica es infinita en al menos una ventana (por ejemplo, el índice de Simpson inverso en una ventana de palabras únicas), la media es infinita y la desviación típica y el intervalo de confianza no están definidos. Devuelve una tupla con nombre `WindowStats` con los campos `mean`, `std`, `lower`, `upper` y `n_windows`.
 
 Parámetros:
@@ -779,3 +779,4 @@ Parámetros:
 | `window_len` | int | `100` | Tamaño de la ventana |
 | `step` | int | `None` | Paso de la ventana, por defecto igual a su tamaño |
 | `confidence` | float | `0.95` | Nivel de confianza |
+| `messages` | dict[str, str] | `MESSAGES` | Mensajes de los errores por clave, argumento con nombre |

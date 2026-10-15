@@ -251,6 +251,40 @@ def test_pipeline_is_loaded_without_importing_the_package(tmp_path):
     assert result.stdout.strip() == "6"
 
 
+def test_blank_lines_component(nlp):
+    """Before the parser ests_blank_lines gives a Doc the sentences of its string"""
+    text = "Novedades\n\nImportación rápida. Menos errores\n\nLista de cambios"
+    assert BasicStats(nlp(text)).n_sents == 2
+    nlp.add_pipe("ests_blank_lines", before="parser")
+    try:
+        doc = nlp(text)
+    finally:
+        nlp.remove_pipe("ests_blank_lines")
+    assert [sent.text.strip() for sent in doc.sents] == [
+        "Novedades",
+        "Importación rápida.",
+        "Menos errores",
+        "Lista de cambios",
+    ]
+    assert BasicStats(doc).n_sents == BasicStats(text).n_sents == 4
+
+
+def test_blank_lines_pipeline_is_loaded_without_importing_the_package(tmp_path):
+    pipeline = spacy.blank("es")
+    pipeline.add_pipe("ests_blank_lines")
+    pipeline.add_pipe("sentencizer")
+    pipeline.to_disk(tmp_path)
+    code = (
+        "import spacy;"
+        f"nlp = spacy.load({str(tmp_path)!r});"
+        "print(len(list(nlp('Resultados\\n\\nTodo en orden').sents)))"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", code], capture_output=True, text=True, check=True
+    )
+    assert result.stdout.strip() == "2"
+
+
 @pytest.mark.parametrize(("factory", "component", "stats"), COMPONENTS)
 @pytest.mark.parametrize("text", ["", "   ", "¿?", "..."])
 def test_component_of_a_document_without_words(factory, component, stats, text):

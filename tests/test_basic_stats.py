@@ -110,6 +110,11 @@ def test_n_spaces(bs):
     assert bs.n_spaces == 93
 
 
+def test_n_spaces_of_unicode():
+    # the no-break and narrow no-break spaces of Spanish typography count as spaces
+    assert BasicStats("Son las 10\u00a0h y\u202f5 min\tya").n_spaces == 7
+
+
 def test_n_syllables(bs):
     assert bs.n_syllables == 213
 

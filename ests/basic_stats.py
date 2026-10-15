@@ -70,7 +70,7 @@ class BasicStats(anyts.basic_stats.BasicStats):
         n_polysyllable_words (int): Number of polysyllabic words
         n_chars (int): Number of characters
         n_letters (int): Number of letters
-        n_spaces (int): Number of spaces
+        n_spaces (int): Number of spaces of Unicode and tabs
         n_syllables (int): Number of syllables
         n_punctuations (int): Number of punctuation marks
         c_punctuations (dict[str, int]): Distribution of punctuation marks by type

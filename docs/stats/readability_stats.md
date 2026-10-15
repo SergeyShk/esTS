@@ -40,7 +40,7 @@ The main presumptions of readability metrics:
 
 ## Language hooks
 
-The class extends the `ReadabilityStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/readability_stats/) core with the Spanish formulas and tables: the [basic statistics](basic_stats.md) of esTS, which take the Spanish [`SentsExtractor`](../extractors/sentences.md) and [`WordsExtractor`](../extractors/words.md) by default, the presets of the Flesch reading ease, the formulas of Gutiérrez de Polini, Crawford and SOL, the grade formulas of the consensus grade (Crawford and SOL), the school stages of Spain and the reading speeds of Spanish readers.
+The class extends the `ReadabilityStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/readability_stats/) core with the Spanish formulas and tables: the [basic statistics](basic_stats.md) of esTS, which take the Spanish [`SentsExtractor`](../extractors/sentences.md) and [`WordsExtractor`](../extractors/words.md) by default, the presets of the Flesch reading ease, the formulas of Gutiérrez de Polini, Crawford and SOL, the grade formulas of the consensus grade (Crawford and SOL), the school stages of Spain, the interpretation scales and the reading speeds of Spanish readers. The scale of the reading ease follows the preset (`level_scale`), so `describe_level` and `describe` read the value as the consensus grade does.
 
 The formulas of the core with their English coefficients - `flesch_kincaid_grade`, `coleman_liau_index`, `automated_readability_index`, `smog_index` and `gunning_fog_index` - stay attributes of the object, outside `get_stats`: they are fitted on English texts, and `smog_index` is the input of SOL.
 
@@ -98,7 +98,7 @@ The formula of Fernández Huerta takes the mean sentence length, with the correc
 
 ## Interpretation { #interpretation }
 
-The [`describe_level`](#describe_level) method places the reading ease on the scale of the preset: INFLESZ for `general` (`muy difícil` below 40, `algo difícil` 40-55, `normal` 55-65, `bastante fácil` 65-80, `muy fácil` above 80) and the seven bands of Fernández Huerta for `classic`, with the scales of Szigriszt-Pazos or of the other author on request; Legibilidad µ has the seven bands of its authors (`muy difícil` 0-30, `difícil` 31-50, `un poco difícil` 51-60, `adecuado` 61-70, `un poco fácil` 71-80, `fácil` 81-90, `muy fácil` 91-100).
+The [`describe_level`](#describe_level) method places the reading ease on the scale of the preset: INFLESZ for `general` (`muy difícil` below 40, `algo difícil` 40-55, `normal` 55-65, `bastante fácil` 65-80, `muy fácil` above 80) and the seven bands of Fernández Huerta for `classic`, with the scales of Szigriszt-Pazos or of the other author on request; Legibilidad µ has the seven bands of its authors (`muy difícil` 0-30, `difícil` 31-50, `un poco difícil` 51-60, `adecuado` 61-70, `un poco fácil` 71-80, `fácil` 81-90, `muy fácil` 91-100), and LIX the text types of Björnsson ([`calc_lix`](readability_stats_funcs.md#calc_lix)). RIX has no bands of its own here: its grades of Anderson ([`calc_rix`](readability_stats_funcs.md#calc_rix)) are years of schooling, and [`describe`](#describe) reads them as a stage of the Spanish school system.
 
 --8<-- "stats/readability_stats.md:ReadabilityStats-consensus"
 
@@ -122,14 +122,14 @@ The `reading_time` attribute estimates silent reading time at 278 words per minu
 
 ### describe_level
 
-Returns the band of a readability scale for the reading ease or Legibilidad µ.
+Returns the band of the interpretation scale of the reading ease, Legibilidad µ or LIX. A metric without a scale of bands, an undefined value (nan) and a scale given for a metric other than the reading ease raise `ParameterError`.
 
 Parameters:
 
 | Parameter | Type | Default | Description |
 | :-------: | :--: | :-----: | :---------: |
-| `stat` | str | `flesch_reading_easy` | Name of the metric (`flesch_reading_easy`, `mu_index`) |
-| `scale` | str | `None` | Scale for the reading ease (`inflesz`, `szigriszt`, `fernandez_huerta`); without it the scale of the preset is used; Legibilidad µ has a single scale and accepts no other |
+| `stat` | str | `flesch_reading_easy` | Name of the metric (`flesch_reading_easy`, `mu_index`, `lix`) |
+| `scale` | str | `None` | Scale for the reading ease (`inflesz`, `szigriszt`, `fernandez_huerta`); without it the scale of the preset is used |
 
 !!! example "Example"
 
@@ -144,6 +144,8 @@ Parameters:
     # 'normal'
     rs.describe_level("mu_index")
     # 'difícil'
+    rs.describe_level("lix")
+    # 'very hard texts, laws and bureaucratic language'
     ```
 
 ### describe_grade
@@ -159,6 +161,27 @@ The grade formulas are `consensus_grade`, `crawford_grade` and `sol_grade`.
     # 'ESO (12-16 years)'
     rs.describe_grade("crawford_grade")
     # 'primary school, grades 4-6 (9-12 years)'
+    ```
+
+### describe
+
+--8<-- "stats/readability_stats.md:ReadabilityStats-describe"
+
+In esTS the grade formulas are read as stages of the Spanish school system, and so is RIX through the grades of Anderson; the formula of Gutiérrez de Polini and the reading time have no scale.
+
+!!! example "Example"
+
+    ``` python
+    {stat: rs.describe(stat) for stat in rs.get_stats()}
+    # {'flesch_reading_easy': 'algo difícil',
+    #  'gutierrez_polini_index': None,
+    #  'crawford_grade': 'primary school, grades 4-6 (9-12 years)',
+    #  'mu_index': 'difícil',
+    #  'sol_grade': 'ESO (12-16 years)',
+    #  'lix': 'very hard texts, laws and bureaucratic language',
+    #  'rix': 'ESO (12-16 years)',
+    #  'consensus_grade': 'ESO (12-16 years)',
+    #  'reading_time': None}
     ```
 
 ### reading_time_by_speed

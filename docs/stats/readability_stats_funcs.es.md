@@ -249,7 +249,7 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.flesch_reading_easy_to_level()**
 
-El nivel de una escala para la facilidad de lectura de Flesch. Las escalas de `ests.constants.READING_EASE_SCALES`: `inflesz` (Barrio-Cantalejo et al., 2008, cinco niveles para los coeficientes de Szigriszt-Pazos), `szigriszt` (Szigriszt-Pazos, 1993, niveles enteros: `muy difícil` 0-15, `árido` 16-35, `bastante difícil` 36-50, `normal` 51-65, `bastante fácil` 66-75, `fácil` 76-85, `muy fácil` 86-100) y `fernandez_huerta` (Fernández Huerta, 1959: `muy difícil` por debajo de 30, `difícil` 30-50, `bastante difícil` 50-60, `normal` 60-70, `bastante fácil` 70-80, `fácil` 80-90, `muy fácil` por encima de 90).
+El nivel de una escala para la facilidad de lectura de Flesch. Las escalas de `ests.constants.READING_EASE_SCALES`: `inflesz` (Barrio-Cantalejo et al., 2008, cinco niveles para los coeficientes de Szigriszt-Pazos), `szigriszt` (Szigriszt-Pazos, 1993, niveles enteros: `muy difícil` 0-15, `árido` 16-35, `bastante difícil` 36-50, `normal` 51-65, `bastante fácil` 66-75, `fácil` 76-85, `muy fácil` 86-100) y `fernandez_huerta` (Fernández Huerta, 1959: `muy difícil` por debajo de 30, `difícil` 30-50, `bastante difícil` 50-60, `normal` 60-70, `bastante fácil` 70-80, `fácil` 80-90, `muy fácil` por encima de 90). Una escala desconocida y un valor que no es un número finito lanzan `ParameterError`.
 
 Parámetros:
 
@@ -272,13 +272,38 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.mu_to_level()**
 
-El nivel de la escala µ de Muñoz Baquedano y Muñoz Urra (2006) para la Legibilidad µ; un índice no definido (`nan`) no tiene nivel y devuelve una cadena vacía.
+El nivel de la escala µ de Muñoz Baquedano y Muñoz Urra (2006) para la Legibilidad µ; un valor que no es un número finito, como el índice no definido (`nan`), lanza `ParameterError`.
 
 Parámetros:
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------: | :--: | :---------: | :---------: |
 | `mu_index` | float | `-` | Valor de la Legibilidad µ |
+
+## Nivel de una escala { #scale_level }
+
+!!! info ""
+    **ests.readability_stats.scale_level()**
+
+<!-- core: stats/readability_stats_funcs.md:scale_level 2322dde -->
+El nivel de una escala para un valor: la escala se da como los límites inferiores de sus niveles en orden descendente, el valor cae en el primer nivel cuyo límite alcanza, y el nivel más bajo queda abierto por debajo. Un valor que no es un número finito y una escala vacía lanzan `ParameterError`.
+
+Parámetros:
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------: | :--: | :---------: | :---------: |
+| `value` | float | `-` | Valor de una métrica |
+| `scale` | list[tuple[float, Any]] | `-` | Límites inferiores y sus niveles en orden descendente |
+
+!!! example "Ejemplo"
+
+    ``` python
+    from ests.constants import MU_SCALE
+    from ests.readability_stats import scale_level
+
+    scale_level(50.9, MU_SCALE)
+    # 'difícil'
+    ```
 
 ## De facilidad de lectura a grado { #flesch_reading_easy_to_grade }
 

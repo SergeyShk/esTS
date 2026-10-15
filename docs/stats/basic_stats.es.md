@@ -5,10 +5,10 @@
 
 ## Descripción
 
-<!-- core: stats/basic_stats.md:BasicStats 9bab5af -->
+<!-- core: stats/basic_stats.md:BasicStats 1991b2a -->
 Las estadísticas básicas de un texto: el número de sus oraciones, palabras, caracteres, letras, espacios, sílabas y signos de puntuación, las distribuciones de las palabras por letras y por sílabas, y las palabras largas, complejas, simples, monosílabas y polisílabas. La fuente de datos puede ser un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy). Las letras se cuentan con `str.isalpha`, así que las cifras, los guiones y los signos dentro de una palabra no son letras.
 
-Las palabras de una cadena salen del extractor de palabras y sus oraciones del extractor de oraciones. Las palabras de un `Doc` salen de sus tokens (los signos de puntuación y los símbolos como `€` o `%` se descartan) y sus oraciones de sus límites, o del extractor de oraciones cuando no los tiene; un extractor indicado explícitamente se usa sobre el texto del `Doc`. Una oración de pura puntuación no lleva ninguna palabra y no se cuenta.
+Las palabras de una cadena salen del extractor de palabras y sus oraciones del extractor de oraciones. Las palabras de un `Doc` salen de sus tokens (los signos de puntuación y los símbolos como `€` o `%` se descartan) y sus oraciones de sus límites, o del extractor de oraciones cuando no los tiene; un extractor indicado explícitamente se usa sobre el texto del `Doc`. Una línea en blanco termina una oración de una cadena y de un `Doc` sin límites; un `Doc` con límites sigue la regla cuando su pipeline inicia una oración tras una línea en blanco (`start_sents_after_blank_lines`, que una biblioteca del idioma registra con su propio nombre) antes del parser, `senter` o `sentencizer`. Una oración de pura puntuación no lleva ninguna palabra y no se cuenta.
 
 !!! note "Nota"
     Las estadísticas se calculan al inicializar el objeto `BasicStats`.
@@ -36,7 +36,7 @@ Una fuente que no es ni una cadena ni un `Doc` y un extractor de otro tipo lanza
 
 ## Atributos
 
-<!-- core: stats/basic_stats.md:BasicStats-attributes 105b5fe -->
+<!-- core: stats/basic_stats.md:BasicStats-attributes ed90a25 -->
 | Atributo | Tipo | Descripción |
 | :-------: | :--: | :---------: |
 | `c_letters` | dict[int, int] | Distribución de las palabras por número de letras |
@@ -51,7 +51,7 @@ Una fuente que no es ni una cadena ni un `Doc` y un extractor de otro tipo lanza
 | `n_polysyllable_words` | int | Número de palabras polisílabas |
 | `n_chars` | int | Número de caracteres sin los saltos de línea |
 | `n_letters` | int | Número de letras |
-| `n_spaces` | int | Número de espacios y tabulaciones |
+| `n_spaces` | int | Número de espacios de Unicode (categoría Zs), como el espacio de no separación, y tabulaciones |
 | `n_syllables` | int | Número de sílabas |
 | `n_punctuations` | int | Número de signos de puntuación |
 | `c_punctuations` | dict[str, int] | Distribución de los signos de puntuación por tipo |

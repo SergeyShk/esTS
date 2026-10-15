@@ -4,6 +4,8 @@ from anyts.utils import has_words, is_punctuation, iter_doc_tokens, iter_doc_wor
 from spacy.tokens import Doc
 from spacy.util import compile_infix_regex
 
+from ests import lexical_stats, style_stats
+from ests.corpus import stylometry
 from ests.exceptions import DatasetNotFoundError
 from ests.utils import (
     add_dash_rules,
@@ -134,6 +136,7 @@ def test_sentenize_long_runs(text, expected):
             ["Título sin punto", "Primera frase.", "Segunda\nfrase con salto.", "Tercera"],
         ),
         ("Uno.\n\n\n\nDos.\n \t\nTres.", ["Uno.", "Dos.", "Tres."]),
+        ("Título\n\u00a0\u3000\nEl gato duerme", ["Título", "El gato duerme"]),
         ("Uno.\nDos.\nTres", ["Uno.", "Dos.", "Tres"]),
         ("Él vino. Ñandú corrió. Ángel durmió.", ["Él vino.", "Ñandú corrió.", "Ángel durmió."]),
         ("¿Qué?!! ¡¿Cómo?! Así...  ¿Sí?", ["¿Qué?!!", "¡¿Cómo?!", "Así...", "¿Sí?"]),
@@ -417,6 +420,28 @@ def test_get_nlp():
 
 def test_get_nlp_cached():
     assert get_nlp() is get_nlp()
+
+
+def test_get_nlp_starts_a_sentence_after_a_blank_line():
+    nlp = get_nlp()
+    assert nlp.pipe_names.index("ests_blank_lines") == nlp.pipe_names.index("parser") - 1
+    text = "Novedades\n\nImportación rápida. Menos errores\n\nEl gato duerme"
+    sents = [sent.text.strip() for sent in nlp(text).sents]
+    assert sents == list(sentenize(text))
+
+
+@pytest.mark.parametrize(
+    "disable",
+    [
+        lexical_stats.UNUSED_COMPONENTS,
+        style_stats.UNUSED_COMPONENTS,
+        stylometry.UNUSED_COMPONENTS,
+    ],
+)
+def test_get_nlp_without_the_parser_sets_no_sentences(disable):
+    """Alone, the component of the blank lines would make every paragraph a sentence"""
+    doc = get_nlp()("Novedades\n\nImportación rápida. Menos errores", disable=disable)
+    assert not doc.has_annotation("SENT_START")
 
 
 def test_get_nlp_not_installed():
