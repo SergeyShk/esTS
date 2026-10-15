@@ -201,8 +201,8 @@ def add_dash_rules(nlp: Language) -> None:
         a digit (-5) alone; a byte order mark glued to the start of a text is
         split off as well, so the marks after it are split as usual. The
         abbreviations of TOKENIZER_ABBREVIATIONS become single tokens in lower
-        case, capitalized and in upper case (sr., Sr., SR.), in the cases a
-        tokenizer already keeps one of them whole; get_tokenizer and get_nlp
+        case, capitalized and in upper case (sr., Sr., SR.), when the tokenizer
+        keeps one of their forms whole; get_tokenizer and get_nlp
         have the rules already.
         A rule the tokenizer has is not added twice; a tokenizer that is not
         the Tokenizer of spaCy, or whose rules are not regular expressions,
@@ -236,14 +236,20 @@ def add_dash_rules(nlp: Language) -> None:
     if infixes is not None:
         tokenizer.infix_finditer = infixes.finditer
     rules = tokenizer.rules
+    pairs: dict[str, dict[int, str]] = {}
+    for form, rule in rules.items():
+        if len(rule) == 1:
+            pairs.setdefault(form.lower(), rule[0])
     for abbreviation in TOKENIZER_ABBREVIATIONS:
-        forms = (abbreviation, abbreviation[:1].upper() + abbreviation[1:], abbreviation.upper())
-        pairs = [rules[form] for form in forms if len(rules.get(form, ())) == 1]
-        if not pairs:
+        if abbreviation not in pairs:
             continue
-        for form in forms:
+        for form in (
+            abbreviation,
+            abbreviation[:1].upper() + abbreviation[1:],
+            abbreviation.upper(),
+        ):
             if form not in rules:
-                tokenizer.add_special_case(form, [{**pairs[0][0], ORTH: form}])
+                tokenizer.add_special_case(form, [{**pairs[abbreviation], ORTH: form}])
 
 
 def _extend_rules(method: object, rules: list[str]) -> re.Pattern[str] | None:

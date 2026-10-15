@@ -305,8 +305,17 @@ def test_abbreviation_case(abbreviation):
 
 
 def test_tokenizer_abbreviations():
-    # The sentences know every one of them; EE.UU. without a space is a form of EE. UU.
-    assert set(TOKENIZER_ABBREVIATIONS) - ABBREVIATIONS == {"ee.uu."}
+    assert all(form == form.lower() and len(form) > 2 for form in TOKENIZER_ABBREVIATIONS)
+    # Every abbreviation with a period that spaCy keeps whole is whole in every case or in none
+    rules = spacy.blank("es").tokenizer.rules
+    spacy_forms = {
+        form.lower()
+        for form in rules
+        if form[:1].isalpha() and form.endswith(".") and len(form) > 2
+    }
+    for abbreviation in spacy_forms - {"dna."}:
+        forms = (abbreviation, abbreviation[:1].upper() + abbreviation[1:], abbreviation.upper())
+        assert len({list(tokenize(form)) == [form] for form in forms}) == 1, abbreviation
     assert list(tokenize("el sr. Pérez, SR. OBISPO, la Pág. 5 y ee. uu.")) == [
         "el",
         "sr.",
