@@ -16,7 +16,7 @@ Las estadísticas se cuentan sobre los sonidos de la transcripción de las palab
 | Obstruyentes sonoras | b (`b`, `v`), d, g, ʝ (`y`, `ll`) |
 | Obstruyentes sordas | p, t, k (`c`, `qu`, `k`), f, θ (`c`, `z`), s, x (`j`, `g`), tʃ (`ch`) |
 
-Las sílabas son las de [`syllabify`](../syllables.md), por las reglas ortográficas, y un hiato son dos vocales en dos sílabas vecinas de una palabra (`po-e-ta`, `dí-a`, `bú-ho`).
+Las sílabas son las de [`syllabify`](../syllables.md), por las reglas ortográficas, y un hiato son dos vocales en dos sílabas vecinas de una palabra (`po-e-ta`, `dí-a`, `bú-ho`). Un texto sin sonidos (números) tiene todas las proporciones y razones sin definir - `nan`, y un texto sin grupos consonánticos la proporción de los pesados.
 
 !!! note "Nota"
     Las estadísticas se calculan al crear el objeto `PhonStats`. Las estadísticas y las funciones que las calculan se describen en la [sección](phon_stats_funcs.md) correspondiente.

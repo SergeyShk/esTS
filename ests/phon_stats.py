@@ -74,7 +74,9 @@ class PhonStats:
         (transcribe), not the letters, in the standard of Spain with yeísmo and
         distinción: vowels - a, e, i, o, u; sonorants - m, n, ɲ, l, r; voiced
         obstruents - b, d, g, ʝ; voiceless obstruents - p, t, k, f, θ, s, x,
-        tʃ. The syllables are the ones of syllabify
+        tʃ. The syllables are the ones of syllabify. A text without sounds
+        (numbers) has every share and ratio undefined (nan), a text without
+        consonant clusters the share of the heavy ones
 
     Example:
         >>> from ests import PhonStats
@@ -183,16 +185,16 @@ class PhonStats:
             patterns[_cv_pattern(syllable)] += count
         self.c_syllable_patterns = dict(sorted(patterns.items()))
 
-        self.p_vowels = safe_divide(self.n_vowels, n_sounds)
-        self.p_sonorants = safe_divide(self.n_sonorants, n_sounds)
-        self.p_voiced = safe_divide(self.n_voiced, n_sounds)
-        self.p_voiceless = safe_divide(self.n_voiceless, n_sounds)
+        self.p_vowels = safe_divide(self.n_vowels, n_sounds, nan)
+        self.p_sonorants = safe_divide(self.n_sonorants, n_sounds, nan)
+        self.p_voiced = safe_divide(self.n_voiced, n_sounds, nan)
+        self.p_voiceless = safe_divide(self.n_voiceless, n_sounds, nan)
         self.consonant_vowel_ratio = safe_divide(self.n_consonants, self.n_vowels, nan)
         n_clusters = sum(self.c_clusters.values())
         self.p_heavy_clusters = safe_divide(
-            sum(count for size, count in self.c_clusters.items() if size >= 3), n_clusters
+            sum(count for size, count in self.c_clusters.items() if size >= 3), n_clusters, nan
         )
-        self.p_hiatus = _hiatus(counts) / len(words)
+        self.p_hiatus = _hiatus(counts) / len(words) if n_sounds else nan
         self.cv_entropy = _cv_entropy(counts)
         self.hardness = safe_divide(self.n_voiceless, self.n_vowels + self.n_sonorants, nan)
         self.alliteration = calc_repetition_index(self.sounds, window_len, CONSONANT_SOUNDS)
