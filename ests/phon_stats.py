@@ -76,7 +76,7 @@ class PhonStats:
         obstruents - b, d, g, ʝ; voiceless obstruents - p, t, k, f, θ, s, x,
         tʃ. The syllables are the ones of syllabify. A text without sounds
         (numbers) has every share and ratio undefined (nan), a text without
-        consonant clusters the share of the heavy ones
+        consonants the share of the heavy clusters
 
     Example:
         >>> from ests import PhonStats
