@@ -327,7 +327,7 @@ def _load_nlp(model: str) -> Language:
         ) from error
     add_dash_rules(nlp)
     setters = [name for name in nlp.pipe_names if name in SENTENCE_SETTERS]
-    if setters and "ests_blank_lines" not in nlp.pipe_names:
+    if setters and "ests_blank_lines" not in nlp.component_names:
         nlp.add_pipe("ests_blank_lines", before=setters[0])
     return nlp
 

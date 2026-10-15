@@ -455,7 +455,14 @@ def test_describe(preset, expected):
     for stat, reading in expected.items():
         assert rs.describe(stat) == reading
     assert rs.describe("flesch_reading_easy") == rs.describe_level()
-    assert rs.describe("flesch_kincaid_grade") is None
+    for stat in (
+        "flesch_kincaid_grade",
+        "coleman_liau_index",
+        "automated_readability_index",
+        "smog_index",
+        "gunning_fog_index",
+    ):
+        assert rs.describe(stat) is None
 
 
 def test_describe_rix_by_the_school_stages():

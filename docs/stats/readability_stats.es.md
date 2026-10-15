@@ -187,7 +187,7 @@ Parámetros:
 | :-------: | :--: | :---------: | :---------: |
 | `stat` | str | `-` | Nombre de la métrica |
 
-En esTS las fórmulas de grado se leen como etapas del sistema educativo español, y también RIX a través de los grados de Anderson; la fórmula de Gutiérrez de Polini y el tiempo de lectura no tienen escala.
+En esTS las fórmulas de grado se leen como etapas del sistema educativo español, y también RIX a través de los grados de Anderson; la fórmula de Gutiérrez de Polini, el tiempo de lectura y las fórmulas del núcleo con sus coeficientes ingleses (`flesch_kincaid_grade`, `coleman_liau_index`, `automated_readability_index`, `smog_index`, `gunning_fog_index`) no tienen escala.
 
 !!! example "Ejemplo"
 

@@ -167,7 +167,7 @@ The grade formulas are `consensus_grade`, `crawford_grade` and `sol_grade`.
 
 --8<-- "stats/readability_stats.md:ReadabilityStats-describe"
 
-In esTS the grade formulas are read as stages of the Spanish school system, and so is RIX through the grades of Anderson; the formula of Gutiérrez de Polini and the reading time have no scale.
+In esTS the grade formulas are read as stages of the Spanish school system, and so is RIX through the grades of Anderson; the formula of Gutiérrez de Polini, the reading time and the formulas of the core with their English coefficients (`flesch_kincaid_grade`, `coleman_liau_index`, `automated_readability_index`, `smog_index`, `gunning_fog_index`) have no scale.
 
 !!! example "Example"
 
