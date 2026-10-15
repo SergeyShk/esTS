@@ -1,10 +1,12 @@
 import pytest
 import spacy
 from anyts.utils import has_words, is_punctuation, iter_doc_tokens, iter_doc_words
+from spacy.attrs import NORM, ORTH
 from spacy.tokens import Doc
 from spacy.util import compile_infix_regex
 
 from ests import BasicStats, CohesionStats
+from ests.constants import ABBREVIATIONS, TOKENIZER_ABBREVIATIONS
 from ests.exceptions import DatasetNotFoundError
 from ests.utils import (
     add_dash_rules,
@@ -291,6 +293,41 @@ def test_tokenize():
 )
 def test_tokenize_dialogue_dashes(text, expected):
     assert list(tokenize(text)) == expected
+
+
+@pytest.mark.parametrize(
+    "abbreviation", sorted(word for word in ABBREVIATIONS if len(word) > 2 and " " not in word)
+)
+def test_abbreviation_case(abbreviation):
+    """An abbreviation is one token in lower case as capitalized, or in neither"""
+    capital = abbreviation[:1].upper() + abbreviation[1:]
+    whole = [list(tokenize(form)) == [form] for form in (abbreviation, capital)]
+    assert whole[0] == whole[1]
+
+
+def test_tokenizer_abbreviations():
+    assert all(len(form) > 2 for form in TOKENIZER_ABBREVIATIONS)
+    # The sentences know every one of them; EE.UU. without a space is a form of EE. UU.
+    assert {form.lower() for form in TOKENIZER_ABBREVIATIONS} - ABBREVIATIONS == {"ee.uu."}
+    assert list(tokenize("el sr. Pérez y la Pág. 5 de EE. UU. y ee. uu.")) == [
+        "el",
+        "sr.",
+        "Pérez",
+        "y",
+        "la",
+        "Pág.",
+        "5",
+        "de",
+        "EE. UU.",
+        "y",
+        "ee. uu.",
+    ]
+    # The form of the other case lends its attributes, and a rule of spaCy stays as it is
+    rules = get_tokenizer().rules
+    assert rules["ud."] == [{ORTH: "ud.", NORM: "usted"}]
+    assert rules["Ud."] == [{ORTH: "Ud.", NORM: "usted"}]
+    # One-letter abbreviations and interjections are left alone
+    assert list(tokenize("--Ej... a.")) == ["--", "Ej", "...", "a."]
 
 
 def test_add_dash_rules():

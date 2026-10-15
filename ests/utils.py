@@ -6,6 +6,7 @@ import simplemma
 import spacy
 from anyts.extractors import BLANK_LINE
 from anyts.utils import check_words, count_words_by_spans as count_words_by_spans, iter_doc_words
+from spacy.attrs import ORTH
 from spacy.language import Language
 from spacy.tokenizer import Tokenizer
 
@@ -14,6 +15,7 @@ from .constants import (
     DASHES,
     SENTENCE_OPENERS,
     SPACY_MODEL,
+    TOKENIZER_ABBREVIATIONS,
     TOKENIZER_INFIXES,
     TOKENIZER_PREFIXES,
     TOKENIZER_SUFFIXES,
@@ -197,8 +199,10 @@ def add_dash_rules(nlp: Language) -> None:
         split the dashes glued to the words off (--No, -dijo, reírse—me,
         dijo:—¡Mis) and leave a hyphen between letters (franco-alemán) or before
         a digit (-5) alone; a byte order mark glued to the start of a text is
-        split off as well, so the marks after it are split as usual;
-        get_tokenizer and get_nlp have them already.
+        split off as well, so the marks after it are split as usual. The
+        abbreviations of TOKENIZER_ABBREVIATIONS become single tokens in the
+        case the tokenizer of spaCy splits (sr., Pág.), as in the other one;
+        get_tokenizer and get_nlp have the rules already.
         A rule the tokenizer has is not added twice; a tokenizer that is not
         the Tokenizer of spaCy, or whose rules are not regular expressions,
         is left as it is
@@ -230,6 +234,22 @@ def add_dash_rules(nlp: Language) -> None:
         tokenizer.suffix_search = suffixes.search
     if infixes is not None:
         tokenizer.infix_finditer = infixes.finditer
+    rules = tokenizer.rules
+    for form in TOKENIZER_ABBREVIATIONS:
+        if form in rules:
+            continue
+        pairs = [rules[other] for other in _case_forms(form) if len(rules.get(other, ())) == 1]
+        attrs: dict[int, str] = pairs[0][0] if pairs else {}
+        tokenizer.add_special_case(form, [{**attrs, ORTH: form}])
+
+
+def _case_forms(form: str) -> tuple[str, ...]:
+    """The forms of an abbreviation in other cases: lower, capitalized and upper"""
+    return tuple(
+        other
+        for other in (form.lower(), form[:1].upper() + form[1:], form.upper())
+        if other != form
+    )
 
 
 def _extend_rules(method: object, rules: list[str]) -> re.Pattern[str] | None:
