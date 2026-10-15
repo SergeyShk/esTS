@@ -43,6 +43,7 @@ from ests.style_stats import (
     calc_water,
     calc_zipf_naturalness,
     expand_phrases,
+    find_parentheticals,
     is_stopword,
 )
 from ests.syllables import count_syllables, stress_type, syllabify
@@ -104,6 +105,7 @@ WORD_LISTS = {
     "expand_phrases": lambda: expand_phrases(NOT_STRINGS, []),
     "calc_phrase_density(phrases)": lambda: calc_phrase_density(WORDS, "sin embargo"),
     "calc_parentheticals": lambda: calc_parentheticals(NOT_STRINGS),
+    "find_parentheticals": lambda: find_parentheticals(NOT_STRINGS),
     "calc_consonant_clusters": lambda: calc_consonant_clusters(NOT_STRINGS),
     "calc_hiatus": lambda: calc_hiatus(NOT_STRINGS),
     "calc_cv_entropy": lambda: calc_cv_entropy(NOT_STRINGS),

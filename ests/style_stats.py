@@ -109,8 +109,8 @@ class StyleStats:
         SourceTypeError: If the source is neither a string nor a Doc, or the
             stopwords or the clichés are not a list or a set of strings, or the extractor
             or the pipeline is of another type
-        SourceError: If the source has no words; when the verbal nouns are read,
-            if the source lacks the parts of speech or the lemmas or a sentence
+        SourceError: If the source has no words; when the verbal nouns or the markers
+            are read, if the source lacks the parts of speech or the lemmas or a sentence
             of a string is longer than the max_length of the pipeline
         ParameterError: If the number of the most frequent words is not an integer or is
             below one
@@ -372,7 +372,7 @@ def noun_lemmas(doc: Doc) -> list[str]:
 
 
 def _doc_nouns(doc: Doc) -> list[tuple[str, str]]:
-    """The tokens of a Doc tagged NOUN in lower case with their lemmas; the checks of noun_lemmas"""
+    """The tokens of a Doc tagged NOUN, in lower case, with their lemmas"""
     if not doc.has_annotation("POS"):
         raise SourceError(
             "The data source has no annotation of the parts of speech: "
