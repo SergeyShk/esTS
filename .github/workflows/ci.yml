@@ -27,8 +27,8 @@ jobs:
         run: uv sync --locked --no-default-groups --group lint
       - name: Ruff
         run: |
-          uv run --no-sync ruff check ests tests demo examples
-          uv run --no-sync ruff format ests tests demo examples --check
+          uv run --no-sync ruff check ests tests demo examples scripts
+          uv run --no-sync ruff format ests tests demo examples scripts --check
       - name: Ruff format of the Python in Markdown
         run: git ls-files -z '*.md' | xargs -0 uv run --no-sync ruff format --check
       - name: Mypy
