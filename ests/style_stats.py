@@ -109,10 +109,9 @@ class StyleStats:
         print_stats: Printing the computed style metrics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc, or the
-            stopwords, the nausea stopwords or the clichés are not a list or a set of
-            strings, or the extractor
-            or the pipeline is of another type
+        SourceTypeError: If the source is neither a string nor a Doc, the stopwords,
+            the nausea stopwords or the clichés are not a list or a set of strings, or
+            the extractor or the pipeline is of another type
         SourceError: If the source has no words; when the verbal nouns or the markers
             are read, if the source lacks the parts of speech or the lemmas or a sentence
             of a string is longer than the max_length of the pipeline
@@ -480,9 +479,8 @@ def calc_academic_nausea(
     Description:
         The summed frequency of the top_n most frequent significant words
         (find_nausea_words) per 100 words of the text (Advego); the exact
-        formula of Advego is not published. With the stopwords the top ten of
-        almost any text is de, la, que, el, and its nausea is above the norm
-        of Advego, 5-15%
+        formula of Advego is not published. The norm of Advego is 5-15%, for
+        texts of several hundred words
 
     References:
         https://advego.com/text/seo/
@@ -497,7 +495,8 @@ def calc_academic_nausea(
         float: Value of the nausea in percent
 
     Raises:
-        SourceTypeError: If the words or the stopwords are not a list of strings
+        SourceTypeError: If the words are not a list of strings or the stopwords are not
+            a list or a set of strings
         ParameterError: If top_n is not an integer or is below one
     """
     top_freqs = sum(find_nausea_words(text, top_n, stopwords).values())
@@ -515,7 +514,8 @@ def find_nausea_words(
     Description:
         The top_n most frequent words without the stopwords - those of the
         list passed, in any case, or of is_stopword - with their occurrences,
-        the most frequent first
+        the most frequent first and words of equal frequency in the order of
+        the text
 
     Arguments:
         text (list[str]): List of words
@@ -526,7 +526,8 @@ def find_nausea_words(
         dict[str, int]: Occurrences of every word
 
     Raises:
-        SourceTypeError: If the words or the stopwords are not a list of strings
+        SourceTypeError: If the words are not a list of strings or the stopwords are not
+            a list or a set of strings
         ParameterError: If top_n is not an integer or is below one
 
     Example:

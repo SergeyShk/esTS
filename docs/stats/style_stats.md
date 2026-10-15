@@ -79,7 +79,7 @@ Parameters:
 
 ### nausea_words
 
-Returns the most frequent significant words the academic nausea is counted from: the `top_n` most frequent words without the stopwords of `nausea_stopwords`, or of [`is_stopword`](style_stats_funcs.md#is_stopword) when they are not given, with their occurrences, the most frequent first.
+Returns the most frequent significant words the academic nausea is counted from: the `top_n` most frequent words without the stopwords of `nausea_stopwords`, or of [`is_stopword`](style_stats_funcs.md#is_stopword) when they are not given, with their occurrences, the most frequent first and words of equal frequency in the order of the text.
 
 !!! example "Example"
 
@@ -167,4 +167,4 @@ The same notice written in the administrative style and in plain language.
      'cliches': 0.0}
     ```
 
-The notice of 56 words has three compound prepositions (`en el marco del`, `a efectos de`, `en virtud de`), five clichés (`dar cumplimiento`, `se procedió a`, `se llevará a cabo`, `a la mayor brevedad`, `en tiempo y forma`) and one parenthetical expression, and almost half of its nouns are derived from a verb; the plain version has no compound prepositions, parenthetical expressions or clichés, and a quarter of its nouns are derived from a verb. The anaphoric `de la misma`, which the guides also advise against, is not counted.
+The notice of 56 words has three compound prepositions (`en el marco del`, `a efectos de`, `en virtud de`), five clichés (`dar cumplimiento`, `se procedió a`, `se llevará a cabo`, `a la mayor brevedad`, `en tiempo y forma`) and one parenthetical expression, and almost half of its nouns are derived from a verb; the plain version has no compound prepositions, parenthetical expressions or clichés, and a quarter of its nouns are derived from a verb. The anaphoric `de la misma`, which the guides also advise against, is not counted. The academic nausea says nothing of the style here: neither notice repeats a significant word, so it is ten words over the length of the text, 10/56 and 10/23.

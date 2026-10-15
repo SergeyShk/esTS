@@ -79,7 +79,7 @@ Parámetros:
 
 ### nausea_words
 
-Devuelve las palabras significativas más frecuentes con las que se cuenta la náusea académica: las `top_n` palabras más frecuentes sin las palabras vacías de `nausea_stopwords`, o de [`is_stopword`](style_stats_funcs.md#is_stopword) si no se dan, con sus apariciones, de la más frecuente a la menos.
+Devuelve las palabras significativas más frecuentes con las que se cuenta la náusea académica: las `top_n` palabras más frecuentes sin las palabras vacías de `nausea_stopwords`, o de [`is_stopword`](style_stats_funcs.md#is_stopword) si no se dan, con sus apariciones, de la más frecuente a la menos y las de igual frecuencia en el orden del texto.
 
 !!! example "Ejemplo"
 
@@ -167,4 +167,4 @@ El mismo aviso escrito en estilo administrativo y en lenguaje claro.
      'cliches': 0.0}
     ```
 
-El aviso de 56 palabras tiene tres locuciones prepositivas (`en el marco del`, `a efectos de`, `en virtud de`), cinco clichés (`dar cumplimiento`, `se procedió a`, `se llevará a cabo`, `a la mayor brevedad`, `en tiempo y forma`) y una expresión parentética, y casi la mitad de sus sustantivos son deverbales; la versión clara no tiene locuciones prepositivas, expresiones parentéticas ni clichés, y una cuarta parte de sus sustantivos son deverbales. El anafórico `de la misma`, que las guías también desaconsejan, no se cuenta.
+El aviso de 56 palabras tiene tres locuciones prepositivas (`en el marco del`, `a efectos de`, `en virtud de`), cinco clichés (`dar cumplimiento`, `se procedió a`, `se llevará a cabo`, `a la mayor brevedad`, `en tiempo y forma`) y una expresión parentética, y casi la mitad de sus sustantivos son deverbales; la versión clara no tiene locuciones prepositivas, expresiones parentéticas ni clichés, y una cuarta parte de sus sustantivos son deverbales. El anafórico `de la misma`, que las guías también desaconsejan, no se cuenta. La náusea académica no dice nada del estilo aquí: ninguno de los avisos repite una palabra significativa, así que son diez palabras sobre la longitud del texto, 10/56 y 10/23.
