@@ -2550,7 +2550,7 @@
 
 <h1 id="keywords">Keywords<a class="headerlink" href="#keywords" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
-<p><strong>ests.corpus.keyness()</strong>, <strong>ests.corpus.Keyword</strong>, <strong>ests.corpus.FrequencyReference</strong></p>
+<p><strong>ests.corpus.keyness()</strong>, <strong>ests.corpus.check_keyness_params()</strong>, <strong>ests.corpus.Keyword</strong>, <strong>ests.corpus.FrequencyReference</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
 <p>Keyword extraction (keyness) for a target corpus against a reference one: the words that occur significantly more often in the target corpus than in the reference.</p>
@@ -2664,6 +2664,8 @@
 </tbody>
 </table>
 <p><code>reference</code> may also be <code>FreqDict</code>, against which <code>target</code> is word forms.</p>
+<p><code>check_keyness_params(measure="log_likelihood", min_freq=1, top_n=None, target=None)</code> checks the parameters of <code>keyness</code> and raises <code>ParameterError</code> unless the measure is one of <code>KEYNESS_MEASURES</code>, the minimum frequency is an integer and the number of keywords is <code>None</code> or an integer of at least one; with <code>target</code> it also raises <code>SourceTypeError</code> unless the target corpus is a list of strings or a mapping of strings to whole frequencies, and <code>SourceError</code> for a negative, nan or infinite frequency. A library that builds the reference from a frequency dictionary calls it first, so that a wrong parameter or target fails before the dictionary is read.</p>
+<p>In esTS <code>keyness</code> calls it itself before it reads <code>FreqDict</code>.</p>
 <h2 id="reference-by-frequencies">Reference by frequencies<a class="headerlink" href="#reference-by-frequencies" title="Permanent link">&para;</a></h2>
 <p><code>FrequencyReference(counts, size, missing=0.0, key=None, keep=None)</code> describes a reference corpus by its frequencies alone, such as a frequency dictionary built from a corpus too large to pass as words:</p>
 <table>
