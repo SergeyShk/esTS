@@ -1109,6 +1109,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#level_scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        level_scale
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#describe_grade" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2648,6 +2659,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#level_scale" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        level_scale
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#describe_grade" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3066,6 +3088,14 @@
 <span class="c1"># 'difícil'</span>
 <span class="n">rs</span><span class="o">.</span><span class="n">describe_level</span><span class="p">(</span><span class="s2">"lix"</span><span class="p">)</span>
 <span class="c1"># 'very hard texts, laws and bureaucratic language'</span>
+</code></pre></div>
+</div>
+<h3 id="level_scale">level_scale<a class="headerlink" href="#level_scale" title="Permanent link">&para;</a></h3>
+<p>Devuelve la escala de interpretación de una métrica como límites inferiores y sus niveles, la que leen <code>describe_level</code> y <code>describe</code>: para la facilidad de lectura la escala del preajuste (INFLESZ para <code>general</code>, Fernández Huerta para <code>classic</code>), <code>MU_SCALE</code> para la Legibilidad µ, los tipos de texto de Björnsson para LIX, y <code>None</code> para una métrica sin escala de niveles, RIX incluido.</p>
+<div class="admonition example">
+<p class="admonition-title">Ejemplo</p>
+<div class="highlight"><pre><span></span><code><span class="n">rs</span><span class="o">.</span><span class="n">level_scale</span><span class="p">(</span><span class="s2">"flesch_reading_easy"</span><span class="p">)</span>
+<span class="c1"># ((80, 'muy fácil'), (65, 'bastante fácil'), (55, 'normal'), (40, 'algo difícil'), (0, 'muy difícil'))</span>
 </code></pre></div>
 </div>
 <h3 id="describe_grade">describe_grade<a class="headerlink" href="#describe_grade" title="Permanent link">&para;</a></h3>
