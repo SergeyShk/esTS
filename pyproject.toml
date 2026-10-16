@@ -1,6 +1,6 @@
 [project]
 name = "pyests"
-version = "0.7.0.dev8"
+version = "0.7.0.dev9"
 description = "Spanish Texts Statistics"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -39,14 +39,14 @@ classifiers = [
     "Natural Language :: Spanish",
 ]
 dependencies = [
-    "anyts>=0.2.12,<0.3",
+    "anyts>=0.2.13,<0.3",
     "graphviz>=0.20.3",
     "matplotlib>=3.8",
     "numpy>=1.26",
     "pandas>=2.1",
     "scipy>=1.11",
     "simplemma>=2.0,<3",
-    "spacy>=3.8",
+    "spacy>=3.8.15",
 ]
 
 [project.urls]
@@ -97,7 +97,7 @@ test = [
 ]
 lint = ["mypy>=1.14", "pre-commit>=4.0", "ruff>=0.9"]
 docs = [
-    "mkdocs>=1.6",
+    "mkdocs>=1.6,<2",
     "mkdocs-material>=9.5",
     "mkdocs-static-i18n>=1.2",
     "pymdown-extensions>=10.0",
@@ -189,6 +189,6 @@ source = ["ests"]
 branch = true
 
 [tool.coverage.report]
-fail_under = 90
+fail_under = 100
 show_missing = true
 exclude_also = ["if TYPE_CHECKING:", "raise NotImplementedError"]

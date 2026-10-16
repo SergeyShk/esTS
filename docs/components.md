@@ -21,7 +21,7 @@ doc._.basic.n_words
 
 --8<-- "components.md:StatsComponent-serialization"
 
-Adding a component extends the tokenizer of its pipeline with the rules for the dashes of a dialogue glued to the words ([`add_dash_rules`](extractors/words.md)), as in the string API: `sí--dijo` is two words and a dash. A tokenizer that is not the `Tokenizer` of spaCy is left as it is.
+Adding a component extends the tokenizer of its pipeline with the rules for the dashes of a dialogue glued to the words and for the abbreviations in every case ([`add_dash_rules`](extractors/words.md)), as in the string API: `sí--dijo` is two words and a dash, `SR.` one word. A tokenizer that is not the `Tokenizer` of spaCy is left as it is.
 
 ## What each component needs { #requirements }
 
@@ -474,6 +474,7 @@ The ten components can share one pipeline.
     import spacy
 
     nlp = spacy.load("es_core_news_sm")
+    nlp.add_pipe("ests_blank_lines", before="parser")
     factories = (
         "basic",
         "readability",

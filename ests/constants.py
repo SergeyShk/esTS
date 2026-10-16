@@ -9,7 +9,8 @@ DASHES = "—–―-"
 
 # Tokenizer rules that split off the dashes of a dialogue glued to words (--No, -dijo,
 # sí--dijo, dijo:—¡Mis); the underscores of the Project Gutenberg italics count as quotes.
-# A single hyphen between letters (franco-alemán) or before a digit (-5) stays
+# A single hyphen between letters (franco-alemán) or before a digit (-5) stays, and a dotted
+# acronym keeps its period (S.A.—dijo)
 _LETTER = r"[^\W\d_]"
 _OPENING = r"[¿¡«“\"'(\[_]"
 _CLOSING = r"[.,;:!?…»”\"')\]_]"
@@ -20,19 +21,22 @@ TOKENIZER_INFIXES = (
     rf"(?<={_LETTER})(?:-{{2,}}|[—–―])(?={_LETTER}|{_OPENING})",
     rf"(?<={_LETTER})-(?={_OPENING})",
     rf"(?<={_CLOSING}){_DASH}(?={_LETTER}|{_OPENING})",
-    rf"(?<={_LETTER}){_CLOSING}+(?={_DASH})",
+    rf"(?<={_LETTER})(?!(?<=\.{_LETTER})\.){_CLOSING}+(?={_DASH})",
+    rf"(?<=\.{_LETTER}\.){_CLOSING}+(?={_DASH})",
     rf"(?<=[-—–―]){_OPENING}",
 )
-# Abbreviations the tokenizer of spaCy keeps whole in some cases only (Sr., pág., a.C.),
+# Abbreviations the tokenizer of spaCy keeps whole in some cases only (Sr., pág., A.M.),
 # made whole in lower case, capitalized and in upper case alike; the one-letter ones are
 # whole in every case already, and dna. stays out, since DNA. is an English acronym
 TOKENIZER_ABBREVIATIONS = (
     "a.c.",
     "a.j.c.",
+    "a.m.",
     "apdo.",
     "aprox.",
     "av.",
     "avda.",
+    "c.p.",
     "cía.",
     "d.c.",
     "d.j.c.",
@@ -54,6 +58,7 @@ TOKENIZER_ABBREVIATIONS = (
     "núm.",
     "p.d.",
     "p.ej.",
+    "p.m.",
     "prof.",
     "profa.",
     "pág.",
@@ -177,6 +182,8 @@ ABBREVIATIONS = frozenset(
         "c.",
         "dpto.",
         "depto.",
+        "apdo.",
+        "esq.",
         "izq.",
         "izqda.",
         "dcha.",
@@ -185,6 +192,7 @@ ABBREVIATIONS = frozenset(
         "a.",
         "a. m.",
         "p. m.",
+        "c. p.",
         "a. c.",
         "d. c.",
         "a. j. c.",

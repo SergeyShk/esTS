@@ -3,6 +3,7 @@ import importlib.metadata
 import re
 import shutil
 import subprocess
+import tomllib
 import zipfile
 from pathlib import Path
 from types import ModuleType
@@ -184,3 +185,17 @@ def test_wheel_contents(tmp_path):
     # The archives of the datasets are downloaded, not installed
     assert not any(name.startswith("ests/datasets/data/") for name in names)
     assert set(declared) == FACTORIES | CORE_COMPONENTS
+
+
+@pytest.mark.parametrize("page", ["installation.md", "installation.es.md"])
+def test_installation_bounds(page):
+    """The installation page states the lower bounds of anyTS and spaCy of the package"""
+    requirements = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    bounds = {
+        match[1]: match[2]
+        for requirement in requirements["project"]["dependencies"]
+        if (match := re.match(r"(anyts|spacy)>=([\d.]+)", requirement))
+    }
+    text = (ROOT / "docs" / page).read_text(encoding="utf-8")
+    assert f"`spaCy` {bounds['spacy']} " in text
+    assert f"(https://sergeyshk.github.io/anyTS/) {bounds['anyts']} " in text

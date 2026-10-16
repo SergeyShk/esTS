@@ -35,6 +35,7 @@ def test_kwic_by_case():
     assert [line.keyword for line in kwic("Vive en ee. uu. ahora", "EE. UU.")] == ["ee. uu."]
     assert [line.keyword for line in kwic("DEL ILMO. SR. OBISPO", "sr. obispo")] == ["SR. OBISPO"]
     assert [line.keyword for line in kwic("Ver PÁG. 5", "Pág. 5")] == ["PÁG. 5"]
+    assert [line.keyword for line in kwic("Abre a las 10 A.M. y cierra", "10 a.m.")] == ["10 A.M."]
 
 
 def test_kwic_by_lemma():

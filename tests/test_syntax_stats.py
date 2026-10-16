@@ -645,3 +645,26 @@ def test_empty_bases():
     assert isnan(ss.mean_gerund_clause_len)
     assert isnan(ss.p_agentless_passive)
     assert ss.max_de_chain_len == 0
+
+
+def test_subordinate_clause_up_a_long_chain_of_conjuncts():
+    """A chain of conjuncts longer than the limit of recursion is followed up to its head"""
+    n = 700
+    doc = Doc(
+        spacy.blank("es").vocab,
+        words=["va"] * n,
+        heads=[0, *range(n - 1)],
+        deps=["ROOT", "advcl", *["conj"] * (n - 2)],
+        pos=["VERB"] * n,
+    )
+    assert is_subordinate_clause_head(doc[-1])
+    assert not is_subordinate_clause_head(doc[0])
+    # A clause beside the root, not under it, is not subordinate
+    doc = Doc(
+        spacy.blank("es").vocab,
+        words=["va", "viene", "sale"],
+        heads=[0, 0, 1],
+        deps=["ROOT", "parataxis", "conj"],
+        pos=["VERB"] * 3,
+    )
+    assert not any(is_subordinate_clause_head(token) for token in doc)

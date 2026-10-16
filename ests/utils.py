@@ -22,7 +22,7 @@ from .constants import (
     VERBAL_NOUN_LEMMAS,
     VERBAL_NOUN_SUFFIXES,
 )
-from .exceptions import DatasetNotFoundError
+from .exceptions import DatasetNotFoundError, SourceError
 
 # End of a sentence: terminal marks, optionally closing quotes or brackets and a dash
 # that closes a line of dialogue (¡Traidores!--), before whitespace, the end of the text
@@ -40,6 +40,8 @@ SENTENCE_END = re.compile(
 NON_SPACE = re.compile(r"\S")
 NON_DASH = re.compile(rf"[^\s{DASHES}]")
 INITIAL = re.compile(r"[A-ZÁÉÍÓÚÜÑ]\.")
+# A period inside an abbreviation written without spaces (a.C., p.ej., EE.UU.)
+INNER_PERIOD = re.compile(r"\.(?=\w)")
 # Marker of a list (1. 2.1. b. IV.) that opens a sentence or a line, at the end of the window
 LIST_MARKER = re.compile(r"(?:^|\n)[ \t]*(?:\d+(?:\.\d+)*|[a-z]|[IVXLC]+)\.\Z")
 OPENING_CHARS = "(«“\"'["
@@ -103,10 +105,11 @@ def _ends_sentence(text: str, start: int, match: re.Match[str]) -> bool:
     if LIST_MARKER.search(window):
         return False
     tokens = [stripped for token in window.split() if (stripped := token.lstrip(OPENING_CHARS))]
-    last = tokens[-1]
+    last = tokens[-1].lower()
     return not (
-        INITIAL.fullmatch(last)
-        or last.lower() in ABBREVIATIONS
+        INITIAL.fullmatch(tokens[-1])
+        or last in ABBREVIATIONS
+        or INNER_PERIOD.sub(". ", last) in ABBREVIATIONS
         or " ".join(tokens[-2:]).lower() in ABBREVIATIONS
     )
 
@@ -124,9 +127,10 @@ def sentenize(text: str) -> Iterator[str]:
         a line of dialogue and stays with its sentence; a blank line ends one
         too. A dash before a lower-case word opens a remark of the narrator
         and keeps the sentence going. A single period after an abbreviation
-        (Sr., p. ej., EE. UU.), a capital initial or a list marker opening
-        a sentence or a line (1. 2.1. IV.) does not end a sentence, nor does
-        a single line break. Sentences are stripped of surrounding whitespace
+        (Sr., p. ej., EE. UU., also without spaces: p.ej.), a capital initial
+        or a list marker opening a sentence or a line (1. 2.1. IV.) does not
+        end a sentence, nor does a single line break. Sentences are stripped
+        of surrounding whitespace
 
     Arguments:
         text (str): Text string
@@ -241,15 +245,16 @@ def add_dash_rules(nlp: Language) -> None:
         if len(rule) == 1:
             pairs.setdefault(form.lower(), rule[0])
     for abbreviation in TOKENIZER_ABBREVIATIONS:
-        if abbreviation not in pairs:
+        forms = (abbreviation, abbreviation[:1].upper() + abbreviation[1:], abbreviation.upper())
+        # A form may be kept whole by a pattern of the tokenizer rather than by a rule (A.M.)
+        pair = pairs.get(abbreviation)
+        if pair is None and any(len(tokenizer(form)) == 1 for form in forms):
+            pair = {}
+        if pair is None:
             continue
-        for form in (
-            abbreviation,
-            abbreviation[:1].upper() + abbreviation[1:],
-            abbreviation.upper(),
-        ):
+        for form in forms:
             if form not in rules:
-                tokenizer.add_special_case(form, [{**pairs[abbreviation], ORTH: form}])
+                tokenizer.add_special_case(form, [{**pair, ORTH: form}])
 
 
 def _extend_rules(method: object, rules: list[str]) -> re.Pattern[str] | None:
@@ -259,7 +264,8 @@ def _extend_rules(method: object, rules: list[str]) -> re.Pattern[str] | None:
     Description:
         The expression is read from a bound method of the tokenizer
         (prefix_search, suffix_search, infix_finditer); no method gives the
-        rules alone, a method not bound to a regular expression gives None
+        rules alone, and a method not bound to a regular expression or one that
+        has every rule gives None, so the tokenizer is not reloaded
     """
     if method is None:
         return re.compile("|".join(rules))
@@ -267,7 +273,20 @@ def _extend_rules(method: object, rules: list[str]) -> re.Pattern[str] | None:
     if not isinstance(pattern, str):
         return None
     missing = [rule for rule in rules if rule not in pattern]
+    if not missing:
+        return None
     return re.compile("|".join([pattern, *missing]))
+
+
+def _check_encoding(text: str) -> None:
+    """A text the tokenizer of spaCy cannot read: a lone surrogate has no UTF-8 form"""
+    try:
+        text.encode("utf-8")
+    except UnicodeEncodeError as error:
+        raise SourceError(
+            f"The text has a character without a UTF-8 form at {error.start}: "
+            "read the file again with its encoding"
+        ) from None
 
 
 def tokenize(text: str) -> Iterator[str]:
@@ -287,6 +306,7 @@ def tokenize(text: str) -> Iterator[str]:
     Returns:
         iterator[str]: Iterator of tokens
     """
+    _check_encoding(text)
     return (
         word
         for token in get_tokenizer()(text)
@@ -333,6 +353,7 @@ def iter_text_words(text: str) -> Iterator[tuple[int, int, str]]:
         >>> list(iter_text_words("¡Hola, mundo!"))
         [(1, 5, 'Hola'), (7, 12, 'mundo')]
     """
+    _check_encoding(text)
     return iter_doc_words(get_tokenizer()(text))
 
 

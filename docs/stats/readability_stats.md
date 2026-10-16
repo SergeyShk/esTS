@@ -148,6 +148,17 @@ Parameters:
     # 'very hard texts, laws and bureaucratic language'
     ```
 
+### level_scale
+
+Returns the interpretation scale of a metric as lower bounds and their bands, the one `describe_level` and `describe` read: for the reading ease the scale of the preset (INFLESZ for `general`, Fernández Huerta for `classic`), `MU_SCALE` for Legibilidad µ, the text types of Björnsson for LIX, and `None` for a metric without a scale of bands, RIX included.
+
+!!! example "Example"
+
+    ``` python
+    rs.level_scale("flesch_reading_easy")
+    # ((80, 'muy fácil'), (65, 'bastante fácil'), (55, 'normal'), (40, 'algo difícil'), (0, 'muy difícil'))
+    ```
+
 ### describe_grade
 
 --8<-- "stats/readability_stats.md:ReadabilityStats-describe_grade"

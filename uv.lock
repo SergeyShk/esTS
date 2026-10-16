@@ -49,7 +49,7 @@ wheels = [
 
 [[package]]
 name = "anyts"
-version = "0.2.12"
+version = "0.2.13"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "graphviz" },
@@ -61,9 +61,9 @@ dependencies = [
     { name = "scipy", version = "1.18.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "spacy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b2/15/ca2dfa09039b3e60c3962c7ff7c8edbe853a911bffe3c96121d5e27b1e28/anyts-0.2.12.tar.gz", hash = "sha256:fe9e950e3b3ee7a72844e1ab8f2441417fab7069f87f9a9c5f1c18191f6bfb62", size = 104799, upload-time = "2026-10-15T01:45:38.011Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/64/8a/cc233c8c9581d8fd5375f5fb056b4e67b3344e53cb1adb764aeb0e73369c/anyts-0.2.13.tar.gz", hash = "sha256:e677d02c49844d48dc41cd82ce5a12369ab27b8e30608ffb597ce3bd788c0162", size = 105138, upload-time = "2026-10-15T17:53:38.522Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8a/b1/a5380e4e6a127daafc0004319d5af365a2f1d55bf73dadfbc3a7c7ee8c6e/anyts-0.2.12-py3-none-any.whl", hash = "sha256:2b7382b35ca6d11e7c7f076aa5adf5402600a3a4d616419bd1c3c89c1c549856", size = 121616, upload-time = "2026-10-15T01:45:36.839Z" },
+    { url = "https://files.pythonhosted.org/packages/d3/2c/edd094b9c78000f7b93b4ccb21d3f447aeeaf8396bdbdf36646b18fd64e7/anyts-0.2.13-py3-none-any.whl", hash = "sha256:d211c8c1c29b16c7cddf7254dc5a70870e2ed789a9fb1f1814d7ccf1aaca0304", size = 121987, upload-time = "2026-10-15T17:53:36.819Z" },
 ]
 
 [[package]]
@@ -3023,7 +3023,7 @@ wheels = [
 
 [[package]]
 name = "pyests"
-version = "0.7.0.dev8"
+version = "0.7.0.dev9"
 source = { editable = "." }
 dependencies = [
     { name = "anyts" },
@@ -3075,20 +3075,20 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "anyts", specifier = ">=0.2.12,<0.3" },
+    { name = "anyts", specifier = ">=0.2.13,<0.3" },
     { name = "graphviz", specifier = ">=0.20.3" },
     { name = "matplotlib", specifier = ">=3.8" },
     { name = "numpy", specifier = ">=1.26" },
     { name = "pandas", specifier = ">=2.1" },
     { name = "scipy", specifier = ">=1.11" },
     { name = "simplemma", specifier = ">=2.0,<3" },
-    { name = "spacy", specifier = ">=3.8" },
+    { name = "spacy", specifier = ">=3.8.15" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "es-core-news-sm", url = "https://github.com/explosion/spacy-models/releases/download/es_core_news_sm-3.8.0/es_core_news_sm-3.8.0-py3-none-any.whl" },
-    { name = "mkdocs", specifier = ">=1.6" },
+    { name = "mkdocs", specifier = ">=1.6,<2" },
     { name = "mkdocs-material", specifier = ">=9.5" },
     { name = "mkdocs-static-i18n", specifier = ">=1.2" },
     { name = "mypy", specifier = ">=1.14" },
@@ -3099,7 +3099,7 @@ dev = [
     { name = "ruff", specifier = ">=0.9" },
 ]
 docs = [
-    { name = "mkdocs", specifier = ">=1.6" },
+    { name = "mkdocs", specifier = ">=1.6,<2" },
     { name = "mkdocs-material", specifier = ">=9.5" },
     { name = "mkdocs-static-i18n", specifier = ">=1.2" },
     { name = "pymdown-extensions", specifier = ">=10.0" },

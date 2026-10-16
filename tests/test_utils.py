@@ -7,7 +7,7 @@ from spacy.util import compile_infix_regex
 
 from ests import BasicStats, CohesionStats
 from ests.constants import ABBREVIATIONS, TOKENIZER_ABBREVIATIONS
-from ests.exceptions import DatasetNotFoundError
+from ests.exceptions import DatasetNotFoundError, SourceError
 from ests.utils import (
     add_dash_rules,
     get_nlp,
@@ -283,6 +283,12 @@ def test_tokenize():
             ["Pharsalia", "--", "_", "quiere", "nivolas", "_", "—", "concluyó"],
         ),
         ("_e-mail_", ["_", "e-mail", "_"]),
+        # A dotted acronym keeps its period, the marks after it are split off
+        ("la S.A.—dijo", ["la", "S.A.", "—", "dijo"]),
+        ("el año 50 a.C.,—dijo", ["el", "año", "50", "a.C.", ",", "—", "dijo"]),
+        ("»P.D.--El", ["»", "P.D.", "--", "El"]),
+        ("la S.A.»—dijo", ["la", "S.A.", "»", "—", "dijo"]),
+        ("¿Qué...a?—preguntó", ["¿", "Qué", "...", "a", "?", "—", "preguntó"]),
         # A hyphen between letters or before a digit is left alone
         ("franco-alemán e-mail", ["franco-alemán", "e-mail"]),
         ("-5 grados, 1990-1995, 1990–1995", ["-5", "grados", ",", "1990-1995", ",", "1990–1995"]),
@@ -302,6 +308,30 @@ def test_abbreviation_case(abbreviation):
     """An abbreviation is one token in lower case, capitalized and in upper case, or in none"""
     forms = (abbreviation, abbreviation[:1].upper() + abbreviation[1:], abbreviation.upper())
     assert len({list(tokenize(form)) == [form] for form in forms}) == 1
+
+
+# Abbreviations the tokenizer keeps whole that may end a sentence, so a sentence of a string
+# ends after them before an upper-case word
+SENTENCE_FINAL_ABBREVIATIONS = {
+    "etc.",
+    "gob.",
+    "j.c.",
+    "m.n.",
+    "p.d.",
+    "q.e.p.d.",
+    "s.r.l.",
+    "s.s.s.",
+}
+
+
+@pytest.mark.parametrize("abbreviation", TOKENIZER_ABBREVIATIONS)
+def test_tokenizer_abbreviations_in_the_sentences(abbreviation):
+    """A sentence of a string goes on after an abbreviation of the tokenizer, as in a Doc"""
+    sents = list(sentenize(f"Lo dijo {abbreviation} Pérez ayer."))
+    if abbreviation in SENTENCE_FINAL_ABBREVIATIONS:
+        assert len(sents) == 2
+    else:
+        assert sents == [f"Lo dijo {abbreviation} Pérez ayer."]
 
 
 def test_tokenizer_abbreviations():
@@ -371,7 +401,10 @@ def test_add_dash_rules():
         extended.tokenizer.suffix_search.__self__.pattern,
         extended.tokenizer.infix_finditer.__self__.pattern,
     ]
+    searches = (extended.tokenizer.prefix_search, extended.tokenizer.suffix_search)
     add_dash_rules(extended)
+    # A tokenizer that has every rule is not reloaded
+    assert (extended.tokenizer.prefix_search, extended.tokenizer.suffix_search) == searches
     assert extended.tokenizer.prefix_search.__self__.pattern == rules[0]
     assert extended.tokenizer.suffix_search.__self__.pattern == rules[1]
     assert extended.tokenizer.infix_finditer.__self__.pattern == rules[2]
@@ -480,6 +513,17 @@ def test_get_nlp_cached():
     assert get_nlp() is get_nlp()
 
 
+def test_get_nlp_of_a_saved_pipeline(tmp_path):
+    """A pipeline saved with the component of the blank lines gets it once"""
+    get_nlp().to_disk(tmp_path)
+    nlp = get_nlp(str(tmp_path))
+    assert nlp.pipe_names.count("ests_blank_lines") == 1
+    # A pipeline without a component that sets the sentences gets none
+    blank = spacy.blank("es")
+    blank.to_disk(tmp_path / "blank")
+    assert "ests_blank_lines" not in get_nlp(str(tmp_path / "blank")).pipe_names
+
+
 def test_get_nlp_starts_a_sentence_after_a_blank_line():
     nlp = get_nlp()
     assert nlp.pipe_names.index("ests_blank_lines") == nlp.pipe_names.index("parser") - 1
@@ -530,3 +574,14 @@ def test_has_words_of_a_doc(text):
 def test_has_words_of_a_span():
     doc = spacy.blank("es")("El gato duerme. ¿?")
     assert [has_words(sent) for sent in (doc[0:3], doc[4:])] == [True, False]
+
+
+@pytest.mark.parametrize(
+    "parse",
+    [lambda text: list(tokenize(text)), iter_text_words, BasicStats, CohesionStats],
+    ids=["tokenize", "iter_text_words", "BasicStats", "CohesionStats"],
+)
+def test_lone_surrogate(parse):
+    """A text with a character without a UTF-8 form raises SourceError, not UnicodeEncodeError"""
+    with pytest.raises(SourceError, match="without a UTF-8 form at 5"):
+        parse("Hola \ud800 mundo")

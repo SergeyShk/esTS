@@ -154,6 +154,17 @@ Parámetros:
     # 'very hard texts, laws and bureaucratic language'
     ```
 
+### level_scale
+
+Devuelve la escala de interpretación de una métrica como límites inferiores y sus niveles, la que leen `describe_level` y `describe`: para la facilidad de lectura la escala del preajuste (INFLESZ para `general`, Fernández Huerta para `classic`), `MU_SCALE` para la Legibilidad µ, los tipos de texto de Björnsson para LIX, y `None` para una métrica sin escala de niveles, RIX incluido.
+
+!!! example "Ejemplo"
+
+    ``` python
+    rs.level_scale("flesch_reading_easy")
+    # ((80, 'muy fácil'), (65, 'bastante fácil'), (55, 'normal'), (40, 'algo difícil'), (0, 'muy difícil'))
+    ```
+
 ### describe_grade
 
 <!-- core: stats/readability_stats.md:ReadabilityStats-describe_grade af0b5e5 -->
