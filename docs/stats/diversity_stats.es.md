@@ -5,11 +5,8 @@
 
 ## Descripción
 
-<!-- core: stats/diversity_stats.md:DiversityStats 2e4dbf8 -->
-Clase para calcular las principales métricas de [diversidad léxica](https://en.wikipedia.org/wiki/Lexical_diversity) de un texto a partir de sus palabras.
-
-!!! note "Nota"
-    Las métricas se calculan al acceder al atributo correspondiente o al llamar al método `get_stats` del objeto `DiversityStats`.
+<!-- core: stats/diversity_stats.md:DiversityStats 62610fe -->
+Las principales métricas de [diversidad léxica](https://en.wikipedia.org/wiki/Lexical_diversity) de un texto, calculadas a partir de sus palabras.
 
 La clase extiende el `DiversityStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/diversity_stats/): en lugar de una lista de palabras recibe un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy).
 
@@ -27,87 +24,36 @@ Las palabras pueden extraerse con un [`WordsExtractor`](../extractors/words.md) 
 | `hdd_sample_size` | int | `42` | Tamaño de la muestra para HD-D |
 | `log_base` | float | `10` | Base del logaritmo para las métricas de Summer, Maas y Dugast |
 
-<!-- core: stats/diversity_stats.md:check_params 69e400f -->
-Los parámetros se comprueban con `check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base, *, messages=MESSAGES)`, que lanza `ParameterError` si una ventana, un tamaño de muestra o una longitud mínima del factor están fuera de rango, si el umbral está fuera de (0, 1) o si la base del logaritmo no es mayor que 1. Llamada antes de extraer las palabras, señala un parámetro erróneo antes que un texto vacío.
+<!-- core: stats/diversity_stats.md:check_params 84612a6 -->
+Comprueba los parámetros de las métricas: un `window_len` o un `hdd_sample_size` que no es un entero de al menos uno, un `mtld_min_len` que no es un entero no negativo, un `mtld_threshold` que no es un número en (0, 1) y un `log_base` que no es un número finito mayor que 1 lanzan `ParameterError`. Llamada antes de extraer las palabras, señala un parámetro erróneo antes que un texto vacío.
 
 ## Convenciones { #conventions }
 
-<!-- core: stats/diversity_stats.md:DiversityStats-conventions a759359 -->
-Los valores de algunas métricas dependen de convenciones que difieren entre bibliotecas. Todas salvo la comparación con el umbral de MTLD son parámetros de la clase:
+<!-- core: stats/diversity_stats.md:DiversityStats-conventions 22cd78d -->
+Algunas métricas dependen de convenciones que difieren entre bibliotecas. Todas salvo la comparación con el umbral de MTLD son parámetros de la clase:
 
 | Parámetro | Por defecto | Otras bibliotecas |
-| :-------: | :---------: | :---------------: |
-| Base del logaritmo para Summer, Maas, U de Dugast y k de Dugast | 10 | LexicalRichness, textcomplexity y zipfR: natural |
-| Ventana de MATTR y segmento de MSTTR | 50 | quanteda y koRpus: 100 |
-| Umbral de TTR para MTLD | 0.72 | 0.66-0.75 en la bibliografía |
+| :-------- | :------ | :-------------- |
+| Base del logaritmo para Summer, Maas, U de Dugast y k de Dugast | `10` | LexicalRichness, textcomplexity y zipfR: natural |
+| Ventana de MATTR y segmento de MSTTR | `50` | quanteda y koRpus: 100 |
+| Umbral de TTR para MTLD | `0.72` | 0.66-0.75 en la bibliografía |
 | Comparación con el umbral de MTLD | un factor se cierra con TTR ≤ 0.72 (McCarthy & Jarvis, 2010) | lexical-diversity y TAALED: `<` estricto; los valores difieren cuando el TTR da exactamente el umbral |
-| Longitud mínima del factor de MTLD | 10 | koRpus la aplica solo a MTLD-MA y descarta los factores más cortos en lugar de extenderlos, LexicalRichness y textcomplexity no la aplican |
-| Tamaño de la muestra de HD-D | 42 | 35-50 en la bibliografía |
+| Longitud mínima del factor de MTLD | `10` | koRpus: solo en MTLD-MA, descartando los factores más cortos en lugar de extenderlos; LexicalRichness y textcomplexity: no se aplica |
+| Tamaño de la muestra de HD-D | `42` | 35-50 en la bibliografía |
 
-Según Zenker y Kyle (2021), MATTR, MTLD y HD-D son estables en textos de 50-200 palabras o más, MTLD-W, MA-MTLD y Maas son inestables en textos cortos, y la familia de TTR nunca se estabiliza. Para comparar textos de distinta longitud use el [cálculo por ventanas](#windowed) con intervalos de confianza.
+Según Zenker y Kyle (2021), MATTR, MTLD y HD-D son estables en textos de 50-200 palabras o más, MTLD-W, MA-MTLD y Maas son inestables en textos cortos, y la familia de TTR nunca se estabiliza. Los textos de distinta longitud se comparan mediante el [cálculo por ventanas](#windowed) con intervalos de confianza.
 
 ## Atributos
 
-<!-- core: stats/diversity_stats.md:DiversityStats-attributes 2bd9615 -->
-| Atributo | Tipo | Descripción |
-| :------: | :--: | :---------: |
-| `words` | tuple[str] | Tupla de las palabras |
-| `window_len`, `mtld_threshold`, `mtld_min_len`, `hdd_sample_size`, `log_base` | int/float | Los parámetros de las métricas; cambiarlos en el objeto cambia las métricas |
-| `frequency_spectrum` | dict[int, int] | Espectro de frecuencias: número de lexemas con una frecuencia dada |
-| `ttr` | float | Type-Token Ratio (TTR) |
-| `rttr` | float | Root Type-Token Ratio (RTTR) |
-| `cttr` | float | Corrected Type-Token Ratio (CTTR) |
-| `httr` | float | Herdan Type-Token Ratio (HTTR) |
-| `sttr` | float | Summer Type-Token Ratio (STTR) |
-| `mttr` | float | Maas Type-Token Ratio (MTTR) |
-| `dttr` | float | Dugast Type-Token Ratio (DTTR) |
-| `mattr` | float | Moving Average Type-Token Ratio (MATTR) |
-| `msttr` | float | Mean Segmental Type-Token Ratio (MSTTR) |
-| `mtld` | float | Measure of Textual Lexical Diversity (MTLD) |
-| `mamtld` | float | Moving Average Measure of Textual Lexical Diversity (MA-MTLD) |
-| `mtldw` | float | MTLD con ventana móvil y vuelta al inicio del texto (MTLD-W) |
-| `hdd` | float | Hypergeometric Distribution D (HD-D) |
-| `simpson_index` | float | Índice de Simpson (D) |
-| `inverse_simpson_index` | float | Índice de Simpson inverso (1/D) |
-| `gini_simpson_index` | float | Índice de Gini-Simpson (1-D) |
-| `hapax_index` | float | Índice de hápax, también llamado R de Honoré |
-| `honore_r` | float | Alias del índice de hápax |
-| `yule_k` | float | Característica de Yule (K de Yule) |
-| `yule_i` | float | Característica inversa de Yule (I de Yule) |
-| `herdan_vm` | float | Vm de Herdan |
-| `sichel_s` | float | S de Sichel |
-| `michea_m` | float | M de Michéa |
-| `brunet_w` | float | W de Brunet |
-| `dugast_k` | float | k de Dugast |
-| `baayen_p` | float | P de Baayen |
-| `hapax_ratio` | float | Proporción de hápax entre los lexemas |
-| `alpha2` | float | Exponente α₂ |
-| `entropy` | float | Entropía de Shannon en bits |
-| `evenness` | float | Equitatividad: cociente entre la entropía y su máximo |
-| `perplexity` | float | Perplejidad |
-| `zipf_alpha` | float | Pendiente de la ley de Zipf |
-| `heaps_beta` | float | Exponente de la ley de Heaps |
-
-!!! note "Nota"
-    Cada métrica puede calcularse también con su función; las métricas y sus funciones se describen en la [sección](diversity_stats_funcs.md) correspondiente.
+<!-- core: stats/diversity_stats.md:DiversityStats-attributes 2e73f9a -->
+El objeto guarda las palabras en `words`, una tupla, y los cinco parámetros con sus nombres, modificables en el objeto. `frequency_spectrum` es el espectro de frecuencias de las palabras (`calc_frequency_spectrum`), y `honore_r`, un alias de `hapax_index`.
 
 ## Métodos
 
 ### windowed
 
-<!-- core: stats/diversity_stats.md:DiversityStats-windowed af6a479 -->
-Cálculo por ventanas de una métrica por su nombre, como en [`calc_windowed`](diversity_stats_funcs.md#calc_windowed): su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Los casos límite (textos cortos, valores `nan` e infinitos) se describen allí.
-
-Parámetros:
-
-| Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `stat` | str | `-` | Nombre de la métrica de `get_stats` |
-| `window_len` | int | `100` | Tamaño de la ventana |
-| `step` | int | `None` | Paso de la ventana, por defecto igual a su tamaño (las ventanas no se solapan) |
-| `confidence` | float | `0.95` | Nivel de confianza |
-
-Devuelve una tupla con nombre `WindowStats` con los campos `mean`, `std`, `lower`, `upper` y `n_windows`. Un nombre de métrica desconocido lanza `UnknownStatError`.
+<!-- core: stats/diversity_stats.md:DiversityStats-windowed da979e4 -->
+`windowed(stat, window_len=100, step=None, confidence=0.95)` calcula por ventanas una métrica de `get_stats` por su nombre: `calc_windowed` con la función de la métrica y los parámetros del objeto. Los demás argumentos, el resultado y los errores son los de `calc_windowed`; un nombre desconocido lanza `UnknownStatError`.
 
 !!! example "Ejemplo"
 
@@ -124,8 +70,8 @@ Devuelve una tupla con nombre `WindowStats` con los campos `mean`, `std`, `lower
 
 ### get_stats
 
-<!-- core: stats/diversity_stats.md:DiversityStats-get_stats b65013e -->
-Devuelve un diccionario con las métricas de diversidad léxica calculadas.
+<!-- core: stats/diversity_stats.md:DiversityStats-get_stats fa25bfe -->
+`get_stats()` devuelve un diccionario con las métricas calculadas de `stats_desc`.
 
 !!! example "Ejemplo"
 
@@ -182,8 +128,8 @@ Devuelve un diccionario con las métricas de diversidad léxica calculadas.
 
 ### print_stats
 
-<!-- core: stats/diversity_stats.md:DiversityStats-print_stats be91444 -->
-Muestra una tabla con las métricas de diversidad léxica calculadas, sus descripciones de `stats_desc` y los encabezados de `stats_headers`.
+<!-- core: stats/diversity_stats.md:DiversityStats-print_stats 8d60982 -->
+`print_stats()` muestra una tabla de las métricas calculadas con sus descripciones de `stats_desc` bajo los encabezados de `stats_headers`.
 
 El ejemplo continúa el anterior:
 

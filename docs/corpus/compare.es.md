@@ -7,10 +7,14 @@
 
 `compare_corpora` compara dos corpus de textos en español por todos los rasgos de un texto a la vez - qué estadísticas distinguen los corpus y en qué medida. Para palabras sueltas hace lo mismo [`keyness`](keyness.md), para las distancias entre textos, [`delta`](stylometry.md#delta). Construye las tablas de los rasgos de las ventanas de los dos corpus y las compara con el `compare_features` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/compare/):
 
-<!-- core: corpus/compare.md:compare_features 9eaeeac -->
-Comparación de dos corpus rasgo por rasgo. Cada corpus llega como una tabla de los rasgos de sus ventanas - los textos divididos en partes de un tamaño parecido, para que los rasgos no dependan de la longitud de los textos. `compare_features(table_a, table_b, labels, n_bootstrap, seed)` compara las tablas columna por columna y devuelve una fila por rasgo, ordenadas por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel `text` del índice de una tabla; una tabla sin ese nivel toma cada fila por un texto aparte. Una columna que falta en una de las tablas da `nan`.
+<!-- core: corpus/compare.md:compare_features 96478f4 -->
+``` {.python .signature}
+compare_features(table_a, table_b, labels=('A', 'B'), n_bootstrap=1000, seed=0)
+```
 
-En `split_windows` el número de ventanas es la razón del número de palabras al tamaño de una ventana redondeada al entero más próximo (las mitades hacia arriba), al menos una, y las partes son iguales: con una ventana de 1000 un texto de una a dos ventanas da ventanas de 750 a 1499 palabras, y un texto más corto que `min_words` - media ventana por defecto - no da ninguna. Un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, `¿` y `¡` -, mientras que unas comillas rectas o una raya pegadas al final de la palabra anterior se quedan con ella (`"cuatro"`, `—dijo Juan—`). Los rasgos de cada ventana los calcula `text_features` o una función propia.
+Compara dos corpus rasgo por rasgo. Cada corpus es una tabla de los rasgos de sus ventanas, partes de los textos de un tamaño parecido, así que los rasgos no dependen de la longitud de los textos. El resultado tiene una fila por columna, por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel `text` del índice; sin él cada fila es un texto aparte. Una columna que falta en una de las tablas da `nan`.
+
+`split_windows` corta un texto en ventanas consecutivas de exactamente `window` palabras, así que los rasgos que dependen de la longitud son comparables entre textos; el resto final es una ventana solo con al menos `min_words` palabras, por defecto una ventana entera, así que se descarta. Un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, `¿` y `¡` -, mientras que unas comillas rectas o una raya pegadas al final de la palabra anterior o tras un signo de cierre se quedan con ella (`"cuatro"`, `—dijo Juan—`, `"adiós."`). Es el `split_windows` del núcleo con las palabras y los signos del español. Los rasgos de cada ventana los calcula `text_features` o una función propia.
 
 ## Rasgos
 
@@ -37,7 +41,7 @@ Las proporciones de espacios, letras y signos de puntuación (`basic_p_spaces`, 
 
 ## Estadísticas
 
-<!-- core: corpus/compare.md:compare_features-statistics 42e948a -->
+<!-- core: corpus/compare.md:compare_features-statistics 99869be -->
 Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_{n_B}$ en el corpus B (sin los valores indefinidos e infinitos; con menos de dos valores en un lado, `nan`):
 
 | Columna | Descripción |
@@ -46,16 +50,16 @@ Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_
 | `median_diff`, `ci_low`, `ci_high` | la diferencia de las medianas y su intervalo bootstrap de percentiles al 95%: ambos conjuntos se remuestrean `n_bootstrap` veces (`bootstrap_median_diff`) |
 | `cohen_d` | $d = (\bar{x} - \bar{y}) / s$, $s$ - la desviación típica combinada; 0.2 - un efecto pequeño, 0.5 - mediano, 0.8 - grande (`calc_cohen_d`) |
 | `cliff_delta` | $\delta = P(x > y) - P(x < y)$ de −1 a 1; $\lvert\delta\rvert$ < 0.147 - un efecto despreciable, < 0.33 - pequeño, < 0.474 - mediano, grande en otro caso (Romano et al. 2006; `calc_cliff_delta`) |
-| `auc` | el rasgo como clasificador por sí solo: la proporción de pares de ventanas en los que el valor en A es mayor que en B, con los empates a la mitad; $\delta = 2 \cdot AUC - 1$, 0.5 - el rasgo no distingue los corpus |
+| `auc` | el rasgo como clasificador: la proporción de pares de ventanas con el valor en A mayor que en B, con los empates a la mitad; $\delta = 2 \cdot AUC - 1$, 0.5 - el rasgo no distingue los corpus |
 | `u`, `p_value` | el estadístico U de Mann-Whitney y el valor p bilateral (`scipy.stats.mannwhitneyu`) |
 | `p_holm` | el valor p con la corrección de Holm por el número de rasgos (`holm_correction`) |
 | `n_A`, `n_B` | número de ventanas con un valor definido |
 | `n_texts_A`, `n_texts_B` | número de textos detrás de esas ventanas |
 
-Los nombres de las columnas son `anyts.corpus.COMPARISON_COLUMNS`, con `A` y `B` sustituidas por las etiquetas de los corpus. La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.
+Las columnas son `anyts.corpus.COMPARISON_COLUMNS` con los sufijos `a` y `b` sustituidos por las etiquetas de los corpus. La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.
 
 !!! warning "Las ventanas de un texto no son independientes"
-    La prueba y los tamaños del efecto toman cada ventana por una observación independiente, y las ventanas de un texto no lo son. Con pocos textos en un corpus los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus. El bootstrap, en cambio, remuestrea textos enteros (un bootstrap por conglomerados), así que su intervalo tiene en cuenta la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con solo unos pocos.
+    La prueba y los tamaños del efecto toman las ventanas por observaciones independientes, cosa que las ventanas de un texto no son: con pocos textos los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus. El bootstrap remuestrea textos enteros (un bootstrap por conglomerados), así que su intervalo abarca la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con pocos.
 
 ## Parámetros
 
@@ -67,21 +71,27 @@ Parámetros de `compare_corpora`:
 | `b` | list[str] | `-` | Textos del segundo corpus |
 | `window` | int | `1000` | Tamaño de una ventana en palabras; `None` - los textos enteros |
 | `features` | callable | `None` | Función de los rasgos de un texto; `None` - `text_features` |
-| `min_words` | int | `None` | Menor número de palabras de una ventana; `None` - media ventana, o una cuando `window` es `None` |
+| `min_words` | int | `None` | Menor número de palabras de una ventana; `None` - una ventana entera, o una palabra cuando `window` es `None` |
 
 `labels`, `n_bootstrap` y `seed` pasan a `compare_features`, cuyos parámetros son:
 
-<!-- core: corpus/compare.md:compare_features-parameters 7c141e7 -->
+<!-- core: corpus/compare.md:compare_features-parameters 2ed21c1 -->
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `table_a` | DataFrame | `-` | Rasgos de las ventanas del primer corpus, una fila por ventana |
-| `table_b` | DataFrame | `-` | Rasgos de las ventanas del segundo corpus |
-| `labels` | tuple[str, str] | `("A", "B")` | Nombres de los corpus para las columnas, dos cadenas que den columnas distintas |
-| `n_bootstrap` | int | `1000` | Número de remuestras bootstrap |
-| `seed` | int/Generator | `0` | Semilla del generador de números aleatorios, un entero no negativo, o un `Generator` de numpy; `None` - una aleatoria |
+| :-------- | :--- | :------ | :---------- |
+| `table_a` | `DataFrame` | - | Rasgos de las ventanas del primer corpus, una fila por ventana |
+| `table_b` | `DataFrame` | - | Rasgos de las ventanas del segundo corpus |
+| `labels` | `tuple[str, str]` | `('A', 'B')` | Nombres de los corpus para las columnas, dos cadenas que den columnas distintas |
+| `n_bootstrap` | `int` | `1000` | Número de remuestras bootstrap |
+| `seed` | `int` / `Generator` | `0` | Semilla del generador de números aleatorios, un entero no negativo, o un `Generator` de numpy; `None` - una aleatoria |
 
-<!-- core: corpus/compare.md:check_comparison_params f445b8d -->
-`check_comparison_params(labels=("A", "B"), n_bootstrap=1000, seed=0)` comprueba los parámetros de `compare_features` y lanza `ParameterError` salvo que las etiquetas sean dos cadenas que den columnas distintas (`("diff", "B")` repetiría `median_diff`), el número de remuestras bootstrap sea un entero de al menos uno y la semilla sea `None`, un entero no negativo o un `Generator` de numpy. Llamada antes de construir las tablas a partir de los textos, señala un parámetro erróneo antes de procesar los textos.
+Una tabla que no es un `DataFrame`, que repite el nombre de una columna o que tiene una columna no numérica lanza `SourceTypeError`; los demás parámetros los comprueba `check_comparison_params`.
+
+<!-- core: corpus/compare.md:check_comparison_params a56a706 -->
+``` {.python .signature}
+check_comparison_params(labels=('A', 'B'), n_bootstrap=1000, seed=0)
+```
+
+Comprueba los parámetros de `compare_features` antes de procesar los textos: lanza `ParameterError` salvo que las etiquetas sean dos cadenas que den columnas distintas (`("diff", "B")` repetiría `median_diff`), el número de remuestras bootstrap sea un entero de al menos uno y la semilla sea `None`, un entero no negativo o un `Generator` de numpy.
 
 `compare_corpora` la llama primero, así que un nombre de corpus o una semilla erróneos fallan antes de analizar ningún texto.
 
@@ -89,17 +99,65 @@ Parámetros de `compare_corpora`:
 
 Las estadísticas de una fila están disponibles una a una desde `ests.corpus`:
 
-<!-- core: corpus/compare.md:calc_cohen_d c27397e -->
-`calc_cohen_d(values_a, values_b)`: la d de Cohen con las varianzas muestrales combinadas (ddof=1); `nan` con menos de dos valores en un lado o sin dispersión.
+<!-- core: corpus/compare.md:calc_cohen_d 198b504 -->
+``` {.python .signature}
+calc_cohen_d(values_a, values_b)
+```
 
-<!-- core: corpus/compare.md:calc_cliff_delta 896afa2 -->
-`calc_cliff_delta(values_a, values_b)`: la delta de Cliff, la proporción de pares en que el primer valor es mayor menos la proporción en que es menor; `nan` para un conjunto vacío o un valor indefinido. Se calcula por ordenación, en tiempo $O((n_A + n_B) \log n_B)$ y memoria lineal.
+La d de Cohen con las varianzas muestrales combinadas (ddof=1); `nan` con menos de dos valores en un lado o sin dispersión.
 
-<!-- core: corpus/compare.md:bootstrap_median_diff e93949a -->
-`bootstrap_median_diff(values_a, values_b, n_bootstrap=1000, rng=None, confidence=0.95, texts_a=None, texts_b=None)`: el intervalo bootstrap de percentiles de la diferencia de las medianas. Con `texts_a` y `texts_b` se remuestrean textos enteros, y la mediana de una extracción es la de los valores de los textos extraídos juntos; con menos de dos textos en un lado el intervalo es `nan`.
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `values_a` | `list[float]` | - | Valores en el primer corpus |
+| `values_b` | `list[float]` | - | Valores en el segundo corpus |
 
-<!-- core: corpus/compare.md:holm_correction e61edf0 -->
-`holm_correction(p_values)`: la corrección de Holm para comparaciones múltiples: los valores p se ordenan de menor a mayor, el i-ésimo se multiplica por (m − i + 1), donde m es el número de valores definidos, luego se toma el máximo acumulado y se limita a uno; `nan` sigue siendo `nan`, y un valor p fuera de [0, 1] lanza `ParameterError`.
+Un valor que no es un número o que falta (`None`, `NA`) y unos valores que no son una lista plana lanzan `SourceTypeError`.
+
+<!-- core: corpus/compare.md:calc_cliff_delta ccd5938 -->
+``` {.python .signature}
+calc_cliff_delta(values_a, values_b)
+```
+
+La delta de Cliff, la proporción de pares en que el primer valor es mayor menos la proporción en que es menor; `nan` para un conjunto vacío o un valor indefinido. Se calcula por ordenación, en tiempo $O((n_A + n_B) \log n_B)$ y memoria lineal.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `values_a` | `list[float]` | - | Valores en el primer corpus |
+| `values_b` | `list[float]` | - | Valores en el segundo corpus |
+
+Un valor que no es un número o que falta (`None`, `NA`) y unos valores que no son una lista plana lanzan `SourceTypeError`.
+
+<!-- core: corpus/compare.md:bootstrap_median_diff b20d95f -->
+``` {.python .signature}
+bootstrap_median_diff(values_a, values_b, n_bootstrap=1000, rng=None, confidence=0.95, texts_a=None, texts_b=None)
+```
+
+El intervalo bootstrap de percentiles de la diferencia de las medianas. Con `texts_a` y `texts_b` se remuestrean textos enteros, y la mediana de una extracción se toma sobre los valores de sus textos; con menos de dos textos en un lado el intervalo es `nan`.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `values_a` | `list[float]` | - | Valores en el primer corpus |
+| `values_b` | `list[float]` | - | Valores en el segundo corpus |
+| `n_bootstrap` | `int` | `1000` | Número de remuestras bootstrap |
+| `rng` | `Generator` | `None` | Generador de números aleatorios de numpy; `None` - uno nuevo sin semilla |
+| `confidence` | `float` | `0.95` | Nivel de confianza |
+| `texts_a` | `list` | `None` | Textos de los valores en el primer corpus; `None` - cada valor se remuestrea por separado |
+| `texts_b` | `list` | `None` | Textos de los valores en el segundo corpus |
+
+Un valor que no es un número o que falta, unos valores que no son una lista plana y unos textos que no son etiquetas de un mismo tipo lanzan `SourceTypeError`; un `n_bootstrap` que no es un entero de al menos uno, un `confidence` que no es un número en (0, 1), unos textos que no son tantos como los valores y un `rng` que no es un `Generator` de numpy lanzan `ParameterError`.
+
+<!-- core: corpus/compare.md:holm_correction 7006482 -->
+``` {.python .signature}
+holm_correction(p_values)
+```
+
+La corrección de Holm para comparaciones múltiples: los valores p se ordenan de menor a mayor, el i-ésimo se multiplica por (m − i + 1), donde m es el número de valores definidos, luego se toma el máximo acumulado y se limita a uno; `nan` sigue siendo `nan`.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `p_values` | `list[float]` | - | Valores p |
+
+Un valor p que no es un número o que falta y unos valores p que no son una lista plana lanzan `SourceTypeError`, y un valor p fuera de [0, 1], `ParameterError`.
 
 ## Ejemplo de uso
 

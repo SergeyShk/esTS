@@ -8,7 +8,7 @@ from types import MappingProxyType
 from typing import NamedTuple
 
 import anyts
-from anyts.cohesion import calc_overlaps, calc_repetition, count_given
+from anyts.cohesion_stats import calc_overlaps, calc_repetition, count_given
 from anyts.utils import check_sequence, check_words, has_sents, iter_doc_tokens, safe_divide
 from spacy.language import Language
 from spacy.tokens import Doc, Token

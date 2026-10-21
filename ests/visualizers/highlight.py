@@ -2,8 +2,8 @@ import re
 from collections.abc import Callable, Collection, Iterable, Iterator, Sequence
 
 import anyts.visualizers.highlight
-from anyts.syntax import base_dep, is_word, subtree_len
-from anyts.utils import check_integer, check_number, check_words
+from anyts.syntax_stats import base_dep, subtree_len
+from anyts.utils import check_integer, check_number, check_words, is_word
 from anyts.visualizers.highlight import (
     Highlight as Highlight,
     Sent,

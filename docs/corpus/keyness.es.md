@@ -5,10 +5,10 @@
 
 ## Descripción
 
-<!-- core: corpus/keyness.md:keyness 0018a96 -->
+<!-- core: corpus/keyness.md:keyness bbbd1ba -->
 Extracción de palabras clave (keyness) de un corpus objetivo frente a uno de referencia: las palabras que aparecen significativamente más a menudo en el corpus objetivo que en el de referencia.
 
-Para cada palabra se calculan dos valores que [Gabrielatos y Marchi](http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf) y [Hardie](http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/) recomiendan leer juntos: la razón de verosimilitud $G^2$ con su valor p (la significación de la diferencia: si la hay) y Log Ratio (el tamaño del efecto: cuán grande es). Se calcula además la medida elegida `score`, que sirve para ordenar. Las medidas de significación ($G^2$, ji cuadrado, BIC) y ELL, el tamaño del efecto de $G^2$, llevan signo: negativo cuando la palabra es más frecuente en la referencia; las demás medidas de efecto (%DIFF, Log Ratio, razón de momios) tienen dirección por construcción.
+Cada palabra recibe dos valores que [Gabrielatos y Marchi](http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf) y [Hardie](http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/) recomiendan leer juntos: la razón de verosimilitud $G^2$ con su valor p (si hay una diferencia) y Log Ratio (cuán grande es), además de la medida elegida `score`, que ordena la lista. Las medidas de significación ($G^2$, ji cuadrado, BIC) y ELL, el tamaño del efecto de $G^2$, son negativas cuando la palabra es más frecuente en la referencia; %DIFF, Log Ratio y la razón de momios tienen dirección por construcción.
 
 La referencia puede ser una lista de palabras, un mapeo de frecuencias (su tamaño es la suma de los recuentos) o una `FrequencyReference`. Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematización y las palabras vacías corresponden al extractor de palabras, y los dos corpus tienen que extraerse del mismo modo.
 
@@ -16,54 +16,73 @@ La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/a
 
 ## Medidas
 
-<!-- core: corpus/keyness.md:keyness-measures 7d98aa3 -->
-Para una palabra de frecuencia $a$ en un corpus objetivo de tamaño $c$ y de frecuencia $b$ en un corpus de referencia de tamaño $d$, $N = c + d$:
+<!-- core: corpus/keyness.md:keyness-measures 62bf3c6 -->
+Las medidas de `measure` por clave, con sus nombres y descripciones en `anyts.constants.KEYNESS_MEASURES`:
 
-| Medida | Clave | Fórmula | Descripción |
-| :----- | :---- | :------ | :---------- |
-| Razón de verosimilitud | `log_likelihood` | $G^2 = 2\,(a \ln \frac{a}{E_1} + b \ln \frac{b}{E_2})$, $E_1 = \frac{c\,(a+b)}{N}$, $E_2 = \frac{d\,(a+b)}{N}$ | [Rayson y Garside (2000)](https://ucrel.lancs.ac.uk/llwizard.html); valores críticos `anyts.constants.G2_CRITICAL_VALUES`: 3.84 para p < 0.05, 6.63 para p < 0.01, 10.83 para p < 0.001, 15.13 para p < 0.0001 |
-| Ji cuadrado | `chi2` | $\chi^2 = \frac{N\,\max(\lvert a(d-b) - b(c-a) \rvert - N/2,\ 0)^2}{(a+b)(N-a-b)\,c\,d}$ | con la corrección de Yates sobre la tabla de contingencia 2×2; si la corrección supera la diferencia, el estadístico es cero |
-| %DIFF | `diff` | $\frac{NF_a - NF_b}{NF_b} \cdot 100$ | [Gabrielatos y Marchi (2011)](http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf); $NF$ - frecuencia por millón de palabras |
-| Log Ratio | `log_ratio` | $\log_2 \frac{NF_a}{NF_b}$ | [Hardie (2014)](http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/); uno significa que la palabra es el doble de frecuente en el corpus objetivo |
-| BIC | `bic` | $\operatorname{sign}(G^2) \cdot (\lvert G^2 \rvert - \ln N)$ | Wilson (2013); en valor absoluto, por encima de 2 - indicio positivo de diferencia, de 6 - fuerte, de 10 - muy fuerte; un valor negativo con $\lvert G^2 \rvert < \ln N$ significa ausencia de indicio, no la dirección contraria |
-| ELL | `ell` | $\frac{G^2}{N \ln \min(E_1, E_2)}$ | Johnston, Berry y Mielke (2006); tamaño del efecto de $G^2$, la proporción de la mayor desviación posible respecto de las frecuencias esperadas, de 0 a 1; `nan` cuando la menor frecuencia esperada es como máximo uno - entonces el logaritmo es cero o negativo; justo por encima de uno la medida crece sin límite |
-| Razón de momios | `odds_ratio` | $\frac{a / (c - a)}{b / (d - b)}$ | uno significa momios iguales; `inf` si la palabra ocupa todo el corpus objetivo, 0 - toda la referencia |
+| Clave | Qué mide | Rango | Un valor mayor indica |
+| :---- | :------- | :---- | :-------------------- |
+| [`log_likelihood`](#log_likelihood) | Significación de la diferencia de las frecuencias | Cualquier número | Un exceso más significativo en el corpus objetivo |
+| [`chi2`](#chi2) | Significación de la diferencia, con la corrección de Yates | Cualquier número | Un exceso más significativo en el corpus objetivo |
+| [`diff`](#diff) | Diferencia de las frecuencias por millón, en porcentaje de la referencia | Por encima de −100 | Un exceso mayor en el corpus objetivo |
+| [`log_ratio`](#log_ratio) | Logaritmo binario de la razón de las frecuencias por millón | Cualquier número | Un exceso mayor en el corpus objetivo |
+| [`bic`](#bic) | Indicio de la diferencia: $G^2$ penalizado por el tamaño de los corpus | Cualquier número | Un indicio más fuerte de un exceso en el corpus objetivo, para una palabra más frecuente en él |
+| [`ell`](#ell) | Tamaño del efecto de $G^2$ | De −1 a 1 por lo general, `nan` para frecuencias esperadas pequeñas | Un exceso mayor en el corpus objetivo |
+| [`odds_ratio`](#odds_ratio) | Razón de los momios de la palabra en los corpus | De 0 a `inf`, `nan` si la palabra ocupa los dos corpus | Momios más altos en el corpus objetivo |
 
-Una frecuencia nula en uno de los corpus se sustituye por 0.5 para %DIFF, Log Ratio y la razón de momios (Hardie 2014). El valor p de $G^2$ sale de la distribución ji cuadrado con un grado de libertad (`calc_p_value`). Las medidas están disponibles como las funciones `calc_log_likelihood`, `calc_chi2`, `calc_diff`, `calc_log_ratio`, `calc_bic`, `calc_ell` y `calc_odds_ratio` con los argumentos `(a, b, c, d)` del módulo `anyts.corpus.keyness`; sus nombres y descripciones están en `anyts.constants.KEYNESS_MEASURES`.
+Cada medida es una función del módulo `anyts.corpus.keyness` de las frecuencias de una palabra y de los tamaños de los corpus, $N = c + d$:
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `a` | `float` | - | Frecuencia de la palabra en el corpus objetivo |
+| `b` | `float` | - | Frecuencia de la palabra en el corpus de referencia |
+| `c` | `float` | - | Tamaño del corpus objetivo |
+| `d` | `float` | - | Tamaño del corpus de referencia |
+
+Una frecuencia nula en uno de los corpus se sustituye por 0.5 para %DIFF, Log Ratio y la razón de momios (Hardie 2014).
 
 ## Parámetros
 
-<!-- core: corpus/keyness.md:keyness-parameters 6f31f0b -->
+<!-- core: corpus/keyness.md:keyness-parameters c87c5b2 -->
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `target` | list[str]/dict[str, int] | `-` | Palabras del corpus objetivo o sus frecuencias |
-| `reference` | list[str]/dict[str, float]/FrequencyReference | `-` | Palabras del corpus de referencia, sus frecuencias o una referencia por frecuencias |
-| `measure` | str | `log_likelihood` | Medida de `anyts.constants.KEYNESS_MEASURES` para `score` y el orden |
-| `min_freq` | int | `1` | Frecuencia mínima de una palabra clave en su propio corpus |
-| `positive` | bool | `True` | Palabras clave positivas (más frecuentes en el corpus objetivo) o negativas (más frecuentes en la referencia) |
-| `top_n` | int | `None` | Número de palabras clave; `None` - todas |
+| :-------- | :--- | :------ | :---------- |
+| `target` | `list[str]` / `dict[str, int]` | - | Palabras del corpus objetivo o sus frecuencias |
+| `reference` | `list[str]` / `dict[str, float]` / `FrequencyReference` | - | Palabras del corpus de referencia, sus frecuencias o una referencia por frecuencias |
+| `measure` | `str` | `'log_likelihood'` | Medida de `anyts.constants.KEYNESS_MEASURES` para `score` y el orden |
+| `min_freq` | `int` | `1` | Frecuencia mínima de una palabra clave en su propio corpus |
+| `positive` | `bool` | `True` | Palabras clave positivas (más frecuentes en el corpus objetivo) o negativas (más frecuentes en la referencia) |
+| `top_n` | `int` | `None` | Número de palabras clave; `None` - todas |
+
+Los parámetros y el corpus objetivo los comprueba `check_keyness_params`. Una referencia que no es una lista de cadenas, un contador ni una `FrequencyReference` lanza `SourceTypeError`, y una frecuencia negativa, `nan` o infinita de un contador y un corpus vacío lanzan `SourceError`.
 
 `reference` también puede ser `FreqDict`, frente al cual `target` son formas.
 
-<!-- core: corpus/keyness.md:check_keyness_params 1b312d2 -->
-`check_keyness_params(measure="log_likelihood", min_freq=1, top_n=None, target=None)` comprueba los parámetros de `keyness` y lanza `ParameterError` salvo que la medida sea una de `KEYNESS_MEASURES`, la frecuencia mínima un entero y el número de palabras clave `None` o un entero de al menos uno; con `target` lanza además `SourceTypeError` salvo que el corpus objetivo sea una lista de cadenas o un mapeo de cadenas a frecuencias enteras, y `SourceError` para una frecuencia negativa, nan o infinita. Una biblioteca que construye la referencia a partir de un diccionario de frecuencias la llama primero, para que un parámetro o un corpus objetivo erróneos fallen antes de leer el diccionario.
+<!-- core: corpus/keyness.md:check_keyness_params 9ffcaab -->
+``` {.python .signature}
+check_keyness_params(measure='log_likelihood', min_freq=1, top_n=None, target=None)
+```
+
+Comprueba los parámetros de `keyness` antes de leer un diccionario de frecuencias: lanza `ParameterError` salvo que la medida sea una de `KEYNESS_MEASURES`, la frecuencia mínima un entero y el número de palabras clave `None` o un entero de al menos uno. Con `target` lanza además `SourceTypeError` salvo que el corpus objetivo sea una lista de cadenas o un mapeo de cadenas a frecuencias enteras, y `SourceError` para una frecuencia negativa, nan o infinita.
 
 En esTS `keyness` la llama por sí misma antes de leer `FreqDict`.
 
 ## Referencia por frecuencias
 
-<!-- core: corpus/keyness.md:FrequencyReference 3fc867c -->
-`FrequencyReference(counts, size, missing=0.0, key=None, keep=None)` describe un corpus de referencia solo por sus frecuencias, como un diccionario de frecuencias construido a partir de un corpus demasiado grande para pasarlo como palabras:
+<!-- core: corpus/keyness.md:FrequencyReference 02046dc -->
+``` {.python .signature}
+FrequencyReference(counts, size, missing=0.0, key=None, keep=None)
+```
+
+Un corpus de referencia descrito solo por sus frecuencias, como un diccionario de frecuencias construido a partir de un corpus demasiado grande para pasarlo como palabras:
 
 | Campo | Tipo | Por defecto | Descripción |
-| :---: | :--: | :---------: | :---------- |
-| `counts` | dict[str, float] | `-` | Frecuencias de las claves en el corpus de referencia |
-| `size` | float | `-` | Tamaño del corpus de referencia en palabras |
-| `missing` | float | `0.0` | Frecuencia de una clave que falta en `counts` |
-| `key` | callable | `None` | Clave de una palabra del corpus objetivo en `counts`, como su lema; `None` - la propia palabra |
-| `keep` | callable | `None` | Si una palabra del corpus objetivo se cuenta; `None` - todas las palabras |
+| :---- | :--- | :------ | :---------- |
+| `counts` | `dict[str, float]` | - | Frecuencias de las claves en el corpus de referencia |
+| `size` | `float` | - | Tamaño del corpus de referencia en palabras |
+| `missing` | `float` | `0.0` | Frecuencia de una clave que falta en `counts` |
+| `key` | `Callable` | `None` | Clave de una palabra del corpus objetivo en `counts`, como su lema; `None` - la propia palabra |
+| `keep` | `Callable` | `None` | Si una palabra del corpus objetivo se cuenta; `None` - todas las palabras |
 
-Las palabras del objetivo que `keep` deja pasar se cuentan bajo su `key`, y las que deja fuera tampoco cuentan en el tamaño del objetivo; las palabras clave negativas salen solo de las claves de `counts` que `keep` deja pasar. La frecuencia de una clave que falta en `counts` es `missing`: un diccionario da su frecuencia mínima, una cota superior de la real, así que esa palabra puede ser palabra clave positiva pero nunca negativa.
+Solo se cuentan las palabras del objetivo que `keep` deja pasar, bajo su `key`, tanto en las frecuencias como en el tamaño. Una clave que falta en `counts` tiene la frecuencia `missing`, como la frecuencia mínima de un diccionario: una cota superior, así que su palabra puede ser palabra clave positiva pero nunca negativa. Las palabras clave negativas salen solo de las claves de `counts` que `keep` deja pasar. Una frecuencia se comprueba al leerla, así que para las palabras clave positivas no se recorre un diccionario grande: una que no es un número lanza `SourceTypeError`, y una negativa, `nan` o infinita, `SourceError`. Un `size` o un `missing` que no es un número finito o es negativo lanza `ParameterError`, y un `key` o un `keep` que no se puede invocar, `SourceTypeError`.
 
 El diccionario de frecuencias `FreqDict` de Google Books Ngram pasado como `reference` se convierte en una referencia así:
 
@@ -79,20 +98,24 @@ El corpus objetivo tiene que contarse como se contó el diccionario: formas con 
 
 ## Resultado
 
-<!-- core: corpus/keyness.md:Keyword 33ab9a7 -->
+<!-- core: corpus/keyness.md:Keyword 8a09d1b -->
+``` {.python .signature}
+Keyword(word, freq_target, freq_reference, ipm_target, ipm_reference, g2, p_value, log_ratio, score)
+```
+
 Una lista de tuplas con nombre `Keyword` por keyness descendente (los empates por frecuencia descendente y alfabéticamente, las palabras de medida indefinida al final); `pd.DataFrame(keywords)` da una tabla.
 
 | Campo | Tipo | Descripción |
-| :---: | :--: | :---------- |
-| `word` | str | Palabra |
-| `freq_target` | int | Frecuencia en el corpus objetivo |
-| `freq_reference` | float | Frecuencia en el corpus de referencia |
-| `ipm_target` | float | Frecuencia en el corpus objetivo por millón de palabras |
-| `ipm_reference` | float | Frecuencia en el corpus de referencia por millón de palabras |
-| `g2` | float | $G^2$ con signo |
-| `p_value` | float | Valor p de $G^2$ |
-| `log_ratio` | float | Log Ratio |
-| `score` | float | Valor de la medida elegida |
+| :---- | :--- | :---------- |
+| `word` | `str` | Palabra |
+| `freq_target` | `int` | Frecuencia en el corpus objetivo |
+| `freq_reference` | `float` | Frecuencia en el corpus de referencia |
+| `ipm_target` | `float` | Frecuencia en el corpus objetivo por millón de palabras |
+| `ipm_reference` | `float` | Frecuencia en el corpus de referencia por millón de palabras |
+| `g2` | `float` | $G^2$ con signo |
+| `p_value` | `float` | Valor p de $G^2$ |
+| `log_ratio` | `float` | Log Ratio |
+| `score` | `float` | Valor de la medida elegida |
 
 ## Ejemplo
 

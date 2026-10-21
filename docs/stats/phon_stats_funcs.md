@@ -114,9 +114,9 @@ $$
 !!! info ""
     **ests.phon_stats.calc_alliteration()**
 
-The index is `calc_repetition_index` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/phonetics/) core over the consonant sounds of the words:
+The index is `calc_repetition_index` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/phon_stats/) core over the consonant sounds of the words:
 
---8<-- "stats/phonetics.md:calc_repetition_index"
+--8<-- "stats/phon_stats.md:calc_repetition_index"
 
 The features are the consonant sounds of the transcription, so `casa` and `queso` repeat k, and `cena` and `casa` do not.
 

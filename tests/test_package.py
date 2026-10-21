@@ -37,8 +37,11 @@ CORE_MODULES = {
     "ests.utils": "anyts.utils",
     "ests.extractors": "anyts.extractors",
     "ests.diversity_stats": "anyts.diversity_stats",
-    "ests.cohesion_stats": "anyts.cohesion",
-    "ests.syntax_stats": "anyts.syntax",
+    "ests.cohesion_stats": "anyts.cohesion_stats",
+    "ests.syntax_stats": "anyts.syntax_stats",
+    "ests.style_stats": "anyts.style_stats",
+    "ests.lexical_stats": "anyts.lexical_stats",
+    "ests.phon_stats": "anyts.phon_stats",
     "ests.corpus": "anyts.corpus",
     "ests.corpus.collocations": "anyts.corpus.collocations",
     "ests.corpus.dispersion": "anyts.corpus.dispersion",
@@ -62,16 +65,12 @@ CORE_MODULES = {
     "ests.visualizers.word_tree": "anyts.visualizers.word_tree",
     "ests.visualizers.zipf": "anyts.visualizers.zipf",
 }
-# Names of the core the library defines for itself: subclasses with the Spanish hooks,
-# wrappers with the Spanish defaults, the pattern of Spanish numbers, the tables of the
-# Spanish readability and the User-Agent of the downloads
-SPANISH = {
-    "BasicStats",
-    "CharNgramsExtractor",
-    "DiversityStats",
+# Names of the core a module of the library defines for itself: subclasses with the
+# Spanish hooks, wrappers with the Spanish defaults, the pattern of Spanish numbers, the
+# Spanish marks, the tables of the Spanish readability and the User-Agent of the downloads
+EXTRACTORS = {"SentsExtractor", "WordsExtractor"}
+READABILITY = {
     "GRADE_AGE_LEVELS",
-    "HighlightedText",
-    "NUMBER_PATTERN",
     "POSTGRADUATE_LEVEL",
     "READABILITY_GRADE_STATS",
     "READABILITY_PRESETS",
@@ -80,18 +79,115 @@ SPANISH = {
     "READING_SPEED_NORMS",
     "READING_SPEED_WPM",
     "ReadabilityStats",
-    "SentsExtractor",
-    "USER_AGENT",
-    "WordsExtractor",
     "calc_consensus_grade",
     "calc_flesch_reading_easy",
     "calc_reading_time",
     "flesch_reading_easy_to_grade",
     "grade_to_age",
-    "keyness",
-    "kwic",
-    "sentence_lengths",
-    "sentence_lengths_plot",
+}
+SPANISH = {
+    "ests": {*EXTRACTORS, "CharNgramsExtractor", "DiversityStats"},
+    "ests.extractors": {*EXTRACTORS, "CharNgramsExtractor", "NUMBER_PATTERN"},
+    "ests.diversity_stats": {"DiversityStats"},
+    "ests.cohesion_stats": {"SentsExtractor"},
+    "ests.style_stats": {"WordsExtractor"},
+    "ests.phon_stats": {"WordsExtractor"},
+    "ests.corpus": {"keyness", "kwic", "split_windows"},
+    "ests.corpus.keyness": {"keyness"},
+    "ests.corpus.compare": {"OPENING_MARKS", "SYMMETRIC_MARKS", "split_windows"},
+    "ests.corpus.kwic": {"kwic"},
+    "ests.basic_stats": {*EXTRACTORS, "BasicStats"},
+    "ests.readability_stats": {*EXTRACTORS, *READABILITY, "BasicStats"},
+    "ests.components": {"BasicStats", "ReadabilityStats"},
+    "ests.datasets.freq_dict": {"USER_AGENT"},
+    "ests.datasets.spanish_literature": {"USER_AGENT"},
+    "ests.datasets.spanish_sonnets": {"USER_AGENT"},
+    "ests.visualizers": {"HighlightedText", "sentence_lengths", "sentence_lengths_plot"},
+    "ests.visualizers.highlight": {"HighlightedText"},
+    "ests.visualizers.sentences": {*EXTRACTORS, "sentence_lengths", "sentence_lengths_plot"},
+}
+# Copies of the mechanics of the core until the classes move onto the frames of anyTS 0.3:
+# every PR of 0.8 removes its own
+PENDING = {
+    "ests.cohesion_stats": {
+        "COHESION_STATS_DESC",
+        "CONNECTOR_CLASSES",
+        "CONNECTOR_POS",
+        "CONTENT_UD_POS",
+        "CohesionStats",
+        "Connector",
+    },
+    "ests.syntax_stats": {
+        "AUXILIARY_DEPS",
+        "CLAUSE_DEPS",
+        "NOUN_MODIFIER_DEPS",
+        "SUBJECT_DEPS",
+        "SUBORDINATE_CLAUSE_DEPS",
+        "SYNTAX_STATS_DESC",
+        "SyntaxStats",
+        "count_noun_modifiers",
+        "is_agentless",
+        "is_clause_head",
+        "is_finite_verb",
+        "is_infinitive",
+        "is_infinitive_clause",
+        "is_passive",
+        "is_predicate",
+        "is_subordinate_clause_head",
+        "predicate_form",
+    },
+    "ests.style_stats": {
+        "STYLE_STATS_DESC",
+        "StyleStats",
+        "calc_academic_nausea",
+        "calc_classic_nausea",
+        "calc_keyword_density",
+        "calc_parentheticals",
+        "calc_phrase_density",
+        "calc_spam",
+        "calc_water",
+        "calc_zipf_naturalness",
+        "check_params",
+        "find_nausea_words",
+        "find_parentheticals",
+        "in_order",
+    },
+    "ests.lexical_stats": {
+        "FREQUENCY_BANDS",
+        "LEXICAL_STATS_DESC",
+        "LexicalStats",
+        "calc_surprisal",
+    },
+    "ests.phon_stats": {"PHON_STATS_DESC", "PhonStats", "check_params", "cv_pattern"},
+    "ests.components": {
+        "BasicStatsComponent",
+        "CohesionStats",
+        "CohesionStatsComponent",
+        "DiversityStatsComponent",
+        "LexicalStats",
+        "LexicalStatsComponent",
+        "PhonStats",
+        "PhonStatsComponent",
+        "ReadabilityStatsComponent",
+        "StyleStats",
+        "StyleStatsComponent",
+        "SyntaxStats",
+        "SyntaxStatsComponent",
+        "check_phon_params",
+        "check_style_params",
+        "is_number",
+    },
+    "ests.visualizers.highlight": {
+        "ALLITERATION_THRESHOLD",
+        "calc_alliteration_runs",
+        "find_alliteration",
+        "find_complex_words",
+        "find_connector_highlights",
+        "find_long_sents",
+        "find_phrase_highlights",
+        "find_split_predicate_highlights",
+        "in_order",
+    },
 }
 
 
@@ -137,10 +233,11 @@ def test_core_names(library, core):
             name.startswith("_")
             or isinstance(value, ModuleType)
             or not hasattr(library_module, name)
+            or name in PENDING.get(library, ())
         ):
             continue
         own = getattr(library_module, name)
-        if name in SPANISH:
+        if name in SPANISH.get(library, ()):
             assert own is not value, name
             assert not isinstance(value, type) or issubclass(own, value), name
         else:

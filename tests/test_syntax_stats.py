@@ -2,7 +2,7 @@ from math import isnan
 
 import pytest
 import spacy
-from anyts.syntax import (
+from anyts.syntax_stats import (
     base_dep,
     calc_coordination_chains,
     calc_dependency_distances,
@@ -10,11 +10,10 @@ from anyts.syntax import (
     calc_valency,
     count_children,
     get_words,
-    has_feature,
     is_root,
-    is_word,
     subtree_len,
 )
+from anyts.utils import has_feature, is_word
 from spacy.tokens import Doc
 
 from ests import BasicStats, SyntaxStats

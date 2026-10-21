@@ -5,8 +5,14 @@
 
 ## Descripción
 
-<!-- core: visualizers/highlight.md:HighlightedText ca113fe -->
-El mecanismo del resaltado de un texto por capas, a la manera de los correctores de estilo: cada capa marca los fragmentos de un texto que cuenta una estadística - las oraciones largas, las palabras complejas, la pasiva. La fuente de datos puede ser un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy). El resultado se muestra en Jupyter como HTML con estilos y una leyenda; el método `to_html` devuelve el mismo marcado para la documentación y las aplicaciones web, y los fragmentos se guardan en el atributo `highlights` para una representación propia. Los fragmentos de capas distintas pueden solaparse.
+<!-- core: visualizers/highlight.md:HighlightedText f056ba1 -->
+Resaltado de un texto por capas, a la manera de los correctores de estilo: cada capa marca los fragmentos de un texto que cuenta una estadística - las oraciones largas, las palabras complejas, la pasiva. La fuente de datos es un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy). El resultado se muestra en Jupyter como HTML con estilos y una leyenda; `to_html` devuelve el marcado, y `highlights` guarda los fragmentos para una representación propia. Los fragmentos de capas distintas pueden solaparse.
+
+Excepciones:
+
+- `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`;
+- `SourceError` - una fuente sin palabras;
+- `ParameterError` - unas capas que no son un nombre ni una lista de nombres, una capa desconocida o una que necesita una anotación que le falta a la fuente.
 
 La función `highlight` devuelve un objeto `HighlightedText` de esTS, que extiende el `HighlightedText` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visualizers/highlight/) con las capas de la biblioteca, su búsqueda y sus parámetros, y el prefijo `ests` de las clases CSS.
 
@@ -39,13 +45,11 @@ Una oración es larga a partir de 30 palabras, el límite de las guías de lengu
 
 ## Parámetros
 
-<!-- core: visualizers/highlight.md:HighlightedText-parameters 94d89c2 -->
-| Parámetro | Tipo | Valor por defecto | Descripción |
-| :-------: | :--: | :---------------: | :---------: |
-| `source` | str/Doc | `-` | Fuente de datos (una cadena o un objeto Doc) |
-| `layers` | list[str]/str | `None` | Capas del resaltado; si no se dan, las capas por defecto que la fuente permite; `"all"` - todas las permitidas |
-
-Una fuente que no es ni una cadena ni un `Doc` lanza `SourceTypeError`, una fuente sin palabras `SourceError`; unas capas que no son un nombre ni una lista de nombres, una capa desconocida o una que necesita una anotación que le falta a la fuente lanzan `ParameterError`.
+<!-- core: visualizers/highlight.md:HighlightedText-parameters da96774 -->
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `source` | `str` / `Doc` | - | Fuente de datos (una cadena o un objeto Doc) |
+| `layers` | `list[str]` / `str` | `None` | Capas del resaltado; si no se dan, las capas por defecto que la fuente permite; `"all"` - todas las permitidas |
 
 Los parámetros de las capas de esTS:
 
@@ -61,16 +65,27 @@ Un umbral que no es un entero de al menos uno o una probabilidad fuera de (0, 1]
 
 ## Atributos
 
-<!-- core: visualizers/highlight.md:HighlightedText-attributes d9379e7 -->
+<!-- core: visualizers/highlight.md:HighlightedText-attributes 78a8c2b -->
 | Atributo | Tipo | Descripción |
-| :------: | :--: | :---------: |
-| `text` | str | Texto de la fuente de datos |
-| `layers` | tuple[str] | Capas activadas, en el orden de dibujo |
-| `highlights` | tuple[Highlight] | Fragmentos resaltados, ordenados por su inicio y luego por su final descendente |
-| `counts` | dict[str, int] | Número de fragmentos de cada capa |
+| :-------- | :--- | :---------- |
+| `text` | `str` | Texto de la fuente de datos |
+| `layers` | `tuple[str]` | Capas activadas, en el orden de dibujo |
+| `highlights` | `tuple[Highlight]` | Fragmentos resaltados, ordenados por su inicio y luego por su final descendente |
+| `counts` | `dict[str, int]` | Número de fragmentos de cada capa |
 
-<!-- core: visualizers/highlight.md:Highlight 58d8a45 -->
-Un fragmento `Highlight` es un objeto inmutable con los campos `start` y `end` (posiciones en el texto), `layer` (la capa) y `note` (la explicación de la ventana emergente).
+<!-- core: visualizers/highlight.md:Highlight cfcf714 -->
+``` {.python .signature}
+Highlight(start, end, layer, note='')
+```
+
+Un fragmento del resaltado: un objeto inmutable con los parámetros como campos.
+
+| Campo | Tipo | Por defecto | Descripción |
+| :---- | :--- | :------ | :---------- |
+| `start` | `int` | - | Posición del primer carácter del fragmento en el texto |
+| `end` | `int` | - | Posición siguiente al último carácter del fragmento |
+| `layer` | `str` | - | Capa del resaltado |
+| `note` | `str` | `''` | Explicación del fragmento para la ventana emergente |
 
 La nota de un fragmento da el número de palabras de la oración, de sílabas de la palabra, la longitud de la cadena o la expresión de la lista.
 
@@ -78,13 +93,13 @@ La nota de un fragmento da el número de palabras de la oración, de sílabas de
 
 ### to_html
 
-<!-- core: visualizers/highlight.md:HighlightedText-to_html a16305c -->
-Devuelve el marcado HTML del texto resaltado: un `div` de la clase `<prefix>-highlight` con la leyenda y sus recuentos y el texto, donde los segmentos resaltados van dentro de un `span` de las clases `<prefix>-hl` y `<prefix>-hl-<capa>`, y las notas van al atributo `title`; `<prefix>` es el prefijo de las clases CSS. Los fragmentos solapados de capas distintas dan segmentos con varias clases, en el orden de dibujo. Los saltos de línea (`\n`, `\r\n`, `\r`) se guardan como referencias de caracteres, una por salto, así que el marcado puede insertarse en Markdown.
+<!-- core: visualizers/highlight.md:HighlightedText-to_html 1693b8b -->
+`to_html(legend=True, css=True)` devuelve el marcado HTML del texto resaltado: un `div` de la clase `<prefix>-highlight` con la leyenda, sus recuentos y el texto, donde un segmento resaltado es un `span` de las clases `<prefix>-hl` y `<prefix>-hl-<layer>` con las notas en su `title`; `<prefix>` es `css_prefix`. Los fragmentos solapados de capas distintas dan segmentos con varias clases, en el orden de dibujo. Los saltos de línea (`\n`, `\r\n`, `\r`) se convierten en referencias de caracteres, una por salto, así que el marcado puede ir en Markdown.
 
-| Parámetro | Tipo | Valor por defecto | Descripción |
-| :-------: | :--: | :---------------: | :---------: |
-| `legend` | bool | `True` | Añadir la leyenda con los recuentos de los fragmentos |
-| `css` | bool | `True` | Añadir los estilos de las capas |
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `legend` | `bool` | `True` | Añadir la leyenda con los recuentos de los fragmentos |
+| `css` | `bool` | `True` | Añadir los estilos de las capas |
 
 ### css
 

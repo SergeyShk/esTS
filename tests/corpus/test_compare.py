@@ -39,23 +39,24 @@ long = [
 
 
 def test_split_windows():
-    assert split_windows(text, 5) == [
+    windows = [
         "El gato estaba en la",
         "ventana. Miraba los pájaros, pero",
         "los pájaros se fueron. El",
         "gato durmió. Mañana volverá a",
-        "estar en la ventana",
-        "y mirará los pájaros.",
+        "estar en la ventana y",
     ]
+    assert split_windows(text, 5) == windows
+    assert split_windows(text, 5, min_words=3) == [*windows, "mirará los pájaros."]
     assert split_windows(text, None) == [text]
-    assert split_windows(text, 56) == [text]
-    # A text shorter than half a window gives no window by default
-    assert split_windows(text, 100) == []
+    assert split_windows(text, 28) == [text]
+    # A text shorter than a window gives no window by default
+    assert split_windows(text, 29) == []
     assert split_windows(text, 100, min_words=1) == [text]
     assert split_windows(text, 100, min_words=28) == [text]
     assert split_windows(text, 100, min_words=29) == []
     assert split_windows(" \n" + text + "\n ", None) == [text]
-    assert len(split_windows(text, 8)) == 4
+    assert len(split_windows(text, 8)) == 3
     assert split_windows("¿Quién es?! Nadie… ¡¡Se fueron!!", None) == [
         "¿Quién es?! Nadie… ¡¡Se fueron!!"
     ]
@@ -65,7 +66,7 @@ def test_split_windows():
         "¿Dónde está el perro?",
     ]
     assert split_windows("(Gato) duerme. «Perro» come.", 2) == ["(Gato) duerme.", "«Perro» come."]
-    assert split_windows("—Se fueron —dijo él—. —Todos se fueron.", 3) == [
+    assert split_windows("—Se fueron —dijo él—. —Todos se fueron.", 4, min_words=1) == [
         "—Se fueron —dijo él—.",
         "—Todos se fueron.",
     ]
@@ -75,38 +76,46 @@ def test_split_windows():
         'uno dos tres "cuatro"',
         "cinco seis siete ocho",
     ]
-    assert split_windows("uno dos tres —dijo Juan— y se fue ya", 4) == [
+    assert split_windows("uno dos tres —dijo Juan— y se fue ya", 5, min_words=1) == [
         "uno dos tres —dijo Juan—",
         "y se fue ya",
     ]
-    assert split_windows("uno dos tres ―dijo Juan― y se fue ya", 4) == [
+    assert split_windows("uno dos tres ―dijo Juan― y se fue ya", 5, min_words=1) == [
         "uno dos tres ―dijo Juan―",
         "y se fue ya",
     ]
-    for glued in ("cuatro. —¿Cinco?", "cuatro.—¿Cinco?"):
-        assert split_windows(f"uno dos tres {glued} seis siete ocho", 4) == [
-            "uno dos tres cuatro.",
-            "—¿Cinco? seis siete ocho",
-        ]
+    assert split_windows("uno dos tres cuatro. —¿Cinco? seis siete ocho", 4) == [
+        "uno dos tres cuatro.",
+        "—¿Cinco? seis siete ocho",
+    ]
+    assert split_windows("uno dos tres cuatro.—¿Cinco? seis siete ocho", 4) == [
+        "uno dos tres cuatro.—",
+        "¿Cinco? seis siete ocho",
+    ]
+    # A quote after a closing mark closes the window
+    assert split_windows('Dijo "adiós." Y se fue ya', 2) == ['Dijo "adiós."', "Y se", "fue ya"]
     assert (
         text_features("—Se fueron —dijo él.")["punct_dash"]
         == corpus_features(["—Se fueron —dijo él."], None)["punct_dash"].iloc[0]
     )
-    assert [len(chunk.split()) for chunk in split_windows(" ".join(["a"] * 1500), 1000)] == [
-        750,
-        750,
-    ]
-    assert len(split_windows(" ".join(["a"] * 2500), 1000)) == 3
-    assert len(split_windows(" ".join(["a"] * 3500), 1000)) == 4
-    assert len(split_windows(" ".join(["a"] * 1499), 1000)) == 1
-    assert len(split_windows(" ".join(["a"] * 500), 1000)) == 1
-    assert split_windows(" ".join(["a"] * 499), 1000) == []
+    # Windows of exactly the size, the rest only with min_words words
+    for n_words, min_words, lengths in (
+        (2500, None, [1000, 1000]),
+        (2500, 500, [1000, 1000, 500]),
+        (2500, 501, [1000, 1000]),
+        (999, None, []),
+        (999, 1, [999]),
+    ):
+        windows = split_windows(" ".join(["a"] * n_words), 1000, min_words)
+        assert [len(chunk.split()) for chunk in windows] == lengths
     assert split_windows("", 5) == []
     assert split_windows("... ¡!", 5) == []
     with pytest.raises(ParameterError):
         split_windows(text, 0)
     with pytest.raises(ParameterError):
         split_windows(text, 5, min_words=0)
+    with pytest.raises(ParameterError):
+        split_windows(text, 5, min_words=6)
 
 
 def test_text_features():
@@ -177,7 +186,7 @@ def test_sentence_rhythm():
 def test_corpus_features():
     table = corpus_features([text, "El gato duerme."], window=8)
     assert table.index.names == ["text", "window"]
-    assert list(table.index) == [(0, 0), (0, 1), (0, 2), (0, 3)]
+    assert list(table.index) == [(0, 0), (0, 1), (0, 2)]
     assert (1, 0) in corpus_features([text, "El gato duerme."], window=8, min_words=1).index
     assert "morph_pos_NOUN" in table.columns
     assert table.dtypes.eq(float).all()

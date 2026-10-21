@@ -11,42 +11,60 @@ Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visu
 
 ## Dispersión léxica { #dispersion_plot }
 
-<!-- core: visualizers/corpus.md:dispersion_plot 604b589 -->
+<!-- core: visualizers/corpus.md:dispersion_plot d906327 -->
+``` {.python .signature}
+dispersion_plot(words, targets, ax=None, labels=None)
+```
+
 Una fila por cada palabra de `targets` y una marca en la posición de cada una de sus apariciones en el texto. Las palabras se comparan tal cual: las mayúsculas y minúsculas y la lematización corresponden a la extracción de las palabras.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `words` | list[str] | `-` | Palabras del texto en orden |
-| `targets` | list[str] | `-` | Palabras cuyas apariciones se muestran |
-| `ax` | Axes | `None` | Ejes para el gráfico |
-| `labels` | dict[str, str] | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel` |
+| :-------- | :--- | :------ | :---------- |
+| `words` | `list[str]` | - | Palabras del texto en orden |
+| `targets` | `list[str]` | - | Palabras cuyas apariciones se muestran |
+| `ax` | `Axes` | `None` | Ejes para el gráfico |
+| `labels` | `dict[str, str]` | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel` |
+
+Unas palabras o unos objetivos que no son una lista de cadenas lanzan `SourceTypeError`, la falta de palabras o de objetivos `SourceError`; unas etiquetas que `merge_labels` rechaza y un `ax` que no es un `Axes` de matplotlib lanzan `ParameterError`.
 
 Las palabras las extrae [`WordsExtractor`](../extractors/words.md): en minúsculas con `lowercase=True`, los lemas con `use_lexemes=True`.
 
 ## Diagrama de palabras clave { #keyness_plot }
 
-<!-- core: visualizers/corpus.md:keyness_plot e860f91 -->
-Barras horizontales divergentes: las palabras de `positive` a la derecha, las de `negative` - el resultado de `keyness` con `positive=False` - a la izquierda; la longitud de una barra es el valor absoluto del campo `field` (`score`, `g2`, `log_ratio`), así que el lado lo fija la lista y no el signo de la medida; `top_n` palabras por lado, y las palabras con un valor indefinido o infinito se omiten. Para la razón de momios (`score` de 0 a infinito, uno - momios iguales) indique `log=True`: se representa el valor absoluto de $\log_2$ del valor, simétrico en torno a uno.
+<!-- core: visualizers/corpus.md:keyness_plot f2f89b3 -->
+``` {.python .signature}
+keyness_plot(positive, negative=(), top_n=20, labels=None, field='score', log=False, ax=None)
+```
+
+Barras horizontales divergentes: las palabras de `positive` a la derecha, las de `negative` (el resultado de `keyness` con `positive=False`) a la izquierda, `top_n` por lado. La longitud de una barra es el valor absoluto del campo `field` (`score`, `g2`, `log_ratio`), así que el lado lo fija la lista, no el signo de la medida; las palabras con un valor indefinido o infinito se omiten. Para la razón de momios (de 0 a infinito, uno - momios iguales) `log=True` representa el valor absoluto de $\log_2$ del valor, simétrico en torno a uno.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `positive` | list[Keyword] | `-` | Palabras clave positivas |
-| `negative` | list[Keyword] | `()` | Palabras clave negativas |
-| `top_n` | int | `20` | Número de palabras por lado |
-| `labels` | dict[str, str]/tuple[str, str] | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel` y `xlabel_log` (cadenas de formato con `field`), `target` y `reference` (la leyenda); un par de cadenas fija solo la leyenda |
-| `field` | str | `score` | Campo de `Keyword` cuyos valores se representan |
-| `log` | bool | `False` | Representar $\log_2$ del valor, para la razón de momios |
-| `ax` | Axes | `None` | Ejes para el gráfico |
+| :-------- | :--- | :------ | :---------- |
+| `positive` | `list[Keyword]` | - | Palabras clave positivas |
+| `negative` | `list[Keyword]` | `()` | Palabras clave negativas |
+| `top_n` | `int` | `20` | Número de palabras por lado |
+| `labels` | `dict[str, str]` / `tuple[str, str]` | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel` y `xlabel_log` (cadenas de formato con `field`), `target` y `reference` (la leyenda); un par de cadenas fija solo la leyenda |
+| `field` | `str` | `'score'` | Campo de `Keyword` cuyos valores se representan |
+| `log` | `bool` | `False` | Representar $\log_2$ del valor, para la razón de momios |
+| `ax` | `Axes` | `None` | Ejes para el gráfico |
+
+Unas palabras clave que no son una lista lanzan `SourceTypeError`, y la falta de palabras clave con un valor finito `SourceError`. Un `field` desconocido, un `top_n` que no es un entero de al menos uno, unas etiquetas que `merge_labels` rechaza o una leyenda que no es un par, y un `ax` que no es un `Axes` de matplotlib lanzan `ParameterError`.
 
 ## Red de colocaciones { #collocation_network }
 
-<!-- core: visualizers/corpus.md:collocation_network 080cdcf -->
-Un grafo no dirigido: los nodos son las palabras con el tamaño de la letra según su frecuencia, las aristas son los pares con el grosor y la etiqueta según el valor de la medida; la disposición `neato`. Un par de una palabra consigo misma - una palabra repetida dentro de la ventana - sería un bucle y se deja fuera antes de tomar los `top_n` pares. Para dibujarlo hacen falta los ejecutables de [Graphviz](https://graphviz.org/download/); en Jupyter el grafo se muestra solo, y `graph.render("network")` guarda un archivo png.
+<!-- core: visualizers/corpus.md:collocation_network 5af4d04 -->
+``` {.python .signature}
+collocation_network(collocations, top_n=None)
+```
+
+Un grafo no dirigido con la disposición `neato`: los nodos son las palabras, con el tamaño de la letra según la frecuencia, y las aristas son los pares, con el grosor y la etiqueta según la medida. Un par de una palabra consigo misma (una palabra repetida dentro de la ventana) sería un bucle y se deja fuera antes de `top_n`. Para dibujarlo hacen falta los ejecutables de [Graphviz](https://graphviz.org/download/); Jupyter muestra el grafo, y `graph.render("network")` guarda un archivo png.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `collocations` | list[Collocation] | `-` | Colocaciones |
-| `top_n` | int | `None` | Número de pares desde el principio de la lista; `None` - todos |
+| :-------- | :--- | :------ | :---------- |
+| `collocations` | `list[Collocation]` | - | Colocaciones |
+| `top_n` | `int` | `None` | Número de pares desde el principio de la lista; `None` - todos |
+
+Unas colocaciones que no son una lista lanzan `SourceTypeError`, la falta de un par de dos palabras distintas `SourceError`, y un `top_n` que no es un entero de al menos uno `ParameterError`.
 
 ## Ejemplo de uso
 

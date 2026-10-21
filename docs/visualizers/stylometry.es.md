@@ -11,50 +11,74 @@ Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visu
 
 ## Dendrograma { #dendrogram_plot }
 
-<!-- core: visualizers/stylometry.md:dendrogram_plot 1c08ea8 -->
-Agrupamiento jerárquico con `scipy.cluster.hierarchy` sobre la matriz de distancias entre textos; el método de Ward por defecto, como en [Evert et al. (2015)](https://aclanthology.org/W15-0709.pdf); las etiquetas de las hojas son los nombres de los textos del índice de la matriz. Las columnas se toman en el orden de las filas; una matriz con textos distintos en las columnas y en las filas, menos de dos textos, una distancia infinita o negativa, la asimetría o una distancia en la diagonal lanzan `SourceError` antes de crear una figura.
+<!-- core: visualizers/stylometry.md:dendrogram_plot e3f6319 -->
+``` {.python .signature}
+dendrogram_plot(distances, method='ward', ax=None, labels=None)
+```
+
+Agrupamiento jerárquico con `scipy.cluster.hierarchy` sobre la matriz de distancias entre textos, por defecto con el método de Ward, como en [Evert et al. (2015)](https://aclanthology.org/W15-0709.pdf); las hojas se etiquetan con el índice de la matriz. Las columnas se toman en el orden de las filas.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `distances` | DataFrame | `-` | Matriz simétrica de distancias con los nombres de los textos en las filas y en las columnas, en cualquier orden |
-| `method` | str | `ward` | Método de `scipy.cluster.hierarchy.linkage` para unir los grupos: `single`, `complete`, `average`, `weighted`, `centroid`, `median` o `ward` |
-| `ax` | Axes | `None` | Ejes para el gráfico |
-| `labels` | dict[str, str] | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel` |
+| :-------- | :--- | :------ | :---------- |
+| `distances` | `DataFrame` | - | Matriz simétrica de distancias con los nombres de los textos en las filas y en las columnas, en cualquier orden |
+| `method` | `str` | `'ward'` | Método de `scipy.cluster.hierarchy.linkage` para unir los grupos: `single`, `complete`, `average`, `weighted`, `centroid`, `median` o `ward` |
+| `ax` | `Axes` | `None` | Ejes para el gráfico |
+| `labels` | `dict[str, str]` | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel` |
+
+Textos distintos en las columnas y en las filas, menos de dos textos, una distancia infinita o negativa, la asimetría o una distancia en la diagonal lanzan `SourceError` antes de crear una figura. Unas distancias que no son un `DataFrame` de números lanzan `SourceTypeError`; un `method` desconocido, unas etiquetas que `merge_labels` rechaza y un `ax` que no es un `Axes` de matplotlib lanzan `ParameterError`.
 
 ## Componentes principales { #pca_plot }
 
-<!-- core: visualizers/stylometry.md:pca_plot 5872373 -->
+<!-- core: visualizers/stylometry.md:pca_plot b21b905 -->
+``` {.python .signature}
+pca_plot(corpus, n_mfw=100, culling=0.0, ax=None, labels=None)
+```
+
 Análisis de componentes principales de las puntuaciones z de las frecuencias relativas de las unidades más frecuentes (`frequency_table`, `z_scores`): los textos en el plano de las dos primeras componentes con sus nombres, y la proporción de la varianza explicada en las etiquetas de los ejes.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `corpus` | dict[str, list[str]] | `-` | Unidades de los textos por los nombres de los textos |
-| `n_mfw` | int | `100` | Número de las unidades más frecuentes; `None` - todas |
-| `culling` | float | `0.0` | Menor proporción de textos en la que aparece una unidad |
-| `ax` | Axes | `None` | Ejes para el gráfico |
-| `labels` | dict[str, str] | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel` y `ylabel` (cadenas de formato con la proporción explicada `share`) |
+| :-------- | :--- | :------ | :---------- |
+| `corpus` | `dict[str, list[str]]` | - | Unidades de los textos por los nombres de los textos |
+| `n_mfw` | `int` | `100` | Número de las unidades más frecuentes; `None` - todas |
+| `culling` | `float` | `0.0` | Menor proporción de textos en la que aparece una unidad |
+| `ax` | `Axes` | `None` | Ejes para el gráfico |
+| `labels` | `dict[str, str]` | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel` y `ylabel` (cadenas de formato con la proporción explicada `share`) |
+
+El corpus, `n_mfw` y `culling` lanzan los errores de `frequency_table`, y menos de tres textos lanzan `SourceError`; unas etiquetas que `merge_labels` rechaza y un `ax` que no es un `Axes` de matplotlib lanzan `ParameterError`.
 
 ## Escalamiento multidimensional { #mds_plot }
 
-<!-- core: visualizers/stylometry.md:mds_plot 3309106 -->
-Escalamiento multidimensional clásico (Torgerson 1952) de cualquier matriz de distancias: el doble centrado de la matriz de distancias al cuadrado y los dos vectores propios principales; las distancias entre los puntos aproximan las distancias de la matriz. Las columnas se toman en el orden de las filas; una matriz con textos distintos en las columnas y en las filas, menos de dos textos, una distancia infinita o negativa, la asimetría o una distancia en la diagonal lanzan `SourceError` antes de crear una figura.
+<!-- core: visualizers/stylometry.md:mds_plot fee8015 -->
+``` {.python .signature}
+mds_plot(distances, ax=None, labels=None)
+```
+
+Escalamiento multidimensional clásico (Torgerson 1952) de cualquier matriz de distancias: los dos vectores propios principales de las distancias al cuadrado con doble centrado, así que las distancias entre los puntos aproximan las de la matriz. Las columnas se toman en el orden de las filas.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `distances` | DataFrame | `-` | Matriz simétrica de distancias con los nombres de los textos en las filas y en las columnas, en cualquier orden |
-| `ax` | Axes | `None` | Ejes para el gráfico |
-| `labels` | dict[str, str] | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel`, `ylabel` |
+| :-------- | :--- | :------ | :---------- |
+| `distances` | `DataFrame` | - | Matriz simétrica de distancias con los nombres de los textos en las filas y en las columnas, en cualquier orden |
+| `ax` | `Axes` | `None` | Ejes para el gráfico |
+| `labels` | `dict[str, str]` | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel`, `ylabel` |
+
+Textos distintos en las columnas y en las filas, menos de dos textos, una distancia infinita o negativa, la asimetría o una distancia en la diagonal lanzan `SourceError` antes de crear una figura. Unas distancias que no son un `DataFrame` de números lanzan `SourceTypeError`; unas etiquetas que `merge_labels` rechaza y un `ax` que no es un `Axes` de matplotlib lanzan `ParameterError`.
 
 ## Curvas de Mendenhall { #mendenhall_plot }
 
-<!-- core: visualizers/stylometry.md:mendenhall_plot fadc7a5 -->
+<!-- core: visualizers/stylometry.md:mendenhall_plot 921690d -->
+``` {.python .signature}
+mendenhall_plot(corpus, ax=None, labels=None)
+```
+
 Las proporciones de las palabras por longitud en caracteres (`mendenhall_curve`) de cada texto en un mismo gráfico; una longitud que ninguna palabra tiene se dibuja en cero.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `corpus` | dict[str, list[str]] | `-` | Palabras de los textos por los nombres de los textos |
-| `ax` | Axes | `None` | Ejes para el gráfico |
-| `labels` | dict[str, str] | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel`, `ylabel` |
+| :-------- | :--- | :------ | :---------- |
+| `corpus` | `dict[str, list[str]]` | - | Palabras de los textos por los nombres de los textos |
+| `ax` | `Axes` | `None` | Ejes para el gráfico |
+| `labels` | `dict[str, str]` | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel`, `ylabel` |
+
+Un corpus que no es un mapeo de listas de cadenas lanza `SourceTypeError`, la falta de textos o un texto sin palabras `SourceError`; unas etiquetas que `merge_labels` rechaza y un `ax` que no es un `Axes` de matplotlib lanzan `ParameterError`.
 
 ## Ejemplo de uso
 

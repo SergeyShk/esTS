@@ -5,10 +5,16 @@
 
 ## Descripción
 
-<!-- core: stats/basic_stats.md:BasicStats ba50d56 -->
-Las estadísticas básicas de un texto: el número de sus oraciones, palabras, caracteres, letras, espacios, sílabas y signos de puntuación, las distribuciones de las palabras por letras y por sílabas, y las palabras largas, complejas, simples, monosílabas y polisílabas. La fuente de datos puede ser un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy). Las letras se cuentan con `str.isalpha`, así que las cifras, los guiones y los signos dentro de una palabra no son letras.
+<!-- core: stats/basic_stats.md:BasicStats b417be1 -->
+Las estadísticas básicas de un texto: el número de sus oraciones, palabras, caracteres, sílabas y signos de puntuación y las distribuciones de sus palabras. La fuente de datos es un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy). Las letras se cuentan con `str.isalpha`, así que las cifras, los guiones y los signos dentro de una palabra no son letras.
 
-Las palabras de una cadena salen del extractor de palabras y sus oraciones del extractor de oraciones. Las palabras de un `Doc` salen de sus tokens (los signos de puntuación y los símbolos como `€` o `%` se descartan) y sus oraciones de sus límites, o del extractor de oraciones cuando no los tiene o solo tiene algunos (`has_sents`); un extractor indicado explícitamente se usa sobre el texto del `Doc`. Una línea en blanco termina una oración de una cadena y de un `Doc` sin límites; un `Doc` con límites sigue la regla cuando su pipeline inicia una oración tras una línea en blanco (`start_sents_after_blank_lines`, que una biblioteca del idioma registra con su propio nombre) antes del parser, `senter` o `sentencizer`. Una oración de pura puntuación no lleva ninguna palabra y no se cuenta.
+Las palabras y las oraciones de una cadena salen de los extractores. Un `Doc` da sus tokens como palabras, sin los signos de puntuación ni los símbolos como `€` o `%`, y sus límites como oraciones, o los del extractor de oraciones cuando no los tiene o solo tiene algunos (`has_sents`); un extractor indicado se usa en su lugar, sobre su texto. Una línea en blanco termina una oración de una cadena y de un `Doc` sin límites; un `Doc` con límites también, cuando su pipeline tiene `start_sents_after_blank_lines` (que una biblioteca del idioma registra con su propio nombre) antes del parser, `senter` o `sentencizer`. Una oración sin palabras, como una de pura puntuación, no se cuenta.
+
+Excepciones:
+
+- `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`, un extractor de otro tipo;
+- `SourceError` - una fuente sin palabras;
+- `ParameterError` - un umbral que no es un entero de al menos uno.
 
 !!! note "Nota"
     Las estadísticas se calculan al inicializar el objeto `BasicStats`.
@@ -19,53 +25,44 @@ La clase extiende el `BasicStats` del núcleo [anyTS](https://sergeyshk.github.i
 
 ## Parámetros
 
-<!-- core: stats/basic_stats.md:BasicStats-parameters 2296788 -->
+<!-- core: stats/basic_stats.md:BasicStats-parameters 362b585 -->
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `source` | str/Doc | `-` | Fuente de datos (cadena u objeto Doc) |
-| `sents_extractor` | SentsExtractor | `None` | Herramienta de extracción de oraciones; se usa también con un Doc, sobre su texto |
-| `words_extractor` | WordsExtractor | `None` | Herramienta de extracción de palabras; se usa también con un Doc, sobre su texto |
-| `normalize` | bool | `False` | Calcular las estadísticas normalizadas |
-| `complex_syl_factor` | int | `COMPLEX_SYL_FACTOR` | Número mínimo de sílabas de una palabra compleja |
-| `long_word_letter_factor` | int | `LONG_WORD_LETTER_FACTOR` | Número mínimo de letras de una palabra larga |
+| :-------- | :--- | :------ | :---------- |
+| `source` | `str` / `Doc` | - | Fuente de datos (cadena u objeto Doc) |
+| `sents_extractor` | `SentsExtractor` | `None` | Herramienta de extracción de oraciones; se usa también con un Doc, sobre su texto |
+| `words_extractor` | `WordsExtractor` | `None` | Herramienta de extracción de palabras; se usa también con un Doc, sobre su texto |
+| `normalize` | `bool` | `False` | Calcular las estadísticas normalizadas |
+| `complex_syl_factor` | `int` | `COMPLEX_SYL_FACTOR` | Número mínimo de sílabas de una palabra compleja |
+| `long_word_letter_factor` | `int` | `LONG_WORD_LETTER_FACTOR` | Número mínimo de letras de una palabra larga |
 
-Una fuente que no es ni una cadena ni un `Doc` y un extractor de otro tipo lanzan `SourceTypeError`, una fuente sin palabras `SourceError`, un umbral que no es un entero de al menos uno `ParameterError`.
+El objeto guarda `normalize`, `complex_syl_factor` y `long_word_letter_factor` con sus nombres.
 
 !!! note "Nota"
     Los umbrales por defecto son los de las fórmulas de legibilidad: una palabra compleja tiene tres o más sílabas, como en SMOG, y una palabra larga siete o más letras, como en LIX y RIX.
 
 ## Atributos
 
-<!-- core: stats/basic_stats.md:BasicStats-attributes ed90a25 -->
-| Atributo | Tipo | Descripción |
-| :-------: | :--: | :---------: |
-| `c_letters` | dict[int, int] | Distribución de las palabras por número de letras |
-| `c_syllables` | dict[int, int] | Distribución de las palabras por número de sílabas |
-| `n_sents` | int | Número de oraciones con palabras |
-| `n_words` | int | Número de palabras |
-| `n_unique_words` | int | Número de palabras únicas, sin distinguir mayúsculas |
-| `n_long_words` | int | Número de palabras largas |
-| `n_complex_words` | int | Número de palabras complejas |
-| `n_simple_words` | int | Número de palabras simples: con alguna sílaba, por debajo de las complejas |
-| `n_monosyllable_words` | int | Número de palabras monosílabas |
-| `n_polysyllable_words` | int | Número de palabras polisílabas |
-| `n_chars` | int | Número de caracteres sin los saltos de línea |
-| `n_letters` | int | Número de letras |
-| `n_spaces` | int | Número de espacios de Unicode (categoría Zs), como el espacio de no separación, y tabulaciones |
-| `n_syllables` | int | Número de sílabas |
-| `n_punctuations` | int | Número de signos de puntuación |
-| `c_punctuations` | dict[str, int] | Distribución de los signos de puntuación por tipo |
-| `p_unique_words` | float | Número normalizado de palabras únicas |
-| `p_long_words` | float | Número normalizado de palabras largas |
-| `p_complex_words` | float | Número normalizado de palabras complejas |
-| `p_simple_words` | float | Número normalizado de palabras simples |
-| `p_monosyllable_words` | float | Número normalizado de palabras monosílabas |
-| `p_polysyllable_words` | float | Número normalizado de palabras polisílabas |
-| `p_letters` | float | Número normalizado de letras |
-| `p_spaces` | float | Número normalizado de espacios |
-| `p_punctuations` | float | Número normalizado de signos de puntuación |
+<!-- core: stats/basic_stats.md:BasicStats-attributes 2687b35 -->
+| Estadística | Tipo | Descripción | Normalizada |
+| :-------- | :--- | :---------- | :--------- |
+| `c_letters` | `dict[int, int]` | Distribución de las palabras por número de letras | - |
+| `c_syllables` | `dict[int, int]` | Distribución de las palabras por número de sílabas | - |
+| `n_sents` | `int` | Número de oraciones con palabras | - |
+| `n_words` | `int` | Número de palabras | - |
+| `n_unique_words` | `int` | Número de palabras únicas, sin distinguir mayúsculas | `p_unique_words` |
+| `n_long_words` | `int` | Número de palabras largas, de al menos `long_word_letter_factor` letras | `p_long_words` |
+| `n_complex_words` | `int` | Número de palabras complejas, de al menos `complex_syl_factor` sílabas | `p_complex_words` |
+| `n_simple_words` | `int` | Número de palabras simples: con alguna sílaba, por debajo de las complejas | `p_simple_words` |
+| `n_monosyllable_words` | `int` | Número de palabras monosílabas | `p_monosyllable_words` |
+| `n_polysyllable_words` | `int` | Número de palabras polisílabas, de dos o más sílabas | `p_polysyllable_words` |
+| `n_chars` | `int` | Número de caracteres sin los saltos de línea | - |
+| `n_letters` | `int` | Número de letras | `p_letters` |
+| `n_spaces` | `int` | Número de espacios de Unicode (categoría Zs), como el espacio de no separación, y tabulaciones | `p_spaces` |
+| `n_syllables` | `int` | Número de sílabas | - |
+| `n_punctuations` | `int` | Número de signos de puntuación | `p_punctuations` |
+| `c_punctuations` | `dict[str, int]` | Distribución de los signos de puntuación por tipo ([`count_punctuations`](#count_punctuations)) | - |
 
-Los recuentos de palabras se normalizan por el número de palabras, los de caracteres por el número de caracteres; las estadísticas normalizadas se calculan con `normalize=True`.
+Con `normalize=True` el objeto tiene también las estadísticas normalizadas, de tipo `float`: los recuentos de palabras divididos por el número de palabras, los de caracteres por el número de caracteres.
 
 ## Métodos
 
@@ -79,8 +76,8 @@ Los recuentos de palabras se normalizan por el número de palabras, los de carac
 
 ### get_stats
 
-<!-- core: stats/basic_stats.md:BasicStats-get_stats c61b85d -->
-Devuelve un diccionario con las estadísticas calculadas: una copia, editarlo no cambia el objeto.
+<!-- core: stats/basic_stats.md:BasicStats-get_stats f52c936 -->
+`get_stats(flat)` devuelve un diccionario con las distribuciones `c_letters` y `c_syllables`, los recuentos de `stats_desc`, la distribución `c_punctuations` y, con `normalize=True`, los recuentos normalizados, como una copia: editarlo no cambia el objeto. Con `flat=True` las distribuciones dan una clave por cada valor que tiene el texto, como `c_letters_3` y `c_punctuations_comma`.
 
 Ejemplo de cálculo de las estadísticas básicas con normalización:
 
@@ -132,8 +129,8 @@ Ejemplo de cálculo de las estadísticas básicas con normalización:
 
 ### print_stats
 
-<!-- core: stats/basic_stats.md:BasicStats-print_stats 3af6554 -->
-Muestra una tabla con los recuentos de las estadísticas, sus descripciones de `stats_desc` y los encabezados de `stats_headers`.
+<!-- core: stats/basic_stats.md:BasicStats-print_stats da79e92 -->
+`print_stats()` muestra una tabla con los recuentos de `stats_desc`, sus descripciones y los encabezados de `stats_headers`.
 
 Para ilustrar el método reutilizamos el código del ejemplo anterior:
 
@@ -176,8 +173,20 @@ Para ilustrar el método reutilizamos el código del ejemplo anterior:
 !!! info ""
     **ests.basic_stats.count_punctuations()**, **ests.basic_stats.punctuation_profile()**
 
-<!-- core: stats/basic_stats.md:count_punctuations fdfb6b0 -->
-`count_punctuations(text, marks, dash_pattern)` cuenta los signos de puntuación por tipo, la misma distribución que guarda el atributo `c_punctuations`: comas, puntos, signos de interrogación y de exclamación, puntos suspensivos, dos puntos, puntos y comas, rayas, guiones, comillas latinas, comillas, paréntesis y los demás signos. Primero se cuentan las rayas escritas con guiones (`dash_pattern`), luego los puntos suspensivos - el carácter `…`, tres o más puntos, o un par de puntos tras `?` y `!`, un solo signo cuyos puntos no cuentan como puntos (`¿Quién?..` es una interrogación y unos puntos suspensivos) - y después cada signo por su tipo en `marks`; cualquier otro carácter de las categorías Unicode P y S es otro signo (`§`, `€`, `°`). `marks` asigna a cada signo, un solo carácter, uno de los tipos, si no `ParameterError`, y `dash_pattern` es una expresión regular compilada; un texto que no es una cadena, unos signos que no son un mapeo y unas rayas que no son una expresión compilada lanzan `SourceTypeError`.
+<!-- core: stats/basic_stats.md:count_punctuations b982de2 -->
+``` {.python .signature}
+count_punctuations(text, marks=PUNCTUATION_MARKS, dash_pattern=DASH_PATTERN)
+```
+
+Cuenta los signos de puntuación por tipo, la distribución de `c_punctuations`: comas, puntos, signos de interrogación y de exclamación, puntos suspensivos, dos puntos, puntos y comas, rayas, guiones, comillas latinas, comillas, paréntesis y otros signos. Primero se cuentan las rayas escritas con guiones (`dash_pattern`), luego los puntos suspensivos - `…`, tres o más puntos, o dos tras `?` y `!`, un solo signo cuyos puntos no se cuentan como puntos (`¿Quién?..` es una interrogación y unos puntos suspensivos) - y después cada signo por su tipo en `marks`; cualquier otro carácter de las categorías Unicode P y S es otro signo (`§`, `€`, `°`).
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `text` | `str` | - | Cadena de texto |
+| `marks` | `dict[str, str]` | `PUNCTUATION_MARKS` | Tipo de cada signo, uno de `PUNCTUATION_TYPES` |
+| `dash_pattern` | `Pattern` | `DASH_PATTERN` | Rayas escritas con guiones |
+
+Un signo de `marks` que no es un solo carácter o tiene un tipo desconocido lanza `ParameterError`; un texto que no es una cadena, unos `marks` que no son un mapeo y un `dash_pattern` que no es una expresión regular compilada lanzan `SourceTypeError`.
 
 Los signos y las rayas por defecto son los de la ortografía española: los signos de apertura `¿` y `¡` son de interrogación y de exclamación (`¿Qué?` lleva dos signos de interrogación), `—`, `–` y la barra horizontal `―` son rayas, y también la raya escrita con guiones - una serie de dos o más guiones, un guion tras espacio, al principio de línea o tras un signo de cierre, ante un espacio o entre una letra y un signo de apertura o de cierre (`--Hola --dijo Juan`, `- Se fueron - dijo`, `cuatro.-¿Cinco?`); un guion dentro de una palabra, ante una cifra o al final de línea dentro de una palabra es un guion (`teórico-práctico`, `-5`), `«»` son comillas latinas y `"“”‘’` las comillas de los tres niveles de la ortografía. Los signos combinantes y los caracteres invisibles de formato (Unicode M y Cf) se descartan de las palabras, pero no se cuentan como signos.
 

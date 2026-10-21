@@ -9,7 +9,7 @@
 
 --8<-- "corpus/compare.md:compare_features"
 
-In `split_windows` the number of windows is the ratio of the number of words to the size of a window rounded half up, at least one, and the parts are equal: at a window of 1000 a text of one to two windows gives windows of 750 to 1499 words, and a text shorter than `min_words` - half a window by default - gives none. A boundary goes before the opening marks of the first word of a window - dashes, quotes, brackets, `¿` and `¡` - while a straight quote or a dash glued to the end of the previous word stays with it (`"cuatro"`, `—dijo Juan—`). The features of every window are computed by `text_features` or a function of one's own.
+`split_windows` cuts a text into consecutive windows of exactly `window` words, so the features that depend on length are comparable between texts; the rest at the end is a window only with at least `min_words` words, by default a whole window, so it is dropped. A boundary goes before the opening marks of the first word of a window - dashes, quotes, brackets, `¿` and `¡` - while a straight quote or a dash glued to the end of the previous word or after a closing mark stays with it (`"cuatro"`, `—dijo Juan—`, `"adiós."`). It is the `split_windows` of the core with the Spanish words and marks. The features of every window are computed by `text_features` or a function of one's own.
 
 ## Features
 
@@ -48,7 +48,7 @@ Parameters of `compare_corpora`:
 | `b` | list[str] | `-` | Texts of the second corpus |
 | `window` | int | `1000` | Size of a window in words; `None` - the whole texts |
 | `features` | callable | `None` | Function of the features of a text; `None` - `text_features` |
-| `min_words` | int | `None` | Smallest number of words in a window; `None` - half a window, or one when `window` is `None` |
+| `min_words` | int | `None` | Smallest number of words in a window; `None` - a whole window, or one word when `window` is `None` |
 
 `labels`, `n_bootstrap` and `seed` go on to `compare_features`, whose parameters are:
 
