@@ -7,7 +7,7 @@ from spacy.util import compile_infix_regex
 
 from ests import BasicStats, CohesionStats
 from ests.constants import ABBREVIATIONS, TOKENIZER_ABBREVIATIONS
-from ests.exceptions import DatasetNotFoundError, SourceError
+from ests.exceptions import DatasetNotFoundError, SourceError, SourceTypeError
 from ests.utils import (
     add_dash_rules,
     get_nlp,
@@ -222,6 +222,9 @@ def test_iter_text_sents():
     assert sents[0][:2] == (2, 22)
     assert list(iter_text_sents("")) == []
     assert list(iter_text_sents(" \n ")) == []
+    for split in (iter_text_sents, sentenize):
+        with pytest.raises(SourceTypeError):
+            split(5)
 
 
 def test_iter_text_words():

@@ -13,7 +13,7 @@ from anyts.syntax_stats import (
     is_root,
     subtree_len,
 )
-from anyts.utils import has_feature, is_word
+from anyts.utils import has_feature, is_finite_verb, is_infinitive, is_word
 from spacy.tokens import Doc
 
 from ests import BasicStats, SyntaxStats
@@ -28,10 +28,8 @@ from ests.syntax_stats import (
     is_agentless,
     is_clause_head,
     is_de_modifier,
-    is_finite_verb,
     is_gerund,
     is_gerund_clause,
-    is_infinitive,
     is_light_verb,
     is_negation,
     is_participle,

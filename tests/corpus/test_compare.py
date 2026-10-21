@@ -264,3 +264,14 @@ def test_compare_corpora_options():
     single = compare_corpora(short[:1], long, window=None, features=lengths, n_bootstrap=50)
     assert isnan(single.loc["length", "cliff_delta"])
     assert (single.loc["length", "n_A"], single.loc["length", "n_B"]) == (1, 3)
+
+
+def test_windows_are_checked_before_the_features():
+    def spy(text):
+        raise AssertionError("features computed")
+
+    for window, min_words in ((0, None), (5, 0), (5, 6)):
+        with pytest.raises(ParameterError):
+            compare_corpora(short, long, window=window, min_words=min_words, features=spy)
+        with pytest.raises(ParameterError):
+            corpus_features(short, window=window, min_words=min_words, features=spy)

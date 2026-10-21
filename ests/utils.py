@@ -139,6 +139,9 @@ def sentenize(text: str) -> Iterator[str]:
 
     Returns:
         iterator[str]: Iterator of sentences
+
+    Raises:
+        SourceTypeError: If the text is not a string
     """
     return (sent for _, _, sent in iter_text_sents(text))
 
@@ -158,6 +161,9 @@ def iter_text_sents(text: str) -> Iterator[tuple[int, int, str]]:
     Returns:
         iterator[tuple[int, int, str]]: Position of the first character,
             position after the last character and text of each sentence
+
+    Raises:
+        SourceTypeError: If the text is not a string
 
     Example:
         >>> from ests.utils import iter_text_sents

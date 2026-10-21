@@ -216,28 +216,28 @@ Galdós frente a Unamuno, tres novelas de cada uno del [corpus de literatura](..
 
     ``` bash
                       median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    diversity_mtldw         104.034          66.540  35.976   43.701    3.243        0.988  0.994     0.0
-    diversity_mamtld        102.044          64.410  36.302   44.519    3.130        0.982  0.991     0.0
-    diversity_mattr           0.816           0.769   0.045    0.053    2.964        0.981  0.991     0.0
-    diversity_mtld          103.668          63.774  37.093   44.947    2.978        0.979  0.989     0.0
-    diversity_msttr           0.817           0.770   0.045    0.054    2.839        0.973  0.987     0.0
+    diversity_mtldw         105.455          66.179  37.104   43.850    3.260        0.988  0.994     0.0
+    diversity_mamtld        103.316          64.814  35.081   45.200    3.083        0.981  0.990     0.0
+    diversity_mtld          103.655          63.851  38.320   47.911    3.110        0.981  0.990     0.0
+    diversity_mattr           0.817           0.769   0.046    0.057    2.952        0.979  0.990     0.0
+    diversity_msttr           0.819           0.769   0.047    0.059    2.929        0.979  0.989     0.0
 
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    basic_letters_per_word          4.437           4.132   0.255    0.356    1.676        0.782  0.891     0.0
-    readability_lix                38.220          29.469   7.437   10.668    1.088        0.703  0.852     0.0
-    morph_p_gerund                  0.068           0.036   0.028    0.036    1.503        0.736  0.868     0.0
-    morph_polarity_Neg              0.018           0.028  -0.013   -0.010   -1.130       -0.547  0.226     0.0
-    sents_mean                     16.650          11.409   3.219    6.998    0.844        0.623  0.811     0.0
-    punct_dash                     19.019          46.351 -40.474  -15.844   -1.315       -0.618  0.191     0.0
-    punct_exclamation               8.016          23.928 -23.896   -3.779   -1.271       -0.629  0.186     0.0
-    diversity_yule_k              104.859         110.355 -14.143   -1.203   -0.625       -0.318  0.341     0.0
+    basic_letters_per_word          4.441           4.130   0.243    0.356    1.695        0.784  0.892     0.0
+    readability_lix                37.906          29.721   6.954   11.023    1.084        0.694  0.847     0.0
+    morph_p_gerund                  0.069           0.037   0.026    0.035    1.533        0.742  0.871     0.0
+    morph_polarity_Neg              0.019           0.028  -0.011   -0.009   -1.122       -0.559  0.221     0.0
+    sents_mean                     16.393          11.494   3.078    6.688    0.833        0.610  0.805     0.0
+    punct_dash                     19.000          46.000 -39.012  -14.000   -1.287       -0.605  0.197     0.0
+    punct_exclamation               9.000          24.000 -22.000   -2.975   -1.251       -0.637  0.181     0.0
+    diversity_yule_k              103.620         112.500 -17.620   -3.740   -0.676       -0.351  0.324     0.0
 
-    {'n_Galdós': 157, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
+    {'n_Galdós': 155, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto pequeño (0.32), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas por cada 1000 palabras, el triple de signos de exclamación, y más negaciones.
+Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0.35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones.
 
-Los valores p toman las 274 ventanas de seis novelas por independientes (véase la advertencia de arriba), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 41 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.2 a 7.0 palabras, donde las ventanas solas darían de 3.7 a 6.3.
+Los valores p toman las 272 ventanas de seis novelas por independientes (véase la advertencia de arriba), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 42 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 6.7 palabras, donde las ventanas solas darían de 3.9 a 6.1.
 
 Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:
 

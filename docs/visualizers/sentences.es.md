@@ -48,7 +48,7 @@ La segunda ventana de 2000 palabras de *Niebla* de Unamuno del [corpus de litera
     chapter = split_windows(text, 2000)[1]
 
     sentence_lengths(chapter)[:5]
-    # [2, 26, 30, 41, 41]
+    # [1, 30, 41, 41, 14]
 
     sentence_lengths_plot(chapter, window=10)
     ```

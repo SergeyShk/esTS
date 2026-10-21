@@ -128,8 +128,6 @@ PENDING = {
         "count_noun_modifiers",
         "is_agentless",
         "is_clause_head",
-        "is_finite_verb",
-        "is_infinitive",
         "is_infinitive_clause",
         "is_passive",
         "is_predicate",
@@ -150,7 +148,6 @@ PENDING = {
         "check_params",
         "find_nausea_words",
         "find_parentheticals",
-        "in_order",
     },
     "ests.lexical_stats": {
         "FREQUENCY_BANDS",
@@ -175,7 +172,6 @@ PENDING = {
         "SyntaxStatsComponent",
         "check_phon_params",
         "check_style_params",
-        "is_number",
     },
     "ests.visualizers.highlight": {
         "ALLITERATION_THRESHOLD",
@@ -186,7 +182,6 @@ PENDING = {
         "find_long_sents",
         "find_phrase_highlights",
         "find_split_predicate_highlights",
-        "in_order",
     },
 }
 

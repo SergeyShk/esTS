@@ -240,7 +240,8 @@ def corpus_features(
     Raises:
         SourceTypeError: If the texts are not a list of strings or the features are not a function
         SourceError: If the corpus has no window of enough words
-        ParameterError: If the size of a window or min_words is not an integer or is below one
+        ParameterError: If the size of a window or min_words is not an integer or is
+            below one, or min_words is greater than the window
 
     Example:
         >>> from ests.corpus import corpus_features
@@ -322,7 +323,8 @@ def compare_corpora(
         SourceError: If one of the corpora has no window of enough words
         ParameterError: If the names of the corpora are not two strings that give
             distinct columns, the number of samples, the size of a window or min_words
-            is not an integer or is below one, or the seed is set incorrectly
+            is not an integer or is below one, min_words is greater than the window, or
+            the seed is set incorrectly
 
     Example:
         >>> from ests.corpus import compare_corpora

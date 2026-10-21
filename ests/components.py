@@ -26,7 +26,7 @@ from anyts.constants import (
     MTLD_MIN_LEN,
     MTLD_TTR_THRESHOLD,
 )
-from anyts.utils import check_words, iter_doc_tokens
+from anyts.utils import check_words, is_number, iter_doc_tokens
 from spacy.language import Language
 from spacy.tokens import Doc
 
@@ -35,7 +35,8 @@ from .cohesion_stats import CohesionStats
 from .constants import NAUSEA_TOP_N, PHON_WINDOW_LEN
 from .datasets.freq_dict import FreqDict
 from .diversity_stats import DiversityStats, check_params as check_diversity_params
-from .lexical_stats import LexicalStats, is_number
+from .extractors import NUMBER_PATTERN
+from .lexical_stats import LexicalStats
 from .morph_stats import MorphStats
 from .phon_stats import PhonStats, check_params as check_phon_params
 from .readability_stats import ReadabilityStats, check_preset
@@ -373,7 +374,7 @@ class LexicalStatsComponent(_Component):
 
     def accepts(self, doc: Doc) -> bool:
         """A document gets the statistics when it has a word other than a number"""
-        return any(not is_number(token.text) for token in iter_doc_tokens(doc))
+        return any(not is_number(token.text, NUMBER_PATTERN) for token in iter_doc_tokens(doc))
 
     def compute(self, doc: Doc) -> LexicalStats:
         return LexicalStats(doc, freq_dict=self.freq_dict)
