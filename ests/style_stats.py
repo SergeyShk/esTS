@@ -92,6 +92,15 @@ class StyleStats(anyts.style_stats.StyleStats):
         parentheticals (float): Parenthetical expressions per 100 words
         cliches (float): Clichés per 100 words
 
+    Methods:
+        keyword_density: Density of keywords and phrases
+        nausea_words: Most frequent significant words of the academic nausea
+        markers: Markers of the officialese style found in the text
+        describe: Reading of a metric by its scale, None for every metric
+        get_stats: Getting the computed style metrics of the text
+        to_dataframe: Getting the metrics as a table of one row
+        print_stats: Printing the computed style metrics with descriptions
+
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc, the stopwords,
             the nausea stopwords or the clichés are not a list or a set of strings, or

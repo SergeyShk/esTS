@@ -67,11 +67,42 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
             model of SPACY_MODEL is loaded
 
     Attributes:
+        freq_dict (FreqDict): Frequency dictionary
+        words (tuple[str]): Tuple of the words
         lemmas (tuple[str]): Tuple of the lemmas of the words by lemma_key, the
             lower-case form for a proper noun; the bands are counted by them
         keys (tuple[str]): Tuple of the keys of the words in the frequency
             dictionary: the lemma of a proper noun when its form is not there
+        n_words (int): Number of words
+        n_content_words (int): Number of content words
+        n_found (int): Number of words found in the frequency dictionary
+        ranks (tuple[int|None]): Tuple of the ranks of the lemmas by the embedded
+            list, None beyond the top 10000
+        entries (tuple[Entry|None]): Tuple of the entries of the dictionary, None
+            for a word out of it
+        coverage (float): Share of words found in the frequency dictionary
+        mean_ipm (float): Mean frequency of the words found
+        mean_ipm_content (float): Mean frequency of the content words found
+        mean_log_ipm (float): Mean decimal logarithm of the frequency of the words found
+        mean_log_ipm_content (float): The same over the content words
         mean_range (float): Mean range of the words found - years out of 40
+        mean_dispersion (float): Mean dispersion D of the words found
+        surprisal (float): Mean surprisal of the words by the unigram model of
+            the dictionary, in bits
+        perplexity (float): Unigram perplexity - 2 to the power of the surprisal
+        p_top1000 (float): Share of words with a lemma of the top 1000
+        p_top2000 (float): Share of words with a lemma of the top 2000
+        p_top5000 (float): Share of words with a lemma of the top 5000
+        p_top10000 (float): Share of words with a lemma of the top 10000
+        p_beyond_top10000 (float): Share of words with a lemma beyond the top 10000
+        lexical_density (float): Share of content words
+
+    Methods:
+        band_coverage: Shares of the words or of the lemmas by frequency bands
+        describe: Reading of a statistic by its scale, None for every statistic
+        get_stats: Getting the computed lexical sophistication statistics
+        to_dataframe: Getting the statistics as a table of one row
+        print_stats: Printing the computed statistics with descriptions
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc, or the dictionary or
@@ -96,6 +127,8 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
             raise SourceTypeError("The pipeline must be a spaCy Language")
         self._nlp = nlp
         super().__init__(source, freq_dict)
+        # analyze can be called again on the object; the keys read the words of the source
+        self._proper = self._found_proper
 
     def analyze(self, source: str | Doc) -> list[LexicalWord]:
         """
@@ -139,14 +172,14 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
                 "The data source has no annotation of the parts of speech: "
                 "parse the text with a model instead of a blank pipeline"
             )
-        self._proper = tuple(token.pos_ == "PROPN" for token in tokens)
+        self._found_proper = tuple(token.pos_ == "PROPN" for token in tokens)
         return [
             LexicalWord(
                 token.text,
                 lemma_key(_without_period(token.text), proper),
                 token_info(token).content,
             )
-            for token, proper in zip(tokens, self._proper, strict=True)
+            for token, proper in zip(tokens, self._found_proper, strict=True)
         ]
 
     def dictionary_keys(self) -> tuple[str, ...]:

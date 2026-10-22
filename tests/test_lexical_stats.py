@@ -84,6 +84,12 @@ def test_proper_noun_falls_back_to_the_lemma(freq_dict):
     assert ls.ranks[0] is None
 
 
+def test_analyze_again_keeps_the_keys(freq_dict):
+    ls = LexicalStats("Estados Unidos y Nueva York", freq_dict)
+    ls.analyze("El gato duerme")
+    assert ls.keys[:4] == ("estado", "unidos", "y", "nuevo")
+
+
 def test_verb_tagged_as_proper_noun(freq_dict):
     doc = spacy.blank("es")("Miró la ventana")
     for token, pos in zip(doc, ["PROPN", "DET", "NOUN"], strict=True):
