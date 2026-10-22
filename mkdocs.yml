@@ -29,9 +29,7 @@ nav:
       - Cohesion statistics: stats/cohesion_stats.md
       - Lexical sophistication statistics: stats/lexical_stats.md
       - Style metrics: stats/style_stats.md
-      - Phonostatistics:
-        - Metrics module: stats/phon_stats.md
-        - Metric functions: stats/phon_stats_funcs.md
+      - Phonostatistics: stats/phon_stats.md
       - Verse statistics: stats/verse_stats.md
     - Corpus measures:
       - Keywords: corpus/keyness.md
@@ -120,8 +118,6 @@ plugins:
             Statistics: Estadísticas
             Basic statistics: Estadísticas básicas
             Readability metrics: Métricas de legibilidad
-            Metrics module: Módulo de las métricas
-            Metric functions: Funciones de las métricas
             Lexical diversity metrics: Métricas de diversidad léxica
             Morphological statistics: Estadísticas morfológicas
             Syntactic statistics: Estadísticas sintácticas

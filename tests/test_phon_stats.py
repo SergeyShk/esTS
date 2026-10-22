@@ -4,9 +4,9 @@ from math import comb, isnan, log2, nan
 
 import pytest
 import spacy
+from anyts.constants import PHON_STATS_DESC
 
 from ests import PhonStats
-from ests.constants import PHON_STATS_DESC
 from ests.phon_stats import (
     CONSONANT_SOUNDS,
     VOWEL_SOUNDS,

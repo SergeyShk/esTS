@@ -18,6 +18,7 @@ from ests.visualizers.highlight import (
     find_alliteration,
     find_complex_words,
     find_connector_highlights,
+    find_de_chains,
     find_long_sents,
     get_stem_sounds,
     plural,
@@ -368,6 +369,18 @@ def test_de_chains(doc):
 def test_de_chains_single_complement(nlp):
     ht = highlight(nlp("El uso del agua."), layers="de_chains")
     assert ht.counts == {"de_chains": 0}
+
+
+def test_de_chains_skip_punctuation():
+    # The layer counts the chains as calc_de_chains: a quote tagged nmod is no link
+    doc = Doc(
+        spacy.blank("es").vocab,
+        words=["uso", "del", "agua", "de", "«", "Bruges"],
+        heads=[0, 2, 0, 4, 2, 4],
+        deps=["ROOT", "case", "nmod", "case", "nmod", "flat"],
+        pos=["NOUN", "ADP", "NOUN", "ADP", "PUNCT", "PROPN"],
+    )
+    assert find_de_chains(doc) == []
 
 
 def test_split_predicates(doc):

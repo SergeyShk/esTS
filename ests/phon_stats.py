@@ -2,22 +2,18 @@ from collections import Counter
 from collections.abc import Sequence
 from functools import lru_cache
 from itertools import pairwise
-from math import log2, nan
 
-import anyts
-from anyts.phon_stats import calc_repetition_index
-from anyts.utils import check_integer, check_words, iter_doc_words, safe_divide
-from spacy.tokens import Doc
-
-from .constants import (
-    PHON_STATS_DESC,
-    PHON_WINDOW_LEN,
-    SONORANT_SOUNDS,
-    VOICED_SOUNDS,
-    VOICELESS_SOUNDS,
-    VOWEL_SOUNDS,
+import anyts.phon_stats
+from anyts.constants import PHON_WINDOW_LEN
+from anyts.phon_stats import (
+    calc_repetition_index,
+    check_params as check_params,
+    consonant_clusters,
 )
-from .exceptions import ParameterError, SourceError, SourceTypeError
+from anyts.utils import check_words, shannon_entropy
+
+from .constants import SONORANT_SOUNDS, VOICED_SOUNDS, VOICELESS_SOUNDS, VOWEL_SOUNDS
+from .exceptions import SourceTypeError
 from .extractors import WordsExtractor
 from .syllables import syllabify
 
@@ -50,33 +46,20 @@ CONSONANT_LETTERS = {
 }
 
 
-def check_params(window_len: int) -> None:
-    """
-    Checking the parameters of the phonostatistics
-
-    Arguments:
-        window_len (int): Window in words for the alliteration and the assonance
-
-    Raises:
-        ParameterError: If the window is not an integer or is below 2
-    """
-    check_integer(window_len, "window")
-    if window_len < 2:
-        raise ParameterError("The window must be at least 2")
-
-
-class PhonStats:
+class PhonStats(anyts.phon_stats.PhonStats):
     """
     Class for computing the phonostatistics of a text
 
     Description:
-        The statistics are counted over the sounds of the transcription
+        Extends the PhonStats of the anyTS core with the sounds of Spanish: the
+        statistics are counted over the sounds of the transcription
         (transcribe), not the letters, in the standard of Spain with yeísmo and
         distinción: vowels - a, e, i, o, u; sonorants - m, n, ɲ, l, r; voiced
         obstruents - b, d, g, ʝ; voiceless obstruents - p, t, k, f, θ, s, x,
-        tʃ. The syllables are the ones of syllabify. A text without sounds
-        (numbers) has every share and ratio undefined (nan), a text without
-        consonants the share of the heavy clusters
+        tʃ. The syllables are the ones of syllabify, a hiatus is two vowels in
+        two syllables of a word (calc_hiatus). A text without sounds (numbers)
+        has every share and ratio undefined (nan), a text without consonants
+        the share of the heavy clusters
 
     Example:
         >>> from ests import PhonStats
@@ -101,11 +84,13 @@ class PhonStats:
 
     Arguments:
         source (str|Doc): Data source (a string or a Doc object)
-        words_extractor (WordsExtractor): Word extraction tool
+        words_extractor (WordsExtractor): Word extraction tool; for a Doc it is applied
+            to its text
         window_len (int): Window in words for the alliteration and the assonance
 
     Attributes:
         words (tuple[str]): Tuple of the extracted words in lower case
+        window_len (int): Window in words for the alliteration and the assonance
         syllables (tuple[tuple[str, ...], ...]): Tuple of the syllables of every word
         sounds (tuple[tuple[str, ...], ...]): Tuple of the sounds of every word
         n_vowels (int): Number of vowels
@@ -131,102 +116,40 @@ class PhonStats:
         mean_syllable_len (float): Mean length of a syllable in sounds
 
     Methods:
+        describe: Reading of a statistic by its scale, None for every statistic
         get_stats: Getting the computed phonostatistics of the text
+        to_dataframe: Getting the statistics as a table of one row
         print_stats: Printing the computed phonostatistics with descriptions
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc, or the extractor is
             not a WordsExtractor
-        SourceError: If the source has no words
-        ParameterError: If the window is below 2
+        SourceError: If the source has no words or a string has a character without a
+            UTF-8 form
+        ParameterError: If the window is not an integer or is below 2
     """
 
-    def __init__(
-        self,
-        source: str | Doc,
-        words_extractor: WordsExtractor | None = None,
-        window_len: int = PHON_WINDOW_LEN,
-    ):
-        if words_extractor is not None and not isinstance(words_extractor, anyts.WordsExtractor):
-            raise SourceTypeError("The word extractor must be a WordsExtractor")
-        check_params(window_len)
-        if isinstance(source, Doc):
-            words = tuple(word.lower() for _, _, word in iter_doc_words(source))
-        elif isinstance(source, str):
-            if not words_extractor:
-                words_extractor = WordsExtractor(lowercase=True)
-            words = tuple(word.lower() for word in words_extractor.extract(source))
-        else:
-            raise SourceTypeError("The data source is set incorrectly")
-        if not words:
-            raise SourceError("The data source has no words")
-        self.words = words
-        self.window_len = window_len
-        self.syllables = tuple(tuple(syllabify(word)) for word in words)
-        self.sounds = tuple(transcribe(word) for word in words)
+    words_extractor_class = WordsExtractor
+    vowels = VOWEL_SOUNDS
+    sonorants = SONORANT_SOUNDS
+    voiced = VOICED_SOUNDS
+    voiceless = VOICELESS_SOUNDS
 
-        counts = Counter(words)
-        sounds: Counter[str] = Counter()
-        syllables: Counter[tuple[str, ...]] = Counter()
-        for word, count in counts.items():
-            for sound, number in Counter(transcribe(word)).items():
-                sounds[sound] += number * count
-            for syllable in _syllable_sounds(word):
-                syllables[syllable] += count
-        self.n_vowels = sum(sounds[sound] for sound in VOWEL_SOUNDS)
-        self.n_sonorants = sum(sounds[sound] for sound in SONORANT_SOUNDS)
-        self.n_voiced = sum(sounds[sound] for sound in VOICED_SOUNDS)
-        self.n_voiceless = sum(sounds[sound] for sound in VOICELESS_SOUNDS)
-        self.n_consonants = self.n_sonorants + self.n_voiced + self.n_voiceless
-        n_sounds = self.n_vowels + self.n_consonants
-        self.c_clusters = _consonant_clusters(counts)
-        patterns: Counter[str] = Counter()
-        for syllable, count in syllables.items():
-            patterns[_cv_pattern(syllable)] += count
-        self.c_syllable_patterns = dict(sorted(patterns.items()))
+    def transcribe(self, word: str) -> tuple[str, ...]:
+        """Sounds of a word by the Spanish orthography (transcribe)"""
+        return transcribe(word)
 
-        self.p_vowels = safe_divide(self.n_vowels, n_sounds, nan)
-        self.p_sonorants = safe_divide(self.n_sonorants, n_sounds, nan)
-        self.p_voiced = safe_divide(self.n_voiced, n_sounds, nan)
-        self.p_voiceless = safe_divide(self.n_voiceless, n_sounds, nan)
-        self.consonant_vowel_ratio = safe_divide(self.n_consonants, self.n_vowels, nan)
-        n_clusters = sum(self.c_clusters.values())
-        self.p_heavy_clusters = safe_divide(
-            sum(count for size, count in self.c_clusters.items() if size >= 3), n_clusters, nan
-        )
-        self.p_hiatus = _hiatus(counts) / len(words) if n_sounds else nan
-        self.cv_entropy = _cv_entropy(counts)
-        self.hardness = safe_divide(self.n_voiceless, self.n_vowels + self.n_sonorants, nan)
-        self.alliteration = calc_repetition_index(self.sounds, window_len, CONSONANT_SOUNDS)
-        self.assonance = calc_repetition_index(self.sounds, window_len, VOWEL_SOUNDS)
-        n_syllables = sum(syllables.values())
-        self.p_open_syllables = safe_divide(
-            sum(count for syllable, count in syllables.items() if _is_open(syllable)),
-            n_syllables,
-            nan,
-        )
-        self.mean_syllable_len = safe_divide(
-            sum(len(syllable) * count for syllable, count in syllables.items()),
-            n_syllables,
-            nan,
-        )
+    def syllabify(self, word: str) -> list[str]:
+        """Syllables of a word (ests.syllables.syllabify)"""
+        return syllabify(word)
 
-    def get_stats(self) -> dict[str, float]:
-        """
-        Getting the computed phonostatistics of the text
+    def syllable_sounds(self, word: str) -> tuple[tuple[str, ...], ...]:
+        """Sounds of every syllable, the first one read as the start of the word"""
+        return _syllable_sounds(word)
 
-        Returns:
-            dict[str, float]: Dictionary of the computed phonostatistics
-        """
-        return {stat: getattr(self, stat) for stat in PHON_STATS_DESC}
-
-    def print_stats(self) -> None:
-        """Printing the computed phonostatistics of the text with descriptions"""
-        print(f"{'Statistic':^46}|{'Value':^10}")
-        print("-" * 56)
-        stats = self.get_stats()
-        for stat, desc in PHON_STATS_DESC.items():
-            print(f"{desc:46}|{stats[stat]:^10.2f}")
+    def word_hiatus(self, word: str) -> int:
+        """Hiatuses of a word by its syllables (calc_hiatus)"""
+        return _word_hiatus(word)
 
 
 def transcribe(word: str) -> tuple[str, ...]:
@@ -343,17 +266,15 @@ def cv_pattern(word: str) -> str:
     Returns:
         str: CV pattern
 
+    Raises:
+        SourceTypeError: If the word is not a string
+
     Example:
         >>> from ests.phon_stats import cv_pattern
         >>> cv_pattern("queso"), cv_pattern("instrumento")
         ('CVCV', 'VCCCCVCVCCV')
     """
-    return _cv_pattern(transcribe(word))
-
-
-def _cv_pattern(sounds: Sequence[str]) -> str:
-    """CV pattern of the sounds of a word or a syllable - see cv_pattern"""
-    return "".join("V" if sound in VOWEL_SOUNDS else "C" for sound in sounds)
+    return anyts.phon_stats.cv_pattern(transcribe(word), VOWEL_SOUNDS, CONSONANT_SOUNDS)
 
 
 def is_open_syllable(syllable: str) -> bool:
@@ -370,12 +291,11 @@ def is_open_syllable(syllable: str) -> bool:
 
     Returns:
         bool: Result of the check
+
+    Raises:
+        SourceTypeError: If the syllable is not a string
     """
-    return _is_open(transcribe(syllable))
-
-
-def _is_open(sounds: Sequence[str]) -> bool:
-    """Whether the sounds of a syllable end in a vowel - see is_open_syllable"""
+    sounds = transcribe(syllable)
     return bool(sounds) and sounds[-1] in VOWEL_SOUNDS
 
 
@@ -403,13 +323,8 @@ def calc_consonant_clusters(text: Sequence[str]) -> dict[int, int]:
         {1: 3, 2: 1, 4: 1}
     """
     check_words(text)
-    return _consonant_clusters(Counter(text))
-
-
-def _consonant_clusters(counts: Counter[str]) -> dict[int, int]:
-    """Distribution of the clusters by length by a counter of word forms"""
     counter: Counter[int] = Counter()
-    for word, count in counts.items():
+    for word, count in Counter(text).items():
         for size in _clusters(word):
             counter[size] += count
     return dict(sorted(counter.items()))
@@ -418,18 +333,7 @@ def _consonant_clusters(counts: Counter[str]) -> dict[int, int]:
 @lru_cache(maxsize=CACHE_SIZE)
 def _clusters(word: str) -> tuple[int, ...]:
     """Lengths of the consonant clusters of a word in order"""
-    sizes = []
-    size = 0
-    for sound in transcribe(word):
-        if sound in CONSONANT_SOUNDS:
-            size += 1
-        else:
-            if size:
-                sizes.append(size)
-            size = 0
-    if size:
-        sizes.append(size)
-    return tuple(sizes)
+    return consonant_clusters(transcribe(word), CONSONANT_SOUNDS)
 
 
 def calc_hiatus(text: Sequence[str]) -> int:
@@ -456,12 +360,7 @@ def calc_hiatus(text: Sequence[str]) -> int:
         4
     """
     check_words(text)
-    return _hiatus(Counter(text))
-
-
-def _hiatus(counts: Counter[str]) -> int:
-    """Number of hiatuses by a counter of word forms"""
-    return sum(_word_hiatus(word) * count for word, count in counts.items())
+    return sum(_word_hiatus(word) * count for word, count in Counter(text).items())
 
 
 @lru_cache(maxsize=CACHE_SIZE)
@@ -493,19 +392,11 @@ def calc_cv_entropy(text: Sequence[str]) -> float:
         SourceTypeError: If the words are not a list of strings
     """
     check_words(text)
-    return _cv_entropy(Counter(text))
-
-
-def _cv_entropy(counts: Counter[str]) -> float:
-    """Entropy of the CV patterns by a counter of word forms"""
     patterns: Counter[str] = Counter()
-    for word, count in counts.items():
+    for word, count in Counter(text).items():
         if pattern := cv_pattern(word):
             patterns[pattern] += count
-    total = sum(patterns.values())
-    if not total:
-        return nan
-    return -sum(count / total * log2(count / total) for count in patterns.values()) or 0.0
+    return shannon_entropy(patterns)
 
 
 def calc_alliteration(text: Sequence[str], window_len: int = PHON_WINDOW_LEN) -> float:

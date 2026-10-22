@@ -1,44 +1,41 @@
 import re
-from collections import Counter
-from collections.abc import Collection, Iterable
+from collections.abc import Collection, Iterable, Sequence
 from math import nan
-from statistics import fmean, pstdev
+from statistics import fmean
+from typing import Any
 
+import anyts.syntax_stats
+from anyts.constants import AUXILIARY_DEPS, CLAUSE_DEPS, SUBORDINATE_CLAUSE_DEPS
 from anyts.syntax_stats import (
     base_dep,
-    calc_coordination_chains,
-    calc_dependency_distances,
-    calc_tree_depth,
+    calc_modifier_chains,
     calc_valency,
-    count_children,
+    count_noun_modifiers as count_noun_modifiers,
     get_children,
     get_words,
+    is_predicate as is_predicate,
     is_root,
     subtree_len,
 )
-from anyts.utils import has_feature, is_finite_verb, is_infinitive, is_word, safe_divide
+from anyts.utils import has_feature, is_word
 from spacy.language import Language
 from spacy.tokens import Doc, Token
 
 from .constants import (
     AGENT_PREPOSITION,
     AUXILIARY_VERBS,
-    CLAUSE_DEPS,
     DE_PREPOSITIONS,
     ENCLITICS,
     GERUND_PERIPHRASIS_VERBS,
     INFINITIVE_PERIPHRASES,
     LIGHT_VERBS,
     NEGATION_WORDS,
-    NOUN_MODIFIER_DEPS,
     PASSIVE_AUX,
     PREPOSITIONAL_LIGHT_VERBS,
     RAISING_VERBS,
     SE_IMPERSONAL_DEP,
     SE_PASSIVE_DEP,
     SPLIT_PREDICATE_NOUNS,
-    SUBJECT_DEPS,
-    SUBORDINATE_CLAUSE_DEPS,
     SYNTAX_STATS_DESC,
 )
 from .exceptions import SourceError, SourceTypeError
@@ -46,8 +43,6 @@ from .utils import _check_encoding, get_nlp, is_verbal_noun, lemmatize
 
 # Dependencies of the nominal part of a split predicate, in the order of preference
 SPLIT_PREDICATE_DEPS = ("compound", "obj", "nsubj", "iobj", "nmod", "obl")
-# Relations of an auxiliary: the models tag the auxiliary of a present passive as cop
-AUXILIARY_DEPS = ("aux", "cop")
 # Relations by which the models attach the gerund of a periphrasis to its verb
 PERIPHRASIS_DEPS = ("xcomp", "advcl")
 # The endings of the infinitive and the gerund, enclitics after them
@@ -64,20 +59,17 @@ LINKING_WORDS = frozenset(
 UNUSED_COMPONENTS = ["ner"]
 
 
-class SyntaxStats:
+class SyntaxStats(anyts.syntax_stats.SyntaxStats):
     """
     Class for computing the syntactic statistics of a text
 
     Description:
-        Measures of the dependency tree of Universal Dependencies (Ivanov,
-        Solnyshkina and Solovyev 2018) and the constructions of the Spanish
-        administrative style: the passive with ser and with se, the participial
-        and the gerund clauses, the chains of de and the split predicates
-        A Doc must carry the dependencies and the lemmas. Punctuation marks,
-        symbols and whitespace are not nodes of the tree, and distances are
-        counted in positions of words. The measures of a sentence (the longest
-        dependency, the depth, the nodes per leaf) are averaged over the
-        sentences, and the constructions are given per sentence
+        Extends the SyntaxStats of the anyTS core with the constructions of the
+        Spanish administrative style: the clauses (is_clause_head), the passive
+        with ser and with se, the gerund clauses, the chains of de, the words
+        of negation of NEGATION_WORDS and the split predicates. A string is
+        parsed by the spaCy model; a Doc must carry the dependencies and the
+        lemmas
 
     References:
         https://universaldependencies.org/u/dep/
@@ -101,6 +93,7 @@ class SyntaxStats:
             the model of SPACY_MODEL is loaded
 
     Attributes:
+        sents (tuple[tuple[Token]]): Words of every sentence with words
         n_sents (int): Number of sentences containing words
         n_words (int): Number of words
         n_leaves (int): Number of leaves - words with no dependent word
@@ -109,6 +102,7 @@ class SyntaxStats:
         n_clauses (int): Number of clauses
         n_subordinate_clauses (int): Number of subordinate clauses
         n_complex_sents (int): Number of sentences with a subordinate clause
+        n_infinitive_clauses (int): Number of infinitive clauses under a verb
         n_nouns (int): Number of nouns
         n_de_chains (int): Number of chains of de
         n_participle_clauses (int): Number of participial clauses
@@ -140,6 +134,7 @@ class SyntaxStats:
         mean_clause_len (float): Mean length of a clause in words
         subordinate_clauses_per_sent (float): Subordinate clauses per sentence
         p_complex_sents (float): Share of sentences with at least one subordinate clause
+        infinitive_clauses_per_sent (float): Infinitive clauses under a verb per sentence
         modifiers_per_noun (float): Mean number of modifiers of a noun
         de_chains_per_sent (float): Chains of de per sentence
         max_de_chain_len (int): Maximum length of a chain of de
@@ -157,22 +152,65 @@ class SyntaxStats:
         noun_verb_ratio (float): Ratio of the number of nouns to the number of verb forms
 
     Methods:
+        describe: Reading of a statistic by its scale, None for every statistic
         get_stats: Getting the computed syntactic statistics of the text
+        to_dataframe: Getting the statistics as a table of one row
         print_stats: Printing the computed syntactic statistics with descriptions
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc object, or the
             pipeline is not a spaCy Language
         SourceError: If the source has no words, no parse or no lemmas, or is
-            a string longer than the max_length of the pipeline
+            a string longer than the max_length of the pipeline or with a character
+            without a UTF-8 form
         DatasetNotFoundError: If a string is passed and the model is not installed
     """
+
+    requires_lemmas = True
+    negation_words = NEGATION_WORDS
+    stats_desc = SYNTAX_STATS_DESC
 
     def __init__(self, source: str | Doc, nlp: Language | None = None):
         if nlp is not None and not isinstance(nlp, Language):
             raise SourceTypeError("The pipeline must be a spaCy Language")
+        self._nlp = nlp
+        super().__init__(source)  # type: ignore[arg-type]  # parse takes a string too
+        words = [token for sent in self.sents for token in sent]
+        de_chains = [length for sent in self.sents for length in calc_de_chains(sent)]
+        self.n_de_chains = len(de_chains)
+        gerund_clauses = [subtree_len(token) for token in words if is_gerund_clause(token)]
+        self.n_gerund_clauses = len(gerund_clauses)
+        self.n_se_passives = sum(1 for token in words if token.dep_ == SE_PASSIVE_DEP)
+        self.n_impersonal_se = sum(1 for token in words if token.dep_ == SE_IMPERSONAL_DEP)
+        self.de_chains_per_sent = self.n_de_chains / self.n_sents
+        self.max_de_chain_len = max(de_chains, default=0)
+        self.gerund_clauses_per_sent = self.n_gerund_clauses / self.n_sents
+        self.mean_gerund_clause_len = fmean(gerund_clauses) if gerund_clauses else nan
+        self.se_passives_per_sent = self.n_se_passives / self.n_sents
+        self.impersonal_se_per_sent = self.n_impersonal_se / self.n_sents
+
+    def parse(self, source: str | Doc) -> Doc:
+        """
+        Getting the Doc of a source
+
+        Description:
+            A string is parsed by nlp or get_nlp() without the named entities;
+            a Doc is taken as it is
+
+        Arguments:
+            source (str|Doc): Data source
+
+        Returns:
+            Doc: Doc with a dependency parse
+
+        Raises:
+            SourceTypeError: If the source is neither a string nor a Doc object
+            SourceError: If a string is longer than the max_length of the pipeline or
+                has a character without a UTF-8 form
+            DatasetNotFoundError: If a string is passed and the model is not installed
+        """
         if isinstance(source, str):
-            pipeline = nlp or get_nlp()
+            pipeline = getattr(self, "_nlp", None) or get_nlp()
             if len(source) > pipeline.max_length:
                 raise SourceError(
                     f"The text of {len(source)} characters is longer than the limit of the "
@@ -180,119 +218,34 @@ class SyntaxStats:
                     "max_length on a pipeline of your own and pass it in nlp"
                 )
             _check_encoding(source)
-            source = pipeline(source, disable=UNUSED_COMPONENTS)
-        elif not isinstance(source, Doc):
-            raise SourceTypeError("The data source is set incorrectly")
-        if not source.has_annotation("DEP"):
-            raise SourceError(
-                "The data source has no parse: parse the text with a model that has a parser"
-            )
-        if not source.has_annotation("LEMMA"):
-            raise SourceError(
-                "The data source has no lemmas: parse the text with a pipeline that has "
-                "a lemmatizer"
-            )
-        sents = [sent_words for sent in source.sents if (sent_words := get_words(sent))]
-        if not sents:
-            raise SourceError("The data source has no words")
-        words = [token for sent in sents for token in sent]
-        self.n_sents = len(sents)
-        self.n_words = len(words)
+            return pipeline(source, disable=UNUSED_COMPONENTS)
+        return super().parse(source)
 
-        distances = [calc_dependency_distances(sent) for sent in sents]
-        all_distances = [distance for sent in distances for distance in sent]
-        depths = [calc_tree_depth(sent) for sent in sents]
-        leaves = [sum(1 for token in sent if not count_children(token)) for sent in sents]
-        self.c_children = dict(sorted(Counter(count_children(token) for token in words).items()))
-        self.c_deps = dict(sorted(Counter(token.dep_ for token in words).items()))
-        self.n_leaves = sum(leaves)
-        self.n_subtrees = self.n_words - self.n_leaves
-        finite_verbs = [token for token in words if is_finite_verb(token)]
-        chains = [length for sent in sents for length in calc_coordination_chains(sent)]
-        self.n_coordination_chains = len(chains)
-        heads = [[token for token in sent if is_clause_head(token)] for sent in sents]
-        self.n_clauses = sum(len(sent) for sent in heads)
-        subordinate = [sum(1 for token in sent if _is_subordinate(token)) for sent in heads]
-        self.n_subordinate_clauses = sum(subordinate)
-        self.n_complex_sents = sum(1 for count in subordinate if count)
-        nouns = [token for token in words if token.pos_ in ("NOUN", "PROPN")]
-        self.n_nouns = len(nouns)
-        de_chains = [length for sent in sents for length in calc_de_chains(sent)]
-        self.n_de_chains = len(de_chains)
-        participle_clauses = [subtree_len(token) for token in words if is_participle_clause(token)]
-        self.n_participle_clauses = len(participle_clauses)
-        gerund_clauses = [subtree_len(token) for token in words if is_gerund_clause(token)]
-        self.n_gerund_clauses = len(gerund_clauses)
-        self.n_verbs = sum(1 for token in words if token.pos_ == "VERB")
-        passive = [token for token in words if is_passive(token)]
-        self.n_passive = len(passive)
-        self.n_agentless_passive = sum(1 for token in passive if is_agentless(token))
-        self.n_se_passives = sum(1 for token in words if token.dep_ == SE_PASSIVE_DEP)
-        self.n_impersonal_se = sum(1 for token in words if token.dep_ == SE_IMPERSONAL_DEP)
-        self.n_infinitives = sum(1 for token in words if is_infinitive(token))
-        self.n_negations = sum(1 for token in words if is_negation(token))
-        split_predicates = find_split_predicates(words)
-        self.n_split_predicates = len(split_predicates)
-        self.split_predicates = tuple(
-            f"{verb.text} {noun.text}" for verb, noun in split_predicates
-        )
+    def __getstate__(self) -> dict[str, Any]:
+        """State for pickle and copy without the pipeline, which is no part of the statistics"""
+        state = super().__getstate__()
+        state.pop("_nlp", None)
+        return state
 
-        self.mean_dependency_distance = fmean(all_distances) if all_distances else nan
-        self.std_dependency_distance = pstdev(all_distances) if all_distances else nan
-        sent_maxima = [max(sent) for sent in distances if sent]
-        self.max_dependency_distance = fmean(sent_maxima) if sent_maxima else nan
-        self.p_adjacent_dependencies = safe_divide(
-            sum(1 for distance in all_distances if distance == 1), len(all_distances), nan
-        )
-        self.tree_depth = fmean(depths)
-        self.leaves_per_sent = self.n_leaves / self.n_sents
-        self.subtrees_per_sent = self.n_subtrees / self.n_sents
-        self.nodes_per_leaf = fmean(
-            len(sent) / n_leaves for sent, n_leaves in zip(sents, leaves, strict=True)
-        )
-        self.verb_valency = safe_divide(
-            sum(calc_valency(token) for token in finite_verbs), len(finite_verbs), nan
-        )
-        self.coordination_chains_per_sent = self.n_coordination_chains / self.n_sents
-        self.mean_coordination_chain_len = fmean(chains) if chains else nan
-        self.clauses_per_sent = self.n_clauses / self.n_sents
-        self.mean_clause_len = safe_divide(self.n_words, self.n_clauses, nan)
-        self.subordinate_clauses_per_sent = self.n_subordinate_clauses / self.n_sents
-        self.p_complex_sents = self.n_complex_sents / self.n_sents
-        self.modifiers_per_noun = safe_divide(
-            sum(count_noun_modifiers(token) for token in nouns), self.n_nouns, nan
-        )
-        self.de_chains_per_sent = self.n_de_chains / self.n_sents
-        self.max_de_chain_len = max(de_chains, default=0)
-        self.participle_clauses_per_sent = self.n_participle_clauses / self.n_sents
-        self.mean_participle_clause_len = fmean(participle_clauses) if participle_clauses else nan
-        self.gerund_clauses_per_sent = self.n_gerund_clauses / self.n_sents
-        self.mean_gerund_clause_len = fmean(gerund_clauses) if gerund_clauses else nan
-        self.p_passive = safe_divide(self.n_passive, self.n_verbs, nan)
-        self.p_agentless_passive = safe_divide(self.n_agentless_passive, self.n_passive, nan)
-        self.se_passives_per_sent = self.n_se_passives / self.n_sents
-        self.impersonal_se_per_sent = self.n_impersonal_se / self.n_sents
-        self.infinitives_per_sent = self.n_infinitives / self.n_sents
-        self.negations_per_sent = self.n_negations / self.n_sents
-        self.split_predicates_per_sent = self.n_split_predicates / self.n_sents
-        self.noun_verb_ratio = safe_divide(self.n_nouns, self.n_verbs, nan)
+    def is_clause_head(self, token: Token) -> bool:
+        """Head of a clause by the Spanish rules (is_clause_head)"""
+        return is_clause_head(token)
 
-    def get_stats(self) -> dict[str, float]:
-        """
-        Getting the computed syntactic statistics of the text
+    def is_subordinate_clause_head(self, token: Token) -> bool:
+        """Head of a subordinate clause by the Spanish rules (is_subordinate_clause_head)"""
+        return is_subordinate_clause_head(token)
 
-        Returns:
-            dict[str, float]: Dictionary of the computed syntactic statistics
-        """
-        return {stat: getattr(self, stat) for stat in SYNTAX_STATS_DESC}
+    def is_passive(self, token: Token) -> bool:
+        """Passive with ser or with se (is_passive)"""
+        return is_passive(token)
 
-    def print_stats(self) -> None:
-        """Printing the computed syntactic statistics with descriptions"""
-        print(f"{'Statistic':^50}|{'Value':^10}")
-        print("-" * 60)
-        stats = self.get_stats()
-        for stat, desc in SYNTAX_STATS_DESC.items():
-            print(f"{desc:50}|{stats[stat]:^10.2f}")
+    def is_agentless(self, token: Token) -> bool:
+        """Passive form with no complement of por (is_agentless)"""
+        return is_agentless(token)
+
+    def find_split_predicates(self, words: Sequence[Token]) -> list[tuple[Token, Token]]:
+        """Split predicates of a light verb and a verbal noun (find_split_predicates)"""
+        return find_split_predicates(words)
 
 
 def is_participle(token: Token) -> bool:
@@ -387,25 +340,6 @@ def is_clause_head(token: Token) -> bool:
     if token.dep_ == "parataxis":
         return is_predicate(token)
     return not (token.dep_ == "acl" and form == "Inf")
-
-
-def is_predicate(token: Token) -> bool:
-    """
-    Checking whether a token can be the predicate of its clause
-
-    Description:
-        A verb (VERB, AUX) or a word with a subject of its own (nsubj, csubj):
-        the nominal predicate of es alto passes, the parenthetical claro does not
-
-    Arguments:
-        token (Token): Token
-
-    Returns:
-        bool: Result of the check
-    """
-    return token.pos_ in ("VERB", "AUX") or any(
-        base_dep(child) in SUBJECT_DEPS for child in get_children(token)
-    )
 
 
 def is_subordinate_clause_head(token: Token) -> bool:
@@ -513,23 +447,6 @@ def _linking_word(token: Token) -> str:
     return token.text.lower().replace("á", "a")
 
 
-def count_noun_modifiers(token: Token) -> int:
-    """
-    Counting the modifiers of a noun phrase
-
-    Description:
-        The dependents with the relations amod, det, nmod, nummod and acl and
-        their subtypes; conj and appos are no modifiers
-
-    Arguments:
-        token (Token): Token
-
-    Returns:
-        int: Number of modifiers
-    """
-    return sum(1 for child in get_children(token) if base_dep(child) in NOUN_MODIFIER_DEPS)
-
-
 def is_de_modifier(token: Token) -> bool:
     """
     Checking whether a token is a complement introduced by de
@@ -551,12 +468,6 @@ def is_de_modifier(token: Token) -> bool:
     )
 
 
-def _de_chain_len(token: Token) -> int:
-    return 1 + max(
-        (_de_chain_len(child) for child in token.children if is_de_modifier(child)), default=0
-    )
-
-
 def calc_de_chains(tokens: Iterable[Token]) -> list[int]:
     """
     Computing the lengths of the chains of de
@@ -572,13 +483,7 @@ def calc_de_chains(tokens: Iterable[Token]) -> list[int]:
     Returns:
         list[int]: Lengths of the chains in the order of the words
     """
-    chains = []
-    for token in get_words(tokens):
-        if is_de_modifier(token) and not is_de_modifier(token.head):
-            length = _de_chain_len(token)
-            if length >= 2:
-                chains.append(length)
-    return chains
+    return calc_modifier_chains(tokens, is_de_modifier)
 
 
 def is_participle_clause(token: Token) -> bool:
@@ -636,14 +541,16 @@ def predicate_form(token: Token) -> str:
     Getting the verb form of a predicate
 
     Description:
-        The form of the first auxiliary or copula of a word with a verb form
-        (había llegado is finite, de haber matado an infinitive, siendo
-        elegido a gerund) or of the word itself without one. An auxiliary the
+        The form of the auxiliaries and copulas of a word: Fin when one of them
+        is finite or the first one is a participle, else the form of the first
+        one (había llegado is finite, de haber matado an infinitive, siendo
+        elegido a gerund), and without them the form of the word itself. An auxiliary the
         model leaves without a form is read by its ending when it is a verb of
         AUXILIARY_VERBS (habéis llegado) and skipped otherwise (the old
         spelling á). A participle auxiliary counts as finite: sido and estado
         follow a form of haber, which the models may attach to another word
-        (hubieras sido albañil)
+        (hubieras sido albañil). The predicate_form of the core with the
+        Spanish reading of an auxiliary without a form
 
     Arguments:
         token (Token): Token
@@ -651,25 +558,11 @@ def predicate_form(token: Token) -> str:
     Returns:
         str: Fin, Inf, Ger or Part, an empty string for a word with no verb form
     """
-    forms = [
-        form
-        for child in token.children
-        if base_dep(child) in AUXILIARY_DEPS and (form := _auxiliary_form(child))
-    ]
-    if not forms:
-        return _verb_form(token)
-    return "Fin" if forms[0] == "Part" else forms[0]
-
-
-def _verb_form(token: Token) -> str:
-    """Verb form of a token, an empty string without one"""
-    return next(iter(token.morph.get("VerbForm", [])), "")
+    return anyts.syntax_stats.predicate_form(token, _auxiliary_form)
 
 
 def _auxiliary_form(token: Token) -> str:
-    """Verb form of an auxiliary, by its ending when the model gives none"""
-    if form := _verb_form(token):
-        return form
+    """Verb form of an auxiliary the model leaves without one, by its ending"""
     word = token.text.lower()
     if lemmatize(word) not in AUXILIARY_VERBS:
         return ""
@@ -732,7 +625,7 @@ def is_agentless(token: Token) -> bool:
         bool: Result of the check
     """
     if not is_passive(token):
-        return True
+        return False
     return not any(is_agent(child) for child in get_children(token))
 
 
