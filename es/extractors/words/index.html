@@ -2565,8 +2565,13 @@
 <p><strong>ests.extractors.WordsExtractor</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<!-- core: extractors/words.md:WordsExtractor 912c6ba -->
-<p>Clase para extraer palabras de un texto. Permite usar distintos tokenizadores, filtrar palabras vacías, números y signos de puntuación, lematizar, construir N-gramas y fijar la longitud mínima y máxima de las palabras extraídas.</p>
+<!-- core: extractors/words.md:WordsExtractor 45872ab -->
+<p>Clase para extraer palabras de un texto.</p>
+<p>Excepciones:</p>
+<ul>
+<li><code>ParameterError</code> - un <code>ngram_range</code> que no es un par de enteros o cuyo límite inferior es menor que uno o mayor que el superior, un límite de longitud que no es un entero, un límite negativo, un mínimo mayor que el máximo;</li>
+<li><code>SourceTypeError</code> - palabras vacías que no son una colección de cadenas.</li>
+</ul>
 <h2 id="ganchos-del-idioma">Ganchos del idioma<a class="headerlink" href="#ganchos-del-idioma" title="Permanent link">&para;</a></h2>
 <p>La clase extiende el <code>WordsExtractor</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/extractors/words/">anyTS</a> con los ganchos del español:</p>
 <table>
@@ -2600,76 +2605,76 @@
 <p><a href="https://github.com/adbar/simplemma">simplemma</a> trabaja con un diccionario sin modelo entrenado: una forma conocida se convierte en su lema en minúsculas (<code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>), una forma desconocida se devuelve sin cambios (<code>Madrid</code>, <code>dámelo</code>).</p>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: extractors/words.md:WordsExtractor-parameters a447ca0 -->
+<!-- core: extractors/words.md:WordsExtractor-parameters 234b185 -->
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>tokenizer</code></td>
-<td style="text-align: center;">Pattern/Callable</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Tokenizador o expresión regular; por defecto, el método <code>tokenize</code></td>
+<td style="text-align: left;"><code>tokenizer</code></td>
+<td style="text-align: left;"><code>Pattern</code> / <code>Callable</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Tokenizador o expresión regular; por defecto, el método <code>tokenize</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>filter_punct</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>True</code></td>
-<td style="text-align: center;">Filtrar los signos de puntuación</td>
+<td style="text-align: left;"><code>filter_punct</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>True</code></td>
+<td style="text-align: left;">Filtrar los signos de puntuación</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>filter_nums</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Filtrar los números que reconoce <code>number_pattern</code></td>
+<td style="text-align: left;"><code>filter_nums</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Filtrar los números que reconoce <code>number_pattern</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>use_lexemes</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Usar los lemas de las palabras del método <code>lemmatize</code></td>
+<td style="text-align: left;"><code>use_lexemes</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Usar los lemas de las palabras del método <code>lemmatize</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>stopwords</code></td>
-<td style="text-align: center;">Collection[str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Palabras vacías, comparadas sin distinguir mayúsculas</td>
+<td style="text-align: left;"><code>stopwords</code></td>
+<td style="text-align: left;"><code>Collection[str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Palabras vacías, comparadas sin distinguir mayúsculas</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>lowercase</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Convertir las palabras a minúsculas</td>
+<td style="text-align: left;"><code>lowercase</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Convertir las palabras a minúsculas</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>ngram_range</code></td>
-<td style="text-align: center;">Tuple[int, int]</td>
-<td style="text-align: center;"><code>(1, 1)</code></td>
-<td style="text-align: center;">Límite inferior y superior del tamaño de los N-gramas</td>
+<td style="text-align: left;"><code>ngram_range</code></td>
+<td style="text-align: left;"><code>tuple[int, int]</code></td>
+<td style="text-align: left;"><code>(1, 1)</code></td>
+<td style="text-align: left;">Límite inferior y superior del tamaño de los N-gramas</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>min_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Longitud mínima de la palabra extraída en caracteres, <code>0</code> sin límite</td>
+<td style="text-align: left;"><code>min_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>0</code></td>
+<td style="text-align: left;">Longitud mínima de la palabra extraída en caracteres, <code>0</code> sin límite</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>max_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Longitud máxima de la palabra extraída en caracteres, <code>0</code> sin límite</td>
+<td style="text-align: left;"><code>max_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>0</code></td>
+<td style="text-align: left;">Longitud máxima de la palabra extraída en caracteres, <code>0</code> sin límite</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p>Una expresión regular como tokenizador es un separador: el texto se divide con <code>re.split</code>. Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Una lista de palabras vacías en minúsculas también filtra una palabra con mayúscula al principio de una oración. Un signo de puntuación es un token formado solo por signos y símbolos, también de varios caracteres: <code>?!</code>, <code>--</code>, <code>…</code>, <code>€</code> (véase <code>anyts.utils.is_punctuation</code>). Los tokens vacíos y de espacios se descartan antes de los filtros. Los N-gramas unen las palabras con <code>_</code>.</p>
+<p>Una expresión regular como tokenizador es un separador para <code>re.split</code>. Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Un signo de puntuación es un token solo de signos y símbolos, también de varios caracteres: <code>?!</code>, <code>--</code>, <code>…</code>, <code>€</code> (<code>anyts.utils.is_punctuation</code>). Los tokens vacíos y de espacios se descartan antes de los filtros. Los N-gramas unen las palabras con <code>_</code>.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
@@ -2677,26 +2682,27 @@
 </div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
-<!-- core: extractors/words.md:WordsExtractor-extract 67c60e1 -->
-<p>Extrae las palabras de un texto.</p>
+<!-- core: extractors/words.md:WordsExtractor-extract 383f135 -->
+<p><code>extract(text)</code> extrae las palabras de un texto.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Cadena de texto</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Cadena de texto</td>
 </tr>
 </tbody>
 </table>
+<p>Un texto que no es una cadena y un tokenizador que no es invocable o no devuelve cadenas lanzan <code>SourceTypeError</code>.</p>
 <p>Ejemplo de extracción de palabras con bigramas como tokens, tras filtrar números y palabras vacías y lematizar:</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
@@ -2716,26 +2722,27 @@
 </code></pre></div>
 </div>
 <h3 id="get_most_common">get_most_common<a class="headerlink" href="#get_most_common" title="Permanent link">&para;</a></h3>
-<!-- core: extractors/words.md:WordsExtractor-get_most_common a834177 -->
-<p>Devuelve las palabras más frecuentes del texto como una lista de pares (palabra, frecuencia), la más frecuente primero.</p>
+<!-- core: extractors/words.md:WordsExtractor-get_most_common 7c47d0f -->
+<p><code>get_most_common(n=10)</code> devuelve las palabras más frecuentes del texto como una lista de pares (palabra, frecuencia), la más frecuente primero.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Número de palabras más frecuentes</td>
+<td style="text-align: left;"><code>n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Número de palabras más frecuentes</td>
 </tr>
 </tbody>
 </table>
+<p>Un número que no es un entero de al menos uno lanza <code>ParameterError</code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
 <p>El método debe llamarse después de extraer las palabras con <code>extract</code>.</p>

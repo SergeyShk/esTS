@@ -2585,8 +2585,14 @@
 <p><strong>ests.visualizers.highlight()</strong>, <strong>ests.visualizers.HighlightedText</strong>, <strong>ests.visualizers.Highlight</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/highlight.md:HighlightedText ca113fe -->
-<p>El mecanismo del resaltado de un texto por capas, a la manera de los correctores de estilo: cada capa marca los fragmentos de un texto que cuenta una estadística - las oraciones largas, las palabras complejas, la pasiva. La fuente de datos puede ser un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>. El resultado se muestra en Jupyter como HTML con estilos y una leyenda; el método <code>to_html</code> devuelve el mismo marcado para la documentación y las aplicaciones web, y los fragmentos se guardan en el atributo <code>highlights</code> para una representación propia. Los fragmentos de capas distintas pueden solaparse.</p>
+<!-- core: visualizers/highlight.md:HighlightedText f056ba1 -->
+<p>Resaltado de un texto por capas, a la manera de los correctores de estilo: cada capa marca los fragmentos de un texto que cuenta una estadística - las oraciones largas, las palabras complejas, la pasiva. La fuente de datos es un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>. El resultado se muestra en Jupyter como HTML con estilos y una leyenda; <code>to_html</code> devuelve el marcado, y <code>highlights</code> guarda los fragmentos para una representación propia. Los fragmentos de capas distintas pueden solaparse.</p>
+<p>Excepciones:</p>
+<ul>
+<li><code>SourceTypeError</code> - una fuente que no es ni una cadena ni un <code>Doc</code>;</li>
+<li><code>SourceError</code> - una fuente sin palabras;</li>
+<li><code>ParameterError</code> - unas capas que no son un nombre ni una lista de nombres, una capa desconocida o una que necesita una anotación que le falta a la fuente.</li>
+</ul>
 <p>La función <code>highlight</code> devuelve un objeto <code>HighlightedText</code> de esTS, que extiende el <code>HighlightedText</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/visualizers/highlight/">anyTS</a> con las capas de la biblioteca, su búsqueda y sus parámetros, y el prefijo <code>ests</code> de las clases CSS.</p>
 <p>Capas del resaltado:</p>
 <table>
@@ -2698,32 +2704,31 @@
 <p>Una aliteración se busca dentro de una oración como una secuencia de dos palabras vecinas o más con el mismo sonido consonántico en su raíz. Los sonidos son los de la <a href="../../stats/phon_stats_funcs/#transcribe">transcripción</a>, así que <code>casa</code> y <code>queso</code> repiten k; la raíz es el comienzo común de las transcripciones de la forma y de su lema (<code>cantaban</code> - k a n t a), lo que deja fuera las terminaciones que se repiten por la concordancia (<code>las casas blancas</code>). La probabilidad de una secuencia con un reparto independiente de los sonidos es el producto sobre sus palabras de la probabilidad de encontrar la consonante entre los sonidos de la raíz, <span class="arithmatex">\(1 - (1 - f)^n\)</span>, donde <span class="arithmatex">\(f\)</span> es la frecuencia del sonido en el <a href="../../datasets/spanishliterature/">corpus de literatura</a> y <span class="arithmatex">\(n\)</span> el número de sonidos de la raíz; una secuencia se resalta cuando la probabilidad queda por debajo de <code>alliteration_threshold</code>. La repetición de un sonido raro se nota en dos o tres palabras (<code>deje la abeja</code>), mientras que la <code>s</code> de <code>los suspiros se escapan</code> es demasiado frecuente para contar en dos palabras. Las palabras de menos de tres letras (<code>de</code>, <code>la</code>, <code>el</code>) y las palabras vacías (<code>que</code>, <code>los</code>, <code>con</code>) no cortan ni continúan una secuencia. El índice de aliteración de <a href="../../stats/phon_stats/">PhonStats</a> mide cómo se agrupan las repeticiones en todo el texto; el resaltado muestra dónde están.</p>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/highlight.md:HighlightedText-parameters 94d89c2 -->
+<!-- core: visualizers/highlight.md:HighlightedText-parameters da96774 -->
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Valor por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>source</code></td>
-<td style="text-align: center;">str/Doc</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Fuente de datos (una cadena o un objeto Doc)</td>
+<td style="text-align: left;"><code>source</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Fuente de datos (una cadena o un objeto Doc)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>layers</code></td>
-<td style="text-align: center;">list[str]/str</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Capas del resaltado; si no se dan, las capas por defecto que la fuente permite; <code>"all"</code> - todas las permitidas</td>
+<td style="text-align: left;"><code>layers</code></td>
+<td style="text-align: left;"><code>list[str]</code> / <code>str</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Capas del resaltado; si no se dan, las capas por defecto que la fuente permite; <code>"all"</code> - todas las permitidas</td>
 </tr>
 </tbody>
 </table>
-<p>Una fuente que no es ni una cadena ni un <code>Doc</code> lanza <code>SourceTypeError</code>, una fuente sin palabras <code>SourceError</code>; unas capas que no son un nombre ni una lista de nombres, una capa desconocida o una que necesita una anotación que le falta a la fuente lanzan <code>ParameterError</code>.</p>
 <p>Los parámetros de las capas de esTS:</p>
 <table>
 <thead>
@@ -2769,66 +2774,104 @@
 </table>
 <p>Un umbral que no es un entero de al menos uno o una probabilidad fuera de (0, 1] lanza <code>ParameterError</code>, unas palabras vacías o unos clichés que no son cadenas <code>SourceTypeError</code>.</p>
 <h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/highlight.md:HighlightedText-attributes d9379e7 -->
+<!-- core: visualizers/highlight.md:HighlightedText-attributes 78a8c2b -->
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Atributo</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Atributo</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;">Texto de la fuente de datos</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">Texto de la fuente de datos</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>layers</code></td>
-<td style="text-align: center;">tuple[str]</td>
-<td style="text-align: center;">Capas activadas, en el orden de dibujo</td>
+<td style="text-align: left;"><code>layers</code></td>
+<td style="text-align: left;"><code>tuple[str]</code></td>
+<td style="text-align: left;">Capas activadas, en el orden de dibujo</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>highlights</code></td>
-<td style="text-align: center;">tuple[Highlight]</td>
-<td style="text-align: center;">Fragmentos resaltados, ordenados por su inicio y luego por su final descendente</td>
+<td style="text-align: left;"><code>highlights</code></td>
+<td style="text-align: left;"><code>tuple[Highlight]</code></td>
+<td style="text-align: left;">Fragmentos resaltados, ordenados por su inicio y luego por su final descendente</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>counts</code></td>
-<td style="text-align: center;">dict[str, int]</td>
-<td style="text-align: center;">Número de fragmentos de cada capa</td>
+<td style="text-align: left;"><code>counts</code></td>
+<td style="text-align: left;"><code>dict[str, int]</code></td>
+<td style="text-align: left;">Número de fragmentos de cada capa</td>
 </tr>
 </tbody>
 </table>
-<!-- core: visualizers/highlight.md:Highlight 58d8a45 -->
-<p>Un fragmento <code>Highlight</code> es un objeto inmutable con los campos <code>start</code> y <code>end</code> (posiciones en el texto), <code>layer</code> (la capa) y <code>note</code> (la explicación de la ventana emergente).</p>
-<p>La nota de un fragmento da el número de palabras de la oración, de sílabas de la palabra, la longitud de la cadena o la expresión de la lista.</p>
-<h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
-<h3 id="to_html">to_html<a class="headerlink" href="#to_html" title="Permanent link">&para;</a></h3>
-<!-- core: visualizers/highlight.md:HighlightedText-to_html a16305c -->
-<p>Devuelve el marcado HTML del texto resaltado: un <code>div</code> de la clase <code>&lt;prefix&gt;-highlight</code> con la leyenda y sus recuentos y el texto, donde los segmentos resaltados van dentro de un <code>span</code> de las clases <code>&lt;prefix&gt;-hl</code> y <code>&lt;prefix&gt;-hl-&lt;capa&gt;</code>, y las notas van al atributo <code>title</code>; <code>&lt;prefix&gt;</code> es el prefijo de las clases CSS. Los fragmentos solapados de capas distintas dan segmentos con varias clases, en el orden de dibujo. Los saltos de línea (<code>\n</code>, <code>\r\n</code>, <code>\r</code>) se guardan como referencias de caracteres, una por salto, así que el marcado puede insertarse en Markdown.</p>
+<!-- core: visualizers/highlight.md:Highlight cfcf714 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">Highlight</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">note</span><span class="o">=</span><span class="s1">''</span><span class="p">)</span>
+</code></pre></div>
+<p>Un fragmento del resaltado: un objeto inmutable con los parámetros como campos.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Valor por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Campo</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>legend</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>True</code></td>
-<td style="text-align: center;">Añadir la leyenda con los recuentos de los fragmentos</td>
+<td style="text-align: left;"><code>start</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Posición del primer carácter del fragmento en el texto</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>css</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>True</code></td>
-<td style="text-align: center;">Añadir los estilos de las capas</td>
+<td style="text-align: left;"><code>end</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Posición siguiente al último carácter del fragmento</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>layer</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Capa del resaltado</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>note</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>''</code></td>
+<td style="text-align: left;">Explicación del fragmento para la ventana emergente</td>
+</tr>
+</tbody>
+</table>
+<p>La nota de un fragmento da el número de palabras de la oración, de sílabas de la palabra, la longitud de la cadena o la expresión de la lista.</p>
+<h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
+<h3 id="to_html">to_html<a class="headerlink" href="#to_html" title="Permanent link">&para;</a></h3>
+<!-- core: visualizers/highlight.md:HighlightedText-to_html 1693b8b -->
+<p><code>to_html(legend=True, css=True)</code> devuelve el marcado HTML del texto resaltado: un <code>div</code> de la clase <code>&lt;prefix&gt;-highlight</code> con la leyenda, sus recuentos y el texto, donde un segmento resaltado es un <code>span</code> de las clases <code>&lt;prefix&gt;-hl</code> y <code>&lt;prefix&gt;-hl-&lt;layer&gt;</code> con las notas en su <code>title</code>; <code>&lt;prefix&gt;</code> es <code>css_prefix</code>. Los fragmentos solapados de capas distintas dan segmentos con varias clases, en el orden de dibujo. Los saltos de línea (<code>\n</code>, <code>\r\n</code>, <code>\r</code>) se convierten en referencias de caracteres, una por salto, así que el marcado puede ir en Markdown.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>legend</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>True</code></td>
+<td style="text-align: left;">Añadir la leyenda con los recuentos de los fragmentos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>css</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>True</code></td>
+<td style="text-align: left;">Añadir los estilos de las capas</td>
 </tr>
 </tbody>
 </table>

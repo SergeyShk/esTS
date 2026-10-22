@@ -2487,54 +2487,56 @@
 <p><strong>ests.visualizers.wordtree()</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/word_tree.md:wordtree 7b85f86 -->
-<p>La construcción de un <a href="https://www.weblyzard.com/word-tree/">árbol de palabras</a> que muestra los contextos de una palabra clave en un texto: en cada lista de palabras - una oración, por ejemplo - se cuentan los N-gramas de hasta <code>max_n</code> palabras que empiezan o terminan en la palabra clave. Cada nivel del árbol conserva los <code>max_per_n</code> N-gramas más frecuentes que continúan uno más corto ya conservado, alfabéticamente si empatan. Los N-gramas conservados se unen en dos árboles, las palabras tras la palabra clave y ante ella, con el tamaño de la letra según la frecuencia (<a href="https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/2011/Gruppe05/Homepage/Paper/wordtree-paper-wattenberg.pdf">Wattenberg y Viégas 2008</a>). Para dibujarlo hacen falta los ejecutables de <a href="https://graphviz.org/download/">Graphviz</a>.</p>
+<!-- core: visualizers/word_tree.md:wordtree c07e802 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">wordtree</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">max_n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_per_n</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div>
+<p>La construcción de un <a href="https://www.weblyzard.com/word-tree/">árbol de palabras</a> de los contextos de una palabra clave: en cada lista de palabras, como una oración, se cuentan los N-gramas de hasta <code>max_n</code> palabras que empiezan o terminan en la palabra clave. Cada nivel conserva los <code>max_per_n</code> N-gramas más frecuentes que continúan uno más corto ya conservado, alfabéticamente si empatan; se unen en dos árboles, tras la palabra clave y ante ella, con el tamaño de la letra según la frecuencia (<a href="https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/2011/Gruppe05/Homepage/Paper/wordtree-paper-wattenberg.pdf">Wattenberg y Viégas 2008</a>). Para dibujarlo hacen falta los ejecutables de <a href="https://graphviz.org/download/">Graphviz</a>.</p>
 <p>La función es la del núcleo <a href="https://sergeyshk.github.io/anyTS/visualizers/word_tree/">anyTS</a>.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/word_tree.md:wordtree-parameters d32a474 -->
+<!-- core: visualizers/word_tree.md:wordtree-parameters 7409f71 -->
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>texts</code></td>
-<td style="text-align: center;">list[list[str]]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Lista de listas de palabras</td>
+<td style="text-align: left;"><code>texts</code></td>
+<td style="text-align: left;"><code>list[list[str]]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de listas de palabras</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>keyword</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Palabra clave cuyos contextos se muestran</td>
+<td style="text-align: left;"><code>keyword</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabra clave cuyos contextos se muestran</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>max_n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>5</code></td>
-<td style="text-align: center;">Mayor tamaño del contexto</td>
+<td style="text-align: left;"><code>max_n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>5</code></td>
+<td style="text-align: left;">Mayor tamaño del contexto</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>max_per_n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>8</code></td>
-<td style="text-align: center;">Mayor número de ejemplos para cada tamaño del contexto</td>
+<td style="text-align: left;"><code>max_per_n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>8</code></td>
+<td style="text-align: left;">Mayor número de ejemplos para cada tamaño del contexto</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>**kwargs</code></td>
-<td style="text-align: center;">-</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Parámetros de dibujo: <code>max_font_size</code> (por defecto <code>30</code>), <code>min_font_size</code> (<code>12</code>), <code>font_interp</code> - una función de la frecuencia relativa de un nodo, su frecuencia entre la mayor (de 0 a 1], que da la parte del intervalo de <code>min_font_size</code> a <code>max_font_size</code>, de 0 a 1; la raíz cúbica por defecto</td>
+<td style="text-align: left;"><code>**kwargs</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Parámetros de dibujo: <code>max_font_size</code> (por defecto <code>30</code>), <code>min_font_size</code> (<code>12</code>), <code>font_interp</code> - una función de la frecuencia relativa de un nodo (su frecuencia entre la mayor, en (0, 1]) que da la parte del intervalo de <code>min_font_size</code> a <code>max_font_size</code>, de 0 a 1; la raíz cúbica por defecto</td>
 </tr>
 </tbody>
 </table>
-<p>La función devuelve un <code>Digraph</code> de graphviz.</p>
+<p>La función devuelve un <code>Digraph</code> de graphviz. Unos textos que no son una lista de listas de cadenas y una palabra clave que no es una cadena lanzan <code>SourceTypeError</code>; la falta de textos, o una palabra clave sin ninguna palabra a su lado en ninguno de ellos, <code>SourceError</code>; un <code>max_n</code> que no es un entero de al menos 2 y un <code>max_per_n</code> que no es un entero de al menos uno, <code>ParameterError</code>.</p>
 <h2 id="ejemplo-de-uso">Ejemplo de uso<a class="headerlink" href="#ejemplo-de-uso" title="Permanent link">&para;</a></h2>
 <p>Las oraciones de <em>Marianela</em> de Galdós del <a href="../../datasets/spanishliterature/">corpus de literatura</a>.</p>
 <div class="admonition example">

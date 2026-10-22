@@ -2631,9 +2631,15 @@
 <p><strong>ests.basic_stats.BasicStats</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<!-- core: stats/basic_stats.md:BasicStats ba50d56 -->
-<p>Las estadísticas básicas de un texto: el número de sus oraciones, palabras, caracteres, letras, espacios, sílabas y signos de puntuación, las distribuciones de las palabras por letras y por sílabas, y las palabras largas, complejas, simples, monosílabas y polisílabas. La fuente de datos puede ser un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>. Las letras se cuentan con <code>str.isalpha</code>, así que las cifras, los guiones y los signos dentro de una palabra no son letras.</p>
-<p>Las palabras de una cadena salen del extractor de palabras y sus oraciones del extractor de oraciones. Las palabras de un <code>Doc</code> salen de sus tokens (los signos de puntuación y los símbolos como <code>€</code> o <code>%</code> se descartan) y sus oraciones de sus límites, o del extractor de oraciones cuando no los tiene o solo tiene algunos (<code>has_sents</code>); un extractor indicado explícitamente se usa sobre el texto del <code>Doc</code>. Una línea en blanco termina una oración de una cadena y de un <code>Doc</code> sin límites; un <code>Doc</code> con límites sigue la regla cuando su pipeline inicia una oración tras una línea en blanco (<code>start_sents_after_blank_lines</code>, que una biblioteca del idioma registra con su propio nombre) antes del parser, <code>senter</code> o <code>sentencizer</code>. Una oración de pura puntuación no lleva ninguna palabra y no se cuenta.</p>
+<!-- core: stats/basic_stats.md:BasicStats b417be1 -->
+<p>Las estadísticas básicas de un texto: el número de sus oraciones, palabras, caracteres, sílabas y signos de puntuación y las distribuciones de sus palabras. La fuente de datos es un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>. Las letras se cuentan con <code>str.isalpha</code>, así que las cifras, los guiones y los signos dentro de una palabra no son letras.</p>
+<p>Las palabras y las oraciones de una cadena salen de los extractores. Un <code>Doc</code> da sus tokens como palabras, sin los signos de puntuación ni los símbolos como <code>€</code> o <code>%</code>, y sus límites como oraciones, o los del extractor de oraciones cuando no los tiene o solo tiene algunos (<code>has_sents</code>); un extractor indicado se usa en su lugar, sobre su texto. Una línea en blanco termina una oración de una cadena y de un <code>Doc</code> sin límites; un <code>Doc</code> con límites también, cuando su pipeline tiene <code>start_sents_after_blank_lines</code> (que una biblioteca del idioma registra con su propio nombre) antes del parser, <code>senter</code> o <code>sentencizer</code>. Una oración sin palabras, como una de pura puntuación, no se cuenta.</p>
+<p>Excepciones:</p>
+<ul>
+<li><code>SourceTypeError</code> - una fuente que no es ni una cadena ni un <code>Doc</code>, un extractor de otro tipo;</li>
+<li><code>SourceError</code> - una fuente sin palabras;</li>
+<li><code>ParameterError</code> - un umbral que no es un entero de al menos uno.</li>
+</ul>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>Las estadísticas se calculan al inicializar el objeto <code>BasicStats</code>.</p>
@@ -2641,199 +2647,171 @@
 <h2 id="ganchos-del-idioma">Ganchos del idioma<a class="headerlink" href="#ganchos-del-idioma" title="Permanent link">&para;</a></h2>
 <p>La clase extiende el <code>BasicStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/basic_stats/">anyTS</a> con los ganchos del español: las sílabas de una palabra se cuentan con <a href="../../syllables/#count_syllables"><code>count_syllables</code></a>, y los extractores por defecto son los <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> y <a href="../../extractors/words/"><code>WordsExtractor</code></a> del español. Los indicadores ordinales <code>º</code> y <code>ª</code> son letras (<code>3.º</code> es una palabra de una letra). Un <code>Doc</code> sin límites de oración (<code>spacy.blank</code>, un pipeline sin <code>parser</code> ni <code>senter</code>) toma sus oraciones del texto con <code>SentsExtractor</code>.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: stats/basic_stats.md:BasicStats-parameters 2296788 -->
+<!-- core: stats/basic_stats.md:BasicStats-parameters 362b585 -->
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>source</code></td>
-<td style="text-align: center;">str/Doc</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Fuente de datos (cadena u objeto Doc)</td>
+<td style="text-align: left;"><code>source</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Fuente de datos (cadena u objeto Doc)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>sents_extractor</code></td>
-<td style="text-align: center;">SentsExtractor</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Herramienta de extracción de oraciones; se usa también con un Doc, sobre su texto</td>
+<td style="text-align: left;"><code>sents_extractor</code></td>
+<td style="text-align: left;"><code>SentsExtractor</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Herramienta de extracción de oraciones; se usa también con un Doc, sobre su texto</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>words_extractor</code></td>
-<td style="text-align: center;">WordsExtractor</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Herramienta de extracción de palabras; se usa también con un Doc, sobre su texto</td>
+<td style="text-align: left;"><code>words_extractor</code></td>
+<td style="text-align: left;"><code>WordsExtractor</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Herramienta de extracción de palabras; se usa también con un Doc, sobre su texto</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>normalize</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Calcular las estadísticas normalizadas</td>
+<td style="text-align: left;"><code>normalize</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Calcular las estadísticas normalizadas</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>complex_syl_factor</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>COMPLEX_SYL_FACTOR</code></td>
-<td style="text-align: center;">Número mínimo de sílabas de una palabra compleja</td>
+<td style="text-align: left;"><code>complex_syl_factor</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>COMPLEX_SYL_FACTOR</code></td>
+<td style="text-align: left;">Número mínimo de sílabas de una palabra compleja</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>long_word_letter_factor</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>LONG_WORD_LETTER_FACTOR</code></td>
-<td style="text-align: center;">Número mínimo de letras de una palabra larga</td>
+<td style="text-align: left;"><code>long_word_letter_factor</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>LONG_WORD_LETTER_FACTOR</code></td>
+<td style="text-align: left;">Número mínimo de letras de una palabra larga</td>
 </tr>
 </tbody>
 </table>
-<p>Una fuente que no es ni una cadena ni un <code>Doc</code> y un extractor de otro tipo lanzan <code>SourceTypeError</code>, una fuente sin palabras <code>SourceError</code>, un umbral que no es un entero de al menos uno <code>ParameterError</code>.</p>
+<p>El objeto guarda <code>normalize</code>, <code>complex_syl_factor</code> y <code>long_word_letter_factor</code> con sus nombres.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
 <p>Los umbrales por defecto son los de las fórmulas de legibilidad: una palabra compleja tiene tres o más sílabas, como en SMOG, y una palabra larga siete o más letras, como en LIX y RIX.</p>
 </div>
 <h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
-<!-- core: stats/basic_stats.md:BasicStats-attributes ed90a25 -->
+<!-- core: stats/basic_stats.md:BasicStats-attributes 2687b35 -->
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Atributo</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Estadística</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+<th style="text-align: left;">Normalizada</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>c_letters</code></td>
-<td style="text-align: center;">dict[int, int]</td>
-<td style="text-align: center;">Distribución de las palabras por número de letras</td>
+<td style="text-align: left;"><code>c_letters</code></td>
+<td style="text-align: left;"><code>dict[int, int]</code></td>
+<td style="text-align: left;">Distribución de las palabras por número de letras</td>
+<td style="text-align: left;">-</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>c_syllables</code></td>
-<td style="text-align: center;">dict[int, int]</td>
-<td style="text-align: center;">Distribución de las palabras por número de sílabas</td>
+<td style="text-align: left;"><code>c_syllables</code></td>
+<td style="text-align: left;"><code>dict[int, int]</code></td>
+<td style="text-align: left;">Distribución de las palabras por número de sílabas</td>
+<td style="text-align: left;">-</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_sents</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de oraciones con palabras</td>
+<td style="text-align: left;"><code>n_sents</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de oraciones con palabras</td>
+<td style="text-align: left;">-</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de palabras</td>
+<td style="text-align: left;"><code>n_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de palabras</td>
+<td style="text-align: left;">-</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_unique_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de palabras únicas, sin distinguir mayúsculas</td>
+<td style="text-align: left;"><code>n_unique_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de palabras únicas, sin distinguir mayúsculas</td>
+<td style="text-align: left;"><code>p_unique_words</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_long_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de palabras largas</td>
+<td style="text-align: left;"><code>n_long_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de palabras largas, de al menos <code>long_word_letter_factor</code> letras</td>
+<td style="text-align: left;"><code>p_long_words</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_complex_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de palabras complejas</td>
+<td style="text-align: left;"><code>n_complex_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de palabras complejas, de al menos <code>complex_syl_factor</code> sílabas</td>
+<td style="text-align: left;"><code>p_complex_words</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_simple_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de palabras simples: con alguna sílaba, por debajo de las complejas</td>
+<td style="text-align: left;"><code>n_simple_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de palabras simples: con alguna sílaba, por debajo de las complejas</td>
+<td style="text-align: left;"><code>p_simple_words</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_monosyllable_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de palabras monosílabas</td>
+<td style="text-align: left;"><code>n_monosyllable_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de palabras monosílabas</td>
+<td style="text-align: left;"><code>p_monosyllable_words</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_polysyllable_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de palabras polisílabas</td>
+<td style="text-align: left;"><code>n_polysyllable_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de palabras polisílabas, de dos o más sílabas</td>
+<td style="text-align: left;"><code>p_polysyllable_words</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_chars</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de caracteres sin los saltos de línea</td>
+<td style="text-align: left;"><code>n_chars</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de caracteres sin los saltos de línea</td>
+<td style="text-align: left;">-</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_letters</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de letras</td>
+<td style="text-align: left;"><code>n_letters</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de letras</td>
+<td style="text-align: left;"><code>p_letters</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_spaces</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de espacios de Unicode (categoría Zs), como el espacio de no separación, y tabulaciones</td>
+<td style="text-align: left;"><code>n_spaces</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de espacios de Unicode (categoría Zs), como el espacio de no separación, y tabulaciones</td>
+<td style="text-align: left;"><code>p_spaces</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_syllables</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de sílabas</td>
+<td style="text-align: left;"><code>n_syllables</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de sílabas</td>
+<td style="text-align: left;">-</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_punctuations</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de signos de puntuación</td>
+<td style="text-align: left;"><code>n_punctuations</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de signos de puntuación</td>
+<td style="text-align: left;"><code>p_punctuations</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>c_punctuations</code></td>
-<td style="text-align: center;">dict[str, int]</td>
-<td style="text-align: center;">Distribución de los signos de puntuación por tipo</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_unique_words</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de palabras únicas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_long_words</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de palabras largas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_complex_words</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de palabras complejas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_simple_words</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de palabras simples</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_monosyllable_words</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de palabras monosílabas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_polysyllable_words</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de palabras polisílabas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_letters</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de letras</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_spaces</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de espacios</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_punctuations</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Número normalizado de signos de puntuación</td>
+<td style="text-align: left;"><code>c_punctuations</code></td>
+<td style="text-align: left;"><code>dict[str, int]</code></td>
+<td style="text-align: left;">Distribución de los signos de puntuación por tipo (<a href="#count_punctuations"><code>count_punctuations</code></a>)</td>
+<td style="text-align: left;">-</td>
 </tr>
 </tbody>
 </table>
-<p>Los recuentos de palabras se normalizan por el número de palabras, los de caracteres por el número de caracteres; las estadísticas normalizadas se calculan con <code>normalize=True</code>.</p>
+<p>Con <code>normalize=True</code> el objeto tiene también las estadísticas normalizadas, de tipo <code>float</code>: los recuentos de palabras divididos por el número de palabras, los de caracteres por el número de caracteres.</p>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <h3 id="count_words_by_syllables-count_words_by_letters">count_words_by_syllables, count_words_by_letters<a class="headerlink" href="#count_words_by_syllables-count_words_by_letters" title="Permanent link">&para;</a></h3>
 <!-- core: stats/basic_stats.md:BasicStats-count_words_by abc6821 -->
@@ -2843,8 +2821,8 @@
 <p>Estos métodos vuelven a contar las palabras complejas y largas con un umbral distinto del fijado al inicializar.</p>
 </div>
 <h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
-<!-- core: stats/basic_stats.md:BasicStats-get_stats c61b85d -->
-<p>Devuelve un diccionario con las estadísticas calculadas: una copia, editarlo no cambia el objeto.</p>
+<!-- core: stats/basic_stats.md:BasicStats-get_stats f52c936 -->
+<p><code>get_stats(flat)</code> devuelve un diccionario con las distribuciones <code>c_letters</code> y <code>c_syllables</code>, los recuentos de <code>stats_desc</code>, la distribución <code>c_punctuations</code> y, con <code>normalize=True</code>, los recuentos normalizados, como una copia: editarlo no cambia el objeto. Con <code>flat=True</code> las distribuciones dan una clave por cada valor que tiene el texto, como <code>c_letters_3</code> y <code>c_punctuations_comma</code>.</p>
 <p>Ejemplo de cálculo de las estadísticas básicas con normalización:</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
@@ -2888,8 +2866,8 @@
 </code></pre></div>
 </div>
 <h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
-<!-- core: stats/basic_stats.md:BasicStats-print_stats 3af6554 -->
-<p>Muestra una tabla con los recuentos de las estadísticas, sus descripciones de <code>stats_desc</code> y los encabezados de <code>stats_headers</code>.</p>
+<!-- core: stats/basic_stats.md:BasicStats-print_stats da79e92 -->
+<p><code>print_stats()</code> muestra una tabla con los recuentos de <code>stats_desc</code>, sus descripciones y los encabezados de <code>stats_headers</code>.</p>
 <p>Para ilustrar el método reutilizamos el código del ejemplo anterior:</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
@@ -2925,8 +2903,41 @@ Punctuation<span class="w"> </span>marks<span class="w">   </span><span class="p
 <div class="admonition info">
 <p><strong>ests.basic_stats.count_punctuations()</strong>, <strong>ests.basic_stats.punctuation_profile()</strong></p>
 </div>
-<!-- core: stats/basic_stats.md:count_punctuations fdfb6b0 -->
-<p><code>count_punctuations(text, marks, dash_pattern)</code> cuenta los signos de puntuación por tipo, la misma distribución que guarda el atributo <code>c_punctuations</code>: comas, puntos, signos de interrogación y de exclamación, puntos suspensivos, dos puntos, puntos y comas, rayas, guiones, comillas latinas, comillas, paréntesis y los demás signos. Primero se cuentan las rayas escritas con guiones (<code>dash_pattern</code>), luego los puntos suspensivos - el carácter <code>…</code>, tres o más puntos, o un par de puntos tras <code>?</code> y <code>!</code>, un solo signo cuyos puntos no cuentan como puntos (<code>¿Quién?..</code> es una interrogación y unos puntos suspensivos) - y después cada signo por su tipo en <code>marks</code>; cualquier otro carácter de las categorías Unicode P y S es otro signo (<code>§</code>, <code>€</code>, <code>°</code>). <code>marks</code> asigna a cada signo, un solo carácter, uno de los tipos, si no <code>ParameterError</code>, y <code>dash_pattern</code> es una expresión regular compilada; un texto que no es una cadena, unos signos que no son un mapeo y unas rayas que no son una expresión compilada lanzan <code>SourceTypeError</code>.</p>
+<!-- core: stats/basic_stats.md:count_punctuations b982de2 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">count_punctuations</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">marks</span><span class="o">=</span><span class="n">PUNCTUATION_MARKS</span><span class="p">,</span> <span class="n">dash_pattern</span><span class="o">=</span><span class="n">DASH_PATTERN</span><span class="p">)</span>
+</code></pre></div>
+<p>Cuenta los signos de puntuación por tipo, la distribución de <code>c_punctuations</code>: comas, puntos, signos de interrogación y de exclamación, puntos suspensivos, dos puntos, puntos y comas, rayas, guiones, comillas latinas, comillas, paréntesis y otros signos. Primero se cuentan las rayas escritas con guiones (<code>dash_pattern</code>), luego los puntos suspensivos - <code>…</code>, tres o más puntos, o dos tras <code>?</code> y <code>!</code>, un solo signo cuyos puntos no se cuentan como puntos (<code>¿Quién?..</code> es una interrogación y unos puntos suspensivos) - y después cada signo por su tipo en <code>marks</code>; cualquier otro carácter de las categorías Unicode P y S es otro signo (<code>§</code>, <code>€</code>, <code>°</code>).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Cadena de texto</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>marks</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>PUNCTUATION_MARKS</code></td>
+<td style="text-align: left;">Tipo de cada signo, uno de <code>PUNCTUATION_TYPES</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>dash_pattern</code></td>
+<td style="text-align: left;"><code>Pattern</code></td>
+<td style="text-align: left;"><code>DASH_PATTERN</code></td>
+<td style="text-align: left;">Rayas escritas con guiones</td>
+</tr>
+</tbody>
+</table>
+<p>Un signo de <code>marks</code> que no es un solo carácter o tiene un tipo desconocido lanza <code>ParameterError</code>; un texto que no es una cadena, unos <code>marks</code> que no son un mapeo y un <code>dash_pattern</code> que no es una expresión regular compilada lanzan <code>SourceTypeError</code>.</p>
 <p>Los signos y las rayas por defecto son los de la ortografía española: los signos de apertura <code>¿</code> y <code>¡</code> son de interrogación y de exclamación (<code>¿Qué?</code> lleva dos signos de interrogación), <code>—</code>, <code>–</code> y la barra horizontal <code>―</code> son rayas, y también la raya escrita con guiones - una serie de dos o más guiones, un guion tras espacio, al principio de línea o tras un signo de cierre, ante un espacio o entre una letra y un signo de apertura o de cierre (<code>--Hola --dijo Juan</code>, <code>- Se fueron - dijo</code>, <code>cuatro.-¿Cinco?</code>); un guion dentro de una palabra, ante una cifra o al final de línea dentro de una palabra es un guion (<code>teórico-práctico</code>, <code>-5</code>), <code>«»</code> son comillas latinas y <code>"“”‘’</code> las comillas de los tres niveles de la ortografía. Los signos combinantes y los caracteres invisibles de formato (Unicode M y Cf) se descartan de las palabras, pero no se cuentan como signos.</p>
 <p><code>punctuation_profile(text, n_words=None)</code> convierte los recuentos en frecuencias por cada 1000 palabras y añade <code>inverted_share</code>, la proporción de signos de apertura entre todos los signos de interrogación y exclamación: <code>0.5</code> cuando toda pregunta y exclamación empieza con <code>¿</code> o <code>¡</code> como exige la ortografía, menor cuando quien escribe los omite; sin palabras o sin signos de interrogación y exclamación es <code>nan</code>.</p>
 <p>El perfil depende del formato del texto (comillas y rayas tipográficas, signos de apertura), así que conviene leerlo aparte de los rasgos lingüísticos.</p>

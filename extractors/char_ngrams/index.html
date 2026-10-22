@@ -2565,68 +2565,73 @@
 <p><strong>ests.extractors.CharNgramsExtractor</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A class for extracting character N-grams from a text - sequences of N characters taken with a sliding window over the string. Character N-grams are a standard feature of stylometry and authorship attribution (Stamatatos 2009) and can replace words as the units of a text in measures such as Burrows's Delta.</p>
-<p>Whitespace runs are collapsed into a single space beforehand, punctuation marks are kept. With <code>within_words=True</code> N-grams do not cross word boundaries: the text is split into words by the tokenizer, punctuation is dropped, and words shorter than N yield no N-grams.</p>
+<p>A class for extracting character N-grams from a text - sequences of N characters taken with a sliding window over the string. Character N-grams are a standard feature of stylometry and authorship attribution (Stamatatos 2009) and can replace words in measures such as Burrows's Delta.</p>
+<p>Whitespace runs are collapsed into a single space, punctuation marks are kept. With <code>within_words=True</code> N-grams do not cross word boundaries: the text is split into words by the tokenizer, punctuation is dropped, and words shorter than N yield no N-grams.</p>
+<p>Raises:</p>
+<ul>
+<li><code>ParameterError</code> - an <code>n</code> that is not an integer of at least one.</li>
+</ul>
 <h2 id="language-hooks">Language hooks<a class="headerlink" href="#language-hooks" title="Permanent link">&para;</a></h2>
 <p>The class extends the <code>CharNgramsExtractor</code> of the <a href="https://sergeyshk.github.io/anyTS/extractors/char_ngrams/">anyTS</a> core with the hook of Spanish: its default word tokenizer for <code>within_words</code>, the method <code>tokenize(text)</code>, is the default tokenizer of <a href="../words/">WordsExtractor</a>, the rule-based tokenizer of the <a href="https://github.com/explosion/spaCy">spaCy</a> Spanish language class <code>ests.utils.tokenize</code>.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>2</code></td>
-<td style="text-align: center;">N-gram length in characters</td>
+<td style="text-align: left;"><code>n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>2</code></td>
+<td style="text-align: left;">N-gram length in characters</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>lowercase</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Convert the text to lower case</td>
+<td style="text-align: left;"><code>lowercase</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Convert the text to lower case</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>within_words</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Take N-grams only inside words</td>
+<td style="text-align: left;"><code>within_words</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Take N-grams only inside words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>tokenizer</code></td>
-<td style="text-align: center;">Pattern/Callable</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Word tokenizer for <code>within_words</code> or a regular expression; by default the <code>tokenize</code> method</td>
+<td style="text-align: left;"><code>tokenizer</code></td>
+<td style="text-align: left;"><code>Pattern</code> / <code>Callable</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Word tokenizer for <code>within_words</code> or a regular expression; by default the <code>tokenize</code> method</td>
 </tr>
 </tbody>
 </table>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
-<p>Extracts N-grams from a text.</p>
+<p><code>extract(text)</code> extracts N-grams from a text.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Text string</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Text string</td>
 </tr>
 </tbody>
 </table>
+<p>A text that is not a string raises <code>SourceTypeError</code>, and so does, with <code>within_words</code>, a tokenizer that cannot be called or does not return strings.</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">CharNgramsExtractor</span>
@@ -2646,25 +2651,26 @@
 </code></pre></div>
 </div>
 <h3 id="get_most_common">get_most_common<a class="headerlink" href="#get_most_common" title="Permanent link">&para;</a></h3>
-<p>Returns the top N-grams of the text as a list of (N-gram, frequency) pairs, the most frequent first.</p>
+<p><code>get_most_common(n=10)</code> returns the top N-grams of the text as a list of (N-gram, frequency) pairs, the most frequent first.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Number of top N-grams</td>
+<td style="text-align: left;"><code>n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Number of top N-grams</td>
 </tr>
 </tbody>
 </table>
+<p>A number that is not an integer of at least one raises <code>ParameterError</code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The method must be called after N-grams have been extracted with <code>extract</code>.</p>

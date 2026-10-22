@@ -2534,126 +2534,135 @@
 <p>Plots for the <a href="../../corpus/keyness/">corpus measures</a>: the lexical dispersion - where in a text a word occurs, a chart of the keywords found by <a href="../../corpus/keyness/"><code>keyness</code></a> and a network of the collocations found by <a href="../../corpus/collocations/"><code>collocations</code></a>. The matplotlib functions take the axes <code>ax</code> and return <code>Axes</code>: without <code>ax</code> a new figure is created, with it the plot goes into a grid of one's own; the network of collocations is built by graphviz and returns a <code>Graph</code>, as the <a href="../word_tree/">word tree</a> returns a <code>Digraph</code>.</p>
 <p>The functions are those of the <a href="https://sergeyshk.github.io/anyTS/visualizers/corpus/">anyTS</a> core. The default labels of the matplotlib plots are the English ones of <code>VISUALIZER_LABELS</code> in <code>anyts.constants</code>; <code>labels</code> replaces any of them.</p>
 <h2 id="dispersion_plot">Lexical dispersion<a class="headerlink" href="#dispersion_plot" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">dispersion_plot</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 <p>A row for every word of <code>targets</code> and a tick at the position of each of its occurrences in the text. Words are compared as they are: case and lemmatization belong to the extraction of the words.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>words</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Words of the text in order</td>
+<td style="text-align: left;"><code>words</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Words of the text in order</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>targets</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Words whose occurrences are shown</td>
+<td style="text-align: left;"><code>targets</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Words whose occurrences are shown</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>ax</code></td>
-<td style="text-align: center;">Axes</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Axes for the plot</td>
+<td style="text-align: left;"><code>ax</code></td>
+<td style="text-align: left;"><code>Axes</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Axes for the plot</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>labels</code></td>
-<td style="text-align: center;">dict[str, str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Labels over the defaults: <code>title</code>, <code>xlabel</code></td>
+<td style="text-align: left;"><code>labels</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Labels over the defaults: <code>title</code>, <code>xlabel</code></td>
 </tr>
 </tbody>
 </table>
+<p>Words or targets that are not a list of strings raise <code>SourceTypeError</code>, no words or no targets <code>SourceError</code>; labels that <code>merge_labels</code> refuses and an <code>ax</code> that is not a matplotlib <code>Axes</code> raise <code>ParameterError</code>.</p>
 <p>The words are extracted by <a href="../../extractors/words/"><code>WordsExtractor</code></a>: lower case with <code>lowercase=True</code>, lemmas with <code>use_lexemes=True</code>.</p>
 <h2 id="keyness_plot">Chart of keywords<a class="headerlink" href="#keyness_plot" title="Permanent link">&para;</a></h2>
-<p>Diverging horizontal bars: the words of <code>positive</code> to the right, of <code>negative</code> - the result of <code>keyness</code> with <code>positive=False</code> - to the left, the length of a bar is the absolute value of the <code>field</code> (<code>score</code>, <code>g2</code>, <code>log_ratio</code>), so the side is set by the list and not by the sign of the measure; <code>top_n</code> words on each side, the words with an undefined or infinite value are skipped. For the odds ratio (<code>score</code> from 0 to infinity, one - equal odds) set <code>log=True</code>: the absolute <span class="arithmatex">\(\log_2\)</span> of the value is plotted, symmetric around one.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">keyness_plot</span><span class="p">(</span><span class="n">positive</span><span class="p">,</span> <span class="n">negative</span><span class="o">=</span><span class="p">(),</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="s1">'score'</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>Diverging horizontal bars: the words of <code>positive</code> to the right, of <code>negative</code> (the result of <code>keyness</code> with <code>positive=False</code>) to the left, <code>top_n</code> on each side. The length of a bar is the absolute value of the <code>field</code> (<code>score</code>, <code>g2</code>, <code>log_ratio</code>), so the side is set by the list, not by the sign of the measure; words with an undefined or infinite value are skipped. For the odds ratio (from 0 to infinity, one - equal odds) <code>log=True</code> plots the absolute <span class="arithmatex">\(\log_2\)</span> of the value, symmetric around one.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>positive</code></td>
-<td style="text-align: center;">list[Keyword]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Positive keywords</td>
+<td style="text-align: left;"><code>positive</code></td>
+<td style="text-align: left;"><code>list[Keyword]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Positive keywords</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>negative</code></td>
-<td style="text-align: center;">list[Keyword]</td>
-<td style="text-align: center;"><code>()</code></td>
-<td style="text-align: center;">Negative keywords</td>
+<td style="text-align: left;"><code>negative</code></td>
+<td style="text-align: left;"><code>list[Keyword]</code></td>
+<td style="text-align: left;"><code>()</code></td>
+<td style="text-align: left;">Negative keywords</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>top_n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>20</code></td>
-<td style="text-align: center;">Number of words on each side</td>
+<td style="text-align: left;"><code>top_n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>20</code></td>
+<td style="text-align: left;">Number of words on each side</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>labels</code></td>
-<td style="text-align: center;">dict[str, str]/tuple[str, str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Labels over the defaults: <code>title</code>, <code>xlabel</code> and <code>xlabel_log</code> (format strings with <code>field</code>), <code>target</code> and <code>reference</code> (the legend); a pair of strings sets the legend alone</td>
+<td style="text-align: left;"><code>labels</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code> / <code>tuple[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Labels over the defaults: <code>title</code>, <code>xlabel</code> and <code>xlabel_log</code> (format strings with <code>field</code>), <code>target</code> and <code>reference</code> (the legend); a pair of strings sets the legend alone</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>field</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>score</code></td>
-<td style="text-align: center;">Field of <code>Keyword</code> whose values are plotted</td>
+<td style="text-align: left;"><code>field</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>'score'</code></td>
+<td style="text-align: left;">Field of <code>Keyword</code> whose values are plotted</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>log</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Plot <span class="arithmatex">\(\log_2\)</span> of the value - for the odds ratio</td>
+<td style="text-align: left;"><code>log</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Plot <span class="arithmatex">\(\log_2\)</span> of the value - for the odds ratio</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>ax</code></td>
-<td style="text-align: center;">Axes</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Axes for the plot</td>
+<td style="text-align: left;"><code>ax</code></td>
+<td style="text-align: left;"><code>Axes</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Axes for the plot</td>
 </tr>
 </tbody>
 </table>
+<p>Keywords that are not a list raise <code>SourceTypeError</code>, and no keyword with a finite value <code>SourceError</code>. An unknown <code>field</code>, a <code>top_n</code> that is not an integer of at least one, labels that <code>merge_labels</code> refuses or a legend that is not a pair, and an <code>ax</code> that is not a matplotlib <code>Axes</code> raise <code>ParameterError</code>.</p>
 <h2 id="collocation_network">Network of collocations<a class="headerlink" href="#collocation_network" title="Permanent link">&para;</a></h2>
-<p>An undirected graph: the nodes are the words with the size of the font by frequency, the edges the pairs with the width and the label by the value of the measure; the <code>neato</code> layout. A pair of a word with itself - a word repeated within the window - would be a loop and is left out before <code>top_n</code> pairs are taken. Rendering needs the executables of <a href="https://graphviz.org/download/">Graphviz</a>; in Jupyter the graph displays itself, and <code>graph.render("network")</code> saves a png file.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">collocation_network</span><span class="p">(</span><span class="n">collocations</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>An undirected graph in the <code>neato</code> layout: the nodes are the words, the size of the font by frequency, the edges the pairs, the width and the label by the measure. A pair of a word with itself (a word repeated within the window) would be a loop and is left out before <code>top_n</code>. Rendering needs the executables of <a href="https://graphviz.org/download/">Graphviz</a>; Jupyter displays the graph, and <code>graph.render("network")</code> saves a png file.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>collocations</code></td>
-<td style="text-align: center;">list[Collocation]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Collocations</td>
+<td style="text-align: left;"><code>collocations</code></td>
+<td style="text-align: left;"><code>list[Collocation]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Collocations</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>top_n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Number of pairs from the start of the list; <code>None</code> - all of them</td>
+<td style="text-align: left;"><code>top_n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Number of pairs from the start of the list; <code>None</code> - all of them</td>
 </tr>
 </tbody>
 </table>
+<p>Collocations that are not a list raise <code>SourceTypeError</code>, no pair of two different words <code>SourceError</code>, and a <code>top_n</code> that is not an integer of at least one <code>ParameterError</code>.</p>
 <h2 id="usage-example">Usage example<a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h2>
 <p><em>Marianela</em> by Galdós and six novels from the <a href="../../datasets/spanishliterature/">corpus of literature</a>: <em>Marianela</em>, <em>Misericordia</em> and <em>Torquemada en la hoguera</em> against <em>Niebla</em>, <em>Abel Sánchez</em> and <em>La tía Tula</em> by Unamuno.</p>
 <div class="admonition example">

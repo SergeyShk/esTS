@@ -3193,28 +3193,27 @@
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_ttr()</strong></p>
 </div>
-<p>Computation of the Type-Token Ratio (TTR).</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_ttr</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
 <p>The simplest measure of lexical diversity; it is not corrected for text length.</p>
-<p>Formula:</p>
 <div class="arithmatex">\[
 \frac{\textrm{Number of lexemes}}{\textrm{Number of words}}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -3222,28 +3221,27 @@
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_rttr()</strong></p>
 </div>
-<p>Computation of the Root Type-Token Ratio (RTTR).</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_rttr</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
 <p>A modification of TTR (Guiraud, 1960).</p>
-<p>Formula:</p>
 <div class="arithmatex">\[
 \frac{\textrm{Number of lexemes}}{\sqrt{\textrm{(Number of words)}}}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -3251,28 +3249,27 @@
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_cttr()</strong></p>
 </div>
-<p>Computation of the Corrected Type-Token Ratio (CTTR).</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_cttr</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
 <p>A modification of TTR (Carroll, 1964).</p>
-<p>Formula:</p>
 <div class="arithmatex">\[
 \frac{\textrm{Number of lexemes}}{\sqrt{2\times\textrm{(Number of words)}}}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -3280,28 +3277,27 @@
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_httr()</strong></p>
 </div>
-<p>Computation of the Herdan Type-Token Ratio (HTTR).</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_httr</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
 <p>A logarithmic modification of TTR (Herdan, 1960).</p>
-<p>Formula:</p>
 <div class="arithmatex">\[
 \frac{\log_{10} {\textrm{(Number of lexemes)}}}{\log_{10} {{\textrm{(Number of words)}}}}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -3309,397 +3305,342 @@
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_sttr()</strong></p>
 </div>
-<p>Computation of the Summer Type-Token Ratio (STTR).</p>
-<p>A logarithmic modification of TTR (Summer, 1966).</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The value depends on the logarithm base, 10 by default. See <a href="../diversity_stats/#conventions">conventions</a>. For a text of one lexeme the numerator is undefined, and for a text of no more words than the base the denominator <span class="arithmatex">\(\log \log N\)</span> is zero or negative, so the value is <code>nan</code> there, and so is every window of <code>calc_windowed</code> that short.</p>
-</div>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_sttr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+<p>A logarithmic modification of TTR (Summer, 1966). The value depends on the logarithm base (see the <a href="#conventions">conventions</a>). It is <code>nan</code> for a text of one lexeme, where the numerator is undefined, and for a text no longer than the base (<span class="arithmatex">\(\log \log N \le 0\)</span>), including such windows of <code>calc_windowed</code>.</p>
 <div class="arithmatex">\[
 \frac{\log_{10} {\log_{10} {\textrm{(Number of lexemes)}}}}{\log_{10} {\log_{10} {{\textrm{(Number of words)}}}}}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>base</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Logarithm base</td>
+<td style="text-align: left;"><code>base</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Logarithm base (<code>DIVERSITY_LOG_BASE</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>A <code>base</code> that is not a finite number above 1 raises <code>ParameterError</code>.</p>
 <h2 id="maas-type-token-ratio-mttr">Maas Type-Token Ratio (MTTR)<a class="headerlink" href="#maas-type-token-ratio-mttr" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_mttr()</strong></p>
 </div>
-<p>Computation of the Maas Type-Token Ratio (MTTR).</p>
-<p>A logarithmic modification of TTR (Maas, 1972).</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The value depends on the logarithm base, 10 by default. See <a href="../diversity_stats/#conventions">conventions</a>.</p>
-</div>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_mttr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+<p>A logarithmic modification of TTR (Maas, 1972). The value depends on the logarithm base (see the <a href="#conventions">conventions</a>).</p>
 <div class="arithmatex">\[
 \frac{\log_{10} {\textrm{(Number of words)}}-\log_{10} {\textrm{(Number of lexemes)}}}{\log_{10} {{\textrm{(Number of words)}}}^2}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>base</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Logarithm base</td>
+<td style="text-align: left;"><code>base</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Logarithm base (<code>DIVERSITY_LOG_BASE</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>A <code>base</code> that is not a finite number above 1 raises <code>ParameterError</code>.</p>
 <h2 id="dugast-type-token-ratio-dttr">Dugast Type-Token Ratio (DTTR)<a class="headerlink" href="#dugast-type-token-ratio-dttr" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_dttr()</strong></p>
 </div>
-<p>Computation of the Dugast Type-Token Ratio (DTTR).</p>
-<p>A logarithmic modification of TTR (Dugast, 1978), the reciprocal of the Maas metric.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The value depends on the logarithm base, 10 by default. See <a href="../diversity_stats/#conventions">conventions</a>. A text without repeated words has an infinite value, like the other reciprocal measures.</p>
-</div>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_dttr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+<p>A logarithmic modification of TTR (Dugast, 1978), the reciprocal of the Maas metric. The value depends on the logarithm base (see the <a href="#conventions">conventions</a>). A text without repeated words has an infinite value.</p>
 <div class="arithmatex">\[
 \frac{\log_{10} {{\textrm{(Number of words)}}}^2}{\log_{10} {\textrm{(Number of words)}}-\log_{10} {\textrm{(Number of lexemes)}}}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>base</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Logarithm base</td>
+<td style="text-align: left;"><code>base</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Logarithm base (<code>DIVERSITY_LOG_BASE</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>A <code>base</code> that is not a finite number above 1 raises <code>ParameterError</code>.</p>
 <h2 id="moving-average-type-token-ratio-mattr">Moving Average Type-Token Ratio (MATTR)<a class="headerlink" href="#moving-average-type-token-ratio-mattr" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_mattr()</strong></p>
 </div>
-<p>Computation of the Moving Average Type-Token Ratio (MATTR).</p>
-<p>A moving-average modification of TTR (Covington &amp; McFall, 2010). Independent of text length.</p>
-<p>Algorithm:</p>
-<ol>
-<li>Slide a fixed-size window over the text</li>
-<li>Compute TTR for every window</li>
-<li>Average the values</li>
-</ol>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For texts shorter than the window the TTR of the whole text is returned.</p>
-</div>
-<p>Parameters:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_mattr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</code></pre></div>
+<p>A moving-average modification of TTR (Covington &amp; McFall, 2010), independent of text length: a window of fixed size slides over the text, and the TTR of every window is averaged. For texts shorter than the window the TTR of the whole text is returned.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>window_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>50</code></td>
-<td style="text-align: center;">Window size</td>
+<td style="text-align: left;"><code>window_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>50</code></td>
+<td style="text-align: left;">Window size (<code>MATTR_WINDOW_LEN</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>A <code>window_len</code> that is not an integer of at least one raises <code>ParameterError</code>.</p>
 <h2 id="mean-segmental-type-token-ratio-msttr">Mean Segmental Type-Token Ratio (MSTTR)<a class="headerlink" href="#mean-segmental-type-token-ratio-msttr" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_msttr()</strong></p>
 </div>
-<p>Computation of the Mean Segmental Type-Token Ratio (MSTTR).</p>
-<p>A segmentation-based modification of TTR (Johnson, 1944). Independent of text length.</p>
-<p>Algorithm:</p>
-<ol>
-<li>Split the text into fixed-size segments</li>
-<li>Compute TTR for every segment</li>
-<li>Average the values</li>
-</ol>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For texts shorter than the segment the TTR of the whole text is returned; an incomplete last segment is dropped.</p>
-</div>
-<p>Parameters:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_msttr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">segment_len</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</code></pre></div>
+<p>A segmentation-based modification of TTR (Johnson, 1944), independent of text length: the text is split into segments of fixed size, and the TTR of every segment is averaged; an incomplete last segment is dropped. For texts shorter than the segment the TTR of the whole text is returned.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>segment_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>50</code></td>
-<td style="text-align: center;">Segment size</td>
+<td style="text-align: left;"><code>segment_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>50</code></td>
+<td style="text-align: left;">Segment size (<code>MATTR_WINDOW_LEN</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>A <code>segment_len</code> that is not an integer of at least one raises <code>ParameterError</code>.</p>
 <h2 id="measure-of-textual-lexical-diversity-mtld">Measure of Textual Lexical Diversity (MTLD)<a class="headerlink" href="#measure-of-textual-lexical-diversity-mtld" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_mtld()</strong></p>
 </div>
-<p>Computation of the Measure of Textual Lexical Diversity (MTLD).</p>
-<p>A modification of MSTTR (McCarthy, 2005). Independent of text length.</p>
-<p>Algorithm:</p>
-<ol>
-<li>The text is divided into factors - stretches on which TTR drops to the threshold 0.72 inclusive (<code>TTR &lt;= 0.72</code>, see <a href="../diversity_stats/#conventions">conventions</a>)</li>
-<li>An incomplete factor at the end of the text counts partially, in proportion to how close its TTR came to the threshold</li>
-<li>The number of words is divided by the number of factors</li>
-</ol>
-<p>The refined version of the algorithm makes two passes over the text - forward and backward - and averages the values (McCarthy &amp; Jarvis, 2010).</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The minimum factor length is non-standard (Kyle's lexical-diversity). If no factor completes and TTR never drops below 1, infinity is returned.</p>
-</div>
-<p>Parameters:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_mtld</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">min_len</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.72</span><span class="p">)</span>
+</code></pre></div>
+<p>A modification of MSTTR (McCarthy, 2005), independent of text length: the number of words divided by the number of factors, the stretches on which TTR drops to the threshold (<code>TTR &lt;= threshold</code>, see the <a href="#conventions">conventions</a>). An incomplete last factor counts in proportion to how close its TTR came to the threshold. The value is the mean of a forward and a backward pass (McCarthy &amp; Jarvis, 2010). The minimum factor length is non-standard (Kyle's lexical-diversity), and a <code>min_len</code> of 0 disables it. If no factor completes and TTR never drops below 1, the value is infinity.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>min_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Minimum factor length</td>
+<td style="text-align: left;"><code>min_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Minimum factor length (<code>MTLD_MIN_LEN</code>)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>threshold</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><code>0.72</code></td>
-<td style="text-align: center;">TTR threshold for completing a factor</td>
+<td style="text-align: left;"><code>threshold</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>0.72</code></td>
+<td style="text-align: left;">TTR threshold for completing a factor (<code>MTLD_TTR_THRESHOLD</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>A <code>min_len</code> that is not a non-negative integer and a <code>threshold</code> that is not a number in (0, 1) raise <code>ParameterError</code>.</p>
 <h2 id="moving-average-measure-of-textual-lexical-diversity-ma-mtld">Moving Average Measure of Textual Lexical Diversity (MA-MTLD)<a class="headerlink" href="#moving-average-measure-of-textual-lexical-diversity-ma-mtld" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_mamtld()</strong></p>
 </div>
-<p>Computation of the Moving Average Measure of Textual Lexical Diversity (MA-MTLD).</p>
-<p>A moving-window modification of MTLD after MTLD-MA of koRpus: a factor starts at every position of the text, the value is the mean length of completed factors over two passes, forward and backward. Factors not completed by the end of the text are ignored. The values differ from those of koRpus, which makes the forward pass only, closes a factor at TTR strictly below the threshold and drops the factors shorter than its minimum length instead of extending them to it.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>If no factor completes, the function returns <code>nan</code>. The metric is unstable on short texts.</p>
-</div>
-<p>Parameters:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_mamtld</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">min_len</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.72</span><span class="p">)</span>
+</code></pre></div>
+<p>A moving-window modification of MTLD after MTLD-MA of koRpus: a factor starts at every position of the text, and the value is the mean length of the completed factors over a forward and a backward pass. koRpus makes the forward pass only, closes a factor at TTR strictly below the threshold and drops factors shorter than the minimum length instead of extending them. If no factor completes, the value is <code>nan</code>. The metric is unstable on short texts.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>min_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Minimum factor length</td>
+<td style="text-align: left;"><code>min_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Minimum factor length (<code>MTLD_MIN_LEN</code>)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>threshold</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><code>0.72</code></td>
-<td style="text-align: center;">TTR threshold for completing a factor</td>
+<td style="text-align: left;"><code>threshold</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>0.72</code></td>
+<td style="text-align: left;">TTR threshold for completing a factor (<code>MTLD_TTR_THRESHOLD</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>A <code>min_len</code> that is not a non-negative integer and a <code>threshold</code> that is not a number in (0, 1) raise <code>ParameterError</code>.</p>
 <h2 id="mtld-with-a-moving-window-and-text-wrap-mtld-w">MTLD with a moving window and text wrap (MTLD-W)<a class="headerlink" href="#mtld-with-a-moving-window-and-text-wrap-mtld-w" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_mtldw()</strong></p>
 </div>
-<p>Computation of MTLD-W (lexical-diversity <code>mtld_ma_wrap</code>, TAALED).</p>
-<p>A modification of MA-MTLD: a factor starts at every position of the text, and factors not completed by the end of the text continue from its beginning, so all positions get equal weight. A factor cannot be longer than the text.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>If TTR does not drop to the threshold even over the whole text, the function returns <code>nan</code>. The metric is unstable on texts shorter than 100 words.</p>
-</div>
-<p>Parameters:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_mtldw</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">min_len</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.72</span><span class="p">)</span>
+</code></pre></div>
+<p>A modification of MA-MTLD after <code>mtld_ma_wrap</code> of lexical-diversity and TAALED: factors not completed by the end of the text continue from its beginning, so all positions get equal weight. A factor cannot be longer than the text. If no factor completes, because the text is shorter than <code>min_len</code> or TTR drops to the threshold from no start, the value is <code>nan</code>. The metric is unstable on texts shorter than 100 words.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>min_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Minimum factor length</td>
+<td style="text-align: left;"><code>min_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Minimum factor length (<code>MTLD_MIN_LEN</code>)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>threshold</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><code>0.72</code></td>
-<td style="text-align: center;">TTR threshold for completing a factor</td>
+<td style="text-align: left;"><code>threshold</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>0.72</code></td>
+<td style="text-align: left;">TTR threshold for completing a factor (<code>MTLD_TTR_THRESHOLD</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>A <code>min_len</code> that is not a non-negative integer and a <code>threshold</code> that is not a number in (0, 1) raise <code>ParameterError</code>.</p>
 <h2 id="hypergeometric-distribution-d-hd-d">Hypergeometric Distribution D (HD-D)<a class="headerlink" href="#hypergeometric-distribution-d-hd-d" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_hdd()</strong></p>
 </div>
-<p>Computation of the Hypergeometric Distribution D (HD-D).</p>
-<p>An alternative to vocd-D (McCarthy &amp; Jarvis, 2010): instead of drawing random segments of the text, it computes the expected TTR of a random sample of <code>sample_size</code> words exactly. For every lexeme the hypergeometric distribution gives the probability that the sample holds it at least once; the sum of these probabilities is the expected number of lexemes in the sample, and HD-D is that number divided by the sample size. The value involves no randomness.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>For texts shorter than 50 words or than the sample size the metric is undefined; the function returns <code>nan</code>.</p>
-</div>
-<p>Parameters:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_hdd</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</code></pre></div>
+<p>An alternative to vocd-D (McCarthy &amp; Jarvis, 2010): the exact expected TTR of a random sample of <code>sample_size</code> words, without drawing samples. The hypergeometric distribution gives the probability that the sample holds each lexeme at least once; HD-D is the sum of these probabilities divided by the sample size. For texts shorter than 50 words or than the sample size the metric is undefined, and the value is <code>nan</code>.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>sample_size</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>42</code></td>
-<td style="text-align: center;">Sample size in words, 35 to 50 in the literature</td>
+<td style="text-align: left;"><code>sample_size</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>42</code></td>
+<td style="text-align: left;">Sample size in words (<code>HDD_SAMPLE_SIZE</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>A <code>sample_size</code> that is not an integer of at least one raises <code>ParameterError</code>.</p>
 <h2 id="simpsons-index-d">Simpson's index (D)<a class="headerlink" href="#simpsons-index-d" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_simpson_index()</strong></p>
 </div>
-<p>Computation of <a href="https://en.wikipedia.org/wiki/Diversity_index#Simpson_index">Simpson's index</a>.</p>
-<p>The probability that two words drawn from the text at random without replacement are the same lexeme. The lower the value, the richer the vocabulary.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>For texts shorter than two words the index is undefined; the function returns <code>nan</code>. The same holds for the inverse Simpson's index and the Gini-Simpson index.</p>
-</div>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_simpson_index</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>The probability that two words drawn from the text at random without replacement are the same lexeme; <span class="arithmatex">\(n\)</span> is the number of occurrences of a lexeme in the text. For texts shorter than two words the index is undefined, and the value is <code>nan</code>; the same holds for the inverse Simpson's index and the Gini-Simpson index.</p>
 <div class="arithmatex">\[
 \frac{\sum n\times(n-1)}{\textrm{(Number of words)}\times(\textrm{Number of words}-1)}
 \]</div>
-<p>where <span class="arithmatex">\(n\)</span> is the number of occurrences of a lexeme in the text.</p>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -3707,32 +3648,27 @@
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_inverse_simpson_index()</strong></p>
 </div>
-<p>Computation of the <a href="https://en.wikipedia.org/wiki/Diversity_index#Inverse_Simpson_index">inverse Simpson's index</a>, an estimate of the Hill number of order two (<span class="arithmatex">\(1/\sum_k p_k^2\)</span>) from pairs drawn without replacement.</p>
-<p>The higher the value, the richer the vocabulary.</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_inverse_simpson_index</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>An estimate of the Hill number of order two (<span class="arithmatex">\(1/\sum_k p_k^2\)</span>) from pairs drawn without replacement. If all words of the text are unique, Simpson's index is 0 and the inverse index is infinity.</p>
 <div class="arithmatex">\[
 \frac{1}{D}
 \]</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>If all words of the text are unique, Simpson's index is 0 and the inverse index is infinity.</p>
-</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -3740,28 +3676,27 @@
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_gini_simpson_index()</strong></p>
 </div>
-<p>Computation of the <a href="https://en.wikipedia.org/wiki/Diversity_index#Gini–Simpson_index">Gini-Simpson index</a>.</p>
-<p>The probability that two randomly chosen words of the text are different. The higher the value, the richer the vocabulary.</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_gini_simpson_index</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>The probability that two randomly chosen words of the text are different.</p>
 <div class="arithmatex">\[
 1-D
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -3769,36 +3704,27 @@
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_hapax_index()</strong>, alias <strong>ests.diversity_stats.calc_honore_r()</strong></p>
 </div>
-<p>Computation of the <a href="https://en.wikipedia.org/wiki/Hapax_legomenon">hapax index</a>.</p>
-<div class="admonition quote">
-<p class="admonition-title">Definition</p>
-<p>A hapax (Greek ἅπαξ λεγόμενον - "said only once") is a word that occurs only once in a certain corpus of texts. For instance, <em>baciyelmo</em>, Sancho Panza's word for the barber's basin that Don Quixote takes for a helmet, is a hapax of Cervantes (it occurs once, in chapter 44 of the first part of <em>Don Quixote</em>).</p>
-</div>
-<p>The metric coincides with Honoré's measure (1979), with the natural logarithm.</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_hapax_index</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>A hapax (Greek ἅπαξ λεγόμενον - "said only once") is a word that occurs only once in a corpus: <em>baciyelmo</em>, Sancho Panza's word for the barber's basin that Don Quixote takes for a helmet, is a hapax of Cervantes (chapter 44 of the first part of <em>Don Quixote</em>). The index coincides with Honoré's measure (1979), with the natural logarithm. If all words of the text are hapaxes, the index is infinity; for texts shorter than two words it is undefined, and the value is <code>nan</code>. <code>calc_honore_r</code> is the same function.</p>
 <div class="arithmatex">\[
 100\times\frac{\ln {\textrm{(Number of words)}}}{1-\frac{\textrm{Number of hapaxes}}{\textrm{Number of lexemes}}}
 \]</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>If all words of the text are hapaxes, the index is infinity. For texts shorter than two words the index is undefined; the function returns <code>nan</code>.</p>
-</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -3806,24 +3732,25 @@
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_frequency_spectrum()</strong></p>
 </div>
-<p>Computation of the frequency spectrum - the number of lexemes <span class="arithmatex">\(V_i\)</span> occurring exactly <span class="arithmatex">\(i\)</span> times in the text. The measures below are computed from it; their formulas are checked against Tweedie and Baayen (1998).</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_frequency_spectrum</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>The number of lexemes <span class="arithmatex">\(V_i\)</span> occurring exactly <span class="arithmatex">\(i\)</span> times in the text, as a dictionary by the frequency <span class="arithmatex">\(i\)</span> in ascending order. The hapax index, Yule's K and I, Herdan's Vm, Sichel's S, Michéa's M, Baayen's P, the hapax ratio and the α₂ exponent are computed from it, with the formulas of Tweedie and Baayen (1998).</p>
 <p>Notation: <span class="arithmatex">\(N\)</span> - number of words, <span class="arithmatex">\(V\)</span> - number of lexemes, <span class="arithmatex">\(V_i\)</span> - number of lexemes with frequency <span class="arithmatex">\(i\)</span>, <span class="arithmatex">\(V_1\)</span> - hapaxes, <span class="arithmatex">\(V_2\)</span> - dis legomena, <span class="arithmatex">\(p_k\)</span> - relative frequency of a lexeme.</p>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -3831,27 +3758,27 @@
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_yule_k()</strong></p>
 </div>
-<p>Computation of Yule's characteristic (Yule, 1944). One of the few measures theoretically independent of text length (Tweedie &amp; Baayen, 1998); in practice it converges as the text grows. The lower the value, the richer the vocabulary. Proportional to Simpson's index: <span class="arithmatex">\(K \approx 10^4 \cdot D\)</span>.</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_yule_k</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Yule's characteristic (Yule, 1944), one of the few measures theoretically independent of text length (Tweedie &amp; Baayen, 1998); in practice it converges as the text grows. It is proportional to Simpson's index: <span class="arithmatex">\(K \approx 10^4 \cdot D\)</span>. For texts shorter than two words the value is <code>nan</code>.</p>
 <div class="arithmatex">\[
 K = 10^4\times\frac{\sum_i i^2 V_i - N}{N^2}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -3859,27 +3786,27 @@ K = 10^4\times\frac{\sum_i i^2 V_i - N}{N^2}
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_yule_i()</strong></p>
 </div>
-<p>Computation of the inverse Yule's characteristic. The higher the value, the richer the vocabulary; if all words of the text are unique, the value is infinity.</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_yule_i</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>The inverse Yule's characteristic. If all words of the text are unique, the value is infinity; for texts shorter than two words it is <code>nan</code>.</p>
 <div class="arithmatex">\[
 I = \frac{V^2}{\sum_i i^2 V_i - V}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -3887,27 +3814,27 @@ I = \frac{V^2}{\sum_i i^2 V_i - V}
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_herdan_vm()</strong></p>
 </div>
-<p>Computation of Herdan's measure (Herdan, 1955). Theoretically independent of text length; the lower the value, the richer the vocabulary.</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_herdan_vm</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Herdan's measure (Herdan, 1955), theoretically independent of text length. For texts shorter than two words the value is <code>nan</code>.</p>
 <div class="arithmatex">\[
 V_m = \sqrt{\sum_i V_i \left(\frac{i}{N}\right)^2 - \frac{1}{V}}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -3915,27 +3842,27 @@ V_m = \sqrt{\sum_i V_i \left(\frac{i}{N}\right)^2 - \frac{1}{V}}
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_sichel_s()</strong></p>
 </div>
-<p>Computation of Sichel's measure (Sichel, 1975) - the share of dis legomena, lexemes with frequency 2, among all lexemes. Stable across texts of different lengths.</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_sichel_s</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Sichel's measure (Sichel, 1975) - the share of dis legomena, lexemes with frequency 2, among all lexemes. Stable across texts of different lengths.</p>
 <div class="arithmatex">\[
 S = \frac{V_2}{V}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -3943,27 +3870,27 @@ S = \frac{V_2}{V}
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_michea_m()</strong></p>
 </div>
-<p>Computation of Michéa's measure (Michéa, 1969) - the reciprocal of Sichel's measure. If the text has no dis legomena, the value is infinity.</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_michea_m</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Michéa's measure (Michéa, 1969) - the reciprocal of Sichel's measure. If the text has no dis legomena, the value is infinity.</p>
 <div class="arithmatex">\[
 M = \frac{V}{V_2}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -3971,99 +3898,97 @@ M = \frac{V}{V_2}
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_brunet_w()</strong></p>
 </div>
-<p>Computation of Brunet's measure (Brunet, 1978). Values for texts usually lie within 10-20; the lower the value, the richer the vocabulary.</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_brunet_w</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.172</span><span class="p">)</span>
+</code></pre></div>
+<p>Brunet's measure (Brunet, 1978). Values for texts usually lie within 10-20.</p>
 <div class="arithmatex">\[
 W = N^{V^{-a}}, \quad a = 0.172
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>a</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><code>0.172</code></td>
-<td style="text-align: center;">Exponent</td>
+<td style="text-align: left;"><code>a</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>0.172</code></td>
+<td style="text-align: left;">Exponent (<code>BRUNET_W_EXPONENT</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>An <code>a</code> that is not a finite number raises <code>ParameterError</code>.</p>
 <h2 id="dugasts-k">Dugast's k<a class="headerlink" href="#dugasts-k" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_dugast_k()</strong></p>
 </div>
-<p>Computation of Dugast's measure (Dugast, 1979). Not to be confused with Dugast's U - the <a href="#dugast-type-token-ratio-dttr">DTTR</a> metric.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The value depends on the logarithm base, 10 by default. The measure is undefined when <span class="arithmatex">\(\log N \le 1\)</span>, that is, for texts no longer than the logarithm base; in that case the function returns <code>nan</code>.</p>
-</div>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_dugast_k</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+<p>Dugast's measure (Dugast, 1979), not to be confused with Dugast's U - the <a href="#dttr">DTTR</a> metric. The value depends on the logarithm base. For texts no longer than the base (<span class="arithmatex">\(\log N \le 1\)</span>) the measure is undefined, and the value is <code>nan</code>.</p>
 <div class="arithmatex">\[
 k = \frac{\log V}{\log \log N}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>base</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Logarithm base</td>
+<td style="text-align: left;"><code>base</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Logarithm base (<code>DIVERSITY_LOG_BASE</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>A <code>base</code> that is not a finite number above 1 raises <code>ParameterError</code>.</p>
 <h2 id="baayens-p">Baayen's P<a class="headerlink" href="#baayens-p" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_baayen_p()</strong></p>
 </div>
-<p>Computation of Baayen's measure (Baayen, 1991) - the share of hapaxes among all words of the text. Equals the slope of the vocabulary growth curve at the end of the text: the probability that the next word is new (Evert, 2004).</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_baayen_p</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Baayen's measure (Baayen, 1991) - the share of hapaxes among all words of the text. It equals the slope of the vocabulary growth curve at the end of the text: the probability that the next word is new (Evert, 2004).</p>
 <div class="arithmatex">\[
 P = \frac{V_1}{N}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -4071,27 +3996,27 @@ P = \frac{V_1}{N}
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_hapax_ratio()</strong></p>
 </div>
-<p>Computation of the share of hapaxes among all lexemes of the text.</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_hapax_ratio</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>The share of hapaxes among all lexemes of the text.</p>
 <div class="arithmatex">\[
 \frac{V_1}{V}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -4099,27 +4024,27 @@ P = \frac{V_1}{N}
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_alpha2()</strong></p>
 </div>
-<p>Computation of the exponent <span class="arithmatex">\(\alpha_2\)</span> - an estimate of the Zipf-Mandelbrot parameter from the lower part of the frequency spectrum (Evert, 2004). If the text has no hapaxes, the function returns <code>nan</code>.</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_alpha2</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>An estimate of the Zipf-Mandelbrot parameter from the lower part of the frequency spectrum (Evert, 2004). If the text has no hapaxes, the value is <code>nan</code>.</p>
 <div class="arithmatex">\[
 \alpha_2 = 1 - \frac{2 V_2}{V_1}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -4127,27 +4052,27 @@ P = \frac{V_1}{N}
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_entropy()</strong></p>
 </div>
-<p>Computation of the <a href="https://en.wikipedia.org/wiki/Diversity_index#Shannon_index">Shannon entropy</a> of the lexeme distribution in bits. The higher the value, the richer the vocabulary. The Hill number of order one is <span class="arithmatex">\(2^H\)</span> (<a href="#perplexity">perplexity</a>), of order zero - <span class="arithmatex">\(V\)</span>; the <a href="#inverse_simpson_index">inverse Simpson's index</a> estimates the one of order two.</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_entropy</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>The entropy of the lexeme distribution in bits. The Hill number of order one is <span class="arithmatex">\(2^H\)</span> (<a href="#perplexity">perplexity</a>), of order zero - <span class="arithmatex">\(V\)</span>; the <a href="#inverse_simpson_index">inverse Simpson's index</a> estimates the one of order two.</p>
 <div class="arithmatex">\[
 H = -\sum_k p_k \log_2 p_k
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -4155,27 +4080,27 @@ H = -\sum_k p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_evenness()</strong></p>
 </div>
-<p>Computation of evenness (Pielou's evenness) - the ratio of the Shannon entropy to its maximum for the given number of lexemes. Ranges from 0 to 1; for texts of a single lexeme it is undefined, the function returns <code>nan</code>.</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_evenness</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Pielou's evenness - the ratio of the Shannon entropy to its maximum for the given number of lexemes. For texts of a single lexeme it is undefined, and the value is <code>nan</code>.</p>
 <div class="arithmatex">\[
 \frac{H}{\log_2 V}
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -4183,27 +4108,27 @@ H = -\sum_k p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_perplexity()</strong></p>
 </div>
-<p>Computation of perplexity - the Hill number of order one, the effective number of lexemes of the text.</p>
-<p>Formula:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_perplexity</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>The Hill number of order one, the effective number of lexemes of the text.</p>
 <div class="arithmatex">\[
 2^H
 \]</div>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -4211,27 +4136,24 @@ H = -\sum_k p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_zipf_alpha()</strong></p>
 </div>
-<p>Computation of the exponent <span class="arithmatex">\(\alpha\)</span> of <a href="https://en.wikipedia.org/wiki/Zipf's_law">Zipf's law</a> <span class="arithmatex">\(f(r) \propto r^{-\alpha}\)</span>, where <span class="arithmatex">\(r\)</span> is the frequency rank of a lexeme. Estimated by linear regression of log frequency on log rank. For natural texts <span class="arithmatex">\(\alpha\)</span> is close to 1.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The rank-based least squares estimate is biased; maximum likelihood is more accurate. For texts of a single lexeme the function returns <code>nan</code>.</p>
-</div>
-<p>Parameters:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_zipf_alpha</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>The exponent <span class="arithmatex">\(\alpha\)</span> of Zipf's law <span class="arithmatex">\(f(r) \propto r^{-\alpha}\)</span>, where <span class="arithmatex">\(r\)</span> is the frequency rank of a lexeme, estimated by linear regression of log frequency on log rank. For natural texts <span class="arithmatex">\(\alpha\)</span> is close to 1. The rank-based least squares estimate is biased; maximum likelihood is more accurate. For texts of a single lexeme the value is <code>nan</code>.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
@@ -4239,30 +4161,28 @@ H = -\sum_k p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.diversity_stats.fit_zipf_mandelbrot()</strong>, <strong>ests.diversity_stats.ZipfMandelbrot</strong></p>
 </div>
-<p>Fitting the <a href="https://en.wikipedia.org/wiki/Zipf–Mandelbrot_law">Zipf-Mandelbrot law</a> <span class="arithmatex">\(f(r) = C / (r + q)^s\)</span> to the rank-frequency distribution. With <span class="arithmatex">\(q = 0\)</span> the law reduces to Zipf's law with exponent <span class="arithmatex">\(s\)</span>; the shift <span class="arithmatex">\(q\)</span> describes the flattening of the curve on the most frequent words that Zipf's law does not capture. The parameters are fitted by least squares in logarithmic coordinates with the constraints <span class="arithmatex">\(q \ge 0\)</span>, <span class="arithmatex">\(s \ge 0\)</span>. Returns a <code>ZipfMandelbrot</code> named tuple with the fields <code>c</code>, <code>q</code>, <code>s</code> and <code>r2</code> - the coefficient of determination of the fit in logarithmic coordinates.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>For texts of fewer than three lexemes, with identical frequencies of all lexemes and when the fit diverges all fields are <code>nan</code>. On short texts the parameters are unstable: the law describes the frequency distribution of large corpora.</p>
-</div>
-<p>Parameters:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">fit_zipf_mandelbrot</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Fits the Zipf-Mandelbrot law <span class="arithmatex">\(f(r) = C / (r + q)^s\)</span> to the rank-frequency distribution. With <span class="arithmatex">\(q = 0\)</span> it is Zipf's law with exponent <span class="arithmatex">\(s\)</span>; the shift <span class="arithmatex">\(q\)</span> captures the flattening of the curve on the most frequent words. The fit is by least squares in logarithmic coordinates with <span class="arithmatex">\(q \ge 0\)</span>, <span class="arithmatex">\(s \ge 0\)</span>; the lexemes of zero frequency in a counter are left out. The result is a <code>ZipfMandelbrot</code> named tuple with the fields <code>c</code>, <code>q</code>, <code>s</code> and <code>r2</code> - the coefficient of determination of the fit in logarithmic coordinates. All fields are <code>nan</code> for texts of fewer than three lexemes, with identical frequencies of all lexemes or when the fit diverges. The parameters are unstable on short texts: the law describes large corpora.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]/Counter</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words or a counter of their frequencies</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code> / <code>Counter</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words or a counter of their frequencies</td>
 </tr>
 </tbody>
 </table>
+<p>A counter whose words are not strings or whose frequencies are not numbers raises <code>SourceTypeError</code>, and a negative, <code>nan</code> or infinite frequency <code>SourceError</code> (<code>check_counts</code>).</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.diversity_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">fit_zipf_mandelbrot</span>
@@ -4278,86 +4198,87 @@ H = -\sum_k p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_heaps_beta()</strong>, <strong>ests.diversity_stats.fit_heaps()</strong>, <strong>ests.diversity_stats.vocabulary_growth()</strong></p>
 </div>
-<p>Computation of the exponent <span class="arithmatex">\(\beta\)</span> of <a href="https://en.wikipedia.org/wiki/Heaps'_law">Heaps' law</a> <span class="arithmatex">\(V(N) = K \cdot N^{\beta}\)</span>, which describes vocabulary growth with text length. Estimated by linear regression of log vocabulary size on log text length along the vocabulary growth curve. On corpora of millions of words <span class="arithmatex">\(\beta\)</span> lies within 0.4-0.6; over the growth curve of a single text it is higher (0.6-0.9), so the values are comparable only between texts of similar length.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The value depends on word order and needs several hundred words or more. For texts shorter than two words the function returns <code>nan</code>.</p>
-</div>
-<p>Parameters:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_heaps_beta</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>The exponent <span class="arithmatex">\(\beta\)</span> of Heaps' law <span class="arithmatex">\(V(N) = K \cdot N^{\beta}\)</span> of vocabulary growth with text length, estimated by linear regression of log vocabulary size on log text length along the growth curve. On corpora of millions of words <span class="arithmatex">\(\beta\)</span> lies within 0.4-0.6, on a single text within 0.6-0.9, so the values are comparable only between texts of similar length. The value depends on word order and needs several hundred words or more. For texts shorter than two words the value is <code>nan</code>.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 </tbody>
 </table>
-<p><code>vocabulary_growth</code> returns the vocabulary growth curve: the vocabulary size after every word of the text.</p>
-<p><code>fit_heaps</code> fits the law over this curve and returns a <code>HeapsFit</code> named tuple with the parameters <code>k</code>, <code>beta</code> and the coefficient of determination <code>r2</code>.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">vocabulary_growth</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>The vocabulary growth curve of a list of words: the vocabulary size after every word of the text.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">fit_heaps</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Fits Heaps' law over the vocabulary growth curve of a list of words, as <code>calc_heaps_beta</code> does, and returns a <code>HeapsFit</code> named tuple with the parameters <code>k</code>, <code>beta</code> and the coefficient of determination <code>r2</code>, all <code>nan</code> for texts shorter than two words; <code>r2</code> is <code>nan</code> for a text of one lexeme too.</p>
 <h2 id="calc_windowed">Windowed computation<a class="headerlink" href="#calc_windowed" title="Permanent link">&para;</a></h2>
 <div class="admonition info">
 <p><strong>ests.diversity_stats.calc_windowed()</strong></p>
 </div>
-<p>Windowed computation of any metric: its value over consecutive text windows of equal length, the mean, the sample standard deviation and the confidence interval of the mean by Student's distribution. The standard way to compare texts of different lengths; Kubát and Milička's standardized TTR (not Summer's STTR) is a windowed TTR with a 1000-word window and a 95% confidence interval. For texts shorter than the window the metric is computed over the whole text as a single window; windows with an undefined metric value (<code>nan</code>) are ignored. If the metric is infinite in at least one window (e.g. the inverse Simpson's index on a window of unique words), the mean is infinite and the standard deviation and confidence interval are undefined. Returns a <code>WindowStats</code> named tuple with the fields <code>mean</code>, <code>std</code>, <code>lower</code>, <code>upper</code> and <code>n_windows</code>.</p>
-<p>Parameters:</p>
+<p>The values of a metric over consecutive windows of equal length give their mean, their sample standard deviation and the confidence interval of the mean by Student's distribution. The standard way to compare texts of different lengths; Kubát and Milička's standardized TTR (not Summer's STTR) is a windowed TTR with a 1000-word window and a 95% interval. A text shorter than the window is a single window; <code>nan</code> windows are ignored. With fewer than two windows of a defined value the deviation and the interval are <code>nan</code>, and without any the mean too. A metric infinite in any window (e.g. the inverse Simpson's index on a window of unique words) makes the mean infinite and the deviation and the interval <code>nan</code>. The result is a <code>WindowStats</code> named tuple with the fields <code>mean</code>, <code>std</code>, <code>lower</code>, <code>upper</code> and <code>n_windows</code>, the number of the windows of a defined value.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of words</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>func</code></td>
-<td style="text-align: center;">callable</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Function computing the metric from a list of words</td>
+<td style="text-align: left;"><code>func</code></td>
+<td style="text-align: left;"><code>Callable</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Function computing the metric from a list of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>window_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>100</code></td>
-<td style="text-align: center;">Window size</td>
+<td style="text-align: left;"><code>window_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>100</code></td>
+<td style="text-align: left;">Window size</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>step</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Window step, by default equal to the window size</td>
+<td style="text-align: left;"><code>step</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Window step; the window size by default, so the windows do not overlap</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>confidence</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><code>0.95</code></td>
-<td style="text-align: center;">Confidence level</td>
+<td style="text-align: left;"><code>confidence</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>0.95</code></td>
+<td style="text-align: left;">Confidence level</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>messages</code></td>
-<td style="text-align: center;">dict[str, str]</td>
-<td style="text-align: center;"><code>MESSAGES</code></td>
-<td style="text-align: center;">Messages of the errors by key, a keyword</td>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>MESSAGES</code></td>
+<td style="text-align: left;">Messages of the errors by key</td>
 </tr>
 </tbody>
 </table>
+<p>A <code>func</code> that cannot be called raises <code>SourceTypeError</code>; a <code>window_len</code> or a <code>step</code> that is not an integer of at least one and a <code>confidence</code> that is not a number in (0, 1) raise <code>ParameterError</code>.</p>
 
 
 

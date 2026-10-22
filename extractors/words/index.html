@@ -2565,7 +2565,12 @@
 <p><strong>ests.extractors.WordsExtractor</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A class for extracting words from a text. It allows using different tokenizers, filtering stop words, numbers and punctuation, lemmatizing, building N-grams, and setting the minimum and maximum length of extracted words.</p>
+<p>A class for extracting words from a text.</p>
+<p>Raises:</p>
+<ul>
+<li><code>ParameterError</code> - an <code>ngram_range</code> that is not a pair of integers or whose lower bound is below one or above the upper one, a length bound that is not an integer, a negative bound, a minimum above the maximum;</li>
+<li><code>SourceTypeError</code> - stop words that are not a collection of strings.</li>
+</ul>
 <h2 id="language-hooks">Language hooks<a class="headerlink" href="#language-hooks" title="Permanent link">&para;</a></h2>
 <p>The class extends the <code>WordsExtractor</code> of the <a href="https://sergeyshk.github.io/anyTS/extractors/words/">anyTS</a> core with the hooks of Spanish:</p>
 <table>
@@ -2602,72 +2607,72 @@
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>tokenizer</code></td>
-<td style="text-align: center;">Pattern/Callable</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Tokenizer or regular expression; by default the <code>tokenize</code> method</td>
+<td style="text-align: left;"><code>tokenizer</code></td>
+<td style="text-align: left;"><code>Pattern</code> / <code>Callable</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Tokenizer or regular expression; by default the <code>tokenize</code> method</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>filter_punct</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>True</code></td>
-<td style="text-align: center;">Filter punctuation marks</td>
+<td style="text-align: left;"><code>filter_punct</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>True</code></td>
+<td style="text-align: left;">Filter punctuation marks</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>filter_nums</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Filter numbers matched by <code>number_pattern</code></td>
+<td style="text-align: left;"><code>filter_nums</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Filter numbers matched by <code>number_pattern</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>use_lexemes</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Use word lemmas of the <code>lemmatize</code> method</td>
+<td style="text-align: left;"><code>use_lexemes</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Use word lemmas of the <code>lemmatize</code> method</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>stopwords</code></td>
-<td style="text-align: center;">Collection[str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Stop words, compared case-insensitively</td>
+<td style="text-align: left;"><code>stopwords</code></td>
+<td style="text-align: left;"><code>Collection[str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Stop words, compared case-insensitively</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>lowercase</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Convert words to lower case</td>
+<td style="text-align: left;"><code>lowercase</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Convert words to lower case</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>ngram_range</code></td>
-<td style="text-align: center;">Tuple[int, int]</td>
-<td style="text-align: center;"><code>(1, 1)</code></td>
-<td style="text-align: center;">Lower and upper bound of the N-gram size</td>
+<td style="text-align: left;"><code>ngram_range</code></td>
+<td style="text-align: left;"><code>tuple[int, int]</code></td>
+<td style="text-align: left;"><code>(1, 1)</code></td>
+<td style="text-align: left;">Lower and upper bound of the N-gram size</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>min_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Minimum length of an extracted word in characters, <code>0</code> for no bound</td>
+<td style="text-align: left;"><code>min_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>0</code></td>
+<td style="text-align: left;">Minimum length of an extracted word in characters, <code>0</code> for no bound</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>max_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>0</code></td>
-<td style="text-align: center;">Maximum length of an extracted word in characters, <code>0</code> for no bound</td>
+<td style="text-align: left;"><code>max_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>0</code></td>
+<td style="text-align: left;">Maximum length of an extracted word in characters, <code>0</code> for no bound</td>
 </tr>
 </tbody>
 </table>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>A regular expression as the tokenizer is a separator: the text is split with <code>re.split</code>. The filters are applied in order: punctuation, numbers, lemmatization, lower case, stop words, word length. A lower-case stop word list also filters a capitalized word at the start of a sentence. A punctuation mark is a token consisting entirely of marks and symbols, including multi-character ones: <code>?!</code>, <code>--</code>, <code>…</code>, <code>€</code> (see <code>anyts.utils.is_punctuation</code>). Empty and whitespace tokens are dropped before the filters. N-grams join the words with <code>_</code>.</p>
+<p>A regular expression as the tokenizer is a separator for <code>re.split</code>. The filters are applied in order: punctuation, numbers, lemmatization, lower case, stop words, word length. A punctuation mark is a token of marks and symbols only, multi-character ones included: <code>?!</code>, <code>--</code>, <code>…</code>, <code>€</code> (<code>anyts.utils.is_punctuation</code>). Empty and whitespace tokens are dropped before the filters. N-grams join the words with <code>_</code>.</p>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -2675,25 +2680,26 @@
 </div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
-<p>Extracts words from a text.</p>
+<p><code>extract(text)</code> extracts words from a text.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>text</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Text string</td>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Text string</td>
 </tr>
 </tbody>
 </table>
+<p>A text that is not a string and a tokenizer that cannot be called or does not return strings raise <code>SourceTypeError</code>.</p>
 <p>An example of word extraction with bigrams as tokens, after filtering numbers and stop words and lemmatizing:</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
@@ -2713,25 +2719,26 @@
 </code></pre></div>
 </div>
 <h3 id="get_most_common">get_most_common<a class="headerlink" href="#get_most_common" title="Permanent link">&para;</a></h3>
-<p>Returns the top words of the text as a list of (word, frequency) pairs, the most frequent first.</p>
+<p><code>get_most_common(n=10)</code> returns the top words of the text as a list of (word, frequency) pairs, the most frequent first.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Number of top words</td>
+<td style="text-align: left;"><code>n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Number of top words</td>
 </tr>
 </tbody>
 </table>
+<p>A number that is not an integer of at least one raises <code>ParameterError</code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The method must be called after words have been extracted with <code>extract</code>.</p>

@@ -2531,7 +2531,8 @@
 <p><strong>ests.corpus.kwic()</strong>, <strong>ests.corpus.format_kwic()</strong>, <strong>ests.corpus.print_kwic()</strong>, <strong>ests.corpus.Concordance</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A KWIC concordance (keyword in context) - every occurrence of a word or a phrase with its context on the left and on the right. The occurrences are looked for among the words of the text by the word form, ignoring case or respecting it (<code>ignore_case=False</code>), or by the lemma (<code>by_lemma=True</code>), where the words of the keyword are lemmatized as words of a string: with a lemmatizer a phrase may be written in any form, without one it is given by lemmas. The words of a string and of the keyword come from the tokenizer, those of a <code>Doc</code> from its tokens, so a tokenizer that splits a string as the pipeline does finds in a <code>Doc</code> what it finds in its text; punctuation and symbols are not words. The forms are compared in the composed form of Unicode (NFC), without soft hyphens. A phrase does not run across the end of a paragraph or of a sentence - a boundary of a <code>Doc</code> anywhere between its words, an opening mark included, or in a text without boundaries or with partial ones (<code>has_sents</code>) the start of a sentence of the sentence splitter, by default a final mark before whitespace - unless the keyword has a final mark or the start of a sentence in the same place (<code>U.S. Army</code>). The context is <code>window</code> words on each side as they are written in the text, with the punctuation between them; whitespace collapses into one space, and occurrences do not overlap.</p>
+<p>A KWIC concordance (keyword in context) - every occurrence of a word or a phrase with its context on both sides. Occurrences are found among the words of the text by the word form, ignoring case or respecting it (<code>ignore_case=False</code>), or by the lemma (<code>by_lemma=True</code>); the keyword is lemmatized as a string, so with a lemmatizer a phrase may be written in any form and without one it is given by lemmas. The words of a string and of the keyword come from the tokenizer, those of a <code>Doc</code> from its tokens: a tokenizer that splits a string as the pipeline does finds the same in both. Punctuation and symbols are not words; forms are compared in the composed form of Unicode (NFC), without soft hyphens.</p>
+<p>A phrase does not cross the end of a paragraph or a sentence unless the keyword has a final mark or a sentence start in the same place (<code>U.S. Army</code>). A sentence ends at a boundary of a <code>Doc</code> anywhere between the words, an opening mark included, or, without boundaries or with partial ones (<code>has_sents</code>), at a sentence start of the sentence splitter, by default a final mark before whitespace. The context is <code>window</code> words on each side as written, punctuation included; whitespace collapses into one space, and occurrences do not overlap.</p>
 <h2 id="language-hooks">Language hooks<a class="headerlink" href="#language-hooks" title="Permanent link">&para;</a></h2>
 <p>The function calls the <code>kwic</code> of the <a href="https://sergeyshk.github.io/anyTS/corpus/kwic/">anyTS</a> core with the hooks of Spanish. The text and the keyword are split into words the same way, by the tokenizer of the blank Spanish pipeline, so <code>EE. UU.</code> is one word in both; the abbreviations the tokenizer keeps whole (<code>Sr.</code>, <code>pág.</code>, <code>etc.</code>, <code>EE. UU.</code>) are one word in lower case, capitalized and in upper case alike, so <code>sr. pérez</code> finds <code>Sr. Pérez</code> and <code>SR. PÉREZ</code>, and punctuation and symbols are words of neither: <code>¿Dónde</code> finds <code>Dónde</code>, <code>20 €</code> finds <code>20</code>. The word forms and the lemmas are lower-cased; accents are part of the word form: <code>solo</code> and <code>sólo</code> are two forms. The sentences of a string, of the keyword and of the text of a <code>Doc</code> without boundaries are those of <a href="../../extractors/sentences/"><code>SentsExtractor</code></a>: an ellipsis or an exclamation followed by a lower-case word does not end a sentence, so <code>honrado piensa</code> finds <code>honrado... piensa</code>.</p>
 <p>By lemma, the keyword is lemmatized by simplemma, so a phrase is given by lemmas - <code>mirar a el pájaro</code> - or as it is written, and a word of the text is found by its lemma of simplemma and, in a <code>Doc</code> that carries lemmas, by the lemma of the model as well: <code>gatos</code> is found by <code>gato</code>. In <code>Mi amigo vino con una botella de vino</code> the model gives <code>venir</code> to the verb, so <code>venir</code> finds the verb, where simplemma, which sees no context, would find nothing; <code>vino</code> finds both, since simplemma reads the verb as <code>vino</code>.</p>
@@ -2539,82 +2540,113 @@
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>source</code></td>
-<td style="text-align: center;">str/Doc</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Text or Doc object</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>keyword</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Word or phrase</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>window</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>5</code></td>
-<td style="text-align: center;">Number of words of context on each side</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>by_lemma</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Compare lemmas instead of word forms</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>ignore_case</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>True</code></td>
-<td style="text-align: center;">Ignore case when comparing word forms</td>
-</tr>
-</tbody>
-</table>
-<p>A keyword without words and a negative window raise <code>ParameterError</code>; a source that is neither a string nor a <code>Doc</code>, a keyword that is not a string and a hook that is not callable raise <code>SourceTypeError</code>.</p>
-<p><code>format_kwic(concordances, width=40)</code> aligns the lines on the keyword: the left context is cut on the left and aligned to the right, the right one is cut on the right; <code>width</code> is the width of a context in characters, at least one. The lines may come from any iterable and are taken in the composed form of Unicode (NFC), so that the widths count the characters as they are shown.</p>
-<p><code>print_kwic(concordances, width=40)</code> prints the result of <code>format_kwic</code>.</p>
-<h2 id="result">Result<a class="headerlink" href="#result" title="Permanent link">&para;</a></h2>
-<p>A list of <code>Concordance</code> named tuples in the order of the text.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Field</th>
-<th style="text-align: center;">Type</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
 <th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>start</code></td>
-<td style="text-align: center;">int</td>
+<td style="text-align: left;"><code>source</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Text or Doc object</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>keyword</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Word or phrase</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>window</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>5</code></td>
+<td style="text-align: left;">Number of words of context on each side</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>by_lemma</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Compare lemmas instead of word forms</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ignore_case</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>True</code></td>
+<td style="text-align: left;">Ignore case when comparing word forms</td>
+</tr>
+</tbody>
+</table>
+<p>A keyword without words and a negative window raise <code>ParameterError</code>; a source that is neither a string nor a <code>Doc</code>, a keyword that is not a string and a hook that is not callable raise <code>SourceTypeError</code>.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">format_kwic</span><span class="p">(</span><span class="n">concordances</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</code></pre></div>
+<p>Aligns the lines on the keyword in a text, one line per occurrence: the left context is cut on the left and aligned to the right, the right one cut on the right. The lines may come from any iterable and are taken in the composed form of Unicode (NFC), so the widths count characters as shown.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>concordances</code></td>
+<td style="text-align: left;"><code>list[Concordance]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lines of a concordance</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>width</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>40</code></td>
+<td style="text-align: left;">Width of a context in characters</td>
+</tr>
+</tbody>
+</table>
+<p>Lines that are a string or cannot be iterated raise <code>SourceTypeError</code>, and a <code>width</code> that is not an integer of at least one <code>ParameterError</code>.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">print_kwic</span><span class="p">(</span><span class="n">concordances</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</code></pre></div>
+<p>Prints the result of <code>format_kwic</code>.</p>
+<h2 id="result">Result<a class="headerlink" href="#result" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">Concordance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span>
+</code></pre></div>
+<p>A list of <code>Concordance</code> named tuples in the order of the text.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Field</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>start</code></td>
+<td style="text-align: left;"><code>int</code></td>
 <td style="text-align: left;">Position of the first character of the occurrence in the text</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>end</code></td>
-<td style="text-align: center;">int</td>
+<td style="text-align: left;"><code>end</code></td>
+<td style="text-align: left;"><code>int</code></td>
 <td style="text-align: left;">Position after the last character of the occurrence</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>left</code></td>
-<td style="text-align: center;">str</td>
+<td style="text-align: left;"><code>left</code></td>
+<td style="text-align: left;"><code>str</code></td>
 <td style="text-align: left;">Context on the left</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>keyword</code></td>
-<td style="text-align: center;">str</td>
+<td style="text-align: left;"><code>keyword</code></td>
+<td style="text-align: left;"><code>str</code></td>
 <td style="text-align: left;">Occurrence as written in the text</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>right</code></td>
-<td style="text-align: center;">str</td>
+<td style="text-align: left;"><code>right</code></td>
+<td style="text-align: left;"><code>str</code></td>
 <td style="text-align: left;">Context on the right</td>
 </tr>
 </tbody>

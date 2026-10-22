@@ -2534,129 +2534,138 @@
 <p>Gráficos para las <a href="../../corpus/keyness/">medidas de corpus</a>: la dispersión léxica - dónde aparece una palabra en un texto -, un diagrama de las palabras clave que encuentra <a href="../../corpus/keyness/"><code>keyness</code></a> y una red de las colocaciones que encuentra <a href="../../corpus/collocations/"><code>collocations</code></a>. Las funciones de matplotlib reciben los ejes <code>ax</code> y devuelven <code>Axes</code>: sin <code>ax</code> se crea una figura nueva, con ellos el gráfico va a una rejilla propia; la red de colocaciones la construye graphviz y devuelve un <code>Graph</code>, como el <a href="../word_tree/">árbol de palabras</a> devuelve un <code>Digraph</code>.</p>
 <p>Las funciones son las del núcleo <a href="https://sergeyshk.github.io/anyTS/visualizers/corpus/">anyTS</a>. Las etiquetas por defecto de los gráficos de matplotlib son las inglesas de <code>VISUALIZER_LABELS</code> en <code>anyts.constants</code>; <code>labels</code> sustituye cualquiera de ellas.</p>
 <h2 id="dispersion_plot">Dispersión léxica<a class="headerlink" href="#dispersion_plot" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/corpus.md:dispersion_plot 604b589 -->
+<!-- core: visualizers/corpus.md:dispersion_plot d906327 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">dispersion_plot</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 <p>Una fila por cada palabra de <code>targets</code> y una marca en la posición de cada una de sus apariciones en el texto. Las palabras se comparan tal cual: las mayúsculas y minúsculas y la lematización corresponden a la extracción de las palabras.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>words</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Palabras del texto en orden</td>
+<td style="text-align: left;"><code>words</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabras del texto en orden</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>targets</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Palabras cuyas apariciones se muestran</td>
+<td style="text-align: left;"><code>targets</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabras cuyas apariciones se muestran</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>ax</code></td>
-<td style="text-align: center;">Axes</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Ejes para el gráfico</td>
+<td style="text-align: left;"><code>ax</code></td>
+<td style="text-align: left;"><code>Axes</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Ejes para el gráfico</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>labels</code></td>
-<td style="text-align: center;">dict[str, str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code></td>
+<td style="text-align: left;"><code>labels</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code></td>
 </tr>
 </tbody>
 </table>
+<p>Unas palabras o unos objetivos que no son una lista de cadenas lanzan <code>SourceTypeError</code>, la falta de palabras o de objetivos <code>SourceError</code>; unas etiquetas que <code>merge_labels</code> rechaza y un <code>ax</code> que no es un <code>Axes</code> de matplotlib lanzan <code>ParameterError</code>.</p>
 <p>Las palabras las extrae <a href="../../extractors/words/"><code>WordsExtractor</code></a>: en minúsculas con <code>lowercase=True</code>, los lemas con <code>use_lexemes=True</code>.</p>
 <h2 id="keyness_plot">Diagrama de palabras clave<a class="headerlink" href="#keyness_plot" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/corpus.md:keyness_plot e860f91 -->
-<p>Barras horizontales divergentes: las palabras de <code>positive</code> a la derecha, las de <code>negative</code> - el resultado de <code>keyness</code> con <code>positive=False</code> - a la izquierda; la longitud de una barra es el valor absoluto del campo <code>field</code> (<code>score</code>, <code>g2</code>, <code>log_ratio</code>), así que el lado lo fija la lista y no el signo de la medida; <code>top_n</code> palabras por lado, y las palabras con un valor indefinido o infinito se omiten. Para la razón de momios (<code>score</code> de 0 a infinito, uno - momios iguales) indique <code>log=True</code>: se representa el valor absoluto de <span class="arithmatex">\(\log_2\)</span> del valor, simétrico en torno a uno.</p>
+<!-- core: visualizers/corpus.md:keyness_plot f2f89b3 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">keyness_plot</span><span class="p">(</span><span class="n">positive</span><span class="p">,</span> <span class="n">negative</span><span class="o">=</span><span class="p">(),</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="s1">'score'</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>Barras horizontales divergentes: las palabras de <code>positive</code> a la derecha, las de <code>negative</code> (el resultado de <code>keyness</code> con <code>positive=False</code>) a la izquierda, <code>top_n</code> por lado. La longitud de una barra es el valor absoluto del campo <code>field</code> (<code>score</code>, <code>g2</code>, <code>log_ratio</code>), así que el lado lo fija la lista, no el signo de la medida; las palabras con un valor indefinido o infinito se omiten. Para la razón de momios (de 0 a infinito, uno - momios iguales) <code>log=True</code> representa el valor absoluto de <span class="arithmatex">\(\log_2\)</span> del valor, simétrico en torno a uno.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>positive</code></td>
-<td style="text-align: center;">list[Keyword]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Palabras clave positivas</td>
+<td style="text-align: left;"><code>positive</code></td>
+<td style="text-align: left;"><code>list[Keyword]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabras clave positivas</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>negative</code></td>
-<td style="text-align: center;">list[Keyword]</td>
-<td style="text-align: center;"><code>()</code></td>
-<td style="text-align: center;">Palabras clave negativas</td>
+<td style="text-align: left;"><code>negative</code></td>
+<td style="text-align: left;"><code>list[Keyword]</code></td>
+<td style="text-align: left;"><code>()</code></td>
+<td style="text-align: left;">Palabras clave negativas</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>top_n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>20</code></td>
-<td style="text-align: center;">Número de palabras por lado</td>
+<td style="text-align: left;"><code>top_n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>20</code></td>
+<td style="text-align: left;">Número de palabras por lado</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>labels</code></td>
-<td style="text-align: center;">dict[str, str]/tuple[str, str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code> y <code>xlabel_log</code> (cadenas de formato con <code>field</code>), <code>target</code> y <code>reference</code> (la leyenda); un par de cadenas fija solo la leyenda</td>
+<td style="text-align: left;"><code>labels</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code> / <code>tuple[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code> y <code>xlabel_log</code> (cadenas de formato con <code>field</code>), <code>target</code> y <code>reference</code> (la leyenda); un par de cadenas fija solo la leyenda</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>field</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>score</code></td>
-<td style="text-align: center;">Campo de <code>Keyword</code> cuyos valores se representan</td>
+<td style="text-align: left;"><code>field</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>'score'</code></td>
+<td style="text-align: left;">Campo de <code>Keyword</code> cuyos valores se representan</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>log</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Representar <span class="arithmatex">\(\log_2\)</span> del valor, para la razón de momios</td>
+<td style="text-align: left;"><code>log</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Representar <span class="arithmatex">\(\log_2\)</span> del valor, para la razón de momios</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>ax</code></td>
-<td style="text-align: center;">Axes</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Ejes para el gráfico</td>
+<td style="text-align: left;"><code>ax</code></td>
+<td style="text-align: left;"><code>Axes</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Ejes para el gráfico</td>
 </tr>
 </tbody>
 </table>
+<p>Unas palabras clave que no son una lista lanzan <code>SourceTypeError</code>, y la falta de palabras clave con un valor finito <code>SourceError</code>. Un <code>field</code> desconocido, un <code>top_n</code> que no es un entero de al menos uno, unas etiquetas que <code>merge_labels</code> rechaza o una leyenda que no es un par, y un <code>ax</code> que no es un <code>Axes</code> de matplotlib lanzan <code>ParameterError</code>.</p>
 <h2 id="collocation_network">Red de colocaciones<a class="headerlink" href="#collocation_network" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/corpus.md:collocation_network 080cdcf -->
-<p>Un grafo no dirigido: los nodos son las palabras con el tamaño de la letra según su frecuencia, las aristas son los pares con el grosor y la etiqueta según el valor de la medida; la disposición <code>neato</code>. Un par de una palabra consigo misma - una palabra repetida dentro de la ventana - sería un bucle y se deja fuera antes de tomar los <code>top_n</code> pares. Para dibujarlo hacen falta los ejecutables de <a href="https://graphviz.org/download/">Graphviz</a>; en Jupyter el grafo se muestra solo, y <code>graph.render("network")</code> guarda un archivo png.</p>
+<!-- core: visualizers/corpus.md:collocation_network 5af4d04 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">collocation_network</span><span class="p">(</span><span class="n">collocations</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>Un grafo no dirigido con la disposición <code>neato</code>: los nodos son las palabras, con el tamaño de la letra según la frecuencia, y las aristas son los pares, con el grosor y la etiqueta según la medida. Un par de una palabra consigo misma (una palabra repetida dentro de la ventana) sería un bucle y se deja fuera antes de <code>top_n</code>. Para dibujarlo hacen falta los ejecutables de <a href="https://graphviz.org/download/">Graphviz</a>; Jupyter muestra el grafo, y <code>graph.render("network")</code> guarda un archivo png.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>collocations</code></td>
-<td style="text-align: center;">list[Collocation]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Colocaciones</td>
+<td style="text-align: left;"><code>collocations</code></td>
+<td style="text-align: left;"><code>list[Collocation]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Colocaciones</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>top_n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Número de pares desde el principio de la lista; <code>None</code> - todos</td>
+<td style="text-align: left;"><code>top_n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Número de pares desde el principio de la lista; <code>None</code> - todos</td>
 </tr>
 </tbody>
 </table>
+<p>Unas colocaciones que no son una lista lanzan <code>SourceTypeError</code>, la falta de un par de dos palabras distintas <code>SourceError</code>, y un <code>top_n</code> que no es un entero de al menos uno <code>ParameterError</code>.</p>
 <h2 id="ejemplo-de-uso">Ejemplo de uso<a class="headerlink" href="#ejemplo-de-uso" title="Permanent link">&para;</a></h2>
 <p><em>Marianela</em> de Galdós y seis novelas del <a href="../../datasets/spanishliterature/">corpus de literatura</a>: <em>Marianela</em>, <em>Misericordia</em> y <em>Torquemada en la hoguera</em> frente a <em>Niebla</em>, <em>Abel Sánchez</em> y <em>La tía Tula</em> de Unamuno.</p>
 <div class="admonition example">

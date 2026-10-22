@@ -2611,12 +2611,8 @@
 <p><strong>ests.diversity_stats.DiversityStats</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<!-- core: stats/diversity_stats.md:DiversityStats 2e4dbf8 -->
-<p>Clase para calcular las principales métricas de <a href="https://en.wikipedia.org/wiki/Lexical_diversity">diversidad léxica</a> de un texto a partir de sus palabras.</p>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Las métricas se calculan al acceder al atributo correspondiente o al llamar al método <code>get_stats</code> del objeto <code>DiversityStats</code>.</p>
-</div>
+<!-- core: stats/diversity_stats.md:DiversityStats 62610fe -->
+<p>Las principales métricas de <a href="https://en.wikipedia.org/wiki/Lexical_diversity">diversidad léxica</a> de un texto, calculadas a partir de sus palabras.</p>
 <p>La clase extiende el <code>DiversityStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/diversity_stats/">anyTS</a>: en lugar de una lista de palabras recibe un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>.</p>
 <p>Las palabras pueden extraerse con un <a href="../../extractors/words/"><code>WordsExtractor</code></a> ya configurado; para un <code>Doc</code>, el extractor indicado se aplica a su texto, y sin él las palabras salen de sus tokens. Las palabras siempre se pasan a minúsculas, porque todas las métricas cuentan lexemas.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
@@ -2674,292 +2670,60 @@
 </tr>
 </tbody>
 </table>
-<!-- core: stats/diversity_stats.md:check_params 69e400f -->
-<p>Los parámetros se comprueban con <code>check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base, *, messages=MESSAGES)</code>, que lanza <code>ParameterError</code> si una ventana, un tamaño de muestra o una longitud mínima del factor están fuera de rango, si el umbral está fuera de (0, 1) o si la base del logaritmo no es mayor que 1. Llamada antes de extraer las palabras, señala un parámetro erróneo antes que un texto vacío.</p>
+<!-- core: stats/diversity_stats.md:check_params 84612a6 -->
+<p>Comprueba los parámetros de las métricas: un <code>window_len</code> o un <code>hdd_sample_size</code> que no es un entero de al menos uno, un <code>mtld_min_len</code> que no es un entero no negativo, un <code>mtld_threshold</code> que no es un número en (0, 1) y un <code>log_base</code> que no es un número finito mayor que 1 lanzan <code>ParameterError</code>. Llamada antes de extraer las palabras, señala un parámetro erróneo antes que un texto vacío.</p>
 <h2 id="conventions">Convenciones<a class="headerlink" href="#conventions" title="Permanent link">&para;</a></h2>
-<!-- core: stats/diversity_stats.md:DiversityStats-conventions a759359 -->
-<p>Los valores de algunas métricas dependen de convenciones que difieren entre bibliotecas. Todas salvo la comparación con el umbral de MTLD son parámetros de la clase:</p>
+<!-- core: stats/diversity_stats.md:DiversityStats-conventions 22cd78d -->
+<p>Algunas métricas dependen de convenciones que difieren entre bibliotecas. Todas salvo la comparación con el umbral de MTLD son parámetros de la clase:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Otras bibliotecas</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Otras bibliotecas</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">Base del logaritmo para Summer, Maas, U de Dugast y k de Dugast</td>
-<td style="text-align: center;">10</td>
-<td style="text-align: center;">LexicalRichness, textcomplexity y zipfR: natural</td>
+<td style="text-align: left;">Base del logaritmo para Summer, Maas, U de Dugast y k de Dugast</td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">LexicalRichness, textcomplexity y zipfR: natural</td>
 </tr>
 <tr>
-<td style="text-align: center;">Ventana de MATTR y segmento de MSTTR</td>
-<td style="text-align: center;">50</td>
-<td style="text-align: center;">quanteda y koRpus: 100</td>
+<td style="text-align: left;">Ventana de MATTR y segmento de MSTTR</td>
+<td style="text-align: left;"><code>50</code></td>
+<td style="text-align: left;">quanteda y koRpus: 100</td>
 </tr>
 <tr>
-<td style="text-align: center;">Umbral de TTR para MTLD</td>
-<td style="text-align: center;">0.72</td>
-<td style="text-align: center;">0.66-0.75 en la bibliografía</td>
+<td style="text-align: left;">Umbral de TTR para MTLD</td>
+<td style="text-align: left;"><code>0.72</code></td>
+<td style="text-align: left;">0.66-0.75 en la bibliografía</td>
 </tr>
 <tr>
-<td style="text-align: center;">Comparación con el umbral de MTLD</td>
-<td style="text-align: center;">un factor se cierra con TTR ≤ 0.72 (McCarthy &amp; Jarvis, 2010)</td>
-<td style="text-align: center;">lexical-diversity y TAALED: <code>&lt;</code> estricto; los valores difieren cuando el TTR da exactamente el umbral</td>
+<td style="text-align: left;">Comparación con el umbral de MTLD</td>
+<td style="text-align: left;">un factor se cierra con TTR ≤ 0.72 (McCarthy &amp; Jarvis, 2010)</td>
+<td style="text-align: left;">lexical-diversity y TAALED: <code>&lt;</code> estricto; los valores difieren cuando el TTR da exactamente el umbral</td>
 </tr>
 <tr>
-<td style="text-align: center;">Longitud mínima del factor de MTLD</td>
-<td style="text-align: center;">10</td>
-<td style="text-align: center;">koRpus la aplica solo a MTLD-MA y descarta los factores más cortos en lugar de extenderlos, LexicalRichness y textcomplexity no la aplican</td>
+<td style="text-align: left;">Longitud mínima del factor de MTLD</td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">koRpus: solo en MTLD-MA, descartando los factores más cortos en lugar de extenderlos; LexicalRichness y textcomplexity: no se aplica</td>
 </tr>
 <tr>
-<td style="text-align: center;">Tamaño de la muestra de HD-D</td>
-<td style="text-align: center;">42</td>
-<td style="text-align: center;">35-50 en la bibliografía</td>
+<td style="text-align: left;">Tamaño de la muestra de HD-D</td>
+<td style="text-align: left;"><code>42</code></td>
+<td style="text-align: left;">35-50 en la bibliografía</td>
 </tr>
 </tbody>
 </table>
-<p>Según Zenker y Kyle (2021), MATTR, MTLD y HD-D son estables en textos de 50-200 palabras o más, MTLD-W, MA-MTLD y Maas son inestables en textos cortos, y la familia de TTR nunca se estabiliza. Para comparar textos de distinta longitud use el <a href="#windowed">cálculo por ventanas</a> con intervalos de confianza.</p>
+<p>Según Zenker y Kyle (2021), MATTR, MTLD y HD-D son estables en textos de 50-200 palabras o más, MTLD-W, MA-MTLD y Maas son inestables en textos cortos, y la familia de TTR nunca se estabiliza. Los textos de distinta longitud se comparan mediante el <a href="#windowed">cálculo por ventanas</a> con intervalos de confianza.</p>
 <h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
-<!-- core: stats/diversity_stats.md:DiversityStats-attributes 2bd9615 -->
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Atributo</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>words</code></td>
-<td style="text-align: center;">tuple[str]</td>
-<td style="text-align: center;">Tupla de las palabras</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>window_len</code>, <code>mtld_threshold</code>, <code>mtld_min_len</code>, <code>hdd_sample_size</code>, <code>log_base</code></td>
-<td style="text-align: center;">int/float</td>
-<td style="text-align: center;">Los parámetros de las métricas; cambiarlos en el objeto cambia las métricas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>frequency_spectrum</code></td>
-<td style="text-align: center;">dict[int, int]</td>
-<td style="text-align: center;">Espectro de frecuencias: número de lexemas con una frecuencia dada</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>ttr</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Type-Token Ratio (TTR)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>rttr</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Root Type-Token Ratio (RTTR)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>cttr</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Corrected Type-Token Ratio (CTTR)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>httr</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Herdan Type-Token Ratio (HTTR)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>sttr</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Summer Type-Token Ratio (STTR)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>mttr</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Maas Type-Token Ratio (MTTR)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>dttr</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Dugast Type-Token Ratio (DTTR)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>mattr</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Moving Average Type-Token Ratio (MATTR)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>msttr</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean Segmental Type-Token Ratio (MSTTR)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>mtld</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Measure of Textual Lexical Diversity (MTLD)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>mamtld</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Moving Average Measure of Textual Lexical Diversity (MA-MTLD)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>mtldw</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">MTLD con ventana móvil y vuelta al inicio del texto (MTLD-W)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>hdd</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Hypergeometric Distribution D (HD-D)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>simpson_index</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Índice de Simpson (D)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>inverse_simpson_index</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Índice de Simpson inverso (1/D)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>gini_simpson_index</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Índice de Gini-Simpson (1-D)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>hapax_index</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Índice de hápax, también llamado R de Honoré</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>honore_r</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Alias del índice de hápax</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>yule_k</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Característica de Yule (K de Yule)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>yule_i</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Característica inversa de Yule (I de Yule)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>herdan_vm</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Vm de Herdan</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>sichel_s</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">S de Sichel</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>michea_m</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">M de Michéa</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>brunet_w</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">W de Brunet</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>dugast_k</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">k de Dugast</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>baayen_p</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">P de Baayen</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>hapax_ratio</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Proporción de hápax entre los lexemas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>alpha2</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Exponente α₂</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>entropy</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Entropía de Shannon en bits</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>evenness</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Equitatividad: cociente entre la entropía y su máximo</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>perplexity</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Perplejidad</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>zipf_alpha</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Pendiente de la ley de Zipf</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>heaps_beta</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Exponente de la ley de Heaps</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Cada métrica puede calcularse también con su función; las métricas y sus funciones se describen en la <a href="../diversity_stats_funcs/">sección</a> correspondiente.</p>
-</div>
+<!-- core: stats/diversity_stats.md:DiversityStats-attributes 2e73f9a -->
+<p>El objeto guarda las palabras en <code>words</code>, una tupla, y los cinco parámetros con sus nombres, modificables en el objeto. <code>frequency_spectrum</code> es el espectro de frecuencias de las palabras (<code>calc_frequency_spectrum</code>), y <code>honore_r</code>, un alias de <code>hapax_index</code>.</p>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <h3 id="windowed">windowed<a class="headerlink" href="#windowed" title="Permanent link">&para;</a></h3>
-<!-- core: stats/diversity_stats.md:DiversityStats-windowed af6a479 -->
-<p>Cálculo por ventanas de una métrica por su nombre, como en <a href="../diversity_stats_funcs/#calc_windowed"><code>calc_windowed</code></a>: su valor en ventanas consecutivas del texto de igual longitud, la media, la desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Los casos límite (textos cortos, valores <code>nan</code> e infinitos) se describen allí.</p>
-<p>Parámetros:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>stat</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Nombre de la métrica de <code>get_stats</code></td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>window_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>100</code></td>
-<td style="text-align: center;">Tamaño de la ventana</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>step</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Paso de la ventana, por defecto igual a su tamaño (las ventanas no se solapan)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>confidence</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><code>0.95</code></td>
-<td style="text-align: center;">Nivel de confianza</td>
-</tr>
-</tbody>
-</table>
-<p>Devuelve una tupla con nombre <code>WindowStats</code> con los campos <code>mean</code>, <code>std</code>, <code>lower</code>, <code>upper</code> y <code>n_windows</code>. Un nombre de métrica desconocido lanza <code>UnknownStatError</code>.</p>
+<!-- core: stats/diversity_stats.md:DiversityStats-windowed da979e4 -->
+<p><code>windowed(stat, window_len=100, step=None, confidence=0.95)</code> calcula por ventanas una métrica de <code>get_stats</code> por su nombre: <code>calc_windowed</code> con la función de la métrica y los parámetros del objeto. Los demás argumentos, el resultado y los errores son los de <code>calc_windowed</code>; un nombre desconocido lanza <code>UnknownStatError</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiversityStats</span>
@@ -2973,8 +2737,8 @@
 </code></pre></div>
 </div>
 <h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
-<!-- core: stats/diversity_stats.md:DiversityStats-get_stats b65013e -->
-<p>Devuelve un diccionario con las métricas de diversidad léxica calculadas.</p>
+<!-- core: stats/diversity_stats.md:DiversityStats-get_stats fa25bfe -->
+<p><code>get_stats()</code> devuelve un diccionario con las métricas calculadas de <code>stats_desc</code>.</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>
 <p><em>Código</em>:</p>
@@ -3024,8 +2788,8 @@
 </code></pre></div>
 </div>
 <h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
-<!-- core: stats/diversity_stats.md:DiversityStats-print_stats be91444 -->
-<p>Muestra una tabla con las métricas de diversidad léxica calculadas, sus descripciones de <code>stats_desc</code> y los encabezados de <code>stats_headers</code>.</p>
+<!-- core: stats/diversity_stats.md:DiversityStats-print_stats 8d60982 -->
+<p><code>print_stats()</code> muestra una tabla de las métricas calculadas con sus descripciones de <code>stats_desc</code> bajo los encabezados de <code>stats_headers</code>.</p>
 <p>El ejemplo continúa el anterior:</p>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>

@@ -2531,104 +2531,134 @@
 <p><strong>ests.corpus.dispersion()</strong>, <strong>ests.corpus.Dispersion</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/dispersion.md:dispersion 14e4623 -->
-<p>La dispersión de una palabra es lo uniformemente que se reparte por las partes de un texto o de un corpus. La frecuencia no distingue una palabra que aparece una vez en cada capítulo de otra reunida en uno solo; las medidas de dispersión (<a href="https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf">Gries 2008</a>, <a href="https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf">2020</a>) complementan la frecuencia.</p>
-<p>El texto se divide en partes: <code>parts</code> es el número de partes de tamaño aproximadamente igual o los tamaños de las partes en orden (oraciones, párrafos, capítulos, documentos de un corpus), que suman el número de palabras. Para cada palabra se calculan sus frecuencias por parte y seis medidas; Gries recomienda DP como la principal.</p>
+<!-- core: corpus/dispersion.md:dispersion f0bdceb -->
+<div class="signature highlight"><pre><span></span><code><span class="n">dispersion</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">parts</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">word</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<p>La dispersión de una palabra es lo uniformemente que se reparte por las partes de un texto o de un corpus. La frecuencia no distingue una palabra que aparece una vez en cada capítulo de otra reunida en un solo capítulo; las medidas de dispersión (<a href="https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf">Gries 2008</a>, <a href="https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf">2020</a>) la complementan.</p>
+<p><code>parts</code> es el número de partes de tamaño aproximadamente igual o los tamaños de las partes en orden (oraciones, párrafos, capítulos, documentos de un corpus), que suman el número de palabras. Se calculan seis medidas a partir de las frecuencias de cada palabra por parte; Gries recomienda DP como la principal.</p>
 <p>Las palabras se comparan tal cual: las mayúsculas y minúsculas y la lematización corresponden al extractor de palabras.</p>
 <p>El módulo <code>ests.corpus.dispersion</code> reexporta la función y las medidas del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/dispersion/">anyTS</a> (<code>from ests.corpus.dispersion import calc_dp</code>). Las palabras se extraen con <a href="../../extractors/words/"><code>WordsExtractor</code></a>.</p>
 <h2 id="medidas">Medidas<a class="headerlink" href="#medidas" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/dispersion.md:dispersion-measures 09abba3 -->
-<p>Para <span class="arithmatex">\(n\)</span> partes de proporciones <span class="arithmatex">\(s_i\)</span> del texto, frecuencias de la palabra por parte <span class="arithmatex">\(v_i\)</span> y una frecuencia total <span class="arithmatex">\(f = \sum v_i\)</span>; <span class="arithmatex">\(p_i = v_i / n_i\)</span> es la frecuencia relativa en una parte de tamaño <span class="arithmatex">\(n_i\)</span>:</p>
+<!-- core: corpus/dispersion.md:dispersion-measures dc6c36a -->
+<p>Las medidas, los campos de <code>Dispersion</code>, con sus nombres en <code>anyts.constants.DISPERSION_STATS_DESC</code>:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Medida</th>
 <th style="text-align: left;">Campo</th>
-<th style="text-align: left;">Fórmula</th>
-<th style="text-align: left;">Valores</th>
+<th style="text-align: left;">Qué mide</th>
+<th style="text-align: left;">Rango</th>
+<th style="text-align: left;">Un valor mayor indica</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">Desviación de proporciones DP</td>
-<td style="text-align: left;"><code>dp</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(\frac{1}{2} \sum \left\lvert \frac{v_i}{f} - s_i \right\rvert\)</span></td>
-<td style="text-align: left;">0 - en proporción a los tamaños de las partes, <span class="arithmatex">\(1 - s_i\)</span> - solo en la parte <span class="arithmatex">\(i\)</span>, así que como máximo <span class="arithmatex">\(1 - \min s_i\)</span>; Gries (2008)</td>
+<td style="text-align: left;"><a href="#dp"><code>dp</code></a></td>
+<td style="text-align: left;">Desviación de las proporciones de las apariciones respecto de las proporciones de las partes</td>
+<td style="text-align: left;">De 0 a <span class="arithmatex">\(1 - \min s_i\)</span></td>
+<td style="text-align: left;">Más desigual</td>
 </tr>
 <tr>
-<td style="text-align: left;">DP normalizada</td>
-<td style="text-align: left;"><code>dp_norm</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(\frac{DP}{1 - \min s_i}\)</span></td>
-<td style="text-align: left;">el máximo es uno sea cual sea la división; Lijffijt y Gries (2012)</td>
+<td style="text-align: left;"><a href="#dp_norm"><code>dp_norm</code></a></td>
+<td style="text-align: left;">DP sobre su mayor valor posible</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">Más desigual</td>
 </tr>
 <tr>
-<td style="text-align: left;">D de Juilland</td>
-<td style="text-align: left;"><code>juilland_d</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(1 - \frac{V}{\sqrt{n - 1}}\)</span>, <span class="arithmatex">\(V = \frac{\sigma(p)}{\mu(p)}\)</span></td>
-<td style="text-align: left;">1 - uniforme, 0 - en una parte; Juilland y Chang-Rodríguez (1964), con la desviación típica poblacional <span class="arithmatex">\(\sigma\)</span> como en Gries (2020); Gries (2008) toma la muestral</td>
+<td style="text-align: left;"><a href="#juilland_d"><code>juilland_d</code></a></td>
+<td style="text-align: left;">Variación de las frecuencias relativas por parte</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">Más uniforme</td>
 </tr>
 <tr>
-<td style="text-align: left;">D2 de Carroll</td>
-<td style="text-align: left;"><code>carroll_d2</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(\frac{H(p)}{\log_2 n}\)</span></td>
-<td style="text-align: left;">entropía de la distribución <span class="arithmatex">\(p_i\)</span>; 1 - uniforme, 0 - en una parte; Carroll (1970)</td>
+<td style="text-align: left;"><a href="#carroll_d2"><code>carroll_d2</code></a></td>
+<td style="text-align: left;">Entropía de las frecuencias relativas por parte</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">Más uniforme</td>
 </tr>
 <tr>
-<td style="text-align: left;">S de Rosengren</td>
-<td style="text-align: left;"><code>rosengren_s</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(\frac{(\sum \sqrt{s_i v_i})^2}{f}\)</span></td>
-<td style="text-align: left;">1 - en proporción, tiende a <span class="arithmatex">\(1/n\)</span> cuando se reúne en una de partes iguales; Rosengren (1971)</td>
+<td style="text-align: left;"><a href="#rosengren_s"><code>rosengren_s</code></a></td>
+<td style="text-align: left;">Reparto de las apariciones frente a los tamaños de las partes</td>
+<td style="text-align: left;">De <span class="arithmatex">\(\min s_i\)</span> a 1</td>
+<td style="text-align: left;">Más uniforme</td>
 </tr>
 <tr>
-<td style="text-align: left;">Divergencia de Kullback-Leibler</td>
-<td style="text-align: left;"><code>kl_divergence</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(\sum \frac{v_i}{f} \log_2 \frac{v_i / f}{s_i}\)</span></td>
-<td style="text-align: left;">en bits; 0 - en proporción, crece cuando se reúne en partes pequeñas; Gries (2020)</td>
+<td style="text-align: left;"><a href="#kl_divergence"><code>kl_divergence</code></a></td>
+<td style="text-align: left;">Divergencia de las proporciones de las apariciones respecto de las proporciones de las partes, en bits</td>
+<td style="text-align: left;">De 0 a <span class="arithmatex">\(-\log_2 \min s_i\)</span></td>
+<td style="text-align: left;">Más desigual</td>
 </tr>
 </tbody>
 </table>
-<p>Las medidas están disponibles como las funciones <code>calc_dp</code>, <code>calc_dp_norm</code>, <code>calc_juilland_d</code>, <code>calc_carroll_d2</code>, <code>calc_rosengren_s</code> y <code>calc_kl_divergence</code> con los argumentos <code>(frequencies, sizes)</code> - las frecuencias de la palabra por parte y los tamaños de las partes - del módulo <code>anyts.corpus.dispersion</code>; sus nombres están en <code>anyts.constants.DISPERSION_STATS_DESC</code>. Para una palabra de frecuencia nula todas las medidas son <code>nan</code>.</p>
-<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/dispersion.md:dispersion-parameters a7f9e1c -->
+<p>Cada medida es una función del módulo <code>anyts.corpus.dispersion</code> de las frecuencias de la palabra por parte y de los tamaños de las partes. Para <span class="arithmatex">\(n\)</span> partes de tamaños <span class="arithmatex">\(n_i\)</span> y proporciones <span class="arithmatex">\(s_i\)</span> del texto, frecuencias de la palabra por parte <span class="arithmatex">\(v_i\)</span> y una frecuencia total <span class="arithmatex">\(f = \sum v_i\)</span>, <span class="arithmatex">\(p_i = v_i / n_i\)</span> es la frecuencia relativa en una parte:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>words</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Palabras del texto en orden</td>
+<td style="text-align: left;"><code>frequencies</code></td>
+<td style="text-align: left;"><code>list[int]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Frecuencias de la palabra por parte</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>parts</code></td>
-<td style="text-align: center;">int/list[int]</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Número de partes (de 2 al número de palabras) o tamaños de las partes</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>word</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Palabra cuya dispersión se busca; <code>None</code> - todas las palabras</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>min_freq</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>1</code></td>
-<td style="text-align: center;">Frecuencia mínima de una palabra</td>
+<td style="text-align: left;"><code>sizes</code></td>
+<td style="text-align: left;"><code>list[int]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Tamaños de las partes</td>
 </tr>
 </tbody>
 </table>
+<p>Para una palabra de frecuencia nula todas las medidas son <code>nan</code>.</p>
+<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/dispersion.md:dispersion-parameters 2fdf192 -->
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>words</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabras del texto en orden</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>parts</code></td>
+<td style="text-align: left;"><code>int</code> / <code>list[int]</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Número de partes (de 2 al número de palabras) o tamaños de las partes</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Palabra cuya dispersión se busca; <code>None</code> - todas las palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>min_freq</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>1</code></td>
+<td style="text-align: left;">Frecuencia mínima de una palabra</td>
+</tr>
+</tbody>
+</table>
+<p>Unas palabras que no son una lista de cadenas lanzan <code>SourceTypeError</code>, y la falta de palabras, <code>SourceError</code>. Un <code>parts</code> que no es ni un entero de 2 al número de palabras ni dos o más enteros positivos que lo sumen, un <code>word</code> que no es una cadena y un <code>min_freq</code> que no es un entero lanzan <code>ParameterError</code>.</p>
 <h2 id="resultado">Resultado<a class="headerlink" href="#resultado" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/dispersion.md:Dispersion c55ea86 -->
-<p>Una lista de tuplas con nombre <code>Dispersion</code> por frecuencia descendente: <code>word</code>, <code>freq</code> y las seis medidas de la tabla; <code>pd.DataFrame(result)</code> da una tabla.</p>
+<!-- core: corpus/dispersion.md:Dispersion 536c09a -->
+<div class="signature highlight"><pre><span></span><code><span class="n">Dispersion</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">dp</span><span class="p">,</span> <span class="n">dp_norm</span><span class="p">,</span> <span class="n">juilland_d</span><span class="p">,</span> <span class="n">carroll_d2</span><span class="p">,</span> <span class="n">rosengren_s</span><span class="p">,</span> <span class="n">kl_divergence</span><span class="p">)</span>
+</code></pre></div>
+<p>Una lista de tuplas con nombre <code>Dispersion</code> por frecuencia descendente: la palabra, su frecuencia y las medidas; <code>pd.DataFrame(result)</code> da una tabla.</p>
 <h2 id="ejemplo">Ejemplo<a class="headerlink" href="#ejemplo" title="Permanent link">&para;</a></h2>
 <div class="admonition example">
 <p class="admonition-title">Ejemplo</p>

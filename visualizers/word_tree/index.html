@@ -2487,52 +2487,54 @@
 <p><strong>ests.visualizers.wordtree()</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>Building a <a href="https://www.weblyzard.com/word-tree/">word tree</a> that shows the contexts of a keyword in a text: the N-grams of up to <code>max_n</code> words that start or end with the keyword are counted in every list of words - a sentence, for instance. Every level of the tree keeps the <code>max_per_n</code> most frequent N-grams that continue a kept shorter one, alphabetically when equal. The kept N-grams are joined into two trees, the words after the keyword and before it, with the size of the font by frequency (<a href="https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/2011/Gruppe05/Homepage/Paper/wordtree-paper-wattenberg.pdf">Wattenberg and Viégas 2008</a>). Rendering needs the executables of <a href="https://graphviz.org/download/">Graphviz</a>.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">wordtree</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">max_n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_per_n</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div>
+<p>Building a <a href="https://www.weblyzard.com/word-tree/">word tree</a> of the contexts of a keyword: the N-grams of up to <code>max_n</code> words that start or end with the keyword are counted in every list of words, such as a sentence. Every level keeps the <code>max_per_n</code> most frequent N-grams that continue a kept shorter one, alphabetically when equal; they are joined into two trees, after the keyword and before it, the size of the font by frequency (<a href="https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/2011/Gruppe05/Homepage/Paper/wordtree-paper-wattenberg.pdf">Wattenberg and Viégas 2008</a>). Rendering needs the executables of <a href="https://graphviz.org/download/">Graphviz</a>.</p>
 <p>The function is that of the <a href="https://sergeyshk.github.io/anyTS/visualizers/word_tree/">anyTS</a> core.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>texts</code></td>
-<td style="text-align: center;">list[list[str]]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of lists of words</td>
+<td style="text-align: left;"><code>texts</code></td>
+<td style="text-align: left;"><code>list[list[str]]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of lists of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>keyword</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Keyword whose contexts are shown</td>
+<td style="text-align: left;"><code>keyword</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Keyword whose contexts are shown</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>max_n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>5</code></td>
-<td style="text-align: center;">Largest size of the context</td>
+<td style="text-align: left;"><code>max_n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>5</code></td>
+<td style="text-align: left;">Largest size of the context</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>max_per_n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>8</code></td>
-<td style="text-align: center;">Largest number of examples for every size of the context</td>
+<td style="text-align: left;"><code>max_per_n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>8</code></td>
+<td style="text-align: left;">Largest number of examples for every size of the context</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>**kwargs</code></td>
-<td style="text-align: center;">-</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Drawing parameters: <code>max_font_size</code> (default <code>30</code>), <code>min_font_size</code> (<code>12</code>), <code>font_interp</code> - a function of the relative frequency of a node, its frequency over the greatest one (0 to 1], that gives the share of the range from <code>min_font_size</code> to <code>max_font_size</code>, from 0 to 1; the cube root by default</td>
+<td style="text-align: left;"><code>**kwargs</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Drawing parameters: <code>max_font_size</code> (default <code>30</code>), <code>min_font_size</code> (<code>12</code>), <code>font_interp</code> - a function of the relative frequency of a node (its frequency over the greatest one, in (0, 1]) giving the share of the range from <code>min_font_size</code> to <code>max_font_size</code>, from 0 to 1; the cube root by default</td>
 </tr>
 </tbody>
 </table>
-<p>The function returns a <code>Digraph</code> of graphviz.</p>
+<p>The function returns a <code>Digraph</code> of graphviz. Texts that are not a list of lists of strings and a keyword that is not a string raise <code>SourceTypeError</code>; no texts, or a keyword with no word next to it in any of them, <code>SourceError</code>; a <code>max_n</code> that is not an integer of at least 2 and a <code>max_per_n</code> that is not an integer of at least one <code>ParameterError</code>.</p>
 <h2 id="usage-example">Usage example<a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h2>
 <p>The sentences of <em>Marianela</em> by Galdós from the <a href="../../datasets/spanishliterature/">corpus of literature</a>.</p>
 <div class="admonition example">

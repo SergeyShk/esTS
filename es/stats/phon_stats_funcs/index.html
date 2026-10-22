@@ -2859,13 +2859,15 @@ H = -\sum_{k} p_k \log_2 p_k
 <div class="admonition info">
 <p><strong>ests.phon_stats.calc_alliteration()</strong></p>
 </div>
-<p>El índice es <code>calc_repetition_index</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/phonetics/">anyTS</a> sobre los sonidos consonánticos de las palabras:</p>
-<!-- core: stats/phonetics.md:calc_repetition_index 8d65261 -->
-<p>El índice de repetición: el número de ventanas de <code>window_len</code> palabras vecinas donde un rasgo - una letra o un sonido, según elija una biblioteca - aparece en dos palabras o más, sumado sobre los rasgos, dividido por el número esperado si las palabras estuvieran en orden aleatorio. Una ventana de palabras barajadas es una muestra de ellas sin reposición, así que, para un rasgo presente en <span class="arithmatex">\(K\)</span> de las <span class="arithmatex">\(N\)</span> palabras del texto, una ventana de <span class="arithmatex">\(w\)</span> palabras lo contiene en dos palabras o más con la probabilidad hipergeométrica</p>
+<p>El índice es <code>calc_repetition_index</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/phon_stats/">anyTS</a> sobre los sonidos consonánticos de las palabras:</p>
+<!-- core: stats/phon_stats.md:calc_repetition_index ea6ed82 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_repetition_index</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">window_len</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>El índice de repetición: el número de ventanas de <code>window_len</code> palabras vecinas donde un rasgo (una letra o un sonido) aparece en dos palabras o más, sumado sobre los rasgos, dividido por el número esperado si las palabras estuvieran en orden aleatorio. Una ventana de palabras barajadas es una muestra sin reposición, así que, para un rasgo presente en <span class="arithmatex">\(K\)</span> de las <span class="arithmatex">\(N\)</span> palabras, una ventana de <span class="arithmatex">\(w\)</span> palabras lo contiene en dos palabras o más con la probabilidad hipergeométrica</p>
 <div class="arithmatex">\[
 P = 1 - \frac{\binom{N-K}{w} + K \binom{N-K}{w-1}}{\binom{N}{w}}
 \]</div>
-<p>y el número esperado es la suma de estas probabilidades sobre los rasgos multiplicada por las <span class="arithmatex">\(N - w + 1\)</span> ventanas. La esperanza sale del propio texto, así que el índice dice si las repeticiones se agrupan en palabras vecinas, no cuán frecuente es un rasgo: vale 1 de media sobre los órdenes de las palabras y queda bastante por encima de 1 cuando las repeticiones se acercan más que al azar. Una palabra cuenta un rasgo una vez, lo contenga las veces que lo contenga; <code>nan</code> para un texto más corto que la ventana y para un texto en el que ningún rasgo aparezca en dos palabras.</p>
+<p>y el número esperado es la suma de estas probabilidades sobre los rasgos multiplicada por las <span class="arithmatex">\(N - w + 1\)</span> ventanas. Como la esperanza sale del propio texto, el índice muestra si las repeticiones se agrupan en palabras vecinas, no cuán frecuente es un rasgo: vale 1 de media sobre los órdenes de las palabras y queda bastante por encima de 1 cuando las repeticiones se acercan más que al azar. Una palabra cuenta un rasgo una vez; el índice es <code>nan</code> para un texto más corto que la ventana o sin ningún rasgo que compartan dos palabras.</p>
 <p>Los rasgos son los sonidos consonánticos de la transcripción, así que <code>casa</code> y <code>queso</code> repiten k, y <code>cena</code> y <code>casa</code> no.</p>
 <table>
 <thead>

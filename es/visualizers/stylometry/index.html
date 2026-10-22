@@ -2556,155 +2556,167 @@
 <p>Gráficos para la <a href="../../corpus/stylometry/">estilometría</a>: un dendrograma y el escalamiento multidimensional de la matriz de distancias de <a href="../../corpus/stylometry/#delta"><code>delta</code></a>, las componentes principales de las frecuencias de las palabras más frecuentes y las curvas de Mendenhall de varios textos. Las funciones reciben los ejes <code>ax</code> y devuelven <code>Axes</code>.</p>
 <p>Las funciones son las del núcleo <a href="https://sergeyshk.github.io/anyTS/visualizers/stylometry/">anyTS</a>; las frecuencias de las componentes principales salen de <a href="../../corpus/stylometry/#delta"><code>frequency_table</code></a> y las curvas de <a href="../../corpus/stylometry/#mendenhall"><code>mendenhall_curve</code></a>. Las etiquetas por defecto son las inglesas de <code>VISUALIZER_LABELS</code> en <code>anyts.constants</code>; <code>labels</code> sustituye cualquiera de ellas.</p>
 <h2 id="dendrogram_plot">Dendrograma<a class="headerlink" href="#dendrogram_plot" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/stylometry.md:dendrogram_plot 1c08ea8 -->
-<p>Agrupamiento jerárquico con <code>scipy.cluster.hierarchy</code> sobre la matriz de distancias entre textos; el método de Ward por defecto, como en <a href="https://aclanthology.org/W15-0709.pdf">Evert et al. (2015)</a>; las etiquetas de las hojas son los nombres de los textos del índice de la matriz. Las columnas se toman en el orden de las filas; una matriz con textos distintos en las columnas y en las filas, menos de dos textos, una distancia infinita o negativa, la asimetría o una distancia en la diagonal lanzan <code>SourceError</code> antes de crear una figura.</p>
+<!-- core: visualizers/stylometry.md:dendrogram_plot e3f6319 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">dendrogram_plot</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">'ward'</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>Agrupamiento jerárquico con <code>scipy.cluster.hierarchy</code> sobre la matriz de distancias entre textos, por defecto con el método de Ward, como en <a href="https://aclanthology.org/W15-0709.pdf">Evert et al. (2015)</a>; las hojas se etiquetan con el índice de la matriz. Las columnas se toman en el orden de las filas.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>distances</code></td>
-<td style="text-align: center;">DataFrame</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Matriz simétrica de distancias con los nombres de los textos en las filas y en las columnas, en cualquier orden</td>
+<td style="text-align: left;"><code>distances</code></td>
+<td style="text-align: left;"><code>DataFrame</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Matriz simétrica de distancias con los nombres de los textos en las filas y en las columnas, en cualquier orden</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>method</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>ward</code></td>
-<td style="text-align: center;">Método de <code>scipy.cluster.hierarchy.linkage</code> para unir los grupos: <code>single</code>, <code>complete</code>, <code>average</code>, <code>weighted</code>, <code>centroid</code>, <code>median</code> o <code>ward</code></td>
+<td style="text-align: left;"><code>method</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>'ward'</code></td>
+<td style="text-align: left;">Método de <code>scipy.cluster.hierarchy.linkage</code> para unir los grupos: <code>single</code>, <code>complete</code>, <code>average</code>, <code>weighted</code>, <code>centroid</code>, <code>median</code> o <code>ward</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>ax</code></td>
-<td style="text-align: center;">Axes</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Ejes para el gráfico</td>
+<td style="text-align: left;"><code>ax</code></td>
+<td style="text-align: left;"><code>Axes</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Ejes para el gráfico</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>labels</code></td>
-<td style="text-align: center;">dict[str, str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code></td>
+<td style="text-align: left;"><code>labels</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code></td>
 </tr>
 </tbody>
 </table>
+<p>Textos distintos en las columnas y en las filas, menos de dos textos, una distancia infinita o negativa, la asimetría o una distancia en la diagonal lanzan <code>SourceError</code> antes de crear una figura. Unas distancias que no son un <code>DataFrame</code> de números lanzan <code>SourceTypeError</code>; un <code>method</code> desconocido, unas etiquetas que <code>merge_labels</code> rechaza y un <code>ax</code> que no es un <code>Axes</code> de matplotlib lanzan <code>ParameterError</code>.</p>
 <h2 id="pca_plot">Componentes principales<a class="headerlink" href="#pca_plot" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/stylometry.md:pca_plot 5872373 -->
+<!-- core: visualizers/stylometry.md:pca_plot b21b905 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">pca_plot</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">n_mfw</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">culling</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 <p>Análisis de componentes principales de las puntuaciones z de las frecuencias relativas de las unidades más frecuentes (<code>frequency_table</code>, <code>z_scores</code>): los textos en el plano de las dos primeras componentes con sus nombres, y la proporción de la varianza explicada en las etiquetas de los ejes.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>corpus</code></td>
-<td style="text-align: center;">dict[str, list[str]]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Unidades de los textos por los nombres de los textos</td>
+<td style="text-align: left;"><code>corpus</code></td>
+<td style="text-align: left;"><code>dict[str, list[str]]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Unidades de los textos por los nombres de los textos</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_mfw</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>100</code></td>
-<td style="text-align: center;">Número de las unidades más frecuentes; <code>None</code> - todas</td>
+<td style="text-align: left;"><code>n_mfw</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>100</code></td>
+<td style="text-align: left;">Número de las unidades más frecuentes; <code>None</code> - todas</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>culling</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><code>0.0</code></td>
-<td style="text-align: center;">Menor proporción de textos en la que aparece una unidad</td>
+<td style="text-align: left;"><code>culling</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>0.0</code></td>
+<td style="text-align: left;">Menor proporción de textos en la que aparece una unidad</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>ax</code></td>
-<td style="text-align: center;">Axes</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Ejes para el gráfico</td>
+<td style="text-align: left;"><code>ax</code></td>
+<td style="text-align: left;"><code>Axes</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Ejes para el gráfico</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>labels</code></td>
-<td style="text-align: center;">dict[str, str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code> y <code>ylabel</code> (cadenas de formato con la proporción explicada <code>share</code>)</td>
+<td style="text-align: left;"><code>labels</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code> y <code>ylabel</code> (cadenas de formato con la proporción explicada <code>share</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>El corpus, <code>n_mfw</code> y <code>culling</code> lanzan los errores de <code>frequency_table</code>, y menos de tres textos lanzan <code>SourceError</code>; unas etiquetas que <code>merge_labels</code> rechaza y un <code>ax</code> que no es un <code>Axes</code> de matplotlib lanzan <code>ParameterError</code>.</p>
 <h2 id="mds_plot">Escalamiento multidimensional<a class="headerlink" href="#mds_plot" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/stylometry.md:mds_plot 3309106 -->
-<p>Escalamiento multidimensional clásico (Torgerson 1952) de cualquier matriz de distancias: el doble centrado de la matriz de distancias al cuadrado y los dos vectores propios principales; las distancias entre los puntos aproximan las distancias de la matriz. Las columnas se toman en el orden de las filas; una matriz con textos distintos en las columnas y en las filas, menos de dos textos, una distancia infinita o negativa, la asimetría o una distancia en la diagonal lanzan <code>SourceError</code> antes de crear una figura.</p>
+<!-- core: visualizers/stylometry.md:mds_plot fee8015 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">mds_plot</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>Escalamiento multidimensional clásico (Torgerson 1952) de cualquier matriz de distancias: los dos vectores propios principales de las distancias al cuadrado con doble centrado, así que las distancias entre los puntos aproximan las de la matriz. Las columnas se toman en el orden de las filas.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>distances</code></td>
-<td style="text-align: center;">DataFrame</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Matriz simétrica de distancias con los nombres de los textos en las filas y en las columnas, en cualquier orden</td>
+<td style="text-align: left;"><code>distances</code></td>
+<td style="text-align: left;"><code>DataFrame</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Matriz simétrica de distancias con los nombres de los textos en las filas y en las columnas, en cualquier orden</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>ax</code></td>
-<td style="text-align: center;">Axes</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Ejes para el gráfico</td>
+<td style="text-align: left;"><code>ax</code></td>
+<td style="text-align: left;"><code>Axes</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Ejes para el gráfico</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>labels</code></td>
-<td style="text-align: center;">dict[str, str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code>, <code>ylabel</code></td>
+<td style="text-align: left;"><code>labels</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code>, <code>ylabel</code></td>
 </tr>
 </tbody>
 </table>
+<p>Textos distintos en las columnas y en las filas, menos de dos textos, una distancia infinita o negativa, la asimetría o una distancia en la diagonal lanzan <code>SourceError</code> antes de crear una figura. Unas distancias que no son un <code>DataFrame</code> de números lanzan <code>SourceTypeError</code>; unas etiquetas que <code>merge_labels</code> rechaza y un <code>ax</code> que no es un <code>Axes</code> de matplotlib lanzan <code>ParameterError</code>.</p>
 <h2 id="mendenhall_plot">Curvas de Mendenhall<a class="headerlink" href="#mendenhall_plot" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/stylometry.md:mendenhall_plot fadc7a5 -->
+<!-- core: visualizers/stylometry.md:mendenhall_plot 921690d -->
+<div class="signature highlight"><pre><span></span><code><span class="n">mendenhall_plot</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 <p>Las proporciones de las palabras por longitud en caracteres (<code>mendenhall_curve</code>) de cada texto en un mismo gráfico; una longitud que ninguna palabra tiene se dibuja en cero.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>corpus</code></td>
-<td style="text-align: center;">dict[str, list[str]]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Palabras de los textos por los nombres de los textos</td>
+<td style="text-align: left;"><code>corpus</code></td>
+<td style="text-align: left;"><code>dict[str, list[str]]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabras de los textos por los nombres de los textos</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>ax</code></td>
-<td style="text-align: center;">Axes</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Ejes para el gráfico</td>
+<td style="text-align: left;"><code>ax</code></td>
+<td style="text-align: left;"><code>Axes</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Ejes para el gráfico</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>labels</code></td>
-<td style="text-align: center;">dict[str, str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code>, <code>ylabel</code></td>
+<td style="text-align: left;"><code>labels</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Etiquetas sobre las de por defecto: <code>title</code>, <code>xlabel</code>, <code>ylabel</code></td>
 </tr>
 </tbody>
 </table>
+<p>Un corpus que no es un mapeo de listas de cadenas lanza <code>SourceTypeError</code>, la falta de textos o un texto sin palabras <code>SourceError</code>; unas etiquetas que <code>merge_labels</code> rechaza y un <code>ax</code> que no es un <code>Axes</code> de matplotlib lanzan <code>ParameterError</code>.</p>
 <h2 id="ejemplo-de-uso">Ejemplo de uso<a class="headerlink" href="#ejemplo-de-uso" title="Permanent link">&para;</a></h2>
 <p>Seis novelas del <a href="../../datasets/spanishliterature/">corpus de literatura</a>, tres de Galdós y tres de Unamuno.</p>
 <div class="admonition example">

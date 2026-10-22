@@ -2631,8 +2631,14 @@
 <p><strong>ests.basic_stats.BasicStats</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>The basic statistics of a text: the counts of its sentences, words, characters, letters, spaces, syllables and punctuation marks, the distributions of the words by letters and by syllables, and the long, complex, simple, monosyllabic and polysyllabic words. The data source can be either a text or a <code>Doc</code> object of <a href="https://github.com/explosion/spaCy">spaCy</a>. Letters are counted by <code>str.isalpha</code>, so digits, hyphens and marks inside a word are not letters.</p>
-<p>The words of a string come from the word extractor and its sentences from the sentence extractor. The words of a <code>Doc</code> come from its tokens (punctuation marks and symbols such as <code>€</code> or <code>%</code> dropped) and its sentences from its boundaries, or from the sentence extractor when it has none or only partial ones (<code>has_sents</code>); an extractor passed explicitly is used on the text of the <code>Doc</code>. A blank line ends a sentence of a string and of a <code>Doc</code> without boundaries; a <code>Doc</code> with boundaries follows the rule when its pipeline starts a sentence after a blank line (<code>start_sents_after_blank_lines</code>, registered by a language library under its own name) before the parser, <code>senter</code> or <code>sentencizer</code>. A sentence of punctuation alone holds no word and is not counted.</p>
+<p>The basic statistics of a text: the counts of its sentences, words, characters, syllables and punctuation marks and the distributions of its words. The data source is a text or a <code>Doc</code> object of <a href="https://github.com/explosion/spaCy">spaCy</a>. Letters are counted by <code>str.isalpha</code>, so digits, hyphens and marks inside a word are not letters.</p>
+<p>The words and the sentences of a string come from the extractors. A <code>Doc</code> gives its tokens as words, without punctuation marks and symbols such as <code>€</code> or <code>%</code>, and its boundaries as sentences, or those of the sentence extractor when it has none or only partial ones (<code>has_sents</code>); an extractor given is used on its text instead. A blank line ends a sentence of a string and of a <code>Doc</code> without boundaries; a <code>Doc</code> with boundaries does so when its pipeline has <code>start_sents_after_blank_lines</code> (registered by a language library under its own name) before the parser, <code>senter</code> or <code>sentencizer</code>. A sentence without words, such as punctuation alone, is not counted.</p>
+<p>Raises:</p>
+<ul>
+<li><code>SourceTypeError</code> - a source that is neither a string nor a <code>Doc</code>, an extractor of another type;</li>
+<li><code>SourceError</code> - a source without words;</li>
+<li><code>ParameterError</code> - a threshold that is not an integer of at least one.</li>
+</ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The statistics are computed when the <code>BasicStats</code> object is initialized.</p>
@@ -2643,52 +2649,52 @@
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>source</code></td>
-<td style="text-align: center;">str/Doc</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Data source (a string or a Doc object)</td>
+<td style="text-align: left;"><code>source</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Data source (a string or a Doc object)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>sents_extractor</code></td>
-<td style="text-align: center;">SentsExtractor</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Sentence extraction tool; used for a Doc too, on its text</td>
+<td style="text-align: left;"><code>sents_extractor</code></td>
+<td style="text-align: left;"><code>SentsExtractor</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Sentence extraction tool; used for a Doc too, on its text</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>words_extractor</code></td>
-<td style="text-align: center;">WordsExtractor</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Word extraction tool; used for a Doc too, on its text</td>
+<td style="text-align: left;"><code>words_extractor</code></td>
+<td style="text-align: left;"><code>WordsExtractor</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Word extraction tool; used for a Doc too, on its text</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>normalize</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Compute normalized statistics</td>
+<td style="text-align: left;"><code>normalize</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Compute normalized statistics</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>complex_syl_factor</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>COMPLEX_SYL_FACTOR</code></td>
-<td style="text-align: center;">Minimum number of syllables in a complex word</td>
+<td style="text-align: left;"><code>complex_syl_factor</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>COMPLEX_SYL_FACTOR</code></td>
+<td style="text-align: left;">Minimum number of syllables in a complex word</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>long_word_letter_factor</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>LONG_WORD_LETTER_FACTOR</code></td>
-<td style="text-align: center;">Minimum number of letters in a long word</td>
+<td style="text-align: left;"><code>long_word_letter_factor</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>LONG_WORD_LETTER_FACTOR</code></td>
+<td style="text-align: left;">Minimum number of letters in a long word</td>
 </tr>
 </tbody>
 </table>
-<p>A source that is neither a string nor a <code>Doc</code> and an extractor of another type raise <code>SourceTypeError</code>, a source without words <code>SourceError</code>, a threshold that is not an integer of at least one <code>ParameterError</code>.</p>
+<p>The object keeps <code>normalize</code>, <code>complex_syl_factor</code> and <code>long_word_letter_factor</code> under their names.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The default thresholds are those of the readability formulas: a complex word has three or more syllables, as in SMOG, and a long word seven or more letters, as in LIX and RIX.</p>
@@ -2697,140 +2703,112 @@
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Attribute</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Statistic</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Normalized</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>c_letters</code></td>
-<td style="text-align: center;">dict[int, int]</td>
-<td style="text-align: center;">Distribution of words by number of letters</td>
+<td style="text-align: left;"><code>c_letters</code></td>
+<td style="text-align: left;"><code>dict[int, int]</code></td>
+<td style="text-align: left;">Distribution of words by number of letters</td>
+<td style="text-align: left;">-</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>c_syllables</code></td>
-<td style="text-align: center;">dict[int, int]</td>
-<td style="text-align: center;">Distribution of words by number of syllables</td>
+<td style="text-align: left;"><code>c_syllables</code></td>
+<td style="text-align: left;"><code>dict[int, int]</code></td>
+<td style="text-align: left;">Distribution of words by number of syllables</td>
+<td style="text-align: left;">-</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_sents</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of sentences containing words</td>
+<td style="text-align: left;"><code>n_sents</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of sentences containing words</td>
+<td style="text-align: left;">-</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of words</td>
+<td style="text-align: left;"><code>n_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of words</td>
+<td style="text-align: left;">-</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_unique_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of unique words, case ignored</td>
+<td style="text-align: left;"><code>n_unique_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of unique words, case ignored</td>
+<td style="text-align: left;"><code>p_unique_words</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_long_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of long words</td>
+<td style="text-align: left;"><code>n_long_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of long words, of at least <code>long_word_letter_factor</code> letters</td>
+<td style="text-align: left;"><code>p_long_words</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_complex_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of complex words</td>
+<td style="text-align: left;"><code>n_complex_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of complex words, of at least <code>complex_syl_factor</code> syllables</td>
+<td style="text-align: left;"><code>p_complex_words</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_simple_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of simple words: with a syllable, below the complex ones</td>
+<td style="text-align: left;"><code>n_simple_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of simple words: with a syllable, below the complex ones</td>
+<td style="text-align: left;"><code>p_simple_words</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_monosyllable_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of monosyllabic words</td>
+<td style="text-align: left;"><code>n_monosyllable_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of monosyllabic words</td>
+<td style="text-align: left;"><code>p_monosyllable_words</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_polysyllable_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of polysyllabic words</td>
+<td style="text-align: left;"><code>n_polysyllable_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of polysyllabic words, of two syllables or more</td>
+<td style="text-align: left;"><code>p_polysyllable_words</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_chars</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of characters without the line breaks</td>
+<td style="text-align: left;"><code>n_chars</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of characters without the line breaks</td>
+<td style="text-align: left;">-</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_letters</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of letters</td>
+<td style="text-align: left;"><code>n_letters</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of letters</td>
+<td style="text-align: left;"><code>p_letters</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_spaces</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of spaces of Unicode (category Zs), such as the no-break space, and tabs</td>
+<td style="text-align: left;"><code>n_spaces</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of spaces of Unicode (category Zs), such as the no-break space, and tabs</td>
+<td style="text-align: left;"><code>p_spaces</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_syllables</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of syllables</td>
+<td style="text-align: left;"><code>n_syllables</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of syllables</td>
+<td style="text-align: left;">-</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>n_punctuations</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of punctuation marks</td>
+<td style="text-align: left;"><code>n_punctuations</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of punctuation marks</td>
+<td style="text-align: left;"><code>p_punctuations</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>c_punctuations</code></td>
-<td style="text-align: center;">dict[str, int]</td>
-<td style="text-align: center;">Distribution of punctuation marks by type</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_unique_words</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Normalized number of unique words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_long_words</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Normalized number of long words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_complex_words</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Normalized number of complex words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_simple_words</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Normalized number of simple words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_monosyllable_words</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Normalized number of monosyllabic words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_polysyllable_words</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Normalized number of polysyllabic words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_letters</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Normalized number of letters</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_spaces</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Normalized number of spaces</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_punctuations</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Normalized number of punctuation marks</td>
+<td style="text-align: left;"><code>c_punctuations</code></td>
+<td style="text-align: left;"><code>dict[str, int]</code></td>
+<td style="text-align: left;">Distribution of punctuation marks by type (<a href="#count_punctuations"><code>count_punctuations</code></a>)</td>
+<td style="text-align: left;">-</td>
 </tr>
 </tbody>
 </table>
-<p>The counts of the words are normalized by the number of words, those of the characters by the number of characters; the normalized statistics are computed with <code>normalize=True</code>.</p>
+<p>With <code>normalize=True</code> the object has the normalized statistics too, of the type <code>float</code>: the counts of the words divided by the number of words, those of the characters by the number of characters.</p>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <h3 id="count_words_by_syllables-count_words_by_letters">count_words_by_syllables, count_words_by_letters<a class="headerlink" href="#count_words_by_syllables-count_words_by_letters" title="Permanent link">&para;</a></h3>
 <p><code>count_words_by_syllables(min_syllables)</code> and <code>count_words_by_letters(min_letters)</code> return the number of words with at least the given number of syllables or letters; a minimum that is not an integer raises <code>ParameterError</code>.</p>
@@ -2839,7 +2817,7 @@
 <p>These methods recount complex and long words with a threshold different from the one set at initialization.</p>
 </div>
 <h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
-<p>Returns a dictionary with the computed statistics - a copy: editing it does not change the object.</p>
+<p><code>get_stats(flat)</code> returns a dictionary with the distributions <code>c_letters</code> and <code>c_syllables</code>, the counts of <code>stats_desc</code>, the distribution <code>c_punctuations</code> and, with <code>normalize=True</code>, the normalized counts, as a copy: editing it does not change the object. With <code>flat=True</code> the distributions give a key for every value the text has, such as <code>c_letters_3</code> and <code>c_punctuations_comma</code>.</p>
 <p>An example of computing basic text statistics with normalization:</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
@@ -2883,7 +2861,7 @@
 </code></pre></div>
 </div>
 <h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
-<p>Prints a table with the counts of the statistics, their descriptions from <code>stats_desc</code> and the headers from <code>stats_headers</code>.</p>
+<p><code>print_stats()</code> prints a table with the counts of <code>stats_desc</code>, their descriptions and the headers from <code>stats_headers</code>.</p>
 <p>To illustrate the method, we reuse the code from the previous example:</p>
 <div class="admonition example">
 <p class="admonition-title">Example</p>
@@ -2919,7 +2897,40 @@ Punctuation<span class="w"> </span>marks<span class="w">   </span><span class="p
 <div class="admonition info">
 <p><strong>ests.basic_stats.count_punctuations()</strong>, <strong>ests.basic_stats.punctuation_profile()</strong></p>
 </div>
-<p><code>count_punctuations(text, marks, dash_pattern)</code> counts punctuation marks by their types - the same distribution lives in the <code>c_punctuations</code> attribute: commas, periods, question and exclamation marks, ellipses, colons, semicolons, dashes, hyphens, guillemets, quotation marks, parentheses and the other marks. The dashes typed with hyphens (<code>dash_pattern</code>) are counted first, then the ellipses - the <code>…</code> character, three or more periods, or two periods after <code>?</code> and <code>!</code>, one mark whose periods do not count as periods (<code>Who?..</code> is a question and an ellipsis) - and then every mark by its type in <code>marks</code>; any other character of the Unicode categories P and S is another mark (<code>§</code>, <code>€</code>, <code>°</code>). <code>marks</code> maps every mark, a single character, to one of the types, otherwise <code>ParameterError</code>, and <code>dash_pattern</code> is a compiled regular expression; a text that is not a string, marks that are not a mapping and dashes that are not a compiled expression raise <code>SourceTypeError</code>.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">count_punctuations</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">marks</span><span class="o">=</span><span class="n">PUNCTUATION_MARKS</span><span class="p">,</span> <span class="n">dash_pattern</span><span class="o">=</span><span class="n">DASH_PATTERN</span><span class="p">)</span>
+</code></pre></div>
+<p>Counts punctuation marks by type, the distribution of <code>c_punctuations</code>: commas, periods, question and exclamation marks, ellipses, colons, semicolons, dashes, hyphens, guillemets, quotation marks, parentheses and other marks. Dashes typed with hyphens (<code>dash_pattern</code>) are counted first, then ellipses - <code>…</code>, three or more periods, or two after <code>?</code> and <code>!</code>, one mark whose periods are not counted as periods (<code>Who?..</code> is a question and an ellipsis) - then each mark by its type in <code>marks</code>; any other character of the Unicode categories P and S is another mark (<code>§</code>, <code>€</code>, <code>°</code>).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Text string</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>marks</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>PUNCTUATION_MARKS</code></td>
+<td style="text-align: left;">Type of every mark, among <code>PUNCTUATION_TYPES</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>dash_pattern</code></td>
+<td style="text-align: left;"><code>Pattern</code></td>
+<td style="text-align: left;"><code>DASH_PATTERN</code></td>
+<td style="text-align: left;">Dashes typed with hyphens</td>
+</tr>
+</tbody>
+</table>
+<p>A mark of <code>marks</code> that is not a single character or has an unknown type raises <code>ParameterError</code>; a text that is not a string, <code>marks</code> that are not a mapping and a <code>dash_pattern</code> that is not a compiled regular expression raise <code>SourceTypeError</code>.</p>
 <p>The default marks and dashes are those of Spanish orthography: the inverted <code>¿</code> and <code>¡</code> are question and exclamation marks (<code>¿Qué?</code> carries two question marks), <code>—</code>, <code>–</code> and the horizontal bar <code>―</code> are dashes, and so is the raya typed with hyphens - a run of two or more hyphens, a hyphen after whitespace, at the start of a line or after a closing mark, before a space or between a letter and an opening or a closing mark (<code>--Hola --dijo Juan</code>, <code>- Se fueron - dijo</code>, <code>cuatro.-¿Cinco?</code>); a hyphen inside a word, before a digit or at the end of a line inside a word is a hyphen (<code>teórico-práctico</code>, <code>-5</code>), <code>«»</code> are guillemets and <code>"“”‘’</code> the quotation marks of the three levels of the orthography. The combining marks and the invisible format characters (Unicode M and Cf) are removed from the words but are not counted as marks.</p>
 <p><code>punctuation_profile(text, n_words=None)</code> turns the counts into frequencies per 1000 words and adds <code>inverted_share</code> - the share of inverted marks among all question and exclamation marks: <code>0.5</code> when every question and exclamation opens with <code>¿</code> or <code>¡</code> as the orthography requires, lower when the writer drops them; without words or without question and exclamation marks it is <code>nan</code>.</p>
 <p>The profile depends on text formatting (typographic quotation marks and dashes, the inverted marks), so it is best read separately from linguistic features.</p>

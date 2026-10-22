@@ -2531,95 +2531,127 @@
 <p><strong>ests.corpus.kwic()</strong>, <strong>ests.corpus.format_kwic()</strong>, <strong>ests.corpus.print_kwic()</strong>, <strong>ests.corpus.Concordance</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/kwic.md:kwic 9ba7a6a -->
-<p>Una concordancia KWIC (keyword in context) - todas las apariciones de una palabra o de una expresión con su contexto a la izquierda y a la derecha. Las apariciones se buscan entre las palabras del texto por la forma, sin distinguir mayúsculas y minúsculas o distinguiéndolas (<code>ignore_case=False</code>), o por el lema (<code>by_lemma=True</code>), donde las palabras de la palabra clave se lematizan como palabras de una cadena: con un lematizador una expresión puede escribirse en cualquier forma, sin él se da por lemas. Las palabras de una cadena y de la palabra clave salen del tokenizador, las de un <code>Doc</code> de sus tokens, así que un tokenizador que divide una cadena como lo hace el pipeline encuentra en un <code>Doc</code> lo que encuentra en su texto; la puntuación y los símbolos no son palabras. Las formas se comparan en la forma compuesta de Unicode (NFC), sin guiones blandos. Una expresión no cruza el final de un párrafo o de una oración - un límite de un <code>Doc</code> en cualquier punto entre sus palabras, incluido un signo de apertura, o en un texto sin límites o con límites parciales (<code>has_sents</code>) el comienzo de una oración del segmentador de oraciones, por defecto un signo final ante un espacio - salvo que la palabra clave tenga un signo final o el comienzo de una oración en el mismo lugar (<code>Sr. García</code>). El contexto son <code>window</code> palabras a cada lado tal como están escritas en el texto, con la puntuación entre ellas; los espacios se reducen a uno, y las apariciones no se solapan.</p>
+<!-- core: corpus/kwic.md:kwic 481d7d1 -->
+<p>Una concordancia KWIC (keyword in context) - todas las apariciones de una palabra o de una expresión con su contexto a ambos lados. Las apariciones se buscan entre las palabras del texto por la forma, sin distinguir mayúsculas y minúsculas o distinguiéndolas (<code>ignore_case=False</code>), o por el lema (<code>by_lemma=True</code>); la palabra clave se lematiza como una cadena, así que con un lematizador una expresión puede escribirse en cualquier forma y sin él se da por lemas. Las palabras de una cadena y de la palabra clave salen del tokenizador, las de un <code>Doc</code> de sus tokens: un tokenizador que divide una cadena como lo hace el pipeline encuentra lo mismo en ambos. La puntuación y los símbolos no son palabras; las formas se comparan en la forma compuesta de Unicode (NFC), sin guiones blandos.</p>
+<p>Una expresión no cruza el final de un párrafo o de una oración salvo que la palabra clave tenga un signo final o un comienzo de oración en el mismo lugar (<code>Sr. García</code>). Una oración termina en un límite de un <code>Doc</code> en cualquier punto entre las palabras, incluido un signo de apertura, o, sin límites o con límites parciales (<code>has_sents</code>), en un comienzo de oración del segmentador de oraciones, por defecto un signo final ante un espacio. El contexto son <code>window</code> palabras a cada lado tal como están escritas, puntuación incluida; los espacios se reducen a uno, y las apariciones no se solapan.</p>
 <h2 id="ganchos-del-idioma">Ganchos del idioma<a class="headerlink" href="#ganchos-del-idioma" title="Permanent link">&para;</a></h2>
 <p>La función llama al <code>kwic</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/kwic/">anyTS</a> con los ganchos del español. El texto y la palabra clave se dividen en palabras del mismo modo, con el tokenizador del pipeline español vacío, así que <code>EE. UU.</code> es una palabra en los dos; las abreviaturas que el tokenizador mantiene enteras (<code>Sr.</code>, <code>pág.</code>, <code>etc.</code>, <code>EE. UU.</code>) son una palabra igual en minúsculas, con mayúscula inicial y en mayúsculas, así que <code>sr. pérez</code> encuentra <code>Sr. Pérez</code> y <code>SR. PÉREZ</code>, y la puntuación y los símbolos no son palabras de ninguno: <code>¿Dónde</code> encuentra <code>Dónde</code>, <code>20 €</code> encuentra <code>20</code>. Las formas y los lemas se pasan a minúsculas; las tildes forman parte de la forma: <code>solo</code> y <code>sólo</code> son dos formas. Las oraciones de una cadena, de la palabra clave y del texto de un <code>Doc</code> sin límites son las de <a href="../../extractors/sentences/"><code>SentsExtractor</code></a>: unos puntos suspensivos o una exclamación seguidos de una palabra en minúscula no terminan la oración, así que <code>honrado piensa</code> encuentra <code>honrado... piensa</code>.</p>
 <p>Por lema, la palabra clave se lematiza con simplemma, así que una expresión se da por lemas - <code>mirar a el pájaro</code> - o tal como se escribe, y una palabra del texto se encuentra por su lema de simplemma y, en un <code>Doc</code> que lleva lemas, también por el lema del modelo: <code>gatos</code> se encuentra por <code>gato</code>. En <code>Mi amigo vino con una botella de vino</code> el modelo da <code>venir</code> al verbo, así que <code>venir</code> encuentra el verbo, donde simplemma, que no ve el contexto, no encontraría nada; <code>vino</code> encuentra los dos, porque simplemma lee el verbo como <code>vino</code>.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/kwic.md:kwic-parameters e17a79b -->
+<!-- core: corpus/kwic.md:kwic-parameters ef54df9 -->
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>source</code></td>
-<td style="text-align: center;">str/Doc</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Texto u objeto Doc</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>keyword</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Palabra o expresión</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>window</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>5</code></td>
-<td style="text-align: center;">Número de palabras de contexto a cada lado</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>by_lemma</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Comparar lemas en lugar de formas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>ignore_case</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>True</code></td>
-<td style="text-align: center;">No distinguir mayúsculas y minúsculas al comparar formas</td>
-</tr>
-</tbody>
-</table>
-<p>Una palabra clave sin palabras y una ventana negativa lanzan <code>ParameterError</code>; una fuente que no es ni una cadena ni un <code>Doc</code>, una palabra clave que no es una cadena y un gancho que no es invocable lanzan <code>SourceTypeError</code>.</p>
-<!-- core: corpus/kwic.md:format_kwic 532aaaa -->
-<p><code>format_kwic(concordances, width=40)</code> alinea las líneas en la palabra clave: el contexto de la izquierda se recorta por la izquierda y se alinea a la derecha, el de la derecha se recorta por la derecha; <code>width</code> es la anchura de un contexto en caracteres, al menos uno. Las líneas pueden venir de cualquier iterable y se toman en la forma compuesta de Unicode (NFC), para que las anchuras cuenten los caracteres tal como se ven.</p>
-<!-- core: corpus/kwic.md:print_kwic 92f3d36 -->
-<p><code>print_kwic(concordances, width=40)</code> imprime el resultado de <code>format_kwic</code>.</p>
-<h2 id="resultado">Resultado<a class="headerlink" href="#resultado" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/kwic.md:Concordance f0916bd -->
-<p>Una lista de tuplas con nombre <code>Concordance</code> en el orden del texto.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Campo</th>
-<th style="text-align: center;">Tipo</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
 <th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>start</code></td>
-<td style="text-align: center;">int</td>
+<td style="text-align: left;"><code>source</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Texto u objeto Doc</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>keyword</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabra o expresión</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>window</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>5</code></td>
+<td style="text-align: left;">Número de palabras de contexto a cada lado</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>by_lemma</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Comparar lemas en lugar de formas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ignore_case</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>True</code></td>
+<td style="text-align: left;">No distinguir mayúsculas y minúsculas al comparar formas</td>
+</tr>
+</tbody>
+</table>
+<p>Una palabra clave sin palabras y una ventana negativa lanzan <code>ParameterError</code>; una fuente que no es ni una cadena ni un <code>Doc</code>, una palabra clave que no es una cadena y un gancho que no es invocable lanzan <code>SourceTypeError</code>.</p>
+<!-- core: corpus/kwic.md:format_kwic 4de69b2 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">format_kwic</span><span class="p">(</span><span class="n">concordances</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</code></pre></div>
+<p>Alinea las líneas en la palabra clave en un texto, una línea por aparición: el contexto de la izquierda se recorta por la izquierda y se alinea a la derecha, el de la derecha se recorta por la derecha. Las líneas pueden venir de cualquier iterable y se toman en la forma compuesta de Unicode (NFC), así que las anchuras cuentan los caracteres tal como se ven.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>concordances</code></td>
+<td style="text-align: left;"><code>list[Concordance]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Líneas de una concordancia</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>width</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>40</code></td>
+<td style="text-align: left;">Anchura de un contexto en caracteres</td>
+</tr>
+</tbody>
+</table>
+<p>Unas líneas que son una cadena o que no se pueden iterar lanzan <code>SourceTypeError</code>, y un <code>width</code> que no es un entero de al menos uno, <code>ParameterError</code>.</p>
+<!-- core: corpus/kwic.md:print_kwic 3ead3e5 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">print_kwic</span><span class="p">(</span><span class="n">concordances</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</code></pre></div>
+<p>Imprime el resultado de <code>format_kwic</code>.</p>
+<h2 id="resultado">Resultado<a class="headerlink" href="#resultado" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/kwic.md:Concordance ce8d89f -->
+<div class="signature highlight"><pre><span></span><code><span class="n">Concordance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span>
+</code></pre></div>
+<p>Una lista de tuplas con nombre <code>Concordance</code> en el orden del texto.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Campo</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>start</code></td>
+<td style="text-align: left;"><code>int</code></td>
 <td style="text-align: left;">Posición del primer carácter de la aparición en el texto</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>end</code></td>
-<td style="text-align: center;">int</td>
+<td style="text-align: left;"><code>end</code></td>
+<td style="text-align: left;"><code>int</code></td>
 <td style="text-align: left;">Posición tras el último carácter de la aparición</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>left</code></td>
-<td style="text-align: center;">str</td>
+<td style="text-align: left;"><code>left</code></td>
+<td style="text-align: left;"><code>str</code></td>
 <td style="text-align: left;">Contexto a la izquierda</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>keyword</code></td>
-<td style="text-align: center;">str</td>
+<td style="text-align: left;"><code>keyword</code></td>
+<td style="text-align: left;"><code>str</code></td>
 <td style="text-align: left;">Aparición tal como está escrita en el texto</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>right</code></td>
-<td style="text-align: center;">str</td>
+<td style="text-align: left;"><code>right</code></td>
+<td style="text-align: left;"><code>str</code></td>
 <td style="text-align: left;">Contexto a la derecha</td>
 </tr>
 </tbody>

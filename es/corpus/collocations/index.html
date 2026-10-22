@@ -2531,165 +2531,207 @@
 <p><strong>ests.corpus.collocations()</strong>, <strong>ests.corpus.Collocation</strong></p>
 </div>
 <h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/collocations.md:collocations 90cd7f5 -->
+<!-- core: corpus/collocations.md:collocations c290cd8 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">collocations</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="s1">'logdice'</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 <p>Extracción de colocaciones: pares de palabras que aparecen juntas más a menudo de lo que daría la independencia - expresiones fijas, terminología, la combinatoria de una palabra. Las medidas de asociación son las de <a href="https://www.sketchengine.eu/wp-content/uploads/ske-statistics.pdf">Sketch Engine</a> y de <a href="https://www.nltk.org/api/nltk.metrics.association.html"><code>nltk.metrics.association</code></a>.</p>
-<p>Los pares de palabras son ordenados, como en NLTK: la palabra de la derecha aparece a no más de <code>window</code> palabras después de la de la izquierda, y cada par de posiciones se cuenta una vez; <code>window=1</code> da bigramas. Dentro de la medida la frecuencia del par se divide por el tamaño de la ventana (Church y Hanks 1990, como en NLTK), para que la frecuencia esperada no dependa de la ventana y Dice y la sensibilidad mínima no superen uno; el campo <code>freq_pair</code> guarda la frecuencia sin dividir. Con <code>window &gt; 1</code> la escala de las medidas de Dice se desplaza por ello: un par siempre contiguo recibe un logDice de <span class="arithmatex">\(14 - \log_2 window\)</span> (13 con una ventana de 2) y no 14 como en Sketch Engine, que usa la coocurrencia sin dividir; 14 solo lo alcanza un par que aparece a todas las distancias dentro de la ventana. El parámetro <code>node</code> conserva los pares con la palabra dada a la izquierda o a la derecha: la combinatoria de una palabra.</p>
+<p>Los pares son ordenados, como en NLTK: la palabra de la derecha aparece como mucho <code>window</code> palabras después de la de la izquierda, y cada par de posiciones se cuenta una vez; <code>window=1</code> da bigramas. Las medidas toman la frecuencia del par dividida por la ventana (Church y Hanks 1990, como en NLTK), lo que mantiene la frecuencia esperada independiente de la ventana y Dice y la sensibilidad mínima en uno como máximo; <code>freq_pair</code> queda sin dividir. Así, con <code>window &gt; 1</code> un par siempre contiguo recibe un logDice de <span class="arithmatex">\(14 - \log_2 window\)</span> (13 con una ventana de 2), no 14 como en Sketch Engine con su coocurrencia sin dividir; para 14 hace falta un par a todas las distancias dentro de la ventana. <code>node</code> conserva los pares con la palabra dada a cualquiera de los dos lados.</p>
 <p>Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematización y las palabras vacías corresponden al extractor de palabras; los lemas convienen a las expresiones fijas, las formas a las construcciones gramaticales.</p>
 <p>El módulo <code>ests.corpus.collocations</code> reexporta la función y las medidas del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/collocations/">anyTS</a> (<code>from ests.corpus.collocations import calc_logdice</code>). Las palabras se extraen con <a href="../../extractors/words/"><code>WordsExtractor</code></a>; para las expresiones fijas del español como <code>punto de vista</code> o <code>llevar a cabo</code> conviene usar sus lemas (<code>use_lexemes=True</code>).</p>
 <h2 id="medidas">Medidas<a class="headerlink" href="#medidas" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/collocations.md:collocations-measures fb0a1f7 -->
-<p>Para un par de palabras de frecuencias <span class="arithmatex">\(f_a\)</span> y <span class="arithmatex">\(f_b\)</span>, una frecuencia del par <span class="arithmatex">\(f_{ab}\)</span> y un número de palabras <span class="arithmatex">\(N\)</span>:</p>
+<!-- core: corpus/collocations.md:collocations-measures e3fd7a0 -->
+<p>Las medidas de <code>measure</code> por clave, con sus nombres y descripciones en <code>anyts.constants.COLLOCATION_MEASURES</code>:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">Medida</th>
 <th style="text-align: left;">Clave</th>
-<th style="text-align: left;">Fórmula</th>
+<th style="text-align: left;">Qué mide</th>
+<th style="text-align: left;">Rango</th>
+<th style="text-align: left;">Un valor mayor indica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><a href="#mi"><code>mi</code></a></td>
+<td style="text-align: left;">Frecuencia del par frente a la esperada, en bits</td>
+<td style="text-align: left;">Cualquier número</td>
+<td style="text-align: left;">Una asociación más fuerte</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#mi3"><code>mi3</code></a></td>
+<td style="text-align: left;">MI con la frecuencia del par al cubo</td>
+<td style="text-align: left;">Cualquier número</td>
+<td style="text-align: left;">Una asociación más fuerte</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#t_score"><code>t_score</code></a></td>
+<td style="text-align: left;">Diferencia entre la frecuencia observada y la esperada del par</td>
+<td style="text-align: left;">Cualquier número</td>
+<td style="text-align: left;">Una asociación más segura</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#dice"><code>dice</code></a></td>
+<td style="text-align: left;">Proporción del par en las apariciones de las dos palabras</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">Una asociación más fuerte</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#logdice"><code>logdice</code></a></td>
+<td style="text-align: left;">Coeficiente de Dice en escala logarítmica</td>
+<td style="text-align: left;">14 o menos</td>
+<td style="text-align: left;">Una asociación más fuerte</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#log_likelihood"><code>log_likelihood</code></a></td>
+<td style="text-align: left;">Significación de la asociación</td>
+<td style="text-align: left;">0 o más, <code>nan</code> cuando una palabra ocupa todo el texto o una celda es negativa</td>
+<td style="text-align: left;">Una desviación más significativa respecto de la independencia, tanto para los pares que se atraen como para los que se evitan</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#npmi"><code>npmi</code></a></td>
+<td style="text-align: left;">MI normalizada por la información del par</td>
+<td style="text-align: left;">De −1 a 1</td>
+<td style="text-align: left;">Una asociación más fuerte</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#min_sensitivity"><code>min_sensitivity</code></a></td>
+<td style="text-align: left;">Menor proporción del par en las apariciones de una u otra palabra</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">Una asociación más fuerte</td>
+</tr>
+</tbody>
+</table>
+<p>Cada medida es una función del módulo <code>anyts.corpus.collocations</code> de las frecuencias de las palabras y del par y del número de palabras:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
 <th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;">Información mutua</td>
-<td style="text-align: left;"><code>mi</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(\log_2 \frac{f_{ab} N}{f_a f_b}\)</span></td>
-<td style="text-align: left;">Church y Hanks (1990); sobrevalora los pares raros</td>
+<td style="text-align: left;"><code>freq_a</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Frecuencia <span class="arithmatex">\(f_a\)</span> de la primera palabra</td>
 </tr>
 <tr>
-<td style="text-align: left;">MI³</td>
-<td style="text-align: left;"><code>mi3</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(\log_2 \frac{f_{ab}^3 N}{f_a f_b}\)</span></td>
-<td style="text-align: left;">Oakes (1998); favorece los pares frecuentes</td>
+<td style="text-align: left;"><code>freq_b</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Frecuencia <span class="arithmatex">\(f_b\)</span> de la segunda palabra</td>
 </tr>
 <tr>
-<td style="text-align: left;">t-score</td>
-<td style="text-align: left;"><code>t_score</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(\frac{f_{ab} - f_a f_b / N}{\sqrt{f_{ab}}}\)</span></td>
-<td style="text-align: left;">Church et al. (1991); favorece los pares frecuentes</td>
+<td style="text-align: left;"><code>freq_ab</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Frecuencia <span class="arithmatex">\(f_{ab}\)</span> del par</td>
 </tr>
 <tr>
-<td style="text-align: left;">Coeficiente de Dice</td>
-<td style="text-align: left;"><code>dice</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(\frac{2 f_{ab}}{f_a + f_b}\)</span></td>
-<td style="text-align: left;">no depende del tamaño del texto</td>
-</tr>
-<tr>
-<td style="text-align: left;">logDice</td>
-<td style="text-align: left;"><code>logdice</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(14 + \log_2 \frac{2 f_{ab}}{f_a + f_b}\)</span></td>
-<td style="text-align: left;"><a href="https://www.sketchengine.eu/glossary/logdice/">Rychlý (2008)</a>; no depende del tamaño del texto, como máximo 14, por debajo de cero - un vínculo débil; la medida por defecto, como en Sketch Engine</td>
-</tr>
-<tr>
-<td style="text-align: left;">Razón de verosimilitud</td>
-<td style="text-align: left;"><code>log_likelihood</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(G^2 = 2 \sum O \ln \frac{O}{E}\)</span></td>
-<td style="text-align: left;">Dunning (1993); sobre la tabla de contingencia 2×2, <code>nan</code> si una de las palabras ocupa todo el texto</td>
-</tr>
-<tr>
-<td style="text-align: left;">NPMI</td>
-<td style="text-align: left;"><code>npmi</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(\frac{MI}{-\log_2 (f_{ab} / N)}\)</span></td>
-<td style="text-align: left;">Bouma (2009); de −1 a 1, uno significa que las palabras solo aparecen juntas</td>
-</tr>
-<tr>
-<td style="text-align: left;">Sensibilidad mínima</td>
-<td style="text-align: left;"><code>min_sensitivity</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(\min(\frac{f_{ab}}{f_a}, \frac{f_{ab}}{f_b})\)</span></td>
-<td style="text-align: left;">Pedersen (1998); de 0 a 1</td>
+<td style="text-align: left;"><code>n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Número de palabras <span class="arithmatex">\(N\)</span> del texto</td>
 </tr>
 </tbody>
 </table>
-<p>Las medidas están disponibles como las funciones <code>calc_mi</code>, <code>calc_mi3</code>, <code>calc_t_score</code>, <code>calc_dice</code>, <code>calc_logdice</code>, <code>calc_log_likelihood</code>, <code>calc_npmi</code> y <code>calc_min_sensitivity</code> con los argumentos <code>(freq_a, freq_b, freq_ab, n)</code> del módulo <code>anyts.corpus.collocations</code>; sus nombres y descripciones están en <code>anyts.constants.COLLOCATION_MEASURES</code>.</p>
+<p>Un par de frecuencia nula da <code>nan</code> para MI, MI³, el t-score, logDice y NPMI.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/collocations.md:collocations-parameters 459ab39 -->
+<!-- core: corpus/collocations.md:collocations-parameters be13ed1 -->
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>words</code></td>
-<td style="text-align: center;">list[str]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Palabras del texto en orden</td>
+<td style="text-align: left;"><code>words</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabras del texto en orden</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>window</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>5</code></td>
-<td style="text-align: center;">Mayor distancia entre las palabras de un par</td>
+<td style="text-align: left;"><code>window</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>5</code></td>
+<td style="text-align: left;">Mayor distancia entre las palabras de un par</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>measure</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>logdice</code></td>
-<td style="text-align: center;">Medida de <code>anyts.constants.COLLOCATION_MEASURES</code></td>
+<td style="text-align: left;"><code>measure</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>'logdice'</code></td>
+<td style="text-align: left;">Medida de <code>anyts.constants.COLLOCATION_MEASURES</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>min_freq</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>2</code></td>
-<td style="text-align: center;">Frecuencia mínima de un par</td>
+<td style="text-align: left;"><code>min_freq</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>2</code></td>
+<td style="text-align: left;">Frecuencia mínima de un par</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>node</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Palabra cuya combinatoria se busca; <code>None</code> - todos los pares</td>
+<td style="text-align: left;"><code>node</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Palabra cuya combinatoria se busca; <code>None</code> - todos los pares</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>top_n</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Número de colocaciones; <code>None</code> - todas</td>
+<td style="text-align: left;"><code>top_n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Número de colocaciones; <code>None</code> - todas</td>
 </tr>
 </tbody>
 </table>
+<p>Unas palabras que no son una lista de cadenas lanzan <code>SourceTypeError</code>, y la falta de palabras, <code>SourceError</code>. Una medida desconocida, un <code>window</code> o un <code>top_n</code> que no es un entero de al menos uno, un <code>min_freq</code> que no es un entero y un <code>node</code> que no es una cadena lanzan <code>ParameterError</code>.</p>
 <h2 id="resultado">Resultado<a class="headerlink" href="#resultado" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/collocations.md:Collocation 77925e6 -->
+<!-- core: corpus/collocations.md:Collocation f1761f5 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">Collocation</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">freq_left</span><span class="p">,</span> <span class="n">freq_right</span><span class="p">,</span> <span class="n">freq_pair</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
+</code></pre></div>
 <p>Una lista de tuplas con nombre <code>Collocation</code> por orden descendente de la medida y de la frecuencia del par (los empates, alfabéticamente); <code>pd.DataFrame(found)</code> da una tabla.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Campo</th>
-<th style="text-align: center;">Tipo</th>
+<th style="text-align: left;">Campo</th>
+<th style="text-align: left;">Tipo</th>
 <th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>left</code></td>
-<td style="text-align: center;">str</td>
+<td style="text-align: left;"><code>left</code></td>
+<td style="text-align: left;"><code>str</code></td>
 <td style="text-align: left;">Palabra de la izquierda</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>right</code></td>
-<td style="text-align: center;">str</td>
+<td style="text-align: left;"><code>right</code></td>
+<td style="text-align: left;"><code>str</code></td>
 <td style="text-align: left;">Palabra de la derecha, dentro de la ventana tras la de la izquierda</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>freq_left</code></td>
-<td style="text-align: center;">int</td>
+<td style="text-align: left;"><code>freq_left</code></td>
+<td style="text-align: left;"><code>int</code></td>
 <td style="text-align: left;">Frecuencia de la palabra de la izquierda</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>freq_right</code></td>
-<td style="text-align: center;">int</td>
+<td style="text-align: left;"><code>freq_right</code></td>
+<td style="text-align: left;"><code>int</code></td>
 <td style="text-align: left;">Frecuencia de la palabra de la derecha</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>freq_pair</code></td>
-<td style="text-align: center;">int</td>
+<td style="text-align: left;"><code>freq_pair</code></td>
+<td style="text-align: left;"><code>int</code></td>
 <td style="text-align: left;">Frecuencia de la coocurrencia</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>score</code></td>
-<td style="text-align: center;">float</td>
+<td style="text-align: left;"><code>score</code></td>
+<td style="text-align: left;"><code>float</code></td>
 <td style="text-align: left;">Valor de la medida elegida</td>
 </tr>
 </tbody>

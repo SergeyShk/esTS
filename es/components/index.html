@@ -2720,8 +2720,8 @@
 
 
 <h1 id="componentes">Componentes<a class="headerlink" href="#componentes" title="Permanent link">&para;</a></h1>
-<!-- core: components.md:StatsComponent e3962ed -->
-<p>La base de los componentes de <a href="https://github.com/explosion/spaCy">spaCy</a> que ponen las estadísticas de un texto en una extensión de <code>Doc</code>: un componente registra la extensión al añadirse a un pipeline y, para cada documento, calcula las estadísticas y las pone en <code>doc._.&lt;name&gt;</code>. La escritura de componentes en general se describe en la <a href="https://spacy.io/usage/processing-pipelines#custom-components">documentación de spaCy</a>.</p>
+<!-- core: components.md:StatsComponent d49cea9 -->
+<p>La base de los componentes de <a href="https://github.com/explosion/spaCy">spaCy</a> que ponen las estadísticas de un texto en una extensión de <code>Doc</code>: un componente registra la extensión al añadirse a un pipeline y pone las estadísticas de cada documento en <code>doc._.&lt;name&gt;</code>. La escritura de componentes en general se describe en la <a href="https://spacy.io/usage/processing-pipelines#custom-components">documentación de spaCy</a>.</p>
 <p>Los componentes de esTS son subclases del <code>StatsComponent</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/components/">anyTS</a>, una por cada clase de estadísticas.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
@@ -2733,12 +2733,12 @@
 <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"El gato duerme"</span><span class="p">)</span>
 <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">basic</span><span class="o">.</span><span class="n">n_words</span>
 </code></pre></div>
-<!-- core: components.md:StatsComponent-names 9314eeb -->
-<p>El nombre del paso del pipeline es el nombre de la extensión: <code>nlp.add_pipe(factory, name="basic")</code> pone las estadísticas en <code>doc._.basic</code>. Sin <code>name</code> el paso y la extensión conservan el nombre de la fábrica. La extensión sigue al paso cuando el pipeline lo renombra (<code>nlp.rename_pipe</code>), y un nombre ocupado por una extensión de otro paquete lanza <code>ParameterError</code> en lugar de reemplazarla. Un componente tomado de otro pipeline (<code>add_pipe(name, source=other)</code>) es el mismo objeto en ambos, así que con un nombre nuevo escribe también en esa extensión del otro pipeline; un componente propio sale de la fábrica, <code>add_pipe(factory, name=...)</code>. El mismo componente puede añadirse dos veces con nombres distintos, con parámetros distintos. Un documento sin palabras - una cadena vacía, espacios, pura puntuación - pasa por un componente sin cambios, con su extensión en <code>None</code>.</p>
-<!-- core: components.md:StatsComponent-serialization d6d5068 -->
+<!-- core: components.md:StatsComponent-names 33ebb87 -->
+<p>El nombre del paso del pipeline es el nombre de la extensión: <code>nlp.add_pipe(factory, name="basic")</code> pone las estadísticas en <code>doc._.basic</code>. Sin <code>name</code> ambos toman el nombre de la fábrica. La extensión sigue al paso cuando el pipeline lo renombra (<code>nlp.rename_pipe</code>). Un nombre ocupado por una extensión de otro paquete lanza <code>ParameterError</code> en lugar de reemplazarla: en <code>add_pipe</code>, o con el primer documento después de <code>rename_pipe</code>, que renombra el paso antes de que el componente conozca su nombre. Un componente tomado de otro pipeline (<code>add_pipe(name, source=other)</code>) es el mismo objeto en ambos, así que con un nombre nuevo escribe también en esa extensión del otro pipeline; un componente independiente sale de la fábrica, <code>add_pipe(factory, name=...)</code>. El mismo componente puede añadirse dos veces con nombres distintos, con parámetros distintos. Un documento sin palabras - una cadena vacía, espacios, pura puntuación - pasa por un componente sin cambios, con su extensión en <code>None</code>.</p>
+<!-- core: components.md:StatsComponent-serialization a238412 -->
 <div class="admonition warning">
 <p class="admonition-title">Serialización</p>
-<p>Un componente guarda un objeto de estadísticas en <code>doc._.&lt;name&gt;</code>, y spaCy no sabe serializarlo: <code>Doc.to_bytes()</code>, <code>DocBin(store_user_data=True)</code> y <code>nlp.pipe(..., n_process&gt;1)</code> fallan con estos componentes en el pipeline. Para guardar un documento, deje fuera los datos de usuario (<code>doc.to_bytes(exclude=["user_data"])</code>) o guarde <code>doc._.&lt;name&gt;.get_stats()</code> por su cuenta; para el multiproceso, calcule las estadísticas en el proceso principal después de <code>nlp.pipe</code>, sin los componentes.</p>
+<p>Un componente guarda un objeto de estadísticas en <code>doc._.&lt;name&gt;</code>, y spaCy no sabe serializarlo: <code>Doc.to_bytes()</code>, <code>DocBin(store_user_data=True)</code> y <code>nlp.pipe(..., n_process&gt;1)</code> fallan con estos componentes en el pipeline. Para guardar un documento, deje fuera los datos de usuario (<code>doc.to_bytes(exclude=["user_data"])</code>) o guarde <code>doc._.&lt;name&gt;.get_stats()</code> por separado; para el multiproceso, calcule las estadísticas en el proceso principal después de <code>nlp.pipe</code>, sin los componentes.</p>
 </div>
 <p>Añadir un componente amplía el tokenizador de su pipeline con las reglas de las rayas de un diálogo pegadas a las palabras y de las abreviaturas en cualquier caja (<a href="../extractors/words/"><code>add_dash_rules</code></a>), como en la API de cadenas: <code>sí--dijo</code> son dos palabras y una raya, <code>SR.</code> una palabra. Un tokenizador que no es el <code>Tokenizer</code> de spaCy se queda como está.</p>
 <h2 id="requirements">Qué necesita cada componente<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
@@ -3377,23 +3377,25 @@
 <div class="admonition info">
 <p><strong>ests_blank_lines</strong> (<code>anyts.components.start_sents_after_blank_lines</code>)</p>
 </div>
-<!-- core: components.md:start_sents_after_blank_lines 03053a2 -->
-<p>Un componente que inicia una oración en el primer token tras una línea en blanco - un salto de línea, espacios opcionales y otro salto de línea -, para que un título, un elemento de una lista o un párrafo sin signo final sean una oración propia, como en el extractor de oraciones. Va antes del componente que fija las oraciones - el parser, <code>senter</code> o <code>sentencizer</code> -, que conserva los inicios encontrados y coloca los demás; los espacios ante tal inicio se quedan con la oración anterior, y los signos que abren un párrafo (una raya de diálogo, <code>¡</code>, <code>«</code>) se quedan con su primera palabra. Por sí solo el componente no divide las oraciones dentro de un párrafo, y sus inicios son límites parciales (<code>has_sents</code>), así que las estadísticas toman las oraciones de tal documento de su texto. Un documento ya analizado, como uno que vuelve a pasar por el pipeline, pasa intacto, porque spaCy conserva sus oraciones. Una biblioteca del idioma registra el componente con su prefijo, <code>Language.component("&lt;prefix&gt;_blank_lines", func=start_sents_after_blank_lines)</code>.</p>
+<!-- core: components.md:start_sents_after_blank_lines b811493 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">start_sents_after_blank_lines</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</code></pre></div>
+<p>Un componente que inicia una oración en el primer token tras una línea en blanco - un salto de línea, espacios opcionales y otro salto de línea -, para que un título, un elemento de una lista o un párrafo sin signo final sean una oración propia, como en el extractor de oraciones. Va antes del parser, <code>senter</code> o <code>sentencizer</code>, que conserva sus inicios y coloca los demás. Los espacios ante tal inicio se quedan con la oración anterior, y los signos que abren un párrafo (una raya de diálogo, <code>¡</code>, <code>«</code>) se quedan con su primera palabra. Por sí solo, el componente no divide las oraciones dentro de un párrafo y fija límites parciales (<code>has_sents</code>), así que las estadísticas toman las oraciones de tal documento de su texto. Un documento ya analizado, como uno que vuelve a pasar por el pipeline, pasa intacto, porque spaCy conserva sus oraciones. Una biblioteca del idioma registra el componente con su prefijo, <code>Language.component("&lt;prefix&gt;_blank_lines", func=start_sents_after_blank_lines)</code>.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>doc</code></td>
-<td style="text-align: center;">Doc</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Objeto Doc</td>
+<td style="text-align: left;"><code>doc</code></td>
+<td style="text-align: left;"><code>Doc</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Objeto Doc</td>
 </tr>
 </tbody>
 </table>

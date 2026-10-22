@@ -2487,82 +2487,129 @@
 <p><strong>ests.visualizers.zipf()</strong>, <strong>ests.visualizers.zipf_theory()</strong></p>
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">zipf</span><span class="p">(</span><span class="n">counter</span><span class="p">,</span> <span class="n">num_words</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_theory</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">show_fit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 <p>Plotting <a href="https://en.wikipedia.org/wiki/Zipf%27s_law">Zipf's law</a> from a counter of the frequencies of words.</p>
 <div class="admonition quote">
 <p class="admonition-title">Definition</p>
-<p>Zipf's law (the rank-frequency law) is an empirical regularity of the distribution of the frequencies of words in a natural language: if all the words of a language, or of a long enough text, are ordered by descending frequency, the frequency of the n-th word of the list is roughly inversely proportional to its number n, the rank of the word. The second most frequent word occurs about half as often as the first, the third a third as often, and so on.</p>
+<p>Zipf's law (the rank-frequency law) is an empirical regularity of the frequencies of words in a natural language: with the words of a language, or of a long enough text, ordered by descending frequency, the frequency of the n-th word is roughly inversely proportional to its rank n. The second most frequent word occurs about half as often as the first, the third a third as often, and so on.</p>
 </div>
 <p>The functions are those of the <a href="https://sergeyshk.github.io/anyTS/visualizers/zipf/">anyTS</a> core. The default labels are the English ones of <code>VISUALIZER_LABELS</code> in <code>anyts.constants</code>; <code>labels</code> replaces any of them, for instance <code>labels={"title": "Ley de Zipf"}</code>.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>counter</code></td>
-<td style="text-align: center;">Counter</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Counter of the frequencies of words</td>
+<td style="text-align: left;"><code>counter</code></td>
+<td style="text-align: left;"><code>Counter</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Counter of the frequencies of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>num_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Number of the most frequent words</td>
+<td style="text-align: left;"><code>num_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Number of the most frequent words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>num_labels</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Number of the words labelled on the plot</td>
+<td style="text-align: left;"><code>num_labels</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Number of the words labelled on the plot</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>log</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>True</code></td>
-<td style="text-align: center;">Use a logarithmic scale</td>
+<td style="text-align: left;"><code>log</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>True</code></td>
+<td style="text-align: left;">Use a logarithmic scale</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>show_theory</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Plot the theoretical Zipf's law</td>
+<td style="text-align: left;"><code>show_theory</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Plot the theoretical Zipf's law</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>alpha</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><code>1.5</code></td>
-<td style="text-align: center;">Exponent α of the theoretical Zipf's law, greater than zero</td>
+<td style="text-align: left;"><code>alpha</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>1.5</code></td>
+<td style="text-align: left;">Exponent α of the theoretical Zipf's law, greater than zero</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>show_fit</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Plot the Zipf-Mandelbrot fit <span class="arithmatex">\(f(r) = C / (r + q)^s\)</span> of <code>fit_zipf_mandelbrot</code></td>
+<td style="text-align: left;"><code>show_fit</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Plot the Zipf-Mandelbrot fit <span class="arithmatex">\(f(r) = C / (r + q)^s\)</span> of <code>fit_zipf_mandelbrot</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>ax</code></td>
-<td style="text-align: center;">Axes</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Axes of matplotlib for the plot; if not given, a new figure is created</td>
+<td style="text-align: left;"><code>ax</code></td>
+<td style="text-align: left;"><code>Axes</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Axes of matplotlib for the plot; if not given, a new figure is created</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>labels</code></td>
-<td style="text-align: center;">dict[str, str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Labels of the plot over the defaults: <code>title</code>, <code>xlabel</code>, <code>ylabel</code>, <code>experimental</code> and <code>theoretical</code> (the curves), <code>fit</code> (a format string with <code>q</code> and <code>s</code>)</td>
+<td style="text-align: left;"><code>labels</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Labels of the plot over the defaults: <code>title</code>, <code>xlabel</code>, <code>ylabel</code>, <code>experimental</code> and <code>theoretical</code> (the curves), <code>fit</code> (a format string with <code>q</code> and <code>s</code>)</td>
 </tr>
 </tbody>
 </table>
-<p>The function returns the <code>Axes</code> with the plot; a <code>num_words</code> greater than the number of word types does not extend the curves beyond the data, a counter whose words are not strings raises <code>SourceTypeError</code>, an empty counter or a frequency that is not above zero <code>SourceError</code>, and a <code>num_words</code> below one or an exponent that is not a finite number above zero <code>ParameterError</code> - all before a figure is created.</p>
+<p>The function returns the <code>Axes</code> with the plot; a <code>num_words</code> greater than the number of word types does not extend the curves beyond the data. A counter that is not a <code>Counter</code> of strings raises <code>SourceTypeError</code>, and an empty counter or a frequency that is not above zero <code>SourceError</code>. A <code>num_words</code> below one, a negative <code>num_labels</code>, with <code>show_theory</code> an exponent that is not a finite number above zero, labels that <code>merge_labels</code> refuses and an <code>ax</code> that is not a matplotlib <code>Axes</code> raise <code>ParameterError</code>. All of them are raised before a figure is created.</p>
 <p>The Zipf-Mandelbrot fit is described in <a href="../../stats/diversity_stats_funcs/#fit_zipf_mandelbrot"><code>fit_zipf_mandelbrot</code></a>.</p>
-<p><code>zipf_theory(size, num_ranks, alpha=1.5, ax=None, labels=None)</code> plots the theoretical curve alone, <span class="arithmatex">\(f(r) = size \cdot r^{-\alpha}\)</span> for the ranks from 1 to <code>num_ranks</code>; its label is the key <code>theoretical</code>.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">zipf_theory</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">num_ranks</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>The theoretical curve alone, <span class="arithmatex">\(f(r) = size \cdot r^{-\alpha}\)</span> for the ranks from 1 to <code>num_ranks</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>size</code></td>
+<td style="text-align: left;"><code>int</code> / <code>float</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Frequency of the first rank</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>num_ranks</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Number of ranks</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>alpha</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>1.5</code></td>
+<td style="text-align: left;">Exponent α</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ax</code></td>
+<td style="text-align: left;"><code>Axes</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Axes of matplotlib for the plot; if not given, a new figure is created</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>labels</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Labels over the defaults: <code>theoretical</code> (the curve)</td>
+</tr>
+</tbody>
+</table>
+<p>A <code>size</code> or an <code>alpha</code> that is not a finite number above zero, a <code>num_ranks</code> that is not an integer of at least one, labels that <code>merge_labels</code> refuses and an <code>ax</code> that is not a matplotlib <code>Axes</code> raise <code>ParameterError</code>.</p>
 <h2 id="usage-example">Usage example<a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h2>
 <p>The lemmas of <em>Marianela</em> by Galdós from the <a href="../../datasets/spanishliterature/">corpus of literature</a>.</p>
 <div class="admonition example">

@@ -2488,70 +2488,71 @@
 </div>
 <h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
 <p>Visualization of literature fingerprinting (<a href="https://www.uni-konstanz.de/mmsp/pubsys/publishedFiles/KeOe07.pdf">Keim and Oelke 2007</a>).</p>
-<p>Every text is cut into segments of <code>segment_len</code> words with a sliding step of a tenth of a segment, and a measure of lexical diversity is computed for every segment. A text is a block of squares in the order of its segments, row by row, 8 rows high, or a single column when it has at most 8 segments; a block wider than a row of the drawing area wraps into rows of that width. The blocks are laid out left to right and wrap between the rows of an area <code>2 · x_size</code> wide, which grows downwards from <code>2 · y_size</code> when they need more height. The colour of a square is the value of the measure on the scale of the colorbar, from its smallest to its greatest finite value over all the texts. Segments where the measure is undefined (<code>nan</code> on segments too short for it) and the empty cells of a block are light grey, apart from every value, zero included. Every segment is <code>segment_len</code> words long, so the values are comparable: when the step leaves words after the last segment, one more segment ends with the text, and a text not longer than a segment is one segment. A list without texts or a text without words raises <code>SourceError</code>.</p>
+<p>Every text is cut into segments of <code>segment_len</code> words with a sliding step of a tenth of a segment, and a measure of lexical diversity is computed for every segment. All segments are <code>segment_len</code> words long, so the values are comparable: when the step leaves words after the last segment, one more ends with the text, and a text not longer than a segment is one segment.</p>
+<p>A text is a block of squares, its segments row by row, 8 rows high, or one column with at most 8 segments; a block wider than the drawing area wraps into rows of that width. The blocks go left to right and wrap within an area <code>2 · x_size</code> wide, which grows downwards from <code>2 · y_size</code> when they need more height. The colorbar runs from the smallest to the greatest finite value over all the texts; undefined values (<code>nan</code> on segments too short for the measure) and the empty cells of a block are light grey, unlike any value, zero included.</p>
 <p>The function is that of the <a href="https://sergeyshk.github.io/anyTS/visualizers/fingerprinting/">anyTS</a> core; the measures of <a href="../../stats/diversity_stats/">lexical diversity</a> of esTS, functions of a list of words such as <code>calc_ttr</code> or <code>calc_simpson_index</code>, serve as the <code>metric</code>. The default title is the English one of <code>VISUALIZER_LABELS</code> in <code>anyts.constants</code>; <code>labels</code> replaces it.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>texts</code></td>
-<td style="text-align: center;">list[list[str]]</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">List of lists of words</td>
+<td style="text-align: left;"><code>texts</code></td>
+<td style="text-align: left;"><code>list[list[str]]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">List of lists of words</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>segment_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Size of a segment</td>
+<td style="text-align: left;"><code>segment_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Size of a segment</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>metric</code></td>
-<td style="text-align: center;">Callable</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Function of a measure of lexical diversity; <code>calc_ttr</code> by default</td>
+<td style="text-align: left;"><code>metric</code></td>
+<td style="text-align: left;"><code>Callable</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Function of a measure of lexical diversity; <code>calc_ttr</code> by default</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>x_size</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>800</code></td>
-<td style="text-align: center;">Half the width of the drawing area, greater than 25 (the margin between the blocks)</td>
+<td style="text-align: left;"><code>x_size</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>800</code></td>
+<td style="text-align: left;">Half the width of the drawing area, greater than 25 (the margin between the blocks)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>y_size</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>600</code></td>
-<td style="text-align: center;">Half the height of the drawing area, which grows when the blocks need more</td>
+<td style="text-align: left;"><code>y_size</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>600</code></td>
+<td style="text-align: left;">Half the height of the drawing area, which grows when the blocks need more</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>cmap</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>'viridis'</code></td>
-<td style="text-align: center;">Colour map</td>
+<td style="text-align: left;"><code>cmap</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>'viridis'</code></td>
+<td style="text-align: left;">Colour map</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>ax</code></td>
-<td style="text-align: center;">Axes</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Axes of matplotlib for the plot; if not given, a 15×10 figure is created</td>
+<td style="text-align: left;"><code>ax</code></td>
+<td style="text-align: left;"><code>Axes</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Axes of matplotlib for the plot; if not given, a 15×10 figure is created</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>labels</code></td>
-<td style="text-align: center;">dict[str, str]</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Labels over the defaults: <code>title</code></td>
+<td style="text-align: left;"><code>labels</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Labels over the defaults: <code>title</code></td>
 </tr>
 </tbody>
 </table>
-<p>The function returns the <code>Axes</code> with the visualization, set to an equal aspect so that the squares stay square; the figure is <code>ax.figure</code>.</p>
+<p>The function returns the <code>Axes</code> with the visualization, set to an equal aspect so the squares stay square; the figure is <code>ax.figure</code>. Texts that are not a list of lists of strings and a <code>metric</code> that cannot be called raise <code>SourceTypeError</code>, a list without texts or a text without words <code>SourceError</code>. A <code>segment_len</code> or a <code>y_size</code> that is not an integer above zero, an <code>x_size</code> that is not an integer above 25, an unknown <code>cmap</code>, labels that <code>merge_labels</code> refuses and an <code>ax</code> that is not a matplotlib <code>Axes</code> raise <code>ParameterError</code>.</p>
 <h2 id="usage-example">Usage example<a class="headerlink" href="#usage-example" title="Permanent link">&para;</a></h2>
 <p>The first five windows of 1000 words of six novels from the <a href="../../datasets/spanishliterature/">corpus of literature</a>, three by Galdós and three by Unamuno, by Simpson's index.</p>
 <div class="admonition example">
