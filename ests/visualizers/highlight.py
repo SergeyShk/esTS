@@ -391,7 +391,7 @@ def find_verbal_nouns(words: Iterable[Word]) -> list[Highlight]:
 
 
 def find_phrase_highlights(
-    words: Sequence[Word], phrases: Iterable[str], layer: str, label: str
+    words: Sequence[Word], phrases: Collection[str], layer: str, label: str
 ) -> list[Highlight]:
     """
     Finding the phrases of a list
@@ -414,8 +414,7 @@ def find_phrase_highlights(
     Raises:
         SourceTypeError: If the phrases are not a list or a set of strings
     """
-    check_words(phrases, "phrases", ordered=False)
-    expanded = expand_phrases([word.text for word in words], list(phrases))
+    expanded = expand_phrases([word.text for word in words], phrases)
     return anyts.visualizers.highlight.find_phrase_highlights(
         words, expanded, layer, lambda phrase: f"{label}: «{phrase}»"
     )

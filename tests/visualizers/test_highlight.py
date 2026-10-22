@@ -302,6 +302,12 @@ def test_cliches(ht):
     assert spans(custom, "cliches") == ["El informe", "hacer una revisión"]
 
 
+def test_cliches_of_a_set():
+    words = [Word(*word) for word in iter_text_words("Se procedió a la revisión.")]
+    (fragment,) = find_cliches(words, {"proceder a", "Proceder a", "PROCEDER A"})
+    assert fragment.note == "cliché: «PROCEDER A»"
+
+
 def test_parentheticals(ht):
     assert spans(ht, "parentheticals") == ["Sin embargo"]
 
