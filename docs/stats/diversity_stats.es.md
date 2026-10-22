@@ -10,7 +10,7 @@ Las principales métricas de [diversidad léxica](https://en.wikipedia.org/wiki/
 Excepciones:
 
 - `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`, un extractor de otro tipo;
-- `SourceError` - una fuente sin palabras;
+- `SourceError` - una fuente sin palabras, una cadena con un carácter sin forma UTF-8;
 - `ParameterError` - un parámetro que `check_params` rechaza.
 
 La clase extiende el `DiversityStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/diversity_stats/): en lugar de una lista de palabras recibe un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy). Las palabras de un texto las extrae el [`WordsExtractor`](../extractors/words.md) español o uno indicado, que para un `Doc` se aplica a su texto; sin extractor, las palabras de un `Doc` salen de sus tokens. Las palabras siempre se pasan a minúsculas, porque todas las métricas cuentan lexemas. La tabla de `print_stats` lleva las descripciones inglesas de las métricas del núcleo, `anyts.constants.DIVERSITY_STATS_DESC`.

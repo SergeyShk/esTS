@@ -15,7 +15,7 @@ Excepciones:
 - `SourceError` - una fuente sin palabras;
 - `ParameterError` - un umbral que no es un entero de al menos uno.
 
-La clase extiende el `BasicStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/basic_stats/) con los ganchos del español: las sílabas de una palabra se cuentan con [`count_syllables`](../syllables.md#count_syllables), y los extractores por defecto son los [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) del español. Los indicadores ordinales `º` y `ª` son letras (`3.º` es una palabra de una letra). El componente de líneas en blanco de esTS se llama [`ests_blank_lines`](../components.md#blank_lines): `nlp.add_pipe("ests_blank_lines", before="parser")`. Las estadísticas se calculan al crear el objeto.
+La clase extiende el `BasicStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/basic_stats/) con los ganchos del español: las sílabas de una palabra se cuentan con [`count_syllables`](../syllables.md#count_syllables), y los extractores por defecto son los [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) del español. Los indicadores ordinales `º` y `ª` son letras (`3.º` es una palabra de una letra). El componente de líneas en blanco de esTS se llama [`ests_blank_lines`](../components.md#blank_lines): `nlp.add_pipe("ests_blank_lines", before="parser")`. Las estadísticas se calculan al crear el objeto. Una cadena con un carácter sin forma UTF-8, como la de un fichero leído con una codificación errónea, lanza `SourceError` desde el tokenizador del español.
 
 === "Código"
 
@@ -213,6 +213,7 @@ Las frecuencias de los signos de puntuación por tipo (`count_punctuations`) por
 Excepciones:
 
 - `SourceTypeError` - un texto que no es una cadena;
+- `SourceError` - sin `n_words`, un texto con un carácter sin forma UTF-8;
 - `ParameterError` - un número de palabras que no es un entero no negativo.
 
 El perfil depende del formato del texto (comillas y rayas tipográficas, signos de apertura), así que conviene leerlo aparte de los rasgos lingüísticos.

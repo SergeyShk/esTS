@@ -39,7 +39,7 @@ The function wraps `keyness` of the [anyTS](https://sergeyshk.github.io/anyTS/co
 
 --8<-- "corpus/keyness.md:keyness-parameters"
 
-`reference` may also be `FreqDict`, against which `target` is word forms. A frequency dictionary that is not downloaded raises `DatasetNotFoundError`.
+`reference` may also be `FreqDict`, against which `target` is word forms. A frequency dictionary that is not downloaded raises `DatasetNotFoundError`. `keyness` checks its parameters and the target with `check_keyness_params` before it reads `FreqDict`, so a wrong argument fails before the dictionary is loaded.
 
 --8<-- "corpus/keyness.md:check_keyness_params"
 

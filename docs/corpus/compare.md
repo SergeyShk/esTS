@@ -99,7 +99,7 @@ The p-values take the 272 windows of six novels for independent (see the [warnin
 Raises:
 
 - `SourceTypeError` - texts that are not a list of strings, `features` that cannot be called;
-- `SourceError` - a corpus without a window of `min_words` words or more;
+- `SourceError` - a corpus without a window of `min_words` words or more, a text with a character without a UTF-8 form;
 - `ParameterError` - a `window` or `min_words` that is not an integer of at least one, `min_words` above `window`, labels, a number of samples or a seed that `check_comparison_params` rejects;
 - `DatasetNotFoundError` - the default features without the model installed.
 
@@ -120,7 +120,7 @@ Returns 132 features of a text prefixed by their source; an undefined feature is
 | `sents_` | mean length of a sentence in words, standard deviation, coefficient of variation, autocorrelation of neighbouring lengths ([`sentence_rhythm`](#sentence_rhythm)) - the rhythm of the text | [`SentsExtractor`](../extractors/sentences.md) |
 | `punct_` | frequencies of the punctuation marks by type per 1000 words and the share of the inverted marks | [`punctuation_profile`](../stats/basic_stats.md#punctuation) |
 
-Left out are the reading time, which only follows the number of words in a window, and the features that repeat others: the share of unique words (`diversity_ttr`), the words per sentence (`sents_mean`) and the markers of the moods (`morph_mood_*`).
+Left out are the reading time, which only follows the number of words in a window, and the features that repeat others: the share of unique words of `BasicStats`, which repeats `diversity_ttr`, its words per sentence, which repeat `sents_mean`, and the markers of the moods of `get_markers`, which repeat `morph_mood_*`.
 
 The parts of speech and the features of a single value - polarity, polite, poss, reflex - are shares of all the words (`morph_polarity_Neg` is the share of the negations), the other features shares of the words that carry them (`morph_mood_Sub` is the subjunctive among the moods). A value that does not occur in a window gives 0, a feature absent from the window altogether (no verbs - no tense) gives `nan`. A value of several values (`PronType=Int,Rel` of *que*) is shared equally among its parts, so the shares of a feature still sum to one.
 
@@ -136,7 +136,7 @@ The shares of spaces, letters and punctuation marks (`basic_p_spaces`, `basic_p_
 Raises:
 
 - `SourceTypeError` - a text that is not a string, a pipeline that is not a spaCy `Language`;
-- `SourceError` - a text without words or longer than the `max_length` of the pipeline;
+- `SourceError` - a text without words, with a character without a UTF-8 form or longer than the `max_length` of the pipeline;
 - `DatasetNotFoundError` - the default model is not installed.
 
 ``` {.python .signature}
@@ -155,8 +155,9 @@ Returns the matrix of the features of the windows indexed by (number of the text
 Raises:
 
 - `SourceTypeError` - texts that are not a list of strings, `features` that cannot be called;
-- `SourceError` - a corpus without a window of `min_words` words or more;
-- `ParameterError` - a `window` or `min_words` that is not an integer of at least one, `min_words` above `window`.
+- `SourceError` - a corpus without a window of `min_words` words or more, a text with a character without a UTF-8 form;
+- `ParameterError` - a `window` or `min_words` that is not an integer of at least one, `min_words` above `window`;
+- `DatasetNotFoundError` - the default features without the model installed.
 
 Features of one's own, for instance the syntactic ones, are passed as a function:
 

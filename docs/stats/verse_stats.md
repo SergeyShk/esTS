@@ -65,6 +65,14 @@ Raises:
 | `mean_line_len` | `float` | Mean length of a line in metrical syllables |
 | `c_stressed_vowels` | `dict[str, int]` | Distribution of the stressed vowels |
 | `seseo` | `bool` | Whether the rhyme is read with seseo |
+| `c_feet` | `dict[int, int]` | Distribution of the lines by metrical syllables ([meter](#meter)) |
+| `stress_profile` | `tuple[float, ...]` | Share of the stressed lines of the meter by metrical syllable ([meter](#meter)) |
+| `c_rhythms` | `dict[str, int]` | Distribution of the endecasílabos by type ([rhythmic stresses](#pyrrhics)) |
+| `rhyme_schemes` | `tuple[str, ...]` | Rhyme schemes of the stanzas ([rhyme](#rhyme_scheme)) |
+| `c_rhymes` | `dict[str, int]` | Distribution of the rhymed lines by the kind of the rhyme: `consonante`, `asonante` ([rhyme](#rhyme_scheme)) |
+| `strophes` | `tuple[str / None, ...]` | Names of the stanzas, `VERSE_STROPHES` ([strophes](#strophes)) |
+| `form` | `str / None` | Form of the poem: `soneto`, `romance`, the strophe of all its stanzas, `silva` ([strophes](#strophes)) |
+| `c_clausulas` | `dict[str, int]` | Distribution of the endings of the lines by type: `aguda`, `llana`, `esdrújula`, `sobresdrújula` ([endings](#clausulas)) |
 
 `stresses` indexes `syllables`, and the two agree with `patterns` up to the last stress of a simple verse; in a [compound verse](#meter) each hemistich takes its own length, so after an aguda or an esdrújula at the caesura `patterns` and `syllables` part, and `caesuras` tells where the second hemistich begins.
 
@@ -88,7 +96,7 @@ Raises:
 
 ## Metrics
 
-Every metric is an attribute of the object, computed when it is created, and `get_stats` gives them all.
+Every metric is an attribute of the object, computed when it is created; `get_stats` gives the metrics of the table, while the distributions, the schemes and the names of the cards are attributes only.
 
 | Metric | Measures | Range | Higher means |
 | :----- | :------- | :---- | :----------- |
@@ -130,6 +138,7 @@ The errors are those of `VerseStats`.
     detect_meter(
         "Que por mayo era, por mayo,\ncuando hace la calor,\ncuando los trigos encañan\ny están los campos en flor,"
     )
+    # The sonnet of Garcilaso at the top of the page
     vs.c_feet, vs.p_deviations
     ```
 
@@ -250,6 +259,7 @@ The errors are those of `VerseStats`.
     rhyme_scheme(
         "Hombres necios que acusáis\na la mujer sin razón,\nsin ver que sois la ocasión\nde lo mismo que culpáis."
     )
+    # The sonnet of Garcilaso at the top of the page
     vs.rhyme_schemes, vs.p_rhymed, vs.c_rhymes
 
     # The beginning of La tierra de Alvargonzález by Antonio Machado

@@ -8,7 +8,7 @@ ReadabilityStats(source, sents_extractor=None, words_extractor=None, preset='gen
 
 The metrics assess readability on the side of the language - the complexity of words and syntactic constructions, not the typographic design of the text. They presume that short sentences are easier to read than long ones, long words make reading harder, and low-frequency and unfamiliar words slow a reader down.
 
-The class extends the `ReadabilityStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/readability_stats/) core with the formulas and tables of Spanish, given in the cards of the metrics: the [basic statistics](basic_stats.md) of esTS, which take the Spanish [`SentsExtractor`](../extractors/sentences.md) and [`WordsExtractor`](../extractors/words.md) by default, the coefficient [presets](#presets) of the Flesch reading ease, the formulas of Gutiérrez de Polini, Crawford and SOL, the consensus grade over Crawford and SOL, the school stages of Spain, the interpretation scales and the reading speeds of Spanish readers.
+The class extends the `ReadabilityStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/readability_stats/) core with the formulas and tables of Spanish, given in the cards of the metrics: the [basic statistics](basic_stats.md) of esTS, which take the Spanish [`SentsExtractor`](../extractors/sentences.md) and [`WordsExtractor`](../extractors/words.md) by default, the coefficient [presets](#presets) of the Flesch reading ease, the formulas of Gutiérrez de Polini, Crawford and SOL, the consensus grade over Crawford, SOL and the reading ease, the school stages of Spain, the interpretation scales and the reading speeds of Spanish readers. A string with a character without a UTF-8 form, as a file read with the wrong encoding gives, raises `SourceError` from the Spanish tokenizer.
 
 === "Code"
 
@@ -81,9 +81,9 @@ A formula is computed by the function of its card on the counts of `bs`. The rea
 | :----- | :------- | :---- | :----------- |
 | [`flesch_reading_easy`](#flesch_reading_easy) | Ease of reading by the sentence length and the syllables per word | Nominally 0-100, above 100 for the simplest texts and below 0 for the hardest | An easier text |
 | [`gutierrez_polini_index`](#gutierrez_polini_index) | Comprehensibility by the letters per word and the sentence length | Below 95.2, ordinary prose 30-50 | An easier text |
-| [`crawford_grade`](#crawford_grade) | Grade by the sentences and the syllables per 100 words | Years of schooling, fitted on grades 1-6 | A harder text |
+| [`crawford_grade`](#crawford_grade) | Grade by the sentences and the syllables per 100 words | Years of schooling, below 0 for the simplest texts; fitted on grades 1-6 | A harder text |
 | [`mu_index`](#mu_index) | Mean word length in letters against its variance | Above 0, `nan` with fewer than two words or without variability | An easier text |
-| [`sol_grade`](#sol_grade) | Grade by the polysyllabic words per sentence, SMOG converted to Spanish | Years of schooling | A harder text |
+| [`sol_grade`](#sol_grade) | Grade by the polysyllabic words per sentence, SMOG converted to Spanish | Years of schooling, slightly below 0 for the simplest texts | A harder text |
 | [`lix`](#lix) | Sentence length and the share of long words | 0 and above | A harder text |
 | [`rix`](#rix) | Long words per sentence | 0 and above | A harder text |
 | [`consensus_grade`](#consensus_grade) | Median of the grade formulas and the reading ease as a grade | Years of schooling | A harder text |

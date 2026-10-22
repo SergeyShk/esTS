@@ -40,7 +40,7 @@ The lengths of the sentences in words, in order: a string is split into sentence
 
 Raises:
 
-- `SourceTypeError` - a table, a set, a mapping, bytes, a length that is not an integer, an extractor of another type;
+- `SourceTypeError` - an object that is not a string, a `Doc`, a sequence or an iterator, a table, a set, a mapping, bytes, a length that is not an integer, an extractor of another type;
 - `SourceError` - a negative length.
 
 === "Code"

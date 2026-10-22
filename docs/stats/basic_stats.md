@@ -6,7 +6,7 @@ BasicStats(source, sents_extractor=None, words_extractor=None, normalize=False, 
 
 --8<-- "stats/basic_stats.md:BasicStats"
 
-The class extends the `BasicStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/basic_stats/) core with the hooks of Spanish: the syllables of a word are counted by [`count_syllables`](../syllables.md#count_syllables), and the default extractors are the Spanish [`SentsExtractor`](../extractors/sentences.md) and [`WordsExtractor`](../extractors/words.md). The ordinal indicators `º` and `ª` are letters (`3.º` is a one-letter word). The blank line component of esTS is called [`ests_blank_lines`](../components.md#blank_lines): `nlp.add_pipe("ests_blank_lines", before="parser")`. The statistics are computed when the object is created.
+The class extends the `BasicStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/basic_stats/) core with the hooks of Spanish: the syllables of a word are counted by [`count_syllables`](../syllables.md#count_syllables), and the default extractors are the Spanish [`SentsExtractor`](../extractors/sentences.md) and [`WordsExtractor`](../extractors/words.md). The ordinal indicators `º` and `ª` are letters (`3.º` is a one-letter word). The blank line component of esTS is called [`ests_blank_lines`](../components.md#blank_lines): `nlp.add_pipe("ests_blank_lines", before="parser")`. The statistics are computed when the object is created. A string with a character without a UTF-8 form, as a file read with the wrong encoding gives, raises `SourceError` from the Spanish tokenizer.
 
 === "Code"
 
@@ -157,6 +157,7 @@ The frequencies of the punctuation marks by type (`count_punctuations`) per 1000
 Raises:
 
 - `SourceTypeError` - a text that is not a string;
+- `SourceError` - without `n_words`, a text with a character without a UTF-8 form;
 - `ParameterError` - a number of words that is not a non-negative integer.
 
 The profile depends on text formatting (typographic quotation marks and dashes, the inverted marks), so it is best read separately from linguistic features.

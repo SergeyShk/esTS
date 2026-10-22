@@ -99,7 +99,7 @@ Los valores p toman las 272 ventanas de seis novelas por independientes (véase 
 Excepciones:
 
 - `SourceTypeError` - unos textos que no son una lista de cadenas, unos `features` que no se pueden llamar;
-- `SourceError` - un corpus sin una ventana de `min_words` palabras o más;
+- `SourceError` - un corpus sin una ventana de `min_words` palabras o más, un texto con un carácter sin forma UTF-8;
 - `ParameterError` - un `window` o un `min_words` que no es un entero de al menos uno, un `min_words` mayor que `window`, unas etiquetas, un número de remuestras o una semilla que rechaza `check_comparison_params`;
 - `DatasetNotFoundError` - los rasgos por defecto sin el modelo instalado.
 
@@ -120,7 +120,7 @@ Devuelve 132 rasgos de un texto con un prefijo según su fuente; un rasgo indefi
 | `sents_` | longitud media de una oración en palabras, desviación típica, coeficiente de variación, autocorrelación de las longitudes vecinas ([`sentence_rhythm`](#sentence_rhythm)): el ritmo del texto | [`SentsExtractor`](../extractors/sentences.md) |
 | `punct_` | frecuencias de los signos de puntuación por tipo por cada 1000 palabras y la proporción de los signos de apertura | [`punctuation_profile`](../stats/basic_stats.md#punctuation) |
 
-Se dejan fuera el tiempo de lectura, que solo sigue el número de palabras de una ventana, y los rasgos que repiten otros: la proporción de palabras únicas (`diversity_ttr`), las palabras por oración (`sents_mean`) y los marcadores de los modos (`morph_mood_*`).
+Se dejan fuera el tiempo de lectura, que solo sigue el número de palabras de una ventana, y los rasgos que repiten otros: la proporción de palabras únicas de `BasicStats`, que repite `diversity_ttr`, sus palabras por oración, que repiten `sents_mean`, y los marcadores de los modos de `get_markers`, que repiten `morph_mood_*`.
 
 Las categorías gramaticales y los rasgos de un solo valor - polaridad, cortesía, posesivo, reflexivo - son proporciones de todas las palabras (`morph_polarity_Neg` es la proporción de las negaciones), los demás rasgos, proporciones de las palabras que los llevan (`morph_mood_Sub` es el subjuntivo entre los modos). Un valor que no aparece en una ventana da 0; un rasgo ausente de la ventana por completo (sin verbos no hay tiempo) da `nan`. Un valor de varios valores (`PronType=Int,Rel` de *que*) se reparte a partes iguales entre sus partes, así que las proporciones de un rasgo siguen sumando uno.
 
@@ -136,7 +136,7 @@ Las proporciones de espacios, letras y signos de puntuación (`basic_p_spaces`, 
 Excepciones:
 
 - `SourceTypeError` - un texto que no es una cadena, un pipeline que no es un `Language` de spaCy;
-- `SourceError` - un texto sin palabras o más largo que el `max_length` del pipeline;
+- `SourceError` - un texto sin palabras, con un carácter sin forma UTF-8 o más largo que el `max_length` del pipeline;
 - `DatasetNotFoundError` - el modelo por defecto no está instalado.
 
 ``` {.python .signature}
@@ -155,8 +155,9 @@ Devuelve la matriz de rasgos de las ventanas con el índice (número del texto, 
 Excepciones:
 
 - `SourceTypeError` - unos textos que no son una lista de cadenas, unos `features` que no se pueden llamar;
-- `SourceError` - un corpus sin una ventana de `min_words` palabras o más;
-- `ParameterError` - un `window` o un `min_words` que no es un entero de al menos uno, un `min_words` mayor que `window`.
+- `SourceError` - un corpus sin una ventana de `min_words` palabras o más, un texto con un carácter sin forma UTF-8;
+- `ParameterError` - un `window` o un `min_words` que no es un entero de al menos uno, un `min_words` mayor que `window`;
+- `DatasetNotFoundError` - los rasgos por defecto sin el modelo instalado.
 
 Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:
 

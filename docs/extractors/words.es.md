@@ -75,6 +75,8 @@ La clase extiende el `WordsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 
 Un texto que no es una cadena y un tokenizador que no es invocable o no devuelve cadenas lanzan `SourceTypeError`.
 
+Con el tokenizador por defecto, un texto con un carácter sin forma UTF-8, como el de un fichero leído con una codificación errónea, lanza `SourceError`, igual que las clases y funciones que extraen con él las palabras de una cadena.
+
 <!-- core: extractors/words.md:WordsExtractor-get_most_common 7c47d0f -->
 `get_most_common(n=10)` devuelve las palabras más frecuentes del texto como una lista de pares (palabra, frecuencia), la más frecuente primero.
 

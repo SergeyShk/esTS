@@ -48,6 +48,8 @@ The class extends the `WordsExtractor` of the [anyTS](https://sergeyshk.github.i
 
 --8<-- "extractors/words.md:WordsExtractor-extract"
 
+With the default tokenizer, a text with a character without a UTF-8 form, as a file read with the wrong encoding gives, raises `SourceError`, and so do the classes and functions that extract the words of a string with it.
+
 --8<-- "extractors/words.md:WordsExtractor-get_most_common"
 
 === "Code"

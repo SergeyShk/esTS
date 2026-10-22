@@ -65,6 +65,14 @@ Excepciones:
 | `mean_line_len` | `float` | Longitud media de un verso en sílabas métricas |
 | `c_stressed_vowels` | `dict[str, int]` | Distribución de las vocales acentuadas |
 | `seseo` | `bool` | Si la rima se lee con seseo |
+| `c_feet` | `dict[int, int]` | Distribución de los versos por sílabas métricas ([metro](#meter)) |
+| `stress_profile` | `tuple[float, ...]` | Proporción de los versos del metro acentuados en cada sílaba métrica ([metro](#meter)) |
+| `c_rhythms` | `dict[str, int]` | Distribución de los endecasílabos por tipo ([acentos rítmicos](#pyrrhics)) |
+| `rhyme_schemes` | `tuple[str, ...]` | Esquemas de rima de las estrofas ([rima](#rhyme_scheme)) |
+| `c_rhymes` | `dict[str, int]` | Distribución de los versos con rima por el tipo de la rima: `consonante`, `asonante` ([rima](#rhyme_scheme)) |
+| `strophes` | `tuple[str / None, ...]` | Nombres de las estrofas, `VERSE_STROPHES` ([estrofas](#strophes)) |
+| `form` | `str / None` | Forma del poema: `soneto`, `romance`, la estrofa de todas sus estrofas, `silva` ([estrofas](#strophes)) |
+| `c_clausulas` | `dict[str, int]` | Distribución de las terminaciones de los versos por tipo: `aguda`, `llana`, `esdrújula`, `sobresdrújula` ([terminaciones](#clausulas)) |
 
 `stresses` indexa `syllables`, y ambos coinciden con `patterns` hasta el último acento de un verso simple; en un [verso compuesto](#meter) cada hemistiquio tiene su propia medida, así que tras una aguda o una esdrújula en la cesura `patterns` y `syllables` se separan, y `caesuras` dice dónde empieza el segundo hemistiquio.
 
@@ -88,7 +96,7 @@ Excepciones:
 
 ## Métricas
 
-Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` las devuelve todas.
+Cada métrica es un atributo del objeto, calculado al crearlo; `get_stats` devuelve las métricas de la tabla, mientras que las distribuciones, los esquemas y los nombres de las tarjetas son solo atributos.
 
 | Métrica | Qué mide | Rango | Un valor mayor indica |
 | :------ | :------- | :---- | :-------------------- |
@@ -130,6 +138,7 @@ Las excepciones son las de `VerseStats`.
     detect_meter(
         "Que por mayo era, por mayo,\ncuando hace la calor,\ncuando los trigos encañan\ny están los campos en flor,"
     )
+    # El soneto de Garcilaso del principio de la página
     vs.c_feet, vs.p_deviations
     ```
 
@@ -250,6 +259,7 @@ Las excepciones son las de `VerseStats`.
     rhyme_scheme(
         "Hombres necios que acusáis\na la mujer sin razón,\nsin ver que sois la ocasión\nde lo mismo que culpáis."
     )
+    # El soneto de Garcilaso del principio de la página
     vs.rhyme_schemes, vs.p_rhymed, vs.c_rhymes
 
     # El comienzo de La tierra de Alvargonzález de Antonio Machado

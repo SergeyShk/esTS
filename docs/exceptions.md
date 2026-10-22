@@ -66,4 +66,4 @@ The library prints nothing on its own: the anyTS core sends messages about downl
     anyts.datasets: Extracting the archive /tmp/ests_data/spanish_sonnets_v1.tar.xz
     ```
 
-The `print_stats()` methods of the statistics classes and `print_kwic()` write to standard output by design; logging does not affect them.
+The `print_stats()` methods of the statistics classes, `MorphStats.print_markers()` and `print_kwic()` write to standard output by design; logging does not affect them.

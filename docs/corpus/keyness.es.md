@@ -54,7 +54,7 @@ La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/a
 
 Los parámetros y el corpus objetivo los comprueba `check_keyness_params`. Una referencia que no es una lista de cadenas, un contador ni una `FrequencyReference` lanza `SourceTypeError`, y una frecuencia negativa, `nan` o infinita de un contador y un corpus vacío lanzan `SourceError`.
 
-`reference` también puede ser `FreqDict`, frente al cual `target` son formas. Un diccionario de frecuencias que no está descargado lanza `DatasetNotFoundError`.
+`reference` también puede ser `FreqDict`, frente al cual `target` son formas. Un diccionario de frecuencias que no está descargado lanza `DatasetNotFoundError`. `keyness` comprueba sus parámetros y el corpus objetivo con `check_keyness_params` antes de leer `FreqDict`, así que un argumento erróneo falla antes de cargar el diccionario.
 
 <!-- core: corpus/keyness.md:check_keyness_params 9ffcaab -->
 ``` {.python .signature}

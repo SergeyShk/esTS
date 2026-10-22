@@ -17,7 +17,7 @@ Excepciones:
 
 Las métricas evalúan la legibilidad desde el lado de la lengua - la complejidad de las palabras y de las construcciones sintácticas, no el diseño tipográfico del texto. Suponen que las oraciones cortas se leen con más facilidad que las largas, que las palabras largas dificultan la lectura y que el lector se frena ante palabras poco frecuentes o desconocidas.
 
-La clase extiende el `ReadabilityStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/readability_stats/) con las fórmulas y las tablas del español, descritas en las tarjetas de las métricas: las [estadísticas básicas](basic_stats.md) de esTS, que toman por defecto los [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) del español, los [preajustes](#presets) de coeficientes de la facilidad de lectura de Flesch, las fórmulas de Gutiérrez de Polini, Crawford y SOL, el grado de consenso entre Crawford y SOL, las etapas escolares de España, las escalas de interpretación y las velocidades de lectura de los lectores en español.
+La clase extiende el `ReadabilityStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/readability_stats/) con las fórmulas y las tablas del español, descritas en las tarjetas de las métricas: las [estadísticas básicas](basic_stats.md) de esTS, que toman por defecto los [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) del español, los [preajustes](#presets) de coeficientes de la facilidad de lectura de Flesch, las fórmulas de Gutiérrez de Polini, Crawford y SOL, el grado de consenso entre Crawford, SOL y la facilidad de lectura, las etapas escolares de España, las escalas de interpretación y las velocidades de lectura de los lectores en español. Una cadena con un carácter sin forma UTF-8, como la de un fichero leído con una codificación errónea, lanza `SourceError` desde el tokenizador del español.
 
 === "Código"
 
@@ -90,9 +90,9 @@ Una fórmula se calcula con la función de su tarjeta sobre los recuentos de `bs
 | :------ | :------- | :---- | :-------------------- |
 | [`flesch_reading_easy`](#flesch_reading_easy) | Facilidad de lectura según la longitud de la oración y las sílabas por palabra | En principio 0-100, por encima de 100 para los textos más simples y por debajo de 0 para los más difíciles | Un texto más fácil |
 | [`gutierrez_polini_index`](#gutierrez_polini_index) | Comprensibilidad según las letras por palabra y la longitud de la oración | Por debajo de 95.2, la prosa corriente 30-50 | Un texto más fácil |
-| [`crawford_grade`](#crawford_grade) | Grado según las oraciones y las sílabas por cada 100 palabras | Años de escolaridad, ajustada con los cursos 1-6 | Un texto más difícil |
+| [`crawford_grade`](#crawford_grade) | Grado según las oraciones y las sílabas por cada 100 palabras | Años de escolaridad, por debajo de 0 para los textos más simples; fórmula ajustada con los cursos 1-6 | Un texto más difícil |
 | [`mu_index`](#mu_index) | Longitud media de la palabra en letras frente a su varianza | Por encima de 0, `nan` con menos de dos palabras o sin variabilidad | Un texto más fácil |
-| [`sol_grade`](#sol_grade) | Grado según las palabras polisílabas por oración, SMOG convertido al español | Años de escolaridad | Un texto más difícil |
+| [`sol_grade`](#sol_grade) | Grado según las palabras polisílabas por oración, SMOG convertido al español | Años de escolaridad, algo por debajo de 0 para los textos más simples | Un texto más difícil |
 | [`lix`](#lix) | Longitud de la oración y proporción de palabras largas | 0 o más | Un texto más difícil |
 | [`rix`](#rix) | Palabras largas por oración | 0 o más | Un texto más difícil |
 | [`consensus_grade`](#consensus_grade) | Mediana de las fórmulas de grado y de la facilidad de lectura como grado | Años de escolaridad | Un texto más difícil |
@@ -694,7 +694,7 @@ El método `describe_level` lee la facilidad de lectura, la Legibilidad µ y LIX
 grade_to_age(grade)
 ```
 
-La etapa del sistema educativo español y la edad del lector según el valor de una fórmula de grado, en años de escolaridad contados desde el primer curso de primaria a los seis años: el valor se redondea al entero más próximo (las mitades hacia arriba) y cae en la primera etapa cuyo último curso no supera, los valores por debajo de 1 en los cursos 1-3. Las etapas son `ests.constants.GRADE_AGE_LEVELS` y `POSTGRADUATE_LEVEL`:
+La etapa del sistema educativo español y la edad del lector según el valor de una fórmula de grado, en años de escolaridad contados desde el primer curso de primaria a los seis años: el valor se redondea al entero más próximo (las mitades hacia arriba) y cae en la primera etapa cuyo último curso no supera, los valores por debajo de 1 en los cursos 1-3. Las etapas son `ests.constants.GRADE_AGE_LEVELS` y `POSTGRADUATE_LEVEL`, con etiquetas en inglés (`'postgraduate (over 22 years)'`); la tabla las traduce:
 
 | Grado | Etapa | Edad |
 | :---- | :---- | :--- |

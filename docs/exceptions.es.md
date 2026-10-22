@@ -66,4 +66,4 @@ La biblioteca no imprime nada por su cuenta: el núcleo anyTS envía los mensaje
     anyts.datasets: Extracting the archive /tmp/ests_data/spanish_sonnets_v1.tar.xz
     ```
 
-Los métodos `print_stats()` de las clases de estadísticas y `print_kwic()` escriben en la salida estándar a propósito; el registro no les afecta.
+Los métodos `print_stats()` de las clases de estadísticas, `MorphStats.print_markers()` y `print_kwic()` escriben en la salida estándar a propósito; el registro no les afecta.

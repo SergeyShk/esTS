@@ -9,7 +9,7 @@ DiversityStats(source, words_extractor=None, window_len=50, mtld_threshold=0.72,
 Raises:
 
 - `SourceTypeError` - a source that is neither a string nor a `Doc`, an extractor of another type;
-- `SourceError` - a source without words;
+- `SourceError` - a source without words, a string with a character without a UTF-8 form;
 - `ParameterError` - a parameter that `check_params` rejects.
 
 The class extends the `DiversityStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/diversity_stats/) core: instead of a list of words it takes a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library. The words of a text are extracted by the Spanish [`WordsExtractor`](../extractors/words.md) or by a given one, which for a `Doc` is applied to its text; without an extractor the words of a `Doc` come from its tokens. The words are always lower-cased, since every metric counts lexemes. The `print_stats` table has the English descriptions of the metrics of the core, `anyts.constants.DIVERSITY_STATS_DESC`.
