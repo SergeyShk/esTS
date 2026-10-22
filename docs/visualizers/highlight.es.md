@@ -406,15 +406,20 @@ Excepciones:
 ### Conectores { #connectors }
 
 ``` {.python .signature}
-find_connector_highlights(words, sents)
+find_connector_highlights(words, sents, text=None)
 ```
 
-La capa `connectors`: los conectores de [`CohesionStats`](../stats/cohesion_stats.md#connectors) dentro de cada oración, encontrados por su buscador [`SpanishConnectorMatcher`](../stats/cohesion_stats.md#ConnectorMatcher), un conector de una palabra comprobado por su categoría gramatical cuando las palabras la tienen; la nota da el conector, su clase y su tipo. Las posiciones de los signos de puntuación no se pasan al buscador, así que las palabras de una oración se leen como contiguas.
+La capa `connectors`: los conectores de [`CohesionStats`](../stats/cohesion_stats.md#connectors) dentro de cada oración, encontrados por su buscador [`SpanishConnectorMatcher`](../stats/cohesion_stats.md#ConnectorMatcher), un conector de una palabra comprobado por su categoría gramatical cuando las palabras la tienen; la nota da el conector, su clase y su tipo. Con el texto, las reglas del buscador no leen ninguna palabra a través de un signo de puntuación entre dos palabras, así que `así, que` no es conector; `HighlightedText` pasa el texto de su fuente.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `words` | `list[Word]` | - | Palabras con sus posiciones y sus categorías gramaticales |
 | `sents` | `list[Sent]` | - | Oraciones con sus posiciones |
+| `text` | `str` | `None` | Texto de las palabras, para los signos de puntuación entre ellas |
+
+Excepciones:
+
+- `SourceTypeError` - un texto que no es una cadena.
 
 === "Código"
 
@@ -424,7 +429,7 @@ La capa `connectors`: los conectores de [`CohesionStats`](../stats/cohesion_stat
 
     text = "Sin embargo, el plan no se aprobó."
     words = [Word(*word) for word in iter_text_words(text)]
-    find_connector_highlights(words, [Sent(0, len(text), len(words))])
+    find_connector_highlights(words, [Sent(0, len(text), len(words))], text)
     ```
 
 === "Resultado"

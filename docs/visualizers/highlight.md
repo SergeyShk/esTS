@@ -355,15 +355,20 @@ Raises:
 ### Connectors { #connectors }
 
 ``` {.python .signature}
-find_connector_highlights(words, sents)
+find_connector_highlights(words, sents, text=None)
 ```
 
-The layer `connectors`: the connectors of [`CohesionStats`](../stats/cohesion_stats.md#connectors) inside every sentence, found by its matcher [`SpanishConnectorMatcher`](../stats/cohesion_stats.md#ConnectorMatcher), a one-word connector checked by its part of speech when the words have it; the note gives the connector, its class and its kind. The positions of the punctuation marks are not passed to the matcher, so the words of a sentence are read as adjacent.
+The layer `connectors`: the connectors of [`CohesionStats`](../stats/cohesion_stats.md#connectors) inside every sentence, found by its matcher [`SpanishConnectorMatcher`](../stats/cohesion_stats.md#ConnectorMatcher), a one-word connector checked by its part of speech when the words have it; the note gives the connector, its class and its kind. With the text, the rules of the matcher read no word across a punctuation mark between two words, so `así, que` is no connector; `HighlightedText` passes the text of its source.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
 | `words` | `list[Word]` | - | Words with their positions and parts of speech |
 | `sents` | `list[Sent]` | - | Sentences with their positions |
+| `text` | `str` | `None` | Text of the words, for the punctuation marks between them |
+
+Raises:
+
+- `SourceTypeError` - a text that is not a string.
 
 === "Code"
 
@@ -373,7 +378,7 @@ The layer `connectors`: the connectors of [`CohesionStats`](../stats/cohesion_st
 
     text = "Sin embargo, el plan no se aprobó."
     words = [Word(*word) for word in iter_text_words(text)]
-    find_connector_highlights(words, [Sent(0, len(text), len(words))])
+    find_connector_highlights(words, [Sent(0, len(text), len(words))], text)
     ```
 
 === "Result"

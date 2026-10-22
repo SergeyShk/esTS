@@ -204,7 +204,7 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
             "compound_prepositions": lambda: find_compound_prepositions(words),
             "cliches": lambda: find_cliches(words, self._cliches),
             "parentheticals": lambda: find_parentheticals(words),
-            "connectors": lambda: find_connector_highlights(words, sents),
+            "connectors": lambda: find_connector_highlights(words, sents, self.text),
             "alliteration": lambda: find_alliteration(words, self._alliteration_threshold, sents),
         }
         return finders[layer]()
@@ -470,22 +470,30 @@ def find_parentheticals(words: Sequence[Word]) -> list[Highlight]:
     )
 
 
-def find_connector_highlights(words: Sequence[Word], sents: Sequence[Sent]) -> list[Highlight]:
+def find_connector_highlights(
+    words: Sequence[Word], sents: Sequence[Sent], text: str | None = None
+) -> list[Highlight]:
     """
     Finding the connectors
 
     Description:
         The connectors are looked for inside every sentence by the matcher of
         CohesionStats (SpanishConnectorMatcher), a one-word one checked by its
-        part of speech when the words have it; the note gives the class and the
-        kind of the connector. The find_connector_highlights of the core
+        part of speech when the words have it; with the text, the rules read
+        no word across a punctuation mark between the words. The note gives
+        the class and the kind of the connector. The find_connector_highlights
+        of the core
 
     Arguments:
         words (list[Word]): Words with their positions
         sents (list[Sent]): Sentences with their positions
+        text (str): Text of the words, for the punctuation marks between them
 
     Returns:
         list[Highlight]: Fragments of the layer connectors
+
+    Raises:
+        SourceTypeError: If the text is not a string
     """
     return anyts.visualizers.highlight.find_connector_highlights(
         words,
@@ -495,6 +503,7 @@ def find_connector_highlights(words: Sequence[Word], sents: Sequence[Sent]) -> l
             f"connector «{connector.text}»: {CONNECTOR_CLASSES[connector.cls]}, "
             f"{CONNECTOR_TYPES[connector.kind]}"
         ),
+        text=text,
     )
 
 

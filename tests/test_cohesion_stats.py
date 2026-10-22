@@ -11,7 +11,14 @@ from ests.cohesion_stats import (
     load_connectors,
     token_info,
 )
-from ests.constants import COHESION_STATS_DESC, CONNECTOR_CLASSES, CONNECTOR_TYPES
+from ests.constants import (
+    COHESION_STATS_DESC,
+    CONNECTOR_CLASSES,
+    CONNECTOR_PARCELLATION,
+    CONNECTOR_SPLIT_BY_MARKS,
+    CONNECTOR_SUBORDINATORS,
+    CONNECTOR_TYPES,
+)
 from ests.exceptions import ParameterError, SourceError, SourceTypeError
 from ests.utils import get_nlp
 
@@ -71,6 +78,39 @@ def test_connectors(cs):
     assert cs.connectors_adversative == pytest.approx(1000 / cs.n_words)
     assert cs.connectors_primary == pytest.approx(1000 / cs.n_words)
     assert cs.connectors_secondary == pytest.approx(1000 / cs.n_words)
+    # sin embargo opens its sentence and links it to the one before
+    assert cs.connectors_inter == pytest.approx(1000 / cs.n_words)
+    assert cs.connectors_intra == pytest.approx(1000 / cs.n_words)
+
+
+def test_connectors_by_place():
+    cs = CohesionStats("No vino. Porque llovía. Ya que estás aquí, ayúdame. Cuando llegue, avisa.")
+    assert [c.text for c in cs.connector_spans] == ["porque", "ya que", "cuando"]
+    # porque opens a sentence linking it to the one before; ya que and cuando, their clause
+    assert cs.n_inter_connectors == 1
+    assert cs.connectors_intra == pytest.approx(2000 / cs.n_words)
+
+
+@pytest.mark.parametrize(
+    ("words", "pos", "expected"),
+    [
+        (["Ya", "que", "estás", "aquí"], "ADV", True),
+        (["A", "pesar", "de", "todo"], "ADP", True),
+        (["Cuando", "llegó"], "SCONJ", True),
+        (["Porque", "llovía"], "SCONJ", False),
+        (["Conque", "vayamos"], "SCONJ", False),
+        (["Sin", "embargo", "no"], "ADP", False),
+    ],
+)
+def test_subordinators(words, pos, expected):
+    matcher = CohesionStats.connector_matcher()
+    assert matcher.is_subordinator(matcher.find(words)[0], pos) is expected
+
+
+def test_lists_of_the_connectors_are_in_the_dictionary():
+    connectors = load_connectors()
+    lists = (CONNECTOR_SUBORDINATORS, CONNECTOR_PARCELLATION, CONNECTOR_SPLIT_BY_MARKS)
+    assert all(text in connectors for texts in lists for text in texts)
 
 
 def test_pronouns_exclude_articles():
@@ -320,6 +360,22 @@ def test_find_connectors_of_a_word_without_pos():
 def test_find_connectors_pos_extra():
     assert [c.text for c in find_connectors(["Resumiendo"], pos=["VERB"])] == ["resumiendo"]
     assert find_connectors(["Duerme"], pos=["VERB"]) == []
+
+
+@pytest.mark.parametrize(
+    "words",
+    [["No", "tire", "así", "que", "se", "romperá"], ["Lo", "de", "siempre", "que", "derrocho"]],
+)
+def test_find_connectors_split_by_a_mark(words):
+    # a mark before que makes it a word of its own
+    assert find_connectors(words)
+    assert find_connectors(words, breaks={3}) == []
+
+
+@pytest.mark.parametrize(("breaks", "error"), [("x", SourceTypeError), ([1.5], ParameterError)])
+def test_find_connectors_breaks_errors(breaks, error):
+    with pytest.raises(error):
+        find_connectors(["así", "que", "vino"], breaks=breaks)
 
 
 def test_find_connectors_sent_index():

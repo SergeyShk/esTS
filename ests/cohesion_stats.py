@@ -1,4 +1,4 @@
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Collection, Iterable, Mapping, Sequence
 from functools import cache
 from pathlib import Path
 from types import MappingProxyType
@@ -17,8 +17,11 @@ from .constants import (
     CONNECTOR_BLOCKED_BEFORE,
     CONNECTOR_NOT_AT_START,
     CONNECTOR_ONLY_AFTER,
+    CONNECTOR_PARCELLATION,
     CONNECTOR_POS,
     CONNECTOR_POS_EXTRA,
+    CONNECTOR_SPLIT_BY_MARKS,
+    CONNECTOR_SUBORDINATORS,
 )
 from .exceptions import SourceError, SourceTypeError
 from .extractors import SentsExtractor
@@ -69,7 +72,11 @@ class SpanishConnectorMatcher(ConnectorMatcher):
         opening the sentence (Pues bien) and one of CONNECTOR_ONLY_AFTER inside
         the sentence after another word than those listed (encima). A rule
         reads no word across a punctuation mark when find gets the positions
-        of the marks
+        of the marks, and a mark inside a connector of CONNECTOR_SPLIT_BY_MARKS
+        splits it (así, que). A connector opening a sentence links it to the
+        ones before unless it is a subordinator: one of CONNECTOR_SUBORDINATORS
+        (ya que, a pesar de) or a one-word one tagged SCONJ or ADP, but for
+        those of CONNECTOR_PARCELLATION (Porque...)
 
     Example:
         >>> from ests.cohesion_stats import SpanishConnectorMatcher, load_connectors
@@ -86,6 +93,14 @@ class SpanishConnectorMatcher(ConnectorMatcher):
     blocked_after_pos = CONNECTOR_BLOCKED_AFTER_POS
     not_at_start = CONNECTOR_NOT_AT_START
     only_after = CONNECTOR_ONLY_AFTER
+    split_by_marks = CONNECTOR_SPLIT_BY_MARKS
+    subordinators = CONNECTOR_SUBORDINATORS
+
+    def is_subordinator(self, connector: Connector, pos: str | None = None) -> bool:
+        """Subordinating conjunction or preposition (is_subordinator of the core) but for CONNECTOR_PARCELLATION"""
+        return connector.text not in CONNECTOR_PARCELLATION and super().is_subordinator(
+            connector, pos
+        )
 
 
 class CohesionStats(anyts.cohesion_stats.CohesionStats):
@@ -168,10 +183,10 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
             dominant aspect, outside get_stats
         temporal_cohesion (float): Mean of the repetition of the tense and of the mood
         connectors (float): Connectors per 1000 words
-        connectors_inter (float): Connectors between sentences per 1000 words, outside
-            get_stats
-        connectors_intra (float): Connectors inside a sentence per 1000 words, outside
-            get_stats
+        connectors_inter (float): Connectors linking a sentence to the ones before per
+            1000 words: those opening a sentence, unless a subordinator
+        connectors_intra (float): Connectors linking the parts of a sentence per 1000
+            words
         connectors_causal (float): Causal connectors per 1000 words
         connectors_adversative (float): Adversative connectors per 1000 words
         connectors_concessive (float): Concessive connectors per 1000 words
@@ -288,6 +303,7 @@ def find_connectors(
     connectors: Mapping[str, tuple[str, str]] | None = None,
     sent_index: int = 0,
     pos: Sequence[str | None] | None = None,
+    breaks: Collection[int] | None = None,
 ) -> list[Connector]:
     """
     Finding the connectors of a sentence
@@ -297,7 +313,8 @@ def find_connectors(
         word forms in lower case, the longest one at every position, without
         overlaps. The words are those of one sentence without punctuation, the
         first one its start; with the parts of speech given, the rules that
-        read a tag apply too
+        read a tag apply too, and with the positions of the marks a rule reads
+        no word across a mark
 
     Arguments:
         words (list[str]): Words of the sentence
@@ -306,17 +323,20 @@ def find_connectors(
         sent_index (int): Number of the sentence, written into the occurrences
         pos (list[str]): Parts of speech of the words; without them the rules
             that read a tag are skipped
+        breaks (set[int]): Positions of the words a punctuation mark stands
+            before (find_marks); without them the rules read through the marks
 
     Returns:
         list[Connector]: Occurrences of the connectors in the order of the words
 
     Raises:
         SourceTypeError: If the words are not a list of strings, the parts of speech are
-            not a list of strings and None, or the connectors are not a dictionary of
-            phrases and pairs of strings
+            not a list of strings and None, the positions of the marks are not a
+            collection, or the connectors are not a dictionary of phrases and pairs of
+            strings
         ParameterError: If the dictionary has an unknown class or kind, the number of
-            the sentence is not an integer, or the parts of speech are not as many as
-            the words
+            the sentence or a position of a mark is not an integer, or the parts of
+            speech are not as many as the words
 
     Example:
         >>> from ests.cohesion_stats import find_connectors
@@ -328,7 +348,7 @@ def find_connectors(
         if connectors is None
         else SpanishConnectorMatcher(connectors)
     )
-    return matcher.find(words, sent_index, pos)
+    return matcher.find(words, sent_index, pos, breaks)
 
 
 def token_info(token: Token) -> WordInfo:

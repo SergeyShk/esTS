@@ -317,6 +317,12 @@ def test_connectors(ht):
     assert "connector «sin embargo»: adversative, secondary" in notes
 
 
+def test_connectors_split_by_a_mark():
+    # a comma before que makes it a word of its own
+    ht = highlight("No tire usted así, que se romperá. Así que se fue.", layers="connectors")
+    assert [ht.text[h.start : h.end] for h in ht.highlights] == ["Así que"]
+
+
 def test_connectors_pos():
     # pues tagged as a verb is no connector
     words = [Word(0, 2, "No"), Word(3, 7, "vino"), Word(8, 12, "pues"), Word(13, 19, "llovía")]
@@ -545,6 +551,7 @@ def test_to_html_nested_classes(doc):
         (lambda: find_cliches([], "proceder a"), SourceTypeError),
         (lambda: find_phrase_highlights([], "en vez de", "cliches", "cliché"), SourceTypeError),
         (lambda: get_stem_sounds(1), SourceTypeError),
+        (lambda: find_connector_highlights([], [], text=1), SourceTypeError),
     ],
 )
 def test_errors_of_the_finders(call, error):
