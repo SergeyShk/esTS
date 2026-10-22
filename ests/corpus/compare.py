@@ -1,10 +1,9 @@
 from collections import defaultdict
 from collections.abc import Callable, Mapping, Sequence
-from itertools import pairwise
-from math import floor, isnan, nan
-from numbers import Integral
+from math import nan
 from typing import Any
 
+import anyts.corpus.compare
 import numpy as np
 import pandas as pd
 from anyts.corpus.compare import (
@@ -15,16 +14,17 @@ from anyts.corpus.compare import (
     check_comparison_params as check_comparison_params,
     compare_features as compare_features,
     holm_correction as holm_correction,
+    sentence_rhythm as sentence_rhythm,
 )
-from anyts.utils import check_integer, check_sequence, check_words
+from anyts.extractors import FixedSentsExtractor, FixedWordsExtractor
+from anyts.utils import check_words
 from spacy.language import Language
 from spacy.tokens import Doc
 
 from ..basic_stats import BasicStats, punctuation_profile
 from ..constants import MORPHOLOGY_STATS_DESC, OPENING_MARKS, SYMMETRIC_MARKS
 from ..diversity_stats import DiversityStats
-from ..exceptions import ParameterError, SourceError, SourceTypeError
-from ..extractors import SentsExtractor, WordsExtractor
+from ..exceptions import SourceError, SourceTypeError
 from ..morph_stats import FINITE_MOODS, MorphStats
 from ..readability_stats import ReadabilityStats
 from ..utils import (
@@ -37,47 +37,36 @@ from ..utils import (
 Features = Callable[[str], Mapping[str, float]]
 
 
-def _check_windows(window: int | None, min_words: int | None) -> None:
-    """Checking the size of a window and the smallest number of words in it"""
-    if window is not None:
-        check_integer(window, "size of a window")
-        if window < 1:
-            raise ParameterError("The size of a window must be greater than 0")
-    if min_words is not None:
-        check_integer(min_words, "smallest number of words in a window")
-        if min_words < 1:
-            raise ParameterError("The smallest number of words in a window must be greater than 0")
-
-
 def split_windows(text: str, window: int | None = 1000, min_words: int | None = None) -> list[str]:
     """
     Splitting a text into windows of words
 
     Description:
-        The number of windows is the number of words divided by the window
-        rounded half up (2500 words at 1000 - three windows), at least one;
-        the windows are equal and the tail is not dropped, so a window holds
-        from half a window to one and a half (1500 words - two of 750, 1499 -
-        one). Windows of fewer than min_words words are dropped (by default
-        half a window). A boundary goes before the first word of the next
-        window and the opening marks before it (OPENING_MARKS), except a
-        straight quote or a dash glued to the previous word, which closes it
-        (SYMMETRIC_MARKS); the windows are stripped of whitespace and keep
-        their punctuation; window=None gives the whole text
+        Consecutive windows of exactly window words, so the features that
+        depend on length are comparable between texts; the rest at the end is a
+        window only with at least min_words words (by default a whole window, so
+        the rest is dropped). A boundary goes before the first word of a window
+        and the opening marks before it (OPENING_MARKS); a straight quote or a
+        dash glued to the last word of the previous window or after a closing
+        mark closes that window (SYMMETRIC_MARKS). The windows are stripped of
+        whitespace and keep their punctuation; window=None gives the whole text.
+        The split_windows of the core with the words of iter_text_words and the
+        Spanish marks
 
     Arguments:
         text (str): Text string
         window (int): Size of a window in words; None - the whole text
-        min_words (int): Smallest number of words in a window; None - half a
-            window, or one when window is None
+        min_words (int): Smallest number of words in a window; None - a whole
+            window, or one word when window is None
 
     Returns:
         list[str]: Windows of the text; an empty list for a text without words
             or shorter than min_words
 
     Raises:
-        ParameterError: If the size of a window or min_words is not an integer or is below one
         SourceTypeError: If the text is not a string
+        ParameterError: If the size of a window or min_words is not an integer or is
+            below one, or min_words is greater than the window
 
     Example:
         >>> from ests.corpus import split_windows
@@ -86,35 +75,19 @@ def split_windows(text: str, window: int | None = 1000, min_words: int | None = 
         >>> split_windows('Dijo "adiós" y se fue ya', 2)
         ['Dijo "adiós"', 'y se', 'fue ya']
     """
-    if not isinstance(text, str):
-        raise SourceTypeError(f"A text string is expected, not {type(text).__name__}")
-    _check_windows(window, min_words)
-    if min_words is None:
-        min_words = 1 if window is None else max(1, window // 2)
-    words = list(iter_text_words(text))
-    if not words:
-        return []
-    n_windows = 1 if window is None else max(1, floor(len(words) / window + 0.5))
-    chunks = np.array_split(np.arange(len(words)), n_windows)
-    boundaries = [0]
-    for chunk in chunks[1:]:
-        start = words[chunk[0]][0]
-        previous_end = words[chunk[0] - 1][1]
-        boundary = start
-        while boundary > previous_end and (
-            text[boundary - 1].isspace() or text[boundary - 1] in OPENING_MARKS
-        ):
-            boundary -= 1
-        while boundary == previous_end < start and text[boundary] in SYMMETRIC_MARKS:
-            boundary += 1
-            previous_end += 1
-        boundaries.append(boundary)
-    boundaries.append(len(text))
-    return [
-        text[start:end].strip()
-        for (start, end), chunk in zip(pairwise(boundaries), chunks, strict=True)
-        if len(chunk) >= min_words
-    ]
+    return anyts.corpus.compare.split_windows(
+        text,
+        window,
+        min_words,
+        tokenize=iter_text_words,
+        opening_marks=OPENING_MARKS,
+        symmetric_marks=SYMMETRIC_MARKS,
+    )
+
+
+def _check_windows(window: int | None, min_words: int | None) -> None:
+    """Checking the size of a window and the smallest number of words in it before the texts"""
+    split_windows("", window, min_words)
 
 
 def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
@@ -168,8 +141,8 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         raise SourceTypeError("The pipeline must be a spaCy Language")
     positions = list(iter_text_words(text))
     spans = [(start, stop) for start, stop, _ in iter_text_sents(text)]
-    words = _FixedWordsExtractor(tuple(word for _, _, word in positions))
-    sents = _FixedSentsExtractor(tuple(text[start:stop] for start, stop in spans))
+    words = FixedWordsExtractor([word for _, _, word in positions])
+    sents = FixedSentsExtractor([text[start:stop] for start, stop in spans])
     basic = BasicStats(text, sents, words, normalize=True)
     features: dict[str, float] = {}
     for key in (
@@ -239,75 +212,6 @@ def _morph_features(morph: MorphStats, parsed: bool) -> dict[str, float]:
     return features
 
 
-class _FixedWordsExtractor(WordsExtractor):
-    """Extractor with ready words"""
-
-    def __init__(self, words: tuple[str, ...]) -> None:
-        super().__init__()
-        self.words = words
-
-    def extract(self, text: str) -> tuple[str, ...]:
-        return self.words
-
-
-class _FixedSentsExtractor(SentsExtractor):
-    """Extractor with ready sentences"""
-
-    def __init__(self, sents: tuple[str, ...]) -> None:
-        super().__init__()
-        self.sents = sents
-
-    def extract(self, text: str) -> tuple[str, ...]:
-        return self.sents
-
-
-def sentence_rhythm(lengths: Sequence[int]) -> dict[str, float]:
-    """
-    Computing the features of the rhythm of the sentences
-
-    Description:
-        The mean length of a sentence in words, the standard deviation, the
-        coefficient of variation and the autocorrelation at lag 1 - the link
-        between the lengths of neighbouring sentences (Yule 1939); the
-        autocorrelation needs at least three sentences
-
-    Arguments:
-        lengths (list[int]): Lengths of the sentences in words
-
-    Returns:
-        dict[str, float]: Features sents_mean, sents_std, sents_cv, sents_autocorr
-
-    Raises:
-        SourceTypeError: If the lengths are not a list of integers
-
-    Example:
-        >>> from ests.corpus import sentence_rhythm
-        >>> {key: round(value, 3) for key, value in sentence_rhythm([4, 8, 2, 7]).items()}
-        {'sents_mean': 5.25, 'sents_std': 2.754, 'sents_cv': 0.525, 'sents_autocorr': -0.794}
-    """
-    check_sequence(lengths, "sentence lengths")
-    if not all(isinstance(length, Integral) for length in lengths):
-        raise SourceTypeError("The sentence lengths must be integers")
-    values = np.asarray(lengths, dtype=float)
-    if not len(values):
-        return dict.fromkeys(("sents_mean", "sents_std", "sents_cv", "sents_autocorr"), nan)
-    mean = float(values.mean())
-    std = float(values.std(ddof=1)) if len(values) > 1 else nan
-    centered = values - mean
-    variance = float((centered**2).sum())
-    autocorr = (
-        float((centered[:-1] * centered[1:]).sum() / variance)
-        if len(values) > 2 and variance
-        else nan
-    )
-    return {
-        "sents_mean": mean,
-        "sents_std": std,
-        "sents_cv": std / mean if mean and not isnan(std) else nan,
-        "sents_autocorr": autocorr,
-    }
-
-
 def corpus_features(
     texts: Sequence[str],
     window: int | None = 1000,
@@ -327,8 +231,8 @@ def corpus_features(
         texts (list[str]): Texts of the corpus
         window (int): Size of a window in words; None - the whole texts
         features (callable): Function of the features of a text; text_features by default
-        min_words (int): Smallest number of words in a window; None - half a
-            window, or one when window is None
+        min_words (int): Smallest number of words in a window; None - a whole
+            window, or one word when window is None
 
     Returns:
         DataFrame: Features of the windows
@@ -336,7 +240,8 @@ def corpus_features(
     Raises:
         SourceTypeError: If the texts are not a list of strings or the features are not a function
         SourceError: If the corpus has no window of enough words
-        ParameterError: If the size of a window or min_words is not an integer or is below one
+        ParameterError: If the size of a window or min_words is not an integer or is
+            below one, or min_words is greater than the window
 
     Example:
         >>> from ests.corpus import corpus_features
@@ -406,8 +311,8 @@ def compare_corpora(
         n_bootstrap (int): Number of bootstrap samples
         seed (int|Generator): Seed of the random number generator or the generator
             itself; None - a random one
-        min_words (int): Smallest number of words in a window; None - half a
-            window, or one when window is None
+        min_words (int): Smallest number of words in a window; None - a whole
+            window, or one word when window is None
 
     Returns:
         DataFrame: Features × statistics of the comparison (COMPARISON_COLUMNS
@@ -418,7 +323,8 @@ def compare_corpora(
         SourceError: If one of the corpora has no window of enough words
         ParameterError: If the names of the corpora are not two strings that give
             distinct columns, the number of samples, the size of a window or min_words
-            is not an integer or is below one, or the seed is set incorrectly
+            is not an integer or is below one, min_words is greater than the window, or
+            the seed is set incorrectly
 
     Example:
         >>> from ests.corpus import compare_corpora

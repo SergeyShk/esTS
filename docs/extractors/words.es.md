@@ -5,8 +5,13 @@
 
 ## Descripción
 
-<!-- core: extractors/words.md:WordsExtractor 912c6ba -->
-Clase para extraer palabras de un texto. Permite usar distintos tokenizadores, filtrar palabras vacías, números y signos de puntuación, lematizar, construir N-gramas y fijar la longitud mínima y máxima de las palabras extraídas.
+<!-- core: extractors/words.md:WordsExtractor 45872ab -->
+Clase para extraer palabras de un texto.
+
+Excepciones:
+
+- `ParameterError` - un `ngram_range` que no es un par de enteros o cuyo límite inferior es menor que uno o mayor que el superior, un límite de longitud que no es un entero, un límite negativo, un mínimo mayor que el máximo;
+- `SourceTypeError` - palabras vacías que no son una colección de cadenas.
 
 ## Ganchos del idioma
 
@@ -26,21 +31,21 @@ La clase extiende el `WordsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 
 ## Parámetros
 
-<!-- core: extractors/words.md:WordsExtractor-parameters a447ca0 -->
+<!-- core: extractors/words.md:WordsExtractor-parameters 234b185 -->
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `tokenizer` | Pattern/Callable | `None` | Tokenizador o expresión regular; por defecto, el método `tokenize` |
-| `filter_punct` | bool | `True` | Filtrar los signos de puntuación |
-| `filter_nums` | bool | `False` | Filtrar los números que reconoce `number_pattern` |
-| `use_lexemes` | bool | `False` | Usar los lemas de las palabras del método `lemmatize` |
-| `stopwords` | Collection[str] | `None` | Palabras vacías, comparadas sin distinguir mayúsculas |
-| `lowercase` | bool | `False` | Convertir las palabras a minúsculas |
-| `ngram_range` | Tuple[int, int] | `(1, 1)` | Límite inferior y superior del tamaño de los N-gramas |
-| `min_len` | int | `0` | Longitud mínima de la palabra extraída en caracteres, `0` sin límite |
-| `max_len` | int | `0` | Longitud máxima de la palabra extraída en caracteres, `0` sin límite |
+| :-------- | :--- | :------ | :---------- |
+| `tokenizer` | `Pattern` / `Callable` | `None` | Tokenizador o expresión regular; por defecto, el método `tokenize` |
+| `filter_punct` | `bool` | `True` | Filtrar los signos de puntuación |
+| `filter_nums` | `bool` | `False` | Filtrar los números que reconoce `number_pattern` |
+| `use_lexemes` | `bool` | `False` | Usar los lemas de las palabras del método `lemmatize` |
+| `stopwords` | `Collection[str]` | `None` | Palabras vacías, comparadas sin distinguir mayúsculas |
+| `lowercase` | `bool` | `False` | Convertir las palabras a minúsculas |
+| `ngram_range` | `tuple[int, int]` | `(1, 1)` | Límite inferior y superior del tamaño de los N-gramas |
+| `min_len` | `int` | `0` | Longitud mínima de la palabra extraída en caracteres, `0` sin límite |
+| `max_len` | `int` | `0` | Longitud máxima de la palabra extraída en caracteres, `0` sin límite |
 
 !!! note "Nota"
-    Una expresión regular como tokenizador es un separador: el texto se divide con `re.split`. Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Una lista de palabras vacías en minúsculas también filtra una palabra con mayúscula al principio de una oración. Un signo de puntuación es un token formado solo por signos y símbolos, también de varios caracteres: `?!`, `--`, `…`, `€` (véase `anyts.utils.is_punctuation`). Los tokens vacíos y de espacios se descartan antes de los filtros. Los N-gramas unen las palabras con `_`.
+    Una expresión regular como tokenizador es un separador para `re.split`. Los filtros se aplican en este orden: puntuación, números, lematización, minúsculas, palabras vacías, longitud de la palabra. Un signo de puntuación es un token solo de signos y símbolos, también de varios caracteres: `?!`, `--`, `…`, `€` (`anyts.utils.is_punctuation`). Los tokens vacíos y de espacios se descartan antes de los filtros. Los N-gramas unen las palabras con `_`.
 
 !!! note "Nota"
     Una lista de palabras vacías ya hecha es `spacy.lang.es.stop_words.STOP_WORDS`; téngase en cuenta que incluye verbos frecuentes como `tener`.
@@ -49,12 +54,14 @@ La clase extiende el `WordsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 
 ### extract
 
-<!-- core: extractors/words.md:WordsExtractor-extract 67c60e1 -->
-Extrae las palabras de un texto.
+<!-- core: extractors/words.md:WordsExtractor-extract 383f135 -->
+`extract(text)` extrae las palabras de un texto.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `text` | str | `-` | Cadena de texto |
+| :-------- | :--- | :------ | :---------- |
+| `text` | `str` | - | Cadena de texto |
+
+Un texto que no es una cadena y un tokenizador que no es invocable o no devuelve cadenas lanzan `SourceTypeError`.
 
 Ejemplo de extracción de palabras con bigramas como tokens, tras filtrar números y palabras vacías y lematizar:
 
@@ -82,12 +89,14 @@ Ejemplo de extracción de palabras con bigramas como tokens, tras filtrar númer
 
 ### get_most_common
 
-<!-- core: extractors/words.md:WordsExtractor-get_most_common a834177 -->
-Devuelve las palabras más frecuentes del texto como una lista de pares (palabra, frecuencia), la más frecuente primero.
+<!-- core: extractors/words.md:WordsExtractor-get_most_common 7c47d0f -->
+`get_most_common(n=10)` devuelve las palabras más frecuentes del texto como una lista de pares (palabra, frecuencia), la más frecuente primero.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `n` | int | `10` | Número de palabras más frecuentes |
+| :-------- | :--- | :------ | :---------- |
+| `n` | `int` | `10` | Número de palabras más frecuentes |
+
+Un número que no es un entero de al menos uno lanza `ParameterError`.
 
 !!! warning "Aviso"
     El método debe llamarse después de extraer las palabras con `extract`.

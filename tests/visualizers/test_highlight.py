@@ -145,7 +145,7 @@ def test_layers_unknown():
     [
         ("passive", "a dependency parse"),
         ("de_chains", "a dependency parse"),
-        ("verbal_nouns", "the parts of speech and the lemmas"),
+        ("verbal_nouns", "the parts of speech, the lemmas"),
     ],
 )
 def test_layers_unavailable(layer, requirement):
@@ -167,7 +167,7 @@ def test_doc_without_the_sentence_boundaries(nlp):
 def test_syntax_layers_without_the_lemmas(nlp, layer):
     # the syntactic layers read the lemmas
     doc = nlp(text, disable=["lemmatizer"])
-    with pytest.raises(ParameterError, match="parse and the lemmas"):
+    with pytest.raises(ParameterError, match="parse, the lemmas"):
         highlight(doc, layers=layer)
     assert highlight(doc).layers == ("long_sents", "complex_words", "cliches")
 

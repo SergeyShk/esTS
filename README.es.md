@@ -555,7 +555,7 @@ Las medidas de la lingüística de corpus que comparan corpus y describen el uso
 *   la dispersión de una palabra por las partes de un texto: la DP de Gries, la DP normalizada, la D de Juilland, la D2 de Carroll, la S de Rosengren y la divergencia de Kullback-Leibler
 *   una concordancia KWIC por forma o por lema
 *   estilometría: las distancias entre textos por la Delta de Burrows y sus variantes, con la atribución de un texto a autores de referencia, los marcadores de palabras preferidas y evitadas por Zeta, el ji cuadrado de Kilgarriff, la curva de Mendenhall y el perfil de las palabras funcionales
-*   la comparación de dos corpus por 132 rasgos de un texto en ventanas de un tamaño parecido: la delta de Cliff, la d de Cohen y el AUC de cada rasgo, la prueba de Mann-Whitney con la corrección de Holm y un intervalo bootstrap de la diferencia de las medianas
+*   la comparación de dos corpus por 132 rasgos de un texto en ventanas del mismo tamaño: la delta de Cliff, la d de Cohen y el AUC de cada rasgo, la prueba de Mann-Whitney con la corrección de Holm y un intervalo bootstrap de la diferencia de las medianas
 
 ```python
 >>> from ests import WordsExtractor

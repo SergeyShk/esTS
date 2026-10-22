@@ -7,10 +7,14 @@
 
 `compare_corpora` compara dos corpus de textos en español por todos los rasgos de un texto a la vez - qué estadísticas distinguen los corpus y en qué medida. Para palabras sueltas hace lo mismo [`keyness`](keyness.md), para las distancias entre textos, [`delta`](stylometry.md#delta). Construye las tablas de los rasgos de las ventanas de los dos corpus y las compara con el `compare_features` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/compare/):
 
-<!-- core: corpus/compare.md:compare_features 9eaeeac -->
-Comparación de dos corpus rasgo por rasgo. Cada corpus llega como una tabla de los rasgos de sus ventanas - los textos divididos en partes de un tamaño parecido, para que los rasgos no dependan de la longitud de los textos. `compare_features(table_a, table_b, labels, n_bootstrap, seed)` compara las tablas columna por columna y devuelve una fila por rasgo, ordenadas por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel `text` del índice de una tabla; una tabla sin ese nivel toma cada fila por un texto aparte. Una columna que falta en una de las tablas da `nan`.
+<!-- core: corpus/compare.md:compare_features 96478f4 -->
+``` {.python .signature}
+compare_features(table_a, table_b, labels=('A', 'B'), n_bootstrap=1000, seed=0)
+```
 
-En `split_windows` el número de ventanas es la razón del número de palabras al tamaño de una ventana redondeada al entero más próximo (las mitades hacia arriba), al menos una, y las partes son iguales: con una ventana de 1000 un texto de una a dos ventanas da ventanas de 750 a 1499 palabras, y un texto más corto que `min_words` - media ventana por defecto - no da ninguna. Un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, `¿` y `¡` -, mientras que unas comillas rectas o una raya pegadas al final de la palabra anterior se quedan con ella (`"cuatro"`, `—dijo Juan—`). Los rasgos de cada ventana los calcula `text_features` o una función propia.
+Compara dos corpus rasgo por rasgo. Cada corpus es una tabla de los rasgos de sus ventanas, partes de los textos de un tamaño parecido, así que los rasgos no dependen de la longitud de los textos. El resultado tiene una fila por columna, por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel `text` del índice; sin él cada fila es un texto aparte. Una columna que falta en una de las tablas da `nan`.
+
+`split_windows` corta un texto en ventanas consecutivas de exactamente `window` palabras, así que los rasgos que dependen de la longitud son comparables entre textos; el resto final es una ventana solo con al menos `min_words` palabras, por defecto una ventana entera, así que se descarta. Un límite pasa antes de los signos de apertura de la primera palabra de una ventana - rayas, comillas, paréntesis, `¿` y `¡` -, mientras que unas comillas rectas o una raya pegadas al final de la palabra anterior o tras un signo de cierre se quedan con ella (`"cuatro"`, `—dijo Juan—`, `"adiós."`). Es el `split_windows` del núcleo con las palabras y los signos del español. Los rasgos de cada ventana los calcula `text_features` o una función propia.
 
 ## Rasgos
 
@@ -37,7 +41,7 @@ Las proporciones de espacios, letras y signos de puntuación (`basic_p_spaces`, 
 
 ## Estadísticas
 
-<!-- core: corpus/compare.md:compare_features-statistics 42e948a -->
+<!-- core: corpus/compare.md:compare_features-statistics 99869be -->
 Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_{n_B}$ en el corpus B (sin los valores indefinidos e infinitos; con menos de dos valores en un lado, `nan`):
 
 | Columna | Descripción |
@@ -46,16 +50,16 @@ Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_
 | `median_diff`, `ci_low`, `ci_high` | la diferencia de las medianas y su intervalo bootstrap de percentiles al 95%: ambos conjuntos se remuestrean `n_bootstrap` veces (`bootstrap_median_diff`) |
 | `cohen_d` | $d = (\bar{x} - \bar{y}) / s$, $s$ - la desviación típica combinada; 0.2 - un efecto pequeño, 0.5 - mediano, 0.8 - grande (`calc_cohen_d`) |
 | `cliff_delta` | $\delta = P(x > y) - P(x < y)$ de −1 a 1; $\lvert\delta\rvert$ < 0.147 - un efecto despreciable, < 0.33 - pequeño, < 0.474 - mediano, grande en otro caso (Romano et al. 2006; `calc_cliff_delta`) |
-| `auc` | el rasgo como clasificador por sí solo: la proporción de pares de ventanas en los que el valor en A es mayor que en B, con los empates a la mitad; $\delta = 2 \cdot AUC - 1$, 0.5 - el rasgo no distingue los corpus |
+| `auc` | el rasgo como clasificador: la proporción de pares de ventanas con el valor en A mayor que en B, con los empates a la mitad; $\delta = 2 \cdot AUC - 1$, 0.5 - el rasgo no distingue los corpus |
 | `u`, `p_value` | el estadístico U de Mann-Whitney y el valor p bilateral (`scipy.stats.mannwhitneyu`) |
 | `p_holm` | el valor p con la corrección de Holm por el número de rasgos (`holm_correction`) |
 | `n_A`, `n_B` | número de ventanas con un valor definido |
 | `n_texts_A`, `n_texts_B` | número de textos detrás de esas ventanas |
 
-Los nombres de las columnas son `anyts.corpus.COMPARISON_COLUMNS`, con `A` y `B` sustituidas por las etiquetas de los corpus. La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan entre sí; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.
+Las columnas son `anyts.corpus.COMPARISON_COLUMNS` con los sufijos `a` y `b` sustituidos por las etiquetas de los corpus. La delta de Cliff y el AUC salen del mismo estadístico U y concuerdan; la d de Cohen es sensible a los valores atípicos y a la falta de normalidad, así que conviene leerla junto a la delta.
 
 !!! warning "Las ventanas de un texto no son independientes"
-    La prueba y los tamaños del efecto toman cada ventana por una observación independiente, y las ventanas de un texto no lo son. Con pocos textos en un corpus los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus. El bootstrap, en cambio, remuestrea textos enteros (un bootstrap por conglomerados), así que su intervalo tiene en cuenta la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con solo unos pocos.
+    La prueba y los tamaños del efecto toman las ventanas por observaciones independientes, cosa que las ventanas de un texto no son: con pocos textos los valores p salen demasiado pequeños y reflejan los textos elegidos tanto como los corpus. El bootstrap remuestrea textos enteros (un bootstrap por conglomerados), así que su intervalo abarca la dispersión entre los textos; necesita al menos dos textos en cada lado y es aproximado con pocos.
 
 ## Parámetros
 
@@ -67,21 +71,27 @@ Parámetros de `compare_corpora`:
 | `b` | list[str] | `-` | Textos del segundo corpus |
 | `window` | int | `1000` | Tamaño de una ventana en palabras; `None` - los textos enteros |
 | `features` | callable | `None` | Función de los rasgos de un texto; `None` - `text_features` |
-| `min_words` | int | `None` | Menor número de palabras de una ventana; `None` - media ventana, o una cuando `window` es `None` |
+| `min_words` | int | `None` | Menor número de palabras de una ventana; `None` - una ventana entera, o una palabra cuando `window` es `None` |
 
 `labels`, `n_bootstrap` y `seed` pasan a `compare_features`, cuyos parámetros son:
 
-<!-- core: corpus/compare.md:compare_features-parameters 7c141e7 -->
+<!-- core: corpus/compare.md:compare_features-parameters 2ed21c1 -->
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `table_a` | DataFrame | `-` | Rasgos de las ventanas del primer corpus, una fila por ventana |
-| `table_b` | DataFrame | `-` | Rasgos de las ventanas del segundo corpus |
-| `labels` | tuple[str, str] | `("A", "B")` | Nombres de los corpus para las columnas, dos cadenas que den columnas distintas |
-| `n_bootstrap` | int | `1000` | Número de remuestras bootstrap |
-| `seed` | int/Generator | `0` | Semilla del generador de números aleatorios, un entero no negativo, o un `Generator` de numpy; `None` - una aleatoria |
+| :-------- | :--- | :------ | :---------- |
+| `table_a` | `DataFrame` | - | Rasgos de las ventanas del primer corpus, una fila por ventana |
+| `table_b` | `DataFrame` | - | Rasgos de las ventanas del segundo corpus |
+| `labels` | `tuple[str, str]` | `('A', 'B')` | Nombres de los corpus para las columnas, dos cadenas que den columnas distintas |
+| `n_bootstrap` | `int` | `1000` | Número de remuestras bootstrap |
+| `seed` | `int` / `Generator` | `0` | Semilla del generador de números aleatorios, un entero no negativo, o un `Generator` de numpy; `None` - una aleatoria |
 
-<!-- core: corpus/compare.md:check_comparison_params f445b8d -->
-`check_comparison_params(labels=("A", "B"), n_bootstrap=1000, seed=0)` comprueba los parámetros de `compare_features` y lanza `ParameterError` salvo que las etiquetas sean dos cadenas que den columnas distintas (`("diff", "B")` repetiría `median_diff`), el número de remuestras bootstrap sea un entero de al menos uno y la semilla sea `None`, un entero no negativo o un `Generator` de numpy. Llamada antes de construir las tablas a partir de los textos, señala un parámetro erróneo antes de procesar los textos.
+Una tabla que no es un `DataFrame`, que repite el nombre de una columna o que tiene una columna no numérica lanza `SourceTypeError`; los demás parámetros los comprueba `check_comparison_params`.
+
+<!-- core: corpus/compare.md:check_comparison_params a56a706 -->
+``` {.python .signature}
+check_comparison_params(labels=('A', 'B'), n_bootstrap=1000, seed=0)
+```
+
+Comprueba los parámetros de `compare_features` antes de procesar los textos: lanza `ParameterError` salvo que las etiquetas sean dos cadenas que den columnas distintas (`("diff", "B")` repetiría `median_diff`), el número de remuestras bootstrap sea un entero de al menos uno y la semilla sea `None`, un entero no negativo o un `Generator` de numpy.
 
 `compare_corpora` la llama primero, así que un nombre de corpus o una semilla erróneos fallan antes de analizar ningún texto.
 
@@ -89,17 +99,65 @@ Parámetros de `compare_corpora`:
 
 Las estadísticas de una fila están disponibles una a una desde `ests.corpus`:
 
-<!-- core: corpus/compare.md:calc_cohen_d c27397e -->
-`calc_cohen_d(values_a, values_b)`: la d de Cohen con las varianzas muestrales combinadas (ddof=1); `nan` con menos de dos valores en un lado o sin dispersión.
+<!-- core: corpus/compare.md:calc_cohen_d 198b504 -->
+``` {.python .signature}
+calc_cohen_d(values_a, values_b)
+```
 
-<!-- core: corpus/compare.md:calc_cliff_delta 896afa2 -->
-`calc_cliff_delta(values_a, values_b)`: la delta de Cliff, la proporción de pares en que el primer valor es mayor menos la proporción en que es menor; `nan` para un conjunto vacío o un valor indefinido. Se calcula por ordenación, en tiempo $O((n_A + n_B) \log n_B)$ y memoria lineal.
+La d de Cohen con las varianzas muestrales combinadas (ddof=1); `nan` con menos de dos valores en un lado o sin dispersión.
 
-<!-- core: corpus/compare.md:bootstrap_median_diff e93949a -->
-`bootstrap_median_diff(values_a, values_b, n_bootstrap=1000, rng=None, confidence=0.95, texts_a=None, texts_b=None)`: el intervalo bootstrap de percentiles de la diferencia de las medianas. Con `texts_a` y `texts_b` se remuestrean textos enteros, y la mediana de una extracción es la de los valores de los textos extraídos juntos; con menos de dos textos en un lado el intervalo es `nan`.
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `values_a` | `list[float]` | - | Valores en el primer corpus |
+| `values_b` | `list[float]` | - | Valores en el segundo corpus |
 
-<!-- core: corpus/compare.md:holm_correction e61edf0 -->
-`holm_correction(p_values)`: la corrección de Holm para comparaciones múltiples: los valores p se ordenan de menor a mayor, el i-ésimo se multiplica por (m − i + 1), donde m es el número de valores definidos, luego se toma el máximo acumulado y se limita a uno; `nan` sigue siendo `nan`, y un valor p fuera de [0, 1] lanza `ParameterError`.
+Un valor que no es un número o que falta (`None`, `NA`) y unos valores que no son una lista plana lanzan `SourceTypeError`.
+
+<!-- core: corpus/compare.md:calc_cliff_delta ccd5938 -->
+``` {.python .signature}
+calc_cliff_delta(values_a, values_b)
+```
+
+La delta de Cliff, la proporción de pares en que el primer valor es mayor menos la proporción en que es menor; `nan` para un conjunto vacío o un valor indefinido. Se calcula por ordenación, en tiempo $O((n_A + n_B) \log n_B)$ y memoria lineal.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `values_a` | `list[float]` | - | Valores en el primer corpus |
+| `values_b` | `list[float]` | - | Valores en el segundo corpus |
+
+Un valor que no es un número o que falta (`None`, `NA`) y unos valores que no son una lista plana lanzan `SourceTypeError`.
+
+<!-- core: corpus/compare.md:bootstrap_median_diff b20d95f -->
+``` {.python .signature}
+bootstrap_median_diff(values_a, values_b, n_bootstrap=1000, rng=None, confidence=0.95, texts_a=None, texts_b=None)
+```
+
+El intervalo bootstrap de percentiles de la diferencia de las medianas. Con `texts_a` y `texts_b` se remuestrean textos enteros, y la mediana de una extracción se toma sobre los valores de sus textos; con menos de dos textos en un lado el intervalo es `nan`.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `values_a` | `list[float]` | - | Valores en el primer corpus |
+| `values_b` | `list[float]` | - | Valores en el segundo corpus |
+| `n_bootstrap` | `int` | `1000` | Número de remuestras bootstrap |
+| `rng` | `Generator` | `None` | Generador de números aleatorios de numpy; `None` - uno nuevo sin semilla |
+| `confidence` | `float` | `0.95` | Nivel de confianza |
+| `texts_a` | `list` | `None` | Textos de los valores en el primer corpus; `None` - cada valor se remuestrea por separado |
+| `texts_b` | `list` | `None` | Textos de los valores en el segundo corpus |
+
+Un valor que no es un número o que falta, unos valores que no son una lista plana y unos textos que no son etiquetas de un mismo tipo lanzan `SourceTypeError`; un `n_bootstrap` que no es un entero de al menos uno, un `confidence` que no es un número en (0, 1), unos textos que no son tantos como los valores y un `rng` que no es un `Generator` de numpy lanzan `ParameterError`.
+
+<!-- core: corpus/compare.md:holm_correction 7006482 -->
+``` {.python .signature}
+holm_correction(p_values)
+```
+
+La corrección de Holm para comparaciones múltiples: los valores p se ordenan de menor a mayor, el i-ésimo se multiplica por (m − i + 1), donde m es el número de valores definidos, luego se toma el máximo acumulado y se limita a uno; `nan` sigue siendo `nan`.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `p_values` | `list[float]` | - | Valores p |
+
+Un valor p que no es un número o que falta y unos valores p que no son una lista plana lanzan `SourceTypeError`, y un valor p fuera de [0, 1], `ParameterError`.
 
 ## Ejemplo de uso
 
@@ -158,28 +216,28 @@ Galdós frente a Unamuno, tres novelas de cada uno del [corpus de literatura](..
 
     ``` bash
                       median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    diversity_mtldw         104.034          66.540  35.976   43.701    3.243        0.988  0.994     0.0
-    diversity_mamtld        102.044          64.410  36.302   44.519    3.130        0.982  0.991     0.0
-    diversity_mattr           0.816           0.769   0.045    0.053    2.964        0.981  0.991     0.0
-    diversity_mtld          103.668          63.774  37.093   44.947    2.978        0.979  0.989     0.0
-    diversity_msttr           0.817           0.770   0.045    0.054    2.839        0.973  0.987     0.0
+    diversity_mtldw         105.455          66.179  37.104   43.850    3.260        0.988  0.994     0.0
+    diversity_mamtld        103.316          64.814  35.081   45.200    3.083        0.981  0.990     0.0
+    diversity_mtld          103.655          63.851  38.320   47.911    3.110        0.981  0.990     0.0
+    diversity_mattr           0.817           0.769   0.046    0.057    2.952        0.979  0.990     0.0
+    diversity_msttr           0.819           0.769   0.047    0.059    2.929        0.979  0.989     0.0
 
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    basic_letters_per_word          4.437           4.132   0.255    0.356    1.676        0.782  0.891     0.0
-    readability_lix                38.220          29.469   7.437   10.668    1.088        0.703  0.852     0.0
-    morph_p_gerund                  0.068           0.036   0.028    0.036    1.503        0.736  0.868     0.0
-    morph_polarity_Neg              0.018           0.028  -0.013   -0.010   -1.130       -0.547  0.226     0.0
-    sents_mean                     16.650          11.409   3.219    6.998    0.844        0.623  0.811     0.0
-    punct_dash                     19.019          46.351 -40.474  -15.844   -1.315       -0.618  0.191     0.0
-    punct_exclamation               8.016          23.928 -23.896   -3.779   -1.271       -0.629  0.186     0.0
-    diversity_yule_k              104.859         110.355 -14.143   -1.203   -0.625       -0.318  0.341     0.0
+    basic_letters_per_word          4.441           4.130   0.243    0.356    1.695        0.784  0.892     0.0
+    readability_lix                37.906          29.721   6.954   11.023    1.084        0.694  0.847     0.0
+    morph_p_gerund                  0.069           0.037   0.026    0.035    1.533        0.742  0.871     0.0
+    morph_polarity_Neg              0.019           0.028  -0.011   -0.009   -1.122       -0.559  0.221     0.0
+    sents_mean                     16.393          11.494   3.078    6.688    0.833        0.610  0.805     0.0
+    punct_dash                     19.000          46.000 -39.012  -14.000   -1.287       -0.605  0.197     0.0
+    punct_exclamation               9.000          24.000 -22.000   -2.975   -1.251       -0.637  0.181     0.0
+    diversity_yule_k              103.620         112.500 -17.620   -3.740   -0.676       -0.351  0.324     0.0
 
-    {'n_Galdós': 157, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
+    {'n_Galdós': 155, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto pequeño (0.32), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas por cada 1000 palabras, el triple de signos de exclamación, y más negaciones.
+Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0.35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones.
 
-Los valores p toman las 274 ventanas de seis novelas por independientes (véase la advertencia de arriba), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 41 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.2 a 7.0 palabras, donde las ventanas solas darían de 3.7 a 6.3.
+Los valores p toman las 272 ventanas de seis novelas por independientes (véase la advertencia de arriba), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 42 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 6.7 palabras, donde las ventanas solas darían de 3.9 a 6.0.
 
 Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:
 

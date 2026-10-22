@@ -1,12 +1,16 @@
 import re
-from collections.abc import Iterable, Iterator, Sequence
+from collections.abc import Iterator
 from functools import lru_cache
 
 import simplemma
 import spacy
-from anyts.extractors import BLANK_LINE
-from anyts.utils import check_words, count_words_by_spans as count_words_by_spans, iter_doc_words
-from spacy.attrs import ORTH
+from anyts.extractors import iter_part_sents
+from anyts.utils import (
+    add_tokenizer_rules,
+    count_words_by_spans as count_words_by_spans,
+    find_phrases as find_phrases,
+    iter_doc_words,
+)
 from spacy.language import Language
 from spacy.tokenizer import Tokenizer
 
@@ -29,13 +33,11 @@ from .exceptions import DatasetNotFoundError, SourceError
 # or a dash glued to them that opens a line of dialogue (baja.--Tiene) - a raya or a run
 # of hyphens before the next word or opening mark within the line, not a digit and not
 # the punctuation after a closing dash, or a single hyphen before an opening mark
-# (cuatro.-¿Cinco?), since one before a word numbers an article (Artículo 1.- Objeto);
-# or a blank line, as in the SentsExtractor of the core
+# (cuatro.-¿Cinco?), since one before a word numbers an article (Artículo 1.- Objeto)
 SENTENCE_END = re.compile(
     r"(?<![.!?…])(?P<marks>[.!?…]++)(?P<closers>[»”’\"')\]]*)"
     rf"(?P<dash>(?:--+|[—–―][{DASHES}]*)(?=\s|$))?"
     rf"(?=\s|$|(?:--+|[—–―][{DASHES}]*)[ \t]*+[^\s\d.,;:!?…{DASHES}]|-[¿¡«“])"
-    rf"|(?P<break>{BLANK_LINE.pattern})"
 )
 NON_SPACE = re.compile(r"\S")
 NON_DASH = re.compile(rf"[^\s{DASHES}]")
@@ -137,6 +139,9 @@ def sentenize(text: str) -> Iterator[str]:
 
     Returns:
         iterator[str]: Iterator of sentences
+
+    Raises:
+        SourceTypeError: If the text is not a string
     """
     return (sent for _, _, sent in iter_text_sents(text))
 
@@ -146,7 +151,9 @@ def iter_text_sents(text: str) -> Iterator[tuple[int, int, str]]:
     Splitting a text into sentences with positions
 
     Description:
-        The sentences of sentenize with their positions in the string
+        The sentences of sentenize with their positions in the string; the parts
+        of the text between blank lines are split one by one (iter_part_sents of
+        the core)
 
     Arguments:
         text (str): Text string
@@ -155,14 +162,22 @@ def iter_text_sents(text: str) -> Iterator[tuple[int, int, str]]:
         iterator[tuple[int, int, str]]: Position of the first character,
             position after the last character and text of each sentence
 
+    Raises:
+        SourceTypeError: If the text is not a string
+
     Example:
         >>> from ests.utils import iter_text_sents
         >>> list(iter_text_sents("Hola.  ¿Qué tal?"))
         [(0, 5, 'Hola.'), (7, 16, '¿Qué tal?')]
     """
+    return iter_part_sents(_iter_sents, text)
+
+
+def _iter_sents(text: str) -> Iterator[tuple[int, int, str]]:
+    """Sentences of a part of a text without blank lines, with their positions"""
     start = 0
     for match in SENTENCE_END.finditer(text):
-        if match.group("break") is None and not _ends_sentence(text, start, match):
+        if not _ends_sentence(text, start, match):
             continue
         yield from _stripped_span(text, start, match.end())
         start = match.end()
@@ -207,10 +222,10 @@ def add_dash_rules(nlp: Language) -> None:
         abbreviations of TOKENIZER_ABBREVIATIONS become single tokens in lower
         case, capitalized and in upper case (sr., Sr., SR.), when the tokenizer
         keeps one of their forms whole; get_tokenizer and get_nlp
-        have the rules already.
-        A rule the tokenizer has is not added twice; a tokenizer that is not
-        the Tokenizer of spaCy, or whose rules are not regular expressions,
-        is left as it is
+        have the rules already. The add_tokenizer_rules of the core: a rule the
+        tokenizer has is not added twice, and a tokenizer that is not the
+        Tokenizer of spaCy, or whose rules are not regular expressions, is left
+        as it is
 
     Arguments:
         nlp (Language): Pipeline whose tokenizer gets the rules
@@ -225,57 +240,13 @@ def add_dash_rules(nlp: Language) -> None:
         >>> [token.text for token in nlp("--No --dijo él.")]
         ['--', 'No', '--', 'dijo', 'él', '.']
     """
-    tokenizer = nlp.tokenizer
-    if not isinstance(tokenizer, Tokenizer):
-        return
-    prefixes = _extend_rules(
-        tokenizer.prefix_search, [f"^{rule}" for rule in (BYTE_ORDER_MARK, *TOKENIZER_PREFIXES)]
+    add_tokenizer_rules(
+        nlp,
+        prefixes=(BYTE_ORDER_MARK, *TOKENIZER_PREFIXES),
+        suffixes=TOKENIZER_SUFFIXES,
+        infixes=TOKENIZER_INFIXES,
+        abbreviations=TOKENIZER_ABBREVIATIONS,
     )
-    suffixes = _extend_rules(tokenizer.suffix_search, [f"{rule}$" for rule in TOKENIZER_SUFFIXES])
-    infixes = _extend_rules(tokenizer.infix_finditer, list(TOKENIZER_INFIXES))
-    if prefixes is not None:
-        tokenizer.prefix_search = prefixes.search
-    if suffixes is not None:
-        tokenizer.suffix_search = suffixes.search
-    if infixes is not None:
-        tokenizer.infix_finditer = infixes.finditer
-    rules = tokenizer.rules
-    pairs: dict[str, dict[int, str]] = {}
-    for form, rule in rules.items():
-        if len(rule) == 1:
-            pairs.setdefault(form.lower(), rule[0])
-    for abbreviation in TOKENIZER_ABBREVIATIONS:
-        forms = (abbreviation, abbreviation[:1].upper() + abbreviation[1:], abbreviation.upper())
-        # A form may be kept whole by a pattern of the tokenizer rather than by a rule (A.M.)
-        pair = pairs.get(abbreviation)
-        if pair is None and any(len(tokenizer(form)) == 1 for form in forms):
-            pair = {}
-        if pair is None:
-            continue
-        for form in forms:
-            if form not in rules:
-                tokenizer.add_special_case(form, [{**pair, ORTH: form}])
-
-
-def _extend_rules(method: object, rules: list[str]) -> re.Pattern[str] | None:
-    """
-    Regular expression of a tokenizer extended with the rules it does not have yet
-
-    Description:
-        The expression is read from a bound method of the tokenizer
-        (prefix_search, suffix_search, infix_finditer); no method gives the
-        rules alone, and a method not bound to a regular expression or one that
-        has every rule gives None, so the tokenizer is not reloaded
-    """
-    if method is None:
-        return re.compile("|".join(rules))
-    pattern = getattr(getattr(method, "__self__", None), "pattern", None)
-    if not isinstance(pattern, str):
-        return None
-    missing = [rule for rule in rules if rule not in pattern]
-    if not missing:
-        return None
-    return re.compile("|".join([pattern, *missing]))
 
 
 def _check_encoding(text: str) -> None:
@@ -421,51 +392,3 @@ def is_verbal_noun(lemma: str) -> bool:
     """
     lemma = lemma.lower()
     return lemma.endswith(VERBAL_NOUN_SUFFIXES) or lemma in VERBAL_NOUN_LEMMAS
-
-
-def find_phrases(words: Sequence[str], phrases: Iterable[str]) -> list[tuple[int, int]]:
-    """
-    Finding phrases in a sequence of words
-
-    Description:
-        The words and the phrases are compared in lower case; at every position
-        the longest phrase is taken, and the phrases found do not overlap
-
-    Arguments:
-        words (list[str]): Words of the text
-        phrases (list[str]): Phrases, words separated by spaces
-
-    Returns:
-        list[tuple[int, int]]: Bounds of the phrases found as slices of words;
-            empty phrases are skipped
-
-    Raises:
-        SourceTypeError: If the words are not a list of strings
-
-    Example:
-        >>> from ests.utils import find_phrases
-        >>> find_phrases(["Sin", "embargo", "no", "llegó"], ["sin embargo", "sin"])
-        [(0, 2)]
-    """
-    check_words(words)
-    patterns = sorted(
-        {pattern for phrase in phrases if (pattern := tuple(phrase.lower().split()))},
-        key=len,
-        reverse=True,
-    )
-    by_first: dict[str, list[tuple[str, ...]]] = {}
-    for pattern in patterns:
-        by_first.setdefault(pattern[0], []).append(pattern)
-    lowered = [word.lower() for word in words]
-    spans = []
-    position = 0
-    while position < len(lowered):
-        for pattern in by_first.get(lowered[position], ()):
-            end = position + len(pattern)
-            if tuple(lowered[position:end]) == pattern:
-                spans.append((position, end))
-                position = end
-                break
-        else:
-            position += 1
-    return spans

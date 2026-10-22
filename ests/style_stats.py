@@ -1,10 +1,17 @@
 from collections import Counter
-from collections.abc import Collection, Mapping, Sequence, Set
+from collections.abc import Collection, Sequence
 from functools import cached_property
 from math import nan, sqrt
 
 import anyts
-from anyts.utils import check_integer, check_words, iter_doc_tokens, iter_doc_words, safe_divide
+from anyts.utils import (
+    check_integer,
+    check_words,
+    in_order,
+    iter_doc_tokens,
+    iter_doc_words,
+    safe_divide,
+)
 from spacy.language import Language
 from spacy.tokens import Doc
 
@@ -326,20 +333,6 @@ class StyleStats:
         stats = self.get_stats()
         for stat, desc in STYLE_STATS_DESC.items():
             print(f"{desc:50}|{stats[stat]:^10.2f}")
-
-
-def in_order(words: Collection[str]) -> tuple[str, ...]:
-    """
-    Putting a collection of words in a fixed order
-
-    Arguments:
-        words (list[str]|set[str]): Words; a set or a mapping is sorted, a list,
-            an array or a Series keeps its order
-
-    Returns:
-        tuple[str]: Words in order
-    """
-    return tuple(sorted(words)) if isinstance(words, Set | Mapping) else tuple(words)
 
 
 def _split_text(text: str, max_length: int) -> list[str]:

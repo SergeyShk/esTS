@@ -4,7 +4,7 @@ from math import log2, log10, nan
 from pathlib import Path
 from statistics import fmean
 
-from anyts.utils import check_integer, check_words, iter_doc_tokens, safe_divide
+from anyts.utils import check_integer, check_words, is_number, iter_doc_tokens, safe_divide
 from spacy.language import Language
 from spacy.tokens import Doc
 
@@ -135,7 +135,9 @@ class LexicalStats:
             source = pipeline(source, disable=UNUSED_COMPONENTS)
         elif not isinstance(source, Doc):
             raise SourceTypeError("The data source is set incorrectly")
-        tokens = [token for token in iter_doc_tokens(source) if not is_number(token.text)]
+        tokens = [
+            token for token in iter_doc_tokens(source) if not is_number(token.text, NUMBER_PATTERN)
+        ]
         if not tokens:
             raise SourceError("The data source has no words")
         if not source.has_annotation("POS"):
@@ -281,19 +283,6 @@ class LexicalStats:
         stats = self.get_stats()
         for stat, desc in LEXICAL_STATS_DESC.items():
             print(f"{desc:58}|{stats[stat]:^10.2f}")
-
-
-def is_number(word: str) -> bool:
-    """
-    Checking whether a word is a number by NUMBER_PATTERN
-
-    Arguments:
-        word (str): Word
-
-    Returns:
-        bool: Result of the check
-    """
-    return NUMBER_PATTERN.fullmatch(word.lower()) is not None
 
 
 def _mean(values: Sequence[float]) -> float:

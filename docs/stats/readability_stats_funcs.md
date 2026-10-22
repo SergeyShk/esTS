@@ -7,7 +7,7 @@ A formula of counts gives `nan` when the number of words or of sentences it divi
 !!! info ""
     **ests.readability_stats.calc_flesch_reading_easy()**
 
---8<-- "stats/readability_stats_funcs.md:calc_flesch_reading_easy"
+--8<-- "stats/readability_stats.md:calc_flesch_reading_easy"
 
 The default coefficients of esTS are those of the *fórmula de perspicuidad* of Szigriszt-Pazos (1993), read on the INFLESZ scale of Barrio-Cantalejo et al. (2008):
 
@@ -85,7 +85,7 @@ Source: Crawford, A. N. Fórmula y gráfico para determinar la comprensibilidad 
 !!! info ""
     **ests.readability_stats.calc_mu_index()**
 
---8<-- "stats/readability_stats_funcs.md:calc_mu_index"
+--8<-- "stats/readability_stats.md:calc_mu_index"
 
 The variance divided by `n − 1` is the *cuasivarianza* of the authors, which reproduces the worked example of their manual; the distribution is `BasicStats.c_letters`. The bands of the authors:
 
@@ -106,7 +106,7 @@ Source: Muñoz Baquedano, M. Legibilidad y variabilidad de los textos. *Boletín
 !!! info ""
     **ests.readability_stats.calc_smog_index()**
 
---8<-- "stats/readability_stats_funcs.md:calc_smog_index"
+--8<-- "stats/readability_stats.md:calc_smog_index"
 
 Fitted on English; for Spanish it is the input of the [SOL formula](#calc_sol_grade), and `ReadabilityStats` passes the words of three or more syllables.
 
@@ -143,14 +143,14 @@ Source: Contreras, A., García-Alonso, R., Echenique, M., Daye-Contreras, F. The
 !!! info ""
     **ests.readability_stats.calc_lix()**
 
---8<-- "stats/readability_stats_funcs.md:calc_lix"
+--8<-- "stats/readability_stats.md:calc_lix"
 
 ## RIX readability index { #calc_rix }
 
 !!! info ""
     **ests.readability_stats.calc_rix()**
 
---8<-- "stats/readability_stats_funcs.md:calc_rix"
+--8<-- "stats/readability_stats.md:calc_rix"
 
 ## Reading ease level { #flesch_reading_easy_to_level }
 
@@ -193,7 +193,7 @@ Parameters:
 !!! info ""
     **ests.readability_stats.scale_level()**
 
---8<-- "stats/readability_stats_funcs.md:scale_level"
+--8<-- "stats/readability_stats.md:scale_level"
 
 !!! example "Example"
 
@@ -284,7 +284,7 @@ Parameters:
 !!! info ""
     **ests.readability_stats.calc_reading_time()**
 
---8<-- "stats/readability_stats_funcs.md:calc_reading_time"
+--8<-- "stats/readability_stats.md:calc_reading_time"
 
 The default speed is the silent reading speed of adults in Spanish, 278 words per minute, from the meta-analysis of Brysbaert (2019). The norms of school years from the meta-analysis of Ripoll, Tapia and Aguado (2020) are available in `ests.constants.READING_SPEED_NORMS` as pairs (aloud, silent):
 

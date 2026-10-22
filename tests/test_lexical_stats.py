@@ -2,12 +2,14 @@ from math import isnan, log2, log10
 
 import pytest
 import spacy
+from anyts.utils import is_number
 
 from ests import LexicalStats
 from ests.constants import FREQUENCY_BANDS, LEXICAL_STATS_DESC
 from ests.datasets import FreqDict
 from ests.exceptions import DatasetNotFoundError, ParameterError, SourceError, SourceTypeError
-from ests.lexical_stats import calc_surprisal, get_rank, is_number, load_top_lemmas
+from ests.extractors import NUMBER_PATTERN
+from ests.lexical_stats import calc_surprisal, get_rank, load_top_lemmas
 from ests.utils import get_nlp
 
 TEXT = "El gato estaba en la ventana y miraba a los pájaros"
@@ -118,7 +120,7 @@ def test_numbers_are_no_words(freq_dict):
     ("word", "expected"), [("2020", True), ("1,5", True), ("3.º", True), ("gato", False)]
 )
 def test_is_number(word, expected):
-    assert is_number(word) is expected
+    assert is_number(word, NUMBER_PATTERN) is expected
 
 
 def test_doc_source(ls, freq_dict):

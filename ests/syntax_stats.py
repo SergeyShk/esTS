@@ -4,7 +4,7 @@ from collections.abc import Collection, Iterable
 from math import nan
 from statistics import fmean, pstdev
 
-from anyts.syntax import (
+from anyts.syntax_stats import (
     base_dep,
     calc_coordination_chains,
     calc_dependency_distances,
@@ -13,12 +13,10 @@ from anyts.syntax import (
     count_children,
     get_children,
     get_words,
-    has_feature,
     is_root,
-    is_word,
     subtree_len,
 )
-from anyts.utils import safe_divide
+from anyts.utils import has_feature, is_finite_verb, is_infinitive, is_word, safe_divide
 from spacy.language import Language
 from spacy.tokens import Doc, Token
 
@@ -297,19 +295,6 @@ class SyntaxStats:
             print(f"{desc:50}|{stats[stat]:^10.2f}")
 
 
-def is_finite_verb(token: Token) -> bool:
-    """
-    Checking whether a token is a finite form of a verb
-
-    Arguments:
-        token (Token): Token
-
-    Returns:
-        bool: Result of the check
-    """
-    return token.pos_ == "VERB" and has_feature(token, "VerbForm", "Fin")
-
-
 def is_participle(token: Token) -> bool:
     """
     Checking whether a token is a participle
@@ -338,19 +323,6 @@ def is_gerund(token: Token) -> bool:
         bool: Result of the check
     """
     return has_feature(token, "VerbForm", "Ger")
-
-
-def is_infinitive(token: Token) -> bool:
-    """
-    Checking whether a token is an infinitive
-
-    Arguments:
-        token (Token): Token
-
-    Returns:
-        bool: Result of the check
-    """
-    return has_feature(token, "VerbForm", "Inf")
 
 
 def is_negation(token: Token) -> bool:

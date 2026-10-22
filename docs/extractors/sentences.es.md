@@ -5,8 +5,12 @@
 
 ## Descripción
 
-<!-- core: extractors/sentences.md:SentsExtractor 491dff1 -->
-Clase para extraer oraciones de un texto. Permite usar distintos tokenizadores y fijar la longitud mínima y máxima de las oraciones extraídas.
+<!-- core: extractors/sentences.md:SentsExtractor d5ffb52 -->
+Clase para extraer oraciones de un texto.
+
+Excepciones:
+
+- `ParameterError` - un límite de longitud que no es un entero, un límite negativo, un mínimo mayor que el máximo.
 
 ## Ganchos del idioma
 
@@ -20,26 +24,28 @@ La clase extiende el `SentsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 
 ## Parámetros
 
-<!-- core: extractors/sentences.md:SentsExtractor-parameters 5bc6821 -->
+<!-- core: extractors/sentences.md:SentsExtractor-parameters df5b0a4 -->
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `tokenizer` | Pattern/Callable | `None` | Tokenizador o expresión regular; por defecto, el método `sentenize` |
-| `min_len` | int | `0` | Longitud mínima de la oración extraída en caracteres, `0` sin límite |
-| `max_len` | int | `0` | Longitud máxima de la oración extraída en caracteres, `0` sin límite |
+| :-------- | :--- | :------ | :---------- |
+| `tokenizer` | `Pattern` / `Callable` | `None` | Tokenizador o expresión regular; por defecto, el método `sentenize` |
+| `min_len` | `int` | `0` | Longitud mínima de la oración extraída en caracteres, `0` sin límite |
+| `max_len` | `int` | `0` | Longitud máxima de la oración extraída en caracteres, `0` sin límite |
 
 !!! note "Nota"
-    Una expresión regular como tokenizador es un separador: el texto se divide con `re.split`. Una línea en blanco - un salto de línea, espacios opcionales y otro salto de línea - termina una oración con cualquier tokenizador: el texto se divide primero por las líneas en blanco y cada parte pasa al tokenizador, así que un título o un párrafo sin signo final es una oración propia, y también lo es una parte sin palabras, como una línea de asteriscos entre secciones, que las estadísticas descartan como oración sin palabras. A las oraciones de cualquier tokenizador se les quitan los espacios de los extremos antes de aplicar los límites de longitud, y las vacías se descartan.
+    Una expresión regular como tokenizador es un separador para `re.split`. Una línea en blanco - un salto de línea, espacios opcionales y otro salto de línea - termina una oración con cualquier tokenizador: el texto se divide primero por las líneas en blanco y cada parte pasa al tokenizador, así que un título o un párrafo sin signo final es una oración propia, y también lo es una parte sin palabras, como una línea de asteriscos, que las estadísticas descartan. A las oraciones se les quitan los espacios de los extremos antes de aplicar los límites de longitud, y las vacías se descartan.
 
 ## Métodos
 
 ### extract
 
-<!-- core: extractors/sentences.md:SentsExtractor-extract 6c0a509 -->
-Extrae las oraciones de un texto.
+<!-- core: extractors/sentences.md:SentsExtractor-extract 10444dc -->
+`extract(text)` extrae las oraciones de un texto.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `text` | str | `-` | Cadena de texto |
+| :-------- | :--- | :------ | :---------- |
+| `text` | `str` | - | Cadena de texto |
+
+Un texto que no es una cadena y un tokenizador que no es invocable o no devuelve cadenas lanzan `SourceTypeError`.
 
 Ejemplo de extracción de oraciones con el tokenizador por defecto:
 

@@ -7,12 +7,8 @@ Una fórmula de recuentos da `nan` cuando el número de palabras o de oraciones 
 !!! info ""
     **ests.readability_stats.calc_flesch_reading_easy()**
 
-<!-- core: stats/readability_stats_funcs.md:calc_flesch_reading_easy 978f8ef -->
-Cálculo de la facilidad de lectura de Flesch (Flesch, 1948).
-
-Cuanto mayor es el valor, más fácil es el texto; la escala va nominalmente de 0 a 100, aunque los textos más sencillos pasan de 100 y los más difíciles bajan de 0.
-
-Fórmula:
+<!-- core: stats/readability_stats.md:calc_flesch_reading_easy b94d937 -->
+La facilidad de lectura de un texto según la longitud media de la oración en palabras y la longitud media de la palabra en sílabas.
 
 $$
 c - a \cdot \frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}} - b \cdot \frac{\textrm{Número de sílabas}}{\textrm{Número de palabras}}
@@ -94,12 +90,12 @@ Fuente: Crawford, A. N. Fórmula y gráfico para determinar la comprensibilidad 
 !!! info ""
     **ests.readability_stats.calc_mu_index()**
 
-<!-- core: stats/readability_stats_funcs.md:calc_mu_index cec1984 -->
-Cálculo de la Legibilidad µ (Muñoz Baquedano y Muñoz Urra, 2006).
+<!-- core: stats/readability_stats.md:calc_mu_index 8da809c -->
+``` {.python .signature}
+calc_mu_index(c_letters)
+```
 
-La media del número de letras por palabra dividida por su varianza muestral, por 100; no hay coeficientes que ajustar, y cuanto mayor es el valor, más fácil es el texto. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (`nan`).
-
-Fórmula:
+La media del número de letras por palabra dividida por su varianza muestral, por 100; no hay coeficientes que ajustar. Las palabras sin letras (los números) quedan fuera; con menos de dos palabras o sin variabilidad el índice no está definido (`nan`).
 
 $$
 100 \cdot \frac{\bar{x}}{s^2}, \quad s^2 = \frac{\sum (x_i - \bar{x})^2}{n - 1}
@@ -107,11 +103,11 @@ $$
 
 donde $x_i$ es el número de letras de una palabra y $n$ el número de palabras.
 
-Parámetros:
-
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `c_letters` | dict[int, int] | `-` | Distribución de las palabras por número de letras |
+| :-------- | :--- | :------ | :---------- |
+| `c_letters` | `dict[int, int]` | - | Distribución de las palabras por número de letras |
+
+Un `c_letters` que no es un mapeo lanza `SourceTypeError`.
 
 La varianza dividida por `n − 1` es la *cuasivarianza* de los autores, que reproduce el ejemplo resuelto de su manual; la distribución es `BasicStats.c_letters`. Las bandas de los autores:
 
@@ -132,16 +128,14 @@ Fuente: Muñoz Baquedano, M. Legibilidad y variabilidad de los textos. *Boletín
 !!! info ""
     **ests.readability_stats.calc_smog_index()**
 
-<!-- core: stats/readability_stats_funcs.md:calc_smog_index b721fe1 -->
-Cálculo del índice SMOG (McLaughlin, 1969).
-
-Los años de escolaridad necesarios para leer el texto a partir de las palabras polisílabas por oración; cuanto mayor es el valor, más difícil es el texto. En la fórmula original las palabras polisílabas tienen tres o más sílabas y `b` lleva su número a una muestra de 30 oraciones.
-
-Fórmula:
+<!-- core: stats/readability_stats.md:calc_smog_index 8eac9a0 -->
+Los años de escolaridad necesarios para leer el texto, según las palabras polisílabas por oración. En la fórmula original las palabras polisílabas tienen tres o más sílabas y `b` lleva su número a una muestra de 30 oraciones.
 
 $$
 a \cdot \sqrt{b \cdot \frac{\textrm{Número de palabras polisílabas}}{\textrm{Número de oraciones}}} + c
 $$
+
+Un número de palabras o de oraciones que no es un entero no negativo lanza `ParameterError`.
 
 Ajustado para el inglés; para el español es la entrada de la [fórmula SOL](#calc_sol_grade), y `ReadabilityStats` pasa las palabras de tres o más sílabas.
 
@@ -178,45 +172,45 @@ Fuente: Contreras, A., García-Alonso, R., Echenique, M., Daye-Contreras, F. The
 !!! info ""
     **ests.readability_stats.calc_lix()**
 
-<!-- core: stats/readability_stats_funcs.md:calc_lix 65d7ed6 -->
-Cálculo del índice de legibilidad LIX (Björnsson, 1968).
+<!-- core: stats/readability_stats.md:calc_lix 4fc8ad4 -->
+``` {.python .signature}
+calc_lix(n_long_words, n_words, n_sents)
+```
 
-La longitud media de la oración más el porcentaje de palabras largas, las de más de seis letras; no hay coeficientes que ajustar. Cuanto mayor es el valor, más difícil es el texto:
+La longitud media de la oración más el porcentaje de palabras largas, las de más de seis letras; no hay coeficientes que ajustar. Los valores se leen como tipos de texto:
 
 | Valor | Texto |
-| :---: | :---- |
+| :---- | :--- |
 | `0-30` | textos muy fáciles, libros infantiles |
 | `30-40` | textos fáciles, narrativa, artículos de periódico |
 | `40-50` | textos de dificultad media, artículos de revista |
 | `50-60` | textos difíciles, divulgación científica, textos oficiales |
 | `60-100` | textos muy difíciles, leyes y lenguaje burocrático |
 
-Fórmula:
-
 $$
 \frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}} + \frac{100 \cdot \textrm{Número de palabras largas}}{\textrm{Número de palabras}}
 $$
 
-Parámetros:
-
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `n_long_words` | int | `-` | Número de palabras largas |
-| `n_words` | int | `-` | Número de palabras |
-| `n_sents` | int | `-` | Número de oraciones |
+| :-------- | :--- | :------ | :---------- |
+| `n_long_words` | `int` | - | Número de palabras largas |
+| `n_words` | `int` | - | Número de palabras |
+| `n_sents` | `int` | - | Número de oraciones |
 
 ## Índice de legibilidad RIX { #calc_rix }
 
 !!! info ""
     **ests.readability_stats.calc_rix()**
 
-<!-- core: stats/readability_stats_funcs.md:calc_rix ab7c550 -->
-Cálculo del índice de legibilidad RIX (Anderson, 1983).
+<!-- core: stats/readability_stats.md:calc_rix 139557a -->
+``` {.python .signature}
+calc_rix(n_long_words, n_sents)
+```
 
-Las palabras largas, de más de seis letras, por oración; no hay coeficientes que ajustar. Cuanto mayor es el valor, más difícil es el texto:
+Las palabras largas, de más de seis letras, por oración; no hay coeficientes que ajustar. Los valores se leen como cursos:
 
 | Valor | Curso |
-| :---: | :---: |
+| :---- | :---- |
 | `< 0.2` | 1 |
 | `0.2-0.5` | 2 |
 | `0.5-0.8` | 3 |
@@ -231,18 +225,14 @@ Las palabras largas, de más de seis letras, por oración; no hay coeficientes q
 | `6.2-7.2` | 12 |
 | `> 7.2` | universidad |
 
-Fórmula:
-
 $$
 \frac{\textrm{Número de palabras largas}}{\textrm{Número de oraciones}}
 $$
 
-Parámetros:
-
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `n_long_words` | int | `-` | Número de palabras largas |
-| `n_sents` | int | `-` | Número de oraciones |
+| :-------- | :--- | :------ | :---------- |
+| `n_long_words` | `int` | - | Número de palabras largas |
+| `n_sents` | `int` | - | Número de oraciones |
 
 ## Nivel de la facilidad de lectura { #flesch_reading_easy_to_level }
 
@@ -285,15 +275,19 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.scale_level()**
 
-<!-- core: stats/readability_stats_funcs.md:scale_level 70c84a3 -->
-El nivel de una escala para un valor: la escala se da como los límites inferiores de sus niveles en orden descendente, el valor cae en el primer nivel cuyo límite alcanza, y el nivel más bajo queda abierto por debajo. Un valor que no es un número finito y una escala vacía o que no es una lista de pares de un límite inferior finito y un nivel lanzan `ParameterError`.
+<!-- core: stats/readability_stats.md:scale_level ad443b9 -->
+``` {.python .signature}
+scale_level(value, scale)
+```
 
-Parámetros:
+El nivel de una escala para un valor: la escala se da como los límites inferiores de sus niveles en orden descendente, el valor cae en el primer nivel cuyo límite alcanza, y el nivel más bajo queda abierto por debajo.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `value` | float | `-` | Valor de una métrica |
-| `scale` | list[tuple[float, Any]] | `-` | Límites inferiores y sus niveles en orden descendente |
+| :-------- | :--- | :------ | :---------- |
+| `value` | `float` | - | Valor de una métrica |
+| `scale` | `list[tuple[float, Any]]` | - | Límites inferiores y sus niveles en orden descendente |
+
+Un valor que no es un número finito y una escala vacía, que no es una lista de pares de un límite inferior finito y un nivel o con límites que no descienden lanzan `ParameterError`.
 
 !!! example "Ejemplo"
 
@@ -384,8 +378,14 @@ Parámetros:
 !!! info ""
     **ests.readability_stats.calc_reading_time()**
 
-<!-- core: stats/readability_stats_funcs.md:calc_reading_time 725bd9c -->
-Cálculo del tiempo de lectura de un texto en minutos: el número de palabras dividido por la velocidad de lectura; una velocidad que no es un número positivo lanza `ParameterError`.
+<!-- core: stats/readability_stats.md:calc_reading_time a9233be -->
+El tiempo de lectura de un texto en minutos: el número de palabras dividido por la velocidad de lectura.
+
+$$
+\frac{\textrm{Número de palabras}}{\textrm{wpm}}
+$$
+
+Un número de palabras que no es un entero no negativo y una velocidad que no es un número positivo lanzan `ParameterError`.
 
 La velocidad por defecto es la de lectura silenciosa de los adultos en español, 278 palabras por minuto, según el metaanálisis de Brysbaert (2019). Las normas por curso del metaanálisis de Ripoll, Tapia y Aguado (2020) están en `ests.constants.READING_SPEED_NORMS` como pares (en voz alta, en silencio):
 

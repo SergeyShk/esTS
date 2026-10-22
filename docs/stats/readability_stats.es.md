@@ -7,12 +7,16 @@
 
 Las métricas de legibilidad de la tradición española.
 
-<!-- core: stats/readability_stats.md:ReadabilityStats 7ee1446 -->
-Las métricas de [legibilidad](https://es.wikipedia.org/wiki/Legibilidad) de un texto a partir de sus estadísticas básicas: la longitud media de la oración en palabras, la longitud media de la palabra en sílabas o en letras, la proporción de palabras polisílabas y de palabras largas y la variabilidad de la longitud de las palabras. La fuente de datos puede ser un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) o unas estadísticas básicas ya calculadas, y entonces el texto no se vuelve a contar; los extractores se pasan a las estadísticas básicas de un texto o de un `Doc`, mientras que las ya calculadas se toman tal cual. Las letras de las fórmulas son las de las palabras contadas, así que un extractor de palabras que descarta palabras no alarga la palabra media.
+<!-- core: stats/readability_stats.md:ReadabilityStats 5dd9076 -->
+Las métricas de [legibilidad](https://es.wikipedia.org/wiki/Legibilidad) de un texto a partir de sus estadísticas básicas: la longitud media de la oración en palabras, la longitud media de la palabra en sílabas o en letras, la proporción de palabras polisílabas y de palabras largas y la variabilidad de la longitud de las palabras. La fuente de datos es un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) o unas estadísticas básicas ya calculadas, que se reutilizan tal cual; los extractores se pasan a las estadísticas básicas de un texto o de un `Doc`. Las fórmulas solo cuentan las letras de las palabras contadas, así que un extractor de palabras que descarta palabras no alarga la palabra media.
 
 Las métricas son propiedades que se calculan en cada acceso, así que un cambio de los `coefficients` de un objeto se aplica en el acto.
 
-Una fuente que no es ni una cadena, ni un `Doc`, ni unas estadísticas básicas, unas estadísticas básicas de una clase distinta de las de la biblioteca y un extractor de otro tipo lanzan `SourceTypeError`, una fuente sin palabras o sin oraciones `SourceError`, un preajuste desconocido o que no es una cadena `ParameterError`.
+Excepciones:
+
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni unas estadísticas básicas, unas estadísticas básicas de una clase distinta de las de la biblioteca, un extractor de otro tipo, una cadena o un `Doc` pasados a una clase sin `basic_stats_class`;
+- `SourceError` - una fuente sin palabras o sin oraciones;
+- `ParameterError` - un preajuste desconocido o que no es una cadena.
 
 !!! quote "Definición"
 
@@ -105,8 +109,8 @@ La fórmula de Fernández Huerta toma la longitud media de la oración, con la c
 
 El método [`describe_level`](#describe_level) sitúa la facilidad de lectura en la escala del preajuste: INFLESZ para `general` (`muy difícil` por debajo de 40, `algo difícil` 40-55, `normal` 55-65, `bastante fácil` 65-80, `muy fácil` por encima de 80) y los siete niveles de Fernández Huerta para `classic`, y a petición las escalas de Szigriszt-Pazos o del otro autor; la Legibilidad µ tiene los siete niveles de sus autores (`muy difícil` 0-30, `difícil` 31-50, `un poco difícil` 51-60, `adecuado` 61-70, `un poco fácil` 71-80, `fácil` 81-90, `muy fácil` 91-100), y LIX los tipos de texto de Björnsson ([`calc_lix`](readability_stats_funcs.md#calc_lix)). RIX no tiene aquí niveles propios: sus grados de Anderson ([`calc_rix`](readability_stats_funcs.md#calc_rix)) son años de escolaridad, y [`describe`](#describe) los lee como una etapa del sistema educativo español.
 
-<!-- core: stats/readability_stats.md:ReadabilityStats-consensus 7e17a01 -->
-Las fórmulas que dan años de escolaridad (`grade_stats`) se resumen en el atributo `consensus_grade`: la mediana de sus valores redondeados al entero más próximo (las mitades hacia arriba), junto con la facilidad de lectura convertida en años de escolaridad (`reading_ease_to_grade`) sin redondear. Una biblioteca alinea los límites de `reading_ease_grades` con su escala de la facilidad de lectura, para que el grado de consenso y `describe` lean el valor igual.
+<!-- core: stats/readability_stats.md:ReadabilityStats-consensus c4a6ea5 -->
+El atributo `consensus_grade` es la mediana de los valores de las fórmulas de grado (`grade_stats`) redondeados al entero más próximo (las mitades hacia arriba), junto con la facilidad de lectura en años de escolaridad (`reading_ease_to_grade`), sin redondear. Una biblioteca alinea los límites de `reading_ease_grades`, y de cada escala de `preset_reading_ease_grades`, con su escala de la facilidad de lectura, para que el grado de consenso y `describe` lean el valor igual.
 
 Las fórmulas de grado de esTS son Crawford y SOL, y la facilidad de lectura se [convierte en grado](readability_stats_funcs.md#flesch_reading_easy_to_grade) según la escala del preajuste. El método [`describe_grade`](#describe_grade) traduce el grado de consenso o una fórmula concreta en una etapa del sistema educativo español y la edad del lector:
 
@@ -167,14 +171,8 @@ Devuelve la escala de interpretación de una métrica como límites inferiores y
 
 ### describe_grade
 
-<!-- core: stats/readability_stats.md:ReadabilityStats-describe_grade af0b5e5 -->
-Devuelve la etapa escolar y la edad del lector para el grado de consenso o una fórmula de grado; otra métrica lanza `ParameterError`.
-
-Parámetros:
-
-| Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `stat` | str | `consensus_grade` | Nombre de la fórmula de grado |
+<!-- core: stats/readability_stats.md:ReadabilityStats-describe_grade 01276a5 -->
+`describe_grade(stat)` devuelve la etapa escolar y la edad del lector para el grado de consenso o la fórmula de grado `stat`, `consensus_grade` por defecto; otra métrica lanza `ParameterError`.
 
 Las fórmulas de grado son `consensus_grade`, `crawford_grade` y `sol_grade`.
 
@@ -189,14 +187,8 @@ Las fórmulas de grado son `consensus_grade`, `crawford_grade` y `sol_grade`.
 
 ### describe
 
-<!-- core: stats/readability_stats.md:ReadabilityStats-describe 6148d1e -->
-Devuelve la lectura de cualquier métrica según su escala: para el grado de consenso y una fórmula de grado, la etapa escolar y la edad del lector (`describe_grade`); para una métrica con escala de niveles (`level_scale`), su nivel; para otra métrica de `grade_scales`, la etapa y la edad de los años de escolaridad que da su escala; y `None` para una métrica sin escala o con un valor no definido (nan). Un nombre que no está en `stats_desc` ni es una propiedad pública de la clase lanza `UnknownStatError`.
-
-Parámetros:
-
-| Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `stat` | str | `-` | Nombre de la métrica |
+<!-- core: stats/readability_stats.md:ReadabilityStats-describe 3fed408 -->
+`describe(stat)` devuelve la lectura de cualquier métrica según su escala: para el grado de consenso y una fórmula de grado, la etapa escolar y la edad del lector (`describe_grade`); para una métrica con escala de niveles (`level_scale`), su nivel; para otra métrica de `grade_scales`, la etapa y la edad de los años de escolaridad que da su escala; y `None` para una métrica sin escala o con un valor no definido (nan). Un nombre que no está en `stats_desc` ni es una propiedad pública de la clase lanza `UnknownStatError`.
 
 En esTS las fórmulas de grado se leen como etapas del sistema educativo español, y también RIX a través de los grados de Anderson; la fórmula de Gutiérrez de Polini, el tiempo de lectura y las fórmulas del núcleo con sus coeficientes ingleses (`flesch_kincaid_grade`, `coleman_liau_index`, `automated_readability_index`, `smog_index`, `gunning_fog_index`) no tienen escala.
 
@@ -217,25 +209,13 @@ En esTS las fórmulas de grado se leen como etapas del sistema educativo españo
 
 ### reading_time_by_speed
 
-<!-- core: stats/readability_stats.md:ReadabilityStats-reading_time_by_speed 7c6fa90 -->
-Devuelve el tiempo de lectura del texto en minutos a la velocidad indicada; una velocidad que no es un número positivo lanza `ParameterError`.
-
-Parámetros:
-
-| Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `wpm` | float | `-` | Velocidad de lectura, palabras por minuto |
+<!-- core: stats/readability_stats.md:ReadabilityStats-reading_time_by_speed 02714c8 -->
+`reading_time_by_speed(wpm)` devuelve el tiempo de lectura del texto en minutos a la velocidad `wpm`, en palabras por minuto; una velocidad que no es un número positivo lanza `ParameterError`.
 
 ### reading_time_by_norm
 
-<!-- core: stats/readability_stats.md:ReadabilityStats-reading_time_by_norm dcb8ada -->
-Devuelve los tiempos de lectura del texto en minutos a las velocidades de una norma de `reading_speed_norms`, en su orden; una norma desconocida lanza `ParameterError`.
-
-Parámetros:
-
-| Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `norm` | str | `-` | Nombre de la norma de velocidad de lectura |
+<!-- core: stats/readability_stats.md:ReadabilityStats-reading_time_by_norm 8a24e05 -->
+`reading_time_by_norm(norm)` devuelve los tiempos de lectura del texto en minutos a las velocidades de la norma `norm` de `reading_speed_norms`, en su orden; una norma desconocida lanza `ParameterError`.
 
 Las normas de la tabla `ests.constants.READING_SPEED_NORMS` son de `grade_1` a `grade_11` (años de escolaridad: primaria 1-6, ESO 7-10, bachillerato 11) y `adult`, cada una con las velocidades en voz alta y en silencio, así que el método devuelve los tiempos de lectura en voz alta y en silencio.
 
@@ -250,8 +230,8 @@ Las normas de la tabla `ests.constants.READING_SPEED_NORMS` son de `grade_1` a `
 
 ### get_stats
 
-<!-- core: stats/readability_stats.md:ReadabilityStats-get_stats c9e4353 -->
-Devuelve un diccionario con las métricas de legibilidad calculadas de `stats_desc`.
+<!-- core: stats/readability_stats.md:ReadabilityStats-get_stats 0cb58e2 -->
+`get_stats()` devuelve un diccionario con las métricas de legibilidad de `stats_desc`.
 
 !!! example "Ejemplo"
 
@@ -285,8 +265,8 @@ Devuelve un diccionario con las métricas de legibilidad calculadas de `stats_de
 
 ### print_stats
 
-<!-- core: stats/readability_stats.md:ReadabilityStats-print_stats 62374bb -->
-Muestra una tabla con las métricas de legibilidad calculadas, sus descripciones de `stats_desc` y los encabezados de `stats_headers`.
+<!-- core: stats/readability_stats.md:ReadabilityStats-print_stats ac340b3 -->
+`print_stats()` muestra una tabla con las métricas de legibilidad y sus descripciones de `stats_desc` bajo los encabezados de `stats_headers`.
 
 !!! example "Ejemplo"
 

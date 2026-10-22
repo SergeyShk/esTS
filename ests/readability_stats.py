@@ -2,6 +2,7 @@ from collections.abc import Iterable, Mapping
 from math import nan
 from typing import ClassVar
 
+import anyts
 import anyts.readability_stats
 from anyts.constants import LIX_LEVELS
 from anyts.readability_stats import (
@@ -29,7 +30,6 @@ from .constants import (
     READING_SPEED_WPM,
 )
 from .exceptions import ParameterError
-from .extractors import SentsExtractor, WordsExtractor
 
 
 def check_preset(preset: str) -> None:
@@ -143,8 +143,8 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
     def __init__(
         self,
         source: str | Doc | BasicStats,
-        sents_extractor: SentsExtractor | None = None,
-        words_extractor: WordsExtractor | None = None,
+        sents_extractor: anyts.SentsExtractor | None = None,
+        words_extractor: anyts.WordsExtractor | None = None,
         preset: str = "general",
     ):
         super().__init__(source, sents_extractor, words_extractor, preset)

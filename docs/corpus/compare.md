@@ -9,7 +9,7 @@
 
 --8<-- "corpus/compare.md:compare_features"
 
-In `split_windows` the number of windows is the ratio of the number of words to the size of a window rounded half up, at least one, and the parts are equal: at a window of 1000 a text of one to two windows gives windows of 750 to 1499 words, and a text shorter than `min_words` - half a window by default - gives none. A boundary goes before the opening marks of the first word of a window - dashes, quotes, brackets, `¿` and `¡` - while a straight quote or a dash glued to the end of the previous word stays with it (`"cuatro"`, `—dijo Juan—`). The features of every window are computed by `text_features` or a function of one's own.
+`split_windows` cuts a text into consecutive windows of exactly `window` words, so the features that depend on length are comparable between texts; the rest at the end is a window only with at least `min_words` words, by default a whole window, so it is dropped. A boundary goes before the opening marks of the first word of a window - dashes, quotes, brackets, `¿` and `¡` - while a straight quote or a dash glued to the end of the previous word or after a closing mark stays with it (`"cuatro"`, `—dijo Juan—`, `"adiós."`). It is the `split_windows` of the core with the Spanish words and marks. The features of every window are computed by `text_features` or a function of one's own.
 
 ## Features
 
@@ -48,7 +48,7 @@ Parameters of `compare_corpora`:
 | `b` | list[str] | `-` | Texts of the second corpus |
 | `window` | int | `1000` | Size of a window in words; `None` - the whole texts |
 | `features` | callable | `None` | Function of the features of a text; `None` - `text_features` |
-| `min_words` | int | `None` | Smallest number of words in a window; `None` - half a window, or one when `window` is `None` |
+| `min_words` | int | `None` | Smallest number of words in a window; `None` - a whole window, or one word when `window` is `None` |
 
 `labels`, `n_bootstrap` and `seed` go on to `compare_features`, whose parameters are:
 
@@ -127,28 +127,28 @@ Galdós against Unamuno, three novels each from the [corpus of literature](../da
 
     ``` bash
                       median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    diversity_mtldw         104.034          66.540  35.976   43.701    3.243        0.988  0.994     0.0
-    diversity_mamtld        102.044          64.410  36.302   44.519    3.130        0.982  0.991     0.0
-    diversity_mattr           0.816           0.769   0.045    0.053    2.964        0.981  0.991     0.0
-    diversity_mtld          103.668          63.774  37.093   44.947    2.978        0.979  0.989     0.0
-    diversity_msttr           0.817           0.770   0.045    0.054    2.839        0.973  0.987     0.0
+    diversity_mtldw         105.455          66.179  37.104   43.850    3.260        0.988  0.994     0.0
+    diversity_mamtld        103.316          64.814  35.081   45.200    3.083        0.981  0.990     0.0
+    diversity_mtld          103.655          63.851  38.320   47.911    3.110        0.981  0.990     0.0
+    diversity_mattr           0.817           0.769   0.046    0.057    2.952        0.979  0.990     0.0
+    diversity_msttr           0.819           0.769   0.047    0.059    2.929        0.979  0.989     0.0
 
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    basic_letters_per_word          4.437           4.132   0.255    0.356    1.676        0.782  0.891     0.0
-    readability_lix                38.220          29.469   7.437   10.668    1.088        0.703  0.852     0.0
-    morph_p_gerund                  0.068           0.036   0.028    0.036    1.503        0.736  0.868     0.0
-    morph_polarity_Neg              0.018           0.028  -0.013   -0.010   -1.130       -0.547  0.226     0.0
-    sents_mean                     16.650          11.409   3.219    6.998    0.844        0.623  0.811     0.0
-    punct_dash                     19.019          46.351 -40.474  -15.844   -1.315       -0.618  0.191     0.0
-    punct_exclamation               8.016          23.928 -23.896   -3.779   -1.271       -0.629  0.186     0.0
-    diversity_yule_k              104.859         110.355 -14.143   -1.203   -0.625       -0.318  0.341     0.0
+    basic_letters_per_word          4.441           4.130   0.243    0.356    1.695        0.784  0.892     0.0
+    readability_lix                37.906          29.721   6.954   11.023    1.084        0.694  0.847     0.0
+    morph_p_gerund                  0.069           0.037   0.026    0.035    1.533        0.742  0.871     0.0
+    morph_polarity_Neg              0.019           0.028  -0.011   -0.009   -1.122       -0.559  0.221     0.0
+    sents_mean                     16.393          11.494   3.078    6.688    0.833        0.610  0.805     0.0
+    punct_dash                     19.000          46.000 -39.012  -14.000   -1.287       -0.605  0.197     0.0
+    punct_exclamation               9.000          24.000 -22.000   -2.975   -1.251       -0.637  0.181     0.0
+    diversity_yule_k              103.620         112.500 -17.620   -3.740   -0.676       -0.351  0.324     0.0
 
-    {'n_Galdós': 157, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
+    {'n_Galdós': 155, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós has the richer vocabulary: the measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Yule's K, which weighs the frequent words, gives a small effect (0.32), so the difference lies mostly in the rare vocabulary. His words and sentences are longer, with nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue: two and a half times as many dashes per 1000 words, three times as many exclamation marks, and more negations.
+Galdós has the richer vocabulary: the measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Yule's K, which weighs the frequent words, gives a medium effect (0.35), so the difference lies mostly in the rare vocabulary. His words and sentences are longer, with nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue: two and a half times as many dashes and exclamation marks per 1000 words, and more negations.
 
-The p-values take the 274 windows of six novels for independent (see the warning above), and by the same test two novels of Galdós, *Marianela* and *Misericordia*, differ in 41 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.2 to 7.0 words, where the windows alone would give 3.7 to 6.3.
+The p-values take the 272 windows of six novels for independent (see the warning above), and by the same test two novels of Galdós, *Marianela* and *Misericordia*, differ in 42 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.1 to 6.7 words, where the windows alone would give 3.9 to 6.0.
 
 Features of one's own, for instance the syntactic ones, are passed as a function:
 

@@ -5,7 +5,7 @@ from itertools import pairwise
 from math import log2, nan
 
 import anyts
-from anyts.phonetics import calc_repetition_index
+from anyts.phon_stats import calc_repetition_index
 from anyts.utils import check_integer, check_words, iter_doc_words, safe_divide
 from spacy.tokens import Doc
 
@@ -516,7 +516,7 @@ def calc_alliteration(text: Sequence[str], window_len: int = PHON_WINDOW_LEN) ->
         The number of windows of window_len neighbouring words where a
         consonant sound occurs in two words or more, summed over the
         consonants, to the number expected if the words stood in random order
-        (calc_repetition_index of anyts.phonetics): about 1 - random
+        (calc_repetition_index of anyts.phon_stats): about 1 - random
         repetitions, well above 1 - alliteration. The sounds count, not the
         letters: casa and queso repeat k, cena and casa do not
 
