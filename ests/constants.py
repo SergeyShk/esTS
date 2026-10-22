@@ -634,8 +634,6 @@ SYNTAX_STATS_DESC = {
 }
 
 
-# Parts of speech of a content word, as Universal Dependencies names them
-CONTENT_UD_POS = frozenset({"NOUN", "PROPN", "ADJ", "VERB", "ADV"})
 # Classes of the discourse markers: those of Coh-Metrix (causal, adversative, temporal, additive)
 # with the concessive, conditional and reformulative ones
 CONNECTOR_CLASSES = {
