@@ -41,7 +41,7 @@ Por lema, la palabra clave se lematiza con simplemma, así que una expresión se
 
 ## Parámetros
 
-<!-- core: corpus/kwic.md:kwic-parameters ef54df9 -->
+<!-- core: corpus/kwic.md:kwic-parameters b14c02d -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `source` | `str` / `Doc` | - | Texto u objeto Doc |
@@ -50,7 +50,7 @@ Por lema, la palabra clave se lematiza con simplemma, así que una expresión se
 | `by_lemma` | `bool` | `False` | Comparar lemas en lugar de formas |
 | `ignore_case` | `bool` | `True` | No distinguir mayúsculas y minúsculas al comparar formas |
 
-Una palabra clave sin palabras y una ventana negativa lanzan `ParameterError`; una fuente que no es ni una cadena ni un `Doc`, una palabra clave que no es una cadena y un gancho que no es invocable lanzan `SourceTypeError`.
+Una palabra clave sin palabras y una ventana que no es un entero o es negativa lanzan `ParameterError`; una fuente que no es ni una cadena ni un `Doc`, una palabra clave que no es una cadena y un gancho que no es invocable lanzan `SourceTypeError`.
 
 ## Resultado
 

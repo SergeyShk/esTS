@@ -5,7 +5,7 @@ from statistics import fmean
 from typing import Any
 
 import anyts.syntax_stats
-from anyts.constants import AUXILIARY_DEPS, CLAUSE_DEPS, SUBORDINATE_CLAUSE_DEPS
+from anyts.constants import AUXILIARY_DEPS
 from anyts.syntax_stats import (
     base_dep,
     calc_modifier_chains,
@@ -17,14 +17,13 @@ from anyts.syntax_stats import (
     is_root,
     subtree_len,
 )
-from anyts.utils import has_feature, is_word
+from anyts.utils import has_feature
 from spacy.language import Language
 from spacy.tokens import Doc, Token
 
 from .constants import (
     AGENT_PREPOSITION,
     AUXILIARY_VERBS,
-    CORE_MESSAGES,
     DE_PREPOSITIONS,
     ENCLITICS,
     GERUND_PERIPHRASIS_VERBS,
@@ -170,7 +169,6 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
     requires_lemmas = True
     negation_words = NEGATION_WORDS
     stats_desc = SYNTAX_STATS_DESC
-    messages = CORE_MESSAGES
 
     def __init__(self, source: str | Doc, nlp: Language | None = None):
         if nlp is not None and not isinstance(nlp, Language):
@@ -229,13 +227,13 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         state.pop("_nlp", None)
         return state
 
-    def is_clause_head(self, token: Token) -> bool:
-        """Head of a clause by the Spanish rules (is_clause_head)"""
-        return is_clause_head(token)
+    def is_infinitive_periphrasis(self, token: Token) -> bool:
+        """Infinitive of one predicate with its verb by the Spanish rules (is_infinitive_periphrasis)"""
+        return is_infinitive_periphrasis(token)
 
-    def is_subordinate_clause_head(self, token: Token) -> bool:
-        """Head of a subordinate clause by the Spanish rules (is_subordinate_clause_head)"""
-        return is_subordinate_clause_head(token)
+    def auxiliary_form(self, token: Token) -> str:
+        """Form of an auxiliary without one by its ending (predicate_form)"""
+        return _auxiliary_form(token)
 
     def is_passive(self, token: Token) -> bool:
         """Passive with ser or with se (is_passive)"""
@@ -304,18 +302,19 @@ def is_clause_head(token: Token) -> bool:
     Checking whether a token heads a clause
 
     Description:
-        The head of the sentence or a word with the relation ccomp, advcl, acl
-        or csubj, and under xcomp an infinitive (is_infinitive_clause: quiere
-        salir) or a finite predicate, which the models give to some finite
-        complements. The form of a predicate (predicate_form) decides:
-        a participle or a gerund is counted apart (llegando tarde, habiendo
-        llegado tarde), an infinitive under acl is no clause (el deseo de
-        irse, el miedo de ser robado), and había llegado and estaba cantando
-        are finite. A parataxis or a conj of the head of a clause counts only
-        as a predicate (is_predicate), so that parentheticals such as por
-        ejemplo are no clauses, and an infinitive the models attach as conj
-        to a verb of INFINITIVE_PERIPHRASES makes a periphrasis with it
-        (tiene que salir, va a salir)
+        The is_clause_head of the core with the Spanish rules of
+        is_infinitive_periphrasis and predicate_form: the head of the sentence
+        or a word with the relation ccomp, advcl, acl, csubj or parataxis, and
+        under xcomp a finite predicate, which the models give to some finite
+        complements, or an infinitive clause (is_infinitive_clause: quiere
+        salir). The form of a predicate (predicate_form) decides: a participle
+        or a gerund is counted apart (llegando tarde, habiendo llegado tarde),
+        an infinitive under acl is no clause (el deseo de irse), and había
+        llegado and estaba cantando are finite. A parataxis or a conj of the
+        head of a clause counts only as a predicate (is_predicate), so that
+        parentheticals such as por ejemplo are no clauses, and an infinitive the
+        models attach as conj or csubj to the verb of its periphrasis (hay que
+        salir, llega a convertirse) is none
 
     Arguments:
         token (Token): Token
@@ -323,25 +322,9 @@ def is_clause_head(token: Token) -> bool:
     Returns:
         bool: Result of the check
     """
-    if not is_word(token):
-        return False
-    if is_root(token):
-        return True
-    form = predicate_form(token)
-    if form in ("Ger", "Part"):
-        return False
-    if token.dep_ == "xcomp":
-        return form == "Fin" or is_infinitive_clause(token)
-    if token.dep_ not in CLAUSE_DEPS:
-        return (
-            token.dep_ == "conj"
-            and not (form == "Inf" and is_infinitive_periphrasis(token))
-            and is_clause_head(token.head)
-            and is_predicate(token)
-        )
-    if token.dep_ == "parataxis":
-        return is_predicate(token)
-    return not (token.dep_ == "acl" and form == "Inf")
+    return anyts.syntax_stats.is_clause_head(
+        token, is_infinitive_periphrasis=is_infinitive_periphrasis, auxiliary_form=_auxiliary_form
+    )
 
 
 def is_subordinate_clause_head(token: Token) -> bool:
@@ -349,8 +332,11 @@ def is_subordinate_clause_head(token: Token) -> bool:
     Checking whether a token heads a subordinate clause
 
     Description:
-        The head of a clause with the relation ccomp, advcl, acl, csubj or
-        xcomp, and a coordinated predicate of a subordinate clause
+        The is_subordinate_clause_head of the core over is_clause_head: the
+        head of a clause with the relation ccomp, advcl, acl or csubj, or under
+        xcomp with a finite predicate, and a coordinated predicate of a
+        subordinate clause. An infinitive clause under a verb (quiere salir)
+        is counted apart (is_infinitive_clause_head)
 
     Arguments:
         token (Token): Token
@@ -358,18 +344,25 @@ def is_subordinate_clause_head(token: Token) -> bool:
     Returns:
         bool: Result of the check
     """
-    return is_clause_head(token) and _is_subordinate(token)
+    return anyts.syntax_stats.is_subordinate_clause_head(token, is_clause_head, _auxiliary_form)
 
 
-def _is_subordinate(token: Token) -> bool:
-    """Whether a clause head heads a subordinate clause, up its chain of conjuncts"""
-    while not is_root(token):
-        if token.dep_ in SUBORDINATE_CLAUSE_DEPS or token.dep_ == "xcomp":
-            return True
-        if token.dep_ != "conj" or not is_clause_head(token.head):
-            return False
-        token = token.head
-    return False
+def is_infinitive_clause_head(token: Token) -> bool:
+    """
+    Checking whether a token heads an infinitive clause under a verb
+
+    Description:
+        The is_infinitive_clause_head of the core over is_clause_head: an
+        infinitive under xcomp that heads a clause of its own (quiere salir,
+        le pidió salir), and a coordinated infinitive of one
+
+    Arguments:
+        token (Token): Token
+
+    Returns:
+        bool: Result of the check
+    """
+    return anyts.syntax_stats.is_infinitive_clause_head(token, is_clause_head, _auxiliary_form)
 
 
 def is_infinitive_clause(token: Token) -> bool:
@@ -377,12 +370,14 @@ def is_infinitive_clause(token: Token) -> bool:
     Checking whether an infinitive under xcomp heads a clause of its own
 
     Description:
-        A predicate in the form of an infinitive (predicate_form) that
-        completes its head (quiere salir, le hizo reír, quiere ser médico,
-        quiere ser elegido, cree haber ganado), unless the two
-        make a periphrasis (is_infinitive_periphrasis: puede salir, vuelve a
-        salir) or the head is a verb of RAISING_VERBS (parece dormir);
-        a predicative adjective (parece cansado) is no clause
+        The is_infinitive_clause of the core with the Spanish rules: a
+        predicate in the form of an infinitive (predicate_form) that completes
+        its head (quiere salir, le hizo reír, quiere ser médico, quiere ser
+        elegido, cree haber ganado), unless the two make one predicate
+        (is_infinitive_periphrasis: puede salir, vuelve a salir, parece
+        dormir) or the word it completes heads no clause (is_clause_head:
+        intentando salir); a predicative adjective (parece cansado) is no
+        clause
 
     Arguments:
         token (Token): Token
@@ -390,22 +385,21 @@ def is_infinitive_clause(token: Token) -> bool:
     Returns:
         bool: Result of the check
     """
-    return (
-        predicate_form(token) == "Inf"
-        and not is_infinitive_periphrasis(token)
-        and _head_verb(token, RAISING_VERBS) not in RAISING_VERBS
+    return anyts.syntax_stats.is_infinitive_clause(
+        token, is_infinitive_periphrasis, is_clause_head, _auxiliary_form
     )
 
 
 def is_infinitive_periphrasis(token: Token) -> bool:
     """
-    Checking whether an infinitive makes a periphrasis with its head
+    Checking whether an infinitive makes one predicate with its head
 
     Description:
-        The head is a verb of INFINITIVE_PERIPHRASES and the infinitive is
+        An infinitive under xcomp of a verb of RAISING_VERBS (parece dormir),
+        or the head is a verb of INFINITIVE_PERIPHRASES and the infinitive is
         linked to it by one of the words of that verb: a mark, case or cc
-        before the infinitive or the word right before it, the old spelling
-        á read as a; the verbs taking no word (puede salir) need none
+        before the infinitive or the word right before it, the old spelling á
+        read as a; the verbs taking no word (puede salir) need none
 
     Arguments:
         token (Token): Token
@@ -413,6 +407,8 @@ def is_infinitive_periphrasis(token: Token) -> bool:
     Returns:
         bool: Result of the check
     """
+    if base_dep(token) == "xcomp" and _head_verb(token, RAISING_VERBS) in RAISING_VERBS:
+        return True
     allowed = INFINITIVE_PERIPHRASES.get(_head_verb(token, INFINITIVE_PERIPHRASES))
     if allowed is None:
         return False

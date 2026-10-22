@@ -50,6 +50,7 @@ The `max_length` of the pipeline is a million characters by default: split a lon
     Mean length of a clause (words)                   |   9.67
     Subordinate clauses per sentence                  |   0.50
     Share of sentences with a subordinate clause      |   0.50
+    Infinitive clauses under a verb per sentence      |   0.00
     Modifiers per noun phrase                         |   1.00
     Chains of de per sentence                         |   0.50
     Maximum length of a chain of de                   |    2
@@ -133,6 +134,7 @@ Every metric is an attribute of the object, computed when it is created, and `ge
 | [`mean_clause_len`](#clauses) | Mean length of a clause in words | 1 and above, `nan` without clauses | Longer clauses |
 | [`subordinate_clauses_per_sent`](#subordinate_clauses) | Subordinate clauses per sentence | 0 and above | More subordination |
 | [`p_complex_sents`](#subordinate_clauses) | Share of the sentences with a subordinate clause | 0-1 | More complex sentences |
+| [`infinitive_clauses_per_sent`](#infinitive_clauses) | Infinitive clauses under a verb per sentence | 0 and above | More infinitive complements |
 | [`modifiers_per_noun`](#noun_modifiers) | Mean number of the modifiers of a noun | 0 and above, `nan` without nouns | Heavier noun phrases |
 | [`de_chains_per_sent`](#de_chains) | Chains of `de` per sentence | 0 and above | More chains |
 | [`max_de_chain_len`](#de_chains) | Longest chain of `de` of the text | 0 without chains, otherwise 2 and above | A longer chain |
@@ -221,19 +223,19 @@ A coordination chain is a group of words linked by `conj`: `manzanas, peras y ci
 is_clause_head(token)
 ```
 
-Checks whether a word heads a clause: the head of the sentence or, by the form of its predicate ([`predicate_form`](#verb-forms)), a word with `ccomp`, `advcl`, `acl` (a relative clause included), `csubj` or `parataxis` (`anyts.constants.CLAUSE_DEPS`). A finite predicate heads its clause (`dijo que había llegado`, `estaba cantando`, `los regalos que te van a dar`), also under `xcomp`, which the models give to some finite complements; a predicate in the form of a participle or a gerund heads no clause of that kind - such predicates are counted apart (`llegando tarde`, `habiendo llegado tarde`) - and neither does one in the form of an infinitive under `acl` (`el deseo de irse`, `el miedo de ser robado`). Under `xcomp` an infinitive heads a clause by `is_infinitive_clause`, and a predicative adjective (`parece cansado`) heads none. A parenthetical (`parataxis`) and a coordinated predicate (`conj` of the head of a clause) count only when they can be a predicate ([`is_predicate`](#is_predicate)), so that parentheticals such as `por ejemplo` are no clauses; an infinitive the models attach as `conj` to the verb of a periphrasis (`tiene que salir`, `va a salir`) makes one predicate with it (`is_infinitive_periphrasis`).
+Checks whether a word heads a clause: the head of the sentence or, by the form of its predicate ([`predicate_form`](#verb-forms)), a word with `ccomp`, `advcl`, `acl` (a relative clause included), `csubj` or `parataxis` (`anyts.constants.CLAUSE_DEPS`). A finite predicate heads its clause (`dijo que había llegado`, `estaba cantando`, `los regalos que te van a dar`, `sé que os habéis posado`), also under `xcomp`, which the models give to some finite complements; a predicate in the form of a participle or a gerund heads no clause of that kind - such predicates are counted apart (`llegando tarde`, `habiendo llegado tarde`) - and neither does one in the form of an infinitive under `acl` (`el deseo de irse`, `el miedo de ser robado`). Under `xcomp` an infinitive heads a clause by `is_infinitive_clause`, and a predicative adjective (`parece cansado`) heads none. A parenthetical (`parataxis`) and a coordinated predicate (`conj` of the head of a clause) count only when they can be a predicate ([`is_predicate`](#is_predicate)), so that parentheticals such as `por ejemplo` are no clauses; an infinitive the models attach as `conj` or `csubj` to the verb of its periphrasis (`hay que salir`, `llega a convertirse`) makes one predicate with it (`is_infinitive_periphrasis`). It is the [`is_clause_head`](https://sergeyshk.github.io/anyTS/stats/syntax_stats/#clauses) of the anyTS core with the Spanish rules of `is_infinitive_periphrasis` and `predicate_form`.
 
 ``` {.python .signature}
 is_infinitive_clause(token)
 ```
 
-Checks whether an infinitive under `xcomp` heads a clause of its own: a predicate in the form of an infinitive that completes its head (`quiere salir`, `le hizo reír`, `quiere ser médico`, `quiere ser elegido`, `cree haber ganado`), unless the two make a periphrasis (`is_infinitive_periphrasis`) or the head is a verb of `RAISING_VERBS`, `parecer` (`parece dormir`).
+Checks whether an infinitive under `xcomp` heads a clause of its own: a predicate in the form of an infinitive that completes its head (`quiere salir`, `le hizo reír`, `quiere ser médico`, `quiere ser elegido`, `cree haber ganado`), unless the two make one predicate (`is_infinitive_periphrasis`: `puede salir`, `parece dormir`) or the word it completes heads no clause (`is_clause_head`): an infinitive in a gerund or participial phrase belongs to that phrase (`intentando salir`, `destinada a disculpar`).
 
 ``` {.python .signature}
 is_infinitive_periphrasis(token)
 ```
 
-Checks whether an infinitive makes a periphrasis with its head: the head is a verb of `INFINITIVE_PERIPHRASES` (NGLE, ch. 28) and the infinitive is linked to it by one of the words of that verb - a `mark`, `case` or `cc` before the infinitive, or the word right before it, the old spelling `á` read as `a`. The verbs are `poder`, `soler` and `deber` with no word (`puede salir`, `suele salir`), `deber de`, `tener que`, `haber que`, `haber de`, `ir a`, `venir a`, `pasar a`, `volver a`, `tornar a`, `empezar a` and `por`, `comenzar a` and `por`, `principiar a`, `poner a`, `echar a`, `romper a`, `llegar a`, `alcanzar a`, `acabar de` and `por`, `terminar de` and `por`, `dejar de`, `cesar de`, `parar de`, `estar para` and `por`. The lemma of the head is that of the model, or of `ests.utils.lemmatize` when the model gives none of these verbs (it can read a verb opening a sentence as a proper noun: `Solía salir`).
+Checks whether an infinitive makes one predicate with its head: an infinitive under `xcomp` of a verb of `RAISING_VERBS`, `parecer` (`parece dormir`), or a periphrasis. In a periphrasis the head is a verb of `INFINITIVE_PERIPHRASES` (NGLE, ch. 28) and the infinitive is linked to it by one of the words of that verb - a `mark`, `case` or `cc` before the infinitive, or the word right before it, the old spelling `á` read as `a`. The verbs are `poder`, `soler` and `deber` with no word (`puede salir`, `suele salir`), `deber de`, `tener que`, `haber que`, `haber de`, `ir a`, `venir a`, `pasar a`, `volver a`, `tornar a`, `empezar a` and `por`, `comenzar a` and `por`, `principiar a`, `poner a`, `echar a`, `romper a`, `llegar a`, `alcanzar a`, `acabar de` and `por`, `terminar de` and `por`, `dejar de`, `cesar de`, `parar de`, `estar para` and `por`. The lemma of the head is that of the model, or of `ests.utils.lemmatize` when the model gives none of these verbs (it can read a verb opening a sentence as a proper noun: `Solía salir`).
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
@@ -254,7 +256,7 @@ The mean length of a clause is the number of the words over the number of the cl
 is_subordinate_clause_head(token)
 ```
 
-Checks whether a word heads a subordinate clause: a clause head (`is_clause_head`) with `ccomp`, `advcl`, `acl`, `csubj` (`anyts.constants.SUBORDINATE_CLAUSE_DEPS`) or `xcomp`, or a coordinated predicate of a subordinate clause, by the relation of the first word up its chain of conjuncts. An infinitive clause under a verb (`quiere salir`) is a subordinate clause; the numbers of those alone are the attributes `n_infinitive_clauses` and `infinitive_clauses_per_sent`, which `get_stats` does not give.
+Checks whether a word heads a subordinate clause: a clause head (`is_clause_head`) with `ccomp`, `advcl`, `acl` or `csubj` (`anyts.constants.SUBORDINATE_CLAUSE_DEPS`), or under `xcomp` with a finite predicate, or a coordinated predicate of a subordinate clause, by the relation of the first word up its chain of conjuncts. An infinitive clause under a verb (`quiere salir`) is counted apart, among the [infinitive clauses](#infinitive_clauses).
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
@@ -277,7 +279,44 @@ Checks whether a word heads a subordinate clause: a clause head (`is_clause_head
 
     ```
     ['quiere', 'salir', 'tiene', 'parece']
-    ['salir', 'parece']
+    ['parece']
+    ```
+
+</div>
+
+<div class="metric-card" markdown>
+
+### Infinitive clauses { #infinitive_clauses }
+
+`infinitive_clauses_per_sent`
+{ .metric-meta }
+
+``` {.python .signature}
+is_infinitive_clause_head(token)
+```
+
+Checks whether a word heads an infinitive clause under a verb: a clause head (`is_clause_head`) whose predicate is an infinitive under `xcomp` (`quiere salir`, `le pidió salir`), or a coordinated infinitive of one. These clauses count among the clauses, but not among the subordinate ones: grammars take an infinitive complement for a part of a simple sentence, and the published correlations of the subordination were obtained for finite subordinate clauses. It is the [`is_infinitive_clause_head`](https://sergeyshk.github.io/anyTS/stats/syntax_stats/#infinitive_clauses) of the anyTS core over `is_clause_head`.
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `token` | `Token` | - | Token |
+
+=== "Code"
+
+    ``` python
+    from ests.syntax_stats import is_clause_head, is_infinitive_clause_head
+    from ests.utils import get_nlp
+
+    doc = get_nlp()("Quiere salir y volver, pero intentando salir se cayó.")
+    [token.text for token in doc if is_clause_head(token)]
+    [token.text for token in doc if is_infinitive_clause_head(token)]
+    ```
+
+=== "Result"
+
+    ```
+    ['Quiere', 'salir', 'volver', 'cayó']
+    ['salir', 'volver']
     ```
 
 </div>
@@ -588,6 +627,7 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
      'mean_clause_len': 9.666666666666666,
      'subordinate_clauses_per_sent': 0.5,
      'p_complex_sents': 0.5,
+     'infinitive_clauses_per_sent': 0.0,
      'modifiers_per_noun': 1.0,
      'de_chains_per_sent': 0.5,
      'max_de_chain_len': 2,

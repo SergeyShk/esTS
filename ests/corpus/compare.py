@@ -47,9 +47,11 @@ def split_windows(text: str, window: int | None = 1000, min_words: int | None = 
         window only with at least min_words words (by default a whole window, so
         the rest is dropped). A boundary goes before the first word of a window
         and the opening marks before it (OPENING_MARKS); a straight quote or a
-        dash glued to the last word of the previous window or after a closing
-        mark closes that window (SYMMETRIC_MARKS). The windows are stripped of
-        whitespace and keep their punctuation; window=None gives the whole text.
+        dash glued to the last word of the previous window closes that window,
+        and so does one after a closing mark when whitespace follows it
+        (SYMMETRIC_MARKS), while a dash glued to the next word opens its line
+        of dialogue (cuatro.—¿Cinco?). The windows are stripped of whitespace
+        and keep their punctuation; window=None gives the whole text.
         The split_windows of the core with the words of iter_text_words and the
         Spanish marks
 

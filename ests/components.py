@@ -26,7 +26,6 @@ from spacy.tokens import Doc
 
 from .basic_stats import BasicStats
 from .cohesion_stats import CohesionStats
-from .constants import CORE_MESSAGES
 from .datasets.freq_dict import FreqDict
 from .diversity_stats import DiversityStats
 from .extractors import NUMBER_PATTERN
@@ -44,8 +43,6 @@ Language.component("ests_blank_lines", func=start_sents_after_blank_lines)
 
 class _Component(StatsComponent):
     """Component of esTS: extends the tokenizer of its pipeline with add_dash_rules"""
-
-    messages = CORE_MESSAGES
 
     def prepare(self, nlp: Language) -> None:
         add_dash_rules(nlp)

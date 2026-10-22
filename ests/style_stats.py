@@ -2,7 +2,7 @@ from collections.abc import Collection, Sequence
 from math import nan
 
 import anyts.style_stats
-from anyts.constants import NAUSEA_TOP_N
+from anyts.constants import MESSAGES, NAUSEA_TOP_N
 from anyts.style_stats import (
     calc_classic_nausea as calc_classic_nausea,
     calc_keyword_density as calc_keyword_density,
@@ -252,14 +252,9 @@ def noun_lemmas(doc: Doc) -> list[str]:
 def _doc_nouns(doc: Doc) -> list[tuple[str, str]]:
     """The tokens of a Doc tagged NOUN, in lower case, with their lemmas"""
     if not doc.has_annotation("POS"):
-        raise SourceError(
-            "The data source has no annotation of the parts of speech: "
-            "parse the text with a model instead of a blank pipeline"
-        )
+        raise SourceError(MESSAGES["no_pos"])
     if not doc.has_annotation("LEMMA"):
-        raise SourceError(
-            "The data source has no lemmas: parse the text with a pipeline that has a lemmatizer"
-        )
+        raise SourceError(MESSAGES["no_lemmas"])
     return [
         (token.text.lower(), token.lemma_)
         for token in iter_doc_tokens(doc)
