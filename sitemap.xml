@@ -162,13 +162,6 @@
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/lexical_stats/"/>
     </url>
     <url>
-        <loc>https://sergeyshk.github.io/esTS/stats/lexical_stats_funcs/</loc>
-        <lastmod>2026-10-22</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/lexical_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/lexical_stats_funcs/"/>
-    </url>
-    <url>
         <loc>https://sergeyshk.github.io/esTS/stats/morph_stats/</loc>
         <lastmod>2026-10-22</lastmod>
         <changefreq>daily</changefreq>
@@ -202,13 +195,6 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/style_stats/"/>
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/style_stats/"/>
-    </url>
-    <url>
-        <loc>https://sergeyshk.github.io/esTS/stats/style_stats_funcs/</loc>
-        <lastmod>2026-10-22</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/style_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/style_stats_funcs/"/>
     </url>
     <url>
         <loc>https://sergeyshk.github.io/esTS/stats/syntax_stats/</loc>
@@ -442,13 +428,6 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/lexical_stats/"/>
     </url>
     <url>
-        <loc>https://sergeyshk.github.io/esTS/es/stats/lexical_stats_funcs/</loc>
-        <lastmod>2026-10-22</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/lexical_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/lexical_stats_funcs/"/>
-    </url>
-    <url>
         <loc>https://sergeyshk.github.io/esTS/es/stats/morph_stats/</loc>
         <lastmod>2026-10-22</lastmod>
         <changefreq>daily</changefreq>
@@ -482,13 +461,6 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/style_stats/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/style_stats/"/>
-    </url>
-    <url>
-        <loc>https://sergeyshk.github.io/esTS/es/stats/style_stats_funcs/</loc>
-        <lastmod>2026-10-22</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/style_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/style_stats_funcs/"/>
     </url>
     <url>
         <loc>https://sergeyshk.github.io/esTS/es/stats/syntax_stats/</loc>
