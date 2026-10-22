@@ -16,7 +16,7 @@
         <link rel="prev" href="../style_stats/">
       
       
-        <link rel="next" href="../phon_stats_funcs/">
+        <link rel="next" href="../verse_stats/">
       
       
         
@@ -31,7 +31,7 @@
     
     
       
-        <title>Módulo de las métricas - esTS</title>
+        <title>Fonoestadística - esTS</title>
       
     
     
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Módulo de las métricas
+              Fonoestadística
             
           </span>
         </div>
@@ -1135,58 +1135,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_5_9" id="__nav_5_9_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Fonoestadística
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_9_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_5_9">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Fonoestadística
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-    
-  
-  
-  
     <li class="md-nav__item md-nav__item--active">
       
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
@@ -1202,7 +1150,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Fonoestadística
   
 
     
@@ -1220,7 +1168,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Fonoestadística
   
 
     
@@ -1246,17 +1194,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Descripción
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1279,22 +1216,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#metodos" class="md-nav__link">
+  <a href="#transcribe" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Métodos
+        Transcripción
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Métodos">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métricas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Métricas">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#get_stats" class="md-nav__link">
+  <a href="#sound_shares" class="md-nav__link">
     <span class="md-ellipsis">
       
-        get_stats
+        Proporciones de las clases de sonidos
       
     </span>
   </a>
@@ -1302,10 +1250,76 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#print_stats" class="md-nav__link">
+  <a href="#consonant_vowel_ratio" class="md-nav__link">
     <span class="md-ellipsis">
       
-        print_stats
+        Razón de las consonantes a las vocales
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consonant_clusters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grupos consonánticos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hiatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hiatos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cv_entropy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entropía de los patrones CV
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hardness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dureza
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repetition_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aliteración y asonancia
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#syllables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sílabas
       
     </span>
   </a>
@@ -1317,45 +1331,20 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#metodos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métodos
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../phon_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Funciones de las métricas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
       
     </li>
   
@@ -2071,17 +2060,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Descripción
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2104,22 +2082,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#metodos" class="md-nav__link">
+  <a href="#transcribe" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Métodos
+        Transcripción
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Métodos">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métricas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Métricas">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#get_stats" class="md-nav__link">
+  <a href="#sound_shares" class="md-nav__link">
     <span class="md-ellipsis">
       
-        get_stats
+        Proporciones de las clases de sonidos
       
     </span>
   </a>
@@ -2127,10 +2116,76 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#print_stats" class="md-nav__link">
+  <a href="#consonant_vowel_ratio" class="md-nav__link">
     <span class="md-ellipsis">
       
-        print_stats
+        Razón de las consonantes a las vocales
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#consonant_clusters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grupos consonánticos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hiatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hiatos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cv_entropy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entropía de los patrones CV
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hardness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dureza
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repetition_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Aliteración y asonancia
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#syllables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sílabas
       
     </span>
   </a>
@@ -2139,6 +2194,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metodos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métodos
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2163,234 +2229,52 @@
 
 
 <h1 id="fonoestadistica">Fonoestadística<a class="headerlink" href="#fonoestadistica" title="Permanent link">&para;</a></h1>
-<div class="admonition info">
-<p><strong>ests.phon_stats.PhonStats</strong></p>
-</div>
-<h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Módulo para calcular la fonoestadística de un texto: las proporciones de las clases de sonidos, los grupos consonánticos, los hiatos, la variedad de la forma fónica de las palabras, las sílabas abiertas y los índices de aliteración y de asonancia, que dicen si las repeticiones de un sonido se agrupan en palabras vecinas. La fuente de datos puede ser un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>; no hace falta ningún modelo entrenado.</p>
-<p>Las estadísticas se cuentan sobre los sonidos de la transcripción de las palabras (<a href="../phon_stats_funcs/#transcribe"><code>transcribe</code></a>), no sobre las letras: <code>ch</code>, <code>ll</code>, <code>rr</code> y <code>qu</code> son un sonido, la <code>h</code> y la <code>u</code> de <code>que</code> y <code>gui</code> ninguno, y la <code>x</code> dos. La pronunciación es la del estándar de España: yeísmo (<code>ll</code> e <code>y</code> son un solo sonido) y distinción (<code>c</code> ante <code>e</code> e <code>i</code> y <code>z</code> son θ, distinta de <code>s</code>).</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">PhonStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div>
+<!-- core: stats/phon_stats.md:PhonStats 408ded2 -->
+<p>Las estadísticas fonéticas de un texto: sus sonidos por clase, sus grupos, secuencias y repeticiones, y sus sílabas. Un sonido es por defecto una letra de una palabra, o un sonido de su transcripción cuando una biblioteca la da. La fuente de datos es un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>; las palabras se toman en minúsculas, y un extractor pasado explícitamente se aplica al texto de un <code>Doc</code>.</p>
+<p>Excepciones:</p>
+<ul>
+<li><code>SourceTypeError</code> - una fuente que no es ni una cadena ni un <code>Doc</code>, un extractor de otro tipo;</li>
+<li><code>SourceError</code> - una fuente sin palabras;</li>
+<li><code>ParameterError</code> - una ventana que no es un entero de al menos 2.</li>
+</ul>
+<p>Además de las excepciones anteriores, una cadena con un carácter sin forma UTF-8 lanza <code>SourceError</code> desde el tokenizador del español.</p>
+<p>La clase extiende el <code>PhonStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/phon_stats/">anyTS</a> con los sonidos del español. Los sonidos son los de la transcripción de las palabras (<a href="#transcribe"><code>transcribe</code></a>), no sus letras: <code>ch</code>, <code>ll</code>, <code>rr</code> y <code>qu</code> son un sonido, la <code>h</code> y la <code>u</code> de <code>que</code> y <code>gui</code> ninguno, y la <code>x</code> dos. La pronunciación es la del estándar de España: yeísmo (<code>ll</code> e <code>y</code> son un solo sonido) y distinción (<code>c</code> ante <code>e</code> e <code>i</code> y <code>z</code> son θ, distinta de <code>s</code>). Las clases de los sonidos son las constantes de <code>ests.constants</code> de la tabla siguiente. Las sílabas son las de <a href="../../syllables/#syllabify"><code>syllabify</code></a>, por las reglas ortográficas, y un hiato son dos vocales en dos sílabas vecinas de una palabra (<code>po-e-ta</code>, <code>dí-a</code>, <code>bú-ho</code>). Las palabras de una cadena las extrae el <a href="../../extractors/words/"><code>WordsExtractor</code></a> español; sin extractor, las palabras de un <code>Doc</code> salen de sus tokens. No hace falta ningún modelo entrenado. La tabla de <code>print_stats</code> lleva las descripciones inglesas del núcleo, <code>anyts.constants.PHON_STATS_DESC</code>.</p>
 <table>
 <thead>
 <tr>
 <th style="text-align: left;">Clase</th>
 <th style="text-align: left;">Sonidos</th>
+<th style="text-align: left;">Constante</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align: left;">Vocales</td>
 <td style="text-align: left;">a, e, i, o, u</td>
+<td style="text-align: left;"><code>VOWEL_SOUNDS</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">Sonantes</td>
 <td style="text-align: left;">m, n, ɲ (<code>ñ</code>), l, r (la vibrante simple y la múltiple son un sonido)</td>
+<td style="text-align: left;"><code>SONORANT_SOUNDS</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">Obstruyentes sonoras</td>
 <td style="text-align: left;">b (<code>b</code>, <code>v</code>), d, g, ʝ (<code>y</code>, <code>ll</code>)</td>
+<td style="text-align: left;"><code>VOICED_SOUNDS</code></td>
 </tr>
 <tr>
 <td style="text-align: left;">Obstruyentes sordas</td>
 <td style="text-align: left;">p, t, k (<code>c</code>, <code>qu</code>, <code>k</code>), f, θ (<code>c</code>, <code>z</code>), s, x (<code>j</code>, <code>g</code>), tʃ (<code>ch</code>)</td>
+<td style="text-align: left;"><code>VOICELESS_SOUNDS</code></td>
 </tr>
 </tbody>
 </table>
-<p>Las sílabas son las de <a href="../../syllables/"><code>syllabify</code></a>, por las reglas ortográficas, y un hiato son dos vocales en dos sílabas vecinas de una palabra (<code>po-e-ta</code>, <code>dí-a</code>, <code>bú-ho</code>). Un texto sin sonidos (números) tiene todas las proporciones y razones sin definir - <code>nan</code>, y un texto sin consonantes la proporción de los grupos pesados.</p>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Las estadísticas se calculan al crear el objeto <code>PhonStats</code>. Las estadísticas y las funciones que las calculan se describen en la <a href="../phon_stats_funcs/">sección</a> correspondiente.</p>
-</div>
-<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Valor por defecto</th>
-<th style="text-align: center;">Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>source</code></td>
-<td style="text-align: center;">str/Doc</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Fuente de datos (una cadena o un objeto Doc)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>words_extractor</code></td>
-<td style="text-align: center;">WordsExtractor</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Herramienta de extracción de palabras</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>window_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>3</code></td>
-<td style="text-align: center;">Ventana en palabras para la aliteración y la asonancia</td>
-</tr>
-</tbody>
-</table>
-<h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Atributo</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>words</code></td>
-<td style="text-align: center;">tuple[str]</td>
-<td style="text-align: center;">Tupla de las palabras extraídas en minúsculas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>syllables</code></td>
-<td style="text-align: center;">tuple[tuple[str]]</td>
-<td style="text-align: center;">Tupla de las sílabas de cada palabra</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>sounds</code></td>
-<td style="text-align: center;">tuple[tuple[str]]</td>
-<td style="text-align: center;">Tupla de los sonidos de cada palabra</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_vowels</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de vocales</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_consonants</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de consonantes</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_sonorants</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de consonantes sonantes</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_voiced</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de obstruyentes sonoras</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_voiceless</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de obstruyentes sordas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>c_clusters</code></td>
-<td style="text-align: center;">dict[int, int]</td>
-<td style="text-align: center;">Distribución de los grupos consonánticos por longitud</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>c_syllable_patterns</code></td>
-<td style="text-align: center;">dict[str, int]</td>
-<td style="text-align: center;">Distribución de las sílabas por patrón CV</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_vowels</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Proporción de vocales entre los sonidos</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_sonorants</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Proporción de consonantes sonantes entre los sonidos</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_voiced</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Proporción de obstruyentes sonoras entre los sonidos</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_voiceless</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Proporción de obstruyentes sordas entre los sonidos</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>consonant_vowel_ratio</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Razón de consonantes a vocales</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_heavy_clusters</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Proporción de los grupos de 3 consonantes o más</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_hiatus</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Hiatos por palabra</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>cv_entropy</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Entropía de los patrones CV de las palabras en bits</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>hardness</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Razón de las obstruyentes sordas a las vocales y las sonantes</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>alliteration</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Índice de aliteración</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>assonance</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Índice de asonancia</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_open_syllables</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Proporción de sílabas abiertas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>mean_syllable_len</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Longitud media de una sílaba en sonidos</td>
-</tr>
-</tbody>
-</table>
-<h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
-<h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
-<p>Devuelve un diccionario con la fonoestadística calculada.</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhonStats</span>
-
-<span class="n">ps</span> <span class="o">=</span> <span class="n">PhonStats</span><span class="p">(</span><span class="s2">"Tres tristes tigres tragaban trigo en un trigal"</span><span class="p">)</span>
-<span class="n">ps</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
-<span class="c1"># {'p_vowels': 0.35,</span>
-<span class="c1">#  'p_sonorants': 0.25,</span>
-<span class="c1">#  'p_voiced': 0.125,</span>
-<span class="c1">#  'p_voiceless': 0.275,</span>
-<span class="c1">#  'consonant_vowel_ratio': 1.8571428571428572,</span>
-<span class="c1">#  'p_heavy_clusters': 0.0,</span>
-<span class="c1">#  'p_hiatus': 0.0,</span>
-<span class="c1">#  'cv_entropy': 2.75,</span>
-<span class="c1">#  'hardness': 0.4583333333333333,</span>
-<span class="c1">#  'alliteration': 0.9333333333333333,</span>
-<span class="c1">#  'assonance': 0.7526881720430108,</span>
-<span class="c1">#  'p_open_syllables': 0.42857142857142855,</span>
-<span class="c1">#  'mean_syllable_len': 2.857142857142857}</span>
-
-<span class="n">ps</span><span class="o">.</span><span class="n">syllables</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">ps</span><span class="o">.</span><span class="n">sounds</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
-<span class="c1"># ((('tres',), ('tris', 'tes'), ('ti', 'gres')),</span>
-<span class="c1">#  (('t', 'r', 'e', 's'), ('t', 'r', 'i', 's', 't', 'e', 's')))</span>
-</code></pre></div>
-</div>
-<h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
-<p>Muestra una tabla con la fonoestadística calculada.</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<p><em>Código</em>:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhonStats</span>
 
 <span class="c1"># La primera estrofa de Sonatina de Rubén Darío (Prosas profanas, 1896)</span>
@@ -2402,27 +2286,693 @@
     <span class="s2">"está mudo el teclado de su clave sonoro;</span><span class="se">\n</span><span class="s2">"</span>
     <span class="s2">"y en un vaso olvidada se desmaya una flor."</span>
 <span class="p">)</span>
-<span class="n">PhonStats</span><span class="p">(</span><span class="n">sonatina</span><span class="p">)</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
-</code></pre></div>
-<p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="w">                  </span>Statistic<span class="w">                   </span><span class="p">|</span><span class="w">  </span>Value
---------------------------------------------------------
-Share<span class="w"> </span>of<span class="w"> </span>vowels<span class="w">                               </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.46
-Share<span class="w"> </span>of<span class="w"> </span>sonorant<span class="w"> </span>consonants<span class="w">                  </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.19
-Share<span class="w"> </span>of<span class="w"> </span>voiced<span class="w"> </span>obstruents<span class="w">                    </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.10
-Share<span class="w"> </span>of<span class="w"> </span>voiceless<span class="w"> </span>obstruents<span class="w">                 </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.25
-Ratio<span class="w"> </span>of<span class="w"> </span>consonants<span class="w"> </span>to<span class="w"> </span>vowels<span class="w">                 </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.19
-Share<span class="w"> </span>of<span class="w"> </span>clusters<span class="w"> </span>of<span class="w"> </span><span class="m">3</span><span class="w"> </span>consonants<span class="w"> </span>or<span class="w"> </span>more<span class="w">     </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.01
-Hiatuses<span class="w"> </span>per<span class="w"> </span>word<span class="w">                             </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
-Entropy<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>CV<span class="w"> </span>patterns<span class="w"> </span>of<span class="w"> </span>words<span class="w"> </span><span class="o">(</span>bits<span class="o">)</span><span class="w">    </span><span class="p">|</span><span class="w">   </span><span class="m">3</span>.55
-Hardness<span class="w">                                      </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.39
-Alliteration<span class="w"> </span>index<span class="w">                            </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.87
-Assonance<span class="w"> </span>index<span class="w">                               </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.87
-Share<span class="w"> </span>of<span class="w"> </span>open<span class="w"> </span>syllables<span class="w">                       </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.74
-Mean<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>syllable<span class="w"> </span><span class="o">(</span>sounds<span class="o">)</span><span class="w">            </span><span class="p">|</span><span class="w">   </span><span class="m">2</span>.19
+<span class="n">ps</span> <span class="o">=</span> <span class="n">PhonStats</span><span class="p">(</span><span class="n">sonatina</span><span class="p">)</span>
+<span class="n">ps</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
 </code></pre></div>
 </div>
-<p>Con las palabras en orden aleatorio los índices valen 1 de media: los 150 libros del <a href="../../datasets/spanishliterature/">corpus de literatura</a> con sus palabras barajadas dan de 0,98 a 1,01. En los libros tal como están escritos el índice de aliteración queda algo por debajo de 1 tanto en verso como en prosa, de 0,90 a 0,99 con una mediana de 0,95, y el de asonancia cerca de 1, de 0,99 a 1,01: en un libro entero las palabras vecinas comparten una consonante algo menos a menudo que al azar. Los 4259 <a href="../../datasets/spanishsonnets/">sonetos</a> dan medianas de 0,92 y 0,98, con gran dispersión en textos tan cortos (de 0,59 a 1,30 la aliteración). Las repeticiones de un poema son locales, y los lugares donde se agrupan los muestra la capa <code>alliteration</code> del <a href="../../visualizers/highlight/">resaltado</a>.</p>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>                 Statistic                 |  Value
+------------------------------------------------------
+Share of vowels                            |   0.46
+Share of sonorant consonants               |   0.19
+Share of voiced obstruents                 |   0.10
+Share of voiceless obstruents              |   0.25
+Ratio of consonants to vowels              |   1.19
+Share of clusters of 3 consonants or more  |   0.01
+Hiatuses per word                          |   0.00
+Entropy of the CV patterns of words (bits) |   3.55
+Hardness                                   |   0.39
+Alliteration index                         |   0.87
+Assonance index                            |   0.87
+Share of open syllables                    |   0.74
+Mean length of a syllable (sounds)         |   2.19
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<!-- core: stats/phon_stats.md:PhonStats-parameters b90ae7b -->
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>source</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Fuente de datos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>words_extractor</code></td>
+<td style="text-align: left;"><code>WordsExtractor</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Herramienta de extracción de palabras; se usa también con un <code>Doc</code>, sobre su texto</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>window_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>3</code></td>
+<td style="text-align: left;">Ventana en palabras de la aliteración y la asonancia (<code>PHON_WINDOW_LEN</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><code>PHON_WINDOW_LEN</code> es una constante de <code>anyts.constants</code>.</p>
+<!-- core: stats/phon_stats.md:PhonStats-check_params d87e0c6 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">check_params</span><span class="p">(</span><span class="n">window_len</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">MESSAGES</span><span class="p">)</span>
+</code></pre></div>
+<p>Comprueba la ventana de la aliteración y la asonancia: una que no es un entero de al menos 2 lanza <code>ParameterError</code>.</p>
+<h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
+<!-- core: stats/phon_stats.md:PhonStats-attributes a595894 -->
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Atributo</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>words</code></td>
+<td style="text-align: left;"><code>tuple[str]</code></td>
+<td style="text-align: left;">Palabras en minúsculas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>window_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Ventana de la aliteración y la asonancia</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>syllables</code>, <code>sounds</code></td>
+<td style="text-align: left;"><code>tuple</code></td>
+<td style="text-align: left;">Sílabas (<code>syllabify</code>) y sonidos (<code>transcribe</code>) de cada palabra</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_vowels</code>, <code>n_sonorants</code>, <code>n_voiced</code>, <code>n_voiceless</code>, <code>n_consonants</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Números de los sonidos por clase</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>c_clusters</code></td>
+<td style="text-align: left;"><code>dict[int, int]</code></td>
+<td style="text-align: left;">Número de los grupos consonánticos por longitud (<code>consonant_clusters</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>c_syllable_patterns</code></td>
+<td style="text-align: left;"><code>dict[str, int]</code></td>
+<td style="text-align: left;">Número de las sílabas por patrón CV</td>
+</tr>
+</tbody>
+</table>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Código</label><label for="__tabbed_2_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">ps</span><span class="o">.</span><span class="n">syllables</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">ps</span><span class="o">.</span><span class="n">sounds</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">ps</span><span class="o">.</span><span class="n">c_clusters</span>
+<span class="n">ps</span><span class="o">.</span><span class="n">c_syllable_patterns</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>(('la',), ('prin', 'ce', 'sa'), ('es', 'tá'), ('tris', 'te'))
+(('l', 'a'), ('p', 'r', 'i', 'n', 'θ', 'e', 's', 'a'))
+{1: 66, 2: 21, 3: 1}
+{'CCV': 4, 'CCVC': 5, 'CV': 60, 'CVC': 9, 'V': 5, 'VC': 10}
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="transcribe">Transcripción<a class="headerlink" href="#transcribe" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">transcribe</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+</code></pre></div>
+<p>Transcribe una palabra en sus sonidos, los que cuenta <code>PhonStats</code>. La palabra se divide en sílabas (<a href="../../syllables/#syllabify"><code>syllabify</code></a>) y cada sílaba se lee por las reglas de la ortografía española; los caracteres que no son letras del español (cifras, guiones) se omiten.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Grafía</th>
+<th style="text-align: left;">Sonido</th>
+<th style="text-align: left;">Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>a</code>, <code>á</code>; <code>e</code>, <code>é</code>; <code>i</code>, <code>í</code>; <code>o</code>, <code>ó</code>; <code>u</code>, <code>ú</code>, <code>ü</code></td>
+<td style="text-align: left;">a, e, i, o, u</td>
+<td style="text-align: left;"><code>canción</code> - k a n θ i o n</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>h</code></td>
+<td style="text-align: left;">ninguno; <code>hi</code> ante vocal al principio de una sílaba es ʝ</td>
+<td style="text-align: left;"><code>ahora</code> - a o r a, <code>hielo</code> - ʝ e l o</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ch</code></td>
+<td style="text-align: left;">tʃ</td>
+<td style="text-align: left;"><code>hechizo</code> - e tʃ i θ o</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>c</code> ante <code>e</code>, <code>i</code>; <code>z</code></td>
+<td style="text-align: left;">θ</td>
+<td style="text-align: left;"><code>cena</code> - θ e n a</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>c</code> en los demás casos, <code>qu</code> ante <code>e</code>, <code>i</code>, <code>k</code></td>
+<td style="text-align: left;">k</td>
+<td style="text-align: left;"><code>queso</code> - k e s o</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>g</code> ante <code>e</code>, <code>i</code>; <code>j</code></td>
+<td style="text-align: left;">x</td>
+<td style="text-align: left;"><code>gente</code> - x e n t e</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>g</code> en los demás casos, <code>gu</code> ante <code>e</code>, <code>i</code></td>
+<td style="text-align: left;">g</td>
+<td style="text-align: left;"><code>guerra</code> - g e r a</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ll</code>; <code>y</code> ante vocal</td>
+<td style="text-align: left;">ʝ</td>
+<td style="text-align: left;"><code>calle</code> - k a ʝ e</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>y</code> al final de una sílaba</td>
+<td style="text-align: left;">i</td>
+<td style="text-align: left;"><code>hoy</code> - o i</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>r</code>, <code>rr</code></td>
+<td style="text-align: left;">r</td>
+<td style="text-align: left;"><code>perro</code> - p e r o</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ñ</code></td>
+<td style="text-align: left;">ɲ</td>
+<td style="text-align: left;"><code>niño</code> - n i ɲ o</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>v</code></td>
+<td style="text-align: left;">b</td>
+<td style="text-align: left;"><code>vaca</code> - b a k a</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>x</code>; <code>x</code> al principio de una palabra</td>
+<td style="text-align: left;">k s; s</td>
+<td style="text-align: left;"><code>examen</code> - e k s a m e n, <code>xilófono</code> - s i l o f o n o</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>w</code></td>
+<td style="text-align: left;">u</td>
+<td style="text-align: left;"><code>whisky</code> - u i s k i</td>
+</tr>
+</tbody>
+</table>
+<p>La pronunciación es la del estándar de España, con yeísmo y distinción. Una regla lee la grafía de una palabra, no su historia: la <code>x</code> de <code>México</code> es k s, como en <code>examen</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabra</td>
+</tr>
+</tbody>
+</table>
+<p>Excepciones:</p>
+<ul>
+<li><code>SourceTypeError</code> - una palabra que no es una cadena.</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.phon_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">transcribe</span>
+
+<span class="n">transcribe</span><span class="p">(</span><span class="s2">"hechizo"</span><span class="p">)</span>
+<span class="n">transcribe</span><span class="p">(</span><span class="s2">"guerrilla"</span><span class="p">)</span>
+<span class="n">transcribe</span><span class="p">(</span><span class="s2">"examen"</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>('e', 'tʃ', 'i', 'θ', 'o')
+('g', 'e', 'r', 'i', 'ʝ', 'a')
+('e', 'k', 's', 'a', 'm', 'e', 'n')
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="metricas">Métricas<a class="headerlink" href="#metricas" title="Permanent link">&para;</a></h2>
+<!-- core: stats/phon_stats.md:PhonStats-metrics 83c97d6 -->
+<p>Cada métrica es un atributo del objeto, calculado al crearlo, y <code>get_stats</code> las da todas.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Métrica</th>
+<th style="text-align: left;">Qué mide</th>
+<th style="text-align: left;">Rango</th>
+<th style="text-align: left;">Un valor mayor indica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><a href="#sound_shares"><code>p_vowels</code></a></td>
+<td style="text-align: left;">Proporción de las vocales entre los sonidos de las clases</td>
+<td style="text-align: left;">0-1, <code>nan</code> sin sonidos</td>
+<td style="text-align: left;">Un texto más vocálico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#sound_shares"><code>p_sonorants</code></a></td>
+<td style="text-align: left;">Proporción de las sonantes entre los sonidos de las clases</td>
+<td style="text-align: left;">0-1, <code>nan</code> sin sonidos</td>
+<td style="text-align: left;">Un texto más sonoro</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#sound_shares"><code>p_voiced</code></a></td>
+<td style="text-align: left;">Proporción de las obstruyentes sonoras entre los sonidos de las clases</td>
+<td style="text-align: left;">0-1, <code>nan</code> sin sonidos</td>
+<td style="text-align: left;">Más obstruyentes sonoras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#sound_shares"><code>p_voiceless</code></a></td>
+<td style="text-align: left;">Proporción de las obstruyentes sordas entre los sonidos de las clases</td>
+<td style="text-align: left;">0-1, <code>nan</code> sin sonidos</td>
+<td style="text-align: left;">Más obstruyentes sordas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#consonant_vowel_ratio"><code>consonant_vowel_ratio</code></a></td>
+<td style="text-align: left;">Razón de las consonantes a las vocales</td>
+<td style="text-align: left;">0 o más, <code>nan</code> sin vocales</td>
+<td style="text-align: left;">Consonantes más densas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#consonant_clusters"><code>p_heavy_clusters</code></a></td>
+<td style="text-align: left;">Proporción de los grupos de tres consonantes o más</td>
+<td style="text-align: left;">0-1, <code>nan</code> sin grupos</td>
+<td style="text-align: left;">Grupos más pesados</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#hiatus"><code>p_hiatus</code></a></td>
+<td style="text-align: left;">Hiatos de <code>word_hiatus</code> por palabra</td>
+<td style="text-align: left;">0 o más, <code>nan</code> sin sonidos</td>
+<td style="text-align: left;">Más vocales seguidas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#cv_entropy"><code>cv_entropy</code></a></td>
+<td style="text-align: left;">Entropía de Shannon de los patrones CV de las palabras, en bits</td>
+<td style="text-align: left;">0 o más, <code>nan</code> sin sonidos</td>
+<td style="text-align: left;">Formas de las palabras más variadas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#hardness"><code>hardness</code></a></td>
+<td style="text-align: left;">Obstruyentes sordas frente a las vocales y las sonantes</td>
+<td style="text-align: left;">0 o más, <code>nan</code> sin vocales ni sonantes</td>
+<td style="text-align: left;">Un sonido más duro</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#repetition_index"><code>alliteration</code></a></td>
+<td style="text-align: left;">Índice de repetición de las consonantes en ventanas de <code>window_len</code> palabras</td>
+<td style="text-align: left;">0 o más, <code>nan</code> para un texto más corto que la ventana o sin ninguna consonante que compartan dos palabras</td>
+<td style="text-align: left;">Consonantes repetidas más cerca</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#repetition_index"><code>assonance</code></a></td>
+<td style="text-align: left;">Índice de repetición de las vocales en ventanas de <code>window_len</code> palabras</td>
+<td style="text-align: left;">0 o más, <code>nan</code> para un texto más corto que la ventana o sin ninguna vocal que compartan dos palabras</td>
+<td style="text-align: left;">Vocales repetidas más cerca</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#syllables"><code>p_open_syllables</code></a></td>
+<td style="text-align: left;">Proporción de las sílabas que terminan en vocal</td>
+<td style="text-align: left;">0-1, <code>nan</code> sin sílabas</td>
+<td style="text-align: left;">Más sílabas abiertas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#syllables"><code>mean_syllable_len</code></a></td>
+<td style="text-align: left;">Longitud media de una sílaba en sonidos</td>
+<td style="text-align: left;">1 o más, <code>nan</code> sin sílabas</td>
+<td style="text-align: left;">Sílabas más largas</td>
+</tr>
+</tbody>
+</table>
+<p>Las funciones de las tarjetas se importan de <code>ests.phon_stats</code>; reciben las palabras como cadenas y cuentan sobre los sonidos de su transcripción.</p>
+<div class="metric-card">
+<h3 id="sound_shares">Proporciones de las clases de sonidos<a class="headerlink" href="#sound_shares" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>p_vowels</code> · <code>p_sonorants</code> · <code>p_voiced</code> · <code>p_voiceless</code></p>
+<!-- core: stats/phon_stats.md:PhonStats-sound_shares 4a3e68b -->
+<p>La proporción de los sonidos de cada clase - las vocales, las sonantes y las obstruyentes sonoras y sordas - entre los sonidos de todas ellas; un sonido de <code>skipped</code> o de ninguna clase (una cifra, una letra de otra escritura) no cuenta en ninguna.</p>
+<div class="arithmatex">\[
+\frac{\textrm{Número de sonidos de la clase}}{\textrm{Número de vocales y consonantes}}
+\]</div>
+</div>
+<div class="metric-card">
+<h3 id="consonant_vowel_ratio">Razón de las consonantes a las vocales<a class="headerlink" href="#consonant_vowel_ratio" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>consonant_vowel_ratio</code></p>
+<!-- core: stats/phon_stats.md:PhonStats-consonant_vowel_ratio 7e4ca83 -->
+<p>El número de las consonantes <code>n_consonants</code> frente al número de las vocales <code>n_vowels</code>.</p>
+<div class="arithmatex">\[
+\frac{\textrm{Número de consonantes}}{\textrm{Número de vocales}}
+\]</div>
+</div>
+<div class="metric-card">
+<h3 id="consonant_clusters">Grupos consonánticos<a class="headerlink" href="#consonant_clusters" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>p_heavy_clusters</code> · <code>c_clusters</code></p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_consonant_clusters</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La distribución de los grupos consonánticos de las palabras por longitud, el atributo <code>c_clusters</code>. Un grupo es una secuencia de sonidos consonánticos dentro de una palabra, a través de las sílabas, incluida una consonante suelta entre vocales o en el borde de una palabra: <code>instrumento</code> tiene los grupos n s t r (4), m (1) y n t (2). Los dígrafos son un sonido (<code>calle</code>, <code>perro</code>, <code>chico</code>), y la <code>x</code> son dos (<code>extra</code> - k s t r). <code>p_heavy_clusters</code> es la proporción de los grupos pesados:</p>
+<div class="arithmatex">\[
+\frac{\textrm{Número de grupos de 3 consonantes o más}}{\textrm{Número de grupos}}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+<p>Excepciones:</p>
+<ul>
+<li><code>SourceTypeError</code> - unas palabras que no son una lista de cadenas.</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.phon_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_consonant_clusters</span>
+
+<span class="n">calc_consonant_clusters</span><span class="p">([</span><span class="s2">"instrumento"</span><span class="p">,</span> <span class="s2">"calle"</span><span class="p">])</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>{1: 3, 2: 1, 4: 1}
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="hiatus">Hiatos<a class="headerlink" href="#hiatus" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>p_hiatus</code></p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_hiatus</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>El número de hiatos: dos vocales seguidas en dos sílabas de una palabra, tal como las divide <a href="../../syllables/#syllabify"><code>syllabify</code></a> - <code>po-e-ta</code>, <code>dí-a</code>, <code>le-er</code>, <code>a-é-re-o</code> (dos). Una <code>h</code> muda entre las vocales no rompe el hiato (<code>bú-ho</code>, <code>a-ho-ra</code>), y las vocales de un diptongo son una sílaba y no forman hiato (<code>cie-lo</code>, <code>ciu-dad</code>). <code>p_hiatus</code> es el número de hiatos del texto por palabra.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+<p>Excepciones:</p>
+<ul>
+<li><code>SourceTypeError</code> - unas palabras que no son una lista de cadenas.</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.phon_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_hiatus</span>
+
+<span class="n">calc_hiatus</span><span class="p">([</span><span class="s2">"poeta"</span><span class="p">,</span> <span class="s2">"búho"</span><span class="p">,</span> <span class="s2">"cielo"</span><span class="p">,</span> <span class="s2">"aéreo"</span><span class="p">])</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>4
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="cv_entropy">Entropía de los patrones CV<a class="headerlink" href="#cv_entropy" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>cv_entropy</code></p>
+<!-- core: stats/phon_stats.md:PhonStats-cv_entropy 8ca17ec -->
+<p>La entropía de Shannon de los patrones CV de las palabras (<code>cv_pattern</code>), en bits, donde <span class="arithmatex">\(P(p)\)</span> es la proporción de las palabras con el patrón <span class="arithmatex">\(p\)</span> entre las palabras que tienen uno.</p>
+<div class="arithmatex">\[
+-\sum_{p} P(p) \log_2 P(p)
+\]</div>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_cv_entropy</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La entropía de los patrones CV de una lista de palabras: cuanto más alta, más variada la forma fónica de las palabras del texto. Las palabras sin sonidos (números) se omiten; <code>nan</code> para un texto sin otras palabras.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">cv_pattern</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+</code></pre></div>
+<p>El patrón CV de una palabra o de una sílaba: las vocales se escriben V y las consonantes C, sobre los sonidos de la transcripción - <code>queso</code> es CVCV, <code>hora</code> VCV, <code>examen</code> VCCVCVC. Una sílaba se lee como una palabra por sí sola, así que su <code>x</code> inicial es s, como al comienzo de una palabra: <code>xi</code> es CV, mientras que la sílaba <code>xi</code> de <code>México</code> cuenta como CCV en <code>PhonStats</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras (<code>calc_cv_entropy</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabra o sílaba (<code>cv_pattern</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Excepciones:</p>
+<ul>
+<li><code>SourceTypeError</code> - unas palabras que no son una lista de cadenas (<code>calc_cv_entropy</code>), una palabra que no es una cadena (<code>cv_pattern</code>).</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.phon_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_cv_entropy</span><span class="p">,</span> <span class="n">cv_pattern</span>
+
+<span class="n">cv_pattern</span><span class="p">(</span><span class="s2">"queso"</span><span class="p">),</span> <span class="n">cv_pattern</span><span class="p">(</span><span class="s2">"examen"</span><span class="p">)</span>
+<span class="n">calc_cv_entropy</span><span class="p">([</span><span class="s2">"poeta"</span><span class="p">,</span> <span class="s2">"búho"</span><span class="p">,</span> <span class="s2">"cielo"</span><span class="p">,</span> <span class="s2">"aéreo"</span><span class="p">])</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>('CVCV', 'VCCVCVC')
+1.5
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="hardness">Dureza<a class="headerlink" href="#hardness" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>hardness</code></p>
+<!-- core: stats/phon_stats.md:PhonStats-hardness 7602f72 -->
+<p>El número de las obstruyentes sordas frente al número de las vocales y las sonantes.</p>
+<div class="arithmatex">\[
+\frac{\textrm{Número de obstruyentes sordas}}{\textrm{Número de vocales} + \textrm{Número de sonantes}}
+\]</div>
+<p>Un texto de p, t, k, s y θ suena más duro que un texto de vocales y de m, n, l, r.</p>
+</div>
+<div class="metric-card">
+<h3 id="repetition_index">Aliteración y asonancia<a class="headerlink" href="#repetition_index" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>alliteration</code> · <code>assonance</code></p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_alliteration</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_assonance</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div>
+<p>Los índices de aliteración y de asonancia de una lista de palabras: el índice de repetición <code>calc_repetition_index</code> de <code>anyts.phon_stats</code> sobre los sonidos consonánticos y sobre los vocálicos de la transcripción de las palabras. Cuentan los sonidos, no las letras: <code>casa</code> y <code>queso</code> repiten k, <code>cena</code> y <code>casa</code> no; cuentan todas las vocales, tónicas o no.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>window_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>3</code></td>
+<td style="text-align: left;">Ventana en palabras (<code>PHON_WINDOW_LEN</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Excepciones:</p>
+<ul>
+<li><code>SourceTypeError</code> - unas palabras que no son una lista de cadenas;</li>
+<li><code>ParameterError</code> - una ventana que no es un entero de al menos 2.</li>
+</ul>
+<!-- core: stats/phon_stats.md:calc_repetition_index ea6ed82 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_repetition_index</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">window_len</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>El índice de repetición: el número de ventanas de <code>window_len</code> palabras vecinas donde un rasgo (una letra o un sonido) aparece en dos palabras o más, sumado sobre los rasgos, dividido por el número esperado si las palabras estuvieran en orden aleatorio. Una ventana de palabras barajadas es una muestra sin reposición, así que, para un rasgo presente en <span class="arithmatex">\(K\)</span> de las <span class="arithmatex">\(N\)</span> palabras, una ventana de <span class="arithmatex">\(w\)</span> palabras lo contiene en dos palabras o más con la probabilidad hipergeométrica</p>
+<div class="arithmatex">\[
+P = 1 - \frac{\binom{N-K}{w} + K \binom{N-K}{w-1}}{\binom{N}{w}}
+\]</div>
+<p>y el número esperado es la suma de estas probabilidades sobre los rasgos multiplicada por las <span class="arithmatex">\(N - w + 1\)</span> ventanas. Como la esperanza sale del propio texto, el índice muestra si las repeticiones se agrupan en palabras vecinas, no cuán frecuente es un rasgo: vale 1 de media sobre los órdenes de las palabras y queda bastante por encima de 1 cuando las repeticiones se acercan más que al azar. Una palabra cuenta un rasgo una vez; el índice es <code>nan</code> para un texto más corto que la ventana o sin ningún rasgo que compartan dos palabras.</p>
+<!-- core: stats/phon_stats.md:calc_repetition_index-parameters 9e9f02b -->
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>words</code></td>
+<td style="text-align: left;"><code>list[str]</code> / <code>list[list[str]]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Rasgos de cada palabra: una cadena de sus letras o una colección de sus sonidos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>window_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Ventana en palabras, al menos 2</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>features</code></td>
+<td style="text-align: left;"><code>Collection[str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Rasgos que se cuentan, todos por defecto</td>
+</tr>
+</tbody>
+</table>
+<p>Unas palabras que no son una lista de cadenas o de colecciones de cadenas y unos rasgos que no son una colección de cadenas lanzan <code>SourceTypeError</code>, y un <code>window_len</code> que no es un entero de al menos 2, <code>ParameterError</code>.</p>
+<p>Con las palabras en orden aleatorio los índices valen 1 de media: los 150 libros del <a href="../../datasets/spanishliterature/">corpus de literatura</a> con sus palabras barajadas dan de 0,98 a 1,02. En los libros tal como están escritos el índice de aliteración queda algo por debajo de 1 tanto en verso como en prosa, de 0,90 a 0,99 con una mediana de 0,95, y el de asonancia cerca de 1, de 0,99 a 1,01: en un libro entero las palabras vecinas comparten una consonante algo menos a menudo que al azar. Los 4259 <a href="../../datasets/spanishsonnets/">sonetos</a> dan medianas de 0,92 y 0,98, con gran dispersión en textos tan cortos (de 0,59 a 1,30 la aliteración). Las repeticiones de un poema son locales, y los lugares donde se agrupan los muestra la capa <code>alliteration</code> del <a href="../../visualizers/highlight/">resaltado</a>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.phon_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_alliteration</span><span class="p">,</span> <span class="n">calc_assonance</span>
+
+<span class="c1"># Garcilaso de la Vega, Égloga III</span>
+<span class="n">words</span> <span class="o">=</span> <span class="s2">"en el silencio sólo se escuchaba un susurro de abejas que sonaba"</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="n">calc_alliteration</span><span class="p">(</span><span class="n">words</span><span class="p">),</span> <span class="n">calc_assonance</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>(1.0232558139534884, 1.115942028985507)
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="syllables">Sílabas<a class="headerlink" href="#syllables" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>p_open_syllables</code> · <code>mean_syllable_len</code></p>
+<!-- core: stats/phon_stats.md:PhonStats-syllables 005a7e8 -->
+<p>Las sílabas son los sonidos de cada sílaba de una palabra según <code>syllable_sounds</code>; una sílaba sin ningún sonido de las clases (un número) no es una sílaba, tampoco en <code>c_syllable_patterns</code>. Una sílaba abierta termina en vocal según su patrón CV (<code>cv_pattern</code>), y la longitud de una sílaba es el número de sus sonidos.</p>
+<p>Los sonidos de una sílaba son su transcripción, y la primera sílaba de una palabra se lee como el comienzo de la palabra: la <code>xi</code> de <code>xilófono</code> es s i, la <code>xi</code> de <code>México</code>, k s i.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_open_syllable</span><span class="p">(</span><span class="n">syllable</span><span class="p">)</span>
+</code></pre></div>
+<p>Comprueba si una sílaba es abierta: una sílaba abierta termina en un sonido vocálico - <code>ca</code>, <code>que</code>, <code>hoy</code> (la <code>y</code> final es la vocal i); <code>car</code> y <code>pan</code> son cerradas. La sílaba se lee como una palabra por sí sola.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>syllable</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Sílaba</td>
+</tr>
+</tbody>
+</table>
+<p>Excepciones:</p>
+<ul>
+<li><code>SourceTypeError</code> - una sílaba que no es una cadena.</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Código</label><label for="__tabbed_8_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.phon_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_open_syllable</span>
+
+<span class="n">is_open_syllable</span><span class="p">(</span><span class="s2">"hoy"</span><span class="p">),</span> <span class="n">is_open_syllable</span><span class="p">(</span><span class="s2">"car"</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>(True, False)
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
+<p>Los métodos <code>get_stats</code>, <code>to_dataframe</code>, <code>print_stats</code> y <code>describe</code> son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de estadísticas</a> del núcleo anyTS; la fonoestadística no tiene escalas, así que <code>describe</code> da <code>None</code> para las estadísticas de <code>get_stats</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Código</label><label for="__tabbed_9_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhonStats</span>
+
+<span class="n">PhonStats</span><span class="p">(</span><span class="s2">"Tres tristes tigres tragaban trigo en un trigal"</span><span class="p">)</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>{'p_vowels': 0.35,
+ 'p_sonorants': 0.25,
+ 'p_voiced': 0.125,
+ 'p_voiceless': 0.275,
+ 'consonant_vowel_ratio': 1.8571428571428572,
+ 'p_heavy_clusters': 0.0,
+ 'p_hiatus': 0.0,
+ 'cv_entropy': 2.75,
+ 'hardness': 0.4583333333333333,
+ 'alliteration': 0.9333333333333333,
+ 'assonance': 0.7526881720430108,
+ 'p_open_syllables': 0.42857142857142855,
+ 'mean_syllable_len': 2.857142857142857}
+</code></pre></div>
+</div>
+</div>
+</div>
 
 
 

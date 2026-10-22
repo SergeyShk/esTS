@@ -176,13 +176,6 @@
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/phon_stats/"/>
     </url>
     <url>
-        <loc>https://sergeyshk.github.io/esTS/stats/phon_stats_funcs/</loc>
-        <lastmod>2026-10-22</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/phon_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/phon_stats_funcs/"/>
-    </url>
-    <url>
         <loc>https://sergeyshk.github.io/esTS/stats/readability_stats/</loc>
         <lastmod>2026-10-22</lastmod>
         <changefreq>daily</changefreq>
@@ -440,13 +433,6 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/phon_stats/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/phon_stats/"/>
-    </url>
-    <url>
-        <loc>https://sergeyshk.github.io/esTS/es/stats/phon_stats_funcs/</loc>
-        <lastmod>2026-10-22</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/phon_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/phon_stats_funcs/"/>
     </url>
     <url>
         <loc>https://sergeyshk.github.io/esTS/es/stats/readability_stats/</loc>

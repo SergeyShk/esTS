@@ -1082,17 +1082,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Description
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1104,10 +1093,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#complexity" class="md-nav__link">
+  <a href="#attributes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Measures of complexity
+        Attributes
       
     </span>
   </a>
@@ -1115,24 +1104,184 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metrics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dependency_distances" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency distance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tree_depth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree depth
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#leaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Leaves and subtrees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#valency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Valency of the finite verbs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coordination_chains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coordination chains
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clauses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clauses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subordinate_clauses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subordinate clauses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noun_modifiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modifiers of a noun
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#de_chains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chains of de
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#participle_clauses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Participial clauses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gerund_clauses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gerund clauses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#se" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sentences with se
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#constructions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Constructions of the administrative style
+        Infinitives, negations and split predicates
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#counts" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#noun_verb_ratio" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Counts
+        Ratio of the nouns to the verbs
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1145,33 +1294,71 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Methods">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#get_stats" class="md-nav__link">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get_words" class="md-nav__link">
     <span class="md-ellipsis">
       
-        get_stats
+        Words of a sequence
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#print_stats" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#base_dep" class="md-nav__link">
     <span class="md-ellipsis">
       
-        print_stats
+        Base relation
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#get_children" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependent words
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verb-forms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verb forms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is_predicate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Predicate of a clause
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_modifier_chains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chains of modifiers
+      
+    </span>
+  </a>
   
 </li>
       
@@ -1274,56 +1461,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_9" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_9" id="__nav_5_9_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Phonostatistics
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_9">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Phonostatistics
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../phon_stats/" class="md-nav__link">
         
@@ -1332,7 +1469,7 @@
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Phonostatistics
   
 
     
@@ -1341,42 +1478,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../phon_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Metric functions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -2091,17 +2192,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Description
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2113,10 +2203,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#complexity" class="md-nav__link">
+  <a href="#attributes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Measures of complexity
+        Attributes
       
     </span>
   </a>
@@ -2124,24 +2214,184 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Metrics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dependency_distances" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependency distance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tree_depth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tree depth
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#leaves" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Leaves and subtrees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#valency" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Valency of the finite verbs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coordination_chains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coordination chains
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clauses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clauses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subordinate_clauses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subordinate clauses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#noun_modifiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modifiers of a noun
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#de_chains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chains of de
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#participle_clauses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Participial clauses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gerund_clauses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gerund clauses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#passive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Passive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#se" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sentences with se
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#constructions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Constructions of the administrative style
+        Infinitives, negations and split predicates
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#counts" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#noun_verb_ratio" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Counts
+        Ratio of the nouns to the verbs
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2154,33 +2404,71 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Methods">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#get_stats" class="md-nav__link">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#get_words" class="md-nav__link">
     <span class="md-ellipsis">
       
-        get_stats
+        Words of a sequence
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#print_stats" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#base_dep" class="md-nav__link">
     <span class="md-ellipsis">
       
-        print_stats
+        Base relation
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#get_children" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependent words
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verb-forms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verb forms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is_predicate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Predicate of a clause
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calc_modifier_chains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Chains of modifiers
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2205,461 +2493,1080 @@
 
 
 <h1 id="syntactic-statistics">Syntactic statistics<a class="headerlink" href="#syntactic-statistics" title="Permanent link">&para;</a></h1>
-<div class="admonition info">
-<p><strong>ests.syntax_stats.SyntaxStats</strong></p>
-</div>
-<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A module for computing the syntactic statistics of a text on the dependency tree of <a href="https://universaldependencies.org/u/dep/">Universal Dependencies</a>. The data source can be either a text or a <code>Doc</code> object of the <a href="https://github.com/explosion/spaCy">spaCy</a> library, but it has to be parsed: a string is parsed with <a href="../../installation/#model"><code>es_core_news_sm</code></a> or with the pipeline passed in <code>nlp</code>, and a <code>Doc</code> must carry the dependencies, which come from a <code>parser</code>, and the lemmas, which come from a <code>lemmatizer</code> - a <code>Doc</code> of <code>spacy.blank("es")</code>, of a pipeline without a parser or of one with the <code>lemmatizer</code> excluded raises <code>SourceError</code>.</p>
-<p>Punctuation marks, symbols (<code>%</code>, <code>€</code>, <code>+</code>) and whitespace are not nodes of the tree, and the distances are counted in positions of words. The measures of a single sentence - the longest dependency, the depth of the tree, the nodes per leaf - are averaged over the sentences.</p>
-<p>A text longer than the <code>max_length</code> of the pipeline - a million characters by default - raises <code>SourceError</code>: split it into parts, or raise <code>max_length</code> on a pipeline of your own and pass it in <code>nlp</code>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The statistics are computed when the <code>SyntaxStats</code> object is initialized.</p>
-</div>
-<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>source</code></td>
-<td style="text-align: center;">str/Doc</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Data source (a string or a Doc object)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>nlp</code></td>
-<td style="text-align: center;">Language</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Pipeline of spaCy that parses a string; without it the model <code>es_core_news_sm</code> is loaded</td>
-</tr>
-</tbody>
-</table>
-<h2 id="complexity">Measures of complexity<a class="headerlink" href="#complexity" title="Permanent link">&para;</a></h2>
-<p>The measures follow the work of Ivanov, Solnyshkina and Solovyev on the syntactic complexity of a text; the dependency distance is the one of Liu (2008), the distance between a word and its head in positions of words.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Attribute</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>mean_dependency_distance</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean dependency distance</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>std_dependency_distance</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Standard deviation of the dependency distance</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>max_dependency_distance</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean of the longest dependencies of the sentences, over the sentences that have dependencies</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_adjacent_dependencies</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Share of adjacent dependencies - of length 1</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>tree_depth</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Depth of the dependency tree</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>leaves_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Leaves per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>subtrees_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Subtrees per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>nodes_per_leaf</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean over the sentences of the words per leaf</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>verb_valency</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean number of dependents of a finite verb</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>coordination_chains_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Coordination chains per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>mean_coordination_chain_len</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean length of a coordination chain</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>clauses_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Clauses per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>mean_clause_len</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean length of a clause in words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>subordinate_clauses_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Subordinate clauses per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_complex_sents</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Share of sentences with at least one subordinate clause</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>modifiers_per_noun</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean number of modifiers of a noun</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>noun_verb_ratio</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Ratio of the number of nouns to the number of verb forms</td>
-</tr>
-</tbody>
-</table>
-<p>A clause is headed by the head of a sentence or by a word with the relation <code>ccomp</code>, <code>advcl</code>, <code>acl</code> or <code>csubj</code>, a relative clause included. The form of a predicate is that of its first auxiliary or copula with a verb form, or of the word itself without one; an auxiliary the model leaves without a form is read by its ending when it is a verb of <code>AUXILIARY_VERBS</code> (<code>habéis llegado</code>) and skipped otherwise (the old spelling <code>á</code>), and a participle auxiliary (<code>sido</code>, <code>estado</code>) counts as finite, since it follows a form of <code>haber</code> the models may attach to another word. A finite predicate heads its clause (<code>dijo que había llegado</code>, <code>estaba cantando</code>, <code>los regalos que te van a dar</code>), also under <code>xcomp</code>, which the models give to some finite complements. A predicate in the form of a participle or a gerund heads no clause of that kind - such predicates are counted apart (<code>llegando tarde</code>, <code>habiendo llegado tarde</code>) - and neither does one in the form of an infinitive under <code>acl</code> (<code>el deseo de irse</code>, <code>el miedo de ser robado</code>). An infinitive under <code>xcomp</code> heads a subordinate clause (<code>quiere salir</code>, <code>le hizo reír</code>, <code>quiere ser médico</code>, <code>quiere ser elegido</code>, <code>cree haber ganado</code>) unless it makes a periphrasis with its verb (<code>suele salir</code>, <code>acaba de salir</code>: the verbs and the linking words of <code>INFINITIVE_PERIPHRASES</code>, NGLE ch. 28) or the verb is <code>parecer</code> (<code>parece dormir</code>); a predicative adjective under <code>xcomp</code> (<code>parece cansado</code>) is no clause. Nor does a periphrasis head a clause when the models attach its infinitive to the verb as <code>conj</code> (<code>tiene que salir</code>, <code>va a salir</code>). A parenthetical (<code>parataxis</code>) and a coordinated predicate (<code>conj</code> of the head of a clause) count only when they are a verb or carry a subject of their own.</p>
-<h2 id="constructions">Constructions of the administrative style<a class="headerlink" href="#constructions" title="Permanent link">&para;</a></h2>
-<p>The constructions are the ones the Spanish-language guides to plain language (<em>lenguaje claro</em>) warn about.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Attribute</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>de_chains_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Chains of <code>de</code> per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>max_de_chain_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Maximum length of a chain of <code>de</code></td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>participle_clauses_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Participial clauses per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>mean_participle_clause_len</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean length of a participial clause in words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>gerund_clauses_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Gerund clauses per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>mean_gerund_clause_len</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Mean length of a gerund clause in words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_passive</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Share of passive forms among the verb forms</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_agentless_passive</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Share of forms with no agent among the passive ones</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>se_passives_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Passives with <code>se</code> per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>impersonal_se_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Impersonal sentences with <code>se</code> per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>infinitives_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Infinitives per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>negations_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Words of negation per sentence</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>split_predicates_per_sent</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Split predicates per sentence</td>
-</tr>
-</tbody>
-</table>
+<div class="signature highlight"><pre><span></span><code><span class="n">SyntaxStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>The syntactic statistics of a text by its dependency tree (<a href="https://dialogue-conf.org/media/4302/ivanovvv.pdf">Ivanov, Solnyshkina and Solovyev 2018</a>): the measures of the tree and of the syntactic constructions. The data source is a text or a <code>Doc</code> object of <a href="https://github.com/explosion/spaCy">spaCy</a>, and it has to be parsed: a string is parsed with <a href="../../installation/#model"><code>es_core_news_sm</code></a> or with the pipeline passed in <code>nlp</code>, without the named entities, and a <code>Doc</code> must carry the dependencies, which come from a <code>parser</code>, and the lemmas, which come from a <code>lemmatizer</code>. Punctuation marks, symbols (<code>%</code>, <code>€</code>, <code>+</code>) and whitespace are no nodes of the tree, and the distances are counted in positions of words.</p>
+<p>Raises:</p>
 <ul>
-<li>A <strong>chain of <code>de</code></strong> is two or more nested complements introduced by <code>de</code> or its contraction <code>del</code>: <code>el aumento de la eficiencia del uso de los recursos</code> is a chain of length 3. A single complement (<code>el uso del agua</code>) is not a chain.</li>
-<li>A <strong>participial clause</strong> is a participle with at least one dependent that is not the predicate of its clause: <code>la casa, construida por los obreros, se vendió</code> has one, <code>el autor ha escrito el libro</code> has none, because the participle of a compound tense carries an auxiliary. A <strong>gerund clause</strong> is a predicate in the form of a gerund, simple or compound (<code>llegando tarde</code>, <code>habiendo llegado tarde</code>, <code>siendo elegido presidente</code>), with at least one dependent besides its auxiliaries that is not the predicate of its clause, the periphrases left out, whether the models build them with a finite auxiliary (<code>está cantando</code>) or attach them to their verb as <code>xcomp</code> or <code>advcl</code> (<code>sigue trabajando</code>, <code>acabó reconociendo</code>).</li>
-<li>The <strong>passive</strong> is a participle with the auxiliary <code>ser</code> (<code>la casa fue construida</code>, also when the models read the auxiliary as a copula, <code>el proyecto es financiado</code>) or a verb with the <code>se</code> of the passive (<code>se construyó la casa</code>). A passive is <strong>agentless</strong> when no complement of it is introduced by <code>por</code>.</li>
-<li>A <strong>split predicate</strong> is a light verb (<code>hacer</code>, <code>dar</code>, <code>tomar</code>, <code>tener</code>, <code>poner</code>, <code>llevar</code>, <code>prestar</code>, <code>efectuar</code>, <code>realizar</code>, <code>proceder</code>, <code>proporcionar</code>, <code>ejercer</code>) with a nominal part derived from a verb (<code>revisión</code>, <code>decisión</code>, <code>uso</code>): <code>hacer una revisión</code> instead of <code>revisar</code>. The nouns of the fixed expressions - <code>cabo</code>, <code>manifiesto</code>, <code>parte</code>, <code>lugar</code>, <code>cuenta</code> - count only with the verb they are fixed with, <code>llevar a cabo</code> and <code>tomar parte</code> being split predicates while <code>dar traslado a las partes</code> and <code>poner en primer lugar la seguridad</code> are not. A complement with a preposition is the nominal part only in a fixed expression (<code>poner de manifiesto</code>) or with a verb that takes it that way (<code>proceder a la votación</code>); the agent of a passive never is. The pairs found are in the attribute <code>split_predicates</code>.</li>
-<li>A <strong>word of negation</strong> carries <code>Polarity=Neg</code>, which the models give to <code>no</code> alone, or is one of <code>nunca</code>, <code>jamás</code>, <code>nada</code>, <code>nadie</code>, <code>ninguno</code> and <code>tampoco</code>; the conjunction <code>ni</code> of <code>ni... ni</code> is not one. Every such word counts, so the negative concord of Spanish, where one negation is written twice (<code>no vino nadie</code>), gives two.</li>
+<li><code>SourceTypeError</code> - a source that is neither a string nor a <code>Doc</code>, a pipeline in <code>nlp</code> that is not a spaCy <code>Language</code>;</li>
+<li><code>SourceError</code> - a source without words; a <code>Doc</code> without the dependencies or the lemmas (a <code>Doc</code> of <code>spacy.blank("es")</code>, of a pipeline without a parser or with the <code>lemmatizer</code> excluded); a string longer than the <code>max_length</code> of the pipeline or with a character without a UTF-8 form;</li>
+<li><code>DatasetNotFoundError</code> - a string without <code>nlp</code> when the model is not installed.</li>
 </ul>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The statistics are as good as the parse. <code>es_core_news_sm</code> tells the three <code>se</code> of Spanish apart poorly - it rarely marks an impersonal <code>se</code> and reads <code>se fue dando un portazo</code> as a passive - so read <code>se_passives_per_sent</code> and <code>impersonal_se_per_sent</code> together rather than apart.</p>
-</div>
-<h2 id="counts">Counts<a class="headerlink" href="#counts" title="Permanent link">&para;</a></h2>
-<p>Besides the statistics the object keeps the counts they are built from.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Attribute</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>n_sents</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of sentences containing words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_words</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_leaves</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of leaves - words with no dependent word</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_subtrees</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of subtrees - words with dependent words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_coordination_chains</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of coordination chains</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_clauses</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of clauses</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_subordinate_clauses</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of subordinate clauses</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_complex_sents</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of sentences with a subordinate clause</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_nouns</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of nouns</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_de_chains</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of chains of <code>de</code></td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_participle_clauses</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of participial clauses</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_gerund_clauses</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of gerund clauses</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_verbs</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of verb forms</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_passive</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of passive verb forms</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_agentless_passive</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of passive forms with no agent</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_se_passives</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of passives with <code>se</code></td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_impersonal_se</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of impersonal sentences with <code>se</code></td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_infinitives</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of infinitives</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_negations</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of words of negation</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_split_predicates</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Number of split predicates</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>split_predicates</code></td>
-<td style="text-align: center;">tuple[str]</td>
-<td style="text-align: center;">Tuple of the split predicates (verb and noun)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>c_children</code></td>
-<td style="text-align: center;">dict[int, int]</td>
-<td style="text-align: center;">Distribution of words by number of dependent words</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>c_deps</code></td>
-<td style="text-align: center;">dict[str, int]</td>
-<td style="text-align: center;">Distribution of words by syntactic relation</td>
-</tr>
-</tbody>
-</table>
-<h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
-<h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
-<p>Returns a dictionary with the computed syntactic statistics.</p>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
-<p><em>Code</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Import the library</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">SyntaxStats</span>
+<p>The class extends the <code>SyntaxStats</code> of the <a href="https://sergeyshk.github.io/anyTS/stats/syntax_stats/">anyTS</a> core with the Spanish layer. The relations and features are those of the <a href="https://universaldependencies.org/u/dep/">Universal Dependencies</a> annotation of the <code>es_core_news_sm</code>, <code>es_core_news_md</code> and <code>es_core_news_lg</code> models, and the statistics are as good as the parse. The clauses, the passive, the negations and the split predicates follow the rules of Spanish given in the cards of the metrics, and esTS adds its own metrics of the chains of <code>de</code>, the gerund clauses and the sentences with <code>se</code>. The constructions of the administrative style - the passive with <code>ser</code> and with <code>se</code>, the participial and gerund clauses, the chains of <code>de</code>, the split predicates - are the ones the Spanish-language guides to plain language (<em>lenguaje claro</em>) warn about. The <code>print_stats</code> table takes the descriptions of <code>SYNTAX_STATS_DESC</code> of <code>ests.constants</code>.</p>
+<p>The <code>max_length</code> of the pipeline is a million characters by default: split a longer text into parts, or raise <code>max_length</code> on a pipeline of your own and pass it in <code>nlp</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Code</label><label for="__tabbed_1_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">SyntaxStats</span>
 
-<span class="c1"># Prepare the data</span>
 <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
     <span class="s2">"La revisión de las cuentas del organismo fue realizada por el comité. "</span>
     <span class="s2">"Se llevó a cabo la reforma, aprobada en 1998, sin que nadie hiciera "</span>
     <span class="s2">"mención de los problemas."</span>
 <span class="p">)</span>
-
-<span class="c1"># Compute the statistics</span>
 <span class="n">ss</span> <span class="o">=</span> <span class="n">SyntaxStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-<span class="n">ss</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
-</code></pre></div>
-<p><em>Result</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">{</span><span class="s1">'mean_dependency_distance'</span>:<span class="w"> </span><span class="m">2</span>.259259259259259,
-<span class="s1">'std_dependency_distance'</span>:<span class="w"> </span><span class="m">2</span>.1532506449997975,
-<span class="s1">'max_dependency_distance'</span>:<span class="w"> </span><span class="m">9</span>.0,
-<span class="s1">'p_adjacent_dependencies'</span>:<span class="w"> </span><span class="m">0</span>.48148148148148145,
-<span class="s1">'tree_depth'</span>:<span class="w"> </span><span class="m">4</span>.0,
-<span class="s1">'leaves_per_sent'</span>:<span class="w"> </span><span class="m">8</span>.0,
-<span class="s1">'subtrees_per_sent'</span>:<span class="w"> </span><span class="m">6</span>.5,
-<span class="s1">'nodes_per_leaf'</span>:<span class="w"> </span><span class="m">1</span>.8015873015873014,
-<span class="s1">'verb_valency'</span>:<span class="w"> </span><span class="m">4</span>.0,
-<span class="s1">'coordination_chains_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.0,
-<span class="s1">'mean_coordination_chain_len'</span>:<span class="w"> </span>nan,
-<span class="s1">'clauses_per_sent'</span>:<span class="w"> </span><span class="m">1</span>.5,
-<span class="s1">'mean_clause_len'</span>:<span class="w"> </span><span class="m">9</span>.666666666666666,
-<span class="s1">'subordinate_clauses_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'p_complex_sents'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'modifiers_per_noun'</span>:<span class="w"> </span><span class="m">1</span>.0,
-<span class="s1">'de_chains_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'max_de_chain_len'</span>:<span class="w"> </span><span class="m">2</span>,
-<span class="s1">'participle_clauses_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'mean_participle_clause_len'</span>:<span class="w"> </span><span class="m">3</span>.0,
-<span class="s1">'gerund_clauses_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.0,
-<span class="s1">'mean_gerund_clause_len'</span>:<span class="w"> </span>nan,
-<span class="s1">'p_passive'</span>:<span class="w"> </span><span class="m">0</span>.6666666666666666,
-<span class="s1">'p_agentless_passive'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'se_passives_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'impersonal_se_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.0,
-<span class="s1">'infinitives_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.0,
-<span class="s1">'negations_per_sent'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'split_predicates_per_sent'</span>:<span class="w"> </span><span class="m">1</span>.0,
-<span class="s1">'noun_verb_ratio'</span>:<span class="w"> </span><span class="m">3</span>.0<span class="o">}</span>
-</code></pre></div>
-<p>The split predicates of the text are in an attribute of their own:</p>
-<div class="highlight"><pre><span></span><code><span class="n">ss</span><span class="o">.</span><span class="n">split_predicates</span>
-<span class="c1"># ('llevó cabo', 'hiciera mención')</span>
-</code></pre></div>
-</div>
-<h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
-<p>Prints a table with the computed syntactic statistics.</p>
-<p>To illustrate the method, we reuse the code from the previous example:</p>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
-<p><em>Code</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">...</span>
-
-<span class="c1"># Print the table of computed statistics</span>
 <span class="n">ss</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
 </code></pre></div>
-<p><em>Result</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="w">                    </span>Statistic<span class="w">                     </span><span class="p">|</span><span class="w">  </span>Value
-------------------------------------------------------------
-Mean<span class="w"> </span>dependency<span class="w"> </span>distance<span class="w">                          </span><span class="p">|</span><span class="w">   </span><span class="m">2</span>.26
-Standard<span class="w"> </span>deviation<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>dependency<span class="w"> </span>distance<span class="w">     </span><span class="p">|</span><span class="w">   </span><span class="m">2</span>.15
-Mean<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>longest<span class="w"> </span>dependencies<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>sentences<span class="w"> </span><span class="p">|</span><span class="w">   </span><span class="m">9</span>.00
-Share<span class="w"> </span>of<span class="w"> </span>adjacent<span class="w"> </span>dependencies<span class="w">                    </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.48
-Depth<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>dependency<span class="w"> </span>tree<span class="w">                      </span><span class="p">|</span><span class="w">   </span><span class="m">4</span>.00
-Leaves<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                               </span><span class="p">|</span><span class="w">   </span><span class="m">8</span>.00
-Subtrees<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                             </span><span class="p">|</span><span class="w">   </span><span class="m">6</span>.50
-Mean<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>nodes<span class="w"> </span>per<span class="w"> </span>leaf<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>sentences<span class="w">       </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.80
-Valency<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>finite<span class="w"> </span>verbs<span class="w">                       </span><span class="p">|</span><span class="w">   </span><span class="m">4</span>.00
-Coordination<span class="w"> </span>chains<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                  </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
-Mean<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>coordination<span class="w"> </span>chain<span class="w">               </span><span class="p">|</span><span class="w">   </span>nan
-Clauses<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                              </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.50
-Mean<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>clause<span class="w"> </span><span class="o">(</span>words<span class="o">)</span><span class="w">                   </span><span class="p">|</span><span class="w">   </span><span class="m">9</span>.67
-Subordinate<span class="w"> </span>clauses<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                  </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
-Share<span class="w"> </span>of<span class="w"> </span>sentences<span class="w"> </span>with<span class="w"> </span>a<span class="w"> </span>subordinate<span class="w"> </span>clause<span class="w">      </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
-Modifiers<span class="w"> </span>per<span class="w"> </span>noun<span class="w"> </span>phrase<span class="w">                         </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.00
-Chains<span class="w"> </span>of<span class="w"> </span>de<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                         </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
-Maximum<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>chain<span class="w"> </span>of<span class="w"> </span>de<span class="w">                   </span><span class="p">|</span><span class="w">   </span><span class="m">2</span>.00
-Participial<span class="w"> </span>clauses<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                  </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
-Mean<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>participial<span class="w"> </span>clause<span class="w"> </span><span class="o">(</span>words<span class="o">)</span><span class="w">       </span><span class="p">|</span><span class="w">   </span><span class="m">3</span>.00
-Gerund<span class="w"> </span>clauses<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                       </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
-Mean<span class="w"> </span>length<span class="w"> </span>of<span class="w"> </span>a<span class="w"> </span>gerund<span class="w"> </span>clause<span class="w"> </span><span class="o">(</span>words<span class="o">)</span><span class="w">            </span><span class="p">|</span><span class="w">   </span>nan
-Share<span class="w"> </span>of<span class="w"> </span>passive<span class="w"> </span>forms<span class="w"> </span>among<span class="w"> </span>the<span class="w"> </span>verbs<span class="w">            </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.67
-Share<span class="w"> </span>of<span class="w"> </span>agentless<span class="w"> </span>forms<span class="w"> </span>among<span class="w"> </span>the<span class="w"> </span>passive<span class="w"> </span>ones<span class="w">   </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
-Passives<span class="w"> </span>with<span class="w"> </span>se<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                     </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
-Impersonal<span class="w"> </span>sentences<span class="w"> </span>with<span class="w"> </span>se<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">         </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
-Infinitives<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                          </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.00
-Words<span class="w"> </span>of<span class="w"> </span>negation<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                    </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.50
-Split<span class="w"> </span>predicates<span class="w"> </span>per<span class="w"> </span>sentence<span class="w">                     </span><span class="p">|</span><span class="w">   </span><span class="m">1</span>.00
-Ratio<span class="w"> </span>of<span class="w"> </span>nouns<span class="w"> </span>to<span class="w"> </span>verbs<span class="w">                           </span><span class="p">|</span><span class="w">   </span><span class="m">3</span>.00
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>                    Statistic                     |  Value
+-------------------------------------------------------------
+Mean dependency distance                          |   2.26
+Standard deviation of the dependency distance     |   2.15
+Mean of the longest dependencies of the sentences |   9.00
+Share of adjacent dependencies                    |   0.48
+Depth of the dependency tree                      |   4.00
+Leaves per sentence                               |   8.00
+Subtrees per sentence                             |   6.50
+Mean of the nodes per leaf of the sentences       |   1.80
+Valency of the finite verbs                       |   4.00
+Coordination chains per sentence                  |   0.00
+Mean length of a coordination chain               |   nan
+Clauses per sentence                              |   1.50
+Mean length of a clause (words)                   |   9.67
+Subordinate clauses per sentence                  |   0.50
+Share of sentences with a subordinate clause      |   0.50
+Modifiers per noun phrase                         |   1.00
+Chains of de per sentence                         |   0.50
+Maximum length of a chain of de                   |    2
+Participial clauses per sentence                  |   0.50
+Mean length of a participial clause (words)       |   3.00
+Gerund clauses per sentence                       |   0.00
+Mean length of a gerund clause (words)            |   nan
+Share of passive forms among the verbs            |   0.67
+Share of agentless forms among the passive ones   |   0.50
+Passives with se per sentence                     |   0.50
+Impersonal sentences with se per sentence         |   0.00
+Infinitives per sentence                          |   0.00
+Words of negation per sentence                    |   0.50
+Split predicates per sentence                     |   1.00
+Ratio of nouns to verbs                           |   3.00
 </code></pre></div>
 </div>
+</div>
+</div>
+<h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>source</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Data source: a text or a <code>Doc</code> with the dependencies and the lemmas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>nlp</code></td>
+<td style="text-align: left;"><code>Language</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">spaCy pipeline that parses a string; the model <code>es_core_news_sm</code> of <code>ests.utils.get_nlp</code> if not given</td>
+</tr>
+</tbody>
+</table>
+<h2 id="attributes">Attributes<a class="headerlink" href="#attributes" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Attribute</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>sents</code></td>
+<td style="text-align: left;"><code>tuple[tuple[Token]]</code></td>
+<td style="text-align: left;">Words of every sentence with words</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_sents</code>, <code>n_words</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Numbers of the sentences with words and of the words</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_leaves</code>, <code>n_subtrees</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Numbers of the words without and with dependent words</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_coordination_chains</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of the coordination chains</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_clauses</code>, <code>n_subordinate_clauses</code>, <code>n_complex_sents</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Numbers of the clauses, of the subordinate clauses and of the sentences with one</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_infinitive_clauses</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of the infinitive clauses under a verb</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_nouns</code>, <code>n_verbs</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Numbers of the nouns (<code>NOUN</code>, <code>PROPN</code>) and of the verb forms (<code>VERB</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_participle_clauses</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of the participial clauses</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_passive</code>, <code>n_agentless_passive</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Numbers of the passive forms and of those with no agent</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_infinitives</code>, <code>n_negations</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Numbers of the infinitives and of the words of negation</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_split_predicates</code>, <code>split_predicates</code></td>
+<td style="text-align: left;"><code>int</code>, <code>tuple[str]</code></td>
+<td style="text-align: left;">Number of the split predicates and the predicates, the verb and the noun</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>c_children</code></td>
+<td style="text-align: left;"><code>dict[int, int]</code></td>
+<td style="text-align: left;">Number of the words by number of dependent words</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>c_deps</code></td>
+<td style="text-align: left;"><code>dict[str, int]</code></td>
+<td style="text-align: left;">Number of the words by relation</td>
+</tr>
+</tbody>
+</table>
+<p>The attributes of the constructions of esTS are <code>n_de_chains</code>, <code>n_gerund_clauses</code>, <code>n_se_passives</code> and <code>n_impersonal_se</code> (<code>int</code>): the numbers of the chains of <code>de</code>, of the gerund clauses, of the passives with <code>se</code> and of the impersonal sentences with <code>se</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Code</label><label for="__tabbed_2_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">ss</span><span class="o">.</span><span class="n">n_clauses</span><span class="p">,</span> <span class="n">ss</span><span class="o">.</span><span class="n">n_nouns</span><span class="p">,</span> <span class="n">ss</span><span class="o">.</span><span class="n">n_verbs</span>
+<span class="n">ss</span><span class="o">.</span><span class="n">n_de_chains</span><span class="p">,</span> <span class="n">ss</span><span class="o">.</span><span class="n">n_se_passives</span><span class="p">,</span> <span class="n">ss</span><span class="o">.</span><span class="n">split_predicates</span>
+<span class="n">ss</span><span class="o">.</span><span class="n">c_children</span>
+<span class="n">ss</span><span class="o">.</span><span class="n">c_deps</span>
+<span class="n">ss</span><span class="o">.</span><span class="n">sents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>(3, 9, 3)
+(1, 1, ('llevó cabo', 'hiciera mención'))
+{0: 16, 1: 5, 2: 4, 3: 2, 4: 2}
+{'ROOT': 2,
+ 'advcl': 1,
+ 'amod': 1,
+ 'aux': 1,
+ 'case': 6,
+ 'compound': 1,
+ 'det': 5,
+ 'expl:pass': 1,
+ 'mark': 2,
+ 'nmod': 3,
+ 'nsubj': 3,
+ 'obj': 2,
+ 'obl': 1}
+(La, revisión, de, las, cuentas, del, organismo, fue, realizada, por, el, comité)
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="metrics">Metrics<a class="headerlink" href="#metrics" title="Permanent link">&para;</a></h2>
+<p>Every metric is an attribute of the object, computed when it is created, and <code>get_stats</code> gives the metrics of the table. The measures of a sentence (the longest dependency, the depth, the nodes per leaf) are averaged over the sentences; the constructions are given per sentence.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Measures</th>
+<th style="text-align: left;">Range</th>
+<th style="text-align: left;">Higher means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><a href="#dependency_distances"><code>mean_dependency_distance</code></a></td>
+<td style="text-align: left;">Mean distance between a word and its head</td>
+<td style="text-align: left;">1 and above, <code>nan</code> without dependencies</td>
+<td style="text-align: left;">Harder to process</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#dependency_distances"><code>std_dependency_distance</code></a></td>
+<td style="text-align: left;">Standard deviation of the dependency distance</td>
+<td style="text-align: left;">0 and above, <code>nan</code> without dependencies</td>
+<td style="text-align: left;">Less even distances</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#dependency_distances"><code>max_dependency_distance</code></a></td>
+<td style="text-align: left;">Mean of the longest dependencies of the sentences that have dependencies</td>
+<td style="text-align: left;">1 and above, <code>nan</code> without dependencies</td>
+<td style="text-align: left;">Longer longest dependencies</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#dependency_distances"><code>p_adjacent_dependencies</code></a></td>
+<td style="text-align: left;">Share of the dependencies of length 1</td>
+<td style="text-align: left;">0-1, <code>nan</code> without dependencies</td>
+<td style="text-align: left;">More links between neighbours</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#tree_depth"><code>tree_depth</code></a></td>
+<td style="text-align: left;">Mean depth of the tree of a sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">Deeper embedding</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#leaves"><code>leaves_per_sent</code></a></td>
+<td style="text-align: left;">Leaves per sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">Longer or flatter sentences</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#leaves"><code>subtrees_per_sent</code></a></td>
+<td style="text-align: left;">Subtrees per sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">More phrases in a sentence</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#leaves"><code>nodes_per_leaf</code></a></td>
+<td style="text-align: left;">Mean over the sentences of the words per leaf</td>
+<td style="text-align: left;">1 and above, <code>nan</code> for a sentence without leaves</td>
+<td style="text-align: left;">Longer branches</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#valency"><code>verb_valency</code></a></td>
+<td style="text-align: left;">Mean number of the dependents of a finite verb</td>
+<td style="text-align: left;">0 and above, <code>nan</code> without finite verbs</td>
+<td style="text-align: left;">More dependents of a verb</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#coordination_chains"><code>coordination_chains_per_sent</code></a></td>
+<td style="text-align: left;">Coordination chains per sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">More coordination</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#coordination_chains"><code>mean_coordination_chain_len</code></a></td>
+<td style="text-align: left;">Mean length of a coordination chain in words</td>
+<td style="text-align: left;">2 and above, <code>nan</code> without chains</td>
+<td style="text-align: left;">Longer enumerations</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#clauses"><code>clauses_per_sent</code></a></td>
+<td style="text-align: left;">Clauses per sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">More clauses in a sentence</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#clauses"><code>mean_clause_len</code></a></td>
+<td style="text-align: left;">Mean length of a clause in words</td>
+<td style="text-align: left;">1 and above, <code>nan</code> without clauses</td>
+<td style="text-align: left;">Longer clauses</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#subordinate_clauses"><code>subordinate_clauses_per_sent</code></a></td>
+<td style="text-align: left;">Subordinate clauses per sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">More subordination</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#subordinate_clauses"><code>p_complex_sents</code></a></td>
+<td style="text-align: left;">Share of the sentences with a subordinate clause</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">More complex sentences</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#noun_modifiers"><code>modifiers_per_noun</code></a></td>
+<td style="text-align: left;">Mean number of the modifiers of a noun</td>
+<td style="text-align: left;">0 and above, <code>nan</code> without nouns</td>
+<td style="text-align: left;">Heavier noun phrases</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#de_chains"><code>de_chains_per_sent</code></a></td>
+<td style="text-align: left;">Chains of <code>de</code> per sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">More chains</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#de_chains"><code>max_de_chain_len</code></a></td>
+<td style="text-align: left;">Longest chain of <code>de</code> of the text</td>
+<td style="text-align: left;">0 without chains, otherwise 2 and above</td>
+<td style="text-align: left;">A longer chain</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#participle_clauses"><code>participle_clauses_per_sent</code></a></td>
+<td style="text-align: left;">Participial clauses per sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">More participial clauses</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#participle_clauses"><code>mean_participle_clause_len</code></a></td>
+<td style="text-align: left;">Mean length of a participial clause in words</td>
+<td style="text-align: left;">2 and above, <code>nan</code> without participial clauses</td>
+<td style="text-align: left;">Longer participial clauses</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#gerund_clauses"><code>gerund_clauses_per_sent</code></a></td>
+<td style="text-align: left;">Gerund clauses per sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">More gerund clauses</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#gerund_clauses"><code>mean_gerund_clause_len</code></a></td>
+<td style="text-align: left;">Mean length of a gerund clause in words</td>
+<td style="text-align: left;">2 and above, <code>nan</code> without gerund clauses</td>
+<td style="text-align: left;">Longer gerund clauses</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#passive"><code>p_passive</code></a></td>
+<td style="text-align: left;">Share of the passive forms among the verb forms</td>
+<td style="text-align: left;">0-1, <code>nan</code> without verb forms</td>
+<td style="text-align: left;">More passive</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#passive"><code>p_agentless_passive</code></a></td>
+<td style="text-align: left;">Share of the forms with no agent among the passive ones</td>
+<td style="text-align: left;">0-1, <code>nan</code> without passive forms</td>
+<td style="text-align: left;">More passive without an agent</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#se"><code>se_passives_per_sent</code></a></td>
+<td style="text-align: left;">Passives with <code>se</code> per sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">More passives with <code>se</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#se"><code>impersonal_se_per_sent</code></a></td>
+<td style="text-align: left;">Impersonal sentences with <code>se</code> per sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">More impersonal sentences</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#constructions"><code>infinitives_per_sent</code></a></td>
+<td style="text-align: left;">Infinitives per sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">More infinitives</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#constructions"><code>negations_per_sent</code></a></td>
+<td style="text-align: left;">Words of negation per sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">More negation</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#constructions"><code>split_predicates_per_sent</code></a></td>
+<td style="text-align: left;">Split predicates per sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">More split predicates</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#noun_verb_ratio"><code>noun_verb_ratio</code></a></td>
+<td style="text-align: left;">Ratio of the nouns to the verb forms</td>
+<td style="text-align: left;">0 and above, <code>nan</code> without verb forms</td>
+<td style="text-align: left;">A more nominal style</td>
+</tr>
+</tbody>
+</table>
+<p>The functions of the cards are imported from <code>ests.syntax_stats</code>; those of the measures of the tree that esTS does not re-export are on the <a href="https://sergeyshk.github.io/anyTS/stats/syntax_stats/">anyTS page</a>.</p>
+<div class="metric-card">
+<h3 id="dependency_distances">Dependency distance<a class="headerlink" href="#dependency_distances" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>mean_dependency_distance</code> · <code>std_dependency_distance</code> · <code>max_dependency_distance</code> · <code>p_adjacent_dependencies</code></p>
+<p>The dependency distance (Liu 2008) is the distance between a word and its head in positions of words, punctuation left out; the head of a sentence has none. <code>mean_dependency_distance</code> and <code>std_dependency_distance</code> are the mean and the standard deviation of the distances of the text, <code>max_dependency_distance</code> the mean of the longest distance of every sentence that has one, and <code>p_adjacent_dependencies</code> the share of the distances of 1. One-word sentences enter none of the metrics. The distances are those of <code>calc_dependency_distances</code> of <code>anyts.syntax_stats</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="tree_depth">Tree depth<a class="headerlink" href="#tree_depth" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>tree_depth</code></p>
+<p>The depth of the dependency tree of a sentence is the longest path from its head to a leaf, in relations between words, 0 for a sentence of one word; the metric is its mean over the sentences. The depth is that of <code>calc_tree_depth</code> of <code>anyts.syntax_stats</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="leaves">Leaves and subtrees<a class="headerlink" href="#leaves" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>leaves_per_sent</code> · <code>subtrees_per_sent</code> · <code>nodes_per_leaf</code></p>
+<p>A leaf is a word without dependent words (<code>count_children</code>), a subtree a word with them. The nodes per leaf are the words of a sentence over its leaves, averaged over the <span class="arithmatex">\(S\)</span> sentences.</p>
+<div class="arithmatex">\[
+\frac{1}{S} \sum_{s=1}^{S} \frac{\textrm{Number of words of } s}{\textrm{Number of leaves of } s}
+\]</div>
+<p>The distribution of the words by number of dependents is the attribute <code>c_children</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="valency">Valency of the finite verbs<a class="headerlink" href="#valency" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>verb_valency</code></p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_valency</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>The valency of a token: the number of its dependent words, the relations <code>cc</code>, <code>conj</code>, <code>parataxis</code> and <code>punct</code> left out (<code>anyts.constants.VALENCY_IGNORED_DEPS</code>); with <code>join_hyphens=True</code> a hyphenated dependent counts once, so <code>came</code> in <code>Some-one came</code> has one dependent and not two.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>join_hyphens</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Take a hyphenated word for one word</td>
+</tr>
+</tbody>
+</table>
+<p>A finite verb is a word tagged <code>VERB</code> with <code>VerbForm=Fin</code> (<code>is_finite_verb</code> of <code>anyts.utils</code>). The Spanish models tag the participle of a compound tense or of the passive with <code>ser</code> (<code>ha llegado</code>, <code>fue construida</code>) as the verb and its auxiliary as <code>AUX</code>, so such predicates are left out.</p>
+</div>
+<div class="metric-card">
+<h3 id="coordination_chains">Coordination chains<a class="headerlink" href="#coordination_chains" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>coordination_chains_per_sent</code> · <code>mean_coordination_chain_len</code></p>
+<p>A coordination chain is a group of words linked by <code>conj</code>: <code>manzanas, peras y ciruelas</code> is one chain of three. A nested coordination and an enumeration split between several heads are one chain too; the length of a chain is the number of its words. The chains are those of <code>calc_coordination_chains</code> of <code>anyts.syntax_stats</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="clauses">Clauses<a class="headerlink" href="#clauses" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>clauses_per_sent</code> · <code>mean_clause_len</code></p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether a word heads a clause: the head of the sentence or, by the form of its predicate (<a href="#verb-forms"><code>predicate_form</code></a>), a word with <code>ccomp</code>, <code>advcl</code>, <code>acl</code> (a relative clause included), <code>csubj</code> or <code>parataxis</code> (<code>anyts.constants.CLAUSE_DEPS</code>). A finite predicate heads its clause (<code>dijo que había llegado</code>, <code>estaba cantando</code>, <code>los regalos que te van a dar</code>), also under <code>xcomp</code>, which the models give to some finite complements; a predicate in the form of a participle or a gerund heads no clause of that kind - such predicates are counted apart (<code>llegando tarde</code>, <code>habiendo llegado tarde</code>) - and neither does one in the form of an infinitive under <code>acl</code> (<code>el deseo de irse</code>, <code>el miedo de ser robado</code>). Under <code>xcomp</code> an infinitive heads a clause by <code>is_infinitive_clause</code>, and a predicative adjective (<code>parece cansado</code>) heads none. A parenthetical (<code>parataxis</code>) and a coordinated predicate (<code>conj</code> of the head of a clause) count only when they can be a predicate (<a href="#is_predicate"><code>is_predicate</code></a>), so that parentheticals such as <code>por ejemplo</code> are no clauses; an infinitive the models attach as <code>conj</code> to the verb of a periphrasis (<code>tiene que salir</code>, <code>va a salir</code>) makes one predicate with it (<code>is_infinitive_periphrasis</code>).</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_infinitive_clause</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether an infinitive under <code>xcomp</code> heads a clause of its own: a predicate in the form of an infinitive that completes its head (<code>quiere salir</code>, <code>le hizo reír</code>, <code>quiere ser médico</code>, <code>quiere ser elegido</code>, <code>cree haber ganado</code>), unless the two make a periphrasis (<code>is_infinitive_periphrasis</code>) or the head is a verb of <code>RAISING_VERBS</code>, <code>parecer</code> (<code>parece dormir</code>).</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_infinitive_periphrasis</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether an infinitive makes a periphrasis with its head: the head is a verb of <code>INFINITIVE_PERIPHRASES</code> (NGLE, ch. 28) and the infinitive is linked to it by one of the words of that verb - a <code>mark</code>, <code>case</code> or <code>cc</code> before the infinitive, or the word right before it, the old spelling <code>á</code> read as <code>a</code>. The verbs are <code>poder</code>, <code>soler</code> and <code>deber</code> with no word (<code>puede salir</code>, <code>suele salir</code>), <code>deber de</code>, <code>tener que</code>, <code>haber que</code>, <code>haber de</code>, <code>ir a</code>, <code>venir a</code>, <code>pasar a</code>, <code>volver a</code>, <code>tornar a</code>, <code>empezar a</code> and <code>por</code>, <code>comenzar a</code> and <code>por</code>, <code>principiar a</code>, <code>poner a</code>, <code>echar a</code>, <code>romper a</code>, <code>llegar a</code>, <code>alcanzar a</code>, <code>acabar de</code> and <code>por</code>, <code>terminar de</code> and <code>por</code>, <code>dejar de</code>, <code>cesar de</code>, <code>parar de</code>, <code>estar para</code> and <code>por</code>. The lemma of the head is that of the model, or of <code>ests.utils.lemmatize</code> when the model gives none of these verbs (it can read a verb opening a sentence as a proper noun: <code>Solía salir</code>).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+</tbody>
+</table>
+<p>The mean length of a clause is the number of the words over the number of the clauses.</p>
+</div>
+<div class="metric-card">
+<h3 id="subordinate_clauses">Subordinate clauses<a class="headerlink" href="#subordinate_clauses" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>subordinate_clauses_per_sent</code> · <code>p_complex_sents</code></p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_subordinate_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether a word heads a subordinate clause: a clause head (<code>is_clause_head</code>) with <code>ccomp</code>, <code>advcl</code>, <code>acl</code>, <code>csubj</code> (<code>anyts.constants.SUBORDINATE_CLAUSE_DEPS</code>) or <code>xcomp</code>, or a coordinated predicate of a subordinate clause, by the relation of the first word up its chain of conjuncts. An infinitive clause under a verb (<code>quiere salir</code>) is a subordinate clause; the numbers of those alone are the attributes <code>n_infinitive_clauses</code> and <code>infinitive_clauses_per_sent</code>, which <code>get_stats</code> does not give.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+</tbody>
+</table>
+<p><code>p_complex_sents</code> is the share of the sentences with at least one subordinate clause.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Code</label><label for="__tabbed_3_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_clause_head</span><span class="p">,</span> <span class="n">is_subordinate_clause_head</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"Él quiere salir, pero tiene que quedarse porque parece cansado."</span><span class="p">)</span>
+<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_subordinate_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>['quiere', 'salir', 'tiene', 'parece']
+['salir', 'parece']
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="noun_modifiers">Modifiers of a noun<a class="headerlink" href="#noun_modifiers" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>modifiers_per_noun</code></p>
+<div class="signature highlight"><pre><span></span><code><span class="n">count_noun_modifiers</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>Counts the modifiers of a noun phrase: the dependents with the relations <code>amod</code>, <code>det</code>, <code>nmod</code>, <code>nummod</code>, <code>acl</code> and their subtypes (<code>anyts.constants.NOUN_MODIFIER_DEPS</code>); <code>conj</code> and <code>appos</code> are no modifiers.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>join_hyphens</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Take a hyphenated word for one word</td>
+</tr>
+</tbody>
+</table>
+<p>The nouns are the words tagged <code>NOUN</code> or <code>PROPN</code>: <code>la nueva casa de mi padre</code> gives <code>casa</code> three modifiers, <code>la</code>, <code>nueva</code> and <code>padre</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="de_chains">Chains of de<a class="headerlink" href="#de_chains" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>de_chains_per_sent</code> · <code>max_de_chain_len</code></p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_de_chains</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+</code></pre></div>
+<p>The lengths of the chains of <code>de</code> in the order of the words: the chains of <a href="#calc_modifier_chains"><code>calc_modifier_chains</code></a> whose modifiers are complements with <code>de</code>; <code>el aumento de la eficiencia del uso de los recursos</code> is a chain of length 3, and a single complement (<code>el uso del agua</code>) is no chain.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_de_modifier</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether a word is a complement introduced by <code>de</code>: a word with the relation <code>nmod</code> whose preposition (<code>case</code>) is <code>de</code> or its contraction <code>del</code> (<code>DE_PREPOSITIONS</code>): <code>el uso del agua</code>, but not <code>la vuelta al campo</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>tokens</code></td>
+<td style="text-align: left;"><code>Doc</code> / <code>Span</code> / <code>list[Token]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Sequence of tokens (<code>calc_de_chains</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token (<code>is_de_modifier</code>)</td>
+</tr>
+</tbody>
+</table>
+<p><code>max_de_chain_len</code> is the longest chain of the text, 0 without chains.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Code</label><label for="__tabbed_4_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_de_chains</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+
+<span class="n">calc_de_chains</span><span class="p">(</span><span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"El aumento de la eficiencia del uso de los recursos fue notable."</span><span class="p">))</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>[3]
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="participle_clauses">Participial clauses<a class="headerlink" href="#participle_clauses" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>participle_clauses_per_sent</code> · <code>mean_participle_clause_len</code></p>
+<p>The clauses headed by the words of the hook <code>is_participle_clause</code>; the length of a clause is the number of the words in the subtree of its head (<code>subtree_len</code>).</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_participle_clause</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether a word heads a participial clause: a participle (<a href="#verb-forms"><code>is_participle</code></a>) that is not the head of the sentence, carries no auxiliary or copula (<a href="#verb-forms"><code>has_auxiliary</code></a>) and has at least one dependent (<a href="#valency"><code>calc_valency</code></a>). <code>la casa, construida por los obreros, se vendió</code> has one, while <code>ha pintado</code> and <code>fue construida</code> are predicates. <code>SyntaxStats</code> counts the participial clauses by the same rule.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+</tbody>
+</table>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Code</label><label for="__tabbed_5_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_participle_clause</span><span class="p">,</span> <span class="n">subtree_len</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"La casa, construida por los obreros en 1900, fue vendida."</span><span class="p">)</span>
+<span class="p">[(</span><span class="n">token</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">subtree_len</span><span class="p">(</span><span class="n">token</span><span class="p">))</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_participle_clause</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>[('construida', 6)]
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="gerund_clauses">Gerund clauses<a class="headerlink" href="#gerund_clauses" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>gerund_clauses_per_sent</code> · <code>mean_gerund_clause_len</code></p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_gerund_clause</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether a word heads a gerund clause: a predicate in the form of a gerund (<a href="#verb-forms"><code>predicate_form</code></a>), simple or compound (<code>llegando tarde</code>, <code>habiendo llegado tarde</code>, <code>siendo elegido presidente</code>), that is not the head of the sentence and has at least one dependent besides its auxiliaries and copulas (<a href="#valency"><code>calc_valency</code></a>). The periphrases are left out: one with a finite auxiliary (<code>está cantando</code>) is a finite predicate, and a gerund the models attach as <code>xcomp</code> or <code>advcl</code> to a verb of <code>GERUND_PERIPHRASIS_VERBS</code> - <code>quedar</code>, <code>llevar</code>, <code>seguir</code>, <code>venir</code>, <code>ir</code>, <code>andar</code>, <code>continuar</code>, <code>acabar</code> (<code>sigue trabajando</code>, <code>acabó reconociendo</code>) - heads no clause. The length of a clause is the number of the words in the subtree of the gerund (<code>subtree_len</code>).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+</tbody>
+</table>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Code</label><label for="__tabbed_6_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_gerund_clause</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"Llegando tarde, encontró la puerta cerrada y siguió trabajando."</span><span class="p">)</span>
+<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_gerund_clause</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>['Llegando']
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="passive">Passive<a class="headerlink" href="#passive" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>p_passive</code> · <code>p_agentless_passive</code></p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_passive</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether a word is a passive verb form: a verb (<code>VERB</code>) that is a participle with the auxiliary <code>ser</code> (<code>PASSIVE_AUX</code>) as <code>aux</code> or <code>cop</code> - <code>la casa fue construida</code>, also when the models read the auxiliary as a copula, <code>el proyecto es financiado</code> - or that carries the <code>se</code> of the passive (<code>expl:pass</code>, <code>SE_PASSIVE_DEP</code>: <code>se construyó la casa</code>). A participle that modifies a noun (<code>la casa construida por los obreros</code>) is a participial clause instead.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_agentless</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether a passive form has no agent: none of its dependents is one of <code>is_agent</code> - <code>la casa fue construida</code>, but not <code>la casa fue construida por los obreros</code>. A word that is no passive form (<code>is_passive</code>) gives <code>False</code>.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_agent</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether a word is the agent of a passive: a complement whose preposition (<code>case</code>) is <code>por</code> (<code>AGENT_PREPOSITION</code>), whatever its relation, since the models have no <code>obl:agent</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+</tbody>
+</table>
+<p>The verb forms of <code>p_passive</code> are the words tagged <code>VERB</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Code</label><label for="__tabbed_7_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_agentless</span><span class="p">,</span> <span class="n">is_passive</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span>
+    <span class="s2">"La casa fue construida por los obreros y el proyecto es financiado por el Estado. "</span>
+    <span class="s2">"Se construyó la casa."</span>
+<span class="p">)</span>
+<span class="p">[(</span><span class="n">token</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">is_agentless</span><span class="p">(</span><span class="n">token</span><span class="p">))</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_passive</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>[('construida', False), ('financiado', False), ('construyó', True)]
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="se">Sentences with se<a class="headerlink" href="#se" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>se_passives_per_sent</code> · <code>impersonal_se_per_sent</code></p>
+<p><code>se_passives_per_sent</code> counts the <code>se</code> of the passive (<code>expl:pass</code>, <code>SE_PASSIVE_DEP</code>: <code>se construyó la casa</code>) per sentence, <code>impersonal_se_per_sent</code> the <code>se</code> of an impersonal sentence (<code>expl:impers</code>, <code>SE_IMPERSONAL_DEP</code>: <code>se vive bien</code>, <code>aquí se trabaja mucho</code>), as the model labels them. A verb with the <code>se</code> of the passive is a passive form of <code>p_passive</code> too.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code>es_core_news_sm</code> tells the three <code>se</code> of Spanish apart poorly - it rarely marks an impersonal <code>se</code> and reads <code>se fue dando un portazo</code> as a passive - so read <code>se_passives_per_sent</code> and <code>impersonal_se_per_sent</code> together rather than apart.</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Code</label><label for="__tabbed_8_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">ss</span> <span class="o">=</span> <span class="n">SyntaxStats</span><span class="p">(</span><span class="s2">"Se construyó la casa en un año. Aquí se trabaja mucho."</span><span class="p">)</span>
+<span class="n">ss</span><span class="o">.</span><span class="n">se_passives_per_sent</span><span class="p">,</span> <span class="n">ss</span><span class="o">.</span><span class="n">impersonal_se_per_sent</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>(0.5, 0.5)
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="constructions">Infinitives, negations and split predicates<a class="headerlink" href="#constructions" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>infinitives_per_sent</code> · <code>negations_per_sent</code> · <code>split_predicates_per_sent</code></p>
+<p>The infinitives (<code>is_infinitive</code> of <code>anyts.utils</code>), the words of negation of the hook <code>is_negation</code> and the split predicates of the hook <code>find_split_predicates</code>, per sentence.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_negation</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether a word is a word of negation: a word with <code>Polarity=Neg</code>, which the models give to <code>no</code> alone, or one of <code>NEGATION_WORDS</code> in any case - <code>no</code>, <code>nunca</code>, <code>jamás</code>, <code>nada</code>, <code>nadie</code>, <code>ninguno</code> with its forms, <code>tampoco</code>; a conjunction (<code>ni</code> of <code>ni... ni</code>) is none. Every such word counts, so the negative concord of Spanish, where one negation is written twice (<code>no vino nadie</code>), gives two. <code>SyntaxStats</code> counts the negations by the same rule.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">find_split_predicates</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+</code></pre></div>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_light_verb</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_split_predicate_noun</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">verb</span><span class="p">)</span>
+</code></pre></div>
+<p>The split predicates, pairs of a verb and a noun in the order of the words, replace a verb with a light verb and a noun: <code>hacer una revisión</code> instead of <code>revisar</code>. A light verb (<code>is_light_verb</code>) is a <code>VERB</code> with a lemma of <code>LIGHT_VERBS</code> - <code>hacer</code>, <code>dar</code>, <code>tomar</code>, <code>tener</code>, <code>poner</code>, <code>llevar</code>, <code>prestar</code>, <code>efectuar</code>, <code>realizar</code>, <code>proceder</code>, <code>proporcionar</code>, <code>ejercer</code>. Its nominal part (<code>is_split_predicate_noun</code>) is a <code>NOUN</code> whose lemma is derived from a verb, by the rule of the <a href="../style_stats/#verbal_nouns">verbal nouns</a> (<code>revisión</code>, <code>decisión</code>, <code>uso</code>), or one of the nouns of <code>SPLIT_PREDICATE_NOUNS</code> - <code>cabo</code>, <code>cargo</code>, <code>caso</code>, <code>comienzo</code>, <code>cuenta</code>, <code>efecto</code>, <code>fin</code>, <code>gala</code>, <code>hincapié</code>, <code>lugar</code>, <code>manifiesto</code>, <code>marcha</code>, <code>parte</code> - with a verb <code>verb</code> of its fixed expression (<code>llevar a cabo</code>, <code>tomar parte</code>, <code>poner de manifiesto</code>, <code>tener lugar</code>), so <code>poner en primer lugar la seguridad</code> is none. A verb takes one nominal part at most, preferred by relation in the order <code>compound</code>, <code>obj</code>, <code>nsubj</code> (only with the <code>se</code> of the passive: <code>se tomó la decisión</code>), <code>iobj</code>, <code>nmod</code>, <code>obl</code>. A complement with a preposition is the nominal part only in a fixed expression (<code>poner de manifiesto</code>) or with a verb of <code>PREPOSITIONAL_LIGHT_VERBS</code>, <code>proceder</code> (<code>se procedió a la votación</code>); the agent of a passive never is. The pairs found are in the attribute <code>split_predicates</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>tokens</code></td>
+<td style="text-align: left;"><code>Doc</code> / <code>Span</code> / <code>list[Token]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Sequence of tokens (<code>find_split_predicates</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>verb</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Verb the noun depends on (<code>is_split_predicate_noun</code>)</td>
+</tr>
+</tbody>
+</table>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Code</label><label for="__tabbed_9_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_split_predicates</span><span class="p">,</span> <span class="n">is_negation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span>
+    <span class="s2">"Se procedió a la votación y el comité tomó parte en la revisión. "</span>
+    <span class="s2">"No vino nadie, ni Juan ni María."</span>
+<span class="p">)</span>
+<span class="n">find_split_predicates</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_negation</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>[(procedió, votación), (tomó, parte)]
+['No', 'nadie']
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="noun_verb_ratio">Ratio of the nouns to the verbs<a class="headerlink" href="#noun_verb_ratio" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>noun_verb_ratio</code></p>
+<p>The number of the nouns <code>n_nouns</code> to the number of the verb forms <code>n_verbs</code>.</p>
+<div class="arithmatex">\[
+\frac{\textrm{Number of nouns}}{\textrm{Number of verb forms}}
+\]</div>
+</div>
+<h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
+<p>The methods <code>get_stats</code>, <code>to_dataframe</code>, <code>print_stats</code> and <code>describe</code> are those of the <a href="https://sergeyshk.github.io/anyTS/stats/stats/">statistics interface</a> of the anyTS core; the syntactic statistics have no scales, so <code>describe</code> gives <code>None</code> for the statistics of <code>get_stats</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Code</label><label for="__tabbed_10_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">ss</span> <span class="o">=</span> <span class="n">SyntaxStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="n">ss</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
+<span class="n">ss</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="s2">"tree_depth"</span><span class="p">),</span> <span class="n">ss</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="s2">"de_chains_per_sent"</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>{'mean_dependency_distance': 2.259259259259259,
+ 'std_dependency_distance': 2.1532506449997975,
+ 'max_dependency_distance': 9.0,
+ 'p_adjacent_dependencies': 0.48148148148148145,
+ 'tree_depth': 4.0,
+ 'leaves_per_sent': 8.0,
+ 'subtrees_per_sent': 6.5,
+ 'nodes_per_leaf': 1.8015873015873014,
+ 'verb_valency': 4.0,
+ 'coordination_chains_per_sent': 0.0,
+ 'mean_coordination_chain_len': nan,
+ 'clauses_per_sent': 1.5,
+ 'mean_clause_len': 9.666666666666666,
+ 'subordinate_clauses_per_sent': 0.5,
+ 'p_complex_sents': 0.5,
+ 'modifiers_per_noun': 1.0,
+ 'de_chains_per_sent': 0.5,
+ 'max_de_chain_len': 2,
+ 'participle_clauses_per_sent': 0.5,
+ 'mean_participle_clause_len': 3.0,
+ 'gerund_clauses_per_sent': 0.0,
+ 'mean_gerund_clause_len': nan,
+ 'p_passive': 0.6666666666666666,
+ 'p_agentless_passive': 0.5,
+ 'se_passives_per_sent': 0.5,
+ 'impersonal_se_per_sent': 0.0,
+ 'infinitives_per_sent': 0.0,
+ 'negations_per_sent': 0.5,
+ 'split_predicates_per_sent': 1.0,
+ 'noun_verb_ratio': 3.0}
+(None, None)
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>The functions work with spaCy tokens: the <code>calc_*</code> and <code>find_*</code> functions take a sequence of tokens (<code>Doc</code>, <code>Span</code> or a list), the <code>is_*</code>, <code>has_*</code> and <code>count_*</code> functions a single token; the words of a sequence are the tokens of <code>is_word</code> of <code>anyts.utils</code>. The functions of the dependency tree come from the core, those of the Spanish constructions are esTS's own.</p>
+<h2 id="get_words">Words of a sequence<a class="headerlink" href="#get_words" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">get_words</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>The words of a sequence of tokens in their order; with <code>join_hyphens=True</code> a word the tokenizer split at its hyphens is one word, given by its part that holds its relation, as with the dependents of <code>get_children</code> (<code>governor</code> in <code>He is vice-governor</code>), or by its first part when a hyphen holds it.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>tokens</code></td>
+<td style="text-align: left;"><code>Doc</code> / <code>Span</code> / <code>list[Token]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Sequence of tokens</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>join_hyphens</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Take a hyphenated word for one word</td>
+</tr>
+</tbody>
+</table>
+<h2 id="base_dep">Base relation<a class="headerlink" href="#base_dep" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">base_dep</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>The relation of a token without its subtype, which Universal Dependencies separates by a colon: <code>nsubj:pass</code> gives <code>nsubj</code>, <code>expl:pass</code> gives <code>expl</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+</tbody>
+</table>
+<h2 id="get_children">Dependent words<a class="headerlink" href="#get_children" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">get_children</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>The dependent words of a token, punctuation and whitespace left out; with <code>join_hyphens=True</code>, the dependents of the whole hyphenated word the token belongs to.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>join_hyphens</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Take a hyphenated word for one word</td>
+</tr>
+</tbody>
+</table>
+<div class="signature highlight"><pre><span></span><code><span class="n">subtree_len</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>The number of words in the subtree of a token: the token itself and all of its direct and indirect dependents; the arguments are those of <code>get_children</code>.</p>
+<h2 id="verb-forms">Verb forms<a class="headerlink" href="#verb-forms" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">predicate_form</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>The verb form of a predicate by the forms (<code>VerbForm</code>) of its auxiliaries and copulas (<code>aux</code>, <code>cop</code>): a finite auxiliary makes the predicate finite (<code>había llegado</code>, <code>estaba cantando</code>); otherwise the first auxiliary decides (<code>de haber matado</code> is an infinitive, <code>siendo elegido</code> a gerund), and without auxiliaries the word itself. A participle auxiliary counts as finite: <code>sido</code> and <code>estado</code> follow a form of <code>haber</code>, which the models may attach to another word (<code>hubieras sido albañil</code>). An auxiliary the model leaves without a form is read by its ending when it is a verb of <code>AUXILIARY_VERBS</code> (<code>habéis llegado</code>) - an infinitive in <code>-r</code> and a gerund in <code>-ndo</code>, enclitics after them (<code>ENCLITICS</code>), a finite form otherwise - and skipped when it is not (the old spelling <code>á</code>). It is the <code>predicate_form</code> of the anyTS core with the Spanish reading of an auxiliary without a form. The form is <code>'Fin'</code>, <code>'Inf'</code>, <code>'Ger'</code> or <code>'Part'</code>, an empty string for a word with no verb form.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_participle</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_gerund</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<div class="signature highlight"><pre><span></span><code><span class="n">has_auxiliary</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p><code>is_participle</code> checks whether a token is a participle (<code>VerbForm=Part</code>) whatever its part of speech, since the models tag a participle that modifies a noun as an adjective (<code>la casa pintada</code>); <code>is_gerund</code> whether it is a gerund (<code>VerbForm=Ger</code>); <code>has_auxiliary</code> whether it carries an auxiliary or a copula (<code>aux</code>, <code>cop</code>).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+</tbody>
+</table>
+<div class="tabbed-set tabbed-alternate" data-tabs="11:2"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><input id="__tabbed_11_2" name="__tabbed_11" type="radio" /><div class="tabbed-labels"><label for="__tabbed_11_1">Code</label><label for="__tabbed_11_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_participle</span><span class="p">,</span> <span class="n">predicate_form</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span>
+    <span class="s2">"Dijo que había llegado tarde. Lo acusan de haber matado al rey siendo elegido presidente."</span>
+<span class="p">)</span>
+<span class="p">[(</span><span class="n">token</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">predicate_form</span><span class="p">(</span><span class="n">token</span><span class="p">))</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_participle</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>[('llegado', 'Fin'), ('matado', 'Inf'), ('elegido', 'Ger')]
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="is_predicate">Predicate of a clause<a class="headerlink" href="#is_predicate" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_predicate</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether a word can be the predicate of its clause: a verb (<code>VERB</code>, <code>AUX</code>) or a word with a subject of its own (<code>nsubj</code>, <code>csubj</code> and their subtypes, <code>anyts.constants.SUBJECT_DEPS</code>), so the nominal predicate of <code>he is tall</code> passes and a parenthetical word does not.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>join_hyphens</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Take a hyphenated word for one word</td>
+</tr>
+</tbody>
+</table>
+<h2 id="calc_modifier_chains">Chains of modifiers<a class="headerlink" href="#calc_modifier_chains" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_modifier_chains</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">is_modifier</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>The lengths of the chains of nested modifiers, in the order of the words. A chain is two or more modifiers each hanging on the previous one, such as the complements of <code>the increase of the efficiency of the use of resources</code> (length 3); the check <code>is_modifier</code> of a language says what a modifier is (a complement with a preposition, a noun in the genitive). A chain starts at a modifier whose head is none, and its length is the number of modifiers in its longest branch. The links are those of <code>get_children</code>: punctuation is no link, and with <code>join_hyphens</code> a hyphenated word is one link.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>tokens</code></td>
+<td style="text-align: left;"><code>Doc</code> / <code>Span</code> / <code>list[Token]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Sequence of tokens</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>is_modifier</code></td>
+<td style="text-align: left;"><code>Callable[[Token], bool]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Whether a word is a modifier of the chain</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>join_hyphens</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Take a hyphenated word for one word</td>
+</tr>
+</tbody>
+</table>
+<p>A check that is not callable raises <code>SourceTypeError</code>.</p>
 
 
 
