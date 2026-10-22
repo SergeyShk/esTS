@@ -1,3 +1,4 @@
+import pickle
 from math import isnan
 
 import pytest
@@ -8,7 +9,6 @@ from ests.cohesion_stats import (
     Connector,
     find_connectors,
     load_connectors,
-    split_doc_sents,
     token_info,
 )
 from ests.constants import COHESION_STATS_DESC, CONNECTOR_CLASSES, CONNECTOR_TYPES
@@ -99,10 +99,26 @@ def test_given():
 def test_print_stats(cs, capsys):
     cs.print_stats()
     out = capsys.readouterr().out.splitlines()
-    assert out[0].split("|")[1] == "  Value   "
-    assert out[1] == "-" * 68
+    assert [cell.strip() for cell in out[0].split("|")] == ["Statistic", "Value"]
+    assert set(out[1]) == {"-"}
     assert len(out) == len(COHESION_STATS_DESC) + 2
-    assert out[2] == f"{'Noun overlap in adjacent sentences':58}|{0.5:^10.2f}"
+    assert [cell.strip() for cell in out[2].split("|")] == [
+        "Noun overlap in adjacent sentences",
+        "0.50",
+    ]
+
+
+def test_rules_do_not_read_across_a_comma():
+    # «y» after a determiner is no connector, but a comma between them breaks the rule
+    cs = CohesionStats("Su padre tiene un hijo feo y sin gracia alguna, y el amor le ciega.")
+    assert [(c.text, c.start) for c in cs.connector_spans] == [("y", 6), ("y", 10)]
+
+
+def test_pipeline_is_not_pickled(nlp):
+    cs = CohesionStats(TEXT, nlp=nlp)
+    restored = pickle.loads(pickle.dumps(cs))
+    assert "_nlp" not in vars(restored)
+    assert repr(restored.get_stats()) == repr(cs.get_stats())
 
 
 def test_doc_source(cs, nlp):
@@ -153,7 +169,7 @@ def test_source_without_words(source):
 
 
 def test_source_without_annotation():
-    with pytest.raises(SourceError, match="parts of speech"):
+    with pytest.raises(SourceError, match="parts of speech: parse the text with a model"):
         CohesionStats(spacy.blank("es")("El gato duerme"))
 
 
@@ -328,23 +344,5 @@ def test_token_info(nlp):
     assert token_info(tokens["gusta"]).tense == "Pres"
     assert token_info(tokens["gusta"]).mood == "Ind"
     assert not token_info(tokens["Este"]).content
-
-
-def test_split_doc_sents(nlp):
-    doc = nlp("El gato duerme. Los niños juegan.")
-    sents = split_doc_sents(doc, SentsExtractor())
-    assert [[token.text for token in sent] for sent in sents] == [
-        ["El", "gato", "duerme"],
-        ["Los", "niños", "juegan"],
-    ]
-
-
-def test_split_doc_sents_of_a_sentence_outside_the_text(nlp):
-    doc = nlp("El gato duerme. Los niños juegan.")
-    extractor = SentsExtractor(tokenizer=lambda text: ["El perro corre.", "Los niños juegan."])
-    sents = split_doc_sents(doc, extractor)
-    assert [[token.text for token in sent] for sent in sents] == [["Los", "niños", "juegan"]]
-
-
-def test_split_doc_sents_without_sentences(nlp):
-    assert split_doc_sents(nlp("El gato duerme"), SentsExtractor(min_len=50)) == []
+    assert token_info(nlp("Mi libro")[0]).pronoun
+    assert not token_info(nlp("El libro")[0]).pronoun

@@ -89,7 +89,12 @@ SPANISH = {
     "ests": {*EXTRACTORS, "CharNgramsExtractor", "DiversityStats"},
     "ests.extractors": {*EXTRACTORS, "CharNgramsExtractor", "NUMBER_PATTERN"},
     "ests.diversity_stats": {"DiversityStats"},
-    "ests.cohesion_stats": {"SentsExtractor"},
+    "ests.cohesion_stats": {
+        "COHESION_STATS_DESC",
+        "CONNECTOR_POS",
+        "CohesionStats",
+        "SentsExtractor",
+    },
     "ests.style_stats": {
         "STYLE_STATS_DESC",
         "StyleStats",
@@ -130,14 +135,6 @@ SPANISH = {
 # Copies of the mechanics of the core until the classes move onto the frames of anyTS 0.3:
 # every PR of 0.8 removes its own
 PENDING = {
-    "ests.cohesion_stats": {
-        "COHESION_STATS_DESC",
-        "CONNECTOR_CLASSES",
-        "CONNECTOR_POS",
-        "CONTENT_UD_POS",
-        "CohesionStats",
-        "Connector",
-    },
     "ests.components": {
         "BasicStatsComponent",
         "CohesionStats",

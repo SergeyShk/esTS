@@ -1,6 +1,21 @@
 import os
 from pathlib import Path
 
+from anyts.constants import MESSAGES
+
+# Messages of the errors of the core, the missing annotations of a Doc with how to get them
+CORE_MESSAGES = {
+    **MESSAGES,
+    "no_pos": (
+        "The data source has no annotation of the parts of speech: "
+        "parse the text with a model instead of a blank pipeline"
+    ),
+    "no_lemmas": (
+        "The data source has no lemmas: parse the text with a pipeline that has a lemmatizer"
+    ),
+    "no_parse": "The data source has no parse: parse the text with a model that has a parser",
+}
+
 # Characters besides an upper-case letter or a digit that may open a sentence
 SENTENCE_OPENERS = "¿¡«“\"'([—–―-"
 
@@ -634,8 +649,6 @@ SYNTAX_STATS_DESC = {
 }
 
 
-# Parts of speech of a content word, as Universal Dependencies names them
-CONTENT_UD_POS = frozenset({"NOUN", "PROPN", "ADJ", "VERB", "ADV"})
 # Classes of the discourse markers: those of Coh-Metrix (causal, adversative, temporal, additive)
 # with the concessive, conditional and reformulative ones
 CONNECTOR_CLASSES = {
