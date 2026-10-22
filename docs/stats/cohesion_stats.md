@@ -226,7 +226,7 @@ Spanish has no aspect in the Universal Dependencies annotation of the models, so
 load_connectors()
 ```
 
-The connector dictionary of esTS: the file `ests/resources/connectors.tsv`, 250 discourse markers (*marcadores del discurso*) of Martín Zorraquino and Portolés (1999) and conjunctions of the NGLE, each with its class of `CONNECTOR_CLASSES` and its kind of `CONNECTOR_TYPES` of `ests.constants`. The classes are the causal, adversative, temporal and additive connectives of Coh-Metrix with the concessive, conditional and reformulative ones added. The dictionary is read-only and shared by every caller, so a dictionary of your own goes through the `connectors` parameter.
+The connector dictionary of esTS: the file `ests/resources/connectors.tsv`, 250 discourse markers (*marcadores del discurso*) of Martín Zorraquino and Portolés (1999) and conjunctions of the NGLE, each with its class of `CONNECTOR_CLASSES` and its kind of `CONNECTOR_KINDS` of `anyts.constants`. The classes are the causal, adversative, temporal and additive connectives of Coh-Metrix with the concessive, conditional and reformulative ones added. The dictionary is read-only and shared by every caller, so a dictionary of your own goes through the `connectors` parameter.
 
 | Class | Key | Examples |
 | :---- | :-- | :------- |

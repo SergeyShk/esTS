@@ -244,7 +244,7 @@ $$
 load_connectors()
 ```
 
-El diccionario de conectores de esTS: el fichero `ests/resources/connectors.tsv`, 250 marcadores del discurso de Martín Zorraquino y Portolés (1999) y conjunciones de la NGLE, cada uno con su clase de `CONNECTOR_CLASSES` y su tipo de `CONNECTOR_TYPES` de `ests.constants`. Las clases son los conectores causales, adversativos, temporales y aditivos de Coh-Metrix, con los concesivos, condicionales y reformulativos añadidos. El diccionario es de solo lectura y compartido por todos, así que un diccionario propio se pasa por el parámetro `connectors`.
+El diccionario de conectores de esTS: el fichero `ests/resources/connectors.tsv`, 250 marcadores del discurso de Martín Zorraquino y Portolés (1999) y conjunciones de la NGLE, cada uno con su clase de `CONNECTOR_CLASSES` y su tipo de `CONNECTOR_KINDS` de `anyts.constants`. Las clases son los conectores causales, adversativos, temporales y aditivos de Coh-Metrix, con los concesivos, condicionales y reformulativos añadidos. El diccionario es de solo lectura y compartido por todos, así que un diccionario propio se pasa por el parámetro `connectors`.
 
 | Clase | Clave | Ejemplos |
 | :---- | :---- | :------- |

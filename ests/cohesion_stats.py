@@ -1,4 +1,4 @@
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from functools import cache
 from pathlib import Path
 from types import MappingProxyType
@@ -19,6 +19,7 @@ from .constants import (
     CONNECTOR_ONLY_AFTER,
     CONNECTOR_POS,
     CONNECTOR_POS_EXTRA,
+    CORE_MESSAGES,
 )
 from .exceptions import SourceError, SourceTypeError
 from .extractors import SentsExtractor
@@ -203,6 +204,7 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
     connector_matcher_class = SpanishConnectorMatcher
     temporal_features = ("tense", "mood")
     stats_desc = COHESION_STATS_DESC
+    messages = CORE_MESSAGES
 
     def __init__(
         self,
@@ -227,7 +229,7 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
         """Dictionary of the Spanish connectors (load_connectors)"""
         return load_connectors()
 
-    def analyze(self, source: str | Doc) -> list[list[anyts.cohesion_stats.CohesionWord]]:
+    def analyze(self, source: str | Doc) -> Iterable[Sequence[anyts.cohesion_stats.CohesionWord]]:
         """
         Getting the words of the sentences of a source with their features
 
@@ -239,7 +241,7 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
             source (str|Doc): Data source
 
         Returns:
-            list[list[CohesionWord]]: Words of every sentence
+            iterable[list[CohesionWord]]: Words of every sentence
 
         Raises:
             SourceTypeError: If the source is neither a string nor a Doc object
@@ -258,7 +260,7 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
                 )
             _check_encoding(source)
             source = pipeline(source, disable=UNUSED_COMPONENTS)
-        return [list(sent) for sent in super().analyze(source)]
+        return super().analyze(source)
 
 
 @cache
@@ -268,7 +270,7 @@ def load_connectors() -> Mapping[str, tuple[str, str]]:
 
     Description:
         The file resources/connectors.tsv: 250 discourse markers, each with its
-        class of CONNECTOR_CLASSES and its kind of CONNECTOR_TYPES
+        class of CONNECTOR_CLASSES and its kind of CONNECTOR_KINDS of anyts.constants
 
     Returns:
         Mapping[str, tuple[str, str]]: Class and kind by connector, read-only

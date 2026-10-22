@@ -116,7 +116,7 @@ def test_pipeline_parses_after_and_is_not_pickled(nlp):
 
 
 def test_source_without_parse():
-    with pytest.raises(SourceError, match="no dependency parse"):
+    with pytest.raises(SourceError, match="no parse: parse the text with a model"):
         SyntaxStats(spacy.blank("es")("La casa es blanca"))
 
 

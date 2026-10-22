@@ -169,7 +169,7 @@ def test_source_without_words(source):
 
 
 def test_source_without_annotation():
-    with pytest.raises(SourceError, match="parts of speech"):
+    with pytest.raises(SourceError, match="parts of speech: parse the text with a model"):
         CohesionStats(spacy.blank("es")("El gato duerme"))
 
 

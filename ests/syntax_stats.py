@@ -24,6 +24,7 @@ from spacy.tokens import Doc, Token
 from .constants import (
     AGENT_PREPOSITION,
     AUXILIARY_VERBS,
+    CORE_MESSAGES,
     DE_PREPOSITIONS,
     ENCLITICS,
     GERUND_PERIPHRASIS_VERBS,
@@ -169,6 +170,7 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
     requires_lemmas = True
     negation_words = NEGATION_WORDS
     stats_desc = SYNTAX_STATS_DESC
+    messages = CORE_MESSAGES
 
     def __init__(self, source: str | Doc, nlp: Language | None = None):
         if nlp is not None and not isinstance(nlp, Language):
