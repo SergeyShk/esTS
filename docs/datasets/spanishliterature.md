@@ -1,14 +1,13 @@
 # Spanish-language literature
 
-!!! info ""
-    **ests.datasets.SpanishLiterature**
-
-## Description
+``` {.python .signature}
+SpanishLiterature(data_dir=DEFAULT_DATASET_DIR)
+```
 
 A collection of Spanish-language literature in the public domain: 150 works by 33 authors from Spain, Latin America and the Philippines, from Cervantes to the 1920s, 65 million characters (about 11 million words) in four genres:
 
 | Genre | Key | Authors | Works |
-| :---- | :-- | :------ | :---: |
+| :---- | :-- | :------ | :---- |
 | Prose | `prose` | Pérez Galdós (21), Blasco Ibáñez (15), Palacio Valdés (13), Pardo Bazán (13), Pereda (8), Unamuno (6), Valera (6), Valle-Inclán (5), Clarín (3), Payró (3), Alarcón (2), Cervantes (2), Martí (2), Rizal (2), Darío, Larra, Lugones, Palma, Quevedo, Quiroga | 107 |
 | Poetry | `poems` | Darío (5), Hernández (2), Machado, Rosalía de Castro, Zorrilla | 10 |
 | Drama | `drama` | Valle-Inclán (4), Arniches (3), Ruiz de Alarcón (3), Lope de Vega (2), Cervantes, Dicenta, Moratín, Zorrilla | 16 |
@@ -23,7 +22,7 @@ The archive (19 MB) is kept in the repository of the library and downloaded once
 ??? info "The 150 works"
 
     | Author | Work | Genre | Years | Country |
-    | :----- | :--- | :---: | :---: | :------ |
+    | :----- | :--- | :---- | :---- | :------ |
     | Pedro Antonio de Alarcón | El clavo | `prose` | 1853 | España |
     | Pedro Antonio de Alarcón | El niño de la bola | `prose` | 1880 | España |
     | Vicente Blasco Ibáñez | Arroz y tartana | `prose` | 1894 | España |
@@ -175,41 +174,11 @@ The archive (19 MB) is kept in the repository of the library and downloaded once
     | Juan Valera | Cartas americanas | `publicism` | 1889 | España |
     | José Zorrilla | Recuerdos del tiempo viejo I | `publicism` | 1880 | España |
 
-## Parameters
+Raises:
 
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `data_dir` | str/Path | `DEFAULT_DATA_DIR.joinpath("texts")` | Path to the dataset directory; the data directory is described in [Installation](../installation.md#datasets) |
+- `SourceTypeError` - a `data_dir` that is neither a string nor a `Path`.
 
-## Attributes
-
-| Attribute | Type | Description |
-| :-------: | :--: | :---------: |
-| `genres` | tuple[str] | Tuple of genres: `prose`, `poems`, `drama`, `publicism` |
-| `authors` | dict[str, str] | Names of the authors by the names of their folders |
-| `name` | str | Name of the dataset, `spanish_literature` |
-| `meta` | dict[str, str] | Reference information: the source, the description, the author and the licence |
-| `info` | dict[str, str] | The name and the reference information in one dictionary |
-| `data_dir` | Path | Absolute path to the dataset directory |
-| `filepath` | str | Path to the archive of the dataset, `None` before the download |
-
-The dataset iterates over its records as `get_records()` without filters: `for record in sl` goes over the works one at a time.
-
-## Methods
-
-### check_data
-
-Checks that the list of works and the file of every work are in place and returns `True`; a dataset that is not downloaded or misses a file raises `DatasetNotFoundError`. The other methods check it themselves.
-
-### download
-
-Downloads the archive, verifies its SHA-256 checksum and extracts the files. A corrupted archive is downloaded again, missing files are extracted again; a repeated call downloads nothing.
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `force` | bool | `False` | Download the dataset even if it is already downloaded |
-
-!!! example "Example"
+=== "Code"
 
     ``` python
     from ests.datasets import SpanishLiterature
@@ -217,66 +186,100 @@ Downloads the archive, verifies its SHA-256 checksum and extracts the files. A c
     sl = SpanishLiterature()
     sl.download()
     sl.info
-    # {'name': 'spanish_literature',
-    #  'url': 'https://www.gutenberg.org',
-    #  'description': 'Spanish-language literature in the public domain',
-    #  'author': 'Shkarin S.S.',
-    #  'license': 'Public domain'}
     ```
 
-### get_texts
+=== "Result"
 
-Extracts the texts (without headers) from the dataset.
+    ```
+    {'name': 'spanish_literature',
+     'url': 'https://www.gutenberg.org',
+     'description': 'Spanish-language literature in the public domain',
+     'author': 'Shkarin S.S.',
+     'license': 'Public domain'}
+    ```
+
+## Parameters
 
 | Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `genre` | str | `None` | Genre: `prose`, `poems`, `drama` or `publicism` |
-| `author` | str | `None` | Author: a substring of the name, regardless of case and accents |
-| `country` | str | `None` | Country: a substring of the name in Spanish, regardless of case and accents |
-| `year_from` | int | `None` | Earliest year of the first publication |
-| `year_to` | int | `None` | Latest year of the first publication |
-| `min_len` | int | `None` | Minimum text length (in characters) |
-| `max_len` | int | `None` | Maximum text length (in characters) |
-| `limit` | int | `None` | Number of texts |
+| :-------- | :--- | :------ | :---------- |
+| `data_dir` | `str` / `Path` | `DEFAULT_DATASET_DIR` | Path to the dataset directory; `texts` in `DEFAULT_DATA_DIR` by default, the data directory is described in [Installation](../installation.md#datasets) |
 
-The filters are combined; `author="galdos"` finds Benito Pérez Galdós, `country="mexico"` finds `México`. An unknown genre, an earliest year after the latest one, a length below one, a minimum length above the maximum one and a negative limit raise `ParameterError`.
+## Attributes
 
-!!! example "Example"
+| Attribute | Type | Description |
+| :-------- | :--- | :---------- |
+| `genres` | `tuple[str]` | Tuple of genres: `prose`, `poems`, `drama`, `publicism` |
+| `authors` | `dict[str, str]` | Names of the authors by the names of their folders |
+| `name` | `str` | Name of the dataset, `spanish_literature` |
+| `meta` | `dict[str, str]` | Reference information: the source, the description, the author and the licence |
+| `info` | `dict[str, str]` | The name and the reference information in one dictionary |
+| `data_dir` | `Path` | Absolute path to the dataset directory |
+| `filepath` | `str` | Path to the archive of the dataset, `None` before the download |
+
+The dataset iterates over its records as `get_records()` without filters: `for record in sl` goes over the works one at a time.
+
+## Methods
+
+`download(force=False)` downloads the archive, verifies its SHA-256 checksum and extracts the files. A corrupted archive is downloaded again, missing files are extracted again; a repeated call downloads nothing.
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `force` | `bool` | `False` | Download the dataset even if it is already downloaded |
+
+An archive that cannot be downloaded or fails the checksum twice raises `DownloadError`, an archive that cannot be extracted `DataFileError`.
+
+`check_data()` checks that the list of works and the file of every work are in place and returns `True`; a dataset that is not downloaded or misses a file raises `DatasetNotFoundError` with the commands to download it. The other methods check it themselves.
+
+`get_texts(genre=None, author=None, country=None, year_from=None, year_to=None, min_len=None, max_len=None, limit=None)` extracts the texts (without headers) from the dataset.
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `genre` | `str` | `None` | Genre: `prose`, `poems`, `drama` or `publicism` |
+| `author` | `str` | `None` | Author: a substring of the name, regardless of case and accents |
+| `country` | `str` | `None` | Country: a substring of the name in Spanish, regardless of case and accents |
+| `year_from` | `int` | `None` | Earliest year of the first publication |
+| `year_to` | `int` | `None` | Latest year of the first publication |
+| `min_len` | `int` | `None` | Minimum text length (in characters) |
+| `max_len` | `int` | `None` | Maximum text length (in characters) |
+| `limit` | `int` | `None` | Number of texts |
+
+The filters are combined; `author="galdos"` finds Benito Pérez Galdós, `country="mexico"` finds `México`. An unknown genre, an `author` or a `country` that is not a string, a year that is not an integer, an earliest year after the latest one, a length bound that is not an integer of at least one, a minimum length above the maximum one and a `limit` that is not a non-negative integer raise `ParameterError`.
+
+=== "Code"
 
     ``` python
-    from ests.datasets import SpanishLiterature
-
-    sl = SpanishLiterature()
     for text in sl.get_texts(genre="poems", author="Rosalía", limit=1):
         print(text[:107])
-    # Aunque no alcancen gloria,
-    #     Pensé escribiendo libro tan pequeño,
-    #     Son fáciles y breves mis canciones,
     ```
 
-### get_records
+=== "Result"
 
-Extracts the records (with headers) from the dataset. Record fields: `genre` - genre, `author` - author, `title` - title, `year_from` and `year_to` - the years of the first publication, `country` - the country of the author in Spanish, `text` - text, `file` - path to the file. The records go by genre in the order of `genres`, within a genre by the folder of the author and by year.
+    ```
+    Aunque no alcancen gloria,
+        Pensé escribiendo libro tan pequeño,
+        Son fáciles y breves mis canciones,
+    ```
 
-The parameters are the same as for `get_texts`.
+`get_records` with the same parameters extracts the records (with headers) from the dataset. Record fields: `genre` - genre, `author` - author, `title` - title, `year_from` and `year_to` - the years of the first publication, `country` - the country of the author in Spanish, `text` - text, `file` - path to the file. The records go by genre in the order of `genres`, within a genre by the folder of the author and by year.
 
-!!! example "Example"
+=== "Code"
 
     ``` python
-    from ests.datasets import SpanishLiterature
-
-    sl = SpanishLiterature()
-
     # The plays of the twentieth century
     for record in sl.get_records(genre="drama", year_from=1900):
         print(record["title"], record["year_from"], record["author"])
-    # La señorita de Trevélez 1916 Carlos Arniches
-    # Los caciques 1920 Carlos Arniches
-    # Es mi hombre 1921 Carlos Arniches
-    # El marqués de Bradomín 1907 Ramón del Valle-Inclán
-    # Romance de lobos 1908 Ramón del Valle-Inclán
-    # Luces de bohemia 1920 Ramón del Valle-Inclán
-    # Divinas palabras 1920 Ramón del Valle-Inclán
+    ```
+
+=== "Result"
+
+    ```
+    La señorita de Trevélez 1916 Carlos Arniches
+    Los caciques 1920 Carlos Arniches
+    Es mi hombre 1921 Carlos Arniches
+    El marqués de Bradomín 1907 Ramón del Valle-Inclán
+    Romance de lobos 1908 Ramón del Valle-Inclán
+    Luces de bohemia 1920 Ramón del Valle-Inclán
+    Divinas palabras 1920 Ramón del Valle-Inclán
     ```
 
 !!! warning "The spelling follows the edition"

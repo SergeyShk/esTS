@@ -9,10 +9,18 @@ until its translation is brought up to date
 """
 
 import hashlib
+import importlib
+import inspect
+import pkgutil
 import re
 from pathlib import Path
 
+import anyts
+import anyts.constants
 import pytest
+
+import ests
+import ests.constants
 
 DOCS = Path(__file__).parent.parent / "docs"
 CORE = DOCS / "core"
@@ -81,3 +89,89 @@ def test_core_translations(page):
         assert translated == digest(ref), (
             f"{ref}: translated from {translated}, the core is {digest(ref)}"
         )
+
+
+# A signature block: ``` {.python .signature} with one call on one line
+SIGNATURE = re.compile(r"^``` \{\.python \.signature\}\n(\w+)\((.*)\)\n```$", re.MULTILINE)
+MODULES = [
+    importlib.import_module(info.name)
+    for info in pkgutil.walk_packages(ests.__path__, "ests.")
+    if not info.name.endswith("__main__")
+]
+CORE_MODULES = [
+    importlib.import_module(info.name) for info in pkgutil.walk_packages(anyts.__path__, "anyts.")
+]
+CONSTANTS = [ests.constants, anyts.constants, *MODULES, *CORE_MODULES]
+# Pages whose name is not that of their module
+PAGE_MODULES = {
+    "extractors": "ests.extractors",
+    "datasets/freqdict": "ests.datasets.freq_dict",
+    "datasets/spanishliterature": "ests.datasets.spanish_literature",
+    "datasets/spanishsonnets": "ests.datasets.spanish_sonnets",
+}
+
+
+def default_text(value: object) -> str:
+    """A default as a signature block writes it: a literal, a name or a constant"""
+    if value is None or isinstance(value, bool | int | float | str | tuple):
+        return repr(value)
+    if callable(value) and hasattr(value, "__qualname__"):
+        return value.__qualname__
+    for module in CONSTANTS:
+        for name, constant in vars(module).items():
+            if name.isupper() and constant is value:
+                return name
+    return repr(value)
+
+
+def signature_text(target: object) -> str:
+    """The parameters of a callable as a signature block writes them"""
+    parts = []
+    keyword_only = False
+    for param in inspect.signature(target).parameters.values():
+        if param.kind is param.KEYWORD_ONLY and not keyword_only:
+            parts.append("*")
+            keyword_only = True
+        if param.kind is param.VAR_POSITIONAL:
+            parts.append(f"*{param.name}")
+            keyword_only = True
+        elif param.kind is param.VAR_KEYWORD:
+            parts.append(f"**{param.name}")
+        elif param.default is param.empty:
+            parts.append(param.name)
+        else:
+            parts.append(f"{param.name}={default_text(param.default)}")
+    return ", ".join(parts)
+
+
+def page_target(page: Path, name: str) -> object:
+    """The callable of a page: from the module of the page or the only one of the name in esTS"""
+    key = page.relative_to(DOCS).with_suffix("").as_posix().removesuffix(".es")
+    module_name = PAGE_MODULES.get(key) or PAGE_MODULES.get(key.split("/")[0])
+    if module_name is None:
+        module_name = "ests." + key.removeprefix("stats/").removesuffix("_funcs").replace("/", ".")
+    try:
+        module = importlib.import_module(module_name)
+    except ImportError:
+        module = None
+    if module is not None and name in vars(module):
+        return vars(module)[name]
+    targets = {id(vars(m)[name]): vars(m)[name] for m in MODULES if name in vars(m)}
+    return next(iter(targets.values())) if len(targets) == 1 else None
+
+
+def test_signatures_match_the_code():
+    found = 0
+    for page in sorted(path for path in DOCS.rglob("*.md") if not path.is_relative_to(CORE)):
+        text = INCLUDE.sub(
+            lambda match: core_section(match["ref"]), page.read_text(encoding="utf-8")
+        )
+        for name, written in SIGNATURE.findall(text):
+            target = page_target(page, name)
+            where = page.relative_to(DOCS)
+            assert target is not None, f"{where}: no {name} in esTS"
+            assert written == signature_text(target), (
+                f"{where}: {name}({written}) differs from the code"
+            )
+            found += 1
+    assert found

@@ -1,230 +1,32 @@
 # Morphological statistics
 
-!!! info ""
-    **ests.morph_stats.MorphStats**
+``` {.python .signature}
+MorphStats(source, nlp=None)
+```
 
-## Description
+The morphological statistics of a text: the part of speech and the grammatical features of every word in [Universal Dependencies](https://universaldependencies.org/u/feat/) terms, their distributions and the markers of Spanish computed from them. The data source is a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library; the statistics are computed when the object is created.
 
-A module for computing the morphological statistics of a text. The data source can be either a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library.
+A text is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`; a `Doc` must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer`. Words are taken from the tokens, punctuation marks and symbols are dropped. A text longer than the `max_length` of the pipeline - a million characters by default - has to be split into parts, or `max_length` raised on a pipeline of your own passed in `nlp`.
 
-Parts of speech and grammatical features are given in the terms of [Universal Dependencies](https://universaldependencies.org/u/feat/). A text is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`; a `Doc` must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer` - a `Doc` of `spacy.blank("es")` or of a pipeline with the `lemmatizer` excluded raises `SourceError`. Words are taken from the tokens, punctuation marks and symbols are dropped.
+Raises:
 
-A text longer than the `max_length` of the pipeline - a million characters by default - raises `SourceError`: split it into parts, or raise `max_length` on a pipeline of your own and pass it in `nlp`.
+- `SourceTypeError` - a source that is neither a string nor a `Doc`, a pipeline that is not a spaCy `Language`;
+- `SourceError` - a source without words, a `Doc` without the parts of speech or the lemmas (a `Doc` of `spacy.blank("es")` or of a pipeline with the `lemmatizer` excluded), a string longer than the `max_length` of the pipeline or with a character that has no UTF-8 form;
+- `DatasetNotFoundError` - a string without `nlp` when the model `es_core_news_sm` is not installed.
 
-!!! note "Note"
-    The statistics are computed when the `MorphStats` object is initialized.
-
-## Parameters
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `source` | str/Doc | `-` | Data source (a string or a Doc object) |
-| `nlp` | Language | `None` | Pipeline of spaCy that parses a string; without it the model `es_core_news_sm` is loaded |
-
-## Attributes
-
-| Attribute | Type | Description |
-| :-------: | :--: | :---------: |
-| `words` | tuple[str] | Tuple of extracted words |
-| `lemmas` | tuple[str] | Tuple of lemmas of the words |
-| `tags` | tuple[str] | Tuple of feature strings in the CoNLL-U format |
-| `pos` | tuple[str] | Tuple of the parts of speech |
-| `case` | tuple[str] | Tuple of the values of case |
-| `definite` | tuple[str] | Tuple of the values of definiteness |
-| `degree` | tuple[str] | Tuple of the values of degree |
-| `gender` | tuple[str] | Tuple of the values of gender |
-| `mood` | tuple[str] | Tuple of the values of mood |
-| `num_type` | tuple[str] | Tuple of the values of the numeral type |
-| `number` | tuple[str] | Tuple of the values of number |
-| `person` | tuple[str] | Tuple of the values of person |
-| `polarity` | tuple[str] | Tuple of the values of polarity |
-| `polite` | tuple[str] | Tuple of the values of politeness |
-| `poss` | tuple[str] | Tuple of the values of the possessive |
-| `pron_type` | tuple[str] | Tuple of the values of the pronoun type |
-| `reflex` | tuple[str] | Tuple of the values of the reflexive |
-| `tense` | tuple[str] | Tuple of the values of tense |
-| `verb_form` | tuple[str] | Tuple of the values of the verb form |
-
-Every attribute has the length of `words`, and a word that the model gives the feature no value for holds `None`. The names of the attributes are the names of the statistics accepted by the methods; `tags` and `lemmas` are not statistics.
-
-!!! note "Note"
-    A feature with several values keeps the form of CoNLL-U: `qué`, `quién`, `cuál` have `pron_type` equal to `Int,Rel`, and `usted` has `case` equal to `Acc,Nom`. `print_stats` describes such a value by the descriptions of its parts - "Interrogative or relative", "Accusative or nominative".
-
-## Features { #features }
-
-The statistics count the fifteen features of the table below; the value `Unknown` in the printed tables and `None` in the attributes mean that the model gave the word no value of the feature. The other features the models annotate (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`, `PunctSide`, `PunctType`) are not counted but stay in `tags`.
-
-| Statistic | Feature | Values |
-| :-------: | :-----: | :----: |
-| `pos` | Part of speech | NOUN, PROPN, ADJ, ADV, VERB, AUX, PRON, DET, NUM, ADP, CCONJ, SCONJ, PART, INTJ, SYM, X |
-| `case` | Case | Nom, Acc, Dat, Com |
-| `definite` | Definiteness | Def, Ind |
-| `degree` | Degree | Cmp, Sup, Abs |
-| `gender` | Gender | Masc, Fem |
-| `mood` | Mood | Ind, Sub, Imp, Cnd |
-| `num_type` | Numeral type | Card, Ord, Frac |
-| `number` | Number | Sing, Plur |
-| `person` | Person | 1, 2, 3 |
-| `polarity` | Polarity | Neg |
-| `polite` | Politeness | Form |
-| `poss` | Possessive | Yes |
-| `pron_type` | Pronoun type | Art, Prs, Dem, Ind, Int, Rel, Neg, Tot, Exc |
-| `reflex` | Reflexive | Yes |
-| `tense` | Tense | Pres, Past, Imp, Fut |
-| `verb_form` | Verb form | Fin, Inf, Part, Ger |
-
-!!! warning "Warning"
-    The statistics are as good as the annotation of the model. `es_core_news_sm` mis-analyses verbs with enclitic pronouns (`dámelo`, `cuéntamelo` come out as nouns with invented lemmas) and tags the imperatives of `tú` as indicative (`Abre la ventana` gets `Mood=Ind`), so `p_imperative` under-reports and `p_indicative` absorbs the orders: in the dialogue of the corpus of literature it finds about one imperative in ten. `es_core_news_lg` does little better (15%); the transformer model `es_dep_news_trf` passed in `nlp` finds 87% of them, and in drama `p_imperative` rises from 1.6% to 7.5% - at the cost of about 1 GB with PyTorch and five times the time on a CPU, and it needs the single line breaks of a hard-wrapped text joined first.
-
-## Methods
-
-### get_stats
-
-Returns a dictionary with the computed morphological statistics: for every statistic, how many words carry each of its values.
-
-Parameters:
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `args` | tuple[str] | `-` | Names of the selected statistics, by default all of them |
-| `filter_none` | bool | `False` | Filter out the empty values |
-
-!!! example "Example"
-
-    _Code_:
+=== "Code"
 
     ``` python
-    # Import the library
     from ests import MorphStats
 
-    # Prepare the data
     text = "Si tuviera tiempo, leería el libro que me recomendaste ayer"
-
-    # Compute the statistics
     ms = MorphStats(text)
-    ms.get_stats("pos", "mood", "tense", filter_none=True)
-    ```
-
-    _Result_:
-
-    ``` bash
-    {'pos': {'SCONJ': 1, 'VERB': 3, 'NOUN': 2, 'DET': 1, 'PRON': 2, 'ADV': 1},
-    'mood': {'Sub': 1, 'Cnd': 1, 'Ind': 1},
-    'tense': {'Imp': 1, 'Pres': 1}}
-    ```
-
-### get_markers
-
-Returns a dictionary with the markers of Spanish computed from the features. Every marker is a share of its own base, so the markers of texts of different lengths can be compared directly:
-
-| Marker | Description |
-| :----: | :---------: |
-| `p_indicative` | Indicative among the finite forms |
-| `p_subjunctive` | Subjunctive among the finite forms |
-| `p_conditional` | Conditional among the finite forms |
-| `p_imperative` | Imperative among the finite forms |
-| `p_infinitive` | Infinitive among the verb forms |
-| `p_gerund` | Gerund among the verb forms |
-| `p_participle` | Participle among the verb forms |
-| `p_ser` | `ser` among the copulas `ser` and `estar` |
-| `p_mente_adverbs` | Adverbs in `-mente` among the adverbs |
-
-The first four markers share the base of the finite forms and sum to one unless the model leaves a finite form without a mood. The next three share the base of all the verb forms of verbs and auxiliaries: a participle that the model annotates as an adjective (`la casa pintada`) is out of the base, the ones of the compound tenses and the passive (`he leído`, `fue escrito`) are in.
-
-The base of `p_ser` is the copular uses alone, read from the parse: the auxiliaries of the passive and of the progressive (`fue escrito`, `es financiado`, `está cantando`) are left out, while `es alta`, `está cansada` and `lo importante es que vengas` count. For a `Doc` without a parse the marker is `nan`.
-
-A marker whose base is empty - a text without verbs, without a copula, without adverbs - is `nan`.
-
-!!! note "Note"
-    The subjunctive marks hypothesis and subordination, `estar` a state against the property of `ser`, and the adverbs in `-mente` a formal, written register.
-
-!!! example "Example"
-
-    _Code_:
-
-    ``` python
-    ...
-
-    # Compute the markers
-    ms.get_markers()
-    ```
-
-    _Result_:
-
-    ``` bash
-    {'p_indicative': 0.3333333333333333,
-    'p_subjunctive': 0.3333333333333333,
-    'p_conditional': 0.3333333333333333,
-    'p_imperative': 0.0,
-    'p_infinitive': 0.0,
-    'p_gerund': 0.0,
-    'p_participle': 0.0,
-    'p_ser': nan,
-    'p_mente_adverbs': 0.0}
-    ```
-
-### explain_text
-
-Returns a tuple of the words of the text with the values of the selected statistics.
-
-Parameters:
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `args` | tuple[str] | `-` | Names of the selected statistics, by default all of them |
-| `filter_none` | bool | `False` | Filter out the empty values |
-
-!!! example "Example"
-
-    _Code_:
-
-    ``` python
-    ...
-
-    # Parse the text
-    ms.explain_text("pos", "mood", "tense", filter_none=True)
-    ```
-
-    _Result_:
-
-    ``` bash
-    (('Si', {'pos': 'SCONJ'}),
-    ('tuviera', {'pos': 'VERB', 'mood': 'Sub', 'tense': 'Imp'}),
-    ('tiempo', {'pos': 'NOUN'}),
-    ('leería', {'pos': 'VERB', 'mood': 'Cnd'}),
-    ('el', {'pos': 'DET'}),
-    ('libro', {'pos': 'NOUN'}),
-    ('que', {'pos': 'PRON'}),
-    ('me', {'pos': 'PRON'}),
-    ('recomendaste', {'pos': 'VERB', 'mood': 'Ind', 'tense': 'Pres'}),
-    ('ayer', {'pos': 'ADV'}))
-    ```
-
-### print_stats
-
-Prints a table of the values of every selected statistic, from the most frequent to the least frequent.
-
-Parameters:
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `args` | tuple[str] | `-` | Names of the selected statistics, by default all of them |
-| `filter_none` | bool | `False` | Filter out the empty values |
-
-!!! example "Example"
-
-    _Code_:
-
-    ``` python
-    ...
-
-    # Print the table of computed statistics
     ms.print_stats("pos", "mood")
     ```
 
-    _Result_:
+=== "Result"
 
-    ``` bash
+    ```
     -------------Part of speech-------------
     Verb                          |    3
     Noun                          |    2
@@ -240,24 +42,147 @@ Parameters:
     Indicative                    |    1
     ```
 
-### print_markers
+## Parameters
 
-Prints a table with the computed markers of Spanish.
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `source` | `str` / `Doc` | - | Data source |
+| `nlp` | `Language` | `None` | Pipeline of spaCy that parses a string; without it the model `es_core_news_sm` is loaded |
 
-!!! example "Example"
+## Attributes
 
-    _Code_:
+| Attribute | Type | Description |
+| :-------- | :--- | :---------- |
+| `words` | `tuple[str]` | Words |
+| `lemmas` | `tuple[str]` | Lemmas of the words |
+| `tags` | `tuple[str]` | Grammatical features of the words as strings in the CoNLL-U format (`Gender=Masc|Number=Sing`, `_` without features) |
+
+=== "Code"
 
     ``` python
-    ...
+    ms.lemmas[:4]
+    ms.tags[1]
+    ```
 
-    # Print the table of computed markers
+=== "Result"
+
+    ```
+    ('si', 'tener', 'tiempo', 'leer')
+    'Mood=Sub|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin'
+    ```
+
+## Statistics
+
+Every statistic is an attribute of the object, a tuple of the values of a feature by word (`None` for a word the model gives no value of the feature), and `get_stats` gives the distributions of their values. The values are read from `token.pos_` and `token.morph` of the parse, that is, by context. The statistics are the part of speech and the fifteen features of `MORPHOLOGY_FEATURES`; the value `Unknown` in the printed tables means that the model gave the word no value of the feature. The other features the models annotate (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`, `PunctSide`, `PunctType`) are not counted but stay in `tags`.
+
+| Statistic | Feature | Values |
+| :-------- | :------ | :----- |
+| `pos` | Part of speech | `NOUN`, `PROPN`, `ADJ`, `ADV`, `VERB`, `AUX`, `PRON`, `DET`, `NUM`, `ADP`, `CCONJ`, `SCONJ`, `PART`, `INTJ`, `SYM`, `X` |
+| `case` | Case | `Nom`, `Acc`, `Dat`, `Com` |
+| `definite` | Definiteness | `Def`, `Ind` |
+| `degree` | Degree | `Cmp`, `Sup`, `Abs` |
+| `gender` | Gender | `Masc`, `Fem` |
+| `mood` | Mood | `Ind`, `Sub`, `Imp`, `Cnd` |
+| `num_type` | Numeral type | `Card`, `Ord`, `Frac` |
+| `number` | Number | `Sing`, `Plur` |
+| `person` | Person | `1`, `2`, `3` |
+| `polarity` | Polarity | `Neg` |
+| `polite` | Politeness | `Form` |
+| `poss` | Possessive | `Yes` |
+| `pron_type` | Pronoun type | `Art`, `Prs`, `Dem`, `Ind`, `Int`, `Rel`, `Neg`, `Tot`, `Exc` |
+| `reflex` | Reflexive | `Yes` |
+| `tense` | Tense | `Pres`, `Past`, `Imp`, `Fut` |
+| `verb_form` | Verb form | `Fin`, `Inf`, `Part`, `Ger` |
+
+A feature with several values keeps the form of CoNLL-U: `qué`, `quién`, `cuál` have `pron_type` equal to `Int,Rel`, and `usted` has `case` equal to `Acc,Nom`. `print_stats` names the values by `MORPHOLOGY_STATS_DESC` of `ests.constants`, and such a value by the names of its parts - "Interrogative or relative", "Accusative or nominative".
+
+!!! warning "Warning"
+    The statistics are as good as the annotation of the model. `es_core_news_sm` mis-analyses verbs with enclitic pronouns (`dámelo`, `cuéntamelo` come out as nouns with invented lemmas) and tags the imperatives of `tú` as indicative (`Abre la ventana` gets `Mood=Ind`), so `p_imperative` under-reports and `p_indicative` absorbs the orders: in the dialogue of the corpus of literature it finds about one imperative in ten. `es_core_news_lg` does little better (15%); the transformer model `es_dep_news_trf` passed in `nlp` finds 87% of them, and in drama `p_imperative` rises from 1.6% to 7.5% - at the cost of about 1 GB with PyTorch and five times the time on a CPU, and it needs the single line breaks of a hard-wrapped text joined first.
+
+<div class="metric-card" markdown>
+
+### Markers of Spanish { #markers }
+
+`get_markers()` · `print_markers()`
+{ .metric-meta }
+
+The shares of the forms that mark the register of a Spanish text, each of its own base (`MORPHOLOGY_MARKERS_DESC`), so the markers of texts of different lengths can be compared directly; a marker whose base is empty - a text without verbs, without a copula, without adverbs - is `nan`. The subjunctive marks hypothesis and subordination, `estar` a state against the property of `ser`, and the adverbs in `-mente` a formal, written register.
+
+| Marker | Share | Base |
+| :----- | :---- | :--- |
+| `p_indicative`, `p_subjunctive`, `p_conditional`, `p_imperative` | of the indicative, subjunctive, conditional and imperative mood | finite forms |
+| `p_infinitive`, `p_gerund`, `p_participle` | of infinitives, gerunds and participles | verb forms |
+| `p_ser` | of `ser` | copulas `ser` and `estar` |
+| `p_mente_adverbs` | of the adverbs in `-mente` | adverbs |
+
+The first four markers share the base of the finite forms and sum to one unless the model leaves a finite form without a mood. The next three share the base of all the verb forms of verbs and auxiliaries: a participle that the model annotates as an adjective (`la casa pintada`) is out of the base, the ones of the compound tenses and the passive (`he leído`, `fue escrito`) are in.
+
+The base of `p_ser` is the copular uses alone, read from the parse: the auxiliaries of the passive and of the progressive (`fue escrito`, `es financiado`, `está cantando`) are left out, while `es alta`, `está cansada` and `lo importante es que vengas` count. For a `Doc` without a parse the marker is `nan`.
+
+=== "Code"
+
+    ``` python
+    ms.get_markers()
+    ```
+
+=== "Result"
+
+    ```
+    {'p_indicative': 0.3333333333333333,
+     'p_subjunctive': 0.3333333333333333,
+     'p_conditional': 0.3333333333333333,
+     'p_imperative': 0.0,
+     'p_infinitive': 0.0,
+     'p_gerund': 0.0,
+     'p_participle': 0.0,
+     'p_ser': nan,
+     'p_mente_adverbs': 0.0}
+    ```
+
+</div>
+
+## Methods
+
+`get_stats(*args, filter_none=False)` returns the distributions of the values of the statistics as a dictionary of counts for each. The statistics are chosen by their names separated by commas, all of them without names, and `filter_none=True` drops the words without the feature (`None`). A name that is not a statistic raises `UnknownStatError` - here and in `print_stats` and `explain_text`.
+
+`print_stats(*args, filter_none=False)` prints the distributions of the chosen statistics as tables, the frequent values first (the example at the top of the page), and `explain_text(*args, filter_none=False)` returns the words of the text in order with the values of the chosen statistics.
+
+=== "Code"
+
+    ``` python
+    ms.get_stats("pos", "mood", "tense", filter_none=True)
+    ms.explain_text("pos", "mood", "tense", filter_none=True)
+    ```
+
+=== "Result"
+
+    ```
+    {'pos': {'SCONJ': 1, 'VERB': 3, 'NOUN': 2, 'DET': 1, 'PRON': 2, 'ADV': 1},
+     'mood': {'Sub': 1, 'Cnd': 1, 'Ind': 1},
+     'tense': {'Imp': 1, 'Pres': 1}}
+    (('Si', {'pos': 'SCONJ'}),
+     ('tuviera', {'pos': 'VERB', 'mood': 'Sub', 'tense': 'Imp'}),
+     ('tiempo', {'pos': 'NOUN'}),
+     ('leería', {'pos': 'VERB', 'mood': 'Cnd'}),
+     ('el', {'pos': 'DET'}),
+     ('libro', {'pos': 'NOUN'}),
+     ('que', {'pos': 'PRON'}),
+     ('me', {'pos': 'PRON'}),
+     ('recomendaste', {'pos': 'VERB', 'mood': 'Ind', 'tense': 'Pres'}),
+     ('ayer', {'pos': 'ADV'}))
+    ```
+
+`get_markers()` returns the [markers of Spanish](#markers) as a dictionary, and `print_markers()` prints them as a table.
+
+=== "Code"
+
+    ``` python
     ms.print_markers()
     ```
 
-    _Result_:
+=== "Result"
 
-    ``` bash
+    ```
                          Marker                    |   Value
     -----------------------------------------------------------
     Indicative among the finite forms              |   0.33

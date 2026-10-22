@@ -1,14 +1,13 @@
 # Literatura en español
 
-!!! info ""
-    **ests.datasets.SpanishLiterature**
-
-## Descripción
+``` {.python .signature}
+SpanishLiterature(data_dir=DEFAULT_DATASET_DIR)
+```
 
 Una colección de literatura en español de dominio público: 150 obras de 33 autores de España, Hispanoamérica y Filipinas, de Cervantes a los años veinte, 65 millones de caracteres (unos 11 millones de palabras) en cuatro géneros:
 
 | Género | Clave | Autores | Obras |
-| :----- | :---- | :------ | :---: |
+| :----- | :---- | :------ | :---- |
 | Prosa | `prose` | Pérez Galdós (21), Blasco Ibáñez (15), Palacio Valdés (13), Pardo Bazán (13), Pereda (8), Unamuno (6), Valera (6), Valle-Inclán (5), Clarín (3), Payró (3), Alarcón (2), Cervantes (2), Martí (2), Rizal (2), Darío, Larra, Lugones, Palma, Quevedo, Quiroga | 107 |
 | Poesía | `poems` | Darío (5), Hernández (2), Machado, Rosalía de Castro, Zorrilla | 10 |
 | Teatro | `drama` | Valle-Inclán (4), Arniches (3), Ruiz de Alarcón (3), Lope de Vega (2), Cervantes, Dicenta, Moratín, Zorrilla | 16 |
@@ -23,7 +22,7 @@ El archivo (19 MB) se guarda en el repositorio de la biblioteca y se descarga un
 ??? info "Las 150 obras"
 
     | Autor | Obra | Género | Años | País |
-    | :---- | :--- | :----: | :--: | :--- |
+    | :---- | :--- | :----- | :--- | :--- |
     | Pedro Antonio de Alarcón | El clavo | `prose` | 1853 | España |
     | Pedro Antonio de Alarcón | El niño de la bola | `prose` | 1880 | España |
     | Vicente Blasco Ibáñez | Arroz y tartana | `prose` | 1894 | España |
@@ -175,41 +174,11 @@ El archivo (19 MB) se guarda en el repositorio de la biblioteca y se descarga un
     | Juan Valera | Cartas americanas | `publicism` | 1889 | España |
     | José Zorrilla | Recuerdos del tiempo viejo I | `publicism` | 1880 | España |
 
-## Parámetros
+Excepciones:
 
-| Parámetro | Tipo | Valor por defecto | Descripción |
-| :-------: | :--: | :---------------: | :---------: |
-| `data_dir` | str/Path | `DEFAULT_DATA_DIR.joinpath("texts")` | Ruta al directorio del conjunto de datos; el directorio de datos se describe en [Instalación](../installation.md#datasets) |
+- `SourceTypeError` - un `data_dir` que no es ni una cadena ni un `Path`.
 
-## Atributos
-
-| Atributo | Tipo | Descripción |
-| :------: | :--: | :---------: |
-| `genres` | tuple[str] | Tupla de géneros: `prose`, `poems`, `drama`, `publicism` |
-| `authors` | dict[str, str] | Nombres de los autores por los nombres de sus carpetas |
-| `name` | str | Nombre del conjunto de datos, `spanish_literature` |
-| `meta` | dict[str, str] | Información de referencia: la fuente, la descripción, el autor y la licencia |
-| `info` | dict[str, str] | El nombre y la información de referencia en un diccionario |
-| `data_dir` | Path | Ruta absoluta al directorio del conjunto de datos |
-| `filepath` | str | Ruta al archivo del conjunto de datos, `None` antes de la descarga |
-
-El conjunto de datos se recorre por sus registros como `get_records()` sin filtros: `for record in sl` pasa por las obras de una en una.
-
-## Métodos
-
-### check_data
-
-Comprueba que la lista de obras y el fichero de cada obra están en su sitio y devuelve `True`; un conjunto sin descargar o al que le falta un fichero lanza `DatasetNotFoundError`. Los demás métodos lo comprueban por sí mismos.
-
-### download
-
-Descarga el archivo, verifica su suma de comprobación SHA-256 y extrae los ficheros. Un archivo dañado se descarga de nuevo, los ficheros que faltan se extraen otra vez; una llamada repetida no descarga nada.
-
-| Parámetro | Tipo | Valor por defecto | Descripción |
-| :-------: | :--: | :---------------: | :---------: |
-| `force` | bool | `False` | Descargar el conjunto de datos aunque ya esté descargado |
-
-!!! example "Ejemplo"
+=== "Código"
 
     ``` python
     from ests.datasets import SpanishLiterature
@@ -217,66 +186,100 @@ Descarga el archivo, verifica su suma de comprobación SHA-256 y extrae los fich
     sl = SpanishLiterature()
     sl.download()
     sl.info
-    # {'name': 'spanish_literature',
-    #  'url': 'https://www.gutenberg.org',
-    #  'description': 'Spanish-language literature in the public domain',
-    #  'author': 'Shkarin S.S.',
-    #  'license': 'Public domain'}
     ```
 
-### get_texts
+=== "Resultado"
 
-Extrae los textos (sin encabezados) del conjunto de datos.
+    ```
+    {'name': 'spanish_literature',
+     'url': 'https://www.gutenberg.org',
+     'description': 'Spanish-language literature in the public domain',
+     'author': 'Shkarin S.S.',
+     'license': 'Public domain'}
+    ```
 
-| Parámetro | Tipo | Valor por defecto | Descripción |
-| :-------: | :--: | :---------------: | :---------: |
-| `genre` | str | `None` | Género: `prose`, `poems`, `drama` o `publicism` |
-| `author` | str | `None` | Autor: una subcadena del nombre, sin distinguir mayúsculas ni tildes |
-| `country` | str | `None` | País: una subcadena del nombre en español, sin distinguir mayúsculas ni tildes |
-| `year_from` | int | `None` | Primer año de la primera publicación |
-| `year_to` | int | `None` | Último año de la primera publicación |
-| `min_len` | int | `None` | Longitud mínima del texto (en caracteres) |
-| `max_len` | int | `None` | Longitud máxima del texto (en caracteres) |
-| `limit` | int | `None` | Número de textos |
+## Parámetros
 
-Los filtros se combinan; `author="galdos"` encuentra a Benito Pérez Galdós, `country="mexico"` encuentra `México`. Un género desconocido, un primer año posterior al último, una longitud menor que uno, una longitud mínima mayor que la máxima y un límite negativo lanzan `ParameterError`.
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `data_dir` | `str` / `Path` | `DEFAULT_DATASET_DIR` | Ruta al directorio del conjunto de datos; por defecto `texts` en `DEFAULT_DATA_DIR`, el directorio de datos se describe en [Instalación](../installation.md#datasets) |
 
-!!! example "Ejemplo"
+## Atributos
+
+| Atributo | Tipo | Descripción |
+| :------- | :--- | :---------- |
+| `genres` | `tuple[str]` | Tupla de géneros: `prose`, `poems`, `drama`, `publicism` |
+| `authors` | `dict[str, str]` | Nombres de los autores por los nombres de sus carpetas |
+| `name` | `str` | Nombre del conjunto de datos, `spanish_literature` |
+| `meta` | `dict[str, str]` | Información de referencia: la fuente, la descripción, el autor y la licencia |
+| `info` | `dict[str, str]` | El nombre y la información de referencia en un diccionario |
+| `data_dir` | `Path` | Ruta absoluta al directorio del conjunto de datos |
+| `filepath` | `str` | Ruta al archivo del conjunto de datos, `None` antes de la descarga |
+
+El conjunto de datos se recorre por sus registros como `get_records()` sin filtros: `for record in sl` pasa por las obras de una en una.
+
+## Métodos
+
+`download(force=False)` descarga el archivo, verifica su suma de comprobación SHA-256 y extrae los ficheros. Un archivo dañado se descarga de nuevo, los ficheros que faltan se extraen otra vez; una llamada repetida no descarga nada.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `force` | `bool` | `False` | Descargar el conjunto de datos aunque ya esté descargado |
+
+Un archivo que no se puede descargar o que no pasa la suma de comprobación dos veces lanza `DownloadError`, y un archivo que no se puede extraer, `DataFileError`.
+
+`check_data()` comprueba que la lista de obras y el fichero de cada obra están en su sitio y devuelve `True`; un conjunto sin descargar o al que le falta un fichero lanza `DatasetNotFoundError` con las órdenes para descargarlo. Los demás métodos lo comprueban por sí mismos.
+
+`get_texts(genre=None, author=None, country=None, year_from=None, year_to=None, min_len=None, max_len=None, limit=None)` extrae los textos (sin encabezados) del conjunto de datos.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `genre` | `str` | `None` | Género: `prose`, `poems`, `drama` o `publicism` |
+| `author` | `str` | `None` | Autor: una subcadena del nombre, sin distinguir mayúsculas ni tildes |
+| `country` | `str` | `None` | País: una subcadena del nombre en español, sin distinguir mayúsculas ni tildes |
+| `year_from` | `int` | `None` | Primer año de la primera publicación |
+| `year_to` | `int` | `None` | Último año de la primera publicación |
+| `min_len` | `int` | `None` | Longitud mínima del texto (en caracteres) |
+| `max_len` | `int` | `None` | Longitud máxima del texto (en caracteres) |
+| `limit` | `int` | `None` | Número de textos |
+
+Los filtros se combinan; `author="galdos"` encuentra a Benito Pérez Galdós, `country="mexico"` encuentra `México`. Un género desconocido, un `author` o un `country` que no es una cadena, un año que no es un entero, un primer año posterior al último, una cota de longitud que no es un entero de al menos uno, una longitud mínima mayor que la máxima y un `limit` que no es un entero no negativo lanzan `ParameterError`.
+
+=== "Código"
 
     ``` python
-    from ests.datasets import SpanishLiterature
-
-    sl = SpanishLiterature()
     for text in sl.get_texts(genre="poems", author="Rosalía", limit=1):
         print(text[:107])
-    # Aunque no alcancen gloria,
-    #     Pensé escribiendo libro tan pequeño,
-    #     Son fáciles y breves mis canciones,
     ```
 
-### get_records
+=== "Resultado"
 
-Extrae los registros (con encabezados) del conjunto de datos. Campos del registro: `genre` - género, `author` - autor, `title` - título, `year_from` y `year_to` - los años de la primera publicación, `country` - el país del autor en español, `text` - texto, `file` - ruta al fichero. Los registros van por género en el orden de `genres`, dentro de un género por la carpeta del autor y por año.
+    ```
+    Aunque no alcancen gloria,
+        Pensé escribiendo libro tan pequeño,
+        Son fáciles y breves mis canciones,
+    ```
 
-Los parámetros son los mismos que los de `get_texts`.
+`get_records` con los mismos parámetros extrae los registros (con encabezados) del conjunto de datos. Campos del registro: `genre` - género, `author` - autor, `title` - título, `year_from` y `year_to` - los años de la primera publicación, `country` - el país del autor en español, `text` - texto, `file` - ruta al fichero. Los registros van por género en el orden de `genres`, dentro de un género por la carpeta del autor y por año.
 
-!!! example "Ejemplo"
+=== "Código"
 
     ``` python
-    from ests.datasets import SpanishLiterature
-
-    sl = SpanishLiterature()
-
     # El teatro del siglo XX
     for record in sl.get_records(genre="drama", year_from=1900):
         print(record["title"], record["year_from"], record["author"])
-    # La señorita de Trevélez 1916 Carlos Arniches
-    # Los caciques 1920 Carlos Arniches
-    # Es mi hombre 1921 Carlos Arniches
-    # El marqués de Bradomín 1907 Ramón del Valle-Inclán
-    # Romance de lobos 1908 Ramón del Valle-Inclán
-    # Luces de bohemia 1920 Ramón del Valle-Inclán
-    # Divinas palabras 1920 Ramón del Valle-Inclán
+    ```
+
+=== "Resultado"
+
+    ```
+    La señorita de Trevélez 1916 Carlos Arniches
+    Los caciques 1920 Carlos Arniches
+    Es mi hombre 1921 Carlos Arniches
+    El marqués de Bradomín 1907 Ramón del Valle-Inclán
+    Romance de lobos 1908 Ramón del Valle-Inclán
+    Luces de bohemia 1920 Ramón del Valle-Inclán
+    Divinas palabras 1920 Ramón del Valle-Inclán
     ```
 
 !!! warning "La ortografía sigue a la edición"

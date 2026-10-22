@@ -1,9 +1,8 @@
 # Sonetos en español
 
-!!! info ""
-    **ests.datasets.SpanishSonnets**
-
-## Descripción
+``` {.python .signature}
+SpanishSonnets(data_dir=DEFAULT_DATASET_DIR)
+```
 
 Una colección de sonetos en español del [Diachronic Spanish Sonnet Corpus](https://github.com/pruizf/disco) (DISCO 5.0): 4259 sonetos de 1167 autores de España, Hispanoamérica y Filipinas, del siglo XV a principios del XX, 60 209 versos. Cada verso lleva su patrón métrico y la etiqueta de su rima, así que la colección sirve para estudiar la métrica y la rima y para contrastar una escansión con la anotación del corpus.
 
@@ -16,41 +15,11 @@ El archivo (1 MB, un fichero JSON Lines) se guarda en el repositorio de la bibli
 !!! quote "Licencia y atribución"
     DISCO se publica con la [licencia Creative Commons Reconocimiento 4.0 Internacional](https://creativecommons.org/licenses/by/4.0/), y este conjunto de datos también; el archivo lleva un `README.txt` con la fuente y los cambios. Cite la fuente así: Ruiz Fabo P., Bermúdez Sabel H., Martínez Cantón C., Calvo Tello J. Diachronic Spanish Sonnet Corpus (DISCO), version 5.0. Madrid: UNED, 2017-2023; y el artículo: Ruiz Fabo P., Bermúdez Sabel H., Martínez Cantón C., González-Blanco E. The Diachronic Spanish Sonnet Corpus: TEI and linked open data encoding, data distribution, and metrical findings. Digital Scholarship in the Humanities 36 (Supplement 1), 2021, i68-i80, [doi:10.1093/llc/fqaa035](https://doi.org/10.1093/llc/fqaa035).
 
-## Parámetros
+Excepciones:
 
-| Parámetro | Tipo | Valor por defecto | Descripción |
-| :-------: | :--: | :---------------: | :---------: |
-| `data_dir` | str/Path | `DEFAULT_DATA_DIR.joinpath("texts")` | Ruta al directorio del conjunto de datos; el directorio de datos se describe en [Instalación](../installation.md#datasets) |
+- `SourceTypeError` - un `data_dir` que no es ni una cadena ni un `Path`.
 
-## Atributos
-
-| Atributo | Tipo | Descripción |
-| :------: | :--: | :---------: |
-| `periods` | tuple[str] | Tupla de periodos: `15th-17th`, `18th`, `19th`, `20th` |
-| `authors` | Counter | Número de sonetos por autor, leído del fichero |
-| `name` | str | Nombre del conjunto de datos, `spanish_sonnets` |
-| `meta` | dict[str, str] | Información de referencia: la fuente, la descripción, los autores, la licencia y la cita |
-| `info` | dict[str, str] | El nombre y la información de referencia en un diccionario |
-| `data_dir` | Path | Ruta absoluta al directorio del conjunto de datos |
-| `filepath` | str | Ruta al fichero del conjunto de datos, `None` antes de la descarga |
-
-El conjunto de datos se recorre por sus registros como `get_records()` sin filtros: `for record in ss` pasa por los sonetos de uno en uno.
-
-## Métodos
-
-### check_data
-
-Comprueba que el fichero del conjunto de datos está en su sitio y devuelve `True`; un conjunto sin descargar lanza `DatasetNotFoundError`. Los demás métodos lo comprueban por sí mismos.
-
-### download
-
-Descarga el archivo, verifica su suma de comprobación SHA-256 y extrae el fichero. Un archivo dañado se descarga de nuevo, un fichero que falta se extrae otra vez; una llamada repetida no descarga nada.
-
-| Parámetro | Tipo | Valor por defecto | Descripción |
-| :-------: | :--: | :---------------: | :---------: |
-| `force` | bool | `False` | Descargar el conjunto de datos aunque ya esté descargado |
-
-!!! example "Ejemplo"
+=== "Código"
 
     ``` python
     from ests.datasets import SpanishSonnets
@@ -58,62 +27,88 @@ Descarga el archivo, verifica su suma de comprobación SHA-256 y extrae el fiche
     ss = SpanishSonnets()
     ss.download()
     ss.info["license"], ss.authors.most_common(2)
-    # ('CC BY 4.0', [('Rubén Darío', 140), ('José Santos Chocano', 130)])
     ```
 
-### get_texts
+=== "Resultado"
 
-Extrae los textos (sin encabezados) del conjunto de datos: los versos de un soneto, las estrofas separadas por una línea en blanco.
+    ```
+    ('CC BY 4.0', [('Rubén Darío', 140), ('José Santos Chocano', 130)])
+    ```
 
-| Parámetro | Tipo | Valor por defecto | Descripción |
-| :-------: | :--: | :---------------: | :---------: |
-| `period` | str | `None` | Periodo: `15th-17th`, `18th`, `19th` o `20th` |
-| `author` | str | `None` | Autor: una subcadena del nombre, sin distinguir mayúsculas ni tildes |
-| `country` | str | `None` | País de nacimiento: una subcadena del nombre en español, sin distinguir mayúsculas ni tildes |
-| `gender` | str | `None` | Género del autor: `F` o `M` |
-| `min_len` | int | `None` | Longitud mínima del texto (en caracteres) |
-| `max_len` | int | `None` | Longitud máxima del texto (en caracteres) |
-| `limit` | int | `None` | Número de textos |
+## Parámetros
 
-Los filtros se combinan; `author="dario"` encuentra a Rubén Darío, `country="mexico"` encuentra `México`. Un periodo o un género desconocidos, una longitud menor que uno, una longitud mínima mayor que la máxima y un límite negativo lanzan `ParameterError`.
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `data_dir` | `str` / `Path` | `DEFAULT_DATASET_DIR` | Ruta al directorio del conjunto de datos; por defecto `texts` en `DEFAULT_DATA_DIR`, el directorio de datos se describe en [Instalación](../installation.md#datasets) |
 
-!!! example "Ejemplo"
+## Atributos
+
+| Atributo | Tipo | Descripción |
+| :------- | :--- | :---------- |
+| `periods` | `tuple[str]` | Tupla de periodos: `15th-17th`, `18th`, `19th`, `20th` |
+| `authors` | `Counter` | Número de sonetos por autor, leído del fichero |
+| `name` | `str` | Nombre del conjunto de datos, `spanish_sonnets` |
+| `meta` | `dict[str, str]` | Información de referencia: la fuente, la descripción, los autores, la licencia y la cita |
+| `info` | `dict[str, str]` | El nombre y la información de referencia en un diccionario |
+| `data_dir` | `Path` | Ruta absoluta al directorio del conjunto de datos |
+| `filepath` | `str` | Ruta al fichero del conjunto de datos, `None` antes de la descarga |
+
+El conjunto de datos se recorre por sus registros como `get_records()` sin filtros: `for record in ss` pasa por los sonetos de uno en uno; una línea del fichero que no se puede leer lanza `DataFileError`.
+
+## Métodos
+
+`download(force=False)` descarga el archivo, verifica su suma de comprobación SHA-256 y extrae el fichero. Un archivo dañado se descarga de nuevo, un fichero que falta se extrae otra vez; una llamada repetida no descarga nada.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `force` | `bool` | `False` | Descargar el conjunto de datos aunque ya esté descargado |
+
+Un archivo que no se puede descargar o que no pasa la suma de comprobación dos veces lanza `DownloadError`, y un archivo que no se puede extraer, `DataFileError`.
+
+`check_data()` comprueba que el fichero del conjunto de datos está en su sitio y devuelve `True`; un conjunto sin descargar lanza `DatasetNotFoundError` con las órdenes para descargarlo. Los demás métodos y `authors` lo comprueban por sí mismos.
+
+`get_texts(period=None, author=None, country=None, gender=None, min_len=None, max_len=None, limit=None)` extrae los textos (sin encabezados) del conjunto de datos: los versos de un soneto, las estrofas separadas por una línea en blanco.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `period` | `str` | `None` | Periodo: `15th-17th`, `18th`, `19th` o `20th` |
+| `author` | `str` | `None` | Autor: una subcadena del nombre, sin distinguir mayúsculas ni tildes |
+| `country` | `str` | `None` | País de nacimiento: una subcadena del nombre en español, sin distinguir mayúsculas ni tildes |
+| `gender` | `str` | `None` | Género del autor: `F` o `M` |
+| `min_len` | `int` | `None` | Longitud mínima del texto (en caracteres) |
+| `max_len` | `int` | `None` | Longitud máxima del texto (en caracteres) |
+| `limit` | `int` | `None` | Número de textos |
+
+Los filtros se combinan; `author="dario"` encuentra a Rubén Darío, `country="mexico"` encuentra `México`. Un periodo o un género desconocidos, un `author` o un `country` que no es una cadena, una cota de longitud que no es un entero de al menos uno, una longitud mínima mayor que la máxima y un `limit` que no es un entero no negativo lanzan `ParameterError`.
+
+=== "Código"
 
     ``` python
-    from ests.datasets import SpanishSonnets
-
-    ss = SpanishSonnets()
     for text in ss.get_texts(author="avellaneda", gender="F", limit=1):
         print(text.split("\n\n")[0])
-    # No encuentro paz, ni me permiten guerra;
-    # de fuego devorado, sufro el frío;
-    # abrazo un mundo, y quédome vacío;
-    # me lanzo al cielo, y préndeme la tierra.
     ```
 
-### get_records
+=== "Resultado"
 
-Extrae los registros (con encabezados) del conjunto de datos. Campos del registro: `id` - el identificador del soneto en DISCO, `period` - periodo, `author` - autor, `title` - título, `country` - el país de nacimiento del autor en español (vacío si se desconoce), `gender` - `F` o `M`, `birth` y `death` - los años de vida (`None` si se desconocen), `text` - texto, `meter` - el patrón métrico de cada verso, `rhyme` - la etiqueta de la rima de cada verso. En un patrón métrico `+` es una sílaba tónica y `-` una átona, así que su longitud es el número de sílabas métricas: 11 para un endecasílabo, 14 para un alejandrino. Las etiquetas iguales marcan los versos que riman entre sí, `-` un verso que no rima con ningún otro. Los registros van por periodo en el orden de `periods`, dentro de un periodo por el identificador de DISCO ordenado numéricamente (`1035e_269` antes de `1035e_1360`), que mantiene juntos los sonetos de un autor en el orden de su fuente.
+    ```
+    No encuentro paz, ni me permiten guerra;
+    de fuego devorado, sufro el frío;
+    abrazo un mundo, y quédome vacío;
+    me lanzo al cielo, y préndeme la tierra.
+    ```
 
-Los parámetros son los mismos que los de `get_texts`.
+`get_records` con los mismos parámetros extrae los registros (con encabezados) del conjunto de datos. Campos del registro: `id` - el identificador del soneto en DISCO, `period` - periodo, `author` - autor, `title` - título, `country` - el país de nacimiento del autor en español (vacío si se desconoce), `gender` - `F` o `M`, `birth` y `death` - los años de vida (`None` si se desconocen), `text` - texto, `meter` - el patrón métrico de cada verso, `rhyme` - la etiqueta de la rima de cada verso. En un patrón métrico `+` es una sílaba tónica y `-` una átona, así que su longitud es el número de sílabas métricas: 11 para un endecasílabo, 14 para un alejandrino. Las etiquetas iguales marcan los versos que riman entre sí, `-` un verso que no rima con ningún otro. Los registros van por periodo en el orden de `periods`, dentro de un periodo por el identificador de DISCO ordenado numéricamente (`1035e_269` antes de `1035e_1360`), que mantiene juntos los sonetos de un autor en el orden de su fuente.
 
-!!! example "Ejemplo"
+=== "Código"
 
     ``` python
     from collections import Counter
-    from ests.datasets import SpanishSonnets
-
-    ss = SpanishSonnets()
 
     # Los primeros versos de un soneto con su rima y su métrica
     record = next(ss.get_records(author="rubén darío"))
     lines = record["text"].replace("\n\n", "\n").split("\n")
     for line, pattern, label in list(zip(lines, record["meter"], record["rhyme"]))[:4]:
         print(f"{label} {pattern:<14} {line}")
-    # A -+---+---+-    En medio del abismo de la duda
-    # B +----+-+-+-    lleno de oscuridad, de sombra vana
-    # B +--+---+-+-    hay una estrella que reflejos mana
-    # A -+-+---+-+-    sublime, sí, mas silenciosa, muda.
 
     # La proporción de endecasílabos y alejandrinos por periodo
     for period in ss.periods:
@@ -122,10 +117,19 @@ Los parámetros son los mismos que los de `get_texts`.
         )
         total = sum(lengths.values())
         print(period, f"{lengths[11] / total:.2f}", f"{lengths[14] / total:.2f}")
-    # 15th-17th 0.98 0.00
-    # 18th 0.99 0.00
-    # 19th 0.86 0.09
-    # 20th 0.60 0.40
+    ```
+
+=== "Resultado"
+
+    ```
+    A -+---+---+-    En medio del abismo de la duda
+    B +----+-+-+-    lleno de oscuridad, de sombra vana
+    B +--+---+-+-    hay una estrella que reflejos mana
+    A -+-+---+-+-    sublime, sí, mas silenciosa, muda.
+    15th-17th 0.98 0.00
+    18th 0.99 0.00
+    19th 0.86 0.09
+    20th 0.60 0.40
     ```
 
 !!! warning "La anotación es automática"

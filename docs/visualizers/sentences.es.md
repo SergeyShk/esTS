@@ -1,16 +1,31 @@
 # Longitudes de las oraciones
 
-!!! info ""
-    **ests.visualizers.sentence_lengths_plot()**, **ests.visualizers.sentence_lengths()**
-
-## Descripción
+``` {.python .signature}
+sentence_lengths_plot(source, window=10, inset=True, ax=None, labels=None, sents_extractor=None, words_extractor=None)
+```
 
 <!-- core: visualizers/sentences.md:sentence_lengths_plot 36b6cdc -->
 La curva de las longitudes de las oraciones, el ritmo de un texto: la longitud de cada oración en palabras, en orden, la media móvil sobre `window` oraciones y un recuadro con el histograma de las longitudes. Oraciones cortas y largas que se alternan son un signo editorial de un texto vivo; una curva plana, de uno monótono. La función recibe los ejes `ax` y devuelve `Axes`.
 
-`sentence_lengths(source, sents_extractor=None, words_extractor=None)` extrae las longitudes: una cadena se divide en oraciones con el extractor de oraciones y cada oración en palabras con el extractor de palabras; las oraciones de un `Doc` salen de sus límites y sus palabras de sus tokens, sin la puntuación ni los símbolos, mientras que un `Doc` sin límites, o con límites parciales (`has_sents`), se cuenta como su texto, con los extractores; las oraciones sin palabras se omiten. Las longitudes ya hechas - una secuencia o un iterador de enteros no negativos - se usan tal cual; una tabla, un conjunto, un mapeo, bytes o una longitud que no es un entero lanzan `SourceTypeError`, una longitud negativa `SourceError`.
-
 Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visualizers/sentences/); para una cadena esTS pasa por defecto sus extractores del español, [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md), y los parámetros `sents_extractor` y `words_extractor` los sustituyen. Las etiquetas por defecto son las inglesas de `VISUALIZER_LABELS` en `anyts.constants`; `labels` sustituye cualquiera de ellas.
+
+La curva de la segunda ventana de 2000 palabras de *Niebla* de Unamuno del [corpus de literatura](../datasets/spanishliterature.md); una ventana se corta por palabras, así que empieza con el final de una oración:
+
+``` python
+from ests.corpus import split_windows
+from ests.datasets import SpanishLiterature
+from ests.visualizers import sentence_lengths_plot
+
+sl = SpanishLiterature()
+sl.download()
+text = next(
+    record["text"] for record in sl.get_records(author="unamuno") if record["title"] == "Niebla"
+)
+chapter = split_windows(text, 2000)[1]
+sentence_lengths_plot(chapter, window=10)
+```
+
+![ests](../img/sentences.png){: .center }
 
 ## Parámetros
 
@@ -27,32 +42,31 @@ Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visu
 
 La fuente y los extractores lanzan los errores de `sentence_lengths`, y la falta de oraciones lanza `SourceError`; un `window` que no es un entero de al menos uno, unas etiquetas que `merge_labels` rechaza y un `ax` que no es un `Axes` de matplotlib lanzan `ParameterError`.
 
-## Ejemplo de uso
+## Longitudes de las oraciones { #sentence_lengths }
 
-La segunda ventana de 2000 palabras de *Niebla* de Unamuno del [corpus de literatura](../datasets/spanishliterature.md); una ventana se corta por palabras, así que empieza con el final de una oración.
+``` {.python .signature}
+sentence_lengths(source, sents_extractor=None, words_extractor=None)
+```
 
-!!! example "Ejemplo"
+Las longitudes de las oraciones en palabras, en orden: una cadena se divide en oraciones con el extractor de oraciones y cada oración en palabras con el extractor de palabras; las oraciones de un `Doc` salen de sus límites y sus palabras de sus tokens, sin la puntuación ni los símbolos, mientras que un `Doc` sin límites o con límites parciales (`has_sents`) se cuenta como su texto, con los extractores. Las oraciones sin palabras se omiten. Las longitudes ya hechas (enteros no negativos en una secuencia o un iterador) se usan tal cual. Los argumentos son los de `sentence_lengths_plot`.
 
-    _Código_:
+Excepciones:
+
+- `SourceTypeError` - un objeto que no es una cadena, un `Doc`, una secuencia ni un iterador, una tabla, un conjunto, un mapeo, bytes, una longitud que no es un entero, un extractor de otro tipo;
+- `SourceError` - una longitud negativa.
+
+=== "Código"
 
     ``` python
-    from ests.corpus import split_windows
-    from ests.datasets import SpanishLiterature
-    from ests.visualizers import sentence_lengths, sentence_lengths_plot
+    from ests.visualizers import sentence_lengths
 
-    sl = SpanishLiterature()
-    sl.download()
-    text = next(
-        record["text"] for record in sl.get_records(author="unamuno") if record["title"] == "Niebla"
-    )
-    chapter = split_windows(text, 2000)[1]
-
+    sentence_lengths("El gato duerme. ¿Y el perro? —Come —dijo ella.")
     sentence_lengths(chapter)[:5]
-    # [1, 30, 41, 41, 14]
-
-    sentence_lengths_plot(chapter, window=10)
     ```
 
-    _Resultado_:
+=== "Resultado"
 
-    ![ests](../img/sentences.png){: .center }
+    ```
+    [3, 3, 3]
+    [1, 30, 41, 41, 14]
+    ```

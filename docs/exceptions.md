@@ -1,8 +1,5 @@
 # Exceptions and logging
 
-!!! info ""
-    **ests.exceptions**
-
 ## Exceptions
 
 All library exceptions inherit the base class `EstsError` and a built-in Python class, so they can be caught by either, and `except ValueError` keeps working.
@@ -18,12 +15,12 @@ All library exceptions inherit the base class `EstsError` and a built-in Python 
 | `DataFileError` | `ValueError` | The archive of a dataset is not ZIP or TAR, cannot be extracted, is empty or has paths outside its directory, or its target directory cannot be created; a line of a dataset file cannot be read |
 | `DownloadError` | `RuntimeError` | The file could not be downloaded or its directory created, or it failed the checksum twice |
 
-The classes are available from `ests` and from `ests.exceptions`. They are the classes of the [anyTS](https://sergeyshk.github.io/anyTS/exceptions/) core under the same names, `EstsError` being its `AnyTSError`: aliases, not subclasses, so `except EstsError` catches the errors raised by the code of the core too, and a traceback shows `anyts.exceptions.SourceTypeError`.
+The classes are available from `ests` and from `ests.exceptions`. They are the classes of the [anyTS](https://sergeyshk.github.io/anyTS/exceptions/) core under the same names, `EstsError` being its `anyts.exceptions.AnyTSError`: aliases, not subclasses, so `except EstsError` catches the errors raised by the code of the core too, and a traceback shows `anyts.exceptions.SourceTypeError`.
 
 !!! note "Note"
     `DatasetNotFoundError` is the first error a new user usually meets: `MorphStats("El gato duerme")` without the model `es_core_news_sm` raises it with the download command. `SpanishLiterature().get_texts()` before `download()` and the statistics of `LexicalStats` by the frequency dictionary raise it too.
 
-!!! example "Example"
+=== "Code"
 
     ``` python
     from ests import EstsError, ParameterError, WordsExtractor
@@ -32,25 +29,41 @@ The classes are available from `ests` and from `ests.exceptions`. They are the c
         WordsExtractor(ngram_range=(2, 1))
     except ParameterError as e:
         print(e)
-    # The lower N-gram bound is greater than the upper
 
     try:
         WordsExtractor(tokenizer=42).extract("El gato duerme.")
     except EstsError as e:
         print(type(e).__name__)
-    # SourceTypeError
+    ```
+
+=== "Result"
+
+    ```
+    The lower N-gram bound is greater than the upper
+    SourceTypeError
     ```
 
 ## Logging
 
-The library prints nothing on its own: its messages go to the `ests` logger, which has a `NullHandler` by default, so they are silent. To see them, configure logging in your application:
+The library prints nothing on its own: the anyTS core sends messages about downloading and extracting datasets (the `download()` methods) to the `anyts` logger at the `INFO` level. The logger has a `NullHandler` by default, so the messages are silent; to see them, configure logging in your application:
 
-!!! example "Example"
+=== "Code"
 
     ``` python
     import logging
 
+    from ests.datasets import SpanishSonnets
+
     logging.basicConfig(level=logging.INFO, format="%(name)s: %(message)s")
+    SpanishSonnets(data_dir="/tmp/ests_data").download()
     ```
 
-Methods that print by design, such as the `print_stats()` methods of the statistics classes, write to standard output; logging does not affect them.
+=== "Result"
+
+    ```
+    anyts.datasets: Downloading the file https://github.com/SergeyShk/esTS/raw/master/ests/datasets/data/spanish_sonnets_v1.tar.xz
+    anyts.datasets: The file is downloaded: /tmp/ests_data/spanish_sonnets_v1.tar.xz
+    anyts.datasets: Extracting the archive /tmp/ests_data/spanish_sonnets_v1.tar.xz
+    ```
+
+The `print_stats()` methods of the statistics classes, `MorphStats.print_markers()` and `print_kwic()` write to standard output by design; logging does not affect them.

@@ -1,9 +1,8 @@
 # Extracción de palabras
 
-!!! info ""
-    **ests.extractors.WordsExtractor**
-
-## Descripción
+``` {.python .signature}
+WordsExtractor(tokenizer=None, filter_punct=True, filter_nums=False, use_lexemes=False, stopwords=None, lowercase=False, ngram_range=(1, 1), min_len=0, max_len=0)
+```
 
 <!-- core: extractors/words.md:WordsExtractor 45872ab -->
 Clase para extraer palabras de un texto.
@@ -13,12 +12,10 @@ Excepciones:
 - `ParameterError` - un `ngram_range` que no es un par de enteros o cuyo límite inferior es menor que uno o mayor que el superior, un límite de longitud que no es un entero, un límite negativo, un mínimo mayor que el máximo;
 - `SourceTypeError` - palabras vacías que no son una colección de cadenas.
 
-## Ganchos del idioma
-
 La clase extiende el `WordsExtractor` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/extractors/words/) con los ganchos del español:
 
 | Gancho | Español |
-| :----: | :-----: |
+| :----- | :------ |
 | `tokenize(text)` | el tokenizador por reglas de la clase de idioma español de spaCy, `ests.utils.tokenize` |
 | `lemmatize(word)` | los lemas de simplemma, `ests.utils.lemmatize` |
 | `number_pattern` | números con signo, rangos, fracciones, fechas, horas, porcentajes y ordinales: `-5`, `+7`, `1990-1995`, `1.500,50`, `12/03/2020`, `3:30`, `10%`, `3.º`, `1.ª`, `2do` |
@@ -28,6 +25,23 @@ La clase extiende el `WordsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 
 !!! note "Nota"
     [simplemma](https://github.com/adbar/simplemma) trabaja con un diccionario sin modelo entrenado: una forma conocida se convierte en su lema en minúsculas (`Tienes` - `tener`, `NIÑOS` - `niño`), una forma desconocida se devuelve sin cambios (`Madrid`, `dámelo`).
+
+=== "Código"
+
+    ``` python
+    from ests import WordsExtractor
+
+    text = "No tengas 100 euros, ten 100 amigos"
+
+    we = WordsExtractor(use_lexemes=True, stopwords=["no"], filter_nums=True, ngram_range=(1, 2))
+    we.extract(text)
+    ```
+
+=== "Resultado"
+
+    ```
+    ('tener', 'euro', 'tener', 'amigo', 'tener_euro', 'euro_tener', 'tener_amigo')
+    ```
 
 ## Parámetros
 
@@ -52,8 +66,6 @@ La clase extiende el `WordsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 
 ## Métodos
 
-### extract
-
 <!-- core: extractors/words.md:WordsExtractor-extract 383f135 -->
 `extract(text)` extrae las palabras de un texto.
 
@@ -63,31 +75,7 @@ La clase extiende el `WordsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 
 Un texto que no es una cadena y un tokenizador que no es invocable o no devuelve cadenas lanzan `SourceTypeError`.
 
-Ejemplo de extracción de palabras con bigramas como tokens, tras filtrar números y palabras vacías y lematizar:
-
-!!! example "Ejemplo"
-
-    _Código_:
-
-    ``` python
-    # Importar la biblioteca
-    from ests import WordsExtractor
-
-    # Preparar los datos
-    text = "No tengas 100 euros, ten 100 amigos"
-
-    # Extraer las palabras
-    we = WordsExtractor(use_lexemes=True, stopwords=["no"], filter_nums=True, ngram_range=(1, 2))
-    we.extract(text)
-    ```
-
-    _Resultado_:
-
-    ``` bash
-    ('tener', 'euro', 'tener', 'amigo', 'tener_euro', 'euro_tener', 'tener_amigo')
-    ```
-
-### get_most_common
+Con el tokenizador por defecto, un texto con un carácter sin forma UTF-8, como el de un fichero leído con una codificación errónea, lanza `SourceError`, igual que las clases y funciones que extraen con él las palabras de una cadena.
 
 <!-- core: extractors/words.md:WordsExtractor-get_most_common 7c47d0f -->
 `get_most_common(n=10)` devuelve las palabras más frecuentes del texto como una lista de pares (palabra, frecuencia), la más frecuente primero.
@@ -101,21 +89,14 @@ Un número que no es un entero de al menos uno lanza `ParameterError`.
 !!! warning "Aviso"
     El método debe llamarse después de extraer las palabras con `extract`.
 
-Para ilustrar el método reutilizamos el código del ejemplo anterior:
-
-!!! example "Ejemplo"
-
-    _Código_:
+=== "Código"
 
     ``` python
-    ...
-
-    # Mostrar las palabras más frecuentes
     we.get_most_common(3)
     ```
 
-    _Resultado_:
+=== "Resultado"
 
-    ``` bash
+    ```
     [('tener', 2), ('euro', 1), ('amigo', 1)]
     ```

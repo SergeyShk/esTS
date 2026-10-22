@@ -8,7 +8,7 @@
 
 ## Contribuir
 
-Los informes de errores, las ideas y los pull requests son bienvenidos, en inglés o en español. El flujo de trabajo y las comprobaciones previas a un pull request están descritos en [CONTRIBUTING.md](https://github.com/SergeyShk/esTS/blob/master/CONTRIBUTING.md); las normas de convivencia, en el [código de conducta](https://github.com/SergeyShk/esTS/blob/master/CODE_OF_CONDUCT.md).
+Los informes de errores, las ideas y los pull requests son bienvenidos, en inglés o en español - las [issues](https://github.com/SergeyShk/esTS/issues) están abiertas. El flujo de trabajo y las comprobaciones previas a un pull request están descritos en [CONTRIBUTING.md](https://github.com/SergeyShk/esTS/blob/master/CONTRIBUTING.md); las normas de convivencia, en el [código de conducta](https://github.com/SergeyShk/esTS/blob/master/CODE_OF_CONDUCT.md).
 
 ## Cómo citar
 

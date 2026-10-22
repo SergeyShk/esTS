@@ -1,23 +1,19 @@
 # Sílabas y acento
 
-!!! info ""
-    **ests.syllables**
-
-## Descripción
-
-Módulo que divide una palabra española en sílabas y localiza su sílaba tónica a partir de la escritura, sin diccionario ni modelo entrenado. Estas funciones son la base de las estadísticas básicas, las fórmulas de legibilidad, la fonoestadística y la métrica.
+El módulo `ests.syllables` divide una palabra española en sílabas y localiza su sílaba tónica a partir de la escritura, sin diccionario ni modelo entrenado. Sobre estas funciones se construyen las estadísticas básicas, las fórmulas de legibilidad, la fonoestadística y las estadísticas del verso.
 
 Las reglas siguen la *Ortografía de la lengua española* (RAE, 2010): dos vocales débiles forman siempre diptongo (`huir`, `je-sui-ta`, `guion`), y `tl` se separa como en España (`at-las`).
 
 ## Silabificación { #syllabify }
 
-!!! info ""
-    **ests.syllables.syllabify()**
+``` {.python .signature}
+syllabify(word)
+```
 
 División de una palabra en sílabas. Cada sílaba se construye alrededor de un núcleo vocálico: una vocal, un diptongo o un triptongo.
 
 | Regla | Ejemplo |
-| :--- | :-----: |
+| :---- | :------ |
 | una vocal débil (`i`, `u`, `ü` sin tilde) junto a otra vocal forma diptongo | ai-re, puen-te, rui-do, ciu-dad |
 | dos vocales fuertes forman hiato, igual que dos vocales cerradas de la misma letra, con tilde o sin ella | po-e-ta, le-er, a-é-re-o, chi-i-ta, chi-í-es |
 | una vocal débil con tilde es fuerte | dí-a, pa-ís, ba-úl |
@@ -33,119 +29,170 @@ División de una palabra en sílabas. Cada sílaba se construye alrededor de un 
 
 La palabra se normaliza a NFC y se pasa a minúsculas. Se divide en partes por cifras, guiones y otros caracteres que no son letras, cada parte se silabifica por separado (`te-ó-ri-co-prác-ti-co`), y una parte sin vocales (una abreviatura como `sh`) no produce sílabas. Las vocales con diacríticos extranjeros cuentan como vocales fuertes con tilde (`Björk`). La diéresis marca hiato: la `ü` del verso fuera de `gü` y `qü` y la `ï` (`sü-a-ve`, `glo-rï-o-sa`), que dejan el acento a las reglas de la palabra, y la `ë` del francés (`Ci-tro-ën`), que lo lleva; los portugueses `ão` y `õe` son diptongos (`São`, `Ca-mões`).
 
-Parámetros:
-
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `word` | str | `-` | Palabra |
+| :-------- | :--- | :---------- | :---------- |
+| `word` | `str` | - | Palabra |
 
-!!! example "Ejemplo"
+Excepciones:
+
+- `SourceTypeError` - una palabra que no es una cadena.
+
+=== "Código"
 
     ``` python
     from ests.syllables import syllabify
 
     syllabify("murciélago")
-    # ['mur', 'cié', 'la', 'go']
-
     syllabify("averiguáis")
-    # ['a', 've', 'ri', 'guáis']
+    ```
+
+=== "Resultado"
+
+    ```
+    ['mur', 'cié', 'la', 'go']
+    ['a', 've', 'ri', 'guáis']
     ```
 
 ## Recuento de sílabas { #count_syllables }
 
-!!! info ""
-    **ests.syllables.count_syllables()**
+``` {.python .signature}
+count_syllables(word)
+```
 
-El número de sílabas según `syllabify`.
-
-Parámetros:
+El número de sílabas de una palabra según [`syllabify`](#syllabify).
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `word` | str | `-` | Palabra |
+| :-------- | :--- | :---------- | :---------- |
+| `word` | `str` | - | Palabra |
 
-!!! example "Ejemplo"
+Excepciones:
+
+- `SourceTypeError` - una palabra que no es una cadena.
+
+=== "Código"
 
     ``` python
     from ests.syllables import count_syllables
 
     count_syllables("Uruguay")
-    # 3
+    ```
+
+=== "Resultado"
+
+    ```
+    3
     ```
 
 ## Acento de la palabra { #word_stress }
 
-!!! info ""
-    **ests.syllables.word_stress()**
+``` {.python .signature}
+word_stress(word)
+```
 
-El índice de la sílaba tónica, contado desde cero como en `syllabify`; `None` para una palabra sin vocales.
+El índice de la sílaba tónica de una palabra, contado desde cero como en [`syllabify`](#syllabify).
 
 | Regla | Ejemplo |
-| :--- | :-----: |
+| :---- | :------ |
 | la tilde marca la sílaba tónica | ca-**mión**, **ár**-bol, mur-**cié**-la-go |
 | una palabra terminada en vocal, en `n` o `s` tras vocal, o en `y` tras consonante lleva el acento en la penúltima sílaba | **ca**-sa, **jo**-ven, **lu**-nes, **whis**-ky |
 | cualquier otra palabra lleva el acento en la última sílaba | pa-**pel**, re-**loj**, ro-**bots**, U-ru-**guay** |
 | un monosílabo lleva el acento en su única sílaba | rey, y |
 
-Las formas con pronombres enclíticos llevan la tilde según las mismas reglas (`dí-ga-me-lo`). En un adverbio en `-mente` y en un compuesto con guion el acento principal es el último de `word_stresses` (`fá-cil-men-te` - 2).
-
-Parámetros:
+Las formas con pronombres enclíticos llevan la tilde según las mismas reglas (`dí-ga-me-lo`). En un adverbio en `-mente` y en un compuesto con guion el acento principal es el último de [`word_stresses`](#word_stresses) (`fá-cil-men-te` - 2).
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `word` | str | `-` | Palabra |
+| :-------- | :--- | :---------- | :---------- |
+| `word` | `str` | - | Palabra |
 
-!!! example "Ejemplo"
+Devuelve `None` para una palabra sin vocales.
+
+Excepciones:
+
+- `SourceTypeError` - una palabra que no es una cadena.
+
+=== "Código"
 
     ``` python
     from ests.syllables import word_stress
 
     word_stress("camión"), word_stress("casa"), word_stress("murciélago")
-    # (1, 0, 1)
+    ```
+
+=== "Resultado"
+
+    ```
+    (1, 0, 1)
     ```
 
 ## Todos los acentos { #word_stresses }
 
-!!! info ""
-    **ests.syllables.word_stresses()**
+``` {.python .signature}
+word_stresses(word)
+```
 
 Todas las sílabas tónicas de una palabra en orden ascendente. Un solo índice para la mayoría de las palabras. Dos índices para un adverbio en `-mente`, que conserva el acento de su adjetivo (`fá-cil-men-te` - 0 y 2, `fe-liz-men-te` - 1 y 2), y un índice por cada parte de un compuesto con guion (`te-ó-ri-co-prác-ti-co` - 1 y 4).
 
-El adverbio se reconoce por su forma: una base de al menos una sílaba antes de `-mente` que termina como un adjetivo (en vocal, `l`, `r`, `z`, `n` o `s`) o lleva tilde, así que `cruel-men-te` también cuenta. Las palabras con la misma forma que no son adverbios están en `NON_ADVERBS_MENTE`: adjetivos y sustantivos (`demente`, `vehemente`) y subjuntivos de verbos en `-mentar` (`fundamente`, `complemente`); un subjuntivo de ese tipo que no esté en la lista recibe un segundo acento.
-
-Parámetros:
+El adverbio se reconoce por su forma: una base de al menos una sílaba antes de `-mente` que termina como un adjetivo (en vocal, `l`, `r`, `z`, `n` o `s`) o lleva tilde, así que `cruel-men-te` también cuenta. Las palabras con la misma forma que no son adverbios están en `NON_ADVERBS_MENTE` de `ests.constants`: adjetivos y sustantivos (`demente`, `vehemente`) y subjuntivos de verbos en `-mentar` (`fundamente`, `complemente`); un subjuntivo de ese tipo que no esté en la lista recibe un segundo acento.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `word` | str | `-` | Palabra |
+| :-------- | :--- | :---------- | :---------- |
+| `word` | `str` | - | Palabra |
 
-!!! example "Ejemplo"
+Devuelve una lista vacía para una palabra sin vocales.
+
+Excepciones:
+
+- `SourceTypeError` - una palabra que no es una cadena.
+
+=== "Código"
 
     ``` python
     from ests.syllables import word_stresses
 
-    word_stresses("fácilmente")
-    # [0, 2]
+    word_stresses("fácilmente"), word_stresses("teórico-práctico"), word_stresses("demente")
+    ```
+
+=== "Resultado"
+
+    ```
+    ([0, 2], [1, 4], [1])
     ```
 
 ## Tipo de acentuación { #stress_type }
 
-!!! info ""
-    **ests.syllables.stress_type()**
+``` {.python .signature}
+stress_type(word)
+```
 
-La clase de la palabra según la posición de su acento principal: `aguda` en la última sílaba (`ca-mión`), `llana` en la penúltima (`ca-sa`), `esdrújula` en la antepenúltima (`mur-cié-la-go`), `sobresdrújula` antes (`dí-ga-me-lo`); `None` para una palabra sin vocales.
+La clase de una palabra según la posición de su acento principal, el de [`word_stress`](#word_stress), con los nombres de las [terminaciones](stats/verse_stats.md#clausulas) de los versos:
 
-Parámetros:
+| Tipo | Acento | Ejemplo |
+| :--- | :----- | :------ |
+| `aguda` | en la última sílaba | ca-**mión** |
+| `llana` | en la penúltima sílaba | **ca**-sa |
+| `esdrújula` | en la antepenúltima sílaba | mur-**cié**-la-go |
+| `sobresdrújula` | antes | **dí**-ga-me-lo |
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `word` | str | `-` | Palabra |
+| :-------- | :--- | :---------- | :---------- |
+| `word` | `str` | - | Palabra |
 
-!!! example "Ejemplo"
+Devuelve `None` para una palabra sin vocales.
+
+Excepciones:
+
+- `SourceTypeError` - una palabra que no es una cadena.
+
+=== "Código"
 
     ``` python
     from ests.syllables import stress_type
 
-    stress_type("dígamelo")
-    # 'sobresdrújula'
+    tuple(stress_type(word) for word in ("camión", "casa", "murciélago", "dígamelo"))
+    ```
+
+=== "Resultado"
+
+    ```
+    ('aguda', 'llana', 'esdrújula', 'sobresdrújula')
     ```

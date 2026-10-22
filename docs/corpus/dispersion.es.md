@@ -1,10 +1,5 @@
 # Dispersión de las palabras
 
-!!! info ""
-    **ests.corpus.dispersion()**, **ests.corpus.Dispersion**
-
-## Descripción
-
 <!-- core: corpus/dispersion.md:dispersion f0bdceb -->
 ``` {.python .signature}
 dispersion(words, parts=10, word=None, min_freq=1)
@@ -16,7 +11,56 @@ La dispersión de una palabra es lo uniformemente que se reparte por las partes 
 
 Las palabras se comparan tal cual: las mayúsculas y minúsculas y la lematización corresponden al extractor de palabras.
 
-El módulo `ests.corpus.dispersion` reexporta la función y las medidas del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/dispersion/) (`from ests.corpus.dispersion import calc_dp`). Las palabras se extraen con [`WordsExtractor`](../extractors/words.md).
+`ests.corpus` reexporta la función del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/dispersion/). Las palabras se extraen con [`WordsExtractor`](../extractors/words.md).
+
+=== "Código"
+
+    ``` python
+    from ests import SentsExtractor, WordsExtractor
+    from ests.corpus import dispersion
+
+    text = (
+        "El gato estaba en la ventana y miraba a los pájaros. Los pájaros se fueron y el gato "
+        "se durmió en la ventana. Mañana el gato volverá a estar en la ventana y mirará a los pájaros."
+    )
+    we = WordsExtractor(use_lexemes=True, lowercase=True)
+    words = we.extract(text)
+    sizes = [len(we.extract(sent)) for sent in SentsExtractor().extract(text)]
+    sizes
+    dispersion(words, parts=sizes, word="gato")
+
+    # Tres partes iguales: a y pájaro se reúnen en los extremos del texto
+    [(d.word, round(d.dp, 2)) for d in dispersion(words, parts=3, min_freq=3)]
+    ```
+
+=== "Resultado"
+
+    ```
+    [11, 12, 14]
+    [Dispersion(word='gato', freq=3, dp=0.04504504504504503, dp_norm=0.06410256410256408, juilland_d=0.9307654905484509, carroll_d2=0.9955884389001025, rosengren_s=0.9974825285744621, kl_divergence=0.007241184435774255)]
+    [('el', 0.1), ('gato', 0.02), ('en', 0.02), ('ventana', 0.02), ('y', 0.02), ('a', 0.34), ('pájaro', 0.32)]
+    ```
+
+## Parámetros
+
+<!-- core: corpus/dispersion.md:dispersion-parameters 2fdf192 -->
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `words` | `list[str]` | - | Palabras del texto en orden |
+| `parts` | `int` / `list[int]` | `10` | Número de partes (de 2 al número de palabras) o tamaños de las partes |
+| `word` | `str` | `None` | Palabra cuya dispersión se busca; `None` - todas las palabras |
+| `min_freq` | `int` | `1` | Frecuencia mínima de una palabra |
+
+Unas palabras que no son una lista de cadenas lanzan `SourceTypeError`, y la falta de palabras, `SourceError`. Un `parts` que no es ni un entero de 2 al número de palabras ni dos o más enteros positivos que lo sumen, un `word` que no es una cadena y un `min_freq` que no es un entero lanzan `ParameterError`.
+
+## Resultado
+
+<!-- core: corpus/dispersion.md:Dispersion 536c09a -->
+``` {.python .signature}
+Dispersion(word, freq, dp, dp_norm, juilland_d, carroll_d2, rosengren_s, kl_divergence)
+```
+
+Una lista de tuplas con nombre `Dispersion` por frecuencia descendente: la palabra, su frecuencia y las medidas; `pd.DataFrame(result)` da una tabla.
 
 ## Medidas
 
@@ -41,51 +85,124 @@ Cada medida es una función del módulo `anyts.corpus.dispersion` de las frecuen
 
 Para una palabra de frecuencia nula todas las medidas son `nan`.
 
-## Parámetros
+El módulo `ests.corpus.dispersion` reexporta las funciones de las medidas (`from ests.corpus.dispersion import calc_dp`).
 
-<!-- core: corpus/dispersion.md:dispersion-parameters 2fdf192 -->
-| Parámetro | Tipo | Por defecto | Descripción |
-| :-------- | :--- | :------ | :---------- |
-| `words` | `list[str]` | - | Palabras del texto en orden |
-| `parts` | `int` / `list[int]` | `10` | Número de partes (de 2 al número de palabras) o tamaños de las partes |
-| `word` | `str` | `None` | Palabra cuya dispersión se busca; `None` - todas las palabras |
-| `min_freq` | `int` | `1` | Frecuencia mínima de una palabra |
+<div class="metric-card" markdown>
 
-Unas palabras que no son una lista de cadenas lanzan `SourceTypeError`, y la falta de palabras, `SourceError`. Un `parts` que no es ni un entero de 2 al número de palabras ni dos o más enteros positivos que lo sumen, un `word` que no es una cadena y un `min_freq` que no es un entero lanzan `ParameterError`.
+### Desviación de proporciones DP { #dp }
 
-## Resultado
+`dp` · [Gries (2008)](https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf)
+{ .metric-meta }
 
-<!-- core: corpus/dispersion.md:Dispersion 536c09a -->
+<!-- core: corpus/dispersion.md:calc_dp 6c51955 -->
 ``` {.python .signature}
-Dispersion(word, freq, dp, dp_norm, juilland_d, carroll_d2, rosengren_s, kl_divergence)
+calc_dp(frequencies, sizes)
 ```
 
-Una lista de tuplas con nombre `Dispersion` por frecuencia descendente: la palabra, su frecuencia y las medidas; `pd.DataFrame(result)` da una tabla.
+Cuánto se alejan las proporciones de las apariciones de la palabra por parte de las proporciones de las partes: 0 significa que la palabra se reparte en proporción a los tamaños de las partes, $1 - s_i$, que está toda en la parte $i$.
 
-## Ejemplo
+$$
+DP = \frac{1}{2} \sum \left\lvert \frac{v_i}{f} - s_i \right\rvert
+$$
 
-!!! example "Ejemplo"
+</div>
 
-    ``` python
-    from ests import SentsExtractor, WordsExtractor
-    from ests.corpus import dispersion
+<div class="metric-card" markdown>
 
-    text = (
-        "El gato estaba en la ventana y miraba a los pájaros. Los pájaros se fueron y el gato "
-        "se durmió en la ventana. Mañana el gato volverá a estar en la ventana y mirará a los pájaros."
-    )
-    we = WordsExtractor(use_lexemes=True, lowercase=True)
-    words = we.extract(text)
-    sizes = [len(we.extract(sent)) for sent in SentsExtractor().extract(text)]
-    sizes
-    # [11, 12, 14]
+### DP normalizada { #dp_norm }
 
-    dispersion(words, parts=sizes, word="gato")
-    # [Dispersion(word='gato', freq=3, dp=0.04504504504504503, dp_norm=0.06410256410256408,
-    #  juilland_d=0.9307654905484509, carroll_d2=0.9955884389001025,
-    #  rosengren_s=0.9974825285744621, kl_divergence=0.007241184435774255)]
+`dp_norm` · Lijffijt y Gries (2012)
+{ .metric-meta }
 
-    # Tres partes iguales: a y pájaro se reúnen en los extremos del texto
-    [(d.word, round(d.dp, 2)) for d in dispersion(words, parts=3, min_freq=3)]
-    # [('el', 0.1), ('gato', 0.02), ('en', 0.02), ('ventana', 0.02), ('y', 0.02), ('a', 0.34), ('pájaro', 0.32)]
-    ```
+<!-- core: corpus/dispersion.md:calc_dp_norm bab9d44 -->
+``` {.python .signature}
+calc_dp_norm(frequencies, sizes)
+```
+
+DP dividida por su mayor valor posible, así que el máximo es uno sea cual sea la división.
+
+$$
+\frac{DP}{1 - \min s_i}
+$$
+
+</div>
+
+<div class="metric-card" markdown>
+
+### D de Juilland { #juilland_d }
+
+`juilland_d` · Juilland y Chang-Rodríguez (1964)
+{ .metric-meta }
+
+<!-- core: corpus/dispersion.md:calc_juilland_d c172dee -->
+``` {.python .signature}
+calc_juilland_d(frequencies, sizes)
+```
+
+Uno menos el coeficiente de variación $V$ de las frecuencias relativas $p_i$ dividido por su mayor valor $\sqrt{n - 1}$: 1 significa uniforme, 0, toda en una parte. La desviación típica $\sigma$ es la de la población, como en Gries (2020); Gries (2008) toma la muestral.
+
+$$
+1 - \frac{V}{\sqrt{n - 1}}, \quad V = \frac{\sigma(p)}{\mu(p)}
+$$
+
+</div>
+
+<div class="metric-card" markdown>
+
+### D2 de Carroll { #carroll_d2 }
+
+`carroll_d2` · Carroll (1970)
+{ .metric-meta }
+
+<!-- core: corpus/dispersion.md:calc_carroll_d2 82075b3 -->
+``` {.python .signature}
+calc_carroll_d2(frequencies, sizes)
+```
+
+La entropía de la distribución de las frecuencias relativas $p_i$ por las partes, dividida por su mayor valor: 1 significa uniforme, 0, toda en una parte.
+
+$$
+\frac{H(p)}{\log_2 n}
+$$
+
+</div>
+
+<div class="metric-card" markdown>
+
+### S de Rosengren { #rosengren_s }
+
+`rosengren_s` · Rosengren (1971)
+{ .metric-meta }
+
+<!-- core: corpus/dispersion.md:calc_rosengren_s 29fcb9c -->
+``` {.python .signature}
+calc_rosengren_s(frequencies, sizes)
+```
+
+1 significa que la palabra se reparte en proporción a los tamaños de las partes; toda en la parte $i$, da $s_i$, así que $1/n$ en una de $n$ partes iguales.
+
+$$
+\frac{(\sum \sqrt{s_i v_i})^2}{f}
+$$
+
+</div>
+
+<div class="metric-card" markdown>
+
+### Divergencia de Kullback-Leibler { #kl_divergence }
+
+`kl_divergence` · [Gries (2020)](https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf)
+{ .metric-meta }
+
+<!-- core: corpus/dispersion.md:calc_kl_divergence f5095d5 -->
+``` {.python .signature}
+calc_kl_divergence(frequencies, sizes)
+```
+
+La divergencia de las proporciones de las apariciones de la palabra por parte respecto de las proporciones de las partes: 0 significa en proporción; crece cuando la palabra se reúne en partes pequeñas.
+
+$$
+\sum \frac{v_i}{f} \log_2 \frac{v_i / f}{s_i}
+$$
+
+</div>
