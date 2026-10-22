@@ -99,8 +99,7 @@ MODULES = [
     if not info.name.endswith("__main__")
 ]
 CORE_MODULES = [
-    importlib.import_module(info.name)
-    for info in pkgutil.walk_packages(anyts.__path__, "anyts.")
+    importlib.import_module(info.name) for info in pkgutil.walk_packages(anyts.__path__, "anyts.")
 ]
 CONSTANTS = [ests.constants, anyts.constants, *MODULES, *CORE_MODULES]
 # Pages whose name is not that of their module
