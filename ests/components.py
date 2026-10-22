@@ -18,30 +18,23 @@ Description:
     or sentencizer; get_nlp has it already
 """
 
+import anyts.components
 from anyts.components import StatsComponent, start_sents_after_blank_lines
-from anyts.constants import (
-    DIVERSITY_LOG_BASE,
-    HDD_SAMPLE_SIZE,
-    MATTR_WINDOW_LEN,
-    MTLD_MIN_LEN,
-    MTLD_TTR_THRESHOLD,
-    NAUSEA_TOP_N,
-    PHON_WINDOW_LEN,
-)
-from anyts.utils import check_words, is_number, iter_doc_tokens
+from anyts.utils import is_number
 from spacy.language import Language
 from spacy.tokens import Doc
 
 from .basic_stats import BasicStats
 from .cohesion_stats import CohesionStats
+from .constants import CORE_MESSAGES
 from .datasets.freq_dict import FreqDict
-from .diversity_stats import DiversityStats, check_params as check_diversity_params
+from .diversity_stats import DiversityStats
 from .extractors import NUMBER_PATTERN
 from .lexical_stats import LexicalStats
 from .morph_stats import MorphStats
-from .phon_stats import PhonStats, check_params as check_phon_params
-from .readability_stats import ReadabilityStats, check_preset
-from .style_stats import StyleStats, check_params as check_style_params
+from .phon_stats import PhonStats
+from .readability_stats import ReadabilityStats
+from .style_stats import StyleStats
 from .syntax_stats import SyntaxStats
 from .utils import add_dash_rules
 from .verse_stats import LETTER, VerseStats
@@ -52,12 +45,14 @@ Language.component("ests_blank_lines", func=start_sents_after_blank_lines)
 class _Component(StatsComponent):
     """Component of esTS: extends the tokenizer of its pipeline with add_dash_rules"""
 
+    messages = CORE_MESSAGES
+
     def prepare(self, nlp: Language) -> None:
         add_dash_rules(nlp)
 
 
 @Language.factory("ests_basic")
-class BasicStatsComponent(_Component):
+class BasicStatsComponent(_Component, anyts.components.BasicStatsComponent):
     """
     Class for the component of the basic statistics of a text
 
@@ -81,15 +76,11 @@ class BasicStatsComponent(_Component):
         name (str): Name of the component in the pipeline
     """
 
-    def __init__(self, nlp: Language, name: str = "ests_basic"):
-        super().__init__(nlp, name)
-
-    def compute(self, doc: Doc) -> BasicStats:
-        return BasicStats(doc)
+    stats_class = BasicStats
 
 
 @Language.factory("ests_readability")
-class ReadabilityStatsComponent(_Component):
+class ReadabilityStatsComponent(_Component, anyts.components.ReadabilityStatsComponent):
     """
     Class for the component of the readability metrics of a text
 
@@ -129,36 +120,23 @@ class ReadabilityStatsComponent(_Component):
 
     Arguments:
         name (str): Name of the component in the pipeline
-        preset (str): Preset of the coefficients (general, classic)
+        preset (str): Preset of the coefficients (general, classic); the preset of the
+            class (general) if not set
         basic (str): Extension of a component of basic statistics to reuse
             instead of computing them again
 
     Raises:
-        ParameterError: If the preset is unknown
+        ParameterError: If the preset is not a string or is unknown, or basic is not a
+            string
         SourceError: If the named extension holds no basic statistics
     """
 
-    def __init__(
-        self,
-        nlp: Language,
-        name: str = "ests_readability",
-        preset: str = "general",
-        basic: str | None = None,
-    ):
-        check_preset(preset)
-        self.preset = preset
-        self.basic = basic
-        super().__init__(nlp, name)
-
-    def compute(self, doc: Doc) -> ReadabilityStats:
-        source: Doc | BasicStats = doc
-        if self.basic is not None:
-            source = self.from_extension(doc, self.basic, BasicStats, "ests_basic")
-        return ReadabilityStats(source, preset=self.preset)
+    stats_class = ReadabilityStats
+    basic_factory = "ests_basic"
 
 
 @Language.factory("ests_diversity")
-class DiversityStatsComponent(_Component):
+class DiversityStatsComponent(_Component, anyts.components.DiversityStatsComponent):
     """
     Class for the component of the lexical diversity metrics of a text
 
@@ -199,33 +177,7 @@ class DiversityStatsComponent(_Component):
             of its range
     """
 
-    def __init__(
-        self,
-        nlp: Language,
-        name: str = "ests_diversity",
-        window_len: int = MATTR_WINDOW_LEN,
-        mtld_threshold: float = MTLD_TTR_THRESHOLD,
-        mtld_min_len: int = MTLD_MIN_LEN,
-        hdd_sample_size: int = HDD_SAMPLE_SIZE,
-        log_base: float = DIVERSITY_LOG_BASE,
-    ):
-        check_diversity_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)
-        self.window_len = window_len
-        self.mtld_threshold = mtld_threshold
-        self.mtld_min_len = mtld_min_len
-        self.hdd_sample_size = hdd_sample_size
-        self.log_base = log_base
-        super().__init__(nlp, name)
-
-    def compute(self, doc: Doc) -> DiversityStats:
-        return DiversityStats(
-            doc,
-            window_len=self.window_len,
-            mtld_threshold=self.mtld_threshold,
-            mtld_min_len=self.mtld_min_len,
-            hdd_sample_size=self.hdd_sample_size,
-            log_base=self.log_base,
-        )
+    stats_class = DiversityStats
 
 
 @Language.factory("ests_morph")
@@ -256,15 +208,11 @@ class MorphStatsComponent(_Component):
         SourceError: If the pipeline gives no parts of speech or no lemmas
     """
 
-    def __init__(self, nlp: Language, name: str = "ests_morph"):
-        super().__init__(nlp, name)
-
-    def compute(self, doc: Doc) -> MorphStats:
-        return MorphStats(doc)
+    stats_class = MorphStats
 
 
 @Language.factory("ests_syntax")
-class SyntaxStatsComponent(_Component):
+class SyntaxStatsComponent(_Component, anyts.components.SyntaxStatsComponent):
     """
     Class for the component of the syntactic statistics of a text
 
@@ -291,15 +239,11 @@ class SyntaxStatsComponent(_Component):
         SourceError: If the pipeline gives no parse or no lemmas
     """
 
-    def __init__(self, nlp: Language, name: str = "ests_syntax"):
-        super().__init__(nlp, name)
-
-    def compute(self, doc: Doc) -> SyntaxStats:
-        return SyntaxStats(doc)
+    stats_class = SyntaxStats
 
 
 @Language.factory("ests_cohesion")
-class CohesionStatsComponent(_Component):
+class CohesionStatsComponent(_Component, anyts.components.CohesionStatsComponent):
     """
     Class for the component of the cohesion statistics of a text
 
@@ -326,15 +270,11 @@ class CohesionStatsComponent(_Component):
         SourceError: If the pipeline gives no parts of speech or no lemmas
     """
 
-    def __init__(self, nlp: Language, name: str = "ests_cohesion"):
-        super().__init__(nlp, name)
-
-    def compute(self, doc: Doc) -> CohesionStats:
-        return CohesionStats(doc)
+    stats_class = CohesionStats
 
 
 @Language.factory("ests_lexical")
-class LexicalStatsComponent(_Component):
+class LexicalStatsComponent(_Component, anyts.components.LexicalStatsComponent):
     """
     Class for the component of the lexical sophistication statistics of a text
 
@@ -367,22 +307,24 @@ class LexicalStatsComponent(_Component):
 
     Raises:
         SourceError: If the pipeline gives no parts of speech
+        DatasetNotFoundError: When a statistic by the dictionary is read and the
+            dictionary is not downloaded
+        ConfigValidationError: If data_dir is not a string, raised by spaCy at add_pipe
     """
 
-    def __init__(self, nlp: Language, name: str = "ests_lexical", data_dir: str | None = None):
+    stats_class = LexicalStats
+
+    def __init__(self, nlp: Language, name: str, data_dir: str | None = None):
         self.freq_dict = FreqDict(data_dir) if data_dir else FreqDict()
         super().__init__(nlp, name)
 
-    def accepts(self, doc: Doc) -> bool:
-        """A document gets the statistics when it has a word other than a number"""
-        return any(not is_number(token.text, NUMBER_PATTERN) for token in iter_doc_tokens(doc))
-
-    def compute(self, doc: Doc) -> LexicalStats:
-        return LexicalStats(doc, freq_dict=self.freq_dict)
+    def is_number(self, word: str) -> bool:
+        """A number of the Spanish NUMBER_PATTERN (2020, 1.500,50, 3.º)"""
+        return is_number(word, NUMBER_PATTERN)
 
 
 @Language.factory("ests_style")
-class StyleStatsComponent(_Component):
+class StyleStatsComponent(_Component, anyts.components.StyleStatsComponent):
     """
     Class for the component of the style metrics of a text
 
@@ -419,42 +361,22 @@ class StyleStatsComponent(_Component):
             and the naturalness by Zipf's law
         nausea_stopwords (list[str]): Stopwords left out of the most frequent words
             of the academic nausea; is_stopword if not set
+        cliches (list[str]): Clichés; OFFICIALESE_CLICHES if not set
 
     Raises:
-        SourceTypeError: If the stopwords or the nausea stopwords are not a list of strings
+        SourceTypeError: If the stopwords, the nausea stopwords or the clichés are not a
+            list of strings
         ParameterError: If the number of the most frequent words is not an integer or is
             below one
+        SourceError: When verbal_nouns, markers() or get_stats() is read, if the pipeline
+            gives no parts of speech or no lemmas
     """
 
-    def __init__(
-        self,
-        nlp: Language,
-        name: str = "ests_style",
-        stopwords: list[str] | None = None,
-        top_n: int = NAUSEA_TOP_N,
-        nausea_stopwords: list[str] | None = None,
-    ):
-        check_style_params(top_n)
-        if stopwords is not None:
-            check_words(stopwords, "stopwords")
-        if nausea_stopwords is not None:
-            check_words(nausea_stopwords, "nausea stopwords")
-        self.stopwords = stopwords
-        self.top_n = top_n
-        self.nausea_stopwords = nausea_stopwords
-        super().__init__(nlp, name)
-
-    def compute(self, doc: Doc) -> StyleStats:
-        return StyleStats(
-            doc,
-            stopwords=self.stopwords,
-            top_n=self.top_n,
-            nausea_stopwords=self.nausea_stopwords,
-        )
+    stats_class = StyleStats
 
 
 @Language.factory("ests_phon")
-class PhonStatsComponent(_Component):
+class PhonStatsComponent(_Component, anyts.components.PhonStatsComponent):
     """
     Class for the component of the phonostatistics of a text
 
@@ -485,13 +407,7 @@ class PhonStatsComponent(_Component):
         ParameterError: If the window is not an integer or is below 2
     """
 
-    def __init__(self, nlp: Language, name: str = "ests_phon", window_len: int = PHON_WINDOW_LEN):
-        check_phon_params(window_len)
-        self.window_len = window_len
-        super().__init__(nlp, name)
-
-    def compute(self, doc: Doc) -> PhonStats:
-        return PhonStats(doc, window_len=self.window_len)
+    stats_class = PhonStats
 
 
 @Language.factory("ests_verse")
@@ -523,15 +439,18 @@ class VerseStatsComponent(_Component):
     Arguments:
         name (str): Name of the component in the pipeline
         seseo (bool): Pronounce c and z before e and i as s in the rhyme
+
+    Raises:
+        ConfigValidationError: If seseo is not a boolean, raised by spaCy at add_pipe
     """
 
-    def __init__(self, nlp: Language, name: str = "ests_verse", seseo: bool = False):
+    stats_class = VerseStats
+    stats_params = ("seseo",)
+
+    def __init__(self, nlp: Language, name: str, seseo: bool = False):
         self.seseo = seseo
         super().__init__(nlp, name)
 
     def accepts(self, doc: Doc) -> bool:
         """A document gets the statistics when it has a letter"""
         return LETTER.search(doc.text) is not None
-
-    def compute(self, doc: Doc) -> VerseStats:
-        return VerseStats(doc, seseo=self.seseo)

@@ -1,5 +1,9 @@
 # Componentes
 
+``` {.python .signature}
+StatsComponent(nlp, name)
+```
+
 <!-- core: components.md:StatsComponent d49cea9 -->
 La base de los componentes de [spaCy](https://github.com/explosion/spaCy) que ponen las estadísticas de un texto en una extensión de `Doc`: un componente registra la extensión al añadirse a un pipeline y pone las estadísticas de cada documento en `doc._.<name>`. La escritura de componentes en general se describe en la [documentación de spaCy](https://spacy.io/usage/processing-pipelines#custom-components).
 
@@ -8,18 +12,43 @@ Los componentes de esTS son subclases del `StatsComponent` del núcleo [anyTS](h
 !!! note "Nota"
     Los ejemplos de abajo usan el modelo `es_core_news_sm`, que se instala aparte: `python -m spacy download es_core_news_sm` (véase [instalación](installation.md)).
 
+=== "Código"
+
+    ``` python
+    import ests
+    import spacy
+
+    nlp = spacy.load("es_core_news_sm")
+    nlp.add_pipe("ests_basic", name="basic")
+    doc = nlp("El gato duerme en la ventana. Los niños juegan en el parque.")
+    doc._.basic.n_words, doc._.basic.c_letters
+    nlp("?!")._.basic is None
+    ```
+
+=== "Resultado"
+
+    ```
+    (12, {2: 5, 3: 1, 4: 1, 5: 1, 6: 3, 7: 1})
+    True
+    ```
+
+## Parámetros
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `nlp` | `Language` | - | Pipeline al que se añade el componente |
+| `name` | `str` | - | Nombre del componente en el pipeline y de la extensión |
+
+spaCy fija ambos en `nlp.add_pipe(factory, name=...)`; los demás parámetros de un componente se pasan en el diccionario `config` de la misma llamada.
+
 ## Nombres { #names }
 
 Las fábricas llevan el prefijo de la biblioteca: `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`, y el componente de los límites de oración [`ests_blank_lines`](#blank_lines). Están declaradas como entry points de `spacy_factories`, así que un pipeline guardado con estos componentes (`nlp.to_disk(path)`, `spacy package`) se carga con `spacy.load(path)` sin importar la biblioteca.
 
-``` python
-nlp.add_pipe("ests_basic", name="basic", last=True)
-doc = nlp("El gato duerme")
-doc._.basic.n_words
-```
-
 <!-- core: components.md:StatsComponent-names 33ebb87 -->
 El nombre del paso del pipeline es el nombre de la extensión: `nlp.add_pipe(factory, name="basic")` pone las estadísticas en `doc._.basic`. Sin `name` ambos toman el nombre de la fábrica. La extensión sigue al paso cuando el pipeline lo renombra (`nlp.rename_pipe`). Un nombre ocupado por una extensión de otro paquete lanza `ParameterError` en lugar de reemplazarla: en `add_pipe`, o con el primer documento después de `rename_pipe`, que renombra el paso antes de que el componente conozca su nombre. Un componente tomado de otro pipeline (`add_pipe(name, source=other)`) es el mismo objeto en ambos, así que con un nombre nuevo escribe también en esa extensión del otro pipeline; un componente independiente sale de la fábrica, `add_pipe(factory, name=...)`. El mismo componente puede añadirse dos veces con nombres distintos, con parámetros distintos. Un documento sin palabras - una cadena vacía, espacios, pura puntuación - pasa por un componente sin cambios, con su extensión en `None`.
+
+En `ests_lexical` también pasa intacto un documento solo de números, y en `ests_verse` un documento sin letras.
 
 <!-- core: components.md:StatsComponent-serialization a238412 -->
 !!! warning "Serialización"
@@ -27,413 +56,332 @@ El nombre del paso del pipeline es el nombre de la extensión: `nlp.add_pipe(fac
 
 Añadir un componente amplía el tokenizador de su pipeline con las reglas de las rayas de un diálogo pegadas a las palabras y de las abreviaturas en cualquier caja ([`add_dash_rules`](extractors/words.md)), como en la API de cadenas: `sí--dijo` son dos palabras y una raya, `SR.` una palabra. Un tokenizador que no es el `Tokenizer` de spaCy se queda como está.
 
-## Qué necesita cada componente { #requirements }
+## Componentes de las clases de estadísticas { #class-components }
 
-| Componente | Fábrica | Estadísticas | Necesita |
-| :--------: | :-----: | :----------: | :------: |
-| `BasicStatsComponent` | `ests_basic` | [BasicStats](stats/basic_stats.md) | nada |
-| `ReadabilityStatsComponent` | `ests_readability` | [ReadabilityStats](stats/readability_stats.md) | nada |
-| `DiversityStatsComponent` | `ests_diversity` | [DiversityStats](stats/diversity_stats.md) | nada |
-| `MorphStatsComponent` | `ests_morph` | [MorphStats](stats/morph_stats.md) | categorías gramaticales y lemas |
-| `SyntaxStatsComponent` | `ests_syntax` | [SyntaxStats](stats/syntax_stats.md) | análisis sintáctico y lemas |
-| `CohesionStatsComponent` | `ests_cohesion` | [CohesionStats](stats/cohesion_stats.md) | categorías gramaticales y lemas |
-| `LexicalStatsComponent` | `ests_lexical` | [LexicalStats](stats/lexical_stats.md) | categorías gramaticales; las estadísticas por el diccionario de frecuencias lo necesitan descargado |
-| `StyleStatsComponent` | `ests_style` | [StyleStats](stats/style_stats.md) | categorías gramaticales y lemas para los sustantivos deverbales |
-| `PhonStatsComponent` | `ests_phon` | [PhonStats](stats/phon_stats.md) | nada |
-| `VerseStatsComponent` | `ests_verse` | [VerseStats](stats/verse_stats.md) | nada; los saltos de línea del texto |
+| Componente | Fábrica | Clase de estadísticas | Parámetros |
+| :--------- | :------ | :-------------------- | :--------- |
+| [`BasicStatsComponent`](#BasicStatsComponent) | `ests_basic` | [`BasicStats`](stats/basic_stats.md) | - |
+| [`ReadabilityStatsComponent`](#ReadabilityStatsComponent) | `ests_readability` | [`ReadabilityStats`](stats/readability_stats.md) | `preset`, `basic` |
+| [`DiversityStatsComponent`](#DiversityStatsComponent) | `ests_diversity` | [`DiversityStats`](stats/diversity_stats.md) | `window_len`, `mtld_threshold`, `mtld_min_len`, `hdd_sample_size`, `log_base` |
+| [`MorphStatsComponent`](#MorphStatsComponent) | `ests_morph` | [`MorphStats`](stats/morph_stats.md) | - |
+| [`SyntaxStatsComponent`](#SyntaxStatsComponent) | `ests_syntax` | [`SyntaxStats`](stats/syntax_stats.md) | - |
+| [`CohesionStatsComponent`](#CohesionStatsComponent) | `ests_cohesion` | [`CohesionStats`](stats/cohesion_stats.md) | - |
+| [`LexicalStatsComponent`](#LexicalStatsComponent) | `ests_lexical` | [`LexicalStats`](stats/lexical_stats.md) | `data_dir` |
+| [`StyleStatsComponent`](#StyleStatsComponent) | `ests_style` | [`StyleStats`](stats/style_stats.md) | `stopwords`, `top_n`, `nausea_stopwords`, `cliches` |
+| [`PhonStatsComponent`](#PhonStatsComponent) | `ests_phon` | [`PhonStats`](stats/phon_stats.md) | `window_len` |
+| [`VerseStatsComponent`](#VerseStatsComponent) | `ests_verse` | [`VerseStats`](stats/verse_stats.md) | `seseo` |
 
-En el pipeline de `es_core_news_sm` las categorías gramaticales vienen del `morphologizer` (o de un `tagger` con un `attribute_ruler`; un `tagger` solo no las da), el análisis del `parser` y los lemas del `lemmatizer`. Un componente al que le falta la anotación, también con componentes `excluded`, lanza `SourceError` cuando el documento pasa por él.
+Las estadísticas básicas, de legibilidad, de diversidad, fonéticas y del verso no necesitan ninguna anotación de un modelo. En el pipeline de `es_core_news_sm` las categorías gramaticales vienen del `morphologizer` (o de un `tagger` con un `attribute_ruler`; un `tagger` solo no las da), el análisis del `parser` y los lemas del `lemmatizer`. Un componente al que le falta la anotación, también con componentes `excluded`, lanza `SourceError` cuando el documento pasa por él.
 
-## BasicStatsComponent
+### Estadísticas básicas { #BasicStatsComponent }
 
-!!! info ""
-    **ests.components.BasicStatsComponent**
+``` {.python .signature}
+BasicStatsComponent(nlp, name)
+```
 
-El componente de las estadísticas básicas de un texto.
+<!-- core: components.md:BasicStatsComponent 7b037d9 -->
+`BasicStatsComponent` pone las estadísticas básicas de un documento en su extensión.
 
-Parámetros:
+### Métricas de legibilidad { #ReadabilityStatsComponent }
 
-| Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `nlp` | Language | `-` | Objeto Language |
-| `name` | str | `"ests_basic"` | Nombre del componente en el pipeline |
+``` {.python .signature}
+ReadabilityStatsComponent(nlp, name, preset=None, basic=None)
+```
 
-!!! example "Ejemplo"
-
-    _Código_:
-
-    ``` python
-    # Importar las bibliotecas
-    import ests
-    import spacy
-
-    # Cargar el modelo de spaCy
-    nlp = spacy.load("es_core_news_sm")
-
-    # Añadir el componente
-    nlp.add_pipe("ests_basic", name="basic", last=True)
-
-    # Leer las estadísticas calculadas
-    doc = nlp("El gato duerme en la ventana. Los niños juegan en el parque.")
-    doc._.basic.n_words, doc._.basic.c_letters
-    ```
-
-    _Resultado_:
-
-    ``` bash
-    (12, {2: 5, 3: 1, 4: 1, 5: 1, 6: 3, 7: 1})
-    ```
-
-## ReadabilityStatsComponent
-
-!!! info ""
-    **ests.components.ReadabilityStatsComponent**
-
-El componente de las métricas de legibilidad de un texto.
-
-Parámetros:
+<!-- core: components.md:ReadabilityStatsComponent 78d49ec -->
+`ReadabilityStatsComponent` pone en la extensión las métricas de legibilidad, calculadas sobre el documento o, con `basic`, sobre las estadísticas básicas que otro componente puso en él. Una biblioteca fija `basic_factory`, la fábrica de su componente de las estadísticas básicas, que el error nombra cuando esa extensión no las tiene.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `nlp` | Language | `-` | Objeto Language |
-| `name` | str | `"ests_readability"` | Nombre del componente en el pipeline |
-| `preset` | str | `"general"` | Preajuste de los coeficientes (`general`, `classic`) |
-| `basic` | str | `None` | Nombre de la extensión de un componente de estadísticas básicas, cuyo objeto se usa en lugar de calcularlas otra vez |
+| :-------- | :--- | :---------- | :---------- |
+| `preset` | `str` | `None` | Preajuste de los coeficientes, uno de los preajustes de la clase; el de la clase por defecto si es `None` |
+| `basic` | `str` | `None` | Extensión de un componente de las estadísticas básicas que se reutilizan en lugar de calcularlas otra vez |
 
-Un preajuste desconocido lanza `ParameterError` al añadir el componente.
+Con `preset` en `None` la configuración de un pipeline guardado no lleva preajuste, y el pipeline toma el de la clase por defecto al cargarse; una biblioteca que quiere su valor por defecto escrito en la configuración lo da en la firma de su subclase.
 
-Las métricas de legibilidad se calculan sobre las estadísticas básicas, así que un pipeline con los dos componentes las calcula dos veces salvo que `basic` nombre la extensión del primero: `nlp.add_pipe("ests_readability", config={"basic": "basic"})` después de un componente llamado `basic`. Un nombre que no lleva estadísticas básicas, o un componente que corre después de este, lanza `SourceError`.
+Excepciones:
 
-!!! example "Ejemplo"
+- `ParameterError` - una `stats_class` que no es concreta, un preajuste que no es una cadena o no es de la clase, una extensión no nombrada por una cadena;
+- `SourceTypeError` - una clase sin `basic_stats_class` y sin `basic`;
+- `SourceError` - un documento cuya extensión `basic` no tiene estadísticas básicas de la clase.
 
-    _Código_:
+Los [preajustes](stats/readability_stats.md#presets) de esTS son `general` y `classic`, el de la clase `general`. En esTS la clase de estadísticas y su `basic_stats_class` están fijadas, así que los errores de `stats_class` y `SourceTypeError` no se dan. El componente nombrado por `basic` va antes que este en el pipeline; el mensaje de `SourceError` nombra el componente `ests_basic` (`basic_factory`) que hay que añadir allí.
+
+=== "Código"
 
     ``` python
-    ...
-
-    # Añadir el componente con los coeficientes clásicos
-    nlp.add_pipe(
-        "ests_readability",
-        name="readability_classic",
-        config={"preset": "classic"},
-        last=True,
-    )
-
-    # Leer las métricas calculadas
+    nlp.add_pipe("ests_readability", name="readability")
+    config = {"preset": "classic", "basic": "basic"}
+    nlp.add_pipe("ests_readability", name="readability_classic", config=config)
     doc = nlp("El gato duerme en la ventana. Los niños juegan en el parque.")
+    round(doc._.readability.flesch_reading_easy, 2)
     round(doc._.readability_classic.flesch_reading_easy, 2)
     ```
 
-    _Resultado_:
+=== "Resultado"
 
-    ``` bash
+    ```
+    102.19
     105.72
     ```
 
-## DiversityStatsComponent
+### Métricas de diversidad léxica { #DiversityStatsComponent }
 
-!!! info ""
-    **ests.components.DiversityStatsComponent**
+``` {.python .signature}
+DiversityStatsComponent(nlp, name, window_len=50, mtld_threshold=0.72, mtld_min_len=10, hdd_sample_size=42, log_base=10)
+```
 
-El componente de las métricas de diversidad léxica de un texto.
+<!-- core: components.md:DiversityStatsComponent a13bd76 -->
+`DiversityStatsComponent` pone en la extensión las métricas de diversidad léxica, mediante una clase de la biblioteca que lee un `Doc`. Sus parámetros son los de `DiversityStats`, con los mismos valores por defecto.
 
-Parámetros:
+Excepciones:
+
+- `ParameterError` - un parámetro erróneo (`check_params` de la diversidad).
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `nlp` | Language | `-` | Objeto Language |
-| `name` | str | `"ests_diversity"` | Nombre del componente en el pipeline |
-| `window_len` | int | `50` | Tamaño de la ventana de MATTR y del segmento de MSTTR |
-| `mtld_threshold` | float | `0.72` | Umbral de TTR para MTLD, MA-MTLD y MTLD-W |
-| `mtld_min_len` | int | `10` | Longitud mínima del factor para MTLD, MA-MTLD y MTLD-W |
-| `hdd_sample_size` | int | `42` | Tamaño de la muestra de HD-D |
-| `log_base` | float | `10` | Base del logaritmo de las métricas de Summer, Maas y Dugast |
+| :-------- | :--- | :---------- | :---------- |
+| `window_len` | `int` | `50` | Tamaño de la ventana de MATTR y del segmento de MSTTR |
+| `mtld_threshold` | `float` | `0.72` | Umbral de TTR para MTLD, MA-MTLD y MTLD-W |
+| `mtld_min_len` | `int` | `10` | Longitud mínima del factor para MTLD, MA-MTLD y MTLD-W |
+| `hdd_sample_size` | `int` | `42` | Tamaño de la muestra de HD-D |
+| `log_base` | `float` | `10` | Base del logaritmo de las métricas de Summer, Maas y Dugast |
 
-Un parámetro fuera de su rango lanza `ParameterError` al añadir el componente.
-
-!!! example "Ejemplo"
-
-    _Código_:
+=== "Código"
 
     ``` python
-    ...
-
-    # Añadir el componente con logaritmo natural y ventana de 100 palabras
-    nlp.add_pipe(
-        "ests_diversity",
-        name="diversity_ln",
-        config={"window_len": 100, "log_base": 2.718281828459045},
-        last=True,
-    )
-
-    # Leer las métricas calculadas
+    config = {"window_len": 100, "log_base": 2.718281828459045}
+    nlp.add_pipe("ests_diversity", name="diversity", config=config)
     doc = nlp("El gato duerme en la ventana. Los niños juegan en el parque.")
-    round(doc._.diversity_ln.ttr, 3)
+    round(doc._.diversity.ttr, 3), round(doc._.diversity.sttr, 3)
     ```
 
-    _Resultado_:
+=== "Resultado"
 
-    ``` bash
-    0.833
+    ```
+    (0.833, 0.916)
     ```
 
-## MorphStatsComponent
+### Estadísticas morfológicas { #MorphStatsComponent }
 
-!!! info ""
-    **ests.components.MorphStatsComponent**
+``` {.python .signature}
+MorphStatsComponent(nlp, name)
+```
 
-El componente de las estadísticas morfológicas de un texto. El pipeline necesita un `morphologizer` y un `lemmatizer` antes del componente.
+`MorphStatsComponent` pone las estadísticas morfológicas en la extensión. El pipeline necesita un `morphologizer` y un `lemmatizer` antes del componente.
 
-Parámetros:
+Excepciones:
 
-| Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `nlp` | Language | `-` | Objeto Language |
-| `name` | str | `"ests_morph"` | Nombre del componente en el pipeline |
+- `SourceError` - un documento sin las categorías gramaticales o sin los lemas.
 
-!!! example "Ejemplo"
-
-    _Código_:
+=== "Código"
 
     ``` python
-    ...
-
-    # Añadir el componente
-    nlp.add_pipe("ests_morph", name="morph", last=True)
-
-    # Leer las estadísticas calculadas
+    nlp.add_pipe("ests_morph", name="morph")
     doc = nlp("El gato duerme en la ventana. Los niños juegan en el parque.")
     doc._.morph.pos[:4]
     ```
 
-    _Resultado_:
+=== "Resultado"
 
-    ``` bash
+    ```
     ('DET', 'NOUN', 'VERB', 'ADP')
     ```
 
-## SyntaxStatsComponent
+### Estadísticas sintácticas { #SyntaxStatsComponent }
 
-!!! info ""
-    **ests.components.SyntaxStatsComponent**
+``` {.python .signature}
+SyntaxStatsComponent(nlp, name)
+```
 
-El componente de las estadísticas sintácticas de un texto. El pipeline necesita un `parser` y un `lemmatizer` antes del componente.
+<!-- core: components.md:SyntaxStatsComponent 95e9f18 -->
+`SyntaxStatsComponent` pone las estadísticas sintácticas en la extensión; necesitan un parser antes de él.
 
-Parámetros:
+En esTS necesitan también un `lemmatizer` antes de él.
 
-| Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `nlp` | Language | `-` | Objeto Language |
-| `name` | str | `"ests_syntax"` | Nombre del componente en el pipeline |
+Excepciones:
 
-!!! example "Ejemplo"
+- `SourceError` - un documento sin análisis de dependencias o sin los lemas.
 
-    _Código_:
+=== "Código"
 
     ``` python
-    ...
-
-    # Añadir el componente
-    nlp.add_pipe("ests_syntax", name="syntax", last=True)
-
-    # Leer las estadísticas calculadas
+    nlp.add_pipe("ests_syntax", name="syntax")
     doc = nlp("El gato duerme en la ventana. Los niños juegan en el parque.")
     doc._.syntax.tree_depth, doc._.syntax.mean_dependency_distance
     ```
 
-    _Resultado_:
+=== "Resultado"
 
-    ``` bash
+    ```
     (2.0, 1.6)
     ```
 
-## CohesionStatsComponent
+### Estadísticas de cohesión { #CohesionStatsComponent }
 
-!!! info ""
-    **ests.components.CohesionStatsComponent**
+``` {.python .signature}
+CohesionStatsComponent(nlp, name)
+```
 
-El componente de las estadísticas de cohesión de un texto. El pipeline necesita un `morphologizer` y un `lemmatizer` antes del componente.
+<!-- core: components.md:CohesionStatsComponent 51ecae4 -->
+`CohesionStatsComponent` pone las estadísticas de cohesión en la extensión; por defecto necesitan las categorías gramaticales y los lemas antes de él.
 
-Parámetros:
+En el pipeline de `es_core_news_sm` vienen del `morphologizer` y del `lemmatizer`.
 
-| Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `nlp` | Language | `-` | Objeto Language |
-| `name` | str | `"ests_cohesion"` | Nombre del componente en el pipeline |
+Excepciones:
 
-!!! example "Ejemplo"
+- `SourceError` - un documento sin las categorías gramaticales o sin los lemas.
 
-    _Código_:
+=== "Código"
 
     ``` python
-    ...
-
-    # Añadir el componente
-    nlp.add_pipe("ests_cohesion", name="cohesion", last=True)
-
-    # Leer las estadísticas calculadas
+    nlp.add_pipe("ests_cohesion", name="cohesion")
     doc = nlp("El informe fue aprobado. Sin embargo, el informe no resuelve el problema.")
     doc._.cohesion.noun_overlap_adjacent, round(doc._.cohesion.connectors, 2)
     ```
 
-    _Resultado_:
+=== "Resultado"
 
-    ``` bash
+    ```
     (1.0, 83.33)
     ```
 
-## LexicalStatsComponent
+### Estadísticas de complejidad léxica { #LexicalStatsComponent }
 
-!!! info ""
-    **ests.components.LexicalStatsComponent**
+``` {.python .signature}
+LexicalStatsComponent(nlp, name, data_dir=None)
+```
 
-El componente de las estadísticas de complejidad léxica de un texto. El pipeline necesita un `morphologizer` antes del componente; los lemas del modelo no se usan. Las bandas de frecuencia y la densidad léxica se calculan sin el [diccionario de frecuencias](datasets/freqdict.md), las estadísticas por el diccionario lo necesitan descargado. Aquí los números no son palabras, así que un documento solo de números también pasa intacto.
+<!-- core: components.md:LexicalStatsComponent 7d94500 -->
+`LexicalStatsComponent` pone en la extensión las estadísticas de complejidad léxica, con el diccionario de frecuencias de su atributo `freq_dict`: `None` por defecto, para el diccionario de la clase, y fijado por una biblioteca en el constructor de su componente. Un documento recibe las estadísticas cuando tiene una palabra de `iter_doc_words` (con `join_hyphens`) que no es un número del método `is_number`, `anyts.utils.is_number` por defecto; una biblioteca da los números que su clase deja fuera, así que un documento solo de números pasa intacto.
 
-Parámetros:
+En esTS `freq_dict` es el [diccionario de frecuencias](datasets/freqdict.md) `FreqDict` del directorio `data_dir`, e `is_number` toma los números del `NUMBER_PATTERN` del español (`2020`, `1.500,50`, `3.º`). El pipeline necesita un `morphologizer` antes del componente; los lemas del modelo no se usan. Las bandas de frecuencia y la densidad léxica se calculan sin el diccionario, las estadísticas por el diccionario lo necesitan descargado.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `nlp` | Language | `-` | Objeto Language |
-| `name` | str | `"ests_lexical"` | Nombre del componente en el pipeline |
-| `data_dir` | str | `None` | Directorio del diccionario de frecuencias; el de por defecto si no se indica |
+| :-------- | :--- | :---------- | :---------- |
+| `data_dir` | `str` | `None` | Directorio del diccionario de frecuencias; el de por defecto si no se indica |
 
-!!! example "Ejemplo"
+Excepciones:
 
-    _Código_:
+- `SourceError` - un documento sin las categorías gramaticales;
+- `DatasetNotFoundError` - las estadísticas por el diccionario y `get_stats()` cuando el diccionario no está descargado;
+- `ConfigValidationError` de spaCy - un `data_dir` que no es una cadena, en `add_pipe`.
+
+=== "Código"
 
     ``` python
-    ...
-
-    # Añadir el componente
-    nlp.add_pipe("ests_lexical", name="lexical", last=True)
-
-    # Leer las estadísticas calculadas
+    nlp.add_pipe("ests_lexical", name="lexical")
     doc = nlp("El felinólogo examinaba al minino con parsimonia.")
     round(doc._.lexical.coverage, 3), round(doc._.lexical.p_top1000, 3)
+    nlp("2020 1.500,50 3.º")._.lexical is None
     ```
 
-    _Resultado_:
+=== "Resultado"
 
-    ``` bash
+    ```
     (0.857, 0.429)
+    True
     ```
 
-## StyleStatsComponent
+### Métricas de estilo { #StyleStatsComponent }
 
-!!! info ""
-    **ests.components.StyleStatsComponent**
+``` {.python .signature}
+StyleStatsComponent(nlp, name, stopwords=None, top_n=10, nausea_stopwords=None, cliches=None)
+```
 
-El componente de las métricas de estilo de un texto. Los sustantivos deverbales necesitan un `morphologizer` y un `lemmatizer` antes del componente; las demás métricas solo leen las palabras.
-
-Parámetros:
+<!-- core: components.md:StyleStatsComponent 0abace1 -->
+`StyleStatsComponent` pone las métricas de estilo en la extensión.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `nlp` | Language | `-` | Objeto Language |
-| `name` | str | `"ests_style"` | Nombre del componente en el pipeline |
-| `stopwords` | list[str] | `None` | Palabras vacías para el contenido de agua; `STOPWORDS` y las expresiones parentéticas de una palabra si no se indican |
-| `top_n` | int | `10` | Número de las palabras más frecuentes para la náusea académica y la naturalidad según Zipf |
-| `nausea_stopwords` | list[str] | `None` | Palabras vacías que se dejan fuera de las palabras más frecuentes de la náusea académica; `is_stopword` si no se dan |
+| :-------- | :--- | :---------- | :---------- |
+| `stopwords` | `list[str]` | `None` | Palabras vacías del contenido de agua; las de la clase si es `None` |
+| `top_n` | `int` | `10` | Número de las palabras más frecuentes de la náusea académica y de la naturalidad según la ley de Zipf (`NAUSEA_TOP_N`) |
+| `nausea_stopwords` | `list[str]` | `None` | Palabras que se dejan fuera de las palabras más frecuentes de la náusea académica; las de la clase si es `None` |
+| `cliches` | `list[str]` | `None` | Clichés; los de la clase (`cliches_list`) si es `None` |
 
-!!! example "Ejemplo"
+Excepciones:
 
-    _Código_:
+- `SourceTypeError` - palabras vacías, palabras vacías de la náusea o clichés que no son una lista de cadenas;
+- `ParameterError` - un `top_n` que no es un entero de al menos uno.
+
+Sin las listas, el contenido de agua toma las palabras vacías de `STOPWORDS` y las expresiones parentéticas de una palabra, la náusea académica deja fuera las palabras de `is_stopword`, y los clichés vienen de `OFFICIALESE_CLICHES`; `NAUSEA_TOP_N` es una constante de `anyts.constants`. Los sustantivos deverbales necesitan un `morphologizer` y un `lemmatizer` antes del componente, y sin ellos leer `verbal_nouns`, `markers()` o `get_stats()` lanza `SourceError`; las demás métricas solo leen las palabras.
+
+=== "Código"
 
     ``` python
-    ...
-
-    # Añadir el componente
-    nlp.add_pipe("ests_style", name="style", last=True)
-
-    # Leer las métricas calculadas
+    nlp.add_pipe("ests_style", name="style")
     doc = nlp("Se procedió a la revisión del expediente a la mayor brevedad.")
     round(doc._.style.cliches, 2), round(doc._.style.verbal_nouns, 2)
+    nlp.add_pipe("ests_style", name="style_cliches", config={"cliches": ["se procedió a"]})
+    doc = nlp("Se procedió a la revisión del expediente a la mayor brevedad.")
+    round(doc._.style_cliches.cliches, 2)
     ```
 
-    _Resultado_:
+=== "Resultado"
 
-    ``` bash
+    ```
     (18.18, 33.33)
+    9.09
     ```
 
-## PhonStatsComponent
+### Fonoestadística { #PhonStatsComponent }
 
-!!! info ""
-    **ests.components.PhonStatsComponent**
+``` {.python .signature}
+PhonStatsComponent(nlp, name, window_len=3)
+```
 
-El componente de la fonoestadística de un texto. No necesita ninguna anotación de un modelo.
+<!-- core: components.md:PhonStatsComponent 0e52eb9 -->
+`PhonStatsComponent` pone las estadísticas fonéticas en la extensión; `window_len` (`PHON_WINDOW_LEN` por defecto) es la ventana en palabras de la aliteración y la asonancia.
 
-Parámetros:
+Excepciones:
+
+- `ParameterError` - un `window_len` que no es un entero de al menos 2.
+
+=== "Código"
+
+    ``` python
+    nlp.add_pipe("ests_phon", name="phon", config={"window_len": 5})
+    doc = nlp("Tres tristes tigres tragaban trigo en un trigal")
+    round(doc._.phon.hardness, 3), round(doc._.phon.alliteration, 3)
+    ```
+
+=== "Resultado"
+
+    ```
+    (0.458, 0.975)
+    ```
+
+### Estadísticas del verso { #VerseStatsComponent }
+
+``` {.python .signature}
+VerseStatsComponent(nlp, name, seseo=False)
+```
+
+`VerseStatsComponent` pone las estadísticas del verso en la extensión. Las estadísticas leen los saltos de línea y las líneas en blanco del documento, así que pase el texto de un poema a `nlp` sin unir los versos; el componente no necesita ninguna anotación de un modelo. Un documento sin letras pasa intacto, y un texto con letras pero sin sílabas españolas da estadísticas vacías.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `nlp` | Language | `-` | Objeto Language |
-| `name` | str | `"ests_phon"` | Nombre del componente en el pipeline |
-| `window_len` | int | `3` | Ventana en palabras para la aliteración y la asonancia |
+| :-------- | :--- | :---------- | :---------- |
+| `seseo` | `bool` | `False` | Pronunciar `c` y `z` ante `e` e `i` como `s` en la rima |
 
-!!! example "Ejemplo"
+Excepciones:
 
-    _Código_:
+- `ConfigValidationError` de spaCy - un `seseo` que no es un booleano, en `add_pipe`.
 
-    ``` python
-    ...
-
-    # Añadir el componente
-    nlp.add_pipe("ests_phon", name="phon", last=True)
-
-    # Leer las estadísticas calculadas
-    doc = nlp("Tres tristes tigres tragaban trigo en un trigal")
-    round(doc._.phon.hardness, 3), doc._.phon.c_clusters
-    ```
-
-    _Resultado_:
-
-    ``` bash
-    (0.458, {1: 12, 2: 7})
-    ```
-
-## VerseStatsComponent
-
-!!! info ""
-    **ests.components.VerseStatsComponent**
-
-El componente de las estadísticas del verso de un texto. Las estadísticas leen los saltos de línea y las líneas en blanco del documento, así que pase el texto de un poema a `nlp` sin unir los versos; el componente no necesita ninguna anotación de un modelo. Un documento sin letras pasa intacto, y un texto con letras pero sin sílabas españolas da estadísticas vacías.
-
-Parámetros:
-
-| Parámetro | Tipo | Valor por defecto | Descripción |
-| :-------: | :--: | :---------------: | :---------: |
-| `nlp` | Language | `-` | Objeto Language |
-| `name` | str | `"ests_verse"` | Nombre del componente en el pipeline |
-| `seseo` | bool | `False` | Pronunciar `c` y `z` ante `e` e `i` como `s` en la rima |
-
-!!! example "Ejemplo"
-
-    _Código_:
+=== "Código"
 
     ``` python
-    ...
-
-    # Añadir el componente
-    nlp.add_pipe("ests_verse", name="verse", last=True)
-
-    # Leer las estadísticas calculadas del comienzo del Romance del prisionero
+    nlp.add_pipe("ests_verse", name="verse")
     doc = nlp(
         "Que por mayo era, por mayo,\ncuando hace la calor,\ncuando los trigos encañan\ny están los campos en flor,"
     )
     doc._.verse.meter, doc._.verse.c_clausulas
     ```
 
-    _Resultado_:
+=== "Resultado"
 
-    ``` bash
+    ```
     ('octosílabo', {'aguda': 2, 'llana': 2})
     ```
 
-## Líneas en blanco { #blank_lines }
-
-!!! info ""
-    **ests_blank_lines** (`anyts.components.start_sents_after_blank_lines`)
+## Oraciones tras líneas en blanco { #blank_lines }
 
 <!-- core: components.md:start_sents_after_blank_lines b811493 -->
 ``` {.python .signature}
@@ -448,29 +396,18 @@ Un componente que inicia una oración en el primer token tras una línea en blan
 
 En esTS el componente está registrado como `ests_blank_lines`. Sin él, el modelo `es_core_news_sm` pega un párrafo sin signo final a la oración siguiente, y las estadísticas de un `Doc` difieren de las de la misma cadena. El pipeline de `ests.utils.get_nlp`, que analiza las cadenas de las estadísticas morfológicas, sintácticas, de cohesión y léxicas, lo tiene antes del parser.
 
-!!! example "Ejemplo"
-
-    _Código_:
+=== "Código"
 
     ``` python
-    # Importar las bibliotecas
-    import ests
-    import spacy
-
-    # Cargar el modelo de spaCy
     nlp = spacy.load("es_core_news_sm")
-
-    # Añadir el componente antes del parser
     nlp.add_pipe("ests_blank_lines", before="parser")
-
-    # Oraciones del documento
     doc = nlp("Novedades\n\nImportación rápida. Menos errores")
     [sent.text.strip() for sent in doc.sents]
     ```
 
-    _Resultado_:
+=== "Resultado"
 
-    ``` bash
+    ```
     ['Novedades', 'Importación rápida.', 'Menos errores']
     ```
 
@@ -478,9 +415,7 @@ En esTS el componente está registrado como `ests_blank_lines`. Sin él, el mode
 
 Los diez componentes pueden compartir un pipeline.
 
-!!! example "Ejemplo"
-
-    _Código_:
+=== "Código"
 
     ``` python
     import ests
@@ -501,7 +436,7 @@ Los diez componentes pueden compartir un pipeline.
         "verse",
     )
     for factory in factories:
-        nlp.add_pipe(f"ests_{factory}", name=factory, last=True)
+        nlp.add_pipe(f"ests_{factory}", name=factory)
 
     doc = nlp("El gato duerme en la ventana. Los niños juegan en el parque.")
     (
@@ -518,8 +453,8 @@ Los diez componentes pueden compartir un pipeline.
     )
     ```
 
-    _Resultado_:
+=== "Resultado"
 
-    ``` bash
+    ```
     (12, 102.19, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0, 0.457, 1)
     ```
