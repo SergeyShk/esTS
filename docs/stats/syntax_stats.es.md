@@ -149,7 +149,7 @@ Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` da 
 | [`mean_clause_len`](#clauses) | Longitud media de una cláusula en palabras | 1 o más, `nan` sin cláusulas | Cláusulas más largas |
 | [`subordinate_clauses_per_sent`](#subordinate_clauses) | Cláusulas subordinadas por oración | 0 o más | Más subordinación |
 | [`p_complex_sents`](#subordinate_clauses) | Proporción de las oraciones con subordinada | 0-1 | Más oraciones complejas |
-| [`infinitive_clauses_per_sent`](#infinitive_clauses) | Cláusulas de infinitivo bajo un verbo por oración | 0 y más | Más complementos de infinitivo |
+| [`infinitive_clauses_per_sent`](#infinitive_clauses) | Cláusulas de infinitivo bajo un verbo por oración | 0 o más | Más complementos de infinitivo |
 | [`modifiers_per_noun`](#noun_modifiers) | Número medio de modificadores de un sustantivo | 0 o más, `nan` sin sustantivos | Sintagmas nominales más pesados |
 | [`de_chains_per_sent`](#de_chains) | Cadenas de `de` por oración | 0 o más | Más cadenas |
 | [`max_de_chain_len`](#de_chains) | Cadena de `de` más larga del texto | 0 sin cadenas, si no 2 o más | Una cadena más larga |
@@ -325,7 +325,7 @@ Comprueba si una palabra encabeza una cláusula subordinada: un núcleo de cláu
 is_infinitive_clause_head(token)
 ```
 
-Comprueba si una palabra encabeza una cláusula de infinitivo bajo un verbo: un núcleo de cláusula (`is_clause_head`) cuyo predicado es un infinitivo bajo `xcomp` (`quiere salir`, `le pidió salir`), o un infinitivo coordinado con él. Estas cláusulas se cuentan entre las cláusulas, pero no entre las subordinadas: las gramáticas toman un complemento de infinitivo por parte de una oración simple, y las correlaciones publicadas de la subordinación se obtuvieron para las subordinadas en forma personal. Es el [`is_infinitive_clause_head`](https://sergeyshk.github.io/anyTS/stats/syntax_stats/#infinitive_clauses) del núcleo anyTS sobre `is_clause_head`.
+Comprueba si una palabra encabeza una cláusula de infinitivo bajo un verbo: un núcleo de cláusula (`is_clause_head`) cuyo predicado es un infinitivo bajo `xcomp` (`quiere salir`, `le pidió salir`), o un conjunto de uno, sea cual sea su propia forma: decide la primera palabra de su cadena de conjuntos hacia arriba (`quiero salir y que vengas`). Estas cláusulas se cuentan entre las cláusulas, pero no entre las subordinadas: las gramáticas toman un complemento de infinitivo por parte de una oración simple, y las correlaciones publicadas de la subordinación se obtuvieron para las subordinadas en forma personal. Es el [`is_infinitive_clause_head`](https://sergeyshk.github.io/anyTS/stats/syntax_stats/#infinitive_clauses) del núcleo anyTS sobre `is_clause_head`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |

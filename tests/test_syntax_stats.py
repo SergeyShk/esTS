@@ -425,6 +425,8 @@ def test_clause_head_of_an_infinitive(nlp, text, clauses, infinitive_clauses):
     assert sum(is_infinitive_clause_head(token) for token in doc) == infinitive_clauses
     subordinate = sum(is_subordinate_clause_head(token) for token in doc)
     assert subordinate == clauses - 1 - infinitive_clauses
+    ss = SyntaxStats(doc)
+    assert (ss.n_clauses, ss.n_infinitive_clauses) == (clauses, infinitive_clauses)
 
 
 @pytest.mark.parametrize(

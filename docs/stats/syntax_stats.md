@@ -295,7 +295,7 @@ Checks whether a word heads a subordinate clause: a clause head (`is_clause_head
 is_infinitive_clause_head(token)
 ```
 
-Checks whether a word heads an infinitive clause under a verb: a clause head (`is_clause_head`) whose predicate is an infinitive under `xcomp` (`quiere salir`, `le pidió salir`), or a coordinated infinitive of one. These clauses count among the clauses, but not among the subordinate ones: grammars take an infinitive complement for a part of a simple sentence, and the published correlations of the subordination were obtained for finite subordinate clauses. It is the [`is_infinitive_clause_head`](https://sergeyshk.github.io/anyTS/stats/syntax_stats/#infinitive_clauses) of the anyTS core over `is_clause_head`.
+Checks whether a word heads an infinitive clause under a verb: a clause head (`is_clause_head`) whose predicate is an infinitive under `xcomp` (`quiere salir`, `le pidió salir`), or a conjunct of one, whatever its own form: the first word up its chain of conjuncts decides (`quiero salir y que vengas`). These clauses count among the clauses, but not among the subordinate ones: grammars take an infinitive complement for a part of a simple sentence, and the published correlations of the subordination were obtained for finite subordinate clauses. It is the [`is_infinitive_clause_head`](https://sergeyshk.github.io/anyTS/stats/syntax_stats/#infinitive_clauses) of the anyTS core over `is_clause_head`.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |

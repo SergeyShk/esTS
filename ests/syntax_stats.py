@@ -354,7 +354,9 @@ def is_infinitive_clause_head(token: Token) -> bool:
     Description:
         The is_infinitive_clause_head of the core over is_clause_head: an
         infinitive under xcomp that heads a clause of its own (quiere salir,
-        le pidió salir), and a coordinated infinitive of one
+        le pidió salir), or a conjunct of one, whatever its own form: the
+        first word up its chain of conjuncts decides (quiero salir y que
+        vengas)
 
     Arguments:
         token (Token): Token
