@@ -2,6 +2,7 @@ import re
 from collections.abc import Collection, Iterable, Sequence
 from math import nan
 from statistics import fmean
+from typing import Any
 
 import anyts.syntax_stats
 from anyts.constants import AUXILIARY_DEPS, CLAUSE_DEPS, SUBORDINATE_CLAUSE_DEPS
@@ -172,12 +173,8 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
     def __init__(self, source: str | Doc, nlp: Language | None = None):
         if nlp is not None and not isinstance(nlp, Language):
             raise SourceTypeError("The pipeline must be a spaCy Language")
-        # The pipeline only parses the source: kept, it would go into a pickle of the object
         self._nlp = nlp
-        try:
-            super().__init__(source)  # type: ignore[arg-type]  # parse takes a string too
-        finally:
-            del self._nlp
+        super().__init__(source)  # type: ignore[arg-type]  # parse takes a string too
         words = [token for sent in self.sents for token in sent]
         de_chains = [length for sent in self.sents for length in calc_de_chains(sent)]
         self.n_de_chains = len(de_chains)
@@ -213,7 +210,7 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
             DatasetNotFoundError: If a string is passed and the model is not installed
         """
         if isinstance(source, str):
-            pipeline = self._nlp or get_nlp()
+            pipeline = getattr(self, "_nlp", None) or get_nlp()
             if len(source) > pipeline.max_length:
                 raise SourceError(
                     f"The text of {len(source)} characters is longer than the limit of the "
@@ -223,6 +220,12 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
             _check_encoding(source)
             return pipeline(source, disable=UNUSED_COMPONENTS)
         return super().parse(source)
+
+    def __getstate__(self) -> dict[str, Any]:
+        """State for pickle and copy without the pipeline, which is no part of the statistics"""
+        state = super().__getstate__()
+        state.pop("_nlp", None)
+        return state
 
     def is_clause_head(self, token: Token) -> bool:
         """Head of a clause by the Spanish rules (is_clause_head)"""

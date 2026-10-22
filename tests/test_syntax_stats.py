@@ -1,3 +1,4 @@
+import pickle
 from math import isnan
 
 import pytest
@@ -103,6 +104,15 @@ def test_nlp_parameter(ss, nlp):
 def test_source_type_error(source):
     with pytest.raises(SourceTypeError):
         SyntaxStats(source)
+
+
+def test_pipeline_parses_after_and_is_not_pickled(nlp):
+    ss = SyntaxStats("La casa fue vendida.", nlp=nlp)
+    assert ss.parse("Otra frase.").text == "Otra frase."
+    restored = pickle.loads(pickle.dumps(ss))
+    assert "_nlp" not in vars(restored)
+    assert repr(restored.get_stats()) == repr(ss.get_stats())
+    assert [token.text for token in restored.sents[0]] == ["La", "casa", "fue", "vendida"]
 
 
 def test_source_without_parse():

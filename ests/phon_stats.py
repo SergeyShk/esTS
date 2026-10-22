@@ -4,7 +4,7 @@ from functools import lru_cache
 from itertools import pairwise
 
 import anyts.phon_stats
-from anyts.constants import PHON_STATS_DESC as PHON_STATS_DESC, PHON_WINDOW_LEN
+from anyts.constants import PHON_WINDOW_LEN
 from anyts.phon_stats import (
     calc_repetition_index,
     check_params as check_params,

@@ -3,7 +3,7 @@ from collections.abc import Callable, Collection, Iterable, Iterator, Sequence
 
 import anyts.visualizers.highlight
 from anyts.constants import AUXILIARY_DEPS
-from anyts.syntax_stats import base_dep, subtree_len
+from anyts.syntax_stats import base_dep, get_children, get_words, is_root, subtree_len
 from anyts.utils import check_integer, check_number, check_words, in_order, is_word
 from anyts.visualizers.highlight import (
     Highlight as Highlight,
@@ -734,7 +734,7 @@ def find_split_predicate_highlights(doc: Doc) -> list[Highlight]:
 def _de_chain(token: Token) -> tuple[list[Token], int]:
     tokens = [token]
     depth = 1
-    for child in token.children:
+    for child in get_children(token):
         if is_de_modifier(child):
             child_tokens, child_depth = _de_chain(child)
             tokens += child_tokens
@@ -758,8 +758,11 @@ def find_de_chains(doc: Doc) -> list[Highlight]:
         list[Highlight]: Fragments of the layer de_chains
     """
     highlights = []
-    for token in doc:
-        if not is_de_modifier(token) or is_de_modifier(token.head):
+    for token in get_words(doc):
+        if not is_de_modifier(token):
+            continue
+        head = token.head
+        if not is_root(token) and is_word(head) and is_de_modifier(head):
             continue
         chain, depth = _de_chain(token)
         if depth < 2:
