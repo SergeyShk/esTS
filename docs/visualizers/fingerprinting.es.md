@@ -1,9 +1,8 @@
 # Huella literaria
 
-!!! info ""
-    **ests.visualizers.fingerprinting()**
-
-## Descripción
+``` {.python .signature}
+fingerprinting(texts, segment_len=10, metric=None, x_size=800, y_size=600, cmap='viridis', ax=None, labels=None)
+```
 
 <!-- core: visualizers/fingerprinting.md:fingerprinting 3fb4965 -->
 Visualización de la huella literaria (literature fingerprinting, [Keim y Oelke 2007](https://www.uni-konstanz.de/mmsp/pubsys/publishedFiles/KeOe07.pdf)).
@@ -13,6 +12,43 @@ Cada texto se corta en segmentos de `segment_len` palabras con un paso deslizant
 Un texto es un bloque de cuadrados, sus segmentos fila a fila, de 8 filas de alto, o una sola columna con a lo sumo 8 segmentos; un bloque más ancho que el área de dibujo se parte en filas de esa anchura. Los bloques van de izquierda a derecha y pasan a la fila siguiente dentro de un área de `2 · x_size` de ancho, que crece hacia abajo desde `2 · y_size` cuando necesitan más altura. La barra de colores va del menor al mayor valor finito en todos los textos; los valores no definidos (`nan` en segmentos demasiado cortos para la medida) y las celdas vacías de un bloque son de un gris claro, distinto de cualquier valor, incluido el cero.
 
 La función es la del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visualizers/fingerprinting/); las medidas de [diversidad léxica](../stats/diversity_stats.md) de esTS, funciones de una lista de palabras como `calc_ttr` o `calc_simpson_index`, sirven de `metric`. El título por defecto es el inglés de `VISUALIZER_LABELS` en `anyts.constants`; `labels` lo sustituye.
+
+Las cinco primeras ventanas de 1000 palabras de seis novelas del [corpus de literatura](../datasets/spanishliterature.md), tres de Galdós y tres de Unamuno, según el índice de Simpson:
+
+``` python
+from ests import WordsExtractor
+from ests.corpus import split_windows
+from ests.datasets import SpanishLiterature
+from ests.diversity_stats import calc_simpson_index
+from ests.visualizers import fingerprinting
+
+sl = SpanishLiterature()
+sl.download()
+titles = (
+    "Marianela",
+    "Misericordia",
+    "Torquemada en la hoguera",
+    "Niebla",
+    "Abel Sánchez",
+    "La tía Tula",
+)
+novels = {
+    record["title"]: record["text"]
+    for author in ("galdos", "unamuno")
+    for record in sl.get_records(author=author)
+    if record["title"] in titles
+}
+
+we = WordsExtractor(lowercase=True)
+texts = [
+    we.extract(window) for title in titles for window in split_windows(novels[title], 1000)[:5]
+]
+fingerprinting(texts, segment_len=100, metric=calc_simpson_index, x_size=1000, y_size=330)
+```
+
+![ests](../img/fingerprinting.png){: .center }
+
+Los quince primeros bloques son de Galdós, los quince últimos de Unamuno. El índice de Simpson - la probabilidad de que dos palabras tomadas al azar sean la misma - es más bajo en Galdós, así que sus bloques son más oscuros y los de Unamuno, que repite más sus palabras, más verdes.
 
 ## Parámetros
 
@@ -29,48 +65,3 @@ La función es la del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visualiz
 | `labels` | `dict[str, str]` | `None` | Etiquetas sobre las de por defecto: `title` |
 
 La función devuelve los `Axes` con la visualización, con una relación de aspecto igual para que los cuadrados sigan siendo cuadrados; la figura es `ax.figure`. Unos textos que no son una lista de listas de cadenas y un `metric` que no es invocable lanzan `SourceTypeError`, una lista sin textos o un texto sin palabras `SourceError`. Un `segment_len` o un `y_size` que no es un entero mayor que cero, un `x_size` que no es un entero mayor que 25, un `cmap` desconocido, unas etiquetas que `merge_labels` rechaza y un `ax` que no es un `Axes` de matplotlib lanzan `ParameterError`.
-
-## Ejemplo de uso
-
-Las cinco primeras ventanas de 1000 palabras de seis novelas del [corpus de literatura](../datasets/spanishliterature.md), tres de Galdós y tres de Unamuno, según el índice de Simpson.
-
-!!! example "Ejemplo"
-
-    _Código_:
-
-    ``` python
-    from ests import WordsExtractor
-    from ests.corpus import split_windows
-    from ests.datasets import SpanishLiterature
-    from ests.diversity_stats import calc_simpson_index
-    from ests.visualizers import fingerprinting
-
-    sl = SpanishLiterature()
-    sl.download()
-    titles = (
-        "Marianela",
-        "Misericordia",
-        "Torquemada en la hoguera",
-        "Niebla",
-        "Abel Sánchez",
-        "La tía Tula",
-    )
-    novels = {
-        record["title"]: record["text"]
-        for author in ("galdos", "unamuno")
-        for record in sl.get_records(author=author)
-        if record["title"] in titles
-    }
-
-    we = WordsExtractor(lowercase=True)
-    texts = [
-        we.extract(window) for title in titles for window in split_windows(novels[title], 1000)[:5]
-    ]
-    fingerprinting(texts, segment_len=100, metric=calc_simpson_index, x_size=1000, y_size=330)
-    ```
-
-    _Resultado_:
-
-    ![ests](../img/fingerprinting.png){: .center }
-
-Los quince primeros bloques son de Galdós, los quince últimos de Unamuno. El índice de Simpson - la probabilidad de que dos palabras tomadas al azar sean la misma - es más bajo en Galdós, así que sus bloques son más oscuros y los de Unamuno, que repite más sus palabras, más verdes.

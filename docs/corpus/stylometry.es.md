@@ -1,10 +1,5 @@
 # Estilometría
 
-!!! info ""
-    **ests.corpus.delta()**, **ests.corpus.delta_profiles()**, **ests.corpus.frequency_table()**, **ests.corpus.z_scores()**, **ests.corpus.zeta()**, **ests.corpus.kilgarriff_chi2()**, **ests.corpus.mendenhall_curve()**, **ests.corpus.mendenhall_distance()**, **ests.corpus.function_words_profile()**
-
-## Descripción
-
 <!-- core: corpus/stylometry.md:stylometry 280727d -->
 Medidas de estilometría y de atribución de autoría: distancias entre textos por las frecuencias de las palabras más frecuentes (la Delta de Burrows y sus variantes, como en [stylo](https://github.com/computationalstylistics/stylo)), marcadores de palabras preferidas y evitadas (Zeta), la distancia ji cuadrado de Kilgarriff entre corpus y la curva de Mendenhall. Las funciones trabajan con listas de unidades de un texto: formas de palabra en minúsculas (la elección habitual para Delta), lemas o N-gramas de caracteres; las mayúsculas y minúsculas y la lematización corresponden a los extractores.
 
@@ -83,7 +78,7 @@ Distancias de Delta para la atribución de autoría. Las unidades más frecuente
 
 Los corpus, `n_mfw` y `culling` lanzan los errores de `frequency_table`; menos de tres textos para las estadísticas lanzan `SourceError`, y una variante desconocida, `ParameterError`.
 
-!!! example "Ejemplo"
+=== "Código"
 
     ``` python
     from ests import WordsExtractor
@@ -101,27 +96,33 @@ Los corpus, `n_mfw` y `culling` lanzan los errores de `frequency_table`; menos d
     corpus = {name: we.extract(text) for name, text in texts.items()}
 
     frequency_table(corpus, n_mfw=5).round(3)
-    #       el      y     en  perro   gato
-    # A  0.095  0.095  0.095  0.000  0.095
-    # B  0.211  0.105  0.105  0.105  0.000
-    # C  0.133  0.067  0.000  0.067  0.067
-
     delta(corpus, n_mfw=5).round(3)
-    #        A      B      C
-    # A  0.000  1.312  1.110
-    # B  1.312  0.000  1.428
-    # C  1.110  1.428  0.000
-
     delta(corpus, n_mfw=5, variant="cosine").round(3)
-    #        A      B      C
-    # A  0.000  1.637  1.241
-    # B  1.637  0.000  1.594
-    # C  1.241  1.594  0.000
 
     sample = {"?": we.extract("El gato despertó en la ventana y otra vez miraba los pájaros.")}
     delta_profiles(corpus, sample, n_mfw=5).round(3)
-    #        A      B      C
-    # ?  0.249  1.464  0.942
+    ```
+
+=== "Resultado"
+
+    ```
+          el      y     en  perro   gato
+    A  0.095  0.095  0.095  0.000  0.095
+    B  0.211  0.105  0.105  0.105  0.000
+    C  0.133  0.067  0.000  0.067  0.067
+
+           A      B      C
+    A  0.000  1.312  1.110
+    B  1.312  0.000  1.428
+    C  1.110  1.428  0.000
+
+           A      B      C
+    A  0.000  1.637  1.241
+    B  1.637  0.000  1.594
+    C  1.241  1.594  0.000
+
+           A      B      C
+    ?  0.249  1.464  0.942
     ```
 
 ## Zeta { #zeta }
@@ -142,17 +143,20 @@ Marcadores de palabras preferidas y evitadas según Burrows (2007) y Craig y Kin
 
 El resultado es una lista de tuplas con nombre `ZetaScore(word, dp_target, dp_comparison, zeta, log_zeta)` por Zeta descendente, por Zeta logarítmica descendente y alfabéticamente si empatan. Un corpus que no es ni una lista de cadenas ni una lista de tales listas lanza `SourceTypeError`, y un corpus sin palabras, `SourceError`; un `segment_size` o un `top_n` que no es un entero de al menos uno lanza `ParameterError`.
 
-!!! example "Ejemplo"
+=== "Código"
 
     ``` python
     from ests.corpus import zeta
 
     zeta(corpus["A"], corpus["B"], segment_size=5, top_n=2)
-    # [ZetaScore(word='gato', dp_target=0.5, dp_comparison=0.0, zeta=0.5, log_zeta=2.0),
-    #  ZetaScore(word='la', dp_target=0.5, dp_comparison=0.0, zeta=0.5, log_zeta=2.0)]
-
     zeta(corpus["A"], corpus["B"], segment_size=5)[-1]
-    # ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2.0)
+    ```
+
+=== "Resultado"
+
+    ```
+    [ZetaScore(word='gato', dp_target=0.5, dp_comparison=0.0, zeta=0.5, log_zeta=2.0), ZetaScore(word='la', dp_target=0.5, dp_comparison=0.0, zeta=0.5, log_zeta=2.0)]
+    ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2.0)
     ```
 
 ## Ji cuadrado de Kilgarriff { #kilgarriff_chi2 }
@@ -172,13 +176,18 @@ La distancia entre dos corpus según [Kilgarriff (2001)](https://www.sketchengin
 
 Unas palabras que no son una lista de cadenas lanzan `SourceTypeError`, un corpus sin palabras, `SourceError`, y un `n_mfw` que no es un entero de al menos uno, `ParameterError`.
 
-!!! example "Ejemplo"
+=== "Código"
 
     ``` python
     from ests.corpus import kilgarriff_chi2
 
     round(kilgarriff_chi2(corpus["A"], corpus["B"], n_mfw=5), 3)
-    # 3.119
+    ```
+
+=== "Resultado"
+
+    ```
+    3.119
     ```
 
 ## Curva de Mendenhall { #mendenhall }
@@ -210,34 +219,53 @@ La distancia de Jensen-Shannon con base 2 entre las curvas de Mendenhall de dos 
 
 Unas palabras que no son una lista de cadenas lanzan `SourceTypeError`, y un texto sin palabras, `SourceError`.
 
-!!! example "Ejemplo"
+=== "Código"
 
     ``` python
     from ests.corpus import mendenhall_curve, mendenhall_distance
 
     {length: round(share, 3) for length, share in mendenhall_curve(corpus["A"]).items()}
-    # {1: 0.095, 2: 0.333, 3: 0.095, 4: 0.095, 6: 0.19, 7: 0.19}
-
     round(mendenhall_distance(corpus["A"], corpus["B"]), 3)
-    # 0.415
+    ```
+
+=== "Resultado"
+
+    ```
+    {1: 0.095, 2: 0.333, 3: 0.095, 4: 0.095, 6: 0.19, 7: 0.19}
+    0.415
     ```
 
 ## Perfil de las palabras funcionales { #function_words_profile }
 
-Las proporciones de las adposiciones, las conjunciones coordinantes y subordinantes, las partículas, los pronombres, los determinantes y las interjecciones (`FUNCTION_UD_POS`: `ADP`, `CCONJ`, `SCONJ`, `PART`, `PRON`, `DET`, `INTJ`) entre las palabras del texto. Las palabras funcionales no dependen del tema, así que su perfil es un rasgo clásico de autoría desde Mosteller y Wallace (1964).
+``` {.python .signature}
+function_words_profile(source, nlp=None)
+```
 
-Las categorías gramaticales son las de la anotación de un `Doc` que las lleva. Las palabras de una lista o de un `Doc` sin categorías gramaticales las etiqueta el modelo en su contexto, así que han de pasarse en el orden del texto; la puntuación de la lista ayuda al etiquetado y no se cuenta. El pipeline es el modelo [`es_core_news_sm`](../installation.md#model) o el que se pasa en `nlp`, sin el analizador sintáctico, el lematizador ni el reconocedor de entidades; un pipeline que no las etiqueta (`spacy.blank("es")`) lanza `SourceError`. En las Universal Dependencies del español la negación *no* es un adverbio y no una partícula, así que `PART` es rara.
+Las proporciones de las adposiciones, las conjunciones coordinantes y subordinantes, las partículas, los pronombres, los determinantes y las interjecciones (`ests.constants.FUNCTION_UD_POS`: `ADP`, `CCONJ`, `SCONJ`, `PART`, `PRON`, `DET`, `INTJ`) entre las palabras del texto. Las palabras funcionales no dependen del tema, así que su perfil es un rasgo clásico de autoría desde Mosteller y Wallace (1964).
+
+Las categorías gramaticales son las de la anotación de un `Doc` que las lleva. Las palabras de una lista o de un `Doc` sin categorías gramaticales las etiqueta el modelo en su contexto, así que han de pasarse en el orden del texto; la puntuación de la lista ayuda al etiquetado y no se cuenta. El pipeline es el modelo [`es_core_news_sm`](../installation.md#model) o el que se pasa en `nlp`, sin el analizador sintáctico, el lematizador ni el reconocedor de entidades. En las Universal Dependencies del español la negación *no* es un adverbio y no una partícula, así que `PART` es rara.
 
 | Parámetro | Tipo | Por defecto | Descripción |
-| :-------: | :--: | :---------: | :---------: |
-| `source` | list[str]/Doc | `-` | Palabras del texto u objeto Doc |
-| `nlp` | Language | `None` | Pipeline para una lista de palabras; `None` - el modelo por defecto |
+| :-------- | :--- | :---------- | :---------- |
+| `source` | `list[str]` / `Doc` | - | Palabras del texto u objeto Doc |
+| `nlp` | `Language` | `None` | Pipeline para una lista de palabras; `None` - el modelo por defecto |
 
-!!! example "Ejemplo"
+Excepciones:
+
+- `SourceTypeError` - unas palabras que no son una lista de cadenas, un pipeline que no es un `Language` de spaCy;
+- `SourceError` - una fuente sin palabras, un pipeline que no etiqueta las categorías gramaticales (`spacy.blank("es")`), un carácter sin forma UTF-8;
+- `DatasetNotFoundError` - el modelo por defecto no está instalado.
+
+=== "Código"
 
     ``` python
     from ests.corpus import function_words_profile
 
     {pos: round(share, 3) for pos, share in function_words_profile(corpus["A"]).items()}
-    # {'ADP': 0.095, 'CCONJ': 0.095, 'SCONJ': 0.0, 'PART': 0.0, 'PRON': 0.048, 'DET': 0.286, 'INTJ': 0.0}
+    ```
+
+=== "Resultado"
+
+    ```
+    {'ADP': 0.095, 'CCONJ': 0.095, 'SCONJ': 0.0, 'PART': 0.0, 'PRON': 0.048, 'DET': 0.286, 'INTJ': 0.0}
     ```

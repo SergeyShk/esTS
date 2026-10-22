@@ -1,10 +1,5 @@
 # Gráficos de corpus
 
-!!! info ""
-    **ests.visualizers.dispersion_plot()**, **ests.visualizers.keyness_plot()**, **ests.visualizers.collocation_network()**
-
-## Descripción
-
 Gráficos para las [medidas de corpus](../corpus/keyness.md): la dispersión léxica - dónde aparece una palabra en un texto -, un diagrama de las palabras clave que encuentra [`keyness`](../corpus/keyness.md) y una red de las colocaciones que encuentra [`collocations`](../corpus/collocations.md). Las funciones de matplotlib reciben los ejes `ax` y devuelven `Axes`: sin `ax` se crea una figura nueva, con ellos el gráfico va a una rejilla propia; la red de colocaciones la construye graphviz y devuelve un `Graph`, como el [árbol de palabras](word_tree.md) devuelve un `Digraph`.
 
 Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visualizers/corpus/). Las etiquetas por defecto de los gráficos de matplotlib son las inglesas de `VISUALIZER_LABELS` en `anyts.constants`; `labels` sustituye cualquiera de ellas.
@@ -66,66 +61,58 @@ Un grafo no dirigido con la disposición `neato`: los nodos son las palabras, co
 
 Unas colocaciones que no son una lista lanzan `SourceTypeError`, la falta de un par de dos palabras distintas `SourceError`, y un `top_n` que no es un entero de al menos uno `ParameterError`.
 
-## Ejemplo de uso
+Los gráficos de *Marianela* de Galdós y de seis novelas del [corpus de literatura](../datasets/spanishliterature.md) - *Marianela*, *Misericordia* y *Torquemada en la hoguera* frente a *Niebla*, *Abel Sánchez* y *La tía Tula* de Unamuno:
 
-*Marianela* de Galdós y seis novelas del [corpus de literatura](../datasets/spanishliterature.md): *Marianela*, *Misericordia* y *Torquemada en la hoguera* frente a *Niebla*, *Abel Sánchez* y *La tía Tula* de Unamuno.
+``` python
+from spacy.lang.es.stop_words import STOP_WORDS
 
-!!! example "Ejemplo"
+from ests import WordsExtractor
+from ests.corpus import collocations, keyness
+from ests.datasets import SpanishLiterature
+from ests.visualizers import collocation_network, dispersion_plot, keyness_plot
 
-    _Código_:
+sl = SpanishLiterature()
+sl.download()
+titles = (
+    "Marianela",
+    "Misericordia",
+    "Torquemada en la hoguera",
+    "Niebla",
+    "Abel Sánchez",
+    "La tía Tula",
+)
+novels = {
+    record["title"]: record["text"]
+    for author in ("galdos", "unamuno")
+    for record in sl.get_records(author=author)
+    if record["title"] in titles
+}
 
-    ``` python
-    from spacy.lang.es.stop_words import STOP_WORDS
+# Dónde aparecen los personajes y los motivos de Marianela
+words = WordsExtractor(lowercase=True).extract(novels["Marianela"])
+dispersion_plot(words, ["nela", "pablo", "florentina", "golfín", "ciego", "luz"])
 
-    from ests import WordsExtractor
-    from ests.corpus import collocations, keyness
-    from ests.datasets import SpanishLiterature
-    from ests.visualizers import collocation_network, dispersion_plot, keyness_plot
+# Palabras clave de Galdós frente a Unamuno, lemas sin palabras vacías
+we = WordsExtractor(use_lexemes=True, lowercase=True, filter_nums=True, stopwords=STOP_WORDS)
+galdos = [lemma for title in titles[:3] for lemma in we.extract(novels[title])]
+unamuno = [lemma for title in titles[3:] for lemma in we.extract(novels[title])]
+keyness_plot(
+    keyness(galdos, unamuno, min_freq=5, top_n=10),
+    keyness(galdos, unamuno, positive=False, min_freq=5, top_n=10),
+    labels=("Galdós", "Unamuno"),
+)
 
-    sl = SpanishLiterature()
-    sl.download()
-    titles = (
-        "Marianela",
-        "Misericordia",
-        "Torquemada en la hoguera",
-        "Niebla",
-        "Abel Sánchez",
-        "La tía Tula",
-    )
-    novels = {
-        record["title"]: record["text"]
-        for author in ("galdos", "unamuno")
-        for record in sl.get_records(author=author)
-        if record["title"] in titles
-    }
+# Red de colocaciones de Marianela
+graph = collocation_network(
+    collocations(we.extract(novels["Marianela"]), window=3, min_freq=5, top_n=25)
+)
+graph.render("network", format="png")
+```
 
-    # Dónde aparecen los personajes y los motivos de Marianela
-    words = WordsExtractor(lowercase=True).extract(novels["Marianela"])
-    dispersion_plot(words, ["nela", "pablo", "florentina", "golfín", "ciego", "luz"])
+![ests](../img/dispersion.png){: .center }
 
-    # Palabras clave de Galdós frente a Unamuno, lemas sin palabras vacías
-    we = WordsExtractor(use_lexemes=True, lowercase=True, filter_nums=True, stopwords=STOP_WORDS)
-    galdos = [lemma for title in titles[:3] for lemma in we.extract(novels[title])]
-    unamuno = [lemma for title in titles[3:] for lemma in we.extract(novels[title])]
-    keyness_plot(
-        keyness(galdos, unamuno, min_freq=5, top_n=10),
-        keyness(galdos, unamuno, positive=False, min_freq=5, top_n=10),
-        labels=("Galdós", "Unamuno"),
-    )
+![ests](../img/keyness.png){: .center }
 
-    # Red de colocaciones de Marianela
-    graph = collocation_network(
-        collocations(we.extract(novels["Marianela"]), window=3, min_freq=5, top_n=25)
-    )
-    graph.render("network", format="png")
-    ```
-
-    _Resultado_:
-
-    ![ests](../img/dispersion.png){: .center }
-
-    ![ests](../img/keyness.png){: .center }
-
-    ![ests](../img/network.png){: .center }
+![ests](../img/network.png){: .center }
 
 Nela recorre toda la novela, Florentina entra en su segunda mitad, y el doctor Golfín la abre y la cierra; la ceguera de Pablo (`ciego`) pertenece sobre todo a la primera mitad. Además de los nombres de los personajes, las palabras clave muestran la ortografía antigua de las ediciones (`á`, `fué`) y palabras de los temas de Unamuno: `acaso`, `hijo`. La red de colocaciones reúne los nombres y los lugares de *Marianela* en torno a `d.`, el *don* abreviado: Teodoro Golfín, Aldeacorba de Suso, las minas de Socartes.

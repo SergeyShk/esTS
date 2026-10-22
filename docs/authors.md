@@ -8,7 +8,7 @@
 
 ## Contributing
 
-Bug reports, ideas and pull requests are welcome, in English or Spanish. The workflow and the checks to run before submitting a pull request are described in [CONTRIBUTING.md](https://github.com/SergeyShk/esTS/blob/master/CONTRIBUTING.md); the rules of conduct are in the [code of conduct](https://github.com/SergeyShk/esTS/blob/master/CODE_OF_CONDUCT.md).
+Bug reports, ideas and pull requests are welcome, in English or Spanish - [issues](https://github.com/SergeyShk/esTS/issues) are open. The workflow and the checks to run before submitting a pull request are described in [CONTRIBUTING.md](https://github.com/SergeyShk/esTS/blob/master/CONTRIBUTING.md); the rules of conduct are in the [code of conduct](https://github.com/SergeyShk/esTS/blob/master/CODE_OF_CONDUCT.md).
 
 ## Citation
 

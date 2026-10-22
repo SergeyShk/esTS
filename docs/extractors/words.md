@@ -1,18 +1,15 @@
 # Word extraction
 
-!!! info ""
-    **ests.extractors.WordsExtractor**
-
-## Description
+``` {.python .signature}
+WordsExtractor(tokenizer=None, filter_punct=True, filter_nums=False, use_lexemes=False, stopwords=None, lowercase=False, ngram_range=(1, 1), min_len=0, max_len=0)
+```
 
 --8<-- "extractors/words.md:WordsExtractor"
-
-## Language hooks
 
 The class extends the `WordsExtractor` of the [anyTS](https://sergeyshk.github.io/anyTS/extractors/words/) core with the hooks of Spanish:
 
 | Hook | Spanish |
-| :--: | :-----: |
+| :--- | :------ |
 | `tokenize(text)` | the rule-based tokenizer of the spaCy Spanish language class, `ests.utils.tokenize` |
 | `lemmatize(word)` | the lemmas of simplemma, `ests.utils.lemmatize` |
 | `number_pattern` | signed numbers, ranges, fractions, dates, times, percentages and ordinals: `-5`, `+7`, `1990-1995`, `1.500,50`, `12/03/2020`, `3:30`, `10%`, `3.º`, `1.ª`, `2do` |
@@ -23,6 +20,23 @@ The class extends the `WordsExtractor` of the [anyTS](https://sergeyshk.github.i
 !!! note "Note"
     [simplemma](https://github.com/adbar/simplemma) works from a dictionary without a trained model: a known form is mapped to its lower-case lemma (`Tienes` - `tener`, `NIÑOS` - `niño`), an unknown form is returned unchanged (`Madrid`, `dámelo`).
 
+=== "Code"
+
+    ``` python
+    from ests import WordsExtractor
+
+    text = "No tengas 100 euros, ten 100 amigos"
+
+    we = WordsExtractor(use_lexemes=True, stopwords=["no"], filter_nums=True, ngram_range=(1, 2))
+    we.extract(text)
+    ```
+
+=== "Result"
+
+    ```
+    ('tener', 'euro', 'tener', 'amigo', 'tener_euro', 'euro_tener', 'tener_amigo')
+    ```
+
 ## Parameters
 
 --8<-- "extractors/words.md:WordsExtractor-parameters"
@@ -32,53 +46,18 @@ The class extends the `WordsExtractor` of the [anyTS](https://sergeyshk.github.i
 
 ## Methods
 
-### extract
-
 --8<-- "extractors/words.md:WordsExtractor-extract"
-
-An example of word extraction with bigrams as tokens, after filtering numbers and stop words and lemmatizing:
-
-!!! example "Example"
-
-    _Code_:
-
-    ``` python
-    # Import the library
-    from ests import WordsExtractor
-
-    # Prepare the data
-    text = "No tengas 100 euros, ten 100 amigos"
-
-    # Extract words
-    we = WordsExtractor(use_lexemes=True, stopwords=["no"], filter_nums=True, ngram_range=(1, 2))
-    we.extract(text)
-    ```
-
-    _Result_:
-
-    ``` bash
-    ('tener', 'euro', 'tener', 'amigo', 'tener_euro', 'euro_tener', 'tener_amigo')
-    ```
-
-### get_most_common
 
 --8<-- "extractors/words.md:WordsExtractor-get_most_common"
 
-To illustrate the method, we reuse the code from the previous example:
-
-!!! example "Example"
-
-    _Code_:
+=== "Code"
 
     ``` python
-    ...
-
-    # Print the top words
     we.get_most_common(3)
     ```
 
-    _Result_:
+=== "Result"
 
-    ``` bash
+    ```
     [('tener', 2), ('euro', 1), ('amigo', 1)]
     ```

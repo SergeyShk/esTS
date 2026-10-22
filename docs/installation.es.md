@@ -8,7 +8,10 @@
 *   `numpy`, `scipy`, `pandas`, `simplemma` 2
 *   `matplotlib` y `graphviz` para las [visualizaciones](visualizers/zipf.md)
 
-Las dependencias se instalan con el paquete. El [árbol de palabras](visualizers/word_tree.md) y la [red de colocaciones](visualizers/corpus.md#collocation_network) los dibujan los ejecutables de [Graphviz](https://graphviz.org/download/), que se instalan aparte (`brew install graphviz`, `apt install graphviz`, `conda install graphviz`).
+Las dependencias se instalan con el paquete.
+
+!!! warning "Graphviz"
+    El paquete `graphviz` de las dependencias es solo un envoltorio: para dibujar el [árbol de palabras](visualizers/word_tree.md) y la [red de colocaciones](visualizers/corpus.md#collocation_network) hacen falta los ejecutables de [Graphviz](https://graphviz.org/download/), que se instalan aparte (`brew install graphviz`, `apt install graphviz`, `conda install graphviz`); sin ellos `render()` y la visualización del grafo en Jupyter fallan con `ExecutableNotFound`. Nada más los necesita.
 
 ## Desde PyPI
 

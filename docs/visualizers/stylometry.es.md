@@ -1,10 +1,5 @@
 # Gráficos estilométricos
 
-!!! info ""
-    **ests.visualizers.dendrogram_plot()**, **ests.visualizers.pca_plot()**, **ests.visualizers.mds_plot()**, **ests.visualizers.mendenhall_plot()**
-
-## Descripción
-
 Gráficos para la [estilometría](../corpus/stylometry.md): un dendrograma y el escalamiento multidimensional de la matriz de distancias de [`delta`](../corpus/stylometry.md#delta), las componentes principales de las frecuencias de las palabras más frecuentes y las curvas de Mendenhall de varios textos. Las funciones reciben los ejes `ax` y devuelven `Axes`.
 
 Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visualizers/stylometry/); las frecuencias de las componentes principales salen de [`frequency_table`](../corpus/stylometry.md#delta) y las curvas de [`mendenhall_curve`](../corpus/stylometry.md#mendenhall). Las etiquetas por defecto son las inglesas de `VISUALIZER_LABELS` en `anyts.constants`; `labels` sustituye cualquiera de ellas.
@@ -80,59 +75,51 @@ Las proporciones de las palabras por longitud en caracteres (`mendenhall_curve`)
 
 Un corpus que no es un mapeo de listas de cadenas lanza `SourceTypeError`, la falta de textos o un texto sin palabras `SourceError`; unas etiquetas que `merge_labels` rechaza y un `ax` que no es un `Axes` de matplotlib lanzan `ParameterError`.
 
-## Ejemplo de uso
+Los gráficos de seis novelas del [corpus de literatura](../datasets/spanishliterature.md), tres de Galdós y tres de Unamuno:
 
-Seis novelas del [corpus de literatura](../datasets/spanishliterature.md), tres de Galdós y tres de Unamuno.
+``` python
+import matplotlib.pyplot as plt
 
-!!! example "Ejemplo"
+from ests import WordsExtractor
+from ests.corpus import delta
+from ests.datasets import SpanishLiterature
+from ests.visualizers import dendrogram_plot, mds_plot, mendenhall_plot, pca_plot
 
-    _Código_:
+sl = SpanishLiterature()
+sl.download()
+titles = (
+    "Marianela",
+    "Misericordia",
+    "Torquemada en la hoguera",
+    "Niebla",
+    "Abel Sánchez",
+    "La tía Tula",
+)
+novels = {
+    record["title"]: record["text"]
+    for author in ("galdos", "unamuno")
+    for record in sl.get_records(author=author)
+    if record["title"] in titles
+}
+we = WordsExtractor(lowercase=True)
+corpus = {title: we.extract(novels[title]) for title in titles}
+distances = delta(corpus, n_mfw=100, variant="cosine")
 
-    ``` python
-    import matplotlib.pyplot as plt
+# Dendrograma y componentes principales en una figura
+fig, (left, right) = plt.subplots(1, 2, figsize=(13, 5))
+dendrogram_plot(distances, ax=left)
+pca_plot(corpus, n_mfw=100, ax=right)
 
-    from ests import WordsExtractor
-    from ests.corpus import delta
-    from ests.datasets import SpanishLiterature
-    from ests.visualizers import dendrogram_plot, mds_plot, mendenhall_plot, pca_plot
+# Escalamiento multidimensional y curvas de Mendenhall
+fig, (left, right) = plt.subplots(1, 2, figsize=(13, 5), layout="constrained")
+mds_plot(distances, ax=left)
+mendenhall_plot(
+    {title: corpus[title] for title in ("Marianela", "Niebla", "La tía Tula")}, ax=right
+)
+```
 
-    sl = SpanishLiterature()
-    sl.download()
-    titles = (
-        "Marianela",
-        "Misericordia",
-        "Torquemada en la hoguera",
-        "Niebla",
-        "Abel Sánchez",
-        "La tía Tula",
-    )
-    novels = {
-        record["title"]: record["text"]
-        for author in ("galdos", "unamuno")
-        for record in sl.get_records(author=author)
-        if record["title"] in titles
-    }
-    we = WordsExtractor(lowercase=True)
-    corpus = {title: we.extract(novels[title]) for title in titles}
-    distances = delta(corpus, n_mfw=100, variant="cosine")
+![ests](../img/stylometry.png){: .center }
 
-    # Dendrograma y componentes principales en una figura
-    fig, (left, right) = plt.subplots(1, 2, figsize=(13, 5))
-    dendrogram_plot(distances, ax=left)
-    pca_plot(corpus, n_mfw=100, ax=right)
-
-    # Escalamiento multidimensional y curvas de Mendenhall
-    fig, (left, right) = plt.subplots(1, 2, figsize=(13, 5), layout="constrained")
-    mds_plot(distances, ax=left)
-    mendenhall_plot(
-        {title: corpus[title] for title in ("Marianela", "Niebla", "La tía Tula")}, ax=right
-    )
-    ```
-
-    _Resultado_:
-
-    ![ests](../img/stylometry.png){: .center }
-
-    ![ests](../img/mds_mendenhall.png){: .center }
+![ests](../img/mds_mendenhall.png){: .center }
 
 La Delta coseno sobre las 100 palabras más frecuentes separa a los autores: el dendrograma une las novelas de cada autor antes de unir los dos grupos, y la primera componente principal pone a Galdós a un lado y a Unamuno al otro. Las curvas de Mendenhall apenas difieren: la longitud de las palabras es un rasgo débil por sí sola.

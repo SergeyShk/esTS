@@ -1,9 +1,8 @@
 # Spanish sonnets
 
-!!! info ""
-    **ests.datasets.SpanishSonnets**
-
-## Description
+``` {.python .signature}
+SpanishSonnets(data_dir=DEFAULT_DATASET_DIR)
+```
 
 A collection of Spanish sonnets from the [Diachronic Spanish Sonnet Corpus](https://github.com/pruizf/disco) (DISCO 5.0): 4,259 sonnets by 1,167 authors from Spain, Latin America and the Philippines, from the 15th century to the early 20th, 60,209 lines. Every line has its metrical pattern and the label of its rhyme, so the collection suits the study of meter and rhyme and the checking of a scansion against the annotation of the corpus.
 
@@ -16,41 +15,11 @@ The archive (1 MB, a JSON Lines file) is kept in the repository of the library a
 !!! quote "Licence and attribution"
     DISCO is distributed under the [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/), and so is this dataset; the archive carries a `README.txt` with the source and the changes. Cite the source as: Ruiz Fabo P., Bermúdez Sabel H., Martínez Cantón C., Calvo Tello J. Diachronic Spanish Sonnet Corpus (DISCO), version 5.0. Madrid: UNED, 2017-2023; and the article: Ruiz Fabo P., Bermúdez Sabel H., Martínez Cantón C., González-Blanco E. The Diachronic Spanish Sonnet Corpus: TEI and linked open data encoding, data distribution, and metrical findings. Digital Scholarship in the Humanities 36 (Supplement 1), 2021, i68-i80, [doi:10.1093/llc/fqaa035](https://doi.org/10.1093/llc/fqaa035).
 
-## Parameters
+Raises:
 
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `data_dir` | str/Path | `DEFAULT_DATA_DIR.joinpath("texts")` | Path to the dataset directory; the data directory is described in [Installation](../installation.md#datasets) |
+- `SourceTypeError` - a `data_dir` that is neither a string nor a `Path`.
 
-## Attributes
-
-| Attribute | Type | Description |
-| :-------: | :--: | :---------: |
-| `periods` | tuple[str] | Tuple of periods: `15th-17th`, `18th`, `19th`, `20th` |
-| `authors` | Counter | Number of sonnets by author, read from the file |
-| `name` | str | Name of the dataset, `spanish_sonnets` |
-| `meta` | dict[str, str] | Reference information: the source, the description, the authors, the licence and the citation |
-| `info` | dict[str, str] | The name and the reference information in one dictionary |
-| `data_dir` | Path | Absolute path to the dataset directory |
-| `filepath` | str | Path to the file of the dataset, `None` before the download |
-
-The dataset iterates over its records as `get_records()` without filters: `for record in ss` goes over the sonnets one at a time.
-
-## Methods
-
-### check_data
-
-Checks that the file of the dataset is in place and returns `True`; a dataset that is not downloaded raises `DatasetNotFoundError`. The other methods check it themselves.
-
-### download
-
-Downloads the archive, verifies its SHA-256 checksum and extracts the file. A corrupted archive is downloaded again, a missing file is extracted again; a repeated call downloads nothing.
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `force` | bool | `False` | Download the dataset even if it is already downloaded |
-
-!!! example "Example"
+=== "Code"
 
     ``` python
     from ests.datasets import SpanishSonnets
@@ -58,62 +27,88 @@ Downloads the archive, verifies its SHA-256 checksum and extracts the file. A co
     ss = SpanishSonnets()
     ss.download()
     ss.info["license"], ss.authors.most_common(2)
-    # ('CC BY 4.0', [('Rubén Darío', 140), ('José Santos Chocano', 130)])
     ```
 
-### get_texts
+=== "Result"
 
-Extracts the texts (without headers) from the dataset: the lines of a sonnet, the stanzas separated by a blank line.
+    ```
+    ('CC BY 4.0', [('Rubén Darío', 140), ('José Santos Chocano', 130)])
+    ```
+
+## Parameters
 
 | Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `period` | str | `None` | Period: `15th-17th`, `18th`, `19th` or `20th` |
-| `author` | str | `None` | Author: a substring of the name, regardless of case and accents |
-| `country` | str | `None` | Country of birth: a substring of the name in Spanish, regardless of case and accents |
-| `gender` | str | `None` | Gender of the author: `F` or `M` |
-| `min_len` | int | `None` | Minimum text length (in characters) |
-| `max_len` | int | `None` | Maximum text length (in characters) |
-| `limit` | int | `None` | Number of texts |
+| :-------- | :--- | :------ | :---------- |
+| `data_dir` | `str` / `Path` | `DEFAULT_DATASET_DIR` | Path to the dataset directory; `texts` in `DEFAULT_DATA_DIR` by default, the data directory is described in [Installation](../installation.md#datasets) |
 
-The filters are combined; `author="dario"` finds Rubén Darío, `country="mexico"` finds `México`. An unknown period or gender, a length below one, a minimum length above the maximum one and a negative limit raise `ParameterError`.
+## Attributes
 
-!!! example "Example"
+| Attribute | Type | Description |
+| :-------- | :--- | :---------- |
+| `periods` | `tuple[str]` | Tuple of periods: `15th-17th`, `18th`, `19th`, `20th` |
+| `authors` | `Counter` | Number of sonnets by author, read from the file |
+| `name` | `str` | Name of the dataset, `spanish_sonnets` |
+| `meta` | `dict[str, str]` | Reference information: the source, the description, the authors, the licence and the citation |
+| `info` | `dict[str, str]` | The name and the reference information in one dictionary |
+| `data_dir` | `Path` | Absolute path to the dataset directory |
+| `filepath` | `str` | Path to the file of the dataset, `None` before the download |
+
+The dataset iterates over its records as `get_records()` without filters: `for record in ss` goes over the sonnets one at a time; a line of the file that cannot be read raises `DataFileError`.
+
+## Methods
+
+`download(force=False)` downloads the archive, verifies its SHA-256 checksum and extracts the file. A corrupted archive is downloaded again, a missing file is extracted again; a repeated call downloads nothing.
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `force` | `bool` | `False` | Download the dataset even if it is already downloaded |
+
+An archive that cannot be downloaded or fails the checksum twice raises `DownloadError`, an archive that cannot be extracted `DataFileError`.
+
+`check_data()` checks that the file of the dataset is in place and returns `True`; a dataset that is not downloaded raises `DatasetNotFoundError` with the commands to download it. The other methods and `authors` check it themselves.
+
+`get_texts(period=None, author=None, country=None, gender=None, min_len=None, max_len=None, limit=None)` extracts the texts (without headers) from the dataset: the lines of a sonnet, the stanzas separated by a blank line.
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `period` | `str` | `None` | Period: `15th-17th`, `18th`, `19th` or `20th` |
+| `author` | `str` | `None` | Author: a substring of the name, regardless of case and accents |
+| `country` | `str` | `None` | Country of birth: a substring of the name in Spanish, regardless of case and accents |
+| `gender` | `str` | `None` | Gender of the author: `F` or `M` |
+| `min_len` | `int` | `None` | Minimum text length (in characters) |
+| `max_len` | `int` | `None` | Maximum text length (in characters) |
+| `limit` | `int` | `None` | Number of texts |
+
+The filters are combined; `author="dario"` finds Rubén Darío, `country="mexico"` finds `México`. An unknown period or gender, an `author` or a `country` that is not a string, a length bound that is not an integer of at least one, a minimum length above the maximum one and a `limit` that is not a non-negative integer raise `ParameterError`.
+
+=== "Code"
 
     ``` python
-    from ests.datasets import SpanishSonnets
-
-    ss = SpanishSonnets()
     for text in ss.get_texts(author="avellaneda", gender="F", limit=1):
         print(text.split("\n\n")[0])
-    # No encuentro paz, ni me permiten guerra;
-    # de fuego devorado, sufro el frío;
-    # abrazo un mundo, y quédome vacío;
-    # me lanzo al cielo, y préndeme la tierra.
     ```
 
-### get_records
+=== "Result"
 
-Extracts the records (with headers) from the dataset. Record fields: `id` - the identifier of the sonnet in DISCO, `period` - period, `author` - author, `title` - title, `country` - the country of birth of the author in Spanish (empty when unknown), `gender` - `F` or `M`, `birth` and `death` - the years of life (`None` when unknown), `text` - text, `meter` - the metrical pattern of every line, `rhyme` - the label of the rhyme of every line. In a metrical pattern `+` is a stressed syllable and `-` an unstressed one, so its length is the number of metrical syllables: 11 for an endecasílabo, 14 for an alejandrino. Equal labels of the rhyme mark the lines that rhyme together, `-` a line that rhymes with no other. The records go by period in the order of `periods`, within a period by the identifier of DISCO sorted numerically (`1035e_269` before `1035e_1360`), which keeps the sonnets of an author together in the order of their source.
+    ```
+    No encuentro paz, ni me permiten guerra;
+    de fuego devorado, sufro el frío;
+    abrazo un mundo, y quédome vacío;
+    me lanzo al cielo, y préndeme la tierra.
+    ```
 
-The parameters are the same as for `get_texts`.
+`get_records` with the same parameters extracts the records (with headers) from the dataset. Record fields: `id` - the identifier of the sonnet in DISCO, `period` - period, `author` - author, `title` - title, `country` - the country of birth of the author in Spanish (empty when unknown), `gender` - `F` or `M`, `birth` and `death` - the years of life (`None` when unknown), `text` - text, `meter` - the metrical pattern of every line, `rhyme` - the label of the rhyme of every line. In a metrical pattern `+` is a stressed syllable and `-` an unstressed one, so its length is the number of metrical syllables: 11 for an endecasílabo, 14 for an alejandrino. Equal labels of the rhyme mark the lines that rhyme together, `-` a line that rhymes with no other. The records go by period in the order of `periods`, within a period by the identifier of DISCO sorted numerically (`1035e_269` before `1035e_1360`), which keeps the sonnets of an author together in the order of their source.
 
-!!! example "Example"
+=== "Code"
 
     ``` python
     from collections import Counter
-    from ests.datasets import SpanishSonnets
-
-    ss = SpanishSonnets()
 
     # The first lines of a sonnet with their rhyme and meter
     record = next(ss.get_records(author="rubén darío"))
     lines = record["text"].replace("\n\n", "\n").split("\n")
     for line, pattern, label in list(zip(lines, record["meter"], record["rhyme"]))[:4]:
         print(f"{label} {pattern:<14} {line}")
-    # A -+---+---+-    En medio del abismo de la duda
-    # B +----+-+-+-    lleno de oscuridad, de sombra vana
-    # B +--+---+-+-    hay una estrella que reflejos mana
-    # A -+-+---+-+-    sublime, sí, mas silenciosa, muda.
 
     # The share of endecasílabos and alejandrinos by period
     for period in ss.periods:
@@ -122,10 +117,19 @@ The parameters are the same as for `get_texts`.
         )
         total = sum(lengths.values())
         print(period, f"{lengths[11] / total:.2f}", f"{lengths[14] / total:.2f}")
-    # 15th-17th 0.98 0.00
-    # 18th 0.99 0.00
-    # 19th 0.86 0.09
-    # 20th 0.60 0.40
+    ```
+
+=== "Result"
+
+    ```
+    A -+---+---+-    En medio del abismo de la duda
+    B +----+-+-+-    lleno de oscuridad, de sombra vana
+    B +--+---+-+-    hay una estrella que reflejos mana
+    A -+-+---+-+-    sublime, sí, mas silenciosa, muda.
+    15th-17th 0.98 0.00
+    18th 0.99 0.00
+    19th 0.86 0.09
+    20th 0.60 0.40
     ```
 
 !!! warning "The annotation is automatic"

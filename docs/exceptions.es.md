@@ -1,8 +1,5 @@
 # Excepciones y registro
 
-!!! info ""
-    **ests.exceptions**
-
 ## Excepciones
 
 Todas las excepciones de la biblioteca heredan de la clase base `EstsError` y de una clase integrada de Python, así que pueden capturarse por cualquiera de las dos, y `except ValueError` sigue funcionando.
@@ -18,12 +15,12 @@ Todas las excepciones de la biblioteca heredan de la clase base `EstsError` y de
 | `DataFileError` | `ValueError` | El archivo de un conjunto de datos no es ZIP ni TAR, no se puede extraer, está vacío o tiene rutas fuera de su directorio, o su directorio de destino no se puede crear; una línea de un fichero de un conjunto de datos no se puede leer |
 | `DownloadError` | `RuntimeError` | El archivo no se pudo descargar o no se pudo crear su directorio, o no superó dos veces la suma de verificación |
 
-Las clases están disponibles desde `ests` y desde `ests.exceptions`. Son las clases del núcleo [anyTS](https://sergeyshk.github.io/anyTS/exceptions/) con los mismos nombres, y `EstsError` es su `AnyTSError`: alias, no subclases, así que `except EstsError` captura también los errores que lanza el código del núcleo, y una traza muestra `anyts.exceptions.SourceTypeError`.
+Las clases están disponibles desde `ests` y desde `ests.exceptions`. Son las clases del núcleo [anyTS](https://sergeyshk.github.io/anyTS/exceptions/) con los mismos nombres, y `EstsError` es su `anyts.exceptions.AnyTSError`: alias, no subclases, así que `except EstsError` captura también los errores que lanza el código del núcleo, y una traza muestra `anyts.exceptions.SourceTypeError`.
 
 !!! note "Nota"
     `DatasetNotFoundError` suele ser el primer error con el que se topa un usuario nuevo: `MorphStats("El gato duerme")` sin el modelo `es_core_news_sm` la lanza con el comando de descarga. También la lanzan `SpanishLiterature().get_texts()` antes de `download()` y las estadísticas de `LexicalStats` según el diccionario de frecuencias.
 
-!!! example "Ejemplo"
+=== "Código"
 
     ``` python
     from ests import EstsError, ParameterError, WordsExtractor
@@ -32,25 +29,41 @@ Las clases están disponibles desde `ests` y desde `ests.exceptions`. Son las cl
         WordsExtractor(ngram_range=(2, 1))
     except ParameterError as e:
         print(e)
-    # The lower N-gram bound is greater than the upper
 
     try:
         WordsExtractor(tokenizer=42).extract("El gato duerme.")
     except EstsError as e:
         print(type(e).__name__)
-    # SourceTypeError
+    ```
+
+=== "Resultado"
+
+    ```
+    The lower N-gram bound is greater than the upper
+    SourceTypeError
     ```
 
 ## Registro
 
-La biblioteca no imprime nada por su cuenta: sus mensajes van al logger `ests`, que por defecto tiene un `NullHandler`, así que quedan en silencio. Para verlos, configure el registro en su aplicación:
+La biblioteca no imprime nada por su cuenta: el núcleo anyTS envía los mensajes sobre la descarga y la extracción de los conjuntos de datos (los métodos `download()`) al logger `anyts` con el nivel `INFO`. Por defecto el logger tiene un `NullHandler`, así que los mensajes quedan en silencio; para verlos, configure el registro en su aplicación:
 
-!!! example "Ejemplo"
+=== "Código"
 
     ``` python
     import logging
 
+    from ests.datasets import SpanishSonnets
+
     logging.basicConfig(level=logging.INFO, format="%(name)s: %(message)s")
+    SpanishSonnets(data_dir="/tmp/ests_data").download()
     ```
 
-Los métodos que imprimen a propósito, como los métodos `print_stats()` de las clases de estadísticas, escriben en la salida estándar; el registro no les afecta.
+=== "Resultado"
+
+    ```
+    anyts.datasets: Downloading the file https://github.com/SergeyShk/esTS/raw/master/ests/datasets/data/spanish_sonnets_v1.tar.xz
+    anyts.datasets: The file is downloaded: /tmp/ests_data/spanish_sonnets_v1.tar.xz
+    anyts.datasets: Extracting the archive /tmp/ests_data/spanish_sonnets_v1.tar.xz
+    ```
+
+Los métodos `print_stats()` de las clases de estadísticas y `print_kwic()` escriben en la salida estándar a propósito; el registro no les afecta.
