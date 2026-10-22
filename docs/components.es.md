@@ -262,7 +262,8 @@ En esTS `freq_dict` es el [diccionario de frecuencias](datasets/freqdict.md) `Fr
 Excepciones:
 
 - `SourceError` - un documento sin las categorías gramaticales;
-- `DatasetNotFoundError` - las estadísticas por el diccionario y `get_stats()` cuando el diccionario no está descargado.
+- `DatasetNotFoundError` - las estadísticas por el diccionario y `get_stats()` cuando el diccionario no está descargado;
+- `ConfigValidationError` de spaCy - un `data_dir` que no es una cadena, en `add_pipe`.
 
 === "Código"
 
@@ -301,7 +302,7 @@ Excepciones:
 - `SourceTypeError` - palabras vacías, palabras vacías de la náusea o clichés que no son una lista de cadenas;
 - `ParameterError` - un `top_n` que no es un entero de al menos uno.
 
-Sin las listas, el contenido de agua toma las palabras vacías de `STOPWORDS` y las expresiones parentéticas de una palabra, la náusea académica deja fuera las palabras de `is_stopword`, y los clichés vienen de `OFFICIALESE_CLICHES`; `NAUSEA_TOP_N` es una constante de `anyts.constants`. Los sustantivos deverbales necesitan un `morphologizer` y un `lemmatizer` antes del componente, y sin ellos leer `verbal_nouns` o `get_stats()` lanza `SourceError`; las demás métricas solo leen las palabras.
+Sin las listas, el contenido de agua toma las palabras vacías de `STOPWORDS` y las expresiones parentéticas de una palabra, la náusea académica deja fuera las palabras de `is_stopword`, y los clichés vienen de `OFFICIALESE_CLICHES`; `NAUSEA_TOP_N` es una constante de `anyts.constants`. Los sustantivos deverbales necesitan un `morphologizer` y un `lemmatizer` antes del componente, y sin ellos leer `verbal_nouns`, `markers()` o `get_stats()` lanza `SourceError`; las demás métricas solo leen las palabras.
 
 === "Código"
 

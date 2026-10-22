@@ -309,6 +309,7 @@ class LexicalStatsComponent(_Component, anyts.components.LexicalStatsComponent):
         SourceError: If the pipeline gives no parts of speech
         DatasetNotFoundError: When a statistic by the dictionary is read and the
             dictionary is not downloaded
+        ConfigValidationError: If data_dir is not a string, raised by spaCy at add_pipe
     """
 
     stats_class = LexicalStats
@@ -367,8 +368,8 @@ class StyleStatsComponent(_Component, anyts.components.StyleStatsComponent):
             list of strings
         ParameterError: If the number of the most frequent words is not an integer or is
             below one
-        SourceError: When the verbal nouns or the markers are read, if the pipeline gives
-            no parts of speech or no lemmas
+        SourceError: When verbal_nouns, markers() or get_stats() is read, if the pipeline
+            gives no parts of speech or no lemmas
     """
 
     stats_class = StyleStats

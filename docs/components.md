@@ -235,7 +235,8 @@ In esTS `freq_dict` is the [frequency dictionary](datasets/freqdict.md) `FreqDic
 Raises:
 
 - `SourceError` - a document without the parts of speech;
-- `DatasetNotFoundError` - the statistics by the dictionary and `get_stats()` when the dictionary is not downloaded.
+- `DatasetNotFoundError` - the statistics by the dictionary and `get_stats()` when the dictionary is not downloaded;
+- `ConfigValidationError` of spaCy - a `data_dir` that is not a string, at `add_pipe`.
 
 === "Code"
 
@@ -261,7 +262,7 @@ StyleStatsComponent(nlp, name, stopwords=None, top_n=10, nausea_stopwords=None, 
 
 --8<-- "components.md:StyleStatsComponent"
 
-Without the lists the water content takes the stopwords of `STOPWORDS` and the one-word parenthetical expressions, the academic nausea leaves out the words of `is_stopword`, and the clichés come from `OFFICIALESE_CLICHES`; `NAUSEA_TOP_N` is a constant of `anyts.constants`. The verbal nouns need a `morphologizer` and a `lemmatizer` before the component, and without them reading `verbal_nouns` or `get_stats()` raises `SourceError`; the other metrics read the words alone.
+Without the lists the water content takes the stopwords of `STOPWORDS` and the one-word parenthetical expressions, the academic nausea leaves out the words of `is_stopword`, and the clichés come from `OFFICIALESE_CLICHES`; `NAUSEA_TOP_N` is a constant of `anyts.constants`. The verbal nouns need a `morphologizer` and a `lemmatizer` before the component, and without them reading `verbal_nouns`, `markers()` or `get_stats()` raises `SourceError`; the other metrics read the words alone.
 
 === "Code"
 
