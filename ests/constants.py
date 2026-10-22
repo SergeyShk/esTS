@@ -1,21 +1,6 @@
 import os
 from pathlib import Path
 
-from anyts.constants import MESSAGES
-
-# Messages of the errors of the core, the missing annotations of a Doc with how to get them
-CORE_MESSAGES = {
-    **MESSAGES,
-    "no_pos": (
-        "The data source has no annotation of the parts of speech: "
-        "parse the text with a model instead of a blank pipeline"
-    ),
-    "no_lemmas": (
-        "The data source has no lemmas: parse the text with a pipeline that has a lemmatizer"
-    ),
-    "no_parse": "The data source has no parse: parse the text with a model that has a parser",
-}
-
 # Characters besides an upper-case letter or a digit that may open a sentence
 SENTENCE_OPENERS = "¿¡«“\"'([—–―-"
 
@@ -631,6 +616,7 @@ SYNTAX_STATS_DESC = {
     "mean_clause_len": "Mean length of a clause (words)",
     "subordinate_clauses_per_sent": "Subordinate clauses per sentence",
     "p_complex_sents": "Share of sentences with a subordinate clause",
+    "infinitive_clauses_per_sent": "Infinitive clauses under a verb per sentence",
     "modifiers_per_noun": "Modifiers per noun phrase",
     "de_chains_per_sent": "Chains of de per sentence",
     "max_de_chain_len": "Maximum length of a chain of de",

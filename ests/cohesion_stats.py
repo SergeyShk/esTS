@@ -19,7 +19,6 @@ from .constants import (
     CONNECTOR_ONLY_AFTER,
     CONNECTOR_POS,
     CONNECTOR_POS_EXTRA,
-    CORE_MESSAGES,
 )
 from .exceptions import SourceError, SourceTypeError
 from .extractors import SentsExtractor
@@ -204,7 +203,6 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
     connector_matcher_class = SpanishConnectorMatcher
     temporal_features = ("tense", "mood")
     stats_desc = COHESION_STATS_DESC
-    messages = CORE_MESSAGES
 
     def __init__(
         self,

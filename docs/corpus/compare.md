@@ -186,11 +186,11 @@ Features of one's own, for instance the syntactic ones, are passed as a function
 
     ```
                                         median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    syntax_gerund_clauses_per_sent              0.156           0.047   0.091    0.131    1.493        0.854  0.927     0.0
+    syntax_gerund_clauses_per_sent              0.156           0.047   0.092    0.132    1.494        0.854  0.927     0.0
     syntax_tree_depth                           3.870           3.012   0.625    1.134    1.113        0.661  0.830     0.0
     syntax_subtrees_per_sent                    7.193           4.864   1.500    3.352    0.975        0.648  0.824     0.0
-    syntax_p_complex_sents                      0.632           0.494   0.093    0.187    1.248        0.637  0.819     0.0
-    syntax_participle_clauses_per_sent          0.114           0.059   0.028    0.070    0.805        0.570  0.785     0.0
+    syntax_p_complex_sents                      0.613           0.470   0.092    0.193    1.248        0.644  0.822     0.0
+    syntax_participle_clauses_per_sent          0.114           0.059   0.030    0.070    0.805        0.570  0.785     0.0
     ```
 
 ## Comparison of feature tables { #compare_features }
@@ -241,7 +241,7 @@ The statistics of a row are available one by one from `ests.corpus`:
 split_windows(text, window=1000, min_words=None)
 ```
 
-Cuts a text into consecutive windows of exactly `window` words, so the features that depend on length are comparable between texts. The rest is a window only with at least `min_words` words (by default a whole window, so it is dropped). A boundary goes before the first word of a window and its opening marks; a straight quote or a dash glued to the last word of the previous window or after a closing mark stays with it (`"cuatro"`, `—dijo Juan—`, `"adiós."`). Windows are stripped of whitespace; `window=None` gives the whole text. It is the `split_windows` of the core with the words of [`WordsExtractor`](../extractors/words.md) and the marks of `ests.constants`: quotes, brackets, dashes, `¿` and `¡` open a phrase (`OPENING_MARKS`), the straight quote and the dashes are symmetric (`SYMMETRIC_MARKS`); the marks that close a phrase are those of the core.
+Cuts a text into consecutive windows of exactly `window` words, so the features that depend on length are comparable between texts. The rest is a window only with at least `min_words` words (by default a whole window, so it is dropped). A boundary goes before the first word of a window and its opening marks; a straight quote or a dash glued to the last word of the previous window stays with it, and so does one after a closing mark when whitespace follows it (`"cuatro"`, `—dijo Juan—`, `"adiós."`); a dash glued to the next word opens its line of dialogue (`cuatro.—¿Cinco?`). Windows are stripped of whitespace; `window=None` gives the whole text. It is the `split_windows` of the core with the words of [`WordsExtractor`](../extractors/words.md) and the marks of `ests.constants`: quotes, brackets, dashes, `¿` and `¡` open a phrase (`OPENING_MARKS`), the straight quote and the dashes are symmetric (`SYMMETRIC_MARKS`); the marks that close a phrase are those of the core.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |

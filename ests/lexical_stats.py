@@ -168,10 +168,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
             token for token in iter_doc_tokens(source) if not is_number(token.text, NUMBER_PATTERN)
         ]
         if tokens and not source.has_annotation("POS"):
-            raise SourceError(
-                "The data source has no annotation of the parts of speech: "
-                "parse the text with a model instead of a blank pipeline"
-            )
+            raise SourceError(self.messages["no_pos"])
         self._found_proper = tuple(token.pos_ == "PROPN" for token in tokens)
         return [
             LexicalWord(

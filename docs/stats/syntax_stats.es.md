@@ -50,6 +50,7 @@ El `max_length` del pipeline es de un millón de caracteres por defecto: divida 
     Mean length of a clause (words)                   |   9.67
     Subordinate clauses per sentence                  |   0.50
     Share of sentences with a subordinate clause      |   0.50
+    Infinitive clauses under a verb per sentence      |   0.00
     Modifiers per noun phrase                         |   1.00
     Chains of de per sentence                         |   0.50
     Maximum length of a chain of de                   |    2
@@ -148,6 +149,7 @@ Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` da 
 | [`mean_clause_len`](#clauses) | Longitud media de una cláusula en palabras | 1 o más, `nan` sin cláusulas | Cláusulas más largas |
 | [`subordinate_clauses_per_sent`](#subordinate_clauses) | Cláusulas subordinadas por oración | 0 o más | Más subordinación |
 | [`p_complex_sents`](#subordinate_clauses) | Proporción de las oraciones con subordinada | 0-1 | Más oraciones complejas |
+| [`infinitive_clauses_per_sent`](#infinitive_clauses) | Cláusulas de infinitivo bajo un verbo por oración | 0 o más | Más complementos de infinitivo |
 | [`modifiers_per_noun`](#noun_modifiers) | Número medio de modificadores de un sustantivo | 0 o más, `nan` sin sustantivos | Sintagmas nominales más pesados |
 | [`de_chains_per_sent`](#de_chains) | Cadenas de `de` por oración | 0 o más | Más cadenas |
 | [`max_de_chain_len`](#de_chains) | Cadena de `de` más larga del texto | 0 sin cadenas, si no 2 o más | Una cadena más larga |
@@ -251,19 +253,19 @@ Una cadena de coordinación es un grupo de palabras unidas por `conj`: `manzanas
 is_clause_head(token)
 ```
 
-Comprueba si una palabra encabeza una cláusula: el núcleo de la oración o, según la forma de su predicado ([`predicate_form`](#verb-forms)), una palabra con `ccomp`, `advcl`, `acl` (incluida una oración de relativo), `csubj` o `parataxis` (`anyts.constants.CLAUSE_DEPS`). Un predicado en forma personal encabeza su cláusula (`dijo que había llegado`, `estaba cantando`, `los regalos que te van a dar`), también bajo `xcomp`, que los modelos dan a algunos complementos en forma personal; un predicado en forma de participio o de gerundio no encabeza una cláusula de esa clase - esos predicados se cuentan aparte (`llegando tarde`, `habiendo llegado tarde`) -, ni tampoco uno en forma de infinitivo bajo `acl` (`el deseo de irse`, `el miedo de ser robado`). Bajo `xcomp` un infinitivo encabeza una cláusula según `is_infinitive_clause`, y un adjetivo predicativo (`parece cansado`) no encabeza ninguna. Un inciso (`parataxis`) y un predicado coordinado (`conj` del núcleo de una cláusula) cuentan solo cuando pueden ser un predicado ([`is_predicate`](#is_predicate)), de modo que incisos como `por ejemplo` no son cláusulas; un infinitivo que los modelos cuelgan como `conj` del verbo de una perífrasis (`tiene que salir`, `va a salir`) forma un solo predicado con él (`is_infinitive_periphrasis`).
+Comprueba si una palabra encabeza una cláusula: el núcleo de la oración o, según la forma de su predicado ([`predicate_form`](#verb-forms)), una palabra con `ccomp`, `advcl`, `acl` (incluida una oración de relativo), `csubj` o `parataxis` (`anyts.constants.CLAUSE_DEPS`). Un predicado en forma personal encabeza su cláusula (`dijo que había llegado`, `estaba cantando`, `los regalos que te van a dar`, `sé que os habéis posado`), también bajo `xcomp`, que los modelos dan a algunos complementos en forma personal; un predicado en forma de participio o de gerundio no encabeza una cláusula de esa clase - esos predicados se cuentan aparte (`llegando tarde`, `habiendo llegado tarde`) -, ni tampoco uno en forma de infinitivo bajo `acl` (`el deseo de irse`, `el miedo de ser robado`). Bajo `xcomp` un infinitivo encabeza una cláusula según `is_infinitive_clause`, y un adjetivo predicativo (`parece cansado`) no encabeza ninguna. Un inciso (`parataxis`) y un predicado coordinado (`conj` del núcleo de una cláusula) cuentan solo cuando pueden ser un predicado ([`is_predicate`](#is_predicate)), de modo que incisos como `por ejemplo` no son cláusulas; un infinitivo que los modelos cuelgan como `conj` o `csubj` del verbo de su perífrasis (`hay que salir`, `llega a convertirse`) forma un solo predicado con él (`is_infinitive_periphrasis`). Es el [`is_clause_head`](https://sergeyshk.github.io/anyTS/stats/syntax_stats/#clauses) del núcleo anyTS con las reglas españolas de `is_infinitive_periphrasis` y `predicate_form`.
 
 ``` {.python .signature}
 is_infinitive_clause(token)
 ```
 
-Comprueba si un infinitivo bajo `xcomp` encabeza una cláusula propia: un predicado en forma de infinitivo que completa a su núcleo (`quiere salir`, `le hizo reír`, `quiere ser médico`, `quiere ser elegido`, `cree haber ganado`), salvo que los dos formen perífrasis (`is_infinitive_periphrasis`) o que el núcleo sea un verbo de `RAISING_VERBS`, `parecer` (`parece dormir`).
+Comprueba si un infinitivo bajo `xcomp` encabeza una cláusula propia: un predicado en forma de infinitivo que completa a su núcleo (`quiere salir`, `le hizo reír`, `quiere ser médico`, `quiere ser elegido`, `cree haber ganado`), salvo que los dos formen un solo predicado (`is_infinitive_periphrasis`: `puede salir`, `parece dormir`) o que la palabra que completa no encabece ninguna cláusula (`is_clause_head`): un infinitivo en una construcción de gerundio o de participio pertenece a ella (`intentando salir`, `destinada a disculpar`).
 
 ``` {.python .signature}
 is_infinitive_periphrasis(token)
 ```
 
-Comprueba si un infinitivo forma perífrasis con su núcleo: el núcleo es un verbo de `INFINITIVE_PERIPHRASES` (NGLE, cap. 28) y el infinitivo se une a él por uno de los nexos de ese verbo - un `mark`, `case` o `cc` antes del infinitivo, o la palabra justo anterior, con la grafía antigua `á` leída como `a`. Los verbos son `poder`, `soler` y `deber` sin nexo (`puede salir`, `suele salir`), `deber de`, `tener que`, `haber que`, `haber de`, `ir a`, `venir a`, `pasar a`, `volver a`, `tornar a`, `empezar a` y `por`, `comenzar a` y `por`, `principiar a`, `poner a`, `echar a`, `romper a`, `llegar a`, `alcanzar a`, `acabar de` y `por`, `terminar de` y `por`, `dejar de`, `cesar de`, `parar de`, `estar para` y `por`. El lema del núcleo es el del modelo, o el de `ests.utils.lemmatize` cuando el del modelo no es ninguno de esos verbos (puede leer un verbo que abre la oración como nombre propio: `Solía salir`).
+Comprueba si un infinitivo forma un solo predicado con su núcleo: un infinitivo bajo `xcomp` de un verbo de `RAISING_VERBS`, `parecer` (`parece dormir`), o una perífrasis. En una perífrasis el núcleo es un verbo de `INFINITIVE_PERIPHRASES` (NGLE, cap. 28) y el infinitivo se une a él por uno de los nexos de ese verbo - un `mark`, `case` o `cc` antes del infinitivo, o la palabra justo anterior, con la grafía antigua `á` leída como `a`. Los verbos son `poder`, `soler` y `deber` sin nexo (`puede salir`, `suele salir`), `deber de`, `tener que`, `haber que`, `haber de`, `ir a`, `venir a`, `pasar a`, `volver a`, `tornar a`, `empezar a` y `por`, `comenzar a` y `por`, `principiar a`, `poner a`, `echar a`, `romper a`, `llegar a`, `alcanzar a`, `acabar de` y `por`, `terminar de` y `por`, `dejar de`, `cesar de`, `parar de`, `estar para` y `por`. El lema del núcleo es el del modelo, o el de `ests.utils.lemmatize` cuando el del modelo no es ninguno de esos verbos (puede leer un verbo que abre la oración como nombre propio: `Solía salir`).
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
@@ -284,7 +286,7 @@ La longitud media de una cláusula es el número de las palabras entre el númer
 is_subordinate_clause_head(token)
 ```
 
-Comprueba si una palabra encabeza una cláusula subordinada: un núcleo de cláusula (`is_clause_head`) con `ccomp`, `advcl`, `acl`, `csubj` (`anyts.constants.SUBORDINATE_CLAUSE_DEPS`) o `xcomp`, o un predicado coordinado de una cláusula subordinada, por la relación de la primera palabra de su cadena de conjuntos hacia arriba. Una cláusula de infinitivo bajo un verbo (`quiere salir`) es una cláusula subordinada; los números de esas solas son los atributos `n_infinitive_clauses` e `infinitive_clauses_per_sent`, que `get_stats` no da.
+Comprueba si una palabra encabeza una cláusula subordinada: un núcleo de cláusula (`is_clause_head`) con `ccomp`, `advcl`, `acl` o `csubj` (`anyts.constants.SUBORDINATE_CLAUSE_DEPS`), o bajo `xcomp` con un predicado en forma personal, o un predicado coordinado de una cláusula subordinada, por la relación de la primera palabra de su cadena de conjuntos hacia arriba. Una cláusula de infinitivo bajo un verbo (`quiere salir`) se cuenta aparte, entre las [cláusulas de infinitivo](#infinitive_clauses).
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
@@ -307,7 +309,44 @@ Comprueba si una palabra encabeza una cláusula subordinada: un núcleo de cláu
 
     ```
     ['quiere', 'salir', 'tiene', 'parece']
-    ['salir', 'parece']
+    ['parece']
+    ```
+
+</div>
+
+<div class="metric-card" markdown>
+
+### Cláusulas de infinitivo { #infinitive_clauses }
+
+`infinitive_clauses_per_sent`
+{ .metric-meta }
+
+``` {.python .signature}
+is_infinitive_clause_head(token)
+```
+
+Comprueba si una palabra encabeza una cláusula de infinitivo bajo un verbo: un núcleo de cláusula (`is_clause_head`) cuyo predicado es un infinitivo bajo `xcomp` (`quiere salir`, `le pidió salir`), o un conjunto de uno, sea cual sea su propia forma: decide la primera palabra de su cadena de conjuntos hacia arriba (`quiero salir y que vengas`). Estas cláusulas se cuentan entre las cláusulas, pero no entre las subordinadas: las gramáticas toman un complemento de infinitivo por parte de una oración simple, y las correlaciones publicadas de la subordinación se obtuvieron para las subordinadas en forma personal. Es el [`is_infinitive_clause_head`](https://sergeyshk.github.io/anyTS/stats/syntax_stats/#infinitive_clauses) del núcleo anyTS sobre `is_clause_head`.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `token` | `Token` | - | Token |
+
+=== "Código"
+
+    ``` python
+    from ests.syntax_stats import is_clause_head, is_infinitive_clause_head
+    from ests.utils import get_nlp
+
+    doc = get_nlp()("Quiere salir y volver, pero intentando salir se cayó.")
+    [token.text for token in doc if is_clause_head(token)]
+    [token.text for token in doc if is_infinitive_clause_head(token)]
+    ```
+
+=== "Resultado"
+
+    ```
+    ['Quiere', 'salir', 'volver', 'cayó']
+    ['salir', 'volver']
     ```
 
 </div>
@@ -635,6 +674,7 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
      'mean_clause_len': 9.666666666666666,
      'subordinate_clauses_per_sent': 0.5,
      'p_complex_sents': 0.5,
+     'infinitive_clauses_per_sent': 0.0,
      'modifiers_per_noun': 1.0,
      'de_chains_per_sent': 0.5,
      'max_de_chain_len': 2,

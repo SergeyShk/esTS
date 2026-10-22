@@ -31,6 +31,8 @@ from ests.syntax_stats import (
     is_de_modifier,
     is_gerund,
     is_gerund_clause,
+    is_infinitive_clause,
+    is_infinitive_clause_head,
     is_light_verb,
     is_negation,
     is_participle,
@@ -116,7 +118,7 @@ def test_pipeline_parses_after_and_is_not_pickled(nlp):
 
 
 def test_source_without_parse():
-    with pytest.raises(SourceError, match="no parse: parse the text with a model"):
+    with pytest.raises(SourceError, match="no dependency parse: parse the text with a model"):
         SyntaxStats(spacy.blank("es")("La casa es blanca"))
 
 
@@ -392,35 +394,39 @@ def test_split_predicate_prefers_the_fixed_part(nlp):
 
 
 @pytest.mark.parametrize(
-    ("text", "clauses"),
+    ("text", "clauses", "infinitive_clauses"),
     [
-        ("Quiere salir.", 2),
-        ("Le hizo reír.", 2),
-        ("Puede salir.", 1),
-        ("Suele salir.", 1),
-        ("Empezó a reír.", 1),
-        ("Acaba de salir.", 1),
-        ("Volvió á salir.", 1),
-        ("Parece dormir.", 1),
-        ("Parece cansado.", 1),
-        ("Quiere ser médico.", 2),
-        ("Quiere ser elegido.", 2),
-        ("Llegó a ser rey.", 1),
-        ("Suele ser amable.", 1),
-        ("Cree haber ganado.", 2),
-        ("Dijo que había llegado.", 2),
-        ("Dijo que estaba cantando.", 2),
-        ("Ha podido salir.", 1),
-        ("Está acostumbrado a vivir solo.", 2),
-        ("Tiene que salir.", 1),
-        ("Hay que salir.", 1),
+        ("Quiere salir.", 2, 1),
+        ("Le hizo reír.", 2, 1),
+        ("Puede salir.", 1, 0),
+        ("Suele salir.", 1, 0),
+        ("Empezó a reír.", 1, 0),
+        ("Acaba de salir.", 1, 0),
+        ("Volvió á salir.", 1, 0),
+        ("Parece dormir.", 1, 0),
+        ("Parece cansado.", 1, 0),
+        ("Quiere ser médico.", 2, 1),
+        ("Quiere ser elegido.", 2, 1),
+        ("Llegó a ser rey.", 1, 0),
+        ("Suele ser amable.", 1, 0),
+        ("Cree haber ganado.", 2, 1),
+        ("Dijo que había llegado.", 2, 0),
+        ("Dijo que estaba cantando.", 2, 0),
+        ("Ha podido salir.", 1, 0),
+        ("Está acostumbrado a vivir solo.", 2, 1),
+        ("Tiene que salir.", 1, 0),
+        ("Hay que salir.", 1, 0),
     ],
 )
-def test_clause_head_of_an_infinitive(nlp, text, clauses):
-    """An infinitive under xcomp is a clause unless it makes a periphrasis with its verb"""
+def test_clause_head_of_an_infinitive(nlp, text, clauses, infinitive_clauses):
+    """An infinitive under xcomp is a clause unless it makes one predicate with its verb"""
     doc = nlp(text)
     assert sum(is_clause_head(token) for token in doc) == clauses
-    assert sum(is_subordinate_clause_head(token) for token in doc) == clauses - 1
+    assert sum(is_infinitive_clause_head(token) for token in doc) == infinitive_clauses
+    subordinate = sum(is_subordinate_clause_head(token) for token in doc)
+    assert subordinate == clauses - 1 - infinitive_clauses
+    ss = SyntaxStats(doc)
+    assert (ss.n_clauses, ss.n_infinitive_clauses) == (clauses, infinitive_clauses)
 
 
 @pytest.mark.parametrize(
@@ -489,6 +495,77 @@ def test_clause_head_of_an_infinitive_under_a_misread_verb(nlp):
         morphs=["", "VerbForm=Inf"],
     )
     assert not is_clause_head(doc[1])
+
+
+@pytest.mark.parametrize(
+    ("words", "heads", "deps", "pos", "lemmas", "clause"),
+    [
+        # the model attaches the infinitive of a periphrasis as csubj
+        (
+            ["Llega", "a", "convertirse"],
+            [0, 2, 0],
+            ["ROOT", "mark", "csubj"],
+            ["VERB", "ADP", "VERB"],
+            ["llegar", "a", "convertir"],
+            False,
+        ),
+        # an infinitive subject of parecer heads a clause of its own
+        (
+            ["Desnudar", "parecía", "tolerable"],
+            [1, 1, 1],
+            ["csubj", "ROOT", "xcomp"],
+            ["VERB", "VERB", "ADJ"],
+            ["desnudar", "parecer", "tolerable"],
+            True,
+        ),
+        # so does an infinitive coordinated with parecer
+        (
+            ["parecer", "y", "sentir"],
+            [0, 2, 0],
+            ["ROOT", "cc", "conj"],
+            ["VERB", "CCONJ", "VERB"],
+            ["parecer", "y", "sentir"],
+            True,
+        ),
+    ],
+)
+def test_clause_head_of_an_infinitive_subject_or_conjunct(
+    nlp, words, heads, deps, pos, lemmas, clause
+):
+    """An infinitive under csubj or conj of a periphrasis is no clause; parecer raises only xcomp"""
+    doc = Doc(
+        nlp.vocab,
+        words=words,
+        heads=heads,
+        deps=deps,
+        pos=pos,
+        lemmas=lemmas,
+        morphs=["VerbForm=Inf" if word.endswith(("r", "rse")) else "" for word in words],
+    )
+    infinitive = next(token for token in doc if token.dep_ in ("csubj", "conj"))
+    assert is_clause_head(infinitive) is clause
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("Quiere salir.", True),
+        ("Suele salir.", False),
+        ("Parece dormir.", False),
+        ("Intentando salir, se cayó.", False),
+    ],
+)
+def test_infinitive_clause(nlp, text, expected):
+    """An infinitive in a gerund phrase belongs to that phrase"""
+    (infinitive,) = [token for token in nlp(text) if token.dep_ == "xcomp"]
+    assert is_infinitive_clause(infinitive) is expected
+
+
+def test_infinitive_clauses(nlp):
+    ss = SyntaxStats(nlp("Quiere salir. Sé que os habéis posado aquí."))
+    assert (ss.n_clauses, ss.n_subordinate_clauses, ss.n_infinitive_clauses) == (4, 1, 1)
+    assert ss.get_stats()["infinitive_clauses_per_sent"] == 0.5
+    assert ss.get_stats()["p_complex_sents"] == 0.5
 
 
 @pytest.mark.parametrize(

@@ -114,6 +114,7 @@ SPANISH = {
         "is_agentless",
         "is_clause_head",
         "is_infinitive_clause",
+        "is_infinitive_clause_head",
         "is_passive",
         "is_subordinate_clause_head",
         "predicate_form",

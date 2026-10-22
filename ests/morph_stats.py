@@ -2,6 +2,7 @@ from collections import Counter, OrderedDict
 from math import nan
 from typing import Any
 
+from anyts.constants import MESSAGES
 from anyts.utils import iter_doc_tokens, safe_divide
 from spacy.language import Language
 from spacy.tokens import Doc, Token
@@ -142,15 +143,9 @@ class MorphStats:
         if not tokens:
             raise SourceError("The data source has no words")
         if not source.has_annotation("POS"):
-            raise SourceError(
-                "The data source has no annotation of the parts of speech: "
-                "parse the text with a model instead of a blank pipeline"
-            )
+            raise SourceError(MESSAGES["no_pos"])
         if not source.has_annotation("LEMMA"):
-            raise SourceError(
-                "The data source has no lemmas: parse the text with a pipeline that has "
-                "a lemmatizer"
-            )
+            raise SourceError(MESSAGES["no_lemmas"])
 
         self.words = tuple(token.text for token in tokens)
         self.lemmas = tuple(token.lemma_ for token in tokens)

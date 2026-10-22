@@ -186,11 +186,11 @@ Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:
 
     ```
                                         median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    syntax_gerund_clauses_per_sent              0.156           0.047   0.091    0.131    1.493        0.854  0.927     0.0
+    syntax_gerund_clauses_per_sent              0.156           0.047   0.092    0.132    1.494        0.854  0.927     0.0
     syntax_tree_depth                           3.870           3.012   0.625    1.134    1.113        0.661  0.830     0.0
     syntax_subtrees_per_sent                    7.193           4.864   1.500    3.352    0.975        0.648  0.824     0.0
-    syntax_p_complex_sents                      0.632           0.494   0.093    0.187    1.248        0.637  0.819     0.0
-    syntax_participle_clauses_per_sent          0.114           0.059   0.028    0.070    0.805        0.570  0.785     0.0
+    syntax_p_complex_sents                      0.613           0.470   0.092    0.193    1.248        0.644  0.822     0.0
+    syntax_participle_clauses_per_sent          0.114           0.059   0.030    0.070    0.805        0.570  0.785     0.0
     ```
 
 ## Comparación de tablas de rasgos { #compare_features }
@@ -330,7 +330,7 @@ Un valor p que no es un número o que falta y unos valores p que no son una list
 split_windows(text, window=1000, min_words=None)
 ```
 
-Corta un texto en ventanas consecutivas de exactamente `window` palabras, así que los rasgos que dependen de la longitud son comparables entre textos. El resto es una ventana solo con al menos `min_words` palabras (por defecto una ventana entera, así que se descarta). Un límite pasa antes de la primera palabra de una ventana y de sus signos de apertura; unas comillas rectas o una raya pegadas a la última palabra de la ventana anterior o tras un signo de cierre se quedan con ella (`"cuatro"`, `—dijo Juan—`, `"adiós."`). A las ventanas se les quitan los espacios de los extremos; `window=None` da el texto entero. Es el `split_windows` del núcleo con las palabras de [`WordsExtractor`](../extractors/words.md) y los signos de `ests.constants`: las comillas, los paréntesis, las rayas, `¿` y `¡` abren una frase (`OPENING_MARKS`), las comillas rectas y las rayas son simétricas (`SYMMETRIC_MARKS`); los signos que cierran una frase son los del núcleo.
+Corta un texto en ventanas consecutivas de exactamente `window` palabras, así que los rasgos que dependen de la longitud son comparables entre textos. El resto es una ventana solo con al menos `min_words` palabras (por defecto una ventana entera, así que se descarta). Un límite pasa antes de la primera palabra de una ventana y de sus signos de apertura; unas comillas rectas o una raya pegadas a la última palabra de la ventana anterior se quedan con ella, y también tras un signo de cierre cuando las sigue un espacio (`"cuatro"`, `—dijo Juan—`, `"adiós."`); una raya pegada a la palabra siguiente abre su réplica (`cuatro.—¿Cinco?`). A las ventanas se les quitan los espacios de los extremos; `window=None` da el texto entero. Es el `split_windows` del núcleo con las palabras de [`WordsExtractor`](../extractors/words.md) y los signos de `ests.constants`: las comillas, los paréntesis, las rayas, `¿` y `¡` abren una frase (`OPENING_MARKS`), las comillas rectas y las rayas son simétricas (`SYMMETRIC_MARKS`); los signos que cierran una frase son los del núcleo.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |

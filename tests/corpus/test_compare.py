@@ -84,14 +84,12 @@ def test_split_windows():
         "uno dos tres ―dijo Juan―",
         "y se fue ya",
     ]
-    assert split_windows("uno dos tres cuatro. —¿Cinco? seis siete ocho", 4) == [
-        "uno dos tres cuatro.",
-        "—¿Cinco? seis siete ocho",
-    ]
-    assert split_windows("uno dos tres cuatro.—¿Cinco? seis siete ocho", 4) == [
-        "uno dos tres cuatro.—",
-        "¿Cinco? seis siete ocho",
-    ]
+    # A dash after a closing mark opens the next line of dialogue
+    for glued in ("cuatro. —¿Cinco?", "cuatro.—¿Cinco?"):
+        assert split_windows(f"uno dos tres {glued} seis siete ocho", 4) == [
+            "uno dos tres cuatro.",
+            "—¿Cinco? seis siete ocho",
+        ]
     # A quote after a closing mark closes the window
     assert split_windows('Dijo "adiós." Y se fue ya', 2) == ['Dijo "adiós."', "Y se", "fue ya"]
     assert (
