@@ -155,13 +155,6 @@
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/diversity_stats/"/>
     </url>
     <url>
-        <loc>https://sergeyshk.github.io/esTS/stats/diversity_stats_funcs/</loc>
-        <lastmod>2026-10-22</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/diversity_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/diversity_stats_funcs/"/>
-    </url>
-    <url>
         <loc>https://sergeyshk.github.io/esTS/stats/lexical_stats/</loc>
         <lastmod>2026-10-22</lastmod>
         <changefreq>daily</changefreq>
@@ -204,13 +197,6 @@
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/readability_stats/"/>
     </url>
     <url>
-        <loc>https://sergeyshk.github.io/esTS/stats/readability_stats_funcs/</loc>
-        <lastmod>2026-10-22</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/readability_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/readability_stats_funcs/"/>
-    </url>
-    <url>
         <loc>https://sergeyshk.github.io/esTS/stats/style_stats/</loc>
         <lastmod>2026-10-22</lastmod>
         <changefreq>daily</changefreq>
@@ -237,13 +223,6 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/verse_stats/"/>
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/verse_stats/"/>
-    </url>
-    <url>
-        <loc>https://sergeyshk.github.io/esTS/stats/verse_stats_funcs/</loc>
-        <lastmod>2026-10-22</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/verse_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/verse_stats_funcs/"/>
     </url>
     <url>
         <loc>https://sergeyshk.github.io/esTS/visualizers/corpus/</loc>
@@ -456,13 +435,6 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/diversity_stats/"/>
     </url>
     <url>
-        <loc>https://sergeyshk.github.io/esTS/es/stats/diversity_stats_funcs/</loc>
-        <lastmod>2026-10-22</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/diversity_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/diversity_stats_funcs/"/>
-    </url>
-    <url>
         <loc>https://sergeyshk.github.io/esTS/es/stats/lexical_stats/</loc>
         <lastmod>2026-10-22</lastmod>
         <changefreq>daily</changefreq>
@@ -505,13 +477,6 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/readability_stats/"/>
     </url>
     <url>
-        <loc>https://sergeyshk.github.io/esTS/es/stats/readability_stats_funcs/</loc>
-        <lastmod>2026-10-22</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/readability_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/readability_stats_funcs/"/>
-    </url>
-    <url>
         <loc>https://sergeyshk.github.io/esTS/es/stats/style_stats/</loc>
         <lastmod>2026-10-22</lastmod>
         <changefreq>daily</changefreq>
@@ -538,13 +503,6 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/verse_stats/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/verse_stats/"/>
-    </url>
-    <url>
-        <loc>https://sergeyshk.github.io/esTS/es/stats/verse_stats_funcs/</loc>
-        <lastmod>2026-10-22</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/verse_stats_funcs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/verse_stats_funcs/"/>
     </url>
     <url>
         <loc>https://sergeyshk.github.io/esTS/es/visualizers/corpus/</loc>

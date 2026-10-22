@@ -52,8 +52,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Source Code Pro"}</style>
       
     
     
@@ -69,6 +69,8 @@
   
   
     
+    
+      
     
     
     
@@ -124,7 +126,33 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Dark theme"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark theme" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Light theme"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light theme" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
       <div class="md-header__option">
@@ -178,6 +206,8 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
       
     </form>
     <div class="md-search__output">
@@ -773,28 +803,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Description
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#language-hooks" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Language hooks
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -813,34 +821,6 @@
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Methods">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#extract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        extract
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_most_common" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_most_common
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1026,56 +1006,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Readability metrics
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_2">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Readability metrics
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../stats/readability_stats/" class="md-nav__link">
         
@@ -1084,7 +1014,7 @@
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Readability metrics
   
 
     
@@ -1097,92 +1027,6 @@
   
 
               
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../stats/readability_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Metric functions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Lexical diversity metrics
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Lexical diversity metrics
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1198,7 +1042,7 @@
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Lexical diversity metrics
   
 
     
@@ -1207,42 +1051,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../stats/diversity_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Metric functions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -1680,56 +1488,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_10" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_10" id="__nav_5_10_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Verse statistics
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_10">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Verse statistics
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../stats/verse_stats/" class="md-nav__link">
         
@@ -1738,7 +1496,7 @@
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Verse statistics
   
 
     
@@ -1747,42 +1505,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../stats/verse_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Metric functions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -2469,28 +2191,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Description
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#language-hooks" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Language hooks
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2509,34 +2209,6 @@
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Methods">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#extract" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        extract
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_most_common" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_most_common
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2561,37 +2233,34 @@
 
 
 <h1 id="word-extraction">Word extraction<a class="headerlink" href="#word-extraction" title="Permanent link">&para;</a></h1>
-<div class="admonition info">
-<p><strong>ests.extractors.WordsExtractor</strong></p>
-</div>
-<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">WordsExtractor</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_punct</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_lexemes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lowercase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">min_len</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_len</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
 <p>A class for extracting words from a text.</p>
 <p>Raises:</p>
 <ul>
 <li><code>ParameterError</code> - an <code>ngram_range</code> that is not a pair of integers or whose lower bound is below one or above the upper one, a length bound that is not an integer, a negative bound, a minimum above the maximum;</li>
 <li><code>SourceTypeError</code> - stop words that are not a collection of strings.</li>
 </ul>
-<h2 id="language-hooks">Language hooks<a class="headerlink" href="#language-hooks" title="Permanent link">&para;</a></h2>
 <p>The class extends the <code>WordsExtractor</code> of the <a href="https://sergeyshk.github.io/anyTS/extractors/words/">anyTS</a> core with the hooks of Spanish:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Hook</th>
-<th style="text-align: center;">Spanish</th>
+<th style="text-align: left;">Hook</th>
+<th style="text-align: left;">Spanish</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>tokenize(text)</code></td>
-<td style="text-align: center;">the rule-based tokenizer of the spaCy Spanish language class, <code>ests.utils.tokenize</code></td>
+<td style="text-align: left;"><code>tokenize(text)</code></td>
+<td style="text-align: left;">the rule-based tokenizer of the spaCy Spanish language class, <code>ests.utils.tokenize</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>lemmatize(word)</code></td>
-<td style="text-align: center;">the lemmas of simplemma, <code>ests.utils.lemmatize</code></td>
+<td style="text-align: left;"><code>lemmatize(word)</code></td>
+<td style="text-align: left;">the lemmas of simplemma, <code>ests.utils.lemmatize</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>number_pattern</code></td>
-<td style="text-align: center;">signed numbers, ranges, fractions, dates, times, percentages and ordinals: <code>-5</code>, <code>+7</code>, <code>1990-1995</code>, <code>1.500,50</code>, <code>12/03/2020</code>, <code>3:30</code>, <code>10%</code>, <code>3.º</code>, <code>1.ª</code>, <code>2do</code></td>
+<td style="text-align: left;"><code>number_pattern</code></td>
+<td style="text-align: left;">signed numbers, ranges, fractions, dates, times, percentages and ordinals: <code>-5</code>, <code>+7</code>, <code>1990-1995</code>, <code>1.500,50</code>, <code>12/03/2020</code>, <code>3:30</code>, <code>10%</code>, <code>3.º</code>, <code>1.ª</code>, <code>2do</code></td>
 </tr>
 </tbody>
 </table>
@@ -2602,6 +2271,23 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><a href="https://github.com/adbar/simplemma">simplemma</a> works from a dictionary without a trained model: a known form is mapped to its lower-case lemma (<code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>), an unknown form is returned unchanged (<code>Madrid</code>, <code>dámelo</code>).</p>
+</div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Code</label><label for="__tabbed_1_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"No tengas 100 euros, ten 100 amigos"</span>
+
+<span class="n">we</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">use_lexemes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="p">[</span><span class="s2">"no"</span><span class="p">],</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>('tener', 'euro', 'tener', 'amigo', 'tener_euro', 'euro_tener', 'tener_amigo')
+</code></pre></div>
+</div>
+</div>
 </div>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
@@ -2679,7 +2365,6 @@
 <p>A ready stop word list is <code>spacy.lang.es.stop_words.STOP_WORDS</code>; note that it also holds frequent verbs like <code>tener</code>.</p>
 </div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
-<h3 id="extract">extract<a class="headerlink" href="#extract" title="Permanent link">&para;</a></h3>
 <p><code>extract(text)</code> extracts words from a text.</p>
 <table>
 <thead>
@@ -2700,25 +2385,7 @@
 </tbody>
 </table>
 <p>A text that is not a string and a tokenizer that cannot be called or does not return strings raise <code>SourceTypeError</code>.</p>
-<p>An example of word extraction with bigrams as tokens, after filtering numbers and stop words and lemmatizing:</p>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
-<p><em>Code</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Import the library</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
-
-<span class="c1"># Prepare the data</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">"No tengas 100 euros, ten 100 amigos"</span>
-
-<span class="c1"># Extract words</span>
-<span class="n">we</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">use_lexemes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="p">[</span><span class="s2">"no"</span><span class="p">],</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-</code></pre></div>
-<p><em>Result</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">(</span><span class="s1">'tener'</span>,<span class="w"> </span><span class="s1">'euro'</span>,<span class="w"> </span><span class="s1">'tener'</span>,<span class="w"> </span><span class="s1">'amigo'</span>,<span class="w"> </span><span class="s1">'tener_euro'</span>,<span class="w"> </span><span class="s1">'euro_tener'</span>,<span class="w"> </span><span class="s1">'tener_amigo'</span><span class="o">)</span>
-</code></pre></div>
-</div>
-<h3 id="get_most_common">get_most_common<a class="headerlink" href="#get_most_common" title="Permanent link">&para;</a></h3>
+<p>With the default tokenizer, a text with a character without a UTF-8 form, as a file read with the wrong encoding gives, raises <code>SourceError</code>, and so do the classes and functions that extract the words of a string with it.</p>
 <p><code>get_most_common(n=10)</code> returns the top words of the text as a list of (word, frequency) pairs, the most frequent first.</p>
 <table>
 <thead>
@@ -2743,18 +2410,17 @@
 <p class="admonition-title">Warning</p>
 <p>The method must be called after words have been extracted with <code>extract</code>.</p>
 </div>
-<p>To illustrate the method, we reuse the code from the previous example:</p>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
-<p><em>Code</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">...</span>
-
-<span class="c1"># Print the top words</span>
-<span class="n">we</span><span class="o">.</span><span class="n">get_most_common</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Code</label><label for="__tabbed_2_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">we</span><span class="o">.</span><span class="n">get_most_common</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </code></pre></div>
-<p><em>Result</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">[(</span><span class="s1">'tener'</span>,<span class="w"> </span><span class="m">2</span><span class="o">)</span>,<span class="w"> </span><span class="o">(</span><span class="s1">'euro'</span>,<span class="w"> </span><span class="m">1</span><span class="o">)</span>,<span class="w"> </span><span class="o">(</span><span class="s1">'amigo'</span>,<span class="w"> </span><span class="m">1</span><span class="o">)]</span>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>[('tener', 2), ('euro', 1), ('amigo', 1)]
 </code></pre></div>
+</div>
+</div>
 </div>
 
 
@@ -2775,6 +2441,12 @@
           
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
         
       </main>
       
@@ -2832,7 +2504,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.top", "content.code.copy", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

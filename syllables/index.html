@@ -52,8 +52,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Source Code Pro"}</style>
       
     
     
@@ -69,6 +69,8 @@
   
   
     
+    
+      
     
     
     
@@ -124,7 +126,33 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Dark theme"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark theme" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Light theme"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light theme" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
       <div class="md-header__option">
@@ -178,6 +206,8 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
       
     </form>
     <div class="md-search__output">
@@ -831,17 +861,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Description
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#syllabify" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1015,56 +1034,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Readability metrics
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_2">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Readability metrics
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../stats/readability_stats/" class="md-nav__link">
         
@@ -1073,7 +1042,7 @@
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Readability metrics
   
 
     
@@ -1086,92 +1055,6 @@
   
 
               
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../stats/readability_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Metric functions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Lexical diversity metrics
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Lexical diversity metrics
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1187,7 +1070,7 @@
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Lexical diversity metrics
   
 
     
@@ -1196,42 +1079,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../stats/diversity_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Metric functions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -1669,56 +1516,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_10" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_10" id="__nav_5_10_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Verse statistics
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_10">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Verse statistics
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../stats/verse_stats/" class="md-nav__link">
         
@@ -1727,7 +1524,7 @@
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Verse statistics
   
 
     
@@ -1736,42 +1533,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../stats/verse_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Metric functions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -2458,17 +2219,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Description
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#syllabify" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2544,261 +2294,330 @@
 
 
 <h1 id="syllables-and-stress">Syllables and stress<a class="headerlink" href="#syllables-and-stress" title="Permanent link">&para;</a></h1>
-<div class="admonition info">
-<p><strong>ests.syllables</strong></p>
-</div>
-<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
-<p>A module that divides a Spanish word into syllables and finds its stressed syllable from the spelling alone, without a dictionary or a trained model. The functions are the foundation of the basic statistics, readability formulas, phonostatistics and metre.</p>
+<p>The <code>ests.syllables</code> module divides a Spanish word into syllables and finds its stressed syllable from the spelling alone, without a dictionary or a trained model. The basic statistics, the readability formulas, the phonostatistics and the verse statistics are built on these functions.</p>
 <p>The rules follow the <em>Ortografía de la lengua española</em> (RAE, 2010): two weak vowels always form a diphthong (<code>huir</code>, <code>je-sui-ta</code>, <code>guion</code>), and <code>tl</code> is split as in Spain (<code>at-las</code>).</p>
 <h2 id="syllabify">Syllabification<a class="headerlink" href="#syllabify" title="Permanent link">&para;</a></h2>
-<div class="admonition info">
-<p><strong>ests.syllables.syllabify()</strong></p>
-</div>
+<div class="signature highlight"><pre><span></span><code><span class="n">syllabify</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+</code></pre></div>
 <p>Division of a word into syllables. A syllable is built around a vowel nucleus: a single vowel, a diphthong or a triphthong.</p>
 <table>
 <thead>
 <tr>
 <th style="text-align: left;">Rule</th>
-<th style="text-align: center;">Example</th>
+<th style="text-align: left;">Example</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align: left;">a weak vowel (unaccented <code>i</code>, <code>u</code>, <code>ü</code>) next to another vowel forms a diphthong</td>
-<td style="text-align: center;">ai-re, puen-te, rui-do, ciu-dad</td>
+<td style="text-align: left;">ai-re, puen-te, rui-do, ciu-dad</td>
 </tr>
 <tr>
 <td style="text-align: left;">two strong vowels form a hiatus, as do two close vowels of the same letter, with or without a tilde</td>
-<td style="text-align: center;">po-e-ta, le-er, a-é-re-o, chi-i-ta, chi-í-es</td>
+<td style="text-align: left;">po-e-ta, le-er, a-é-re-o, chi-i-ta, chi-í-es</td>
 </tr>
 <tr>
 <td style="text-align: left;">an accented weak vowel is strong</td>
-<td style="text-align: center;">dí-a, pa-ís, ba-úl</td>
+<td style="text-align: left;">dí-a, pa-ís, ba-úl</td>
 </tr>
 <tr>
 <td style="text-align: left;">a weak vowel between two others gives a triphthong</td>
-<td style="text-align: center;">a-ve-ri-guáis, buey</td>
+<td style="text-align: left;">a-ve-ri-guáis, buey</td>
 </tr>
 <tr>
 <td style="text-align: left;">a weak vowel before a strong one goes with that vowel</td>
-<td style="text-align: center;">chi-hua-hua, ca-ca-hue-te</td>
+<td style="text-align: left;">chi-hua-hua, ca-ca-hue-te</td>
 </tr>
 <tr>
 <td style="text-align: left;">an <code>h</code> between vowels does not break a diphthong</td>
-<td style="text-align: center;">ahu-ma-do, prohi-bir, de-sahu-cio</td>
+<td style="text-align: left;">ahu-ma-do, prohi-bir, de-sahu-cio</td>
 </tr>
 <tr>
 <td style="text-align: left;">the <code>u</code> of <code>qu</code>, and of <code>gu</code> before <code>e</code> and <code>i</code>, is silent; <code>ü</code> is a vowel</td>
-<td style="text-align: center;">que-so, gue-rra, pin-güi-no</td>
+<td style="text-align: left;">que-so, gue-rra, pin-güi-no</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>y</code> is a vowel at the end of a word and a consonant before a vowel</td>
-<td style="text-align: center;">rey, U-ru-guay, ma-yo</td>
+<td style="text-align: left;">rey, U-ru-guay, ma-yo</td>
 </tr>
 <tr>
 <td style="text-align: left;">a single consonant or digraph goes to the next syllable</td>
-<td style="text-align: center;">ca-sa, mu-cho, pe-rro</td>
+<td style="text-align: left;">ca-sa, mu-cho, pe-rro</td>
 </tr>
 <tr>
 <td style="text-align: left;">an obstruent with <code>l</code> or <code>r</code> goes to the next syllable</td>
-<td style="text-align: center;">ha-blar, o-tro</td>
+<td style="text-align: left;">ha-blar, o-tro</td>
 </tr>
 <tr>
 <td style="text-align: left;">other consonant pairs are split</td>
-<td style="text-align: center;">ac-to, is-la, at-las, rit-mo</td>
+<td style="text-align: left;">ac-to, is-la, at-las, rit-mo</td>
 </tr>
 <tr>
 <td style="text-align: left;">of three or more consonants the last two go to the next syllable when they form such a cluster, otherwise only the last one does</td>
-<td style="text-align: center;">com-pra, cons-truir, ins-ti-tu-to, obs-tá-cu-lo, tungs-te-no</td>
+<td style="text-align: left;">com-pra, cons-truir, ins-ti-tu-to, obs-tá-cu-lo, tungs-te-no</td>
 </tr>
 </tbody>
 </table>
 <p>The word is normalized to NFC and lower-cased. It is split into parts at digits, hyphens and other non-letters, each part is syllabified on its own (<code>te-ó-ri-co-prác-ti-co</code>), and a part without vowels (an abbreviation like <code>sh</code>) yields no syllables. Vowels with foreign diacritics count as accented strong vowels (<code>Björk</code>). A diaeresis marks a hiatus: the <code>ü</code> of verse outside <code>gü</code> and <code>qü</code> and the <code>ï</code> (<code>sü-a-ve</code>, <code>glo-rï-o-sa</code>), which leave the stress to the rules of the word, and the <code>ë</code> of French (<code>Ci-tro-ën</code>), which takes it; the Portuguese <code>ão</code> and <code>õe</code> are diphthongs (<code>São</code>, <code>Ca-mões</code>).</p>
-<p>Parameters:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>word</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Word</td>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Word</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
+<p>Raises:</p>
+<ul>
+<li><code>SourceTypeError</code> - a word that is not a string.</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Code</label><label for="__tabbed_1_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">syllabify</span>
 
 <span class="n">syllabify</span><span class="p">(</span><span class="s2">"murciélago"</span><span class="p">)</span>
-<span class="c1"># ['mur', 'cié', 'la', 'go']</span>
-
 <span class="n">syllabify</span><span class="p">(</span><span class="s2">"averiguáis"</span><span class="p">)</span>
-<span class="c1"># ['a', 've', 'ri', 'guáis']</span>
 </code></pre></div>
 </div>
-<h2 id="count_syllables">Syllable count<a class="headerlink" href="#count_syllables" title="Permanent link">&para;</a></h2>
-<div class="admonition info">
-<p><strong>ests.syllables.count_syllables()</strong></p>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>['mur', 'cié', 'la', 'go']
+['a', 've', 'ri', 'guáis']
+</code></pre></div>
 </div>
-<p>The number of syllables by <code>syllabify</code>.</p>
-<p>Parameters:</p>
+</div>
+</div>
+<h2 id="count_syllables">Syllable count<a class="headerlink" href="#count_syllables" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">count_syllables</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+</code></pre></div>
+<p>The number of syllables of a word by <a href="#syllabify"><code>syllabify</code></a>.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>word</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Word</td>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Word</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
+<p>Raises:</p>
+<ul>
+<li><code>SourceTypeError</code> - a word that is not a string.</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Code</label><label for="__tabbed_2_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_syllables</span>
 
 <span class="n">count_syllables</span><span class="p">(</span><span class="s2">"Uruguay"</span><span class="p">)</span>
-<span class="c1"># 3</span>
 </code></pre></div>
 </div>
-<h2 id="word_stress">Word stress<a class="headerlink" href="#word_stress" title="Permanent link">&para;</a></h2>
-<div class="admonition info">
-<p><strong>ests.syllables.word_stress()</strong></p>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>3
+</code></pre></div>
 </div>
-<p>The index of the stressed syllable, counted from zero as in <code>syllabify</code>; <code>None</code> for a word without vowels.</p>
+</div>
+</div>
+<h2 id="word_stress">Word stress<a class="headerlink" href="#word_stress" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">word_stress</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+</code></pre></div>
+<p>The index of the stressed syllable of a word, counted from zero as in <a href="#syllabify"><code>syllabify</code></a>.</p>
 <table>
 <thead>
 <tr>
 <th style="text-align: left;">Rule</th>
-<th style="text-align: center;">Example</th>
+<th style="text-align: left;">Example</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align: left;">a written accent marks the stressed syllable</td>
-<td style="text-align: center;">ca-<strong>mión</strong>, <strong>ár</strong>-bol, mur-<strong>cié</strong>-la-go</td>
+<td style="text-align: left;">ca-<strong>mión</strong>, <strong>ár</strong>-bol, mur-<strong>cié</strong>-la-go</td>
 </tr>
 <tr>
 <td style="text-align: left;">a word ending in a vowel, in <code>n</code> or <code>s</code> after a vowel, or in <code>y</code> after a consonant is stressed on the penultimate syllable</td>
-<td style="text-align: center;"><strong>ca</strong>-sa, <strong>jo</strong>-ven, <strong>lu</strong>-nes, <strong>whis</strong>-ky</td>
+<td style="text-align: left;"><strong>ca</strong>-sa, <strong>jo</strong>-ven, <strong>lu</strong>-nes, <strong>whis</strong>-ky</td>
 </tr>
 <tr>
 <td style="text-align: left;">any other word is stressed on the last syllable</td>
-<td style="text-align: center;">pa-<strong>pel</strong>, re-<strong>loj</strong>, ro-<strong>bots</strong>, U-ru-<strong>guay</strong></td>
+<td style="text-align: left;">pa-<strong>pel</strong>, re-<strong>loj</strong>, ro-<strong>bots</strong>, U-ru-<strong>guay</strong></td>
 </tr>
 <tr>
 <td style="text-align: left;">a monosyllable is stressed on its only syllable</td>
-<td style="text-align: center;">rey, y</td>
+<td style="text-align: left;">rey, y</td>
 </tr>
 </tbody>
 </table>
-<p>Forms with enclitic pronouns carry the accent by the same rules (<code>dí-ga-me-lo</code>). For an adverb in <code>-mente</code> and for a hyphenated compound the main stress is the last of <code>word_stresses</code> (<code>fá-cil-men-te</code> - 2).</p>
-<p>Parameters:</p>
+<p>Forms with enclitic pronouns carry the accent by the same rules (<code>dí-ga-me-lo</code>). For an adverb in <code>-mente</code> and for a hyphenated compound the main stress is the last of <a href="#word_stresses"><code>word_stresses</code></a> (<code>fá-cil-men-te</code> - 2).</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>word</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Word</td>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Word</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
+<p>Returns <code>None</code> for a word without vowels.</p>
+<p>Raises:</p>
+<ul>
+<li><code>SourceTypeError</code> - a word that is not a string.</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Code</label><label for="__tabbed_3_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">word_stress</span>
 
 <span class="n">word_stress</span><span class="p">(</span><span class="s2">"camión"</span><span class="p">),</span> <span class="n">word_stress</span><span class="p">(</span><span class="s2">"casa"</span><span class="p">),</span> <span class="n">word_stress</span><span class="p">(</span><span class="s2">"murciélago"</span><span class="p">)</span>
-<span class="c1"># (1, 0, 1)</span>
 </code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>(1, 0, 1)
+</code></pre></div>
+</div>
+</div>
 </div>
 <h2 id="word_stresses">All stresses<a class="headerlink" href="#word_stresses" title="Permanent link">&para;</a></h2>
-<div class="admonition info">
-<p><strong>ests.syllables.word_stresses()</strong></p>
-</div>
+<div class="signature highlight"><pre><span></span><code><span class="n">word_stresses</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+</code></pre></div>
 <p>All stressed syllables of a word in ascending order. A single index for most words. Two indices for an adverb in <code>-mente</code>, which keeps the stress of its adjective (<code>fá-cil-men-te</code> - 0 and 2, <code>fe-liz-men-te</code> - 1 and 2), and one index per part of a hyphenated compound (<code>te-ó-ri-co-prác-ti-co</code> - 1 and 4).</p>
-<p>An adverb is recognized by its shape: a stem of at least one syllable before <code>-mente</code> that ends like an adjective (in a vowel, <code>l</code>, <code>r</code>, <code>z</code>, <code>n</code> or <code>s</code>) or carries an accent, so <code>cruel-men-te</code> counts too. Words of the same shape that are not adverbs are listed in <code>NON_ADVERBS_MENTE</code>: adjectives and nouns (<code>demente</code>, <code>vehemente</code>) and subjunctives of verbs in <code>-mentar</code> (<code>fundamente</code>, <code>complemente</code>); an unlisted subjunctive of that kind gets a second stress.</p>
-<p>Parameters:</p>
+<p>An adverb is recognized by its shape: a stem of at least one syllable before <code>-mente</code> that ends like an adjective (in a vowel, <code>l</code>, <code>r</code>, <code>z</code>, <code>n</code> or <code>s</code>) or carries an accent, so <code>cruel-men-te</code> counts too. Words of the same shape that are not adverbs are listed in <code>NON_ADVERBS_MENTE</code> of <code>ests.constants</code>: adjectives and nouns (<code>demente</code>, <code>vehemente</code>) and subjunctives of verbs in <code>-mentar</code> (<code>fundamente</code>, <code>complemente</code>); an unlisted subjunctive of that kind gets a second stress.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>word</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Word</td>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Word</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
+<p>Returns an empty list for a word without vowels.</p>
+<p>Raises:</p>
+<ul>
+<li><code>SourceTypeError</code> - a word that is not a string.</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Code</label><label for="__tabbed_4_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">word_stresses</span>
 
-<span class="n">word_stresses</span><span class="p">(</span><span class="s2">"fácilmente"</span><span class="p">)</span>
-<span class="c1"># [0, 2]</span>
+<span class="n">word_stresses</span><span class="p">(</span><span class="s2">"fácilmente"</span><span class="p">),</span> <span class="n">word_stresses</span><span class="p">(</span><span class="s2">"teórico-práctico"</span><span class="p">),</span> <span class="n">word_stresses</span><span class="p">(</span><span class="s2">"demente"</span><span class="p">)</span>
 </code></pre></div>
 </div>
-<h2 id="stress_type">Stress type<a class="headerlink" href="#stress_type" title="Permanent link">&para;</a></h2>
-<div class="admonition info">
-<p><strong>ests.syllables.stress_type()</strong></p>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>([0, 2], [1, 4], [1])
+</code></pre></div>
 </div>
-<p>The class of a word by the position of its main stress: <code>aguda</code> on the last syllable (<code>ca-mión</code>), <code>llana</code> on the penultimate (<code>ca-sa</code>), <code>esdrújula</code> on the antepenultimate (<code>mur-cié-la-go</code>), <code>sobresdrújula</code> earlier (<code>dí-ga-me-lo</code>); <code>None</code> for a word without vowels.</p>
-<p>Parameters:</p>
+</div>
+</div>
+<h2 id="stress_type">Stress type<a class="headerlink" href="#stress_type" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">stress_type</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+</code></pre></div>
+<p>The class of a word by the position of its main stress, that of <a href="#word_stress"><code>word_stress</code></a>, with the names of the <a href="../stats/verse_stats/#clausulas">endings</a> of verse lines:</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Stress</th>
+<th style="text-align: left;">Example</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>word</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Word</td>
+<td style="text-align: left;"><code>aguda</code></td>
+<td style="text-align: left;">on the last syllable</td>
+<td style="text-align: left;">ca-<strong>mión</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>llana</code></td>
+<td style="text-align: left;">on the penultimate syllable</td>
+<td style="text-align: left;"><strong>ca</strong>-sa</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>esdrújula</code></td>
+<td style="text-align: left;">on the antepenultimate syllable</td>
+<td style="text-align: left;">mur-<strong>cié</strong>-la-go</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>sobresdrújula</code></td>
+<td style="text-align: left;">earlier</td>
+<td style="text-align: left;"><strong>dí</strong>-ga-me-lo</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Word</td>
+</tr>
+</tbody>
+</table>
+<p>Returns <code>None</code> for a word without vowels.</p>
+<p>Raises:</p>
+<ul>
+<li><code>SourceTypeError</code> - a word that is not a string.</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Code</label><label for="__tabbed_5_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syllables</span><span class="w"> </span><span class="kn">import</span> <span class="n">stress_type</span>
 
-<span class="n">stress_type</span><span class="p">(</span><span class="s2">"dígamelo"</span><span class="p">)</span>
-<span class="c1"># 'sobresdrújula'</span>
+<span class="nb">tuple</span><span class="p">(</span><span class="n">stress_type</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"camión"</span><span class="p">,</span> <span class="s2">"casa"</span><span class="p">,</span> <span class="s2">"murciélago"</span><span class="p">,</span> <span class="s2">"dígamelo"</span><span class="p">))</span>
 </code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>('aguda', 'llana', 'esdrújula', 'sobresdrújula')
+</code></pre></div>
+</div>
+</div>
 </div>
 
 
@@ -2819,6 +2638,12 @@
           
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
         
       </main>
       
@@ -2876,7 +2701,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.top", "content.code.copy", "search.highlight", "search.suggest"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>

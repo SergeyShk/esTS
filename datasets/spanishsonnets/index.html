@@ -52,8 +52,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Source Code Pro"}</style>
       
     
     
@@ -69,6 +69,8 @@
   
   
     
+    
+      
     
     
     
@@ -124,7 +126,33 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Dark theme"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark theme" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Light theme"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light theme" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
       <div class="md-header__option">
@@ -178,6 +206,8 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
       
     </form>
     <div class="md-search__output">
@@ -902,56 +932,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Readability metrics
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_2">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Readability metrics
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../stats/readability_stats/" class="md-nav__link">
         
@@ -960,7 +940,7 @@
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Readability metrics
   
 
     
@@ -973,92 +953,6 @@
   
 
               
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../stats/readability_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Metric functions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Lexical diversity metrics
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Lexical diversity metrics
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1074,7 +968,7 @@
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Lexical diversity metrics
   
 
     
@@ -1083,42 +977,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../stats/diversity_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Metric functions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -1556,56 +1414,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_10" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_10" id="__nav_5_10_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Verse statistics
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_10">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Verse statistics
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../stats/verse_stats/" class="md-nav__link">
         
@@ -1614,7 +1422,7 @@
   <span class="md-ellipsis">
     
   
-    Metrics module
+    Verse statistics
   
 
     
@@ -1623,42 +1431,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../stats/verse_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Metric functions
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -2046,17 +1818,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Description
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2086,56 +1847,6 @@
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Methods">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#check_data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        check_data
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#download" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        download
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_texts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_texts
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_records" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_records
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2491,17 +2202,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Description
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parameters" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2532,56 +2232,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Methods">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#check_data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        check_data
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#download" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        download
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_texts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_texts
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_records" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_records
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
     </ul>
@@ -2605,10 +2255,8 @@
 
 
 <h1 id="spanish-sonnets">Spanish sonnets<a class="headerlink" href="#spanish-sonnets" title="Permanent link">&para;</a></h1>
-<div class="admonition info">
-<p><strong>ests.datasets.SpanishSonnets</strong></p>
-</div>
-<h2 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">SpanishSonnets</span><span class="p">(</span><span class="n">data_dir</span><span class="o">=</span><span class="n">DEFAULT_DATASET_DIR</span><span class="p">)</span>
+</code></pre></div>
 <p>A collection of Spanish sonnets from the <a href="https://github.com/pruizf/disco">Diachronic Spanish Sonnet Corpus</a> (DISCO 5.0): 4,259 sonnets by 1,167 authors from Spain, Latin America and the Philippines, from the 15th century to the early 20th, 60,209 lines. Every line has its metrical pattern and the label of its rhyme, so the collection suits the study of meter and rhyme and the checking of a scansion against the annotation of the corpus.</p>
 <p>The sonnets fall into four periods: <code>15th-17th</code> (1,088 sonnets), <code>18th</code> (321), <code>19th</code> (2,845, an anthology of Spain and Latin America) and <code>20th</code> (5, by the Filipino poet Cecilio Apóstol); 295 sonnets are by women, and the authors were born in 22 countries, most of them in Spain (2,388 sonnets) and Cuba (719).</p>
 <p>Only the sonnets in the public domain are kept, 4,259 of 4,523: those by the authors who died before 1946, by the authors of the 15th-18th centuries whose death is unknown and by the authors of the 19th-century anthology born before 1866 or with no dates; most of the Filipino poets are left out. An author of the anthology with no dates is left out too when the dates of <a href="https://viaf.org">VIAF</a> that DISCO matched with high confidence give a death in 1946 or later or a birth in 1866 or later with no death; VIAF only drops an author and never replaces the dates of the source. The metadata of DISCO is corrected by the biographical line of the source: the years of life where DISCO took a later year of it for the death or missed a birth or a death given alone (Echegaray died in 1916, not in 1904), the country of birth where the line names one (Gertrudis Gómez de Avellaneda was born in Cuba, not in Haiti). The Filipino poets have the name before the surname, as the rest; the speakers of the dialogues (<code>[Car]</code>, <code>[POETA]</code>) and the calls of the footnotes are removed from the lines, as they are absent from their metrical patterns.</p>
@@ -2617,22 +2265,42 @@
 <p class="admonition-title">Licence and attribution</p>
 <p>DISCO is distributed under the <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>, and so is this dataset; the archive carries a <code>README.txt</code> with the source and the changes. Cite the source as: Ruiz Fabo P., Bermúdez Sabel H., Martínez Cantón C., Calvo Tello J. Diachronic Spanish Sonnet Corpus (DISCO), version 5.0. Madrid: UNED, 2017-2023; and the article: Ruiz Fabo P., Bermúdez Sabel H., Martínez Cantón C., González-Blanco E. The Diachronic Spanish Sonnet Corpus: TEI and linked open data encoding, data distribution, and metrical findings. Digital Scholarship in the Humanities 36 (Supplement 1), 2021, i68-i80, <a href="https://doi.org/10.1093/llc/fqaa035">doi:10.1093/llc/fqaa035</a>.</p>
 </div>
+<p>Raises:</p>
+<ul>
+<li><code>SourceTypeError</code> - a <code>data_dir</code> that is neither a string nor a <code>Path</code>.</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Code</label><label for="__tabbed_1_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanishSonnets</span>
+
+<span class="n">ss</span> <span class="o">=</span> <span class="n">SpanishSonnets</span><span class="p">()</span>
+<span class="n">ss</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
+<span class="n">ss</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">"license"</span><span class="p">],</span> <span class="n">ss</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>('CC BY 4.0', [('Rubén Darío', 140), ('José Santos Chocano', 130)])
+</code></pre></div>
+</div>
+</div>
+</div>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>data_dir</code></td>
-<td style="text-align: center;">str/Path</td>
-<td style="text-align: center;"><code>DEFAULT_DATA_DIR.joinpath("texts")</code></td>
-<td style="text-align: center;">Path to the dataset directory; the data directory is described in <a href="../../installation/#datasets">Installation</a></td>
+<td style="text-align: left;"><code>data_dir</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Path</code></td>
+<td style="text-align: left;"><code>DEFAULT_DATASET_DIR</code></td>
+<td style="text-align: left;">Path to the dataset directory; <code>texts</code> in <code>DEFAULT_DATA_DIR</code> by default, the data directory is described in <a href="../../installation/#datasets">Installation</a></td>
 </tr>
 </tbody>
 </table>
@@ -2640,172 +2308,155 @@
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Attribute</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Attribute</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>periods</code></td>
-<td style="text-align: center;">tuple[str]</td>
-<td style="text-align: center;">Tuple of periods: <code>15th-17th</code>, <code>18th</code>, <code>19th</code>, <code>20th</code></td>
+<td style="text-align: left;"><code>periods</code></td>
+<td style="text-align: left;"><code>tuple[str]</code></td>
+<td style="text-align: left;">Tuple of periods: <code>15th-17th</code>, <code>18th</code>, <code>19th</code>, <code>20th</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>authors</code></td>
-<td style="text-align: center;">Counter</td>
-<td style="text-align: center;">Number of sonnets by author, read from the file</td>
+<td style="text-align: left;"><code>authors</code></td>
+<td style="text-align: left;"><code>Counter</code></td>
+<td style="text-align: left;">Number of sonnets by author, read from the file</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>name</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;">Name of the dataset, <code>spanish_sonnets</code></td>
+<td style="text-align: left;"><code>name</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">Name of the dataset, <code>spanish_sonnets</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>meta</code></td>
-<td style="text-align: center;">dict[str, str]</td>
-<td style="text-align: center;">Reference information: the source, the description, the authors, the licence and the citation</td>
+<td style="text-align: left;"><code>meta</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;">Reference information: the source, the description, the authors, the licence and the citation</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>info</code></td>
-<td style="text-align: center;">dict[str, str]</td>
-<td style="text-align: center;">The name and the reference information in one dictionary</td>
+<td style="text-align: left;"><code>info</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;">The name and the reference information in one dictionary</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>data_dir</code></td>
-<td style="text-align: center;">Path</td>
-<td style="text-align: center;">Absolute path to the dataset directory</td>
+<td style="text-align: left;"><code>data_dir</code></td>
+<td style="text-align: left;"><code>Path</code></td>
+<td style="text-align: left;">Absolute path to the dataset directory</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>filepath</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;">Path to the file of the dataset, <code>None</code> before the download</td>
+<td style="text-align: left;"><code>filepath</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">Path to the file of the dataset, <code>None</code> before the download</td>
 </tr>
 </tbody>
 </table>
-<p>The dataset iterates over its records as <code>get_records()</code> without filters: <code>for record in ss</code> goes over the sonnets one at a time.</p>
+<p>The dataset iterates over its records as <code>get_records()</code> without filters: <code>for record in ss</code> goes over the sonnets one at a time; a line of the file that cannot be read raises <code>DataFileError</code>.</p>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
-<h3 id="check_data">check_data<a class="headerlink" href="#check_data" title="Permanent link">&para;</a></h3>
-<p>Checks that the file of the dataset is in place and returns <code>True</code>; a dataset that is not downloaded raises <code>DatasetNotFoundError</code>. The other methods check it themselves.</p>
-<h3 id="download">download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h3>
-<p>Downloads the archive, verifies its SHA-256 checksum and extracts the file. A corrupted archive is downloaded again, a missing file is extracted again; a repeated call downloads nothing.</p>
+<p><code>download(force=False)</code> downloads the archive, verifies its SHA-256 checksum and extracts the file. A corrupted archive is downloaded again, a missing file is extracted again; a repeated call downloads nothing.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>force</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Download the dataset even if it is already downloaded</td>
+<td style="text-align: left;"><code>force</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Download the dataset even if it is already downloaded</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanishSonnets</span>
-
-<span class="n">ss</span> <span class="o">=</span> <span class="n">SpanishSonnets</span><span class="p">()</span>
-<span class="n">ss</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
-<span class="n">ss</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">"license"</span><span class="p">],</span> <span class="n">ss</span><span class="o">.</span><span class="n">authors</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="c1"># ('CC BY 4.0', [('Rubén Darío', 140), ('José Santos Chocano', 130)])</span>
-</code></pre></div>
-</div>
-<h3 id="get_texts">get_texts<a class="headerlink" href="#get_texts" title="Permanent link">&para;</a></h3>
-<p>Extracts the texts (without headers) from the dataset: the lines of a sonnet, the stanzas separated by a blank line.</p>
+<p>An archive that cannot be downloaded or fails the checksum twice raises <code>DownloadError</code>, an archive that cannot be extracted <code>DataFileError</code>.</p>
+<p><code>check_data()</code> checks that the file of the dataset is in place and returns <code>True</code>; a dataset that is not downloaded raises <code>DatasetNotFoundError</code> with the commands to download it. The other methods and <code>authors</code> check it themselves.</p>
+<p><code>get_texts(period=None, author=None, country=None, gender=None, min_len=None, max_len=None, limit=None)</code> extracts the texts (without headers) from the dataset: the lines of a sonnet, the stanzas separated by a blank line.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parameter</th>
-<th style="text-align: center;">Type</th>
-<th style="text-align: center;">Default</th>
-<th style="text-align: center;">Description</th>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>period</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Period: <code>15th-17th</code>, <code>18th</code>, <code>19th</code> or <code>20th</code></td>
+<td style="text-align: left;"><code>period</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Period: <code>15th-17th</code>, <code>18th</code>, <code>19th</code> or <code>20th</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>author</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Author: a substring of the name, regardless of case and accents</td>
+<td style="text-align: left;"><code>author</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Author: a substring of the name, regardless of case and accents</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>country</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Country of birth: a substring of the name in Spanish, regardless of case and accents</td>
+<td style="text-align: left;"><code>country</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Country of birth: a substring of the name in Spanish, regardless of case and accents</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>gender</code></td>
-<td style="text-align: center;">str</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Gender of the author: <code>F</code> or <code>M</code></td>
+<td style="text-align: left;"><code>gender</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Gender of the author: <code>F</code> or <code>M</code></td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>min_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Minimum text length (in characters)</td>
+<td style="text-align: left;"><code>min_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Minimum text length (in characters)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>max_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Maximum text length (in characters)</td>
+<td style="text-align: left;"><code>max_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Maximum text length (in characters)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>limit</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Number of texts</td>
+<td style="text-align: left;"><code>limit</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Number of texts</td>
 </tr>
 </tbody>
 </table>
-<p>The filters are combined; <code>author="dario"</code> finds Rubén Darío, <code>country="mexico"</code> finds <code>México</code>. An unknown period or gender, a length below one, a minimum length above the maximum one and a negative limit raise <code>ParameterError</code>.</p>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanishSonnets</span>
-
-<span class="n">ss</span> <span class="o">=</span> <span class="n">SpanishSonnets</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">ss</span><span class="o">.</span><span class="n">get_texts</span><span class="p">(</span><span class="n">author</span><span class="o">=</span><span class="s2">"avellaneda"</span><span class="p">,</span> <span class="n">gender</span><span class="o">=</span><span class="s2">"F"</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<p>The filters are combined; <code>author="dario"</code> finds Rubén Darío, <code>country="mexico"</code> finds <code>México</code>. An unknown period or gender, an <code>author</code> or a <code>country</code> that is not a string, a length bound that is not an integer of at least one, a minimum length above the maximum one and a <code>limit</code> that is not a non-negative integer raise <code>ParameterError</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Code</label><label for="__tabbed_2_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">ss</span><span class="o">.</span><span class="n">get_texts</span><span class="p">(</span><span class="n">author</span><span class="o">=</span><span class="s2">"avellaneda"</span><span class="p">,</span> <span class="n">gender</span><span class="o">=</span><span class="s2">"F"</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
-<span class="c1"># No encuentro paz, ni me permiten guerra;</span>
-<span class="c1"># de fuego devorado, sufro el frío;</span>
-<span class="c1"># abrazo un mundo, y quédome vacío;</span>
-<span class="c1"># me lanzo al cielo, y préndeme la tierra.</span>
 </code></pre></div>
 </div>
-<h3 id="get_records">get_records<a class="headerlink" href="#get_records" title="Permanent link">&para;</a></h3>
-<p>Extracts the records (with headers) from the dataset. Record fields: <code>id</code> - the identifier of the sonnet in DISCO, <code>period</code> - period, <code>author</code> - author, <code>title</code> - title, <code>country</code> - the country of birth of the author in Spanish (empty when unknown), <code>gender</code> - <code>F</code> or <code>M</code>, <code>birth</code> and <code>death</code> - the years of life (<code>None</code> when unknown), <code>text</code> - text, <code>meter</code> - the metrical pattern of every line, <code>rhyme</code> - the label of the rhyme of every line. In a metrical pattern <code>+</code> is a stressed syllable and <code>-</code> an unstressed one, so its length is the number of metrical syllables: 11 for an endecasílabo, 14 for an alejandrino. Equal labels of the rhyme mark the lines that rhyme together, <code>-</code> a line that rhymes with no other. The records go by period in the order of <code>periods</code>, within a period by the identifier of DISCO sorted numerically (<code>1035e_269</code> before <code>1035e_1360</code>), which keeps the sonnets of an author together in the order of their source.</p>
-<p>The parameters are the same as for <code>get_texts</code>.</p>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>No encuentro paz, ni me permiten guerra;
+de fuego devorado, sufro el frío;
+abrazo un mundo, y quédome vacío;
+me lanzo al cielo, y préndeme la tierra.
+</code></pre></div>
+</div>
+</div>
+</div>
+<p><code>get_records</code> with the same parameters extracts the records (with headers) from the dataset. Record fields: <code>id</code> - the identifier of the sonnet in DISCO, <code>period</code> - period, <code>author</code> - author, <code>title</code> - title, <code>country</code> - the country of birth of the author in Spanish (empty when unknown), <code>gender</code> - <code>F</code> or <code>M</code>, <code>birth</code> and <code>death</code> - the years of life (<code>None</code> when unknown), <code>text</code> - text, <code>meter</code> - the metrical pattern of every line, <code>rhyme</code> - the label of the rhyme of every line. In a metrical pattern <code>+</code> is a stressed syllable and <code>-</code> an unstressed one, so its length is the number of metrical syllables: 11 for an endecasílabo, 14 for an alejandrino. Equal labels of the rhyme mark the lines that rhyme together, <code>-</code> a line that rhymes with no other. The records go by period in the order of <code>periods</code>, within a period by the identifier of DISCO sorted numerically (<code>1035e_269</code> before <code>1035e_1360</code>), which keeps the sonnets of an author together in the order of their source.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Code</label><label for="__tabbed_3_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanishSonnets</span>
-
-<span class="n">ss</span> <span class="o">=</span> <span class="n">SpanishSonnets</span><span class="p">()</span>
 
 <span class="c1"># The first lines of a sonnet with their rhyme and meter</span>
 <span class="n">record</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">ss</span><span class="o">.</span><span class="n">get_records</span><span class="p">(</span><span class="n">author</span><span class="o">=</span><span class="s2">"rubén darío"</span><span class="p">))</span>
 <span class="n">lines</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">line</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">record</span><span class="p">[</span><span class="s2">"meter"</span><span class="p">],</span> <span class="n">record</span><span class="p">[</span><span class="s2">"rhyme"</span><span class="p">]))[:</span><span class="mi">4</span><span class="p">]:</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pattern</span><span class="si">:</span><span class="s2">&lt;14</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="c1"># A -+---+---+-    En medio del abismo de la duda</span>
-<span class="c1"># B +----+-+-+-    lleno de oscuridad, de sombra vana</span>
-<span class="c1"># B +--+---+-+-    hay una estrella que reflejos mana</span>
-<span class="c1"># A -+-+---+-+-    sublime, sí, mas silenciosa, muda.</span>
 
 <span class="c1"># The share of endecasílabos and alejandrinos by period</span>
 <span class="k">for</span> <span class="n">period</span> <span class="ow">in</span> <span class="n">ss</span><span class="o">.</span><span class="n">periods</span><span class="p">:</span>
@@ -2814,11 +2465,20 @@
     <span class="p">)</span>
     <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lengths</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">lengths</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">total</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">lengths</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">total</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="c1"># 15th-17th 0.98 0.00</span>
-<span class="c1"># 18th 0.99 0.00</span>
-<span class="c1"># 19th 0.86 0.09</span>
-<span class="c1"># 20th 0.60 0.40</span>
 </code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>A -+---+---+-    En medio del abismo de la duda
+B +----+-+-+-    lleno de oscuridad, de sombra vana
+B +--+---+-+-    hay una estrella que reflejos mana
+A -+-+---+-+-    sublime, sí, mas silenciosa, muda.
+15th-17th 0.98 0.00
+18th 0.99 0.00
+19th 0.86 0.09
+20th 0.60 0.40
+</code></pre></div>
+</div>
+</div>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">The annotation is automatic</p>
@@ -2847,6 +2507,12 @@
           
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
         
       </main>
       
@@ -2904,7 +2570,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.top", "content.code.copy", "search.highlight", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>

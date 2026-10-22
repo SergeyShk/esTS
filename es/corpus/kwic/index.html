@@ -52,8 +52,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Source Code Pro"}</style>
       
     
     
@@ -69,6 +69,8 @@
   
   
     
+    
+      
     
     
     
@@ -124,7 +126,33 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Dark theme"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark theme" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Light theme"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light theme" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
       <div class="md-header__option">
@@ -178,6 +206,8 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
       
     </form>
     <div class="md-search__output">
@@ -902,56 +932,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Métricas de legibilidad
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_2">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Métricas de legibilidad
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../stats/readability_stats/" class="md-nav__link">
         
@@ -960,7 +940,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Métricas de legibilidad
   
 
     
@@ -973,92 +953,6 @@
   
 
               
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../stats/readability_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Funciones de las métricas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Métricas de diversidad léxica
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Métricas de diversidad léxica
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1074,7 +968,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Métricas de diversidad léxica
   
 
     
@@ -1083,42 +977,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../stats/diversity_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Funciones de las métricas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -1556,56 +1414,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_10" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_10" id="__nav_5_10_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Estadísticas del verso
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_10">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Estadísticas del verso
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../stats/verse_stats/" class="md-nav__link">
         
@@ -1614,7 +1422,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Estadísticas del verso
   
 
     
@@ -1623,42 +1431,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../stats/verse_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Funciones de las métricas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -1877,28 +1649,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Descripción
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ganchos-del-idioma" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ganchos del idioma
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1921,10 +1671,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ejemplo" class="md-nav__link">
+  <a href="#format_kwic" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ejemplo
+        Líneas alineadas
       
     </span>
   </a>
@@ -2452,28 +2202,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Descripción
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ganchos-del-idioma" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Ganchos del idioma
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2496,10 +2224,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ejemplo" class="md-nav__link">
+  <a href="#format_kwic" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ejemplo
+        Líneas alineadas
       
     </span>
   </a>
@@ -2527,16 +2255,39 @@
 
 
 <h1 id="concordancia-kwic">Concordancia KWIC<a class="headerlink" href="#concordancia-kwic" title="Permanent link">&para;</a></h1>
-<div class="admonition info">
-<p><strong>ests.corpus.kwic()</strong>, <strong>ests.corpus.format_kwic()</strong>, <strong>ests.corpus.print_kwic()</strong>, <strong>ests.corpus.Concordance</strong></p>
-</div>
-<h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">kwic</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">by_lemma</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ignore_case</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
 <!-- core: corpus/kwic.md:kwic 481d7d1 -->
 <p>Una concordancia KWIC (keyword in context) - todas las apariciones de una palabra o de una expresión con su contexto a ambos lados. Las apariciones se buscan entre las palabras del texto por la forma, sin distinguir mayúsculas y minúsculas o distinguiéndolas (<code>ignore_case=False</code>), o por el lema (<code>by_lemma=True</code>); la palabra clave se lematiza como una cadena, así que con un lematizador una expresión puede escribirse en cualquier forma y sin él se da por lemas. Las palabras de una cadena y de la palabra clave salen del tokenizador, las de un <code>Doc</code> de sus tokens: un tokenizador que divide una cadena como lo hace el pipeline encuentra lo mismo en ambos. La puntuación y los símbolos no son palabras; las formas se comparan en la forma compuesta de Unicode (NFC), sin guiones blandos.</p>
 <p>Una expresión no cruza el final de un párrafo o de una oración salvo que la palabra clave tenga un signo final o un comienzo de oración en el mismo lugar (<code>Sr. García</code>). Una oración termina en un límite de un <code>Doc</code> en cualquier punto entre las palabras, incluido un signo de apertura, o, sin límites o con límites parciales (<code>has_sents</code>), en un comienzo de oración del segmentador de oraciones, por defecto un signo final ante un espacio. El contexto son <code>window</code> palabras a cada lado tal como están escritas, puntuación incluida; los espacios se reducen a uno, y las apariciones no se solapan.</p>
-<h2 id="ganchos-del-idioma">Ganchos del idioma<a class="headerlink" href="#ganchos-del-idioma" title="Permanent link">&para;</a></h2>
 <p>La función llama al <code>kwic</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/kwic/">anyTS</a> con los ganchos del español. El texto y la palabra clave se dividen en palabras del mismo modo, con el tokenizador del pipeline español vacío, así que <code>EE. UU.</code> es una palabra en los dos; las abreviaturas que el tokenizador mantiene enteras (<code>Sr.</code>, <code>pág.</code>, <code>etc.</code>, <code>EE. UU.</code>) son una palabra igual en minúsculas, con mayúscula inicial y en mayúsculas, así que <code>sr. pérez</code> encuentra <code>Sr. Pérez</code> y <code>SR. PÉREZ</code>, y la puntuación y los símbolos no son palabras de ninguno: <code>¿Dónde</code> encuentra <code>Dónde</code>, <code>20 €</code> encuentra <code>20</code>. Las formas y los lemas se pasan a minúsculas; las tildes forman parte de la forma: <code>solo</code> y <code>sólo</code> son dos formas. Las oraciones de una cadena, de la palabra clave y del texto de un <code>Doc</code> sin límites son las de <a href="../../extractors/sentences/"><code>SentsExtractor</code></a>: unos puntos suspensivos o una exclamación seguidos de una palabra en minúscula no terminan la oración, así que <code>honrado piensa</code> encuentra <code>honrado... piensa</code>.</p>
 <p>Por lema, la palabra clave se lematiza con simplemma, así que una expresión se da por lemas - <code>mirar a el pájaro</code> - o tal como se escribe, y una palabra del texto se encuentra por su lema de simplemma y, en un <code>Doc</code> que lleva lemas, también por el lema del modelo: <code>gatos</code> se encuentra por <code>gato</code>. En <code>Mi amigo vino con una botella de vino</code> el modelo da <code>venir</code> al verbo, así que <code>venir</code> encuentra el verbo, donde simplemma, que no ve el contexto, no encontraría nada; <code>vino</code> encuentra los dos, porque simplemma lee el verbo como <code>vino</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">kwic</span><span class="p">,</span> <span class="n">print_kwic</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"El gato estaba en la ventana y miraba a los pájaros. Los pájaros se fueron y el gato "</span>
+    <span class="s2">"se durmió en la ventana. Mañana el gato volverá a estar en la ventana y mirará a los pájaros."</span>
+<span class="p">)</span>
+<span class="n">lines</span> <span class="o">=</span> <span class="n">kwic</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s2">"ventana"</span><span class="p">,</span> <span class="n">by_lemma</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">print_kwic</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">keyword</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">kwic</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s2">"mirar a los pájaros"</span><span class="p">,</span> <span class="n">by_lemma</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>Concordance(start=21, end=28, left='estaba en la', keyword='ventana', right='y miraba a')
+        estaba en la  ventana  y miraba a
+        durmió en la  ventana  . Mañana el gato
+         estar en la  ventana  y mirará a
+['miraba a los pájaros', 'mirará a los pájaros']
+</code></pre></div>
+</div>
+</div>
+</div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
 <!-- core: corpus/kwic.md:kwic-parameters ef54df9 -->
 <table>
@@ -2582,39 +2333,6 @@
 </tbody>
 </table>
 <p>Una palabra clave sin palabras y una ventana negativa lanzan <code>ParameterError</code>; una fuente que no es ni una cadena ni un <code>Doc</code>, una palabra clave que no es una cadena y un gancho que no es invocable lanzan <code>SourceTypeError</code>.</p>
-<!-- core: corpus/kwic.md:format_kwic 4de69b2 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">format_kwic</span><span class="p">(</span><span class="n">concordances</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
-</code></pre></div>
-<p>Alinea las líneas en la palabra clave en un texto, una línea por aparición: el contexto de la izquierda se recorta por la izquierda y se alinea a la derecha, el de la derecha se recorta por la derecha. Las líneas pueden venir de cualquier iterable y se toman en la forma compuesta de Unicode (NFC), así que las anchuras cuentan los caracteres tal como se ven.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Parámetro</th>
-<th style="text-align: left;">Tipo</th>
-<th style="text-align: left;">Por defecto</th>
-<th style="text-align: left;">Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><code>concordances</code></td>
-<td style="text-align: left;"><code>list[Concordance]</code></td>
-<td style="text-align: left;">-</td>
-<td style="text-align: left;">Líneas de una concordancia</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>width</code></td>
-<td style="text-align: left;"><code>int</code></td>
-<td style="text-align: left;"><code>40</code></td>
-<td style="text-align: left;">Anchura de un contexto en caracteres</td>
-</tr>
-</tbody>
-</table>
-<p>Unas líneas que son una cadena o que no se pueden iterar lanzan <code>SourceTypeError</code>, y un <code>width</code> que no es un entero de al menos uno, <code>ParameterError</code>.</p>
-<!-- core: corpus/kwic.md:print_kwic 3ead3e5 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">print_kwic</span><span class="p">(</span><span class="n">concordances</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
-</code></pre></div>
-<p>Imprime el resultado de <code>format_kwic</code>.</p>
 <h2 id="resultado">Resultado<a class="headerlink" href="#resultado" title="Permanent link">&para;</a></h2>
 <!-- core: corpus/kwic.md:Concordance ce8d89f -->
 <div class="signature highlight"><pre><span></span><code><span class="n">Concordance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">keyword</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span>
@@ -2656,28 +2374,40 @@
 </tr>
 </tbody>
 </table>
-<h2 id="ejemplo">Ejemplo<a class="headerlink" href="#ejemplo" title="Permanent link">&para;</a></h2>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">kwic</span><span class="p">,</span> <span class="n">print_kwic</span>
-
-<span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">"El gato estaba en la ventana y miraba a los pájaros. Los pájaros se fueron y el gato "</span>
-    <span class="s2">"se durmió en la ventana. Mañana el gato volverá a estar en la ventana y mirará a los pájaros."</span>
-<span class="p">)</span>
-<span class="n">lines</span> <span class="o">=</span> <span class="n">kwic</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s2">"ventana"</span><span class="p">,</span> <span class="n">by_lemma</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="c1"># Concordance(start=21, end=28, left='estaba en la', keyword='ventana', right='y miraba a')</span>
-
-<span class="n">print_kwic</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<span class="c1">#         estaba en la  ventana  y miraba a</span>
-<span class="c1">#         durmió en la  ventana  . Mañana el gato</span>
-<span class="c1">#          estar en la  ventana  y mirará a</span>
-
-<span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">keyword</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">kwic</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s2">"mirar a los pájaros"</span><span class="p">,</span> <span class="n">by_lemma</span><span class="o">=</span><span class="kc">True</span><span class="p">)]</span>
-<span class="c1"># ['miraba a los pájaros', 'mirará a los pájaros']</span>
+<h2 id="format_kwic">Líneas alineadas<a class="headerlink" href="#format_kwic" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/kwic.md:format_kwic 4de69b2 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">format_kwic</span><span class="p">(</span><span class="n">concordances</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
 </code></pre></div>
-</div>
+<p>Alinea las líneas en la palabra clave en un texto, una línea por aparición: el contexto de la izquierda se recorta por la izquierda y se alinea a la derecha, el de la derecha se recorta por la derecha. Las líneas pueden venir de cualquier iterable y se toman en la forma compuesta de Unicode (NFC), así que las anchuras cuentan los caracteres tal como se ven.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>concordances</code></td>
+<td style="text-align: left;"><code>list[Concordance]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Líneas de una concordancia</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>width</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>40</code></td>
+<td style="text-align: left;">Anchura de un contexto en caracteres</td>
+</tr>
+</tbody>
+</table>
+<p>Unas líneas que son una cadena o que no se pueden iterar lanzan <code>SourceTypeError</code>, y un <code>width</code> que no es un entero de al menos uno, <code>ParameterError</code>.</p>
+<!-- core: corpus/kwic.md:print_kwic 3ead3e5 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">print_kwic</span><span class="p">(</span><span class="n">concordances</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</code></pre></div>
+<p>Imprime el resultado de <code>format_kwic</code>.</p>
 
 
 
@@ -2697,6 +2427,12 @@
           
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
         
       </main>
       
@@ -2754,7 +2490,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.top", "content.code.copy", "search.highlight", "search.suggest"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>

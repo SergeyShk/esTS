@@ -13,7 +13,7 @@
         <link rel="canonical" href="https://sergeyshk.github.io/esTS/es/corpus/keyness/">
       
       
-        <link rel="prev" href="../../stats/verse_stats_funcs/">
+        <link rel="prev" href="../../stats/verse_stats/">
       
       
         <link rel="next" href="../collocations/">
@@ -52,8 +52,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Source Code Pro"}</style>
       
     
     
@@ -69,6 +69,8 @@
   
   
     
+    
+      
     
     
     
@@ -124,7 +126,33 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Dark theme"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark theme" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Light theme"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light theme" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
       <div class="md-header__option">
@@ -178,6 +206,8 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
       
     </form>
     <div class="md-search__output">
@@ -902,56 +932,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Métricas de legibilidad
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_2">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Métricas de legibilidad
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../stats/readability_stats/" class="md-nav__link">
         
@@ -960,7 +940,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Métricas de legibilidad
   
 
     
@@ -973,92 +953,6 @@
   
 
               
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../stats/readability_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Funciones de las métricas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Métricas de diversidad léxica
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Métricas de diversidad léxica
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1074,7 +968,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Métricas de diversidad léxica
   
 
     
@@ -1083,42 +977,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../stats/diversity_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Funciones de las métricas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -1556,56 +1414,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_10" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_10" id="__nav_5_10_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Estadísticas del verso
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_10">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Estadísticas del verso
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../stats/verse_stats/" class="md-nav__link">
         
@@ -1614,7 +1422,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Estadísticas del verso
   
 
     
@@ -1623,42 +1431,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../stats/verse_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Funciones de las métricas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -1793,28 +1565,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Descripción
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#medidas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Medidas
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1848,13 +1598,96 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ejemplo" class="md-nav__link">
+  <a href="#medidas" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ejemplo
+        Medidas
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Medidas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#log_likelihood" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Razón de verosimilitud
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chi2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ji cuadrado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        %DIFF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#log_ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Log Ratio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BIC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ELL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#odds_ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Razón de momios
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2463,28 +2296,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Descripción
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#medidas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Medidas
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2518,13 +2329,96 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ejemplo" class="md-nav__link">
+  <a href="#medidas" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ejemplo
+        Medidas
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Medidas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#log_likelihood" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Razón de verosimilitud
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chi2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ji cuadrado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        %DIFF
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#log_ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Log Ratio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BIC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ell" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ELL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#odds_ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Razón de momios
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2549,15 +2443,261 @@
 
 
 <h1 id="palabras-clave">Palabras clave<a class="headerlink" href="#palabras-clave" title="Permanent link">&para;</a></h1>
-<div class="admonition info">
-<p><strong>ests.corpus.keyness()</strong>, <strong>ests.corpus.check_keyness_params()</strong>, <strong>ests.corpus.Keyword</strong>, <strong>ests.corpus.FrequencyReference</strong></p>
-</div>
-<h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">keyness</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="s1">'log_likelihood'</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 <!-- core: corpus/keyness.md:keyness bbbd1ba -->
 <p>Extracción de palabras clave (keyness) de un corpus objetivo frente a uno de referencia: las palabras que aparecen significativamente más a menudo en el corpus objetivo que en el de referencia.</p>
 <p>Cada palabra recibe dos valores que <a href="http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf">Gabrielatos y Marchi</a> y <a href="http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/">Hardie</a> recomiendan leer juntos: la razón de verosimilitud <span class="arithmatex">\(G^2\)</span> con su valor p (si hay una diferencia) y Log Ratio (cuán grande es), además de la medida elegida <code>score</code>, que ordena la lista. Las medidas de significación (<span class="arithmatex">\(G^2\)</span>, ji cuadrado, BIC) y ELL, el tamaño del efecto de <span class="arithmatex">\(G^2\)</span>, son negativas cuando la palabra es más frecuente en la referencia; %DIFF, Log Ratio y la razón de momios tienen dirección por construcción.</p>
 <p>La referencia puede ser una lista de palabras, un mapeo de frecuencias (su tamaño es la suma de los recuentos) o una <code>FrequencyReference</code>. Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematización y las palabras vacías corresponden al extractor de palabras, y los dos corpus tienen que extraerse del mismo modo.</p>
-<p>La función envuelve <code>keyness</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/keyness/">anyTS</a> y admite además como referencia el <a href="../../datasets/freqdict/">diccionario de frecuencias</a> <code>FreqDict</code>; <code>FrequencyReference</code> está en <code>ests.corpus</code> junto a ella, y las funciones de las medidas, en <code>ests.corpus.keyness</code>. Las palabras se extraen con <a href="../../extractors/words/"><code>WordsExtractor</code></a>.</p>
+<p>La función envuelve <code>keyness</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/keyness/">anyTS</a> y admite además como referencia el <a href="../../datasets/freqdict/">diccionario de frecuencias</a> <code>FreqDict</code>; <code>FrequencyReference</code> está en <code>ests.corpus</code> junto a ella. Las palabras se extraen con <a href="../../extractors/words/"><code>WordsExtractor</code></a>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">keyness</span>
+
+<span class="n">we</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">use_lexemes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span>
+    <span class="s2">"El gato estaba en la ventana y miraba a los pájaros. Los pájaros se fueron y el gato "</span>
+    <span class="s2">"se durmió en la ventana. Mañana el gato volverá a estar en la ventana y mirará a los pájaros."</span>
+<span class="p">)</span>
+<span class="n">reference</span> <span class="o">=</span> <span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span>
+    <span class="s2">"El perro estaba en el suelo y dormía. Después el perro comió y volvió a dormir. "</span>
+    <span class="s2">"Mañana el perro saldrá a pasear."</span>
+<span class="p">)</span>
+
+<span class="n">keyness</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">[(</span><span class="n">k</span><span class="o">.</span><span class="n">word</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">g2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keyness</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">2</span><span class="p">)]</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>[Keyword(word='gato', freq_target=3, freq_reference=0.0, ipm_target=81081.08108108108, ipm_reference=0.0, g2=2.79971718756897, p_value=0.09428093556593176, log_ratio=1.8349407537295037, score=2.79971718756897)]
+[('perro', -5.92), ('comer', -1.97)]
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/keyness.md:keyness-parameters c87c5b2 -->
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>target</code></td>
+<td style="text-align: left;"><code>list[str]</code> / <code>dict[str, int]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabras del corpus objetivo o sus frecuencias</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>reference</code></td>
+<td style="text-align: left;"><code>list[str]</code> / <code>dict[str, float]</code> / <code>FrequencyReference</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabras del corpus de referencia, sus frecuencias o una referencia por frecuencias</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>measure</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>'log_likelihood'</code></td>
+<td style="text-align: left;">Medida de <code>anyts.constants.KEYNESS_MEASURES</code> para <code>score</code> y el orden</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>min_freq</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>1</code></td>
+<td style="text-align: left;">Frecuencia mínima de una palabra clave en su propio corpus</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>positive</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>True</code></td>
+<td style="text-align: left;">Palabras clave positivas (más frecuentes en el corpus objetivo) o negativas (más frecuentes en la referencia)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>top_n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Número de palabras clave; <code>None</code> - todas</td>
+</tr>
+</tbody>
+</table>
+<p>Los parámetros y el corpus objetivo los comprueba <code>check_keyness_params</code>. Una referencia que no es una lista de cadenas, un contador ni una <code>FrequencyReference</code> lanza <code>SourceTypeError</code>, y una frecuencia negativa, <code>nan</code> o infinita de un contador y un corpus vacío lanzan <code>SourceError</code>.</p>
+<p><code>reference</code> también puede ser <code>FreqDict</code>, frente al cual <code>target</code> son formas. Un diccionario de frecuencias que no está descargado lanza <code>DatasetNotFoundError</code>. <code>keyness</code> comprueba sus parámetros y el corpus objetivo con <code>check_keyness_params</code> antes de leer <code>FreqDict</code>, así que un argumento erróneo falla antes de cargar el diccionario.</p>
+<!-- core: corpus/keyness.md:check_keyness_params 9ffcaab -->
+<div class="signature highlight"><pre><span></span><code><span class="n">check_keyness_params</span><span class="p">(</span><span class="n">measure</span><span class="o">=</span><span class="s1">'log_likelihood'</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>Comprueba los parámetros de <code>keyness</code> antes de leer un diccionario de frecuencias: lanza <code>ParameterError</code> salvo que la medida sea una de <code>KEYNESS_MEASURES</code>, la frecuencia mínima un entero y el número de palabras clave <code>None</code> o un entero de al menos uno. Con <code>target</code> lanza además <code>SourceTypeError</code> salvo que el corpus objetivo sea una lista de cadenas o un mapeo de cadenas a frecuencias enteras, y <code>SourceError</code> para una frecuencia negativa, nan o infinita.</p>
+<h2 id="referencia-por-frecuencias">Referencia por frecuencias<a class="headerlink" href="#referencia-por-frecuencias" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/keyness.md:FrequencyReference 02046dc -->
+<div class="signature highlight"><pre><span></span><code><span class="n">FrequencyReference</span><span class="p">(</span><span class="n">counts</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>Un corpus de referencia descrito solo por sus frecuencias, como un diccionario de frecuencias construido a partir de un corpus demasiado grande para pasarlo como palabras:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Campo</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>counts</code></td>
+<td style="text-align: left;"><code>dict[str, float]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Frecuencias de las claves en el corpus de referencia</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>size</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Tamaño del corpus de referencia en palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>missing</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>0.0</code></td>
+<td style="text-align: left;">Frecuencia de una clave que falta en <code>counts</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>key</code></td>
+<td style="text-align: left;"><code>Callable</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Clave de una palabra del corpus objetivo en <code>counts</code>, como su lema; <code>None</code> - la propia palabra</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>keep</code></td>
+<td style="text-align: left;"><code>Callable</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Si una palabra del corpus objetivo se cuenta; <code>None</code> - todas las palabras</td>
+</tr>
+</tbody>
+</table>
+<p>Solo se cuentan las palabras del objetivo que <code>keep</code> deja pasar, bajo su <code>key</code>, tanto en las frecuencias como en el tamaño. Una clave que falta en <code>counts</code> tiene la frecuencia <code>missing</code>, como la frecuencia mínima de un diccionario: una cota superior, así que su palabra puede ser palabra clave positiva pero nunca negativa. Las palabras clave negativas salen solo de las claves de <code>counts</code> que <code>keep</code> deja pasar. Una frecuencia se comprueba al leerla, así que para las palabras clave positivas no se recorre un diccionario grande: una que no es un número lanza <code>SourceTypeError</code>, y una negativa, <code>nan</code> o infinita, <code>SourceError</code>. Un <code>size</code> o un <code>missing</code> que no es un número finito o es negativo lanza <code>ParameterError</code>, y un <code>key</code> o un <code>keep</code> que no se puede invocar, <code>SourceTypeError</code>.</p>
+<p>El diccionario de frecuencias <code>FreqDict</code> de Google Books Ngram pasado como <code>reference</code> se convierte en una referencia así:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Campo</th>
+<th style="text-align: left;"><code>FreqDict</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>counts</code></td>
+<td style="text-align: left;">los ipm de <code>FreqDict.word_ipm</code>, incluidos los nombres propios, convertidos en apariciones en el corpus del diccionario</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>size</code></td>
+<td style="text-align: left;"><code>CORPUS_SIZE</code>, 63 000 millones de palabras de los libros de 1980-2019</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>missing</code></td>
+<td style="text-align: left;">la frecuencia mínima del diccionario <code>FreqDict.min_ipm</code>, 0,1 ipm (unas 6300 apariciones)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>key</code></td>
+<td style="text-align: left;"><a href="../../datasets/freqdict/#lemma_key"><code>lemma_key</code></a>: una palabra clave puede llevar la etiqueta de otro lema, <em>Roma</em> se cuenta bajo <code>romo</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>keep</code></td>
+<td style="text-align: left;">las formas hechas de las letras de <code>WORD_PATTERN</code>; los números y las palabras con guion o con punto quedan fuera</td>
+</tr>
+</tbody>
+</table>
+<p>El corpus objetivo tiene que contarse como se contó el diccionario: formas con las palabras vacías, no lemas - <code>lemma_key</code> no es idempotente (<code>estado</code> - <code>estar</code>), así que <code>WordsExtractor(use_lexemes=True)</code> no sirve. El diccionario describe el registro de los libros, así que las palabras clave negativas de un texto son las de la prosa académica (<code>de</code>, <code>social</code>, <code>país</code>).</p>
+<p>Frente al diccionario las palabras de una comedia de Lope de Vega del <a href="../../datasets/spanishliterature/">corpus de literatura</a> dan sus personajes:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Código</label><label for="__tabbed_2_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">keyness</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">FreqDict</span><span class="p">,</span> <span class="n">SpanishLiterature</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">SpanishLiterature</span><span class="p">()</span><span class="o">.</span><span class="n">get_texts</span><span class="p">(</span><span class="n">author</span><span class="o">=</span><span class="s2">"lope"</span><span class="p">,</span> <span class="n">genre</span><span class="o">=</span><span class="s2">"drama"</span><span class="p">))</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keyness</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">FreqDict</span><span class="p">(),</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">word</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">freq_target</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">ipm_reference</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">g2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">log_ratio</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>laurencia 135 0.32 2528.7 14.96
+mengo 105 0.13 2102.5 15.9
+comendador 154 5.33 2059.9 11.09
+frondoso 113 3.84 1515.6 11.12
+barrildo 52 0.1 995.7 15.26
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="resultado">Resultado<a class="headerlink" href="#resultado" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/keyness.md:Keyword 8a09d1b -->
+<div class="signature highlight"><pre><span></span><code><span class="n">Keyword</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">freq_target</span><span class="p">,</span> <span class="n">freq_reference</span><span class="p">,</span> <span class="n">ipm_target</span><span class="p">,</span> <span class="n">ipm_reference</span><span class="p">,</span> <span class="n">g2</span><span class="p">,</span> <span class="n">p_value</span><span class="p">,</span> <span class="n">log_ratio</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
+</code></pre></div>
+<p>Una lista de tuplas con nombre <code>Keyword</code> por keyness descendente (los empates por frecuencia descendente y alfabéticamente, las palabras de medida indefinida al final); <code>pd.DataFrame(keywords)</code> da una tabla.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Campo</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">Palabra</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>freq_target</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Frecuencia en el corpus objetivo</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>freq_reference</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">Frecuencia en el corpus de referencia</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ipm_target</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">Frecuencia en el corpus objetivo por millón de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ipm_reference</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">Frecuencia en el corpus de referencia por millón de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>g2</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><span class="arithmatex">\(G^2\)</span> con signo</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>p_value</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">Valor p de <span class="arithmatex">\(G^2\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>log_ratio</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">Log Ratio</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>score</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">Valor de la medida elegida</td>
+</tr>
+</tbody>
+</table>
 <h2 id="medidas">Medidas<a class="headerlink" href="#medidas" title="Permanent link">&para;</a></h2>
 <!-- core: corpus/keyness.md:keyness-measures 62bf3c6 -->
 <p>Las medidas de <code>measure</code> por clave, con sus nombres y descripciones en <code>anyts.constants.KEYNESS_MEASURES</code>:</p>
@@ -2653,246 +2793,87 @@
 </tbody>
 </table>
 <p>Una frecuencia nula en uno de los corpus se sustituye por 0.5 para %DIFF, Log Ratio y la razón de momios (Hardie 2014).</p>
-<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/keyness.md:keyness-parameters c87c5b2 -->
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Parámetro</th>
-<th style="text-align: left;">Tipo</th>
-<th style="text-align: left;">Por defecto</th>
-<th style="text-align: left;">Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><code>target</code></td>
-<td style="text-align: left;"><code>list[str]</code> / <code>dict[str, int]</code></td>
-<td style="text-align: left;">-</td>
-<td style="text-align: left;">Palabras del corpus objetivo o sus frecuencias</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>reference</code></td>
-<td style="text-align: left;"><code>list[str]</code> / <code>dict[str, float]</code> / <code>FrequencyReference</code></td>
-<td style="text-align: left;">-</td>
-<td style="text-align: left;">Palabras del corpus de referencia, sus frecuencias o una referencia por frecuencias</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>measure</code></td>
-<td style="text-align: left;"><code>str</code></td>
-<td style="text-align: left;"><code>'log_likelihood'</code></td>
-<td style="text-align: left;">Medida de <code>anyts.constants.KEYNESS_MEASURES</code> para <code>score</code> y el orden</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>min_freq</code></td>
-<td style="text-align: left;"><code>int</code></td>
-<td style="text-align: left;"><code>1</code></td>
-<td style="text-align: left;">Frecuencia mínima de una palabra clave en su propio corpus</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>positive</code></td>
-<td style="text-align: left;"><code>bool</code></td>
-<td style="text-align: left;"><code>True</code></td>
-<td style="text-align: left;">Palabras clave positivas (más frecuentes en el corpus objetivo) o negativas (más frecuentes en la referencia)</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>top_n</code></td>
-<td style="text-align: left;"><code>int</code></td>
-<td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Número de palabras clave; <code>None</code> - todas</td>
-</tr>
-</tbody>
-</table>
-<p>Los parámetros y el corpus objetivo los comprueba <code>check_keyness_params</code>. Una referencia que no es una lista de cadenas, un contador ni una <code>FrequencyReference</code> lanza <code>SourceTypeError</code>, y una frecuencia negativa, <code>nan</code> o infinita de un contador y un corpus vacío lanzan <code>SourceError</code>.</p>
-<p><code>reference</code> también puede ser <code>FreqDict</code>, frente al cual <code>target</code> son formas.</p>
-<!-- core: corpus/keyness.md:check_keyness_params 9ffcaab -->
-<div class="signature highlight"><pre><span></span><code><span class="n">check_keyness_params</span><span class="p">(</span><span class="n">measure</span><span class="o">=</span><span class="s1">'log_likelihood'</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<p>El módulo <code>ests.corpus.keyness</code> reexporta las funciones de las medidas (<code>from ests.corpus.keyness import calc_log_likelihood</code>).</p>
+<div class="metric-card">
+<h3 id="log_likelihood">Razón de verosimilitud<a class="headerlink" href="#log_likelihood" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>log_likelihood</code> · <code>g2</code> · <code>p_value</code> · <a href="https://ucrel.lancs.ac.uk/llwizard.html">Rayson y Garside (2000)</a></p>
+<!-- core: corpus/keyness.md:calc_log_likelihood 0a8ca96 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_log_likelihood</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 </code></pre></div>
-<p>Comprueba los parámetros de <code>keyness</code> antes de leer un diccionario de frecuencias: lanza <code>ParameterError</code> salvo que la medida sea una de <code>KEYNESS_MEASURES</code>, la frecuencia mínima un entero y el número de palabras clave <code>None</code> o un entero de al menos uno. Con <code>target</code> lanza además <code>SourceTypeError</code> salvo que el corpus objetivo sea una lista de cadenas o un mapeo de cadenas a frecuencias enteras, y <code>SourceError</code> para una frecuencia negativa, nan o infinita.</p>
-<p>En esTS <code>keyness</code> la llama por sí misma antes de leer <code>FreqDict</code>.</p>
-<h2 id="referencia-por-frecuencias">Referencia por frecuencias<a class="headerlink" href="#referencia-por-frecuencias" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/keyness.md:FrequencyReference 02046dc -->
-<div class="signature highlight"><pre><span></span><code><span class="n">FrequencyReference</span><span class="p">(</span><span class="n">counts</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<p>La razón de verosimilitud de las frecuencias de la palabra frente a las esperadas <span class="arithmatex">\(E_1\)</span> y <span class="arithmatex">\(E_2\)</span>; un término de frecuencia nula es cero. Los valores críticos son <code>anyts.constants.G2_CRITICAL_VALUES</code>: 3.84 para p &lt; 0.05, 6.63 para p &lt; 0.01, 10.83 para p &lt; 0.001, 15.13 para p &lt; 0.0001. El signo es negativo cuando la palabra es más frecuente en la referencia.</p>
+<div class="arithmatex">\[
+G^2 = 2 \left(a \ln \frac{a}{E_1} + b \ln \frac{b}{E_2}\right), \quad E_1 = \frac{c\,(a+b)}{N}, \quad E_2 = \frac{d\,(a+b)}{N}
+\]</div>
+<!-- core: corpus/keyness.md:calc_p_value 9f1c270 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_p_value</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>
 </code></pre></div>
-<p>Un corpus de referencia descrito solo por sus frecuencias, como un diccionario de frecuencias construido a partir de un corpus demasiado grande para pasarlo como palabras:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Campo</th>
-<th style="text-align: left;">Tipo</th>
-<th style="text-align: left;">Por defecto</th>
-<th style="text-align: left;">Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><code>counts</code></td>
-<td style="text-align: left;"><code>dict[str, float]</code></td>
-<td style="text-align: left;">-</td>
-<td style="text-align: left;">Frecuencias de las claves en el corpus de referencia</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>size</code></td>
-<td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;">-</td>
-<td style="text-align: left;">Tamaño del corpus de referencia en palabras</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>missing</code></td>
-<td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;"><code>0.0</code></td>
-<td style="text-align: left;">Frecuencia de una clave que falta en <code>counts</code></td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>key</code></td>
-<td style="text-align: left;"><code>Callable</code></td>
-<td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Clave de una palabra del corpus objetivo en <code>counts</code>, como su lema; <code>None</code> - la propia palabra</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>keep</code></td>
-<td style="text-align: left;"><code>Callable</code></td>
-<td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Si una palabra del corpus objetivo se cuenta; <code>None</code> - todas las palabras</td>
-</tr>
-</tbody>
-</table>
-<p>Solo se cuentan las palabras del objetivo que <code>keep</code> deja pasar, bajo su <code>key</code>, tanto en las frecuencias como en el tamaño. Una clave que falta en <code>counts</code> tiene la frecuencia <code>missing</code>, como la frecuencia mínima de un diccionario: una cota superior, así que su palabra puede ser palabra clave positiva pero nunca negativa. Las palabras clave negativas salen solo de las claves de <code>counts</code> que <code>keep</code> deja pasar. Una frecuencia se comprueba al leerla, así que para las palabras clave positivas no se recorre un diccionario grande: una que no es un número lanza <code>SourceTypeError</code>, y una negativa, <code>nan</code> o infinita, <code>SourceError</code>. Un <code>size</code> o un <code>missing</code> que no es un número finito o es negativo lanza <code>ParameterError</code>, y un <code>key</code> o un <code>keep</code> que no se puede invocar, <code>SourceTypeError</code>.</p>
-<p>El diccionario de frecuencias <code>FreqDict</code> de Google Books Ngram pasado como <code>reference</code> se convierte en una referencia así:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Campo</th>
-<th style="text-align: left;"><code>FreqDict</code></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>counts</code></td>
-<td style="text-align: left;">los ipm de <code>FreqDict.word_ipm</code>, incluidos los nombres propios, convertidos en apariciones en el corpus del diccionario</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>size</code></td>
-<td style="text-align: left;"><code>CORPUS_SIZE</code>, 63 000 millones de palabras de los libros de 1980-2019</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>missing</code></td>
-<td style="text-align: left;">la frecuencia mínima del diccionario, 0,1 ipm (unas 6300 apariciones)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>key</code></td>
-<td style="text-align: left;"><a href="../../datasets/freqdict/#lemma_key"><code>lemma_key</code></a>: una palabra clave puede llevar la etiqueta de otro lema, <em>Roma</em> se cuenta bajo <code>romo</code></td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>keep</code></td>
-<td style="text-align: left;">las formas hechas de las letras de <code>WORD_PATTERN</code>; los números y las palabras con guion o con punto quedan fuera</td>
-</tr>
-</tbody>
-</table>
-<p>El corpus objetivo tiene que contarse como se contó el diccionario: formas con las palabras vacías, no lemas - <code>lemma_key</code> no es idempotente (<code>estado</code> - <code>estar</code>), así que <code>WordsExtractor(use_lexemes=True)</code> no sirve. El diccionario describe el registro de los libros, así que las palabras clave negativas de un texto son las de la prosa académica (<code>de</code>, <code>social</code>, <code>país</code>).</p>
-<h2 id="resultado">Resultado<a class="headerlink" href="#resultado" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/keyness.md:Keyword 8a09d1b -->
-<div class="signature highlight"><pre><span></span><code><span class="n">Keyword</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">freq_target</span><span class="p">,</span> <span class="n">freq_reference</span><span class="p">,</span> <span class="n">ipm_target</span><span class="p">,</span> <span class="n">ipm_reference</span><span class="p">,</span> <span class="n">g2</span><span class="p">,</span> <span class="n">p_value</span><span class="p">,</span> <span class="n">log_ratio</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
-</code></pre></div>
-<p>Una lista de tuplas con nombre <code>Keyword</code> por keyness descendente (los empates por frecuencia descendente y alfabéticamente, las palabras de medida indefinida al final); <code>pd.DataFrame(keywords)</code> da una tabla.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Campo</th>
-<th style="text-align: left;">Tipo</th>
-<th style="text-align: left;">Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><code>word</code></td>
-<td style="text-align: left;"><code>str</code></td>
-<td style="text-align: left;">Palabra</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>freq_target</code></td>
-<td style="text-align: left;"><code>int</code></td>
-<td style="text-align: left;">Frecuencia en el corpus objetivo</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>freq_reference</code></td>
-<td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;">Frecuencia en el corpus de referencia</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>ipm_target</code></td>
-<td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;">Frecuencia en el corpus objetivo por millón de palabras</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>ipm_reference</code></td>
-<td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;">Frecuencia en el corpus de referencia por millón de palabras</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>g2</code></td>
-<td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;"><span class="arithmatex">\(G^2\)</span> con signo</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>p_value</code></td>
-<td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;">Valor p de <span class="arithmatex">\(G^2\)</span></td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>log_ratio</code></td>
-<td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;">Log Ratio</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>score</code></td>
-<td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;">Valor de la medida elegida</td>
-</tr>
-</tbody>
-</table>
-<h2 id="ejemplo">Ejemplo<a class="headerlink" href="#ejemplo" title="Permanent link">&para;</a></h2>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">keyness</span>
-
-<span class="n">we</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">use_lexemes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">target</span> <span class="o">=</span> <span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span>
-    <span class="s2">"El gato estaba en la ventana y miraba a los pájaros. Los pájaros se fueron y el gato "</span>
-    <span class="s2">"se durmió en la ventana. Mañana el gato volverá a estar en la ventana y mirará a los pájaros."</span>
-<span class="p">)</span>
-<span class="n">reference</span> <span class="o">=</span> <span class="n">we</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span>
-    <span class="s2">"El perro estaba en el suelo y dormía. Después el perro comió y volvió a dormir. "</span>
-    <span class="s2">"Mañana el perro saldrá a pasear."</span>
-<span class="p">)</span>
-
-<span class="n">keyness</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="c1"># [Keyword(word='gato', freq_target=3, freq_reference=0.0, ipm_target=81081.08108108108,</span>
-<span class="c1">#  ipm_reference=0.0, g2=2.79971718756897, p_value=0.09428093556593176,</span>
-<span class="c1">#  log_ratio=1.8349407537295037, score=2.79971718756897)]</span>
-
-<span class="p">[(</span><span class="n">k</span><span class="o">.</span><span class="n">word</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">g2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keyness</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">2</span><span class="p">)]</span>
-<span class="c1"># [('perro', -5.92), ('comer', -1.97)]</span>
-</code></pre></div>
+<p>El valor p de un <span class="arithmatex">\(G^2\)</span> o de un ji cuadrado, sea cual sea su signo, según la distribución ji cuadrado con un grado de libertad; un array de valores da un array.</p>
 </div>
-<p>Frente al <a href="../../datasets/freqdict/">diccionario de frecuencias</a> las palabras de una comedia de Lope de Vega del <a href="../../datasets/spanishliterature/">corpus de literatura</a> dan sus personajes:</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">WordsExtractor</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">keyness</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">FreqDict</span><span class="p">,</span> <span class="n">SpanishLiterature</span>
-
-<span class="n">text</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">SpanishLiterature</span><span class="p">()</span><span class="o">.</span><span class="n">get_texts</span><span class="p">(</span><span class="n">author</span><span class="o">=</span><span class="s2">"lope"</span><span class="p">,</span> <span class="n">genre</span><span class="o">=</span><span class="s2">"drama"</span><span class="p">))</span>
-<span class="n">words</span> <span class="o">=</span> <span class="n">WordsExtractor</span><span class="p">(</span><span class="n">lowercase</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keyness</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">FreqDict</span><span class="p">(),</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">word</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">freq_target</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">ipm_reference</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">g2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">k</span><span class="o">.</span><span class="n">log_ratio</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-<span class="c1"># laurencia 135 0.32 2528.7 14.96</span>
-<span class="c1"># mengo 105 0.13 2102.5 15.9</span>
-<span class="c1"># comendador 154 5.33 2059.9 11.09</span>
-<span class="c1"># frondoso 113 3.84 1515.6 11.12</span>
-<span class="c1"># barrildo 52 0.1 995.7 15.26</span>
+<div class="metric-card">
+<h3 id="chi2">Ji cuadrado<a class="headerlink" href="#chi2" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>chi2</code></p>
+<!-- core: corpus/keyness.md:calc_chi2 9925633 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_chi2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 </code></pre></div>
+<p>El ji cuadrado con la corrección de Yates sobre la tabla de contingencia 2×2 de la palabra y las demás palabras de cada corpus. Cuando la corrección supera la diferencia, el estadístico es cero. El signo es negativo cuando la palabra es más frecuente en la referencia.</p>
+<div class="arithmatex">\[
+\chi^2 = \frac{N\,\max(\lvert a(d-b) - b(c-a) \rvert - N/2,\ 0)^2}{(a+b)(N-a-b)\,c\,d}
+\]</div>
+</div>
+<div class="metric-card">
+<h3 id="diff">%DIFF<a class="headerlink" href="#diff" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>diff</code> · <a href="http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf">Gabrielatos y Marchi (2011)</a></p>
+<!-- core: corpus/keyness.md:calc_diff d06d112 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_diff</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+</code></pre></div>
+<p>La diferencia de las frecuencias <span class="arithmatex">\(NF\)</span> por millón de palabras, en porcentaje de la frecuencia en la referencia.</p>
+<div class="arithmatex">\[
+\frac{NF_a - NF_b}{NF_b} \cdot 100
+\]</div>
+</div>
+<div class="metric-card">
+<h3 id="log_ratio">Log Ratio<a class="headerlink" href="#log_ratio" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>log_ratio</code> · <a href="http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/">Hardie (2014)</a></p>
+<!-- core: corpus/keyness.md:calc_log_ratio dfc5efc -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_log_ratio</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+</code></pre></div>
+<p>El logaritmo binario de la razón de las frecuencias <span class="arithmatex">\(NF\)</span> por millón de palabras: uno significa que la palabra es el doble de frecuente en el corpus objetivo.</p>
+<div class="arithmatex">\[
+\log_2 \frac{NF_a}{NF_b}
+\]</div>
+</div>
+<div class="metric-card">
+<h3 id="bic">BIC<a class="headerlink" href="#bic" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>bic</code> · Wilson (2013)</p>
+<!-- core: corpus/keyness.md:calc_bic 1d500ea -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_bic</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+</code></pre></div>
+<p>El criterio de información bayesiano de <span class="arithmatex">\(G^2\)</span>. En valor absoluto, por encima de 2 es un indicio positivo de una diferencia, por encima de 6 un indicio fuerte, por encima de 10 muy fuerte; un valor de signo contrario al de <span class="arithmatex">\(G^2\)</span>, cuando <span class="arithmatex">\(\lvert G^2 \rvert &lt; \ln N\)</span>, significa ausencia de indicio, no la dirección contraria.</p>
+<div class="arithmatex">\[
+\operatorname{sign}(G^2) \cdot (\lvert G^2 \rvert - \ln N)
+\]</div>
+</div>
+<div class="metric-card">
+<h3 id="ell">ELL<a class="headerlink" href="#ell" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>ell</code> · Johnston, Berry y Mielke (2006)</p>
+<!-- core: corpus/keyness.md:calc_ell 43cc977 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_ell</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+</code></pre></div>
+<p>El tamaño del efecto de <span class="arithmatex">\(G^2\)</span>: la proporción de la mayor desviación posible respecto de las frecuencias esperadas <span class="arithmatex">\(E_1\)</span> y <span class="arithmatex">\(E_2\)</span>. Crece sin límite a medida que la menor frecuencia esperada se acerca a uno y es <code>nan</code> cuando esa frecuencia es como mucho uno (un logaritmo nulo o negativo). El signo es negativo cuando la palabra es más frecuente en la referencia.</p>
+<div class="arithmatex">\[
+\frac{G^2}{N \ln \min(E_1, E_2)}
+\]</div>
+</div>
+<div class="metric-card">
+<h3 id="odds_ratio">Razón de momios<a class="headerlink" href="#odds_ratio" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>odds_ratio</code></p>
+<!-- core: corpus/keyness.md:calc_odds_ratio 836cc61 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_odds_ratio</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+</code></pre></div>
+<p>La razón de los momios de la palabra en los dos corpus: uno significa momios iguales. Una palabra que ocupa todo el corpus objetivo da <code>inf</code>, toda la referencia, 0, los dos, <code>nan</code>.</p>
+<div class="arithmatex">\[
+\frac{a / (c - a)}{b / (d - b)}
+\]</div>
 </div>
 
 
@@ -2913,6 +2894,12 @@
           
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
         
       </main>
       
@@ -2970,7 +2957,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.top", "content.code.copy", "search.highlight", "search.suggest"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>

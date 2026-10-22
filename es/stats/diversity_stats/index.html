@@ -13,10 +13,10 @@
         <link rel="canonical" href="https://sergeyshk.github.io/esTS/es/stats/diversity_stats/">
       
       
-        <link rel="prev" href="../readability_stats_funcs/">
+        <link rel="prev" href="../readability_stats/">
       
       
-        <link rel="next" href="../diversity_stats_funcs/">
+        <link rel="next" href="../morph_stats/">
       
       
         
@@ -31,7 +31,7 @@
     
     
       
-        <title>Módulo de las métricas - esTS</title>
+        <title>Métricas de diversidad léxica - esTS</title>
       
     
     
@@ -52,8 +52,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Source Code Pro"}</style>
       
     
     
@@ -69,6 +69,8 @@
   
   
     
+    
+      
     
     
     
@@ -116,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Módulo de las métricas
+              Métricas de diversidad léxica
             
           </span>
         </div>
@@ -124,7 +126,33 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Dark theme"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark theme" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Light theme"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light theme" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
       <div class="md-header__option">
@@ -178,6 +206,8 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
       
     </form>
     <div class="md-search__output">
@@ -907,56 +937,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Métricas de legibilidad
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_2">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Métricas de legibilidad
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../readability_stats/" class="md-nav__link">
         
@@ -965,7 +945,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Métricas de legibilidad
   
 
     
@@ -978,94 +958,6 @@
   
 
               
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../readability_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Funciones de las métricas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Métricas de diversidad léxica
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_5_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Métricas de diversidad léxica
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1090,7 +982,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Métricas de diversidad léxica
   
 
     
@@ -1108,7 +1000,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Métricas de diversidad léxica
   
 
     
@@ -1134,17 +1026,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Descripción
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1167,13 +1048,404 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#atributos" class="md-nav__link">
+  <a href="#metricas" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Atributos
+        Métricas
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Métricas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ttr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type-Token Ratio (TTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rttr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Root Type-Token Ratio (RTTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cttr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Corrected Type-Token Ratio (CTTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#httr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Herdan Type-Token Ratio (HTTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sttr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summer Type-Token Ratio (STTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mttr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maas Type-Token Ratio (MTTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dttr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dugast Type-Token Ratio (DTTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mattr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Moving Average Type-Token Ratio (MATTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msttr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mean Segmental Type-Token Ratio (MSTTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mtld" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Measure of Textual Lexical Diversity (MTLD)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mamtld" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Moving Average Measure of Textual Lexical Diversity (MA-MTLD)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mtldw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MTLD con ventana móvil y vuelta al inicio del texto (MTLD-W)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hdd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hypergeometric Distribution D (HD-D)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simpson_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índice de Simpson (D)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inverse_simpson_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índice de Simpson inverso (1/D)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gini_simpson_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índice de Gini-Simpson (1-D)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hapax_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índice de hápax (R de Honoré)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frequency_spectrum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Espectro de frecuencias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yule_k" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Característica de Yule (K de Yule)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yule_i" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Característica inversa de Yule (I de Yule)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#herdan_vm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vm de Herdan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sichel_s" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S de Sichel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#michea_m" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M de Michéa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#brunet_w" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        W de Brunet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dugast_k" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        k de Dugast
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#baayen_p" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        P de Baayen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hapax_ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Proporción de hápax
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alpha2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El exponente α₂
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entropy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entropía de Shannon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evenness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Equitatividad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#perplexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Perplejidad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zipf_alpha" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pendiente de la ley de Zipf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fit_zipf_mandelbrot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ajuste de Zipf-Mandelbrot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#heaps_beta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exponente de la ley de Heaps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windowed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cálculo por ventanas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1186,86 +1458,11 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Métodos">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#windowed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        windowed
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_stats" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_stats
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#print_stats" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        print_stats
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
     </ul>
   
 </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../diversity_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Funciones de las métricas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
       
     </li>
   
@@ -1704,56 +1901,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_10" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_10" id="__nav_5_10_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Estadísticas del verso
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_10_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_10">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Estadísticas del verso
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../verse_stats/" class="md-nav__link">
         
@@ -1762,7 +1909,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Estadísticas del verso
   
 
     
@@ -1771,42 +1918,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../verse_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Funciones de las métricas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -2493,17 +2604,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Descripción
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2526,13 +2626,404 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#atributos" class="md-nav__link">
+  <a href="#metricas" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Atributos
+        Métricas
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Métricas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ttr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Type-Token Ratio (TTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rttr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Root Type-Token Ratio (RTTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cttr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Corrected Type-Token Ratio (CTTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#httr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Herdan Type-Token Ratio (HTTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sttr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summer Type-Token Ratio (STTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mttr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maas Type-Token Ratio (MTTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dttr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dugast Type-Token Ratio (DTTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mattr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Moving Average Type-Token Ratio (MATTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#msttr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mean Segmental Type-Token Ratio (MSTTR)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mtld" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Measure of Textual Lexical Diversity (MTLD)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mamtld" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Moving Average Measure of Textual Lexical Diversity (MA-MTLD)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mtldw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MTLD con ventana móvil y vuelta al inicio del texto (MTLD-W)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hdd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hypergeometric Distribution D (HD-D)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simpson_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índice de Simpson (D)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inverse_simpson_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índice de Simpson inverso (1/D)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gini_simpson_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índice de Gini-Simpson (1-D)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hapax_index" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Índice de hápax (R de Honoré)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frequency_spectrum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Espectro de frecuencias
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yule_k" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Característica de Yule (K de Yule)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yule_i" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Característica inversa de Yule (I de Yule)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#herdan_vm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vm de Herdan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sichel_s" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S de Sichel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#michea_m" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M de Michéa
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#brunet_w" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        W de Brunet
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dugast_k" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        k de Dugast
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#baayen_p" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        P de Baayen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hapax_ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Proporción de hápax
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alpha2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El exponente α₂
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entropy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entropía de Shannon
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evenness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Equitatividad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#perplexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Perplejidad
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zipf_alpha" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pendiente de la ley de Zipf
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fit_zipf_mandelbrot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ajuste de Zipf-Mandelbrot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#heaps_beta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exponente de la ley de Heaps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windowed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cálculo por ventanas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -2544,45 +3035,6 @@
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Métodos">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#windowed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        windowed
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_stats" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_stats
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#print_stats" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        print_stats
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2607,69 +3059,126 @@
 
 
 <h1 id="metricas-de-diversidad-lexica">Métricas de diversidad léxica<a class="headerlink" href="#metricas-de-diversidad-lexica" title="Permanent link">&para;</a></h1>
-<div class="admonition info">
-<p><strong>ests.diversity_stats.DiversityStats</strong></p>
-</div>
-<h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">DiversityStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">mtld_threshold</span><span class="o">=</span><span class="mf">0.72</span><span class="p">,</span> <span class="n">mtld_min_len</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">hdd_sample_size</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">log_base</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
 <!-- core: stats/diversity_stats.md:DiversityStats 62610fe -->
 <p>Las principales métricas de <a href="https://en.wikipedia.org/wiki/Lexical_diversity">diversidad léxica</a> de un texto, calculadas a partir de sus palabras.</p>
-<p>La clase extiende el <code>DiversityStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/diversity_stats/">anyTS</a>: en lugar de una lista de palabras recibe un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>.</p>
-<p>Las palabras pueden extraerse con un <a href="../../extractors/words/"><code>WordsExtractor</code></a> ya configurado; para un <code>Doc</code>, el extractor indicado se aplica a su texto, y sin él las palabras salen de sus tokens. Las palabras siempre se pasan a minúsculas, porque todas las métricas cuentan lexemas.</p>
+<p>Excepciones:</p>
+<ul>
+<li><code>SourceTypeError</code> - una fuente que no es ni una cadena ni un <code>Doc</code>, un extractor de otro tipo;</li>
+<li><code>SourceError</code> - una fuente sin palabras, una cadena con un carácter sin forma UTF-8;</li>
+<li><code>ParameterError</code> - un parámetro que <code>check_params</code> rechaza.</li>
+</ul>
+<p>La clase extiende el <code>DiversityStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/diversity_stats/">anyTS</a>: en lugar de una lista de palabras recibe un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>. Las palabras de un texto las extrae el <a href="../../extractors/words/"><code>WordsExtractor</code></a> español o uno indicado, que para un <code>Doc</code> se aplica a su texto; sin extractor, las palabras de un <code>Doc</code> salen de sus tokens. Las palabras siempre se pasan a minúsculas, porque todas las métricas cuentan lexemas. La tabla de <code>print_stats</code> lleva las descripciones inglesas de las métricas del núcleo, <code>anyts.constants.DIVERSITY_STATS_DESC</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiversityStats</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"Pies no tengo, ando; boca no tengo, hablo: cuándo dormir, cuándo levantarse, cuándo empezar labores"</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">DiversityStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="n">ds</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>                                Metric                                 |  Value
+----------------------------------------------------------------------------------
+Type-Token Ratio (TTR)                                                 |   0.73
+Root Type-Token Ratio (RTTR)                                           |   2.84
+Corrected Type-Token Ratio (CTTR)                                      |   2.01
+Herdan Type-Token Ratio (HTTR)                                         |   0.89
+Summer Type-Token Ratio (STTR)                                         |   0.25
+Maas Type-Token Ratio (MTTR)                                           |   0.10
+Dugast Type-Token Ratio (DTTR)                                         |  10.27
+Moving Average Type-Token Ratio (MATTR)                                |   0.73
+Mean Segmental Type-Token Ratio (MSTTR)                                |   0.73
+Measure of Textual Lexical Diversity (MTLD)                            |  15.00
+Moving Average Measure of Textual Lexical Diversity (MA-MTLD)          |  12.00
+Moving Average Measure of Textual Lexical Diversity with Wrap (MTLD-W) |  13.25
+Hypergeometric Distribution D (HD-D)                                   |   nan
+Simpson's index (D)                                                    |   0.05
+Inverse Simpson's index (1/D)                                          |  21.00
+Gini-Simpson index (1-D)                                               |   0.95
+Hapax index (Honoré's R)                                               |  992.95
+Yule's characteristic K                                                |  444.44
+Yule's inverse characteristic I                                        |   8.64
+Herdan's Vm                                                            |   0.14
+Sichel's S                                                             |   0.18
+Michéa's M                                                             |   5.50
+Brunet's W                                                             |   6.01
+Dugast's k                                                             |  14.78
+Baayen's P                                                             |   0.53
+Hapax ratio                                                            |   0.73
+Exponent α₂                                                            |   0.50
+Shannon entropy (bits)                                                 |   3.32
+Evenness                                                               |   0.96
+Perplexity                                                             |  10.01
+Zipf's law slope (α)                                                   |   0.49
+Heaps' law exponent (β)                                                |   0.84
+</code></pre></div>
+</div>
+</div>
+</div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Por defecto</th>
-<th style="text-align: center;">Descripción</th>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><code>source</code></td>
-<td style="text-align: center;">str/Doc</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Fuente de datos (cadena u objeto Doc)</td>
+<td style="text-align: left;"><code>source</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Fuente de datos</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>words_extractor</code></td>
-<td style="text-align: center;">WordsExtractor</td>
-<td style="text-align: center;"><code>None</code></td>
-<td style="text-align: center;">Herramienta de extracción de palabras; para un Doc se aplica a su texto cuando se indica</td>
+<td style="text-align: left;"><code>words_extractor</code></td>
+<td style="text-align: left;"><code>WordsExtractor</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Herramienta de extracción de palabras; para un <code>Doc</code> se aplica a su texto</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>window_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>50</code></td>
-<td style="text-align: center;">Tamaño de la ventana para MATTR y del segmento para MSTTR</td>
+<td style="text-align: left;"><code>window_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>50</code></td>
+<td style="text-align: left;">Tamaño de la ventana para MATTR y del segmento para MSTTR (<code>MATTR_WINDOW_LEN</code>)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>mtld_threshold</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><code>0.72</code></td>
-<td style="text-align: center;">Umbral de TTR para MTLD, MA-MTLD y MTLD-W</td>
+<td style="text-align: left;"><code>mtld_threshold</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>0.72</code></td>
+<td style="text-align: left;">Umbral de TTR para MTLD, MA-MTLD y MTLD-W (<code>MTLD_TTR_THRESHOLD</code>)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>mtld_min_len</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Longitud mínima del factor para MTLD, MA-MTLD y MTLD-W</td>
+<td style="text-align: left;"><code>mtld_min_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Longitud mínima del factor para MTLD, MA-MTLD y MTLD-W (<code>MTLD_MIN_LEN</code>)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>hdd_sample_size</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;"><code>42</code></td>
-<td style="text-align: center;">Tamaño de la muestra para HD-D</td>
+<td style="text-align: left;"><code>hdd_sample_size</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>42</code></td>
+<td style="text-align: left;">Tamaño de la muestra para HD-D (<code>HDD_SAMPLE_SIZE</code>)</td>
 </tr>
 <tr>
-<td style="text-align: center;"><code>log_base</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;"><code>10</code></td>
-<td style="text-align: center;">Base del logaritmo para las métricas de Summer, Maas y Dugast</td>
+<td style="text-align: left;"><code>log_base</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Base del logaritmo para las métricas de Summer, Maas y Dugast (<code>DIVERSITY_LOG_BASE</code>)</td>
 </tr>
 </tbody>
 </table>
+<p>Las constantes de los valores por defecto entre paréntesis, aquí y en las tarjetas, son las de <code>anyts.constants</code>.</p>
+<!-- core: stats/diversity_stats.md:DiversityStats-attributes 2e73f9a -->
+<p>El objeto guarda las palabras en <code>words</code>, una tupla, y los cinco parámetros con sus nombres, modificables en el objeto. <code>frequency_spectrum</code> es el espectro de frecuencias de las palabras (<code>calc_frequency_spectrum</code>), y <code>honore_r</code>, un alias de <code>hapax_index</code>.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">check_params</span><span class="p">(</span><span class="n">window_len</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">mtld_threshold</span><span class="o">=</span><span class="mf">0.72</span><span class="p">,</span> <span class="n">mtld_min_len</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">hdd_sample_size</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">log_base</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">MESSAGES</span><span class="p">)</span>
+</code></pre></div>
 <!-- core: stats/diversity_stats.md:check_params 84612a6 -->
 <p>Comprueba los parámetros de las métricas: un <code>window_len</code> o un <code>hdd_sample_size</code> que no es un entero de al menos uno, un <code>mtld_min_len</code> que no es un entero no negativo, un <code>mtld_threshold</code> que no es un número en (0, 1) y un <code>log_base</code> que no es un número finito mayor que 1 lanzan <code>ParameterError</code>. Llamada antes de extraer las palabras, señala un parámetro erróneo antes que un texto vacío.</p>
 <h2 id="conventions">Convenciones<a class="headerlink" href="#conventions" title="Permanent link">&para;</a></h2>
@@ -2717,125 +3226,1418 @@
 </tbody>
 </table>
 <p>Según Zenker y Kyle (2021), MATTR, MTLD y HD-D son estables en textos de 50-200 palabras o más, MTLD-W, MA-MTLD y Maas son inestables en textos cortos, y la familia de TTR nunca se estabiliza. Los textos de distinta longitud se comparan mediante el <a href="#windowed">cálculo por ventanas</a> con intervalos de confianza.</p>
-<h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
-<!-- core: stats/diversity_stats.md:DiversityStats-attributes 2e73f9a -->
-<p>El objeto guarda las palabras en <code>words</code>, una tupla, y los cinco parámetros con sus nombres, modificables en el objeto. <code>frequency_spectrum</code> es el espectro de frecuencias de las palabras (<code>calc_frequency_spectrum</code>), y <code>honore_r</code>, un alias de <code>hapax_index</code>.</p>
+<h2 id="metricas">Métricas<a class="headerlink" href="#metricas" title="Permanent link">&para;</a></h2>
+<!-- core: stats/diversity_stats.md:DiversityStats-metrics bc5ee7c -->
+<p>Cada métrica es una propiedad del objeto, calculada en cada acceso por la función de su tarjeta con los parámetros del objeto, y <code>get_stats</code> las da todas.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Métrica</th>
+<th style="text-align: left;">Qué mide</th>
+<th style="text-align: left;">Rango</th>
+<th style="text-align: left;">Un valor mayor indica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><a href="#ttr"><code>ttr</code></a></td>
+<td style="text-align: left;">Proporción de lexemas entre las palabras</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#rttr"><code>rttr</code></a></td>
+<td style="text-align: left;">Lexemas frente a la raíz cuadrada de las palabras</td>
+<td style="text-align: left;">0 o más</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#cttr"><code>cttr</code></a></td>
+<td style="text-align: left;">Lexemas frente a la raíz cuadrada del doble de las palabras</td>
+<td style="text-align: left;">0 o más</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#httr"><code>httr</code></a></td>
+<td style="text-align: left;">Lexemas frente a las palabras en logaritmos</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#sttr"><code>sttr</code></a></td>
+<td style="text-align: left;">Lexemas frente a las palabras en logaritmos dobles</td>
+<td style="text-align: left;">1 o menos, <code>nan</code> con un solo lexema o en un texto no más largo que la base</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#mttr"><code>mttr</code></a></td>
+<td style="text-align: left;">Repetición de las palabras en logaritmos</td>
+<td style="text-align: left;">0 o más</td>
+<td style="text-align: left;">Un vocabulario más pobre</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#dttr"><code>dttr</code></a></td>
+<td style="text-align: left;">Recíproco de la métrica de Maas</td>
+<td style="text-align: left;">0 o más, <code>inf</code> sin palabras repetidas</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#mattr"><code>mattr</code></a></td>
+<td style="text-align: left;">TTR medio de una ventana móvil</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#msttr"><code>msttr</code></a></td>
+<td style="text-align: left;">TTR medio de segmentos consecutivos</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#mtld"><code>mtld</code></a></td>
+<td style="text-align: left;">Palabras por factor, un tramo en el que el TTR baja hasta el umbral</td>
+<td style="text-align: left;">Más de 0, <code>inf</code> sin palabras repetidas</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#mamtld"><code>mamtld</code></a></td>
+<td style="text-align: left;">Longitud media de los factores que empiezan en cada palabra</td>
+<td style="text-align: left;">Hasta el número de palabras, <code>nan</code> si ningún factor se completa</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#mtldw"><code>mtldw</code></a></td>
+<td style="text-align: left;">Longitud media de los factores que empiezan en cada palabra, con vuelta al inicio del texto</td>
+<td style="text-align: left;">Hasta el número de palabras, <code>nan</code> si ningún factor se completa</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#hdd"><code>hdd</code></a></td>
+<td style="text-align: left;">TTR esperado de una muestra aleatoria</td>
+<td style="text-align: left;">0-1, <code>nan</code> con menos de 50 palabras o menos palabras que la muestra</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#simpson_index"><code>simpson_index</code></a></td>
+<td style="text-align: left;">Probabilidad de que dos palabras sean el mismo lexema</td>
+<td style="text-align: left;">0-1, <code>nan</code> con menos de dos palabras</td>
+<td style="text-align: left;">Un vocabulario más pobre</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#inverse_simpson_index"><code>inverse_simpson_index</code></a></td>
+<td style="text-align: left;">Número efectivo de lexemas de orden dos</td>
+<td style="text-align: left;">1 o más, <code>inf</code> sin palabras repetidas, <code>nan</code> con menos de dos palabras</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#gini_simpson_index"><code>gini_simpson_index</code></a></td>
+<td style="text-align: left;">Probabilidad de que dos palabras sean lexemas distintos</td>
+<td style="text-align: left;">0-1, <code>nan</code> con menos de dos palabras</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#hapax_index"><code>hapax_index</code></a></td>
+<td style="text-align: left;">Proporción de hápax entre los lexemas frente a la longitud</td>
+<td style="text-align: left;">0 o más, <code>inf</code> sin palabras repetidas, <code>nan</code> con menos de dos palabras</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#yule_k"><code>yule_k</code></a></td>
+<td style="text-align: left;">Repetición de las palabras</td>
+<td style="text-align: left;">0-10 000, <code>nan</code> con menos de dos palabras</td>
+<td style="text-align: left;">Un vocabulario más pobre</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#yule_i"><code>yule_i</code></a></td>
+<td style="text-align: left;">Inversa de la K de Yule</td>
+<td style="text-align: left;">Más de 0, <code>inf</code> sin palabras repetidas, <code>nan</code> con menos de dos palabras</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#herdan_vm"><code>herdan_vm</code></a></td>
+<td style="text-align: left;">Desigualdad de las frecuencias</td>
+<td style="text-align: left;">0-1, <code>nan</code> con menos de dos palabras</td>
+<td style="text-align: left;">Un vocabulario más pobre</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#sichel_s"><code>sichel_s</code></a></td>
+<td style="text-align: left;">Proporción de dis legomena entre los lexemas</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">Más lexemas usados dos veces</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#michea_m"><code>michea_m</code></a></td>
+<td style="text-align: left;">Lexemas por dis legomenon</td>
+<td style="text-align: left;">1 o más, <code>inf</code> sin dis legomena</td>
+<td style="text-align: left;">Menos lexemas usados dos veces</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#brunet_w"><code>brunet_w</code></a></td>
+<td style="text-align: left;">Palabras frente a los lexemas</td>
+<td style="text-align: left;">De 1 al número de palabras</td>
+<td style="text-align: left;">Un vocabulario más pobre</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#dugast_k"><code>dugast_k</code></a></td>
+<td style="text-align: left;">Lexemas frente a las palabras en logaritmos</td>
+<td style="text-align: left;">0 o más, <code>nan</code> en un texto no más largo que la base</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#baayen_p"><code>baayen_p</code></a></td>
+<td style="text-align: left;">Proporción de hápax entre las palabras</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">Un vocabulario que crece más deprisa</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#hapax_ratio"><code>hapax_ratio</code></a></td>
+<td style="text-align: left;">Proporción de hápax entre los lexemas</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">Más lexemas usados una sola vez</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#alpha2"><code>alpha2</code></a></td>
+<td style="text-align: left;">Forma de la parte baja del espectro de frecuencias</td>
+<td style="text-align: left;">1 o menos, <code>nan</code> sin hápax</td>
+<td style="text-align: left;">Más hápax frente a dis legomena</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#entropy"><code>entropy</code></a></td>
+<td style="text-align: left;">Información por palabra en bits</td>
+<td style="text-align: left;">0 o más</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#evenness"><code>evenness</code></a></td>
+<td style="text-align: left;">Entropía frente a su máximo</td>
+<td style="text-align: left;">0-1, <code>nan</code> con un solo lexema</td>
+<td style="text-align: left;">Frecuencias más uniformes</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#perplexity"><code>perplexity</code></a></td>
+<td style="text-align: left;">Número efectivo de lexemas</td>
+<td style="text-align: left;">De 1 al número de lexemas</td>
+<td style="text-align: left;">Un vocabulario más rico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#zipf_alpha"><code>zipf_alpha</code></a></td>
+<td style="text-align: left;">Caída de la frecuencia con el rango</td>
+<td style="text-align: left;">0 o más, <code>nan</code> con un solo lexema</td>
+<td style="text-align: left;">Frecuencias que caen más deprisa</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#heaps_beta"><code>heaps_beta</code></a></td>
+<td style="text-align: left;">Crecimiento del vocabulario con la longitud</td>
+<td style="text-align: left;">0 o más, <code>nan</code> con menos de dos palabras</td>
+<td style="text-align: left;">Un vocabulario que crece más deprisa</td>
+</tr>
+</tbody>
+</table>
+<p>Las funciones y las tuplas con nombre de las tarjetas se importan de <code>ests.diversity_stats</code>.</p>
+<div class="metric-card">
+<h3 id="ttr">Type-Token Ratio (TTR)<a class="headerlink" href="#ttr" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>ttr</code></p>
+<!-- core: stats/diversity_stats.md:calc_ttr 4982ca2 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_ttr</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La medida más simple de la diversidad léxica; no está corregida por la longitud del texto.</p>
+<div class="arithmatex">\[
+\frac{\textrm{Número de lexemas}}{\textrm{Número de palabras}}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="rttr">Root Type-Token Ratio (RTTR)<a class="headerlink" href="#rttr" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>rttr</code></p>
+<!-- core: stats/diversity_stats.md:calc_rttr 565f2bc -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_rttr</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Una modificación del TTR (Guiraud, 1960).</p>
+<div class="arithmatex">\[
+\frac{\textrm{Número de lexemas}}{\sqrt{\textrm{(Número de palabras)}}}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="cttr">Corrected Type-Token Ratio (CTTR)<a class="headerlink" href="#cttr" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>cttr</code></p>
+<!-- core: stats/diversity_stats.md:calc_cttr 06c97ca -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_cttr</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Una modificación del TTR (Carroll, 1964).</p>
+<div class="arithmatex">\[
+\frac{\textrm{Número de lexemas}}{\sqrt{2\times\textrm{(Número de palabras)}}}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="httr">Herdan Type-Token Ratio (HTTR)<a class="headerlink" href="#httr" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>httr</code></p>
+<!-- core: stats/diversity_stats.md:calc_httr 42487d4 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_httr</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Una modificación logarítmica del TTR (Herdan, 1960).</p>
+<div class="arithmatex">\[
+\frac{\log_{10} {\textrm{(Número de lexemas)}}}{\log_{10} {{\textrm{(Número de palabras)}}}}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="sttr">Summer Type-Token Ratio (STTR)<a class="headerlink" href="#sttr" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>sttr</code></p>
+<!-- core: stats/diversity_stats.md:calc_sttr 1847a8d -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_sttr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+<p>Una modificación logarítmica del TTR (Summer, 1966). El valor depende de la base del logaritmo (véanse las <a href="#conventions">convenciones</a>). Es <code>nan</code> en un texto de un solo lexema, donde el numerador no está definido, y en un texto no más largo que la base (<span class="arithmatex">\(\log \log N \le 0\)</span>), incluidas las ventanas así de cortas de <code>calc_windowed</code>.</p>
+<div class="arithmatex">\[
+\frac{\log_{10} {\log_{10} {\textrm{(Número de lexemas)}}}}{\log_{10} {\log_{10} {{\textrm{(Número de palabras)}}}}}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>base</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Base del logaritmo (<code>DIVERSITY_LOG_BASE</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Una <code>base</code> que no es un número finito mayor que 1 lanza <code>ParameterError</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="mttr">Maas Type-Token Ratio (MTTR)<a class="headerlink" href="#mttr" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>mttr</code></p>
+<!-- core: stats/diversity_stats.md:calc_mttr 4d5f1b1 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_mttr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+<p>Una modificación logarítmica del TTR (Maas, 1972). El valor depende de la base del logaritmo (véanse las <a href="#conventions">convenciones</a>).</p>
+<div class="arithmatex">\[
+\frac{\log_{10} {\textrm{(Número de palabras)}}-\log_{10} {\textrm{(Número de lexemas)}}}{\log_{10} {{\textrm{(Número de palabras)}}}^2}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>base</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Base del logaritmo (<code>DIVERSITY_LOG_BASE</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Una <code>base</code> que no es un número finito mayor que 1 lanza <code>ParameterError</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="dttr">Dugast Type-Token Ratio (DTTR)<a class="headerlink" href="#dttr" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>dttr</code></p>
+<!-- core: stats/diversity_stats.md:calc_dttr 654db67 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_dttr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+<p>Una modificación logarítmica del TTR (Dugast, 1978), el recíproco de la métrica de Maas. El valor depende de la base del logaritmo (véanse las <a href="#conventions">convenciones</a>). Un texto sin palabras repetidas tiene un valor infinito.</p>
+<div class="arithmatex">\[
+\frac{\log_{10} {{\textrm{(Número de palabras)}}}^2}{\log_{10} {\textrm{(Número de palabras)}}-\log_{10} {\textrm{(Número de lexemas)}}}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>base</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Base del logaritmo (<code>DIVERSITY_LOG_BASE</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Una <code>base</code> que no es un número finito mayor que 1 lanza <code>ParameterError</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="mattr">Moving Average Type-Token Ratio (MATTR)<a class="headerlink" href="#mattr" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>mattr</code></p>
+<!-- core: stats/diversity_stats.md:calc_mattr e57be40 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_mattr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</code></pre></div>
+<p>Una modificación del TTR con media móvil (Covington &amp; McFall, 2010), independiente de la longitud del texto: una ventana de tamaño fijo se desliza por el texto y se promedia el TTR de cada ventana. En los textos más cortos que la ventana se devuelve el TTR de todo el texto.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>window_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>50</code></td>
+<td style="text-align: left;">Tamaño de la ventana (<code>MATTR_WINDOW_LEN</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Un <code>window_len</code> que no es un entero de al menos uno lanza <code>ParameterError</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="msttr">Mean Segmental Type-Token Ratio (MSTTR)<a class="headerlink" href="#msttr" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>msttr</code></p>
+<!-- core: stats/diversity_stats.md:calc_msttr 21799ac -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_msttr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">segment_len</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</code></pre></div>
+<p>Una modificación del TTR por segmentación (Johnson, 1944), independiente de la longitud del texto: el texto se divide en segmentos de tamaño fijo y se promedia el TTR de cada segmento; un último segmento incompleto se descarta. En los textos más cortos que el segmento se devuelve el TTR de todo el texto.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>segment_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>50</code></td>
+<td style="text-align: left;">Tamaño del segmento (<code>MATTR_WINDOW_LEN</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Un <code>segment_len</code> que no es un entero de al menos uno lanza <code>ParameterError</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="mtld">Measure of Textual Lexical Diversity (MTLD)<a class="headerlink" href="#mtld" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>mtld</code></p>
+<!-- core: stats/diversity_stats.md:calc_mtld 427e11b -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_mtld</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">min_len</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.72</span><span class="p">)</span>
+</code></pre></div>
+<p>Una modificación del MSTTR (McCarthy, 2005), independiente de la longitud del texto: el número de palabras dividido por el número de factores, los tramos en los que el TTR baja hasta el umbral (<code>TTR &lt;= threshold</code>, véanse las <a href="#conventions">convenciones</a>). Un último factor incompleto cuenta en proporción a lo que su TTR se acercó al umbral. El valor es la media de una pasada hacia delante y otra hacia atrás (McCarthy &amp; Jarvis, 2010). La longitud mínima del factor no es estándar (lexical-diversity de Kyle), y un <code>min_len</code> de 0 la desactiva. Si ningún factor se completa y el TTR nunca baja de 1, el valor es infinito.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>min_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Longitud mínima del factor (<code>MTLD_MIN_LEN</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>threshold</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>0.72</code></td>
+<td style="text-align: left;">Umbral de TTR para completar un factor (<code>MTLD_TTR_THRESHOLD</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Un <code>min_len</code> que no es un entero no negativo y un <code>threshold</code> que no es un número en (0, 1) lanzan <code>ParameterError</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="mamtld">Moving Average Measure of Textual Lexical Diversity (MA-MTLD)<a class="headerlink" href="#mamtld" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>mamtld</code></p>
+<!-- core: stats/diversity_stats.md:calc_mamtld c845458 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_mamtld</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">min_len</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.72</span><span class="p">)</span>
+</code></pre></div>
+<p>Una modificación de MTLD con ventana móvil según el MTLD-MA de koRpus: un factor empieza en cada posición del texto, y el valor es la longitud media de los factores completados en una pasada hacia delante y otra hacia atrás. koRpus hace solo la pasada hacia delante, cierra un factor con un TTR estrictamente menor que el umbral y descarta los factores más cortos que la longitud mínima en lugar de extenderlos. Si ningún factor se completa, el valor es <code>nan</code>. La métrica es inestable en textos cortos.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>min_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Longitud mínima del factor (<code>MTLD_MIN_LEN</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>threshold</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>0.72</code></td>
+<td style="text-align: left;">Umbral de TTR para completar un factor (<code>MTLD_TTR_THRESHOLD</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Un <code>min_len</code> que no es un entero no negativo y un <code>threshold</code> que no es un número en (0, 1) lanzan <code>ParameterError</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="mtldw">MTLD con ventana móvil y vuelta al inicio del texto (MTLD-W)<a class="headerlink" href="#mtldw" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>mtldw</code></p>
+<!-- core: stats/diversity_stats.md:calc_mtldw 6e0e9fe -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_mtldw</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">min_len</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.72</span><span class="p">)</span>
+</code></pre></div>
+<p>Una modificación de MA-MTLD según <code>mtld_ma_wrap</code> de lexical-diversity y TAALED: los factores no completados al final del texto continúan desde su principio, así que todas las posiciones tienen el mismo peso. Un factor no puede ser más largo que el texto. Si ningún factor se completa, porque el texto es más corto que <code>min_len</code> o porque el TTR no baja hasta el umbral desde ningún inicio, el valor es <code>nan</code>. La métrica es inestable en textos de menos de 100 palabras.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>min_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Longitud mínima del factor (<code>MTLD_MIN_LEN</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>threshold</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>0.72</code></td>
+<td style="text-align: left;">Umbral de TTR para completar un factor (<code>MTLD_TTR_THRESHOLD</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Un <code>min_len</code> que no es un entero no negativo y un <code>threshold</code> que no es un número en (0, 1) lanzan <code>ParameterError</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="hdd">Hypergeometric Distribution D (HD-D)<a class="headerlink" href="#hdd" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>hdd</code></p>
+<!-- core: stats/diversity_stats.md:calc_hdd 44ad1ca -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_hdd</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">sample_size</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+</code></pre></div>
+<p>Una alternativa a vocd-D (McCarthy &amp; Jarvis, 2010): el TTR esperado exacto de una muestra aleatoria de <code>sample_size</code> palabras, sin extraer muestras. La distribución hipergeométrica da la probabilidad de que la muestra contenga cada lexema al menos una vez; HD-D es la suma de estas probabilidades dividida por el tamaño de la muestra. En los textos de menos de 50 palabras o más cortos que el tamaño de la muestra la métrica no está definida, y el valor es <code>nan</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>sample_size</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>42</code></td>
+<td style="text-align: left;">Tamaño de la muestra en palabras (<code>HDD_SAMPLE_SIZE</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Un <code>sample_size</code> que no es un entero de al menos uno lanza <code>ParameterError</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="simpson_index">Índice de Simpson (D)<a class="headerlink" href="#simpson_index" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>simpson_index</code> · <a href="https://es.wikipedia.org/wiki/Índice_de_diversidad#Índice_de_Simpson">Wikipedia</a></p>
+<!-- core: stats/diversity_stats.md:calc_simpson_index 5c0c871 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_simpson_index</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La probabilidad de que dos palabras extraídas del texto al azar sin reemplazo sean el mismo lexema; <span class="arithmatex">\(n\)</span> es el número de apariciones de un lexema en el texto. En los textos de menos de dos palabras el índice no está definido, y el valor es <code>nan</code>; lo mismo vale para el índice de Simpson inverso y el índice de Gini-Simpson.</p>
+<div class="arithmatex">\[
+\frac{\sum n\times(n-1)}{\textrm{(Número de palabras)}\times(\textrm{Número de palabras}-1)}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="inverse_simpson_index">Índice de Simpson inverso (1/D)<a class="headerlink" href="#inverse_simpson_index" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>inverse_simpson_index</code> · <a href="https://es.wikipedia.org/wiki/Índice_de_diversidad#Índice_de_Simpson_inverso">Wikipedia</a></p>
+<!-- core: stats/diversity_stats.md:calc_inverse_simpson_index 370880d -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_inverse_simpson_index</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Una estimación del número de Hill de orden dos (<span class="arithmatex">\(1/\sum_k p_k^2\)</span>) a partir de pares extraídos sin reposición. Si todas las palabras del texto son únicas, el índice de Simpson es 0 y el índice inverso es infinito.</p>
+<div class="arithmatex">\[
+\frac{1}{D}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="gini_simpson_index">Índice de Gini-Simpson (1-D)<a class="headerlink" href="#gini_simpson_index" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>gini_simpson_index</code> · <a href="https://es.wikipedia.org/wiki/Índice_de_diversidad#Índice_de_Gini-Simpson">Wikipedia</a></p>
+<!-- core: stats/diversity_stats.md:calc_gini_simpson_index 00e1184 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_gini_simpson_index</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La probabilidad de que dos palabras del texto elegidas al azar sean distintas.</p>
+<div class="arithmatex">\[
+1-D
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="hapax_index">Índice de hápax (R de Honoré)<a class="headerlink" href="#hapax_index" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>hapax_index</code> · <code>honore_r</code> · <a href="https://es.wikipedia.org/wiki/Hápax">Wikipedia</a></p>
+<!-- core: stats/diversity_stats.md:calc_hapax_index debfb9b -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_hapax_index</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Un hápax (del griego ἅπαξ λεγόμενον, «dicho una sola vez») es una palabra que aparece una sola vez en un corpus: <em>baciyelmo</em>, la palabra con que Sancho Panza llama a la bacía que don Quijote toma por yelmo, es un hápax de Cervantes (capítulo 44 de la primera parte del <em>Quijote</em>). El índice coincide con la medida de Honoré (1979), con el logaritmo natural. Si todas las palabras del texto son hápax, el índice es infinito; en los textos de menos de dos palabras no está definido, y el valor es <code>nan</code>. <code>calc_honore_r</code> es la misma función.</p>
+<div class="arithmatex">\[
+100\times\frac{\ln {\textrm{(Número de palabras)}}}{1-\frac{\textrm{Número de hápax}}{\textrm{Número de lexemas}}}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="frequency_spectrum">Espectro de frecuencias<a class="headerlink" href="#frequency_spectrum" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>frequency_spectrum</code></p>
+<!-- core: stats/diversity_stats.md:calc_frequency_spectrum 5ca9622 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_frequency_spectrum</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>El número de lexemas <span class="arithmatex">\(V_i\)</span> que aparecen exactamente <span class="arithmatex">\(i\)</span> veces en el texto, como un diccionario por la frecuencia <span class="arithmatex">\(i\)</span> en orden ascendente. A partir de él se calculan el índice de hápax, la K y la I de Yule, la Vm de Herdan, la S de Sichel, la M de Michéa, la P de Baayen, la proporción de hápax y el exponente α₂, con las fórmulas de Tweedie y Baayen (1998).</p>
+<p>Notación: <span class="arithmatex">\(N\)</span> es el número de palabras, <span class="arithmatex">\(V\)</span> el número de lexemas, <span class="arithmatex">\(V_i\)</span> el número de lexemas con frecuencia <span class="arithmatex">\(i\)</span>, <span class="arithmatex">\(V_1\)</span> los hápax, <span class="arithmatex">\(V_2\)</span> los dis legomena, <span class="arithmatex">\(p_k\)</span> la frecuencia relativa de un lexema.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="yule_k">Característica de Yule (K de Yule)<a class="headerlink" href="#yule_k" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>yule_k</code></p>
+<!-- core: stats/diversity_stats.md:calc_yule_k baaaa5a -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_yule_k</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La característica de Yule (Yule, 1944), una de las pocas medidas teóricamente independientes de la longitud del texto (Tweedie &amp; Baayen, 1998); en la práctica converge a medida que el texto crece. Es proporcional al índice de Simpson: <span class="arithmatex">\(K \approx 10^4 \cdot D\)</span>. En los textos de menos de dos palabras el valor es <code>nan</code>.</p>
+<div class="arithmatex">\[
+K = 10^4\times\frac{\sum_i i^2 V_i - N}{N^2}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="yule_i">Característica inversa de Yule (I de Yule)<a class="headerlink" href="#yule_i" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>yule_i</code></p>
+<!-- core: stats/diversity_stats.md:calc_yule_i e6ed7d8 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_yule_i</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La característica inversa de Yule. Si todas las palabras del texto son únicas, el valor es infinito; en los textos de menos de dos palabras es <code>nan</code>.</p>
+<div class="arithmatex">\[
+I = \frac{V^2}{\sum_i i^2 V_i - V}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="herdan_vm">Vm de Herdan<a class="headerlink" href="#herdan_vm" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>herdan_vm</code></p>
+<!-- core: stats/diversity_stats.md:calc_herdan_vm a9088dd -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_herdan_vm</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La medida de Herdan (Herdan, 1955), teóricamente independiente de la longitud del texto. En los textos de menos de dos palabras el valor es <code>nan</code>.</p>
+<div class="arithmatex">\[
+V_m = \sqrt{\sum_i V_i \left(\frac{i}{N}\right)^2 - \frac{1}{V}}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="sichel_s">S de Sichel<a class="headerlink" href="#sichel_s" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>sichel_s</code></p>
+<!-- core: stats/diversity_stats.md:calc_sichel_s 5485001 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_sichel_s</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La medida de Sichel (Sichel, 1975): la proporción de dis legomena, lexemas con frecuencia 2, entre todos los lexemas. Estable en textos de distinta longitud.</p>
+<div class="arithmatex">\[
+S = \frac{V_2}{V}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="michea_m">M de Michéa<a class="headerlink" href="#michea_m" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>michea_m</code></p>
+<!-- core: stats/diversity_stats.md:calc_michea_m 8e3f6f5 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_michea_m</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La medida de Michéa (Michéa, 1969): el recíproco de la medida de Sichel. Si el texto no tiene dis legomena, el valor es infinito.</p>
+<div class="arithmatex">\[
+M = \frac{V}{V_2}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="brunet_w">W de Brunet<a class="headerlink" href="#brunet_w" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>brunet_w</code></p>
+<!-- core: stats/diversity_stats.md:calc_brunet_w 2ac7def -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_brunet_w</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">0.172</span><span class="p">)</span>
+</code></pre></div>
+<p>La medida de Brunet (Brunet, 1978). Los valores de los textos suelen estar entre 10 y 20.</p>
+<div class="arithmatex">\[
+W = N^{V^{-a}}, \quad a = 0.172
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>a</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>0.172</code></td>
+<td style="text-align: left;">Exponente (<code>BRUNET_W_EXPONENT</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Un <code>a</code> que no es un número finito lanza <code>ParameterError</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="dugast_k">k de Dugast<a class="headerlink" href="#dugast_k" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>dugast_k</code></p>
+<!-- core: stats/diversity_stats.md:calc_dugast_k a8d476b -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_dugast_k</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div>
+<p>La medida de Dugast (Dugast, 1979), que no debe confundirse con la U de Dugast, la métrica <a href="#dttr">DTTR</a>. El valor depende de la base del logaritmo. En los textos no más largos que la base (<span class="arithmatex">\(\log N \le 1\)</span>) la medida no está definida, y el valor es <code>nan</code>.</p>
+<div class="arithmatex">\[
+k = \frac{\log V}{\log \log N}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>base</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>10</code></td>
+<td style="text-align: left;">Base del logaritmo (<code>DIVERSITY_LOG_BASE</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Una <code>base</code> que no es un número finito mayor que 1 lanza <code>ParameterError</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="baayen_p">P de Baayen<a class="headerlink" href="#baayen_p" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>baayen_p</code></p>
+<!-- core: stats/diversity_stats.md:calc_baayen_p 3754bfb -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_baayen_p</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La medida de Baayen (Baayen, 1991): la proporción de hápax entre todas las palabras del texto. Es la pendiente de la curva de crecimiento del vocabulario al final del texto: la probabilidad de que la siguiente palabra sea nueva (Evert, 2004).</p>
+<div class="arithmatex">\[
+P = \frac{V_1}{N}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="hapax_ratio">Proporción de hápax<a class="headerlink" href="#hapax_ratio" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>hapax_ratio</code></p>
+<!-- core: stats/diversity_stats.md:calc_hapax_ratio d3c3e24 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_hapax_ratio</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La proporción de hápax entre todos los lexemas del texto.</p>
+<div class="arithmatex">\[
+\frac{V_1}{V}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="alpha2">El exponente α₂<a class="headerlink" href="#alpha2" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>alpha2</code></p>
+<!-- core: stats/diversity_stats.md:calc_alpha2 69486ad -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_alpha2</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Una estimación del parámetro de Zipf-Mandelbrot a partir de la parte baja del espectro de frecuencias (Evert, 2004). Si el texto no tiene hápax, el valor es <code>nan</code>.</p>
+<div class="arithmatex">\[
+\alpha_2 = 1 - \frac{2 V_2}{V_1}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="entropy">Entropía de Shannon<a class="headerlink" href="#entropy" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>entropy</code> · <a href="https://es.wikipedia.org/wiki/Índice_de_diversidad#Índice_de_Shannon">Wikipedia</a></p>
+<!-- core: stats/diversity_stats.md:calc_entropy 507c0b8 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_entropy</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La entropía de la distribución de lexemas en bits. El número de Hill de orden uno es <span class="arithmatex">\(2^H\)</span> (<a href="#perplexity">perplejidad</a>), y el de orden cero, <span class="arithmatex">\(V\)</span>; el <a href="#inverse_simpson_index">índice de Simpson inverso</a> estima el de orden dos.</p>
+<div class="arithmatex">\[
+H = -\sum_k p_k \log_2 p_k
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="evenness">Equitatividad<a class="headerlink" href="#evenness" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>evenness</code></p>
+<!-- core: stats/diversity_stats.md:calc_evenness d6817c3 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_evenness</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La equitatividad de Pielou: el cociente entre la entropía de Shannon y su máximo para el número de lexemas dado. En los textos de un solo lexema no está definida, y el valor es <code>nan</code>.</p>
+<div class="arithmatex">\[
+\frac{H}{\log_2 V}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="perplexity">Perplejidad<a class="headerlink" href="#perplexity" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>perplexity</code></p>
+<!-- core: stats/diversity_stats.md:calc_perplexity b5c954f -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_perplexity</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>El número de Hill de orden uno, el número efectivo de lexemas del texto.</p>
+<div class="arithmatex">\[
+2^H
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="zipf_alpha">Pendiente de la ley de Zipf<a class="headerlink" href="#zipf_alpha" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>zipf_alpha</code> · <a href="https://es.wikipedia.org/wiki/Ley_de_Zipf">Wikipedia</a></p>
+<!-- core: stats/diversity_stats.md:calc_zipf_alpha a63837a -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_zipf_alpha</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>El exponente <span class="arithmatex">\(\alpha\)</span> de la ley de Zipf <span class="arithmatex">\(f(r) \propto r^{-\alpha}\)</span>, donde <span class="arithmatex">\(r\)</span> es el rango de frecuencia de un lexema, estimado por regresión lineal del logaritmo de la frecuencia sobre el logaritmo del rango. En los textos naturales <span class="arithmatex">\(\alpha\)</span> está cerca de 1. La estimación por mínimos cuadrados sobre los rangos está sesgada; la máxima verosimilitud es más precisa. En los textos de un solo lexema el valor es <code>nan</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="metric-card">
+<h3 id="fit_zipf_mandelbrot">Ajuste de Zipf-Mandelbrot<a class="headerlink" href="#fit_zipf_mandelbrot" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><a href="https://en.wikipedia.org/wiki/Zipf–Mandelbrot_law">Wikipedia</a></p>
+<!-- core: stats/diversity_stats.md:fit_zipf_mandelbrot 41b2359 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">fit_zipf_mandelbrot</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Ajusta la ley de Zipf-Mandelbrot <span class="arithmatex">\(f(r) = C / (r + q)^s\)</span> a la distribución rango-frecuencia. Con <span class="arithmatex">\(q = 0\)</span> es la ley de Zipf con exponente <span class="arithmatex">\(s\)</span>; el desplazamiento <span class="arithmatex">\(q\)</span> recoge el aplanamiento de la curva en las palabras más frecuentes. El ajuste se hace por mínimos cuadrados en coordenadas logarítmicas con <span class="arithmatex">\(q \ge 0\)</span>, <span class="arithmatex">\(s \ge 0\)</span>; los lexemas de frecuencia cero de un contador se dejan fuera. El resultado es una tupla con nombre <code>ZipfMandelbrot</code> con los campos <code>c</code>, <code>q</code>, <code>s</code> y <code>r2</code>, el coeficiente de determinación del ajuste en coordenadas logarítmicas. Todos los campos son <code>nan</code> en los textos de menos de tres lexemas, con frecuencias idénticas de todos los lexemas o cuando el ajuste diverge. En textos cortos los parámetros son inestables: la ley describe corpus grandes.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code> / <code>Counter</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras o un contador de sus frecuencias</td>
+</tr>
+</tbody>
+</table>
+<p>Un contador cuyas palabras no son cadenas o cuyas frecuencias no son números lanza <code>SourceTypeError</code>, y una frecuencia negativa, <code>nan</code> o infinita, <code>SourceError</code> (<code>check_counts</code>).</p>
+<p>El visualizador de la <a href="../../visualizers/zipf/">ley de Zipf</a> dibuja este ajuste con <code>show_fit=True</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Código</label><label for="__tabbed_2_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.diversity_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">fit_zipf_mandelbrot</span>
+
+<span class="c1"># las frecuencias 12, 6, 4, 3 siguen exactamente la ley f = 12 / r</span>
+<span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"b"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"c"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"d"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
+<span class="n">fit</span> <span class="o">=</span> <span class="n">fit_zipf_mandelbrot</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+<span class="nb">round</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">s</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">r2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>(12.001, 0.0, 1.0, 1.0)
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="heaps_beta">Exponente de la ley de Heaps<a class="headerlink" href="#heaps_beta" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>heaps_beta</code> · <a href="https://es.wikipedia.org/wiki/Ley_de_Heaps">Wikipedia</a></p>
+<!-- core: stats/diversity_stats.md:calc_heaps_beta 6aaa64a -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_heaps_beta</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>El exponente <span class="arithmatex">\(\beta\)</span> de la ley de Heaps <span class="arithmatex">\(V(N) = K \cdot N^{\beta}\)</span> del crecimiento del vocabulario con la longitud del texto, estimado por regresión lineal del logaritmo del tamaño del vocabulario sobre el logaritmo de la longitud del texto a lo largo de la curva de crecimiento. En corpus de millones de palabras <span class="arithmatex">\(\beta\)</span> está entre 0.4 y 0.6, en un solo texto entre 0.6 y 0.9, así que los valores solo son comparables entre textos de longitud parecida. El valor depende del orden de las palabras y necesita varios cientos de palabras o más. En los textos de menos de dos palabras el valor es <code>nan</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+</tbody>
+</table>
+<!-- core: stats/diversity_stats.md:vocabulary_growth d1f1d6d -->
+<div class="signature highlight"><pre><span></span><code><span class="n">vocabulary_growth</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>La curva de crecimiento del vocabulario de una lista de palabras: el tamaño del vocabulario tras cada palabra del texto.</p>
+<!-- core: stats/diversity_stats.md:fit_heaps eefb450 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">fit_heaps</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Ajusta la ley de Heaps sobre la curva de crecimiento del vocabulario de una lista de palabras, como hace <code>calc_heaps_beta</code>, y devuelve una tupla con nombre <code>HeapsFit</code> con los parámetros <code>k</code>, <code>beta</code> y el coeficiente de determinación <code>r2</code>, todos <code>nan</code> en los textos de menos de dos palabras; <code>r2</code> es <code>nan</code> también en un texto de un solo lexema.</p>
+<p>El gráfico de la <a href="../../visualizers/vocabulary/">ley de Heaps</a> se construye a partir de <code>fit_heaps</code>.</p>
+</div>
+<div class="metric-card">
+<h3 id="windowed">Cálculo por ventanas<a class="headerlink" href="#windowed" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>windowed(stat)</code></p>
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_windowed</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">MESSAGES</span><span class="p">)</span>
+</code></pre></div>
+<!-- core: stats/diversity_stats.md:calc_windowed 40fa4f2 -->
+<p>Los valores de una métrica en ventanas consecutivas de igual longitud dan su media, su desviación típica muestral y el intervalo de confianza de la media por la distribución de Student. Es la forma estándar de comparar textos de distinta longitud; el TTR estandarizado de Kubát y Milička (no el STTR de Summer) es un TTR por ventanas de 1000 palabras con un intervalo del 95 %. Un texto más corto que la ventana es una sola ventana; las ventanas con valor <code>nan</code> se ignoran. Con menos de dos ventanas de valor definido la desviación y el intervalo son <code>nan</code>, y sin ninguna también la media. Una métrica infinita en alguna ventana (por ejemplo, el índice de Simpson inverso en una ventana de palabras únicas) hace la media infinita y la desviación y el intervalo <code>nan</code>. El resultado es una tupla con nombre <code>WindowStats</code> con los campos <code>mean</code>, <code>std</code>, <code>lower</code>, <code>upper</code> y <code>n_windows</code>, el número de ventanas de valor definido.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>func</code></td>
+<td style="text-align: left;"><code>Callable</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Función que calcula la métrica a partir de una lista de palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>window_len</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>100</code></td>
+<td style="text-align: left;">Tamaño de la ventana</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>step</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Paso de la ventana; por defecto, el tamaño de la ventana, así que las ventanas no se solapan</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>confidence</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>0.95</code></td>
+<td style="text-align: left;">Nivel de confianza</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>MESSAGES</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave</td>
+</tr>
+</tbody>
+</table>
+<p>Un <code>func</code> que no es invocable lanza <code>SourceTypeError</code>; un <code>window_len</code> o un <code>step</code> que no es un entero de al menos uno y un <code>confidence</code> que no es un número en (0, 1) lanzan <code>ParameterError</code>.</p>
+</div>
+<!-- core: stats/diversity_stats.md:diversity-checks 518d85e -->
+<p>Cada función comprueba sus palabras con <code>check_words</code>: un <code>text</code> que es una cadena, un <code>Doc</code>, un iterador, un conjunto o una tabla, o cuyas palabras no son cadenas, lanza <code>SourceTypeError</code>; <code>fit_zipf_mandelbrot</code> admite también un contador.</p>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
-<h3 id="windowed">windowed<a class="headerlink" href="#windowed" title="Permanent link">&para;</a></h3>
 <!-- core: stats/diversity_stats.md:DiversityStats-windowed da979e4 -->
 <p><code>windowed(stat, window_len=100, step=None, confidence=0.95)</code> calcula por ventanas una métrica de <code>get_stats</code> por su nombre: <code>calc_windowed</code> con la función de la métrica y los parámetros del objeto. Los demás argumentos, el resultado y los errores son los de <code>calc_windowed</code>; un nombre desconocido lanza <code>UnknownStatError</code>.</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiversityStats</span>
-
-<span class="n">text</span> <span class="o">=</span> <span class="s2">"Pies no tengo, ando; boca no tengo, hablo: cuándo dormir, cuándo levantarse, cuándo empezar labores"</span>
-<span class="n">ds</span> <span class="o">=</span> <span class="n">DiversityStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-<span class="n">ds</span><span class="o">.</span><span class="n">windowed</span><span class="p">(</span><span class="s2">"ttr"</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="c1"># WindowStats(mean=0.9333333333333332, std=0.11547005383792512, lower=0.6464898180167025, upper=1.220176848649964, n_windows=3)</span>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">ds</span><span class="o">.</span><span class="n">windowed</span><span class="p">(</span><span class="s2">"ttr"</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">ds</span><span class="o">.</span><span class="n">windowed</span><span class="p">(</span><span class="s2">"ttr"</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">n_windows</span>
-<span class="c1"># 6</span>
 </code></pre></div>
 </div>
-<h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>WindowStats(mean=0.9333333333333332, std=0.11547005383792512, lower=0.6464898180167025, upper=1.220176848649964, n_windows=3)
+6
+</code></pre></div>
+</div>
+</div>
+</div>
 <!-- core: stats/diversity_stats.md:DiversityStats-get_stats fa25bfe -->
 <p><code>get_stats()</code> devuelve un diccionario con las métricas calculadas de <code>stats_desc</code>.</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<p><em>Código</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># Importar la biblioteca</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">DiversityStats</span>
-
-<span class="c1"># Preparar los datos</span>
-<span class="n">text</span> <span class="o">=</span> <span class="s2">"Pies no tengo, ando; boca no tengo, hablo: cuándo dormir, cuándo levantarse, cuándo empezar labores"</span>
-
-<span class="c1"># Calcular las métricas</span>
-<span class="n">ds</span> <span class="o">=</span> <span class="n">DiversityStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-<span class="n">ds</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
-</code></pre></div>
-<p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">{</span><span class="s1">'ttr'</span>:<span class="w"> </span><span class="m">0</span>.7333333333333333,
-<span class="s1">'rttr'</span>:<span class="w"> </span><span class="m">2</span>.840187787218772,
-<span class="s1">'cttr'</span>:<span class="w"> </span><span class="m">2</span>.008316044185609,
-<span class="s1">'httr'</span>:<span class="w"> </span><span class="m">0</span>.8854692840710255,
-<span class="s1">'sttr'</span>:<span class="w"> </span><span class="m">0</span>.2500605793160848,
-<span class="s1">'mttr'</span>:<span class="w"> </span><span class="m">0</span>.09738250756232528,
-<span class="s1">'dttr'</span>:<span class="w"> </span><span class="m">10</span>.268784661968118,
-<span class="s1">'mattr'</span>:<span class="w"> </span><span class="m">0</span>.7333333333333333,
-<span class="s1">'msttr'</span>:<span class="w"> </span><span class="m">0</span>.7333333333333333,
-<span class="s1">'mtld'</span>:<span class="w"> </span><span class="m">15</span>.0,
-<span class="s1">'mamtld'</span>:<span class="w"> </span><span class="m">12</span>.0,
-<span class="s1">'mtldw'</span>:<span class="w"> </span><span class="m">13</span>.25,
-<span class="s1">'hdd'</span>:<span class="w"> </span>nan,
-<span class="s1">'simpson_index'</span>:<span class="w"> </span><span class="m">0</span>.047619047619047616,
-<span class="s1">'inverse_simpson_index'</span>:<span class="w"> </span><span class="m">21</span>.0,
-<span class="s1">'gini_simpson_index'</span>:<span class="w"> </span><span class="m">0</span>.9523809523809523,
-<span class="s1">'hapax_index'</span>:<span class="w"> </span><span class="m">992</span>.9517404041437,
-<span class="s1">'yule_k'</span>:<span class="w"> </span><span class="m">444</span>.44444444444446,
-<span class="s1">'yule_i'</span>:<span class="w"> </span><span class="m">8</span>.642857142857142,
-<span class="s1">'herdan_vm'</span>:<span class="w"> </span><span class="m">0</span>.1421338109037403,
-<span class="s1">'sichel_s'</span>:<span class="w"> </span><span class="m">0</span>.18181818181818182,
-<span class="s1">'michea_m'</span>:<span class="w"> </span><span class="m">5</span>.5,
-<span class="s1">'brunet_w'</span>:<span class="w"> </span><span class="m">6</span>.00637847898991,
-<span class="s1">'dugast_k'</span>:<span class="w"> </span><span class="m">14</span>.783895126869226,
-<span class="s1">'baayen_p'</span>:<span class="w"> </span><span class="m">0</span>.5333333333333333,
-<span class="s1">'hapax_ratio'</span>:<span class="w"> </span><span class="m">0</span>.7272727272727273,
-<span class="s1">'alpha2'</span>:<span class="w"> </span><span class="m">0</span>.5,
-<span class="s1">'entropy'</span>:<span class="w"> </span><span class="m">3</span>.3232314287976203,
-<span class="s1">'evenness'</span>:<span class="w"> </span><span class="m">0</span>.9606293157795304,
-<span class="s1">'perplexity'</span>:<span class="w"> </span><span class="m">10</span>.009038104159247,
-<span class="s1">'zipf_alpha'</span>:<span class="w"> </span><span class="m">0</span>.4884512334695912,
-<span class="s1">'heaps_beta'</span>:<span class="w"> </span><span class="m">0</span>.8366147342060046<span class="o">}</span>
-</code></pre></div>
-</div>
-<h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
 <!-- core: stats/diversity_stats.md:DiversityStats-print_stats 8d60982 -->
 <p><code>print_stats()</code> muestra una tabla de las métricas calculadas con sus descripciones de <code>stats_desc</code> bajo los encabezados de <code>stats_headers</code>.</p>
-<p>El ejemplo continúa el anterior:</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<p><em>Código</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">...</span>
-
-<span class="c1"># Mostrar la tabla de métricas calculadas</span>
-<span class="n">ds</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
-</code></pre></div>
-<p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="w">                                  </span>Metric<span class="w">                                   </span><span class="p">|</span><span class="w">  </span>Value
--------------------------------------------------------------------------------------
-Type-Token<span class="w"> </span>Ratio<span class="w"> </span><span class="o">(</span>TTR<span class="o">)</span><span class="w">                                                     </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.73
-Root<span class="w"> </span>Type-Token<span class="w"> </span>Ratio<span class="w"> </span><span class="o">(</span>RTTR<span class="o">)</span><span class="w">                                               </span><span class="p">|</span><span class="w">   </span><span class="m">2</span>.84
-Corrected<span class="w"> </span>Type-Token<span class="w"> </span>Ratio<span class="w"> </span><span class="o">(</span>CTTR<span class="o">)</span><span class="w">                                          </span><span class="p">|</span><span class="w">   </span><span class="m">2</span>.01
-Herdan<span class="w"> </span>Type-Token<span class="w"> </span>Ratio<span class="w"> </span><span class="o">(</span>HTTR<span class="o">)</span><span class="w">                                             </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.89
-Summer<span class="w"> </span>Type-Token<span class="w"> </span>Ratio<span class="w"> </span><span class="o">(</span>STTR<span class="o">)</span><span class="w">                                             </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.25
-Maas<span class="w"> </span>Type-Token<span class="w"> </span>Ratio<span class="w"> </span><span class="o">(</span>MTTR<span class="o">)</span><span class="w">                                               </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.10
-Dugast<span class="w"> </span>Type-Token<span class="w"> </span>Ratio<span class="w"> </span><span class="o">(</span>DTTR<span class="o">)</span><span class="w">                                             </span><span class="p">|</span><span class="w">  </span><span class="m">10</span>.27
-Moving<span class="w"> </span>Average<span class="w"> </span>Type-Token<span class="w"> </span>Ratio<span class="w"> </span><span class="o">(</span>MATTR<span class="o">)</span><span class="w">                                    </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.73
-Mean<span class="w"> </span>Segmental<span class="w"> </span>Type-Token<span class="w"> </span>Ratio<span class="w"> </span><span class="o">(</span>MSTTR<span class="o">)</span><span class="w">                                    </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.73
-Measure<span class="w"> </span>of<span class="w"> </span>Textual<span class="w"> </span>Lexical<span class="w"> </span>Diversity<span class="w"> </span><span class="o">(</span>MTLD<span class="o">)</span><span class="w">                                </span><span class="p">|</span><span class="w">  </span><span class="m">15</span>.00
-Moving<span class="w"> </span>Average<span class="w"> </span>Measure<span class="w"> </span>of<span class="w"> </span>Textual<span class="w"> </span>Lexical<span class="w"> </span>Diversity<span class="w"> </span><span class="o">(</span>MA-MTLD<span class="o">)</span><span class="w">              </span><span class="p">|</span><span class="w">  </span><span class="m">12</span>.00
-Moving<span class="w"> </span>Average<span class="w"> </span>Measure<span class="w"> </span>of<span class="w"> </span>Textual<span class="w"> </span>Lexical<span class="w"> </span>Diversity<span class="w"> </span>with<span class="w"> </span>Wrap<span class="w"> </span><span class="o">(</span>MTLD-W<span class="o">)</span><span class="w">     </span><span class="p">|</span><span class="w">  </span><span class="m">13</span>.25
-Hypergeometric<span class="w"> </span>Distribution<span class="w"> </span>D<span class="w"> </span><span class="o">(</span>HD-D<span class="o">)</span><span class="w">                                       </span><span class="p">|</span><span class="w">   </span>nan
-Simpson<span class="s1">'s index (D)                                                        |   0.05</span>
-<span class="s1">Inverse Simpson'</span>s<span class="w"> </span>index<span class="w"> </span><span class="o">(</span><span class="m">1</span>/D<span class="o">)</span><span class="w">                                              </span><span class="p">|</span><span class="w">  </span><span class="m">21</span>.00
-Gini-Simpson<span class="w"> </span>index<span class="w"> </span><span class="o">(</span><span class="m">1</span>-D<span class="o">)</span><span class="w">                                                   </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.95
-Hapax<span class="w"> </span>index<span class="w"> </span><span class="o">(</span>Honoré<span class="s1">'s R)                                                   |  992.95</span>
-<span class="s1">Yule'</span>s<span class="w"> </span>characteristic<span class="w"> </span>K<span class="w">                                                    </span><span class="p">|</span><span class="w">  </span><span class="m">444</span>.44
-Yule<span class="s1">'s inverse characteristic I                                            |   8.64</span>
-<span class="s1">Herdan'</span>s<span class="w"> </span>Vm<span class="w">                                                                </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.14
-Sichel<span class="s1">'s S                                                                 |   0.18</span>
-<span class="s1">Michéa'</span>s<span class="w"> </span>M<span class="w">                                                                 </span><span class="p">|</span><span class="w">   </span><span class="m">5</span>.50
-Brunet<span class="s1">'s W                                                                 |   6.01</span>
-<span class="s1">Dugast'</span>s<span class="w"> </span>k<span class="w">                                                                 </span><span class="p">|</span><span class="w">  </span><span class="m">14</span>.78
-Baayen<span class="s1">'s P                                                                 |   0.53</span>
-<span class="s1">Hapax ratio                                                                |   0.73</span>
-<span class="s1">Exponent α₂                                                                |   0.50</span>
-<span class="s1">Shannon entropy (bits)                                                     |   3.32</span>
-<span class="s1">Evenness                                                                   |   0.96</span>
-<span class="s1">Perplexity                                                                 |  10.01</span>
-<span class="s1">Zipf'</span>s<span class="w"> </span>law<span class="w"> </span>slope<span class="w"> </span><span class="o">(</span>α<span class="o">)</span><span class="w">                                                       </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.49
-Heaps<span class="err">'</span><span class="w"> </span>law<span class="w"> </span>exponent<span class="w"> </span><span class="o">(</span>β<span class="o">)</span><span class="w">                                                    </span><span class="p">|</span><span class="w">   </span><span class="m">0</span>.84
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">ds</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
 </code></pre></div>
 </div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>{'ttr': 0.7333333333333333,
+ 'rttr': 2.840187787218772,
+ 'cttr': 2.008316044185609,
+ 'httr': 0.8854692840710255,
+ 'sttr': 0.2500605793160848,
+ 'mttr': 0.09738250756232528,
+ 'dttr': 10.268784661968118,
+ 'mattr': 0.7333333333333333,
+ 'msttr': 0.7333333333333333,
+ 'mtld': 15.0,
+ 'mamtld': 12.0,
+ 'mtldw': 13.25,
+ 'hdd': nan,
+ 'simpson_index': 0.047619047619047616,
+ 'inverse_simpson_index': 21.0,
+ 'gini_simpson_index': 0.9523809523809523,
+ 'hapax_index': 992.9517404041437,
+ 'yule_k': 444.44444444444446,
+ 'yule_i': 8.642857142857142,
+ 'herdan_vm': 0.1421338109037403,
+ 'sichel_s': 0.18181818181818182,
+ 'michea_m': 5.5,
+ 'brunet_w': 6.00637847898991,
+ 'dugast_k': 14.783895126869226,
+ 'baayen_p': 0.5333333333333333,
+ 'hapax_ratio': 0.7272727272727273,
+ 'alpha2': 0.5,
+ 'entropy': 3.3232314287976203,
+ 'evenness': 0.9606293157795304,
+ 'perplexity': 10.009038104159247,
+ 'zipf_alpha': 0.4884512334695912,
+ 'heaps_beta': 0.8366147342060046}
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Los demás métodos, <code>to_dataframe</code> y <code>describe</code>, son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de estadísticas</a> del núcleo anyTS; las métricas de diversidad léxica no tienen escalas, así que <code>describe</code> da <code>None</code> para las métricas de <code>get_stats</code>.</p>
 
 
 
@@ -2855,6 +4657,12 @@ Heaps<span class="err">'</span><span class="w"> </span>law<span class="w"> </spa
           
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
         
       </main>
       
@@ -2912,7 +4720,7 @@ Heaps<span class="err">'</span><span class="w"> </span>law<span class="w"> </spa
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.top", "content.code.copy", "search.highlight", "search.suggest"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>

@@ -16,7 +16,7 @@
         <link rel="prev" href="../phon_stats_funcs/">
       
       
-        <link rel="next" href="../verse_stats_funcs/">
+        <link rel="next" href="../../corpus/keyness/">
       
       
         
@@ -31,7 +31,7 @@
     
     
       
-        <title>Módulo de las métricas - esTS</title>
+        <title>Estadísticas del verso - esTS</title>
       
     
     
@@ -52,8 +52,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Source Code Pro"}</style>
       
     
     
@@ -69,6 +69,8 @@
   
   
     
+    
+      
     
     
     
@@ -116,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Módulo de las métricas
+              Estadísticas del verso
             
           </span>
         </div>
@@ -124,7 +126,33 @@
     </div>
     
       
+        <form class="md-header__option" data-md-component="palette">
+  
     
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Dark theme"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Dark theme" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Light theme"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Light theme" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
     
       <div class="md-header__option">
@@ -178,6 +206,8 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
       
     </form>
     <div class="md-search__output">
@@ -907,56 +937,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Métricas de legibilidad
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_2">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Métricas de legibilidad
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../readability_stats/" class="md-nav__link">
         
@@ -965,7 +945,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Métricas de legibilidad
   
 
     
@@ -978,92 +958,6 @@
   
 
               
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../readability_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Funciones de las métricas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Métricas de diversidad léxica
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Métricas de diversidad léxica
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1079,7 +973,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Métricas de diversidad léxica
   
 
     
@@ -1088,42 +982,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../diversity_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Funciones de las métricas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -1563,58 +1421,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_10" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_5_10" id="__nav_5_10_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Estadísticas del verso
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_10_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_5_10">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Estadísticas del verso
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-    
-  
-  
-  
     <li class="md-nav__item md-nav__item--active">
       
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
@@ -1630,7 +1436,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Estadísticas del verso
   
 
     
@@ -1648,7 +1454,7 @@
   <span class="md-ellipsis">
     
   
-    Módulo de las métricas
+    Estadísticas del verso
   
 
     
@@ -1674,17 +1480,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Descripción
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1704,14 +1499,69 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Atributos">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métricas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Métricas">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#rhyme" class="md-nav__link">
+  <a href="#meter" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Rima y estrofas
+        Metro y sílabas métricas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pyrrhics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acentos rítmicos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rhyme_scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rima
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strophes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estrofas y forma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clausulas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terminaciones de los versos
       
     </span>
   </a>
@@ -1732,86 +1582,44 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Métodos">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#get_stats" class="md-nav__link">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algorithm" class="md-nav__link">
     <span class="md-ellipsis">
       
-        get_stats
+        Algoritmo
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#print_stats" class="md-nav__link">
-    <span class="md-ellipsis">
       
-        print_stats
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
+        <li class="md-nav__item">
   <a href="#accentuate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        accentuate
+        Acentuación
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#split_stanzas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estrofas
+      
+    </span>
+  </a>
   
 </li>
       
     </ul>
   
 </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../verse_stats_funcs/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Funciones de las métricas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
       
     </li>
   
@@ -2499,17 +2307,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#descripcion" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Descripción
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#parametros" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2529,14 +2326,69 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Atributos">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metricas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Métricas
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Métricas">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#rhyme" class="md-nav__link">
+  <a href="#meter" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Rima y estrofas
+        Metro y sílabas métricas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pyrrhics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Acentos rítmicos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rhyme_scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rima
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#strophes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estrofas y forma
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clausulas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Terminaciones de los versos
       
     </span>
   </a>
@@ -2557,44 +2409,38 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Métodos">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#get_stats" class="md-nav__link">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algorithm" class="md-nav__link">
     <span class="md-ellipsis">
       
-        get_stats
+        Algoritmo
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#print_stats" class="md-nav__link">
-    <span class="md-ellipsis">
       
-        print_stats
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
+        <li class="md-nav__item">
   <a href="#accentuate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        accentuate
+        Acentuación
       
     </span>
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#split_stanzas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Estrofas
+      
+    </span>
+  </a>
   
 </li>
       
@@ -2619,378 +2465,18 @@
 
 
 <h1 id="estadisticas-del-verso">Estadísticas del verso<a class="headerlink" href="#estadisticas-del-verso" title="Permanent link">&para;</a></h1>
-<div class="admonition info">
-<p><strong>ests.verse_stats.VerseStats</strong></p>
-</div>
-<h2 id="descripcion">Descripción<a class="headerlink" href="#descripcion" title="Permanent link">&para;</a></h2>
-<p>Módulo para calcular las estadísticas del verso de un texto: la escansión de los versos, el metro y el número de sílabas métricas, los acentos rítmicos y el perfil acentual, los tipos del endecasílabo, las terminaciones de los versos, la rima, su esquema y las estrofas. La fuente de datos puede ser un texto con sus saltos de línea o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>; no hacen falta ni un modelo entrenado ni un diccionario.</p>
-<p>El metro del verso español es silábico: un verso se mide por sus sílabas métricas, y los acentos dan forma a su ritmo. Las palabras se dividen en sílabas y se acentúan con <a href="../../syllables/"><code>syllabify</code></a> y <a href="../../syllables/#word_stresses"><code>word_stresses</code></a>; las sílabas de un verso se cuentan con las sinalefas y la ley del acento final, y un verso compuesto, ante todo el alejandrino, se lee como dos hemistiquios. El algoritmo y su precisión sobre los sonetos de <a href="../../datasets/spanishsonnets/">DISCO</a> se describen en la <a href="../verse_stats_funcs/">sección</a> de las funciones.</p>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>Las estadísticas se calculan al crear el objeto <code>VerseStats</code>.</p>
-</div>
-<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Parámetro</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Valor por defecto</th>
-<th style="text-align: center;">Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>source</code></td>
-<td style="text-align: center;">str/Doc</td>
-<td style="text-align: center;"><code>-</code></td>
-<td style="text-align: center;">Fuente de datos (una cadena o un objeto Doc)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>seseo</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;"><code>False</code></td>
-<td style="text-align: center;">Pronunciar <code>c</code> y <code>z</code> ante <code>e</code> e <code>i</code> como <code>s</code> en la rima, como en Andalucía y en América: <code>voz</code> - <code>dos</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Atributo</th>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Descripción</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>lines</code></td>
-<td style="text-align: center;">tuple[str]</td>
-<td style="text-align: center;">Versos con palabras españolas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>stanzas</code></td>
-<td style="text-align: center;">tuple[tuple[str, ...], ...]</td>
-<td style="text-align: center;">Versos por estrofa</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_lines</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de versos</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_stanzas</code></td>
-<td style="text-align: center;">int</td>
-<td style="text-align: center;">Número de estrofas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>meter</code></td>
-<td style="text-align: center;">str/None</td>
-<td style="text-align: center;">Metro - el nombre del verso por sus sílabas métricas: <code>octosílabo</code>, <code>endecasílabo</code>, <code>alejandrino</code>... (<code>VERSE_METERS</code>), o <code>None</code></td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>n_feet</code></td>
-<td style="text-align: center;">int/None</td>
-<td style="text-align: center;">Número de sílabas métricas del metro</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>c_feet</code></td>
-<td style="text-align: center;">dict[int, int]</td>
-<td style="text-align: center;">Distribución de los versos por sílabas métricas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_deviations</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Proporción de los versos fuera del metro, <code>nan</code> sin metro</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_pyrrhics</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Proporción de los versos del metro sin sus acentos rítmicos, <code>nan</code> sin metro</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>stress_profile</code></td>
-<td style="text-align: center;">tuple[float, ...]</td>
-<td style="text-align: center;">Proporción de los versos del metro acentuados en cada sílaba métrica</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>c_rhythms</code></td>
-<td style="text-align: center;">dict[str, int]</td>
-<td style="text-align: center;">Distribución de los endecasílabos por tipo</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>syllables</code></td>
-<td style="text-align: center;">tuple[tuple[str, ...], ...]</td>
-<td style="text-align: center;">Sílabas de cada verso como las lee el verso, con la sinalefa marcada con <code>‿</code></td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>stresses</code></td>
-<td style="text-align: center;">tuple[tuple[int, ...], ...]</td>
-<td style="text-align: center;">Índices de las sílabas acentuadas de cada verso en <code>syllables</code>, desde cero</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>caesuras</code></td>
-<td style="text-align: center;">tuple[int/None, ...]</td>
-<td style="text-align: center;">Índice de la primera sílaba del segundo hemistiquio de cada verso en <code>syllables</code>, <code>None</code> para un verso simple</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>patterns</code></td>
-<td style="text-align: center;">tuple[str, ...]</td>
-<td style="text-align: center;">Esquemas de los versos de <code>+</code> (una sílaba métrica acentuada) y <code>-</code> (una átona), tan largos como el verso en sílabas métricas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>c_clausulas</code></td>
-<td style="text-align: center;">dict[str, int]</td>
-<td style="text-align: center;">Distribución de las terminaciones de los versos por tipo: <code>aguda</code>, <code>llana</code>, <code>esdrújula</code>, <code>sobresdrújula</code></td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_masculine</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Proporción de terminaciones agudas (el acento en la última sílaba)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_feminine</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Proporción de terminaciones llanas (una sílaba tras el acento)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_dactylic</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Proporción de terminaciones esdrújulas (dos sílabas tras el acento)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>c_stressed_vowels</code></td>
-<td style="text-align: center;">dict[str, int]</td>
-<td style="text-align: center;">Distribución de las vocales acentuadas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>mean_line_len</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Longitud media de un verso en sílabas métricas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>rhyme_schemes</code></td>
-<td style="text-align: center;">tuple[str, ...]</td>
-<td style="text-align: center;">Esquemas de rima de las estrofas</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>p_rhymed</code></td>
-<td style="text-align: center;">float</td>
-<td style="text-align: center;">Proporción de los versos con rima</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>c_rhymes</code></td>
-<td style="text-align: center;">dict[str, int]</td>
-<td style="text-align: center;">Distribución de los versos con rima por el tipo de la rima: <code>consonante</code>, <code>asonante</code></td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>strophes</code></td>
-<td style="text-align: center;">tuple[str/None, ...]</td>
-<td style="text-align: center;">Nombres de las estrofas (<code>VERSE_STROPHES</code>)</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>form</code></td>
-<td style="text-align: center;">str/None</td>
-<td style="text-align: center;">Forma del poema: <code>soneto</code>, <code>romance</code>, la estrofa de todas sus estrofas, <code>silva</code></td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>seseo</code></td>
-<td style="text-align: center;">bool</td>
-<td style="text-align: center;">Si la rima se lee con seseo</td>
-</tr>
-</tbody>
-</table>
-<p>El metro es la medida de la mayoría de los versos, y no se determina (<code>None</code>) si más de una décima parte de los versos (<code>VERSE_MAX_DEVIATIONS</code>) quedan fuera de él tras el ajuste - un poema polimétrico (una silva, un soneto con estrambote de heptasílabos), el verso libre, la prosa - o si el texto tiene un solo verso (<code>VERSE_MIN_LINES</code>). Los versos de un poema sin metro se ajustan a sus medidas comunes - las de al menos dos versos y una décima parte de ellos, como las 7 y las 11 sílabas de una lira o una silva - si estas ocupan más de la mitad de los versos; si no, como en el verso libre y la prosa, los versos conservan su lectura llana.</p>
-<p>Los acentos rítmicos (<code>VERSE_RHYTHMS</code>) son los que un metro pide además del último, que todo verso tiene por la ley del acento final: el endecasílabo se acentúa en la 6.ª sílaba (a maiore) o en la 4.ª y la 8.ª (sáfico) o la 7.ª (dactílico); un verso compuesto, en el último acento de su primer hemistiquio. Un metro con solo el último acento, el octosílabo entre otros, tiene <code>p_pyrrhics</code> 0.</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center;">Tipo</th>
-<th style="text-align: center;">Acentos</th>
-<th style="text-align: left;">Nombre</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;"><code>1-6-10</code></td>
-<td style="text-align: center;">1.ª, 6.ª</td>
-<td style="text-align: left;">enfático</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>2-6-10</code></td>
-<td style="text-align: center;">2.ª, 6.ª</td>
-<td style="text-align: left;">heroico</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>3-6-10</code></td>
-<td style="text-align: center;">3.ª, 6.ª</td>
-<td style="text-align: left;">melódico</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>4-6-10</code>, <code>5-6-10</code></td>
-<td style="text-align: center;">el primer acento en la 4.ª o la 5.ª, 6.ª</td>
-<td style="text-align: left;">a maiore</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>6-10</code></td>
-<td style="text-align: center;">6.ª, sin acento antes</td>
-<td style="text-align: left;">a maiore</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>4-8-10</code></td>
-<td style="text-align: center;">4.ª, 8.ª, sin 6.ª</td>
-<td style="text-align: left;">sáfico</td>
-</tr>
-<tr>
-<td style="text-align: center;"><code>4-7-10</code></td>
-<td style="text-align: center;">4.ª, 7.ª, sin 6.ª ni 8.ª</td>
-<td style="text-align: left;">dactílico, de gaita gallega</td>
-</tr>
-</tbody>
-</table>
-<p>Un verso con la 6.ª sílaba acentuada toma su tipo de su primer acento; <code>4-6-10</code> cuenta como sáfico en algunos tratados. Un verso sin ninguno de los tres conjuntos queda fuera de <code>c_rhythms</code> y se cuenta en <code>p_pyrrhics</code>. Las sílabas métricas de <code>stress_profile</code> se cuentan desde cero, así que la 6.ª sílaba es el número 5. <code>stresses</code> indexa <code>syllables</code>, y ambos coinciden con <code>patterns</code> hasta el último acento de un verso simple; en un verso compuesto cada hemistiquio tiene su propia medida, así que tras una aguda o una esdrújula en la cesura <code>patterns</code> y <code>syllables</code> se separan, y <code>caesuras</code> dice dónde empieza el segundo hemistiquio.</p>
-<h3 id="rhyme">Rima y estrofas<a class="headerlink" href="#rhyme" title="Permanent link">&para;</a></h3>
-<p>Un verso rima por su terminación desde la última vocal acentuada: en consonante si los sonidos son iguales, en asonante si lo son la vocal acentuada y la última. Los sonidos son los del oído: <code>b</code> y <code>v</code>, <code>c</code> y <code>z</code> (<code>s</code> con <code>seseo</code>), <code>ll</code> e <code>y</code> son un solo sonido, la <code>h</code> es muda, la vibrante simple <code>r</code> y la múltiple <code>rr</code> se distinguen. La asonancia deja fuera las vocales entre la acentuada y la última (<em>pálido</em> - a, o), toma la vocal acentuada de un diptongo (<em>cielo</em> - e, o; <em>gracia</em> - a, a), lee la <code>i</code> y la <code>u</code> finales como <code>e</code> y <code>o</code> (<em>fácil</em> - a, e) y da a una aguda solo su vocal acentuada. Un verso rima con los versos de la ventana de <code>RHYME_WINDOW</code> (4) versos anteriores, por encima de las estrofas, de modo que los cuartetos de un soneto riman ABBA ABBA.</p>
-<p>La asonancia cuenta en dos casos. Un poema cuya rima es la asonancia - al menos un tercio de sus versos sin rima consonante, y al menos cuatro de ellos, comparten una (<code>RHYME_MIN_ASSONANCE</code>, <code>RHYME_MIN_ASSONANT_LINES</code>) - rima por las asonancias de todos sus versos, que abarcan las rimas consonantes de las mismas vocales, como un soneto asonantado. Si no, la asonancia cuenta en versos alternos con versos sin rima entre ellos: una serie de al menos cuatro versos de dos en dos con tres de cada cuatro de los versos intermedios sin rima consonante (<code>RHYME_MIN_FREE</code>), o todos los versos pares de una estrofa de un número par de versos, como el segundo y el cuarto de una copla. Así un romance rima aunque cambie de asonancia de una parte a otra o sus versos asonantes rimen además en consonante de dos en dos. Una asonancia de versos vecinos no es rima: en un soneto de <code>-ado</code> y <code>-ano</code> los dos grupos se mantienen aparte.</p>
-<p>El esquema de rima sigue el uso español: las letras van en el orden de los grupos de rima de todo el poema, mayúsculas para los versos de arte mayor (9 sílabas o más, <code>VERSE_ARTE_MAYOR</code>) y minúsculas para los de arte menor, con un guion para un verso sin rima: un soneto es ABBA ABBA CDC DCD, una redondilla abba, una lira aBabB, un romance -a-a-a-a. Cuando se acaban las 26 letras, se vuelve a tomar la letra de un grupo al que ya no puede unirse ningún verso de la ventana.</p>
-<p>Una estrofa se nombra por sus versos, sus medidas, su esquema y su rima (<code>VERSE_STROPHES</code>, la primera que encaja):</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Estrofa</th>
-<th style="text-align: center;">Versos</th>
-<th style="text-align: left;">Medidas</th>
-<th style="text-align: left;">Esquemas</th>
-<th style="text-align: center;">Rima</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;">pareado</td>
-<td style="text-align: center;">2</td>
-<td style="text-align: left;">cualquiera</td>
-<td style="text-align: left;">aa</td>
-<td style="text-align: center;">cualquiera</td>
-</tr>
-<tr>
-<td style="text-align: left;">terceto</td>
-<td style="text-align: center;">3</td>
-<td style="text-align: left;">arte mayor</td>
-<td style="text-align: left;">aba, a-a, abc, aab, abb</td>
-<td style="text-align: center;">cualquiera</td>
-</tr>
-<tr>
-<td style="text-align: left;">tercerilla</td>
-<td style="text-align: center;">3</td>
-<td style="text-align: left;">arte menor</td>
-<td style="text-align: left;">aba, a-a</td>
-<td style="text-align: center;">cualquiera</td>
-</tr>
-<tr>
-<td style="text-align: left;">cuaderna vía</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: left;">14 cada uno</td>
-<td style="text-align: left;">aaaa</td>
-<td style="text-align: center;">consonante</td>
-</tr>
-<tr>
-<td style="text-align: left;">cuarteto, serventesio</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: left;">arte mayor</td>
-<td style="text-align: left;">abba; abab</td>
-<td style="text-align: center;">consonante</td>
-</tr>
-<tr>
-<td style="text-align: left;">redondilla, cuarteta</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: left;">arte menor</td>
-<td style="text-align: left;">abba; abab</td>
-<td style="text-align: center;">consonante</td>
-</tr>
-<tr>
-<td style="text-align: left;">seguidilla</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: left;">7-5-7-5</td>
-<td style="text-align: left;">-a-a</td>
-<td style="text-align: center;">cualquiera</td>
-</tr>
-<tr>
-<td style="text-align: left;">copla</td>
-<td style="text-align: center;">4</td>
-<td style="text-align: left;">8 cada uno</td>
-<td style="text-align: left;">-a-a</td>
-<td style="text-align: center;">asonante</td>
-</tr>
-<tr>
-<td style="text-align: left;">lira</td>
-<td style="text-align: center;">5</td>
-<td style="text-align: left;">7-11-7-7-11</td>
-<td style="text-align: left;">ababb</td>
-<td style="text-align: center;">consonante</td>
-</tr>
-<tr>
-<td style="text-align: left;">quinteto, quintilla</td>
-<td style="text-align: center;">5</td>
-<td style="text-align: left;">arte mayor; arte menor</td>
-<td style="text-align: left;">ababa, abaab, abbab, aabab, aabba</td>
-<td style="text-align: center;">consonante</td>
-</tr>
-<tr>
-<td style="text-align: left;">estrofa manriqueña</td>
-<td style="text-align: center;">6</td>
-<td style="text-align: left;">8-8-4-8-8-4</td>
-<td style="text-align: left;">abcabc</td>
-<td style="text-align: center;">consonante</td>
-</tr>
-<tr>
-<td style="text-align: left;">sexta rima</td>
-<td style="text-align: center;">6</td>
-<td style="text-align: left;">arte mayor</td>
-<td style="text-align: left;">ababcc</td>
-<td style="text-align: center;">consonante</td>
-</tr>
-<tr>
-<td style="text-align: left;">sexteto</td>
-<td style="text-align: center;">6</td>
-<td style="text-align: left;">arte mayor</td>
-<td style="text-align: left;">aabccb, abcabc, abbacc, aabbcc</td>
-<td style="text-align: center;">consonante</td>
-</tr>
-<tr>
-<td style="text-align: left;">sextilla</td>
-<td style="text-align: center;">6</td>
-<td style="text-align: left;">arte menor</td>
-<td style="text-align: left;">aabccb, ababcc, abcabc, aabaab</td>
-<td style="text-align: center;">consonante</td>
-</tr>
-<tr>
-<td style="text-align: left;">octava real</td>
-<td style="text-align: center;">8</td>
-<td style="text-align: left;">11 cada uno</td>
-<td style="text-align: left;">abababcc</td>
-<td style="text-align: center;">consonante</td>
-</tr>
-<tr>
-<td style="text-align: left;">décima</td>
-<td style="text-align: center;">10</td>
-<td style="text-align: left;">8 cada uno</td>
-<td style="text-align: left;">abbaaccddc</td>
-<td style="text-align: center;">consonante</td>
-</tr>
-</tbody>
-</table>
-<p>Una estrofa de un poema sin metro se ajusta a las sílabas de una estrofa que las pide, de modo que una lira sola recibe sus 7 y 11 sílabas. La forma de un poema es <code>soneto</code> para 14 versos de un metro de arte mayor en rima consonante con los cuartetos ABBA o ABAB y los tercetos en rimas propias; <code>romance</code> para octosílabos desde 8 versos con tres de cada cuatro de los versos pares de las estrofas en asonante, que puede cambiar, y tres de cada cuatro de los impares sin rima; la estrofa de todas las estrofas; <code>silva</code> para heptasílabos y endecasílabos sin metro, más largos que una estrofa (más de 10 versos) y sin un patrón de medidas repetido por todas sus estrofas.</p>
-<div class="admonition note">
-<p class="admonition-title">Nota</p>
-<p>La escansión, el metro y los acentos se pueden obtener por separado con las funciones del módulo. El algoritmo y las funciones se describen en la <a href="../verse_stats_funcs/">sección</a> correspondiente.</p>
-</div>
-<h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
-<h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">&para;</a></h3>
-<p>Devuelve un diccionario con las estadísticas del verso calculadas.</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<p><em>Código</em>:</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">VerseStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">seseo</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>Las estadísticas del verso de un texto: la escansión de los versos, el metro y el número de sílabas métricas, los acentos rítmicos y el perfil acentual, los tipos del endecasílabo, las terminaciones de los versos, la rima, su esquema y las estrofas. La fuente de datos es un texto con sus saltos de línea o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>; las estadísticas se calculan al crear el objeto, y no hacen falta ni un modelo entrenado ni un diccionario.</p>
+<p>El metro del verso español es silábico: un verso se mide por sus sílabas métricas, y los acentos dan forma a su ritmo. El texto se divide en versos y estrofas (por las líneas en blanco), las palabras se dividen en sílabas y se acentúan con <a href="../../syllables/"><code>syllabify</code></a> y <a href="../../syllables/#word_stresses"><code>word_stresses</code></a>, y las sílabas de un verso se cuentan con las sinalefas y la ley del acento final; un verso compuesto, ante todo el alejandrino, se lee como dos hemistiquios (<a href="#algorithm">algoritmo</a>). Un texto con letras pero sin sílabas españolas (otro alfabeto) da estadísticas vacías: <code>n_lines</code> 0, el metro <code>None</code>, las proporciones <code>nan</code>.</p>
+<p>Excepciones:</p>
+<ul>
+<li><code>SourceTypeError</code> - una fuente que no es ni una cadena ni un <code>Doc</code>;</li>
+<li><code>SourceError</code> - una fuente sin letras (vacía, solo cifras y signos de puntuación).</li>
+</ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">VerseStats</span>
 
 <span class="c1"># El comienzo del soneto I de Garcilaso de la Vega</span>
@@ -3000,43 +2486,570 @@
 <span class="s2">que a mayor mal pudiera haber llegado."""</span>
 
 <span class="n">vs</span> <span class="o">=</span> <span class="n">VerseStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-<span class="n">vs</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
-</code></pre></div>
-<p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">{</span><span class="s1">'n_lines'</span>:<span class="w"> </span><span class="m">4</span>,
-<span class="w"> </span><span class="s1">'n_stanzas'</span>:<span class="w"> </span><span class="m">1</span>,
-<span class="w"> </span><span class="s1">'meter'</span>:<span class="w"> </span><span class="s1">'endecasílabo'</span>,
-<span class="w"> </span><span class="s1">'n_feet'</span>:<span class="w"> </span><span class="m">11</span>,
-<span class="w"> </span><span class="s1">'p_deviations'</span>:<span class="w"> </span><span class="m">0</span>.0,
-<span class="w"> </span><span class="s1">'p_pyrrhics'</span>:<span class="w"> </span><span class="m">0</span>.0,
-<span class="w"> </span><span class="s1">'p_rhymed'</span>:<span class="w"> </span><span class="m">1</span>.0,
-<span class="w"> </span><span class="s1">'p_masculine'</span>:<span class="w"> </span><span class="m">0</span>.0,
-<span class="w"> </span><span class="s1">'p_feminine'</span>:<span class="w"> </span><span class="m">1</span>.0,
-<span class="w"> </span><span class="s1">'p_dactylic'</span>:<span class="w"> </span><span class="m">0</span>.0<span class="o">}</span>
+<span class="n">vs</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
 </code></pre></div>
 </div>
-<p>La escansión de cada verso, el perfil acentual y las distribuciones son atributos:</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>                  Statistic                   |    Value
+------------------------------------------------------------
+Number of lines                               |      4
+Number of stanzas                             |      1
+Meter                                         | endecasílabo
+Number of metrical syllables                  |      11
+Share of lines off the meter                  |     0.00
+Share of lines without the rhythmic stresses  |     0.00
+Share of rhymed lines                         |     1.00
+Share of oxytone endings (aguda)              |     0.00
+Share of paroxytone endings (llana)           |     1.00
+Share of proparoxytone endings (esdrújula)    |     0.00
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>source</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Fuente de datos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>seseo</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Pronunciar <code>c</code> y <code>z</code> ante <code>e</code> e <code>i</code> como <code>s</code> en la rima, como en Andalucía y en América: <code>voz</code> - <code>dos</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Atributo</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>lines</code></td>
+<td style="text-align: left;"><code>tuple[str]</code></td>
+<td style="text-align: left;">Versos con palabras españolas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>stanzas</code></td>
+<td style="text-align: left;"><code>tuple[tuple[str, ...], ...]</code></td>
+<td style="text-align: left;">Versos por estrofa</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>syllables</code></td>
+<td style="text-align: left;"><code>tuple[tuple[str, ...], ...]</code></td>
+<td style="text-align: left;">Sílabas de cada verso como las lee el verso, con la sinalefa marcada con <code>‿</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>stresses</code></td>
+<td style="text-align: left;"><code>tuple[tuple[int, ...], ...]</code></td>
+<td style="text-align: left;">Índices de las sílabas acentuadas de cada verso en <code>syllables</code>, desde cero</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>caesuras</code></td>
+<td style="text-align: left;"><code>tuple[int / None, ...]</code></td>
+<td style="text-align: left;">Índice de la primera sílaba del segundo hemistiquio de cada verso en <code>syllables</code>, <code>None</code> para un verso simple</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>patterns</code></td>
+<td style="text-align: left;"><code>tuple[str, ...]</code></td>
+<td style="text-align: left;">Esquemas de los versos de <code>+</code> (una sílaba métrica acentuada) y <code>-</code> (una átona), tan largos como el verso en sílabas métricas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>mean_line_len</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">Longitud media de un verso en sílabas métricas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>c_stressed_vowels</code></td>
+<td style="text-align: left;"><code>dict[str, int]</code></td>
+<td style="text-align: left;">Distribución de las vocales acentuadas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>seseo</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;">Si la rima se lee con seseo</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>c_feet</code></td>
+<td style="text-align: left;"><code>dict[int, int]</code></td>
+<td style="text-align: left;">Distribución de los versos por sílabas métricas (<a href="#meter">metro</a>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>stress_profile</code></td>
+<td style="text-align: left;"><code>tuple[float, ...]</code></td>
+<td style="text-align: left;">Proporción de los versos del metro acentuados en cada sílaba métrica (<a href="#meter">metro</a>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>c_rhythms</code></td>
+<td style="text-align: left;"><code>dict[str, int]</code></td>
+<td style="text-align: left;">Distribución de los endecasílabos por tipo (<a href="#pyrrhics">acentos rítmicos</a>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>rhyme_schemes</code></td>
+<td style="text-align: left;"><code>tuple[str, ...]</code></td>
+<td style="text-align: left;">Esquemas de rima de las estrofas (<a href="#rhyme_scheme">rima</a>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>c_rhymes</code></td>
+<td style="text-align: left;"><code>dict[str, int]</code></td>
+<td style="text-align: left;">Distribución de los versos con rima por el tipo de la rima: <code>consonante</code>, <code>asonante</code> (<a href="#rhyme_scheme">rima</a>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>strophes</code></td>
+<td style="text-align: left;"><code>tuple[str / None, ...]</code></td>
+<td style="text-align: left;">Nombres de las estrofas, <code>VERSE_STROPHES</code> (<a href="#strophes">estrofas</a>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>form</code></td>
+<td style="text-align: left;"><code>str / None</code></td>
+<td style="text-align: left;">Forma del poema: <code>soneto</code>, <code>romance</code>, la estrofa de todas sus estrofas, <code>silva</code> (<a href="#strophes">estrofas</a>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>c_clausulas</code></td>
+<td style="text-align: left;"><code>dict[str, int]</code></td>
+<td style="text-align: left;">Distribución de las terminaciones de los versos por tipo: <code>aguda</code>, <code>llana</code>, <code>esdrújula</code>, <code>sobresdrújula</code> (<a href="#clausulas">terminaciones</a>)</td>
+</tr>
+</tbody>
+</table>
+<p><code>stresses</code> indexa <code>syllables</code>, y ambos coinciden con <code>patterns</code> hasta el último acento de un verso simple; en un <a href="#meter">verso compuesto</a> cada hemistiquio tiene su propia medida, así que tras una aguda o una esdrújula en la cesura <code>patterns</code> y <code>syllables</code> se separan, y <code>caesuras</code> dice dónde empieza el segundo hemistiquio.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Código</label><label for="__tabbed_2_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">vs</span><span class="o">.</span><span class="n">syllables</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="c1"># ('y‿a', 'ver', 'los', 'pa', 'sos', 'por', 'do', 'me‿han', 'tra', 'í', 'do')</span>
 <span class="n">vs</span><span class="o">.</span><span class="n">patterns</span>
-<span class="c1"># ('---+---+-+-', '-+-+---+-+-', '+--+--+--+-', '--++-+-+-+-')</span>
 <span class="n">vs</span><span class="o">.</span><span class="n">stresses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="c1"># (3, 7, 9)</span>
-<span class="n">vs</span><span class="o">.</span><span class="n">stress_profile</span>
-<span class="c1"># (0.25, 0.25, 0.25, 1.0, 0.0, 0.25, 0.25, 0.75, 0.0, 1.0, 0.0)</span>
-<span class="n">vs</span><span class="o">.</span><span class="n">c_rhythms</span><span class="p">,</span> <span class="n">vs</span><span class="o">.</span><span class="n">c_clausulas</span>
-<span class="c1"># ({'4-8-10': 2, '4-7-10': 1, '3-6-10': 1}, {'llana': 4})</span>
 <span class="n">vs</span><span class="o">.</span><span class="n">c_stressed_vowels</span>
-<span class="c1"># {'a': 8, 'e': 3, 'i': 2, 'u': 2, 'o': 1}</span>
 </code></pre></div>
 </div>
-<p>La rima del soneto entero y de un romance:</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>('y‿a', 'ver', 'los', 'pa', 'sos', 'por', 'do', 'me‿han', 'tra', 'í', 'do')
+('---+---+-+-', '-+-+---+-+-', '+--+--+--+-', '--++-+-+-+-')
+(3, 7, 9)
+{'a': 8, 'e': 3, 'i': 2, 'u': 2, 'o': 1}
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="metricas">Métricas<a class="headerlink" href="#metricas" title="Permanent link">&para;</a></h2>
+<p>Cada métrica es un atributo del objeto, calculado al crearlo; <code>get_stats</code> devuelve las métricas de la tabla, mientras que las distribuciones, los esquemas y los nombres de las tarjetas son solo atributos.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Métrica</th>
+<th style="text-align: left;">Qué mide</th>
+<th style="text-align: left;">Rango</th>
+<th style="text-align: left;">Un valor mayor indica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>n_lines</code>, <code>n_stanzas</code></td>
+<td style="text-align: left;">Número de los versos con palabras españolas y de las estrofas</td>
+<td style="text-align: left;">0 o más</td>
+<td style="text-align: left;">Un texto más largo</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#meter"><code>meter</code></a></td>
+<td style="text-align: left;">Metro silábico: el nombre del verso por sus sílabas métricas</td>
+<td style="text-align: left;">de <code>bisílabo</code> a <code>octodecasílabo</code> (<code>VERSE_METERS</code>), <code>None</code> sin metro</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#meter"><code>n_feet</code></a></td>
+<td style="text-align: left;">Sílabas métricas del metro</td>
+<td style="text-align: left;">2-18, <code>None</code> sin metro</td>
+<td style="text-align: left;">Versos más largos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#meter"><code>p_deviations</code></a></td>
+<td style="text-align: left;">Proporción de los versos fuera del metro</td>
+<td style="text-align: left;">0-0,1, <code>nan</code> sin metro</td>
+<td style="text-align: left;">Más versos fuera del metro</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#pyrrhics"><code>p_pyrrhics</code></a></td>
+<td style="text-align: left;">Proporción de los versos del metro sin sus acentos rítmicos</td>
+<td style="text-align: left;">0-1, <code>nan</code> sin metro</td>
+<td style="text-align: left;">Más versos sin los acentos rítmicos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#rhyme_scheme"><code>p_rhymed</code></a></td>
+<td style="text-align: left;">Proporción de los versos con rima</td>
+<td style="text-align: left;">0-1, <code>nan</code> sin versos</td>
+<td style="text-align: left;">Más rimas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#clausulas"><code>p_masculine</code></a>, <a href="#clausulas"><code>p_feminine</code></a>, <a href="#clausulas"><code>p_dactylic</code></a></td>
+<td style="text-align: left;">Proporciones de las terminaciones agudas, llanas y esdrújulas</td>
+<td style="text-align: left;">0-1, <code>nan</code> sin versos</td>
+<td style="text-align: left;">Más terminaciones del tipo</td>
+</tr>
+</tbody>
+</table>
+<div class="metric-card">
+<h3 id="meter">Metro y sílabas métricas<a class="headerlink" href="#meter" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>meter</code> · <code>n_feet</code> · <code>c_feet</code> · <code>p_deviations</code> · Quilis, 1984</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">detect_meter</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>El metro de un poema según el <a href="#algorithm">algoritmo</a>: el nombre del verso por sus sílabas métricas - <code>octosílabo</code>, <code>endecasílabo</code>, <code>alejandrino</code>... (<code>VERSE_METERS</code>), y <code>n_feet</code> su número de sílabas métricas. <code>c_feet</code> es la distribución de los versos por sílabas métricas, y <code>p_deviations</code> la proporción de los versos fuera del metro.</p>
+<p>El metro es la medida de la mayoría de los versos, y no se determina (<code>None</code>) si más de una décima parte de los versos (<code>VERSE_MAX_DEVIATIONS</code>) quedan fuera de él tras el ajuste - un poema polimétrico (una silva, un soneto con estrambote de heptasílabos), el verso libre, la prosa - o si el texto tiene un solo verso (<code>VERSE_MIN_LINES</code>). Los versos de un poema sin metro se ajustan a sus medidas comunes - las de al menos dos versos y una décima parte de ellos, como las 7 y las 11 sílabas de una lira o una silva - si estas ocupan más de la mitad de los versos; si no, como en el verso libre y la prosa, los versos conservan su lectura llana.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Texto de un poema</td>
+</tr>
+</tbody>
+</table>
+<p>Las excepciones son las de <code>VerseStats</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.verse_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">detect_meter</span>
+
+<span class="c1"># El comienzo del Romance del prisionero</span>
+<span class="n">detect_meter</span><span class="p">(</span>
+    <span class="s2">"Que por mayo era, por mayo,</span><span class="se">\n</span><span class="s2">cuando hace la calor,</span><span class="se">\n</span><span class="s2">cuando los trigos encañan</span><span class="se">\n</span><span class="s2">y están los campos en flor,"</span>
+<span class="p">)</span>
+<span class="c1"># El soneto de Garcilaso del principio de la página</span>
+<span class="n">vs</span><span class="o">.</span><span class="n">c_feet</span><span class="p">,</span> <span class="n">vs</span><span class="o">.</span><span class="n">p_deviations</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>'octosílabo'
+({11: 4}, 0.0)
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Un verso compuesto se lee por sus hemistiquios, cada uno por la ley del acento final: en el alejandrino de 7 + 7 sílabas <em>La princesa está pálida</em> (una esdrújula) y <em>que ha perdido el color</em> (una aguda) cuentan 7 cada uno.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="c1"># La primera estrofa de Sonatina de Rubén Darío (Prosas profanas, 1896)</span>
+<span class="n">sonatina</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"La princesa está triste... ¿qué tendrá la princesa?</span><span class="se">\n</span><span class="s2">"</span>
+    <span class="s2">"Los suspiros se escapan de su boca de fresa,</span><span class="se">\n</span><span class="s2">"</span>
+    <span class="s2">"que ha perdido la risa, que ha perdido el color.</span><span class="se">\n</span><span class="s2">"</span>
+    <span class="s2">"La princesa está pálida en su silla de oro,</span><span class="se">\n</span><span class="s2">"</span>
+    <span class="s2">"está mudo el teclado de su clave sonoro;</span><span class="se">\n</span><span class="s2">"</span>
+    <span class="s2">"y en un vaso olvidada se desmaya una flor."</span>
+<span class="p">)</span>
+<span class="n">vs_sonatina</span> <span class="o">=</span> <span class="n">VerseStats</span><span class="p">(</span><span class="n">sonatina</span><span class="p">)</span>
+<span class="n">vs_sonatina</span><span class="o">.</span><span class="n">meter</span><span class="p">,</span> <span class="n">vs_sonatina</span><span class="o">.</span><span class="n">n_feet</span>
+<span class="n">vs_sonatina</span><span class="o">.</span><span class="n">syllables</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">vs_sonatina</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">vs_sonatina</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">vs_sonatina</span><span class="o">.</span><span class="n">stresses</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">vs_sonatina</span><span class="o">.</span><span class="n">caesuras</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>('alejandrino', 14)
+('la', 'prin', 'ce', 'sa‿es', 'tá', 'pá', 'li', 'da', 'en', 'su', 'si', 'lla', 'de', 'o', 'ro')
+('+-+--+-+-+--+-', '--+-++---+--+-')
+((2, 4, 5, 10, 13), (7, 7, 7, 8, 7, 7))
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="pyrrhics">Acentos rítmicos<a class="headerlink" href="#pyrrhics" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>p_pyrrhics</code> · <code>stress_profile</code> · <code>c_rhythms</code> · Navarro Tomás, 1972</p>
+<p>Los acentos rítmicos (<code>VERSE_RHYTHMS</code>) son los que un metro pide además del último, que todo verso tiene por la ley del acento final: el endecasílabo se acentúa en la 6.ª sílaba (a maiore) o en la 4.ª y la 8.ª (sáfico) o la 7.ª (dactílico); un verso compuesto, en el último acento de su primer hemistiquio. <code>p_pyrrhics</code> es la proporción de los versos del metro sin ellos, y un metro con solo el último acento, el octosílabo entre otros, tiene <code>p_pyrrhics</code> 0.</p>
+<div class="arithmatex">\[
+\frac{\textrm{Número de versos del metro sin sus acentos rítmicos}}{\textrm{Número de versos del metro}}
+\]</div>
+<p><code>stress_profile</code> es la proporción de los versos del metro acentuados en cada sílaba métrica; las sílabas se cuentan desde cero, así que la 6.ª sílaba es el número 5. Sin metro <code>p_pyrrhics</code> es <code>nan</code> y el perfil está vacío. <code>c_rhythms</code> es la distribución de los endecasílabos por tipo:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Acentos</th>
+<th style="text-align: left;">Nombre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>1-6-10</code></td>
+<td style="text-align: left;">1.ª, 6.ª</td>
+<td style="text-align: left;">enfático</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>2-6-10</code></td>
+<td style="text-align: left;">2.ª, 6.ª</td>
+<td style="text-align: left;">heroico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>3-6-10</code></td>
+<td style="text-align: left;">3.ª, 6.ª</td>
+<td style="text-align: left;">melódico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>4-6-10</code>, <code>5-6-10</code></td>
+<td style="text-align: left;">el primer acento en la 4.ª o la 5.ª, 6.ª</td>
+<td style="text-align: left;">a maiore</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>6-10</code></td>
+<td style="text-align: left;">6.ª, sin acento antes</td>
+<td style="text-align: left;">a maiore</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>4-8-10</code></td>
+<td style="text-align: left;">4.ª, 8.ª, sin 6.ª</td>
+<td style="text-align: left;">sáfico</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>4-7-10</code></td>
+<td style="text-align: left;">4.ª, 7.ª, sin 6.ª ni 8.ª</td>
+<td style="text-align: left;">dactílico, de gaita gallega</td>
+</tr>
+</tbody>
+</table>
+<p>Un verso con la 6.ª sílaba acentuada toma su tipo de su primer acento; <code>4-6-10</code> cuenta como sáfico en algunos tratados. Un verso sin ninguno de los tres conjuntos queda fuera de <code>c_rhythms</code> y se cuenta en <code>p_pyrrhics</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">vs</span><span class="o">.</span><span class="n">p_pyrrhics</span><span class="p">,</span> <span class="n">vs</span><span class="o">.</span><span class="n">stress_profile</span>
+<span class="n">vs</span><span class="o">.</span><span class="n">c_rhythms</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>(0.0, (0.25, 0.25, 0.25, 1.0, 0.0, 0.25, 0.25, 0.75, 0.0, 1.0, 0.0))
+{'4-8-10': 2, '4-7-10': 1, '3-6-10': 1}
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="rhyme_scheme">Rima<a class="headerlink" href="#rhyme_scheme" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>p_rhymed</code> · <code>rhyme_schemes</code> · <code>c_rhymes</code></p>
+<div class="signature highlight"><pre><span></span><code><span class="n">rhyme_scheme</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">seseo</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>El esquema de rima de un poema: los esquemas de las estrofas separados por espacios. El objeto guarda los esquemas por estrofa en <code>rhyme_schemes</code>, la proporción de los versos con rima en <code>p_rhymed</code> y la distribución de los versos con rima por el tipo de la rima, <code>consonante</code> o <code>asonante</code>, en <code>c_rhymes</code>.</p>
+<p>Un verso rima por su terminación desde la última vocal acentuada: en consonante si los sonidos son iguales, en asonante si lo son la vocal acentuada y la última. Los sonidos son los del oído: <code>b</code> y <code>v</code>, <code>c</code> y <code>z</code> (<code>s</code> con <code>seseo</code>), <code>ll</code> e <code>y</code> son un solo sonido, la <code>h</code> es muda, la vibrante simple <code>r</code> y la múltiple <code>rr</code> se distinguen. La asonancia deja fuera las vocales entre la acentuada y la última (<em>pálido</em> - a, o), toma la vocal acentuada de un diptongo (<em>cielo</em> - e, o; <em>gracia</em> - a, a), lee la <code>i</code> y la <code>u</code> finales como <code>e</code> y <code>o</code> (<em>fácil</em> - a, e) y da a una aguda solo su vocal acentuada. Un verso rima con los versos de la ventana de <code>RHYME_WINDOW</code> (4) versos anteriores, por encima de las estrofas, de modo que los cuartetos de un soneto riman ABBA ABBA.</p>
+<p>La asonancia cuenta en dos casos. Un poema cuya rima es la asonancia - al menos un tercio de sus versos sin rima consonante, y al menos cuatro de ellos, comparten una (<code>RHYME_MIN_ASSONANCE</code>, <code>RHYME_MIN_ASSONANT_LINES</code>) - rima por las asonancias de todos sus versos, que abarcan las rimas consonantes de las mismas vocales, como un soneto asonantado. Si no, la asonancia cuenta en versos alternos con versos sin rima entre ellos: una serie de al menos cuatro versos de dos en dos con tres de cada cuatro de los versos intermedios sin rima consonante (<code>RHYME_MIN_FREE</code>), o todos los versos pares de una estrofa de un número par de versos, como el segundo y el cuarto de una copla. Así un romance rima aunque cambie de asonancia de una parte a otra o sus versos asonantes rimen además en consonante de dos en dos. Una asonancia de versos vecinos no es rima: en un soneto de <code>-ado</code> y <code>-ano</code> los dos grupos se mantienen aparte.</p>
+<p>El esquema de rima sigue el uso español: las letras van en el orden de los grupos de rima de todo el poema, mayúsculas para los versos de arte mayor (9 sílabas o más, <code>VERSE_ARTE_MAYOR</code>) y minúsculas para los de arte menor, con un guion para un verso sin rima: un soneto es ABBA ABBA CDC DCD, una redondilla abba, una lira aBabB, un romance -a-a-a-a. Cuando se acaban las 26 letras, se vuelve a tomar la letra de un grupo al que ya no puede unirse ningún verso de la ventana.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Texto de un poema</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>seseo</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Pronunciar <code>c</code> y <code>z</code> ante <code>e</code> e <code>i</code> como <code>s</code> en la rima</td>
+</tr>
+</tbody>
+</table>
+<p>Las excepciones son las de <code>VerseStats</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.verse_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">rhyme_scheme</span>
 
+<span class="c1"># Sor Juana Inés de la Cruz</span>
+<span class="n">rhyme_scheme</span><span class="p">(</span>
+    <span class="s2">"Hombres necios que acusáis</span><span class="se">\n</span><span class="s2">a la mujer sin razón,</span><span class="se">\n</span><span class="s2">sin ver que sois la ocasión</span><span class="se">\n</span><span class="s2">de lo mismo que culpáis."</span>
+<span class="p">)</span>
+<span class="c1"># El soneto de Garcilaso del principio de la página</span>
+<span class="n">vs</span><span class="o">.</span><span class="n">rhyme_schemes</span><span class="p">,</span> <span class="n">vs</span><span class="o">.</span><span class="n">p_rhymed</span><span class="p">,</span> <span class="n">vs</span><span class="o">.</span><span class="n">c_rhymes</span>
+
+<span class="c1"># El comienzo de La tierra de Alvargonzález de Antonio Machado</span>
+<span class="n">romance</span> <span class="o">=</span> <span class="s2">"""Siendo mozo Alvargonzález,</span>
+<span class="s2">dueño de mediana hacienda,</span>
+<span class="s2">que en otras tierras se dice</span>
+<span class="s2">bienestar y aquí, opulencia,</span>
+<span class="s2">en la feria de Berlanga</span>
+<span class="s2">prendóse de una doncella,</span>
+<span class="s2">y la tomó por mujer</span>
+<span class="s2">al año de conocerla."""</span>
+<span class="n">rhyme_scheme</span><span class="p">(</span><span class="n">romance</span><span class="p">),</span> <span class="n">VerseStats</span><span class="p">(</span><span class="n">romance</span><span class="p">)</span><span class="o">.</span><span class="n">c_rhymes</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>'abba'
+(('ABBA',), 1.0, {'consonante': 4})
+('-a-a-a-a', {'asonante': 4})
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="strophes">Estrofas y forma<a class="headerlink" href="#strophes" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>strophes</code> · <code>form</code></p>
+<p>Una estrofa se nombra por sus versos, sus medidas, su esquema y su rima (<code>VERSE_STROPHES</code>, la primera que encaja), <code>None</code> si no encaja ninguna:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Estrofa</th>
+<th style="text-align: left;">Versos</th>
+<th style="text-align: left;">Medidas</th>
+<th style="text-align: left;">Esquemas</th>
+<th style="text-align: left;">Rima</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">pareado</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">cualquiera</td>
+<td style="text-align: left;">aa</td>
+<td style="text-align: left;">cualquiera</td>
+</tr>
+<tr>
+<td style="text-align: left;">terceto</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">arte mayor</td>
+<td style="text-align: left;">aba, a-a, abc, aab, abb</td>
+<td style="text-align: left;">cualquiera</td>
+</tr>
+<tr>
+<td style="text-align: left;">tercerilla</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">arte menor</td>
+<td style="text-align: left;">aba, a-a</td>
+<td style="text-align: left;">cualquiera</td>
+</tr>
+<tr>
+<td style="text-align: left;">cuaderna vía</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">14 cada uno</td>
+<td style="text-align: left;">aaaa</td>
+<td style="text-align: left;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">cuarteto, serventesio</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">arte mayor</td>
+<td style="text-align: left;">abba; abab</td>
+<td style="text-align: left;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">redondilla, cuarteta</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">arte menor</td>
+<td style="text-align: left;">abba; abab</td>
+<td style="text-align: left;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">seguidilla</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">7-5-7-5</td>
+<td style="text-align: left;">-a-a</td>
+<td style="text-align: left;">cualquiera</td>
+</tr>
+<tr>
+<td style="text-align: left;">copla</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;">8 cada uno</td>
+<td style="text-align: left;">-a-a</td>
+<td style="text-align: left;">asonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">lira</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">7-11-7-7-11</td>
+<td style="text-align: left;">ababb</td>
+<td style="text-align: left;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">quinteto, quintilla</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;">arte mayor; arte menor</td>
+<td style="text-align: left;">ababa, abaab, abbab, aabab, aabba</td>
+<td style="text-align: left;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">estrofa manriqueña</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">8-8-4-8-8-4</td>
+<td style="text-align: left;">abcabc</td>
+<td style="text-align: left;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">sexta rima</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">arte mayor</td>
+<td style="text-align: left;">ababcc</td>
+<td style="text-align: left;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">sexteto</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">arte mayor</td>
+<td style="text-align: left;">aabccb, abcabc, abbacc, aabbcc</td>
+<td style="text-align: left;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">sextilla</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;">arte menor</td>
+<td style="text-align: left;">aabccb, ababcc, abcabc, aabaab</td>
+<td style="text-align: left;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">octava real</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;">11 cada uno</td>
+<td style="text-align: left;">abababcc</td>
+<td style="text-align: left;">consonante</td>
+</tr>
+<tr>
+<td style="text-align: left;">décima</td>
+<td style="text-align: left;">10</td>
+<td style="text-align: left;">8 cada uno</td>
+<td style="text-align: left;">abbaaccddc</td>
+<td style="text-align: left;">consonante</td>
+</tr>
+</tbody>
+</table>
+<p>Una estrofa de un poema sin metro se ajusta a las sílabas de una estrofa que las pide, de modo que una lira sola recibe sus 7 y 11 sílabas. La forma de un poema es <code>soneto</code> para 14 versos de un metro de arte mayor en rima consonante con los cuartetos ABBA o ABAB y los tercetos en rimas propias; <code>romance</code> para octosílabos desde 8 versos con tres de cada cuatro de los versos pares de las estrofas en asonante, que puede cambiar, y tres de cada cuatro de los impares sin rima; la estrofa de todas las estrofas; <code>silva</code> para heptasílabos y endecasílabos sin metro, más largos que una estrofa (más de 10 versos) y sin un patrón de medidas repetido por todas sus estrofas; si no, <code>None</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="c1"># El soneto I de Garcilaso de la Vega</span>
 <span class="n">sonnet</span> <span class="o">=</span> <span class="s2">"""Cuando me paro a contemplar mi estado</span>
 <span class="s2">y a ver los pasos por do me han traído,</span>
 <span class="s2">hallo, según por do anduve perdido,</span>
@@ -3054,84 +3067,167 @@
 <span class="s2">que pues mi voluntad puede matarme,</span>
 <span class="s2">la suya, que no es tanto de mi parte,</span>
 <span class="s2">pudiendo, ¿qué hará sino hacello?"""</span>
-<span class="n">vs</span> <span class="o">=</span> <span class="n">VerseStats</span><span class="p">(</span><span class="n">sonnet</span><span class="p">)</span>
-<span class="n">vs</span><span class="o">.</span><span class="n">rhyme_schemes</span><span class="p">,</span> <span class="n">vs</span><span class="o">.</span><span class="n">strophes</span><span class="p">,</span> <span class="n">vs</span><span class="o">.</span><span class="n">form</span>
-<span class="c1"># (('ABBA', 'ABBA', 'CDE', 'DCE'), ('cuarteto', 'cuarteto', 'terceto', 'terceto'), 'soneto')</span>
-
-<span class="c1"># El comienzo de La tierra de Alvargonzález de Antonio Machado</span>
-<span class="n">romance</span> <span class="o">=</span> <span class="s2">"""Siendo mozo Alvargonzález,</span>
-<span class="s2">dueño de mediana hacienda,</span>
-<span class="s2">que en otras tierras se dice</span>
-<span class="s2">bienestar y aquí, opulencia,</span>
-<span class="s2">en la feria de Berlanga</span>
-<span class="s2">prendóse de una doncella,</span>
-<span class="s2">y la tomó por mujer</span>
-<span class="s2">al año de conocerla."""</span>
-<span class="n">vs</span> <span class="o">=</span> <span class="n">VerseStats</span><span class="p">(</span><span class="n">romance</span><span class="p">)</span>
-<span class="n">rhyme_scheme</span><span class="p">(</span><span class="n">romance</span><span class="p">),</span> <span class="n">vs</span><span class="o">.</span><span class="n">form</span><span class="p">,</span> <span class="n">vs</span><span class="o">.</span><span class="n">c_rhymes</span>
-<span class="c1"># ('-a-a-a-a', 'romance', {'asonante': 4})</span>
+<span class="n">vs_sonnet</span> <span class="o">=</span> <span class="n">VerseStats</span><span class="p">(</span><span class="n">sonnet</span><span class="p">)</span>
+<span class="n">vs_sonnet</span><span class="o">.</span><span class="n">rhyme_schemes</span><span class="p">,</span> <span class="n">vs_sonnet</span><span class="o">.</span><span class="n">strophes</span><span class="p">,</span> <span class="n">vs_sonnet</span><span class="o">.</span><span class="n">form</span>
+<span class="n">vs_sonatina</span><span class="o">.</span><span class="n">strophes</span><span class="p">,</span> <span class="n">VerseStats</span><span class="p">(</span><span class="n">romance</span><span class="p">)</span><span class="o">.</span><span class="n">form</span>
 </code></pre></div>
 </div>
-<h3 id="print_stats">print_stats<a class="headerlink" href="#print_stats" title="Permanent link">&para;</a></h3>
-<p>Muestra una tabla con las estadísticas del verso calculadas.</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<p><em>Código</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">VerseStats</span>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>(('ABBA', 'ABBA', 'CDE', 'DCE'), ('cuarteto', 'cuarteto', 'terceto', 'terceto'), 'soneto')
+(('sexteto',), 'romance')
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="clausulas">Terminaciones de los versos<a class="headerlink" href="#clausulas" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>p_masculine</code> · <code>p_feminine</code> · <code>p_dactylic</code> · <code>c_clausulas</code></p>
+<p>El tipo de la terminación (cláusula) de un verso por las sílabas tras su último acento: <code>aguda</code> - el acento en la última sílaba, <code>llana</code> - una sílaba tras el acento, <code>esdrújula</code> - dos, <code>sobresdrújula</code> - tres o más (<code>VERSE_CLAUSULAS</code>, como <a href="../../syllables/#stress_type"><code>stress_type</code></a> de una palabra). <code>c_clausulas</code> es la distribución de los versos por tipo, y las proporciones se toman sobre todos los versos: <code>p_masculine</code> de las agudas, <code>p_feminine</code> de las llanas y <code>p_dactylic</code> de las esdrújulas.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Código</label><label for="__tabbed_8_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">vs</span><span class="o">.</span><span class="n">c_clausulas</span><span class="p">,</span> <span class="n">vs_sonatina</span><span class="o">.</span><span class="n">c_clausulas</span>
+<span class="n">vs_sonatina</span><span class="o">.</span><span class="n">p_masculine</span><span class="p">,</span> <span class="n">vs_sonatina</span><span class="o">.</span><span class="n">p_feminine</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>({'llana': 4}, {'aguda': 2, 'llana': 4})
+(0.3333333333333333, 0.6666666666666666)
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
+<p><code>accentuate()</code> devuelve el texto con los acentos marcados: se pone un acento agudo (U+0301) tras la vocal acentuada de cada palabra tónica sin tilde; las palabras con tilde la conservan, y las palabras átonas del verso (<code>VERSE_PROCLITICS</code>) quedan sin marca, salvo la última palabra de un verso. Las marcas son caracteres combinantes aparte de las tildes, así que <code>unicodedata.normalize("NFC", ...)</code> las convierte en letras acentuadas. Solo se devuelven los versos con palabras españolas (como en <code>lines</code>), con las estrofas separadas por una línea en blanco. A diferencia de la función <a href="#accentuate"><code>accentuate</code></a>, la última palabra de un verso siempre es tónica.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Código</label><label for="__tabbed_9_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="nb">print</span><span class="p">(</span><span class="n">vs</span><span class="o">.</span><span class="n">accentuate</span><span class="p">())</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>Cuando me páro a contemplár mi estádo
+y a vér los pásos por do me hán traído,
+hállo, según por do andúve perdído,
+que a mayór mál pudiéra habér llegádo.
+</code></pre></div>
+</div>
+</div>
+</div>
+<p><code>get_stats()</code> devuelve las métricas como un diccionario, y <code>print_stats()</code> las muestra como una tabla con sus descripciones (<code>VERSE_STATS_DESC</code>), como en el ejemplo del principio de la página.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Código</label><label for="__tabbed_10_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">vs</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>{'n_lines': 4,
+ 'n_stanzas': 1,
+ 'meter': 'endecasílabo',
+ 'n_feet': 11,
+ 'p_deviations': 0.0,
+ 'p_pyrrhics': 0.0,
+ 'p_rhymed': 1.0,
+ 'p_masculine': 0.0,
+ 'p_feminine': 1.0,
+ 'p_dactylic': 0.0}
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="algorithm">Algoritmo<a class="headerlink" href="#algorithm" title="Permanent link">&para;</a></h2>
+<p>Un verso español se mide por sus sílabas métricas, que no son las sílabas de sus palabras una por una:</p>
+<ol>
+<li><strong>Sílabas y acentos.</strong> Cada palabra se divide en sílabas con <a href="../../syllables/"><code>syllabify</code></a> y se acentúa por las reglas ortográficas de <a href="../../syllables/#word_stresses"><code>word_stresses</code></a>; un adverbio en <code>-mente</code> tiene dos acentos. Las palabras átonas del verso (<code>VERSE_PROCLITICS</code>) no llevan acento: los artículos, las preposiciones salvo <code>según</code>, las conjunciones, los relativos (<code>que</code>, <code>cual</code>, <code>donde</code>, <code>como</code>, <code>cuanto</code>), los pronombres clíticos (<code>me</code>, <code>te</code>, <code>se</code>, <code>le</code>, <code>nos</code>), los posesivos antepuestos (<code>mi</code>, <code>tu</code>, <code>su</code>, <code>nuestro</code>, <code>vuestro</code>), los tratamientos ante un nombre (<code>don</code>, <code>fray</code>, <code>san</code>), <code>tan</code>, <code>aun</code> y las interjecciones <code>oh</code>, <code>ay</code>, <code>ah</code>. La última palabra de un verso siempre es tónica.</li>
+<li><strong>La lectura llana.</strong> La vocal final de una palabra y la primera de la siguiente forman una sílaba - la sinalefa (<em>cuan-do‿a-pe-nas</em>, <em>tie-rra‿y‿a-gua</em>). La <code>h</code> muda la deja pasar (<em>oh‿al-ma</em>), mientras que <code>hi</code> y <code>hu</code> ante vocal (<em>hierba</em>, <em>hueso</em>) e <code>y</code> ante vocal (<em>ya</em>, <em>yo</em>) son consonantes y la impiden; una consonante al final de la palabra la impide también (<em>el | al-ma</em>).</li>
+<li><strong>La ley del acento final.</strong> Un verso cuenta hasta su última sílaba acentuada y una sílaba más: un verso que termina en aguda gana una sílaba (<em>cuan-do‿ha-ce-la-ca-lor</em> - 6 + 1 = 7), uno que termina en esdrújula pierde una (<em>el pá-ja-ro</em> - 3).</li>
+<li><strong>El metro.</strong> El metro de un poema es la medida de la mayoría de las lecturas llanas; en caso de empate, desde tres versos, gana la medida empatada con nombre que deja menos versos fuera de ella. Cada verso se ajusta a él con los menos cambios de su lectura llana: un verso más largo une dos vocales de un hiato en una palabra - la sinéresis (<em>poe-ta</em>), las que tienen una <code>i</code> o una <code>u</code> con tilde (<em>dí-a</em>) al final; uno más corto deshace sus sinalefas desde el final del verso - el hiato, y después divide un diptongo de una sílaba acentuada - la diéresis (<em>su-a-ve</em>, <em>ru-i-do</em>). La diéresis escrita marca un hiato (<em>sü-a-ve</em>) que ninguna sinéresis une. Un verso que no alcanza el metro conserva su lectura llana y cuenta como fuera de él. Un poema sin metro ajusta en cambio sus versos a sus medidas comunes, si estas ocupan más de la mitad de los versos.</li>
+<li><strong>El verso compuesto.</strong> Un verso compuesto de dos hemistiquios iguales (<code>VERSE_HEMISTICHS</code>: 5 + 5, 6 + 6, 7 + 7, 8 + 8, 9 + 9) se prueba cuando más de la mitad de las lecturas llanas se dividen en sus hemistiquios y su medida es igual a la de la mayoría de los versos o difiere de ella en una sílaba; gana la lectura con menos versos fuera del metro, el verso compuesto en caso de empate. La cesura cae tras una palabra tónica e impide la sinalefa, y cada hemistiquio sigue la ley del acento final por su cuenta: el alejandrino <em>La princesa está pálida | en su silla de oro</em> es 7 + 7.</li>
+</ol>
+<p>Sobre los 60 209 versos de los 4259 sonetos de <a href="../../datasets/spanishsonnets/">SpanishSonnets</a>, la medida de un verso coincide con la escansión automática de DISCO en el 97,0% de los versos y con la de <a href="https://github.com/linhd-postdata/rantanplan">rantanplan</a> en el 97,7%, y el acento de una sílaba métrica de los versos de igual medida en el 97,4% y el 99,6%.</p>
+<p>La rima se describe en su <a href="#rhyme_scheme">tarjeta</a>. Frente a la rima automática de DISCO (RhymeTagger), el 99,1% de los pares de versos que riman que encontramos son pares suyos, y encontramos el 97,9% de sus pares.</p>
+<h2 id="accentuate">Acentuación<a class="headerlink" href="#accentuate" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">accentuate</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Marca los acentos de un texto por las reglas ortográficas: se pone un acento agudo (U+0301) tras la vocal acentuada de cada palabra sin tilde, los dos acentos de un adverbio en <code>-mente</code> y de un compuesto con guion; las palabras átonas del verso (<code>VERSE_PROCLITICS</code>) quedan sin marca. El texto se normaliza a NFC. Para los versos de un poema, donde la última palabra siempre es tónica, sirve el método <code>VerseStats.accentuate</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Texto</td>
+</tr>
+</tbody>
+</table>
+<div class="tabbed-set tabbed-alternate" data-tabs="11:2"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><input id="__tabbed_11_2" name="__tabbed_11" type="radio" /><div class="tabbed-labels"><label for="__tabbed_11_1">Código</label><label for="__tabbed_11_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">unicodedata</span>
 
-<span class="c1"># La primera estrofa de Sonatina de Rubén Darío (Prosas profanas, 1896)</span>
-<span class="n">sonatina</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">"La princesa está triste... ¿qué tendrá la princesa?</span><span class="se">\n</span><span class="s2">"</span>
-    <span class="s2">"Los suspiros se escapan de su boca de fresa,</span><span class="se">\n</span><span class="s2">"</span>
-    <span class="s2">"que ha perdido la risa, que ha perdido el color.</span><span class="se">\n</span><span class="s2">"</span>
-    <span class="s2">"La princesa está pálida en su silla de oro,</span><span class="se">\n</span><span class="s2">"</span>
-    <span class="s2">"está mudo el teclado de su clave sonoro;</span><span class="se">\n</span><span class="s2">"</span>
-    <span class="s2">"y en un vaso olvidada se desmaya una flor."</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.verse_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">accentuate</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"Yo soy aquel que ayer no más decía el verso azul y la canción profana"</span>
+<span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">"NFC"</span><span class="p">,</span> <span class="n">accentuate</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>'Yó sóy aquél que ayér nó más decía el vérso azúl y la canción profána'
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="split_stanzas">Estrofas<a class="headerlink" href="#split_stanzas" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">split_stanzas</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>Divide un texto en estrofas y versos: las estrofas se separan por líneas en blanco, y los versos sin una sílaba española (números, asteriscos, otros alfabetos) y los números romanos de las partes de un poema (<code>II</code>, <code>IV.</code>) se omiten. El texto se normaliza a NFC.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Texto de un poema</td>
+</tr>
+</tbody>
+</table>
+<div class="tabbed-set tabbed-alternate" data-tabs="12:2"><input checked="checked" id="__tabbed_12_1" name="__tabbed_12" type="radio" /><input id="__tabbed_12_2" name="__tabbed_12" type="radio" /><div class="tabbed-labels"><label for="__tabbed_12_1">Código</label><label for="__tabbed_12_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.verse_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">split_stanzas</span>
+
+<span class="n">split_stanzas</span><span class="p">(</span>
+    <span class="s2">"Cuando me paro a contemplar mi estado</span><span class="se">\n</span><span class="s2">"</span>
+    <span class="s2">"y a ver los pasos por do me han traído,</span><span class="se">\n\n</span><span class="s2">* * *</span><span class="se">\n\n</span><span class="s2">"</span>
+    <span class="s2">"hallo, según por do anduve perdido,"</span>
 <span class="p">)</span>
-<span class="n">vs</span> <span class="o">=</span> <span class="n">VerseStats</span><span class="p">(</span><span class="n">sonatina</span><span class="p">)</span>
-<span class="n">vs</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
-</code></pre></div>
-<p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="w">                  </span>Statistic<span class="w">                   </span><span class="p">|</span><span class="w">    </span>Value
-------------------------------------------------------------
-Number<span class="w"> </span>of<span class="w"> </span>lines<span class="w">                               </span><span class="p">|</span><span class="w">      </span><span class="m">6</span>
-Number<span class="w"> </span>of<span class="w"> </span>stanzas<span class="w">                             </span><span class="p">|</span><span class="w">      </span><span class="m">1</span>
-Meter<span class="w">                                         </span><span class="p">|</span><span class="w"> </span>alejandrino
-Number<span class="w"> </span>of<span class="w"> </span>metrical<span class="w"> </span>syllables<span class="w">                  </span><span class="p">|</span><span class="w">      </span><span class="m">14</span>
-Share<span class="w"> </span>of<span class="w"> </span>lines<span class="w"> </span>off<span class="w"> </span>the<span class="w"> </span>meter<span class="w">                  </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.00
-Share<span class="w"> </span>of<span class="w"> </span>lines<span class="w"> </span>without<span class="w"> </span>the<span class="w"> </span>rhythmic<span class="w"> </span>stresses<span class="w">  </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.00
-Share<span class="w"> </span>of<span class="w"> </span>rhymed<span class="w"> </span>lines<span class="w">                         </span><span class="p">|</span><span class="w">     </span><span class="m">1</span>.00
-Share<span class="w"> </span>of<span class="w"> </span>oxytone<span class="w"> </span>endings<span class="w"> </span><span class="o">(</span>aguda<span class="o">)</span><span class="w">              </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.33
-Share<span class="w"> </span>of<span class="w"> </span>paroxytone<span class="w"> </span>endings<span class="w"> </span><span class="o">(</span>llana<span class="o">)</span><span class="w">           </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.67
-Share<span class="w"> </span>of<span class="w"> </span>proparoxytone<span class="w"> </span>endings<span class="w"> </span><span class="o">(</span>esdrújula<span class="o">)</span><span class="w">    </span><span class="p">|</span><span class="w">     </span><span class="m">0</span>.00
 </code></pre></div>
 </div>
-<p>El alejandrino se lee por hemistiquios de 7 sílabas, cada uno por la ley del acento final: <em>La princesa está pálida</em> (una esdrújula) y <em>que ha perdido el color</em> (una aguda) cuentan 7 cada uno.</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<div class="highlight"><pre><span></span><code><span class="n">vs</span><span class="o">.</span><span class="n">syllables</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-<span class="c1"># ('la', 'prin', 'ce', 'sa‿es', 'tá', 'pá', 'li', 'da', 'en', 'su', 'si', 'lla', 'de', 'o', 'ro')</span>
-<span class="n">vs</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">vs</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-<span class="c1"># ('+-+--+-+-+--+-', '--+-++---+--+-')</span>
-<span class="n">vs</span><span class="o">.</span><span class="n">stresses</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">vs</span><span class="o">.</span><span class="n">caesuras</span>
-<span class="c1"># ((2, 4, 5, 10, 13), (7, 7, 7, 8, 7, 7))</span>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>[['Cuando me paro a contemplar mi estado', 'y a ver los pasos por do me han traído,'],
+ ['hallo, según por do anduve perdido,']]
 </code></pre></div>
 </div>
-<h3 id="accentuate">accentuate<a class="headerlink" href="#accentuate" title="Permanent link">&para;</a></h3>
-<p>Devuelve el texto con los acentos marcados: se pone un acento agudo (U+0301) tras la vocal acentuada de cada palabra tónica sin tilde; las palabras con tilde la conservan, y las palabras átonas del verso (<code>VERSE_PROCLITICS</code>) quedan sin marca, salvo la última palabra de un verso. Las marcas son caracteres combinantes aparte de las tildes, así que <code>unicodedata.normalize("NFC", ...)</code> las convierte en letras acentuadas. Solo se devuelven los versos con palabras españolas (como en <code>lines</code>), con las estrofas separadas por una línea en blanco.</p>
-<div class="admonition example">
-<p class="admonition-title">Ejemplo</p>
-<p><em>Código</em>:</p>
-<div class="highlight"><pre><span></span><code><span class="o">...</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">VerseStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">accentuate</span><span class="p">())</span>
-</code></pre></div>
-<p><em>Resultado</em>:</p>
-<div class="highlight"><pre><span></span><code>Cuando<span class="w"> </span>me<span class="w"> </span>páro<span class="w"> </span>a<span class="w"> </span>contemplár<span class="w"> </span>mi<span class="w"> </span>estádo
-y<span class="w"> </span>a<span class="w"> </span>vér<span class="w"> </span>los<span class="w"> </span>pásos<span class="w"> </span>por<span class="w"> </span><span class="k">do</span><span class="w"> </span>me<span class="w"> </span>hán<span class="w"> </span>traído,
-hállo,<span class="w"> </span>según<span class="w"> </span>por<span class="w"> </span><span class="k">do</span><span class="w"> </span>andúve<span class="w"> </span>perdído,
-que<span class="w"> </span>a<span class="w"> </span>mayór<span class="w"> </span>mál<span class="w"> </span>pudiéra<span class="w"> </span>habér<span class="w"> </span>llegádo.
-</code></pre></div>
+</div>
 </div>
 
 
@@ -3152,6 +3248,12 @@ que<span class="w"> </span>a<span class="w"> </span>mayór<span class="w"> </sp
           
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
         
       </main>
       
@@ -3209,7 +3311,7 @@ que<span class="w"> </span>a<span class="w"> </span>mayór<span class="w"> </sp
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.top", "content.code.copy", "search.highlight", "search.suggest"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
     
     
       <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
