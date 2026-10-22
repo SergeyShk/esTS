@@ -30,7 +30,7 @@ from ests import (
     VerseStats,
     VerseStatsComponent,
 )
-from ests.exceptions import ParameterError, SourceError
+from ests.exceptions import ParameterError, SourceError, SourceTypeError
 
 COMPONENTS = (
     ("ests_basic", BasicStatsComponent, BasicStats),
@@ -148,6 +148,16 @@ def test_style_parameters(nlp):
     assert "gato" not in pipeline(TEXT)._.nausea.nausea_words()
     with pytest.raises(ParameterError):
         pipeline.add_pipe("ests_style", name="wrong", config={"top_n": 0})
+
+
+def test_style_cliches():
+    pipeline = spacy.blank("es")
+    pipeline.add_pipe("ests_style", name="style", config={"cliches": ["a la mayor brevedad"]})
+    doc = pipeline("Se hará a la mayor brevedad")
+    assert doc._.style.cliches_list == ("a la mayor brevedad",)
+    assert doc._.style.cliches == pytest.approx(100 * 1 / 6)
+    with pytest.raises(SourceTypeError):
+        pipeline.add_pipe("ests_style", name="wrong", config={"cliches": [1, 2]})
 
 
 def test_style_component_leaves_a_doc_that_pickles():
