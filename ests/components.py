@@ -439,6 +439,9 @@ class VerseStatsComponent(_Component):
     Arguments:
         name (str): Name of the component in the pipeline
         seseo (bool): Pronounce c and z before e and i as s in the rhyme
+
+    Raises:
+        ConfigValidationError: If seseo is not a boolean, raised by spaCy at add_pipe
     """
 
     stats_class = VerseStats
