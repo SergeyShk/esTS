@@ -6,9 +6,9 @@ import pytest
 import spacy
 
 from ests import PhonStats
-from ests.constants import PHON_STATS_DESC
 from ests.phon_stats import (
     CONSONANT_SOUNDS,
+    PHON_STATS_DESC,
     VOWEL_SOUNDS,
     calc_alliteration,
     calc_assonance,

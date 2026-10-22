@@ -26,6 +26,7 @@ from anyts.constants import (
     MTLD_MIN_LEN,
     MTLD_TTR_THRESHOLD,
     NAUSEA_TOP_N,
+    PHON_WINDOW_LEN,
 )
 from anyts.utils import check_words, is_number, iter_doc_tokens
 from spacy.language import Language
@@ -33,7 +34,6 @@ from spacy.tokens import Doc
 
 from .basic_stats import BasicStats
 from .cohesion_stats import CohesionStats
-from .constants import PHON_WINDOW_LEN
 from .datasets.freq_dict import FreqDict
 from .diversity_stats import DiversityStats, check_params as check_diversity_params
 from .extractors import NUMBER_PATTERN

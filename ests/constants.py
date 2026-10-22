@@ -473,11 +473,6 @@ AUXILIARY_VERBS = frozenset(
 ENCLITICS = ("me", "te", "se", "nos", "os", "lo", "la", "los", "las", "le", "les")
 
 
-# Dependencies that head a clause; the Spanish models give acl for a relative clause too
-CLAUSE_DEPS = frozenset({"ccomp", "advcl", "acl", "csubj", "parataxis"})
-SUBORDINATE_CLAUSE_DEPS = frozenset({"ccomp", "advcl", "acl", "csubj"})
-SUBJECT_DEPS = frozenset({"nsubj", "csubj"})
-NOUN_MODIFIER_DEPS = frozenset({"amod", "det", "nmod", "nummod", "acl"})
 # Prepositions of a chain of complements (el aumento de la eficiencia del uso) and
 # of the agent of a passive (construida por los obreros)
 DE_PREPOSITIONS = frozenset({"de", "del"})
@@ -1001,24 +996,6 @@ PARENTHETICALS = (
 )
 
 
-# Phonostatistics of a text, counted over the sounds of the transcription (transcribe)
-PHON_STATS_DESC = {
-    "p_vowels": "Share of vowels",
-    "p_sonorants": "Share of sonorant consonants",
-    "p_voiced": "Share of voiced obstruents",
-    "p_voiceless": "Share of voiceless obstruents",
-    "consonant_vowel_ratio": "Ratio of consonants to vowels",
-    "p_heavy_clusters": "Share of clusters of 3 consonants or more",
-    "p_hiatus": "Hiatuses per word",
-    "cv_entropy": "Entropy of the CV patterns of words (bits)",
-    "hardness": "Hardness",
-    "alliteration": "Alliteration index",
-    "assonance": "Assonance index",
-    "p_open_syllables": "Share of open syllables",
-    "mean_syllable_len": "Mean length of a syllable (sounds)",
-}
-# Window in words for the alliteration and the assonance
-PHON_WINDOW_LEN = 3
 # Sounds of the transcription by class, in the standard of Spain: yeísmo (ʝ) and distinción (θ)
 VOWEL_SOUNDS = frozenset("aeiou")
 SONORANT_SOUNDS = frozenset({"m", "n", "ɲ", "l", "r"})

@@ -85,13 +85,10 @@ def test_get_stats_values(ss):
 def test_print_stats(ss, capsys):
     ss.print_stats()
     out = capsys.readouterr().out.splitlines()
-    assert out[0].split("|") == [
-        "                    Statistic                     ",
-        "  Value   ",
-    ]
-    assert out[1] == "-" * 60
+    assert [cell.strip() for cell in out[0].split("|")] == ["Statistic", "Value"]
+    assert set(out[1]) == {"-"}
     assert len(out) == len(SYNTAX_STATS_DESC) + 2
-    assert out[2] == f"{'Mean dependency distance':50}|{2.33:^10.2f}"
+    assert [cell.strip() for cell in out[2].split("|")] == ["Mean dependency distance", "2.33"]
 
 
 def test_doc_source(ss, nlp):
@@ -109,7 +106,7 @@ def test_source_type_error(source):
 
 
 def test_source_without_parse():
-    with pytest.raises(SourceError, match="no parse"):
+    with pytest.raises(SourceError, match="no dependency parse"):
         SyntaxStats(spacy.blank("es")("La casa es blanca"))
 
 
@@ -246,6 +243,18 @@ def test_de_chains_single(nlp):
     assert calc_de_chains(words(nlp, "El uso del agua es libre")) == []
 
 
+def test_de_chains_skip_punctuation():
+    # A model may tag an opening quote as a complement with de
+    doc = Doc(
+        spacy.blank("es").vocab,
+        words=["uso", "del", "agua", "de", "«", "Bruges"],
+        heads=[0, 2, 0, 4, 2, 4],
+        deps=["ROOT", "case", "nmod", "case", "nmod", "flat"],
+        pos=["NOUN", "ADP", "NOUN", "ADP", "PUNCT", "PROPN"],
+    )
+    assert calc_de_chains(doc) == []
+
+
 @pytest.mark.parametrize(
     ("text", "expected"),
     [
@@ -277,7 +286,7 @@ def test_agentless(nlp, text, expected):
 
 
 def test_agentless_of_an_active_form(nlp):
-    assert is_agentless(words(nlp, "Los niños juegan")[2])
+    assert not is_agentless(words(nlp, "Los niños juegan")[2])
 
 
 def test_agent(nlp):

@@ -2,6 +2,7 @@ import re
 from collections.abc import Callable, Collection, Iterable, Iterator, Sequence
 
 import anyts.visualizers.highlight
+from anyts.constants import AUXILIARY_DEPS
 from anyts.syntax_stats import base_dep, subtree_len
 from anyts.utils import check_integer, check_number, check_words, in_order, is_word
 from anyts.visualizers.highlight import (
@@ -41,7 +42,6 @@ from ..phon_stats import CONSONANT_SOUNDS, transcribe
 from ..style_stats import expand_phrases, is_stopword
 from ..syllables import count_syllables
 from ..syntax_stats import (
-    AUXILIARY_DEPS,
     find_split_predicates,
     is_agentless,
     is_de_modifier,
