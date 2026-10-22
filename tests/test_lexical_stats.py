@@ -5,11 +5,11 @@ import spacy
 from anyts.utils import is_number
 
 from ests import LexicalStats
-from ests.constants import FREQUENCY_BANDS, LEXICAL_STATS_DESC
+from ests.constants import LEXICAL_STATS_DESC
 from ests.datasets import FreqDict
 from ests.exceptions import DatasetNotFoundError, ParameterError, SourceError, SourceTypeError
 from ests.extractors import NUMBER_PATTERN
-from ests.lexical_stats import calc_surprisal, get_rank, load_top_lemmas
+from ests.lexical_stats import FREQUENCY_BANDS, calc_surprisal, get_rank, load_top_lemmas
 from ests.utils import get_nlp
 
 TEXT = "El gato estaba en la ventana y miraba a los pájaros"
@@ -163,7 +163,7 @@ def test_without_the_dictionary(tmp_path):
 
 
 def test_default_dictionary(monkeypatch, freq_dict):
-    monkeypatch.setattr("ests.lexical_stats.FreqDict", lambda: freq_dict)
+    monkeypatch.setattr(LexicalStats, "freq_dict_class", staticmethod(lambda: freq_dict))
     assert LexicalStats(TEXT).freq_dict is freq_dict
 
 

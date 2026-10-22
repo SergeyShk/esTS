@@ -1,32 +1,30 @@
-from collections import Counter
 from collections.abc import Collection, Sequence
-from functools import cached_property
-from math import nan, sqrt
+from math import nan
 
-import anyts
-from anyts.utils import (
-    check_integer,
-    check_words,
-    in_order,
-    iter_doc_tokens,
-    iter_doc_words,
-    safe_divide,
+import anyts.style_stats
+from anyts.constants import NAUSEA_TOP_N
+from anyts.style_stats import (
+    calc_classic_nausea as calc_classic_nausea,
+    calc_keyword_density as calc_keyword_density,
+    calc_spam as calc_spam,
+    calc_zipf_naturalness as calc_zipf_naturalness,
+    check_params as check_params,
 )
+from anyts.utils import check_words, in_order, is_doc, iter_doc_tokens, safe_divide
 from spacy.language import Language
 from spacy.tokens import Doc
 
 from .constants import (
     COMPOUND_PREPOSITIONS,
     IRREGULAR_VERB_FORMS,
-    NAUSEA_TOP_N,
     OFFICIALESE_CLICHES,
     PARENTHETICALS,
     STOPWORDS,
     STYLE_STATS_DESC,
 )
-from .exceptions import ParameterError, SourceError, SourceTypeError
+from .exceptions import SourceError, SourceTypeError
 from .extractors import WordsExtractor
-from .utils import find_phrases, get_nlp, is_verbal_noun, iter_text_sents, lemmatize
+from .utils import get_nlp, is_verbal_noun, iter_text_sents, lemmatize
 
 # Components the parts of speech and the lemmas of the nouns do not need
 UNUSED_COMPONENTS = ["parser", "ner"]
@@ -38,37 +36,19 @@ STOPWORD_FORMS = STOPWORDS | PARENTHETICAL_WORDS
 INFINITIVE_ENDINGS = ("ar", "er", "ir", "ír")
 
 
-def check_params(top_n: int) -> None:
-    """
-    Checking the parameters of the style metrics
-
-    Arguments:
-        top_n (int): Number of the most frequent words
-
-    Raises:
-        ParameterError: If the number of the most frequent words is not an integer or is below one
-    """
-    check_integer(top_n, "number of the most frequent words")
-    if top_n < 1:
-        raise ParameterError("The number of the most frequent words must be greater than 0")
-
-
-class StyleStats:
+class StyleStats(anyts.style_stats.StyleStats):
     """
     Class for computing the style metrics of a text
 
     Description:
-        The SEO metrics follow the indicators of Advego and Text.ru (nausea,
-        water content, spam score, naturalness by Zipf's law, keyword density),
-        whose exact formulas are not published. The words are extracted in
-        lower case without lemmatization by default; for the SEO metrics by
-        lemmas, pass WordsExtractor(use_lexemes=True, lowercase=True)
-        The markers of the officialese style - the verbal nouns, the compound
-        prepositions, the parenthetical expressions and the clichés - are
-        counted over the unfiltered word forms (forms), whatever the extractor.
-        The verbal nouns need the parts of speech and the lemmas: a string is
-        parsed by the model only when they are first read, in parts of whole
-        sentences if it is longer than the max_length of the pipeline
+        Extends the StyleStats of the anyTS core with the hooks of Spanish: the
+        stopwords and the one-word parenthetical expressions (is_stopword), the
+        phrases with their contractions and the forms of their verbs
+        (expand_phrases), the lists COMPOUND_PREPOSITIONS, PARENTHETICALS and
+        OFFICIALESE_CLICHES, and the verbal nouns among the nouns of the spaCy
+        model. The nouns of a string are parsed by the model only when they
+        are first read, in parts of whole sentences if it is longer than the
+        max_length of the pipeline
 
     Example:
         >>> from ests import StyleStats
@@ -86,9 +66,10 @@ class StyleStats:
 
     Arguments:
         source (str|Doc): Data source (a string or a Doc object)
-        words_extractor (WordsExtractor): Word extraction tool
-        stopwords (list[str]|set[str]): Stopwords for the water content; STOPWORDS and
-            the one-word parenthetical expressions if not set
+        words_extractor (WordsExtractor): Word extraction tool; for a Doc it is applied
+            to its text
+        stopwords (list[str]|set[str]): Stopwords for the water content; is_stopword if
+            not set
         top_n (int): Number of the most frequent words for the academic nausea
             and the naturalness by Zipf's law
         cliches (list[str]|set[str]): List or set of clichés; OFFICIALESE_CLICHES if not set
@@ -100,6 +81,7 @@ class StyleStats:
     Attributes:
         words (tuple[str]): Tuple of the extracted words
         forms (tuple[str]): Tuple of the unfiltered word forms in lower case
+        nlp (Language|None): Pipeline of the verbal nouns
         classic_nausea (float): Classic nausea
         academic_nausea (float): Academic nausea in percent
         water (float): Water content in percent
@@ -110,229 +92,94 @@ class StyleStats:
         parentheticals (float): Parenthetical expressions per 100 words
         cliches (float): Clichés per 100 words
 
-    Methods:
-        keyword_density: Density of keywords and phrases
-        nausea_words: Most frequent significant words of the academic nausea
-        markers: Markers of the officialese style found in the text
-        get_stats: Getting the computed style metrics of the text
-        print_stats: Printing the computed style metrics with descriptions
-
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc, the stopwords,
             the nausea stopwords or the clichés are not a list or a set of strings, or
             the extractor or the pipeline is of another type
-        SourceError: If the source has no words; when the verbal nouns or the markers
-            are read, if the source lacks the parts of speech or the lemmas or a sentence
-            of a string is longer than the max_length of the pipeline
+        SourceError: If the source has no words or a string has a character without a
+            UTF-8 form; when the verbal nouns or the markers are read, if the source lacks
+            the parts of speech or the lemmas or a sentence of a string is longer than the
+            max_length of the pipeline
         ParameterError: If the number of the most frequent words is not an integer or is
             below one
     """
 
+    words_extractor_class = WordsExtractor
+    compound_prepositions_list = COMPOUND_PREPOSITIONS
+    parentheticals_list = PARENTHETICALS
+    cliches_list = OFFICIALESE_CLICHES
+    stats_desc = STYLE_STATS_DESC
+
     def __init__(
         self,
         source: str | Doc,
-        words_extractor: WordsExtractor | None = None,
+        words_extractor: anyts.WordsExtractor | None = None,
         stopwords: Collection[str] | None = None,
         top_n: int = NAUSEA_TOP_N,
         cliches: Collection[str] | None = None,
         nlp: Language | None = None,
         nausea_stopwords: Collection[str] | None = None,
     ):
-        if words_extractor is not None and not isinstance(words_extractor, anyts.WordsExtractor):
-            raise SourceTypeError("The word extractor must be a WordsExtractor")
         if nlp is not None and not isinstance(nlp, Language):
             raise SourceTypeError("The pipeline must be a spaCy Language")
-        check_params(top_n)
-        if stopwords is not None:
-            check_words(stopwords, "stopwords", ordered=False)
-        if nausea_stopwords is not None:
-            check_words(nausea_stopwords, "nausea stopwords", ordered=False)
-        if cliches is not None:
-            check_words(cliches, "clichés", ordered=False)
+        super().__init__(source, words_extractor, stopwords, top_n, cliches, nausea_stopwords)
+        self.nlp = nlp
         # The Doc is not kept: this object in an extension of the Doc would make a cycle
         self._text: str | None = None
         self._nouns: list[tuple[str, str]] | None = None
         self._annotation_error = ""
-        if isinstance(source, Doc):
-            self.words = tuple(text.lower() for _, _, text in iter_doc_words(source))
-            self.forms = self.words
+        if isinstance(source, str):
+            self._text = source
+        else:
             try:
                 self._nouns = _doc_nouns(source)
             except SourceError as error:
                 self._annotation_error = str(error)
-        elif isinstance(source, str):
-            forms = WordsExtractor(lowercase=True).extract(source)
-            self.words = words_extractor.extract(source) if words_extractor else forms
-            self.forms = forms
-            self._text = source
-        else:
-            raise SourceTypeError("The data source is set incorrectly")
-        if not self.words:
-            raise SourceError("The data source has no words")
-        self.stopwords = in_order(stopwords) if stopwords is not None else None
-        self.nausea_stopwords = (
-            in_order(nausea_stopwords) if nausea_stopwords is not None else None
-        )
-        self.top_n = top_n
-        self.cliches_list = in_order(cliches) if cliches is not None else OFFICIALESE_CLICHES
-        self.nlp = nlp
 
-    @property
-    def classic_nausea(self) -> float:
-        return calc_classic_nausea(self.words)
+    def is_stopword(self, word: str) -> bool:
+        """Stopword of STOPWORD_FORMS (is_stopword)"""
+        return is_stopword(word)
 
-    @property
-    def academic_nausea(self) -> float:
-        return calc_academic_nausea(self.words, self.top_n, self.nausea_stopwords)
+    def is_parenthetical(self, word: str) -> bool:
+        """One-word expression of PARENTHETICALS (is_parenthetical)"""
+        return is_parenthetical(word)
 
-    @property
-    def water(self) -> float:
-        return calc_water(self.words, self.stopwords)
+    def expand_phrases(self, text: Sequence[str], phrases: Collection[str]) -> dict[str, str]:
+        """Phrases with their contractions and the forms of their verbs (expand_phrases)"""
+        return expand_phrases(text, phrases)
 
-    @property
-    def spam(self) -> float:
-        return calc_spam(self.words)
-
-    @property
-    def zipf_naturalness(self) -> float:
-        return calc_zipf_naturalness(self.words, self.top_n)
-
-    @cached_property
-    def verbal_nouns(self) -> float:
-        return calc_verbal_nouns([lemma for _, lemma in self._get_nouns()])
-
-    @property
-    def compound_prepositions(self) -> float:
-        return calc_phrase_density(self.forms, COMPOUND_PREPOSITIONS)
-
-    @property
-    def parentheticals(self) -> float:
-        return calc_parentheticals(self.forms)
-
-    @property
-    def cliches(self) -> float:
-        return calc_phrase_density(self.forms, self.cliches_list)
-
-    def _get_nouns(self) -> list[tuple[str, str]]:
-        """The nouns in lower case with their lemmas, a string parsed when they are first read"""
-        if self._nouns is None:
-            if self._text is None:
-                raise SourceError(self._annotation_error)
-            self._nouns = self._parse(self._text)
-        return self._nouns
-
-    def _parse(self, text: str) -> list[tuple[str, str]]:
+    def nouns(self) -> list[tuple[str, str]]:
         """
-        Parsing a string for the nouns and their lemmas
+        Getting the nouns of the text with their lemmas
 
         Description:
-            The pipeline of nlp or get_nlp(), without the parser and the named
-            entities; a text longer than the max_length of the pipeline is
+            The tokens tagged NOUN of a Doc, or of a string parsed by nlp or
+            get_nlp() when they are first read, without the parser and the named
+            entities; a string longer than the max_length of the pipeline is
             parsed in parts of whole sentences
 
-        Arguments:
-            text (str): Text
-
         Returns:
-            list[tuple[str, str]]: Tokens tagged NOUN in lower case with their lemmas
-
-        Raises:
-            SourceError: If a sentence is longer than the max_length of the pipeline
-        """
-        pipeline = self.nlp or get_nlp()
-        parts = _split_text(text, pipeline.max_length)
-        return [
-            noun
-            for doc in pipeline.pipe(parts, disable=UNUSED_COMPONENTS)
-            for noun in _doc_nouns(doc)
-        ]
-
-    def keyword_density(self, *keywords: str) -> dict[str, float]:
-        """
-        Computing the density of keywords and phrases
-
-        Arguments:
-            keywords (tuple[str]): Keywords or phrases of several words separated by spaces
-
-        Returns:
-            dict[str, float]: Density of every keyword in percent
-        """
-        return calc_keyword_density(self.words, keywords)
-
-    def nausea_words(self) -> dict[str, int]:
-        """
-        Getting the most frequent significant words of the academic nausea
-
-        Returns:
-            dict[str, int]: Occurrences of the top_n most frequent words without the
-                stopwords, the most frequent first
-
-        Example:
-            >>> from ests import StyleStats
-            >>> StyleStats("El gato y el perro, el gato y el ratón").nausea_words()
-            {'gato': 2, 'perro': 1, 'ratón': 1}
-        """
-        return find_nausea_words(self.words, self.top_n, self.nausea_stopwords)
-
-    def markers(self) -> dict[str, tuple[str, ...]]:
-        """
-        Getting the markers of the officialese style found in the text
-
-        Description:
-            The words and phrases the metrics verbal_nouns, compound_prepositions,
-            parentheticals and cliches are counted from, in the order of the text
-            and in lower case; a phrase is found with its contractions and the
-            forms of its verb (expand_phrases). The verbal nouns need the parts of
-            speech and the lemmas, as their metric does
-
-        Returns:
-            dict[str, tuple[str, ...]]: Name of the metric - the words and phrases found
+            list[tuple[str, str]]: Nouns in lower case with their lemmas
 
         Raises:
             SourceError: If the source lacks the parts of speech or the lemmas, or a
                 sentence of a string is longer than the max_length of the pipeline
-
-        Example:
-            >>> from ests import StyleStats
-            >>> StyleStats("Sin embargo, se procedió a la revisión en el marco del proyecto").markers()
-            {'verbal_nouns': ('revisión',),
-             'compound_prepositions': ('en el marco del',),
-             'parentheticals': ('sin embargo',),
-             'cliches': ('procedió a',)}
         """
-        forms = self.forms
-        found = {
-            "compound_prepositions": find_phrases(
-                forms, expand_phrases(forms, COMPOUND_PREPOSITIONS)
-            ),
-            "parentheticals": find_parentheticals(forms),
-            "cliches": find_phrases(forms, expand_phrases(forms, self.cliches_list)),
-        }
-        verbal = tuple(form for form, lemma in self._get_nouns() if is_verbal_noun(lemma))
-        return {
-            "verbal_nouns": verbal,
-            **{
-                name: tuple(" ".join(forms[start:end]) for start, end in spans)
-                for name, spans in found.items()
-            },
-        }
+        if self._nouns is None:
+            if self._text is None:
+                raise SourceError(self._annotation_error)
+            pipeline = self.nlp or get_nlp()
+            parts = _split_text(self._text, pipeline.max_length)
+            self._nouns = [
+                noun
+                for doc in pipeline.pipe(parts, disable=UNUSED_COMPONENTS)
+                for noun in _doc_nouns(doc)
+            ]
+        return self._nouns
 
-    def get_stats(self) -> dict[str, float]:
-        """
-        Getting the computed style metrics of the text
-
-        Returns:
-            dict[str, float]: Dictionary of the computed style metrics
-        """
-        return {stat: getattr(self, stat) for stat in STYLE_STATS_DESC}
-
-    def print_stats(self) -> None:
-        """Printing the computed style metrics of the text with descriptions"""
-        print(f"{'Metric':^50}|{'Value':^10}")
-        print("-" * 60)
-        stats = self.get_stats()
-        for stat, desc in STYLE_STATS_DESC.items():
-            print(f"{desc:50}|{stats[stat]:^10.2f}")
+    def is_verbal_noun(self, lemma: str) -> bool:
+        """Noun derived from a verb (ests.utils.is_verbal_noun)"""
+        return is_verbal_noun(lemma)
 
 
 def _split_text(text: str, max_length: int) -> list[str]:
@@ -385,8 +232,11 @@ def noun_lemmas(doc: Doc) -> list[str]:
         list[str]: Lemmas of the tokens tagged NOUN
 
     Raises:
+        SourceTypeError: If the source is not a Doc
         SourceError: If the Doc lacks the parts of speech or the lemmas
     """
+    if not is_doc(doc):
+        raise SourceTypeError(f"A Doc is expected, not {type(doc).__name__}")
     return [lemma for _, lemma in _doc_nouns(doc)]
 
 
@@ -435,254 +285,6 @@ def is_stopword(word: str) -> bool:
     return word.lower() in STOPWORD_FORMS
 
 
-def calc_classic_nausea(text: Sequence[str]) -> float:
-    """
-    Computing the classic nausea
-
-    Description:
-        The square root of the number of occurrences of the most frequent word
-        (Advego); it grows with the text. The norm of Advego is at most 7, 1-5
-        in practice
-
-    References:
-        https://advego.com/text/seo/
-
-    Arguments:
-        text (list[str]): List of words
-
-    Returns:
-        float: Value of the nausea
-
-    Raises:
-        SourceTypeError: If the words are not a list of strings
-    """
-    check_words(text)
-    if not text:
-        return 0.0
-    return sqrt(max(Counter(text).values()))
-
-
-def calc_academic_nausea(
-    text: Sequence[str],
-    top_n: int = NAUSEA_TOP_N,
-    stopwords: Collection[str] | None = None,
-) -> float:
-    """
-    Computing the academic nausea
-
-    Description:
-        The summed frequency of the top_n most frequent significant words
-        (find_nausea_words) per 100 words of the text (Advego); the exact
-        formula of Advego is not published. The norm of Advego is 5-15%, for
-        texts of several hundred words
-
-    References:
-        https://advego.com/text/seo/
-
-    Arguments:
-        text (list[str]): List of words
-        top_n (int): Number of the most frequent words
-        stopwords (list[str]|set[str]): Stopwords left out of the most frequent words;
-            is_stopword if not set
-
-    Returns:
-        float: Value of the nausea in percent
-
-    Raises:
-        SourceTypeError: If the words are not a list of strings or the stopwords are not
-            a list or a set of strings
-        ParameterError: If top_n is not an integer or is below one
-    """
-    top_freqs = sum(find_nausea_words(text, top_n, stopwords).values())
-    return safe_divide(100 * top_freqs, len(text))
-
-
-def find_nausea_words(
-    text: Sequence[str],
-    top_n: int = NAUSEA_TOP_N,
-    stopwords: Collection[str] | None = None,
-) -> dict[str, int]:
-    """
-    Finding the most frequent significant words of the academic nausea
-
-    Description:
-        The top_n most frequent words without the stopwords - those of the
-        list passed, in any case, or of is_stopword - with their occurrences,
-        the most frequent first and words of equal frequency in the order of
-        the text
-
-    Arguments:
-        text (list[str]): List of words
-        top_n (int): Number of the most frequent words
-        stopwords (list[str]|set[str]): Stopwords; is_stopword if not set
-
-    Returns:
-        dict[str, int]: Occurrences of every word
-
-    Raises:
-        SourceTypeError: If the words are not a list of strings or the stopwords are not
-            a list or a set of strings
-        ParameterError: If top_n is not an integer or is below one
-
-    Example:
-        >>> from ests.style_stats import find_nausea_words
-        >>> find_nausea_words(["gato", "y", "gato", "y", "perro"], top_n=1)
-        {'gato': 2}
-    """
-    check_words(text)
-    check_params(top_n)
-    if stopwords is not None:
-        check_words(stopwords, "stopwords", ordered=False)
-        stopwords_set = {word.lower() for word in stopwords}
-        significant = [word for word in text if word.lower() not in stopwords_set]
-    else:
-        significant = [word for word in text if word.lower() not in STOPWORD_FORMS]
-    return dict(Counter(significant).most_common(top_n))
-
-
-def calc_water(text: Sequence[str], stopwords: Collection[str] | None = None) -> float:
-    """
-    Computing the water content
-
-    Description:
-        The share of the words that carry no content in percent (Text.ru): the
-        stopwords of is_stopword or of the list passed, in any case. The norms
-        of Text.ru are set for Russian, which has no articles, so a Spanish
-        text has more water by its grammar alone
-
-    References:
-        https://text.ru/seo
-
-    Arguments:
-        text (list[str]): List of words
-        stopwords (list[str]|set[str]): List or set of stopwords; is_stopword if not set
-
-    Returns:
-        float: Value of the water content in percent
-
-    Raises:
-        SourceTypeError: If the words are not a list of strings or the stopwords are not
-            a list or a set of strings
-    """
-    check_words(text)
-    if stopwords is not None:
-        check_words(stopwords, "stopwords", ordered=False)
-    if stopwords is not None:
-        stopwords_set = {word.lower() for word in stopwords}
-        n_stopwords = sum(1 for word in text if word.lower() in stopwords_set)
-    else:
-        n_stopwords = sum(1 for word in text if word.lower() in STOPWORD_FORMS)
-    return safe_divide(100 * n_stopwords, len(text))
-
-
-def calc_spam(text: Sequence[str]) -> float:
-    """
-    Computing the spam score
-
-    Description:
-        The share of the repeated words in percent (Text.ru), every occurrence
-        of a word after the first: 100 · (1 - TTR). The norms of Text.ru: up to
-        30% - natural, 30-60% - SEO-optimized, above 60% - spammed
-
-    References:
-        https://text.ru/seo
-
-    Arguments:
-        text (list[str]): List of words
-
-    Returns:
-        float: Value of the spam score in percent
-
-    Raises:
-        SourceTypeError: If the words are not a list of strings
-    """
-    check_words(text)
-    n_words = len(text)
-    return safe_divide(100 * (n_words - len(set(text))), n_words)
-
-
-def calc_zipf_naturalness(text: Sequence[str], top_n: int = NAUSEA_TOP_N) -> float:
-    """
-    Computing the naturalness of a text by Zipf's law
-
-    Description:
-        100 · (1 - the mean relative deviation of the frequencies from the
-        ideal f_r = f_1 / r), where f_1 is the frequency of the most frequent
-        word, over the ranks r from 2 to min(top_n, V, f_1), V the number of
-        word types, clipped to 0 (pr-cy, megaindex); the norm of the services
-        is at least 50%. Undefined when there are no ranks to compare: every
-        word is a hapax, the text has one word type or top_n is below 2
-
-    References:
-        https://en.wikipedia.org/wiki/Zipf's_law
-
-    Arguments:
-        text (list[str]): List of words
-        top_n (int): Number of the most frequent words
-
-    Returns:
-        float: Value of the naturalness in percent, nan if there are no ranks to compare
-
-    Raises:
-        SourceTypeError: If the words are not a list of strings
-        ParameterError: If top_n is not an integer or is below one
-    """
-    check_words(text)
-    check_params(top_n)
-    frequencies = sorted(Counter(text).values(), reverse=True)
-    if not frequencies:
-        return nan
-    top_freq = frequencies[0]
-    n_ranks = min(top_n, len(frequencies), top_freq)
-    if n_ranks < 2:
-        return nan
-    deviation = sum(
-        abs(freq * rank - top_freq) for rank, freq in enumerate(frequencies[1:n_ranks], start=2)
-    )
-    span = top_freq * (n_ranks - 1)
-    return max(0.0, 100 * (span - deviation) / span)
-
-
-def calc_keyword_density(text: Sequence[str], keywords: Collection[str]) -> dict[str, float]:
-    """
-    Computing the density of keywords
-
-    Description:
-        The frequency of every keyword per 100 words of the text (Text.ru). A
-        keyword of several words separated by spaces is looked for as a
-        sequence of words, and its occurrences may overlap. The words are
-        compared in any case
-
-    References:
-        https://text.ru/seo
-
-    Arguments:
-        text (list[str]): List of words
-        keywords (list[str]|set[str]): Keywords or phrases
-
-    Returns:
-        dict[str, float]: Density of every keyword in percent
-
-    Raises:
-        SourceTypeError: If the words are not a list of strings or the keywords are not
-            a list or a set of strings
-    """
-    check_words(text)
-    check_words(keywords, "keywords", ordered=False)
-    n_words = len(text)
-    lowered = [word.lower() for word in text]
-    density = {}
-    for keyword in in_order(keywords):
-        parts = keyword.lower().split()
-        size = len(parts)
-        if not size:
-            density[keyword] = 0.0
-            continue
-        count = sum(1 for i in range(n_words - size + 1) if lowered[i : i + size] == parts)
-        density[keyword] = safe_divide(100 * count, n_words)
-    return density
-
-
 def is_parenthetical(word: str) -> bool:
     """
     Checking whether a word is a parenthetical expression by itself
@@ -696,7 +298,12 @@ def is_parenthetical(word: str) -> bool:
 
     Returns:
         bool: Result of the check
+
+    Raises:
+        SourceTypeError: If the word is not a string
     """
+    if not isinstance(word, str):
+        raise SourceTypeError(f"The word must be a string, not {type(word).__name__}")
     return word.lower() in PARENTHETICAL_WORDS
 
 
@@ -803,16 +410,114 @@ def expand_phrases(text: Sequence[str], phrases: Collection[str]) -> dict[str, s
     return expanded
 
 
+def calc_academic_nausea(
+    text: Sequence[str],
+    top_n: int = NAUSEA_TOP_N,
+    stopwords: Collection[str] | None = None,
+) -> float:
+    """
+    Computing the academic nausea
+
+    Description:
+        The summed frequency of the top_n most frequent significant words
+        (find_nausea_words) per 100 words of the text (Advego); the exact
+        formula of Advego is not published. The norm of Advego is 5-15%, for
+        texts of several hundred words. The calc_academic_nausea of the core
+        with is_stopword
+
+    References:
+        https://advego.com/text/seo/
+
+    Arguments:
+        text (list[str]): List of words
+        top_n (int): Number of the most frequent words
+        stopwords (list[str]|set[str]): Stopwords left out of the most frequent words;
+            is_stopword if not set
+
+    Returns:
+        float: Value of the nausea in percent
+
+    Raises:
+        SourceTypeError: If the words are not a list of strings or the stopwords are not
+            a list or a set of strings
+        ParameterError: If top_n is not an integer or is below one
+    """
+    return anyts.style_stats.calc_academic_nausea(text, top_n, stopwords, is_stopword=is_stopword)
+
+
+def find_nausea_words(
+    text: Sequence[str],
+    top_n: int = NAUSEA_TOP_N,
+    stopwords: Collection[str] | None = None,
+) -> dict[str, int]:
+    """
+    Finding the most frequent significant words of the academic nausea
+
+    Description:
+        The top_n most frequent words without the stopwords - those of the
+        list passed, in any case, or of is_stopword - with their occurrences,
+        the most frequent first and words of equal frequency in the order of
+        the text. The find_nausea_words of the core with is_stopword
+
+    Arguments:
+        text (list[str]): List of words
+        top_n (int): Number of the most frequent words
+        stopwords (list[str]|set[str]): Stopwords; is_stopword if not set
+
+    Returns:
+        dict[str, int]: Occurrences of every word
+
+    Raises:
+        SourceTypeError: If the words are not a list of strings or the stopwords are not
+            a list or a set of strings
+        ParameterError: If top_n is not an integer or is below one
+
+    Example:
+        >>> from ests.style_stats import find_nausea_words
+        >>> find_nausea_words(["gato", "y", "gato", "y", "perro"], top_n=1)
+        {'gato': 2}
+    """
+    return anyts.style_stats.find_nausea_words(text, top_n, stopwords, is_stopword=is_stopword)
+
+
+def calc_water(text: Sequence[str], stopwords: Collection[str] | None = None) -> float:
+    """
+    Computing the water content
+
+    Description:
+        The share of the words that carry no content in percent (Text.ru): the
+        stopwords of is_stopword or of the list passed, in any case. The norms
+        of Text.ru are set for Russian, which has no articles, so a Spanish
+        text has more water by its grammar alone. The calc_water of the core
+        with is_stopword
+
+    References:
+        https://text.ru/seo
+
+    Arguments:
+        text (list[str]): List of words
+        stopwords (list[str]|set[str]): List or set of stopwords; is_stopword if not set
+
+    Returns:
+        float: Value of the water content in percent
+
+    Raises:
+        SourceTypeError: If the words are not a list of strings or the stopwords are not
+            a list or a set of strings
+    """
+    return anyts.style_stats.calc_water(text, stopwords, is_water_word=is_stopword)
+
+
 def calc_phrase_density(text: Sequence[str], phrases: Collection[str]) -> float:
     """
     Computing the density of the phrases of a list
 
     Description:
-        The number of occurrences of the phrases (find_phrases) per 100 words,
-        with the contractions and the forms of the verbs of expand_phrases;
-        used for the compound prepositions (COMPOUND_PREPOSITIONS), the
-        parenthetical expressions (PARENTHETICALS) and the clichés
-        (OFFICIALESE_CLICHES)
+        The number of occurrences of the phrases per 100 words, with the
+        contractions and the forms of the verbs of expand_phrases; used for
+        the compound prepositions (COMPOUND_PREPOSITIONS) and the clichés
+        (OFFICIALESE_CLICHES). The calc_phrase_density of the core with
+        expand_phrases
 
     Arguments:
         text (list[str]): List of words
@@ -825,9 +530,7 @@ def calc_phrase_density(text: Sequence[str], phrases: Collection[str]) -> float:
         SourceTypeError: If the words are not a list of strings or the phrases are not
             a list or a set of strings
     """
-    check_words(text)
-    check_words(phrases, "phrases", ordered=False)
-    return safe_divide(len(find_phrases(text, expand_phrases(text, phrases))), len(text)) * 100
+    return anyts.style_stats.calc_phrase_density(text, phrases, expand=expand_phrases)
 
 
 def calc_parentheticals(text: Sequence[str]) -> float:
@@ -836,7 +539,8 @@ def calc_parentheticals(text: Sequence[str]) -> float:
 
     Description:
         The expressions of PARENTHETICALS (sin embargo, es decir, por ejemplo,
-        finalmente) per 100 words, whatever the punctuation
+        finalmente) per 100 words, whatever the punctuation. The
+        calc_parentheticals of the core with the Spanish expressions
 
     Arguments:
         text (list[str]): List of words
@@ -847,8 +551,9 @@ def calc_parentheticals(text: Sequence[str]) -> float:
     Raises:
         SourceTypeError: If the words are not a list of strings
     """
-    check_words(text)
-    return safe_divide(len(find_parentheticals(text)), len(text)) * 100
+    return anyts.style_stats.calc_parentheticals(
+        text, PARENTHETICALS, is_parenthetical=is_parenthetical, expand=expand_phrases
+    )
 
 
 def find_parentheticals(text: Sequence[str]) -> list[tuple[int, int]]:
@@ -873,5 +578,6 @@ def find_parentheticals(text: Sequence[str]) -> list[tuple[int, int]]:
         >>> find_parentheticals(["sin", "embargo", "el", "gato", "finalmente", "duerme"])
         [(0, 2), (4, 5)]
     """
-    check_words(text)
-    return find_phrases(text, expand_phrases(text, PARENTHETICALS))
+    return anyts.style_stats.find_parentheticals(
+        text, PARENTHETICALS, is_parenthetical=is_parenthetical, expand=expand_phrases
+    )

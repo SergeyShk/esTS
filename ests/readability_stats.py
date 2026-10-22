@@ -356,6 +356,9 @@ def calc_sol_grade(n_complex: int, n_sents: int, a: float = 0.74, b: float = -2.
 
     Returns:
         float: Value of the grade, nan without sentences
+
+    Raises:
+        ParameterError: If a count is not a non-negative integer
     """
     return b + a * calc_smog_index(n_complex, n_sents)
 
@@ -460,6 +463,7 @@ def calc_consensus_grade(
         float: Consensus grade
 
     Raises:
+        SourceTypeError: If the grades are not a list
         ParameterError: If there are no values, a grade or the reading ease is not a
             finite number or the preset is unknown
     """
@@ -523,6 +527,7 @@ def calc_reading_time(n_words: int, wpm: float = READING_SPEED_WPM) -> float:
         float: Reading time in minutes
 
     Raises:
-        ParameterError: If the reading speed is not a positive number
+        ParameterError: If the number of words is not a non-negative integer or the
+            reading speed is not a positive number
     """
     return anyts.readability_stats.calc_reading_time(n_words, wpm)
