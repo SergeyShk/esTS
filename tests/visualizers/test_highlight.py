@@ -16,10 +16,13 @@ from ests.visualizers import Highlight, HighlightedText, highlight
 from ests.visualizers.highlight import (
     calc_alliteration_runs,
     find_alliteration,
+    find_cliches,
     find_complex_words,
     find_connector_highlights,
     find_de_chains,
     find_long_sents,
+    find_phrase_highlights,
+    find_stopwords,
     get_stem_sounds,
     plural,
 )
@@ -520,3 +523,24 @@ def test_to_html_title():
 def test_to_html_nested_classes(doc):
     markup = highlight(doc, layers=["complex_words", "verbal_nouns"]).to_html(legend=False)
     assert 'class="ests-hl ests-hl-complex_words ests-hl-verbal_nouns"' in markup
+
+
+@pytest.mark.parametrize(
+    ("call", "error"),
+    [
+        (lambda: calc_alliteration_runs(["casa", "cosa"], threshold=0), ParameterError),
+        (lambda: calc_alliteration_runs(["casa", "cosa"], threshold=1.5), ParameterError),
+        (lambda: calc_alliteration_runs("casa cosa"), SourceTypeError),
+        (lambda: find_long_sents([], 0), ParameterError),
+        (lambda: find_complex_words([], 0), ParameterError),
+        (lambda: find_alliteration([], threshold=2), ParameterError),
+        (lambda: find_stopwords([], "de"), SourceTypeError),
+        (lambda: find_stopwords([], [1]), SourceTypeError),
+        (lambda: find_cliches([], "proceder a"), SourceTypeError),
+        (lambda: find_phrase_highlights([], "en vez de", "cliches", "cliché"), SourceTypeError),
+        (lambda: get_stem_sounds(1), SourceTypeError),
+    ],
+)
+def test_errors_of_the_finders(call, error):
+    with pytest.raises(error):
+        call()

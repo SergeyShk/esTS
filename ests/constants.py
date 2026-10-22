@@ -1167,11 +1167,6 @@ HIGHLIGHT_LAYER_STYLES = {
 LONG_SENT_WORD_FACTOR = 30
 # Number of syllables from which the highlighting marks a word as complex
 HIGHLIGHT_COMPLEX_SYL_FACTOR = 4
-# Probability of a repetition of a consonant sound under an independent spread of the
-# sounds, below which the repetition is highlighted as alliteration
-ALLITERATION_THRESHOLD = 0.001
-# Words shorter than this number of letters neither break nor continue an alliteration
-ALLITERATION_MIN_WORD_LEN = 3
 # Frequencies of the sounds of the transcription in the corpus of literature
 # (SpanishLiterature, transcribe)
 SOUND_FREQUENCIES = {

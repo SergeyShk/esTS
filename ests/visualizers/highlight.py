@@ -2,22 +2,21 @@ import re
 from collections.abc import Callable, Collection, Iterable, Iterator, Sequence
 
 import anyts.visualizers.highlight
-from anyts.constants import AUXILIARY_DEPS
+from anyts.constants import ALLITERATION_MIN_WORD_LEN, ALLITERATION_THRESHOLD, AUXILIARY_DEPS
 from anyts.syntax_stats import base_dep, get_children, get_words, is_root, subtree_len
-from anyts.utils import check_integer, check_number, check_words, in_order, is_word
+from anyts.utils import check_words, in_order, is_word
 from anyts.visualizers.highlight import (
     Highlight as Highlight,
-    Sent,
-    Word,
-    group_words_by_sents,
+    Sent as Sent,
+    Word as Word,
+    find_words,
+    group_words_by_sents as group_words_by_sents,
     tokens_span,
 )
 from spacy.tokens import Doc, Token
 
-from ..cohesion_stats import find_connectors
+from ..cohesion_stats import CohesionStats
 from ..constants import (
-    ALLITERATION_MIN_WORD_LEN,
-    ALLITERATION_THRESHOLD,
     COMPOUND_PREPOSITIONS,
     CONNECTOR_CLASSES,
     CONNECTOR_TYPES,
@@ -36,7 +35,6 @@ from ..constants import (
     VOWEL_SOUNDS,
 )
 from ..datasets.freq_dict import lemma_key
-from ..exceptions import ParameterError
 from ..lexical_stats import get_rank
 from ..phon_stats import CONSONANT_SOUNDS, transcribe
 from ..style_stats import expand_phrases, is_stopword
@@ -49,9 +47,11 @@ from ..syntax_stats import (
     is_participle_clause,
     is_passive,
 )
-from ..utils import find_phrases, is_verbal_noun, iter_text_sents, iter_text_words, lemmatize
+from ..utils import is_verbal_noun, iter_text_sents, iter_text_words, lemmatize
 
 SPANISH_WORD = re.compile(r"[a-záéíóúüñ]{2,}", re.IGNORECASE)
+# Frequencies of the consonant sounds for the alliteration
+ALLITERATION_FREQUENCIES = {sound: SOUND_FREQUENCIES[sound] for sound in CONSONANT_SOUNDS}
 
 
 class HighlightedText(anyts.visualizers.highlight.HighlightedText):
@@ -151,19 +151,12 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
         cliches: Collection[str] | None = None,
         alliteration_threshold: float = ALLITERATION_THRESHOLD,
     ):
-        check_integer(long_sent_word_factor, "number of words of a long sentence")
-        check_integer(complex_syl_factor, "number of syllables of a complex word")
-        if long_sent_word_factor < 1:
-            raise ParameterError("The number of words of a long sentence must be greater than 0")
-        if complex_syl_factor < 1:
-            raise ParameterError(
-                "The number of syllables of a complex word must be greater than 0"
-            )
-        check_number(alliteration_threshold, "threshold of the alliteration")
-        if not 0 < alliteration_threshold <= 1:
-            raise ParameterError(
-                "The threshold of the alliteration must lie in the interval (0, 1]"
-            )
+        anyts.visualizers.highlight.check_params(
+            long_sent_word_factor,
+            complex_syl_factor,
+            alliteration_threshold,
+            messages=self.messages,
+        )
         if stopwords is not None:
             check_words(stopwords, "stopwords", ordered=False)
             stopwords = in_order(stopwords)
@@ -279,25 +272,30 @@ def find_long_sents(sents: Iterable[Sent], long_sent_word_factor: int) -> list[H
     """
     Finding the long sentences
 
+    Description:
+        The find_long_sents of the core with the note of the number of words
+
     Arguments:
         sents (list[Sent]): Sentences with their positions and numbers of words
         long_sent_word_factor (int): Minimum number of words of a long sentence
 
     Returns:
         list[Highlight]: Fragments of the layer long_sents
+
+    Raises:
+        ParameterError: If the number of words is not an integer of at least one
     """
-    return [
-        Highlight(
-            sent.start, sent.end, "long_sents", f"long sentence, {plural(sent.n_words, 'word')}"
-        )
-        for sent in sents
-        if sent.n_words >= long_sent_word_factor
-    ]
+    return anyts.visualizers.highlight.find_long_sents(
+        sents, long_sent_word_factor, lambda n: f"long sentence, {plural(n, 'word')}"
+    )
 
 
 def find_complex_words(words: Iterable[Word], complex_syl_factor: int) -> list[Highlight]:
     """
     Finding the complex words
+
+    Description:
+        The find_complex_words of the core with the syllables of count_syllables
 
     Arguments:
         words (list[Word]): Words with their positions
@@ -305,14 +303,16 @@ def find_complex_words(words: Iterable[Word], complex_syl_factor: int) -> list[H
 
     Returns:
         list[Highlight]: Fragments of the layer complex_words
+
+    Raises:
+        ParameterError: If the number of syllables is not an integer of at least one
     """
-    highlights = []
-    for word in words:
-        n_syllables = count_syllables(word.text)
-        if n_syllables >= complex_syl_factor:
-            note = f"complex word, {plural(n_syllables, 'syllable')}"
-            highlights.append(Highlight(word.start, word.end, "complex_words", note))
-    return highlights
+    return anyts.visualizers.highlight.find_complex_words(
+        words,
+        complex_syl_factor,
+        count_syllables,
+        lambda n: f"complex word, {plural(n, 'syllable')}",
+    )
 
 
 def find_stopwords(
@@ -330,13 +330,15 @@ def find_stopwords(
 
     Returns:
         list[Highlight]: Fragments of the layer stopwords
+
+    Raises:
+        SourceTypeError: If the stopwords are not a list or a set of strings
     """
-    if stopwords is not None:
-        stopwords_set = {word.lower() for word in stopwords}
-        matches = [word for word in words if word.text.lower() in stopwords_set]
-    else:
-        matches = [word for word in words if is_stopword(word.text)]
-    return [Highlight(word.start, word.end, "stopwords", "stopword") for word in matches]
+    if stopwords is None:
+        return find_words(words, lambda word: is_stopword(word.text), "stopwords", "stopword")
+    check_words(stopwords, "stopwords", ordered=False)
+    chosen = {word.lower() for word in stopwords}
+    return find_words(words, lambda word: word.text.lower() in chosen, "stopwords", "stopword")
 
 
 def find_rare_words(words: Iterable[Word]) -> list[Highlight]:
@@ -355,13 +357,16 @@ def find_rare_words(words: Iterable[Word]) -> list[Highlight]:
     Returns:
         list[Highlight]: Fragments of the layer rare_words
     """
-    return [
-        Highlight(word.start, word.end, "rare_words", "rare word: beyond the top 10000")
-        for word in words
-        if SPANISH_WORD.fullmatch(word.text)
-        and not is_stopword(word.text)
-        and get_rank(lemma_key(word.text, word.pos == "PROPN")) is None
-    ]
+    return find_words(
+        words,
+        lambda word: (
+            SPANISH_WORD.fullmatch(word.text) is not None
+            and not is_stopword(word.text)
+            and get_rank(lemma_key(word.text, word.pos == "PROPN")) is None
+        ),
+        "rare_words",
+        "rare word: beyond the top 10000",
+    )
 
 
 def find_verbal_nouns(words: Iterable[Word]) -> list[Highlight]:
@@ -377,11 +382,12 @@ def find_verbal_nouns(words: Iterable[Word]) -> list[Highlight]:
     Returns:
         list[Highlight]: Fragments of the layer verbal_nouns
     """
-    return [
-        Highlight(word.start, word.end, "verbal_nouns", "verbal noun")
-        for word in words
-        if word.pos == "NOUN" and word.lemma and is_verbal_noun(word.lemma)
-    ]
+    return find_words(
+        words,
+        lambda word: word.pos == "NOUN" and word.lemma is not None and is_verbal_noun(word.lemma),
+        "verbal_nouns",
+        "verbal noun",
+    )
 
 
 def find_phrase_highlights(
@@ -393,25 +399,26 @@ def find_phrase_highlights(
     Description:
         The phrases are matched with their contractions and the forms of their
         verbs (expand_phrases); a fragment covers the words from the first to the
-        last, and the note gives the phrase of the list
+        last, and the note gives the phrase of the list. The
+        find_phrase_highlights of the core
 
     Arguments:
         words (list[Word]): Words with their positions
-        phrases (list[str]): Phrases, words separated by spaces
+        phrases (list[str]|set[str]): Phrases, words separated by spaces
         layer (str): Layer of the highlighting
         label (str): Label of the fragment in the note
 
     Returns:
         list[Highlight]: Fragments of the layer
+
+    Raises:
+        SourceTypeError: If the phrases are not a list or a set of strings
     """
-    texts = [word.text for word in words]
-    expanded = expand_phrases(texts, list(phrases))
-    highlights = []
-    for start, end in find_phrases(texts, expanded):
-        phrase = expanded[" ".join(text.lower() for text in texts[start:end])]
-        note = f"{label}: «{phrase}»"
-        highlights.append(Highlight(words[start].start, words[end - 1].end, layer, note))
-    return highlights
+    check_words(phrases, "phrases", ordered=False)
+    expanded = expand_phrases([word.text for word in words], list(phrases))
+    return anyts.visualizers.highlight.find_phrase_highlights(
+        words, expanded, layer, lambda phrase: f"{label}: «{phrase}»"
+    )
 
 
 def find_compound_prepositions(words: Sequence[Word]) -> list[Highlight]:
@@ -439,9 +446,14 @@ def find_cliches(words: Sequence[Word], cliches: Collection[str] | None = None) 
 
     Returns:
         list[Highlight]: Fragments of the layer cliches
+
+    Raises:
+        SourceTypeError: If the clichés are not a list or a set of strings
     """
-    phrases = OFFICIALESE_CLICHES if cliches is None else cliches
-    return find_phrase_highlights(words, phrases, "cliches", "cliché")
+    if cliches is None:
+        return find_phrase_highlights(words, OFFICIALESE_CLICHES, "cliches", "cliché")
+    check_words(cliches, "clichés", ordered=False)
+    return find_phrase_highlights(words, cliches, "cliches", "cliché")
 
 
 def find_parentheticals(words: Sequence[Word]) -> list[Highlight]:
@@ -464,9 +476,10 @@ def find_connector_highlights(words: Sequence[Word], sents: Sequence[Sent]) -> l
     Finding the connectors
 
     Description:
-        The connectors are looked for inside every sentence (find_connectors), a
-        one-word one checked by its part of speech when the words have it; the
-        note gives the class and the kind of the connector
+        The connectors are looked for inside every sentence by the matcher of
+        CohesionStats (SpanishConnectorMatcher), a one-word one checked by its
+        part of speech when the words have it; the note gives the class and the
+        kind of the connector. The find_connector_highlights of the core
 
     Arguments:
         words (list[Word]): Words with their positions
@@ -475,22 +488,15 @@ def find_connector_highlights(words: Sequence[Word], sents: Sequence[Sent]) -> l
     Returns:
         list[Highlight]: Fragments of the layer connectors
     """
-    groups = group_words_by_sents(words, sents)
-    highlights = []
-    for group in groups:
-        texts = [word.text for word in group]
-        pos = [word.pos for word in group] if any(word.pos for word in group) else None
-        for connector in find_connectors(texts, sent_index=0, pos=pos):
-            note = (
-                f"connector «{connector.text}»: {CONNECTOR_CLASSES[connector.cls]}, "
-                f"{CONNECTOR_TYPES[connector.kind]}"
-            )
-            highlights.append(
-                Highlight(
-                    group[connector.start].start, group[connector.end - 1].end, "connectors", note
-                )
-            )
-    return highlights
+    return anyts.visualizers.highlight.find_connector_highlights(
+        words,
+        sents,
+        CohesionStats.connector_matcher(),
+        lambda connector: (
+            f"connector «{connector.text}»: {CONNECTOR_CLASSES[connector.cls]}, "
+            f"{CONNECTOR_TYPES[connector.kind]}"
+        ),
+    )
 
 
 def get_stem_sounds(word: str) -> tuple[str, ...]:
@@ -508,6 +514,9 @@ def get_stem_sounds(word: str) -> tuple[str, ...]:
 
     Returns:
         tuple[str]: Sounds of the stem
+
+    Raises:
+        SourceTypeError: If the word is not a string
     """
     sounds, lemma_sounds = transcribe(word), transcribe(lemmatize(word))
     length = 0
@@ -532,7 +541,7 @@ def calc_alliteration_runs(
         spread of the sounds is the product over its words of 1 - (1 - f)^n,
         where f is the frequency of the consonant in SOUND_FREQUENCIES and n the
         number of the sounds of the stem; a run is alliteration when the
-        probability is below the threshold
+        probability is below the threshold. The calc_alliteration_runs of the core
 
     Arguments:
         text (list[str]): List of words
@@ -541,36 +550,27 @@ def calc_alliteration_runs(
     Returns:
         list[tuple[int, int, str]]: Positions of the first word and after the last
             word of every run and its consonant, in the order of the text
+
+    Raises:
+        SourceTypeError: If the words are not a list of strings
+        ParameterError: If the threshold does not lie in (0, 1]
     """
-    words = [word.lower() for word in text]
-    transparent = [
+    return anyts.visualizers.highlight.calc_alliteration_runs(
+        text,
+        ALLITERATION_FREQUENCIES,
+        threshold,
+        get_stem_sounds,
+        _is_transparent,
+    )
+
+
+def _is_transparent(word: str) -> bool:
+    """A word that neither breaks nor continues a run: short, a stopword or without vowels"""
+    return (
         len(word) < ALLITERATION_MIN_WORD_LEN
         or is_stopword(word)
         or not any(sound in VOWEL_SOUNDS for sound in transcribe(word))
-        for word in words
-    ]
-    stems = [get_stem_sounds(word) for word in words]
-    runs = []
-    for consonant in sorted(CONSONANT_SOUNDS):
-        frequency = SOUND_FREQUENCIES[consonant]
-        start = None
-        stop = 0
-        probability = 1.0
-        for i, stem in enumerate(stems):
-            if transparent[i]:
-                continue
-            if consonant in stem:
-                if start is None:
-                    start, probability = i, 1.0
-                stop = i + 1
-                probability *= 1 - (1 - frequency) ** len(stem)
-            elif start is not None:
-                if stop - start >= 2 and probability < threshold:
-                    runs.append((start, stop, consonant))
-                start = None
-        if start is not None and stop - start >= 2 and probability < threshold:
-            runs.append((start, stop, consonant))
-    return sorted(runs)
+    )
 
 
 def find_alliteration(
@@ -583,7 +583,8 @@ def find_alliteration(
 
     Description:
         The repetitions are looked for inside the sentences, in the whole text
-        without them; the note gives the sound and the letters that write it
+        without them; the note gives the sound and the letters that write it.
+        The find_alliteration of the core
 
     Arguments:
         words (list[Word]): Words with their positions
@@ -592,19 +593,25 @@ def find_alliteration(
 
     Returns:
         list[Highlight]: Fragments of the layer alliteration
+
+    Raises:
+        ParameterError: If the threshold does not lie in (0, 1]
     """
-    groups = [list(words)] if sents is None else group_words_by_sents(words, sents)
-    highlights = []
-    for group in groups:
-        for start, stop, sound in calc_alliteration_runs([word.text for word in group], threshold):
-            spellings = SOUND_SPELLINGS[sound]
-            note = f"alliteration on /{sound}/"
-            if spellings != sound:
-                note += f" ({spellings})"
-            highlights.append(
-                Highlight(group[start].start, group[stop - 1].end, "alliteration", note)
-            )
-    return highlights
+    return anyts.visualizers.highlight.find_alliteration(
+        words,
+        sents,
+        ALLITERATION_FREQUENCIES,
+        threshold,
+        get_stem_sounds,
+        _is_transparent,
+        _alliteration_note,
+    )
+
+
+def _alliteration_note(sound: str) -> str:
+    """Note of an alliteration: the sound and the letters that write it"""
+    spellings = SOUND_SPELLINGS[sound]
+    return f"alliteration on /{sound}/" + (f" ({spellings})" if spellings != sound else "")
 
 
 def find_passive(doc: Doc) -> list[Highlight]:
@@ -715,7 +722,7 @@ def find_split_predicate_highlights(doc: Doc) -> list[Highlight]:
     Description:
         The pairs of a light verb and a noun of find_split_predicates; a fragment
         covers the words from the first to the last of the pair (hacer una
-        revisión)
+        revisión). The find_split_predicate_highlights of the core
 
     Arguments:
         doc (Doc): Doc object with a dependency parse
@@ -723,12 +730,7 @@ def find_split_predicate_highlights(doc: Doc) -> list[Highlight]:
     Returns:
         list[Highlight]: Fragments of the layer split_predicates
     """
-    highlights = []
-    for verb, noun in find_split_predicates(doc):
-        start, end = tokens_span([verb, noun])
-        note = f"split predicate: {verb.lemma_.lower()} {noun.lemma_.lower()}"
-        highlights.append(Highlight(start, end, "split_predicates", note))
-    return highlights
+    return anyts.visualizers.highlight.find_split_predicate_highlights(find_split_predicates(doc))
 
 
 def _de_chain(token: Token) -> tuple[list[Token], int]:

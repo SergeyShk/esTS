@@ -1,18 +1,19 @@
 # Text highlighting
 
-!!! info ""
-    **ests.visualizers.highlight()**, **ests.visualizers.HighlightedText**, **ests.visualizers.Highlight**
-
-## Description
+``` {.python .signature}
+HighlightedText(source, layers=None, long_sent_word_factor=30, complex_syl_factor=4, stopwords=None, cliches=None, alliteration_threshold=0.001)
+```
 
 --8<-- "visualizers/highlight.md:HighlightedText"
 
-The function `highlight` returns a `HighlightedText` object of esTS, which extends the `HighlightedText` of the [anyTS](https://sergeyshk.github.io/anyTS/visualizers/highlight/) core with the layers of the library, their search and their parameters, and the prefix `ests` of the CSS classes.
+``` {.python .signature}
+highlight(source, layers=None, long_sent_word_factor=30, complex_syl_factor=4, stopwords=None, cliches=None, alliteration_threshold=0.001)
+```
 
-Layers of the highlighting:
+The function `highlight` returns a `HighlightedText` object of esTS with the layers of the statistics of the library:
 
 | Group | Layer | What it marks | Statistic |
-| :---- | :---: | :-----------: | :-------: |
+| :---- | :---- | :------------ | :-------- |
 | Readability | `long_sents` | Sentences of `long_sent_word_factor` words or more | [BasicStats](../stats/basic_stats.md) |
 | | `complex_words` | Words of `complex_syl_factor` syllables or more | [BasicStats](../stats/basic_stats.md) |
 | | `rare_words` | Words with a lemma beyond the embedded top 10000; numbers, words with a hyphen or a digit and stopwords are not highlighted | [LexicalStats](../stats/lexical_stats.md) |
@@ -29,55 +30,20 @@ Layers of the highlighting:
 | | `connectors` | Discourse markers, the class and the kind in the note | [CohesionStats](../stats/cohesion_stats.md) |
 | Phonics | `alliteration` | Repetitions of a consonant sound in neighbouring words, unlikely by the frequencies of the Spanish sounds; the note gives the sound and the letters that write it | [PhonStats](../stats/phon_stats.md) |
 
-The groups are defined in `ests.constants.HIGHLIGHT_LAYER_GROUPS`, the annotations of a `Doc` a layer needs in `HIGHLIGHT_LAYER_ANNOTATIONS` and the styles of the layers in `HIGHLIGHT_LAYER_STYLES`. The layers of the group "Syntax" need a `Doc` with a parse and a lemmatizer (the models `es_core_news_sm`, `es_core_news_md`, `es_core_news_lg`), as [SyntaxStats](../stats/syntax_stats.md) does; `verbal_nouns` needs a `Doc` with the parts of speech and the lemmas. A `Doc` without the sentence boundaries (a blank pipeline, a pipeline without the parser) is split by the rules of [SentsExtractor](../extractors/sentences.md). The layers of `HIGHLIGHT_DEFAULT_LAYERS` the source allows are on by default - long sentences, complex words, passive, chains of `de`, split predicates, clichés; `layers="all"` turns on every layer allowed. The layers overlap (a compound preposition is made of stopwords), so pick the ones you need.
+The groups are defined in `ests.constants.HIGHLIGHT_LAYER_GROUPS`. The layers of the group "Syntax" need a `Doc` with a dependency parse and the lemmas (the models `es_core_news_sm`, `es_core_news_md`, `es_core_news_lg`), as [SyntaxStats](../stats/syntax_stats.md) does; `verbal_nouns` needs a `Doc` with the parts of speech and the lemmas. The layers of `HIGHLIGHT_DEFAULT_LAYERS` the source allows are on by default - long sentences, complex words, passive, chains of `de`, split predicates, clichés; `layers="all"` turns on every layer allowed. The layers overlap (a compound preposition is made of stopwords), so pick the ones you need.
 
 A sentence is long from 30 words, the bound of the Spanish-language guides to plain language (the [Comunidad de Madrid](https://www.comunidad.madrid/transparencia/sites/default/files/ckeditor/guia_tramites_claros-comunidad_madrid-noviembre_2021.pdf) and the [Gobierno de la Ciudad de Buenos Aires](https://gcba.github.io/programadelenguajeclaro/Manual%20de%20lenguaje%20claro%202024%20(Final).pdf)), and a word is complex from four syllables; `complex_syl_factor=3`, the bound of `BasicStats`, shows the words of `n_complex_words`.
 
-!!! note "Note"
-    An alliteration is looked for inside a sentence as a run of two neighbouring words or more with the same consonant sound in their stems. The sounds are the ones of the [transcription](../stats/phon_stats.md#transcribe), so `casa` and `queso` repeat k; the stem is the common start of the transcriptions of the word form and of its lemma (`cantaban` - k a n t a), which leaves out the endings that repeat by agreement (`las casas blancas`). The probability of a run under an independent spread of the sounds is the product over its words of the probability to meet the consonant among the sounds of the stem, $1 - (1 - f)^n$, where $f$ is the frequency of the sound in the [corpus of literature](../datasets/spanishliterature.md) and $n$ the number of the sounds of the stem; a run is highlighted when the probability is below `alliteration_threshold`. A repetition of a rare sound shows in two or three words (`deje la abeja`), while the `s` of `los suspiros se escapan` is too frequent to count in two words. Words shorter than three letters (`de`, `la`, `el`) and stopwords (`que`, `los`, `con`) neither break nor continue a run. The alliteration index of [PhonStats](../stats/phon_stats.md) measures how the repetitions cluster over the whole text; the highlighting shows where they are.
+!!! note "Alliteration"
+    An alliteration is looked for inside a sentence as a run of two neighbouring words or more with the same consonant sound in their stems. The sounds are the ones of the [transcription](../stats/phon_stats.md#transcribe), so `casa` and `queso` repeat k; the stem is the common start of the transcriptions of the word form and of its lemma (`cantaban` - k a n t a), which leaves out the endings that repeat by agreement (`las casas blancas`). The probability of a run under an independent spread of the sounds is the product over its words of the probability to meet the consonant among the sounds of the stem, $1 - (1 - f)^n$, where $f$ is the frequency of the sound in the [corpus of literature](../datasets/spanishliterature.md) and $n$ the number of the sounds of the stem; a run is highlighted when the probability is below `alliteration_threshold`. A repetition of a rare sound shows in two or three words (`deje la abeja`), while the `s` of `los suspiros se escapan` is too frequent to count in two words. Words shorter than three letters (`de`, `la`, `el`), stopwords (`que`, `los`, `con`) and words without vowels neither break nor continue a run. The alliteration index of [PhonStats](../stats/phon_stats.md) measures how the repetitions cluster over the whole text; the highlighting shows where they are.
 
-## Parameters
+The class extends the `HighlightedText` of the [anyTS](https://sergeyshk.github.io/anyTS/visualizers/highlight/) core with the hooks of Spanish from `ests.constants`: the layers with their names in the legend are `HIGHLIGHT_LAYERS_DESC`, the layers on by default `HIGHLIGHT_DEFAULT_LAYERS`, the annotations of a `Doc` a layer needs `HIGHLIGHT_LAYER_ANNOTATIONS` and the styles of the layers `HIGHLIGHT_LAYER_STYLES`; the prefix of the CSS classes is `ests`. The words of a string are those of [`WordsExtractor`](../extractors/words.md), without the punctuation, and its sentences those of [`SentsExtractor`](../extractors/sentences.md); a `Doc` without the sentence boundaries (a blank pipeline, a pipeline without the parser) is split into sentences by the rules of `SentsExtractor` too. The fragments of every layer are found by the [finders of esTS](#finders).
 
---8<-- "visualizers/highlight.md:HighlightedText-parameters"
-
-The parameters of the layers of esTS:
-
-| Parameter | Type | Default | Description |
-| :-------: | :--: | :-----: | :---------: |
-| `long_sent_word_factor` | int | `30` | Minimum number of words of a long sentence |
-| `complex_syl_factor` | int | `4` | Minimum number of syllables of a complex word |
-| `stopwords` | list[str]/set[str] | `None` | List or set of stopwords; if not given, `STOPWORDS` and the one-word parenthetical expressions |
-| `cliches` | list[str]/set[str] | `None` | List or set of clichés; if not given, `OFFICIALESE_CLICHES` |
-| `alliteration_threshold` | float | `0.001` | Probability of a repetition of a consonant under an independent spread of the sounds, below which the repetition is alliteration |
-
-A threshold that is not an integer of at least one or a probability outside (0, 1] raises `ParameterError`, stopwords or clichés that are not strings `SourceTypeError`.
-
-## Attributes
-
---8<-- "visualizers/highlight.md:HighlightedText-attributes"
-
---8<-- "visualizers/highlight.md:Highlight"
-
-The note of a fragment gives the number of words of the sentence, of syllables of the word, the length of the chain or the phrase of the list.
-
-## Methods
-
-### to_html
-
---8<-- "visualizers/highlight.md:HighlightedText-to_html"
-
-### css
-
---8<-- "visualizers/highlight.md:HighlightedText-css"
-
-## Usage example
-
-!!! example "Example"
-
-    _Code_:
+=== "Code"
 
     ``` python
     import spacy
+
     from ests.visualizers import highlight
 
     nlp = spacy.load("es_core_news_sm")
@@ -92,30 +58,41 @@ The note of a fragment gives the number of words of the sentence, of syllables o
         "En el marco de la reunión se procedió a la votación, y la decisión quedó aplazada "
         "hasta la próxima sesión."
     )
-
-    # Highlight the text with the default layers
     ht = highlight(nlp(text))
     ht.counts
-    # {'long_sents': 1, 'complex_words': 16, 'passive': 2, 'de_chains': 3,
-    #  'split_predicates': 2, 'cliches': 1}
-
     ht.highlights[:2]
-    # (Highlight(start=13, end=22, layer='complex_words', note='complex word, 5 syllables'),
-    #  Highlight(start=42, end=54, layer='passive', note='passive with ser'))
-
-    # Every layer
     highlight(nlp(text), layers="all").counts
-    # {'long_sents': 1, 'complex_words': 16, 'rare_words': 0, 'passive': 2,
-    #  'participle_clauses': 2, 'gerund_clauses': 1, 'de_chains': 3, 'split_predicates': 2,
-    #  'verbal_nouns': 9, 'compound_prepositions': 1, 'cliches': 1, 'stopwords': 48,
-    #  'parentheticals': 0, 'connectors': 3, 'alliteration': 0}
-
-    # Show in Jupyter or save the markup
-    ht
-    html = ht.to_html()
     ```
 
-_Result_ (hover over a fragment to see its note):
+=== "Result"
+
+    ```
+    {'long_sents': 1,
+     'complex_words': 16,
+     'passive': 2,
+     'de_chains': 3,
+     'split_predicates': 2,
+     'cliches': 1}
+    (Highlight(start=13, end=22, layer='complex_words', note='complex word, 5 syllables'),
+     Highlight(start=42, end=54, layer='passive', note='passive with ser'))
+    {'long_sents': 1,
+     'complex_words': 16,
+     'rare_words': 0,
+     'passive': 2,
+     'participle_clauses': 2,
+     'gerund_clauses': 1,
+     'de_chains': 3,
+     'split_predicates': 2,
+     'verbal_nouns': 9,
+     'compound_prepositions': 1,
+     'cliches': 1,
+     'stopwords': 48,
+     'parentheticals': 0,
+     'connectors': 3,
+     'alliteration': 0}
+    ```
+
+In Jupyter the object `ht` displays like this (hover over a fragment to see its note):
 
 <div class="ests-highlight"><style>.ests-highlight { line-height: 1.7; }
 .ests-highlight-legend { display: flex; flex-wrap: wrap; gap: 0.4em 1.2em; margin-bottom: 0.8em; font-size: 0.9em; }
@@ -142,25 +119,385 @@ _Result_ (hover over a fragment to see its note):
 
 A string without a model of spaCy allows every layer but the syntactic ones and `verbal_nouns`: long sentences, complex words and clichés by default, and the alliteration on request.
 
-!!! example "Example"
+=== "Code"
 
     ``` python
     from ests.visualizers import highlight
 
     # Antonio Machado, Poesías completas (the corpus of literature)
-    text = "El cierzo corre por el campo yerto alborotando en blancos torbellinos la nieve silenciosa."
-    highlight(text, layers="alliteration").highlights
-    # (Highlight(start=35, end=78, layer='alliteration', note='alliteration on /b/ (b, v)'),)
+    poem = "El cierzo corre por el campo yerto alborotando en blancos torbellinos la nieve silenciosa."
+    highlight(poem, layers="alliteration").highlights
+    text = "Se procedió a la revisión del expediente en el marco del plan a la mayor brevedad."
+    highlight(text, layers=["compound_prepositions", "cliches"]).highlights
     ```
 
-!!! example "Example"
+=== "Result"
+
+    ```
+    (Highlight(start=35, end=78, layer='alliteration', note='alliteration on /b/ (b, v)'),)
+    (Highlight(start=3, end=13, layer='cliches', note='cliché: «proceder a»'),
+     Highlight(start=41, end=56, layer='compound_prepositions', note='compound preposition: «en el marco de»'),
+     Highlight(start=62, end=81, layer='cliches', note='cliché: «a la mayor brevedad»'))
+    ```
+
+## Parameters
+
+--8<-- "visualizers/highlight.md:HighlightedText-parameters"
+
+The parameters of the layers of esTS:
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `long_sent_word_factor` | `int` | `30` | Minimum number of words of a long sentence |
+| `complex_syl_factor` | `int` | `4` | Minimum number of syllables of a complex word |
+| `stopwords` | `list[str]` / `set[str]` | `None` | List or set of stopwords; if not given, `STOPWORDS` and the one-word parenthetical expressions |
+| `cliches` | `list[str]` / `set[str]` | `None` | List or set of clichés; if not given, `OFFICIALESE_CLICHES` |
+| `alliteration_threshold` | `float` | `0.001` | Probability of a repetition of a consonant under an independent spread of the sounds, below which the repetition is alliteration |
+
+A number of words or syllables that is not an integer of at least one or a threshold outside (0, 1] raises `ParameterError`, stopwords or clichés that are not a list or a set of strings `SourceTypeError`.
+
+## Attributes
+
+--8<-- "visualizers/highlight.md:HighlightedText-attributes"
+
+--8<-- "visualizers/highlight.md:Highlight"
+
+The notes of esTS are in English: they give the number of words of the sentence or of the clause, of syllables of the word, the length of the chain, the phrase of the list, the class and the kind of the connector, the sound of the alliteration and its letters.
+
+## Methods
+
+--8<-- "visualizers/highlight.md:HighlightedText-to_html"
+
+--8<-- "visualizers/highlight.md:HighlightedText-css"
+
+=== "Code"
 
     ``` python
     from ests.visualizers import highlight
 
-    text = "Se procedió a la revisión del expediente en el marco del plan a la mayor brevedad."
-    highlight(text, layers=["compound_prepositions", "cliches"]).highlights
-    # (Highlight(start=3, end=13, layer='cliches', note='cliché: «proceder a»'),
-    #  Highlight(start=41, end=56, layer='compound_prepositions', note='compound preposition: «en el marco de»'),
-    #  Highlight(start=62, end=81, layer='cliches', note='cliché: «a la mayor brevedad»'))
+    poem = "El cierzo corre por el campo yerto alborotando en blancos torbellinos la nieve silenciosa."
+    highlight(poem, layers="alliteration").to_html(legend=False, css=False)
+    ```
+
+=== "Result"
+
+    ```
+    '<div class="ests-highlight"><div class="ests-highlight-text">El cierzo corre por el campo yerto <span class="ests-hl ests-hl-alliteration" title="alliteration on /b/ (b, v)">alborotando en blancos torbellinos la nieve</span> silenciosa.</div></div>'
+    ```
+
+## Helpers of the layers
+
+The words and the sentences the finders of the layers take; the helpers are in `ests.visualizers.highlight`.
+
+--8<-- "visualizers/highlight.md:Word"
+
+--8<-- "visualizers/highlight.md:Sent"
+
+--8<-- "visualizers/highlight.md:group_words_by_sents"
+
+## Finders of the layers { #finders }
+
+The fragments of every layer are found by a function of `ests.visualizers.highlight` that returns a list of `Highlight`: from the words and the sentences of the text, or from the `Doc` for the syntactic layers (`SYNTAX_FINDERS` gives them by layer). All but the passive, the participial and gerund clauses and the chains of `de` are the [finders of the core](https://sergeyshk.github.io/anyTS/visualizers/highlight/#finders) with the hooks of Spanish.
+
+### Long sentences and complex words { #long-sents }
+
+``` {.python .signature}
+find_long_sents(sents, long_sent_word_factor)
+```
+
+The layer `long_sents`: the sentences of `long_sent_word_factor` words or more, the note with their number of words.
+
+``` {.python .signature}
+find_complex_words(words, complex_syl_factor)
+```
+
+The layer `complex_words`: the words of `complex_syl_factor` syllables or more by [`count_syllables`](../syllables.md#count_syllables), the note with their number of syllables.
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `sents` | `list[Sent]` | - | Sentences with their positions and numbers of words |
+| `long_sent_word_factor` | `int` | - | Minimum number of words of a long sentence |
+| `words` | `list[Word]` | - | Words with their positions |
+| `complex_syl_factor` | `int` | - | Minimum number of syllables of a complex word |
+
+Raises:
+
+- `ParameterError` - a number of words or syllables that is not an integer of at least one.
+
+=== "Code"
+
+    ``` python
+    from ests.utils import iter_text_words
+    from ests.visualizers.highlight import Sent, Word, find_complex_words, find_long_sents
+
+    text = "El felinólogo examinó al gato. Lo devolvieron."
+    words = [Word(*word) for word in iter_text_words(text)]
+    find_long_sents([Sent(0, 30, 5), Sent(31, 46, 2)], 5)
+    find_complex_words(words, 4)
+    ```
+
+=== "Result"
+
+    ```
+    [Highlight(start=0, end=30, layer='long_sents', note='long sentence, 5 words')]
+    [Highlight(start=3, end=13, layer='complex_words', note='complex word, 5 syllables'),
+     Highlight(start=14, end=21, layer='complex_words', note='complex word, 4 syllables'),
+     Highlight(start=34, end=45, layer='complex_words', note='complex word, 4 syllables')]
+    ```
+
+### Single words { #single-words }
+
+``` {.python .signature}
+find_rare_words(words)
+```
+
+The layer `rare_words`: the words whose key ([`lemma_key`](../datasets/freqdict.md#lemma_key)) is beyond the 10,000 most frequent lemmas ([`get_rank`](../stats/lexical_stats.md#bands)), as `p_beyond_top10000` of `LexicalStats` counts them; a word tagged `PROPN` keeps its form. Only the words of two Spanish letters or more that are not stopwords are looked at.
+
+``` {.python .signature}
+find_stopwords(words, stopwords=None)
+```
+
+The layer `stopwords`: the words of `stopwords` in any case or, without the list, the stopwords of [`is_stopword`](../stats/style_stats.md#academic_nausea).
+
+``` {.python .signature}
+find_verbal_nouns(words)
+```
+
+The layer `verbal_nouns`: the words tagged `NOUN` whose lemma is derived from a verb, as for the [verbal nouns](../stats/style_stats.md#verbal_nouns) of `StyleStats`.
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `words` | `list[Word]` | - | Words with their positions; with their parts of speech and lemmas for `find_verbal_nouns` |
+| `stopwords` | `list[str]` / `set[str]` | `None` | List or set of stopwords; `is_stopword` if not given |
+
+Raises:
+
+- `SourceTypeError` - stopwords that are not a list or a set of strings.
+
+=== "Code"
+
+    ``` python
+    from ests.utils import iter_text_words
+    from ests.visualizers.highlight import Word, find_rare_words, find_stopwords
+
+    text = "El felinólogo examinó minuciosamente al gato."
+    words = [Word(*word) for word in iter_text_words(text)]
+    find_rare_words(words)
+    find_stopwords(words)
+    ```
+
+=== "Result"
+
+    ```
+    [Highlight(start=3, end=13, layer='rare_words', note='rare word: beyond the top 10000'),
+     Highlight(start=22, end=36, layer='rare_words', note='rare word: beyond the top 10000')]
+    [Highlight(start=0, end=2, layer='stopwords', note='stopword'),
+     Highlight(start=37, end=39, layer='stopwords', note='stopword')]
+    ```
+
+### Phrases { #phrases }
+
+``` {.python .signature}
+find_phrase_highlights(words, phrases, layer, label)
+```
+
+The fragments of the phrases of a list, matched with their contractions and the forms of their verbs ([`expand_phrases`](../stats/style_stats.md#phrase_density)); the note gives the label and the phrase of the list (`cliché: «proceder a»`).
+
+``` {.python .signature}
+find_compound_prepositions(words)
+```
+
+The layer `compound_prepositions`: the phrases of `COMPOUND_PREPOSITIONS`.
+
+``` {.python .signature}
+find_cliches(words, cliches=None)
+```
+
+The layer `cliches`: the phrases of `cliches`, of `OFFICIALESE_CLICHES` if not given.
+
+``` {.python .signature}
+find_parentheticals(words)
+```
+
+The layer `parentheticals`: the phrases of `PARENTHETICALS`.
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `words` | `list[Word]` | - | Words with their positions |
+| `phrases` | `list[str]` / `set[str]` | - | Phrases, words separated by spaces |
+| `layer` | `str` | - | Layer of the highlighting |
+| `label` | `str` | - | Label of the fragment in the note |
+| `cliches` | `list[str]` / `set[str]` | `None` | List or set of clichés |
+
+Raises:
+
+- `SourceTypeError` - phrases or clichés that are not a list or a set of strings.
+
+=== "Code"
+
+    ``` python
+    from ests.utils import iter_text_words
+    from ests.visualizers.highlight import Word, find_cliches, find_compound_prepositions
+
+    text = "Se procedió a la revisión del expediente en el marco del plan."
+    words = [Word(*word) for word in iter_text_words(text)]
+    find_cliches(words)
+    find_compound_prepositions(words)
+    ```
+
+=== "Result"
+
+    ```
+    [Highlight(start=3, end=13, layer='cliches', note='cliché: «proceder a»')]
+    [Highlight(start=41, end=56, layer='compound_prepositions', note='compound preposition: «en el marco de»')]
+    ```
+
+### Connectors { #connectors }
+
+``` {.python .signature}
+find_connector_highlights(words, sents)
+```
+
+The layer `connectors`: the connectors of [`CohesionStats`](../stats/cohesion_stats.md#connectors) inside every sentence, found by its matcher [`SpanishConnectorMatcher`](../stats/cohesion_stats.md#ConnectorMatcher), a one-word connector checked by its part of speech when the words have it; the note gives the connector, its class and its kind. The positions of the punctuation marks are not passed to the matcher, so the words of a sentence are read as adjacent.
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `words` | `list[Word]` | - | Words with their positions and parts of speech |
+| `sents` | `list[Sent]` | - | Sentences with their positions |
+
+=== "Code"
+
+    ``` python
+    from ests.utils import iter_text_words
+    from ests.visualizers.highlight import Sent, Word, find_connector_highlights
+
+    text = "Sin embargo, el plan no se aprobó."
+    words = [Word(*word) for word in iter_text_words(text)]
+    find_connector_highlights(words, [Sent(0, len(text), len(words))])
+    ```
+
+=== "Result"
+
+    ```
+    [Highlight(start=0, end=11, layer='connectors', note='connector «sin embargo»: adversative, secondary')]
+    ```
+
+### Alliteration { #alliteration }
+
+``` {.python .signature}
+get_stem_sounds(word)
+```
+
+The sounds of the stem of a word form: the common start of the [transcriptions](../stats/phon_stats.md#transcribe) of the form and of its lemma (`cantaban` - k a n t a, `cogió` - k o x). When it is shorter than two sounds, as for the suppletive forms (`fue` - `ser`), the stem is the whole form.
+
+``` {.python .signature}
+calc_alliteration_runs(text, threshold=0.001)
+```
+
+The runs of [`calc_alliteration_runs`](https://sergeyshk.github.io/anyTS/visualizers/highlight/#calc_alliteration_runs) of the core over the stems of `get_stem_sounds` and the consonant sounds of `ALLITERATION_FREQUENCIES`, their frequencies in `SOUND_FREQUENCIES`; the words shorter than three letters, the stopwords and the words without vowels neither break nor continue a run. A run is a triple of the index of its first word, the index after its last word and its sound.
+
+``` {.python .signature}
+find_alliteration(words, threshold=0.001, sents=None)
+```
+
+The layer `alliteration`: the runs of `calc_alliteration_runs` inside every sentence, in the whole text without the sentences; the note gives the sound and the letters that write it (`alliteration on /b/ (b, v)`).
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `word` | `str` | - | Word form in lower case |
+| `text` | `list[str]` | - | List of words |
+| `threshold` | `float` | `0.001` | Probability threshold (`ALLITERATION_THRESHOLD` of `anyts.constants`) |
+| `words` | `list[Word]` | - | Words with their positions |
+| `sents` | `list[Sent]` | `None` | Sentences with their positions |
+
+Raises:
+
+- `SourceTypeError` - a word that is not a string, words of `calc_alliteration_runs` that are not a list of strings;
+- `ParameterError` - a threshold outside (0, 1].
+
+=== "Code"
+
+    ``` python
+    from ests.visualizers.highlight import calc_alliteration_runs, get_stem_sounds
+
+    get_stem_sounds("cantaban"), get_stem_sounds("fue")
+    calc_alliteration_runs(["deje", "la", "abeja"])
+    calc_alliteration_runs(["los", "suspiros", "se", "escapan"])
+    ```
+
+=== "Result"
+
+    ```
+    (('k', 'a', 'n', 't', 'a'), ('f', 'u', 'e'))
+    [(0, 3, 'x')]
+    []
+    ```
+
+### Syntactic layers { #syntax-layers }
+
+``` {.python .signature}
+find_passive(doc)
+```
+
+The layer `passive`: every passive form of [`is_passive`](../stats/syntax_stats.md#passive) with its auxiliary `ser` (`fue construida`) or its `se` (`se construyó`); the note tells the passive with `se` from the one with `ser` and marks a passive with `ser` without an agent (`is_agentless`).
+
+``` {.python .signature}
+find_participle_clauses(doc)
+```
+
+The layer `participle_clauses`: the subtree of every head of a [participial clause](../stats/syntax_stats.md#participle_clauses), the note with its number of words.
+
+``` {.python .signature}
+find_gerund_clauses(doc)
+```
+
+The layer `gerund_clauses`: the subtree of every head of a [gerund clause](../stats/syntax_stats.md#gerund_clauses), the note with its number of words.
+
+``` {.python .signature}
+find_de_chains(doc)
+```
+
+The layer `de_chains`: the [chains of `de`](../stats/syntax_stats.md#de_chains) of two complements or more, a fragment from the head to the last complement (`el aumento de la eficiencia del uso de los recursos`), the note with the length of the chain.
+
+``` {.python .signature}
+find_split_predicate_highlights(doc)
+```
+
+The layer `split_predicates`: the pairs of a light verb and a noun of [`find_split_predicates`](../stats/syntax_stats.md#constructions), a fragment from the first word of the pair to the last (`hacer una revisión`), the note with their lemmas.
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `doc` | `Doc` | - | Doc object with a dependency parse and the lemmas |
+
+=== "Code"
+
+    ``` python
+    from ests.utils import get_nlp
+    from ests.visualizers.highlight import (
+        find_de_chains,
+        find_gerund_clauses,
+        find_participle_clauses,
+        find_passive,
+        find_split_predicate_highlights,
+    )
+
+    doc = get_nlp()(
+        "El informe, redactado por el comité, fue aprobado tras hacer una revisión, "
+        "siguiendo las normas del uso de los recursos."
+    )
+    find_passive(doc)
+    find_participle_clauses(doc)
+    find_gerund_clauses(doc)
+    find_de_chains(doc)
+    find_split_predicate_highlights(doc)
+    ```
+
+=== "Result"
+
+    ```
+    [Highlight(start=37, end=49, layer='passive', note='passive with ser, no agent')]
+    [Highlight(start=12, end=35, layer='participle_clauses', note='participial clause, 4 words')]
+    [Highlight(start=75, end=119, layer='gerund_clauses', note='gerund clause, 8 words')]
+    [Highlight(start=89, end=119, layer='de_chains', note='chain of 2 complements with de')]
+    [Highlight(start=55, end=73, layer='split_predicates', note='split predicate: hacer revisión')]
     ```

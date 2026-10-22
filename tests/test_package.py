@@ -145,14 +145,8 @@ SPANISH = {
     "ests.datasets.spanish_literature": {"USER_AGENT"},
     "ests.datasets.spanish_sonnets": {"USER_AGENT"},
     "ests.visualizers": {"HighlightedText", "sentence_lengths", "sentence_lengths_plot"},
-    "ests.visualizers.highlight": {"HighlightedText"},
-    "ests.visualizers.sentences": {*EXTRACTORS, "sentence_lengths", "sentence_lengths_plot"},
-}
-# Copies of the mechanics of the core until the classes move onto the frames of anyTS 0.3:
-# every PR of 0.8 removes its own
-PENDING = {
     "ests.visualizers.highlight": {
-        "ALLITERATION_THRESHOLD",
+        "HighlightedText",
         "calc_alliteration_runs",
         "find_alliteration",
         "find_complex_words",
@@ -161,6 +155,7 @@ PENDING = {
         "find_phrase_highlights",
         "find_split_predicate_highlights",
     },
+    "ests.visualizers.sentences": {*EXTRACTORS, "sentence_lengths", "sentence_lengths_plot"},
 }
 
 
@@ -206,7 +201,6 @@ def test_core_names(library, core):
             name.startswith("_")
             or isinstance(value, ModuleType)
             or not hasattr(library_module, name)
-            or name in PENDING.get(library, ())
         ):
             continue
         own = getattr(library_module, name)
