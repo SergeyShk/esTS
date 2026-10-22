@@ -2362,11 +2362,11 @@ diversity_yule_k              103.620         112.500 -17.620   -3.740   -0.676 
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>                                    median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-syntax_gerund_clauses_per_sent              0.156           0.047   0.091    0.131    1.493        0.854  0.927     0.0
+syntax_gerund_clauses_per_sent              0.156           0.047   0.092    0.132    1.494        0.854  0.927     0.0
 syntax_tree_depth                           3.870           3.012   0.625    1.134    1.113        0.661  0.830     0.0
 syntax_subtrees_per_sent                    7.193           4.864   1.500    3.352    0.975        0.648  0.824     0.0
-syntax_p_complex_sents                      0.632           0.494   0.093    0.187    1.248        0.637  0.819     0.0
-syntax_participle_clauses_per_sent          0.114           0.059   0.028    0.070    0.805        0.570  0.785     0.0
+syntax_p_complex_sents                      0.613           0.470   0.092    0.193    1.248        0.644  0.822     0.0
+syntax_participle_clauses_per_sent          0.114           0.059   0.030    0.070    0.805        0.570  0.785     0.0
 </code></pre></div>
 </div>
 </div>
@@ -2641,7 +2641,7 @@ syntax_participle_clauses_per_sent          0.114           0.059   0.028    0.0
 <h2 id="split_windows">Ventanas de un texto<a class="headerlink" href="#split_windows" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">split_windows</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">min_words</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>Corta un texto en ventanas consecutivas de exactamente <code>window</code> palabras, así que los rasgos que dependen de la longitud son comparables entre textos. El resto es una ventana solo con al menos <code>min_words</code> palabras (por defecto una ventana entera, así que se descarta). Un límite pasa antes de la primera palabra de una ventana y de sus signos de apertura; unas comillas rectas o una raya pegadas a la última palabra de la ventana anterior o tras un signo de cierre se quedan con ella (<code>"cuatro"</code>, <code>—dijo Juan—</code>, <code>"adiós."</code>). A las ventanas se les quitan los espacios de los extremos; <code>window=None</code> da el texto entero. Es el <code>split_windows</code> del núcleo con las palabras de <a href="../../extractors/words/"><code>WordsExtractor</code></a> y los signos de <code>ests.constants</code>: las comillas, los paréntesis, las rayas, <code>¿</code> y <code>¡</code> abren una frase (<code>OPENING_MARKS</code>), las comillas rectas y las rayas son simétricas (<code>SYMMETRIC_MARKS</code>); los signos que cierran una frase son los del núcleo.</p>
+<p>Corta un texto en ventanas consecutivas de exactamente <code>window</code> palabras, así que los rasgos que dependen de la longitud son comparables entre textos. El resto es una ventana solo con al menos <code>min_words</code> palabras (por defecto una ventana entera, así que se descarta). Un límite pasa antes de la primera palabra de una ventana y de sus signos de apertura; unas comillas rectas o una raya pegadas a la última palabra de la ventana anterior se quedan con ella, y también tras un signo de cierre cuando las sigue un espacio (<code>"cuatro"</code>, <code>—dijo Juan—</code>, <code>"adiós."</code>); una raya pegada a la palabra siguiente abre su réplica (<code>cuatro.—¿Cinco?</code>). A las ventanas se les quitan los espacios de los extremos; <code>window=None</code> da el texto entero. Es el <code>split_windows</code> del núcleo con las palabras de <a href="../../extractors/words/"><code>WordsExtractor</code></a> y los signos de <code>ests.constants</code>: las comillas, los paréntesis, las rayas, <code>¿</code> y <code>¡</code> abren una frase (<code>OPENING_MARKS</code>), las comillas rectas y las rayas son simétricas (<code>SYMMETRIC_MARKS</code>); los signos que cierran una frase son los del núcleo.</p>
 <table>
 <thead>
 <tr>

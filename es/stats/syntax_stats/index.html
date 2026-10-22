@@ -1193,6 +1193,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#infinitive_clauses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cláusulas de infinitivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#noun_modifiers" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2303,6 +2314,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#infinitive_clauses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cláusulas de infinitivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#noun_modifiers" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2536,6 +2558,7 @@ Clauses per sentence                              |   1.50
 Mean length of a clause (words)                   |   9.67
 Subordinate clauses per sentence                  |   0.50
 Share of sentences with a subordinate clause      |   0.50
+Infinitive clauses under a verb per sentence      |   0.00
 Modifiers per noun phrase                         |   1.00
 Chains of de per sentence                         |   0.50
 Maximum length of a chain of de                   |    2
@@ -2794,6 +2817,12 @@ Ratio of nouns to verbs                           |   3.00
 <td style="text-align: left;">Más oraciones complejas</td>
 </tr>
 <tr>
+<td style="text-align: left;"><a href="#infinitive_clauses"><code>infinitive_clauses_per_sent</code></a></td>
+<td style="text-align: left;">Cláusulas de infinitivo bajo un verbo por oración</td>
+<td style="text-align: left;">0 o más</td>
+<td style="text-align: left;">Más complementos de infinitivo</td>
+</tr>
+<tr>
 <td style="text-align: left;"><a href="#noun_modifiers"><code>modifiers_per_noun</code></a></td>
 <td style="text-align: left;">Número medio de modificadores de un sustantivo</td>
 <td style="text-align: left;">0 o más, <code>nan</code> sin sustantivos</td>
@@ -2949,13 +2978,13 @@ Ratio of nouns to verbs                           |   3.00
 <p class="metric-meta"><code>clauses_per_sent</code> · <code>mean_clause_len</code></p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Comprueba si una palabra encabeza una cláusula: el núcleo de la oración o, según la forma de su predicado (<a href="#verb-forms"><code>predicate_form</code></a>), una palabra con <code>ccomp</code>, <code>advcl</code>, <code>acl</code> (incluida una oración de relativo), <code>csubj</code> o <code>parataxis</code> (<code>anyts.constants.CLAUSE_DEPS</code>). Un predicado en forma personal encabeza su cláusula (<code>dijo que había llegado</code>, <code>estaba cantando</code>, <code>los regalos que te van a dar</code>), también bajo <code>xcomp</code>, que los modelos dan a algunos complementos en forma personal; un predicado en forma de participio o de gerundio no encabeza una cláusula de esa clase - esos predicados se cuentan aparte (<code>llegando tarde</code>, <code>habiendo llegado tarde</code>) -, ni tampoco uno en forma de infinitivo bajo <code>acl</code> (<code>el deseo de irse</code>, <code>el miedo de ser robado</code>). Bajo <code>xcomp</code> un infinitivo encabeza una cláusula según <code>is_infinitive_clause</code>, y un adjetivo predicativo (<code>parece cansado</code>) no encabeza ninguna. Un inciso (<code>parataxis</code>) y un predicado coordinado (<code>conj</code> del núcleo de una cláusula) cuentan solo cuando pueden ser un predicado (<a href="#is_predicate"><code>is_predicate</code></a>), de modo que incisos como <code>por ejemplo</code> no son cláusulas; un infinitivo que los modelos cuelgan como <code>conj</code> del verbo de una perífrasis (<code>tiene que salir</code>, <code>va a salir</code>) forma un solo predicado con él (<code>is_infinitive_periphrasis</code>).</p>
+<p>Comprueba si una palabra encabeza una cláusula: el núcleo de la oración o, según la forma de su predicado (<a href="#verb-forms"><code>predicate_form</code></a>), una palabra con <code>ccomp</code>, <code>advcl</code>, <code>acl</code> (incluida una oración de relativo), <code>csubj</code> o <code>parataxis</code> (<code>anyts.constants.CLAUSE_DEPS</code>). Un predicado en forma personal encabeza su cláusula (<code>dijo que había llegado</code>, <code>estaba cantando</code>, <code>los regalos que te van a dar</code>, <code>sé que os habéis posado</code>), también bajo <code>xcomp</code>, que los modelos dan a algunos complementos en forma personal; un predicado en forma de participio o de gerundio no encabeza una cláusula de esa clase - esos predicados se cuentan aparte (<code>llegando tarde</code>, <code>habiendo llegado tarde</code>) -, ni tampoco uno en forma de infinitivo bajo <code>acl</code> (<code>el deseo de irse</code>, <code>el miedo de ser robado</code>). Bajo <code>xcomp</code> un infinitivo encabeza una cláusula según <code>is_infinitive_clause</code>, y un adjetivo predicativo (<code>parece cansado</code>) no encabeza ninguna. Un inciso (<code>parataxis</code>) y un predicado coordinado (<code>conj</code> del núcleo de una cláusula) cuentan solo cuando pueden ser un predicado (<a href="#is_predicate"><code>is_predicate</code></a>), de modo que incisos como <code>por ejemplo</code> no son cláusulas; un infinitivo que los modelos cuelgan como <code>conj</code> o <code>csubj</code> del verbo de su perífrasis (<code>hay que salir</code>, <code>llega a convertirse</code>) forma un solo predicado con él (<code>is_infinitive_periphrasis</code>). Es el <a href="https://sergeyshk.github.io/anyTS/stats/syntax_stats/#clauses"><code>is_clause_head</code></a> del núcleo anyTS con las reglas españolas de <code>is_infinitive_periphrasis</code> y <code>predicate_form</code>.</p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_infinitive_clause</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Comprueba si un infinitivo bajo <code>xcomp</code> encabeza una cláusula propia: un predicado en forma de infinitivo que completa a su núcleo (<code>quiere salir</code>, <code>le hizo reír</code>, <code>quiere ser médico</code>, <code>quiere ser elegido</code>, <code>cree haber ganado</code>), salvo que los dos formen perífrasis (<code>is_infinitive_periphrasis</code>) o que el núcleo sea un verbo de <code>RAISING_VERBS</code>, <code>parecer</code> (<code>parece dormir</code>).</p>
+<p>Comprueba si un infinitivo bajo <code>xcomp</code> encabeza una cláusula propia: un predicado en forma de infinitivo que completa a su núcleo (<code>quiere salir</code>, <code>le hizo reír</code>, <code>quiere ser médico</code>, <code>quiere ser elegido</code>, <code>cree haber ganado</code>), salvo que los dos formen un solo predicado (<code>is_infinitive_periphrasis</code>: <code>puede salir</code>, <code>parece dormir</code>) o que la palabra que completa no encabece ninguna cláusula (<code>is_clause_head</code>): un infinitivo en una construcción de gerundio o de participio pertenece a ella (<code>intentando salir</code>, <code>destinada a disculpar</code>).</p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_infinitive_periphrasis</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Comprueba si un infinitivo forma perífrasis con su núcleo: el núcleo es un verbo de <code>INFINITIVE_PERIPHRASES</code> (NGLE, cap. 28) y el infinitivo se une a él por uno de los nexos de ese verbo - un <code>mark</code>, <code>case</code> o <code>cc</code> antes del infinitivo, o la palabra justo anterior, con la grafía antigua <code>á</code> leída como <code>a</code>. Los verbos son <code>poder</code>, <code>soler</code> y <code>deber</code> sin nexo (<code>puede salir</code>, <code>suele salir</code>), <code>deber de</code>, <code>tener que</code>, <code>haber que</code>, <code>haber de</code>, <code>ir a</code>, <code>venir a</code>, <code>pasar a</code>, <code>volver a</code>, <code>tornar a</code>, <code>empezar a</code> y <code>por</code>, <code>comenzar a</code> y <code>por</code>, <code>principiar a</code>, <code>poner a</code>, <code>echar a</code>, <code>romper a</code>, <code>llegar a</code>, <code>alcanzar a</code>, <code>acabar de</code> y <code>por</code>, <code>terminar de</code> y <code>por</code>, <code>dejar de</code>, <code>cesar de</code>, <code>parar de</code>, <code>estar para</code> y <code>por</code>. El lema del núcleo es el del modelo, o el de <code>ests.utils.lemmatize</code> cuando el del modelo no es ninguno de esos verbos (puede leer un verbo que abre la oración como nombre propio: <code>Solía salir</code>).</p>
+<p>Comprueba si un infinitivo forma un solo predicado con su núcleo: un infinitivo bajo <code>xcomp</code> de un verbo de <code>RAISING_VERBS</code>, <code>parecer</code> (<code>parece dormir</code>), o una perífrasis. En una perífrasis el núcleo es un verbo de <code>INFINITIVE_PERIPHRASES</code> (NGLE, cap. 28) y el infinitivo se une a él por uno de los nexos de ese verbo - un <code>mark</code>, <code>case</code> o <code>cc</code> antes del infinitivo, o la palabra justo anterior, con la grafía antigua <code>á</code> leída como <code>a</code>. Los verbos son <code>poder</code>, <code>soler</code> y <code>deber</code> sin nexo (<code>puede salir</code>, <code>suele salir</code>), <code>deber de</code>, <code>tener que</code>, <code>haber que</code>, <code>haber de</code>, <code>ir a</code>, <code>venir a</code>, <code>pasar a</code>, <code>volver a</code>, <code>tornar a</code>, <code>empezar a</code> y <code>por</code>, <code>comenzar a</code> y <code>por</code>, <code>principiar a</code>, <code>poner a</code>, <code>echar a</code>, <code>romper a</code>, <code>llegar a</code>, <code>alcanzar a</code>, <code>acabar de</code> y <code>por</code>, <code>terminar de</code> y <code>por</code>, <code>dejar de</code>, <code>cesar de</code>, <code>parar de</code>, <code>estar para</code> y <code>por</code>. El lema del núcleo es el del modelo, o el de <code>ests.utils.lemmatize</code> cuando el del modelo no es ninguno de esos verbos (puede leer un verbo que abre la oración como nombre propio: <code>Solía salir</code>).</p>
 <table>
 <thead>
 <tr>
@@ -2981,7 +3010,7 @@ Ratio of nouns to verbs                           |   3.00
 <p class="metric-meta"><code>subordinate_clauses_per_sent</code> · <code>p_complex_sents</code></p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_subordinate_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Comprueba si una palabra encabeza una cláusula subordinada: un núcleo de cláusula (<code>is_clause_head</code>) con <code>ccomp</code>, <code>advcl</code>, <code>acl</code>, <code>csubj</code> (<code>anyts.constants.SUBORDINATE_CLAUSE_DEPS</code>) o <code>xcomp</code>, o un predicado coordinado de una cláusula subordinada, por la relación de la primera palabra de su cadena de conjuntos hacia arriba. Una cláusula de infinitivo bajo un verbo (<code>quiere salir</code>) es una cláusula subordinada; los números de esas solas son los atributos <code>n_infinitive_clauses</code> e <code>infinitive_clauses_per_sent</code>, que <code>get_stats</code> no da.</p>
+<p>Comprueba si una palabra encabeza una cláusula subordinada: un núcleo de cláusula (<code>is_clause_head</code>) con <code>ccomp</code>, <code>advcl</code>, <code>acl</code> o <code>csubj</code> (<code>anyts.constants.SUBORDINATE_CLAUSE_DEPS</code>), o bajo <code>xcomp</code> con un predicado en forma personal, o un predicado coordinado de una cláusula subordinada, por la relación de la primera palabra de su cadena de conjuntos hacia arriba. Una cláusula de infinitivo bajo un verbo (<code>quiere salir</code>) se cuenta aparte, entre las <a href="#infinitive_clauses">cláusulas de infinitivo</a>.</p>
 <table>
 <thead>
 <tr>
@@ -3014,7 +3043,50 @@ Ratio of nouns to verbs                           |   3.00
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>['quiere', 'salir', 'tiene', 'parece']
-['salir', 'parece']
+['parece']
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="infinitive_clauses">Cláusulas de infinitivo<a class="headerlink" href="#infinitive_clauses" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>infinitive_clauses_per_sent</code></p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_infinitive_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Comprueba si una palabra encabeza una cláusula de infinitivo bajo un verbo: un núcleo de cláusula (<code>is_clause_head</code>) cuyo predicado es un infinitivo bajo <code>xcomp</code> (<code>quiere salir</code>, <code>le pidió salir</code>), o un conjunto de uno, sea cual sea su propia forma: decide la primera palabra de su cadena de conjuntos hacia arriba (<code>quiero salir y que vengas</code>). Estas cláusulas se cuentan entre las cláusulas, pero no entre las subordinadas: las gramáticas toman un complemento de infinitivo por parte de una oración simple, y las correlaciones publicadas de la subordinación se obtuvieron para las subordinadas en forma personal. Es el <a href="https://sergeyshk.github.io/anyTS/stats/syntax_stats/#infinitive_clauses"><code>is_infinitive_clause_head</code></a> del núcleo anyTS sobre <code>is_clause_head</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+</tbody>
+</table>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_clause_head</span><span class="p">,</span> <span class="n">is_infinitive_clause_head</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"Quiere salir y volver, pero intentando salir se cayó."</span><span class="p">)</span>
+<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_infinitive_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>['Quiere', 'salir', 'volver', 'cayó']
+['salir', 'volver']
 </code></pre></div>
 </div>
 </div>
@@ -3087,7 +3159,7 @@ Ratio of nouns to verbs                           |   3.00
 </tbody>
 </table>
 <p><code>max_de_chain_len</code> es la cadena más larga del texto, 0 sin cadenas.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_de_chains</span>
@@ -3129,7 +3201,7 @@ Ratio of nouns to verbs                           |   3.00
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_participle_clause</span><span class="p">,</span> <span class="n">subtree_len</span>
@@ -3170,7 +3242,7 @@ Ratio of nouns to verbs                           |   3.00
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_gerund_clause</span>
@@ -3218,7 +3290,7 @@ Ratio of nouns to verbs                           |   3.00
 </tbody>
 </table>
 <p>Las formas verbales de <code>p_passive</code> son las palabras etiquetadas <code>VERB</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Código</label><label for="__tabbed_8_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_agentless</span><span class="p">,</span> <span class="n">is_passive</span>
@@ -3246,7 +3318,7 @@ Ratio of nouns to verbs                           |   3.00
 <p class="admonition-title">Aviso</p>
 <p><code>es_core_news_sm</code> distingue mal los tres <code>se</code> del español - rara vez marca un <code>se</code> impersonal y lee <code>se fue dando un portazo</code> como una pasiva -, así que lea <code>se_passives_per_sent</code> e <code>impersonal_se_per_sent</code> juntas y no por separado.</p>
 </div>
-<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Código</label><label for="__tabbed_8_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Código</label><label for="__tabbed_9_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">ss</span> <span class="o">=</span> <span class="n">SyntaxStats</span><span class="p">(</span><span class="s2">"Se construyó la casa en un año. Aquí se trabaja mucho."</span><span class="p">)</span>
@@ -3305,7 +3377,7 @@ Ratio of nouns to verbs                           |   3.00
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Código</label><label for="__tabbed_9_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Código</label><label for="__tabbed_10_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_split_predicates</span><span class="p">,</span> <span class="n">is_negation</span>
@@ -3338,7 +3410,7 @@ Ratio of nouns to verbs                           |   3.00
 </div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <p>Los métodos <code>get_stats</code>, <code>to_dataframe</code>, <code>print_stats</code> y <code>describe</code> son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de estadísticas</a> del núcleo anyTS; las estadísticas sintácticas no tienen escalas, así que <code>describe</code> da <code>None</code> para las estadísticas de <code>get_stats</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Código</label><label for="__tabbed_10_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="11:2"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><input id="__tabbed_11_2" name="__tabbed_11" type="radio" /><div class="tabbed-labels"><label for="__tabbed_11_1">Código</label><label for="__tabbed_11_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">ss</span> <span class="o">=</span> <span class="n">SyntaxStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
@@ -3362,6 +3434,7 @@ Ratio of nouns to verbs                           |   3.00
  'mean_clause_len': 9.666666666666666,
  'subordinate_clauses_per_sent': 0.5,
  'p_complex_sents': 0.5,
+ 'infinitive_clauses_per_sent': 0.0,
  'modifiers_per_noun': 1.0,
  'de_chains_per_sent': 0.5,
  'max_de_chain_len': 2,
@@ -3497,7 +3570,7 @@ Ratio of nouns to verbs                           |   3.00
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="11:2"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><input id="__tabbed_11_2" name="__tabbed_11" type="radio" /><div class="tabbed-labels"><label for="__tabbed_11_1">Código</label><label for="__tabbed_11_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="12:2"><input checked="checked" id="__tabbed_12_1" name="__tabbed_12" type="radio" /><input id="__tabbed_12_2" name="__tabbed_12" type="radio" /><div class="tabbed-labels"><label for="__tabbed_12_1">Código</label><label for="__tabbed_12_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_participle</span><span class="p">,</span> <span class="n">predicate_form</span>

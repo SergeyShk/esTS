@@ -1193,6 +1193,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#infinitive_clauses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Infinitive clauses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#noun_modifiers" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2303,6 +2314,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#infinitive_clauses" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Infinitive clauses
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#noun_modifiers" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2536,6 +2558,7 @@ Clauses per sentence                              |   1.50
 Mean length of a clause (words)                   |   9.67
 Subordinate clauses per sentence                  |   0.50
 Share of sentences with a subordinate clause      |   0.50
+Infinitive clauses under a verb per sentence      |   0.00
 Modifiers per noun phrase                         |   1.00
 Chains of de per sentence                         |   0.50
 Maximum length of a chain of de                   |    2
@@ -2793,6 +2816,12 @@ Ratio of nouns to verbs                           |   3.00
 <td style="text-align: left;">More complex sentences</td>
 </tr>
 <tr>
+<td style="text-align: left;"><a href="#infinitive_clauses"><code>infinitive_clauses_per_sent</code></a></td>
+<td style="text-align: left;">Infinitive clauses under a verb per sentence</td>
+<td style="text-align: left;">0 and above</td>
+<td style="text-align: left;">More infinitive complements</td>
+</tr>
+<tr>
 <td style="text-align: left;"><a href="#noun_modifiers"><code>modifiers_per_noun</code></a></td>
 <td style="text-align: left;">Mean number of the modifiers of a noun</td>
 <td style="text-align: left;">0 and above, <code>nan</code> without nouns</td>
@@ -2946,13 +2975,13 @@ Ratio of nouns to verbs                           |   3.00
 <p class="metric-meta"><code>clauses_per_sent</code> · <code>mean_clause_len</code></p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Checks whether a word heads a clause: the head of the sentence or, by the form of its predicate (<a href="#verb-forms"><code>predicate_form</code></a>), a word with <code>ccomp</code>, <code>advcl</code>, <code>acl</code> (a relative clause included), <code>csubj</code> or <code>parataxis</code> (<code>anyts.constants.CLAUSE_DEPS</code>). A finite predicate heads its clause (<code>dijo que había llegado</code>, <code>estaba cantando</code>, <code>los regalos que te van a dar</code>), also under <code>xcomp</code>, which the models give to some finite complements; a predicate in the form of a participle or a gerund heads no clause of that kind - such predicates are counted apart (<code>llegando tarde</code>, <code>habiendo llegado tarde</code>) - and neither does one in the form of an infinitive under <code>acl</code> (<code>el deseo de irse</code>, <code>el miedo de ser robado</code>). Under <code>xcomp</code> an infinitive heads a clause by <code>is_infinitive_clause</code>, and a predicative adjective (<code>parece cansado</code>) heads none. A parenthetical (<code>parataxis</code>) and a coordinated predicate (<code>conj</code> of the head of a clause) count only when they can be a predicate (<a href="#is_predicate"><code>is_predicate</code></a>), so that parentheticals such as <code>por ejemplo</code> are no clauses; an infinitive the models attach as <code>conj</code> to the verb of a periphrasis (<code>tiene que salir</code>, <code>va a salir</code>) makes one predicate with it (<code>is_infinitive_periphrasis</code>).</p>
+<p>Checks whether a word heads a clause: the head of the sentence or, by the form of its predicate (<a href="#verb-forms"><code>predicate_form</code></a>), a word with <code>ccomp</code>, <code>advcl</code>, <code>acl</code> (a relative clause included), <code>csubj</code> or <code>parataxis</code> (<code>anyts.constants.CLAUSE_DEPS</code>). A finite predicate heads its clause (<code>dijo que había llegado</code>, <code>estaba cantando</code>, <code>los regalos que te van a dar</code>, <code>sé que os habéis posado</code>), also under <code>xcomp</code>, which the models give to some finite complements; a predicate in the form of a participle or a gerund heads no clause of that kind - such predicates are counted apart (<code>llegando tarde</code>, <code>habiendo llegado tarde</code>) - and neither does one in the form of an infinitive under <code>acl</code> (<code>el deseo de irse</code>, <code>el miedo de ser robado</code>). Under <code>xcomp</code> an infinitive heads a clause by <code>is_infinitive_clause</code>, and a predicative adjective (<code>parece cansado</code>) heads none. A parenthetical (<code>parataxis</code>) and a coordinated predicate (<code>conj</code> of the head of a clause) count only when they can be a predicate (<a href="#is_predicate"><code>is_predicate</code></a>), so that parentheticals such as <code>por ejemplo</code> are no clauses; an infinitive the models attach as <code>conj</code> or <code>csubj</code> to the verb of its periphrasis (<code>hay que salir</code>, <code>llega a convertirse</code>) makes one predicate with it (<code>is_infinitive_periphrasis</code>). It is the <a href="https://sergeyshk.github.io/anyTS/stats/syntax_stats/#clauses"><code>is_clause_head</code></a> of the anyTS core with the Spanish rules of <code>is_infinitive_periphrasis</code> and <code>predicate_form</code>.</p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_infinitive_clause</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Checks whether an infinitive under <code>xcomp</code> heads a clause of its own: a predicate in the form of an infinitive that completes its head (<code>quiere salir</code>, <code>le hizo reír</code>, <code>quiere ser médico</code>, <code>quiere ser elegido</code>, <code>cree haber ganado</code>), unless the two make a periphrasis (<code>is_infinitive_periphrasis</code>) or the head is a verb of <code>RAISING_VERBS</code>, <code>parecer</code> (<code>parece dormir</code>).</p>
+<p>Checks whether an infinitive under <code>xcomp</code> heads a clause of its own: a predicate in the form of an infinitive that completes its head (<code>quiere salir</code>, <code>le hizo reír</code>, <code>quiere ser médico</code>, <code>quiere ser elegido</code>, <code>cree haber ganado</code>), unless the two make one predicate (<code>is_infinitive_periphrasis</code>: <code>puede salir</code>, <code>parece dormir</code>) or the word it completes heads no clause (<code>is_clause_head</code>): an infinitive in a gerund or participial phrase belongs to that phrase (<code>intentando salir</code>, <code>destinada a disculpar</code>).</p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_infinitive_periphrasis</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Checks whether an infinitive makes a periphrasis with its head: the head is a verb of <code>INFINITIVE_PERIPHRASES</code> (NGLE, ch. 28) and the infinitive is linked to it by one of the words of that verb - a <code>mark</code>, <code>case</code> or <code>cc</code> before the infinitive, or the word right before it, the old spelling <code>á</code> read as <code>a</code>. The verbs are <code>poder</code>, <code>soler</code> and <code>deber</code> with no word (<code>puede salir</code>, <code>suele salir</code>), <code>deber de</code>, <code>tener que</code>, <code>haber que</code>, <code>haber de</code>, <code>ir a</code>, <code>venir a</code>, <code>pasar a</code>, <code>volver a</code>, <code>tornar a</code>, <code>empezar a</code> and <code>por</code>, <code>comenzar a</code> and <code>por</code>, <code>principiar a</code>, <code>poner a</code>, <code>echar a</code>, <code>romper a</code>, <code>llegar a</code>, <code>alcanzar a</code>, <code>acabar de</code> and <code>por</code>, <code>terminar de</code> and <code>por</code>, <code>dejar de</code>, <code>cesar de</code>, <code>parar de</code>, <code>estar para</code> and <code>por</code>. The lemma of the head is that of the model, or of <code>ests.utils.lemmatize</code> when the model gives none of these verbs (it can read a verb opening a sentence as a proper noun: <code>Solía salir</code>).</p>
+<p>Checks whether an infinitive makes one predicate with its head: an infinitive under <code>xcomp</code> of a verb of <code>RAISING_VERBS</code>, <code>parecer</code> (<code>parece dormir</code>), or a periphrasis. In a periphrasis the head is a verb of <code>INFINITIVE_PERIPHRASES</code> (NGLE, ch. 28) and the infinitive is linked to it by one of the words of that verb - a <code>mark</code>, <code>case</code> or <code>cc</code> before the infinitive, or the word right before it, the old spelling <code>á</code> read as <code>a</code>. The verbs are <code>poder</code>, <code>soler</code> and <code>deber</code> with no word (<code>puede salir</code>, <code>suele salir</code>), <code>deber de</code>, <code>tener que</code>, <code>haber que</code>, <code>haber de</code>, <code>ir a</code>, <code>venir a</code>, <code>pasar a</code>, <code>volver a</code>, <code>tornar a</code>, <code>empezar a</code> and <code>por</code>, <code>comenzar a</code> and <code>por</code>, <code>principiar a</code>, <code>poner a</code>, <code>echar a</code>, <code>romper a</code>, <code>llegar a</code>, <code>alcanzar a</code>, <code>acabar de</code> and <code>por</code>, <code>terminar de</code> and <code>por</code>, <code>dejar de</code>, <code>cesar de</code>, <code>parar de</code>, <code>estar para</code> and <code>por</code>. The lemma of the head is that of the model, or of <code>ests.utils.lemmatize</code> when the model gives none of these verbs (it can read a verb opening a sentence as a proper noun: <code>Solía salir</code>).</p>
 <table>
 <thead>
 <tr>
@@ -2978,7 +3007,7 @@ Ratio of nouns to verbs                           |   3.00
 <p class="metric-meta"><code>subordinate_clauses_per_sent</code> · <code>p_complex_sents</code></p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_subordinate_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Checks whether a word heads a subordinate clause: a clause head (<code>is_clause_head</code>) with <code>ccomp</code>, <code>advcl</code>, <code>acl</code>, <code>csubj</code> (<code>anyts.constants.SUBORDINATE_CLAUSE_DEPS</code>) or <code>xcomp</code>, or a coordinated predicate of a subordinate clause, by the relation of the first word up its chain of conjuncts. An infinitive clause under a verb (<code>quiere salir</code>) is a subordinate clause; the numbers of those alone are the attributes <code>n_infinitive_clauses</code> and <code>infinitive_clauses_per_sent</code>, which <code>get_stats</code> does not give.</p>
+<p>Checks whether a word heads a subordinate clause: a clause head (<code>is_clause_head</code>) with <code>ccomp</code>, <code>advcl</code>, <code>acl</code> or <code>csubj</code> (<code>anyts.constants.SUBORDINATE_CLAUSE_DEPS</code>), or under <code>xcomp</code> with a finite predicate, or a coordinated predicate of a subordinate clause, by the relation of the first word up its chain of conjuncts. An infinitive clause under a verb (<code>quiere salir</code>) is counted apart, among the <a href="#infinitive_clauses">infinitive clauses</a>.</p>
 <table>
 <thead>
 <tr>
@@ -3011,7 +3040,50 @@ Ratio of nouns to verbs                           |   3.00
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>['quiere', 'salir', 'tiene', 'parece']
-['salir', 'parece']
+['parece']
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
+<h3 id="infinitive_clauses">Infinitive clauses<a class="headerlink" href="#infinitive_clauses" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>infinitive_clauses_per_sent</code></p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_infinitive_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether a word heads an infinitive clause under a verb: a clause head (<code>is_clause_head</code>) whose predicate is an infinitive under <code>xcomp</code> (<code>quiere salir</code>, <code>le pidió salir</code>), or a conjunct of one, whatever its own form: the first word up its chain of conjuncts decides (<code>quiero salir y que vengas</code>). These clauses count among the clauses, but not among the subordinate ones: grammars take an infinitive complement for a part of a simple sentence, and the published correlations of the subordination were obtained for finite subordinate clauses. It is the <a href="https://sergeyshk.github.io/anyTS/stats/syntax_stats/#infinitive_clauses"><code>is_infinitive_clause_head</code></a> of the anyTS core over <code>is_clause_head</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+</tbody>
+</table>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Code</label><label for="__tabbed_4_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_clause_head</span><span class="p">,</span> <span class="n">is_infinitive_clause_head</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"Quiere salir y volver, pero intentando salir se cayó."</span><span class="p">)</span>
+<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_infinitive_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>['Quiere', 'salir', 'volver', 'cayó']
+['salir', 'volver']
 </code></pre></div>
 </div>
 </div>
@@ -3083,7 +3155,7 @@ Ratio of nouns to verbs                           |   3.00
 </tbody>
 </table>
 <p><code>max_de_chain_len</code> is the longest chain of the text, 0 without chains.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Code</label><label for="__tabbed_4_2">Result</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Code</label><label for="__tabbed_5_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_de_chains</span>
@@ -3124,7 +3196,7 @@ Ratio of nouns to verbs                           |   3.00
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Code</label><label for="__tabbed_5_2">Result</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Code</label><label for="__tabbed_6_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_participle_clause</span><span class="p">,</span> <span class="n">subtree_len</span>
@@ -3165,7 +3237,7 @@ Ratio of nouns to verbs                           |   3.00
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Code</label><label for="__tabbed_6_2">Result</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Code</label><label for="__tabbed_7_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_gerund_clause</span>
@@ -3213,7 +3285,7 @@ Ratio of nouns to verbs                           |   3.00
 </tbody>
 </table>
 <p>The verb forms of <code>p_passive</code> are the words tagged <code>VERB</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Code</label><label for="__tabbed_7_2">Result</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Code</label><label for="__tabbed_8_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_agentless</span><span class="p">,</span> <span class="n">is_passive</span>
@@ -3241,7 +3313,7 @@ Ratio of nouns to verbs                           |   3.00
 <p class="admonition-title">Warning</p>
 <p><code>es_core_news_sm</code> tells the three <code>se</code> of Spanish apart poorly - it rarely marks an impersonal <code>se</code> and reads <code>se fue dando un portazo</code> as a passive - so read <code>se_passives_per_sent</code> and <code>impersonal_se_per_sent</code> together rather than apart.</p>
 </div>
-<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Code</label><label for="__tabbed_8_2">Result</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Code</label><label for="__tabbed_9_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">ss</span> <span class="o">=</span> <span class="n">SyntaxStats</span><span class="p">(</span><span class="s2">"Se construyó la casa en un año. Aquí se trabaja mucho."</span><span class="p">)</span>
@@ -3299,7 +3371,7 @@ Ratio of nouns to verbs                           |   3.00
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Code</label><label for="__tabbed_9_2">Result</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Code</label><label for="__tabbed_10_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_split_predicates</span><span class="p">,</span> <span class="n">is_negation</span>
@@ -3331,7 +3403,7 @@ Ratio of nouns to verbs                           |   3.00
 </div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <p>The methods <code>get_stats</code>, <code>to_dataframe</code>, <code>print_stats</code> and <code>describe</code> are those of the <a href="https://sergeyshk.github.io/anyTS/stats/stats/">statistics interface</a> of the anyTS core; the syntactic statistics have no scales, so <code>describe</code> gives <code>None</code> for the statistics of <code>get_stats</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Code</label><label for="__tabbed_10_2">Result</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="11:2"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><input id="__tabbed_11_2" name="__tabbed_11" type="radio" /><div class="tabbed-labels"><label for="__tabbed_11_1">Code</label><label for="__tabbed_11_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">ss</span> <span class="o">=</span> <span class="n">SyntaxStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
@@ -3355,6 +3427,7 @@ Ratio of nouns to verbs                           |   3.00
  'mean_clause_len': 9.666666666666666,
  'subordinate_clauses_per_sent': 0.5,
  'p_complex_sents': 0.5,
+ 'infinitive_clauses_per_sent': 0.0,
  'modifiers_per_noun': 1.0,
  'de_chains_per_sent': 0.5,
  'max_de_chain_len': 2,
@@ -3486,7 +3559,7 @@ Ratio of nouns to verbs                           |   3.00
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="11:2"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><input id="__tabbed_11_2" name="__tabbed_11" type="radio" /><div class="tabbed-labels"><label for="__tabbed_11_1">Code</label><label for="__tabbed_11_2">Result</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="12:2"><input checked="checked" id="__tabbed_12_1" name="__tabbed_12" type="radio" /><input id="__tabbed_12_2" name="__tabbed_12" type="radio" /><div class="tabbed-labels"><label for="__tabbed_12_1">Code</label><label for="__tabbed_12_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_participle</span><span class="p">,</span> <span class="n">predicate_form</span>
