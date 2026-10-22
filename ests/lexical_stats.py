@@ -1,17 +1,19 @@
-from collections.abc import Iterable, Sequence
-from functools import cache, cached_property
-from math import log2, log10, nan
+from collections.abc import Sequence
+from functools import cache
 from pathlib import Path
-from statistics import fmean
 
-from anyts.utils import check_integer, check_words, is_number, iter_doc_tokens, safe_divide
+import anyts
+import anyts.lexical_stats
+from anyts.constants import FREQUENCY_BANDS as FREQUENCY_BANDS
+from anyts.lexical_stats import LexicalWord
+from anyts.utils import is_doc, is_number, iter_doc_tokens
 from spacy.language import Language
 from spacy.tokens import Doc
 
 from .cohesion_stats import token_info
-from .constants import FREQUENCY_BANDS, LEXICAL_STATS_DESC
-from .datasets.freq_dict import Entry, FreqDict, lemma_key
-from .exceptions import ParameterError, SourceError, SourceTypeError
+from .constants import LEXICAL_STATS_DESC
+from .datasets.freq_dict import FreqDict, lemma_key
+from .exceptions import SourceError, SourceTypeError
 from .extractors import NUMBER_PATTERN
 from .utils import _check_encoding, get_nlp
 
@@ -28,24 +30,19 @@ def _without_period(word: str) -> str:
     return word[:-1] if len(word) > 2 and word.endswith(".") else word
 
 
-class LexicalStats:
+class LexicalStats(anyts.lexical_stats.LexicalStats):
     """
     Class for computing the lexical sophistication statistics of a text
 
     Description:
-        Lexical sophistication in the manner of TAALES - how rare the words of
-        the text are in the language: the mean frequency, range and dispersion
-        of the lemmas by the frequency dictionary of Google Books Ngram
-        (FreqDict), the shares of the frequency bands top-1000, 2000, 5000 and
-        10000 by its embedded list, the surprisal and the perplexity by its
-        unigram model, and the lexical density. A word is looked up by
-        lemma_key, a proper noun by its lower-case form when the dictionary has
-        it (keys). The source needs the parts of speech: a string is parsed
-        with the model es_core_news_sm or the pipeline in nlp, a Doc must carry
-        them. A content word is one of CONTENT_UD_POS and no demonstrative, as
-        in CohesionStats; numbers (2020, 5,5, 3.º) are no words. The statistics
-        by the dictionary need a downloaded FreqDict, the bands and the lexical
-        density do not
+        Extends the LexicalStats of the anyTS core with the Spanish layer: the
+        frequency dictionary of Google Books Ngram (FreqDict) with its embedded
+        list of the 10000 most frequent lemmas, the lemmas of lemma_key and the
+        content words of the spaCy model, as in CohesionStats. The source needs
+        the parts of speech: a string is parsed with the model es_core_news_sm
+        or the pipeline in nlp, a Doc must carry them. Numbers (2020, 5,5,
+        3.º) are no words. The statistics by the dictionary need a downloaded
+        FreqDict, the bands and the lexical density do not
 
     References:
         https://doi.org/10.3758/s13428-017-0924-4 (Kyle, Crossley, Berger 2018, TAALES)
@@ -70,6 +67,7 @@ class LexicalStats:
             model of SPACY_MODEL is loaded
 
     Attributes:
+        freq_dict (FreqDict): Frequency dictionary
         words (tuple[str]): Tuple of the words
         lemmas (tuple[str]): Tuple of the lemmas of the words by lemma_key, the
             lower-case form for a proper noun; the bands are counted by them
@@ -101,7 +99,9 @@ class LexicalStats:
 
     Methods:
         band_coverage: Shares of the words or of the lemmas by frequency bands
+        describe: Reading of a statistic by its scale, None for every statistic
         get_stats: Getting the computed lexical sophistication statistics
+        to_dataframe: Getting the statistics as a table of one row
         print_stats: Printing the computed statistics with descriptions
 
     Raises:
@@ -113,18 +113,47 @@ class LexicalStats:
             dictionary is not downloaded
     """
 
+    freq_dict: FreqDict
+    freq_dict_class = FreqDict
+    stats_desc = LEXICAL_STATS_DESC
+
     def __init__(
         self,
         source: str | Doc,
         freq_dict: FreqDict | None = None,
         nlp: Language | None = None,
     ):
-        if freq_dict is not None and not isinstance(freq_dict, FreqDict):
-            raise SourceTypeError("The frequency dictionary must be a FreqDict")
         if nlp is not None and not isinstance(nlp, Language):
             raise SourceTypeError("The pipeline must be a spaCy Language")
+        self._nlp = nlp
+        super().__init__(source, freq_dict)
+        # analyze can be called again on the object; the keys read the words of the source
+        self._proper = self._found_proper
+
+    def analyze(self, source: str | Doc) -> list[LexicalWord]:
+        """
+        Getting the words of a source with their lemmas and their kind
+
+        Description:
+            The tokens of a Doc, or of a string parsed by nlp or get_nlp()
+            without the parser, the lemmatizer and the named entities, without
+            the numbers of NUMBER_PATTERN; the lemma of lemma_key, a proper noun
+            in lower case, and the content words of token_info
+
+        Arguments:
+            source (str|Doc): Data source
+
+        Returns:
+            list[LexicalWord]: Word, lemma and whether it is a content word
+
+        Raises:
+            SourceTypeError: If the source is neither a string nor a Doc
+            SourceError: If a string is longer than the max_length of the pipeline or
+                has a character without a UTF-8 form, or the words lack the parts of
+                speech
+        """
         if isinstance(source, str):
-            pipeline = nlp or get_nlp()
+            pipeline = self._nlp or get_nlp()
             if len(source) > pipeline.max_length:
                 raise SourceError(
                     f"The text of {len(source)} characters is longer than the limit of the "
@@ -133,160 +162,50 @@ class LexicalStats:
                 )
             _check_encoding(source)
             source = pipeline(source, disable=UNUSED_COMPONENTS)
-        elif not isinstance(source, Doc):
+        elif not is_doc(source):
             raise SourceTypeError("The data source is set incorrectly")
         tokens = [
             token for token in iter_doc_tokens(source) if not is_number(token.text, NUMBER_PATTERN)
         ]
-        if not tokens:
-            raise SourceError("The data source has no words")
-        if not source.has_annotation("POS"):
+        if tokens and not source.has_annotation("POS"):
             raise SourceError(
                 "The data source has no annotation of the parts of speech: "
                 "parse the text with a model instead of a blank pipeline"
             )
-        self.freq_dict = freq_dict if freq_dict is not None else FreqDict()
-        self.words = tuple(token.text for token in tokens)
-        self._proper = tuple(token.pos_ == "PROPN" for token in tokens)
-        self.lemmas = tuple(
-            lemma_key(_without_period(token.text), proper)
-            for token, proper in zip(tokens, self._proper, strict=True)
-        )
-        self._content = tuple(token_info(token).content for token in tokens)
-        self.n_words = len(self.words)
-        self.n_content_words = sum(self._content)
-        self.ranks = tuple(get_rank(lemma) for lemma in self.lemmas)
-        self.lexical_density = self.n_content_words / self.n_words
-        bands = self.band_coverage()
-        self.p_top1000 = bands[1000]
-        self.p_top2000 = bands[2000]
-        self.p_top5000 = bands[5000]
-        self.p_top10000 = bands[10000]
-        self.p_beyond_top10000 = 1 - bands[10000]
+        self._found_proper = tuple(token.pos_ == "PROPN" for token in tokens)
+        return [
+            LexicalWord(
+                token.text,
+                lemma_key(_without_period(token.text), proper),
+                token_info(token).content,
+            )
+            for token, proper in zip(tokens, self._found_proper, strict=True)
+        ]
 
-    @cached_property
-    def keys(self) -> tuple[str, ...]:
+    def dictionary_keys(self) -> tuple[str, ...]:
         """
-        Keys of the words in the frequency dictionary
+        Getting the keys of the words in the frequency dictionary
 
         Description:
             A proper noun is looked up by its form when the dictionary has it
             (París - parís) and by its lemma otherwise (Estados - estado, a verb
             tagged PROPN as Miró - mirar)
+
+        Returns:
+            tuple[str]: Key of every word
         """
         return tuple(
             lemma_key(_without_period(word)) if proper and lemma not in self.freq_dict else lemma
             for word, lemma, proper in zip(self.words, self.lemmas, self._proper, strict=True)
         )
 
-    @cached_property
-    def entries(self) -> tuple[Entry | None, ...]:
-        """
-        Entries of the frequency dictionary for every word, None for the words out of it
-        """
-        return tuple(self.freq_dict.lookup(key) for key in self.keys)
+    def rank(self, lemma: str) -> int | None:
+        """Rank of a lemma by the embedded list of FreqDict (get_rank)"""
+        return get_rank(lemma)
 
-    @property
-    def n_found(self) -> int:
-        return sum(1 for entry in self.entries if entry)
-
-    @property
-    def coverage(self) -> float:
-        return self.n_found / self.n_words
-
-    @property
-    def mean_ipm(self) -> float:
-        return _mean([entry.ipm for entry in self.entries if entry])
-
-    @property
-    def mean_ipm_content(self) -> float:
-        return _mean([entry.ipm for entry in self._content_entries()])
-
-    @property
-    def mean_log_ipm(self) -> float:
-        return _mean([log10(entry.ipm) for entry in self.entries if entry])
-
-    @property
-    def mean_log_ipm_content(self) -> float:
-        return _mean([log10(entry.ipm) for entry in self._content_entries()])
-
-    @property
-    def mean_range(self) -> float:
-        return _mean([entry.range for entry in self.entries if entry])
-
-    @property
-    def mean_dispersion(self) -> float:
-        return _mean([entry.dispersion for entry in self.entries if entry])
-
-    @cached_property
-    def surprisal(self) -> float:
-        return calc_surprisal(self.keys, self.freq_dict)
-
-    @property
-    def perplexity(self) -> float:
-        return 2**self.surprisal
-
-    def _content_entries(self) -> list[Entry]:
-        """Entries of the content words found in the dictionary"""
-        return [
-            entry
-            for entry, content in zip(self.entries, self._content, strict=True)
-            if entry and content
-        ]
-
-    def band_coverage(
-        self, bands: Iterable[int] = FREQUENCY_BANDS, unique: bool = False
-    ) -> dict[int, float]:
-        """
-        Shares of the words by the frequency bands of the embedded list
-
-        Arguments:
-            bands (list[int]): Bounds of the bands - the sizes of the top lists
-            unique (bool): Count the distinct lemmas instead of the words
-
-        Returns:
-            dict[int, float]: Share of the words with a lemma of the top N for every bound N
-
-        Raises:
-            ParameterError: If the bounds are not an iterable of integers (a string included)
-                or a bound is out of 1 and the size of the list (10000)
-        """
-        if isinstance(bands, str | bytes) or not isinstance(bands, Iterable):
-            raise ParameterError(
-                f"The bounds of the bands must be a list, not {type(bands).__name__}"
-            )
-        bands = tuple(bands)
-        size = len(load_top_lemmas())
-        for band in bands:
-            check_integer(band, "bound of a band")
-            if not 1 <= band <= size:
-                raise ParameterError(f"A bound of a band must be between 1 and {size} - {band}")
-        ranks = [get_rank(lemma) for lemma in set(self.lemmas)] if unique else list(self.ranks)
-        return {
-            band: safe_divide(sum(1 for rank in ranks if rank and rank <= band), len(ranks))
-            for band in bands
-        }
-
-    def get_stats(self) -> dict[str, float]:
-        """
-        Getting the computed lexical sophistication statistics of the text
-
-        Returns:
-            dict[str, float]: Dictionary of the computed statistics
-        """
-        return {stat: getattr(self, stat) for stat in LEXICAL_STATS_DESC}
-
-    def print_stats(self) -> None:
-        """Printing the computed lexical sophistication statistics with descriptions"""
-        print(f"{'Statistic':^58}|{'Value':^10}")
-        print("-" * 68)
-        stats = self.get_stats()
-        for stat, desc in LEXICAL_STATS_DESC.items():
-            print(f"{desc:58}|{stats[stat]:^10.2f}")
-
-
-def _mean(values: Sequence[float]) -> float:
-    return fmean(values) if values else nan
+    def top_size(self) -> int:
+        """Size of the embedded list, 10000"""
+        return len(load_top_lemmas())
 
 
 @cache
@@ -334,7 +253,8 @@ def calc_surprisal(lemmas: Sequence[str], freq_dict: FreqDict) -> float:
     Description:
         The mean over the words of −log2 P(w), where P(w) = ipm / 10⁶; a word
         out of the dictionary gets its minimum frequency (0.1 ipm). The
-        perplexity is 2 to the power of the surprisal
+        perplexity is 2 to the power of the surprisal. The calc_surprisal of the
+        core for FreqDict
 
     Arguments:
         lemmas (list[str]): Keys of the words (lemma_key)
@@ -349,6 +269,4 @@ def calc_surprisal(lemmas: Sequence[str], freq_dict: FreqDict) -> float:
     """
     if not isinstance(freq_dict, FreqDict):
         raise SourceTypeError("The frequency dictionary must be a FreqDict")
-    check_words(lemmas, "lemmas")
-    floor = freq_dict.min_ipm
-    return _mean([-log2(max(freq_dict.ipm(lemma), floor) / 1_000_000) for lemma in lemmas])
+    return anyts.lexical_stats.calc_surprisal(lemmas, freq_dict)

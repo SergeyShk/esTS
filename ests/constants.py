@@ -732,8 +732,6 @@ LEXICAL_STATS_DESC = {
     "p_beyond_top10000": "Share of words beyond the top 10000",
     "lexical_density": "Lexical density",
 }
-# Bounds of the frequency bands - the sizes of the lists of the most frequent lemmas
-FREQUENCY_BANDS = (1000, 2000, 5000, 10000)
 
 
 # Style metrics of a text
@@ -748,8 +746,6 @@ STYLE_STATS_DESC = {
     "parentheticals": "Parenthetical expressions (per 100 words)",
     "cliches": "Officialese clichés (per 100 words)",
 }
-# Number of the most frequent words for the academic nausea and the naturalness by Zipf's law
-NAUSEA_TOP_N = 10
 # Word forms that carry no content, the water of a text: the closed classes of the grammar
 # and the adverbs that point, ask, negate, affirm or focus, with the old spellings (á, ó, tí)
 STOPWORDS = frozenset(

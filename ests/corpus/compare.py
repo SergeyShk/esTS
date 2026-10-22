@@ -242,6 +242,7 @@ def corpus_features(
         SourceError: If the corpus has no window of enough words
         ParameterError: If the size of a window or min_words is not an integer or is
             below one, or min_words is greater than the window
+        DatasetNotFoundError: If the default features need the model and it is not installed
 
     Example:
         >>> from ests.corpus import corpus_features

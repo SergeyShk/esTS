@@ -27,12 +27,8 @@ nav:
       - Morphological statistics: stats/morph_stats.md
       - Syntactic statistics: stats/syntax_stats.md
       - Cohesion statistics: stats/cohesion_stats.md
-      - Lexical sophistication statistics:
-        - Metrics module: stats/lexical_stats.md
-        - Metric functions: stats/lexical_stats_funcs.md
-      - Style metrics:
-        - Metrics module: stats/style_stats.md
-        - Metric functions: stats/style_stats_funcs.md
+      - Lexical sophistication statistics: stats/lexical_stats.md
+      - Style metrics: stats/style_stats.md
       - Phonostatistics:
         - Metrics module: stats/phon_stats.md
         - Metric functions: stats/phon_stats_funcs.md

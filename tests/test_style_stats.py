@@ -13,7 +13,7 @@ from ests.constants import (
     STOPWORDS,
     STYLE_STATS_DESC,
 )
-from ests.exceptions import SourceError
+from ests.exceptions import SourceError, SourceTypeError
 from ests.style_stats import (
     _split_text,
     calc_academic_nausea,
@@ -81,7 +81,7 @@ def test_init_lists_as_a_string():
     # A string would be taken letter by letter
     with pytest.raises(TypeError, match="list of stopwords"):
         StyleStats(text, stopwords="de la")
-    with pytest.raises(TypeError, match="list of clichés"):
+    with pytest.raises(TypeError, match="list of cliches"):
         StyleStats(text, cliches="a la mayor brevedad")
 
 
@@ -97,6 +97,15 @@ def test_init_lexemes():
     ss = StyleStats(text, words_extractor=WordsExtractor(use_lexemes=True, lowercase=True))
     assert ss.forms == StyleStats(text).forms
     assert ss.spam > StyleStats(text).spam
+
+
+def test_doc_with_an_extractor(nlp):
+    # The extractor takes the text of the Doc; the nouns still come from its parse
+    lemmas = WordsExtractor(use_lexemes=True, lowercase=True)
+    doc = nlp("Se procedió a la revisión de los proyectos.")
+    ss = StyleStats(doc, words_extractor=lemmas)
+    assert ss.words == lemmas.extract(doc.text)
+    assert ss.markers()["verbal_nouns"] == ("revisión",)
 
 
 @pytest.mark.parametrize(
@@ -217,6 +226,8 @@ def test_keyword_density():
 def test_verbal_nouns(ss, nlp):
     assert calc_verbal_nouns(["revisión", "proyecto", "nombramiento", "casa"]) == 50.0
     assert calc_verbal_nouns(noun_lemmas(nlp(text))) == ss.verbal_nouns
+    with pytest.raises(SourceTypeError):
+        noun_lemmas(text)
     assert calc_verbal_nouns(["uso", "viaje", "Aprendizaje"]) == 100.0
     assert isnan(calc_verbal_nouns([]))
     # revisión x2, nombramiento, comisión, votación, uso among the 15 nouns of the model
@@ -275,6 +286,8 @@ def test_parentheticals(ss):
     assert ss.parentheticals == pytest.approx(100 * 3 / len(ss.forms))
     assert is_parenthetical("Finalmente")
     assert not is_parenthetical("embargo")
+    with pytest.raises(SourceTypeError):
+        is_parenthetical(5)
     assert find_parentheticals(words) == [(0, 2), (2, 3), (5, 7)]
     assert find_parentheticals([]) == []
 

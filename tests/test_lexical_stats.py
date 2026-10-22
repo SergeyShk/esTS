@@ -5,11 +5,11 @@ import spacy
 from anyts.utils import is_number
 
 from ests import LexicalStats
-from ests.constants import FREQUENCY_BANDS, LEXICAL_STATS_DESC
+from ests.constants import LEXICAL_STATS_DESC
 from ests.datasets import FreqDict
 from ests.exceptions import DatasetNotFoundError, ParameterError, SourceError, SourceTypeError
 from ests.extractors import NUMBER_PATTERN
-from ests.lexical_stats import calc_surprisal, get_rank, load_top_lemmas
+from ests.lexical_stats import FREQUENCY_BANDS, calc_surprisal, get_rank, load_top_lemmas
 from ests.utils import get_nlp
 
 TEXT = "El gato estaba en la ventana y miraba a los pájaros"
@@ -82,6 +82,12 @@ def test_proper_noun_falls_back_to_the_lemma(freq_dict):
     assert ls.coverage == 1.0
     # The bands count the lower-case form of a proper noun
     assert ls.ranks[0] is None
+
+
+def test_analyze_again_keeps_the_keys(freq_dict):
+    ls = LexicalStats("Estados Unidos y Nueva York", freq_dict)
+    ls.analyze("El gato duerme")
+    assert ls.keys[:4] == ("estado", "unidos", "y", "nuevo")
 
 
 def test_verb_tagged_as_proper_noun(freq_dict):
@@ -163,7 +169,7 @@ def test_without_the_dictionary(tmp_path):
 
 
 def test_default_dictionary(monkeypatch, freq_dict):
-    monkeypatch.setattr("ests.lexical_stats.FreqDict", lambda: freq_dict)
+    monkeypatch.setattr(LexicalStats, "freq_dict_class", staticmethod(lambda: freq_dict))
     assert LexicalStats(TEXT).freq_dict is freq_dict
 
 
