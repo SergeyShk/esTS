@@ -1,3 +1,6 @@
+import os
+import subprocess
+import sys
 from math import isnan
 
 import numpy as np
@@ -305,6 +308,25 @@ def test_lists_are_sorted_and_lower_case(phrases):
     assert list(phrases) == sorted(phrases)
     assert all(phrase == phrase.lower() for phrase in phrases)
     assert len(set(phrases)) == len(phrases)
+
+
+def test_expand_phrases_in_one_order():
+    """The order of the phrases does not follow the hash seed"""
+    code = (
+        "from ests.style_stats import expand_phrases;"
+        "print(list(expand_phrases(['se', 'procedió', 'al', 'cierre'], ['proceder a'])))"
+    )
+    outputs = {
+        subprocess.run(
+            [sys.executable, "-c", code],
+            capture_output=True,
+            text=True,
+            check=True,
+            env={**os.environ, "PYTHONHASHSEED": seed},
+        ).stdout
+        for seed in ("0", "1", "2", "3")
+    }
+    assert len(outputs) == 1
 
 
 def test_expand_phrases():

@@ -4,6 +4,7 @@ try:
 except ImportError:
     spaces = None
 
+import re
 import threading
 from collections import Counter
 from collections.abc import Callable
@@ -41,7 +42,6 @@ from ests.constants import (
     LEXICAL_STATS_DESC,
     MORPHOLOGY_MARKERS_DESC,
     MORPHOLOGY_STATS_DESC,
-    PHON_STATS_DESC,
     READABILITY_STATS_DESC,
     STYLE_STATS_DESC,
     SYNTAX_STATS_DESC,
@@ -57,6 +57,8 @@ from ests.visualizers import highlight, sentence_lengths_plot, zipf
 matplotlib.use("Agg")
 
 MAX_CHARS = 20_000
+MAX_MARK_RUN = 10
+MARK_RUN = re.compile(rf"([^\w\s])\1{{{MAX_MARK_RUN},}}")
 ZIPF_WORDS = 100
 SENTENCES_MIN = 5
 SENTENCES_WINDOW = 5
@@ -355,7 +357,8 @@ def render_highlight(text: str, layers: list[str]) -> str:
 
 
 def compute(text: str, layers: list[str]) -> dict:
-    text = text.strip()[:MAX_CHARS]
+    # A long run of one mark makes the tokenizer of spaCy quadratic
+    text = MARK_RUN.sub(lambda match: match[0][:MAX_MARK_RUN], text.strip()[:MAX_CHARS])
     if not text:
         raise ValueError("Paste a text to analyze")
     doc = parse(text)
@@ -388,7 +391,7 @@ def compute(text: str, layers: list[str]) -> dict:
         "cohesion": stats_table(cs.get_stats(), COHESION_STATS_DESC),
         "lexical": lexical_table(ls),
         "style": stats_table(ss.get_stats(), STYLE_STATS_DESC),
-        "phon": stats_table(ps.get_stats(), PHON_STATS_DESC),
+        "phon": stats_table(ps.get_stats(), PhonStats.stats_desc),
         "verse": verse_table,
         "verse_lines": verse_lines,
         "basic": stats_table(basic, BasicStats.stats_desc),

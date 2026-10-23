@@ -4,14 +4,14 @@
 CharNgramsExtractor(n=2, lowercase=False, within_words=False, tokenizer=None)
 ```
 
-<!-- core: extractors/char_ngrams.md:CharNgramsExtractor afcd43e -->
+<!-- core: extractors/char_ngrams.md:CharNgramsExtractor 1d91165 -->
 Clase para extraer N-gramas de caracteres de un texto: secuencias de N caracteres tomadas con una ventana deslizante sobre la cadena. Los N-gramas de caracteres son un rasgo clásico de la estilometría y la atribución de autoría (Stamatatos 2009) y pueden sustituir a las palabras en medidas como la Delta de Burrows.
 
 Las secuencias de espacios se reducen a un solo espacio y los signos de puntuación se conservan. Con `within_words=True` los N-gramas no cruzan los límites de las palabras: el texto se divide en palabras con el tokenizador, la puntuación se descarta y las palabras más cortas que N no producen N-gramas.
 
 Excepciones:
 
-- `ParameterError` - un `n` que no es un entero de al menos uno.
+- `ParameterError` - un `n` que no es un entero de al menos uno, un `lowercase` o un `within_words` que no es un `bool`.
 
 La clase extiende el `CharNgramsExtractor` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/extractors/char_ngrams/) con el gancho del español: su tokenizador de palabras por defecto para `within_words`, el método `tokenize(text)`, es el tokenizador por defecto de [`WordsExtractor`](words.md), el tokenizador por reglas de la clase de idioma español de [spaCy](https://github.com/explosion/spaCy) `ests.utils.tokenize`. La lista de N-gramas se pasa a [`delta`](../corpus/stylometry.md) como unidades del texto en lugar de las palabras.
 

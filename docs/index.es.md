@@ -74,7 +74,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    Repetición de sustantivos, argumentos y palabras con contenido entre oraciones a la manera de Coh-Metrix, información dada, cohesión temporal y la densidad de 273 marcadores del discurso del español por clase
+    Repetición de sustantivos, argumentos y palabras con contenido entre oraciones a la manera de Coh-Metrix, información dada, cohesión temporal y la densidad de 273 marcadores del discurso del español por clase y por lugar, entre oraciones y dentro de ellas
 
     [:octicons-arrow-right-24: Estadísticas de cohesión](stats/cohesion_stats.md)
 

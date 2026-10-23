@@ -698,6 +698,16 @@ CONNECTOR_BLOCKED_AFTER = {
                 "tus",
                 "su",
                 "sus",
+                "nuestro",
+                "nuestra",
+                "nuestros",
+                "nuestras",
+                "vuestro",
+                "vuestra",
+                "vuestros",
+                "vuestras",
+                "aquellos",
+                "aquellas",
                 "cuanto",
             }
         ),
@@ -792,8 +802,8 @@ CONNECTOR_SUBORDINATORS = frozenset(
 CONNECTOR_PARCELLATION = frozenset({"porque", "conque"})
 # Connectors that a punctuation mark between their words splits: a mark before the
 # conjunction makes it a word of its own (así, que...; lo de siempre, que...); not the
-# consecutive ones and bien es verdad que, where old texts put a comma before que
-# (de tal modo, que)
+# consecutive ones with de … que and bien es verdad que, where old texts put a comma
+# before que (de tal modo, que)
 CONNECTOR_SPLIT_BY_MARKS = frozenset(
     {
         "puesto que",

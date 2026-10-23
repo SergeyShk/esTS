@@ -246,7 +246,7 @@ Las columnas son `anyts.corpus.COMPARISON_COLUMNS` con los sufijos `a` y `b` sus
 
 Las estadísticas de una fila están disponibles una a una desde `ests.corpus`:
 
-<!-- core: corpus/compare.md:calc_cohen_d 198b504 -->
+<!-- core: corpus/compare.md:calc_cohen_d 8318830 -->
 ``` {.python .signature}
 calc_cohen_d(values_a, values_b)
 ```
@@ -258,9 +258,9 @@ La d de Cohen con las varianzas muestrales combinadas (ddof=1); `nan` con menos 
 | `values_a` | `list[float]` | - | Valores en el primer corpus |
 | `values_b` | `list[float]` | - | Valores en el segundo corpus |
 
-Un valor que no es un número o que falta (`None`, `NA`) y unos valores que no son una lista plana lanzan `SourceTypeError`.
+Un valor que no es ni un número ni un valor ausente (`None`, `NA`) y unos valores que no son una lista plana lanzan `SourceTypeError`.
 
-<!-- core: corpus/compare.md:calc_cliff_delta ccd5938 -->
+<!-- core: corpus/compare.md:calc_cliff_delta 46d8def -->
 ``` {.python .signature}
 calc_cliff_delta(values_a, values_b)
 ```
@@ -272,9 +272,9 @@ La delta de Cliff, la proporción de pares en que el primer valor es mayor menos
 | `values_a` | `list[float]` | - | Valores en el primer corpus |
 | `values_b` | `list[float]` | - | Valores en el segundo corpus |
 
-Un valor que no es un número o que falta (`None`, `NA`) y unos valores que no son una lista plana lanzan `SourceTypeError`.
+Un valor que no es ni un número ni un valor ausente (`None`, `NA`) y unos valores que no son una lista plana lanzan `SourceTypeError`.
 
-<!-- core: corpus/compare.md:bootstrap_median_diff b20d95f -->
+<!-- core: corpus/compare.md:bootstrap_median_diff eef19f3 -->
 ``` {.python .signature}
 bootstrap_median_diff(values_a, values_b, n_bootstrap=1000, rng=None, confidence=0.95, texts_a=None, texts_b=None)
 ```
@@ -291,9 +291,9 @@ El intervalo bootstrap de percentiles de la diferencia de las medianas. Con `tex
 | `texts_a` | `list` | `None` | Textos de los valores en el primer corpus; `None` - cada valor se remuestrea por separado |
 | `texts_b` | `list` | `None` | Textos de los valores en el segundo corpus |
 
-Un valor que no es un número o que falta, unos valores que no son una lista plana y unos textos que no son etiquetas de un mismo tipo lanzan `SourceTypeError`; un `n_bootstrap` que no es un entero de al menos uno, un `confidence` que no es un número en (0, 1), unos textos que no son tantos como los valores y un `rng` que no es un `Generator` de numpy lanzan `ParameterError`.
+Un valor que no es ni un número ni un valor ausente, unos valores que no son una lista plana y unos textos que no son etiquetas de un mismo tipo lanzan `SourceTypeError`; un `n_bootstrap` que no es un entero de al menos uno, un `confidence` que no es un número en (0, 1), unos textos que no son tantos como los valores y un `rng` que no es un `Generator` de numpy lanzan `ParameterError`.
 
-<!-- core: corpus/compare.md:holm_correction 7006482 -->
+<!-- core: corpus/compare.md:holm_correction e837116 -->
 ``` {.python .signature}
 holm_correction(p_values)
 ```
@@ -304,7 +304,7 @@ La corrección de Holm para comparaciones múltiples: los valores p se ordenan d
 | :-------- | :--- | :------ | :---------- |
 | `p_values` | `list[float]` | - | Valores p |
 
-Un valor p que no es un número o que falta y unos valores p que no son una lista plana lanzan `SourceTypeError`, y un valor p fuera de [0, 1], `ParameterError`.
+Un valor p que no es ni un número ni un valor ausente y unos valores p que no son una lista plana lanzan `SourceTypeError`, y un valor p fuera de [0, 1], `ParameterError`.
 
 === "Código"
 

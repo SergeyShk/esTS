@@ -1,3 +1,4 @@
+import ast
 import importlib
 import importlib.metadata
 import re
@@ -418,3 +419,57 @@ def test_stats_interface(name):
     stats_class = getattr(ests, name)
     assert issubclass(stats_class, Stats)
     assert stats_class.stats_desc
+
+
+def test_imports_of_the_demo():
+    """Every name the demo imports from esTS exists, without gradio and the model"""
+    tree = ast.parse((ROOT / "demo" / "app.py").read_text(encoding="utf-8"))
+    imports = [
+        (node.module, alias.name)
+        for node in ast.walk(tree)
+        if isinstance(node, ast.ImportFrom) and (node.module or "").split(".")[0] == "ests"
+        for alias in node.names
+    ]
+    assert imports
+    missing = [
+        f"{module}.{name}"
+        for module, name in imports
+        if not hasattr(importlib.import_module(module), name)
+    ]
+    assert not missing
+
+
+@pytest.mark.parametrize(
+    "name", ["CohesionStats", "LexicalStats", "MorphStats", "StyleStats", "SyntaxStats"]
+)
+def test_pickle_without_the_pipeline(name):
+    """A copy of a class built with a pipeline keeps its statistics but not the pipeline"""
+    import copy
+    import pickle
+
+    from ests.utils import get_nlp
+
+    stats = getattr(ests, name)(
+        "La revisión del expediente fue realizada por el comité.", nlp=get_nlp()
+    )
+    data = pickle.dumps(stats)
+    assert len(data) < 100_000
+    for clone in (pickle.loads(data), copy.deepcopy(stats)):
+        assert repr(clone.get_stats()) == repr(stats.get_stats())
+
+
+def test_version_of_the_notebooks():
+    """The notebooks and their pages ask for the minor version of the package"""
+    project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]
+    major, minor = project["version"].split(".")[:2]
+    for notebook in sorted((ROOT / "examples").glob("*.ipynb")):
+        text = notebook.read_text(encoding="utf-8")
+        assert f"< ({major}, {minor}):" in text, notebook.name
+        assert f"pyests>={major}.{minor}" in text, notebook.name
+        assert f"esTS {major}.{minor} or newer" in text, notebook.name
+    for page, phrase in (
+        ("examples/README.md", "or newer"),
+        ("docs/examples.md", "or newer"),
+        ("docs/examples.es.md", "o posterior"),
+    ):
+        assert f"esTS {major}.{minor} {phrase}" in (ROOT / page).read_text(encoding="utf-8")

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from collections.abc import Collection, Mapping, Sequence
+from contextlib import suppress
 from math import nan
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import anyts.style_stats
 from anyts.constants import MESSAGES, NAUSEA_TOP_N
@@ -160,6 +161,18 @@ class StyleStats(anyts.style_stats.StyleStats):
     def expand_phrases(self, text: Sequence[str], phrases: Collection[str]) -> dict[str, str]:
         """Phrases with their contractions and the forms of their verbs (expand_phrases)"""
         return expand_phrases(text, phrases)
+
+    def __getstate__(self) -> dict[str, Any]:
+        """
+        State for pickle and copy without the pipeline: the nouns of a string are read by
+        it first, so the copy keeps them
+        """
+        state = self.__dict__.copy()
+        if state.get("nlp") is not None:
+            with suppress(SourceError):
+                state["_nouns"] = self.nouns()
+            state["nlp"] = None
+        return state
 
     def nouns(self) -> list[tuple[str, str]]:
         """
@@ -404,7 +417,7 @@ def expand_phrases(text: Sequence[str], phrases: Collection[str]) -> dict[str, s
     for phrase, words in ordered:
         firsts = forms.get(words[0], {words[0]})
         if len(words) == 1:
-            for first in firsts:
+            for first in sorted(firsts):
                 expanded.setdefault(first, phrase)
             continue
         endings = [words[-1]]
@@ -412,7 +425,7 @@ def expand_phrases(text: Sequence[str], phrases: Collection[str]) -> dict[str, s
             endings.append("al")
         elif words[-1] == "de":
             endings.append("del")
-        for first in firsts:
+        for first in sorted(firsts):
             for ending in endings:
                 expanded.setdefault(" ".join([first, *words[1:-1], ending]), phrase)
     return expanded

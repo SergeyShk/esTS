@@ -11,7 +11,8 @@ The meter of Spanish verse is syllabic: a line is measured by its metrical sylla
 Raises:
 
 - `SourceTypeError` - a source that is neither a string nor a `Doc`;
-- `SourceError` - a source without letters (empty, digits and punctuation only).
+- `SourceError` - a source without letters (empty, digits and punctuation only);
+- `ParameterError` - a `seseo` that is not a `bool`.
 
 === "Code"
 

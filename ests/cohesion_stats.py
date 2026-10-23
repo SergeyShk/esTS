@@ -86,6 +86,11 @@ class SpanishConnectorMatcher(ConnectorMatcher):
         >>> from ests.cohesion_stats import SpanishConnectorMatcher, load_connectors
         >>> SpanishConnectorMatcher(load_connectors()).find(["Sin", "embargo", "no", "vino"])
         [Connector(sent=0, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary')]
+
+    Raises:
+        SourceTypeError: If the connectors are not a dictionary of a phrase and a pair of
+            strings
+        ParameterError: If a class or a kind of the dictionary is unknown
     """
 
     pos_tags = CONNECTOR_POS
@@ -312,7 +317,9 @@ def find_connectors(
         overlaps. The words are those of one sentence without punctuation, the
         first one its start; with the parts of speech given, the rules that
         read a tag apply too, and with the positions of the marks a rule reads
-        no word across a mark
+        no word across a mark. With a dictionary of its own the function builds
+        a matcher on every call: over many sentences, build a
+        SpanishConnectorMatcher once and call its find
 
     Arguments:
         words (list[str]): Words of the sentence

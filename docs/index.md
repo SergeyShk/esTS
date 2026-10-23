@@ -74,7 +74,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    Overlap of nouns, arguments and content words between sentences in the manner of Coh-Metrix, givenness, temporal cohesion and the density of 273 Spanish discourse markers by class
+    Overlap of nouns, arguments and content words between sentences in the manner of Coh-Metrix, givenness, temporal cohesion and the density of 273 Spanish discourse markers by class and by place, between and within sentences
 
     [:octicons-arrow-right-24: Cohesion statistics](stats/cohesion_stats.md)
 

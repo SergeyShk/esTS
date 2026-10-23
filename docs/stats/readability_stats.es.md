@@ -694,7 +694,7 @@ El método `describe_level` lee la facilidad de lectura, la Legibilidad µ y LIX
 grade_to_age(grade)
 ```
 
-La etapa del sistema educativo español y la edad del lector según el valor de una fórmula de grado, en años de escolaridad contados desde el primer curso de primaria a los seis años: el valor se redondea al entero más próximo (las mitades hacia arriba) y cae en la primera etapa cuyo último curso no supera, los valores por debajo de 1 en los cursos 1-3. Las etapas son `ests.constants.GRADE_AGE_LEVELS` y `POSTGRADUATE_LEVEL`, con etiquetas en inglés (`'postgraduate (over 22 years)'`); la tabla las traduce:
+La etapa del sistema educativo español y la edad del lector según el valor de una fórmula de grado, en años de escolaridad contados desde el primer curso de primaria a los seis años: el valor se redondea al entero más próximo (las mitades hacia arriba) y cae en la primera etapa cuyo último curso no supera, los valores por debajo de 1 en los cursos 1-3. Las etapas son `ests.constants.GRADE_AGE_LEVELS` y `POSTGRADUATE_LEVEL`, con etiquetas en inglés (`('postgraduate', 'over 22 years')`); la tabla las traduce:
 
 | Grado | Etapa | Edad |
 | :---- | :---- | :--- |

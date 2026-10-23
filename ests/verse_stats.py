@@ -11,7 +11,7 @@ from math import nan
 from typing import TYPE_CHECKING, NamedTuple
 
 from anyts.stats import Stats
-from anyts.utils import is_doc, safe_divide
+from anyts.utils import check_bool, is_doc, safe_divide
 
 from .constants import (
     ACCENTED_VOWELS,
@@ -225,11 +225,13 @@ class VerseStats(Stats):
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc
         SourceError: If the source has no words
+        ParameterError: If seseo is not a bool
     """
 
     stats_desc = VERSE_STATS_DESC
 
     def __init__(self, source: str | Doc, seseo: bool = False):
+        check_bool(seseo, "seseo")
         if is_doc(source):
             text = source.text
         elif isinstance(source, str):
@@ -739,8 +741,9 @@ def _splits(line: _Line, hemistich: int) -> bool:
 
 def _pattern(scansion: _Scansion) -> str:
     """Pattern of a line: + for a stressed metrical syllable, - for an unstressed one"""
+    metrical = frozenset(scansion.metrical)
     return "".join(
-        PATTERN_STRESSED if position in scansion.metrical else PATTERN_UNSTRESSED
+        PATTERN_STRESSED if position in metrical else PATTERN_UNSTRESSED
         for position in range(scansion.length)
     )
 
@@ -756,7 +759,8 @@ def _rhythms(meter: str | None, hemistich: int | None) -> tuple[tuple[int, ...],
 
 def _has_rhythm(scansion: _Scansion, rhythms: Sequence[Sequence[int]]) -> bool:
     """Checking that a line has one of the sets of rhythmic stresses"""
-    return any(all(position - 1 in scansion.metrical for position in rhythm) for rhythm in rhythms)
+    metrical = frozenset(scansion.metrical)
+    return any(all(position - 1 in metrical for position in rhythm) for rhythm in rhythms)
 
 
 def _endecasyllable_type(stresses: Sequence[int]) -> str | None:

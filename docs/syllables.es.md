@@ -132,7 +132,7 @@ word_stresses(word)
 
 Todas las sílabas tónicas de una palabra en orden ascendente. Un solo índice para la mayoría de las palabras. Dos índices para un adverbio en `-mente`, que conserva el acento de su adjetivo (`fá-cil-men-te` - 0 y 2, `fe-liz-men-te` - 1 y 2), y un índice por cada parte de un compuesto con guion (`te-ó-ri-co-prác-ti-co` - 1 y 4).
 
-El adverbio se reconoce por su forma: una base de al menos una sílaba antes de `-mente` que termina como un adjetivo (en vocal, `l`, `r`, `z`, `n` o `s`) o lleva tilde, así que `cruel-men-te` también cuenta. Las palabras con la misma forma que no son adverbios están en `NON_ADVERBS_MENTE` de `ests.constants`: adjetivos y sustantivos (`demente`, `vehemente`) y subjuntivos de verbos en `-mentar` (`fundamente`, `complemente`); un subjuntivo de ese tipo que no esté en la lista recibe un segundo acento.
+El adverbio se reconoce por su forma: una base de al menos una sílaba antes de `-mente` que termina como un adjetivo (en `a`, `e`, `l`, `r`, `z`, `n` o `s`) o lleva tilde, así que `cruel-men-te` también cuenta. Las palabras con la misma forma que no son adverbios están en `NON_ADVERBS_MENTE` de `ests.constants`: adjetivos y sustantivos (`demente`, `vehemente`) y subjuntivos de verbos en `-mentar` (`fundamente`, `complemente`); un subjuntivo de ese tipo que no esté en la lista recibe un segundo acento.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |

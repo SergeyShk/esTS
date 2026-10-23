@@ -1,6 +1,6 @@
 # Examples
 
-Jupyter notebooks in the [examples/](https://github.com/SergeyShk/esTS/tree/master/examples) directory of the repository, with the library at work on its datasets. Each opens in Google Colab with a button and installs the library - esTS 0.7 or newer - and, if it needs it, the spaCy model; the outputs of all cells are stored in the files, so the notebooks can be read without running.
+Jupyter notebooks in the [examples/](https://github.com/SergeyShk/esTS/tree/master/examples) directory of the repository, with the library at work on its datasets. Each opens in Google Colab with a button and installs the library - esTS 0.8 or newer - and, if it needs it, the spaCy model; the outputs of all cells are stored in the files, so the notebooks can be read without running.
 
 ## Text walkthrough
 

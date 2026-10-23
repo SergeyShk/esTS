@@ -132,7 +132,7 @@ word_stresses(word)
 
 All stressed syllables of a word in ascending order. A single index for most words. Two indices for an adverb in `-mente`, which keeps the stress of its adjective (`fá-cil-men-te` - 0 and 2, `fe-liz-men-te` - 1 and 2), and one index per part of a hyphenated compound (`te-ó-ri-co-prác-ti-co` - 1 and 4).
 
-An adverb is recognized by its shape: a stem of at least one syllable before `-mente` that ends like an adjective (in a vowel, `l`, `r`, `z`, `n` or `s`) or carries an accent, so `cruel-men-te` counts too. Words of the same shape that are not adverbs are listed in `NON_ADVERBS_MENTE` of `ests.constants`: adjectives and nouns (`demente`, `vehemente`) and subjunctives of verbs in `-mentar` (`fundamente`, `complemente`); an unlisted subjunctive of that kind gets a second stress.
+An adverb is recognized by its shape: a stem of at least one syllable before `-mente` that ends like an adjective (in `a`, `e`, `l`, `r`, `z`, `n` or `s`) or carries an accent, so `cruel-men-te` counts too. Words of the same shape that are not adverbs are listed in `NON_ADVERBS_MENTE` of `ests.constants`: adjectives and nouns (`demente`, `vehemente`) and subjunctives of verbs in `-mentar` (`fundamente`, `complemente`); an unlisted subjunctive of that kind gets a second stress.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |

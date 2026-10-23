@@ -17,7 +17,7 @@ from ests.datasets import (
     spanish_literature as literature_module,
     spanish_sonnets as sonnets_module,
 )
-from ests.exceptions import SourceError, SourceTypeError
+from ests.exceptions import ParameterError, SourceError, SourceTypeError
 from ests.verse_stats import (
     _default_joins,
     _endecasyllable_type,
@@ -464,6 +464,11 @@ def test_diaeresis():
 )
 def test_ending(word, consonant, assonant):
     assert _ending(word, seseo=False) == (consonant, assonant)
+
+
+def test_seseo_is_a_bool():
+    with pytest.raises(ParameterError, match=r"^The seseo must be a bool, not str$"):
+        VerseStats(GARCILASO, seseo="yes")
 
 
 def test_seseo():

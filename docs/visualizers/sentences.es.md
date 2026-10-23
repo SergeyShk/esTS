@@ -53,7 +53,7 @@ Las longitudes de las oraciones en palabras, en orden: una cadena se divide en o
 Excepciones:
 
 - `SourceTypeError` - un objeto que no es una cadena, un `Doc`, una secuencia ni un iterador, una tabla, un conjunto, un mapeo, bytes, una longitud que no es un entero, un extractor de otro tipo;
-- `SourceError` - una longitud negativa.
+- `SourceError` - una longitud negativa, una cadena con un carácter sin forma UTF-8.
 
 === "Código"
 
