@@ -8,7 +8,7 @@
 *   `numpy`, `scipy`, `pandas`, `simplemma` 2
 *   `matplotlib` and `graphviz` for the [visualizers](visualizers/zipf.md)
 
-The dependencies are installed with the package.
+The dependencies are installed with the package. `import ests` loads neither spaCy nor matplotlib nor pandas: spaCy comes with the first text, whose words its Spanish tokenizer finds, and the plots and the corpus functions on first use.
 
 !!! warning "Graphviz"
     The `graphviz` package among the dependencies is only a wrapper: rendering the [word tree](visualizers/word_tree.md) and the [network of collocations](visualizers/corpus.md#collocation_network) requires the executables of [Graphviz](https://graphviz.org/download/), installed separately (`brew install graphviz`, `apt install graphviz`, `conda install graphviz`), otherwise `render()` and displaying the graph in Jupyter fail with `ExecutableNotFound`. Nothing else needs them.

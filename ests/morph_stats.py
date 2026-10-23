@@ -1,11 +1,11 @@
+from __future__ import annotations
+
 from collections import Counter, OrderedDict
 from math import nan
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from anyts.constants import MESSAGES
-from anyts.utils import iter_doc_tokens, safe_divide
-from spacy.language import Language
-from spacy.tokens import Doc, Token
+from anyts.utils import is_doc, iter_doc_tokens, safe_divide
 
 from .constants import (
     COPULAS,
@@ -15,7 +15,11 @@ from .constants import (
     PASSIVE_AUX,
 )
 from .exceptions import SourceError, SourceTypeError, UnknownStatError
-from .utils import _check_encoding, get_nlp
+from .utils import _check_encoding, _check_nlp, get_nlp
+
+if TYPE_CHECKING:
+    from spacy.language import Language
+    from spacy.tokens import Doc, Token
 
 FINITE_MOODS = {
     "p_indicative": "Ind",
@@ -125,8 +129,7 @@ class MorphStats:
     """
 
     def __init__(self, source: str | Doc, nlp: Language | None = None):
-        if nlp is not None and not isinstance(nlp, Language):
-            raise SourceTypeError("The pipeline must be a spaCy Language")
+        _check_nlp(nlp)
         if isinstance(source, str):
             pipeline = nlp or get_nlp()
             if len(source) > pipeline.max_length:
@@ -137,7 +140,7 @@ class MorphStats:
                 )
             _check_encoding(source)
             source = pipeline(source, disable=UNUSED_COMPONENTS)
-        elif not isinstance(source, Doc):
+        elif not is_doc(source):
             raise SourceTypeError("The data source is set incorrectly")
         tokens = list(iter_doc_tokens(source))
         if not tokens:

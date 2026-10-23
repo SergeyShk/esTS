@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from collections.abc import Iterable, Mapping
 from math import nan
-from typing import ClassVar
+from typing import TYPE_CHECKING, ClassVar
 
 import anyts
 import anyts.readability_stats
@@ -13,7 +15,6 @@ from anyts.readability_stats import (
     scale_level as scale_level,
 )
 from anyts.utils import safe_divide
-from spacy.tokens import Doc
 
 from .basic_stats import BasicStats
 from .constants import (
@@ -30,6 +31,9 @@ from .constants import (
     READING_SPEED_WPM,
 )
 from .exceptions import ParameterError
+
+if TYPE_CHECKING:
+    from spacy.tokens import Doc
 
 
 def check_preset(preset: str) -> None:

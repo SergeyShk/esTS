@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import re
 from collections.abc import Callable, Collection, Iterable, Iterator, Sequence
+from typing import TYPE_CHECKING
 
 import anyts.visualizers.highlight
 from anyts.constants import ALLITERATION_MIN_WORD_LEN, ALLITERATION_THRESHOLD, AUXILIARY_DEPS
@@ -13,7 +16,6 @@ from anyts.visualizers.highlight import (
     group_words_by_sents as group_words_by_sents,
     tokens_span,
 )
-from spacy.tokens import Doc, Token
 
 from ..cohesion_stats import CohesionStats
 from ..constants import (
@@ -48,6 +50,9 @@ from ..syntax_stats import (
     is_passive,
 )
 from ..utils import is_verbal_noun, iter_text_sents, iter_text_words, lemmatize
+
+if TYPE_CHECKING:
+    from spacy.tokens import Doc, Token
 
 SPANISH_WORD = re.compile(r"[a-záéíóúüñ]{2,}", re.IGNORECASE)
 # Frequencies of the consonant sounds for the alliteration

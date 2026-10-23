@@ -1,10 +1,15 @@
+from __future__ import annotations
+
 from collections.abc import Iterable, Mapping
+from typing import TYPE_CHECKING
 
 import anyts.visualizers
 from matplotlib.axes import Axes
-from spacy.tokens import Doc
 
 from ..extractors import SentsExtractor, WordsExtractor
+
+if TYPE_CHECKING:
+    from spacy.tokens import Doc
 
 
 def sentence_lengths_plot(

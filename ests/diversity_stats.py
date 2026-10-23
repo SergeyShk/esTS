@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 import anyts
 from anyts.constants import (
@@ -52,11 +55,13 @@ from anyts.diversity_stats import (
     fit_zipf_mandelbrot as fit_zipf_mandelbrot,
     vocabulary_growth as vocabulary_growth,
 )
-from anyts.utils import iter_doc_words
-from spacy.tokens import Doc
+from anyts.utils import is_doc, iter_doc_words
 
 from .exceptions import SourceTypeError
 from .extractors import WordsExtractor
+
+if TYPE_CHECKING:
+    from spacy.tokens import Doc
 
 
 class DiversityStats(anyts.DiversityStats):
@@ -165,11 +170,14 @@ class DiversityStats(anyts.DiversityStats):
         if words_extractor is not None and not isinstance(words_extractor, anyts.WordsExtractor):
             raise SourceTypeError("The word extractor must be a WordsExtractor")
         check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)
-        if isinstance(source, Doc) and words_extractor is None:
-            words: Sequence[str] = [word for _, _, word in iter_doc_words(source)]
-        elif isinstance(source, Doc | str):
-            text = source.text if isinstance(source, Doc) else source
-            words = (words_extractor or WordsExtractor()).extract(text)
+        if is_doc(source):
+            words: Sequence[str] = (
+                [word for _, _, word in iter_doc_words(source)]
+                if words_extractor is None
+                else words_extractor.extract(source.text)
+            )
+        elif isinstance(source, str):
+            words = (words_extractor or WordsExtractor()).extract(source)
         else:
             raise SourceTypeError("The data source is set incorrectly")
         super().__init__(
