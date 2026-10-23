@@ -2291,33 +2291,35 @@
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>                       Statistic                        |  Value
--------------------------------------------------------------------
-Noun overlap in adjacent sentences                      |   0.33
-Noun overlap in all pairs of sentences                  |   0.50
-Argument overlap in adjacent sentences                  |   0.33
-Argument overlap in all pairs of sentences              |   0.50
-Content word overlap in adjacent sentences              |   0.33
-Content word overlap in all pairs of sentences          |   0.50
-Share of shared content words in adjacent sentences     |   0.08
-Share of shared content words in all pairs of sentences |   0.12
-Share of pronouns                                       |   0.03
-Ratio of pronouns to nouns                              |   0.09
-Share of demonstratives                                 |   0.00
-Share of content words seen before                      |   0.18
-Repetition of the tense in adjacent sentences           |   0.00
-Repetition of the mood in adjacent sentences            |   1.00
-Temporal cohesion                                       |   0.50
-Connectors per 1000 words                               |  103.45
-Causal connectors per 1000 words                        |  34.48
-Adversative connectors per 1000 words                   |  34.48
-Concessive connectors per 1000 words                    |   0.00
-Temporal connectors per 1000 words                      |   0.00
-Additive connectors per 1000 words                      |   0.00
-Conditional connectors per 1000 words                   |   0.00
-Reformulative connectors per 1000 words                 |  34.48
-Primary connectors per 1000 words                       |   0.00
-Secondary connectors per 1000 words                     |  103.45
+<div class="highlight"><pre><span></span><code>                           Statistic                            |  Value
+---------------------------------------------------------------------------
+Noun overlap in adjacent sentences                              |   0.33
+Noun overlap in all pairs of sentences                          |   0.50
+Argument overlap in adjacent sentences                          |   0.33
+Argument overlap in all pairs of sentences                      |   0.50
+Content word overlap in adjacent sentences                      |   0.33
+Content word overlap in all pairs of sentences                  |   0.50
+Share of shared content words in adjacent sentences             |   0.08
+Share of shared content words in all pairs of sentences         |   0.12
+Share of pronouns                                               |   0.03
+Ratio of pronouns to nouns                                      |   0.09
+Share of demonstratives                                         |   0.00
+Share of content words seen before                              |   0.18
+Repetition of the tense in adjacent sentences                   |   0.00
+Repetition of the mood in adjacent sentences                    |   1.00
+Temporal cohesion                                               |   0.50
+Connectors per 1000 words                                       |  103.45
+Connectors linking a sentence to the ones before per 1000 words |  103.45
+Connectors linking the parts of a sentence per 1000 words       |   0.00
+Causal connectors per 1000 words                                |  34.48
+Adversative connectors per 1000 words                           |  34.48
+Concessive connectors per 1000 words                            |   0.00
+Temporal connectors per 1000 words                              |   0.00
+Additive connectors per 1000 words                              |   0.00
+Conditional connectors per 1000 words                           |   0.00
+Reformulative connectors per 1000 words                         |  34.48
+Primary connectors per 1000 words                               |   0.00
+Secondary connectors per 1000 words                             |  103.45
 </code></pre></div>
 </div>
 </div>
@@ -2423,7 +2425,7 @@ Secondary connectors per 1000 words                     |  103.45
 </div>
 </div>
 <h2 id="metrics">Metrics<a class="headerlink" href="#metrics" title="Permanent link">&para;</a></h2>
-<p>Every metric is an attribute of the object, computed when it is created, and <code>get_stats</code> gives the metrics of the table; <code>aspect_repetition</code>, <code>connectors_inter</code> and <code>connectors_intra</code> are attributes outside it.</p>
+<p>Every metric is an attribute of the object, computed when it is created, and <code>get_stats</code> gives the metrics of the table; <code>aspect_repetition</code> is an attribute outside it.</p>
 <table>
 <thead>
 <tr>
@@ -2531,6 +2533,18 @@ Secondary connectors per 1000 words                     |  103.45
 <td style="text-align: left;">More explicit links</td>
 </tr>
 <tr>
+<td style="text-align: left;"><a href="#connectors"><code>connectors_inter</code></a></td>
+<td style="text-align: left;">Connectors linking a sentence to the ones before per 1000 words</td>
+<td style="text-align: left;">0-1000</td>
+<td style="text-align: left;">More links between sentences</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#connectors"><code>connectors_intra</code></a></td>
+<td style="text-align: left;">Connectors linking the parts of a sentence per 1000 words</td>
+<td style="text-align: left;">0-1000</td>
+<td style="text-align: left;">More links inside sentences</td>
+</tr>
+<tr>
 <td style="text-align: left;"><a href="#connectors"><code>connectors_&lt;class&gt;</code></a></td>
 <td style="text-align: left;">Connectors of a class per 1000 words: <code>causal</code>, <code>adversative</code>, <code>concessive</code>, <code>temporal</code>, <code>additive</code>, <code>conditional</code>, <code>reformulative</code></td>
 <td style="text-align: left;">0-1000</td>
@@ -2589,15 +2603,15 @@ Secondary connectors per 1000 words                     |  103.45
 </div>
 <div class="metric-card">
 <h3 id="connectors">Connectors<a class="headerlink" href="#connectors" title="Permanent link">&para;</a></h3>
-<p class="metric-meta"><code>connectors</code> · <code>connectors_&lt;class&gt;</code> · <code>connectors_primary</code> · <code>connectors_secondary</code></p>
+<p class="metric-meta"><code>connectors</code> · <code>connectors_inter</code> · <code>connectors_intra</code> · <code>connectors_&lt;class&gt;</code> · <code>connectors_primary</code> · <code>connectors_secondary</code></p>
 <p>The occurrences of the connectors found in every sentence by the matcher of <code>connector_matcher_class</code>, per 1000 words. An inter-sentential connector links a sentence to the ones before: it opens a sentence, unless the matcher takes it for a subordinator (<code>is_subordinator</code>), whose clause or phrase belongs to the same sentence; the others are intra-sentential. Every class and kind of the matcher gives a density: <code>connectors_causal</code>, <code>connectors_adversative</code>, <code>connectors_concessive</code>, <code>connectors_temporal</code>, <code>connectors_additive</code>, <code>connectors_conditional</code>, <code>connectors_reformulative</code>, <code>connectors_primary</code> and <code>connectors_secondary</code> by default.</p>
 <div class="arithmatex">\[
 1000 \cdot \frac{\textrm{Number of connectors}}{\textrm{Number of words}}
 \]</div>
-<p><code>connectors_inter</code> and <code>connectors_intra</code> are attributes outside <code>get_stats</code>.</p>
+<p>The subordinators of esTS are the one-word connectors tagged <code>SCONJ</code> or <code>ADP</code> (<code>cuando</code>, <code>aunque</code>, <code>si</code>) and the conjunctive and prepositional phrases of <code>CONNECTOR_SUBORDINATORS</code> (<code>ya que</code>, <code>a pesar de</code>, <code>siempre que</code>), but <code>porque</code> and <code>conque</code>, which open a sentence linking it to the one before (<code>CONNECTOR_PARCELLATION</code>: <code>¿Por qué? Porque...</code>). In <code>Ya que estás aquí, ayúdame</code> the connector is intra-sentential; in <code>No vino. Porque llovía.</code> and <code>Sin embargo, no.</code> it is inter-sentential. The anaphoric forms of the prepositional subordinators (<code>a pesar de esto</code>, <code>gracias a ello</code>) are entries of the dictionary of their own, which link a sentence to the one before.</p>
 <div class="signature highlight"><pre><span></span><code><span class="n">load_connectors</span><span class="p">()</span>
 </code></pre></div>
-<p>The connector dictionary of esTS: the file <code>ests/resources/connectors.tsv</code>, 250 discourse markers (<em>marcadores del discurso</em>) of Martín Zorraquino and Portolés (1999) and conjunctions of the NGLE, each with its class of <code>CONNECTOR_CLASSES</code> and its kind of <code>CONNECTOR_KINDS</code> of <code>anyts.constants</code>. The classes are the causal, adversative, temporal and additive connectives of Coh-Metrix with the concessive, conditional and reformulative ones added. The dictionary is read-only and shared by every caller, so a dictionary of your own goes through the <code>connectors</code> parameter.</p>
+<p>The connector dictionary of esTS: the file <code>ests/resources/connectors.tsv</code>, 273 discourse markers (<em>marcadores del discurso</em>) of Martín Zorraquino and Portolés (1999) and conjunctions of the NGLE, each with its class of <code>CONNECTOR_CLASSES</code> and its kind of <code>CONNECTOR_KINDS</code> of <code>anyts.constants</code>. The classes are the causal, adversative, temporal and additive connectives of Coh-Metrix with the concessive, conditional and reformulative ones added. The dictionary is read-only and shared by every caller, so a dictionary of your own goes through the <code>connectors</code> parameter.</p>
 <table>
 <thead>
 <tr>
@@ -2655,7 +2669,7 @@ Secondary connectors per 1000 words                     |  103.45
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>(250, ('causal', 'secondary'))
+<div class="highlight"><pre><span></span><code>(273, ('causal', 'secondary'))
 </code></pre></div>
 </div>
 </div>
@@ -2691,6 +2705,8 @@ Secondary connectors per 1000 words                     |  103.45
  'mood_repetition': 1.0,
  'temporal_cohesion': 0.5,
  'connectors': 103.44827586206898,
+ 'connectors_inter': 103.44827586206898,
+ 'connectors_intra': 0.0,
  'connectors_causal': 34.48275862068966,
  'connectors_adversative': 34.48275862068966,
  'connectors_concessive': 0.0,
@@ -2714,7 +2730,7 @@ None
 <li><code>SourceTypeError</code> - a dictionary that is not a mapping of a phrase to a pair of strings;</li>
 <li><code>ParameterError</code> - an unknown class or kind.</li>
 </ul>
-<p><code>SpanishConnectorMatcher</code> is a subclass of the core <code>ConnectorMatcher</code> with the rules of Spanish; words and connectors are compared in lower case. A one-word connector takes a part of speech of <code>CONNECTOR_POS</code> - a conjunction, a particle, an adverb, an adposition, an interjection, a proper noun or <code>X</code> - or of <code>CONNECTOR_POS_EXTRA</code> for its form (<code>pues</code> and <code>verbigracia</code> as <code>NOUN</code>, <code>resumiendo</code>, <code>recapitulando</code> and <code>concluyendo</code> as <code>VERB</code>). It is no connector right after a determiner, so <code>el antes y el después</code> holds one connector, <code>y</code>, and not three; and as a proper noun it counts only at the start of a sentence, where the models read a marker so (<code>Primeramente</code>), so the surname in <code>Habló con Juan Luego ayer</code> is no connector. A marker that is part of another phrase is dropped: the words after it of <code>CONNECTOR_BLOCKED_AFTER</code> (<code>antes de la reunión</code>, <code>en cuanto a</code>), the words before it of <code>CONNECTOR_BLOCKED_BEFORE</code> (<code>algo así como</code>) and the parts of speech of the word after it of <code>CONNECTOR_BLOCKED_AFTER_POS</code> (<code>sobre todo el texto</code>) make it none, while <code>antes, firmó el acta</code> and <code>sobre todo cuando llueve</code> count their marker. A few markers depend on their place: <code>pues</code> opening a sentence opens a reply (<code>Pues bien</code>) and is no connector (<code>CONNECTOR_NOT_AT_START</code>), and <code>encima</code> counts inside a sentence only after <code>y</code>, <code>e</code>, <code>ni</code> or <code>pero</code> (<code>y encima llueve</code>, <code>CONNECTOR_ONLY_AFTER</code>). These lists are attributes of the matcher: <code>CONNECTOR_POS</code> is <code>pos_tags</code>, the others are named without <code>CONNECTOR_</code> in lower case (<code>CONNECTOR_BLOCKED_AFTER</code> is <code>blocked_after</code>); <code>not_after_pos</code> is the determiner <code>DET</code>, <code>start_only_pos</code> the proper noun <code>PROPN</code>, and <code>read_through_marks</code>, <code>split_by_marks</code> and <code>subordinators</code> are empty in esTS.</p>
+<p><code>SpanishConnectorMatcher</code> is a subclass of the core <code>ConnectorMatcher</code> with the rules of Spanish; words and connectors are compared in lower case. A one-word connector takes a part of speech of <code>CONNECTOR_POS</code> - a conjunction, a particle, an adverb, an adposition, an interjection, a proper noun or <code>X</code> - or of <code>CONNECTOR_POS_EXTRA</code> for its form (<code>pues</code> and <code>verbigracia</code> as <code>NOUN</code>, <code>resumiendo</code>, <code>recapitulando</code> and <code>concluyendo</code> as <code>VERB</code>). It is no connector right after a determiner, so <code>el antes y el después</code> holds one connector, <code>y</code>, and not three; and as a proper noun it counts only at the start of a sentence, where the models read a marker so (<code>Primeramente</code>), so the surname in <code>Habló con Juan Luego ayer</code> is no connector. A marker that is part of another phrase is dropped: the words after it of <code>CONNECTOR_BLOCKED_AFTER</code> (<code>antes de la reunión</code>, <code>en cuanto a</code>, <code>a pesar de todo lo que</code>), the words before it of <code>CONNECTOR_BLOCKED_BEFORE</code> (<code>algo así como</code>) and the parts of speech of the word after it of <code>CONNECTOR_BLOCKED_AFTER_POS</code> (<code>sobre todo el texto</code>, <code>a pesar de todo el esfuerzo</code>) make it none, while <code>antes, firmó el acta</code> and <code>sobre todo cuando llueve</code> count their marker. A few markers depend on their place: <code>pues</code> opening a sentence opens a reply (<code>Pues bien</code>) and is no connector (<code>CONNECTOR_NOT_AT_START</code>), and <code>encima</code> counts inside a sentence only after <code>y</code>, <code>e</code>, <code>ni</code> or <code>pero</code> (<code>y encima llueve</code>, <code>CONNECTOR_ONLY_AFTER</code>). These lists are attributes of the matcher: <code>CONNECTOR_POS</code> is <code>pos_tags</code>, the others are named without <code>CONNECTOR_</code> in lower case (<code>CONNECTOR_BLOCKED_AFTER</code> is <code>blocked_after</code>); <code>not_after_pos</code> is the determiner <code>DET</code>, <code>start_only_pos</code> the proper noun <code>PROPN</code>, and <code>read_through_marks</code> is empty in esTS. A punctuation mark inside a conjunctive phrase ending in <code>que</code>, <code>como</code> or <code>si</code> (<code>CONNECTOR_SPLIT_BY_MARKS</code>) makes the conjunction a word of its own, so <code>No tire así, que se romperá</code> and <code>lo de siempre, que...</code> hold no connector; the consecutive phrases and <code>bien es verdad que</code> are left out, as old texts put a comma before their <code>que</code> (<code>de tal modo, que</code>).</p>
 <p><code>find(words, sent_index, pos, breaks)</code> returns the occurrences of the connectors in a sentence in the order of its words. The words are those of one sentence without punctuation, the first one its start. With the parts of speech, a one-word connector counts only with one of <code>pos_tags</code> or of <code>pos_extra</code> for its form, never after one of <code>not_after_pos</code>, and with one of <code>start_only_pos</code> only at the start of the sentence; a word without a part of speech (<code>None</code>) passes. Without the parts of speech the rules that read them are skipped. The positions of the punctuation marks <code>breaks</code> cut a connector off its neighbours: a rule does not read a word across a mark, so in <em>so, the end</em> the word after the comma neither blocks nor lets the connector count, unless the connector is one of <code>read_through_marks</code>, and a mark between the words of a connector of <code>split_by_marks</code> makes it none; without them the words are read as adjacent.</p>
 <table>
 <thead>
@@ -2774,11 +2790,25 @@ None
 </div>
 </div>
 <p><code>is_subordinator(connector, pos=None)</code> checks whether an occurrence of a connector ties its clause or phrase to its own sentence: a connector of <code>subordinators</code>, or a one-word connector whose part of speech <code>pos</code> is <code>SCONJ</code> or <code>ADP</code>. The clause of a subordinating conjunction and the phrase of a preposition belong to the sentence of the connector wherever it stands, so a subordinator opening a sentence (<em>when he came, ...</em>, <em>despite the rain, ...</em>) does not link it to the ones before.</p>
-<p>With <code>subordinators</code> empty, a subordinator of esTS is a one-word connector tagged <code>SCONJ</code> or <code>ADP</code> (<code>cuando</code>, <code>aunque</code>), so <code>ya que</code> and <code>a pesar de</code> opening a sentence count as inter-sentential.</p>
-<h2 id="find_connectors">Connector search<a class="headerlink" href="#find_connectors" title="Permanent link">&para;</a></h2>
-<div class="signature highlight"><pre><span></span><code><span class="n">find_connectors</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">connectors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sent_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<p><code>SpanishConnectorMatcher.is_subordinator</code> is that of the core but for the connectors of <code>CONNECTOR_PARCELLATION</code>; <code>subordinators</code> is <code>CONNECTOR_SUBORDINATORS</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Code</label><label for="__tabbed_6_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">matcher</span><span class="o">.</span><span class="n">is_subordinator</span><span class="p">(</span><span class="n">matcher</span><span class="o">.</span><span class="n">find</span><span class="p">([</span><span class="s2">"Ya"</span><span class="p">,</span> <span class="s2">"que"</span><span class="p">,</span> <span class="s2">"estás"</span><span class="p">,</span> <span class="s2">"aquí"</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">matcher</span><span class="o">.</span><span class="n">is_subordinator</span><span class="p">(</span><span class="n">matcher</span><span class="o">.</span><span class="n">find</span><span class="p">([</span><span class="s2">"Porque"</span><span class="p">,</span> <span class="s2">"llovía"</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">"SCONJ"</span><span class="p">)</span>
 </code></pre></div>
-<p>Searches a sentence for connectors with the <code>find</code> method of <code>SpanishConnectorMatcher</code> over the dictionary <code>connectors</code>, that of <code>load_connectors</code> by default; the other parameters and the errors are those of the matcher and of <code>find</code>. It takes no positions of the punctuation marks, so the words are read as adjacent; a search that keeps the marks goes through <code>find</code> with <code>breaks</code>.</p>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>True
+False
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="find_connectors">Connector search<a class="headerlink" href="#find_connectors" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">find_connectors</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">connectors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sent_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">breaks</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>Searches a sentence for connectors with the <code>find</code> method of <code>SpanishConnectorMatcher</code> over the dictionary <code>connectors</code>, that of <code>load_connectors</code> by default; the other parameters and the errors are those of the matcher and of <code>find</code>. Without <code>breaks</code>, the positions of the words a punctuation mark stands before (<a href="https://sergeyshk.github.io/anyTS/utils/words/#find_marks"><code>find_marks</code></a> of a string), the words are read as adjacent.</p>
 <table>
 <thead>
 <tr>
@@ -2797,18 +2827,20 @@ None
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Code</label><label for="__tabbed_6_2">Result</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Code</label><label for="__tabbed_7_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.cohesion_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_connectors</span>
 
 <span class="n">find_connectors</span><span class="p">([</span><span class="s2">"Sin"</span><span class="p">,</span> <span class="s2">"embargo"</span><span class="p">,</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">"vino"</span><span class="p">])</span>
 <span class="n">find_connectors</span><span class="p">([</span><span class="s2">"El"</span><span class="p">,</span> <span class="s2">"antes"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">,</span> <span class="s2">"el"</span><span class="p">,</span> <span class="s2">"después"</span><span class="p">],</span> <span class="n">pos</span><span class="o">=</span><span class="p">[</span><span class="s2">"DET"</span><span class="p">,</span> <span class="s2">"NOUN"</span><span class="p">,</span> <span class="s2">"CCONJ"</span><span class="p">,</span> <span class="s2">"DET"</span><span class="p">,</span> <span class="s2">"NOUN"</span><span class="p">])</span>
+<span class="n">find_connectors</span><span class="p">([</span><span class="s2">"No"</span><span class="p">,</span> <span class="s2">"tire"</span><span class="p">,</span> <span class="s2">"así"</span><span class="p">,</span> <span class="s2">"que"</span><span class="p">,</span> <span class="s2">"se"</span><span class="p">,</span> <span class="s2">"romperá"</span><span class="p">],</span> <span class="n">breaks</span><span class="o">=</span><span class="p">{</span><span class="mi">3</span><span class="p">})</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>[Connector(sent=0, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary')]
 [Connector(sent=0, start=2, end=3, text='y', cls='additive', kind='primary')]
+[]
 </code></pre></div>
 </div>
 </div>
@@ -2835,7 +2867,7 @@ None
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Code</label><label for="__tabbed_7_2">Result</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Code</label><label for="__tabbed_8_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.cohesion_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">token_info</span>

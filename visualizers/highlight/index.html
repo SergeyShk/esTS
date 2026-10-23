@@ -2805,9 +2805,9 @@
 </div>
 </div>
 <h3 id="connectors">Connectors<a class="headerlink" href="#connectors" title="Permanent link">&para;</a></h3>
-<div class="signature highlight"><pre><span></span><code><span class="n">find_connector_highlights</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">sents</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">find_connector_highlights</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>The layer <code>connectors</code>: the connectors of <a href="../../stats/cohesion_stats/#connectors"><code>CohesionStats</code></a> inside every sentence, found by its matcher <a href="../../stats/cohesion_stats/#ConnectorMatcher"><code>SpanishConnectorMatcher</code></a>, a one-word connector checked by its part of speech when the words have it; the note gives the connector, its class and its kind. The positions of the punctuation marks are not passed to the matcher, so the words of a sentence are read as adjacent.</p>
+<p>The layer <code>connectors</code>: the connectors of <a href="../../stats/cohesion_stats/#connectors"><code>CohesionStats</code></a> inside every sentence, found by its matcher <a href="../../stats/cohesion_stats/#ConnectorMatcher"><code>SpanishConnectorMatcher</code></a>, a one-word connector checked by its part of speech when the words have it; the note gives the connector, its class and its kind. With the text, the rules of the matcher read no word across a punctuation mark between two words, so <code>así, que</code> is no connector; <code>HighlightedText</code> passes the text of its source.</p>
 <table>
 <thead>
 <tr>
@@ -2830,8 +2830,18 @@
 <td style="text-align: left;">-</td>
 <td style="text-align: left;">Sentences with their positions</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Text of the words, for the punctuation marks between them</td>
+</tr>
 </tbody>
 </table>
+<p>Raises:</p>
+<ul>
+<li><code>SourceTypeError</code> - a text that is not a string.</li>
+</ul>
 <div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Code</label><label for="__tabbed_7_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2840,7 +2850,7 @@
 
 <span class="n">text</span> <span class="o">=</span> <span class="s2">"Sin embargo, el plan no se aprobó."</span>
 <span class="n">words</span> <span class="o">=</span> <span class="p">[</span><span class="n">Word</span><span class="p">(</span><span class="o">*</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">iter_text_words</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
-<span class="n">find_connector_highlights</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="p">[</span><span class="n">Sent</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">))])</span>
+<span class="n">find_connector_highlights</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="p">[</span><span class="n">Sent</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">words</span><span class="p">))],</span> <span class="n">text</span><span class="p">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
