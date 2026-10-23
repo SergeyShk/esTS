@@ -114,7 +114,9 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
 
     Methods:
         reading_ease_to_grade: Years of schooling for a value of the reading ease by the preset
+            (preset_reading_ease_grades)
         level_scale: Interpretation scale of a metric, the reading ease by the preset
+            (preset_level_scales)
         describe_level: Band of the scale of the reading ease, Legibilidad µ or LIX
         describe_grade: School stage and reader age for the consensus grade or a grade formula
         describe: Reading of any metric by its scale, None for a metric without one
@@ -136,10 +138,17 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
     stats_desc = READABILITY_STATS_DESC
     grade_age_levels = GRADE_AGE_LEVELS
     postgraduate_level = POSTGRADUATE_LEVEL
-    # The reading ease by the preset (level_scale); RIX by years of schooling (grade_scales)
+    # The reading ease by the preset; RIX by years of schooling (grade_scales)
     level_scales: ClassVar[Mapping[str, tuple[tuple[float, str], ...]]] = {
         "mu_index": MU_SCALE,
         "lix": LIX_LEVELS,
+    }
+    preset_level_scales: ClassVar[Mapping[str, Mapping[str, tuple[tuple[float, str], ...]]]] = {
+        preset: {"flesch_reading_easy": READING_EASE_SCALES[scale]}
+        for preset, scale in PRESET_SCALES.items()
+    }
+    preset_reading_ease_grades: ClassVar[Mapping[str, tuple[tuple[float, float], ...]]] = {
+        preset: (*grades, (0, 13)) for preset, grades in READING_EASE_GRADES.items()
     }
     reading_speed = READING_SPEED_WPM
     reading_speed_norms = READING_SPEED_NORMS
@@ -168,42 +177,6 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
         return calc_sol_grade(
             self.bs.count_words_by_syllables(self.smog_complex_syl_factor), self.bs.n_sents
         )
-
-    def reading_ease_to_grade(self, flesch_reading_easy: float) -> float:
-        """
-        Converting the Flesch reading ease into years of schooling by the scale of the preset
-
-        Arguments:
-            flesch_reading_easy (float): Value of the reading ease
-
-        Returns:
-            float: Years of schooling
-
-        Raises:
-            ParameterError: If the reading ease is not a finite number
-        """
-        return flesch_reading_easy_to_grade(flesch_reading_easy, self.preset)
-
-    def level_scale(self, stat: str) -> tuple[tuple[float, str], ...] | None:
-        """
-        Getting the interpretation scale of a metric
-
-        Description:
-            The reading ease by the scale of the preset (general - inflesz,
-            classic - fernandez_huerta), Legibilidad µ by MU_SCALE and LIX by
-            the text types of Björnsson; RIX is read by years of schooling, as
-            a stage of the Spanish school system
-
-        Arguments:
-            stat (str): Name of the metric
-
-        Returns:
-            tuple[tuple[float, str], ...] | None: Lower bounds and their bands, None
-                for a metric without a scale
-        """
-        if isinstance(stat, str) and stat == "flesch_reading_easy":
-            return READING_EASE_SCALES[PRESET_SCALES[self.preset]]
-        return super().level_scale(stat)
 
     def describe_level(self, stat: str = "flesch_reading_easy", scale: str | None = None) -> str:
         """

@@ -13,6 +13,7 @@ from ests.constants import (
     READABILITY_GRADE_STATS,
     READABILITY_PRESETS,
     READABILITY_STATS_DESC,
+    READING_EASE_SCALES,
     READING_SPEED_NORMS,
 )
 from ests.exceptions import ParameterError, SourceTypeError, UnknownStatError
@@ -246,6 +247,14 @@ def test_consensus_grade(rs):
 @pytest.mark.parametrize(("preset", "grade"), [("general", 8.0), ("classic", 8.5)])
 def test_reading_ease_to_grade(preset, grade):
     assert ReadabilityStats(TEXT, preset=preset).reading_ease_to_grade(60) == grade
+
+
+@pytest.mark.parametrize("preset", ["general", "classic"])
+def test_reading_ease_by_the_preset(preset):
+    rs = ReadabilityStats(TEXT, preset=preset)
+    assert rs.level_scale("flesch_reading_easy") == READING_EASE_SCALES[PRESET_SCALES[preset]]
+    for value in (-50, 0, 40, 65, 100, 130):
+        assert rs.reading_ease_to_grade(value) == flesch_reading_easy_to_grade(value, preset)
 
 
 def test_calc_consensus_grade():

@@ -144,6 +144,18 @@ def test_get_stats_counts_words(ms):
     assert sum(ms.get_stats("pos")["pos"].values()) == len(ms.words)
 
 
+def test_get_stats_flat(short):
+    assert short.get_stats("number", flat=True) == {"number_Plur": 3}
+    frame = short.to_dataframe()
+    assert frame.shape[0] == 1 and frame.loc[0, "pos_NOUN"] == 1
+
+
+def test_describe(short):
+    assert all(short.describe(stat) is None for stat in MORPHOLOGY_STATS_DESC)
+    with pytest.raises(UnknownStatError):
+        short.describe("lemma")
+
+
 def test_get_stats_unknown():
     with pytest.raises(UnknownStatError, match="lemma"):
         MorphStats("Los niños juegan").get_stats("lemma")

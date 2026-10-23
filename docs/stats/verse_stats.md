@@ -31,18 +31,18 @@ Raises:
 === "Result"
 
     ```
-                      Statistic                   |    Value
+                      Statistic                  |    Value
     ------------------------------------------------------------
-    Number of lines                               |      4
-    Number of stanzas                             |      1
-    Meter                                         | endecasílabo
-    Number of metrical syllables                  |      11
-    Share of lines off the meter                  |     0.00
-    Share of lines without the rhythmic stresses  |     0.00
-    Share of rhymed lines                         |     1.00
-    Share of oxytone endings (aguda)              |     0.00
-    Share of paroxytone endings (llana)           |     1.00
-    Share of proparoxytone endings (esdrújula)    |     0.00
+    Number of lines                              |      4
+    Number of stanzas                            |      1
+    Meter                                        | endecasílabo
+    Number of metrical syllables                 |      11
+    Share of lines off the meter                 |     0.00
+    Share of lines without the rhythmic stresses |     0.00
+    Share of rhymed lines                        |     1.00
+    Share of oxytone endings (aguda)             |     0.00
+    Share of paroxytone endings (llana)          |     1.00
+    Share of proparoxytone endings (esdrújula)   |     0.00
     ```
 
 ## Parameters
@@ -393,7 +393,7 @@ The type of the ending (cláusula) of a line by the syllables after its last str
     que a mayór mál pudiéra habér llegádo.
     ```
 
-`get_stats()` returns the metrics as a dictionary, and `print_stats()` prints them as a table with their descriptions (`VERSE_STATS_DESC`), as in the example at the top of the page.
+The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core: `get_stats()` returns the metrics as a dictionary, and `print_stats()` prints them as a table with their descriptions (`VERSE_STATS_DESC`), as in the example at the top of the page. The verse statistics have no scales, so `describe` gives `None` for the statistics of `get_stats`.
 
 === "Code"
 

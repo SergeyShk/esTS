@@ -116,7 +116,7 @@ The default coefficients are those of the *fórmula de perspicuidad* of Szigrisz
 | `b` | `float` | `62.3` | Coefficient b, at the mean word length in syllables |
 | `c` | `float` | `206.835` | Coefficient c, the constant |
 
-The scale of `describe_level` and `describe` follows the preset: the `level_scale` method of esTS gives the scale of `ests.constants.READING_EASE_SCALES` named in `PRESET_SCALES` - the INFLESZ scale of Barrio-Cantalejo et al. (2008) for `general` and the bands of Fernández Huerta for `classic`. The INFLESZ scale:
+The scale of `describe_level` and `describe` follows the preset: the attribute `preset_level_scales` of the core gives for each preset the scale of `ests.constants.READING_EASE_SCALES` named in `PRESET_SCALES` - the INFLESZ scale of Barrio-Cantalejo et al. (2008) for `general` and the bands of Fernández Huerta for `classic`. The INFLESZ scale:
 
 | Value | Level | Text type |
 | :---- | :---- | :-------- |
@@ -377,7 +377,7 @@ In esTS RIX has no scale of bands, so `describe_level("rix")` raises `ParameterE
 
 --8<-- "stats/readability_stats.md:ReadabilityStats-consensus"
 
-The grade formulas of esTS (`ests.constants.READABILITY_GRADE_STATS`) are Crawford and SOL. esTS converts the reading ease by the scale of the preset with its own `reading_ease_to_grade(flesch_reading_easy)` method, which calls `flesch_reading_easy_to_grade` with the preset of the object, so the `reading_ease_grades` of the core are not used.
+The grade formulas of esTS (`ests.constants.READABILITY_GRADE_STATS`) are Crawford and SOL. esTS converts the reading ease into years of schooling by the scale of the preset: the attribute `preset_reading_ease_grades` of the core gives for each preset the bounds of `READING_EASE_GRADES` and 13 below them, the scale of `flesch_reading_easy_to_grade`, so the `reading_ease_grades` of the core are not used.
 
 !!! warning "Warning"
     Crawford was fitted on primary school readers and saturates for adult texts; SOL was fitted on health education materials. The consensus grade of a technical text mostly reflects the reading ease band.

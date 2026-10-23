@@ -143,7 +143,7 @@ La base de `p_ser` son solo los usos copulativos, leídos del análisis sintáct
 
 ## Métodos
 
-`get_stats(*args, filter_none=False)` devuelve las distribuciones de los valores de las estadísticas como un diccionario de recuentos para cada una. Las estadísticas se eligen por sus nombres separados por comas, todas sin nombres, y `filter_none=True` descarta las palabras sin el rasgo (`None`). Un nombre que no es una estadística lanza `UnknownStatError`, aquí y en `print_stats` y `explain_text`.
+`get_stats(*args, filter_none=False, flat=False)` devuelve las distribuciones de los valores de las estadísticas como un diccionario de recuentos para cada una. Las estadísticas se eligen por sus nombres separados por comas, todas sin nombres, y `filter_none=True` descarta las palabras sin el rasgo (`None`); `flat=True` da los recuentos por claves como `mood_Sub`, sin las palabras que carecen del rasgo, y lo mismo `to_dataframe()`, una tabla de una fila. Un nombre que no es una estadística lanza `UnknownStatError`, aquí y en `print_stats` y `explain_text`. `to_dataframe` y `describe` son los de la [interfaz de las estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las estadísticas morfológicas no tienen escalas, así que `describe` da `None`.
 
 `print_stats(*args, filter_none=False)` muestra las distribuciones de las estadísticas elegidas como tablas, primero los valores frecuentes (el ejemplo del principio de la página), y `explain_text(*args, filter_none=False)` devuelve las palabras del texto en orden con los valores de las estadísticas elegidas.
 
