@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from collections import Counter
 from collections.abc import Sequence
+from typing import TYPE_CHECKING, cast
 
 from anyts.corpus.stylometry import (
     ZetaScore as ZetaScore,
@@ -12,13 +15,15 @@ from anyts.corpus.stylometry import (
     z_scores as z_scores,
     zeta as zeta,
 )
-from anyts.utils import check_words, is_punctuation, iter_doc_tokens
-from spacy.language import Language
-from spacy.tokens import Doc
+from anyts.utils import check_words, is_doc, is_punctuation, iter_doc_tokens
 
 from ..constants import FUNCTION_UD_POS
-from ..exceptions import SourceError, SourceTypeError
-from ..utils import _check_encoding, get_nlp
+from ..exceptions import SourceError
+from ..utils import _check_encoding, _check_nlp, get_nlp
+
+if TYPE_CHECKING:
+    from spacy.language import Language
+    from spacy.tokens import Doc
 
 # Components the parts of speech of a list of words do not need
 UNUSED_COMPONENTS = ["parser", "lemmatizer", "ner"]
@@ -61,17 +66,14 @@ def function_words_profile(
         >>> profile["DET"], profile["ADP"]
         (0.3333333333333333, 0.16666666666666666)
     """
-    if nlp is not None and not isinstance(nlp, Language):
-        raise SourceTypeError("The pipeline must be a spaCy Language")
-    if isinstance(source, Doc) and source.has_annotation("POS"):
+    _check_nlp(nlp)
+    if is_doc(source) and source.has_annotation("POS"):
         tags = [token.pos_ for token in iter_doc_tokens(source)]
+    elif is_doc(source):
+        tags = _tag_words([token.text for token in source if not token.is_space], nlp)
     else:
-        if isinstance(source, Doc):
-            words = [token.text for token in source if not token.is_space]
-        else:
-            check_words(source)
-            words = [word for word in source if word.strip()]
-        tags = _tag_words(words, nlp)
+        check_words(source)
+        tags = _tag_words([word for word in cast("Sequence[str]", source) if word.strip()], nlp)
     if not tags:
         raise SourceError("The data source has no words")
     counts = Counter(tags)
@@ -82,6 +84,8 @@ def _tag_words(words: Sequence[str], nlp: Language | None) -> list[str]:
     """Parts of speech of the words that are not punctuation, tagged by the model in context"""
     if all(is_punctuation(word) for word in words):
         return []
+    from spacy.tokens import Doc
+
     _check_encoding("".join(words))
     pipeline = nlp or get_nlp()
     starts = range(0, len(words), CHUNK_SIZE)

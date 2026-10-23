@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import re
 import string
 import unicodedata
@@ -6,10 +8,9 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from itertools import pairwise
 from math import nan
-from typing import Any, NamedTuple
+from typing import TYPE_CHECKING, Any, NamedTuple
 
-from anyts.utils import safe_divide
-from spacy.tokens import Doc
+from anyts.utils import is_doc, safe_divide
 
 from .constants import (
     ACCENTED_VOWELS,
@@ -33,6 +34,9 @@ from .constants import (
 )
 from .exceptions import SourceError, SourceTypeError
 from .syllables import WORD_PARTS, syllabify, word_stresses
+
+if TYPE_CHECKING:
+    from spacy.tokens import Doc
 
 ACUTE = "\u0301"
 LETTER = re.compile(r"[^\W\d_]")
@@ -221,7 +225,7 @@ class VerseStats:
     """
 
     def __init__(self, source: str | Doc, seseo: bool = False):
-        if isinstance(source, Doc):
+        if is_doc(source):
             text = source.text
         elif isinstance(source, str):
             text = source
@@ -1053,7 +1057,7 @@ def _has_lengths(lengths: Sequence[int], measure: str | tuple[int, ...] | None) 
     return tuple(lengths) == measure
 
 
-def _form(verse: "VerseStats", labels: Sequence[str], kinds: Sequence[str | None]) -> str | None:
+def _form(verse: VerseStats, labels: Sequence[str], kinds: Sequence[str | None]) -> str | None:
     """
     Form of a poem
 

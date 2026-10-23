@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 from collections.abc import Collection, Sequence
 from math import nan
+from typing import TYPE_CHECKING
 
 import anyts.style_stats
 from anyts.constants import MESSAGES, NAUSEA_TOP_N
@@ -11,8 +14,6 @@ from anyts.style_stats import (
     check_params as check_params,
 )
 from anyts.utils import check_words, in_order, is_doc, iter_doc_tokens, safe_divide
-from spacy.language import Language
-from spacy.tokens import Doc
 
 from .constants import (
     COMPOUND_PREPOSITIONS,
@@ -24,7 +25,11 @@ from .constants import (
 )
 from .exceptions import SourceError, SourceTypeError
 from .extractors import WordsExtractor
-from .utils import get_nlp, is_verbal_noun, iter_text_sents, lemmatize
+from .utils import _check_nlp, get_nlp, is_verbal_noun, iter_text_sents, lemmatize
+
+if TYPE_CHECKING:
+    from spacy.language import Language
+    from spacy.tokens import Doc
 
 # Components the parts of speech and the lemmas of the nouns do not need
 UNUSED_COMPONENTS = ["parser", "ner"]
@@ -129,8 +134,7 @@ class StyleStats(anyts.style_stats.StyleStats):
         nlp: Language | None = None,
         nausea_stopwords: Collection[str] | None = None,
     ):
-        if nlp is not None and not isinstance(nlp, Language):
-            raise SourceTypeError("The pipeline must be a spaCy Language")
+        _check_nlp(nlp)
         super().__init__(source, words_extractor, stopwords, top_n, cliches, nausea_stopwords)
         self.nlp = nlp
         # The Doc is not kept: this object in an extension of the Doc would make a cycle

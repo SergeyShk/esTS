@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import re
+import sys
 from collections.abc import Iterator
 from functools import lru_cache
+from typing import TYPE_CHECKING
 
 import simplemma
-import spacy
 from anyts.extractors import iter_part_sents
 from anyts.utils import (
     add_tokenizer_rules,
@@ -11,8 +14,6 @@ from anyts.utils import (
     find_phrases as find_phrases,
     iter_doc_words,
 )
-from spacy.language import Language
-from spacy.tokenizer import Tokenizer
 
 from .constants import (
     ABBREVIATIONS,
@@ -26,7 +27,11 @@ from .constants import (
     VERBAL_NOUN_LEMMAS,
     VERBAL_NOUN_SUFFIXES,
 )
-from .exceptions import DatasetNotFoundError, SourceError
+from .exceptions import DatasetNotFoundError, SourceError, SourceTypeError
+
+if TYPE_CHECKING:
+    from spacy.language import Language
+    from spacy.tokenizer import Tokenizer
 
 # End of a sentence: terminal marks, optionally closing quotes or brackets and a dash
 # that closes a line of dialogue (¡Traidores!--), before whitespace, the end of the text
@@ -204,6 +209,8 @@ def get_tokenizer() -> Tokenizer:
     Returns:
         Tokenizer: spaCy tokenizer
     """
+    import spacy
+
     nlp = spacy.blank("es")
     add_dash_rules(nlp)
     return nlp.tokenizer
@@ -247,6 +254,13 @@ def add_dash_rules(nlp: Language) -> None:
         infixes=TOKENIZER_INFIXES,
         abbreviations=TOKENIZER_ABBREVIATIONS,
     )
+
+
+def _check_nlp(nlp: object) -> None:
+    """A pipeline that is not a spaCy Language; there is none before spaCy is loaded"""
+    language = getattr(sys.modules.get("spacy.language"), "Language", None)
+    if nlp is not None and (language is None or not isinstance(nlp, language)):
+        raise SourceTypeError("The pipeline must be a spaCy Language")
 
 
 def _check_encoding(text: str) -> None:
@@ -331,6 +345,10 @@ def iter_text_words(text: str) -> Iterator[tuple[int, int, str]]:
 @lru_cache(maxsize=4)
 def _load_nlp(model: str) -> Language:
     """Loading a pipeline by the name of its model, once per name, with the dash rules"""
+    import spacy
+
+    from . import components  # noqa: F401  # registers ests_blank_lines
+
     try:
         nlp = spacy.load(model)
     except OSError as error:

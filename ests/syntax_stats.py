@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import re
 from collections.abc import Collection, Iterable, Sequence
 from math import nan
 from statistics import fmean
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import anyts.syntax_stats
 from anyts.constants import AUXILIARY_DEPS
@@ -18,8 +20,6 @@ from anyts.syntax_stats import (
     subtree_len,
 )
 from anyts.utils import has_feature
-from spacy.language import Language
-from spacy.tokens import Doc, Token
 
 from .constants import (
     AGENT_PREPOSITION,
@@ -38,8 +38,12 @@ from .constants import (
     SPLIT_PREDICATE_NOUNS,
     SYNTAX_STATS_DESC,
 )
-from .exceptions import SourceError, SourceTypeError
-from .utils import _check_encoding, get_nlp, is_verbal_noun, lemmatize
+from .exceptions import SourceError
+from .utils import _check_encoding, _check_nlp, get_nlp, is_verbal_noun, lemmatize
+
+if TYPE_CHECKING:
+    from spacy.language import Language
+    from spacy.tokens import Doc, Token
 
 # Dependencies of the nominal part of a split predicate, in the order of preference
 SPLIT_PREDICATE_DEPS = ("compound", "obj", "nsubj", "iobj", "nmod", "obl")
@@ -171,8 +175,7 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
     stats_desc = SYNTAX_STATS_DESC
 
     def __init__(self, source: str | Doc, nlp: Language | None = None):
-        if nlp is not None and not isinstance(nlp, Language):
-            raise SourceTypeError("The pipeline must be a spaCy Language")
+        _check_nlp(nlp)
         self._nlp = nlp
         super().__init__(source)  # type: ignore[arg-type]  # parse takes a string too
         words = [token for sent in self.sents for token in sent]

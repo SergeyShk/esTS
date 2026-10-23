@@ -1,14 +1,14 @@
+from __future__ import annotations
+
 from collections.abc import Collection, Iterable, Mapping, Sequence
 from functools import cache
 from pathlib import Path
 from types import MappingProxyType
-from typing import Any, NamedTuple
+from typing import TYPE_CHECKING, Any, NamedTuple
 
 import anyts.cohesion_stats
 from anyts.cohesion_stats import Connector as Connector, ConnectorMatcher
 from anyts.constants import CONTENT_UD_POS
-from spacy.language import Language
-from spacy.tokens import Doc, Token
 
 from .constants import (
     COHESION_STATS_DESC,
@@ -23,9 +23,13 @@ from .constants import (
     CONNECTOR_SPLIT_BY_MARKS,
     CONNECTOR_SUBORDINATORS,
 )
-from .exceptions import SourceError, SourceTypeError
+from .exceptions import SourceError
 from .extractors import SentsExtractor
-from .utils import _check_encoding, get_nlp
+from .utils import _check_encoding, _check_nlp, get_nlp
+
+if TYPE_CHECKING:
+    from spacy.language import Language
+    from spacy.tokens import Doc, Token
 
 CONNECTORS_FILE = Path(__file__).parent / "resources" / "connectors.tsv"
 # Components the statistics never read
@@ -226,8 +230,7 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
         connectors: Mapping[str, tuple[str, str]] | None = None,
         nlp: Language | None = None,
     ):
-        if nlp is not None and not isinstance(nlp, Language):
-            raise SourceTypeError("The pipeline must be a spaCy Language")
+        _check_nlp(nlp)
         self._nlp = nlp
         super().__init__(source, sents_extractor, connectors)  # type: ignore[arg-type]  # analyze takes a string too
 

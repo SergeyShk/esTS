@@ -1,21 +1,26 @@
+from __future__ import annotations
+
 from collections.abc import Sequence
 from functools import cache
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import anyts
 import anyts.lexical_stats
 from anyts.constants import FREQUENCY_BANDS as FREQUENCY_BANDS
 from anyts.lexical_stats import LexicalWord
 from anyts.utils import is_doc, is_number, iter_doc_tokens
-from spacy.language import Language
-from spacy.tokens import Doc
 
 from .cohesion_stats import token_info
 from .constants import LEXICAL_STATS_DESC
 from .datasets.freq_dict import FreqDict, lemma_key
 from .exceptions import SourceError, SourceTypeError
 from .extractors import NUMBER_PATTERN
-from .utils import _check_encoding, get_nlp
+from .utils import _check_encoding, _check_nlp, get_nlp
+
+if TYPE_CHECKING:
+    from spacy.language import Language
+    from spacy.tokens import Doc
 
 TOP_LEMMAS_FILE = Path(__file__).parent / "resources" / "google_books_top10000.txt"
 # Components a parse of the text does not need: the lemmas come from lemma_key
@@ -123,8 +128,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         freq_dict: FreqDict | None = None,
         nlp: Language | None = None,
     ):
-        if nlp is not None and not isinstance(nlp, Language):
-            raise SourceTypeError("The pipeline must be a spaCy Language")
+        _check_nlp(nlp)
         self._nlp = nlp
         super().__init__(source, freq_dict)
         # analyze can be called again on the object; the keys read the words of the source

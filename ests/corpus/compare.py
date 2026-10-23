@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 from collections import defaultdict
 from collections.abc import Callable, Mapping, Sequence
 from math import nan
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import anyts.corpus.compare
 import numpy as np
@@ -18,8 +20,6 @@ from anyts.corpus.compare import (
 )
 from anyts.extractors import FixedSentsExtractor, FixedWordsExtractor
 from anyts.utils import check_words
-from spacy.language import Language
-from spacy.tokens import Doc
 
 from ..basic_stats import BasicStats, punctuation_profile
 from ..constants import MORPHOLOGY_STATS_DESC, OPENING_MARKS, SYMMETRIC_MARKS
@@ -28,11 +28,16 @@ from ..exceptions import SourceError, SourceTypeError
 from ..morph_stats import FINITE_MOODS, MorphStats
 from ..readability_stats import ReadabilityStats
 from ..utils import (
+    _check_nlp,
     count_words_by_spans,
     get_nlp,
     iter_text_sents,
     iter_text_words,
 )
+
+if TYPE_CHECKING:
+    from spacy.language import Language
+    from spacy.tokens import Doc
 
 Features = Callable[[str], Mapping[str, float]]
 
@@ -139,8 +144,7 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
     """
     if not isinstance(text, str):
         raise SourceTypeError(f"A text string is expected, not {type(text).__name__}")
-    if nlp is not None and not isinstance(nlp, Language):
-        raise SourceTypeError("The pipeline must be a spaCy Language")
+    _check_nlp(nlp)
     positions = list(iter_text_words(text))
     spans = [(start, stop) for start, stop, _ in iter_text_sents(text)]
     words = FixedWordsExtractor([word for _, _, word in positions])

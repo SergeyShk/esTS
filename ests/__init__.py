@@ -5,22 +5,14 @@
 # URL: <https://github.com/SergeyShk/esTS>
 
 import logging
+import sys
 from importlib.metadata import PackageNotFoundError, version
+from typing import TYPE_CHECKING
+
+from anyts.utils import make_lazy
 
 from .basic_stats import BasicStats
 from .cohesion_stats import CohesionStats
-from .components import (
-    BasicStatsComponent,
-    CohesionStatsComponent,
-    DiversityStatsComponent,
-    LexicalStatsComponent,
-    MorphStatsComponent,
-    PhonStatsComponent,
-    ReadabilityStatsComponent,
-    StyleStatsComponent,
-    SyntaxStatsComponent,
-    VerseStatsComponent,
-)
 from .diversity_stats import DiversityStats
 from .exceptions import (
     DataFileError,
@@ -41,6 +33,20 @@ from .style_stats import StyleStats
 from .syntax_stats import SyntaxStats
 from .verse_stats import VerseStats
 
+if TYPE_CHECKING:
+    from .components import (
+        BasicStatsComponent as BasicStatsComponent,
+        CohesionStatsComponent as CohesionStatsComponent,
+        DiversityStatsComponent as DiversityStatsComponent,
+        LexicalStatsComponent as LexicalStatsComponent,
+        MorphStatsComponent as MorphStatsComponent,
+        PhonStatsComponent as PhonStatsComponent,
+        ReadabilityStatsComponent as ReadabilityStatsComponent,
+        StyleStatsComponent as StyleStatsComponent,
+        SyntaxStatsComponent as SyntaxStatsComponent,
+        VerseStatsComponent as VerseStatsComponent,
+    )
+
 logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 # The distribution is pyests, the package it installs is ests
@@ -56,35 +62,51 @@ __author_email__ = "kouki.sergey@gmail.com"
 
 __all__ = [
     "BasicStats",
-    "BasicStatsComponent",
     "CharNgramsExtractor",
     "CohesionStats",
-    "CohesionStatsComponent",
     "DataFileError",
     "DatasetNotFoundError",
     "DiversityStats",
-    "DiversityStatsComponent",
     "DownloadError",
     "EstsError",
     "LexicalStats",
-    "LexicalStatsComponent",
     "MorphStats",
-    "MorphStatsComponent",
     "ParameterError",
     "PhonStats",
-    "PhonStatsComponent",
     "ReadabilityStats",
-    "ReadabilityStatsComponent",
     "SentsExtractor",
     "SourceError",
     "SourceTypeError",
     "StyleStats",
-    "StyleStatsComponent",
     "SyntaxStats",
-    "SyntaxStatsComponent",
     "UnknownStatError",
     "VerseStats",
-    "VerseStatsComponent",
     "WordsExtractor",
     "__version__",
 ]
+
+# The components register the factories of spaCy and import it: the module is loaded on first
+# use, or at once when spaCy is loaded already, as it may have read the entry points before
+# esTS was installed. The components are out of __all__, so import * and help() load no spaCy;
+# a stub of spaCy is no spaCy
+if sys.modules.get("spacy.language") is not None:
+    from . import components as components
+
+make_lazy(
+    __name__,
+    dict.fromkeys(
+        (
+            "BasicStatsComponent",
+            "CohesionStatsComponent",
+            "DiversityStatsComponent",
+            "LexicalStatsComponent",
+            "MorphStatsComponent",
+            "PhonStatsComponent",
+            "ReadabilityStatsComponent",
+            "StyleStatsComponent",
+            "SyntaxStatsComponent",
+            "VerseStatsComponent",
+        ),
+        "components",
+    ),
+)

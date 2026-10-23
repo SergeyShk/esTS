@@ -42,7 +42,7 @@ spaCy sets both at `nlp.add_pipe(factory, name=...)`; the other parameters of a 
 
 ## Names { #names }
 
-The factories carry the prefix of the library: `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`, and the component of sentence boundaries [`ests_blank_lines`](#blank_lines). They are declared as entry points of `spacy_factories`, so a pipeline saved with these components (`nlp.to_disk(path)`, `spacy package`) loads with `spacy.load(path)` without importing the library.
+The factories carry the prefix of the library: `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`, and the component of sentence boundaries [`ests_blank_lines`](#blank_lines). They are declared as entry points of `spacy_factories`, so a pipeline saved with these components (`nlp.to_disk(path)`, `spacy package`) loads with `spacy.load(path)` without importing the library. `import ests` does not load the components while spaCy is not loaded - the entry points find them, and `ests.StyleStatsComponent` loads them on first use; from the sources without an installed package, `import ests.components` comes before `add_pipe`.
 
 --8<-- "components.md:StatsComponent-names"
 

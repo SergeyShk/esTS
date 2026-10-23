@@ -3,6 +3,7 @@ import importlib.metadata
 import re
 import shutil
 import subprocess
+import sys
 import tomllib
 import zipfile
 from pathlib import Path
@@ -264,3 +265,132 @@ def test_installation_bounds(page):
     text = (ROOT / "docs" / page).read_text(encoding="utf-8")
     assert f"`spaCy` {bounds['spacy']} " in text
     assert f"(https://sergeyshk.github.io/anyTS/) {bounds['anyts']} " in text
+
+
+def _run(code: str) -> str:
+    """Output of the code in a process of its own, where nothing is imported beforehand"""
+    result = subprocess.run(
+        [sys.executable, "-c", code], capture_output=True, text=True, check=True
+    )
+    return result.stdout.strip()
+
+
+@pytest.mark.parametrize(
+    ("statement", "absent"),
+    [
+        ("import ests", ("spacy", "thinc", "scipy", "pandas", "matplotlib")),
+        ("from ests.visualizers import highlight", ("spacy", "pandas", "matplotlib")),
+        ("from ests.corpus import kwic", ("spacy", "pandas", "matplotlib")),
+    ],
+)
+def test_imports_are_light(statement, absent):
+    loaded = _run(f"import sys\n{statement}\nprint(' '.join(sorted(sys.modules)))").split()
+    assert not set(absent) & set(loaded)
+
+
+def test_only_components_import_spacy():
+    """spaCy is loaded by the documents of the user and by the components, not by importing
+    the modules of esTS"""
+    code = (
+        "import importlib, pkgutil, sys, ests\n"
+        "names = [m.name for m in pkgutil.walk_packages(ests.__path__, 'ests.')]\n"
+        "for name in names:\n"
+        "    if name != 'ests.components':\n"
+        "        importlib.import_module(name)\n"
+        "print(len(names), 'spacy' in sys.modules, 'thinc' in sys.modules)"
+    )
+    n_modules, spacy, thinc = _run(code).split()
+    assert int(n_modules) > 30
+    assert (spacy, thinc) == ("False", "False")
+
+
+def test_components_on_first_use():
+    code = (
+        "import sys, ests\n"
+        "before = 'spacy' in sys.modules\n"
+        "component = ests.StyleStatsComponent\n"
+        "print(before, 'spacy' in sys.modules, component.__module__)"
+    )
+    assert _run(code) == "False True ests.components"
+
+
+def test_factories_without_import():
+    """The factories are found by the entry points spacy_factories, without import ests"""
+    code = (
+        "import spacy\n"
+        "nlp = spacy.blank('es')\n"
+        "nlp.add_pipe('ests_basic')\n"
+        "print(nlp('el gato duerme')._.ests_basic.n_words)"
+    )
+    assert _run(code) == "3"
+
+
+@pytest.mark.parametrize(
+    "stub", ["sys.modules['spacy'] = None", "sys.modules['spacy'] = types.ModuleType('spacy')"]
+)
+def test_import_with_a_stub_of_spacy(stub):
+    """A mark of spaCy as missing and a stub of spaCy (Pyodide) do not break the import"""
+    code = (
+        f"import sys, types\n{stub}\n"
+        "import ests\n"
+        "from ests.syllables import count_syllables\n"
+        "print(count_syllables('gato'), 'ests.components' in sys.modules)"
+    )
+    assert _run(code) == "2 False"
+
+
+def test_star_import_and_help_without_spacy():
+    code = (
+        "import pydoc, sys\n"
+        "from ests import *\n"
+        "import ests\n"
+        "pydoc.render_doc(ests)\n"
+        "print('BasicStats' in dir(), 'spacy' in sys.modules, 'ests.components' in sys.modules)"
+    )
+    assert _run(code) == "True False False"
+
+
+def test_lazy_packages_export_their_names():
+    for package in (ests, ests.corpus, ests.visualizers):
+        assert set(package.__all__) <= set(dir(package))
+        assert all(getattr(package, name) is not None for name in package.__all__)
+    assert callable(ests.visualizers.highlight) and callable(ests.corpus.kwic)
+
+
+def test_factories_with_spacy_loaded_before():
+    """Entry points read before esTS was installed do not matter: with spaCy loaded, import
+    ests registers the factories itself"""
+    code = (
+        "import catalogue\n"
+        "catalogue.AVAILABLE_ENTRY_POINTS = {}\n"
+        "import spacy, ests\n"
+        "nlp = spacy.blank('es')\n"
+        "nlp.add_pipe('ests_basic')\n"
+        "print(nlp('el gato duerme')._.ests_basic.n_words)"
+    )
+    assert _run(code) == "3"
+
+
+def test_doc_of_spacy_loaded_after():
+    """A Doc is recognized when spaCy is loaded after import ests"""
+    code = (
+        "import sys, ests\n"
+        "before = 'spacy' in sys.modules\n"
+        "import spacy\n"
+        "doc = spacy.blank('es')('El gato duerme. El perro come.')\n"
+        "print(before, ests.BasicStats(doc).n_sents, len(ests.DiversityStats(doc).words),"
+        " len(ests.StyleStats(doc).words))"
+    )
+    assert _run(code) == "False 2 6 6"
+
+
+def test_pipeline_check_without_spacy():
+    """A pipeline is checked without loading spaCy: there is no Language before it"""
+    code = (
+        "import sys, ests\n"
+        "try:\n"
+        "    ests.StyleStats('El gato duerme.', nlp='es_core_news_sm')\n"
+        "except ests.SourceTypeError as error:\n"
+        "    print(error, 'spacy' in sys.modules)"
+    )
+    assert _run(code) == "The pipeline must be a spaCy Language False"
