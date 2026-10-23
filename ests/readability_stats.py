@@ -138,8 +138,10 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
     stats_desc = READABILITY_STATS_DESC
     grade_age_levels = GRADE_AGE_LEVELS
     postgraduate_level = POSTGRADUATE_LEVEL
-    # The reading ease by the preset; RIX by years of schooling (grade_scales)
+    # The reading ease by the preset, the general one for a preset of a subclass; RIX by
+    # years of schooling (grade_scales)
     level_scales: ClassVar[Mapping[str, tuple[tuple[float, str], ...]]] = {
+        "flesch_reading_easy": READING_EASE_SCALES[PRESET_SCALES["general"]],
         "mu_index": MU_SCALE,
         "lix": LIX_LEVELS,
     }
@@ -150,6 +152,7 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
     preset_reading_ease_grades: ClassVar[Mapping[str, tuple[tuple[float, float], ...]]] = {
         preset: (*grades, (0, 13)) for preset, grades in READING_EASE_GRADES.items()
     }
+    reading_ease_grades = preset_reading_ease_grades["general"]
     reading_speed = READING_SPEED_WPM
     reading_speed_norms = READING_SPEED_NORMS
 

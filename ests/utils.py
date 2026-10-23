@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import re
-import sys
 from collections.abc import Iterator
 from functools import lru_cache
 from typing import TYPE_CHECKING
@@ -12,6 +11,7 @@ from anyts.utils import (
     add_tokenizer_rules,
     count_words_by_spans as count_words_by_spans,
     find_phrases as find_phrases,
+    is_language,
     iter_doc_words,
 )
 
@@ -257,9 +257,8 @@ def add_dash_rules(nlp: Language) -> None:
 
 
 def _check_nlp(nlp: object) -> None:
-    """A pipeline that is not a spaCy Language; there is none before spaCy is loaded"""
-    language = getattr(sys.modules.get("spacy.language"), "Language", None)
-    if nlp is not None and (language is None or not isinstance(nlp, language)):
+    """A pipeline that is not a spaCy Language (is_language)"""
+    if nlp is not None and not is_language(nlp):
         raise SourceTypeError("The pipeline must be a spaCy Language")
 
 

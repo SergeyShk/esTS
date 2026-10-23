@@ -99,12 +99,7 @@ class SpanishConnectorMatcher(ConnectorMatcher):
     only_after = CONNECTOR_ONLY_AFTER
     split_by_marks = CONNECTOR_SPLIT_BY_MARKS
     subordinators = CONNECTOR_SUBORDINATORS
-
-    def is_subordinator(self, connector: Connector, pos: str | None = None) -> bool:
-        """Subordinating conjunction or preposition (is_subordinator of the core) but for CONNECTOR_PARCELLATION"""
-        return connector.text not in CONNECTOR_PARCELLATION and super().is_subordinator(
-            connector, pos
-        )
+    parcellation = CONNECTOR_PARCELLATION
 
 
 class CohesionStats(anyts.cohesion_stats.CohesionStats):

@@ -5,7 +5,6 @@ from collections.abc import Mapping
 from math import nan
 from typing import TYPE_CHECKING, Any, ClassVar
 
-from anyts.constants import MESSAGES
 from anyts.stats import Stats
 from anyts.utils import is_doc, iter_doc_tokens, safe_divide
 
@@ -154,9 +153,9 @@ class MorphStats(Stats):
         if not tokens:
             raise SourceError("The data source has no words")
         if not source.has_annotation("POS"):
-            raise SourceError(MESSAGES["no_pos"])
+            raise SourceError(self.messages["no_pos"])
         if not source.has_annotation("LEMMA"):
-            raise SourceError(MESSAGES["no_lemmas"])
+            raise SourceError(self.messages["no_lemmas"])
 
         self.words = tuple(token.text for token in tokens)
         self.lemmas = tuple(token.lemma_ for token in tokens)

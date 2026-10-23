@@ -130,7 +130,7 @@ Los coeficientes por defecto son los de la *fórmula de perspicuidad* de Szigris
 | `b` | `float` | `62.3` | Coeficiente b, de la longitud media de la palabra en sílabas |
 | `c` | `float` | `206.835` | Coeficiente c, la constante |
 
-La escala de `describe_level` y `describe` sigue el preajuste: el atributo `preset_level_scales` del núcleo da para cada preajuste la escala de `ests.constants.READING_EASE_SCALES` que nombra `PRESET_SCALES` - la escala INFLESZ de Barrio-Cantalejo et al. (2008) para `general` y los niveles de Fernández Huerta para `classic`. La escala INFLESZ:
+La escala de `describe_level` y `describe` sigue el preajuste: el atributo `preset_level_scales` del núcleo da para cada preajuste la escala de `ests.constants.READING_EASE_SCALES` que nombra `PRESET_SCALES` - la escala INFLESZ de Barrio-Cantalejo et al. (2008) para `general` y los niveles de Fernández Huerta para `classic`; un preajuste que añade una subclase se lee con las escalas de `general`. La escala INFLESZ:
 
 | Valor | Nivel | Tipo de texto |
 | :---- | :---- | :------------ |

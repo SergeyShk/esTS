@@ -116,7 +116,7 @@ The default coefficients are those of the *fórmula de perspicuidad* of Szigrisz
 | `b` | `float` | `62.3` | Coefficient b, at the mean word length in syllables |
 | `c` | `float` | `206.835` | Coefficient c, the constant |
 
-The scale of `describe_level` and `describe` follows the preset: the attribute `preset_level_scales` of the core gives for each preset the scale of `ests.constants.READING_EASE_SCALES` named in `PRESET_SCALES` - the INFLESZ scale of Barrio-Cantalejo et al. (2008) for `general` and the bands of Fernández Huerta for `classic`. The INFLESZ scale:
+The scale of `describe_level` and `describe` follows the preset: the attribute `preset_level_scales` of the core gives for each preset the scale of `ests.constants.READING_EASE_SCALES` named in `PRESET_SCALES` - the INFLESZ scale of Barrio-Cantalejo et al. (2008) for `general` and the bands of Fernández Huerta for `classic`; a preset that a subclass adds is read by the scales of `general`. The INFLESZ scale:
 
 | Value | Level | Text type |
 | :---- | :---- | :-------- |

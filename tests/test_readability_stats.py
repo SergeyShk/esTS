@@ -1,5 +1,6 @@
 from collections import Counter
 from math import isnan
+from typing import ClassVar
 
 import anyts.basic_stats
 import numpy as np
@@ -255,6 +256,21 @@ def test_reading_ease_by_the_preset(preset):
     assert rs.level_scale("flesch_reading_easy") == READING_EASE_SCALES[PRESET_SCALES[preset]]
     for value in (-50, 0, 40, 65, 100, 130):
         assert rs.reading_ease_to_grade(value) == flesch_reading_easy_to_grade(value, preset)
+
+
+def test_subclass_presets():
+    general = ReadabilityStats(TEXT)
+
+    class Narrowed(ReadabilityStats):
+        presets: ClassVar = {"general": READABILITY_PRESETS["general"]}
+
+    class Added(ReadabilityStats):
+        presets: ClassVar = {**READABILITY_PRESETS, "mine": READABILITY_PRESETS["general"]}
+
+    # a preset of a subclass is read by the scales of the general one
+    mine = Added(TEXT, preset="mine")
+    assert Narrowed(TEXT).describe_level() == mine.describe_level() == general.describe_level()
+    assert mine.reading_ease_to_grade(60) == general.reading_ease_to_grade(60)
 
 
 def test_calc_consensus_grade():
