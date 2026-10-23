@@ -127,7 +127,7 @@ class MorphStats(Stats):
             pipeline is not a spaCy Language
         SourceError: If the source has no words, no annotation of the parts of
             speech or no lemmas, or is a string longer than the max_length of
-            the pipeline
+            the pipeline or with a character without a UTF-8 form
         DatasetNotFoundError: If a string is passed and the model is not installed
     """
 

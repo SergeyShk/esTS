@@ -77,10 +77,10 @@ El `max_length` del pipeline es de un millón de caracteres por defecto: divida 
 
 ## Atributos
 
-<!-- core: stats/syntax_stats.md:SyntaxStats-attributes bde5658 -->
+<!-- core: stats/syntax_stats.md:SyntaxStats-attributes a0c3c7a -->
 | Atributo | Tipo | Descripción |
 | :------- | :--- | :---------- |
-| `sents` | `tuple[tuple[Token]]` | Palabras de cada oración con palabras |
+| `sents` | `tuple[tuple[Token]]` | Palabras de cada oración con palabras, sobre una copia del `Doc` sin su tensor ni sus datos de usuario |
 | `n_sents`, `n_words` | `int` | Números de las oraciones con palabras y de las palabras |
 | `n_leaves`, `n_subtrees` | `int` | Números de las palabras sin dependientes y con ellas |
 | `n_coordination_chains` | `int` | Número de las cadenas de coordinación |
@@ -789,17 +789,19 @@ has_auxiliary(token)
 
 ## Predicado de una cláusula { #is_predicate }
 
-<!-- core: stats/syntax_stats.md:is_predicate 1c57281 -->
+<!-- core: stats/syntax_stats.md:is_predicate b814232 -->
 ``` {.python .signature}
 is_predicate(token, join_hyphens=False)
 ```
 
-Comprueba si una palabra puede ser el predicado de su cláusula: un verbo (`VERB`, `AUX`) o una palabra con sujeto propio (`nsubj`, `csubj` y sus subtipos, `anyts.constants.SUBJECT_DEPS`), de modo que el predicado nominal de `he is tall` pasa y una palabra parentética no.
+Comprueba si una palabra puede ser el predicado de su cláusula: un verbo (`VERB`, `AUX`), una palabra con sujeto propio (`nsubj`, `csubj` y sus subtipos, `anyts.constants.SUBJECT_DEPS`) o con cópula (`cop`), de modo que el predicado nominal de `he is tall` y de una lengua que omite el sujeto pasa y una palabra parentética no.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
 | `token` | `Token` | - | Token |
 | `join_hyphens` | `bool` | `False` | Tomar una palabra con guion por una sola palabra |
+
+Un valor que no es un `Token` lanza `SourceTypeError`.
 
 ## Cadenas de modificadores { #calc_modifier_chains }
 

@@ -71,7 +71,7 @@ Añadir un componente amplía el tokenizador de su pipeline con las reglas de la
 | [`PhonStatsComponent`](#PhonStatsComponent) | `ests_phon` | [`PhonStats`](stats/phon_stats.md) | `window_len` |
 | [`VerseStatsComponent`](#VerseStatsComponent) | `ests_verse` | [`VerseStats`](stats/verse_stats.md) | `seseo` |
 
-Las estadísticas básicas, de legibilidad, de diversidad, fonéticas y del verso no necesitan ninguna anotación de un modelo. En el pipeline de `es_core_news_sm` las categorías gramaticales vienen del `morphologizer` (o de un `tagger` con un `attribute_ruler`; un `tagger` solo no las da), el análisis del `parser` y los lemas del `lemmatizer`. Un componente al que le falta la anotación, también con componentes `excluded`, lanza `SourceError` cuando el documento pasa por él.
+Las estadísticas básicas, de legibilidad, de diversidad, fonéticas y del verso no necesitan ninguna anotación de un modelo. En el pipeline de `es_core_news_sm` las categorías gramaticales vienen del `morphologizer` (o de un `tagger` con un `attribute_ruler`; un `tagger` solo no las da), el análisis del `parser` y los lemas del `lemmatizer`. Un componente al que le falta la anotación, también con componentes `excluded`, lanza `SourceError` cuando el documento pasa por él; `ests_lexical` solo necesita las categorías gramaticales, y `ests_style` lanza el error cuando se lee `verbal_nouns` o `markers()`.
 
 ### Estadísticas básicas { #BasicStatsComponent }
 

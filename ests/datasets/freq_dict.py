@@ -149,6 +149,9 @@ class FreqDict(Dataset):
         ipm: Getting the frequency of a lemma
         get_texts: Getting the lemmas of the dictionary
         get_records: Getting the records of the dictionary
+
+    Raises:
+        SourceTypeError: If the directory of the data is not a string or a Path
     """
 
     def __init__(self, data_dir: str | Path = DEFAULT_DATASET_DIR) -> None:

@@ -1,3 +1,6 @@
+import os
+import subprocess
+import sys
 from math import isnan
 
 import numpy as np
@@ -267,6 +270,17 @@ def test_verbal_nouns_of_a_long_text(nlp, monkeypatch):
         _ = ss.verbal_nouns
 
 
+def test_copy_keeps_the_error_of_its_pipeline():
+    import copy
+    import pickle
+
+    ss = StyleStats("La revisión del expediente fue realizada.", nlp=spacy.blank("es"))
+    for clone in (pickle.loads(pickle.dumps(ss)), copy.deepcopy(ss)):
+        assert clone.nlp is None
+        with pytest.raises(SourceError, match="no parts of speech"):
+            _ = clone.verbal_nouns
+
+
 def test_split_text():
     assert _split_text("El gato duerme.", 15) == ["El gato duerme."]
     # The parts are as long as the limit allows, without the spaces around the sentences
@@ -305,6 +319,25 @@ def test_lists_are_sorted_and_lower_case(phrases):
     assert list(phrases) == sorted(phrases)
     assert all(phrase == phrase.lower() for phrase in phrases)
     assert len(set(phrases)) == len(phrases)
+
+
+def test_expand_phrases_in_one_order():
+    """The order of the phrases does not follow the hash seed"""
+    code = (
+        "from ests.style_stats import expand_phrases;"
+        "print(list(expand_phrases(['se', 'procedió', 'al', 'cierre'], ['proceder a'])))"
+    )
+    outputs = {
+        subprocess.run(
+            [sys.executable, "-c", code],
+            capture_output=True,
+            text=True,
+            check=True,
+            env={**os.environ, "PYTHONHASHSEED": seed},
+        ).stdout
+        for seed in ("0", "1", "2", "3")
+    }
+    assert len(outputs) == 1
 
 
 def test_expand_phrases():

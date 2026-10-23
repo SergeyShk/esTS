@@ -47,7 +47,7 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Visualizaciones](https://sergeyshk.github.io/esTS/es/visualizers/zipf/)** - ley de Zipf, huella literaria, árbol de palabras, dispersión léxica y palabras clave, red de colocaciones, dendrograma, PCA y MDS por la Delta, crecimiento del vocabulario, longitudes de las oraciones y el resaltado de los fragmentos que cuentan las estadísticas, como las oraciones largas y las pasivas
 * **[Conjuntos de datos](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/)** - literatura en español de dominio público: 150 obras de 33 autores en cuatro géneros; 4259 sonetos de los siglos XV-XX con el patrón métrico y la rima de cada verso; un diccionario de frecuencias de 83 785 lemas según Google Books Ngram
 * **[Componentes de spaCy](https://sergeyshk.github.io/esTS/es/components/)** - cada clase de estadísticas como componente de un pipeline, con las estadísticas puestas en el `Doc` en una sola pasada
-* **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, con la densidad de 273 marcadores del discurso españoles
+* **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, con la densidad de 273 marcadores del discurso españoles por clase y por lugar
 * **[Estadísticas de complejidad léxica](https://sergeyshk.github.io/esTS/es/stats/lexical_stats/)** - cuán raras son las palabras de un texto en la lengua: la frecuencia, el rango y la dispersión de los lemas según un diccionario de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la sorpresa, la perplejidad y la densidad léxica
 * **[Métricas de estilo](https://sergeyshk.github.io/esTS/es/stats/style_stats/)** - los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías de lenguaje claro en español: sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés
 * **[Fonoestadística](https://sergeyshk.github.io/esTS/es/stats/phon_stats/)** - proporciones de las clases de sonidos, grupos consonánticos, hiatos, sílabas abiertas, dureza e índices de aliteración y de asonancia, sobre los sonidos de una transcripción por reglas
@@ -138,7 +138,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/extractors/sente
 
 <br>
 
-Las sílabas y el acento se deducen de la ortografía española, sin diccionario: la tilde, o la terminación de la palabra cuando no la hay, da la sílaba tónica. Los adverbios en `-mente` y los compuestos con guion llevan dos acentos.
+Las sílabas y el acento se deducen de la ortografía española, sin diccionario: la tilde, o la terminación de la palabra cuando no la hay, da la sílaba tónica. Los adverbios en `-mente` llevan dos acentos, y los compuestos con guion uno por parte.
 
 ```python
 >>> from ests.syllables import stress_type, syllabify, word_stress, word_stresses
@@ -190,21 +190,21 @@ Una palabra compleja tiene tres o más sílabas y una palabra larga siete o más
 
 >>> text = "Hay tres clases de mentiras: mentiras, malditas mentiras y estadísticas"
 >>> BasicStats(text).print_stats()
-     Statistic      |  Value
+     Statistic     |  Value
 ------------------------------
-Sentences           |    1
-Words               |    10
-Unique words        |    8
-Long words          |    5
-Complex words       |    5
-Simple words        |    5
-Monosyllabic words  |    4
-Polysyllabic words  |    6
-Characters          |    71
-Letters             |    60
-Spaces              |    9
-Syllables           |    23
-Punctuation marks   |    2
+Sentences          |    1
+Words              |    10
+Unique words       |    8
+Long words         |    5
+Complex words      |    5
+Simple words       |    5
+Monosyllabic words |    4
+Polysyllabic words |    6
+Characters         |    71
+Letters            |    60
+Spaces             |    9
+Syllables          |    23
+Punctuation marks  |    2
 ```
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/basic_stats/).
@@ -249,17 +249,17 @@ Los coeficientes de la facilidad de lectura de Flesch se eligen con `preset`: po
  'reading_time': 0.03597122302158273}
 
 >>> rs.print_stats()
-                   Metric                    |  Value
--------------------------------------------------------
-Flesch reading ease (Szigriszt-Pazos)        |  53.55
-Gutiérrez de Polini comprehensibility        |  33.50
-Crawford grade                               |   5.81
-Legibilidad µ                                |  50.94
-SOL grade (SMOG for Spanish)                 |   9.26
-LIX readability index                        |  60.00
-RIX readability index                        |   5.00
-Consensus grade                              |   9.00
-Reading time (min)                           |   0.04
+                Metric                |  Value
+-------------------------------------------------
+Flesch reading ease (Szigriszt-Pazos) |  53.55
+Gutiérrez de Polini comprehensibility |  33.50
+Crawford grade                        |   5.81
+Legibilidad µ                         |  50.94
+SOL grade (SMOG for Spanish)          |   9.26
+LIX readability index                 |  60.00
+RIX readability index                 |   5.00
+Consensus grade                       |   9.00
+Reading time (min)                    |   0.04
 
 >>> rs.describe_level()
 'algo difícil'
@@ -358,7 +358,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/morph_stat
 
 El árbol de dependencias de Universal Dependencies y las construcciones contra las que advierten las guías de lenguaje claro en español:
 
-*   la complejidad del árbol: distancias de dependencia, profundidad, hojas y subárboles, valencia de los verbos personales, cadenas de coordinación, cláusulas y subordinadas, modificadores por sustantivo
+*   la complejidad del árbol: distancias de dependencia, profundidad, hojas y subárboles, valencia de los verbos personales, cadenas de coordinación, cláusulas, subordinadas e infinitivas, modificadores por sustantivo
 *   las construcciones: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos, el `se` impersonal, las palabras de negación, la razón entre sustantivos y verbos
 
 ```python
@@ -397,7 +397,7 @@ La cohesión referencial a la manera de Coh-Metrix y de su adaptación española
 *   la repetición de sustantivos, de argumentos y de palabras con contenido entre oraciones contiguas y entre todos los pares de oraciones, binaria y proporcional
 *   la información dada: pronombres, demostrativos y palabras con contenido cuyo lema ya se había usado
 *   la cohesión temporal: la repetición del tiempo y del modo de los verbos de oraciones contiguas
-*   la densidad de 273 marcadores del discurso españoles por clase - causales, adversativos, concesivos, temporales, aditivos, condicionales, reformulativos - y por tipo
+*   la densidad de 273 marcadores del discurso españoles por clase - causales, adversativos, concesivos, temporales, aditivos, condicionales, reformulativos -, por tipo y por lugar: los que unen una oración con las anteriores o las partes de una oración
 
 ```python
 >>> from ests import CohesionStats

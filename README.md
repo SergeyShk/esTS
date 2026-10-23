@@ -47,7 +47,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, vocabulary growth, sentence lengths, and the highlighting of the fragments the statistics count, such as long sentences and passives
 * **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors in four genres; 4,259 sonnets of the 15th-20th centuries with the metrical pattern and the rhyme of every line; a frequency dictionary of 83,785 lemmas by Google Books Ngram
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
-* **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 273 Spanish discourse markers
+* **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, with the density of 273 Spanish discourse markers by class and by place
 * **[Lexical sophistication statistics](https://sergeyshk.github.io/esTS/stats/lexical_stats/)** - how rare the words of a text are in the language: the frequency, range and dispersion of the lemmas by a dictionary of Google Books Ngram, the frequency bands top-1000 to 10000, surprisal, perplexity and lexical density
 * **[Style metrics](https://sergeyshk.github.io/esTS/stats/style_stats/)** - the SEO indicators of Advego and Text.ru (nausea, water content, spam score, naturalness by Zipf's law, keyword density) and the markers of the officialese style by the Spanish-language guides to plain language: verbal nouns, compound prepositions, parenthetical expressions and clichés
 * **[Phonostatistics](https://sergeyshk.github.io/esTS/stats/phon_stats/)** - the shares of the classes of sounds, consonant clusters, hiatuses, open syllables, hardness and the indices of alliteration and assonance, over the sounds of a rule-based transcription
@@ -138,7 +138,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/extractors/sentence
 
 <br>
 
-The syllables and the stress follow from the Spanish spelling, with no dictionary: the written accent, or the ending of the word when there is none, gives the stressed syllable. Adverbs in `-mente` and hyphenated compounds carry two stresses.
+The syllables and the stress follow from the Spanish spelling, with no dictionary: the written accent, or the ending of the word when there is none, gives the stressed syllable. Adverbs in `-mente` carry two stresses, and hyphenated compounds one per part.
 
 ```python
 >>> from ests.syllables import stress_type, syllabify, word_stress, word_stresses
@@ -190,21 +190,21 @@ A complex word has three or more syllables and a long word seven or more letters
 
 >>> text = "Hay tres clases de mentiras: mentiras, malditas mentiras y estadísticas"
 >>> BasicStats(text).print_stats()
-     Statistic      |  Value
+     Statistic     |  Value
 ------------------------------
-Sentences           |    1
-Words               |    10
-Unique words        |    8
-Long words          |    5
-Complex words       |    5
-Simple words        |    5
-Monosyllabic words  |    4
-Polysyllabic words  |    6
-Characters          |    71
-Letters             |    60
-Spaces              |    9
-Syllables           |    23
-Punctuation marks   |    2
+Sentences          |    1
+Words              |    10
+Unique words       |    8
+Long words         |    5
+Complex words      |    5
+Simple words       |    5
+Monosyllabic words |    4
+Polysyllabic words |    6
+Characters         |    71
+Letters            |    60
+Spaces             |    9
+Syllables          |    23
+Punctuation marks  |    2
 ```
 
 More in the [documentation](https://sergeyshk.github.io/esTS/stats/basic_stats/).
@@ -249,17 +249,17 @@ The coefficients of the Flesch reading ease are selected by `preset`: by default
  'reading_time': 0.03597122302158273}
 
 >>> rs.print_stats()
-                   Metric                    |  Value
--------------------------------------------------------
-Flesch reading ease (Szigriszt-Pazos)        |  53.55
-Gutiérrez de Polini comprehensibility        |  33.50
-Crawford grade                               |   5.81
-Legibilidad µ                                |  50.94
-SOL grade (SMOG for Spanish)                 |   9.26
-LIX readability index                        |  60.00
-RIX readability index                        |   5.00
-Consensus grade                              |   9.00
-Reading time (min)                           |   0.04
+                Metric                |  Value
+-------------------------------------------------
+Flesch reading ease (Szigriszt-Pazos) |  53.55
+Gutiérrez de Polini comprehensibility |  33.50
+Crawford grade                        |   5.81
+Legibilidad µ                         |  50.94
+SOL grade (SMOG for Spanish)          |   9.26
+LIX readability index                 |  60.00
+RIX readability index                 |   5.00
+Consensus grade                       |   9.00
+Reading time (min)                    |   0.04
 
 >>> rs.describe_level()
 'algo difícil'
@@ -358,7 +358,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/morph_stats/)
 
 The dependency tree of Universal Dependencies and the constructions that the Spanish-language guides to plain language warn about:
 
-*   the complexity of the tree: dependency distances, depth, leaves and subtrees, valency of the finite verbs, coordination chains, clauses and subordinate clauses, modifiers per noun
+*   the complexity of the tree: dependency distances, depth, leaves and subtrees, valency of the finite verbs, coordination chains, clauses, subordinate and infinitive clauses, modifiers per noun
 *   the constructions: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates, the impersonal `se`, the words of negation, the ratio of nouns to verbs
 
 ```python
@@ -397,7 +397,7 @@ Referential cohesion in the manner of Coh-Metrix and its Spanish adaptation Coh-
 *   the overlap of nouns, of arguments and of content words between adjacent sentences and between all pairs of sentences, binary and proportional
 *   givenness: pronouns, demonstratives and the content words whose lemma was already used
 *   temporal cohesion: the repetition of the tense and of the mood of the verbs of adjacent sentences
-*   the density of 273 Spanish discourse markers by class - causal, adversative, concessive, temporal, additive, conditional, reformulative - and by kind
+*   the density of 273 Spanish discourse markers by class - causal, adversative, concessive, temporal, additive, conditional, reformulative - by kind and by place: linking a sentence to the ones before or the parts of a sentence
 
 ```python
 >>> from ests import CohesionStats

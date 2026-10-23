@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 from functools import cache
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import anyts
 import anyts.lexical_stats
@@ -113,7 +113,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         SourceTypeError: If the source is neither a string nor a Doc, or the dictionary or
             the pipeline is of another type
         SourceError: If the source has no words, lacks the parts of speech or
-            is a string longer than the max_length of the pipeline
+            is a string longer than the max_length of the pipeline or with a character without a UTF-8 form
         DatasetNotFoundError: When a statistic by the dictionary is read and the
             dictionary is not downloaded
     """
@@ -133,6 +133,12 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         super().__init__(source, freq_dict)
         # analyze can be called again on the object; the keys read the words of the source
         self._proper = self._found_proper
+
+    def __getstate__(self) -> dict[str, Any]:
+        """State for pickle and copy without the pipeline, which is no part of the statistics"""
+        state = self.__dict__.copy()
+        state["_nlp"] = None
+        return state
 
     def analyze(self, source: str | Doc) -> list[LexicalWord]:
         """

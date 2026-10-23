@@ -49,7 +49,7 @@ wheels = [
 
 [[package]]
 name = "anyts"
-version = "0.3.8"
+version = "0.3.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "graphviz" },
@@ -61,9 +61,9 @@ dependencies = [
     { name = "scipy", version = "1.18.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "spacy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d1/7f/5303968ce657b8ae2bcea01bda22f120104355fc93615b4abd08d0790326/anyts-0.3.8.tar.gz", hash = "sha256:33d9c59ec5c239e901b0b701e971998c9ebc1e5666dd702cdb227350a2b2b5b9", size = 153812, upload-time = "2026-10-23T15:37:39.07Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a8/d5/c2bff253f7197aa510032cdfae9b6aff909fc5f7b4814f3f3b5d31ee9be3/anyts-0.3.9.tar.gz", hash = "sha256:dab8ed1c24b610fac3586b265ac0efceff2e99d7640a45a52730a7628bb880f8", size = 155385, upload-time = "2026-10-23T19:23:57.212Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/35/df/2650f00506c07db0b2d5345510c969da205b16a5d27b31eb2f7161fef917/anyts-0.3.8-py3-none-any.whl", hash = "sha256:318861e2bbaf756dab9a1de534fa3ca1ec8ef8fd59fb724400a653592819b739", size = 174727, upload-time = "2026-10-23T15:37:37.718Z" },
+    { url = "https://files.pythonhosted.org/packages/87/05/7433de08d0ce4f6f2fcd81117d3d86a5098eae7fca574f9fde3eca4ece53/anyts-0.3.9-py3-none-any.whl", hash = "sha256:bf5aea39f115c2853b4f2164585ee4eb1d63390f909ebe2bc54ea0a573859246", size = 176218, upload-time = "2026-10-23T19:23:55.879Z" },
 ]
 
 [[package]]
@@ -3023,7 +3023,7 @@ wheels = [
 
 [[package]]
 name = "pyests"
-version = "0.8.0.dev10"
+version = "0.8.0.dev11"
 source = { editable = "." }
 dependencies = [
     { name = "anyts" },
@@ -3075,14 +3075,14 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "anyts", specifier = ">=0.3.8,<0.4" },
+    { name = "anyts", specifier = ">=0.3.9,<0.4" },
     { name = "graphviz", specifier = ">=0.20.3" },
     { name = "matplotlib", specifier = ">=3.8" },
     { name = "numpy", specifier = ">=1.26" },
     { name = "pandas", specifier = ">=2.1" },
     { name = "scipy", specifier = ">=1.11" },
     { name = "simplemma", specifier = ">=2.0,<3" },
-    { name = "spacy", specifier = ">=3.8.15" },
+    { name = "spacy", specifier = ">=3.8.15,<4" },
 ]
 
 [package.metadata.requires-dev]

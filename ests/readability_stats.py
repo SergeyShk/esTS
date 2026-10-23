@@ -128,7 +128,8 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
     Raises:
         SourceTypeError: If the source is neither a string, a Doc nor a BasicStats object,
             the basic statistics are not those of esTS, or an extractor is of another type
-        SourceError: If the source has no words or no sentences
+        SourceError: If the source has no words or no sentences, or is a string with
+            a character without a UTF-8 form
         ParameterError: If the coefficient preset is not a string or is unknown
     """
 

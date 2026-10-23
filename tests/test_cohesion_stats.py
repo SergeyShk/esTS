@@ -124,8 +124,9 @@ def test_anaphoric_forms_link_to_the_sentence_before(text, found, inter):
     assert cs.n_inter_connectors == inter
 
 
-def test_anaphoric_form_before_a_noun_phrase_of_a_string():
-    found = find_connectors(["A", "pesar", "de", "todo", "el", "esfuerzo"])
+@pytest.mark.parametrize("determiner", ["el", "mi", "nuestro", "vuestras", "aquellos"])
+def test_anaphoric_form_before_a_noun_phrase_of_a_string(determiner):
+    found = find_connectors(["A", "pesar", "de", "todo", determiner, "esfuerzo"])
     assert [c.text for c in found] == ["a pesar de"]
 
 

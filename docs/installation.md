@@ -3,8 +3,8 @@
 ## Requirements
 
 *   `python` 3.11 or newer
-*   `spaCy` 3.8.15 or newer
-*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.3.8 or newer within 0.3, the language-independent core: the extractors, the basic statistics and the common readability formulas, the lexical diversity metrics, the corpus measures, the plots and the machinery of the highlighting come from it with the tokenizer, the lemmatizer, the sentence splitter and the syllables of Spanish
+*   `spaCy` 3.8.15 or newer within 3
+*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.3.9 or newer within 0.3, the language-independent core: the extractors, the basic statistics and the common readability formulas, the lexical diversity metrics, the corpus measures, the plots and the machinery of the highlighting come from it with the tokenizer, the lemmatizer, the sentence splitter and the syllables of Spanish
 *   `numpy`, `scipy`, `pandas`, `simplemma` 2
 *   `matplotlib` and `graphviz` for the [visualizers](visualizers/zipf.md)
 

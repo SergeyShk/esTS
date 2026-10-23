@@ -125,6 +125,9 @@ class SpanishLiterature(Dataset):
         download: Downloading the dataset from the network
         get_texts: Getting the texts (without the headers) of the dataset
         get_records: Getting the records (with the headers) of the dataset
+
+    Raises:
+        SourceTypeError: If the directory of the data is not a string or a Path
     """
 
     def __init__(self, data_dir: str | Path = DEFAULT_DATASET_DIR) -> None:

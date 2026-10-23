@@ -418,3 +418,65 @@ def test_stats_interface(name):
     stats_class = getattr(ests, name)
     assert issubclass(stats_class, Stats)
     assert stats_class.stats_desc
+
+
+def test_demo_computes_its_examples(monkeypatch, freq_dict):
+    """The demo computes every example and a text of long runs of marks, gradio stubbed"""
+    import importlib.util
+    import time
+    from unittest.mock import MagicMock
+
+    import ests.datasets
+
+    monkeypatch.setitem(sys.modules, "gradio", MagicMock())
+    monkeypatch.setattr(ests.datasets, "FreqDict", lambda: freq_dict)
+    spec = importlib.util.spec_from_file_location("ests_demo", ROOT / "demo" / "app.py")
+    assert spec and spec.loader
+    app = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(app)
+    for text in app.EXAMPLES.values():
+        result = app.compute(text, app.DEFAULT_LAYERS)
+        assert result["summary"] and not result["lexical"].empty
+    start = time.perf_counter()
+    result = app.compute("Hola, " + "!?" * 5000 + " " + "_" * 5000 + " mundo.", [])
+    assert time.perf_counter() - start < 10
+    assert result["text"] == "Hola, " + "!?" * 5 + " " + "_" * 10 + " mundo."
+
+
+@pytest.mark.parametrize(
+    "name", ["CohesionStats", "LexicalStats", "MorphStats", "StyleStats", "SyntaxStats"]
+)
+def test_pickle_without_the_pipeline(name, freq_dict):
+    """A copy of a class built with a pipeline keeps its statistics but not the pipeline"""
+    import copy
+    import pickle
+
+    from ests.utils import get_nlp
+
+    extra = {"freq_dict": freq_dict} if name == "LexicalStats" else {}
+    stats = getattr(ests, name)(
+        "La revisión del expediente fue realizada por el comité.", nlp=get_nlp(), **extra
+    )
+    data = pickle.dumps(stats)
+    assert len(data) < 100_000
+    for clone in (pickle.loads(data), copy.deepcopy(stats)):
+        assert repr(clone.get_stats()) == repr(stats.get_stats())
+        if name == "LexicalStats":
+            assert clone.analyze("El perro ladra.") == stats.analyze("El perro ladra.")
+
+
+def test_version_of_the_notebooks():
+    """The notebooks and their pages ask for the minor version of the package"""
+    project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]
+    major, minor = project["version"].split(".")[:2]
+    for notebook in sorted((ROOT / "examples").glob("*.ipynb")):
+        text = notebook.read_text(encoding="utf-8")
+        assert f"< ({major}, {minor}):" in text, notebook.name
+        assert f"pyests>={major}.{minor}" in text, notebook.name
+        assert f"esTS {major}.{minor} or newer" in text, notebook.name
+    for page, phrase in (
+        ("examples/README.md", "or newer"),
+        ("docs/examples.md", "or newer"),
+        ("docs/examples.es.md", "o posterior"),
+    ):
+        assert f"esTS {major}.{minor} {phrase}" in (ROOT / page).read_text(encoding="utf-8")

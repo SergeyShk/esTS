@@ -4,7 +4,7 @@
 BasicStats(source, sents_extractor=None, words_extractor=None, normalize=False, complex_syl_factor=3, long_word_letter_factor=7)
 ```
 
-<!-- core: stats/basic_stats.md:BasicStats b417be1 -->
+<!-- core: stats/basic_stats.md:BasicStats c1092e0 -->
 Las estadísticas básicas de un texto: el número de sus oraciones, palabras, caracteres, sílabas y signos de puntuación y las distribuciones de sus palabras. La fuente de datos es un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy). Las letras se cuentan con `str.isalpha`, así que las cifras, los guiones y los signos dentro de una palabra no son letras.
 
 Las palabras y las oraciones de una cadena salen de los extractores. Un `Doc` da sus tokens como palabras, sin los signos de puntuación ni los símbolos como `€` o `%`, y sus límites como oraciones, o los del extractor de oraciones cuando no los tiene o solo tiene algunos (`has_sents`); un extractor indicado se usa en su lugar, sobre su texto. Una línea en blanco termina una oración de una cadena y de un `Doc` sin límites; un `Doc` con límites también, cuando su pipeline tiene `start_sents_after_blank_lines` (que una biblioteca del idioma registra con su propio nombre) antes del parser, `senter` o `sentencizer`. Una oración sin palabras, como una de pura puntuación, no se cuenta.
@@ -13,7 +13,7 @@ Excepciones:
 
 - `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`, un extractor de otro tipo;
 - `SourceError` - una fuente sin palabras;
-- `ParameterError` - un umbral que no es un entero de al menos uno.
+- `ParameterError` - un umbral que no es un entero de al menos uno, un `normalize` que no es un `bool`.
 
 La clase extiende el `BasicStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/basic_stats/) con los ganchos del español: las sílabas de una palabra se cuentan con [`count_syllables`](../syllables.md#count_syllables), y los extractores por defecto son los [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) del español. Los indicadores ordinales `º` y `ª` son letras (`3.º` es una palabra de una letra). El componente de líneas en blanco de esTS se llama [`ests_blank_lines`](../components.md#blank_lines): `nlp.add_pipe("ests_blank_lines", before="parser")`. Las estadísticas se calculan al crear el objeto. Una cadena con un carácter sin forma UTF-8, como la de un fichero leído con una codificación errónea, lanza `SourceError` desde el tokenizador del español.
 

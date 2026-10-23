@@ -67,7 +67,7 @@ Adding a component extends the tokenizer of its pipeline with the rules for the 
 | [`PhonStatsComponent`](#PhonStatsComponent) | `ests_phon` | [`PhonStats`](stats/phon_stats.md) | `window_len` |
 | [`VerseStatsComponent`](#VerseStatsComponent) | `ests_verse` | [`VerseStats`](stats/verse_stats.md) | `seseo` |
 
-The basic, readability, diversity, phonetic and verse statistics need no annotation of a model. In the pipeline of `es_core_news_sm` the parts of speech come from the `morphologizer` (or a `tagger` with an `attribute_ruler`; a `tagger` alone does not give them), the parse from the `parser` and the lemmas from the `lemmatizer`. A component whose annotation is missing, `excluded` components included, raises `SourceError` when the document goes through it.
+The basic, readability, diversity, phonetic and verse statistics need no annotation of a model. In the pipeline of `es_core_news_sm` the parts of speech come from the `morphologizer` (or a `tagger` with an `attribute_ruler`; a `tagger` alone does not give them), the parse from the `parser` and the lemmas from the `lemmatizer`. A component whose annotation is missing, `excluded` components included, raises `SourceError` when the document goes through it; `ests_lexical` needs only the parts of speech, and `ests_style` raises when `verbal_nouns` or `markers()` is read.
 
 ### Basic statistics { #BasicStatsComponent }
 

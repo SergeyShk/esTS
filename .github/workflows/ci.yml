@@ -64,6 +64,24 @@ jobs:
         # of one exists only after the merge: the network tests run in their own job
         run: uv run --no-sync pytest -m "not network" --cov ests
 
+  test-lowest:
+    name: test (lowest)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v10.2.0
+        with:
+          enable-cache: true
+          python-version: "3.11"
+      - name: Install dependencies
+        run: uv sync --resolution lowest-direct --no-default-groups --group test
+      - name: Fetch the pages of anyTS
+        run: uv run --no-sync python scripts/core_docs.py
+      - name: Run tests
+        run: uv run --no-sync pytest -m "not network"
+
   network:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest

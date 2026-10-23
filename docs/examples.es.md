@@ -1,6 +1,6 @@
 # Ejemplos
 
-Cuadernos de Jupyter en el directorio [examples/](https://github.com/SergeyShk/esTS/tree/master/examples) del repositorio, con la biblioteca en funcionamiento sobre sus conjuntos de datos. Cada uno se abre en Google Colab con un botón e instala la biblioteca - esTS 0.7 o posterior - y, si el cuaderno lo necesita, el modelo de spaCy; las salidas de todas las celdas se guardan en los archivos, así que los cuadernos se leen sin ejecutarlos. Los cuadernos están en inglés.
+Cuadernos de Jupyter en el directorio [examples/](https://github.com/SergeyShk/esTS/tree/master/examples) del repositorio, con la biblioteca en funcionamiento sobre sus conjuntos de datos. Cada uno se abre en Google Colab con un botón e instala la biblioteca - esTS 0.8 o posterior - y, si el cuaderno lo necesita, el modelo de spaCy; las salidas de todas las celdas se guardan en los archivos, así que los cuadernos se leen sin ejecutarlos. Los cuadernos están en inglés.
 
 ## Un texto con todas las herramientas
 

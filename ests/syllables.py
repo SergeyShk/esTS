@@ -121,7 +121,7 @@ def word_stresses(word: str) -> list[int]:
         -mente, which keeps the stress of its adjective (fá-cil-men-te - 0
         and 2), one per part of a hyphenated compound
         (te-ó-ri-co-prác-ti-co - 1 and 4). An adverb is a stem of at least one
-        syllable before -mente that ends in a vowel, l, r, z, n or s or carries
+        syllable before -mente that ends in a, e, l, r, z, n or s or carries
         an accent; look-alikes (demente, fundamente) are listed in
         NON_ADVERBS_MENTE, an unlisted one gets a second stress
 

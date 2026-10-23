@@ -4,12 +4,12 @@
 WordsExtractor(tokenizer=None, filter_punct=True, filter_nums=False, use_lexemes=False, stopwords=None, lowercase=False, ngram_range=(1, 1), min_len=0, max_len=0)
 ```
 
-<!-- core: extractors/words.md:WordsExtractor 45872ab -->
+<!-- core: extractors/words.md:WordsExtractor ee077d8 -->
 Clase para extraer palabras de un texto.
 
 Excepciones:
 
-- `ParameterError` - un `ngram_range` que no es un par de enteros o cuyo límite inferior es menor que uno o mayor que el superior, un límite de longitud que no es un entero, un límite negativo, un mínimo mayor que el máximo;
+- `ParameterError` - un `ngram_range` que no es un par de enteros o cuyo límite inferior es menor que uno o mayor que el superior, un límite de longitud que no es un entero, un límite negativo, un mínimo mayor que el máximo, un interruptor que no es un `bool`;
 - `SourceTypeError` - palabras vacías que no son una colección de cadenas.
 
 La clase extiende el `WordsExtractor` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/extractors/words/) con los ganchos del español:

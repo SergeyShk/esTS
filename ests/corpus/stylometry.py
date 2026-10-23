@@ -56,8 +56,8 @@ def function_words_profile(
     Raises:
         SourceTypeError: If the words are not a list of strings or the pipeline is not a
             spaCy Language
-        SourceError: If there are no words or the pipeline does not tag the
-            parts of speech
+        SourceError: If there are no words, a word has a character without a UTF-8 form or the
+            pipeline does not tag the parts of speech
         DatasetNotFoundError: If the default model is not installed
 
     Example:

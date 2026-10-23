@@ -153,7 +153,7 @@ class DiversityStats(anyts.DiversityStats):
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc object, or the
             extractor is not a WordsExtractor
-        SourceError: If the source has no words
+        SourceError: If the source has no words or is a string with a character without a UTF-8 form
         ParameterError: If the parameters of the metrics are set incorrectly
     """
 

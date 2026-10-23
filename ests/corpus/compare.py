@@ -72,6 +72,7 @@ def split_windows(text: str, window: int | None = 1000, min_words: int | None = 
 
     Raises:
         SourceTypeError: If the text is not a string
+        SourceError: If the text has a character without a UTF-8 form
         ParameterError: If the size of a window or min_words is not an integer or is
             below one, or min_words is greater than the window
 
@@ -132,8 +133,8 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
 
     Raises:
         SourceTypeError: If the text is not a string or the pipeline is not a spaCy Language
-        SourceError: If the text has no words or is longer than the max_length
-            of the pipeline
+        SourceError: If the text has no words or a character without a UTF-8 form, or is longer than
+            the max_length of the pipeline
         DatasetNotFoundError: If the default model is not installed
 
     Example:
@@ -327,7 +328,10 @@ def compare_corpora(
 
     Raises:
         SourceTypeError: If the texts are not a list of strings or the features are not a function
-        SourceError: If one of the corpora has no window of enough words
+        SourceError: If one of the corpora has no window of enough words or a text has
+            a character without a UTF-8 form
+        DatasetNotFoundError: If the default features are read and the model is not
+            installed
         ParameterError: If the names of the corpora are not two strings that give
             distinct columns, the number of samples, the size of a window or min_words
             is not an integer or is below one, min_words is greater than the window, or
