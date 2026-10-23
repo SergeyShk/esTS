@@ -442,15 +442,16 @@ def test_imports_of_the_demo():
 @pytest.mark.parametrize(
     "name", ["CohesionStats", "LexicalStats", "MorphStats", "StyleStats", "SyntaxStats"]
 )
-def test_pickle_without_the_pipeline(name):
+def test_pickle_without_the_pipeline(name, freq_dict):
     """A copy of a class built with a pipeline keeps its statistics but not the pipeline"""
     import copy
     import pickle
 
     from ests.utils import get_nlp
 
+    extra = {"freq_dict": freq_dict} if name == "LexicalStats" else {}
     stats = getattr(ests, name)(
-        "La revisión del expediente fue realizada por el comité.", nlp=get_nlp()
+        "La revisión del expediente fue realizada por el comité.", nlp=get_nlp(), **extra
     )
     data = pickle.dumps(stats)
     assert len(data) < 100_000
