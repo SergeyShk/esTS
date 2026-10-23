@@ -1977,12 +1977,12 @@
 <h1 id="extraccion-de-n-gramas-de-caracteres">Extracción de N-gramas de caracteres<a class="headerlink" href="#extraccion-de-n-gramas-de-caracteres" title="Permanent link">&para;</a></h1>
 <div class="signature highlight"><pre><span></span><code><span class="n">CharNgramsExtractor</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">lowercase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">within_words</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: extractors/char_ngrams.md:CharNgramsExtractor afcd43e -->
+<!-- core: extractors/char_ngrams.md:CharNgramsExtractor 1d91165 -->
 <p>Clase para extraer N-gramas de caracteres de un texto: secuencias de N caracteres tomadas con una ventana deslizante sobre la cadena. Los N-gramas de caracteres son un rasgo clásico de la estilometría y la atribución de autoría (Stamatatos 2009) y pueden sustituir a las palabras en medidas como la Delta de Burrows.</p>
 <p>Las secuencias de espacios se reducen a un solo espacio y los signos de puntuación se conservan. Con <code>within_words=True</code> los N-gramas no cruzan los límites de las palabras: el texto se divide en palabras con el tokenizador, la puntuación se descarta y las palabras más cortas que N no producen N-gramas.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>ParameterError</code> - un <code>n</code> que no es un entero de al menos uno.</li>
+<li><code>ParameterError</code> - un <code>n</code> que no es un entero de al menos uno, un <code>lowercase</code> o un <code>within_words</code> que no es un <code>bool</code>.</li>
 </ul>
 <p>La clase extiende el <code>CharNgramsExtractor</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/extractors/char_ngrams/">anyTS</a> con el gancho del español: su tokenizador de palabras por defecto para <code>within_words</code>, el método <code>tokenize(text)</code>, es el tokenizador por defecto de <a href="../words/"><code>WordsExtractor</code></a>, el tokenizador por reglas de la clase de idioma español de <a href="https://github.com/explosion/spaCy">spaCy</a> <code>ests.utils.tokenize</code>. La lista de N-gramas se pasa a <a href="../../corpus/stylometry/"><code>delta</code></a> como unidades del texto en lugar de las palabras.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>

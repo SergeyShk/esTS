@@ -2616,7 +2616,7 @@ Ratio of nouns to verbs                           |   3.00
 <tr>
 <td style="text-align: left;"><code>sents</code></td>
 <td style="text-align: left;"><code>tuple[tuple[Token]]</code></td>
-<td style="text-align: left;">Words of every sentence with words</td>
+<td style="text-align: left;">Words of every sentence with words, on a copy of the <code>Doc</code> without its tensor and user data</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>n_sents</code>, <code>n_words</code></td>
@@ -3580,7 +3580,7 @@ Ratio of nouns to verbs                           |   3.00
 <h2 id="is_predicate">Predicate of a clause<a class="headerlink" href="#is_predicate" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_predicate</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
-<p>Checks whether a word can be the predicate of its clause: a verb (<code>VERB</code>, <code>AUX</code>) or a word with a subject of its own (<code>nsubj</code>, <code>csubj</code> and their subtypes, <code>anyts.constants.SUBJECT_DEPS</code>), so the nominal predicate of <code>he is tall</code> passes and a parenthetical word does not.</p>
+<p>Checks whether a word can be the predicate of its clause: a verb (<code>VERB</code>, <code>AUX</code>), a word with a subject of its own (<code>nsubj</code>, <code>csubj</code> and their subtypes, <code>anyts.constants.SUBJECT_DEPS</code>) or with a copula (<code>cop</code>), so the nominal predicate of <code>he is tall</code> and of a language that drops the subject passes and a parenthetical word does not.</p>
 <table>
 <thead>
 <tr>
@@ -3605,6 +3605,7 @@ Ratio of nouns to verbs                           |   3.00
 </tr>
 </tbody>
 </table>
+<p>A value that is not a <code>Token</code> raises <code>SourceTypeError</code>.</p>
 <h2 id="calc_modifier_chains">Chains of modifiers<a class="headerlink" href="#calc_modifier_chains" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">calc_modifier_chains</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">is_modifier</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>

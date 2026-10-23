@@ -2404,7 +2404,7 @@ True
 </tr>
 </tbody>
 </table>
-<p>The basic, readability, diversity, phonetic and verse statistics need no annotation of a model. In the pipeline of <code>es_core_news_sm</code> the parts of speech come from the <code>morphologizer</code> (or a <code>tagger</code> with an <code>attribute_ruler</code>; a <code>tagger</code> alone does not give them), the parse from the <code>parser</code> and the lemmas from the <code>lemmatizer</code>. A component whose annotation is missing, <code>excluded</code> components included, raises <code>SourceError</code> when the document goes through it.</p>
+<p>The basic, readability, diversity, phonetic and verse statistics need no annotation of a model. In the pipeline of <code>es_core_news_sm</code> the parts of speech come from the <code>morphologizer</code> (or a <code>tagger</code> with an <code>attribute_ruler</code>; a <code>tagger</code> alone does not give them), the parse from the <code>parser</code> and the lemmas from the <code>lemmatizer</code>. A component whose annotation is missing, <code>excluded</code> components included, raises <code>SourceError</code> when the document goes through it; <code>ests_lexical</code> needs only the parts of speech, and <code>ests_style</code> raises when <code>verbal_nouns</code> or <code>markers()</code> is read.</p>
 <h3 id="BasicStatsComponent">Basic statistics<a class="headerlink" href="#BasicStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">BasicStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </code></pre></div>

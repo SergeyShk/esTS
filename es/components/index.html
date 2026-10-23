@@ -2407,7 +2407,7 @@ True
 </tr>
 </tbody>
 </table>
-<p>Las estadísticas básicas, de legibilidad, de diversidad, fonéticas y del verso no necesitan ninguna anotación de un modelo. En el pipeline de <code>es_core_news_sm</code> las categorías gramaticales vienen del <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>; un <code>tagger</code> solo no las da), el análisis del <code>parser</code> y los lemas del <code>lemmatizer</code>. Un componente al que le falta la anotación, también con componentes <code>excluded</code>, lanza <code>SourceError</code> cuando el documento pasa por él.</p>
+<p>Las estadísticas básicas, de legibilidad, de diversidad, fonéticas y del verso no necesitan ninguna anotación de un modelo. En el pipeline de <code>es_core_news_sm</code> las categorías gramaticales vienen del <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>; un <code>tagger</code> solo no las da), el análisis del <code>parser</code> y los lemas del <code>lemmatizer</code>. Un componente al que le falta la anotación, también con componentes <code>excluded</code>, lanza <code>SourceError</code> cuando el documento pasa por él; <code>ests_lexical</code> solo necesita las categorías gramaticales, y <code>ests_style</code> lanza el error cuando se lee <code>verbal_nouns</code> o <code>markers()</code>.</p>
 <h3 id="BasicStatsComponent">Estadísticas básicas<a class="headerlink" href="#BasicStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">BasicStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </code></pre></div>

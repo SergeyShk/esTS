@@ -2604,7 +2604,7 @@ Ratio of nouns to verbs                           |   3.00
 </tbody>
 </table>
 <h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
-<!-- core: stats/syntax_stats.md:SyntaxStats-attributes bde5658 -->
+<!-- core: stats/syntax_stats.md:SyntaxStats-attributes a0c3c7a -->
 <table>
 <thead>
 <tr>
@@ -2617,7 +2617,7 @@ Ratio of nouns to verbs                           |   3.00
 <tr>
 <td style="text-align: left;"><code>sents</code></td>
 <td style="text-align: left;"><code>tuple[tuple[Token]]</code></td>
-<td style="text-align: left;">Palabras de cada oración con palabras</td>
+<td style="text-align: left;">Palabras de cada oración con palabras, sobre una copia del <code>Doc</code> sin su tensor ni sus datos de usuario</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>n_sents</code>, <code>n_words</code></td>
@@ -3589,10 +3589,10 @@ Ratio of nouns to verbs                           |   3.00
 </div>
 </div>
 <h2 id="is_predicate">Predicado de una cláusula<a class="headerlink" href="#is_predicate" title="Permanent link">&para;</a></h2>
-<!-- core: stats/syntax_stats.md:is_predicate 1c57281 -->
+<!-- core: stats/syntax_stats.md:is_predicate b814232 -->
 <div class="signature highlight"><pre><span></span><code><span class="n">is_predicate</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
-<p>Comprueba si una palabra puede ser el predicado de su cláusula: un verbo (<code>VERB</code>, <code>AUX</code>) o una palabra con sujeto propio (<code>nsubj</code>, <code>csubj</code> y sus subtipos, <code>anyts.constants.SUBJECT_DEPS</code>), de modo que el predicado nominal de <code>he is tall</code> pasa y una palabra parentética no.</p>
+<p>Comprueba si una palabra puede ser el predicado de su cláusula: un verbo (<code>VERB</code>, <code>AUX</code>), una palabra con sujeto propio (<code>nsubj</code>, <code>csubj</code> y sus subtipos, <code>anyts.constants.SUBJECT_DEPS</code>) o con cópula (<code>cop</code>), de modo que el predicado nominal de <code>he is tall</code> y de una lengua que omite el sujeto pasa y una palabra parentética no.</p>
 <table>
 <thead>
 <tr>
@@ -3617,6 +3617,7 @@ Ratio of nouns to verbs                           |   3.00
 </tr>
 </tbody>
 </table>
+<p>Un valor que no es un <code>Token</code> lanza <code>SourceTypeError</code>.</p>
 <h2 id="calc_modifier_chains">Cadenas de modificadores<a class="headerlink" href="#calc_modifier_chains" title="Permanent link">&para;</a></h2>
 <!-- core: stats/syntax_stats.md:calc_modifier_chains f16f96d -->
 <div class="signature highlight"><pre><span></span><code><span class="n">calc_modifier_chains</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">is_modifier</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>

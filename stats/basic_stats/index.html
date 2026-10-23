@@ -2049,7 +2049,7 @@
 <ul>
 <li><code>SourceTypeError</code> - a source that is neither a string nor a <code>Doc</code>, an extractor of another type;</li>
 <li><code>SourceError</code> - a source without words;</li>
-<li><code>ParameterError</code> - a threshold that is not an integer of at least one.</li>
+<li><code>ParameterError</code> - a threshold that is not an integer of at least one, a <code>normalize</code> that is not a <code>bool</code>.</li>
 </ul>
 <p>The class extends the <code>BasicStats</code> of the <a href="https://sergeyshk.github.io/anyTS/stats/basic_stats/">anyTS</a> core with the hooks of Spanish: the syllables of a word are counted by <a href="../../syllables/#count_syllables"><code>count_syllables</code></a>, and the default extractors are the Spanish <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> and <a href="../../extractors/words/"><code>WordsExtractor</code></a>. The ordinal indicators <code>º</code> and <code>ª</code> are letters (<code>3.º</code> is a one-letter word). The blank line component of esTS is called <a href="../../components/#blank_lines"><code>ests_blank_lines</code></a>: <code>nlp.add_pipe("ests_blank_lines", before="parser")</code>. The statistics are computed when the object is created. A string with a character without a UTF-8 form, as a file read with the wrong encoding gives, raises <code>SourceError</code> from the Spanish tokenizer.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Code</label><label for="__tabbed_1_2">Result</label></div>

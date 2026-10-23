@@ -2503,7 +2503,7 @@ syntax_participle_clauses_per_sent          0.114           0.059   0.030    0.0
 </tr>
 </tbody>
 </table>
-<p>A value that is not a number or a missing one (<code>None</code>, <code>NA</code>) and values that are not a flat list raise <code>SourceTypeError</code>.</p>
+<p>A value that is neither a number nor a missing one (<code>None</code>, <code>NA</code>) and values that are not a flat list raise <code>SourceTypeError</code>.</p>
 <div class="signature highlight"><pre><span></span><code><span class="n">calc_cliff_delta</span><span class="p">(</span><span class="n">values_a</span><span class="p">,</span> <span class="n">values_b</span><span class="p">)</span>
 </code></pre></div>
 <p>Cliff's delta, the share of the pairs where the first value is greater minus the share where it is smaller; <code>nan</code> for an empty set or an undefined value. Computed by sorting, in <span class="arithmatex">\(O((n_A + n_B) \log n_B)\)</span> time and linear memory.</p>
@@ -2531,7 +2531,7 @@ syntax_participle_clauses_per_sent          0.114           0.059   0.030    0.0
 </tr>
 </tbody>
 </table>
-<p>A value that is not a number or a missing one (<code>None</code>, <code>NA</code>) and values that are not a flat list raise <code>SourceTypeError</code>.</p>
+<p>A value that is neither a number nor a missing one (<code>None</code>, <code>NA</code>) and values that are not a flat list raise <code>SourceTypeError</code>.</p>
 <div class="signature highlight"><pre><span></span><code><span class="n">bootstrap_median_diff</span><span class="p">(</span><span class="n">values_a</span><span class="p">,</span> <span class="n">values_b</span><span class="p">,</span> <span class="n">n_bootstrap</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">texts_a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">texts_b</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>The percentile bootstrap interval of the difference of the medians. With <code>texts_a</code> and <code>texts_b</code> whole texts are resampled, the median of a draw taken over the values of its texts; with fewer than two texts on a side the interval is <code>nan</code>.</p>
@@ -2589,7 +2589,7 @@ syntax_participle_clauses_per_sent          0.114           0.059   0.030    0.0
 </tr>
 </tbody>
 </table>
-<p>A value that is not a number or a missing one, values that are not a flat list and texts that are not labels of one type raise <code>SourceTypeError</code>; an <code>n_bootstrap</code> that is not an integer of at least one, a <code>confidence</code> that is not a number in (0, 1), texts not as many as the values and an <code>rng</code> that is not a numpy <code>Generator</code> raise <code>ParameterError</code>.</p>
+<p>A value that is neither a number nor a missing one, values that are not a flat list and texts that are not labels of one type raise <code>SourceTypeError</code>; an <code>n_bootstrap</code> that is not an integer of at least one, a <code>confidence</code> that is not a number in (0, 1), texts not as many as the values and an <code>rng</code> that is not a numpy <code>Generator</code> raise <code>ParameterError</code>.</p>
 <div class="signature highlight"><pre><span></span><code><span class="n">holm_correction</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span>
 </code></pre></div>
 <p>Holm's correction for multiple comparisons: the p-values are sorted in ascending order, the i-th is multiplied by (m − i + 1), where m is the number of defined values, then the running maximum is taken and capped at one; <code>nan</code> stays <code>nan</code>.</p>
@@ -2611,7 +2611,7 @@ syntax_participle_clauses_per_sent          0.114           0.059   0.030    0.0
 </tr>
 </tbody>
 </table>
-<p>A p-value that is not a number or a missing one and p-values that are not a flat list raise <code>SourceTypeError</code>, and a p-value outside [0, 1] <code>ParameterError</code>.</p>
+<p>A p-value that is neither a number nor a missing one and p-values that are not a flat list raise <code>SourceTypeError</code>, and a p-value outside [0, 1] <code>ParameterError</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Code</label><label for="__tabbed_3_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

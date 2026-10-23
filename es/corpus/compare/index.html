@@ -2480,7 +2480,7 @@ syntax_participle_clauses_per_sent          0.114           0.059   0.030    0.0
 </div>
 <h2 id="funciones-de-las-estadisticas">Funciones de las estadísticas<a class="headerlink" href="#funciones-de-las-estadisticas" title="Permanent link">&para;</a></h2>
 <p>Las estadísticas de una fila están disponibles una a una desde <code>ests.corpus</code>:</p>
-<!-- core: corpus/compare.md:calc_cohen_d 198b504 -->
+<!-- core: corpus/compare.md:calc_cohen_d 8318830 -->
 <div class="signature highlight"><pre><span></span><code><span class="n">calc_cohen_d</span><span class="p">(</span><span class="n">values_a</span><span class="p">,</span> <span class="n">values_b</span><span class="p">)</span>
 </code></pre></div>
 <p>La d de Cohen con las varianzas muestrales combinadas (ddof=1); <code>nan</code> con menos de dos valores en un lado o sin dispersión.</p>
@@ -2508,8 +2508,8 @@ syntax_participle_clauses_per_sent          0.114           0.059   0.030    0.0
 </tr>
 </tbody>
 </table>
-<p>Un valor que no es un número o que falta (<code>None</code>, <code>NA</code>) y unos valores que no son una lista plana lanzan <code>SourceTypeError</code>.</p>
-<!-- core: corpus/compare.md:calc_cliff_delta ccd5938 -->
+<p>Un valor que no es ni un número ni un valor ausente (<code>None</code>, <code>NA</code>) y unos valores que no son una lista plana lanzan <code>SourceTypeError</code>.</p>
+<!-- core: corpus/compare.md:calc_cliff_delta 46d8def -->
 <div class="signature highlight"><pre><span></span><code><span class="n">calc_cliff_delta</span><span class="p">(</span><span class="n">values_a</span><span class="p">,</span> <span class="n">values_b</span><span class="p">)</span>
 </code></pre></div>
 <p>La delta de Cliff, la proporción de pares en que el primer valor es mayor menos la proporción en que es menor; <code>nan</code> para un conjunto vacío o un valor indefinido. Se calcula por ordenación, en tiempo <span class="arithmatex">\(O((n_A + n_B) \log n_B)\)</span> y memoria lineal.</p>
@@ -2537,8 +2537,8 @@ syntax_participle_clauses_per_sent          0.114           0.059   0.030    0.0
 </tr>
 </tbody>
 </table>
-<p>Un valor que no es un número o que falta (<code>None</code>, <code>NA</code>) y unos valores que no son una lista plana lanzan <code>SourceTypeError</code>.</p>
-<!-- core: corpus/compare.md:bootstrap_median_diff b20d95f -->
+<p>Un valor que no es ni un número ni un valor ausente (<code>None</code>, <code>NA</code>) y unos valores que no son una lista plana lanzan <code>SourceTypeError</code>.</p>
+<!-- core: corpus/compare.md:bootstrap_median_diff eef19f3 -->
 <div class="signature highlight"><pre><span></span><code><span class="n">bootstrap_median_diff</span><span class="p">(</span><span class="n">values_a</span><span class="p">,</span> <span class="n">values_b</span><span class="p">,</span> <span class="n">n_bootstrap</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">texts_a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">texts_b</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>El intervalo bootstrap de percentiles de la diferencia de las medianas. Con <code>texts_a</code> y <code>texts_b</code> se remuestrean textos enteros, y la mediana de una extracción se toma sobre los valores de sus textos; con menos de dos textos en un lado el intervalo es <code>nan</code>.</p>
@@ -2596,8 +2596,8 @@ syntax_participle_clauses_per_sent          0.114           0.059   0.030    0.0
 </tr>
 </tbody>
 </table>
-<p>Un valor que no es un número o que falta, unos valores que no son una lista plana y unos textos que no son etiquetas de un mismo tipo lanzan <code>SourceTypeError</code>; un <code>n_bootstrap</code> que no es un entero de al menos uno, un <code>confidence</code> que no es un número en (0, 1), unos textos que no son tantos como los valores y un <code>rng</code> que no es un <code>Generator</code> de numpy lanzan <code>ParameterError</code>.</p>
-<!-- core: corpus/compare.md:holm_correction 7006482 -->
+<p>Un valor que no es ni un número ni un valor ausente, unos valores que no son una lista plana y unos textos que no son etiquetas de un mismo tipo lanzan <code>SourceTypeError</code>; un <code>n_bootstrap</code> que no es un entero de al menos uno, un <code>confidence</code> que no es un número en (0, 1), unos textos que no son tantos como los valores y un <code>rng</code> que no es un <code>Generator</code> de numpy lanzan <code>ParameterError</code>.</p>
+<!-- core: corpus/compare.md:holm_correction e837116 -->
 <div class="signature highlight"><pre><span></span><code><span class="n">holm_correction</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span>
 </code></pre></div>
 <p>La corrección de Holm para comparaciones múltiples: los valores p se ordenan de menor a mayor, el i-ésimo se multiplica por (m − i + 1), donde m es el número de valores definidos, luego se toma el máximo acumulado y se limita a uno; <code>nan</code> sigue siendo <code>nan</code>.</p>
@@ -2619,7 +2619,7 @@ syntax_participle_clauses_per_sent          0.114           0.059   0.030    0.0
 </tr>
 </tbody>
 </table>
-<p>Un valor p que no es un número o que falta y unos valores p que no son una lista plana lanzan <code>SourceTypeError</code>, y un valor p fuera de [0, 1], <code>ParameterError</code>.</p>
+<p>Un valor p que no es ni un número ni un valor ausente y unos valores p que no son una lista plana lanzan <code>SourceTypeError</code>, y un valor p fuera de [0, 1], <code>ParameterError</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

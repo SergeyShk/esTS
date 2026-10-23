@@ -1977,11 +1977,11 @@
 <h1 id="extraccion-de-palabras">Extracción de palabras<a class="headerlink" href="#extraccion-de-palabras" title="Permanent link">&para;</a></h1>
 <div class="signature highlight"><pre><span></span><code><span class="n">WordsExtractor</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_punct</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_lexemes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lowercase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ngram_range</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">min_len</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_len</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: extractors/words.md:WordsExtractor 45872ab -->
+<!-- core: extractors/words.md:WordsExtractor ee077d8 -->
 <p>Clase para extraer palabras de un texto.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>ParameterError</code> - un <code>ngram_range</code> que no es un par de enteros o cuyo límite inferior es menor que uno o mayor que el superior, un límite de longitud que no es un entero, un límite negativo, un mínimo mayor que el máximo;</li>
+<li><code>ParameterError</code> - un <code>ngram_range</code> que no es un par de enteros o cuyo límite inferior es menor que uno o mayor que el superior, un límite de longitud que no es un entero, un límite negativo, un mínimo mayor que el máximo, un interruptor que no es un <code>bool</code>;</li>
 <li><code>SourceTypeError</code> - palabras vacías que no son una colección de cadenas.</li>
 </ul>
 <p>La clase extiende el <code>WordsExtractor</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/extractors/words/">anyTS</a> con los ganchos del español:</p>
