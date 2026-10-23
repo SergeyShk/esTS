@@ -45,32 +45,34 @@ Las palabras se clasifican por la anotación de Universal Dependencies:
 === "Resultado"
 
     ```
-                           Statistic                        |  Value
-    -------------------------------------------------------------------
-    Noun overlap in adjacent sentences                      |   0.33
-    Noun overlap in all pairs of sentences                  |   0.50
-    Argument overlap in adjacent sentences                  |   0.33
-    Argument overlap in all pairs of sentences              |   0.50
-    Content word overlap in adjacent sentences              |   0.33
-    Content word overlap in all pairs of sentences          |   0.50
-    Share of shared content words in adjacent sentences     |   0.08
-    Share of shared content words in all pairs of sentences |   0.12
-    Share of pronouns                                       |   0.03
-    Ratio of pronouns to nouns                              |   0.09
-    Share of demonstratives                                 |   0.00
-    Share of content words seen before                      |   0.18
-    Repetition of the tense in adjacent sentences           |   0.00
-    Repetition of the mood in adjacent sentences            |   1.00
-    Temporal cohesion                                       |   0.50
-    Connectors per 1000 words                               |  103.45
-    Causal connectors per 1000 words                        |  34.48
-    Adversative connectors per 1000 words                   |  34.48
-    Concessive connectors per 1000 words                    |   0.00
-    Temporal connectors per 1000 words                      |   0.00
-    Additive connectors per 1000 words                      |   0.00
-    Conditional connectors per 1000 words                   |   0.00
-    Reformulative connectors per 1000 words                 |  34.48
-    Primary connectors per 1000 words                       |   0.00
+                               Statistic                            |  Value
+    ---------------------------------------------------------------------------
+    Noun overlap in adjacent sentences                              |   0.33
+    Noun overlap in all pairs of sentences                          |   0.50
+    Argument overlap in adjacent sentences                          |   0.33
+    Argument overlap in all pairs of sentences                      |   0.50
+    Content word overlap in adjacent sentences                      |   0.33
+    Content word overlap in all pairs of sentences                  |   0.50
+    Share of shared content words in adjacent sentences             |   0.08
+    Share of shared content words in all pairs of sentences         |   0.12
+    Share of pronouns                                               |   0.03
+    Ratio of pronouns to nouns                                      |   0.09
+    Share of demonstratives                                         |   0.00
+    Share of content words seen before                              |   0.18
+    Repetition of the tense in adjacent sentences                   |   0.00
+    Repetition of the mood in adjacent sentences                    |   1.00
+    Temporal cohesion                                               |   0.50
+    Connectors per 1000 words                                       |  103.45
+    Connectors linking a sentence to the ones before per 1000 words |  103.45
+    Connectors linking the parts of a sentence per 1000 words       |   0.00
+    Causal connectors per 1000 words                                |  34.48
+    Adversative connectors per 1000 words                           |  34.48
+    Concessive connectors per 1000 words                            |   0.00
+    Temporal connectors per 1000 words                              |   0.00
+    Additive connectors per 1000 words                              |   0.00
+    Conditional connectors per 1000 words                           |   0.00
+    Reformulative connectors per 1000 words                         |  34.48
+    Primary connectors per 1000 words                               |   0.00
     Secondary connectors per 1000 words                     |  103.45
     ```
 
@@ -119,7 +121,7 @@ El extractor indicado se guarda en el atributo `sents_extractor`, `None` sin él
 
 ## Métricas
 
-Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` da las métricas de la tabla; `aspect_repetition`, `connectors_inter` y `connectors_intra` son atributos fuera de él.
+Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` da las métricas de la tabla; `aspect_repetition` es un atributo fuera de él.
 
 | Métrica | Qué mide | Rango | Un valor mayor indica |
 | :------ | :------- | :---- | :-------------------- |
@@ -139,6 +141,8 @@ Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` da 
 | [`mood_repetition`](#temporal_cohesion) | Proporción de los pares contiguos con el mismo modo dominante | 0-1, `nan` sin dos oraciones contiguas con el rasgo | Un modo más estable |
 | [`temporal_cohesion`](#temporal_cohesion) | Media de las repeticiones del tiempo y del modo | 0-1, `nan` cuando una de ellas es `nan` | Un marco temporal más estable |
 | [`connectors`](#connectors) | Conectores por 1000 palabras | 0-1000 | Más enlaces explícitos |
+| [`connectors_inter`](#connectors) | Conectores que unen una oración con las anteriores por 1000 palabras | 0-1000 | Más enlaces entre oraciones |
+| [`connectors_intra`](#connectors) | Conectores que unen las partes de una oración por 1000 palabras | 0-1000 | Más enlaces dentro de las oraciones |
 | [`connectors_<class>`](#connectors) | Conectores de una clase por 1000 palabras: `causal`, `adversative`, `concessive`, `temporal`, `additive`, `conditional`, `reformulative` | 0-1000 | Más enlaces de la clase |
 | [`connectors_primary`, `connectors_secondary`](#connectors) | Conectores primarios y secundarios por 1000 palabras | 0-1000 | Más enlaces del tipo |
 
@@ -228,7 +232,7 @@ El español no tiene aspecto en la anotación de Universal Dependencies de los m
 
 ### Conectores { #connectors }
 
-`connectors` · `connectors_<class>` · `connectors_primary` · `connectors_secondary`
+`connectors` · `connectors_inter` · `connectors_intra` · `connectors_<class>` · `connectors_primary` · `connectors_secondary`
 { .metric-meta }
 
 <!-- core: stats/cohesion_stats.md:CohesionStats-connectors 0332772 -->
@@ -238,13 +242,13 @@ $$
 1000 \cdot \frac{\textrm{Número de conectores}}{\textrm{Número de palabras}}
 $$
 
-`connectors_inter` y `connectors_intra` son atributos fuera de `get_stats`.
+Los subordinantes de esTS son los conectores de una palabra etiquetados `SCONJ` o `ADP` (`cuando`, `aunque`, `si`) y las locuciones conjuntivas y preposicionales de `CONNECTOR_SUBORDINATORS` (`ya que`, `a pesar de`, `siempre que`), salvo `porque` y `conque`, que abren una oración uniéndola a la anterior (`CONNECTOR_PARCELLATION`: `¿Por qué? Porque...`). En `Ya que estás aquí, ayúdame` el conector es intraoracional; en `No vino. Porque llovía.` y en `Sin embargo, no.` es interoracional. Las formas anafóricas de los subordinantes preposicionales (`a pesar de esto`, `gracias a ello`) son entradas propias del diccionario, que unen una oración con la anterior.
 
 ``` {.python .signature}
 load_connectors()
 ```
 
-El diccionario de conectores de esTS: el fichero `ests/resources/connectors.tsv`, 250 marcadores del discurso de Martín Zorraquino y Portolés (1999) y conjunciones de la NGLE, cada uno con su clase de `CONNECTOR_CLASSES` y su tipo de `CONNECTOR_KINDS` de `anyts.constants`. Las clases son los conectores causales, adversativos, temporales y aditivos de Coh-Metrix, con los concesivos, condicionales y reformulativos añadidos. El diccionario es de solo lectura y compartido por todos, así que un diccionario propio se pasa por el parámetro `connectors`.
+El diccionario de conectores de esTS: el fichero `ests/resources/connectors.tsv`, 273 marcadores del discurso de Martín Zorraquino y Portolés (1999) y conjunciones de la NGLE, cada uno con su clase de `CONNECTOR_CLASSES` y su tipo de `CONNECTOR_KINDS` de `anyts.constants`. Las clases son los conectores causales, adversativos, temporales y aditivos de Coh-Metrix, con los concesivos, condicionales y reformulativos añadidos. El diccionario es de solo lectura y compartido por todos, así que un diccionario propio se pasa por el parámetro `connectors`.
 
 | Clase | Clave | Ejemplos |
 | :---- | :---- | :------- |
@@ -270,7 +274,7 @@ Los conectores primarios (`primary`) son conjunciones, locuciones conjuntivas y 
 === "Resultado"
 
     ```
-    (250, ('causal', 'secondary'))
+    (273, ('causal', 'secondary'))
     ```
 
 !!! warning "Aviso"
@@ -308,6 +312,8 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
      'mood_repetition': 1.0,
      'temporal_cohesion': 0.5,
      'connectors': 103.44827586206898,
+     'connectors_inter': 103.44827586206898,
+     'connectors_intra': 0.0,
      'connectors_causal': 34.48275862068966,
      'connectors_adversative': 34.48275862068966,
      'connectors_concessive': 0.0,
@@ -334,7 +340,7 @@ Excepciones:
 - `SourceTypeError` - un diccionario que no es una correspondencia de una locución a un par de cadenas;
 - `ParameterError` - una clase o un tipo desconocidos.
 
-`SpanishConnectorMatcher` es una subclase del `ConnectorMatcher` del núcleo con las reglas del español; las palabras y los conectores se comparan en minúscula. Un conector de una palabra lleva una categoría de `CONNECTOR_POS` - conjunción, partícula, adverbio, adposición, interjección, nombre propio o `X` - o de `CONNECTOR_POS_EXTRA` para su forma (`pues` y `verbigracia` como `NOUN`, `resumiendo`, `recapitulando` y `concluyendo` como `VERB`). No es conector justo tras un determinante, así que `el antes y el después` lleva un conector, `y`, y no tres; y como nombre propio cuenta solo al principio de la oración, donde los modelos leen así un marcador (`Primeramente`), de modo que el apellido de `Habló con Juan Luego ayer` no es conector. Un marcador que forma parte de otra locución se descarta: las palabras que lo siguen de `CONNECTOR_BLOCKED_AFTER` (`antes de la reunión`, `en cuanto a`), las que lo preceden de `CONNECTOR_BLOCKED_BEFORE` (`algo así como`) y las categorías de la palabra siguiente de `CONNECTOR_BLOCKED_AFTER_POS` (`sobre todo el texto`) lo anulan, mientras que `antes, firmó el acta` y `sobre todo cuando llueve` cuentan su marcador. Algunos marcadores dependen de su lugar: `pues` al principio de la oración abre una réplica (`Pues bien`) y no es conector (`CONNECTOR_NOT_AT_START`), y `encima` cuenta dentro de la oración solo tras `y`, `e`, `ni` o `pero` (`y encima llueve`, `CONNECTOR_ONLY_AFTER`). Estas listas son atributos del buscador: `CONNECTOR_POS` es `pos_tags`, las demás se llaman sin `CONNECTOR_` en minúscula (`CONNECTOR_BLOCKED_AFTER` es `blocked_after`); `not_after_pos` es el determinante `DET`, `start_only_pos` el nombre propio `PROPN`, y `read_through_marks`, `split_by_marks` y `subordinators` están vacíos en esTS.
+`SpanishConnectorMatcher` es una subclase del `ConnectorMatcher` del núcleo con las reglas del español; las palabras y los conectores se comparan en minúscula. Un conector de una palabra lleva una categoría de `CONNECTOR_POS` - conjunción, partícula, adverbio, adposición, interjección, nombre propio o `X` - o de `CONNECTOR_POS_EXTRA` para su forma (`pues` y `verbigracia` como `NOUN`, `resumiendo`, `recapitulando` y `concluyendo` como `VERB`). No es conector justo tras un determinante, así que `el antes y el después` lleva un conector, `y`, y no tres; y como nombre propio cuenta solo al principio de la oración, donde los modelos leen así un marcador (`Primeramente`), de modo que el apellido de `Habló con Juan Luego ayer` no es conector. Un marcador que forma parte de otra locución se descarta: las palabras que lo siguen de `CONNECTOR_BLOCKED_AFTER` (`antes de la reunión`, `en cuanto a`, `a pesar de todo lo que`), las que lo preceden de `CONNECTOR_BLOCKED_BEFORE` (`algo así como`) y las categorías de la palabra siguiente de `CONNECTOR_BLOCKED_AFTER_POS` (`sobre todo el texto`, `a pesar de todo el esfuerzo`) lo anulan, mientras que `antes, firmó el acta` y `sobre todo cuando llueve` cuentan su marcador. Algunos marcadores dependen de su lugar: `pues` al principio de la oración abre una réplica (`Pues bien`) y no es conector (`CONNECTOR_NOT_AT_START`), y `encima` cuenta dentro de la oración solo tras `y`, `e`, `ni` o `pero` (`y encima llueve`, `CONNECTOR_ONLY_AFTER`). Estas listas son atributos del buscador: `CONNECTOR_POS` es `pos_tags`, las demás se llaman sin `CONNECTOR_` en minúscula (`CONNECTOR_BLOCKED_AFTER` es `blocked_after`); `not_after_pos` es el determinante `DET`, `start_only_pos` el nombre propio `PROPN`, y `read_through_marks` está vacío en esTS. Un signo de puntuación dentro de una locución conjuntiva que acaba en `que`, `como` o `si` (`CONNECTOR_SPLIT_BY_MARKS`) hace de la conjunción una palabra aparte, así que `No tire así, que se romperá` y `lo de siempre, que...` no tienen conector; las locuciones consecutivas y `bien es verdad que` quedan fuera, porque los textos antiguos ponen una coma antes de su `que` (`de tal modo, que`).
 
 <!-- core: stats/cohesion_stats.md:ConnectorMatcher-find a9d4226 -->
 `find(words, sent_index, pos, breaks)` devuelve las apariciones de los conectores en una oración en el orden de sus palabras. Las palabras son las de una oración sin puntuación, la primera su inicio. Con las categorías gramaticales, un conector de una palabra cuenta solo con una de `pos_tags` o de `pos_extra` para su forma, nunca tras una de `not_after_pos`, y con una de `start_only_pos` solo al principio de la oración; una palabra sin categoría (`None`) pasa. Sin las categorías gramaticales se omiten las reglas que las leen. Las posiciones de los signos de puntuación `breaks` separan un conector de sus vecinas: una regla no lee una palabra a través de un signo, así que en *so, the end* la palabra tras la coma ni bloquea el conector ni le deja contar, salvo que el conector sea uno de `read_through_marks`, y un signo entre las palabras de un conector de `split_by_marks` lo anula; sin ellas las palabras se leen como contiguas.
@@ -372,15 +378,29 @@ Unas palabras que no son una lista de cadenas, unas categorías gramaticales que
 <!-- core: stats/cohesion_stats.md:ConnectorMatcher-is_subordinator 9d44a18 -->
 `is_subordinator(connector, pos=None)` comprueba si una aparición de un conector une su cláusula o su sintagma a su propia oración: un conector de `subordinators`, o un conector de una palabra cuya categoría `pos` es `SCONJ` o `ADP`. La cláusula de una conjunción subordinante y el sintagma de una preposición pertenecen a la oración del conector esté donde esté, así que un subordinante que abre una oración (*when he came, ...*, *despite the rain, ...*) no la une con las anteriores.
 
-Con `subordinators` vacío, un subordinante de esTS es un conector de una palabra etiquetado `SCONJ` o `ADP` (`cuando`, `aunque`), así que `ya que` y `a pesar de` al principio de una oración cuentan como interoracionales.
+`SpanishConnectorMatcher.is_subordinator` es el del núcleo salvo para los conectores de `CONNECTOR_PARCELLATION`; `subordinators` es `CONNECTOR_SUBORDINATORS`.
+
+=== "Código"
+
+    ``` python
+    matcher.is_subordinator(matcher.find(["Ya", "que", "estás", "aquí"])[0])
+    matcher.is_subordinator(matcher.find(["Porque", "llovía"])[0], "SCONJ")
+    ```
+
+=== "Resultado"
+
+    ```
+    True
+    False
+    ```
 
 ## Búsqueda de conectores { #find_connectors }
 
 ``` {.python .signature}
-find_connectors(words, connectors=None, sent_index=0, pos=None)
+find_connectors(words, connectors=None, sent_index=0, pos=None, breaks=None)
 ```
 
-Busca los conectores de una oración con el método `find` de `SpanishConnectorMatcher` en el diccionario `connectors`, el de `load_connectors` por defecto; los demás parámetros y las excepciones son los del buscador y de `find`. No toma las posiciones de los signos de puntuación, así que las palabras se leen como contiguas; una búsqueda que conserva los signos pasa por `find` con `breaks`.
+Busca los conectores de una oración con el método `find` de `SpanishConnectorMatcher` en el diccionario `connectors`, el de `load_connectors` por defecto; los demás parámetros y las excepciones son los del buscador y de `find`. Sin `breaks`, las posiciones de las palabras ante las que hay un signo de puntuación ([`find_marks`](https://sergeyshk.github.io/anyTS/utils/words/#find_marks) de una cadena), las palabras se leen como contiguas.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
@@ -393,6 +413,7 @@ Busca los conectores de una oración con el método `find` de `SpanishConnectorM
 
     find_connectors(["Sin", "embargo", "no", "vino"])
     find_connectors(["El", "antes", "y", "el", "después"], pos=["DET", "NOUN", "CCONJ", "DET", "NOUN"])
+    find_connectors(["No", "tire", "así", "que", "se", "romperá"], breaks={3})
     ```
 
 === "Resultado"
@@ -400,6 +421,7 @@ Busca los conectores de una oración con el método `find` de `SpanishConnectorM
     ```
     [Connector(sent=0, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary')]
     [Connector(sent=0, start=2, end=3, text='y', cls='additive', kind='primary')]
+    []
     ```
 
 ## Rasgos de las palabras { #token_info }
