@@ -2049,7 +2049,7 @@
 <li><code>numpy</code>, <code>scipy</code>, <code>pandas</code>, <code>simplemma</code> 2</li>
 <li><code>matplotlib</code> and <code>graphviz</code> for the <a href="../visualizers/zipf/">visualizers</a></li>
 </ul>
-<p>The dependencies are installed with the package.</p>
+<p>The dependencies are installed with the package. <code>import ests</code> loads neither spaCy nor matplotlib nor pandas: spaCy comes with the first text, whose words its Spanish tokenizer finds, and the plots and the corpus functions on first use.</p>
 <div class="admonition warning">
 <p class="admonition-title">Graphviz</p>
 <p>The <code>graphviz</code> package among the dependencies is only a wrapper: rendering the <a href="../visualizers/word_tree/">word tree</a> and the <a href="../visualizers/corpus/#collocation_network">network of collocations</a> requires the executables of <a href="https://graphviz.org/download/">Graphviz</a>, installed separately (<code>brew install graphviz</code>, <code>apt install graphviz</code>, <code>conda install graphviz</code>), otherwise <code>render()</code> and displaying the graph in Jupyter fail with <code>ExecutableNotFound</code>. Nothing else needs them.</p>
