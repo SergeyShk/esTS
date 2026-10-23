@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Collection, Sequence
+from collections.abc import Collection, Mapping, Sequence
 from math import nan
 from typing import TYPE_CHECKING
 
@@ -145,7 +145,7 @@ class StyleStats(anyts.style_stats.StyleStats):
             self._text = source
         else:
             try:
-                self._nouns = _doc_nouns(source)
+                self._nouns = _doc_nouns(source, self.messages)
             except SourceError as error:
                 self._annotation_error = str(error)
 
@@ -186,7 +186,7 @@ class StyleStats(anyts.style_stats.StyleStats):
             self._nouns = [
                 noun
                 for doc in pipeline.pipe(parts, disable=UNUSED_COMPONENTS)
-                for noun in _doc_nouns(doc)
+                for noun in _doc_nouns(doc, self.messages)
             ]
         return self._nouns
 
@@ -253,12 +253,12 @@ def noun_lemmas(doc: Doc) -> list[str]:
     return [lemma for _, lemma in _doc_nouns(doc)]
 
 
-def _doc_nouns(doc: Doc) -> list[tuple[str, str]]:
+def _doc_nouns(doc: Doc, messages: Mapping[str, str] = MESSAGES) -> list[tuple[str, str]]:
     """The tokens of a Doc tagged NOUN, in lower case, with their lemmas"""
     if not doc.has_annotation("POS"):
-        raise SourceError(MESSAGES["no_pos"])
+        raise SourceError(messages["no_pos"])
     if not doc.has_annotation("LEMMA"):
-        raise SourceError(MESSAGES["no_lemmas"])
+        raise SourceError(messages["no_lemmas"])
     return [
         (token.text.lower(), token.lemma_)
         for token in iter_doc_tokens(doc)

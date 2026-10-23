@@ -1,4 +1,5 @@
 from math import isnan
+from typing import ClassVar
 
 import pytest
 import spacy
@@ -142,6 +143,27 @@ def test_get_stats_filter_none(short):
 
 def test_get_stats_counts_words(ms):
     assert sum(ms.get_stats("pos")["pos"].values()) == len(ms.words)
+
+
+def test_get_stats_flat(short):
+    assert short.get_stats("number", flat=True) == {"number_Plur": 3}
+    frame = short.to_dataframe()
+    assert frame.shape[0] == 1 and frame.loc[0, "pos_NOUN"] == 1
+
+
+def test_describe(short):
+    assert all(short.describe(stat) is None for stat in MORPHOLOGY_STATS_DESC)
+    assert all(short.describe(column) is None for column in short.to_dataframe())
+    with pytest.raises(UnknownStatError):
+        short.describe("lemma")
+
+
+def test_messages_of_a_subclass():
+    class Translated(MorphStats):
+        messages: ClassVar = {**MorphStats.messages, "no_pos": "Sin categorías"}
+
+    with pytest.raises(SourceError, match=r"^Sin categorías$"):
+        Translated(spacy.blank("es")("Los niños juegan"))
 
 
 def test_get_stats_unknown():

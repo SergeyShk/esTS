@@ -394,3 +394,27 @@ def test_pipeline_check_without_spacy():
         "    print(error, 'spacy' in sys.modules)"
     )
     assert _run(code) == "The pipeline must be a spaCy Language False"
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "BasicStats",
+        "CohesionStats",
+        "DiversityStats",
+        "LexicalStats",
+        "MorphStats",
+        "PhonStats",
+        "ReadabilityStats",
+        "StyleStats",
+        "SyntaxStats",
+        "VerseStats",
+    ],
+)
+def test_stats_interface(name):
+    """Every class of statistics has the interface of the core: get_stats, describe..."""
+    from anyts.stats import Stats
+
+    stats_class = getattr(ests, name)
+    assert issubclass(stats_class, Stats)
+    assert stats_class.stats_desc

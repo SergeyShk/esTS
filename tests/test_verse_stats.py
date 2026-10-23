@@ -653,6 +653,12 @@ def test_get_stats():
     assert stats["meter"] == "endecasílabo"
 
 
+def test_describe_and_frame():
+    vs = VerseStats(GARCILASO)
+    assert all(vs.describe(stat) is None for stat in VERSE_STATS_DESC)
+    assert vs.to_dataframe().loc[0, "meter"] == "endecasílabo"
+
+
 def test_print_stats(capsys):
     VerseStats(GARCILASO).print_stats()
     captured = capsys.readouterr()

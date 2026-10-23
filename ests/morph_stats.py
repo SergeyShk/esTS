@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from collections import Counter, OrderedDict
+from collections.abc import Mapping
 from math import nan
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
-from anyts.constants import MESSAGES
+from anyts.stats import Stats
 from anyts.utils import is_doc, iter_doc_tokens, safe_divide
 
 from .constants import (
@@ -14,7 +15,7 @@ from .constants import (
     MORPHOLOGY_STATS_DESC,
     PASSIVE_AUX,
 )
-from .exceptions import SourceError, SourceTypeError, UnknownStatError
+from .exceptions import SourceError, SourceTypeError
 from .utils import _check_encoding, _check_nlp, get_nlp
 
 if TYPE_CHECKING:
@@ -59,7 +60,7 @@ def is_auxiliary(token: Token) -> bool:
     return token.head.pos_ == "VERB" and "Part" in token.head.morph.get("VerbForm", [])
 
 
-class MorphStats:
+class MorphStats(Stats):
     """
     Class for computing the morphological statistics of a text
 
@@ -113,7 +114,9 @@ class MorphStats:
         verb_form (tuple[str]): Tuple of the values of the verb form
 
     Methods:
+        describe: Reading of a statistic by its scale, None for every statistic
         get_stats: Getting the computed morphological statistics of the text
+        to_dataframe: Getting the statistics as a table of one row
         get_markers: Getting the markers of Spanish computed from the features
         explain_text: Parsing the text by the morphological statistics
         print_stats: Printing the computed morphological statistics with descriptions
@@ -127,6 +130,10 @@ class MorphStats:
             the pipeline
         DatasetNotFoundError: If a string is passed and the model is not installed
     """
+
+    stats_desc: ClassVar[Mapping[str, str]] = {
+        stat: str(desc["name"]) for stat, desc in MORPHOLOGY_STATS_DESC.items()
+    }
 
     def __init__(self, source: str | Doc, nlp: Language | None = None):
         _check_nlp(nlp)
@@ -146,9 +153,9 @@ class MorphStats:
         if not tokens:
             raise SourceError("The data source has no words")
         if not source.has_annotation("POS"):
-            raise SourceError(MESSAGES["no_pos"])
+            raise SourceError(self.messages["no_pos"])
         if not source.has_annotation("LEMMA"):
-            raise SourceError(MESSAGES["no_lemmas"])
+            raise SourceError(self.messages["no_lemmas"])
 
         self.words = tuple(token.text for token in tokens)
         self.lemmas = tuple(token.lemma_ for token in tokens)
@@ -179,16 +186,21 @@ class MorphStats:
         name = MORPHOLOGY_FEATURES[stat]
         return tuple(word.get(name) for word in features)
 
-    def get_stats(self, *args: str, filter_none: bool = False) -> dict[str, dict[str, int]]:
+    def get_stats(  # type: ignore[override]
+        self, *args: str, filter_none: bool = False, flat: bool = False
+    ) -> dict[str, Any]:
         """
         Getting the computed morphological statistics of the text
 
         Arguments:
             args (tuple[str]): Names of the selected statistics
             filter_none (bool): Filter out the empty values
+            flat (bool): Keys such as pos_NOUN instead of nested dictionaries, without
+                the words that lack the feature
 
         Returns:
-            dict[str, dict[str, int]]: Dictionary of the computed morphological statistics
+            dict[str, dict[str, int]]: Dictionary of the computed morphological statistics;
+                with flat, the counts by keys statistic_value
 
         Raises:
             UnknownStatError: If a statistic is unknown
@@ -199,11 +211,18 @@ class MorphStats:
             >>> ms.get_stats("number", filter_none=True)
             {'number': {'Plur': 3}}
         """
-        args = self.__check_stat(args)
-        stats: dict[str, dict[str, int]] = {}
+        args = self._checked_stats(args)
+        stats: dict[str, dict[str | None, int]] = {}
         for arg in args:
             counts = dict(Counter(getattr(self, arg)))
             stats[arg] = {k: v for k, v in counts.items() if k} if filter_none else counts
+        if flat:
+            return {
+                f"{stat}_{value}": n
+                for stat, counts in stats.items()
+                for value, n in counts.items()
+                if value is not None
+            }
         return stats
 
     def get_markers(self) -> dict[str, float]:
@@ -308,7 +327,7 @@ class MorphStats:
             >>> ms.explain_text("pos", "number", filter_none=True)[2]
             ('juegan', {'pos': 'VERB', 'number': 'Plur'})
         """
-        args = self.__check_stat(args)
+        args = self._checked_stats(args)
         values = tuple(zip(*(getattr(self, arg) for arg in args), strict=True))
         explains = tuple(
             {
@@ -338,7 +357,7 @@ class MorphStats:
             Plural                        |    3
             Unknown                       |    1
         """
-        args = self.__check_stat(args)
+        args = self._checked_stats(args)
         for stat, values in self.get_stats(*args).items():
             desc: Any = MORPHOLOGY_STATS_DESC[stat]
             print(f"{desc['name'].center(40, '-')}")
@@ -375,26 +394,8 @@ class MorphStats:
             return " or ".join([parts[0]] + [part.lower() for part in parts[1:]])
         return value
 
-    @staticmethod
-    def __check_stat(args: tuple[str, ...]) -> tuple[str, ...]:
-        """
-        Checking the names of the selected statistics
-
-        Arguments:
-            args (tuple[str]): Names of the selected statistics
-
-        Returns:
-            tuple[str]: The names, or all of them when none is given
-
-        Raises:
-            UnknownStatError: If a statistic is missing from MORPHOLOGY_STATS_DESC
-        """
-        if not args:
-            return tuple(MORPHOLOGY_STATS_DESC)
+    def _checked_stats(self, args: tuple[str, ...]) -> tuple[str, ...]:
+        """The selected statistics checked by the dictionary; all of them when none is selected"""
         for arg in args:
-            if arg not in MORPHOLOGY_STATS_DESC:
-                raise UnknownStatError(
-                    f"{arg} is missing from the morphological statistics, "
-                    f"available: {', '.join(MORPHOLOGY_STATS_DESC)}"
-                )
-        return args
+            self._check_stat(arg)
+        return args or self.stat_names()

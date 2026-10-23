@@ -8,8 +8,9 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from itertools import pairwise
 from math import nan
-from typing import TYPE_CHECKING, Any, NamedTuple
+from typing import TYPE_CHECKING, NamedTuple
 
+from anyts.stats import Stats
 from anyts.utils import is_doc, safe_divide
 
 from .constants import (
@@ -118,7 +119,7 @@ class _Line:
     scansion: _Scansion
 
 
-class VerseStats:
+class VerseStats(Stats):
     """
     Class for computing the verse statistics of a text
 
@@ -215,7 +216,9 @@ class VerseStats:
         seseo (bool): Whether the rhyme is read with seseo
 
     Methods:
+        describe: Reading of a statistic by its scale, None for every statistic
         get_stats: Getting the computed verse statistics
+        to_dataframe: Getting the statistics as a table of one row
         print_stats: Printing the computed verse statistics with descriptions
         accentuate: Getting the text with the stresses marked
 
@@ -223,6 +226,8 @@ class VerseStats:
         SourceTypeError: If the source is neither a string nor a Doc
         SourceError: If the source has no words
     """
+
+    stats_desc = VERSE_STATS_DESC
 
     def __init__(self, source: str | Doc, seseo: bool = False):
         if is_doc(source):
@@ -328,23 +333,6 @@ class VerseStats:
         self.c_rhymes = {kind: rhymes[kind] for kind in VERSE_RHYMES if rhymes[kind]}
         self.p_rhymed = safe_divide(sum(rhymes.values()), len(lines), nan)
         self.form = _form(self, labels, kinds)
-
-    def get_stats(self) -> dict[str, Any]:
-        """
-        Getting the computed verse statistics of the text
-
-        Returns:
-            dict[str, object]: Dictionary of the computed verse statistics
-        """
-        return {stat: getattr(self, stat) for stat in VERSE_STATS_DESC}
-
-    def print_stats(self) -> None:
-        """Printing the computed verse statistics of the text with descriptions"""
-        print(f"{'Statistic':^46}|{'Value':^14}")
-        print("-" * 60)
-        for stat, value in self.get_stats().items():
-            text = f"{value:.2f}" if isinstance(value, float) else str(value)
-            print(f"{VERSE_STATS_DESC[stat]:46}|{text:^14}")
 
     def accentuate(self) -> str:
         """

@@ -31,18 +31,18 @@ Excepciones:
 === "Resultado"
 
     ```
-                      Statistic                   |    Value
+                      Statistic                  |    Value
     ------------------------------------------------------------
-    Number of lines                               |      4
-    Number of stanzas                             |      1
-    Meter                                         | endecasílabo
-    Number of metrical syllables                  |      11
-    Share of lines off the meter                  |     0.00
-    Share of lines without the rhythmic stresses  |     0.00
-    Share of rhymed lines                         |     1.00
-    Share of oxytone endings (aguda)              |     0.00
-    Share of paroxytone endings (llana)           |     1.00
-    Share of proparoxytone endings (esdrújula)    |     0.00
+    Number of lines                              |      4
+    Number of stanzas                            |      1
+    Meter                                        | endecasílabo
+    Number of metrical syllables                 |      11
+    Share of lines off the meter                 |     0.00
+    Share of lines without the rhythmic stresses |     0.00
+    Share of rhymed lines                        |     1.00
+    Share of oxytone endings (aguda)             |     0.00
+    Share of paroxytone endings (llana)          |     1.00
+    Share of proparoxytone endings (esdrújula)   |     0.00
     ```
 
 ## Parámetros
@@ -393,7 +393,7 @@ El tipo de la terminación (cláusula) de un verso por las sílabas tras su últ
     que a mayór mál pudiéra habér llegádo.
     ```
 
-`get_stats()` devuelve las métricas como un diccionario, y `print_stats()` las muestra como una tabla con sus descripciones (`VERSE_STATS_DESC`), como en el ejemplo del principio de la página.
+Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de la [interfaz de las estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS: `get_stats()` devuelve las métricas como un diccionario, y `print_stats()` las muestra como una tabla con sus descripciones (`VERSE_STATS_DESC`), como en el ejemplo del principio de la página. Las estadísticas del verso no tienen escalas, así que `describe` da `None` para las estadísticas de `get_stats`.
 
 === "Código"
 

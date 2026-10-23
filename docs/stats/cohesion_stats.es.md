@@ -375,10 +375,10 @@ Unas palabras que no son una lista de cadenas, unas categorías gramaticales que
     [Connector(sent=0, start=4, end=5, text='y', cls='additive', kind='primary')]
     ```
 
-<!-- core: stats/cohesion_stats.md:ConnectorMatcher-is_subordinator 9d44a18 -->
-`is_subordinator(connector, pos=None)` comprueba si una aparición de un conector une su cláusula o su sintagma a su propia oración: un conector de `subordinators`, o un conector de una palabra cuya categoría `pos` es `SCONJ` o `ADP`. La cláusula de una conjunción subordinante y el sintagma de una preposición pertenecen a la oración del conector esté donde esté, así que un subordinante que abre una oración (*when he came, ...*, *despite the rain, ...*) no la une con las anteriores.
+<!-- core: stats/cohesion_stats.md:ConnectorMatcher-is_subordinator a87e4f1 -->
+`is_subordinator(connector, pos=None)` comprueba si una aparición de un conector une su cláusula o su sintagma a su propia oración: un conector de `subordinators`, o un conector de una palabra cuya categoría `pos` es `SCONJ` o `ADP`, pero ninguno de `parcellation`. La cláusula de una conjunción subordinante y el sintagma de una preposición pertenecen a la oración del conector esté donde esté, así que un subordinante que abre una oración (*when he came, ...*, *despite the rain, ...*) no la une con las anteriores.
 
-`SpanishConnectorMatcher.is_subordinator` es el del núcleo salvo para los conectores de `CONNECTOR_PARCELLATION`; `subordinators` es `CONNECTOR_SUBORDINATORS`.
+`subordinators` es `CONNECTOR_SUBORDINATORS` y `parcellation` es `CONNECTOR_PARCELLATION`.
 
 === "Código"
 

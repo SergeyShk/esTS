@@ -343,7 +343,7 @@ SpanishConnectorMatcher(connectors)
 
 --8<-- "stats/cohesion_stats.md:ConnectorMatcher-is_subordinator"
 
-`SpanishConnectorMatcher.is_subordinator` is that of the core but for the connectors of `CONNECTOR_PARCELLATION`; `subordinators` is `CONNECTOR_SUBORDINATORS`.
+`subordinators` is `CONNECTOR_SUBORDINATORS` and `parcellation` is `CONNECTOR_PARCELLATION`.
 
 === "Code"
 

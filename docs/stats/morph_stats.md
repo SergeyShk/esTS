@@ -143,7 +143,7 @@ The base of `p_ser` is the copular uses alone, read from the parse: the auxiliar
 
 ## Methods
 
-`get_stats(*args, filter_none=False)` returns the distributions of the values of the statistics as a dictionary of counts for each. The statistics are chosen by their names separated by commas, all of them without names, and `filter_none=True` drops the words without the feature (`None`). A name that is not a statistic raises `UnknownStatError` - here and in `print_stats` and `explain_text`.
+`get_stats(*args, filter_none=False, flat=False)` returns the distributions of the values of the statistics as a dictionary of counts for each. The statistics are chosen by their names separated by commas, all of them without names, and `filter_none=True` drops the words without the feature (`None`); `flat=True` gives the counts by keys such as `mood_Sub`, without the words that lack the feature, and so does `to_dataframe()`, a table of one row. A name that is not a statistic raises `UnknownStatError` - here and in `print_stats` and `explain_text`. `to_dataframe` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the morphological statistics have no scales, so `describe` gives `None`.
 
 `print_stats(*args, filter_none=False)` prints the distributions of the chosen statistics as tables, the frequent values first (the example at the top of the page), and `explain_text(*args, filter_none=False)` returns the words of the text in order with the values of the chosen statistics.
 
