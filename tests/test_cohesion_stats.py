@@ -113,6 +113,8 @@ def test_subordinators(words, pos, expected):
     [
         ("Llovía. A pesar de todo, salimos.", ["a pesar de todo"], 1),
         ("Llovía. A pesar de todo el esfuerzo, salimos.", ["a pesar de"], 0),
+        ("Llovía. A pesar de todo lo que hizo, salimos.", ["a pesar de"], 0),
+        ("Llovía. Pese a todo ello, salimos.", ["pese a todo"], 1),
         ("Llovía. Gracias a ello, nos quedamos.", ["gracias a ello"], 1),
     ],
 )
@@ -120,6 +122,11 @@ def test_anaphoric_forms_link_to_the_sentence_before(text, found, inter):
     cs = CohesionStats(text)
     assert [c.text for c in cs.connector_spans] == found
     assert cs.n_inter_connectors == inter
+
+
+def test_anaphoric_form_before_a_noun_phrase_of_a_string():
+    found = find_connectors(["A", "pesar", "de", "todo", "el", "esfuerzo"])
+    assert [c.text for c in found] == ["a pesar de"]
 
 
 def test_consecutive_connector_after_a_comma():

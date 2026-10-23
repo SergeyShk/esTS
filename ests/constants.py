@@ -670,6 +670,38 @@ CONNECTOR_BLOCKED_AFTER = {
     "al comienzo": frozenset({"de", "del"}),
     "luego": frozenset({"de", "del"}),
     "en cuanto": frozenset({"a", "al", "á"}),
+    # a pesar de todo before a noun phrase or a relative clause (todo el esfuerzo, todo lo que)
+    **dict.fromkeys(
+        ("a pesar de todo", "pese a todo"),
+        frozenset(
+            {
+                "el",
+                "la",
+                "los",
+                "las",
+                "lo",
+                "un",
+                "una",
+                "este",
+                "esta",
+                "estos",
+                "estas",
+                "ese",
+                "esa",
+                "esos",
+                "esas",
+                "aquel",
+                "aquella",
+                "mi",
+                "mis",
+                "tu",
+                "tus",
+                "su",
+                "sus",
+                "cuanto",
+            }
+        ),
+    ),
 }
 CONNECTOR_BLOCKED_BEFORE = {"así como": frozenset({"algo"})}
 # Markers counted only at the start of a sentence or after these words (y encima llueve)
@@ -760,7 +792,8 @@ CONNECTOR_SUBORDINATORS = frozenset(
 CONNECTOR_PARCELLATION = frozenset({"porque", "conque"})
 # Connectors that a punctuation mark between their words splits: a mark before the
 # conjunction makes it a word of its own (así, que...; lo de siempre, que...); not the
-# consecutive ones, where old texts put a comma before que (de tal modo, que)
+# consecutive ones and bien es verdad que, where old texts put a comma before que
+# (de tal modo, que)
 CONNECTOR_SPLIT_BY_MARKS = frozenset(
     {
         "puesto que",
