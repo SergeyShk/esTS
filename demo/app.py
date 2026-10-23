@@ -58,7 +58,7 @@ matplotlib.use("Agg")
 
 MAX_CHARS = 20_000
 MAX_MARK_RUN = 10
-MARK_RUN = re.compile(rf"([^\w\s])\1{{{MAX_MARK_RUN},}}")
+MARK_RUN = re.compile(rf"(?:[^\w\s]|_){{{MAX_MARK_RUN + 1},}}")
 ZIPF_WORDS = 100
 SENTENCES_MIN = 5
 SENTENCES_WINDOW = 5
@@ -357,7 +357,7 @@ def render_highlight(text: str, layers: list[str]) -> str:
 
 
 def compute(text: str, layers: list[str]) -> dict:
-    # A long run of one mark makes the tokenizer of spaCy quadratic
+    # A long run of marks makes the tokenizer of spaCy quadratic
     text = MARK_RUN.sub(lambda match: match[0][:MAX_MARK_RUN], text.strip()[:MAX_CHARS])
     if not text:
         raise ValueError("Paste a text to analyze")

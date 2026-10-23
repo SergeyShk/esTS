@@ -55,8 +55,8 @@ def kwic(
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc object or the keyword
             is not a string
-        ParameterError: If the keyword has no words or the window is not an integer or is
-            negative
+        ParameterError: If the keyword has no words, the window is not an integer or is
+            negative, or by_lemma or ignore_case is not a bool
 
     Example:
         >>> from ests.corpus import kwic

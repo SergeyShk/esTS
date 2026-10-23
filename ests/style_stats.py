@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from collections.abc import Collection, Mapping, Sequence
-from contextlib import suppress
 from math import nan
 from typing import TYPE_CHECKING, Any
 
@@ -165,12 +164,15 @@ class StyleStats(anyts.style_stats.StyleStats):
     def __getstate__(self) -> dict[str, Any]:
         """
         State for pickle and copy without the pipeline: the nouns of a string are read by
-        it first, so the copy keeps them
+        it first, so the copy keeps them or the error of reading them
         """
         state = self.__dict__.copy()
         if state.get("nlp") is not None:
-            with suppress(SourceError):
+            try:
                 state["_nouns"] = self.nouns()
+            except SourceError as error:
+                state["_text"] = None
+                state["_annotation_error"] = str(error)
             state["nlp"] = None
         return state
 

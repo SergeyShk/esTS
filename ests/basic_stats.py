@@ -96,7 +96,8 @@ class BasicStats(anyts.basic_stats.BasicStats):
         SourceTypeError: If the source is neither a string nor a Doc object, or an extractor
             is of another type
         SourceError: If the source has no words or is a string with a character without a UTF-8 form
-        ParameterError: If a factor is not an integer or is below one
+        ParameterError: If a factor is not an integer or is below one, or normalize is not
+            a bool
     """
 
     sents_extractor_class = SentsExtractor

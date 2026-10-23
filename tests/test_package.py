@@ -1,4 +1,3 @@
-import ast
 import importlib
 import importlib.metadata
 import re
@@ -421,22 +420,27 @@ def test_stats_interface(name):
     assert stats_class.stats_desc
 
 
-def test_imports_of_the_demo():
-    """Every name the demo imports from esTS exists, without gradio and the model"""
-    tree = ast.parse((ROOT / "demo" / "app.py").read_text(encoding="utf-8"))
-    imports = [
-        (node.module, alias.name)
-        for node in ast.walk(tree)
-        if isinstance(node, ast.ImportFrom) and (node.module or "").split(".")[0] == "ests"
-        for alias in node.names
-    ]
-    assert imports
-    missing = [
-        f"{module}.{name}"
-        for module, name in imports
-        if not hasattr(importlib.import_module(module), name)
-    ]
-    assert not missing
+def test_demo_computes_its_examples(monkeypatch, freq_dict):
+    """The demo computes every example and a text of long runs of marks, gradio stubbed"""
+    import importlib.util
+    import time
+    from unittest.mock import MagicMock
+
+    import ests.datasets
+
+    monkeypatch.setitem(sys.modules, "gradio", MagicMock())
+    monkeypatch.setattr(ests.datasets, "FreqDict", lambda: freq_dict)
+    spec = importlib.util.spec_from_file_location("ests_demo", ROOT / "demo" / "app.py")
+    assert spec and spec.loader
+    app = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(app)
+    for text in app.EXAMPLES.values():
+        result = app.compute(text, app.DEFAULT_LAYERS)
+        assert result["summary"] and not result["lexical"].empty
+    start = time.perf_counter()
+    result = app.compute("Hola, " + "!?" * 5000 + " " + "_" * 5000 + " mundo.", [])
+    assert time.perf_counter() - start < 10
+    assert result["text"] == "Hola, " + "!?" * 5 + " " + "_" * 10 + " mundo."
 
 
 @pytest.mark.parametrize(
@@ -457,6 +461,8 @@ def test_pickle_without_the_pipeline(name, freq_dict):
     assert len(data) < 100_000
     for clone in (pickle.loads(data), copy.deepcopy(stats)):
         assert repr(clone.get_stats()) == repr(stats.get_stats())
+        if name == "LexicalStats":
+            assert clone.analyze("El perro ladra.") == stats.analyze("El perro ladra.")
 
 
 def test_version_of_the_notebooks():

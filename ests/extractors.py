@@ -83,7 +83,7 @@ class WordsExtractor(anyts.WordsExtractor):
         ParameterError: If the N-gram range is not a pair of integers, its lower bound
             is less than one or greater than the upper
         ParameterError: If a length bound is not an integer, is negative or the minimum
-            is greater than the maximum
+            is greater than the maximum, or a switch is not a bool
         SourceTypeError: If the stop words are not a list of strings
     """
 
@@ -131,7 +131,8 @@ class CharNgramsExtractor(anyts.CharNgramsExtractor):
         get_most_common: Getting a counter of the top N-grams
 
     Raises:
-        ParameterError: If the N-gram length is not an integer or is less than one
+        ParameterError: If the N-gram length is not an integer or is less than one, or
+            lowercase or within_words is not a bool
     """
 
     def tokenize(self, text: str) -> Iterable[str]:

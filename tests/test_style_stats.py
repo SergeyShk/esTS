@@ -270,6 +270,17 @@ def test_verbal_nouns_of_a_long_text(nlp, monkeypatch):
         _ = ss.verbal_nouns
 
 
+def test_copy_keeps_the_error_of_its_pipeline():
+    import copy
+    import pickle
+
+    ss = StyleStats("La revisión del expediente fue realizada.", nlp=spacy.blank("es"))
+    for clone in (pickle.loads(pickle.dumps(ss)), copy.deepcopy(ss)):
+        assert clone.nlp is None
+        with pytest.raises(SourceError, match="no parts of speech"):
+            _ = clone.verbal_nouns
+
+
 def test_split_text():
     assert _split_text("El gato duerme.", 15) == ["El gato duerme."]
     # The parts are as long as the limit allows, without the spaces around the sentences

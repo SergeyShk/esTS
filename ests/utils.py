@@ -289,6 +289,9 @@ def tokenize(text: str) -> Iterator[str]:
 
     Returns:
         iterator[str]: Iterator of tokens
+
+    Raises:
+        SourceError: If the text has a character without a UTF-8 form
     """
     _check_encoding(text)
     return (
@@ -331,6 +334,9 @@ def iter_text_words(text: str) -> Iterator[tuple[int, int, str]]:
     Returns:
         iterator[tuple[int, int, str]]: Position of the first character,
             position after the last character and text of each word
+
+    Raises:
+        SourceError: If the text has a character without a UTF-8 form
 
     Example:
         >>> from ests.utils import iter_text_words

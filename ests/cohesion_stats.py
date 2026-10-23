@@ -340,8 +340,9 @@ def find_connectors(
             collection, or the connectors are not a dictionary of phrases and pairs of
             strings
         ParameterError: If the dictionary has an unknown class or kind, the number of
-            the sentence or a position of a mark is not an integer, or the parts of
-            speech are not as many as the words
+            the sentence or a position of a mark is not an integer, a position of a mark
+            is not that of a word after the first, or the parts of speech are not as many
+            as the words
 
     Example:
         >>> from ests.cohesion_stats import find_connectors

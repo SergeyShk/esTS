@@ -137,7 +137,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
     def __getstate__(self) -> dict[str, Any]:
         """State for pickle and copy without the pipeline, which is no part of the statistics"""
         state = self.__dict__.copy()
-        state.pop("_nlp", None)
+        state["_nlp"] = None
         return state
 
     def analyze(self, source: str | Doc) -> list[LexicalWord]:
