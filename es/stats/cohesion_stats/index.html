@@ -2794,9 +2794,9 @@ None
 </div>
 </div>
 </div>
-<!-- core: stats/cohesion_stats.md:ConnectorMatcher-is_subordinator 9d44a18 -->
-<p><code>is_subordinator(connector, pos=None)</code> comprueba si una aparición de un conector une su cláusula o su sintagma a su propia oración: un conector de <code>subordinators</code>, o un conector de una palabra cuya categoría <code>pos</code> es <code>SCONJ</code> o <code>ADP</code>. La cláusula de una conjunción subordinante y el sintagma de una preposición pertenecen a la oración del conector esté donde esté, así que un subordinante que abre una oración (<em>when he came, ...</em>, <em>despite the rain, ...</em>) no la une con las anteriores.</p>
-<p><code>SpanishConnectorMatcher.is_subordinator</code> es el del núcleo salvo para los conectores de <code>CONNECTOR_PARCELLATION</code>; <code>subordinators</code> es <code>CONNECTOR_SUBORDINATORS</code>.</p>
+<!-- core: stats/cohesion_stats.md:ConnectorMatcher-is_subordinator a87e4f1 -->
+<p><code>is_subordinator(connector, pos=None)</code> comprueba si una aparición de un conector une su cláusula o su sintagma a su propia oración: un conector de <code>subordinators</code>, o un conector de una palabra cuya categoría <code>pos</code> es <code>SCONJ</code> o <code>ADP</code>, pero ninguno de <code>parcellation</code>. La cláusula de una conjunción subordinante y el sintagma de una preposición pertenecen a la oración del conector esté donde esté, así que un subordinante que abre una oración (<em>when he came, ...</em>, <em>despite the rain, ...</em>) no la une con las anteriores.</p>
+<p><code>subordinators</code> es <code>CONNECTOR_SUBORDINATORS</code> y <code>parcellation</code> es <code>CONNECTOR_PARCELLATION</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

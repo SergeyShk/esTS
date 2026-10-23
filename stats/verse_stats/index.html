@@ -2232,18 +2232,18 @@
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>                  Statistic                   |    Value
+<div class="highlight"><pre><span></span><code>                  Statistic                  |    Value
 ------------------------------------------------------------
-Number of lines                               |      4
-Number of stanzas                             |      1
-Meter                                         | endecasílabo
-Number of metrical syllables                  |      11
-Share of lines off the meter                  |     0.00
-Share of lines without the rhythmic stresses  |     0.00
-Share of rhymed lines                         |     1.00
-Share of oxytone endings (aguda)              |     0.00
-Share of paroxytone endings (llana)           |     1.00
-Share of proparoxytone endings (esdrújula)    |     0.00
+Number of lines                              |      4
+Number of stanzas                            |      1
+Meter                                        | endecasílabo
+Number of metrical syllables                 |      11
+Share of lines off the meter                 |     0.00
+Share of lines without the rhythmic stresses |     0.00
+Share of rhymed lines                        |     1.00
+Share of oxytone endings (aguda)             |     0.00
+Share of paroxytone endings (llana)          |     1.00
+Share of proparoxytone endings (esdrújula)   |     0.00
 </code></pre></div>
 </div>
 </div>
@@ -2858,7 +2858,7 @@ que a mayór mál pudiéra habér llegádo.
 </div>
 </div>
 </div>
-<p><code>get_stats()</code> returns the metrics as a dictionary, and <code>print_stats()</code> prints them as a table with their descriptions (<code>VERSE_STATS_DESC</code>), as in the example at the top of the page.</p>
+<p>The methods <code>get_stats</code>, <code>to_dataframe</code>, <code>print_stats</code> and <code>describe</code> are those of the <a href="https://sergeyshk.github.io/anyTS/stats/stats/">statistics interface</a> of the anyTS core: <code>get_stats()</code> returns the metrics as a dictionary, and <code>print_stats()</code> prints them as a table with their descriptions (<code>VERSE_STATS_DESC</code>), as in the example at the top of the page. The verse statistics have no scales, so <code>describe</code> gives <code>None</code> for the statistics of <code>get_stats</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Code</label><label for="__tabbed_10_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

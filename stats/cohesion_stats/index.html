@@ -2789,8 +2789,8 @@ None
 </div>
 </div>
 </div>
-<p><code>is_subordinator(connector, pos=None)</code> checks whether an occurrence of a connector ties its clause or phrase to its own sentence: a connector of <code>subordinators</code>, or a one-word connector whose part of speech <code>pos</code> is <code>SCONJ</code> or <code>ADP</code>. The clause of a subordinating conjunction and the phrase of a preposition belong to the sentence of the connector wherever it stands, so a subordinator opening a sentence (<em>when he came, ...</em>, <em>despite the rain, ...</em>) does not link it to the ones before.</p>
-<p><code>SpanishConnectorMatcher.is_subordinator</code> is that of the core but for the connectors of <code>CONNECTOR_PARCELLATION</code>; <code>subordinators</code> is <code>CONNECTOR_SUBORDINATORS</code>.</p>
+<p><code>is_subordinator(connector, pos=None)</code> checks whether an occurrence of a connector ties its clause or phrase to its own sentence: a connector of <code>subordinators</code>, or a one-word connector whose part of speech <code>pos</code> is <code>SCONJ</code> or <code>ADP</code>, but none of <code>parcellation</code>. The clause of a subordinating conjunction and the phrase of a preposition belong to the sentence of the connector wherever it stands, so a subordinator opening a sentence (<em>when he came, ...</em>, <em>despite the rain, ...</em>) does not link it to the ones before.</p>
+<p><code>subordinators</code> is <code>CONNECTOR_SUBORDINATORS</code> and <code>parcellation</code> is <code>CONNECTOR_PARCELLATION</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Code</label><label for="__tabbed_6_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

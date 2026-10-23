@@ -2580,7 +2580,7 @@ c - a \cdot \frac{\textrm{Number of words}}{\textrm{Number of sentences}} - b \c
 </tr>
 </tbody>
 </table>
-<p>The scale of <code>describe_level</code> and <code>describe</code> follows the preset: the <code>level_scale</code> method of esTS gives the scale of <code>ests.constants.READING_EASE_SCALES</code> named in <code>PRESET_SCALES</code> - the INFLESZ scale of Barrio-Cantalejo et al. (2008) for <code>general</code> and the bands of Fernández Huerta for <code>classic</code>. The INFLESZ scale:</p>
+<p>The scale of <code>describe_level</code> and <code>describe</code> follows the preset: the attribute <code>preset_level_scales</code> of the core gives for each preset the scale of <code>ests.constants.READING_EASE_SCALES</code> named in <code>PRESET_SCALES</code> - the INFLESZ scale of Barrio-Cantalejo et al. (2008) for <code>general</code> and the bands of Fernández Huerta for <code>classic</code>; a preset that a subclass adds is read by the scales of <code>general</code>. The INFLESZ scale:</p>
 <table>
 <thead>
 <tr>
@@ -3122,7 +3122,7 @@ b + a \cdot S
 <h3 id="consensus_grade">Consensus grade<a class="headerlink" href="#consensus_grade" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>consensus_grade</code></p>
 <p>The <code>consensus_grade</code> attribute is the median of the values of the grade formulas (<code>grade_stats</code>) rounded half up, together with the reading ease in years of schooling (<code>reading_ease_to_grade</code>), not rounded. A library aligns the bounds of <code>reading_ease_grades</code>, and of each scale of <code>preset_reading_ease_grades</code>, with its scale of the reading ease, so that the consensus grade and <code>describe</code> read the value alike.</p>
-<p>The grade formulas of esTS (<code>ests.constants.READABILITY_GRADE_STATS</code>) are Crawford and SOL. esTS converts the reading ease by the scale of the preset with its own <code>reading_ease_to_grade(flesch_reading_easy)</code> method, which calls <code>flesch_reading_easy_to_grade</code> with the preset of the object, so the <code>reading_ease_grades</code> of the core are not used.</p>
+<p>The grade formulas of esTS (<code>ests.constants.READABILITY_GRADE_STATS</code>) are Crawford and SOL. esTS converts the reading ease into years of schooling by the scale of the preset: the attribute <code>preset_reading_ease_grades</code> of the core gives for each preset the bounds of <code>READING_EASE_GRADES</code> and 13 below them, the scale of <code>flesch_reading_easy_to_grade</code>, so the <code>reading_ease_grades</code> of the core are not used.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Crawford was fitted on primary school readers and saturates for adult texts; SOL was fitted on health education materials. The consensus grade of a technical text mostly reflects the reading ease band.</p>

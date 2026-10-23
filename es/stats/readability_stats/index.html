@@ -2582,7 +2582,7 @@ c - a \cdot \frac{\textrm{Número de palabras}}{\textrm{Número de oraciones}} -
 </tr>
 </tbody>
 </table>
-<p>La escala de <code>describe_level</code> y <code>describe</code> sigue el preajuste: el método <code>level_scale</code> de esTS da la escala de <code>ests.constants.READING_EASE_SCALES</code> que nombra <code>PRESET_SCALES</code> - la escala INFLESZ de Barrio-Cantalejo et al. (2008) para <code>general</code> y los niveles de Fernández Huerta para <code>classic</code>. La escala INFLESZ:</p>
+<p>La escala de <code>describe_level</code> y <code>describe</code> sigue el preajuste: el atributo <code>preset_level_scales</code> del núcleo da para cada preajuste la escala de <code>ests.constants.READING_EASE_SCALES</code> que nombra <code>PRESET_SCALES</code> - la escala INFLESZ de Barrio-Cantalejo et al. (2008) para <code>general</code> y los niveles de Fernández Huerta para <code>classic</code>; un preajuste que añade una subclase se lee con las escalas de <code>general</code>. La escala INFLESZ:</p>
 <table>
 <thead>
 <tr>
@@ -3128,7 +3128,7 @@ b + a \cdot S
 <p class="metric-meta"><code>consensus_grade</code></p>
 <!-- core: stats/readability_stats.md:ReadabilityStats-consensus c4a6ea5 -->
 <p>El atributo <code>consensus_grade</code> es la mediana de los valores de las fórmulas de grado (<code>grade_stats</code>) redondeados al entero más próximo (las mitades hacia arriba), junto con la facilidad de lectura en años de escolaridad (<code>reading_ease_to_grade</code>), sin redondear. Una biblioteca alinea los límites de <code>reading_ease_grades</code>, y de cada escala de <code>preset_reading_ease_grades</code>, con su escala de la facilidad de lectura, para que el grado de consenso y <code>describe</code> lean el valor igual.</p>
-<p>Las fórmulas de grado de esTS (<code>ests.constants.READABILITY_GRADE_STATS</code>) son Crawford y SOL. esTS convierte la facilidad de lectura según la escala del preajuste con su propio método <code>reading_ease_to_grade(flesch_reading_easy)</code>, que llama a <code>flesch_reading_easy_to_grade</code> con el preajuste del objeto, así que los <code>reading_ease_grades</code> del núcleo no se usan.</p>
+<p>Las fórmulas de grado de esTS (<code>ests.constants.READABILITY_GRADE_STATS</code>) son Crawford y SOL. esTS convierte la facilidad de lectura en años de escolaridad según la escala del preajuste: el atributo <code>preset_reading_ease_grades</code> del núcleo da para cada preajuste los límites de <code>READING_EASE_GRADES</code> y 13 por debajo de ellos, la escala de <code>flesch_reading_easy_to_grade</code>, así que los <code>reading_ease_grades</code> del núcleo no se usan.</p>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
 <p>Crawford se ajustó con lecturas de primaria y se satura en los textos para adultos; SOL se ajustó con materiales de educación sanitaria. El grado de consenso de un texto técnico refleja sobre todo el nivel de la facilidad de lectura.</p>
