@@ -13,15 +13,30 @@ debido a que	causal	primary
 gracias a que	causal	primary
 por cuanto	causal	primary
 a causa de	causal	secondary
+a causa de eso	causal	secondary
+a causa de esto	causal	secondary
+a causa de ello	causal	secondary
 debido a	causal	secondary
 gracias a	causal	secondary
+gracias a eso	causal	secondary
+gracias a esto	causal	secondary
+gracias a ello	causal	secondary
 por culpa de	causal	secondary
 por razón de	causal	secondary
 en razón de	causal	secondary
 en virtud de	causal	secondary
+en virtud de eso	causal	secondary
+en virtud de esto	causal	secondary
+en virtud de ello	causal	secondary
 a fuerza de	causal	secondary
 a consecuencia de	causal	secondary
+a consecuencia de eso	causal	secondary
+a consecuencia de esto	causal	secondary
+a consecuencia de ello	causal	secondary
 como consecuencia de	causal	secondary
+como consecuencia de eso	causal	secondary
+como consecuencia de esto	causal	secondary
+como consecuencia de ello	causal	secondary
 como resultado de	causal	secondary
 de resultas de	causal	secondary
 por eso	causal	secondary
@@ -77,7 +92,15 @@ por muy que	concessive	primary
 por poco que	concessive	primary
 aun a riesgo de	concessive	secondary
 a pesar de	concessive	secondary
+a pesar de eso	concessive	secondary
+a pesar de esto	concessive	secondary
+a pesar de ello	concessive	secondary
+a pesar de todo	concessive	secondary
 pese a	concessive	secondary
+pese a eso	concessive	secondary
+pese a esto	concessive	secondary
+pese a ello	concessive	secondary
+pese a todo	concessive	secondary
 con todo	concessive	secondary
 con todo y con eso	concessive	secondary
 aun así	concessive	secondary

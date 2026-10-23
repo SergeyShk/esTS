@@ -282,7 +282,7 @@ def load_connectors() -> Mapping[str, tuple[str, str]]:
     Loading the dictionary of the connectors
 
     Description:
-        The file resources/connectors.tsv: 250 discourse markers, each with its
+        The file resources/connectors.tsv: 273 discourse markers, each with its
         class of CONNECTOR_CLASSES and its kind of CONNECTOR_KINDS of anyts.constants
 
     Returns:

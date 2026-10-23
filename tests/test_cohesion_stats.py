@@ -95,7 +95,8 @@ def test_connectors_by_place():
     ("words", "pos", "expected"),
     [
         (["Ya", "que", "estás", "aquí"], "ADV", True),
-        (["A", "pesar", "de", "todo"], "ADP", True),
+        (["A", "pesar", "de", "la", "lluvia"], "ADP", True),
+        (["A", "pesar", "de", "todo"], "ADP", False),
         (["Cuando", "llegó"], "SCONJ", True),
         (["Porque", "llovía"], "SCONJ", False),
         (["Conque", "vayamos"], "SCONJ", False),
@@ -105,6 +106,26 @@ def test_connectors_by_place():
 def test_subordinators(words, pos, expected):
     matcher = CohesionStats.connector_matcher()
     assert matcher.is_subordinator(matcher.find(words)[0], pos) is expected
+
+
+@pytest.mark.parametrize(
+    ("text", "found", "inter"),
+    [
+        ("Llovía. A pesar de todo, salimos.", ["a pesar de todo"], 1),
+        ("Llovía. A pesar de todo el esfuerzo, salimos.", ["a pesar de"], 0),
+        ("Llovía. Gracias a ello, nos quedamos.", ["gracias a ello"], 1),
+    ],
+)
+def test_anaphoric_forms_link_to_the_sentence_before(text, found, inter):
+    cs = CohesionStats(text)
+    assert [c.text for c in cs.connector_spans] == found
+    assert cs.n_inter_connectors == inter
+
+
+def test_consecutive_connector_after_a_comma():
+    # old texts put a comma before the que of a consecutive connector
+    cs = CohesionStats("Se enfureció de tal modo, que gritó.")
+    assert [c.text for c in cs.connector_spans] == ["de tal modo que"]
 
 
 def test_lists_of_the_connectors_are_in_the_dictionary():
@@ -252,7 +273,7 @@ def test_unknown_connector_class(connectors):
 
 def test_load_connectors():
     connectors = load_connectors()
-    assert len(connectors) == 250
+    assert len(connectors) == 273
     assert connectors["sin embargo"] == ("adversative", "secondary")
     assert all(cls in CONNECTOR_CLASSES for cls, _ in connectors.values())
     assert all(kind in CONNECTOR_TYPES for _, kind in connectors.values())

@@ -677,10 +677,15 @@ CONNECTOR_ONLY_AFTER = {"encima": frozenset({"y", "e", "ni", "pero"})}
 # Markers not counted at the start of a sentence, where they open a reply (Pues bien...)
 CONNECTOR_NOT_AT_START = frozenset({"pues"})
 # Parts of speech of the next word that make a marker a phrase of its own (sobre todo el)
-CONNECTOR_BLOCKED_AFTER_POS = {"sobre todo": frozenset({"DET"})}
+CONNECTOR_BLOCKED_AFTER_POS = {
+    "sobre todo": frozenset({"DET"}),
+    "a pesar de todo": frozenset({"DET", "NOUN", "ADJ"}),
+    "pese a todo": frozenset({"DET", "NOUN", "ADJ"}),
+}
 # Subordinating conjunctions and prepositions besides the one-word ones tagged SCONJ or ADP:
 # opening a sentence, they open its subordinate clause or prepositional phrase (Ya que
-# estás aquí, ...; A pesar de todo, ...)
+# estás aquí, ...; A pesar de la lluvia, ...); their anaphoric forms (a pesar de ello) are
+# entries of their own, which link to the sentence before
 CONNECTOR_SUBORDINATORS = frozenset(
     {
         "puesto que",
@@ -754,7 +759,8 @@ CONNECTOR_SUBORDINATORS = frozenset(
 # Subordinating conjunctions that open a sentence linking it to the one before (Porque...)
 CONNECTOR_PARCELLATION = frozenset({"porque", "conque"})
 # Connectors that a punctuation mark between their words splits: a mark before the
-# conjunction makes it a word of its own (así, que...; lo de siempre, que...)
+# conjunction makes it a word of its own (así, que...; lo de siempre, que...); not the
+# consecutive ones, where old texts put a comma before que (de tal modo, que)
 CONNECTOR_SPLIT_BY_MARKS = frozenset(
     {
         "puesto que",
@@ -769,12 +775,6 @@ CONNECTOR_SPLIT_BY_MARKS = frozenset(
         "gracias a que",
         "de ahí que",
         "así que",
-        "de modo que",
-        "de manera que",
-        "de forma que",
-        "de suerte que",
-        "de tal modo que",
-        "de tal manera que",
         "por lo que",
         "sino que",
         "mientras que",
@@ -784,7 +784,6 @@ CONNECTOR_SPLIT_BY_MARKS = frozenset(
         "por mucho que",
         "por muy que",
         "por poco que",
-        "bien es verdad que",
         "cierto es que",
         "antes de que",
         "después de que",
