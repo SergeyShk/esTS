@@ -61,28 +61,28 @@ Galdós frente a Unamuno, tres novelas de cada uno del [corpus de literatura](..
 
     ```
                       median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    diversity_mtldw         105.455          66.179  37.104   43.850    3.260        0.988  0.994     0.0
-    diversity_mamtld        103.316          64.814  35.081   45.200    3.083        0.981  0.990     0.0
-    diversity_mtld          103.655          63.851  38.320   47.911    3.110        0.981  0.990     0.0
+    diversity_mtldw         105.455          66.179  37.104   43.799    3.260        0.988  0.994     0.0
+    diversity_mamtld        103.316          64.814  35.107   45.657    3.083        0.981  0.990     0.0
+    diversity_mtld          103.655          63.851  38.546   47.911    3.110        0.981  0.990     0.0
     diversity_mattr           0.817           0.769   0.046    0.057    2.952        0.979  0.990     0.0
     diversity_msttr           0.819           0.769   0.047    0.059    2.929        0.979  0.989     0.0
 
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    basic_letters_per_word          4.441           4.130   0.243    0.356    1.695        0.784  0.892     0.0
-    readability_lix                37.906          29.721   6.954   11.023    1.084        0.694  0.847     0.0
+    basic_letters_per_word          4.441           4.130   0.243    0.358    1.695        0.784  0.892     0.0
+    readability_lix                37.906          29.721   7.097   11.023    1.084        0.694  0.847     0.0
     morph_p_gerund                  0.069           0.037   0.026    0.035    1.533        0.742  0.871     0.0
     morph_polarity_Neg              0.019           0.028  -0.011   -0.009   -1.122       -0.559  0.221     0.0
     sents_mean                     16.393          11.494   3.078    6.688    0.833        0.610  0.805     0.0
-    punct_dash                     19.000          46.000 -39.012  -14.000   -1.287       -0.605  0.197     0.0
-    punct_exclamation               9.000          24.000 -22.000   -2.975   -1.251       -0.637  0.181     0.0
-    diversity_yule_k              103.620         112.500 -17.620   -3.740   -0.676       -0.351  0.324     0.0
+    punct_dash                     19.000          46.000 -39.000  -14.000   -1.287       -0.605  0.197     0.0
+    punct_exclamation               9.000          24.000 -23.000   -2.000   -1.251       -0.637  0.181     0.0
+    diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676       -0.351  0.324     0.0
 
     {'n_Galdós': 155, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
 Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0.35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones.
 
-Los valores p toman las 272 ventanas de seis novelas por independientes (véase el [aviso](#statistics) de abajo), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 42 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 6.7 palabras, donde las ventanas solas darían de 3.9 a 6.0.
+Los valores p toman las 272 ventanas de seis novelas por independientes (véase el [aviso](#statistics) de abajo), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 43 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 6.7 palabras, donde las ventanas solas darían de 3.9 a 6.0.
 
 ## Parámetros
 
@@ -109,13 +109,13 @@ Excepciones:
 text_features(text, nlp=None)
 ```
 
-Devuelve 132 rasgos de un texto con un prefijo según su fuente; un rasgo indefinido es `nan`.
+Devuelve 133 rasgos de un texto con un prefijo según su fuente; un rasgo indefinido es `nan`.
 
 | Prefijo | Rasgos | Fuente |
 | :------ | :----- | :----- |
 | `basic_` | proporciones de palabras largas, complejas, simples, monosílabas y polisílabas, de letras, espacios y signos de puntuación; letras y sílabas por palabra | [`BasicStats`](../stats/basic_stats.md) |
 | `readability_` | todas las fórmulas de legibilidad y el grado de consenso | [`ReadabilityStats`](../stats/readability_stats.md) |
-| `diversity_` | todas las medidas de diversidad léxica | [`DiversityStats`](../stats/diversity_stats.md) |
+| `diversity_` | todas las medidas de diversidad léxica salvo la Z de Orlov, inestable en una ventana | [`DiversityStats`](../stats/diversity_stats.md) |
 | `morph_` | proporciones de los valores de cada rasgo morfológico (`morph_pos_NOUN`, `morph_mood_Sub`, `morph_polarity_Neg`) y los marcadores del español (`morph_p_gerund`, `morph_p_mente_adverbs`) | [`MorphStats`](../stats/morph_stats.md) con el modelo de spaCy |
 | `sents_` | longitud media de una oración en palabras, desviación típica, coeficiente de variación, autocorrelación de las longitudes vecinas ([`sentence_rhythm`](#sentence_rhythm)): el ritmo del texto | [`SentsExtractor`](../extractors/sentences.md) |
 | `punct_` | frecuencias de los signos de puntuación por tipo por cada 1000 palabras y la proporción de los signos de apertura | [`punctuation_profile`](../stats/basic_stats.md#punctuation) |
@@ -187,20 +187,20 @@ Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:
     ```
                                         median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
     syntax_gerund_clauses_per_sent              0.156           0.047   0.092    0.132    1.494        0.854  0.927     0.0
+    syntax_complex_nominals_per_clause          0.695           0.483   0.178    0.236    1.237        0.709  0.855     0.0
     syntax_tree_depth                           3.870           3.012   0.625    1.134    1.113        0.661  0.830     0.0
-    syntax_subtrees_per_sent                    7.193           4.864   1.500    3.352    0.975        0.648  0.824     0.0
+    syntax_subtrees_per_sent                    7.193           4.864   1.500    3.351    0.975        0.648  0.824     0.0
     syntax_p_complex_sents                      0.613           0.470   0.092    0.193    1.248        0.644  0.822     0.0
-    syntax_participle_clauses_per_sent          0.114           0.059   0.030    0.070    0.805        0.570  0.785     0.0
     ```
 
 ## Comparación de tablas de rasgos { #compare_features }
 
-<!-- core: corpus/compare.md:compare_features 96478f4 -->
+<!-- core: corpus/compare.md:compare_features e0c139a -->
 ``` {.python .signature}
 compare_features(table_a, table_b, labels=('A', 'B'), n_bootstrap=1000, seed=0)
 ```
 
-Compara dos corpus rasgo por rasgo. Cada corpus es una tabla de los rasgos de sus ventanas, partes de los textos de un tamaño parecido, así que los rasgos no dependen de la longitud de los textos. El resultado tiene una fila por columna, por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel `text` del índice; sin él cada fila es un texto aparte. Una columna que falta en una de las tablas da `nan`.
+Compara dos corpus rasgo por rasgo. Cada corpus es una tabla de los rasgos de sus ventanas, partes de los textos de un tamaño parecido, así que los rasgos no dependen de la longitud de los textos. El resultado tiene una fila por columna, por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel `text` del índice; sin él cada fila es un texto aparte. Cada rasgo tiene un generador propio, a partir de la semilla y del nombre del rasgo, así que su intervalo no cambia con las demás columnas. Una columna que falta en una de las tablas da `nan`.
 
 <!-- core: corpus/compare.md:compare_features-parameters 2ed21c1 -->
 | Parámetro | Tipo | Por defecto | Descripción |

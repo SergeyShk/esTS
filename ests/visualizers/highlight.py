@@ -17,7 +17,7 @@ from anyts.visualizers.highlight import (
     tokens_span,
 )
 
-from ..cohesion_stats import CohesionStats
+from ..cohesion_stats import CohesionStats, is_connector_blocked
 from ..constants import (
     COMPOUND_PREPOSITIONS,
     CONNECTOR_CLASSES,
@@ -210,7 +210,7 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
             "compound_prepositions": lambda: find_compound_prepositions(words),
             "cliches": lambda: find_cliches(words, self._cliches),
             "parentheticals": lambda: find_parentheticals(words),
-            "connectors": lambda: find_connector_highlights(words, sents, self.text),
+            "connectors": lambda: find_connector_highlights(words, sents, self.text, doc),
             "alliteration": lambda: find_alliteration(words, self._alliteration_threshold, sents),
         }
         return finders[layer]()
@@ -485,7 +485,10 @@ def find_parentheticals(words: Sequence[Word]) -> list[Highlight]:
 
 
 def find_connector_highlights(
-    words: Sequence[Word], sents: Sequence[Sent], text: str | None = None
+    words: Sequence[Word],
+    sents: Sequence[Sent],
+    text: str | None = None,
+    doc: Doc | None = None,
 ) -> list[Highlight]:
     """
     Finding the connectors
@@ -494,14 +497,16 @@ def find_connector_highlights(
         The connectors are looked for inside every sentence by the matcher of
         CohesionStats (SpanishConnectorMatcher), a one-word one checked by its
         part of speech when the words have it; with the text, the rules read
-        no word across a punctuation mark between the words. The note gives
-        the class and the kind of the connector. The find_connector_highlights
-        of the core
+        no word across a punctuation mark between the words, and with the Doc
+        no connector starts at a si that opens no condition, as in
+        CohesionStats (is_connector_blocked). The note gives the class and the
+        kind of the connector. The find_connector_highlights of the core
 
     Arguments:
         words (list[Word]): Words with their positions
         sents (list[Sent]): Sentences with their positions
         text (str): Text of the words, for the punctuation marks between them
+        doc (Doc): Doc object of the words, for the rules by its tokens
 
     Returns:
         list[Highlight]: Fragments of the layer connectors
@@ -518,7 +523,14 @@ def find_connector_highlights(
             f"{CONNECTOR_TYPES[connector.kind]}"
         ),
         text=text,
+        blocked=None if doc is None else _blocked_words(doc),
     )
+
+
+def _blocked_words(doc: Doc) -> Callable[[Word], bool]:
+    """Whether no connector starts at a word of a Doc, by the position of its token"""
+    starts = frozenset(token.idx for token in doc if is_connector_blocked(token))
+    return lambda word: word.start in starts
 
 
 def get_stem_sounds(word: str) -> tuple[str, ...]:

@@ -33,39 +33,53 @@ El `max_length` del pipeline es de un millón de caracteres por defecto: divida 
 === "Resultado"
 
     ```
-                        Statistic                     |  Value
-    -------------------------------------------------------------
-    Mean dependency distance                          |   2.26
-    Standard deviation of the dependency distance     |   2.15
-    Mean of the longest dependencies of the sentences |   9.00
-    Share of adjacent dependencies                    |   0.48
-    Depth of the dependency tree                      |   4.00
-    Leaves per sentence                               |   8.00
-    Subtrees per sentence                             |   6.50
-    Mean of the nodes per leaf of the sentences       |   1.80
-    Valency of the finite verbs                       |   4.00
-    Coordination chains per sentence                  |   0.00
-    Mean length of a coordination chain               |   nan
-    Clauses per sentence                              |   1.50
-    Mean length of a clause (words)                   |   9.67
-    Subordinate clauses per sentence                  |   0.50
-    Share of sentences with a subordinate clause      |   0.50
-    Infinitive clauses under a verb per sentence      |   0.00
-    Modifiers per noun phrase                         |   1.00
-    Chains of de per sentence                         |   0.50
-    Maximum length of a chain of de                   |    2
-    Participial clauses per sentence                  |   0.50
-    Mean length of a participial clause (words)       |   3.00
-    Gerund clauses per sentence                       |   0.00
-    Mean length of a gerund clause (words)            |   nan
-    Share of passive forms among the verbs            |   0.67
-    Share of agentless forms among the passive ones   |   0.50
-    Passives with se per sentence                     |   0.50
-    Impersonal sentences with se per sentence         |   0.00
-    Infinitives per sentence                          |   0.00
-    Words of negation per sentence                    |   0.50
-    Split predicates per sentence                     |   1.00
-    Ratio of nouns to verbs                           |   3.00
+                             Statistic                         |  Value
+    ----------------------------------------------------------------------
+    Mean dependency distance                                   |   2.26
+    Standard deviation of the dependency distance              |   2.15
+    Mean of the longest dependencies of the sentences          |   9.00
+    Share of adjacent dependencies                             |   0.48
+    Depth of the dependency tree                               |   4.00
+    Leaves per sentence                                        |   8.00
+    Subtrees per sentence                                      |   6.50
+    Mean of the nodes per leaf of the sentences                |   1.80
+    Mean number of words before the root of a sentence         |   4.50
+    Valency of the finite verbs                                |   4.00
+    Coordination chains per sentence                           |   0.00
+    Mean length of a coordination chain                        |   nan
+    Clauses per sentence                                       |   1.50
+    Mean length of a clause (words)                            |   9.67
+    Subordinate clauses per sentence                           |   0.50
+    Share of sentences with a subordinate clause               |   0.50
+    Infinitive clauses under a verb per sentence               |   0.00
+    T-units per sentence                                       |   1.00
+    Mean length of a T-unit (words)                            |  14.50
+    Clauses per T-unit                                         |   1.50
+    Share of T-units with a subordinate clause                 |   0.50
+    Verb phrases per T-unit                                    |   1.50
+    Coordinate phrases per clause                              |   0.00
+    Complex nominals per clause                                |   1.33
+    Modifiers per noun phrase                                  |   1.00
+    Prepositional chains per sentence                          |   0.50
+    Maximum length of a prepositional chain                    |    2
+    Chains of de per sentence                                  |   0.50
+    Maximum length of a chain of de                            |    2
+    Participial clauses per sentence                           |   0.50
+    Mean length of a participial clause (words)                |   3.00
+    Gerund clauses per sentence                                |   0.00
+    Mean length of a gerund clause (words)                     |   nan
+    Share of passive forms among the verbs                     |   0.67
+    Share of agentless forms among the passive ones            |   0.50
+    Passives with se per sentence                              |   0.50
+    Impersonal sentences with se per sentence                  |   0.00
+    Infinitives per sentence                                   |   0.00
+    Words of negation per sentence                             |   0.50
+    Split predicates per sentence                              |   1.00
+    Share of nominal subjects before their head                |   0.50
+    Share of nominal objects before their head                 |   0.00
+    Edit distance of the parts of speech of adjacent sentences |   0.47
+    Syntactic similarity of adjacent sentences                 |   0.45
+    Ratio of nouns to verbs                                    |   3.00
     ```
 
 ## Parámetros
@@ -77,7 +91,7 @@ El `max_length` del pipeline es de un millón de caracteres por defecto: divida 
 
 ## Atributos
 
-<!-- core: stats/syntax_stats.md:SyntaxStats-attributes a0c3c7a -->
+<!-- core: stats/syntax_stats.md:SyntaxStats-attributes 9a60cb2 -->
 | Atributo | Tipo | Descripción |
 | :------- | :--- | :---------- |
 | `sents` | `tuple[tuple[Token]]` | Palabras de cada oración con palabras, sobre una copia del `Doc` sin su tensor ni sus datos de usuario |
@@ -86,11 +100,16 @@ El `max_length` del pipeline es de un millón de caracteres por defecto: divida 
 | `n_coordination_chains` | `int` | Número de las cadenas de coordinación |
 | `n_clauses`, `n_subordinate_clauses`, `n_complex_sents` | `int` | Números de las cláusulas, de las cláusulas subordinadas y de las oraciones con alguna |
 | `n_infinitive_clauses` | `int` | Número de las cláusulas de infinitivo bajo un verbo |
+| `n_t_units`, `n_complex_t_units` | `int` | Números de las unidades T y de las que tienen una cláusula subordinada |
+| `n_verb_phrases`, `n_coordinate_phrases`, `n_complex_nominals` | `int` | Números de los sintagmas verbales, de los sintagmas coordinados y de los nominales complejos |
 | `n_nouns`, `n_verbs` | `int` | Números de los sustantivos (`NOUN`, `PROPN`) y de las formas verbales (`VERB`) |
+| `n_prep_chains` | `int` | Número de las cadenas preposicionales |
 | `n_participle_clauses` | `int` | Número de las cláusulas de participio |
 | `n_passive`, `n_agentless_passive` | `int` | Números de las formas pasivas y de las que no tienen agente |
 | `n_infinitives`, `n_negations` | `int` | Números de los infinitivos y de las palabras de negación |
 | `n_split_predicates`, `split_predicates` | `int`, `tuple[str]` | Número de los predicados escindidos y los predicados, el verbo y el sustantivo |
+| `n_nominal_subjects`, `n_preverbal_subjects` | `int` | Números de los sujetos nominales y de los que preceden a su núcleo |
+| `n_nominal_objects`, `n_preverbal_objects` | `int` | Números de los objetos directos nominales y de los que preceden a su núcleo |
 | `c_children` | `dict[int, int]` | Número de las palabras por número de dependientes |
 | `c_deps` | `dict[str, int]` | Número de las palabras por relación |
 
@@ -142,6 +161,7 @@ Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` da 
 | [`leaves_per_sent`](#leaves) | Hojas por oración | 0 o más | Oraciones más largas o más planas |
 | [`subtrees_per_sent`](#leaves) | Subárboles por oración | 0 o más | Más sintagmas en una oración |
 | [`nodes_per_leaf`](#leaves) | Media por oración de las palabras por hoja | 1 o más, `nan` para una oración sin hojas | Ramas más largas |
+| [`words_before_root`](#words_before_root) | Número medio de las palabras antes de la raíz de una oración | 0 o más, `nan` sin una raíz entre las palabras | Un predicado principal más tardío |
 | [`verb_valency`](#valency) | Número medio de dependientes de un verbo en forma personal | 0 o más, `nan` sin verbos en forma personal | Más dependientes de un verbo |
 | [`coordination_chains_per_sent`](#coordination_chains) | Cadenas de coordinación por oración | 0 o más | Más coordinación |
 | [`mean_coordination_chain_len`](#coordination_chains) | Longitud media de una cadena de coordinación en palabras | 2 o más, `nan` sin cadenas | Enumeraciones más largas |
@@ -150,7 +170,16 @@ Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` da 
 | [`subordinate_clauses_per_sent`](#subordinate_clauses) | Cláusulas subordinadas por oración | 0 o más | Más subordinación |
 | [`p_complex_sents`](#subordinate_clauses) | Proporción de las oraciones con subordinada | 0-1 | Más oraciones complejas |
 | [`infinitive_clauses_per_sent`](#infinitive_clauses) | Cláusulas de infinitivo bajo un verbo por oración | 0 o más | Más complementos de infinitivo |
+| [`t_units_per_sent`](#l2sca) | Unidades T por oración (T/S) | 0 o más | Más cláusulas principales en una oración |
+| [`mean_t_unit_len`](#l2sca) | Longitud media de una unidad T en palabras (MLT) | 1 o más, `nan` sin unidades T | Unidades T más largas |
+| [`clauses_per_t_unit`](#l2sca) | Cláusulas por unidad T (C/T) | 1 o más, `nan` sin unidades T | Más subordinación |
+| [`p_complex_t_units`](#l2sca) | Proporción de las unidades T con una cláusula subordinada (CT/T) | 0-1, `nan` sin unidades T | Unidades T más complejas |
+| [`verb_phrases_per_t_unit`](#l2sca) | Sintagmas verbales por unidad T (VP/T) | 0 o más, `nan` sin unidades T | Más sintagmas verbales |
+| [`coordinate_phrases_per_clause`](#l2sca) | Sintagmas coordinados por cláusula (CP/C) | 0 o más, `nan` sin cláusulas | Más coordinación de sintagmas |
+| [`complex_nominals_per_clause`](#l2sca) | Nominales complejos por cláusula (CN/C) | 0 o más, `nan` sin cláusulas | Sintagmas nominales más densos |
 | [`modifiers_per_noun`](#noun_modifiers) | Número medio de modificadores de un sustantivo | 0 o más, `nan` sin sustantivos | Sintagmas nominales más pesados |
+| [`prep_chains_per_sent`](#prep_chains) | Cadenas de complementos encajados con preposición por oración | 0 o más | Más complementos encajados |
+| [`max_prep_chain_len`](#prep_chains) | Longitud de la cadena preposicional más larga | 0, o 2 o más | Cadenas más largas |
 | [`de_chains_per_sent`](#de_chains) | Cadenas de `de` por oración | 0 o más | Más cadenas |
 | [`max_de_chain_len`](#de_chains) | Cadena de `de` más larga del texto | 0 sin cadenas, si no 2 o más | Una cadena más larga |
 | [`participle_clauses_per_sent`](#participle_clauses) | Cláusulas de participio por oración | 0 o más | Más cláusulas de participio |
@@ -164,6 +193,10 @@ Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` da 
 | [`infinitives_per_sent`](#constructions) | Infinitivos por oración | 0 o más | Más infinitivos |
 | [`negations_per_sent`](#constructions) | Palabras de negación por oración | 0 o más | Más negación |
 | [`split_predicates_per_sent`](#constructions) | Predicados escindidos por oración | 0 o más | Más predicados escindidos |
+| [`p_preverbal_subjects`](#word_order) | Proporción de los sujetos nominales antes de su núcleo | 0-1, `nan` sin sujetos nominales | Menos sujetos invertidos |
+| [`p_preverbal_objects`](#word_order) | Proporción de los objetos directos nominales antes de su núcleo | 0-1, `nan` sin objetos nominales | Más objetos antepuestos |
+| [`pos_edit_distance`](#similarity) | Distancia de edición media de las categorías gramaticales de las oraciones contiguas entre la más larga | 0-1, `nan` con una sola oración | Oraciones menos parecidas |
+| [`syntax_similarity`](#similarity) | Semejanza media de las ternas de dependencias de las oraciones contiguas | 0-1, `nan` con una sola oración | Oraciones más parecidas |
 | [`noun_verb_ratio`](#noun_verb_ratio) | Razón entre los sustantivos y las formas verbales | 0 o más, `nan` sin formas verbales | Un estilo más nominal |
 
 Las funciones de las tarjetas se importan de `ests.syntax_stats`; las de las medidas del árbol que esTS no reexporta están en la [página de anyTS](https://sergeyshk.github.io/anyTS/stats/syntax_stats/).
@@ -205,6 +238,18 @@ $$
 $$
 
 La distribución de las palabras por número de dependientes es el atributo `c_children`.
+
+</div>
+
+<div class="metric-card" markdown>
+
+### Palabras antes de la raíz { #words_before_root }
+
+`words_before_root` · [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664)
+{ .metric-meta }
+
+<!-- core: stats/syntax_stats.md:SyntaxStats-words_before_root 9bff332 -->
+La incrustación a la izquierda de Coh-Metrix (SYNLE): el número de las palabras de una oración antes de su raíz, el predicado principal, promediado sobre las oraciones cuya raíz es una palabra. La raíz de una oración con cópula es su parte nominal (*she **is** a **doctor***), como la da Universal Dependencies. En una lengua de orden de palabras libre la medida lee tanto el orden como la complejidad.
 
 </div>
 
@@ -353,6 +398,33 @@ Comprueba si una palabra encabeza una cláusula de infinitivo bajo un verbo: un 
 
 <div class="metric-card" markdown>
 
+### Unidades de producción de L2SCA { #l2sca }
+
+`t_units_per_sent` · `mean_t_unit_len` · `clauses_per_t_unit` · `p_complex_t_units` · `verb_phrases_per_t_unit` · `coordinate_phrases_per_clause` · `complex_nominals_per_clause` · [Lu 2010](https://doi.org/10.1075/ijcl.15.4.02lu)
+{ .metric-meta }
+
+<!-- core: stats/syntax_stats.md:SyntaxStats-l2sca b816772 -->
+Los índices del L2 Syntactic Complexity Analyzer (L2SCA) que no dan las demás métricas, sobre Universal Dependencies. MLC y C/S son `mean_clause_len` y `clauses_per_sent`; MLS y DC/C salen de los recuentos, `n_words / n_sents` y `n_subordinate_clauses / n_clauses`.
+
+- Una unidad T es una cláusula principal con las cláusulas que dependen de ella: el núcleo de una oración y cada núcleo de cláusula unido a él por `conj` o `parataxis` (`anyts.constants.MAIN_CLAUSE_DEPS`), así que *I came, and he left* tiene dos; un conjunto de una cláusula subordinada no lo es. Un conjunto sin sujeto propio (*I came and left*) es un predicado que comparte la unidad T de la cláusula con la que se coordina, como en L2SCA, salvo que su persona, número o género - los de su auxiliar o su cópula, los suyos propios sin ellos - difieran de los de esa cláusula: en una lengua que omite sus sujetos la terminación nombra otro sujeto (*llegamos al puerto y nos esperabas*). Un *there* existencial (`expl` de ClearNLP) es un sujeto. Una unidad T es compleja con una cláusula subordinada (`is_subordinate_clause_head`) cuya unidad T más cercana por encima es ella.
+- Un sintagma verbal es un predicado (`is_predicate`) que no es auxiliar ni cópula: un verbo, un auxiliar usado como predicado (*there **is** trouble*), una palabra con sujeto o con cópula; un infinitivo que forma un solo predicado con su núcleo (`is_infinitive_periphrasis`), y su conjunto en infinitivo, forman parte del sintagma verbal del núcleo.
+- Un sintagma coordinado es una coordinación con un conjunto que no es núcleo de cláusula (*the man and the woman*, *is big and nice*) o un predicado sin sujeto propio (*came and left*), contada una vez por su primer conjunto; una coordinación de cláusulas con sus propios sujetos cuenta como cláusulas.
+- Las cláusulas son las de `is_clause_head`, como en las demás métricas: un predicado que comparte sujeto y una cláusula de infinitivo cuentan como cláusulas, mientras que L2SCA cuenta las cláusulas en forma personal con sujeto, así que C/T, C/S y CN/C salen más altos y MLC más bajo que en L2SCA.
+- Un nominal complejo es un sustantivo con un modificador de `anyts.constants.COMPLEX_NOMINAL_DEPS` (un adjetivo, un complemento, una cláusula de relativo o de participio, una aposición, un posesivo), o una cláusula nominal, un núcleo de cláusula de `anyts.constants.NOMINAL_CLAUSE_DEPS` o un conjunto de uno.
+
+$$
+\textrm{MLT} = \frac{\textrm{Palabras}}{\textrm{Unidades T}}, \quad
+\textrm{C/T} = \frac{\textrm{Cláusulas}}{\textrm{Unidades T}}, \quad
+\textrm{CT/T} = \frac{\textrm{Unidades T complejas}}{\textrm{Unidades T}}, \quad
+\textrm{CN/C} = \frac{\textrm{Nominales complejos}}{\textrm{Cláusulas}}
+$$
+
+Las cláusulas y las cláusulas subordinadas son las de las reglas españolas de las tarjetas de arriba, y una perífrasis es un solo sintagma verbal (`puede venir`). Los modelos cuelgan el infinitivo de algunas perífrasis como conjunto de su verbo (`tiene que venir`): queda dentro del sintagma verbal del verbo, pero el par cuenta además como un sintagma coordinado.
+
+</div>
+
+<div class="metric-card" markdown>
+
 ### Modificadores de un sustantivo { #noun_modifiers }
 
 `modifiers_per_noun`
@@ -371,6 +443,20 @@ Cuenta los modificadores de un sintagma nominal: las dependientes con las relaci
 | `join_hyphens` | `bool` | `False` | Tomar una palabra con guion por una sola palabra |
 
 Los sustantivos son las palabras etiquetadas `NOUN` o `PROPN`: `la nueva casa de mi padre` da a `casa` tres modificadores, `la`, `nueva` y `padre`.
+
+</div>
+
+<div class="metric-card" markdown>
+
+### Cadenas preposicionales { #prep_chains }
+
+`prep_chains_per_sent` · `max_prep_chain_len` · [Profiling-UD](https://aclanthology.org/2020.lrec-1.883/)
+{ .metric-meta }
+
+<!-- core: stats/syntax_stats.md:SyntaxStats-prep_chains 1c1340a -->
+Una cadena preposicional son dos o más complementos con preposición encajados, cada uno colgado del anterior: *on the mat of the house of the mayor* (longitud 3). Los enlaces son las palabras del gancho `is_prep_complement`, y las cadenas y sus longitudes son las de `calc_modifier_chains`; una cadena puede empezar en un complemento de un verbo (`obl`) o en un predicado preposicional con cópula (*was in the house of the mayor*), pero no en un conjunto de un complemento (*in Madrid and in the centre of the city*), y el predicado de una oración de relativo (*the house that was by the river*) no es un enlace de la cadena de su sustantivo. Las cadenas leen solo Universal Dependencies: ClearNLP encabeza un sintagma por su preposición (`prep`, `pobj`), así que sus análisis no dan cadenas.
+
+Las cadenas de `de` de esTS ([`de_chains_per_sent`](#de_chains)) se cuentan aparte: sus enlaces son solo complementos con `de` (`la revisión de las cuentas del organismo`), el marcador del estilo nominal del español, y los de una cadena preposicional, complementos con cualquier preposición (`sobre la mesa en la sala`).
 
 </div>
 
@@ -630,6 +716,42 @@ Los predicados escindidos, pares de un verbo y un sustantivo en el orden de las 
 
 <div class="metric-card" markdown>
 
+### Orden de los sujetos y los objetos { #word_order }
+
+`p_preverbal_subjects` · `p_preverbal_objects` · [Profiling-UD](https://aclanthology.org/2020.lrec-1.883/)
+{ .metric-meta }
+
+<!-- core: stats/syntax_stats.md:SyntaxStats-word_order efbba5d -->
+El orden de los sujetos y de los objetos directos a la manera de Profiling-UD: las proporciones de los que preceden a su núcleo, el predicado. Solo cuentan los nominales (`NOUN`, `PROPN`): el lugar de un pronombre, como un objeto clítico, lo fija la gramática. Un sujeto es una palabra de `nsubj` (`anyts.constants.NOMINAL_SUBJECT_DEPS`), un objeto una de `obj` (`anyts.constants.OBJECT_DEPS`), con las relaciones de ClearNLP y los subtipos.
+
+$$
+\frac{\textrm{Sujetos nominales antes de su núcleo}}{\textrm{Sujetos nominales}}, \quad
+\frac{\textrm{Objetos nominales antes de su núcleo}}{\textrm{Objetos nominales}}
+$$
+
+El español pone el sujeto tras el verbo más a menudo que el inglés (`llegó el tren`, `me gusta el café`). Un objeto antepuesto se retoma con un clítico (`el libro lo compré ayer`), y los modelos toman el sustantivo por un objeto indirecto, así que la proporción de los objetos nominales antes de su núcleo queda cerca de 0.
+
+</div>
+
+<div class="metric-card" markdown>
+
+### Semejanza de las oraciones contiguas { #similarity }
+
+`pos_edit_distance` · `syntax_similarity` · [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664)
+{ .metric-meta }
+
+<!-- core: stats/syntax_stats.md:SyntaxStats-similarity 1203633 -->
+Lo parecidas que son las estructuras de dos oraciones contiguas, promediado sobre los $S - 1$ pares. `pos_edit_distance` es la distancia de edición de las categorías gramaticales $P_s$ de las palabras de las oraciones (SYNMEDpos de Coh-Metrix) entre la longitud $n$ de la oración más larga del par, `calc_edit_distance`. `syntax_similarity` es la semejanza de los multiconjuntos de las ternas de dependencias $T$ de las dos oraciones (`dependency_triples`, `calc_multiset_similarity`), a la manera de SYNSTRUT de Coh-Metrix, que compara los nodos de los árboles de constituyentes.
+
+$$
+\frac{1}{S - 1} \sum_{s=1}^{S-1} \frac{\textrm{lev}(P_s, P_{s+1})}{\max(n_s, n_{s+1})}, \quad
+\frac{1}{S - 1} \sum_{s=1}^{S-1} \frac{|T_s \cap T_{s+1}|}{|T_s \cup T_{s+1}|}
+$$
+
+</div>
+
+<div class="metric-card" markdown>
+
 ### Razón entre los sustantivos y los verbos { #noun_verb_ratio }
 
 `noun_verb_ratio`
@@ -667,6 +789,7 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
      'leaves_per_sent': 8.0,
      'subtrees_per_sent': 6.5,
      'nodes_per_leaf': 1.8015873015873014,
+     'words_before_root': 4.5,
      'verb_valency': 4.0,
      'coordination_chains_per_sent': 0.0,
      'mean_coordination_chain_len': nan,
@@ -675,7 +798,16 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
      'subordinate_clauses_per_sent': 0.5,
      'p_complex_sents': 0.5,
      'infinitive_clauses_per_sent': 0.0,
+     't_units_per_sent': 1.0,
+     'mean_t_unit_len': 14.5,
+     'clauses_per_t_unit': 1.5,
+     'p_complex_t_units': 0.5,
+     'verb_phrases_per_t_unit': 1.5,
+     'coordinate_phrases_per_clause': 0.0,
+     'complex_nominals_per_clause': 1.3333333333333333,
      'modifiers_per_noun': 1.0,
+     'prep_chains_per_sent': 0.5,
+     'max_prep_chain_len': 2,
      'de_chains_per_sent': 0.5,
      'max_de_chain_len': 2,
      'participle_clauses_per_sent': 0.5,
@@ -689,11 +821,15 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
      'infinitives_per_sent': 0.0,
      'negations_per_sent': 0.5,
      'split_predicates_per_sent': 1.0,
+     'p_preverbal_subjects': 0.5,
+     'p_preverbal_objects': 0.0,
+     'pos_edit_distance': 0.47058823529411764,
+     'syntax_similarity': 0.45,
      'noun_verb_ratio': 3.0}
     (None, None)
     ```
 
-Las funciones trabajan con tokens de spaCy: las funciones `calc_*` y `find_*` reciben una secuencia de tokens (`Doc`, `Span` o una lista), las funciones `is_*`, `has_*` y `count_*` un solo token; las palabras de una secuencia son los tokens de `is_word` de `anyts.utils`. Las funciones del árbol de dependencias vienen del núcleo, las de las construcciones del español son propias de esTS.
+Las funciones trabajan con tokens de spaCy: las funciones `calc_*` y `find_*` y `dependency_triples` reciben una secuencia de tokens (`Doc`, `Span` o una lista), las funciones `is_*`, `has_*` y `count_*` un solo token, y `calc_edit_distance` y `calc_multiset_similarity` listas de los elementos de las oraciones; las palabras de una secuencia son los tokens de `is_word` de `anyts.utils`. Las funciones del árbol de dependencias vienen del núcleo, las de las construcciones del español son propias de esTS.
 
 ## Palabras de una secuencia { #get_words }
 
@@ -819,3 +955,63 @@ Las longitudes de las cadenas de modificadores encajados, en el orden de las pal
 | `join_hyphens` | `bool` | `False` | Tomar una palabra con guion por una sola palabra |
 
 Una comprobación que no es invocable lanza `SourceTypeError`.
+
+## Complementos con preposición { #is_prep_complement }
+
+<!-- core: stats/syntax_stats.md:is_prep_complement e341296 -->
+``` {.python .signature}
+is_prep_complement(token, join_hyphens=False)
+```
+
+Comprueba si una palabra es un complemento con preposición: una palabra con la relación `nmod` u `obl` o un subtipo de ellas (`anyts.constants.PREP_COMPLEMENT_DEPS`), o un predicado con cópula fuera de una oración de relativo (`acl`), que tiene una dependiente de la relación `case` que es una adposición (`ADP`) o empieza una de varias palabras (`fixed`: *in front of*). Un sustantivo en un caso sin preposición y un marcador posesivo no lo son.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `token` | `Token` | - | Token |
+| `join_hyphens` | `bool` | `False` | Tomar una palabra con guion por una sola palabra |
+
+Un valor que no es un `Token` lanza `SourceTypeError`.
+
+## Ternas de dependencias { #dependency_triples }
+
+<!-- core: stats/syntax_stats.md:dependency_triples 8643971 -->
+``` {.python .signature}
+dependency_triples(tokens, join_hyphens=False)
+```
+
+Las ternas de dependencias de las palabras de una oración (`get_words`), en su orden: la categoría gramatical del núcleo de una palabra - la palabra más cercana por encima de ella a través de la puntuación -, su relación sin subtipo (`base_dep`) y su propia categoría gramatical, como `("NOUN", "amod", "ADJ")` para *a red house*. El núcleo de la oración, y una palabra sin ninguna palabra por encima, dan un núcleo vacío y la relación `root`, sea cual sea su etiqueta.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `tokens` | `Doc` / `Span` / `list[Token]` | - | Secuencia de tokens |
+| `join_hyphens` | `bool` | `False` | Tomar una palabra con guion por una sola palabra |
+
+Unos tokens que no son un `Doc`, un `Span` ni una lista de objetos `Token` lanzan `SourceTypeError`.
+
+## Distancia de edición y semejanza de multiconjuntos { #calc_edit_distance }
+
+<!-- core: stats/syntax_stats.md:calc_edit_distance c75df9c -->
+``` {.python .signature}
+calc_edit_distance(sents)
+```
+
+La distancia de edición media de los elementos de oraciones contiguas: la distancia de Levenshtein de cada dos - el menor número de inserciones, supresiones y sustituciones que convierten una en la otra - entre el número de los elementos de la más larga, 0 para secuencias iguales y 1 para las que no tienen ningún elemento en común; `nan` con menos de dos oraciones.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `sents` | `list[list]` | - | Elementos de cada oración, como sus categorías gramaticales |
+
+Unas oraciones que no son una lista de listas, o unos elementos que no se pueden hashear, lanzan `SourceTypeError`.
+
+<!-- core: stats/syntax_stats.md:calc_multiset_similarity 3c6c790 -->
+``` {.python .signature}
+calc_multiset_similarity(sents)
+```
+
+La semejanza media de los multiconjuntos de los elementos de oraciones contiguas: la semejanza de Jaccard ponderada de cada dos - los elementos que comparten, cada uno tantas veces como lo tiene la oración que menos lo tiene, entre los elementos de ambas, cada uno tantas veces como lo tiene la oración que más lo tiene -, 1 para multiconjuntos iguales y para dos vacíos, 0 para disjuntos; `nan` con menos de dos oraciones. Un mapeo se lee por sus claves, como un conjunto.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `sents` | `list[list]` | - | Elementos de cada oración, como sus ternas de dependencias |
+
+Unas oraciones que no son una lista de colecciones, o unos elementos que no se pueden hashear, lanzan `SourceTypeError`.

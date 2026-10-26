@@ -33,39 +33,53 @@ The `max_length` of the pipeline is a million characters by default: split a lon
 === "Result"
 
     ```
-                        Statistic                     |  Value
-    -------------------------------------------------------------
-    Mean dependency distance                          |   2.26
-    Standard deviation of the dependency distance     |   2.15
-    Mean of the longest dependencies of the sentences |   9.00
-    Share of adjacent dependencies                    |   0.48
-    Depth of the dependency tree                      |   4.00
-    Leaves per sentence                               |   8.00
-    Subtrees per sentence                             |   6.50
-    Mean of the nodes per leaf of the sentences       |   1.80
-    Valency of the finite verbs                       |   4.00
-    Coordination chains per sentence                  |   0.00
-    Mean length of a coordination chain               |   nan
-    Clauses per sentence                              |   1.50
-    Mean length of a clause (words)                   |   9.67
-    Subordinate clauses per sentence                  |   0.50
-    Share of sentences with a subordinate clause      |   0.50
-    Infinitive clauses under a verb per sentence      |   0.00
-    Modifiers per noun phrase                         |   1.00
-    Chains of de per sentence                         |   0.50
-    Maximum length of a chain of de                   |    2
-    Participial clauses per sentence                  |   0.50
-    Mean length of a participial clause (words)       |   3.00
-    Gerund clauses per sentence                       |   0.00
-    Mean length of a gerund clause (words)            |   nan
-    Share of passive forms among the verbs            |   0.67
-    Share of agentless forms among the passive ones   |   0.50
-    Passives with se per sentence                     |   0.50
-    Impersonal sentences with se per sentence         |   0.00
-    Infinitives per sentence                          |   0.00
-    Words of negation per sentence                    |   0.50
-    Split predicates per sentence                     |   1.00
-    Ratio of nouns to verbs                           |   3.00
+                             Statistic                         |  Value
+    ----------------------------------------------------------------------
+    Mean dependency distance                                   |   2.26
+    Standard deviation of the dependency distance              |   2.15
+    Mean of the longest dependencies of the sentences          |   9.00
+    Share of adjacent dependencies                             |   0.48
+    Depth of the dependency tree                               |   4.00
+    Leaves per sentence                                        |   8.00
+    Subtrees per sentence                                      |   6.50
+    Mean of the nodes per leaf of the sentences                |   1.80
+    Mean number of words before the root of a sentence         |   4.50
+    Valency of the finite verbs                                |   4.00
+    Coordination chains per sentence                           |   0.00
+    Mean length of a coordination chain                        |   nan
+    Clauses per sentence                                       |   1.50
+    Mean length of a clause (words)                            |   9.67
+    Subordinate clauses per sentence                           |   0.50
+    Share of sentences with a subordinate clause               |   0.50
+    Infinitive clauses under a verb per sentence               |   0.00
+    T-units per sentence                                       |   1.00
+    Mean length of a T-unit (words)                            |  14.50
+    Clauses per T-unit                                         |   1.50
+    Share of T-units with a subordinate clause                 |   0.50
+    Verb phrases per T-unit                                    |   1.50
+    Coordinate phrases per clause                              |   0.00
+    Complex nominals per clause                                |   1.33
+    Modifiers per noun phrase                                  |   1.00
+    Prepositional chains per sentence                          |   0.50
+    Maximum length of a prepositional chain                    |    2
+    Chains of de per sentence                                  |   0.50
+    Maximum length of a chain of de                            |    2
+    Participial clauses per sentence                           |   0.50
+    Mean length of a participial clause (words)                |   3.00
+    Gerund clauses per sentence                                |   0.00
+    Mean length of a gerund clause (words)                     |   nan
+    Share of passive forms among the verbs                     |   0.67
+    Share of agentless forms among the passive ones            |   0.50
+    Passives with se per sentence                              |   0.50
+    Impersonal sentences with se per sentence                  |   0.00
+    Infinitives per sentence                                   |   0.00
+    Words of negation per sentence                             |   0.50
+    Split predicates per sentence                              |   1.00
+    Share of nominal subjects before their head                |   0.50
+    Share of nominal objects before their head                 |   0.00
+    Edit distance of the parts of speech of adjacent sentences |   0.47
+    Syntactic similarity of adjacent sentences                 |   0.45
+    Ratio of nouns to verbs                                    |   3.00
     ```
 
 ## Parameters
@@ -127,6 +141,7 @@ Every metric is an attribute of the object, computed when it is created, and `ge
 | [`leaves_per_sent`](#leaves) | Leaves per sentence | 0 and above | Longer or flatter sentences |
 | [`subtrees_per_sent`](#leaves) | Subtrees per sentence | 0 and above | More phrases in a sentence |
 | [`nodes_per_leaf`](#leaves) | Mean over the sentences of the words per leaf | 1 and above, `nan` for a sentence without leaves | Longer branches |
+| [`words_before_root`](#words_before_root) | Mean number of the words before the root of a sentence | 0 and above, `nan` without a root among the words | A later main predicate |
 | [`verb_valency`](#valency) | Mean number of the dependents of a finite verb | 0 and above, `nan` without finite verbs | More dependents of a verb |
 | [`coordination_chains_per_sent`](#coordination_chains) | Coordination chains per sentence | 0 and above | More coordination |
 | [`mean_coordination_chain_len`](#coordination_chains) | Mean length of a coordination chain in words | 2 and above, `nan` without chains | Longer enumerations |
@@ -135,7 +150,16 @@ Every metric is an attribute of the object, computed when it is created, and `ge
 | [`subordinate_clauses_per_sent`](#subordinate_clauses) | Subordinate clauses per sentence | 0 and above | More subordination |
 | [`p_complex_sents`](#subordinate_clauses) | Share of the sentences with a subordinate clause | 0-1 | More complex sentences |
 | [`infinitive_clauses_per_sent`](#infinitive_clauses) | Infinitive clauses under a verb per sentence | 0 and above | More infinitive complements |
+| [`t_units_per_sent`](#l2sca) | T-units per sentence (T/S) | 0 and above | More main clauses in a sentence |
+| [`mean_t_unit_len`](#l2sca) | Mean length of a T-unit in words (MLT) | 1 and above, `nan` without T-units | Longer T-units |
+| [`clauses_per_t_unit`](#l2sca) | Clauses per T-unit (C/T) | 1 and above, `nan` without T-units | More subordination |
+| [`p_complex_t_units`](#l2sca) | Share of the T-units with a subordinate clause (CT/T) | 0-1, `nan` without T-units | More complex T-units |
+| [`verb_phrases_per_t_unit`](#l2sca) | Verb phrases per T-unit (VP/T) | 0 and above, `nan` without T-units | More verb phrases |
+| [`coordinate_phrases_per_clause`](#l2sca) | Coordinate phrases per clause (CP/C) | 0 and above, `nan` without clauses | More phrasal coordination |
+| [`complex_nominals_per_clause`](#l2sca) | Complex nominals per clause (CN/C) | 0 and above, `nan` without clauses | Denser noun phrases |
 | [`modifiers_per_noun`](#noun_modifiers) | Mean number of the modifiers of a noun | 0 and above, `nan` without nouns | Heavier noun phrases |
+| [`prep_chains_per_sent`](#prep_chains) | Chains of nested complements with a preposition per sentence | 0 and above | More nested complements |
+| [`max_prep_chain_len`](#prep_chains) | Length of the longest prepositional chain | 0, or 2 and above | Longer chains |
 | [`de_chains_per_sent`](#de_chains) | Chains of `de` per sentence | 0 and above | More chains |
 | [`max_de_chain_len`](#de_chains) | Longest chain of `de` of the text | 0 without chains, otherwise 2 and above | A longer chain |
 | [`participle_clauses_per_sent`](#participle_clauses) | Participial clauses per sentence | 0 and above | More participial clauses |
@@ -149,6 +173,10 @@ Every metric is an attribute of the object, computed when it is created, and `ge
 | [`infinitives_per_sent`](#constructions) | Infinitives per sentence | 0 and above | More infinitives |
 | [`negations_per_sent`](#constructions) | Words of negation per sentence | 0 and above | More negation |
 | [`split_predicates_per_sent`](#constructions) | Split predicates per sentence | 0 and above | More split predicates |
+| [`p_preverbal_subjects`](#word_order) | Share of the nominal subjects before their head | 0-1, `nan` without nominal subjects | Fewer inverted subjects |
+| [`p_preverbal_objects`](#word_order) | Share of the nominal direct objects before their head | 0-1, `nan` without nominal objects | More fronted objects |
+| [`pos_edit_distance`](#similarity) | Mean edit distance of the parts of speech of adjacent sentences over the longer one | 0-1, `nan` for one sentence | Less alike sentences |
+| [`syntax_similarity`](#similarity) | Mean similarity of the dependency triples of adjacent sentences | 0-1, `nan` for one sentence | More alike sentences |
 | [`noun_verb_ratio`](#noun_verb_ratio) | Ratio of the nouns to the verb forms | 0 and above, `nan` without verb forms | A more nominal style |
 
 The functions of the cards are imported from `ests.syntax_stats`; those of the measures of the tree that esTS does not re-export are on the [anyTS page](https://sergeyshk.github.io/anyTS/stats/syntax_stats/).
@@ -185,6 +213,17 @@ The depth of the dependency tree of a sentence is the longest path from its head
 --8<-- "stats/syntax_stats.md:SyntaxStats-leaves"
 
 The distribution of the words by number of dependents is the attribute `c_children`.
+
+</div>
+
+<div class="metric-card" markdown>
+
+### Words before the root { #words_before_root }
+
+`words_before_root` · [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664)
+{ .metric-meta }
+
+--8<-- "stats/syntax_stats.md:SyntaxStats-words_before_root"
 
 </div>
 
@@ -323,6 +362,19 @@ Checks whether a word heads an infinitive clause under a verb: a clause head (`i
 
 <div class="metric-card" markdown>
 
+### Production units of L2SCA { #l2sca }
+
+`t_units_per_sent` · `mean_t_unit_len` · `clauses_per_t_unit` · `p_complex_t_units` · `verb_phrases_per_t_unit` · `coordinate_phrases_per_clause` · `complex_nominals_per_clause` · [Lu 2010](https://doi.org/10.1075/ijcl.15.4.02lu)
+{ .metric-meta }
+
+--8<-- "stats/syntax_stats.md:SyntaxStats-l2sca"
+
+The clauses and the subordinate clauses are those of the Spanish rules of the cards above, and a periphrasis is one verb phrase (`puede venir`). The models attach the infinitive of some periphrases as a conjunct of their verb (`tiene que venir`): it stays inside the verb phrase of the verb, but the pair counts as a coordinate phrase too.
+
+</div>
+
+<div class="metric-card" markdown>
+
 ### Modifiers of a noun { #noun_modifiers }
 
 `modifiers_per_noun`
@@ -331,6 +383,19 @@ Checks whether a word heads an infinitive clause under a verb: a clause head (`i
 --8<-- "stats/syntax_stats.md:count_noun_modifiers"
 
 The nouns are the words tagged `NOUN` or `PROPN`: `la nueva casa de mi padre` gives `casa` three modifiers, `la`, `nueva` and `padre`.
+
+</div>
+
+<div class="metric-card" markdown>
+
+### Prepositional chains { #prep_chains }
+
+`prep_chains_per_sent` · `max_prep_chain_len` · [Profiling-UD](https://aclanthology.org/2020.lrec-1.883/)
+{ .metric-meta }
+
+--8<-- "stats/syntax_stats.md:SyntaxStats-prep_chains"
+
+The chains of `de` of esTS ([`de_chains_per_sent`](#de_chains)) are counted apart: their links are complements of `de` alone (`la revisión de las cuentas del organismo`), the marker of the nominal style of Spanish, and those of a prepositional chain complements with any preposition (`sobre la mesa en la sala`).
 
 </div>
 
@@ -588,6 +653,30 @@ The split predicates, pairs of a verb and a noun in the order of the words, repl
 
 <div class="metric-card" markdown>
 
+### Order of the subjects and the objects { #word_order }
+
+`p_preverbal_subjects` · `p_preverbal_objects` · [Profiling-UD](https://aclanthology.org/2020.lrec-1.883/)
+{ .metric-meta }
+
+--8<-- "stats/syntax_stats.md:SyntaxStats-word_order"
+
+Spanish puts the subject after the verb more often than English does (`llegó el tren`, `me gusta el café`). A fronted object comes back as a clitic (`el libro lo compré ayer`), and the models take the noun for an indirect object, so the share of the nominal objects before their head stays near 0.
+
+</div>
+
+<div class="metric-card" markdown>
+
+### Similarity of adjacent sentences { #similarity }
+
+`pos_edit_distance` · `syntax_similarity` · [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664)
+{ .metric-meta }
+
+--8<-- "stats/syntax_stats.md:SyntaxStats-similarity"
+
+</div>
+
+<div class="metric-card" markdown>
+
 ### Ratio of the nouns to the verbs { #noun_verb_ratio }
 
 `noun_verb_ratio`
@@ -620,6 +709,7 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
      'leaves_per_sent': 8.0,
      'subtrees_per_sent': 6.5,
      'nodes_per_leaf': 1.8015873015873014,
+     'words_before_root': 4.5,
      'verb_valency': 4.0,
      'coordination_chains_per_sent': 0.0,
      'mean_coordination_chain_len': nan,
@@ -628,7 +718,16 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
      'subordinate_clauses_per_sent': 0.5,
      'p_complex_sents': 0.5,
      'infinitive_clauses_per_sent': 0.0,
+     't_units_per_sent': 1.0,
+     'mean_t_unit_len': 14.5,
+     'clauses_per_t_unit': 1.5,
+     'p_complex_t_units': 0.5,
+     'verb_phrases_per_t_unit': 1.5,
+     'coordinate_phrases_per_clause': 0.0,
+     'complex_nominals_per_clause': 1.3333333333333333,
      'modifiers_per_noun': 1.0,
+     'prep_chains_per_sent': 0.5,
+     'max_prep_chain_len': 2,
      'de_chains_per_sent': 0.5,
      'max_de_chain_len': 2,
      'participle_clauses_per_sent': 0.5,
@@ -642,11 +741,15 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
      'infinitives_per_sent': 0.0,
      'negations_per_sent': 0.5,
      'split_predicates_per_sent': 1.0,
+     'p_preverbal_subjects': 0.5,
+     'p_preverbal_objects': 0.0,
+     'pos_edit_distance': 0.47058823529411764,
+     'syntax_similarity': 0.45,
      'noun_verb_ratio': 3.0}
     (None, None)
     ```
 
-The functions work with spaCy tokens: the `calc_*` and `find_*` functions take a sequence of tokens (`Doc`, `Span` or a list), the `is_*`, `has_*` and `count_*` functions a single token; the words of a sequence are the tokens of `is_word` of `anyts.utils`. The functions of the dependency tree come from the core, those of the Spanish constructions are esTS's own.
+The functions work with spaCy tokens: the `calc_*` and `find_*` functions and `dependency_triples` take a sequence of tokens (`Doc`, `Span` or a list), the `is_*`, `has_*` and `count_*` functions a single token, and `calc_edit_distance` and `calc_multiset_similarity` lists of the items of sentences; the words of a sequence are the tokens of `is_word` of `anyts.utils`. The functions of the dependency tree come from the core, those of the Spanish constructions are esTS's own.
 
 ## Words of a sequence { #get_words }
 
@@ -713,3 +816,17 @@ has_auxiliary(token)
 ## Chains of modifiers { #calc_modifier_chains }
 
 --8<-- "stats/syntax_stats.md:calc_modifier_chains"
+
+## Complements with a preposition { #is_prep_complement }
+
+--8<-- "stats/syntax_stats.md:is_prep_complement"
+
+## Dependency triples { #dependency_triples }
+
+--8<-- "stats/syntax_stats.md:dependency_triples"
+
+## Edit distance and multiset similarity { #calc_edit_distance }
+
+--8<-- "stats/syntax_stats.md:calc_edit_distance"
+
+--8<-- "stats/syntax_stats.md:calc_multiset_similarity"

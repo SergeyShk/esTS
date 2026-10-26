@@ -16,15 +16,21 @@ from anyts.corpus.keyness import (
 )
 
 from ..datasets.freq_dict import CORPUS_SIZE, WORD_PATTERN, FreqDict, lemma_key
+from ..exceptions import ParameterError
 
 
 def keyness(
-    target: Sequence[str] | Mapping[str, int],
-    reference: Sequence[str] | Mapping[str, float] | FreqDict | FrequencyReference,
+    target: Sequence[str] | Sequence[Sequence[str]] | Mapping[str, int],
+    reference: Sequence[str]
+    | Sequence[Sequence[str]]
+    | Mapping[str, float]
+    | FreqDict
+    | FrequencyReference,
     measure: str = "log_likelihood",
     min_freq: int = 1,
     positive: bool = True,
     top_n: int | None = None,
+    n: int = 1,
 ) -> list[Keyword]:
     """
     Finding the keywords of a target corpus against a reference one
@@ -36,6 +42,9 @@ def keyness(
         measures of significance (G², chi-square, BIC) and ELL, the effect size
         of G², are negative when the word is more frequent in the reference. A zero frequency is
         replaced with 0.5 for %DIFF, Log Ratio and the odds ratio (Hardie 2014)
+        A corpus of several texts is a list of their lists of words; with n
+        above 1 the keywords are the n-grams of the words of every text, not
+        across two texts
         The reference may be a list of words, their frequencies (the size is
         their sum), FreqDict or a FrequencyReference. Against FreqDict the
         target is to be word forms, not lemmas, with the stop words kept; the
@@ -55,24 +64,29 @@ def keyness(
         http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/
 
     Arguments:
-        target (list[str]|dict[str, int]): Words of the target corpus or their
-            frequencies; word forms against the frequency dictionary
-        reference (list[str]|dict[str, float]|FreqDict|FrequencyReference): Words
-            of the reference corpus, their frequencies, the frequency dictionary
-            or a reference by frequencies
+        target (list[str]|list[list[str]]|dict[str, int]): Words of the target
+            corpus - one text or a list of texts - or their frequencies; word forms
+            against the frequency dictionary
+        reference (list[str]|list[list[str]]|dict[str, float]|FreqDict|FrequencyReference):
+            Words of the reference corpus - one text or a list of texts, their
+            frequencies, the frequency dictionary or a reference by frequencies
         measure (str): Measure of KEYNESS_MEASURES for score and the sorting
         min_freq (int): Minimum frequency of a keyword in its own corpus
         positive (bool): Positive keywords (True) or negative ones (False)
         top_n (int): Number of keywords; None - all of them
+        n (int): Length of the n-grams of the words of every text, joined by
+            underscores as the n-grams of WordsExtractor; 1 - the words
 
     Returns:
         list[Keyword]: Keywords by descending keyness, then by descending
             frequency and alphabetically; words of an undefined measure last
 
     Raises:
-        SourceTypeError: If the words are not a list of strings
-        ParameterError: If the measure is unknown or top_n is below one
-        SourceError: If one of the corpora is empty
+        SourceTypeError: If a corpus is not a list of strings, a list of such lists or
+            a mapping of frequencies
+        ParameterError: If the measure is unknown, top_n or n is below one, or n is above
+            one with frequencies, a FrequencyReference or the frequency dictionary
+        SourceError: If one of the corpora is empty or shorter than n words
         DatasetNotFoundError: If the frequency dictionary is not downloaded
 
     Example:
@@ -83,9 +97,14 @@ def keyness(
         [('gato', 2.77)]
     """
     if isinstance(reference, FreqDict):
-        check_keyness_params(measure, min_freq, top_n, target)
+        check_keyness_params(measure, min_freq, top_n, target, n, positive)
+        if n > 1:
+            raise ParameterError(
+                "The frequency dictionary holds words: the n-grams need the words of both "
+                f"corpora, not n={n}"
+            )
         reference = _frequency_reference(reference)
-    return anyts.corpus.keyness(target, reference, measure, min_freq, positive, top_n)
+    return anyts.corpus.keyness(target, reference, measure, min_freq, positive, top_n, n)
 
 
 def _frequency_reference(freq_dict: FreqDict) -> FrequencyReference:

@@ -208,14 +208,14 @@ class MorphStatsComponent(_Component):
     stats_class = MorphStats
 
 
-@Language.factory("ests_syntax")
+@Language.factory("ests_syntax", requires=["token.dep", "token.head", "token.pos", "token.lemma"])
 class SyntaxStatsComponent(_Component, anyts.components.SyntaxStatsComponent):
     """
     Class for the component of the syntactic statistics of a text
 
     Description:
-        Puts a SyntaxStats object into doc._.<name>; needs a parser and
-        a lemmatizer before it
+        Puts a SyntaxStats object into doc._.<name>; needs a parser, a
+        morphologizer and a lemmatizer before it
 
     Adding the component to a pipeline:
         >>> import ests
@@ -233,7 +233,7 @@ class SyntaxStatsComponent(_Component, anyts.components.SyntaxStatsComponent):
         name (str): Name of the component in the pipeline
 
     Raises:
-        SourceError: If the pipeline gives no parse or no lemmas
+        SourceError: If the pipeline gives no parse, no parts of speech or no lemmas
     """
 
     stats_class = SyntaxStats

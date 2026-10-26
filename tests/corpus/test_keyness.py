@@ -138,3 +138,20 @@ def test_check_keyness_params():
 def test_keyness_errors(kwargs, error):
     with pytest.raises(error):
         keyness(target, reference, **kwargs)
+
+
+def test_keyness_ngrams():
+    """The n-grams of the words of every text, not across two texts"""
+    texts = [["el", "gato", "duerme", "en", "casa"], ["el", "gato", "come", "en", "casa"]]
+    keywords = keyness(texts, [["el", "perro", "duerme", "en", "el", "jardín"]], n=2)
+    assert {keyword.word: keyword.freq_target for keyword in keywords}["el_gato"] == 2
+    assert "casa_el" not in {keyword.word for keyword in keywords}
+
+
+def test_keyness_freq_dict_ngrams(freq_dict, monkeypatch):
+    """The frequency dictionary holds words: n-grams with it fail before it is read"""
+    monkeypatch.setattr(FreqDict, "word_ipm", property(lambda self: pytest.fail("read")))
+    with pytest.raises(ParameterError, match=r"^The frequency dictionary holds words"):
+        keyness(target, freq_dict, n=2)
+    with pytest.raises(ParameterError):
+        keyness(target, freq_dict, n=0)

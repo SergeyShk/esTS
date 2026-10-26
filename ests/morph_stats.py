@@ -6,7 +6,7 @@ from math import nan
 from typing import TYPE_CHECKING, Any, ClassVar
 
 from anyts.stats import Stats
-from anyts.utils import is_doc, iter_doc_tokens, safe_divide
+from anyts.utils import is_doc, iter_doc_tokens, safe_divide, source_type_error
 
 from .constants import (
     COPULAS,
@@ -15,7 +15,7 @@ from .constants import (
     MORPHOLOGY_STATS_DESC,
     PASSIVE_AUX,
 )
-from .exceptions import SourceError, SourceTypeError
+from .exceptions import SourceError
 from .utils import _check_encoding, _check_nlp, get_nlp
 
 if TYPE_CHECKING:
@@ -148,7 +148,7 @@ class MorphStats(Stats):
             _check_encoding(source)
             source = pipeline(source, disable=UNUSED_COMPONENTS)
         elif not is_doc(source):
-            raise SourceTypeError("The data source is set incorrectly")
+            raise source_type_error(self.messages, source)
         tokens = list(iter_doc_tokens(source))
         if not tokens:
             raise SourceError("The data source has no words")

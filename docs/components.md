@@ -170,11 +170,11 @@ SyntaxStatsComponent(nlp, name)
 
 --8<-- "components.md:SyntaxStatsComponent"
 
-In esTS they need a `lemmatizer` before it as well.
+In esTS they need a `lemmatizer` before it as well; the factory requires `token.dep`, `token.head`, `token.pos` and `token.lemma`, so `nlp.analyze_pipes()` names a pipeline without one of them.
 
 Raises:
 
-- `SourceError` - a document without a dependency parse or the lemmas.
+- `SourceError` - a document without a dependency parse, the parts of speech or the lemmas.
 
 === "Code"
 

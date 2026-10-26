@@ -192,14 +192,14 @@ Excepciones:
 SyntaxStatsComponent(nlp, name)
 ```
 
-<!-- core: components.md:SyntaxStatsComponent 95e9f18 -->
-`SyntaxStatsComponent` pone las estadísticas sintácticas en la extensión; necesitan un parser antes de él.
+<!-- core: components.md:SyntaxStatsComponent f99599b -->
+`SyntaxStatsComponent` pone las estadísticas sintácticas en la extensión; necesitan un parser y las categorías gramaticales antes de él.
 
-En esTS necesitan también un `lemmatizer` antes de él.
+En esTS necesitan también un `lemmatizer` antes de él; la fábrica requiere `token.dep`, `token.head`, `token.pos` y `token.lemma`, así que `nlp.analyze_pipes()` señala un pipeline sin alguno de ellos.
 
 Excepciones:
 
-- `SourceError` - un documento sin análisis de dependencias o sin los lemas.
+- `SourceError` - un documento sin análisis de dependencias, sin las categorías gramaticales o sin los lemas.
 
 === "Código"
 

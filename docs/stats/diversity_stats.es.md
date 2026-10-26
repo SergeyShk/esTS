@@ -55,6 +55,7 @@ La clase extiende el `DiversityStats` del núcleo [anyTS](https://sergeyshk.gith
     Brunet's W                                                             |   6.01
     Dugast's k                                                             |  14.78
     Baayen's P                                                             |   0.53
+    Orlov's Z (words)                                                      |   nan
     Hapax ratio                                                            |   0.73
     Exponent α₂                                                            |   0.50
     Shannon entropy (bits)                                                 |   3.32
@@ -62,6 +63,7 @@ La clase extiende el `DiversityStats` del núcleo [anyTS](https://sergeyshk.gith
     Perplexity                                                             |  10.01
     Zipf's law slope (α)                                                   |   0.49
     Heaps' law exponent (β)                                                |   0.84
+    Burstiness of the frequent lexemes                                     |   nan
     ```
 
 ## Parámetros
@@ -106,7 +108,7 @@ Según Zenker y Kyle (2021), MATTR, MTLD y HD-D son estables en textos de 50-200
 
 ## Métricas
 
-<!-- core: stats/diversity_stats.md:DiversityStats-metrics bc5ee7c -->
+<!-- core: stats/diversity_stats.md:DiversityStats-metrics 07cb8f8 -->
 Cada métrica es una propiedad del objeto, calculada en cada acceso por la función de su tarjeta con los parámetros del objeto, y `get_stats` las da todas.
 
 | Métrica | Qué mide | Rango | Un valor mayor indica |
@@ -136,6 +138,7 @@ Cada métrica es una propiedad del objeto, calculada en cada acceso por la funci
 | [`brunet_w`](#brunet_w) | Palabras frente a los lexemas | De 1 al número de palabras | Un vocabulario más pobre |
 | [`dugast_k`](#dugast_k) | Lexemas frente a las palabras en logaritmos | 0 o más, `nan` en un texto no más largo que la base | Un vocabulario más rico |
 | [`baayen_p`](#baayen_p) | Proporción de hápax entre las palabras | 0-1 | Un vocabulario que crece más deprisa |
+| [`orlov_z`](#orlov_z) | Longitud del texto en palabras con la que la ley de Zipf mejor se ajusta al vocabulario | Más de 0, `nan` sin solución, `inf` más allá de los float | Un vocabulario más rico |
 | [`hapax_ratio`](#hapax_ratio) | Proporción de hápax entre los lexemas | 0-1 | Más lexemas usados una sola vez |
 | [`alpha2`](#alpha2) | Forma de la parte baja del espectro de frecuencias | 1 o menos, `nan` sin hápax | Más hápax frente a dis legomena |
 | [`entropy`](#entropy) | Información por palabra en bits | 0 o más | Un vocabulario más rico |
@@ -143,6 +146,7 @@ Cada métrica es una propiedad del objeto, calculada en cada acceso por la funci
 | [`perplexity`](#perplexity) | Número efectivo de lexemas | De 1 al número de lexemas | Un vocabulario más rico |
 | [`zipf_alpha`](#zipf_alpha) | Caída de la frecuencia con el rango | 0 o más, `nan` con un solo lexema | Frecuencias que caen más deprisa |
 | [`heaps_beta`](#heaps_beta) | Crecimiento del vocabulario con la longitud | 0 o más, `nan` con menos de dos palabras | Un vocabulario que crece más deprisa |
+| [`burstiness`](#burstiness) | Índice medio de ráfagas de los lexemas de cinco apariciones o más | De -1 a 1, `nan` sin ellos | Palabras usadas en ráfagas |
 
 Las funciones y las tuplas con nombre de las tarjetas se importan de `ests.diversity_stats`.
 
@@ -400,20 +404,21 @@ Un `min_len` que no es un entero no negativo y un `threshold` que no es un núme
 `mamtld`
 { .metric-meta }
 
-<!-- core: stats/diversity_stats.md:calc_mamtld c845458 -->
+<!-- core: stats/diversity_stats.md:calc_mamtld 8e538bd -->
 ``` {.python .signature}
-calc_mamtld(text, min_len=10, threshold=0.72)
+calc_mamtld(text, min_len=10, threshold=0.72, step=1)
 ```
 
-Una modificación de MTLD con ventana móvil según el MTLD-MA de koRpus: un factor empieza en cada posición del texto, y el valor es la longitud media de los factores completados en una pasada hacia delante y otra hacia atrás. koRpus hace solo la pasada hacia delante, cierra un factor con un TTR estrictamente menor que el umbral y descarta los factores más cortos que la longitud mínima en lugar de extenderlos. Si ningún factor se completa, el valor es `nan`. La métrica es inestable en textos cortos.
+Una modificación de MTLD con ventana móvil según el MTLD-MA de koRpus: un factor empieza en cada posición del texto, y el valor es la longitud media de los factores completados en una pasada hacia delante y otra hacia atrás. koRpus hace solo la pasada hacia delante, cierra un factor con un TTR estrictamente menor que el umbral y descarta los factores más cortos que la longitud mínima en lugar de extenderlos. Con un `step` de k un factor empieza en cada k-ésima posición desde cualquiera de los dos extremos, como `MTLDMA.steps` de koRpus, y solo se calculan esos factores: un paso de 10 es varias veces más rápido. Si ningún factor se completa, el valor es `nan`. La métrica es inestable en textos cortos.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `text` | `list[str]` | - | Lista de palabras |
 | `min_len` | `int` | `10` | Longitud mínima del factor (`MTLD_MIN_LEN`) |
 | `threshold` | `float` | `0.72` | Umbral de TTR para completar un factor (`MTLD_TTR_THRESHOLD`) |
+| `step` | `int` | `1` | Distancia entre los inicios de los factores |
 
-Un `min_len` que no es un entero no negativo y un `threshold` que no es un número en (0, 1) lanzan `ParameterError`.
+Un `min_len` que no es un entero no negativo, un `threshold` que no es un número en (0, 1) y un `step` que no es un entero mayor que 0 lanzan `ParameterError`.
 
 </div>
 
@@ -782,6 +787,48 @@ $$
 
 <div class="metric-card" markdown>
 
+### Z de Orlov { #orlov_z }
+
+`orlov_z` · [Tweedie y Baayen 1998](https://doi.org/10.1023/A:1001749303137)
+{ .metric-meta }
+
+<!-- core: stats/diversity_stats.md:calc_orlov_z f1f1b1c -->
+``` {.python .signature}
+calc_orlov_z(text)
+```
+
+La longitud del texto con la que la ley de Zipf mejor se ajusta al vocabulario (Orlov 1983): la solución $Z$ para $N$ palabras, $V$ lexemas y la proporción $p$ del lexema más frecuente. El lado derecho, como función de $Z$, tiene un mínimo, y $Z$ es la solución por encima de él; es `nan` cuando $V$ queda en ese mínimo o por debajo o cuando cada palabra es un lexema propio, e `inf` cuando $V$ se acerca tanto a $N$ que $Z$ desborda un float. Junto con la K de Yule, Z fue la que mejor separó a los autores entre las medidas que compararon Tweedie y Baayen.
+
+$$
+V = \frac{Z}{\ln(pZ)} \cdot \frac{N}{N - Z} \cdot \ln \frac{N}{Z}
+$$
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `text` | `list[str]` | - | Lista de palabras |
+
+=== "Código"
+
+    ``` python
+    from ests.diversity_stats import calc_orlov_z
+
+    words = (
+        "en un lugar de la mancha de cuyo nombre no quiero acordarme no ha mucho tiempo que "
+        "vivía un hidalgo de los de lanza en astillero adarga antigua rocín flaco y galgo corredor"
+    ).split()
+    round(calc_orlov_z(words), 2)
+    ```
+
+=== "Resultado"
+
+    ```
+    15733.38
+    ```
+
+</div>
+
+<div class="metric-card" markdown>
+
 ### Proporción de hápax { #hapax_ratio }
 
 `hapax_ratio`
@@ -999,6 +1046,50 @@ El gráfico de la [ley de Heaps](../visualizers/vocabulary.md) se construye a pa
 
 <div class="metric-card" markdown>
 
+### Ráfagas (burstiness) { #burstiness }
+
+`burstiness` · [Kim y Jo 2016](https://doi.org/10.1103/PhysRevE.94.032311)
+{ .metric-meta }
+
+<!-- core: stats/diversity_stats.md:calc_burstiness d0ce1ff -->
+``` {.python .signature}
+calc_burstiness(text, min_freq=5)
+```
+
+En qué medida un lexema aparece en ráfagas en lugar de repartido por el texto, según el índice de ráfagas (burstiness) de Kim y Jo, que corrige el de Goh y Barabási para un número finito $n$ de eventos, promediado sobre los lexemas de `min_freq` apariciones o más (`BURSTINESS_MIN_FREQ`). Para las $n$ apariciones de un lexema, $r$ es el coeficiente de variación de sus $n$ intervalos, incluido el que va de la última a la primera dando la vuelta al final del texto. El valor es −1 para apariciones a intervalos iguales, incluido el que da la vuelta al final (*a x a x a x a x a x* da −1, *a x a x a x a x a* alrededor de −0.69), cerca de 0 para un lexema raro en lugares aleatorios y hasta 1 para apariciones en ráfagas; `nan` sin tales lexemas.
+
+$$
+A_n = \frac{\sqrt{n + 1} \cdot r - \sqrt{n - 1}}{(\sqrt{n + 1} - 2) \cdot r + \sqrt{n - 1}}
+$$
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `text` | `list[str]` | - | Lista de palabras |
+| `min_freq` | `int` | `5` | Menor número de apariciones de un lexema medido |
+
+Un `min_freq` que no es un entero de al menos 2 lanza `ParameterError`.
+
+=== "Código"
+
+    ``` python
+    from ests.diversity_stats import calc_burstiness
+
+    (
+        calc_burstiness("sí no sí no sí no sí no sí no".split()),
+        calc_burstiness("sí sí sí sí sí no no no no no".split()),
+    )
+    ```
+
+=== "Resultado"
+
+    ```
+    (-1.0, 0.18350341907227388)
+    ```
+
+</div>
+
+<div class="metric-card" markdown>
+
 ### Cálculo por ventanas { #windowed }
 
 `windowed(stat)`
@@ -1086,13 +1177,15 @@ Cada función comprueba sus palabras con `check_words`: un `text` que es una cad
      'brunet_w': 6.00637847898991,
      'dugast_k': 14.783895126869226,
      'baayen_p': 0.5333333333333333,
+     'orlov_z': nan,
      'hapax_ratio': 0.7272727272727273,
      'alpha2': 0.5,
      'entropy': 3.3232314287976203,
      'evenness': 0.9606293157795304,
      'perplexity': 10.009038104159247,
      'zipf_alpha': 0.4884512334695912,
-     'heaps_beta': 0.8366147342060046}
+     'heaps_beta': 0.8366147342060046,
+     'burstiness': nan}
     ```
 
 Los demás métodos, `to_dataframe` y `describe`, son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las métricas de diversidad léxica no tienen escalas, así que `describe` da `None` para las métricas de `get_stats`.

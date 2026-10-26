@@ -18,6 +18,7 @@ from anyts.diversity_stats import (
     calc_alpha2 as calc_alpha2,
     calc_baayen_p as calc_baayen_p,
     calc_brunet_w as calc_brunet_w,
+    calc_burstiness as calc_burstiness,
     calc_cttr as calc_cttr,
     calc_dttr as calc_dttr,
     calc_dugast_k as calc_dugast_k,
@@ -40,6 +41,7 @@ from anyts.diversity_stats import (
     calc_mtld as calc_mtld,
     calc_mtldw as calc_mtldw,
     calc_mttr as calc_mttr,
+    calc_orlov_z as calc_orlov_z,
     calc_perplexity as calc_perplexity,
     calc_rttr as calc_rttr,
     calc_sichel_s as calc_sichel_s,
@@ -55,7 +57,7 @@ from anyts.diversity_stats import (
     fit_zipf_mandelbrot as fit_zipf_mandelbrot,
     vocabulary_growth as vocabulary_growth,
 )
-from anyts.utils import is_doc, iter_doc_words
+from anyts.utils import is_doc, iter_doc_words, source_type_error
 
 from .exceptions import SourceTypeError
 from .extractors import WordsExtractor
@@ -137,6 +139,7 @@ class DiversityStats(anyts.DiversityStats):
         brunet_w (float): Brunet's W
         dugast_k (float): Dugast's k
         baayen_p (float): Baayen's P
+        orlov_z (float): Orlov's Z, a text length in words
         hapax_ratio (float): Share of hapaxes among lexemes
         alpha2 (float): The α₂ exponent
         entropy (float): Shannon entropy in bits
@@ -144,6 +147,8 @@ class DiversityStats(anyts.DiversityStats):
         perplexity (float): Perplexity
         zipf_alpha (float): Zipf's law slope
         heaps_beta (float): Heaps' law exponent
+        burstiness (float): Mean burstiness of the lexemes of BURSTINESS_MIN_FREQ
+            occurrences or more
 
     Methods:
         windowed: Windowed computation of a metric with the mean and a confidence interval
@@ -179,7 +184,7 @@ class DiversityStats(anyts.DiversityStats):
         elif isinstance(source, str):
             words = (words_extractor or WordsExtractor()).extract(source)
         else:
-            raise SourceTypeError("The data source is set incorrectly")
+            raise source_type_error(self.messages, source)
         super().__init__(
             [word.lower() for word in words],
             window_len,

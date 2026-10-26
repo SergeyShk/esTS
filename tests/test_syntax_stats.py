@@ -761,3 +761,32 @@ def test_subordinate_clause_up_a_long_chain_of_conjuncts():
         pos=["VERB"] * 3,
     )
     assert not any(is_subordinate_clause_head(token) for token in doc)
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("Ayer por la tarde el gato dormía.", {"words_before_root": 6.0}),
+        ("El gato duerme. Llegó el tren.", {"p_preverbal_subjects": 0.5}),
+        (
+            "La revisión de las cuentas del organismo fue lenta.",
+            {
+                "prep_chains_per_sent": 1.0,
+                "max_prep_chain_len": 2,
+                "de_chains_per_sent": 1.0,
+                "max_de_chain_len": 2,
+            },
+        ),
+        (
+            "Sé que vendrá. Nos vamos.",
+            {"t_units_per_sent": 1.0, "clauses_per_t_unit": 1.5, "p_complex_t_units": 0.5},
+        ),
+        # A periphrasis is one predicate, an infinitive clause one of its own
+        ("Puede venir.", {"clauses_per_t_unit": 1.0, "verb_phrases_per_t_unit": 1.0}),
+        ("Quiere venir.", {"clauses_per_t_unit": 2.0, "verb_phrases_per_t_unit": 2.0}),
+    ],
+)
+def test_new_core_stats(nlp, text, expected):
+    """The metrics of the core 0.4 on Spanish sentences with the Spanish hooks of the clauses"""
+    stats = SyntaxStats(nlp(text)).get_stats()
+    assert {key: stats[key] for key in expected} == pytest.approx(expected)

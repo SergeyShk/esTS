@@ -30,21 +30,23 @@ La clase extiende el `BasicStats` del núcleo [anyTS](https://sergeyshk.github.i
 === "Resultado"
 
     ```
-         Statistic     |  Value
-    ------------------------------
-    Sentences          |    1
-    Words              |    10
-    Unique words       |    8
-    Long words         |    5
-    Complex words      |    5
-    Simple words       |    5
-    Monosyllabic words |    4
-    Polysyllabic words |    6
-    Characters         |    71
-    Letters            |    60
-    Spaces             |    9
-    Syllables          |    23
-    Punctuation marks  |    2
+                       Statistic                    |  Value
+    -----------------------------------------------------------
+    Sentences                                       |    1
+    Words                                           |    10
+    Unique words                                    |    8
+    Long words                                      |    5
+    Complex words                                   |    5
+    Simple words                                    |    5
+    Monosyllabic words                              |    4
+    Polysyllabic words                              |    6
+    Characters                                      |    71
+    Letters                                         |    60
+    Spaces                                          |    9
+    Syllables                                       |    23
+    Punctuation marks                               |    2
+    Entropy of the word lengths in letters (bits)   |   2.52
+    Entropy of the word lengths in syllables (bits) |   1.72
     ```
 
 ## Parámetros
@@ -65,7 +67,7 @@ En esTS los umbrales son los del núcleo y de las fórmulas de legibilidad: una 
 
 ## Estadísticas
 
-<!-- core: stats/basic_stats.md:BasicStats-attributes 2687b35 -->
+<!-- core: stats/basic_stats.md:BasicStats-attributes 0981aba -->
 | Estadística | Tipo | Descripción | Normalizada |
 | :-------- | :--- | :---------- | :--------- |
 | `c_letters` | `dict[int, int]` | Distribución de las palabras por número de letras | - |
@@ -83,6 +85,8 @@ En esTS los umbrales son los del núcleo y de las fórmulas de legibilidad: una 
 | `n_spaces` | `int` | Número de espacios de Unicode (categoría Zs), como el espacio de no separación, y tabulaciones | `p_spaces` |
 | `n_syllables` | `int` | Número de sílabas | - |
 | `n_punctuations` | `int` | Número de signos de puntuación | `p_punctuations` |
+| `letters_entropy` | `float` | Entropía de Shannon en bits de las longitudes de las palabras en letras, de `c_letters`: 0 cuando las palabras tienen una sola longitud | - |
+| `syllables_entropy` | `float` | Entropía de Shannon en bits de las longitudes de las palabras en sílabas, de `c_syllables` | - |
 | `c_punctuations` | `dict[str, int]` | Distribución de los signos de puntuación por tipo ([`count_punctuations`](#count_punctuations)) | - |
 
 Con `normalize=True` el objeto tiene también las estadísticas normalizadas, de tipo `float`: los recuentos de palabras divididos por el número de palabras, los de caracteres por el número de caracteres.
@@ -94,11 +98,11 @@ Con `normalize=True` el objeto tiene también las estadísticas normalizadas, de
 
 Los métodos vuelven a contar las palabras complejas y largas con un umbral distinto del fijado al crear el objeto; [`ReadabilityStats`](readability_stats.md) cuenta con ellos las palabras polisílabas de SOL y las palabras largas de LIX y RIX, así que estas no dependen de los umbrales del objeto.
 
-<!-- core: stats/basic_stats.md:BasicStats-get_stats f52c936 -->
-`get_stats(flat)` devuelve un diccionario con las distribuciones `c_letters` y `c_syllables`, los recuentos de `stats_desc`, la distribución `c_punctuations` y, con `normalize=True`, los recuentos normalizados, como una copia: editarlo no cambia el objeto. Con `flat=True` las distribuciones dan una clave por cada valor que tiene el texto, como `c_letters_3` y `c_punctuations_comma`.
+<!-- core: stats/basic_stats.md:BasicStats-get_stats 5352c3c -->
+`get_stats(flat)` devuelve un diccionario con las distribuciones `c_letters` y `c_syllables`, las estadísticas de `stats_desc`, la distribución `c_punctuations` y, con `normalize=True`, los recuentos normalizados, como una copia: editarlo no cambia el objeto. Con `flat=True` las distribuciones dan una clave por cada valor que tiene el texto, como `c_letters_3` y `c_punctuations_comma`.
 
-<!-- core: stats/basic_stats.md:BasicStats-print_stats da79e92 -->
-`print_stats()` muestra una tabla con los recuentos de `stats_desc`, sus descripciones y los encabezados de `stats_headers`.
+<!-- core: stats/basic_stats.md:BasicStats-print_stats 129bbf6 -->
+`print_stats()` muestra una tabla con las estadísticas de `stats_desc`, sus descripciones y los encabezados de `stats_headers`.
 
 Las estadísticas normalizadas `p_*` no están en la tabla.
 
@@ -131,6 +135,8 @@ Las estadísticas normalizadas `p_*` no están en la tabla.
      'n_spaces': 9,
      'n_syllables': 23,
      'n_punctuations': 2,
+     'letters_entropy': 2.5219280948873624,
+     'syllables_entropy': 1.7219280948873623,
      'c_punctuations': {'comma': 1,
                         'period': 0,
                         'question': 0,

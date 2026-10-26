@@ -114,7 +114,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    [Keywords](corpus/keyness.md) against a reference corpus or the frequency dictionary, [collocations](corpus/collocations.md), the [dispersion](corpus/dispersion.md) of a word over the parts of a text, a [KWIC concordance](corpus/kwic.md), authorship by [stylometry](corpus/stylometry.md) (Burrows's Delta, Zeta, the Mendenhall curve, the function words) and the [comparison of corpora](corpus/compare.md) over 132 features of a text
+    [Keywords](corpus/keyness.md) against a reference corpus or the frequency dictionary, [collocations](corpus/collocations.md), the [dispersion](corpus/dispersion.md) of a word over the parts of a text, a [KWIC concordance](corpus/kwic.md), authorship by [stylometry](corpus/stylometry.md) (Burrows's Delta, Zeta, the Mendenhall curve, the function words) and the [comparison of corpora](corpus/compare.md) over 133 features of a text
 
     [:octicons-arrow-right-24: Corpus measures](corpus/keyness.md)
 
@@ -194,6 +194,8 @@ The distribution on PyPI is `pyests`, the package it installs is `ests`. The dep
      'n_spaces': 9,
      'n_syllables': 23,
      'n_punctuations': 2,
+     'letters_entropy': 2.5219280948873624,
+     'syllables_entropy': 1.7219280948873623,
      'c_punctuations': {'comma': 1,
                         'period': 0,
                         'question': 0,
@@ -222,21 +224,23 @@ Any statistic can be printed in a readable form:
 === "Result"
 
     ```
-         Statistic     |  Value
-    ------------------------------
-    Sentences          |    1
-    Words              |    10
-    Unique words       |    8
-    Long words         |    5
-    Complex words      |    5
-    Simple words       |    5
-    Monosyllabic words |    4
-    Polysyllabic words |    6
-    Characters         |    71
-    Letters            |    60
-    Spaces             |    9
-    Syllables          |    23
-    Punctuation marks  |    2
+                       Statistic                    |  Value
+    -----------------------------------------------------------
+    Sentences                                       |    1
+    Words                                           |    10
+    Unique words                                    |    8
+    Long words                                      |    5
+    Complex words                                   |    5
+    Simple words                                    |    5
+    Monosyllabic words                              |    4
+    Polysyllabic words                              |    6
+    Characters                                      |    71
+    Letters                                         |    60
+    Spaces                                          |    9
+    Syllables                                       |    23
+    Punctuation marks                               |    2
+    Entropy of the word lengths in letters (bits)   |   2.52
+    Entropy of the word lengths in syllables (bits) |   1.72
     ```
 
 A walkthrough of one short story with every tool of the library is in the notebook [examples/01_text_walkthrough.ipynb](https://github.com/SergeyShk/esTS/blob/master/examples/01_text_walkthrough.ipynb), which opens in [Colab](https://colab.research.google.com/github/SergeyShk/esTS/blob/master/examples/01_text_walkthrough.ipynb); the notebooks on prose authors, sonnets and corpus measures are on the [examples](examples.md) page.

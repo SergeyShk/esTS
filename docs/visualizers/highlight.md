@@ -355,16 +355,17 @@ Raises:
 ### Connectors { #connectors }
 
 ``` {.python .signature}
-find_connector_highlights(words, sents, text=None)
+find_connector_highlights(words, sents, text=None, doc=None)
 ```
 
-The layer `connectors`: the connectors of [`CohesionStats`](../stats/cohesion_stats.md#connectors) inside every sentence, found by its matcher [`SpanishConnectorMatcher`](../stats/cohesion_stats.md#ConnectorMatcher), a one-word connector checked by its part of speech when the words have it; the note gives the connector, its class and its kind. With the text, the rules of the matcher read no word across a punctuation mark between two words, so `así, que` is no connector; `HighlightedText` passes the text of its source.
+The layer `connectors`: the connectors of [`CohesionStats`](../stats/cohesion_stats.md#connectors) inside every sentence, found by its matcher [`SpanishConnectorMatcher`](../stats/cohesion_stats.md#ConnectorMatcher), a one-word connector checked by its part of speech when the words have it; the note gives the connector, its class and its kind. With the text, the rules of the matcher read no word across a punctuation mark between two words, so `así, que` is no connector; with the `Doc`, no connector starts at a `si` that opens no condition, as in `CohesionStats` ([`is_connector_blocked`](../stats/cohesion_stats.md#is_connector_blocked): `no sé si vendrá`). `HighlightedText` passes the text of its source and its `Doc`; in a string, which it does not parse, only the rules of the matcher drop a `si` (`como si fuera`).
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
 | `words` | `list[Word]` | - | Words with their positions and parts of speech |
 | `sents` | `list[Sent]` | - | Sentences with their positions |
 | `text` | `str` | `None` | Text of the words, for the punctuation marks between them |
+| `doc` | `Doc` | `None` | `Doc` of the words, for the rules by its tokens |
 
 Raises:
 

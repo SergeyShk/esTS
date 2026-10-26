@@ -3,7 +3,7 @@ import spacy
 from anyts.visualizers.highlight import Sent, Word
 from spacy.tokens import Doc
 
-from ests import StyleStats
+from ests import CohesionStats, StyleStats
 from ests.constants import (
     HIGHLIGHT_DEFAULT_LAYERS,
     HIGHLIGHT_LAYER_ANNOTATIONS,
@@ -147,9 +147,9 @@ def test_layers_unknown():
 @pytest.mark.parametrize(
     ("layer", "requirement"),
     [
-        ("passive", "a dependency parse"),
-        ("de_chains", "a dependency parse"),
-        ("verbal_nouns", "the parts of speech, the lemmas"),
+        ("passive", "dependency parse"),
+        ("de_chains", "dependency parse"),
+        ("verbal_nouns", "parts of speech, lemmas"),
     ],
 )
 def test_layers_unavailable(layer, requirement):
@@ -171,7 +171,7 @@ def test_doc_without_the_sentence_boundaries(nlp):
 def test_syntax_layers_without_the_lemmas(nlp, layer):
     # the syntactic layers read the lemmas
     doc = nlp(text, disable=["lemmatizer"])
-    with pytest.raises(ParameterError, match="parse, the lemmas"):
+    with pytest.raises(ParameterError, match="parse, lemmas"):
         highlight(doc, layers=layer)
     assert highlight(doc).layers == ("long_sents", "complex_words", "cliches")
 
@@ -333,6 +333,17 @@ def test_connectors_pos():
         for word, pos in zip(words, ["ADV", "VERB", "VERB", "VERB"], strict=True)
     ]
     assert find_connector_highlights(tagged, sents) == []
+
+
+def test_connectors_si_without_a_condition(nlp):
+    """With a Doc the layer drops the si of CohesionStats that opens no condition"""
+    text = "No sé si vendrá. Si llueve, me quedo. ¡Si ya te lo dije!"
+    doc = nlp(text)
+    ht = highlight(doc, layers="connectors")
+    assert [(h.start, h.end) for h in ht.highlights] == [(17, 19)]
+    assert len(ht.highlights) == len(CohesionStats(doc).connector_spans)
+    # A string has no parse: every si counts
+    assert len(highlight(text, layers="connectors").highlights) == 3
 
 
 def test_passive(doc):

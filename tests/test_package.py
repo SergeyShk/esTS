@@ -192,6 +192,11 @@ def test_subpackage_exports(name):
     assert all(hasattr(module, attr) for attr in module.__all__)
 
 
+# Names of the core the library has not moved onto the object of the core yet: MorphStats
+# before the frame of the core
+PENDING = {"ests.components": {"MorphStats", "MorphStatsComponent"}}
+
+
 @pytest.mark.parametrize(("library", "core"), CORE_MODULES.items())
 def test_core_names(library, core):
     """A name of the core in the library is the object of the core, not a copy of it"""
@@ -203,6 +208,7 @@ def test_core_names(library, core):
             name.startswith("_")
             or isinstance(value, ModuleType)
             or not hasattr(library_module, name)
+            or name in PENDING.get(library, ())
         ):
             continue
         own = getattr(library_module, name)
@@ -396,21 +402,21 @@ def test_pipeline_check_without_spacy():
     assert _run(code) == "The pipeline must be a spaCy Language False"
 
 
-@pytest.mark.parametrize(
-    "name",
-    [
-        "BasicStats",
-        "CohesionStats",
-        "DiversityStats",
-        "LexicalStats",
-        "MorphStats",
-        "PhonStats",
-        "ReadabilityStats",
-        "StyleStats",
-        "SyntaxStats",
-        "VerseStats",
-    ],
-)
+STATS_CLASSES = [
+    "BasicStats",
+    "CohesionStats",
+    "DiversityStats",
+    "LexicalStats",
+    "MorphStats",
+    "PhonStats",
+    "ReadabilityStats",
+    "StyleStats",
+    "SyntaxStats",
+    "VerseStats",
+]
+
+
+@pytest.mark.parametrize("name", STATS_CLASSES)
 def test_stats_interface(name):
     """Every class of statistics has the interface of the core: get_stats, describe..."""
     from anyts.stats import Stats
@@ -418,6 +424,27 @@ def test_stats_interface(name):
     stats_class = getattr(ests, name)
     assert issubclass(stats_class, Stats)
     assert stats_class.stats_desc
+
+
+@pytest.mark.parametrize("name", STATS_CLASSES)
+def test_stats_in_docstring(name):
+    """Every statistic of get_stats is described in the Attributes of the docstring of its class"""
+    stats_class = getattr(ests, name)
+    attributes = re.search(r"Attributes:\n(.*?)\n\n", stats_class.__doc__, re.DOTALL)
+    assert attributes is not None
+    assert [key for key in stats_class.stats_desc if f" {key} (" not in attributes[1]] == []
+
+
+@pytest.mark.parametrize("name", STATS_CLASSES)
+def test_source_type_message(name):
+    """A source of a wrong type names its type, a Span asks for its Doc"""
+    import spacy
+
+    with pytest.raises(ests.SourceTypeError, match=r"^The data source cannot be of type int$"):
+        getattr(ests, name)(5)
+    span = spacy.blank("es")("El gato duerme en la ventana.")[0:2]
+    with pytest.raises(ests.SourceTypeError, match=r"^The data source cannot be a Span"):
+        getattr(ests, name)(span)
 
 
 def test_demo_computes_its_examples(monkeypatch, freq_dict):

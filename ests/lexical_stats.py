@@ -9,7 +9,7 @@ import anyts
 import anyts.lexical_stats
 from anyts.constants import FREQUENCY_BANDS as FREQUENCY_BANDS
 from anyts.lexical_stats import LexicalWord
-from anyts.utils import is_doc, is_number, iter_doc_tokens
+from anyts.utils import is_doc, is_number, iter_doc_tokens, source_type_error
 
 from .cohesion_stats import token_info
 from .constants import LEXICAL_STATS_DESC
@@ -173,7 +173,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
             _check_encoding(source)
             source = pipeline(source, disable=UNUSED_COMPONENTS)
         elif not is_doc(source):
-            raise SourceTypeError("The data source is set incorrectly")
+            raise source_type_error(self.messages, source)
         tokens = [
             token for token in iter_doc_tokens(source) if not is_number(token.text, NUMBER_PATTERN)
         ]

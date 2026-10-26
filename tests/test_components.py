@@ -241,6 +241,15 @@ def test_readability_reuse_of_a_component_that_runs_later():
         pipeline(TEXT)
 
 
+def test_component_syntax_requires_pos():
+    """spaCy names a pipeline without the parts of speech a problem before the first document"""
+    pipeline = spacy.load("es_core_news_sm", exclude=["morphologizer"])
+    pipeline.add_pipe("ests_syntax", name="syntax", last=True)
+    assert pipeline.analyze_pipes(pretty=False)["problems"]["syntax"] == ["token.pos"]
+    with pytest.raises(SourceError, match="parts of speech"):
+        pipeline(TEXT)
+
+
 @pytest.mark.parametrize("factory", ["ests_morph", "ests_syntax", "ests_cohesion"])
 def test_component_without_the_lemmas(factory):
     pipeline = spacy.load("es_core_news_sm", exclude=["lemmatizer"])

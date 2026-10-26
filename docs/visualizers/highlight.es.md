@@ -406,16 +406,17 @@ Excepciones:
 ### Conectores { #connectors }
 
 ``` {.python .signature}
-find_connector_highlights(words, sents, text=None)
+find_connector_highlights(words, sents, text=None, doc=None)
 ```
 
-La capa `connectors`: los conectores de [`CohesionStats`](../stats/cohesion_stats.md#connectors) dentro de cada oración, encontrados por su buscador [`SpanishConnectorMatcher`](../stats/cohesion_stats.md#ConnectorMatcher), un conector de una palabra comprobado por su categoría gramatical cuando las palabras la tienen; la nota da el conector, su clase y su tipo. Con el texto, las reglas del buscador no leen ninguna palabra a través de un signo de puntuación entre dos palabras, así que `así, que` no es conector; `HighlightedText` pasa el texto de su fuente.
+La capa `connectors`: los conectores de [`CohesionStats`](../stats/cohesion_stats.md#connectors) dentro de cada oración, encontrados por su buscador [`SpanishConnectorMatcher`](../stats/cohesion_stats.md#ConnectorMatcher), un conector de una palabra comprobado por su categoría gramatical cuando las palabras la tienen; la nota da el conector, su clase y su tipo. Con el texto, las reglas del buscador no leen ninguna palabra a través de un signo de puntuación entre dos palabras, así que `así, que` no es conector; con el `Doc`, ningún conector empieza en un `si` que no abre ninguna condición, como en `CohesionStats` ([`is_connector_blocked`](../stats/cohesion_stats.md#is_connector_blocked): `no sé si vendrá`). `HighlightedText` pasa el texto de su fuente y su `Doc`; en una cadena, que no analiza, solo las reglas del buscador descartan un `si` (`como si fuera`).
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `words` | `list[Word]` | - | Palabras con sus posiciones y sus categorías gramaticales |
 | `sents` | `list[Sent]` | - | Oraciones con sus posiciones |
 | `text` | `str` | `None` | Texto de las palabras, para los signos de puntuación entre ellas |
+| `doc` | `Doc` | `None` | `Doc` de las palabras, para las reglas por sus tokens |
 
 Excepciones:
 

@@ -21,21 +21,23 @@ The class extends the `BasicStats` of the [anyTS](https://sergeyshk.github.io/an
 === "Result"
 
     ```
-         Statistic     |  Value
-    ------------------------------
-    Sentences          |    1
-    Words              |    10
-    Unique words       |    8
-    Long words         |    5
-    Complex words      |    5
-    Simple words       |    5
-    Monosyllabic words |    4
-    Polysyllabic words |    6
-    Characters         |    71
-    Letters            |    60
-    Spaces             |    9
-    Syllables          |    23
-    Punctuation marks  |    2
+                       Statistic                    |  Value
+    -----------------------------------------------------------
+    Sentences                                       |    1
+    Words                                           |    10
+    Unique words                                    |    8
+    Long words                                      |    5
+    Complex words                                   |    5
+    Simple words                                    |    5
+    Monosyllabic words                              |    4
+    Polysyllabic words                              |    6
+    Characters                                      |    71
+    Letters                                         |    60
+    Spaces                                          |    9
+    Syllables                                       |    23
+    Punctuation marks                               |    2
+    Entropy of the word lengths in letters (bits)   |   2.52
+    Entropy of the word lengths in syllables (bits) |   1.72
     ```
 
 ## Parameters
@@ -88,6 +90,8 @@ The normalized statistics `p_*` are not in the table.
      'n_spaces': 9,
      'n_syllables': 23,
      'n_punctuations': 2,
+     'letters_entropy': 2.5219280948873624,
+     'syllables_entropy': 1.7219280948873623,
      'c_punctuations': {'comma': 1,
                         'period': 0,
                         'question': 0,
