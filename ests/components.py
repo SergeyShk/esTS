@@ -177,7 +177,7 @@ class DiversityStatsComponent(_Component, anyts.components.DiversityStatsCompone
     stats_class = DiversityStats
 
 
-@Language.factory("ests_morph")
+@Language.factory("ests_morph", requires=["token.pos", "token.lemma"])
 class MorphStatsComponent(_Component):
     """
     Class for the component of the morphological statistics of a text
@@ -208,14 +208,14 @@ class MorphStatsComponent(_Component):
     stats_class = MorphStats
 
 
-@Language.factory("ests_syntax")
+@Language.factory("ests_syntax", requires=["token.dep", "token.head", "token.pos", "token.lemma"])
 class SyntaxStatsComponent(_Component, anyts.components.SyntaxStatsComponent):
     """
     Class for the component of the syntactic statistics of a text
 
     Description:
-        Puts a SyntaxStats object into doc._.<name>; needs a parser and
-        a lemmatizer before it
+        Puts a SyntaxStats object into doc._.<name>; needs a parser, a
+        morphologizer and a lemmatizer before it
 
     Adding the component to a pipeline:
         >>> import ests
@@ -233,13 +233,13 @@ class SyntaxStatsComponent(_Component, anyts.components.SyntaxStatsComponent):
         name (str): Name of the component in the pipeline
 
     Raises:
-        SourceError: If the pipeline gives no parse or no lemmas
+        SourceError: If the pipeline gives no parse, no parts of speech or no lemmas
     """
 
     stats_class = SyntaxStats
 
 
-@Language.factory("ests_cohesion")
+@Language.factory("ests_cohesion", requires=["token.pos", "token.lemma"])
 class CohesionStatsComponent(_Component, anyts.components.CohesionStatsComponent):
     """
     Class for the component of the cohesion statistics of a text
@@ -270,7 +270,7 @@ class CohesionStatsComponent(_Component, anyts.components.CohesionStatsComponent
     stats_class = CohesionStats
 
 
-@Language.factory("ests_lexical")
+@Language.factory("ests_lexical", requires=["token.pos"])
 class LexicalStatsComponent(_Component, anyts.components.LexicalStatsComponent):
     """
     Class for the component of the lexical sophistication statistics of a text

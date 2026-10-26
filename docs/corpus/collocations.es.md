@@ -1,13 +1,13 @@
 # Colocaciones
 
-<!-- core: corpus/collocations.md:collocations c290cd8 -->
+<!-- core: corpus/collocations.md:collocations a019591 -->
 ``` {.python .signature}
-collocations(words, window=5, measure='logdice', min_freq=2, node=None, top_n=None)
+collocations(words, window=5, measure='logdice', min_freq=2, node=None, top_n=None, side=None)
 ```
 
 Extracción de colocaciones: pares de palabras que aparecen juntas más a menudo de lo que daría la independencia - expresiones fijas, terminología, la combinatoria de una palabra. Las medidas de asociación son las de [Sketch Engine](https://www.sketchengine.eu/wp-content/uploads/ske-statistics.pdf) y de [`nltk.metrics.association`](https://www.nltk.org/api/nltk.metrics.association.html).
 
-Los pares son ordenados, como en NLTK: la palabra de la derecha aparece como mucho `window` palabras después de la de la izquierda, y cada par de posiciones se cuenta una vez; `window=1` da bigramas. Las medidas toman la frecuencia del par dividida por la ventana (Church y Hanks 1990, como en NLTK), lo que mantiene la frecuencia esperada independiente de la ventana y Dice y la sensibilidad mínima en uno como máximo; `freq_pair` queda sin dividir. Así, con `window > 1` un par siempre contiguo recibe un logDice de $14 - \log_2 window$ (13 con una ventana de 2), no 14 como en Sketch Engine con su coocurrencia sin dividir; para 14 hace falta un par a todas las distancias dentro de la ventana. `node` conserva los pares con la palabra dada a cualquiera de los dos lados.
+Los pares son ordenados, como en NLTK: la palabra de la derecha aparece como mucho `window` palabras después de la de la izquierda, y cada par de posiciones se cuenta una vez; `window=1` da bigramas. Las medidas toman la frecuencia del par dividida por la ventana (Church y Hanks 1990, como en NLTK), lo que mantiene la frecuencia esperada independiente de la ventana y Dice y la sensibilidad mínima en uno como máximo; `freq_pair` queda sin dividir. Así, con `window > 1` un par siempre contiguo recibe un logDice de $14 - \log_2 window$ (13 con una ventana de 2), no 14 como en Sketch Engine con su coocurrencia sin dividir; para 14 hace falta un par a todas las distancias dentro de la ventana. `node` conserva los pares con la palabra dada a cualquiera de los dos lados, y `side`, a uno de ellos: `"left"` los colocativos antes del nodo, `"right"` los de después.
 
 Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematización y las palabras vacías corresponden al extractor de palabras; los lemas convienen a las expresiones fijas, las formas a las construcciones gramaticales.
 
@@ -40,7 +40,7 @@ Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematizaci�
 
 ## Parámetros
 
-<!-- core: corpus/collocations.md:collocations-parameters be13ed1 -->
+<!-- core: corpus/collocations.md:collocations-parameters 09ebaf3 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `words` | `list[str]` | - | Palabras del texto en orden |
@@ -49,8 +49,9 @@ Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematizaci�
 | `min_freq` | `int` | `2` | Frecuencia mínima de un par |
 | `node` | `str` | `None` | Palabra cuya combinatoria se busca; `None` - todos los pares |
 | `top_n` | `int` | `None` | Número de colocaciones; `None` - todas |
+| `side` | `str` | `None` | Con un nodo, el lado de sus colocativos: `"left"` o `"right"`; `None` - los dos |
 
-Unas palabras que no son una lista de cadenas lanzan `SourceTypeError`, y la falta de palabras, `SourceError`. Una medida desconocida, un `window` o un `top_n` que no es un entero de al menos uno, un `min_freq` que no es un entero y un `node` que no es una cadena lanzan `ParameterError`.
+Unas palabras que no son una lista de cadenas lanzan `SourceTypeError`, y la falta de palabras, `SourceError`. Una medida desconocida, un `window` o un `top_n` que no es un entero de al menos uno, un `min_freq` que no es un entero, un `node` que no es una cadena y un `side` distinto de `"left"` y `"right"` o sin un nodo lanzan `ParameterError`.
 
 ## Resultado
 

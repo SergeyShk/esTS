@@ -609,6 +609,7 @@ SYNTAX_STATS_DESC = {
     "leaves_per_sent": "Leaves per sentence",
     "subtrees_per_sent": "Subtrees per sentence",
     "nodes_per_leaf": "Mean of the nodes per leaf of the sentences",
+    "words_before_root": "Mean number of words before the root of a sentence",
     "verb_valency": "Valency of the finite verbs",
     "coordination_chains_per_sent": "Coordination chains per sentence",
     "mean_coordination_chain_len": "Mean length of a coordination chain",
@@ -617,7 +618,16 @@ SYNTAX_STATS_DESC = {
     "subordinate_clauses_per_sent": "Subordinate clauses per sentence",
     "p_complex_sents": "Share of sentences with a subordinate clause",
     "infinitive_clauses_per_sent": "Infinitive clauses under a verb per sentence",
+    "t_units_per_sent": "T-units per sentence",
+    "mean_t_unit_len": "Mean length of a T-unit (words)",
+    "clauses_per_t_unit": "Clauses per T-unit",
+    "p_complex_t_units": "Share of T-units with a subordinate clause",
+    "verb_phrases_per_t_unit": "Verb phrases per T-unit",
+    "coordinate_phrases_per_clause": "Coordinate phrases per clause",
+    "complex_nominals_per_clause": "Complex nominals per clause",
     "modifiers_per_noun": "Modifiers per noun phrase",
+    "prep_chains_per_sent": "Prepositional chains per sentence",
+    "max_prep_chain_len": "Maximum length of a prepositional chain",
     "de_chains_per_sent": "Chains of de per sentence",
     "max_de_chain_len": "Maximum length of a chain of de",
     "participle_clauses_per_sent": "Participial clauses per sentence",
@@ -631,6 +641,10 @@ SYNTAX_STATS_DESC = {
     "infinitives_per_sent": "Infinitives per sentence",
     "negations_per_sent": "Words of negation per sentence",
     "split_predicates_per_sent": "Split predicates per sentence",
+    "p_preverbal_subjects": "Share of nominal subjects before their head",
+    "p_preverbal_objects": "Share of nominal objects before their head",
+    "pos_edit_distance": "Edit distance of the parts of speech of adjacent sentences",
+    "syntax_similarity": "Syntactic similarity of adjacent sentences",
     "noun_verb_ratio": "Ratio of nouns to verbs",
 }
 
@@ -713,7 +727,34 @@ CONNECTOR_BLOCKED_AFTER = {
         ),
     ),
 }
-CONNECTOR_BLOCKED_BEFORE = {"así como": frozenset({"algo"})}
+CONNECTOR_BLOCKED_BEFORE = {
+    "así como": frozenset({"algo"}),
+    # si of a hypothetical comparison (como si fuera) and of an emphatic phrase (vaya si lo sé)
+    "si": frozenset({"como", "cual", "vaya", "maldito"}),
+}
+# Verbs after which si opens an indirect question, not a condition (no sé si viene, a ver si llega)
+CONNECTOR_QUESTION_VERBS = frozenset(
+    {
+        "saber",
+        "ver",
+        "mirar",
+        "preguntar",
+        "dudar",
+        "ignorar",
+        "pensar",
+        "averiguar",
+        "probar",
+        "comprobar",
+        "observar",
+        "examinar",
+        "determinar",
+        "decidir",
+        "considerar",
+        "consultar",
+        "investigar",
+        "adivinar",
+    }
+)
 # Markers counted only at the start of a sentence or after these words (y encima llueve)
 CONNECTOR_ONLY_AFTER = {"encima": frozenset({"y", "e", "ni", "pero"})}
 # Markers not counted at the start of a sentence, where they open a reply (Pues bien...)
@@ -869,6 +910,12 @@ COHESION_STATS_DESC = {
     "content_overlap_all": "Content word overlap in all pairs of sentences",
     "content_overlap_prop_adjacent": "Share of shared content words in adjacent sentences",
     "content_overlap_prop_all": "Share of shared content words in all pairs of sentences",
+    "noun_overlap_2_sent": "Share of the nouns of a sentence repeated in the next two",
+    "argument_overlap_2_sent": "Share of the arguments of a sentence repeated in the next two",
+    "content_overlap_2_sent": "Share of the content words of a sentence repeated in the next two",
+    "noun_overlap_para": "Share of the nouns of a paragraph repeated in the next one",
+    "argument_overlap_para": "Share of the arguments of a paragraph repeated in the next one",
+    "content_overlap_para": "Share of the content words of a paragraph repeated in the next one",
     "p_pronouns": "Share of pronouns",
     "pronoun_noun_ratio": "Ratio of pronouns to nouns",
     "p_demonstratives": "Share of demonstratives",

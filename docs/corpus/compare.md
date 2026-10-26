@@ -61,28 +61,28 @@ Galdós against Unamuno, three novels each from the [corpus of literature](../da
 
     ```
                       median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    diversity_mtldw         105.455          66.179  37.104   43.850    3.260        0.988  0.994     0.0
-    diversity_mamtld        103.316          64.814  35.081   45.200    3.083        0.981  0.990     0.0
-    diversity_mtld          103.655          63.851  38.320   47.911    3.110        0.981  0.990     0.0
+    diversity_mtldw         105.455          66.179  37.104   43.799    3.260        0.988  0.994     0.0
+    diversity_mamtld        103.316          64.814  35.107   45.657    3.083        0.981  0.990     0.0
+    diversity_mtld          103.655          63.851  38.546   47.911    3.110        0.981  0.990     0.0
     diversity_mattr           0.817           0.769   0.046    0.057    2.952        0.979  0.990     0.0
     diversity_msttr           0.819           0.769   0.047    0.059    2.929        0.979  0.989     0.0
 
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    basic_letters_per_word          4.441           4.130   0.243    0.356    1.695        0.784  0.892     0.0
-    readability_lix                37.906          29.721   6.954   11.023    1.084        0.694  0.847     0.0
+    basic_letters_per_word          4.441           4.130   0.243    0.358    1.695        0.784  0.892     0.0
+    readability_lix                37.906          29.721   7.097   11.023    1.084        0.694  0.847     0.0
     morph_p_gerund                  0.069           0.037   0.026    0.035    1.533        0.742  0.871     0.0
     morph_polarity_Neg              0.019           0.028  -0.011   -0.009   -1.122       -0.559  0.221     0.0
     sents_mean                     16.393          11.494   3.078    6.688    0.833        0.610  0.805     0.0
-    punct_dash                     19.000          46.000 -39.012  -14.000   -1.287       -0.605  0.197     0.0
-    punct_exclamation               9.000          24.000 -22.000   -2.975   -1.251       -0.637  0.181     0.0
-    diversity_yule_k              103.620         112.500 -17.620   -3.740   -0.676       -0.351  0.324     0.0
+    punct_dash                     19.000          46.000 -39.000  -14.000   -1.287       -0.605  0.197     0.0
+    punct_exclamation               9.000          24.000 -23.000   -2.000   -1.251       -0.637  0.181     0.0
+    diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676       -0.351  0.324     0.0
 
     {'n_Galdós': 155, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
 Galdós has the richer vocabulary: the measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Yule's K, which weighs the frequent words, gives a medium effect (0.35), so the difference lies mostly in the rare vocabulary. His words and sentences are longer, with nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue: two and a half times as many dashes and exclamation marks per 1000 words, and more negations.
 
-The p-values take the 272 windows of six novels for independent (see the [warning](#statistics) below), and by the same test two novels of Galdós, *Marianela* and *Misericordia*, differ in 42 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.1 to 6.7 words, where the windows alone would give 3.9 to 6.0.
+The p-values take the 272 windows of six novels for independent (see the [warning](#statistics) below), and by the same test two novels of Galdós, *Marianela* and *Misericordia*, differ in 43 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.1 to 6.7 words, where the windows alone would give 3.9 to 6.1.
 
 ## Parameters
 
@@ -109,13 +109,13 @@ Raises:
 text_features(text, nlp=None)
 ```
 
-Returns 132 features of a text prefixed by their source; an undefined feature is `nan`.
+Returns 133 features of a text prefixed by their source; an undefined feature is `nan`.
 
 | Prefix | Features | Source |
 | :----- | :------- | :----- |
 | `basic_` | shares of long, complex, simple, mono- and polysyllabic words, of letters, spaces and punctuation marks; letters and syllables per word | [`BasicStats`](../stats/basic_stats.md) |
 | `readability_` | every readability formula and the consensus grade | [`ReadabilityStats`](../stats/readability_stats.md) |
-| `diversity_` | every measure of lexical diversity | [`DiversityStats`](../stats/diversity_stats.md) |
+| `diversity_` | every measure of lexical diversity but Orlov's Z, unstable on a window | [`DiversityStats`](../stats/diversity_stats.md) |
 | `morph_` | shares of the values of every morphological feature (`morph_pos_NOUN`, `morph_mood_Sub`, `morph_polarity_Neg`) and the markers of Spanish (`morph_p_gerund`, `morph_p_mente_adverbs`) | [`MorphStats`](../stats/morph_stats.md) by the spaCy model |
 | `sents_` | mean length of a sentence in words, standard deviation, coefficient of variation, autocorrelation of neighbouring lengths ([`sentence_rhythm`](#sentence_rhythm)) - the rhythm of the text | [`SentsExtractor`](../extractors/sentences.md) |
 | `punct_` | frequencies of the punctuation marks by type per 1000 words and the share of the inverted marks | [`punctuation_profile`](../stats/basic_stats.md#punctuation) |
@@ -187,10 +187,10 @@ Features of one's own, for instance the syntactic ones, are passed as a function
     ```
                                         median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
     syntax_gerund_clauses_per_sent              0.156           0.047   0.092    0.132    1.494        0.854  0.927     0.0
+    syntax_complex_nominals_per_clause          0.695           0.483   0.178    0.236    1.237        0.709  0.855     0.0
     syntax_tree_depth                           3.870           3.012   0.625    1.134    1.113        0.661  0.830     0.0
-    syntax_subtrees_per_sent                    7.193           4.864   1.500    3.352    0.975        0.648  0.824     0.0
+    syntax_subtrees_per_sent                    7.193           4.864   1.500    3.351    0.975        0.648  0.824     0.0
     syntax_p_complex_sents                      0.613           0.470   0.092    0.193    1.248        0.644  0.822     0.0
-    syntax_participle_clauses_per_sent          0.114           0.059   0.030    0.070    0.805        0.570  0.785     0.0
     ```
 
 ## Comparison of feature tables { #compare_features }

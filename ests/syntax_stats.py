@@ -10,12 +10,16 @@ import anyts.syntax_stats
 from anyts.constants import AUXILIARY_DEPS
 from anyts.syntax_stats import (
     base_dep,
+    calc_edit_distance as calc_edit_distance,
     calc_modifier_chains,
+    calc_multiset_similarity as calc_multiset_similarity,
     calc_valency,
     count_noun_modifiers as count_noun_modifiers,
+    dependency_triples as dependency_triples,
     get_children,
     get_words,
     is_predicate as is_predicate,
+    is_prep_complement as is_prep_complement,
     is_root,
     subtree_len,
 )
@@ -107,7 +111,12 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         n_subordinate_clauses (int): Number of subordinate clauses
         n_complex_sents (int): Number of sentences with a subordinate clause
         n_infinitive_clauses (int): Number of infinitive clauses under a verb
+        n_t_units, n_complex_t_units (int): Numbers of the T-units and of those with a
+            subordinate clause
+        n_verb_phrases, n_coordinate_phrases, n_complex_nominals (int): Numbers of the verb
+            phrases, of the coordinate phrases and of the complex nominals
         n_nouns (int): Number of nouns
+        n_prep_chains (int): Number of prepositional chains
         n_de_chains (int): Number of chains of de
         n_participle_clauses (int): Number of participial clauses
         n_gerund_clauses (int): Number of gerund clauses
@@ -119,6 +128,10 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         n_infinitives (int): Number of infinitives
         n_negations (int): Number of words of negation
         n_split_predicates (int): Number of split predicates
+        n_nominal_subjects, n_preverbal_subjects (int): Numbers of the nominal subjects
+            and of those before their head
+        n_nominal_objects, n_preverbal_objects (int): Numbers of the nominal direct
+            objects and of those before their head
         split_predicates (tuple[str]): Tuple of the split predicates (verb and noun)
         c_children (dict[int, int]): Distribution of words by number of dependent words
         c_deps (dict[str, int]): Distribution of words by syntactic relation
@@ -131,6 +144,7 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         leaves_per_sent (float): Leaves per sentence
         subtrees_per_sent (float): Subtrees per sentence
         nodes_per_leaf (float): Mean over the sentences of the words per leaf
+        words_before_root (float): Mean number of words before the root of a sentence
         verb_valency (float): Mean number of dependents of a finite verb
         coordination_chains_per_sent (float): Coordination chains per sentence
         mean_coordination_chain_len (float): Mean length of a coordination chain
@@ -139,7 +153,17 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         subordinate_clauses_per_sent (float): Subordinate clauses per sentence
         p_complex_sents (float): Share of sentences with at least one subordinate clause
         infinitive_clauses_per_sent (float): Infinitive clauses under a verb per sentence
+        t_units_per_sent (float): T-units per sentence
+        mean_t_unit_len (float): Mean length of a T-unit in words
+        clauses_per_t_unit (float): Clauses per T-unit
+        p_complex_t_units (float): Share of the T-units with a subordinate clause
+        verb_phrases_per_t_unit (float): Verb phrases per T-unit
+        coordinate_phrases_per_clause (float): Coordinate phrases per clause
+        complex_nominals_per_clause (float): Complex nominals per clause
         modifiers_per_noun (float): Mean number of modifiers of a noun
+        prep_chains_per_sent (float): Prepositional chains per sentence
+        max_prep_chain_len (int): Length of the longest prepositional chain, 0 without
+            chains
         de_chains_per_sent (float): Chains of de per sentence
         max_de_chain_len (int): Maximum length of a chain of de
         participle_clauses_per_sent (float): Participial clauses per sentence
@@ -153,6 +177,12 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         infinitives_per_sent (float): Infinitives per sentence
         negations_per_sent (float): Words of negation per sentence
         split_predicates_per_sent (float): Split predicates per sentence
+        p_preverbal_subjects (float): Share of the nominal subjects before their head
+        p_preverbal_objects (float): Share of the nominal direct objects before their head
+        pos_edit_distance (float): Mean edit distance of the parts of speech of adjacent
+            sentences over the longer one
+        syntax_similarity (float): Mean similarity of the dependency triples of adjacent
+            sentences
         noun_verb_ratio (float): Ratio of the number of nouns to the number of verb forms
 
     Methods:

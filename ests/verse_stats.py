@@ -11,7 +11,7 @@ from math import nan
 from typing import TYPE_CHECKING, NamedTuple
 
 from anyts.stats import Stats
-from anyts.utils import check_bool, is_doc, safe_divide
+from anyts.utils import check_bool, is_doc, safe_divide, source_type_error
 
 from .constants import (
     ACCENTED_VOWELS,
@@ -33,7 +33,7 @@ from .constants import (
     VERSE_STROPHES,
     VOWELS,
 )
-from .exceptions import SourceError, SourceTypeError
+from .exceptions import SourceError
 from .syllables import WORD_PARTS, syllabify, word_stresses
 
 if TYPE_CHECKING:
@@ -237,7 +237,7 @@ class VerseStats(Stats):
         elif isinstance(source, str):
             text = source
         else:
-            raise SourceTypeError("The data source is set incorrectly")
+            raise source_type_error(self.messages, source)
         if not LETTER.search(text):
             raise SourceError("The data source has no words")
         lines = _parse_lines(text)

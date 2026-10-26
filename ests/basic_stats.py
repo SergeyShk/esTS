@@ -31,6 +31,8 @@ class BasicStats(anyts.basic_stats.BasicStats):
          'n_spaces': 9,
          'n_syllables': 23,
          'n_punctuations': 2,
+         'letters_entropy': 2.5219280948873...,
+         'syllables_entropy': 1.7219280948873...,
          'c_punctuations': {'comma': 1,
                             'period': 0,
                             'question': 0,
@@ -73,6 +75,10 @@ class BasicStats(anyts.basic_stats.BasicStats):
         n_spaces (int): Number of spaces of Unicode and tabs
         n_syllables (int): Number of syllables
         n_punctuations (int): Number of punctuation marks
+        letters_entropy (float): Shannon entropy in bits of the distribution of words by
+            number of letters
+        syllables_entropy (float): Shannon entropy in bits of the distribution of words by
+            number of syllables
         c_punctuations (dict[str, int]): Distribution of punctuation marks by type
         p_unique_words (float): Normalized number of unique words
         p_long_words (float): Normalized number of long words

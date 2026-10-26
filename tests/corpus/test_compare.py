@@ -120,7 +120,7 @@ def test_text_features():
     features = text_features(text)
     prefixes = {key.split("_", 1)[0] for key in features}
     assert prefixes == {"basic", "readability", "diversity", "morph", "sents", "punct"}
-    assert len(features) == 132
+    assert len(features) == 133
     assert features["sents_mean"] == 7.0
     assert features["basic_letters_per_word"] == pytest.approx(4.5, rel=0.2)
     assert features["morph_pos_NOUN"] == pytest.approx(7 / 28)

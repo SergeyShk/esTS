@@ -1,15 +1,15 @@
 # Palabras clave
 
 ``` {.python .signature}
-keyness(target, reference, measure='log_likelihood', min_freq=1, positive=True, top_n=None)
+keyness(target, reference, measure='log_likelihood', min_freq=1, positive=True, top_n=None, n=1)
 ```
 
-<!-- core: corpus/keyness.md:keyness bbbd1ba -->
+<!-- core: corpus/keyness.md:keyness 4394918 -->
 Extracción de palabras clave (keyness) de un corpus objetivo frente a uno de referencia: las palabras que aparecen significativamente más a menudo en el corpus objetivo que en el de referencia.
 
 Cada palabra recibe dos valores que [Gabrielatos y Marchi](http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf) y [Hardie](http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/) recomiendan leer juntos: la razón de verosimilitud $G^2$ con su valor p (si hay una diferencia) y Log Ratio (cuán grande es), además de la medida elegida `score`, que ordena la lista. Las medidas de significación ($G^2$, ji cuadrado, BIC) y ELL, el tamaño del efecto de $G^2$, son negativas cuando la palabra es más frecuente en la referencia; %DIFF, Log Ratio y la razón de momios tienen dirección por construcción.
 
-La referencia puede ser una lista de palabras, un mapeo de frecuencias (su tamaño es la suma de los recuentos) o una `FrequencyReference`. Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematización y las palabras vacías corresponden al extractor de palabras, y los dos corpus tienen que extraerse del mismo modo.
+La referencia puede ser una lista de palabras, un mapeo de frecuencias (su tamaño es la suma de los recuentos) o una `FrequencyReference`. Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematización y las palabras vacías corresponden al extractor de palabras, y los dos corpus tienen que extraerse del mismo modo. Un corpus de varios textos se da como una lista de sus listas de palabras. Con `n` mayor que 1 las palabras clave son los N-gramas de las palabras de cada texto, unidos por guiones bajos como los N-gramas de `WordsExtractor` (*black_cat*), así que un N-grama nunca cruza dos textos; los recuentos y los tamaños son los de los N-gramas, y las frecuencias por millón son por millón de N-gramas. Las frecuencias de N-gramas - una suma de los `Counter` de los N-gramas de cada texto, o un diccionario de frecuencias de N-gramas - van con `n=1`: un mapeo y una `FrequencyReference` se rechazan con `n` mayor que 1.
 
 La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/keyness/) y admite además como referencia el [diccionario de frecuencias](../datasets/freqdict.md) `FreqDict`; `FrequencyReference` está en `ests.corpus` junto a ella. Las palabras se extraen con [`WordsExtractor`](../extractors/words.md).
 
@@ -42,26 +42,27 @@ La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/a
 
 ## Parámetros
 
-<!-- core: corpus/keyness.md:keyness-parameters c87c5b2 -->
+<!-- core: corpus/keyness.md:keyness-parameters a26b20f -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
-| `target` | `list[str]` / `dict[str, int]` | - | Palabras del corpus objetivo o sus frecuencias |
-| `reference` | `list[str]` / `dict[str, float]` / `FrequencyReference` | - | Palabras del corpus de referencia, sus frecuencias o una referencia por frecuencias |
+| `target` | `list[str]` / `list[list[str]]` / `dict[str, int]` | - | Palabras del corpus objetivo - un texto o una lista de textos - o sus frecuencias |
+| `reference` | `list[str]` / `list[list[str]]` / `dict[str, float]` / `FrequencyReference` | - | Palabras del corpus de referencia - un texto o una lista de textos -, sus frecuencias o una referencia por frecuencias |
 | `measure` | `str` | `'log_likelihood'` | Medida de `anyts.constants.KEYNESS_MEASURES` para `score` y el orden |
 | `min_freq` | `int` | `1` | Frecuencia mínima de una palabra clave en su propio corpus |
 | `positive` | `bool` | `True` | Palabras clave positivas (más frecuentes en el corpus objetivo) o negativas (más frecuentes en la referencia) |
 | `top_n` | `int` | `None` | Número de palabras clave; `None` - todas |
+| `n` | `int` | `1` | Longitud de los N-gramas de las palabras de cada texto; `1` - las palabras |
 
-Los parámetros y el corpus objetivo los comprueba `check_keyness_params`. Una referencia que no es una lista de cadenas, un contador ni una `FrequencyReference` lanza `SourceTypeError`, y una frecuencia negativa, `nan` o infinita de un contador y un corpus vacío lanzan `SourceError`.
+Los parámetros y el corpus objetivo los comprueba `check_keyness_params`; un `n` mayor que 1 con frecuencias o con una `FrequencyReference` lanza `ParameterError`. Una referencia que no es una lista de cadenas, una lista de tales listas, un contador ni una `FrequencyReference` lanza `SourceTypeError`, y una frecuencia negativa, `nan` o infinita de un contador y un corpus sin palabras, o de menos de `n` palabras, lanzan `SourceError`.
 
-`reference` también puede ser `FreqDict`, frente al cual `target` son formas. Un diccionario de frecuencias que no está descargado lanza `DatasetNotFoundError`. `keyness` comprueba sus parámetros y el corpus objetivo con `check_keyness_params` antes de leer `FreqDict`, así que un argumento erróneo falla antes de cargar el diccionario.
+`reference` también puede ser `FreqDict`, frente al cual `target` son formas. Un diccionario de frecuencias que no está descargado lanza `DatasetNotFoundError`. `keyness` comprueba sus parámetros y el corpus objetivo con `check_keyness_params` antes de leer `FreqDict`, así que un argumento erróneo falla antes de cargar el diccionario; el diccionario guarda palabras, así que un `n` mayor que 1 con él también lanza `ParameterError` antes de leerlo.
 
-<!-- core: corpus/keyness.md:check_keyness_params 9ffcaab -->
+<!-- core: corpus/keyness.md:check_keyness_params 9e9c4da -->
 ``` {.python .signature}
-check_keyness_params(measure='log_likelihood', min_freq=1, top_n=None, target=None)
+check_keyness_params(measure='log_likelihood', min_freq=1, top_n=None, target=None, n=1, positive=True)
 ```
 
-Comprueba los parámetros de `keyness` antes de leer un diccionario de frecuencias: lanza `ParameterError` salvo que la medida sea una de `KEYNESS_MEASURES`, la frecuencia mínima un entero y el número de palabras clave `None` o un entero de al menos uno. Con `target` lanza además `SourceTypeError` salvo que el corpus objetivo sea una lista de cadenas o un mapeo de cadenas a frecuencias enteras, y `SourceError` para una frecuencia negativa, nan o infinita.
+Comprueba los parámetros de `keyness` antes de leer un diccionario de frecuencias: lanza `ParameterError` salvo que la medida sea una de `KEYNESS_MEASURES`, la frecuencia mínima un entero, el número de palabras clave `None` o un entero de al menos uno, la longitud de los N-gramas `n` un entero de al menos uno y `positive` un `bool`. Con `target` lanza además `SourceTypeError` salvo que el corpus objetivo sea una lista de cadenas, una lista de tales listas o un mapeo de cadenas a frecuencias enteras, y `SourceError` para una frecuencia negativa, nan o infinita.
 
 ## Referencia por frecuencias
 
@@ -121,7 +122,7 @@ Frente al diccionario las palabras de una comedia de Lope de Vega del [corpus de
 
 ## Resultado
 
-<!-- core: corpus/keyness.md:Keyword 8a09d1b -->
+<!-- core: corpus/keyness.md:Keyword 6f45611 -->
 ``` {.python .signature}
 Keyword(word, freq_target, freq_reference, ipm_target, ipm_reference, g2, p_value, log_ratio, score)
 ```
@@ -133,8 +134,8 @@ Una lista de tuplas con nombre `Keyword` por keyness descendente (los empates po
 | `word` | `str` | Palabra |
 | `freq_target` | `int` | Frecuencia en el corpus objetivo |
 | `freq_reference` | `float` | Frecuencia en el corpus de referencia |
-| `ipm_target` | `float` | Frecuencia en el corpus objetivo por millón de palabras |
-| `ipm_reference` | `float` | Frecuencia en el corpus de referencia por millón de palabras |
+| `ipm_target` | `float` | Frecuencia en el corpus objetivo por millón de palabras, o de N-gramas |
+| `ipm_reference` | `float` | Frecuencia en el corpus de referencia por millón de palabras, o de N-gramas |
 | `g2` | `float` | $G^2$ con signo |
 | `p_value` | `float` | Valor p de $G^2$ |
 | `log_ratio` | `float` | Log Ratio |

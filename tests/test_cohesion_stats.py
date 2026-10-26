@@ -8,6 +8,7 @@ from ests import CohesionStats, SentsExtractor
 from ests.cohesion_stats import (
     Connector,
     find_connectors,
+    is_connector_blocked,
     load_connectors,
     token_info,
 )
@@ -431,3 +432,76 @@ def test_token_info(nlp):
     assert not token_info(tokens["Este"]).content
     assert token_info(nlp("Mi libro")[0]).pronoun
     assert not token_info(nlp("El libro")[0]).pronoun
+
+
+PARAGRAPHS = (
+    "El gato duerme en la casa. El perro mira la calle. La casa es grande.\n\n"
+    "El perro corre por la casa.\n\nEl gato salta."
+)
+
+
+def test_paragraphs(nlp):
+    """A paragraph is a part between blank lines, of a string and of a Doc"""
+    for source in (PARAGRAPHS, nlp(PARAGRAPHS)):
+        cs = CohesionStats(source)
+        assert cs.n_paragraphs == 3
+        # gato, casa, perro, calle | perro, casa | gato (salta): 2 of 4 and 0 of 2 come again
+        assert cs.noun_overlap_para == pytest.approx(1 / 3)
+    assert CohesionStats(PARAGRAPHS.replace("\n\n", "\n")).n_paragraphs == 1
+
+
+def test_overlaps_with_the_next_two_sentences():
+    """The nouns of a sentence with two after it that one of them repeats"""
+    cs = CohesionStats(PARAGRAPHS)
+    # gato, casa | perro, calle | casa: casa, perro and casa of the five nouns
+    assert cs.noun_overlap_2_sent == pytest.approx(0.6)
+    assert cs.get_stats()["noun_overlap_2_sent"] == cs.noun_overlap_2_sent
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("Si llueve, me quedo.", ["si"]),
+        ("No sé si vendrá.", []),
+        ("Voy a ver si puedo venir.", []),
+        ("Me preguntó si tenía hambre.", []),
+        ("¡Si ya te lo dije!", []),
+        ("Lo miró como si fuera un fantasma.", []),
+        ("Vaya si lo sé.", []),
+        ("Si bien es cierto, no lo creo.", ["si bien"]),
+        ("Te lo diré si me lo pides.", ["si"]),
+        # The model leaves the verb without its lemma, simplemma gives it
+        ("Ya verás si tengo razón.", []),
+        ("Decidiremos si vamos.", []),
+        # simplemma keeps the reflexive verb, the model gives its lemma with the pronoun
+        ("Empezó a preguntarse si valía la pena.", []),
+    ],
+)
+def test_si_without_a_condition(text, expected):
+    """si of an indirect question, of an exclamation and of a comparison is no conditional"""
+    assert [connector.text for connector in CohesionStats(text).connector_spans] == expected
+
+
+def test_is_connector_blocked(nlp):
+    doc = nlp("No sé si vendrá. Si llueve, me quedo. ¡Si ya te lo dije!")
+    assert [is_connector_blocked(token) for token in doc if token.lower_ == "si"] == [
+        True,
+        False,
+        True,
+    ]
+    assert not any(is_connector_blocked(token) for token in doc if token.lower_ != "si")
+    # Without the parts of speech only the exclamation is known
+    doc = spacy.blank("es")("No sé si vendrá. ¡Si ya te lo dije!")
+    assert [is_connector_blocked(token) for token in doc if token.lower_ == "si"] == [False, True]
+
+
+def test_find_connectors_blocked(nlp):
+    """The positions of is_connector_blocked drop the si that CohesionStats drops"""
+    words = [token for token in nlp("No sé si vendrá.") if not token.is_punct]
+    texts, pos = [token.text for token in words], [token.pos_ for token in words]
+    assert [c.text for c in find_connectors(texts, pos=pos)] == ["si"]
+    blocked = {i for i, token in enumerate(words) if is_connector_blocked(token)}
+    assert blocked == {2}
+    assert find_connectors(texts, pos=pos, blocked=blocked) == []
+    with pytest.raises(ParameterError):
+        find_connectors(texts, blocked={4})

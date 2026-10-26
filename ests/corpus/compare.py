@@ -108,7 +108,8 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         punctuation marks, the mean number of letters and syllables per word
         (BasicStats); readability_ - every readability formula and the
         consensus grade except the reading time (ReadabilityStats); diversity_ -
-        every measure of lexical diversity (DiversityStats); morph_ - the
+        every measure of lexical diversity but Orlov's Z, unstable on a window
+        (DiversityStats); morph_ - the
         shares of the values of every feature of MORPHOLOGY_STATS_DESC and the
         markers of MorphStats.get_markers except the moods; sents_ - the rhythm
         of the sentences (sentence_rhythm); punct_ - punctuation_profile
@@ -169,7 +170,8 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         if key != "reading_time":
             features[f"readability_{key}"] = float(score)
     for key, score in DiversityStats(text, words_extractor=words).get_stats().items():
-        features[f"diversity_{key}"] = float(score)
+        if key != "orlov_z":
+            features[f"diversity_{key}"] = float(score)
     doc = _parse(text, nlp)
     features.update(_morph_features(MorphStats(doc), doc.has_annotation("DEP")))
     features.update(

@@ -45,35 +45,41 @@ Las palabras se clasifican por la anotación de Universal Dependencies:
 === "Resultado"
 
     ```
-                               Statistic                            |  Value
-    ---------------------------------------------------------------------------
-    Noun overlap in adjacent sentences                              |   0.33
-    Noun overlap in all pairs of sentences                          |   0.50
-    Argument overlap in adjacent sentences                          |   0.33
-    Argument overlap in all pairs of sentences                      |   0.50
-    Content word overlap in adjacent sentences                      |   0.33
-    Content word overlap in all pairs of sentences                  |   0.50
-    Share of shared content words in adjacent sentences             |   0.08
-    Share of shared content words in all pairs of sentences         |   0.12
-    Share of pronouns                                               |   0.03
-    Ratio of pronouns to nouns                                      |   0.09
-    Share of demonstratives                                         |   0.00
-    Share of content words seen before                              |   0.18
-    Repetition of the tense in adjacent sentences                   |   0.00
-    Repetition of the mood in adjacent sentences                    |   1.00
-    Temporal cohesion                                               |   0.50
-    Connectors per 1000 words                                       |  103.45
-    Connectors linking a sentence to the ones before per 1000 words |  103.45
-    Connectors linking the parts of a sentence per 1000 words       |   0.00
-    Causal connectors per 1000 words                                |  34.48
-    Adversative connectors per 1000 words                           |  34.48
-    Concessive connectors per 1000 words                            |   0.00
-    Temporal connectors per 1000 words                              |   0.00
-    Additive connectors per 1000 words                              |   0.00
-    Conditional connectors per 1000 words                           |   0.00
-    Reformulative connectors per 1000 words                         |  34.48
-    Primary connectors per 1000 words                               |   0.00
-    Secondary connectors per 1000 words                             |  103.45
+                                 Statistic                             |  Value
+    ------------------------------------------------------------------------------
+    Noun overlap in adjacent sentences                                 |   0.33
+    Noun overlap in all pairs of sentences                             |   0.50
+    Argument overlap in adjacent sentences                             |   0.33
+    Argument overlap in all pairs of sentences                         |   0.50
+    Content word overlap in adjacent sentences                         |   0.33
+    Content word overlap in all pairs of sentences                     |   0.50
+    Share of shared content words in adjacent sentences                |   0.08
+    Share of shared content words in all pairs of sentences            |   0.12
+    Share of the nouns of a sentence repeated in the next two          |   0.60
+    Share of the arguments of a sentence repeated in the next two      |   0.60
+    Share of the content words of a sentence repeated in the next two  |   0.38
+    Share of the nouns of a paragraph repeated in the next one         |   nan
+    Share of the arguments of a paragraph repeated in the next one     |   nan
+    Share of the content words of a paragraph repeated in the next one |   nan
+    Share of pronouns                                                  |   0.03
+    Ratio of pronouns to nouns                                         |   0.09
+    Share of demonstratives                                            |   0.00
+    Share of content words seen before                                 |   0.18
+    Repetition of the tense in adjacent sentences                      |   0.00
+    Repetition of the mood in adjacent sentences                       |   1.00
+    Temporal cohesion                                                  |   0.50
+    Connectors per 1000 words                                          |  103.45
+    Connectors linking a sentence to the ones before per 1000 words    |  103.45
+    Connectors linking the parts of a sentence per 1000 words          |   0.00
+    Causal connectors per 1000 words                                   |  34.48
+    Adversative connectors per 1000 words                              |  34.48
+    Concessive connectors per 1000 words                               |   0.00
+    Temporal connectors per 1000 words                                 |   0.00
+    Additive connectors per 1000 words                                 |   0.00
+    Conditional connectors per 1000 words                              |   0.00
+    Reformulative connectors per 1000 words                            |  34.48
+    Primary connectors per 1000 words                                  |   0.00
+    Secondary connectors per 1000 words                                |  103.45
     ```
 
 ## Parámetros
@@ -87,11 +93,12 @@ Las palabras se clasifican por la anotación de Universal Dependencies:
 
 ## Atributos
 
-<!-- core: stats/cohesion_stats.md:CohesionStats-attributes ee54833 -->
+<!-- core: stats/cohesion_stats.md:CohesionStats-attributes b48ff23 -->
 | Atributo | Tipo | Descripción |
 | :------- | :--- | :---------- |
 | `words`, `lemmas` | `tuple[tuple[str]]` | Palabras y lemas de cada oración con palabras |
 | `n_sents`, `n_words` | `int` | Números de las oraciones con palabras y de las palabras |
+| `n_paragraphs` | `int` | Número de los párrafos, las partes del texto entre líneas en blanco que tienen palabras |
 | `n_nouns`, `n_pronouns`, `n_demonstratives`, `n_content_words` | `int` | Números de las palabras por clase |
 | `n_given` | `int` | Número de las palabras con contenido cuyo lema ya apareció antes |
 | `n_connectors`, `connector_spans`, `c_connectors` | `int`, `tuple[Connector]`, `dict[str, int]` | Número de los conectores, sus apariciones y su número por conector |
@@ -133,6 +140,12 @@ Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` da 
 | [`content_overlap_all`](#overlap) | Proporción de todos los pares que comparten una palabra con contenido | 0-1, `nan` con una sola oración | Todo el texto más unido |
 | [`content_overlap_prop_adjacent`](#proportional_overlap) | Proporción media de las palabras con contenido compartidas (Dice) en los pares contiguos | 0-1, `nan` con una sola oración | Más palabras compartidas por las vecinas |
 | [`content_overlap_prop_all`](#proportional_overlap) | Proporción media de las palabras con contenido compartidas (Dice) en todos los pares | 0-1, `nan` con una sola oración | Más palabras compartidas en todo el texto |
+| [`noun_overlap_2_sent`](#forward_overlap) | Proporción de los sustantivos de una oración repetidos en una de las dos siguientes | 0-1, `nan` con menos de tres oraciones | Sustantivos que llegan más lejos |
+| [`argument_overlap_2_sent`](#forward_overlap) | Proporción de los argumentos de una oración repetidos en una de las dos siguientes | 0-1, `nan` con menos de tres oraciones | Argumentos que llegan más lejos |
+| [`content_overlap_2_sent`](#forward_overlap) | Proporción de las palabras con contenido de una oración repetidas en una de las dos siguientes | 0-1, `nan` con menos de tres oraciones | Palabras con contenido que llegan más lejos |
+| [`noun_overlap_para`](#forward_overlap) | Proporción de los sustantivos de un párrafo repetidos en el siguiente | 0-1, `nan` con un solo párrafo | Párrafos más unidos |
+| [`argument_overlap_para`](#forward_overlap) | Proporción de los argumentos de un párrafo repetidos en el siguiente | 0-1, `nan` con un solo párrafo | Párrafos más unidos |
+| [`content_overlap_para`](#forward_overlap) | Proporción de las palabras con contenido de un párrafo repetidas en el siguiente | 0-1, `nan` con un solo párrafo | Párrafos más unidos |
 | [`p_pronouns`](#pronouns) | Proporción de los pronombres entre las palabras | 0-1 | Más referencia por pronombres |
 | [`pronoun_noun_ratio`](#pronouns) | Razón entre los pronombres y los sustantivos | 0 o más, `nan` sin sustantivos | Más pronombres por sustantivo |
 | [`p_demonstratives`](#pronouns) | Proporción de los demostrativos entre las palabras | 0-1 | Más referencia hacia atrás |
@@ -146,7 +159,7 @@ Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` da 
 | [`connectors_<class>`](#connectors) | Conectores de una clase por 1000 palabras: `causal`, `adversative`, `concessive`, `temporal`, `additive`, `conditional`, `reformulative` | 0-1000 | Más enlaces de la clase |
 | [`connectors_primary`, `connectors_secondary`](#connectors) | Conectores primarios y secundarios por 1000 palabras | 0-1000 | Más enlaces del tipo |
 
-Las funciones de la repetición, de la información dada y de las repeticiones del rasgo (`calc_overlap`, `calc_proportional_overlap`, `calc_overlaps`, `dice`, `count_given`, `calc_repetition`, `dominant`) son las de `anyts.cohesion_stats`, que esTS no reexporta; están en la [página de anyTS](https://sergeyshk.github.io/anyTS/stats/cohesion_stats/).
+Las funciones de la repetición, de la información dada y de las repeticiones del rasgo (`calc_overlap`, `calc_proportional_overlap`, `calc_overlaps`, `dice`, `count_given`, `calc_repetition`, `dominant`) son las de `anyts.cohesion_stats`, que esTS no reexporta; están en la [página de anyTS](https://sergeyshk.github.io/anyTS/stats/cohesion_stats/). `calc_forward_overlap` de la [repetición con los segmentos siguientes](#forward_overlap) se importa de `ests.cohesion_stats`.
 
 <div class="metric-card" markdown>
 
@@ -175,6 +188,59 @@ La repetición proporcional de Coh-Metrix (CRFCWO1, CRFCWOa): el coeficiente de 
 $$
 \frac{1}{\textrm{Número de pares}} \sum_{(A, B)} \frac{2 \times |A \cap B|}{|A| + |B|}
 $$
+
+</div>
+
+<div class="metric-card" markdown>
+
+### Repetición con las oraciones y los párrafos siguientes { #forward_overlap }
+
+`noun_overlap_2_sent` · `argument_overlap_2_sent` · `content_overlap_2_sent` · `noun_overlap_para` · `argument_overlap_para` · `content_overlap_para` · [TAACO](https://doi.org/10.3758/s13428-015-0651-7)
+{ .metric-meta }
+
+<!-- core: stats/cohesion_stats.md:CohesionStats-forward_overlap 34e902e -->
+La repetición contigua de TAACO, por los lemas de los sustantivos, de los argumentos y de las palabras con contenido: la proporción de los lemas distintos de una oración repetidos en una de las dos oraciones siguientes (`adjacent_overlap_2_*_sent`), y de un párrafo repetidos en el párrafo siguiente (`adjacent_overlap_*_para`), sobre todas las oraciones o párrafos que los tienen (`calc_forward_overlap`). A diferencia de la repetición binaria, un par de segmentos cuenta por la proporción de los lemas que comparten. Un párrafo es una parte del texto entre líneas en blanco que tiene palabras; una palabra que lleva `paragraph_start` abre uno, también dentro de una oración, como cuando un parser une un título a la oración siguiente. TAACO toma cada línea por un párrafo: un texto con un párrafo en cada línea y sin líneas en blanco es aquí un solo párrafo, y sus `*_para` son `nan`.
+
+<!-- core: stats/cohesion_stats.md:calc_forward_overlap 7389f78 -->
+``` {.python .signature}
+calc_forward_overlap(sets, span=1)
+```
+
+La proporción de los elementos de un segmento repetidos en los siguientes: los elementos distintos de cada segmento seguido de `span` segmentos que están en alguno de ellos, entre los elementos distintos de esos segmentos; `nan` con no más segmentos que `span` o con segmentos sin elementos.
+
+$$
+\frac{\sum_{i=1}^{n-k} |A_i \cap (A_{i+1} \cup \dots \cup A_{i+k})|}{\sum_{i=1}^{n-k} |A_i|}
+$$
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `sets` | `list[set[str]]` | - | Elementos de cada segmento |
+| `span` | `int` | `1` | Número $k$ de los segmentos siguientes con los que se compara un segmento |
+
+Unos segmentos que son una cadena, un `Doc`, un iterador o un segmento que no es una lista de cadenas lanzan `SourceTypeError`, y un alcance que no es un entero mayor que 0, `ParameterError`.
+
+En esTS una cadena se analiza en un `Doc`, así que ambos se dividen en párrafos por las líneas en blanco entre sus tokens.
+
+=== "Código"
+
+    ``` python
+    from ests.cohesion_stats import calc_forward_overlap
+
+    calc_forward_overlap([{"gato", "ventana"}, {"pájaro"}, {"gato"}], span=2)
+    text = (
+        "El gato estaba en la ventana. Miraba a los pájaros.\n\n"
+        "Los pájaros se fueron y el gato se durmió. Mañana el gato volverá a la ventana."
+    )
+    paragraphs = CohesionStats(text)
+    paragraphs.n_paragraphs, paragraphs.noun_overlap_para, paragraphs.content_overlap_para
+    ```
+
+=== "Resultado"
+
+    ```
+    0.5
+    (2, 1.0, 0.6)
+    ```
 
 </div>
 
@@ -260,7 +326,7 @@ El diccionario de conectores de esTS: el fichero `ests/resources/connectors.tsv`
 | Condicional | `conditional` | si, a menos que, de lo contrario |
 | Reformulativa (con los operadores de concreción) | `reformulative` | es decir, en resumen, por ejemplo, en particular, sobre todo |
 
-Los conectores primarios (`primary`) son conjunciones, locuciones conjuntivas y adverbios (porque, aunque, además), los secundarios (`secondary`), locuciones lexicalizadas (sin embargo, por lo tanto, es decir). `si` abre también interrogativas indirectas y exclamaciones (`no sé si vendrá`, `¡pero si es él!`) - cerca de una cuarta parte de sus apariciones en el corpus de literatura -, y `siempre que` es temporal con indicativo y condicional con subjuntivo; ambos se cuentan en su clase del diccionario. Las reglas por las que una palabra del diccionario cuenta como conector son las del [buscador](#ConnectorMatcher).
+Los conectores primarios (`primary`) son conjunciones, locuciones conjuntivas y adverbios (porque, aunque, además), los secundarios (`secondary`), locuciones lexicalizadas (sin embargo, por lo tanto, es decir). `si` abre también interrogativas indirectas, exclamaciones y comparaciones hipotéticas - cerca de un tercio de sus apariciones en el corpus de literatura - y no es conector tras un verbo que rige una interrogativa indirecta, tras un `¡` de apertura ([`is_connector_blocked`](#is_connector_blocked)) ni tras `como`, `cual`, `vaya` y `maldito` (`CONNECTOR_BLOCKED_BEFORE`: `como si fuera`, `vaya si lo sé`); las reglas hallan cerca de tres cuartas partes de estos `si` y descartan el 25 % de los conectores condicionales de la literatura. `siempre que` es temporal con indicativo y condicional con subjuntivo y se cuenta en su clase del diccionario. Las reglas por las que una palabra del diccionario cuenta como conector son las del [buscador](#ConnectorMatcher).
 
 === "Código"
 
@@ -304,6 +370,12 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
      'content_overlap_all': 0.5,
      'content_overlap_prop_adjacent': 0.08333333333333333,
      'content_overlap_prop_all': 0.12037037037037035,
+     'noun_overlap_2_sent': 0.6,
+     'argument_overlap_2_sent': 0.6,
+     'content_overlap_2_sent': 0.375,
+     'noun_overlap_para': nan,
+     'argument_overlap_para': nan,
+     'content_overlap_para': nan,
      'p_pronouns': 0.034482758620689655,
      'pronoun_noun_ratio': 0.09090909090909091,
      'p_demonstratives': 0.0,
@@ -340,10 +412,10 @@ Excepciones:
 - `SourceTypeError` - un diccionario que no es una correspondencia de una locución a un par de cadenas;
 - `ParameterError` - una clase o un tipo desconocidos.
 
-`SpanishConnectorMatcher` es una subclase del `ConnectorMatcher` del núcleo con las reglas del español; las palabras y los conectores se comparan en minúscula. Un conector de una palabra lleva una categoría de `CONNECTOR_POS` - conjunción, partícula, adverbio, adposición, interjección, nombre propio o `X` - o de `CONNECTOR_POS_EXTRA` para su forma (`pues` y `verbigracia` como `NOUN`, `resumiendo`, `recapitulando` y `concluyendo` como `VERB`). No es conector justo tras un determinante, así que `el antes y el después` lleva un conector, `y`, y no tres; y como nombre propio cuenta solo al principio de la oración, donde los modelos leen así un marcador (`Primeramente`), de modo que el apellido de `Habló con Juan Luego ayer` no es conector. Un marcador que forma parte de otra locución se descarta: las palabras que lo siguen de `CONNECTOR_BLOCKED_AFTER` (`antes de la reunión`, `en cuanto a`, `a pesar de todo lo que`), las que lo preceden de `CONNECTOR_BLOCKED_BEFORE` (`algo así como`) y las categorías de la palabra siguiente de `CONNECTOR_BLOCKED_AFTER_POS` (`sobre todo el texto`, `a pesar de todo el esfuerzo`) lo anulan, mientras que `antes, firmó el acta` y `sobre todo cuando llueve` cuentan su marcador. Algunos marcadores dependen de su lugar: `pues` al principio de la oración abre una réplica (`Pues bien`) y no es conector (`CONNECTOR_NOT_AT_START`), y `encima` cuenta dentro de la oración solo tras `y`, `e`, `ni` o `pero` (`y encima llueve`, `CONNECTOR_ONLY_AFTER`). Estas listas son atributos del buscador: `CONNECTOR_POS` es `pos_tags`, las demás se llaman sin `CONNECTOR_` en minúscula (`CONNECTOR_BLOCKED_AFTER` es `blocked_after`); `not_after_pos` es el determinante `DET`, `start_only_pos` el nombre propio `PROPN`, y `read_through_marks` está vacío en esTS. Un signo de puntuación dentro de una locución conjuntiva que acaba en `que`, `como` o `si` (`CONNECTOR_SPLIT_BY_MARKS`) hace de la conjunción una palabra aparte, así que `No tire así, que se romperá` y `lo de siempre, que...` no tienen conector; las locuciones consecutivas con `de modo`, `de manera`, `de forma` o `de suerte` (`de modo que`, `de tal manera que`) y `bien es verdad que` quedan fuera, porque los textos antiguos ponen una coma antes de su `que` (`de tal modo, que`).
+`SpanishConnectorMatcher` es una subclase del `ConnectorMatcher` del núcleo con las reglas del español; las palabras y los conectores se comparan en minúscula. Un conector de una palabra lleva una categoría de `CONNECTOR_POS` - conjunción, partícula, adverbio, adposición, interjección, nombre propio o `X` - o de `CONNECTOR_POS_EXTRA` para su forma (`pues` y `verbigracia` como `NOUN`, `resumiendo`, `recapitulando` y `concluyendo` como `VERB`). No es conector justo tras un determinante, así que `el antes y el después` lleva un conector, `y`, y no tres; y como nombre propio cuenta solo al principio de la oración, donde los modelos leen así un marcador (`Primeramente`), de modo que el apellido de `Habló con Juan Luego ayer` no es conector. Un marcador que forma parte de otra locución se descarta: las palabras que lo siguen de `CONNECTOR_BLOCKED_AFTER` (`antes de la reunión`, `en cuanto a`, `a pesar de todo lo que`), las que lo preceden de `CONNECTOR_BLOCKED_BEFORE` (`algo así como`, `como si fuera`) y las categorías de la palabra siguiente de `CONNECTOR_BLOCKED_AFTER_POS` (`sobre todo el texto`, `a pesar de todo el esfuerzo`) lo anulan, mientras que `antes, firmó el acta` y `sobre todo cuando llueve` cuentan su marcador. Algunos marcadores dependen de su lugar: `pues` al principio de la oración abre una réplica (`Pues bien`) y no es conector (`CONNECTOR_NOT_AT_START`), y `encima` cuenta dentro de la oración solo tras `y`, `e`, `ni` o `pero` (`y encima llueve`, `CONNECTOR_ONLY_AFTER`). Estas listas son atributos del buscador: `CONNECTOR_POS` es `pos_tags`, las demás se llaman sin `CONNECTOR_` en minúscula (`CONNECTOR_BLOCKED_AFTER` es `blocked_after`); `not_after_pos` es el determinante `DET`, `start_only_pos` el nombre propio `PROPN`, y `read_through_marks` está vacío en esTS. Un signo de puntuación dentro de una locución conjuntiva que acaba en `que`, `como` o `si` (`CONNECTOR_SPLIT_BY_MARKS`) hace de la conjunción una palabra aparte, así que `No tire así, que se romperá` y `lo de siempre, que...` no tienen conector; las locuciones consecutivas con `de modo`, `de manera`, `de forma` o `de suerte` (`de modo que`, `de tal manera que`) y `bien es verdad que` quedan fuera, porque los textos antiguos ponen una coma antes de su `que` (`de tal modo, que`).
 
-<!-- core: stats/cohesion_stats.md:ConnectorMatcher-find 4580723 -->
-`find(words, sent_index, pos, breaks)` devuelve las apariciones de los conectores en una oración en el orden de sus palabras. Las palabras son las de una oración sin puntuación, la primera su inicio. Con las categorías gramaticales, un conector de una palabra cuenta solo con una de `pos_tags` o de `pos_extra` para su forma, nunca tras una de `not_after_pos`, y con una de `start_only_pos` solo al principio de la oración; una palabra sin categoría (`None`) pasa. Sin las categorías gramaticales se omiten las reglas que las leen. Las posiciones de los signos de puntuación `breaks` separan un conector de sus vecinas: una regla no lee una palabra a través de un signo, así que en *so, the end* la palabra tras la coma ni bloquea el conector ni le deja contar, salvo que el conector sea uno de `read_through_marks`, y un signo entre las palabras de un conector de `split_by_marks` lo anula; sin ellas las palabras se leen como contiguas.
+<!-- core: stats/cohesion_stats.md:ConnectorMatcher-find 8e0022c -->
+`find(words, sent_index, pos, breaks, blocked)` devuelve las apariciones de los conectores en una oración en el orden de sus palabras. Las palabras son las de una oración sin puntuación, la primera su inicio. Con las categorías gramaticales, un conector de una palabra cuenta solo con una de `pos_tags` o de `pos_extra` para su forma, nunca tras una de `not_after_pos`, y con una de `start_only_pos` solo al principio de la oración; una palabra sin categoría (`None`) pasa. Sin las categorías gramaticales se omiten las reglas que las leen. Las posiciones de los signos de puntuación `breaks` separan un conector de sus vecinas: una regla no lee una palabra a través de un signo, así que en *so, the end* la palabra tras la coma ni bloquea el conector ni le deja contar, salvo que el conector sea uno de `read_through_marks`, y un signo entre las palabras de un conector de `split_by_marks` lo anula; sin ellas las palabras se leen como contiguas. Ningún conector empieza en una palabra de `blocked`, que una lengua descarta por algo más que las palabras y sus categorías gramaticales, como su análisis sintáctico.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
@@ -351,8 +423,9 @@ Excepciones:
 | `sent_index` | `int` | `0` | Número de la oración, escrito en las apariciones |
 | `pos` | `list[str]` | `None` | Categorías gramaticales de las palabras |
 | `breaks` | `set[int]` | `None` | Posiciones de las palabras precedidas por un signo de puntuación |
+| `blocked` | `set[int]` | `None` | Posiciones de las palabras en las que no empieza ningún conector |
 
-Unas palabras que no son una lista de cadenas, unas categorías gramaticales que no son una lista de cadenas y `None` (las etiquetas `token.pos_` de spaCy, no los números `token.pos`) y unas posiciones de los signos que no son una colección lanzan `SourceTypeError`; un número de oración o una posición de un signo que no es un entero, una posición de un signo que no es la de una palabra después de la primera y unas categorías gramaticales que no son tantas como las palabras, `ParameterError`.
+Unas palabras que no son una lista de cadenas, unas categorías gramaticales que no son una lista de cadenas y `None` (las etiquetas `token.pos_` de spaCy, no los números `token.pos`) y unas posiciones que no son una colección lanzan `SourceTypeError`; un número de oración o una posición que no es un entero, una posición de un signo que no es la de una palabra después de la primera, una posición bloqueada que no es la de una palabra y unas categorías gramaticales que no son tantas como las palabras, `ParameterError`.
 
 `CohesionStats` pasa las posiciones de los signos de puntuación de cada oración, así que en `sin gracia alguna, y el amor` la coma separa `y` del determinante `alguna` y cuenta, y `encima` tras una coma también cuenta.
 
@@ -397,10 +470,10 @@ Unas palabras que no son una lista de cadenas, unas categorías gramaticales que
 ## Búsqueda de conectores { #find_connectors }
 
 ``` {.python .signature}
-find_connectors(words, connectors=None, sent_index=0, pos=None, breaks=None)
+find_connectors(words, connectors=None, sent_index=0, pos=None, breaks=None, blocked=None)
 ```
 
-Busca los conectores de una oración con el método `find` de `SpanishConnectorMatcher` en el diccionario `connectors`, el de `load_connectors` por defecto; los demás parámetros y las excepciones son los del buscador y de `find`. Sin `breaks`, las posiciones de las palabras ante las que hay un signo de puntuación ([`find_marks`](https://sergeyshk.github.io/anyTS/utils/words/#find_marks) de una cadena), las palabras se leen como contiguas. Con un diccionario propio la función construye un buscador en cada llamada, así que para muchas oraciones construya `SpanishConnectorMatcher(connectors)` una vez y llame a su `find`.
+Busca los conectores de una oración con el método `find` de `SpanishConnectorMatcher` en el diccionario `connectors`, el de `load_connectors` por defecto; los demás parámetros y las excepciones son los del buscador y de `find`. Sin `breaks`, las posiciones de las palabras ante las que hay un signo de puntuación ([`find_marks`](https://sergeyshk.github.io/anyTS/utils/words/#find_marks) de una cadena), las palabras se leen como contiguas; `blocked`, las posiciones de las palabras de [`is_connector_blocked`](#is_connector_blocked), descarta los `si` que descarta `CohesionStats`. Con un diccionario propio la función construye un buscador en cada llamada, así que para muchas oraciones construya `SpanishConnectorMatcher(connectors)` una vez y llame a su `find`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
@@ -414,6 +487,7 @@ Busca los conectores de una oración con el método `find` de `SpanishConnectorM
     find_connectors(["Sin", "embargo", "no", "vino"])
     find_connectors(["El", "antes", "y", "el", "después"], pos=["DET", "NOUN", "CCONJ", "DET", "NOUN"])
     find_connectors(["No", "tire", "así", "que", "se", "romperá"], breaks={3})
+    find_connectors(["No", "sé", "si", "vendrá"], blocked={2})
     ```
 
 === "Resultado"
@@ -421,6 +495,7 @@ Busca los conectores de una oración con el método `find` de `SpanishConnectorM
     ```
     [Connector(sent=0, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary')]
     [Connector(sent=0, start=2, end=3, text='y', cls='additive', kind='primary')]
+    []
     []
     ```
 
@@ -452,4 +527,32 @@ Los rasgos de un token de spaCy para las estadísticas de cohesión según su an
     ```
     WordInfo(lemma='mirar', noun=False, pronoun=False, demonstrative=False, argument=False, content=True, tense='Imp', mood='Ind')
     WordInfo(lemma='este', noun=False, pronoun=True, demonstrative=True, argument=False, content=False, tense=None, mood=None)
+    ```
+
+## Conectores bloqueados { #is_connector_blocked }
+
+``` {.python .signature}
+is_connector_blocked(token)
+```
+
+Comprueba si ningún conector empieza en un token por las palabras que lo preceden en un `Doc`: un `si` que no abre ninguna condición. Es así tras un verbo de `CONNECTOR_QUESTION_VERBS` - `saber`, `ver`, `mirar`, `preguntar`, `dudar`, `ignorar`, `pensar`, `averiguar`, `probar`, `comprobar`, `observar`, `examinar`, `determinar`, `decidir`, `considerar`, `consultar`, `investigar`, `adivinar` - etiquetado `VERB` o `AUX`, por el lema del modelo sin su pronombre enclítico o por el de `ests.utils.lemmatize` (`no sé si vendrá`, `a ver si llega`, `preguntó si tenía hambre`, `preguntándose si`), y tras un `¡` de apertura (`¡Si ya te lo dije!`). En una muestra de la literatura la regla de los verbos acertó en todos los casos revisados, la de `¡` en unos nueve de cada diez. `CohesionStats` fija con ella el `connector_blocked` de las palabras del núcleo, y la capa [`connectors`](../visualizers/highlight.md) del resaltado de un `Doc` descarta los mismos `si`.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `token` | `Token` | - | Token de spaCy |
+
+=== "Código"
+
+    ``` python
+    from ests.cohesion_stats import is_connector_blocked
+    from ests.utils import get_nlp
+
+    doc = get_nlp()("No sé si vendrá. Si llueve, me quedo. ¡Si ya te lo dije!")
+    [is_connector_blocked(token) for token in doc if token.lower_ == "si"]
+    ```
+
+=== "Resultado"
+
+    ```
+    [True, False, True]
     ```

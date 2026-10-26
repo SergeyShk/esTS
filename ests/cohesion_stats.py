@@ -7,7 +7,12 @@ from types import MappingProxyType
 from typing import TYPE_CHECKING, Any, NamedTuple
 
 import anyts.cohesion_stats
-from anyts.cohesion_stats import Connector as Connector, ConnectorMatcher
+from anyts.cohesion_stats import (
+    CohesionWord,
+    Connector as Connector,
+    ConnectorMatcher,
+    calc_forward_overlap as calc_forward_overlap,
+)
 from anyts.constants import CONTENT_UD_POS
 
 from .constants import (
@@ -20,12 +25,13 @@ from .constants import (
     CONNECTOR_PARCELLATION,
     CONNECTOR_POS,
     CONNECTOR_POS_EXTRA,
+    CONNECTOR_QUESTION_VERBS,
     CONNECTOR_SPLIT_BY_MARKS,
     CONNECTOR_SUBORDINATORS,
 )
 from .exceptions import SourceError
 from .extractors import SentsExtractor
-from .utils import _check_encoding, _check_nlp, get_nlp
+from .utils import _check_encoding, _check_nlp, get_nlp, lemmatize
 
 if TYPE_CHECKING:
     from spacy.language import Language
@@ -74,7 +80,8 @@ class SpanishConnectorMatcher(ConnectorMatcher):
         encima de 80) is dropped (CONNECTOR_BLOCKED_AFTER, CONNECTOR_BLOCKED_BEFORE,
         CONNECTOR_BLOCKED_AFTER_POS), and so are one of CONNECTOR_NOT_AT_START
         opening the sentence (Pues bien) and one of CONNECTOR_ONLY_AFTER inside
-        the sentence after another word than those listed (encima). A rule
+        the sentence after another word than those listed (encima); si after
+        como or vaya is no condition (como si fuera, vaya si lo sé). A rule
         reads no word across a punctuation mark when find gets the positions
         of the marks, and a mark inside a connector of CONNECTOR_SPLIT_BY_MARKS
         splits it (así, que). A connector opening a sentence links it to the
@@ -117,9 +124,11 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
         boundaries come from the Spanish SentsExtractor, the temporal cohesion
         is the repetition of the tense and of the mood, and the connectors
         (porque, sin embargo, es decir) are found in the dictionary of
-        load_connectors by SpanishConnectorMatcher. A Doc must carry the parts
-        of speech (from a morphologizer, or a tagger with an attribute ruler)
-        and the lemmas
+        load_connectors by SpanishConnectorMatcher; si is no conditional
+        connector after a verb of CONNECTOR_QUESTION_VERBS (no sé si viene) and
+        after an opening ¡ (¡Si ya te lo dije!). A Doc must
+        carry the parts of speech (from a morphologizer, or a tagger with an
+        attribute ruler) and the lemmas
 
     References:
         https://doi.org/10.1017/CBO9780511894664 (McNamara et al. 2014, Coh-Metrix)
@@ -154,6 +163,8 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
         words (tuple[tuple[str, ...], ...]): Tuple of the words of every sentence
         lemmas (tuple[tuple[str, ...], ...]): Tuple of the lemmas of every sentence
         n_sents (int): Number of sentences containing words
+        n_paragraphs (int): Number of paragraphs - parts of the text between blank lines
+            that hold words
         n_words (int): Number of words
         n_nouns (int): Number of nouns
         n_pronouns (int): Number of pronouns
@@ -175,6 +186,17 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
             in adjacent pairs of sentences
         content_overlap_prop_all (float): Mean share of shared content words
             in all pairs of sentences
+        noun_overlap_2_sent (float): Share of the nouns of a sentence repeated in one of
+            the next two sentences
+        argument_overlap_2_sent (float): Share of the arguments of a sentence repeated in
+            one of the next two sentences
+        content_overlap_2_sent (float): Share of the content words of a sentence repeated
+            in one of the next two sentences
+        noun_overlap_para (float): Share of the nouns of a paragraph repeated in the next one
+        argument_overlap_para (float): Share of the arguments of a paragraph repeated in the
+            next one
+        content_overlap_para (float): Share of the content words of a paragraph repeated in
+            the next one
         p_pronouns (float): Share of pronouns among the words
         pronoun_noun_ratio (float): Ratio of the number of pronouns to the number of nouns
         p_demonstratives (float): Share of demonstratives among the words
@@ -278,6 +300,25 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
             source = pipeline(source, disable=UNUSED_COMPONENTS)
         return super().analyze(source)
 
+    def word_info(self, unit: Sequence[Token]) -> CohesionWord:
+        """
+        Getting the features of a word of a Doc
+
+        Description:
+            The features of the core; no connector starts at a si that opens
+            no condition (is_connector_blocked)
+
+        Arguments:
+            unit (list[Token]): Tokens of the word
+
+        Returns:
+            CohesionWord: Word with its features
+        """
+        word = super().word_info(unit)
+        if is_connector_blocked(unit[0]):
+            return word._replace(connector_blocked=True)
+        return word
+
 
 @cache
 def load_connectors() -> Mapping[str, tuple[str, str]]:
@@ -307,6 +348,7 @@ def find_connectors(
     sent_index: int = 0,
     pos: Sequence[str | None] | None = None,
     breaks: Collection[int] | None = None,
+    blocked: Collection[int] | None = None,
 ) -> list[Connector]:
     """
     Finding the connectors of a sentence
@@ -316,10 +358,11 @@ def find_connectors(
         word forms in lower case, the longest one at every position, without
         overlaps. The words are those of one sentence without punctuation, the
         first one its start; with the parts of speech given, the rules that
-        read a tag apply too, and with the positions of the marks a rule reads
-        no word across a mark. With a dictionary of its own the function builds
-        a matcher on every call: over many sentences, build a
-        SpanishConnectorMatcher once and call its find
+        read a tag apply too, with the positions of the marks a rule reads no
+        word across a mark, and no connector starts at a blocked position
+        (is_connector_blocked of the tokens of the words). With a dictionary
+        of its own the function builds a matcher on every call: over many
+        sentences, build a SpanishConnectorMatcher once and call its find
 
     Arguments:
         words (list[str]): Words of the sentence
@@ -330,19 +373,20 @@ def find_connectors(
             that read a tag are skipped
         breaks (set[int]): Positions of the words a punctuation mark stands
             before (find_marks); without them the rules read through the marks
+        blocked (set[int]): Positions of the words no connector starts at
 
     Returns:
         list[Connector]: Occurrences of the connectors in the order of the words
 
     Raises:
         SourceTypeError: If the words are not a list of strings, the parts of speech are
-            not a list of strings and None, the positions of the marks are not a
-            collection, or the connectors are not a dictionary of phrases and pairs of
-            strings
+            not a list of strings and None, the positions of the marks or of the blocked
+            words are not a collection, or the connectors are not a dictionary of
+            phrases and pairs of strings
         ParameterError: If the dictionary has an unknown class or kind, the number of
-            the sentence or a position of a mark is not an integer, a position of a mark
-            is not that of a word after the first, or the parts of speech are not as many
-            as the words
+            the sentence or a position is not an integer, a position of a mark is not
+            that of a word after the first, a blocked position is not that of a word,
+            or the parts of speech are not as many as the words
 
     Example:
         >>> from ests.cohesion_stats import find_connectors
@@ -354,7 +398,45 @@ def find_connectors(
         if connectors is None
         else SpanishConnectorMatcher(connectors)
     )
-    return matcher.find(words, sent_index, pos, breaks)
+    return matcher.find(words, sent_index, pos, breaks, blocked)
+
+
+def is_connector_blocked(token: Token) -> bool:
+    """
+    Checking whether no connector starts at a token by the words before it in a Doc
+
+    Description:
+        A si opens no condition after a verb of CONNECTOR_QUESTION_VERBS, by
+        the lemma of the model without its enclitic pronoun or by that of
+        simplemma, and the part of speech VERB or AUX (no sé si viene, a ver si
+        llega, preguntándose si), and after an opening ¡ (¡Si ya te lo dije!);
+        a si after como or vaya is dropped by the matcher itself
+        (CONNECTOR_BLOCKED_BEFORE)
+
+    Arguments:
+        token (Token): Token
+
+    Returns:
+        bool: Whether no connector starts at the token
+
+    Example:
+        >>> from ests.cohesion_stats import is_connector_blocked
+        >>> from ests.utils import get_nlp
+        >>> doc = get_nlp()("No sé si vendrá. Si llueve, me quedo.")
+        >>> [is_connector_blocked(token) for token in doc if token.lower_ == "si"]
+        [True, False]
+    """
+    if token.lower_ != "si":
+        return False
+    previous = next((word for word in reversed(token.doc[: token.i]) if not word.is_space), None)
+    if previous is None:
+        return False
+    if previous.text == "¡":
+        return True
+    return previous.pos_ in ("VERB", "AUX") and (
+        previous.lemma_.lower().split(" ")[0] in CONNECTOR_QUESTION_VERBS
+        or lemmatize(previous.lower_) in CONNECTOR_QUESTION_VERBS
+    )
 
 
 def token_info(token: Token) -> WordInfo:

@@ -54,6 +54,7 @@ The class extends the `DiversityStats` of the [anyTS](https://sergeyshk.github.i
     Brunet's W                                                             |   6.01
     Dugast's k                                                             |  14.78
     Baayen's P                                                             |   0.53
+    Orlov's Z (words)                                                      |   nan
     Hapax ratio                                                            |   0.73
     Exponent α₂                                                            |   0.50
     Shannon entropy (bits)                                                 |   3.32
@@ -61,6 +62,7 @@ The class extends the `DiversityStats` of the [anyTS](https://sergeyshk.github.i
     Perplexity                                                             |  10.01
     Zipf's law slope (α)                                                   |   0.49
     Heaps' law exponent (β)                                                |   0.84
+    Burstiness of the frequent lexemes                                     |   nan
     ```
 
 ## Parameters
@@ -383,6 +385,35 @@ The functions and the named tuples of the cards are imported from `ests.diversit
 
 <div class="metric-card" markdown>
 
+### Orlov's Z { #orlov_z }
+
+`orlov_z` · [Tweedie and Baayen 1998](https://doi.org/10.1023/A:1001749303137)
+{ .metric-meta }
+
+--8<-- "stats/diversity_stats.md:calc_orlov_z"
+
+=== "Code"
+
+    ``` python
+    from ests.diversity_stats import calc_orlov_z
+
+    words = (
+        "en un lugar de la mancha de cuyo nombre no quiero acordarme no ha mucho tiempo que "
+        "vivía un hidalgo de los de lanza en astillero adarga antigua rocín flaco y galgo corredor"
+    ).split()
+    round(calc_orlov_z(words), 2)
+    ```
+
+=== "Result"
+
+    ```
+    15733.38
+    ```
+
+</div>
+
+<div class="metric-card" markdown>
+
 ### Hapax ratio { #hapax_ratio }
 
 `hapax_ratio`
@@ -496,6 +527,34 @@ The [Heaps' law](../visualizers/vocabulary.md) plot is built from `fit_heaps`.
 
 <div class="metric-card" markdown>
 
+### Burstiness { #burstiness }
+
+`burstiness` · [Kim and Jo 2016](https://doi.org/10.1103/PhysRevE.94.032311)
+{ .metric-meta }
+
+--8<-- "stats/diversity_stats.md:calc_burstiness"
+
+=== "Code"
+
+    ``` python
+    from ests.diversity_stats import calc_burstiness
+
+    (
+        calc_burstiness("sí no sí no sí no sí no sí no".split()),
+        calc_burstiness("sí sí sí sí sí no no no no no".split()),
+    )
+    ```
+
+=== "Result"
+
+    ```
+    (-1.0, 0.18350341907227388)
+    ```
+
+</div>
+
+<div class="metric-card" markdown>
+
 ### Windowed computation { #windowed }
 
 `windowed(stat)`
@@ -567,13 +626,15 @@ calc_windowed(text, func, window_len=100, step=None, confidence=0.95, *, message
      'brunet_w': 6.00637847898991,
      'dugast_k': 14.783895126869226,
      'baayen_p': 0.5333333333333333,
+     'orlov_z': nan,
      'hapax_ratio': 0.7272727272727273,
      'alpha2': 0.5,
      'entropy': 3.3232314287976203,
      'evenness': 0.9606293157795304,
      'perplexity': 10.009038104159247,
      'zipf_alpha': 0.4884512334695912,
-     'heaps_beta': 0.8366147342060046}
+     'heaps_beta': 0.8366147342060046,
+     'burstiness': nan}
     ```
 
 The other methods - `to_dataframe` and `describe` - are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the lexical diversity metrics have no scales, so `describe` gives `None` for the metrics of `get_stats`.

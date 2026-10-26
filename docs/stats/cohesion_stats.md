@@ -45,35 +45,41 @@ The words are classified by the Universal Dependencies annotation:
 === "Result"
 
     ```
-                               Statistic                            |  Value
-    ---------------------------------------------------------------------------
-    Noun overlap in adjacent sentences                              |   0.33
-    Noun overlap in all pairs of sentences                          |   0.50
-    Argument overlap in adjacent sentences                          |   0.33
-    Argument overlap in all pairs of sentences                      |   0.50
-    Content word overlap in adjacent sentences                      |   0.33
-    Content word overlap in all pairs of sentences                  |   0.50
-    Share of shared content words in adjacent sentences             |   0.08
-    Share of shared content words in all pairs of sentences         |   0.12
-    Share of pronouns                                               |   0.03
-    Ratio of pronouns to nouns                                      |   0.09
-    Share of demonstratives                                         |   0.00
-    Share of content words seen before                              |   0.18
-    Repetition of the tense in adjacent sentences                   |   0.00
-    Repetition of the mood in adjacent sentences                    |   1.00
-    Temporal cohesion                                               |   0.50
-    Connectors per 1000 words                                       |  103.45
-    Connectors linking a sentence to the ones before per 1000 words |  103.45
-    Connectors linking the parts of a sentence per 1000 words       |   0.00
-    Causal connectors per 1000 words                                |  34.48
-    Adversative connectors per 1000 words                           |  34.48
-    Concessive connectors per 1000 words                            |   0.00
-    Temporal connectors per 1000 words                              |   0.00
-    Additive connectors per 1000 words                              |   0.00
-    Conditional connectors per 1000 words                           |   0.00
-    Reformulative connectors per 1000 words                         |  34.48
-    Primary connectors per 1000 words                               |   0.00
-    Secondary connectors per 1000 words                             |  103.45
+                                 Statistic                             |  Value
+    ------------------------------------------------------------------------------
+    Noun overlap in adjacent sentences                                 |   0.33
+    Noun overlap in all pairs of sentences                             |   0.50
+    Argument overlap in adjacent sentences                             |   0.33
+    Argument overlap in all pairs of sentences                         |   0.50
+    Content word overlap in adjacent sentences                         |   0.33
+    Content word overlap in all pairs of sentences                     |   0.50
+    Share of shared content words in adjacent sentences                |   0.08
+    Share of shared content words in all pairs of sentences            |   0.12
+    Share of the nouns of a sentence repeated in the next two          |   0.60
+    Share of the arguments of a sentence repeated in the next two      |   0.60
+    Share of the content words of a sentence repeated in the next two  |   0.38
+    Share of the nouns of a paragraph repeated in the next one         |   nan
+    Share of the arguments of a paragraph repeated in the next one     |   nan
+    Share of the content words of a paragraph repeated in the next one |   nan
+    Share of pronouns                                                  |   0.03
+    Ratio of pronouns to nouns                                         |   0.09
+    Share of demonstratives                                            |   0.00
+    Share of content words seen before                                 |   0.18
+    Repetition of the tense in adjacent sentences                      |   0.00
+    Repetition of the mood in adjacent sentences                       |   1.00
+    Temporal cohesion                                                  |   0.50
+    Connectors per 1000 words                                          |  103.45
+    Connectors linking a sentence to the ones before per 1000 words    |  103.45
+    Connectors linking the parts of a sentence per 1000 words          |   0.00
+    Causal connectors per 1000 words                                   |  34.48
+    Adversative connectors per 1000 words                              |  34.48
+    Concessive connectors per 1000 words                               |   0.00
+    Temporal connectors per 1000 words                                 |   0.00
+    Additive connectors per 1000 words                                 |   0.00
+    Conditional connectors per 1000 words                              |   0.00
+    Reformulative connectors per 1000 words                            |  34.48
+    Primary connectors per 1000 words                                  |   0.00
+    Secondary connectors per 1000 words                                |  103.45
     ```
 
 ## Parameters
@@ -125,6 +131,12 @@ Every metric is an attribute of the object, computed when it is created, and `ge
 | [`content_overlap_all`](#overlap) | Share of all the pairs sharing a content word | 0-1, `nan` for one sentence | The whole text tied tighter |
 | [`content_overlap_prop_adjacent`](#proportional_overlap) | Mean share of the shared content words (Dice) in the adjacent pairs | 0-1, `nan` for one sentence | More words shared by neighbours |
 | [`content_overlap_prop_all`](#proportional_overlap) | Mean share of the shared content words (Dice) in all the pairs | 0-1, `nan` for one sentence | More words shared across the text |
+| [`noun_overlap_2_sent`](#forward_overlap) | Share of the nouns of a sentence repeated in one of the next two | 0-1, `nan` for fewer than three sentences | Nouns carried further |
+| [`argument_overlap_2_sent`](#forward_overlap) | Share of the arguments of a sentence repeated in one of the next two | 0-1, `nan` for fewer than three sentences | Arguments carried further |
+| [`content_overlap_2_sent`](#forward_overlap) | Share of the content words of a sentence repeated in one of the next two | 0-1, `nan` for fewer than three sentences | Content words carried further |
+| [`noun_overlap_para`](#forward_overlap) | Share of the nouns of a paragraph repeated in the next one | 0-1, `nan` for one paragraph | Paragraphs tied tighter |
+| [`argument_overlap_para`](#forward_overlap) | Share of the arguments of a paragraph repeated in the next one | 0-1, `nan` for one paragraph | Paragraphs tied tighter |
+| [`content_overlap_para`](#forward_overlap) | Share of the content words of a paragraph repeated in the next one | 0-1, `nan` for one paragraph | Paragraphs tied tighter |
 | [`p_pronouns`](#pronouns) | Share of the pronouns among the words | 0-1 | More reference by pronouns |
 | [`pronoun_noun_ratio`](#pronouns) | Ratio of the pronouns to the nouns | 0 and above, `nan` without nouns | More pronouns per noun |
 | [`p_demonstratives`](#pronouns) | Share of the demonstratives among the words | 0-1 | More pointing back |
@@ -138,7 +150,7 @@ Every metric is an attribute of the object, computed when it is created, and `ge
 | [`connectors_<class>`](#connectors) | Connectors of a class per 1000 words: `causal`, `adversative`, `concessive`, `temporal`, `additive`, `conditional`, `reformulative` | 0-1000 | More links of the class |
 | [`connectors_primary`, `connectors_secondary`](#connectors) | Primary and secondary connectors per 1000 words | 0-1000 | More links of the kind |
 
-The functions of the overlaps, the givenness and the repetitions (`calc_overlap`, `calc_proportional_overlap`, `calc_overlaps`, `dice`, `count_given`, `calc_repetition`, `dominant`) are those of `anyts.cohesion_stats`, which esTS does not re-export; they are on the [anyTS page](https://sergeyshk.github.io/anyTS/stats/cohesion_stats/).
+The functions of the overlaps, the givenness and the repetitions (`calc_overlap`, `calc_proportional_overlap`, `calc_overlaps`, `dice`, `count_given`, `calc_repetition`, `dominant`) are those of `anyts.cohesion_stats`, which esTS does not re-export; they are on the [anyTS page](https://sergeyshk.github.io/anyTS/stats/cohesion_stats/). `calc_forward_overlap` of the [overlaps with the next segments](#forward_overlap) is imported from `ests.cohesion_stats`.
 
 <div class="metric-card" markdown>
 
@@ -167,6 +179,42 @@ The proportional overlap of Coh-Metrix (CRFCWO1, CRFCWOa): the Dice coefficient 
 $$
 \frac{1}{\textrm{Number of pairs}} \sum_{(A, B)} \frac{2 \times |A \cap B|}{|A| + |B|}
 $$
+
+</div>
+
+<div class="metric-card" markdown>
+
+### Overlap with the next sentences and paragraphs { #forward_overlap }
+
+`noun_overlap_2_sent` · `argument_overlap_2_sent` · `content_overlap_2_sent` · `noun_overlap_para` · `argument_overlap_para` · `content_overlap_para` · [TAACO](https://doi.org/10.3758/s13428-015-0651-7)
+{ .metric-meta }
+
+--8<-- "stats/cohesion_stats.md:CohesionStats-forward_overlap"
+
+--8<-- "stats/cohesion_stats.md:calc_forward_overlap"
+
+In esTS a string is parsed into a `Doc`, so both are split into paragraphs by the blank lines between their tokens.
+
+=== "Code"
+
+    ``` python
+    from ests.cohesion_stats import calc_forward_overlap
+
+    calc_forward_overlap([{"gato", "ventana"}, {"pájaro"}, {"gato"}], span=2)
+    text = (
+        "El gato estaba en la ventana. Miraba a los pájaros.\n\n"
+        "Los pájaros se fueron y el gato se durmió. Mañana el gato volverá a la ventana."
+    )
+    paragraphs = CohesionStats(text)
+    paragraphs.n_paragraphs, paragraphs.noun_overlap_para, paragraphs.content_overlap_para
+    ```
+
+=== "Result"
+
+    ```
+    0.5
+    (2, 1.0, 0.6)
+    ```
 
 </div>
 
@@ -242,7 +290,7 @@ The connector dictionary of esTS: the file `ests/resources/connectors.tsv`, 273 
 | Conditional | `conditional` | si, a menos que, de lo contrario |
 | Reformulative (operators of concretion included) | `reformulative` | es decir, en resumen, por ejemplo, en particular, sobre todo |
 
-The primary connectors (`primary`) are conjunctions, conjunctive locutions and adverbs (porque, aunque, además), the secondary ones (`secondary`) lexicalized phrases (sin embargo, por lo tanto, es decir). `si` also opens indirect questions and exclamations (`no sé si vendrá`, `¡pero si es él!`) - about a quarter of its occurrences in the corpus of literature - and `siempre que` is temporal with the indicative and conditional with the subjunctive; both are counted in their class of the dictionary. The rules by which a word of the dictionary counts as a connector are those of the [matcher](#ConnectorMatcher).
+The primary connectors (`primary`) are conjunctions, conjunctive locutions and adverbs (porque, aunque, además), the secondary ones (`secondary`) lexicalized phrases (sin embargo, por lo tanto, es decir). `si` also opens indirect questions, exclamations and hypothetical comparisons - about a third of its occurrences in the corpus of literature - and is no connector after a verb that takes an indirect question, after an opening `¡` ([`is_connector_blocked`](#is_connector_blocked)), and after `como`, `cual`, `vaya` and `maldito` (`CONNECTOR_BLOCKED_BEFORE`: `como si fuera`, `vaya si lo sé`); the rules find about three quarters of these `si` and drop 25 % of the conditional connectors of the literature. `siempre que` is temporal with the indicative and conditional with the subjunctive and is counted in its class of the dictionary. The rules by which a word of the dictionary counts as a connector are those of the [matcher](#ConnectorMatcher).
 
 === "Code"
 
@@ -286,6 +334,12 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
      'content_overlap_all': 0.5,
      'content_overlap_prop_adjacent': 0.08333333333333333,
      'content_overlap_prop_all': 0.12037037037037035,
+     'noun_overlap_2_sent': 0.6,
+     'argument_overlap_2_sent': 0.6,
+     'content_overlap_2_sent': 0.375,
+     'noun_overlap_para': nan,
+     'argument_overlap_para': nan,
+     'content_overlap_para': nan,
      'p_pronouns': 0.034482758620689655,
      'pronoun_noun_ratio': 0.09090909090909091,
      'p_demonstratives': 0.0,
@@ -316,7 +370,7 @@ SpanishConnectorMatcher(connectors)
 
 --8<-- "stats/cohesion_stats.md:ConnectorMatcher"
 
-`SpanishConnectorMatcher` is a subclass of the core `ConnectorMatcher` with the rules of Spanish; words and connectors are compared in lower case. A one-word connector takes a part of speech of `CONNECTOR_POS` - a conjunction, a particle, an adverb, an adposition, an interjection, a proper noun or `X` - or of `CONNECTOR_POS_EXTRA` for its form (`pues` and `verbigracia` as `NOUN`, `resumiendo`, `recapitulando` and `concluyendo` as `VERB`). It is no connector right after a determiner, so `el antes y el después` holds one connector, `y`, and not three; and as a proper noun it counts only at the start of a sentence, where the models read a marker so (`Primeramente`), so the surname in `Habló con Juan Luego ayer` is no connector. A marker that is part of another phrase is dropped: the words after it of `CONNECTOR_BLOCKED_AFTER` (`antes de la reunión`, `en cuanto a`, `a pesar de todo lo que`), the words before it of `CONNECTOR_BLOCKED_BEFORE` (`algo así como`) and the parts of speech of the word after it of `CONNECTOR_BLOCKED_AFTER_POS` (`sobre todo el texto`, `a pesar de todo el esfuerzo`) make it none, while `antes, firmó el acta` and `sobre todo cuando llueve` count their marker. A few markers depend on their place: `pues` opening a sentence opens a reply (`Pues bien`) and is no connector (`CONNECTOR_NOT_AT_START`), and `encima` counts inside a sentence only after `y`, `e`, `ni` or `pero` (`y encima llueve`, `CONNECTOR_ONLY_AFTER`). These lists are attributes of the matcher: `CONNECTOR_POS` is `pos_tags`, the others are named without `CONNECTOR_` in lower case (`CONNECTOR_BLOCKED_AFTER` is `blocked_after`); `not_after_pos` is the determiner `DET`, `start_only_pos` the proper noun `PROPN`, and `read_through_marks` is empty in esTS. A punctuation mark inside a conjunctive phrase ending in `que`, `como` or `si` (`CONNECTOR_SPLIT_BY_MARKS`) makes the conjunction a word of its own, so `No tire así, que se romperá` and `lo de siempre, que...` hold no connector; the consecutive phrases with `de modo`, `de manera`, `de forma` or `de suerte` (`de modo que`, `de tal manera que`) and `bien es verdad que` are left out, as old texts put a comma before their `que` (`de tal modo, que`).
+`SpanishConnectorMatcher` is a subclass of the core `ConnectorMatcher` with the rules of Spanish; words and connectors are compared in lower case. A one-word connector takes a part of speech of `CONNECTOR_POS` - a conjunction, a particle, an adverb, an adposition, an interjection, a proper noun or `X` - or of `CONNECTOR_POS_EXTRA` for its form (`pues` and `verbigracia` as `NOUN`, `resumiendo`, `recapitulando` and `concluyendo` as `VERB`). It is no connector right after a determiner, so `el antes y el después` holds one connector, `y`, and not three; and as a proper noun it counts only at the start of a sentence, where the models read a marker so (`Primeramente`), so the surname in `Habló con Juan Luego ayer` is no connector. A marker that is part of another phrase is dropped: the words after it of `CONNECTOR_BLOCKED_AFTER` (`antes de la reunión`, `en cuanto a`, `a pesar de todo lo que`), the words before it of `CONNECTOR_BLOCKED_BEFORE` (`algo así como`, `como si fuera`) and the parts of speech of the word after it of `CONNECTOR_BLOCKED_AFTER_POS` (`sobre todo el texto`, `a pesar de todo el esfuerzo`) make it none, while `antes, firmó el acta` and `sobre todo cuando llueve` count their marker. A few markers depend on their place: `pues` opening a sentence opens a reply (`Pues bien`) and is no connector (`CONNECTOR_NOT_AT_START`), and `encima` counts inside a sentence only after `y`, `e`, `ni` or `pero` (`y encima llueve`, `CONNECTOR_ONLY_AFTER`). These lists are attributes of the matcher: `CONNECTOR_POS` is `pos_tags`, the others are named without `CONNECTOR_` in lower case (`CONNECTOR_BLOCKED_AFTER` is `blocked_after`); `not_after_pos` is the determiner `DET`, `start_only_pos` the proper noun `PROPN`, and `read_through_marks` is empty in esTS. A punctuation mark inside a conjunctive phrase ending in `que`, `como` or `si` (`CONNECTOR_SPLIT_BY_MARKS`) makes the conjunction a word of its own, so `No tire así, que se romperá` and `lo de siempre, que...` hold no connector; the consecutive phrases with `de modo`, `de manera`, `de forma` or `de suerte` (`de modo que`, `de tal manera que`) and `bien es verdad que` are left out, as old texts put a comma before their `que` (`de tal modo, que`).
 
 --8<-- "stats/cohesion_stats.md:ConnectorMatcher-find"
 
@@ -362,10 +416,10 @@ SpanishConnectorMatcher(connectors)
 ## Connector search { #find_connectors }
 
 ``` {.python .signature}
-find_connectors(words, connectors=None, sent_index=0, pos=None, breaks=None)
+find_connectors(words, connectors=None, sent_index=0, pos=None, breaks=None, blocked=None)
 ```
 
-Searches a sentence for connectors with the `find` method of `SpanishConnectorMatcher` over the dictionary `connectors`, that of `load_connectors` by default; the other parameters and the errors are those of the matcher and of `find`. Without `breaks`, the positions of the words a punctuation mark stands before ([`find_marks`](https://sergeyshk.github.io/anyTS/utils/words/#find_marks) of a string), the words are read as adjacent. With a dictionary of your own the function builds a matcher on every call, so over many sentences build `SpanishConnectorMatcher(connectors)` once and call its `find`.
+Searches a sentence for connectors with the `find` method of `SpanishConnectorMatcher` over the dictionary `connectors`, that of `load_connectors` by default; the other parameters and the errors are those of the matcher and of `find`. Without `breaks`, the positions of the words a punctuation mark stands before ([`find_marks`](https://sergeyshk.github.io/anyTS/utils/words/#find_marks) of a string), the words are read as adjacent; `blocked`, the positions of the words of [`is_connector_blocked`](#is_connector_blocked), drops the `si` that `CohesionStats` drops. With a dictionary of your own the function builds a matcher on every call, so over many sentences build `SpanishConnectorMatcher(connectors)` once and call its `find`.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
@@ -379,6 +433,7 @@ Searches a sentence for connectors with the `find` method of `SpanishConnectorMa
     find_connectors(["Sin", "embargo", "no", "vino"])
     find_connectors(["El", "antes", "y", "el", "después"], pos=["DET", "NOUN", "CCONJ", "DET", "NOUN"])
     find_connectors(["No", "tire", "así", "que", "se", "romperá"], breaks={3})
+    find_connectors(["No", "sé", "si", "vendrá"], blocked={2})
     ```
 
 === "Result"
@@ -386,6 +441,7 @@ Searches a sentence for connectors with the `find` method of `SpanishConnectorMa
     ```
     [Connector(sent=0, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary')]
     [Connector(sent=0, start=2, end=3, text='y', cls='additive', kind='primary')]
+    []
     []
     ```
 
@@ -417,4 +473,32 @@ The features of a spaCy token for the cohesion statistics by its Universal Depen
     ```
     WordInfo(lemma='mirar', noun=False, pronoun=False, demonstrative=False, argument=False, content=True, tense='Imp', mood='Ind')
     WordInfo(lemma='este', noun=False, pronoun=True, demonstrative=True, argument=False, content=False, tense=None, mood=None)
+    ```
+
+## Blocked connectors { #is_connector_blocked }
+
+``` {.python .signature}
+is_connector_blocked(token)
+```
+
+Checks whether no connector starts at a token by the words before it in a `Doc`: a `si` that opens no condition. It is so after a verb of `CONNECTOR_QUESTION_VERBS` - `saber`, `ver`, `mirar`, `preguntar`, `dudar`, `ignorar`, `pensar`, `averiguar`, `probar`, `comprobar`, `observar`, `examinar`, `determinar`, `decidir`, `considerar`, `consultar`, `investigar`, `adivinar` - tagged `VERB` or `AUX`, by the lemma of the model without its enclitic pronoun or by that of `ests.utils.lemmatize` (`no sé si vendrá`, `a ver si llega`, `preguntó si tenía hambre`, `preguntándose si`), and after an opening `¡` (`¡Si ya te lo dije!`). On a sample of the literature the rule of the verbs was right in all the cases checked, that of `¡` in about nine of ten. `CohesionStats` sets `connector_blocked` of the words of the core by it, and the [`connectors`](../visualizers/highlight.md) layer of the highlighting of a `Doc` drops the same `si`.
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `token` | `Token` | - | spaCy token |
+
+=== "Code"
+
+    ``` python
+    from ests.cohesion_stats import is_connector_blocked
+    from ests.utils import get_nlp
+
+    doc = get_nlp()("No sé si vendrá. Si llueve, me quedo. ¡Si ya te lo dije!")
+    [is_connector_blocked(token) for token in doc if token.lower_ == "si"]
+    ```
+
+=== "Result"
+
+    ```
+    [True, False, True]
     ```

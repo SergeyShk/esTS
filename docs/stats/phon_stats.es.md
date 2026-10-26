@@ -443,8 +443,8 @@ Con las palabras en orden aleatorio los índices valen 1 de media: los 150 libro
 `p_open_syllables` · `mean_syllable_len`
 { .metric-meta }
 
-<!-- core: stats/phon_stats.md:PhonStats-syllables 005a7e8 -->
-Las sílabas son los sonidos de cada sílaba de una palabra según `syllable_sounds`; una sílaba sin ningún sonido de las clases (un número) no es una sílaba, tampoco en `c_syllable_patterns`. Una sílaba abierta termina en vocal según su patrón CV (`cv_pattern`), y la longitud de una sílaba es el número de sus sonidos.
+<!-- core: stats/phon_stats.md:PhonStats-syllables eb2f919 -->
+Las sílabas son los sonidos de cada sílaba de una palabra según `syllable_sounds`; una sílaba sin ningún sonido de las clases (un número) no es una sílaba, tampoco en `c_syllable_patterns`. Una sílaba abierta termina en vocal según su patrón CV (`cv_pattern`), y la longitud de una sílaba es la longitud de ese patrón: los sonidos de las clases, sin `skipped` ni los signos fuera de ellas.
 
 Los sonidos de una sílaba son su transcripción, y la primera sílaba de una palabra se lee como el comienzo de la palabra: la `xi` de `xilófono` es s i, la `xi` de `México`, k s i.
 

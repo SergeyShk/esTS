@@ -1,7 +1,7 @@
 # Estilometría
 
-<!-- core: corpus/stylometry.md:stylometry 280727d -->
-Medidas de estilometría y de atribución de autoría: distancias entre textos por las frecuencias de las palabras más frecuentes (la Delta de Burrows y sus variantes, como en [stylo](https://github.com/computationalstylistics/stylo)), marcadores de palabras preferidas y evitadas (Zeta), la distancia ji cuadrado de Kilgarriff entre corpus y la curva de Mendenhall. Las funciones trabajan con listas de unidades de un texto: formas de palabra en minúsculas (la elección habitual para Delta), lemas o N-gramas de caracteres; las mayúsculas y minúsculas y la lematización corresponden a los extractores.
+<!-- core: corpus/stylometry.md:stylometry e6b2525 -->
+Medidas de estilometría y de atribución de autoría: distancias entre textos por las frecuencias de las palabras más frecuentes (la Delta de Burrows y sus variantes, como en [stylo](https://github.com/computationalstylistics/stylo)) y a lo largo de un texto por sus ventanas (la Delta móvil), marcadores de palabras preferidas y evitadas (Zeta) y sus proporciones en los segmentos de los corpus, la distancia ji cuadrado de Kilgarriff entre corpus y la curva de Mendenhall. Las funciones trabajan con listas de unidades de un texto: formas de palabra en minúsculas (la elección habitual para Delta), lemas o N-gramas de caracteres; las mayúsculas y minúsculas y la lematización corresponden a los extractores.
 
 Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/stylometry/), con el [perfil de las palabras funcionales](#function_words_profile) del español añadido como rasgo de un autor. Las unidades de un texto las dan [`WordsExtractor`](../extractors/words.md) - formas de palabra y lemas - y [`CharNgramsExtractor`](../extractors/char_ngrams.md).
 

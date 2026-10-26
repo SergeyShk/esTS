@@ -43,7 +43,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Readability metrics](https://sergeyshk.github.io/esTS/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX, with a consensus grade, the school stages of Spain and reading time
 * **[Lexical diversity metrics](https://sergeyshk.github.io/esTS/stats/diversity_stats/)** - TTR and its variations, MATTR, MSTTR, MTLD, HD-D, Simpson's and Yule's indices, entropy, Zipf's and Heaps' laws
 * **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
-* **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text, a KWIC concordance and the stylometry of authorship: Burrows's Delta with its variants, Zeta, the Mendenhall curve, the profile of the function words; the comparison of two corpora by 132 features of a text with effect sizes
+* **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text, a KWIC concordance and the stylometry of authorship: Burrows's Delta with its variants, Zeta, the Mendenhall curve, the profile of the function words; the comparison of two corpora by 133 features of a text with effect sizes
 * **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, vocabulary growth, sentence lengths, and the highlighting of the fragments the statistics count, such as long sentences and passives
 * **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors in four genres; 4,259 sonnets of the 15th-20th centuries with the metrical pattern and the rhyme of every line; a frequency dictionary of 83,785 lemmas by Google Books Ngram
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
@@ -99,6 +99,8 @@ The statistics by the frequency dictionary need it downloaded once with `FreqDic
  'n_spaces': 9,
  'n_syllables': 23,
  'n_punctuations': 2,
+ 'letters_entropy': 2.5219280948873624,
+ 'syllables_entropy': 1.7219280948873623,
  'c_punctuations': {'comma': 1, 'period': 0, 'question': 0, 'exclamation': 0,
                     'ellipsis': 0, 'colon': 1, 'semicolon': 0, 'dash': 0,
                     'hyphen': 0, 'angle_quotes': 0, 'straight_quotes': 0,
@@ -182,6 +184,7 @@ The library allows extracting the following statistics from a text:
 *   the number of punctuation marks and their distribution by type
 *   the distribution of words by the number of letters
 *   the distribution of words by the number of syllables
+*   the entropy of word lengths in letters and in syllables
 
 A complex word has three or more syllables and a long word seven or more letters. Any statistic can be printed in a readable form:
 
@@ -190,21 +193,23 @@ A complex word has three or more syllables and a long word seven or more letters
 
 >>> text = "Hay tres clases de mentiras: mentiras, malditas mentiras y estadísticas"
 >>> BasicStats(text).print_stats()
-     Statistic     |  Value
-------------------------------
-Sentences          |    1
-Words              |    10
-Unique words       |    8
-Long words         |    5
-Complex words      |    5
-Simple words       |    5
-Monosyllabic words |    4
-Polysyllabic words |    6
-Characters         |    71
-Letters            |    60
-Spaces             |    9
-Syllables          |    23
-Punctuation marks  |    2
+                   Statistic                    |  Value
+-----------------------------------------------------------
+Sentences                                       |    1
+Words                                           |    10
+Unique words                                    |    8
+Long words                                      |    5
+Complex words                                   |    5
+Simple words                                    |    5
+Monosyllabic words                              |    4
+Polysyllabic words                              |    6
+Characters                                      |    71
+Letters                                         |    60
+Spaces                                          |    9
+Syllables                                       |    23
+Punctuation marks                               |    2
+Entropy of the word lengths in letters (bits)   |   2.52
+Entropy of the word lengths in syllables (bits) |   1.72
 ```
 
 More in the [documentation](https://sergeyshk.github.io/esTS/stats/basic_stats/).
@@ -280,7 +285,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/readability_s
 
 <br>
 
-The library allows counting 32 lexical diversity metrics, among them:
+The library allows counting 34 lexical diversity metrics, among them:
 
 *   Type-Token Ratio and its variations: RTTR, CTTR, Herdan, Summer, Maas, Dugast
 *   Moving Average Type-Token Ratio and Mean Segmental Type-Token Ratio
@@ -290,6 +295,7 @@ The library allows counting 32 lexical diversity metrics, among them:
 *   the hapax index (Honoré's R), the measures of Yule, Herdan, Sichel, Michéa, Brunet, Dugast and Baayen
 *   Shannon entropy, evenness and perplexity
 *   the slope of Zipf's law, the Zipf-Mandelbrot fit and the exponent of Heaps' law
+*   Orlov's Z and the burstiness of frequent lexemes
 
 Any metric can be computed over windows of equal length, to compare texts of different lengths, with a confidence interval of the mean.
 
@@ -358,7 +364,8 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/morph_stats/)
 
 The dependency tree of Universal Dependencies and the constructions that the Spanish-language guides to plain language warn about:
 
-*   the complexity of the tree: dependency distances, depth, leaves and subtrees, valency of the finite verbs, coordination chains, clauses, subordinate and infinitive clauses, modifiers per noun
+*   the complexity of the tree: dependency distances, depth, leaves and subtrees, valency of the finite verbs, coordination chains, clauses, subordinate and infinitive clauses, the L2SCA indices by T-units, modifiers per noun, prepositional chains
+*   the order and the similarity: words before the root of a sentence, preverbal subjects and objects, the syntactic similarity of adjacent sentences
 *   the constructions: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates, the impersonal `se`, the words of negation, the ratio of nouns to verbs
 
 ```python
@@ -394,7 +401,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/syntax_stats/
 
 Referential cohesion in the manner of Coh-Metrix and its Spanish adaptation Coh-Metrix-Esp:
 
-*   the overlap of nouns, of arguments and of content words between adjacent sentences and between all pairs of sentences, binary and proportional
+*   the overlap of nouns, of arguments and of content words between adjacent sentences and between all pairs of sentences, binary and proportional, with the next two sentences and between paragraphs (as in TAACO)
 *   givenness: pronouns, demonstratives and the content words whose lemma was already used
 *   temporal cohesion: the repetition of the tense and of the mood of the verbs of adjacent sentences
 *   the density of 273 Spanish discourse markers by class - causal, adversative, concessive, temporal, additive, conditional, reformulative - by kind and by place: linking a sentence to the ones before or the parts of a sentence
@@ -550,12 +557,12 @@ More in the [documentation](https://sergeyshk.github.io/esTS/components/).
 
 The measures of corpus linguistics that compare corpora and describe the use of a word:
 
-*   keywords of a target corpus against a reference one or against the frequency dictionary of Google Books Ngram: the log-likelihood with its p-value, Log Ratio, chi-square, %DIFF, BIC, ELL and the odds ratio
-*   collocations by logDice, MI, MI³, t-score, Dice, log-likelihood, NPMI and minimum sensitivity
+*   keywords of a target corpus against a reference one or against the frequency dictionary of Google Books Ngram: the log-likelihood with its p-value, Log Ratio, chi-square, %DIFF, BIC, ELL and the odds ratio; by words or n-grams
+*   collocations by logDice, MI, MI³, t-score, Dice, log-likelihood, NPMI and minimum sensitivity; the collocates of a word on its left or right
 *   the dispersion of a word over the parts of a text: DP of Gries, normalized DP, Juilland's D, Carroll's D2, Rosengren's S and the Kullback-Leibler divergence
 *   a KWIC concordance by word form or by lemma
 *   stylometry: the distances between texts by Burrows's Delta and its variants, with the attribution of a text to reference authors, the markers of preferred and avoided words by Zeta, Kilgarriff's chi-square, the Mendenhall curve and the profile of the function words
-*   the comparison of two corpora by 132 features of a text over windows of the same size: Cliff's delta, Cohen's d and the AUC of every feature, the Mann-Whitney test with Holm's correction and a bootstrap interval of the difference of the medians
+*   the comparison of two corpora by 133 features of a text over windows of the same size: Cliff's delta, Cohen's d and the AUC of every feature, the Mann-Whitney test with Holm's correction and a bootstrap interval of the difference of the medians
 
 ```python
 >>> from ests import WordsExtractor

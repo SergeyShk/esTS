@@ -1,4 +1,4 @@
-from math import isnan
+from math import isnan, log2
 
 import pytest
 import spacy
@@ -445,6 +445,14 @@ def test_print_stats(capsys, bs, monkeypatch):
     monkeypatch.setattr(BasicStats, "get_stats", counting)
     bs.print_stats()
     captured = capsys.readouterr()
-    assert captured.out.count("|") == 14
+    assert captured.out.count("|") == len(BASIC_STATS_DESC) + 1
     assert "Sentences" in captured.out
     assert len(calls) == 1
+
+
+def test_word_length_entropy():
+    """Entropy of the lengths of the words in letters and in Spanish syllables"""
+    bs = BasicStats("El gato duerme en casa.")
+    # Letters: 2, 4, 6, 2, 4; syllables: 1, 2, 2, 1, 2
+    assert bs.letters_entropy == pytest.approx(-(2 * 0.4 * log2(0.4) + 0.2 * log2(0.2)))
+    assert bs.syllables_entropy == pytest.approx(-(0.4 * log2(0.4) + 0.6 * log2(0.6)))
