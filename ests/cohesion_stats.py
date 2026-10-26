@@ -348,6 +348,7 @@ def find_connectors(
     sent_index: int = 0,
     pos: Sequence[str | None] | None = None,
     breaks: Collection[int] | None = None,
+    blocked: Collection[int] | None = None,
 ) -> list[Connector]:
     """
     Finding the connectors of a sentence
@@ -357,10 +358,11 @@ def find_connectors(
         word forms in lower case, the longest one at every position, without
         overlaps. The words are those of one sentence without punctuation, the
         first one its start; with the parts of speech given, the rules that
-        read a tag apply too, and with the positions of the marks a rule reads
-        no word across a mark. With a dictionary of its own the function builds
-        a matcher on every call: over many sentences, build a
-        SpanishConnectorMatcher once and call its find
+        read a tag apply too, with the positions of the marks a rule reads no
+        word across a mark, and no connector starts at a blocked position
+        (is_connector_blocked of the tokens of the words). With a dictionary
+        of its own the function builds a matcher on every call: over many
+        sentences, build a SpanishConnectorMatcher once and call its find
 
     Arguments:
         words (list[str]): Words of the sentence
@@ -371,19 +373,20 @@ def find_connectors(
             that read a tag are skipped
         breaks (set[int]): Positions of the words a punctuation mark stands
             before (find_marks); without them the rules read through the marks
+        blocked (set[int]): Positions of the words no connector starts at
 
     Returns:
         list[Connector]: Occurrences of the connectors in the order of the words
 
     Raises:
         SourceTypeError: If the words are not a list of strings, the parts of speech are
-            not a list of strings and None, the positions of the marks are not a
-            collection, or the connectors are not a dictionary of phrases and pairs of
-            strings
+            not a list of strings and None, the positions of the marks or of the blocked
+            words are not a collection, or the connectors are not a dictionary of
+            phrases and pairs of strings
         ParameterError: If the dictionary has an unknown class or kind, the number of
-            the sentence or a position of a mark is not an integer, a position of a mark
-            is not that of a word after the first, or the parts of speech are not as many
-            as the words
+            the sentence or a position is not an integer, a position of a mark is not
+            that of a word after the first, a blocked position is not that of a word,
+            or the parts of speech are not as many as the words
 
     Example:
         >>> from ests.cohesion_stats import find_connectors
@@ -395,7 +398,7 @@ def find_connectors(
         if connectors is None
         else SpanishConnectorMatcher(connectors)
     )
-    return matcher.find(words, sent_index, pos, breaks)
+    return matcher.find(words, sent_index, pos, breaks, blocked)
 
 
 def is_connector_blocked(token: Token) -> bool:
@@ -430,7 +433,7 @@ def is_connector_blocked(token: Token) -> bool:
     if previous.text == "¡":
         return True
     return previous.pos_ in ("VERB", "AUX") and (
-        previous.lemma_.lower().split(" ")[0] in CONNECTOR_QUESTION_VERBS
+        previous.lemma_.lower() in CONNECTOR_QUESTION_VERBS
         or lemmatize(previous.lower_) in CONNECTOR_QUESTION_VERBS
     )
 

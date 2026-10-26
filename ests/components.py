@@ -177,7 +177,7 @@ class DiversityStatsComponent(_Component, anyts.components.DiversityStatsCompone
     stats_class = DiversityStats
 
 
-@Language.factory("ests_morph")
+@Language.factory("ests_morph", requires=["token.pos", "token.lemma"])
 class MorphStatsComponent(_Component):
     """
     Class for the component of the morphological statistics of a text
@@ -239,7 +239,7 @@ class SyntaxStatsComponent(_Component, anyts.components.SyntaxStatsComponent):
     stats_class = SyntaxStats
 
 
-@Language.factory("ests_cohesion")
+@Language.factory("ests_cohesion", requires=["token.pos", "token.lemma"])
 class CohesionStatsComponent(_Component, anyts.components.CohesionStatsComponent):
     """
     Class for the component of the cohesion statistics of a text
@@ -270,7 +270,7 @@ class CohesionStatsComponent(_Component, anyts.components.CohesionStatsComponent
     stats_class = CohesionStats
 
 
-@Language.factory("ests_lexical")
+@Language.factory("ests_lexical", requires=["token.pos"])
 class LexicalStatsComponent(_Component, anyts.components.LexicalStatsComponent):
     """
     Class for the component of the lexical sophistication statistics of a text

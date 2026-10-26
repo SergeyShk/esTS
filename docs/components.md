@@ -142,7 +142,7 @@ DiversityStatsComponent(nlp, name, window_len=50, mtld_threshold=0.72, mtld_min_
 MorphStatsComponent(nlp, name)
 ```
 
-`MorphStatsComponent` puts the morphological statistics into the extension. The pipeline needs a `morphologizer` and a `lemmatizer` before the component.
+`MorphStatsComponent` puts the morphological statistics into the extension. The pipeline needs a `morphologizer` and a `lemmatizer` before the component; the factory requires `token.pos` and `token.lemma`, so `nlp.analyze_pipes()` names a pipeline without one of them.
 
 Raises:
 
@@ -198,7 +198,7 @@ CohesionStatsComponent(nlp, name)
 
 --8<-- "components.md:CohesionStatsComponent"
 
-In the pipeline of `es_core_news_sm` they come from the `morphologizer` and the `lemmatizer`.
+In the pipeline of `es_core_news_sm` they come from the `morphologizer` and the `lemmatizer`; the factory requires `token.pos` and `token.lemma`, so `nlp.analyze_pipes()` names a pipeline without one of them.
 
 Raises:
 
@@ -226,7 +226,7 @@ LexicalStatsComponent(nlp, name, data_dir=None)
 
 --8<-- "components.md:LexicalStatsComponent"
 
-In esTS `freq_dict` is the [frequency dictionary](datasets/freqdict.md) `FreqDict` of the directory `data_dir`, and `is_number` takes the numbers of the Spanish `NUMBER_PATTERN` (`2020`, `1.500,50`, `3.º`). The pipeline needs a `morphologizer` before the component; the lemmas of the model are not used. The frequency bands and the lexical density are computed without the dictionary, the statistics by the dictionary need it downloaded.
+In esTS `freq_dict` is the [frequency dictionary](datasets/freqdict.md) `FreqDict` of the directory `data_dir`, and `is_number` takes the numbers of the Spanish `NUMBER_PATTERN` (`2020`, `1.500,50`, `3.º`). The pipeline needs a `morphologizer` before the component, and the factory requires `token.pos`; the lemmas of the model are not used. The frequency bands and the lexical density are computed without the dictionary, the statistics by the dictionary need it downloaded.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |

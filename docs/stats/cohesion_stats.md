@@ -416,10 +416,10 @@ SpanishConnectorMatcher(connectors)
 ## Connector search { #find_connectors }
 
 ``` {.python .signature}
-find_connectors(words, connectors=None, sent_index=0, pos=None, breaks=None)
+find_connectors(words, connectors=None, sent_index=0, pos=None, breaks=None, blocked=None)
 ```
 
-Searches a sentence for connectors with the `find` method of `SpanishConnectorMatcher` over the dictionary `connectors`, that of `load_connectors` by default; the other parameters and the errors are those of the matcher and of `find`. Without `breaks`, the positions of the words a punctuation mark stands before ([`find_marks`](https://sergeyshk.github.io/anyTS/utils/words/#find_marks) of a string), the words are read as adjacent. With a dictionary of your own the function builds a matcher on every call, so over many sentences build `SpanishConnectorMatcher(connectors)` once and call its `find`.
+Searches a sentence for connectors with the `find` method of `SpanishConnectorMatcher` over the dictionary `connectors`, that of `load_connectors` by default; the other parameters and the errors are those of the matcher and of `find`. Without `breaks`, the positions of the words a punctuation mark stands before ([`find_marks`](https://sergeyshk.github.io/anyTS/utils/words/#find_marks) of a string), the words are read as adjacent; `blocked`, the positions of the words of [`is_connector_blocked`](#is_connector_blocked), drops the `si` that `CohesionStats` drops. With a dictionary of your own the function builds a matcher on every call, so over many sentences build `SpanishConnectorMatcher(connectors)` once and call its `find`.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
@@ -433,6 +433,7 @@ Searches a sentence for connectors with the `find` method of `SpanishConnectorMa
     find_connectors(["Sin", "embargo", "no", "vino"])
     find_connectors(["El", "antes", "y", "el", "después"], pos=["DET", "NOUN", "CCONJ", "DET", "NOUN"])
     find_connectors(["No", "tire", "así", "que", "se", "romperá"], breaks={3})
+    find_connectors(["No", "sé", "si", "vendrá"], blocked={2})
     ```
 
 === "Result"
@@ -440,6 +441,7 @@ Searches a sentence for connectors with the `find` method of `SpanishConnectorMa
     ```
     [Connector(sent=0, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary')]
     [Connector(sent=0, start=2, end=3, text='y', cls='additive', kind='primary')]
+    []
     []
     ```
 

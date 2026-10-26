@@ -113,8 +113,6 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         n_infinitive_clauses (int): Number of infinitive clauses under a verb
         n_t_units, n_complex_t_units (int): Numbers of the T-units and of those with a
             subordinate clause
-        n_l2sca_clauses (int): Number of the clauses of L2SCA - clauses besides the
-            predicates sharing a subject and the infinitive clauses
         n_verb_phrases, n_coordinate_phrases, n_complex_nominals (int): Numbers of the verb
             phrases, of the coordinate phrases and of the complex nominals
         n_nouns (int): Number of nouns

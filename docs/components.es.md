@@ -166,7 +166,7 @@ Excepciones:
 MorphStatsComponent(nlp, name)
 ```
 
-`MorphStatsComponent` pone las estadísticas morfológicas en la extensión. El pipeline necesita un `morphologizer` y un `lemmatizer` antes del componente.
+`MorphStatsComponent` pone las estadísticas morfológicas en la extensión. El pipeline necesita un `morphologizer` y un `lemmatizer` antes del componente; la fábrica requiere `token.pos` y `token.lemma`, así que `nlp.analyze_pipes()` señala un pipeline sin alguno de ellos.
 
 Excepciones:
 
@@ -224,7 +224,7 @@ CohesionStatsComponent(nlp, name)
 <!-- core: components.md:CohesionStatsComponent 51ecae4 -->
 `CohesionStatsComponent` pone las estadísticas de cohesión en la extensión; por defecto necesitan las categorías gramaticales y los lemas antes de él.
 
-En el pipeline de `es_core_news_sm` vienen del `morphologizer` y del `lemmatizer`.
+En el pipeline de `es_core_news_sm` vienen del `morphologizer` y del `lemmatizer`; la fábrica requiere `token.pos` y `token.lemma`, así que `nlp.analyze_pipes()` señala un pipeline sin alguno de ellos.
 
 Excepciones:
 
@@ -253,7 +253,7 @@ LexicalStatsComponent(nlp, name, data_dir=None)
 <!-- core: components.md:LexicalStatsComponent 7d94500 -->
 `LexicalStatsComponent` pone en la extensión las estadísticas de complejidad léxica, con el diccionario de frecuencias de su atributo `freq_dict`: `None` por defecto, para el diccionario de la clase, y fijado por una biblioteca en el constructor de su componente. Un documento recibe las estadísticas cuando tiene una palabra de `iter_doc_words` (con `join_hyphens`) que no es un número del método `is_number`, `anyts.utils.is_number` por defecto; una biblioteca da los números que su clase deja fuera, así que un documento solo de números pasa intacto.
 
-En esTS `freq_dict` es el [diccionario de frecuencias](datasets/freqdict.md) `FreqDict` del directorio `data_dir`, e `is_number` toma los números del `NUMBER_PATTERN` del español (`2020`, `1.500,50`, `3.º`). El pipeline necesita un `morphologizer` antes del componente; los lemas del modelo no se usan. Las bandas de frecuencia y la densidad léxica se calculan sin el diccionario, las estadísticas por el diccionario lo necesitan descargado.
+En esTS `freq_dict` es el [diccionario de frecuencias](datasets/freqdict.md) `FreqDict` del directorio `data_dir`, e `is_number` toma los números del `NUMBER_PATTERN` del español (`2020`, `1.500,50`, `3.º`). El pipeline necesita un `morphologizer` antes del componente, y la fábrica requiere `token.pos`; los lemas del modelo no se usan. Las bandas de frecuencia y la densidad léxica se calculan sin el diccionario, las estadísticas por el diccionario lo necesitan descargado.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |

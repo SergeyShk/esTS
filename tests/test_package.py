@@ -436,6 +436,22 @@ def test_stats_in_docstring(name):
 
 
 @pytest.mark.parametrize("name", STATS_CLASSES)
+def test_docstring_attributes_exist(name, freq_dict):
+    """Every name of the Attributes of the docstring of a class is an attribute of its object"""
+    stats_class = getattr(ests, name)
+    attributes = re.search(r"Attributes:\n(.*?)\n\n", stats_class.__doc__, re.DOTALL)
+    assert attributes is not None
+    names = [
+        attribute
+        for line in re.findall(r"^        (\w+(?:, \w+)*) \(", attributes[1], re.MULTILINE)
+        for attribute in line.split(", ")
+    ]
+    options = {"LexicalStats": {"freq_dict": freq_dict}, "BasicStats": {"normalize": True}}
+    stats = stats_class("El gato duerme en la casa. El perro come.", **options.get(name, {}))
+    assert [attribute for attribute in names if not hasattr(stats, attribute)] == []
+
+
+@pytest.mark.parametrize("name", STATS_CLASSES)
 def test_source_type_message(name):
     """A source of a wrong type names its type, a Span asks for its Doc"""
     import spacy

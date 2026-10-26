@@ -470,6 +470,10 @@ def test_overlaps_with_the_next_two_sentences():
         ("Vaya si lo sé.", []),
         ("Si bien es cierto, no lo creo.", ["si bien"]),
         ("Te lo diré si me lo pides.", ["si"]),
+        # The model leaves the verb without its lemma or with its enclitic, simplemma gives it
+        ("Ya verás si tengo razón.", []),
+        ("Decidiremos si vamos.", []),
+        ("Quise preguntarle si venía.", []),
     ],
 )
 def test_si_without_a_condition(text, expected):
@@ -488,3 +492,15 @@ def test_is_connector_blocked(nlp):
     # Without the parts of speech only the exclamation is known
     doc = spacy.blank("es")("No sé si vendrá. ¡Si ya te lo dije!")
     assert [is_connector_blocked(token) for token in doc if token.lower_ == "si"] == [False, True]
+
+
+def test_find_connectors_blocked(nlp):
+    """The positions of is_connector_blocked drop the si that CohesionStats drops"""
+    words = [token for token in nlp("No sé si vendrá.") if not token.is_punct]
+    texts, pos = [token.text for token in words], [token.pos_ for token in words]
+    assert [c.text for c in find_connectors(texts, pos=pos)] == ["si"]
+    blocked = {i for i, token in enumerate(words) if is_connector_blocked(token)}
+    assert blocked == {2}
+    assert find_connectors(texts, pos=pos, blocked=blocked) == []
+    with pytest.raises(ParameterError):
+        find_connectors(texts, blocked={4})

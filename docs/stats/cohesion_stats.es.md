@@ -470,10 +470,10 @@ Unas palabras que no son una lista de cadenas, unas categorías gramaticales que
 ## Búsqueda de conectores { #find_connectors }
 
 ``` {.python .signature}
-find_connectors(words, connectors=None, sent_index=0, pos=None, breaks=None)
+find_connectors(words, connectors=None, sent_index=0, pos=None, breaks=None, blocked=None)
 ```
 
-Busca los conectores de una oración con el método `find` de `SpanishConnectorMatcher` en el diccionario `connectors`, el de `load_connectors` por defecto; los demás parámetros y las excepciones son los del buscador y de `find`. Sin `breaks`, las posiciones de las palabras ante las que hay un signo de puntuación ([`find_marks`](https://sergeyshk.github.io/anyTS/utils/words/#find_marks) de una cadena), las palabras se leen como contiguas. Con un diccionario propio la función construye un buscador en cada llamada, así que para muchas oraciones construya `SpanishConnectorMatcher(connectors)` una vez y llame a su `find`.
+Busca los conectores de una oración con el método `find` de `SpanishConnectorMatcher` en el diccionario `connectors`, el de `load_connectors` por defecto; los demás parámetros y las excepciones son los del buscador y de `find`. Sin `breaks`, las posiciones de las palabras ante las que hay un signo de puntuación ([`find_marks`](https://sergeyshk.github.io/anyTS/utils/words/#find_marks) de una cadena), las palabras se leen como contiguas; `blocked`, las posiciones de las palabras de [`is_connector_blocked`](#is_connector_blocked), descarta los `si` que descarta `CohesionStats`. Con un diccionario propio la función construye un buscador en cada llamada, así que para muchas oraciones construya `SpanishConnectorMatcher(connectors)` una vez y llame a su `find`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
@@ -487,6 +487,7 @@ Busca los conectores de una oración con el método `find` de `SpanishConnectorM
     find_connectors(["Sin", "embargo", "no", "vino"])
     find_connectors(["El", "antes", "y", "el", "después"], pos=["DET", "NOUN", "CCONJ", "DET", "NOUN"])
     find_connectors(["No", "tire", "así", "que", "se", "romperá"], breaks={3})
+    find_connectors(["No", "sé", "si", "vendrá"], blocked={2})
     ```
 
 === "Resultado"
@@ -494,6 +495,7 @@ Busca los conectores de una oración con el método `find` de `SpanishConnectorM
     ```
     [Connector(sent=0, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary')]
     [Connector(sent=0, start=2, end=3, text='y', cls='additive', kind='primary')]
+    []
     []
     ```
 

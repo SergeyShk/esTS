@@ -241,12 +241,24 @@ def test_readability_reuse_of_a_component_that_runs_later():
         pipeline(TEXT)
 
 
-def test_component_syntax_requires_pos():
-    """spaCy names a pipeline without the parts of speech a problem before the first document"""
-    pipeline = spacy.load("es_core_news_sm", exclude=["morphologizer"])
-    pipeline.add_pipe("ests_syntax", name="syntax", last=True)
-    assert pipeline.analyze_pipes(pretty=False)["problems"]["syntax"] == ["token.pos"]
-    with pytest.raises(SourceError, match="parts of speech"):
+@pytest.mark.parametrize(
+    ("factory", "excluded", "missing", "message"),
+    [
+        ("ests_syntax", "morphologizer", "token.pos", "parts of speech"),
+        ("ests_morph", "morphologizer", "token.pos", "parts of speech"),
+        ("ests_morph", "lemmatizer", "token.lemma", "lemmas"),
+        ("ests_cohesion", "morphologizer", "token.pos", "parts of speech"),
+        ("ests_cohesion", "lemmatizer", "token.lemma", "lemmas"),
+        ("ests_lexical", "morphologizer", "token.pos", "parts of speech"),
+    ],
+)
+def test_component_requires_the_annotations(factory, excluded, missing, message):
+    """spaCy names a pipeline without an annotation a component reads a problem before the
+    first document"""
+    pipeline = spacy.load("es_core_news_sm", exclude=[excluded])
+    pipeline.add_pipe(factory, name="stats", last=True)
+    assert missing in pipeline.analyze_pipes(pretty=False)["problems"]["stats"]
+    with pytest.raises(SourceError, match=message):
         pipeline(TEXT)
 
 

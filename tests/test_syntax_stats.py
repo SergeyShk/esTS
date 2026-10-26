@@ -786,7 +786,8 @@ def test_subordinate_clause_up_a_long_chain_of_conjuncts():
         ("Quiere venir.", {"clauses_per_t_unit": 2.0, "verb_phrases_per_t_unit": 2.0}),
     ],
 )
-def test_new_core_stats(nlp, text, expected):
-    """The metrics of the core 0.4 on Spanish sentences with the Spanish hooks of the clauses"""
+def test_order_chains_and_t_units(nlp, text, expected):
+    """Words before the root, preverbal subjects, prepositional chains and T-units on Spanish
+    sentences, with the Spanish hooks of the clauses"""
     stats = SyntaxStats(nlp(text)).get_stats()
     assert {key: stats[key] for key in expected} == pytest.approx(expected)
