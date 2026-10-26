@@ -2814,9 +2814,9 @@
 </div>
 </div>
 <h3 id="connectors">Conectores<a class="headerlink" href="#connectors" title="Permanent link">&para;</a></h3>
-<div class="signature highlight"><pre><span></span><code><span class="n">find_connector_highlights</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">find_connector_highlights</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>La capa <code>connectors</code>: los conectores de <a href="../../stats/cohesion_stats/#connectors"><code>CohesionStats</code></a> dentro de cada oración, encontrados por su buscador <a href="../../stats/cohesion_stats/#ConnectorMatcher"><code>SpanishConnectorMatcher</code></a>, un conector de una palabra comprobado por su categoría gramatical cuando las palabras la tienen; la nota da el conector, su clase y su tipo. Con el texto, las reglas del buscador no leen ninguna palabra a través de un signo de puntuación entre dos palabras, así que <code>así, que</code> no es conector; <code>HighlightedText</code> pasa el texto de su fuente.</p>
+<p>La capa <code>connectors</code>: los conectores de <a href="../../stats/cohesion_stats/#connectors"><code>CohesionStats</code></a> dentro de cada oración, encontrados por su buscador <a href="../../stats/cohesion_stats/#ConnectorMatcher"><code>SpanishConnectorMatcher</code></a>, un conector de una palabra comprobado por su categoría gramatical cuando las palabras la tienen; la nota da el conector, su clase y su tipo. Con el texto, las reglas del buscador no leen ninguna palabra a través de un signo de puntuación entre dos palabras, así que <code>así, que</code> no es conector; con el <code>Doc</code>, ningún conector empieza en un <code>si</code> que no abre ninguna condición, como en <code>CohesionStats</code> (<a href="../../stats/cohesion_stats/#is_connector_blocked"><code>is_connector_blocked</code></a>: <code>no sé si vendrá</code>). <code>HighlightedText</code> pasa el texto de su fuente y su <code>Doc</code>; en una cadena, que no analiza, solo las reglas del buscador descartan un <code>si</code> (<code>como si fuera</code>).</p>
 <table>
 <thead>
 <tr>
@@ -2844,6 +2844,12 @@
 <td style="text-align: left;"><code>str</code></td>
 <td style="text-align: left;"><code>None</code></td>
 <td style="text-align: left;">Texto de las palabras, para los signos de puntuación entre ellas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>doc</code></td>
+<td style="text-align: left;"><code>Doc</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;"><code>Doc</code> de las palabras, para las reglas por sus tokens</td>
 </tr>
 </tbody>
 </table>

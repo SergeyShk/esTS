@@ -2537,7 +2537,7 @@ True
 <h3 id="MorphStatsComponent">Estadísticas morfológicas<a class="headerlink" href="#MorphStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">MorphStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </code></pre></div>
-<p><code>MorphStatsComponent</code> pone las estadísticas morfológicas en la extensión. El pipeline necesita un <code>morphologizer</code> y un <code>lemmatizer</code> antes del componente.</p>
+<p><code>MorphStatsComponent</code> pone las estadísticas morfológicas en la extensión. El pipeline necesita un <code>morphologizer</code> y un <code>lemmatizer</code> antes del componente; la fábrica requiere <code>token.pos</code> y <code>token.lemma</code>, así que <code>nlp.analyze_pipes()</code> señala un pipeline sin alguno de ellos.</p>
 <p>Excepciones:</p>
 <ul>
 <li><code>SourceError</code> - un documento sin las categorías gramaticales o sin los lemas.</li>
@@ -2559,12 +2559,12 @@ True
 <h3 id="SyntaxStatsComponent">Estadísticas sintácticas<a class="headerlink" href="#SyntaxStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">SyntaxStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: components.md:SyntaxStatsComponent 95e9f18 -->
-<p><code>SyntaxStatsComponent</code> pone las estadísticas sintácticas en la extensión; necesitan un parser antes de él.</p>
-<p>En esTS necesitan también un <code>lemmatizer</code> antes de él.</p>
+<!-- core: components.md:SyntaxStatsComponent f99599b -->
+<p><code>SyntaxStatsComponent</code> pone las estadísticas sintácticas en la extensión; necesitan un parser y las categorías gramaticales antes de él.</p>
+<p>En esTS necesitan también un <code>lemmatizer</code> antes de él; la fábrica requiere <code>token.dep</code>, <code>token.head</code>, <code>token.pos</code> y <code>token.lemma</code>, así que <code>nlp.analyze_pipes()</code> señala un pipeline sin alguno de ellos.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceError</code> - un documento sin análisis de dependencias o sin los lemas.</li>
+<li><code>SourceError</code> - un documento sin análisis de dependencias, sin las categorías gramaticales o sin los lemas.</li>
 </ul>
 <div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
 <div class="tabbed-content">
@@ -2585,7 +2585,7 @@ True
 </code></pre></div>
 <!-- core: components.md:CohesionStatsComponent 51ecae4 -->
 <p><code>CohesionStatsComponent</code> pone las estadísticas de cohesión en la extensión; por defecto necesitan las categorías gramaticales y los lemas antes de él.</p>
-<p>En el pipeline de <code>es_core_news_sm</code> vienen del <code>morphologizer</code> y del <code>lemmatizer</code>.</p>
+<p>En el pipeline de <code>es_core_news_sm</code> vienen del <code>morphologizer</code> y del <code>lemmatizer</code>; la fábrica requiere <code>token.pos</code> y <code>token.lemma</code>, así que <code>nlp.analyze_pipes()</code> señala un pipeline sin alguno de ellos.</p>
 <p>Excepciones:</p>
 <ul>
 <li><code>SourceError</code> - un documento sin las categorías gramaticales o sin los lemas.</li>
@@ -2609,7 +2609,7 @@ True
 </code></pre></div>
 <!-- core: components.md:LexicalStatsComponent 7d94500 -->
 <p><code>LexicalStatsComponent</code> pone en la extensión las estadísticas de complejidad léxica, con el diccionario de frecuencias de su atributo <code>freq_dict</code>: <code>None</code> por defecto, para el diccionario de la clase, y fijado por una biblioteca en el constructor de su componente. Un documento recibe las estadísticas cuando tiene una palabra de <code>iter_doc_words</code> (con <code>join_hyphens</code>) que no es un número del método <code>is_number</code>, <code>anyts.utils.is_number</code> por defecto; una biblioteca da los números que su clase deja fuera, así que un documento solo de números pasa intacto.</p>
-<p>En esTS <code>freq_dict</code> es el <a href="../datasets/freqdict/">diccionario de frecuencias</a> <code>FreqDict</code> del directorio <code>data_dir</code>, e <code>is_number</code> toma los números del <code>NUMBER_PATTERN</code> del español (<code>2020</code>, <code>1.500,50</code>, <code>3.º</code>). El pipeline necesita un <code>morphologizer</code> antes del componente; los lemas del modelo no se usan. Las bandas de frecuencia y la densidad léxica se calculan sin el diccionario, las estadísticas por el diccionario lo necesitan descargado.</p>
+<p>En esTS <code>freq_dict</code> es el <a href="../datasets/freqdict/">diccionario de frecuencias</a> <code>FreqDict</code> del directorio <code>data_dir</code>, e <code>is_number</code> toma los números del <code>NUMBER_PATTERN</code> del español (<code>2020</code>, <code>1.500,50</code>, <code>3.º</code>). El pipeline necesita un <code>morphologizer</code> antes del componente, y la fábrica requiere <code>token.pos</code>; los lemas del modelo no se usan. Las bandas de frecuencia y la densidad léxica se calculan sin el diccionario, las estadísticas por el diccionario lo necesitan descargado.</p>
 <table>
 <thead>
 <tr>

@@ -2531,7 +2531,7 @@ True
 <h3 id="MorphStatsComponent">Morphological statistics<a class="headerlink" href="#MorphStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">MorphStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </code></pre></div>
-<p><code>MorphStatsComponent</code> puts the morphological statistics into the extension. The pipeline needs a <code>morphologizer</code> and a <code>lemmatizer</code> before the component.</p>
+<p><code>MorphStatsComponent</code> puts the morphological statistics into the extension. The pipeline needs a <code>morphologizer</code> and a <code>lemmatizer</code> before the component; the factory requires <code>token.pos</code> and <code>token.lemma</code>, so <code>nlp.analyze_pipes()</code> names a pipeline without one of them.</p>
 <p>Raises:</p>
 <ul>
 <li><code>SourceError</code> - a document without the parts of speech or the lemmas.</li>
@@ -2553,11 +2553,11 @@ True
 <h3 id="SyntaxStatsComponent">Syntactic statistics<a class="headerlink" href="#SyntaxStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">SyntaxStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </code></pre></div>
-<p><code>SyntaxStatsComponent</code> puts the syntactic statistics into the extension; they need a parser before it.</p>
-<p>In esTS they need a <code>lemmatizer</code> before it as well.</p>
+<p><code>SyntaxStatsComponent</code> puts the syntactic statistics into the extension; they need a parser and the parts of speech before it.</p>
+<p>In esTS they need a <code>lemmatizer</code> before it as well; the factory requires <code>token.dep</code>, <code>token.head</code>, <code>token.pos</code> and <code>token.lemma</code>, so <code>nlp.analyze_pipes()</code> names a pipeline without one of them.</p>
 <p>Raises:</p>
 <ul>
-<li><code>SourceError</code> - a document without a dependency parse or the lemmas.</li>
+<li><code>SourceError</code> - a document without a dependency parse, the parts of speech or the lemmas.</li>
 </ul>
 <div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Code</label><label for="__tabbed_5_2">Result</label></div>
 <div class="tabbed-content">
@@ -2577,7 +2577,7 @@ True
 <div class="signature highlight"><pre><span></span><code><span class="n">CohesionStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </code></pre></div>
 <p><code>CohesionStatsComponent</code> puts the cohesion statistics into the extension; by default they need the parts of speech and the lemmas before it.</p>
-<p>In the pipeline of <code>es_core_news_sm</code> they come from the <code>morphologizer</code> and the <code>lemmatizer</code>.</p>
+<p>In the pipeline of <code>es_core_news_sm</code> they come from the <code>morphologizer</code> and the <code>lemmatizer</code>; the factory requires <code>token.pos</code> and <code>token.lemma</code>, so <code>nlp.analyze_pipes()</code> names a pipeline without one of them.</p>
 <p>Raises:</p>
 <ul>
 <li><code>SourceError</code> - a document without the parts of speech or the lemmas.</li>
@@ -2600,7 +2600,7 @@ True
 <div class="signature highlight"><pre><span></span><code><span class="n">LexicalStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p><code>LexicalStatsComponent</code> puts the lexical sophistication statistics into the extension, with the frequency dictionary of its attribute <code>freq_dict</code>: <code>None</code> by default, for the dictionary of the class, and set by a library in the constructor of its component. A document gets the statistics when it has a word of <code>iter_doc_words</code> (with <code>join_hyphens</code>) other than a number of the method <code>is_number</code>, <code>anyts.utils.is_number</code> by default; a library gives the numbers its class leaves out, so a document of numbers alone passes untouched.</p>
-<p>In esTS <code>freq_dict</code> is the <a href="../datasets/freqdict/">frequency dictionary</a> <code>FreqDict</code> of the directory <code>data_dir</code>, and <code>is_number</code> takes the numbers of the Spanish <code>NUMBER_PATTERN</code> (<code>2020</code>, <code>1.500,50</code>, <code>3.º</code>). The pipeline needs a <code>morphologizer</code> before the component; the lemmas of the model are not used. The frequency bands and the lexical density are computed without the dictionary, the statistics by the dictionary need it downloaded.</p>
+<p>In esTS <code>freq_dict</code> is the <a href="../datasets/freqdict/">frequency dictionary</a> <code>FreqDict</code> of the directory <code>data_dir</code>, and <code>is_number</code> takes the numbers of the Spanish <code>NUMBER_PATTERN</code> (<code>2020</code>, <code>1.500,50</code>, <code>3.º</code>). The pipeline needs a <code>morphologizer</code> before the component, and the factory requires <code>token.pos</code>; the lemmas of the model are not used. The frequency bands and the lexical density are computed without the dictionary, the statistics by the dictionary need it downloaded.</p>
 <table>
 <thead>
 <tr>

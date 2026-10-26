@@ -2078,7 +2078,7 @@
 <li>
 <p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg></span> <strong>Corpus measures</strong></p>
 <hr />
-<p><a href="corpus/keyness/">Keywords</a> against a reference corpus or the frequency dictionary, <a href="corpus/collocations/">collocations</a>, the <a href="corpus/dispersion/">dispersion</a> of a word over the parts of a text, a <a href="corpus/kwic/">KWIC concordance</a>, authorship by <a href="corpus/stylometry/">stylometry</a> (Burrows's Delta, Zeta, the Mendenhall curve, the function words) and the <a href="corpus/compare/">comparison of corpora</a> over 132 features of a text</p>
+<p><a href="corpus/keyness/">Keywords</a> against a reference corpus or the frequency dictionary, <a href="corpus/collocations/">collocations</a>, the <a href="corpus/dispersion/">dispersion</a> of a word over the parts of a text, a <a href="corpus/kwic/">KWIC concordance</a>, authorship by <a href="corpus/stylometry/">stylometry</a> (Burrows's Delta, Zeta, the Mendenhall curve, the function words) and the <a href="corpus/compare/">comparison of corpora</a> over 133 features of a text</p>
 <p><a href="corpus/keyness/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Corpus measures</a></p>
 </li>
 <li>
@@ -2141,6 +2141,8 @@
  'n_spaces': 9,
  'n_syllables': 23,
  'n_punctuations': 2,
+ 'letters_entropy': 2.5219280948873624,
+ 'syllables_entropy': 1.7219280948873623,
  'c_punctuations': {'comma': 1,
                     'period': 0,
                     'question': 0,
@@ -2168,21 +2170,23 @@
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>     Statistic     |  Value
-------------------------------
-Sentences          |    1
-Words              |    10
-Unique words       |    8
-Long words         |    5
-Complex words      |    5
-Simple words       |    5
-Monosyllabic words |    4
-Polysyllabic words |    6
-Characters         |    71
-Letters            |    60
-Spaces             |    9
-Syllables          |    23
-Punctuation marks  |    2
+<div class="highlight"><pre><span></span><code>                   Statistic                    |  Value
+-----------------------------------------------------------
+Sentences                                       |    1
+Words                                           |    10
+Unique words                                    |    8
+Long words                                      |    5
+Complex words                                   |    5
+Simple words                                    |    5
+Monosyllabic words                              |    4
+Polysyllabic words                              |    6
+Characters                                      |    71
+Letters                                         |    60
+Spaces                                          |    9
+Syllables                                       |    23
+Punctuation marks                               |    2
+Entropy of the word lengths in letters (bits)   |   2.52
+Entropy of the word lengths in syllables (bits) |   1.72
 </code></pre></div>
 </div>
 </div>

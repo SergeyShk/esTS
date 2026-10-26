@@ -2805,9 +2805,9 @@
 </div>
 </div>
 <h3 id="connectors">Connectors<a class="headerlink" href="#connectors" title="Permanent link">&para;</a></h3>
-<div class="signature highlight"><pre><span></span><code><span class="n">find_connector_highlights</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">find_connector_highlights</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>The layer <code>connectors</code>: the connectors of <a href="../../stats/cohesion_stats/#connectors"><code>CohesionStats</code></a> inside every sentence, found by its matcher <a href="../../stats/cohesion_stats/#ConnectorMatcher"><code>SpanishConnectorMatcher</code></a>, a one-word connector checked by its part of speech when the words have it; the note gives the connector, its class and its kind. With the text, the rules of the matcher read no word across a punctuation mark between two words, so <code>así, que</code> is no connector; <code>HighlightedText</code> passes the text of its source.</p>
+<p>The layer <code>connectors</code>: the connectors of <a href="../../stats/cohesion_stats/#connectors"><code>CohesionStats</code></a> inside every sentence, found by its matcher <a href="../../stats/cohesion_stats/#ConnectorMatcher"><code>SpanishConnectorMatcher</code></a>, a one-word connector checked by its part of speech when the words have it; the note gives the connector, its class and its kind. With the text, the rules of the matcher read no word across a punctuation mark between two words, so <code>así, que</code> is no connector; with the <code>Doc</code>, no connector starts at a <code>si</code> that opens no condition, as in <code>CohesionStats</code> (<a href="../../stats/cohesion_stats/#is_connector_blocked"><code>is_connector_blocked</code></a>: <code>no sé si vendrá</code>). <code>HighlightedText</code> passes the text of its source and its <code>Doc</code>; in a string, which it does not parse, only the rules of the matcher drop a <code>si</code> (<code>como si fuera</code>).</p>
 <table>
 <thead>
 <tr>
@@ -2835,6 +2835,12 @@
 <td style="text-align: left;"><code>str</code></td>
 <td style="text-align: left;"><code>None</code></td>
 <td style="text-align: left;">Text of the words, for the punctuation marks between them</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>doc</code></td>
+<td style="text-align: left;"><code>Doc</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;"><code>Doc</code> of the words, for the rules by its tokens</td>
 </tr>
 </tbody>
 </table>

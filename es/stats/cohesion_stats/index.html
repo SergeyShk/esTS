@@ -1166,6 +1166,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#forward_overlap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repetición con las oraciones y los párrafos siguientes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pronouns" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1252,6 +1263,17 @@
     <span class="md-ellipsis">
       
         Rasgos de las palabras
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is_connector_blocked" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conectores bloqueados
       
     </span>
   </a>
@@ -2116,6 +2138,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#forward_overlap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repetición con las oraciones y los párrafos siguientes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pronouns" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2208,6 +2241,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#is_connector_blocked" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conectores bloqueados
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2291,35 +2335,41 @@
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>                           Statistic                            |  Value
----------------------------------------------------------------------------
-Noun overlap in adjacent sentences                              |   0.33
-Noun overlap in all pairs of sentences                          |   0.50
-Argument overlap in adjacent sentences                          |   0.33
-Argument overlap in all pairs of sentences                      |   0.50
-Content word overlap in adjacent sentences                      |   0.33
-Content word overlap in all pairs of sentences                  |   0.50
-Share of shared content words in adjacent sentences             |   0.08
-Share of shared content words in all pairs of sentences         |   0.12
-Share of pronouns                                               |   0.03
-Ratio of pronouns to nouns                                      |   0.09
-Share of demonstratives                                         |   0.00
-Share of content words seen before                              |   0.18
-Repetition of the tense in adjacent sentences                   |   0.00
-Repetition of the mood in adjacent sentences                    |   1.00
-Temporal cohesion                                               |   0.50
-Connectors per 1000 words                                       |  103.45
-Connectors linking a sentence to the ones before per 1000 words |  103.45
-Connectors linking the parts of a sentence per 1000 words       |   0.00
-Causal connectors per 1000 words                                |  34.48
-Adversative connectors per 1000 words                           |  34.48
-Concessive connectors per 1000 words                            |   0.00
-Temporal connectors per 1000 words                              |   0.00
-Additive connectors per 1000 words                              |   0.00
-Conditional connectors per 1000 words                           |   0.00
-Reformulative connectors per 1000 words                         |  34.48
-Primary connectors per 1000 words                               |   0.00
-Secondary connectors per 1000 words                             |  103.45
+<div class="highlight"><pre><span></span><code>                             Statistic                             |  Value
+------------------------------------------------------------------------------
+Noun overlap in adjacent sentences                                 |   0.33
+Noun overlap in all pairs of sentences                             |   0.50
+Argument overlap in adjacent sentences                             |   0.33
+Argument overlap in all pairs of sentences                         |   0.50
+Content word overlap in adjacent sentences                         |   0.33
+Content word overlap in all pairs of sentences                     |   0.50
+Share of shared content words in adjacent sentences                |   0.08
+Share of shared content words in all pairs of sentences            |   0.12
+Share of the nouns of a sentence repeated in the next two          |   0.60
+Share of the arguments of a sentence repeated in the next two      |   0.60
+Share of the content words of a sentence repeated in the next two  |   0.38
+Share of the nouns of a paragraph repeated in the next one         |   nan
+Share of the arguments of a paragraph repeated in the next one     |   nan
+Share of the content words of a paragraph repeated in the next one |   nan
+Share of pronouns                                                  |   0.03
+Ratio of pronouns to nouns                                         |   0.09
+Share of demonstratives                                            |   0.00
+Share of content words seen before                                 |   0.18
+Repetition of the tense in adjacent sentences                      |   0.00
+Repetition of the mood in adjacent sentences                       |   1.00
+Temporal cohesion                                                  |   0.50
+Connectors per 1000 words                                          |  103.45
+Connectors linking a sentence to the ones before per 1000 words    |  103.45
+Connectors linking the parts of a sentence per 1000 words          |   0.00
+Causal connectors per 1000 words                                   |  34.48
+Adversative connectors per 1000 words                              |  34.48
+Concessive connectors per 1000 words                               |   0.00
+Temporal connectors per 1000 words                                 |   0.00
+Additive connectors per 1000 words                                 |   0.00
+Conditional connectors per 1000 words                              |   0.00
+Reformulative connectors per 1000 words                            |  34.48
+Primary connectors per 1000 words                                  |   0.00
+Secondary connectors per 1000 words                                |  103.45
 </code></pre></div>
 </div>
 </div>
@@ -2362,7 +2412,7 @@ Secondary connectors per 1000 words                             |  103.45
 </tbody>
 </table>
 <h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
-<!-- core: stats/cohesion_stats.md:CohesionStats-attributes ee54833 -->
+<!-- core: stats/cohesion_stats.md:CohesionStats-attributes b48ff23 -->
 <table>
 <thead>
 <tr>
@@ -2381,6 +2431,11 @@ Secondary connectors per 1000 words                             |  103.45
 <td style="text-align: left;"><code>n_sents</code>, <code>n_words</code></td>
 <td style="text-align: left;"><code>int</code></td>
 <td style="text-align: left;">Números de las oraciones con palabras y de las palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_paragraphs</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de los párrafos, las partes del texto entre líneas en blanco que tienen palabras</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>n_nouns</code>, <code>n_pronouns</code>, <code>n_demonstratives</code>, <code>n_content_words</code></td>
@@ -2486,6 +2541,42 @@ Secondary connectors per 1000 words                             |  103.45
 <td style="text-align: left;">Más palabras compartidas en todo el texto</td>
 </tr>
 <tr>
+<td style="text-align: left;"><a href="#forward_overlap"><code>noun_overlap_2_sent</code></a></td>
+<td style="text-align: left;">Proporción de los sustantivos de una oración repetidos en una de las dos siguientes</td>
+<td style="text-align: left;">0-1, <code>nan</code> con menos de tres oraciones</td>
+<td style="text-align: left;">Sustantivos que llegan más lejos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#forward_overlap"><code>argument_overlap_2_sent</code></a></td>
+<td style="text-align: left;">Proporción de los argumentos de una oración repetidos en una de las dos siguientes</td>
+<td style="text-align: left;">0-1, <code>nan</code> con menos de tres oraciones</td>
+<td style="text-align: left;">Argumentos que llegan más lejos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#forward_overlap"><code>content_overlap_2_sent</code></a></td>
+<td style="text-align: left;">Proporción de las palabras con contenido de una oración repetidas en una de las dos siguientes</td>
+<td style="text-align: left;">0-1, <code>nan</code> con menos de tres oraciones</td>
+<td style="text-align: left;">Palabras con contenido que llegan más lejos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#forward_overlap"><code>noun_overlap_para</code></a></td>
+<td style="text-align: left;">Proporción de los sustantivos de un párrafo repetidos en el siguiente</td>
+<td style="text-align: left;">0-1, <code>nan</code> con un solo párrafo</td>
+<td style="text-align: left;">Párrafos más unidos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#forward_overlap"><code>argument_overlap_para</code></a></td>
+<td style="text-align: left;">Proporción de los argumentos de un párrafo repetidos en el siguiente</td>
+<td style="text-align: left;">0-1, <code>nan</code> con un solo párrafo</td>
+<td style="text-align: left;">Párrafos más unidos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#forward_overlap"><code>content_overlap_para</code></a></td>
+<td style="text-align: left;">Proporción de las palabras con contenido de un párrafo repetidas en el siguiente</td>
+<td style="text-align: left;">0-1, <code>nan</code> con un solo párrafo</td>
+<td style="text-align: left;">Párrafos más unidos</td>
+</tr>
+<tr>
 <td style="text-align: left;"><a href="#pronouns"><code>p_pronouns</code></a></td>
 <td style="text-align: left;">Proporción de los pronombres entre las palabras</td>
 <td style="text-align: left;">0-1</td>
@@ -2559,7 +2650,7 @@ Secondary connectors per 1000 words                             |  103.45
 </tr>
 </tbody>
 </table>
-<p>Las funciones de la repetición, de la información dada y de las repeticiones del rasgo (<code>calc_overlap</code>, <code>calc_proportional_overlap</code>, <code>calc_overlaps</code>, <code>dice</code>, <code>count_given</code>, <code>calc_repetition</code>, <code>dominant</code>) son las de <code>anyts.cohesion_stats</code>, que esTS no reexporta; están en la <a href="https://sergeyshk.github.io/anyTS/stats/cohesion_stats/">página de anyTS</a>.</p>
+<p>Las funciones de la repetición, de la información dada y de las repeticiones del rasgo (<code>calc_overlap</code>, <code>calc_proportional_overlap</code>, <code>calc_overlaps</code>, <code>dice</code>, <code>count_given</code>, <code>calc_repetition</code>, <code>dominant</code>) son las de <code>anyts.cohesion_stats</code>, que esTS no reexporta; están en la <a href="https://sergeyshk.github.io/anyTS/stats/cohesion_stats/">página de anyTS</a>. <code>calc_forward_overlap</code> de la <a href="#forward_overlap">repetición con los segmentos siguientes</a> se importa de <code>ests.cohesion_stats</code>.</p>
 <div class="metric-card">
 <h3 id="overlap">Repetición binaria<a class="headerlink" href="#overlap" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>noun_overlap_adjacent</code> · <code>noun_overlap_all</code> · <code>argument_overlap_adjacent</code> · <code>argument_overlap_all</code> · <code>content_overlap_adjacent</code> · <code>content_overlap_all</code> · <a href="https://doi.org/10.1017/CBO9780511894664">Coh-Metrix</a></p>
@@ -2575,6 +2666,66 @@ Secondary connectors per 1000 words                             |  103.45
 <div class="arithmatex">\[
 \frac{1}{\textrm{Número de pares}} \sum_{(A, B)} \frac{2 \times |A \cap B|}{|A| + |B|}
 \]</div>
+</div>
+<div class="metric-card">
+<h3 id="forward_overlap">Repetición con las oraciones y los párrafos siguientes<a class="headerlink" href="#forward_overlap" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>noun_overlap_2_sent</code> · <code>argument_overlap_2_sent</code> · <code>content_overlap_2_sent</code> · <code>noun_overlap_para</code> · <code>argument_overlap_para</code> · <code>content_overlap_para</code> · <a href="https://doi.org/10.3758/s13428-015-0651-7">TAACO</a></p>
+<!-- core: stats/cohesion_stats.md:CohesionStats-forward_overlap 34e902e -->
+<p>La repetición contigua de TAACO, por los lemas de los sustantivos, de los argumentos y de las palabras con contenido: la proporción de los lemas distintos de una oración repetidos en una de las dos oraciones siguientes (<code>adjacent_overlap_2_*_sent</code>), y de un párrafo repetidos en el párrafo siguiente (<code>adjacent_overlap_*_para</code>), sobre todas las oraciones o párrafos que los tienen (<code>calc_forward_overlap</code>). A diferencia de la repetición binaria, un par de segmentos cuenta por la proporción de los lemas que comparten. Un párrafo es una parte del texto entre líneas en blanco que tiene palabras; una palabra que lleva <code>paragraph_start</code> abre uno, también dentro de una oración, como cuando un parser une un título a la oración siguiente. TAACO toma cada línea por un párrafo: un texto con un párrafo en cada línea y sin líneas en blanco es aquí un solo párrafo, y sus <code>*_para</code> son <code>nan</code>.</p>
+<!-- core: stats/cohesion_stats.md:calc_forward_overlap 7389f78 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_forward_overlap</span><span class="p">(</span><span class="n">sets</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<p>La proporción de los elementos de un segmento repetidos en los siguientes: los elementos distintos de cada segmento seguido de <code>span</code> segmentos que están en alguno de ellos, entre los elementos distintos de esos segmentos; <code>nan</code> con no más segmentos que <code>span</code> o con segmentos sin elementos.</p>
+<div class="arithmatex">\[
+\frac{\sum_{i=1}^{n-k} |A_i \cap (A_{i+1} \cup \dots \cup A_{i+k})|}{\sum_{i=1}^{n-k} |A_i|}
+\]</div>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>sets</code></td>
+<td style="text-align: left;"><code>list[set[str]]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Elementos de cada segmento</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>span</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>1</code></td>
+<td style="text-align: left;">Número <span class="arithmatex">\(k\)</span> de los segmentos siguientes con los que se compara un segmento</td>
+</tr>
+</tbody>
+</table>
+<p>Unos segmentos que son una cadena, un <code>Doc</code>, un iterador o un segmento que no es una lista de cadenas lanzan <code>SourceTypeError</code>, y un alcance que no es un entero mayor que 0, <code>ParameterError</code>.</p>
+<p>En esTS una cadena se analiza en un <code>Doc</code>, así que ambos se dividen en párrafos por las líneas en blanco entre sus tokens.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.cohesion_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_forward_overlap</span>
+
+<span class="n">calc_forward_overlap</span><span class="p">([{</span><span class="s2">"gato"</span><span class="p">,</span> <span class="s2">"ventana"</span><span class="p">},</span> <span class="p">{</span><span class="s2">"pájaro"</span><span class="p">},</span> <span class="p">{</span><span class="s2">"gato"</span><span class="p">}],</span> <span class="n">span</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"El gato estaba en la ventana. Miraba a los pájaros.</span><span class="se">\n\n</span><span class="s2">"</span>
+    <span class="s2">"Los pájaros se fueron y el gato se durmió. Mañana el gato volverá a la ventana."</span>
+<span class="p">)</span>
+<span class="n">paragraphs</span> <span class="o">=</span> <span class="n">CohesionStats</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="n">paragraphs</span><span class="o">.</span><span class="n">n_paragraphs</span><span class="p">,</span> <span class="n">paragraphs</span><span class="o">.</span><span class="n">noun_overlap_para</span><span class="p">,</span> <span class="n">paragraphs</span><span class="o">.</span><span class="n">content_overlap_para</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>0.5
+(2, 1.0, 0.6)
+</code></pre></div>
+</div>
+</div>
+</div>
 </div>
 <div class="metric-card">
 <h3 id="pronouns">Pronombres y demostrativos<a class="headerlink" href="#pronouns" title="Permanent link">&para;</a></h3>
@@ -2661,8 +2812,8 @@ Secondary connectors per 1000 words                             |  103.45
 </tr>
 </tbody>
 </table>
-<p>Los conectores primarios (<code>primary</code>) son conjunciones, locuciones conjuntivas y adverbios (porque, aunque, además), los secundarios (<code>secondary</code>), locuciones lexicalizadas (sin embargo, por lo tanto, es decir). <code>si</code> abre también interrogativas indirectas y exclamaciones (<code>no sé si vendrá</code>, <code>¡pero si es él!</code>) - cerca de una cuarta parte de sus apariciones en el corpus de literatura -, y <code>siempre que</code> es temporal con indicativo y condicional con subjuntivo; ambos se cuentan en su clase del diccionario. Las reglas por las que una palabra del diccionario cuenta como conector son las del <a href="#ConnectorMatcher">buscador</a>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
+<p>Los conectores primarios (<code>primary</code>) son conjunciones, locuciones conjuntivas y adverbios (porque, aunque, además), los secundarios (<code>secondary</code>), locuciones lexicalizadas (sin embargo, por lo tanto, es decir). <code>si</code> abre también interrogativas indirectas, exclamaciones y comparaciones hipotéticas - cerca de un tercio de sus apariciones en el corpus de literatura - y no es conector tras un verbo que rige una interrogativa indirecta, tras un <code>¡</code> de apertura (<a href="#is_connector_blocked"><code>is_connector_blocked</code></a>) ni tras <code>como</code>, <code>cual</code>, <code>vaya</code> y <code>maldito</code> (<code>CONNECTOR_BLOCKED_BEFORE</code>: <code>como si fuera</code>, <code>vaya si lo sé</code>); las reglas hallan cerca de tres cuartas partes de estos <code>si</code> y descartan el 25 % de los conectores condicionales de la literatura. <code>siempre que</code> es temporal con indicativo y condicional con subjuntivo y se cuenta en su clase del diccionario. Las reglas por las que una palabra del diccionario cuenta como conector son las del <a href="#ConnectorMatcher">buscador</a>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.cohesion_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_connectors</span>
@@ -2684,7 +2835,7 @@ Secondary connectors per 1000 words                             |  103.45
 </div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <p>Los métodos <code>get_stats</code>, <code>to_dataframe</code>, <code>print_stats</code> y <code>describe</code> son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de las estadísticas</a> del núcleo anyTS; las estadísticas de cohesión no tienen escalas, así que <code>describe</code> da <code>None</code> para las estadísticas de <code>get_stats</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">cs</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
@@ -2700,6 +2851,12 @@ Secondary connectors per 1000 words                             |  103.45
  'content_overlap_all': 0.5,
  'content_overlap_prop_adjacent': 0.08333333333333333,
  'content_overlap_prop_all': 0.12037037037037035,
+ 'noun_overlap_2_sent': 0.6,
+ 'argument_overlap_2_sent': 0.6,
+ 'content_overlap_2_sent': 0.375,
+ 'noun_overlap_para': nan,
+ 'argument_overlap_para': nan,
+ 'content_overlap_para': nan,
  'p_pronouns': 0.034482758620689655,
  'pronoun_noun_ratio': 0.09090909090909091,
  'p_demonstratives': 0.0,
@@ -2734,9 +2891,9 @@ None
 <li><code>SourceTypeError</code> - un diccionario que no es una correspondencia de una locución a un par de cadenas;</li>
 <li><code>ParameterError</code> - una clase o un tipo desconocidos.</li>
 </ul>
-<p><code>SpanishConnectorMatcher</code> es una subclase del <code>ConnectorMatcher</code> del núcleo con las reglas del español; las palabras y los conectores se comparan en minúscula. Un conector de una palabra lleva una categoría de <code>CONNECTOR_POS</code> - conjunción, partícula, adverbio, adposición, interjección, nombre propio o <code>X</code> - o de <code>CONNECTOR_POS_EXTRA</code> para su forma (<code>pues</code> y <code>verbigracia</code> como <code>NOUN</code>, <code>resumiendo</code>, <code>recapitulando</code> y <code>concluyendo</code> como <code>VERB</code>). No es conector justo tras un determinante, así que <code>el antes y el después</code> lleva un conector, <code>y</code>, y no tres; y como nombre propio cuenta solo al principio de la oración, donde los modelos leen así un marcador (<code>Primeramente</code>), de modo que el apellido de <code>Habló con Juan Luego ayer</code> no es conector. Un marcador que forma parte de otra locución se descarta: las palabras que lo siguen de <code>CONNECTOR_BLOCKED_AFTER</code> (<code>antes de la reunión</code>, <code>en cuanto a</code>, <code>a pesar de todo lo que</code>), las que lo preceden de <code>CONNECTOR_BLOCKED_BEFORE</code> (<code>algo así como</code>) y las categorías de la palabra siguiente de <code>CONNECTOR_BLOCKED_AFTER_POS</code> (<code>sobre todo el texto</code>, <code>a pesar de todo el esfuerzo</code>) lo anulan, mientras que <code>antes, firmó el acta</code> y <code>sobre todo cuando llueve</code> cuentan su marcador. Algunos marcadores dependen de su lugar: <code>pues</code> al principio de la oración abre una réplica (<code>Pues bien</code>) y no es conector (<code>CONNECTOR_NOT_AT_START</code>), y <code>encima</code> cuenta dentro de la oración solo tras <code>y</code>, <code>e</code>, <code>ni</code> o <code>pero</code> (<code>y encima llueve</code>, <code>CONNECTOR_ONLY_AFTER</code>). Estas listas son atributos del buscador: <code>CONNECTOR_POS</code> es <code>pos_tags</code>, las demás se llaman sin <code>CONNECTOR_</code> en minúscula (<code>CONNECTOR_BLOCKED_AFTER</code> es <code>blocked_after</code>); <code>not_after_pos</code> es el determinante <code>DET</code>, <code>start_only_pos</code> el nombre propio <code>PROPN</code>, y <code>read_through_marks</code> está vacío en esTS. Un signo de puntuación dentro de una locución conjuntiva que acaba en <code>que</code>, <code>como</code> o <code>si</code> (<code>CONNECTOR_SPLIT_BY_MARKS</code>) hace de la conjunción una palabra aparte, así que <code>No tire así, que se romperá</code> y <code>lo de siempre, que...</code> no tienen conector; las locuciones consecutivas con <code>de modo</code>, <code>de manera</code>, <code>de forma</code> o <code>de suerte</code> (<code>de modo que</code>, <code>de tal manera que</code>) y <code>bien es verdad que</code> quedan fuera, porque los textos antiguos ponen una coma antes de su <code>que</code> (<code>de tal modo, que</code>).</p>
-<!-- core: stats/cohesion_stats.md:ConnectorMatcher-find 4580723 -->
-<p><code>find(words, sent_index, pos, breaks)</code> devuelve las apariciones de los conectores en una oración en el orden de sus palabras. Las palabras son las de una oración sin puntuación, la primera su inicio. Con las categorías gramaticales, un conector de una palabra cuenta solo con una de <code>pos_tags</code> o de <code>pos_extra</code> para su forma, nunca tras una de <code>not_after_pos</code>, y con una de <code>start_only_pos</code> solo al principio de la oración; una palabra sin categoría (<code>None</code>) pasa. Sin las categorías gramaticales se omiten las reglas que las leen. Las posiciones de los signos de puntuación <code>breaks</code> separan un conector de sus vecinas: una regla no lee una palabra a través de un signo, así que en <em>so, the end</em> la palabra tras la coma ni bloquea el conector ni le deja contar, salvo que el conector sea uno de <code>read_through_marks</code>, y un signo entre las palabras de un conector de <code>split_by_marks</code> lo anula; sin ellas las palabras se leen como contiguas.</p>
+<p><code>SpanishConnectorMatcher</code> es una subclase del <code>ConnectorMatcher</code> del núcleo con las reglas del español; las palabras y los conectores se comparan en minúscula. Un conector de una palabra lleva una categoría de <code>CONNECTOR_POS</code> - conjunción, partícula, adverbio, adposición, interjección, nombre propio o <code>X</code> - o de <code>CONNECTOR_POS_EXTRA</code> para su forma (<code>pues</code> y <code>verbigracia</code> como <code>NOUN</code>, <code>resumiendo</code>, <code>recapitulando</code> y <code>concluyendo</code> como <code>VERB</code>). No es conector justo tras un determinante, así que <code>el antes y el después</code> lleva un conector, <code>y</code>, y no tres; y como nombre propio cuenta solo al principio de la oración, donde los modelos leen así un marcador (<code>Primeramente</code>), de modo que el apellido de <code>Habló con Juan Luego ayer</code> no es conector. Un marcador que forma parte de otra locución se descarta: las palabras que lo siguen de <code>CONNECTOR_BLOCKED_AFTER</code> (<code>antes de la reunión</code>, <code>en cuanto a</code>, <code>a pesar de todo lo que</code>), las que lo preceden de <code>CONNECTOR_BLOCKED_BEFORE</code> (<code>algo así como</code>, <code>como si fuera</code>) y las categorías de la palabra siguiente de <code>CONNECTOR_BLOCKED_AFTER_POS</code> (<code>sobre todo el texto</code>, <code>a pesar de todo el esfuerzo</code>) lo anulan, mientras que <code>antes, firmó el acta</code> y <code>sobre todo cuando llueve</code> cuentan su marcador. Algunos marcadores dependen de su lugar: <code>pues</code> al principio de la oración abre una réplica (<code>Pues bien</code>) y no es conector (<code>CONNECTOR_NOT_AT_START</code>), y <code>encima</code> cuenta dentro de la oración solo tras <code>y</code>, <code>e</code>, <code>ni</code> o <code>pero</code> (<code>y encima llueve</code>, <code>CONNECTOR_ONLY_AFTER</code>). Estas listas son atributos del buscador: <code>CONNECTOR_POS</code> es <code>pos_tags</code>, las demás se llaman sin <code>CONNECTOR_</code> en minúscula (<code>CONNECTOR_BLOCKED_AFTER</code> es <code>blocked_after</code>); <code>not_after_pos</code> es el determinante <code>DET</code>, <code>start_only_pos</code> el nombre propio <code>PROPN</code>, y <code>read_through_marks</code> está vacío en esTS. Un signo de puntuación dentro de una locución conjuntiva que acaba en <code>que</code>, <code>como</code> o <code>si</code> (<code>CONNECTOR_SPLIT_BY_MARKS</code>) hace de la conjunción una palabra aparte, así que <code>No tire así, que se romperá</code> y <code>lo de siempre, que...</code> no tienen conector; las locuciones consecutivas con <code>de modo</code>, <code>de manera</code>, <code>de forma</code> o <code>de suerte</code> (<code>de modo que</code>, <code>de tal manera que</code>) y <code>bien es verdad que</code> quedan fuera, porque los textos antiguos ponen una coma antes de su <code>que</code> (<code>de tal modo, que</code>).</p>
+<!-- core: stats/cohesion_stats.md:ConnectorMatcher-find 8e0022c -->
+<p><code>find(words, sent_index, pos, breaks, blocked)</code> devuelve las apariciones de los conectores en una oración en el orden de sus palabras. Las palabras son las de una oración sin puntuación, la primera su inicio. Con las categorías gramaticales, un conector de una palabra cuenta solo con una de <code>pos_tags</code> o de <code>pos_extra</code> para su forma, nunca tras una de <code>not_after_pos</code>, y con una de <code>start_only_pos</code> solo al principio de la oración; una palabra sin categoría (<code>None</code>) pasa. Sin las categorías gramaticales se omiten las reglas que las leen. Las posiciones de los signos de puntuación <code>breaks</code> separan un conector de sus vecinas: una regla no lee una palabra a través de un signo, así que en <em>so, the end</em> la palabra tras la coma ni bloquea el conector ni le deja contar, salvo que el conector sea uno de <code>read_through_marks</code>, y un signo entre las palabras de un conector de <code>split_by_marks</code> lo anula; sin ellas las palabras se leen como contiguas. Ningún conector empieza en una palabra de <code>blocked</code>, que una lengua descarta por algo más que las palabras y sus categorías gramaticales, como su análisis sintáctico.</p>
 <table>
 <thead>
 <tr>
@@ -2771,11 +2928,17 @@ None
 <td style="text-align: left;"><code>None</code></td>
 <td style="text-align: left;">Posiciones de las palabras precedidas por un signo de puntuación</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>blocked</code></td>
+<td style="text-align: left;"><code>set[int]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Posiciones de las palabras en las que no empieza ningún conector</td>
+</tr>
 </tbody>
 </table>
-<p>Unas palabras que no son una lista de cadenas, unas categorías gramaticales que no son una lista de cadenas y <code>None</code> (las etiquetas <code>token.pos_</code> de spaCy, no los números <code>token.pos</code>) y unas posiciones de los signos que no son una colección lanzan <code>SourceTypeError</code>; un número de oración o una posición de un signo que no es un entero, una posición de un signo que no es la de una palabra después de la primera y unas categorías gramaticales que no son tantas como las palabras, <code>ParameterError</code>.</p>
+<p>Unas palabras que no son una lista de cadenas, unas categorías gramaticales que no son una lista de cadenas y <code>None</code> (las etiquetas <code>token.pos_</code> de spaCy, no los números <code>token.pos</code>) y unas posiciones que no son una colección lanzan <code>SourceTypeError</code>; un número de oración o una posición que no es un entero, una posición de un signo que no es la de una palabra después de la primera, una posición bloqueada que no es la de una palabra y unas categorías gramaticales que no son tantas como las palabras, <code>ParameterError</code>.</p>
 <p><code>CohesionStats</code> pasa las posiciones de los signos de puntuación de cada oración, así que en <code>sin gracia alguna, y el amor</code> la coma separa <code>y</code> del determinante <code>alguna</code> y cuenta, y <code>encima</code> tras una coma también cuenta.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.cohesion_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanishConnectorMatcher</span><span class="p">,</span> <span class="n">load_connectors</span>
@@ -2797,7 +2960,7 @@ None
 <!-- core: stats/cohesion_stats.md:ConnectorMatcher-is_subordinator 6913020 -->
 <p><code>is_subordinator(connector, pos=None)</code> comprueba si una aparición de un conector une su cláusula o su sintagma a su propia oración: un conector de <code>subordinators</code>, o un conector de una palabra cuya categoría <code>pos</code> es <code>SCONJ</code> o <code>ADP</code>, pero ninguno de <code>parcellation</code>. La cláusula de una conjunción subordinante y el sintagma de una preposición pertenecen a la oración del conector esté donde esté, así que un subordinante que abre una oración (<em>when he came, ...</em>, <em>despite the rain, ...</em>) no la une con las anteriores. Un conector que no es un <code>Connector</code> lanza <code>SourceTypeError</code>.</p>
 <p><code>subordinators</code> es <code>CONNECTOR_SUBORDINATORS</code> y <code>parcellation</code> es <code>CONNECTOR_PARCELLATION</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">matcher</span><span class="o">.</span><span class="n">is_subordinator</span><span class="p">(</span><span class="n">matcher</span><span class="o">.</span><span class="n">find</span><span class="p">([</span><span class="s2">"Ya"</span><span class="p">,</span> <span class="s2">"que"</span><span class="p">,</span> <span class="s2">"estás"</span><span class="p">,</span> <span class="s2">"aquí"</span><span class="p">])[</span><span class="mi">0</span><span class="p">])</span>
@@ -2812,9 +2975,9 @@ False
 </div>
 </div>
 <h2 id="find_connectors">Búsqueda de conectores<a class="headerlink" href="#find_connectors" title="Permanent link">&para;</a></h2>
-<div class="signature highlight"><pre><span></span><code><span class="n">find_connectors</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">connectors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sent_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">breaks</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">find_connectors</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">connectors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sent_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">breaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">blocked</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>Busca los conectores de una oración con el método <code>find</code> de <code>SpanishConnectorMatcher</code> en el diccionario <code>connectors</code>, el de <code>load_connectors</code> por defecto; los demás parámetros y las excepciones son los del buscador y de <code>find</code>. Sin <code>breaks</code>, las posiciones de las palabras ante las que hay un signo de puntuación (<a href="https://sergeyshk.github.io/anyTS/utils/words/#find_marks"><code>find_marks</code></a> de una cadena), las palabras se leen como contiguas. Con un diccionario propio la función construye un buscador en cada llamada, así que para muchas oraciones construya <code>SpanishConnectorMatcher(connectors)</code> una vez y llame a su <code>find</code>.</p>
+<p>Busca los conectores de una oración con el método <code>find</code> de <code>SpanishConnectorMatcher</code> en el diccionario <code>connectors</code>, el de <code>load_connectors</code> por defecto; los demás parámetros y las excepciones son los del buscador y de <code>find</code>. Sin <code>breaks</code>, las posiciones de las palabras ante las que hay un signo de puntuación (<a href="https://sergeyshk.github.io/anyTS/utils/words/#find_marks"><code>find_marks</code></a> de una cadena), las palabras se leen como contiguas; <code>blocked</code>, las posiciones de las palabras de <a href="#is_connector_blocked"><code>is_connector_blocked</code></a>, descarta los <code>si</code> que descarta <code>CohesionStats</code>. Con un diccionario propio la función construye un buscador en cada llamada, así que para muchas oraciones construya <code>SpanishConnectorMatcher(connectors)</code> una vez y llame a su <code>find</code>.</p>
 <table>
 <thead>
 <tr>
@@ -2833,7 +2996,7 @@ False
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Código</label><label for="__tabbed_8_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.cohesion_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_connectors</span>
@@ -2841,11 +3004,13 @@ False
 <span class="n">find_connectors</span><span class="p">([</span><span class="s2">"Sin"</span><span class="p">,</span> <span class="s2">"embargo"</span><span class="p">,</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">"vino"</span><span class="p">])</span>
 <span class="n">find_connectors</span><span class="p">([</span><span class="s2">"El"</span><span class="p">,</span> <span class="s2">"antes"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">,</span> <span class="s2">"el"</span><span class="p">,</span> <span class="s2">"después"</span><span class="p">],</span> <span class="n">pos</span><span class="o">=</span><span class="p">[</span><span class="s2">"DET"</span><span class="p">,</span> <span class="s2">"NOUN"</span><span class="p">,</span> <span class="s2">"CCONJ"</span><span class="p">,</span> <span class="s2">"DET"</span><span class="p">,</span> <span class="s2">"NOUN"</span><span class="p">])</span>
 <span class="n">find_connectors</span><span class="p">([</span><span class="s2">"No"</span><span class="p">,</span> <span class="s2">"tire"</span><span class="p">,</span> <span class="s2">"así"</span><span class="p">,</span> <span class="s2">"que"</span><span class="p">,</span> <span class="s2">"se"</span><span class="p">,</span> <span class="s2">"romperá"</span><span class="p">],</span> <span class="n">breaks</span><span class="o">=</span><span class="p">{</span><span class="mi">3</span><span class="p">})</span>
+<span class="n">find_connectors</span><span class="p">([</span><span class="s2">"No"</span><span class="p">,</span> <span class="s2">"sé"</span><span class="p">,</span> <span class="s2">"si"</span><span class="p">,</span> <span class="s2">"vendrá"</span><span class="p">],</span> <span class="n">blocked</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">})</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>[Connector(sent=0, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary')]
 [Connector(sent=0, start=2, end=3, text='y', cls='additive', kind='primary')]
+[]
 []
 </code></pre></div>
 </div>
@@ -2873,7 +3038,7 @@ False
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Código</label><label for="__tabbed_8_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Código</label><label for="__tabbed_9_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.cohesion_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">token_info</span>
@@ -2887,6 +3052,44 @@ False
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>WordInfo(lemma='mirar', noun=False, pronoun=False, demonstrative=False, argument=False, content=True, tense='Imp', mood='Ind')
 WordInfo(lemma='este', noun=False, pronoun=True, demonstrative=True, argument=False, content=False, tense=None, mood=None)
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="is_connector_blocked">Conectores bloqueados<a class="headerlink" href="#is_connector_blocked" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_connector_blocked</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Comprueba si ningún conector empieza en un token por las palabras que lo preceden en un <code>Doc</code>: un <code>si</code> que no abre ninguna condición. Es así tras un verbo de <code>CONNECTOR_QUESTION_VERBS</code> - <code>saber</code>, <code>ver</code>, <code>mirar</code>, <code>preguntar</code>, <code>dudar</code>, <code>ignorar</code>, <code>pensar</code>, <code>averiguar</code>, <code>probar</code>, <code>comprobar</code>, <code>observar</code>, <code>examinar</code>, <code>determinar</code>, <code>decidir</code>, <code>considerar</code>, <code>consultar</code>, <code>investigar</code>, <code>adivinar</code> - etiquetado <code>VERB</code> o <code>AUX</code>, por el lema del modelo sin su pronombre enclítico o por el de <code>ests.utils.lemmatize</code> (<code>no sé si vendrá</code>, <code>a ver si llega</code>, <code>preguntó si tenía hambre</code>, <code>preguntándose si</code>), y tras un <code>¡</code> de apertura (<code>¡Si ya te lo dije!</code>). En una muestra de la literatura la regla de los verbos acertó en todos los casos revisados, la de <code>¡</code> en unos nueve de cada diez. <code>CohesionStats</code> fija con ella el <code>connector_blocked</code> de las palabras del núcleo, y la capa <a href="../../visualizers/highlight/"><code>connectors</code></a> del resaltado de un <code>Doc</code> descarta los mismos <code>si</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token de spaCy</td>
+</tr>
+</tbody>
+</table>
+<div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Código</label><label for="__tabbed_10_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.cohesion_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_connector_blocked</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"No sé si vendrá. Si llueve, me quedo. ¡Si ya te lo dije!"</span><span class="p">)</span>
+<span class="p">[</span><span class="n">is_connector_blocked</span><span class="p">(</span><span class="n">token</span><span class="p">)</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">lower_</span> <span class="o">==</span> <span class="s2">"si"</span><span class="p">]</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>[True, False, True]
 </code></pre></div>
 </div>
 </div>

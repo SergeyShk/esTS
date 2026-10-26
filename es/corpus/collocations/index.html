@@ -2185,11 +2185,11 @@
 
 
 <h1 id="colocaciones">Colocaciones<a class="headerlink" href="#colocaciones" title="Permanent link">&para;</a></h1>
-<!-- core: corpus/collocations.md:collocations c290cd8 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">collocations</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="s1">'logdice'</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<!-- core: corpus/collocations.md:collocations a019591 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">collocations</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="s1">'logdice'</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Extracción de colocaciones: pares de palabras que aparecen juntas más a menudo de lo que daría la independencia - expresiones fijas, terminología, la combinatoria de una palabra. Las medidas de asociación son las de <a href="https://www.sketchengine.eu/wp-content/uploads/ske-statistics.pdf">Sketch Engine</a> y de <a href="https://www.nltk.org/api/nltk.metrics.association.html"><code>nltk.metrics.association</code></a>.</p>
-<p>Los pares son ordenados, como en NLTK: la palabra de la derecha aparece como mucho <code>window</code> palabras después de la de la izquierda, y cada par de posiciones se cuenta una vez; <code>window=1</code> da bigramas. Las medidas toman la frecuencia del par dividida por la ventana (Church y Hanks 1990, como en NLTK), lo que mantiene la frecuencia esperada independiente de la ventana y Dice y la sensibilidad mínima en uno como máximo; <code>freq_pair</code> queda sin dividir. Así, con <code>window &gt; 1</code> un par siempre contiguo recibe un logDice de <span class="arithmatex">\(14 - \log_2 window\)</span> (13 con una ventana de 2), no 14 como en Sketch Engine con su coocurrencia sin dividir; para 14 hace falta un par a todas las distancias dentro de la ventana. <code>node</code> conserva los pares con la palabra dada a cualquiera de los dos lados.</p>
+<p>Los pares son ordenados, como en NLTK: la palabra de la derecha aparece como mucho <code>window</code> palabras después de la de la izquierda, y cada par de posiciones se cuenta una vez; <code>window=1</code> da bigramas. Las medidas toman la frecuencia del par dividida por la ventana (Church y Hanks 1990, como en NLTK), lo que mantiene la frecuencia esperada independiente de la ventana y Dice y la sensibilidad mínima en uno como máximo; <code>freq_pair</code> queda sin dividir. Así, con <code>window &gt; 1</code> un par siempre contiguo recibe un logDice de <span class="arithmatex">\(14 - \log_2 window\)</span> (13 con una ventana de 2), no 14 como en Sketch Engine con su coocurrencia sin dividir; para 14 hace falta un par a todas las distancias dentro de la ventana. <code>node</code> conserva los pares con la palabra dada a cualquiera de los dos lados, y <code>side</code>, a uno de ellos: <code>"left"</code> los colocativos antes del nodo, <code>"right"</code> los de después.</p>
 <p>Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematización y las palabras vacías corresponden al extractor de palabras; los lemas convienen a las expresiones fijas, las formas a las construcciones gramaticales.</p>
 <p><code>ests.corpus</code> reexporta la función del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/collocations/">anyTS</a>. Las palabras se extraen con <a href="../../extractors/words/"><code>WordsExtractor</code></a>; para las expresiones fijas del español como <code>punto de vista</code> o <code>llevar a cabo</code> conviene usar sus lemas (<code>use_lexemes=True</code>).</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>
@@ -2218,7 +2218,7 @@
 </div>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/collocations.md:collocations-parameters be13ed1 -->
+<!-- core: corpus/collocations.md:collocations-parameters 09ebaf3 -->
 <table>
 <thead>
 <tr>
@@ -2265,9 +2265,15 @@
 <td style="text-align: left;"><code>None</code></td>
 <td style="text-align: left;">Número de colocaciones; <code>None</code> - todas</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>side</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Con un nodo, el lado de sus colocativos: <code>"left"</code> o <code>"right"</code>; <code>None</code> - los dos</td>
+</tr>
 </tbody>
 </table>
-<p>Unas palabras que no son una lista de cadenas lanzan <code>SourceTypeError</code>, y la falta de palabras, <code>SourceError</code>. Una medida desconocida, un <code>window</code> o un <code>top_n</code> que no es un entero de al menos uno, un <code>min_freq</code> que no es un entero y un <code>node</code> que no es una cadena lanzan <code>ParameterError</code>.</p>
+<p>Unas palabras que no son una lista de cadenas lanzan <code>SourceTypeError</code>, y la falta de palabras, <code>SourceError</code>. Una medida desconocida, un <code>window</code> o un <code>top_n</code> que no es un entero de al menos uno, un <code>min_freq</code> que no es un entero, un <code>node</code> que no es una cadena y un <code>side</code> distinto de <code>"left"</code> y <code>"right"</code> o sin un nodo lanzan <code>ParameterError</code>.</p>
 <h2 id="resultado">Resultado<a class="headerlink" href="#resultado" title="Permanent link">&para;</a></h2>
 <!-- core: corpus/collocations.md:Collocation f1761f5 -->
 <div class="signature highlight"><pre><span></span><code><span class="n">Collocation</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">freq_left</span><span class="p">,</span> <span class="n">freq_right</span><span class="p">,</span> <span class="n">freq_pair</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>

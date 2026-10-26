@@ -2902,8 +2902,8 @@ P = 1 - \frac{\binom{N-K}{w} + K \binom{N-K}{w-1}}{\binom{N}{w}}
 <div class="metric-card">
 <h3 id="syllables">Sílabas<a class="headerlink" href="#syllables" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>p_open_syllables</code> · <code>mean_syllable_len</code></p>
-<!-- core: stats/phon_stats.md:PhonStats-syllables 005a7e8 -->
-<p>Las sílabas son los sonidos de cada sílaba de una palabra según <code>syllable_sounds</code>; una sílaba sin ningún sonido de las clases (un número) no es una sílaba, tampoco en <code>c_syllable_patterns</code>. Una sílaba abierta termina en vocal según su patrón CV (<code>cv_pattern</code>), y la longitud de una sílaba es el número de sus sonidos.</p>
+<!-- core: stats/phon_stats.md:PhonStats-syllables eb2f919 -->
+<p>Las sílabas son los sonidos de cada sílaba de una palabra según <code>syllable_sounds</code>; una sílaba sin ningún sonido de las clases (un número) no es una sílaba, tampoco en <code>c_syllable_patterns</code>. Una sílaba abierta termina en vocal según su patrón CV (<code>cv_pattern</code>), y la longitud de una sílaba es la longitud de ese patrón: los sonidos de las clases, sin <code>skipped</code> ni los signos fuera de ellas.</p>
 <p>Los sonidos de una sílaba son su transcripción, y la primera sílaba de una palabra se lee como el comienzo de la palabra: la <code>xi</code> de <code>xilófono</code> es s i, la <code>xi</code> de <code>México</code>, k s i.</p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_open_syllable</span><span class="p">(</span><span class="n">syllable</span><span class="p">)</span>
 </code></pre></div>

@@ -2185,12 +2185,12 @@
 
 
 <h1 id="palabras-clave">Palabras clave<a class="headerlink" href="#palabras-clave" title="Permanent link">&para;</a></h1>
-<div class="signature highlight"><pre><span></span><code><span class="n">keyness</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="s1">'log_likelihood'</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">keyness</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="s1">'log_likelihood'</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: corpus/keyness.md:keyness bbbd1ba -->
+<!-- core: corpus/keyness.md:keyness 4394918 -->
 <p>Extracción de palabras clave (keyness) de un corpus objetivo frente a uno de referencia: las palabras que aparecen significativamente más a menudo en el corpus objetivo que en el de referencia.</p>
 <p>Cada palabra recibe dos valores que <a href="http://eprints.lancs.ac.uk/51449/4/Gabrielatos_Marchi_Keyness.pdf">Gabrielatos y Marchi</a> y <a href="http://cass.lancs.ac.uk/log-ratio-an-informal-introduction/">Hardie</a> recomiendan leer juntos: la razón de verosimilitud <span class="arithmatex">\(G^2\)</span> con su valor p (si hay una diferencia) y Log Ratio (cuán grande es), además de la medida elegida <code>score</code>, que ordena la lista. Las medidas de significación (<span class="arithmatex">\(G^2\)</span>, ji cuadrado, BIC) y ELL, el tamaño del efecto de <span class="arithmatex">\(G^2\)</span>, son negativas cuando la palabra es más frecuente en la referencia; %DIFF, Log Ratio y la razón de momios tienen dirección por construcción.</p>
-<p>La referencia puede ser una lista de palabras, un mapeo de frecuencias (su tamaño es la suma de los recuentos) o una <code>FrequencyReference</code>. Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematización y las palabras vacías corresponden al extractor de palabras, y los dos corpus tienen que extraerse del mismo modo.</p>
+<p>La referencia puede ser una lista de palabras, un mapeo de frecuencias (su tamaño es la suma de los recuentos) o una <code>FrequencyReference</code>. Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematización y las palabras vacías corresponden al extractor de palabras, y los dos corpus tienen que extraerse del mismo modo. Un corpus de varios textos se da como una lista de sus listas de palabras. Con <code>n</code> mayor que 1 las palabras clave son los N-gramas de las palabras de cada texto, unidos por guiones bajos como los N-gramas de <code>WordsExtractor</code> (<em>black_cat</em>), así que un N-grama nunca cruza dos textos; los recuentos y los tamaños son los de los N-gramas, y las frecuencias por millón son por millón de N-gramas. Las frecuencias de N-gramas - una suma de los <code>Counter</code> de los N-gramas de cada texto, o un diccionario de frecuencias de N-gramas - van con <code>n=1</code>: un mapeo y una <code>FrequencyReference</code> se rechazan con <code>n</code> mayor que 1.</p>
 <p>La función envuelve <code>keyness</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/keyness/">anyTS</a> y admite además como referencia el <a href="../../datasets/freqdict/">diccionario de frecuencias</a> <code>FreqDict</code>; <code>FrequencyReference</code> está en <code>ests.corpus</code> junto a ella. Las palabras se extraen con <a href="../../extractors/words/"><code>WordsExtractor</code></a>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>
 <div class="tabbed-content">
@@ -2220,7 +2220,7 @@
 </div>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/keyness.md:keyness-parameters c87c5b2 -->
+<!-- core: corpus/keyness.md:keyness-parameters a26b20f -->
 <table>
 <thead>
 <tr>
@@ -2233,15 +2233,15 @@
 <tbody>
 <tr>
 <td style="text-align: left;"><code>target</code></td>
-<td style="text-align: left;"><code>list[str]</code> / <code>dict[str, int]</code></td>
+<td style="text-align: left;"><code>list[str]</code> / <code>list[list[str]]</code> / <code>dict[str, int]</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Palabras del corpus objetivo o sus frecuencias</td>
+<td style="text-align: left;">Palabras del corpus objetivo - un texto o una lista de textos - o sus frecuencias</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>reference</code></td>
-<td style="text-align: left;"><code>list[str]</code> / <code>dict[str, float]</code> / <code>FrequencyReference</code></td>
+<td style="text-align: left;"><code>list[str]</code> / <code>list[list[str]]</code> / <code>dict[str, float]</code> / <code>FrequencyReference</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Palabras del corpus de referencia, sus frecuencias o una referencia por frecuencias</td>
+<td style="text-align: left;">Palabras del corpus de referencia - un texto o una lista de textos -, sus frecuencias o una referencia por frecuencias</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>measure</code></td>
@@ -2267,14 +2267,20 @@
 <td style="text-align: left;"><code>None</code></td>
 <td style="text-align: left;">Número de palabras clave; <code>None</code> - todas</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>n</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>1</code></td>
+<td style="text-align: left;">Longitud de los N-gramas de las palabras de cada texto; <code>1</code> - las palabras</td>
+</tr>
 </tbody>
 </table>
-<p>Los parámetros y el corpus objetivo los comprueba <code>check_keyness_params</code>. Una referencia que no es una lista de cadenas, un contador ni una <code>FrequencyReference</code> lanza <code>SourceTypeError</code>, y una frecuencia negativa, <code>nan</code> o infinita de un contador y un corpus vacío lanzan <code>SourceError</code>.</p>
-<p><code>reference</code> también puede ser <code>FreqDict</code>, frente al cual <code>target</code> son formas. Un diccionario de frecuencias que no está descargado lanza <code>DatasetNotFoundError</code>. <code>keyness</code> comprueba sus parámetros y el corpus objetivo con <code>check_keyness_params</code> antes de leer <code>FreqDict</code>, así que un argumento erróneo falla antes de cargar el diccionario.</p>
-<!-- core: corpus/keyness.md:check_keyness_params 9ffcaab -->
-<div class="signature highlight"><pre><span></span><code><span class="n">check_keyness_params</span><span class="p">(</span><span class="n">measure</span><span class="o">=</span><span class="s1">'log_likelihood'</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<p>Los parámetros y el corpus objetivo los comprueba <code>check_keyness_params</code>; un <code>n</code> mayor que 1 con frecuencias o con una <code>FrequencyReference</code> lanza <code>ParameterError</code>. Una referencia que no es una lista de cadenas, una lista de tales listas, un contador ni una <code>FrequencyReference</code> lanza <code>SourceTypeError</code>, y una frecuencia negativa, <code>nan</code> o infinita de un contador y un corpus sin palabras, o de menos de <code>n</code> palabras, lanzan <code>SourceError</code>.</p>
+<p><code>reference</code> también puede ser <code>FreqDict</code>, frente al cual <code>target</code> son formas. Un diccionario de frecuencias que no está descargado lanza <code>DatasetNotFoundError</code>. <code>keyness</code> comprueba sus parámetros y el corpus objetivo con <code>check_keyness_params</code> antes de leer <code>FreqDict</code>, así que un argumento erróneo falla antes de cargar el diccionario; el diccionario guarda palabras, así que un <code>n</code> mayor que 1 con él también lanza <code>ParameterError</code> antes de leerlo.</p>
+<!-- core: corpus/keyness.md:check_keyness_params 9e9c4da -->
+<div class="signature highlight"><pre><span></span><code><span class="n">check_keyness_params</span><span class="p">(</span><span class="n">measure</span><span class="o">=</span><span class="s1">'log_likelihood'</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
-<p>Comprueba los parámetros de <code>keyness</code> antes de leer un diccionario de frecuencias: lanza <code>ParameterError</code> salvo que la medida sea una de <code>KEYNESS_MEASURES</code>, la frecuencia mínima un entero y el número de palabras clave <code>None</code> o un entero de al menos uno. Con <code>target</code> lanza además <code>SourceTypeError</code> salvo que el corpus objetivo sea una lista de cadenas o un mapeo de cadenas a frecuencias enteras, y <code>SourceError</code> para una frecuencia negativa, nan o infinita.</p>
+<p>Comprueba los parámetros de <code>keyness</code> antes de leer un diccionario de frecuencias: lanza <code>ParameterError</code> salvo que la medida sea una de <code>KEYNESS_MEASURES</code>, la frecuencia mínima un entero, el número de palabras clave <code>None</code> o un entero de al menos uno, la longitud de los N-gramas <code>n</code> un entero de al menos uno y <code>positive</code> un <code>bool</code>. Con <code>target</code> lanza además <code>SourceTypeError</code> salvo que el corpus objetivo sea una lista de cadenas, una lista de tales listas o un mapeo de cadenas a frecuencias enteras, y <code>SourceError</code> para una frecuencia negativa, nan o infinita.</p>
 <h2 id="referencia-por-frecuencias">Referencia por frecuencias<a class="headerlink" href="#referencia-por-frecuencias" title="Permanent link">&para;</a></h2>
 <!-- core: corpus/keyness.md:FrequencyReference 02046dc -->
 <div class="signature highlight"><pre><span></span><code><span class="n">FrequencyReference</span><span class="p">(</span><span class="n">counts</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">missing</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -2380,7 +2386,7 @@ barrildo 52 0.1 995.7 15.26
 </div>
 </div>
 <h2 id="resultado">Resultado<a class="headerlink" href="#resultado" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/keyness.md:Keyword 8a09d1b -->
+<!-- core: corpus/keyness.md:Keyword 6f45611 -->
 <div class="signature highlight"><pre><span></span><code><span class="n">Keyword</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">freq_target</span><span class="p">,</span> <span class="n">freq_reference</span><span class="p">,</span> <span class="n">ipm_target</span><span class="p">,</span> <span class="n">ipm_reference</span><span class="p">,</span> <span class="n">g2</span><span class="p">,</span> <span class="n">p_value</span><span class="p">,</span> <span class="n">log_ratio</span><span class="p">,</span> <span class="n">score</span><span class="p">)</span>
 </code></pre></div>
 <p>Una lista de tuplas con nombre <code>Keyword</code> por keyness descendente (los empates por frecuencia descendente y alfabéticamente, las palabras de medida indefinida al final); <code>pd.DataFrame(keywords)</code> da una tabla.</p>
@@ -2411,12 +2417,12 @@ barrildo 52 0.1 995.7 15.26
 <tr>
 <td style="text-align: left;"><code>ipm_target</code></td>
 <td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;">Frecuencia en el corpus objetivo por millón de palabras</td>
+<td style="text-align: left;">Frecuencia en el corpus objetivo por millón de palabras, o de N-gramas</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>ipm_reference</code></td>
 <td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;">Frecuencia en el corpus de referencia por millón de palabras</td>
+<td style="text-align: left;">Frecuencia en el corpus de referencia por millón de palabras, o de N-gramas</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>g2</code></td>

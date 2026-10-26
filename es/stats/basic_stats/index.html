@@ -2064,21 +2064,23 @@
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>     Statistic     |  Value
-------------------------------
-Sentences          |    1
-Words              |    10
-Unique words       |    8
-Long words         |    5
-Complex words      |    5
-Simple words       |    5
-Monosyllabic words |    4
-Polysyllabic words |    6
-Characters         |    71
-Letters            |    60
-Spaces             |    9
-Syllables          |    23
-Punctuation marks  |    2
+<div class="highlight"><pre><span></span><code>                   Statistic                    |  Value
+-----------------------------------------------------------
+Sentences                                       |    1
+Words                                           |    10
+Unique words                                    |    8
+Long words                                      |    5
+Complex words                                   |    5
+Simple words                                    |    5
+Monosyllabic words                              |    4
+Polysyllabic words                              |    6
+Characters                                      |    71
+Letters                                         |    60
+Spaces                                          |    9
+Syllables                                       |    23
+Punctuation marks                               |    2
+Entropy of the word lengths in letters (bits)   |   2.52
+Entropy of the word lengths in syllables (bits) |   1.72
 </code></pre></div>
 </div>
 </div>
@@ -2136,7 +2138,7 @@ Punctuation marks  |    2
 <p>El objeto guarda <code>normalize</code>, <code>complex_syl_factor</code> y <code>long_word_letter_factor</code> con sus nombres.</p>
 <p>En esTS los umbrales son los del núcleo y de las fórmulas de legibilidad: una palabra compleja tiene tres o más sílabas, como en SMOG, y una palabra larga siete o más letras, como en LIX y RIX (<code>COMPLEX_SYL_FACTOR = 3</code> y <code>LONG_WORD_LETTER_FACTOR = 7</code> de <code>anyts.constants</code>).</p>
 <h2 id="estadisticas">Estadísticas<a class="headerlink" href="#estadisticas" title="Permanent link">&para;</a></h2>
-<!-- core: stats/basic_stats.md:BasicStats-attributes 2687b35 -->
+<!-- core: stats/basic_stats.md:BasicStats-attributes 0981aba -->
 <table>
 <thead>
 <tr>
@@ -2238,6 +2240,18 @@ Punctuation marks  |    2
 <td style="text-align: left;"><code>p_punctuations</code></td>
 </tr>
 <tr>
+<td style="text-align: left;"><code>letters_entropy</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">Entropía de Shannon en bits de las longitudes de las palabras en letras, de <code>c_letters</code>: 0 cuando las palabras tienen una sola longitud</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>syllables_entropy</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;">Entropía de Shannon en bits de las longitudes de las palabras en sílabas, de <code>c_syllables</code></td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr>
 <td style="text-align: left;"><code>c_punctuations</code></td>
 <td style="text-align: left;"><code>dict[str, int]</code></td>
 <td style="text-align: left;">Distribución de los signos de puntuación por tipo (<a href="#count_punctuations"><code>count_punctuations</code></a>)</td>
@@ -2250,10 +2264,10 @@ Punctuation marks  |    2
 <!-- core: stats/basic_stats.md:BasicStats-count_words_by abc6821 -->
 <p><code>count_words_by_syllables(min_syllables)</code> y <code>count_words_by_letters(min_letters)</code> devuelven el número de palabras con al menos el número de sílabas o de letras indicado; un mínimo que no es un entero lanza <code>ParameterError</code>.</p>
 <p>Los métodos vuelven a contar las palabras complejas y largas con un umbral distinto del fijado al crear el objeto; <a href="../readability_stats/"><code>ReadabilityStats</code></a> cuenta con ellos las palabras polisílabas de SOL y las palabras largas de LIX y RIX, así que estas no dependen de los umbrales del objeto.</p>
-<!-- core: stats/basic_stats.md:BasicStats-get_stats f52c936 -->
-<p><code>get_stats(flat)</code> devuelve un diccionario con las distribuciones <code>c_letters</code> y <code>c_syllables</code>, los recuentos de <code>stats_desc</code>, la distribución <code>c_punctuations</code> y, con <code>normalize=True</code>, los recuentos normalizados, como una copia: editarlo no cambia el objeto. Con <code>flat=True</code> las distribuciones dan una clave por cada valor que tiene el texto, como <code>c_letters_3</code> y <code>c_punctuations_comma</code>.</p>
-<!-- core: stats/basic_stats.md:BasicStats-print_stats da79e92 -->
-<p><code>print_stats()</code> muestra una tabla con los recuentos de <code>stats_desc</code>, sus descripciones y los encabezados de <code>stats_headers</code>.</p>
+<!-- core: stats/basic_stats.md:BasicStats-get_stats 5352c3c -->
+<p><code>get_stats(flat)</code> devuelve un diccionario con las distribuciones <code>c_letters</code> y <code>c_syllables</code>, las estadísticas de <code>stats_desc</code>, la distribución <code>c_punctuations</code> y, con <code>normalize=True</code>, los recuentos normalizados, como una copia: editarlo no cambia el objeto. Con <code>flat=True</code> las distribuciones dan una clave por cada valor que tiene el texto, como <code>c_letters_3</code> y <code>c_punctuations_comma</code>.</p>
+<!-- core: stats/basic_stats.md:BasicStats-print_stats 129bbf6 -->
+<p><code>print_stats()</code> muestra una tabla con las estadísticas de <code>stats_desc</code>, sus descripciones y los encabezados de <code>stats_headers</code>.</p>
 <p>Las estadísticas normalizadas <code>p_*</code> no están en la tabla.</p>
 <!-- core: stats/stats.md:Stats-to_dataframe fb70c9b -->
 <p><code>to_dataframe()</code> devuelve las estadísticas planas, <code>get_stats(flat=True)</code>, como un <code>DataFrame</code> de <a href="https://pandas.pydata.org/">pandas</a> de una fila con una columna por cada clave. Una estadística de diccionario da columnas solo para las claves que tiene el texto, así que en los marcos de varios textos unidos con <code>pandas.concat</code> un recuento que le falta a un texto es <code>NaN</code>. Solo estas columnas pueden rellenarse con 0: en las demás <code>NaN</code> es un valor no definido.</p>
@@ -2281,6 +2295,8 @@ Punctuation marks  |    2
  'n_spaces': 9,
  'n_syllables': 23,
  'n_punctuations': 2,
+ 'letters_entropy': 2.5219280948873624,
+ 'syllables_entropy': 1.7219280948873623,
  'c_punctuations': {'comma': 1,
                     'period': 0,
                     'question': 0,
