@@ -407,9 +407,10 @@ def is_connector_blocked(token: Token) -> bool:
 
     Description:
         A si opens no condition after a verb of CONNECTOR_QUESTION_VERBS, by
-        the lemma of the model or of simplemma and the part of speech VERB or
-        AUX (no sé si viene, a ver si llega), and after an opening ¡ (¡Si ya
-        te lo dije!); a si after como or vaya is dropped by the matcher itself
+        the lemma of the model without its enclitic pronoun or by that of
+        simplemma, and the part of speech VERB or AUX (no sé si viene, a ver si
+        llega, preguntándose si), and after an opening ¡ (¡Si ya te lo dije!);
+        a si after como or vaya is dropped by the matcher itself
         (CONNECTOR_BLOCKED_BEFORE)
 
     Arguments:
@@ -433,7 +434,7 @@ def is_connector_blocked(token: Token) -> bool:
     if previous.text == "¡":
         return True
     return previous.pos_ in ("VERB", "AUX") and (
-        previous.lemma_.lower() in CONNECTOR_QUESTION_VERBS
+        previous.lemma_.lower().split(" ")[0] in CONNECTOR_QUESTION_VERBS
         or lemmatize(previous.lower_) in CONNECTOR_QUESTION_VERBS
     )
 

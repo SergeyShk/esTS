@@ -470,10 +470,11 @@ def test_overlaps_with_the_next_two_sentences():
         ("Vaya si lo sé.", []),
         ("Si bien es cierto, no lo creo.", ["si bien"]),
         ("Te lo diré si me lo pides.", ["si"]),
-        # The model leaves the verb without its lemma or with its enclitic, simplemma gives it
+        # The model leaves the verb without its lemma, simplemma gives it
         ("Ya verás si tengo razón.", []),
         ("Decidiremos si vamos.", []),
-        ("Quise preguntarle si venía.", []),
+        # simplemma keeps the reflexive verb, the model gives its lemma with the pronoun
+        ("Empezó a preguntarse si valía la pena.", []),
     ],
 )
 def test_si_without_a_condition(text, expected):
