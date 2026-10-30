@@ -432,6 +432,7 @@ def test_split_predicates(doc):
         ("Se dio traslado del mismo, que deberá ser contestado en diez días.", ["del mismo"]),
         ("La duración del mismo y el precio se publicaron.", ["del mismo"]),
         ("Se archivó el mismo y tres días después se notificó.", ["el mismo"]),
+        ("El mantenimiento del mismo y su reparación corresponden al titular.", ["del mismo"]),
         # The identity, the emphasis and the adjective are no anaphora
         ("Llegaron el mismo día.", []),
         ("Este informe es el mismo que enviaste ayer.", []),
