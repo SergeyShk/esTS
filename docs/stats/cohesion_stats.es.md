@@ -130,7 +130,7 @@ El extractor indicado se guarda en el atributo `sents_extractor`, `None` sin él
 
 ## Métricas
 
-Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` da las métricas de la tabla; `aspect_repetition` es un atributo fuera de él.
+Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` da las métricas de la tabla; `aspect_repetition` es un atributo fuera de ella.
 
 | Métrica | Qué mide | Rango | Un valor mayor indica |
 | :------ | :------- | :---- | :-------------------- |

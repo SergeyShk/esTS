@@ -293,6 +293,12 @@ class CohesionStatsComponent(_Component, anyts.components.CohesionStatsComponent
         >>> nlp.add_pipe("ests_cohesion", name="cohesion", last=True)
         <ests.components.CohesionStatsComponent object at 0x...>
 
+    Starting the paragraphs after the blank lines alone:
+        >>> nlp.add_pipe(
+        ...     "ests_cohesion", name="cohesion_blank", config={"blank_lines": True}, last=True
+        ... )
+        <ests.components.CohesionStatsComponent object at 0x...>
+
     Reading the computed statistics:
         >>> doc = nlp("El gato duerme. El gato come.")
         >>> doc._.cohesion.noun_overlap_adjacent
