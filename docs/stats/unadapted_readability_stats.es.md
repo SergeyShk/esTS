@@ -411,12 +411,12 @@ Un recuento que no es un entero no negativo lanza `ParameterError`.
 `wheeler_smith` · Wheeler y Smith, 1954
 { .metric-meta }
 
-<!-- core: stats/unadapted_readability_stats.md:calc_wheeler_smith de9b424 -->
+<!-- core: stats/unadapted_readability_stats.md:calc_wheeler_smith 7c17af5 -->
 ``` {.python .signature}
 calc_wheeler_smith(n_polysyllable_words, n_sents)
 ```
 
-El índice de Wheeler y Smith (1954) para textos de primaria: la longitud media de la oración por la proporción de palabras de dos o más sílabas, por 10, es decir, 10 veces esas palabras por oración; cuenta oraciones donde el original cuenta unidades terminadas por cualquier signo final. `nan` sin oraciones.
+El índice de Wheeler y Smith (1954) para textos de primaria: la longitud media de la oración por la proporción de palabras de dos o más sílabas, por 10: diez veces el número de esas palabras por oración; cuenta oraciones donde el original cuenta unidades terminadas por cualquier signo final. `nan` sin oraciones.
 
 $$
 \textrm{WS} = 10 \times \textrm{ASL} \times \frac{\textrm{Palabras de dos o más sílabas}}{\textrm{Palabras}}
