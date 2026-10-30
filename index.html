@@ -2034,7 +2034,7 @@
 <li>
 <p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 21H7v-2h4zm4.5-2H17v2h-4v-2h.2l-1.4-6.1-2.5.6c-.1.5-.3.9-.5 1.3-.9 1.5-2.8 1.9-4.3 1s-1.9-2.8-1-4.3 2.8-1.9 4.3-1c.4.2.7.6.9.9l2.5-.6-.6-2.5c-.4-.1-.8-.3-1.2-.5C8 6.9 7.5 5 8.4 3.5s2.8-1.9 4.3-1 1.9 2.8 1 4.3c-.2.4-.6.7-.9.9zM7 11.8c-.7-.5-1.7-.2-2.2.5s-.2 1.7.5 2.1c.7.5 1.7.3 2.2-.5.4-.7.2-1.7-.5-2.1M12.4 6c.5-.7.2-1.7-.5-2.2s-1.7-.2-2.2.5c-.4.7-.2 1.7.6 2.2.7.4 1.7.2 2.1-.5m.4 5.3c-.2-.1-.4-.1-.5.1s-.1.4.1.5.4.1.5-.1c.2-.2.1-.4-.1-.5M21 8.5 14.5 10l.5 2.2 7.5-1.8.5-.7zM23 19h-4v2h4zM5 19H1v2h4z"/></svg></span> <strong>Extraction</strong></p>
 <hr />
-<p>Tokenizers of <a href="extractors/sentences/">sentences</a>, <a href="extractors/words/">words</a> and <a href="extractors/char_ngrams/">character N-grams</a> that know the inverted marks, the dialogue dash and the abbreviations of Spanish</p>
+<p>Tokenizers of <a href="extractors/sentences/">sentences</a>, <a href="extractors/words/">words</a> and <a href="extractors/char_ngrams/">character N-grams</a> that know the inverted marks, the dialogue dash and the abbreviations of Spanish, and the <a href="extractors/sentences/#split_paragraphs">paragraphs</a> of a text</p>
 <p><a href="extractors/sentences/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Extraction</a></p>
 </li>
 <li>
@@ -2106,7 +2106,7 @@
 <li>
 <p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg></span> <strong>Corpus measures</strong></p>
 <hr />
-<p><a href="corpus/keyness/">Keywords</a> against a reference corpus or the frequency dictionary, <a href="corpus/collocations/">collocations</a>, the <a href="corpus/dispersion/">dispersion</a> of a word over the parts of a text, a <a href="corpus/kwic/">KWIC concordance</a>, authorship by <a href="corpus/stylometry/">stylometry</a> (Burrows's Delta, Zeta, the Mendenhall curve, the function words) and the <a href="corpus/compare/">comparison of corpora</a> over 133 features of a text</p>
+<p><a href="corpus/keyness/">Keywords</a> against a reference corpus or the frequency dictionary, <a href="corpus/collocations/">collocations</a>, the <a href="corpus/dispersion/">dispersion</a> of a word over the parts of a text, a <a href="corpus/kwic/">KWIC concordance</a>, authorship by <a href="corpus/stylometry/">stylometry</a> (Burrows's Delta and rolling Delta, Zeta and its markers in segments, the Mendenhall curve, the function words) and the <a href="corpus/compare/">comparison of corpora</a> over 133 features of a text</p>
 <p><a href="corpus/keyness/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Corpus measures</a></p>
 </li>
 <li>
@@ -2232,7 +2232,7 @@ Entropy of the word lengths in syllables (bits) |   1.72
 <li>constants.py - constants of the Spanish language and of the metrics</li>
 <li>diversity_stats.py - lexical diversity metrics</li>
 <li>exceptions.py - library exceptions</li>
-<li>extractors.py - extractors of sentences, words and character N-grams with the Spanish tokenizers</li>
+<li>extractors.py - extractors of sentences, words and character N-grams with the Spanish tokenizers, the paragraphs of a text</li>
 <li>lexical_stats.py - lexical sophistication statistics</li>
 <li>morph_stats.py - morphological statistics</li>
 <li>phon_stats.py - phonostatistics</li>
@@ -2264,7 +2264,7 @@ Entropy of the word lengths in syllables (bits) |   1.72
 <li>fingerprinting.py - literature fingerprinting</li>
 <li>highlight.py - text highlighting</li>
 <li>sentences.py - sentence lengths</li>
-<li>stylometry.py - dendrogram, principal components, scaling, Mendenhall curves</li>
+<li>stylometry.py - dendrogram, principal components, scaling, distances within and between authors, rolling Delta, Zeta markers, Mendenhall curves</li>
 <li>vocabulary.py - vocabulary growth and frequency spectrum</li>
 <li>word_tree.py - word tree</li>
 <li>zipf.py - Zipf's law</li>

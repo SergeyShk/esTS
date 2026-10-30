@@ -796,6 +796,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#split_paragraphs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paragraphs
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1982,6 +1993,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#split_paragraphs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Paragraphs
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2102,6 +2124,43 @@
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>('Novedades', 'Importación más rápida\nMenos errores', '¡Gracias!')
 ('No tengas 100 euros', 'ten 100 amigos')
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="split_paragraphs">Paragraphs<a class="headerlink" href="#split_paragraphs" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">split_paragraphs</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div>
+<p>The paragraphs of a text: its parts between blank lines, stripped of whitespace at their edges; a part of whitespace alone is none. A blank line (<code>BLANK_LINE</code>) is two line breaks - <code>\n</code>, <code>\r\n</code>, <code>\r</code>, U+0085 or U+2028 - with whitespace alone between them, the zero-width space and the byte order mark counting as whitespace there, or a paragraph separator U+2029; it also ends the sentences of <code>SentsExtractor</code> and the paragraphs of <code>CohesionStats</code>. Their words give the sizes of the parts of <code>dispersion</code> by paragraph; a paragraph without words, such as a scene break of asterisks, is still one. A text that is not a string raises <code>SourceTypeError</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Text string</td>
+</tr>
+</tbody>
+</table>
+<p>In esTS the function is imported from <code>ests.extractors</code>; the words of the paragraphs give <a href="../../corpus/dispersion/"><code>dispersion</code></a> the sizes of its parts.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Code</label><label for="__tabbed_3_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.extractors</span><span class="w"> </span><span class="kn">import</span> <span class="n">split_paragraphs</span>
+
+<span class="n">split_paragraphs</span><span class="p">(</span><span class="s2">"Capítulo I</span><span class="se">\n\n</span><span class="s2">Era una noche oscura.</span><span class="se">\n</span><span class="s2">Llovía.</span><span class="se">\n\n</span><span class="s2">* * *</span><span class="se">\n\n</span><span class="s2">Amaneció."</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>['Capítulo I', 'Era una noche oscura.\nLlovía.', '* * *', 'Amaneció.']
 </code></pre></div>
 </div>
 </div>

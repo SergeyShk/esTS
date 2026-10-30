@@ -1458,6 +1458,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#rolling_delta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Delta móvil
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#zeta" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2005,6 +2016,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#rolling_delta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Delta móvil
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#zeta" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2309,6 +2331,99 @@ C  1.241  1.594  0.000
 </div>
 </div>
 </div>
+<h2 id="rolling_delta">Delta móvil<a class="headerlink" href="#rolling_delta" title="Permanent link">&para;</a></h2>
+<!-- core: corpus/stylometry.md:rolling_delta c80e9bf -->
+<div class="signature highlight"><pre><span></span><code><span class="n">rolling_delta</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_mfw</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="s1">'burrows'</span><span class="p">,</span> <span class="n">culling</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<p>La Delta a lo largo de un texto, a la manera de <code>rolling.delta</code> de stylo: los textos de referencia y el texto a examinar se cortan en ventanas de <code>window</code> unidades cada <code>step</code> unidades, y el resto más corto que una ventana se descarta. Las unidades más frecuentes, el filtrado y las estadísticas de las puntuaciones z se toman de las ventanas de los textos de referencia o de un conjunto aparte <code>statistics</code>, y cada ventana del texto se compara por la variante de Delta con el centroide de las ventanas de cada texto de referencia. El resultado son las distancias de las ventanas (filas, por la posición de su centro en unidades) a las referencias (columnas); donde la referencia más cercana cambia a lo largo del texto, cambia también el estilo: otro autor de una parte de un texto escrito en colaboración, un pasaje tomado de otro texto. A diferencia de stylo, que suma las diferencias de las frecuencias brutas, las distancias son las de <code>delta_profiles</code> sobre puntuaciones z.</p>
+<p>Escalados por sus propias ventanas, los centroides de las referencias se equilibran entre sí, y la Delta coseno pierde su sentido: las distancias coseno de una ventana a las referencias promedian 1 (ponderadas por sus ventanas y las longitudes de sus centroides); con dos referencias suman 2 y las líneas son simétricas entre sí, así que un pasaje de un tercer autor parece a medio camino entre ellas. Con pocas referencias, la Delta coseno necesita unas <code>statistics</code> de más textos - otros autores, otras obras; las Deltas de Burrows y de Eder no tienen esa limitación. Con <code>statistics</code> basta una sola referencia.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>reference</code></td>
+<td style="text-align: left;"><code>dict[str, list[str]]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Unidades de los textos de referencia por los nombres de los textos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>text</code></td>
+<td style="text-align: left;"><code>list[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Unidades del texto a examinar</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>window</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>5000</code></td>
+<td style="text-align: left;">Tamaño de una ventana en unidades</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>step</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>1000</code></td>
+<td style="text-align: left;">Distancia entre los inicios de las ventanas en unidades</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_mfw</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>100</code></td>
+<td style="text-align: left;">Número de las unidades más frecuentes; <code>None</code> - todas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>variant</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>'burrows'</code></td>
+<td style="text-align: left;">Variante de Delta de <code>anyts.constants.DELTA_VARIANTS</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>culling</code></td>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>0.0</code></td>
+<td style="text-align: left;">Menor proporción de ventanas en la que aparece una unidad</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>statistics</code></td>
+<td style="text-align: left;"><code>dict[str, list[str]]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Textos cuyas ventanas dan las unidades y las estadísticas del escalado; <code>None</code> - los textos de referencia</td>
+</tr>
+</tbody>
+</table>
+<p>Un corpus que no es un mapeo de listas de cadenas y unas unidades del texto que no son una lista de cadenas lanzan <code>SourceTypeError</code>. La falta de textos de referencia, menos de dos sin <code>statistics</code>, un texto sin unidades o más corto que una ventana, menos de tres ventanas de las estadísticas y un filtrado que no deja ninguna unidad lanzan <code>SourceError</code>. Una variante desconocida, un <code>window</code>, un <code>step</code> o un <code>n_mfw</code> que no es un entero de al menos uno, un <code>step</code> mayor que la ventana y un <code>culling</code> que no es un número dentro de [0, 1] lanzan <code>ParameterError</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Código</label><label for="__tabbed_2_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">rolling_delta</span>
+
+<span class="n">rolling_delta</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">corpus</span><span class="p">[</span><span class="s2">"A"</span><span class="p">]</span> <span class="o">+</span> <span class="n">corpus</span><span class="p">[</span><span class="s2">"B"</span><span class="p">],</span> <span class="n">window</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_mfw</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>        A      B      C
+3   0.830  1.181  0.954
+6   0.709  1.166  0.845
+9   0.957  1.225  0.942
+12  0.799  1.067  0.784
+15  0.761  0.687  0.757
+18  0.830  1.181  0.954
+21  1.048  0.919  0.954
+24  1.216  0.610  1.123
+27  1.003  0.381  1.087
+30  1.221  0.377  0.999
+33  0.980  0.425  0.757
+36  1.003  0.381  1.087
+</code></pre></div>
+</div>
+</div>
+</div>
 <h2 id="zeta">Zeta<a class="headerlink" href="#zeta" title="Permanent link">&para;</a></h2>
 <!-- core: corpus/stylometry.md:zeta 1b7460b -->
 <div class="signature highlight"><pre><span></span><code><span class="n">zeta</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">comparison</span><span class="p">,</span> <span class="n">segment_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -2351,7 +2466,7 @@ C  1.241  1.594  0.000
 </tbody>
 </table>
 <p>El resultado es una lista de tuplas con nombre <code>ZetaScore(word, dp_target, dp_comparison, zeta, log_zeta)</code> por Zeta descendente, por Zeta logarítmica descendente y alfabéticamente si empatan. Un corpus que no es ni una lista de cadenas ni una lista de tales listas lanza <code>SourceTypeError</code>, y un corpus sin palabras, <code>SourceError</code>; un <code>segment_size</code> o un <code>top_n</code> que no es un entero de al menos uno lanza <code>ParameterError</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Código</label><label for="__tabbed_2_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">zeta</span>
@@ -2363,6 +2478,75 @@ C  1.241  1.594  0.000
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>[ZetaScore(word='gato', dp_target=0.5, dp_comparison=0.0, zeta=0.5, log_zeta=2.0), ZetaScore(word='la', dp_target=0.5, dp_comparison=0.0, zeta=0.5, log_zeta=2.0)]
 ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2.0)
+</code></pre></div>
+</div>
+</div>
+</div>
+<!-- core: corpus/stylometry.md:zeta_segments 89aea5c -->
+<div class="signature highlight"><pre><span></span><code><span class="n">zeta_segments</span><span class="p">(</span><span class="n">corpora</span><span class="p">,</span> <span class="n">preferred</span><span class="p">,</span> <span class="n">avoided</span><span class="p">,</span> <span class="n">segment_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+</code></pre></div>
+<p>Las proporciones de los marcadores de Zeta en los segmentos de los corpus, tal como <code>oppose</code> de stylo sitúa los segmentos: cada texto se divide en segmentos como en <code>zeta</code>, y un segmento recibe las proporciones de las palabras de las listas <code>preferred</code> y <code>avoided</code> presentes en él. Con los marcadores de un corpus objetivo frente a un corpus de comparación, los segmentos del objetivo quedan arriba a la izquierda del plano de las dos proporciones y los de la comparación abajo a la derecha; los segmentos de un texto de autoría disputada muestran a qué grupo se acerca (<code>zeta_scatter_plot</code>).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>corpora</code></td>
+<td style="text-align: left;"><code>dict[str, list[str] / list[list[str]]]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabras de los corpus por nombre - un texto o una lista de textos cada uno</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>preferred</code></td>
+<td style="text-align: left;"><code>Collection[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabras que prefiere el corpus objetivo - el principio de la lista de <code>zeta</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>avoided</code></td>
+<td style="text-align: left;"><code>Collection[str]</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Palabras que evita el corpus objetivo - el final de la lista</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>segment_size</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>2000</code></td>
+<td style="text-align: left;">Tamaño de un segmento en palabras</td>
+</tr>
+</tbody>
+</table>
+<p>El resultado es un <code>DataFrame</code> de los segmentos en el orden de los corpus y de sus textos, con las columnas <code>corpus</code> (el nombre del corpus), <code>preferred</code> y <code>avoided</code> (las proporciones de las listas). Unos corpus que no son un mapeo y un corpus o una lista de marcadores que no es una lista de cadenas lanzan <code>SourceTypeError</code>; la falta de corpus, una lista de marcadores vacía y un corpus sin palabras, <code>SourceError</code>, y un <code>segment_size</code> que no es un entero de al menos uno, <code>ParameterError</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">zeta_segments</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="n">zeta</span><span class="p">(</span><span class="n">corpus</span><span class="p">[</span><span class="s2">"A"</span><span class="p">],</span> <span class="n">corpus</span><span class="p">[</span><span class="s2">"B"</span><span class="p">],</span> <span class="n">segment_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">preferred</span> <span class="o">=</span> <span class="p">[</span><span class="n">score</span><span class="o">.</span><span class="n">word</span> <span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">scores</span> <span class="k">if</span> <span class="n">score</span><span class="o">.</span><span class="n">zeta</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">avoided</span> <span class="o">=</span> <span class="p">[</span><span class="n">score</span><span class="o">.</span><span class="n">word</span> <span class="k">for</span> <span class="n">score</span> <span class="ow">in</span> <span class="n">scores</span> <span class="k">if</span> <span class="n">score</span><span class="o">.</span><span class="n">zeta</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">zeta_segments</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">preferred</span><span class="p">,</span> <span class="n">avoided</span><span class="p">,</span> <span class="n">segment_size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>   corpus  preferred  avoided
+0       A      0.333    0.125
+1       A      0.333    0.000
+2       A      0.333    0.125
+3       A      0.444    0.000
+4       B      0.000    0.250
+5       B      0.000    0.500
+6       B      0.000    0.500
+7       B      0.000    0.375
+8       C      0.111    0.125
+9       C      0.333    0.000
+10      C      0.111    0.250
 </code></pre></div>
 </div>
 </div>
@@ -2403,7 +2587,7 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 </tbody>
 </table>
 <p>Unas palabras que no son una lista de cadenas lanzan <code>SourceTypeError</code>, un corpus sin palabras, <code>SourceError</code>, y un <code>n_mfw</code> que no es un entero de al menos uno, <code>ParameterError</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">kilgarriff_chi2</span>
@@ -2470,7 +2654,7 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 </tbody>
 </table>
 <p>Unas palabras que no son una lista de cadenas lanzan <code>SourceTypeError</code>, y un texto sin palabras, <code>SourceError</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">mendenhall_curve</span><span class="p">,</span> <span class="n">mendenhall_distance</span>
@@ -2521,7 +2705,7 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 <li><code>SourceError</code> - una fuente sin palabras, un pipeline que no etiqueta las categorías gramaticales (<code>spacy.blank("es")</code>), un carácter sin forma UTF-8;</li>
 <li><code>DatasetNotFoundError</code> - el modelo por defecto no está instalado.</li>
 </ul>
-<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">function_words_profile</span>
