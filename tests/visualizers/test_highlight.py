@@ -16,6 +16,7 @@ from ests.visualizers import Highlight, HighlightedText, highlight
 from ests.visualizers.highlight import (
     calc_alliteration_runs,
     find_alliteration,
+    find_anaphoric_mismo,
     find_cliches,
     find_complex_words,
     find_connector_highlights,
@@ -24,6 +25,7 @@ from ests.visualizers.highlight import (
     find_phrase_highlights,
     find_stopwords,
     get_stem_sounds,
+    is_anaphoric_mismo,
     plural,
 )
 
@@ -128,7 +130,8 @@ def test_layers_default_blank_doc():
 def test_layer_groups():
     layers = [layer for group in HIGHLIGHT_LAYER_GROUPS.values() for layer in group]
     assert sorted(layers) == sorted(HIGHLIGHT_LAYERS_DESC)
-    assert sorted(HIGHLIGHT_LAYER_GROUPS["Syntax"]) == SYNTAX_LAYERS
+    # A layer of the group Syntax reads the dependency tree, as a few layers of other groups do
+    assert set(HIGHLIGHT_LAYER_GROUPS["Syntax"]) <= set(SYNTAX_LAYERS)
 
 
 def test_layers_selection(doc):
@@ -171,7 +174,7 @@ def test_doc_without_the_sentence_boundaries(nlp):
 def test_syntax_layers_without_the_lemmas(nlp, layer):
     # the syntactic layers read the lemmas
     doc = nlp(text, disable=["lemmatizer"])
-    with pytest.raises(ParameterError, match="parse, lemmas"):
+    with pytest.raises(ParameterError, match=r"parse, (parts of speech, )?lemmas"):
         highlight(doc, layers=layer)
     assert highlight(doc).layers == ("long_sents", "complex_words", "cliches")
 
@@ -413,6 +416,88 @@ def test_split_predicates(doc):
     ht = highlight(doc, layers="split_predicates")
     assert spans(ht, "split_predicates") == ["hacer una revisión"]
     assert ht.highlights[0].note == "split predicate: hacer revisión"
+
+
+@pytest.mark.parametrize(
+    ("sentence", "expected"),
+    [
+        ("Se revisó el expediente y se archivó el mismo.", ["el mismo"]),
+        ("El contrato se firmó y la duración del mismo será de un año.", ["del mismo"]),
+        ("Recibimos su reclamación y procederemos a la revisión de la misma.", ["la misma"]),
+        ("El paciente ingresó el martes y el mismo fue dado de alta.", ["el mismo"]),
+        ("Las bases están publicadas y los aspirantes deben leer las mismas.", ["las mismas"]),
+        ("El edificio tiene tres plantas; en la misma hay oficinas.", ["la misma"]),
+        ("El edificio tiene tres plantas; en la misma\nhay oficinas.", ["la misma"]),
+        ("Se presentó el recurso, pero el mismo parece infundado.", ["el mismo"]),
+        ("Se dio traslado del mismo, que deberá ser contestado en diez días.", ["del mismo"]),
+        ("La duración del mismo y el precio se publicaron.", ["del mismo"]),
+        ("Se archivó el mismo y tres días después se notificó.", ["el mismo"]),
+        ("El mantenimiento del mismo y su reparación corresponden al titular.", ["del mismo"]),
+        # The identity, the emphasis and the adjective are no anaphora
+        ("Llegaron el mismo día.", []),
+        ("Este informe es el mismo que enviaste ayer.", []),
+        ("Los resultados son los mismos.", []),
+        ("No parecía la misma.", []),
+        ("Los dos parecen el mismo.", []),
+        ("La situación permanece la misma.", []),
+        ("Se aplicará el mismo que en el ejercicio anterior.", []),
+        ("Vinieron los mismos de siempre.", []),
+        # A modifier coordinated with mismo before their noun, not a new noun phrase
+        ("Podrán participar los funcionarios de la misma o superior categoría.", []),
+        ("Los trabajadores que se encuentren en la misma o parecida situación cobrarán.", []),
+        ("Se trasladarán a la misma u otra sede.", []),
+        ("Lo mismo ocurre con los demás.", []),
+        ("Ella misma firmó el contrato.", []),
+        ("Del mismo modo, los vecinos protestaron.", []),
+        ("—El mismo.", []),
+    ],
+)
+def test_anaphoric_mismo(nlp, sentence, expected):
+    ht = highlight(nlp(sentence), layers="anaphoric_mismo")
+    assert spans(ht, "anaphoric_mismo") == expected
+    assert [highlight.note for highlight in ht.highlights] == [
+        f"anaphoric {phrase}" for phrase in expected
+    ]
+
+
+@pytest.mark.parametrize(
+    ("pos", "expected"),
+    [
+        ("VERB", True),
+        ("NOUN", False),
+        ("PROPN", False),
+        ("ADJ", False),
+        ("NUM", False),
+        ("PRON", False),
+    ],
+)
+def test_anaphoric_mismo_attached_to_its_article(pos, expected):
+    """A mismo the model attaches to its article heads a noun phrase when no noun, adjective,
+    numeral or pronoun follows it in its sentence"""
+    doc = Doc(
+        spacy.blank("es").vocab,
+        words=["en", "la", "misma", "hay", ".", "Casa", "nueva"],
+        deps=["case", "obl", "det", "ROOT", "punct", "ROOT", "amod"],
+        heads=[1, 3, 1, 3, 3, 5, 5],
+        pos=["ADP", "DET", "DET", pos, "PUNCT", "NOUN", "ADJ"],
+    )
+    assert is_anaphoric_mismo(doc[2]) is expected
+    if expected:
+        assert [(h.start, h.end, h.note) for h in find_anaphoric_mismo(doc)] == [
+            (3, 11, "anaphoric la misma")
+        ]
+
+
+def test_anaphoric_mismo_at_the_end_of_its_sentence():
+    """Nothing follows the form in its sentence; the noun of the next one does not count"""
+    doc = Doc(
+        spacy.blank("es").vocab,
+        words=["vi", "la", "misma", ".", "Casa", "nueva"],
+        deps=["ROOT", "obj", "det", "punct", "ROOT", "amod"],
+        heads=[0, 0, 1, 0, 4, 4],
+        pos=["VERB", "DET", "DET", "PUNCT", "NOUN", "ADJ"],
+    )
+    assert [token.text for token in doc if is_anaphoric_mismo(token)] == ["misma"]
 
 
 def test_doc_long_sents(nlp):

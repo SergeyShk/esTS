@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable, Collection, Iterable, Iterator, Sequence
+from itertools import islice
 from typing import TYPE_CHECKING
 
 import anyts.visualizers.highlight
 from anyts.constants import ALLITERATION_MIN_WORD_LEN, ALLITERATION_THRESHOLD, AUXILIARY_DEPS
 from anyts.syntax_stats import base_dep, get_children, get_words, is_root, subtree_len
-from anyts.utils import check_words, in_order, is_word
+from anyts.utils import check_words, has_feature, in_order, is_word
 from anyts.visualizers.highlight import (
     Highlight as Highlight,
     Sent as Sent,
@@ -28,9 +29,13 @@ from ..constants import (
     HIGHLIGHT_LAYER_STYLES,
     HIGHLIGHT_LAYERS_DESC,
     LONG_SENT_WORD_FACTOR,
+    MISMO_ARTICLES,
+    MISMO_COMPARATIVE,
+    MISMO_FORMS,
     OFFICIALESE_CLICHES,
     PARENTHETICALS,
     PASSIVE_AUX,
+    PREDICATIVE_VERBS,
     SE_PASSIVE_DEP,
     SOUND_FREQUENCIES,
     SOUND_SPELLINGS,
@@ -57,6 +62,14 @@ if TYPE_CHECKING:
 SPANISH_WORD = re.compile(r"[a-záéíóúüñ]{2,}", re.IGNORECASE)
 # Frequencies of the consonant sounds for the alliteration
 ALLITERATION_FREQUENCIES = {sound: SOUND_FREQUENCIES[sound] for sound in CONSONANT_SOUNDS}
+# Relations of an anaphoric el mismo to its head, of the words of its noun phrase, and the parts of
+# speech that go on a noun phrase after a mismo the models attach to its article
+ARGUMENT_DEPS = frozenset({"nsubj", "obj", "iobj", "obl", "nmod", "conj"})
+NP_DEPS = frozenset({"det", "case", "cc"})
+NOMINAL_POS = frozenset({"NOUN", "PROPN", "ADJ", "NUM", "PRON"})
+# Pronoun types of a determiner that opens a noun phrase of its own, not a modifier coordinated
+# with mismo before their noun (de la misma o distinta categoría)
+NP_OPENING_PRON_TYPES = frozenset({"Art", "Prs"})
 
 
 class HighlightedText(anyts.visualizers.highlight.HighlightedText):
@@ -76,6 +89,7 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
             verbal_nouns - nouns derived from a verb (StyleStats)
             compound_prepositions - compound prepositions (StyleStats)
             cliches - clichés of OFFICIALESE_CLICHES or of the list passed (StyleStats)
+            anaphoric_mismo - the anaphoric el mismo with its article, of no statistic
             stopwords - stopwords of STOPWORDS or of the list passed, the water (StyleStats)
             parentheticals - parenthetical expressions (StyleStats)
             connectors - discourse markers, with the class and the kind in the note
@@ -84,10 +98,11 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
                 unlikely by the frequencies of the Spanish sounds (PhonStats)
         HIGHLIGHT_LAYER_GROUPS groups the layers. The syntactic layers need a Doc
         with a dependency parse and the lemmas, verbal_nouns a Doc with the parts
-        of speech and the lemmas; a Doc without the sentence boundaries is split
-        by the rules of SentsExtractor. By default the layers of
-        HIGHLIGHT_DEFAULT_LAYERS the source allows are on (long sentences, complex
-        words, passive, chains of de, split predicates, clichés)
+        of speech and the lemmas, anaphoric_mismo one with all three; a Doc
+        without the sentence boundaries is split by the rules of SentsExtractor.
+        By default the layers of HIGHLIGHT_DEFAULT_LAYERS the source allows are on
+        (long sentences, complex words, passive, chains of de, split predicates,
+        clichés)
         A word is complex from 4 syllables here; complex_syl_factor=3 shows the
         words of n_complex_words
         The result shows in Jupyter as HTML with a legend (to_html); fragments of
@@ -767,6 +782,98 @@ def find_split_predicate_highlights(doc: Doc) -> list[Highlight]:
     return anyts.visualizers.highlight.find_split_predicate_highlights(find_split_predicates(doc))
 
 
+def is_anaphoric_mismo(token: Token) -> bool:
+    """
+    Checking whether a token is an anaphoric el mismo
+
+    Description:
+        A form of MISMO_FORMS that heads a noun phrase of its own with an
+        article of MISMO_ARTICLES and no other dependent, as an argument
+        (se archivó el mismo, la duración del mismo, dentro de la misma), but
+        not as the subject or the object after a verb of PREDICATIVE_VERBS,
+        where it means the same one (no parecía la misma), right before que
+        (el mismo que el año pasado) or before a conjunction and an adjective
+        or a determiner that shares its noun (de la misma o distinta
+        categoría). The models attach some of them to
+        their article (en la misma hay oficinas): such a form counts when no
+        noun, adjective, numeral or pronoun follows it in its sentence. The
+        identity of el mismo día, es el mismo, lo mismo and él mismo is no
+        anaphora
+
+    Arguments:
+        token (Token): Token
+
+    Returns:
+        bool: Result of the check
+    """
+    if token.lower_ not in MISMO_FORMS:
+        return False
+    sent_end = token.sent.end
+    after = list(
+        islice((word for word in token.doc[token.i + 1 : sent_end] if not word.is_space), 2)
+    )
+    if after and after[0].lower_ == MISMO_COMPARATIVE:
+        return False
+    if len(after) == 2 and after[0].pos_ == "CCONJ" and _is_modifier(after[1]):
+        return False
+    children = get_children(token)
+    if any(child.lower_ in MISMO_ARTICLES and base_dep(child) in NP_DEPS for child in children):
+        if base_dep(token) not in ARGUMENT_DEPS or any(
+            base_dep(child) not in NP_DEPS for child in children
+        ):
+            return False
+        head = token.head
+        return not (
+            base_dep(token) in ("nsubj", "obj")
+            and head.i < token.i
+            and head.lemma_ in PREDICATIVE_VERBS
+        )
+    head = token.head
+    if children or head.i != token.i - 1 or head.lower_ not in MISMO_ARTICLES:
+        return False
+    following = next((word for word in token.doc[token.i + 1 : sent_end] if is_word(word)), None)
+    return following is None or following.pos_ not in NOMINAL_POS
+
+
+def _is_modifier(word: Token) -> bool:
+    """Whether a word after a conjunction modifies a noun with the word before it: an adjective,
+    or a determiner other than an article or a possessive"""
+    if word.pos_ == "ADJ":
+        return True
+    return word.pos_ == "DET" and not any(
+        has_feature(word, "PronType", value) for value in NP_OPENING_PRON_TYPES
+    )
+
+
+def find_anaphoric_mismo(doc: Doc) -> list[Highlight]:
+    """
+    Finding the anaphoric el mismo
+
+    Description:
+        Every form of is_anaphoric_mismo with its article (la misma, del
+        mismo); the note gives the two words
+
+    Arguments:
+        doc (Doc): Doc object with a dependency parse, the parts of speech and the
+            lemmas
+
+    Returns:
+        list[Highlight]: Fragments of the layer anaphoric_mismo
+    """
+    highlights = []
+    for token in doc:
+        if not is_anaphoric_mismo(token):
+            continue
+        article = next(
+            (child for child in token.children if child.lower_ in MISMO_ARTICLES),
+            token.head,
+        )
+        start, end = tokens_span([article, token])
+        note = f"anaphoric {article.lower_} {token.lower_}"
+        highlights.append(Highlight(start, end, "anaphoric_mismo", note))
+    return highlights
+
+
 def _de_chain(token: Token) -> tuple[list[Token], int]:
     tokens = [token]
     depth = 1
@@ -816,4 +923,5 @@ SYNTAX_FINDERS: dict[str, Callable[[Doc], list[Highlight]]] = {
     "gerund_clauses": find_gerund_clauses,
     "de_chains": find_de_chains,
     "split_predicates": find_split_predicate_highlights,
+    "anaphoric_mismo": find_anaphoric_mismo,
 }

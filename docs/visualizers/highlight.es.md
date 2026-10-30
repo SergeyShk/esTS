@@ -32,12 +32,13 @@ La función `highlight` devuelve un objeto `HighlightedText` de esTS con las cap
 | Estilo burocrático | `verbal_nouns` | Sustantivos deverbales | [StyleStats](../stats/style_stats.md) |
 | | `compound_prepositions` | Locuciones prepositivas de `COMPOUND_PREPOSITIONS` | [StyleStats](../stats/style_stats.md) |
 | | `cliches` | Clichés de `OFFICIALESE_CLICHES` o del parámetro `cliches` | [StyleStats](../stats/style_stats.md) |
+| | `anaphoric_mismo` | El `el mismo` anafórico con su artículo (`se archivó el mismo`, `la duración del mismo`) | - |
 | Estilo | `stopwords` | Palabras vacías de `STOPWORDS` o del parámetro `stopwords`, el agua del texto | [StyleStats](../stats/style_stats.md) |
 | | `parentheticals` | Expresiones parentéticas | [StyleStats](../stats/style_stats.md) |
 | | `connectors` | Marcadores del discurso, con la clase y el tipo en la nota | [CohesionStats](../stats/cohesion_stats.md) |
 | Fónica | `alliteration` | Repeticiones de un sonido consonántico en palabras vecinas, poco probables por las frecuencias de los sonidos del español; la nota da el sonido y las letras que lo escriben | [PhonStats](../stats/phon_stats.md) |
 
-Los grupos se definen en `ests.constants.HIGHLIGHT_LAYER_GROUPS`. Las capas del grupo «Sintaxis» necesitan un `Doc` con análisis de dependencias y lemas (los modelos `es_core_news_sm`, `es_core_news_md`, `es_core_news_lg`), como [SyntaxStats](../stats/syntax_stats.md); `verbal_nouns` necesita un `Doc` con las categorías gramaticales y los lemas. Por defecto se activan las capas de `HIGHLIGHT_DEFAULT_LAYERS` que la fuente permite - oraciones largas, palabras complejas, pasiva, cadenas de `de`, predicados escindidos, clichés; `layers="all"` activa todas las permitidas. Las capas se solapan (una locución prepositiva está hecha de palabras vacías), así que elija las que necesite.
+Los grupos se definen en `ests.constants.HIGHLIGHT_LAYER_GROUPS`. Las capas del grupo «Sintaxis» necesitan un `Doc` con análisis de dependencias y lemas (los modelos `es_core_news_sm`, `es_core_news_md`, `es_core_news_lg`), como [SyntaxStats](../stats/syntax_stats.md); `verbal_nouns` necesita un `Doc` con las categorías gramaticales y los lemas, y `anaphoric_mismo`, uno con el análisis de dependencias, las categorías gramaticales y los lemas. Por defecto se activan las capas de `HIGHLIGHT_DEFAULT_LAYERS` que la fuente permite - oraciones largas, palabras complejas, pasiva, cadenas de `de`, predicados escindidos, clichés; `layers="all"` activa todas las permitidas. Las capas se solapan (una locución prepositiva está hecha de palabras vacías), así que elija las que necesite.
 
 Una oración es larga a partir de 30 palabras, el límite de las guías de lenguaje claro en español (la [Comunidad de Madrid](https://www.comunidad.madrid/transparencia/sites/default/files/ckeditor/guia_tramites_claros-comunidad_madrid-noviembre_2021.pdf) y el [Gobierno de la Ciudad de Buenos Aires](https://gcba.github.io/programadelenguajeclaro/Manual%20de%20lenguaje%20claro%202024%20(Final).pdf)), y una palabra es compleja a partir de cuatro sílabas; `complex_syl_factor=3`, el límite de `BasicStats`, muestra las palabras de `n_complex_words`.
 
@@ -93,6 +94,7 @@ La clase extiende el `HighlightedText` del núcleo [anyTS](https://sergeyshk.git
      'verbal_nouns': 9,
      'compound_prepositions': 1,
      'cliches': 1,
+     'anaphoric_mismo': 0,
      'stopwords': 48,
      'parentheticals': 0,
      'connectors': 3,
@@ -248,7 +250,7 @@ Las palabras de cada oración; las palabras fuera de las oraciones se omiten.
 
 ## Búsqueda de las capas { #finders }
 
-Los fragmentos de cada capa los encuentra una función de `ests.visualizers.highlight` que devuelve una lista de `Highlight`: a partir de las palabras y las oraciones del texto, o del `Doc` para las capas sintácticas (`SYNTAX_FINDERS` las da por capa). Todas salvo la pasiva, las construcciones de participio y de gerundio y las cadenas de `de` son las [funciones de búsqueda del núcleo](https://sergeyshk.github.io/anyTS/visualizers/highlight/#finders) con los ganchos del español.
+Los fragmentos de cada capa los encuentra una función de `ests.visualizers.highlight` que devuelve una lista de `Highlight`: a partir de las palabras y las oraciones del texto, o del `Doc` para las capas sintácticas (`SYNTAX_FINDERS` las da por capa). Todas salvo la pasiva, las construcciones de participio y de gerundio, las cadenas de `de` y el `el mismo` anafórico son las [funciones de búsqueda del núcleo](https://sergeyshk.github.io/anyTS/visualizers/highlight/#finders) con los ganchos del español.
 
 ### Oraciones largas y palabras complejas { #long-sents }
 
@@ -557,4 +559,41 @@ La capa `split_predicates`: los pares de un verbo de apoyo y un sustantivo de [`
     [Highlight(start=75, end=119, layer='gerund_clauses', note='gerund clause, 8 words')]
     [Highlight(start=89, end=119, layer='de_chains', note='chain of 2 complements with de')]
     [Highlight(start=55, end=73, layer='split_predicates', note='split predicate: hacer revisión')]
+    ```
+
+### El mismo anafórico { #anaphoric-mismo }
+
+``` {.python .signature}
+is_anaphoric_mismo(token)
+```
+
+Comprueba si una palabra es un `el mismo` anafórico: una forma de `mismo` que encabeza un sintagma nominal propio con su artículo (`el`, `la`, `los`, `las`, `del`, `al`) y sin otro dependiente, como argumento de un verbo o de un sustantivo (`se archivó el mismo`, `la duración del mismo`, `dentro de la misma`). El [Diccionario panhispánico de dudas](https://www.rae.es/dpd/mismo) tiene por innecesario este uso del estilo administrativo y periodístico y propone en su lugar un demostrativo, un posesivo o un pronombre personal (`su duración`, `dentro de ella`). La identidad no es anáfora: `el mismo día`, `es el mismo`, `lo mismo`, `él mismo`, una forma tras `ser`, `estar`, `parecer`, `permanecer` o `resultar` (`no parecía la misma`, `la situación permanece la misma`), justo ante `que` (`el mismo que el año pasado`, mientras que `del mismo, que...` es anafórico) y ante una conjunción y un adjetivo o un determinante que no es un artículo ni un posesivo, que comparten su sustantivo (`de la misma o superior categoría`, `a la misma u otra sede`). Los modelos cuelgan algunas formas anafóricas de su artículo (`en la misma hay oficinas`): esa forma cuenta cuando no la sigue en su oración un sustantivo, un adjetivo, un numeral o un pronombre. Los espacios y los signos de puntuación no son dependientes de la forma, así que un salto de línea tras ella no cambia nada.
+
+``` {.python .signature}
+find_anaphoric_mismo(doc)
+```
+
+La capa `anaphoric_mismo`: cada forma de `is_anaphoric_mismo` con su artículo (`la misma`, `del mismo`), las dos palabras en la nota.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `token` | `Token` | - | Token |
+| `doc` | `Doc` | - | Objeto Doc con análisis de dependencias, categorías gramaticales y lemas |
+
+=== "Código"
+
+    ``` python
+    from ests.utils import get_nlp
+    from ests.visualizers.highlight import find_anaphoric_mismo, is_anaphoric_mismo
+
+    doc = get_nlp()("Se recibió la solicitud el mismo día, y se procedió al estudio de la misma.")
+    [token.text for token in doc if is_anaphoric_mismo(token)]
+    find_anaphoric_mismo(doc)
+    ```
+
+=== "Resultado"
+
+    ```
+    ['misma']
+    [Highlight(start=66, end=74, layer='anaphoric_mismo', note='anaphoric la misma')]
     ```

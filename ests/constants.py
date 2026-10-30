@@ -1351,6 +1351,7 @@ HIGHLIGHT_LAYERS_DESC = {
     "verbal_nouns": "Verbal nouns",
     "compound_prepositions": "Compound prepositions",
     "cliches": "Clichés",
+    "anaphoric_mismo": "Anaphoric el mismo",
     "stopwords": "Stopwords",
     "parentheticals": "Parenthetical expressions",
     "connectors": "Connectors",
@@ -1359,7 +1360,7 @@ HIGHLIGHT_LAYERS_DESC = {
 HIGHLIGHT_LAYER_GROUPS = {
     "Readability": ("long_sents", "complex_words", "rare_words"),
     "Syntax": ("passive", "participle_clauses", "gerund_clauses", "de_chains", "split_predicates"),
-    "Officialese": ("verbal_nouns", "compound_prepositions", "cliches"),
+    "Officialese": ("verbal_nouns", "compound_prepositions", "cliches", "anaphoric_mismo"),
     "Style": ("stopwords", "parentheticals", "connectors"),
     "Phonics": ("alliteration",),
 }
@@ -1380,6 +1381,7 @@ HIGHLIGHT_LAYER_ANNOTATIONS = {
     "de_chains": ("DEP", "LEMMA"),
     "split_predicates": ("DEP", "LEMMA"),
     "verbal_nouns": ("POS", "LEMMA"),
+    "anaphoric_mismo": ("DEP", "POS", "LEMMA"),
 }
 # CSS declarations of the layers; a later one wins where the backgrounds of layers overlap
 HIGHLIGHT_LAYER_STYLES = {
@@ -1391,6 +1393,7 @@ HIGHLIGHT_LAYER_STYLES = {
     "verbal_nouns": "background: #e9d5ff;",
     "compound_prepositions": "background: #a7f3d0;",
     "cliches": "background: #fbcfe8;",
+    "anaphoric_mismo": "background: #fde68a;",
     "parentheticals": "background: #d9f99d;",
     "participle_clauses": "border-bottom: 2px solid #7c3aed;",
     "gerund_clauses": "border-bottom: 2px solid #0d9488;",
@@ -1403,6 +1406,14 @@ HIGHLIGHT_LAYER_STYLES = {
         "text-underline-offset: 3px;"
     ),
 }
+# The anaphoric el mismo (se archivó el mismo, la duración del mismo): a form of mismo that heads
+# a noun phrase of its own with its article, for which the Diccionario panhispánico de dudas
+# suggests a demonstrative, a possessive or a personal pronoun; after a verb of a predicate it means
+# "the same one" (no parecía la misma), and before que it compares (el mismo que el año pasado)
+MISMO_FORMS = frozenset({"mismo", "misma", "mismos", "mismas"})
+MISMO_ARTICLES = frozenset({"el", "la", "los", "las", "del", "al"})
+MISMO_COMPARATIVE = "que"
+PREDICATIVE_VERBS = frozenset({"ser", "estar", "parecer", "semejar", "permanecer", "resultar"})
 # Number of words from which a sentence is long, by the Spanish-language guides to plain language
 # (Comunidad de Madrid 2021, Gobierno and Legislatura de la Ciudad de Buenos Aires 2024)
 LONG_SENT_WORD_FACTOR = 30
