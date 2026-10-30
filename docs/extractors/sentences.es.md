@@ -73,3 +73,32 @@ Un texto que no es una cadena y un tokenizador que no es invocable o no devuelve
     ('Novedades', 'Importación más rápida\nMenos errores', '¡Gracias!')
     ('No tengas 100 euros', 'ten 100 amigos')
     ```
+
+## Párrafos { #split_paragraphs }
+
+<!-- core: extractors/sentences.md:split_paragraphs 3fe9d43 -->
+``` {.python .signature}
+split_paragraphs(text)
+```
+
+Los párrafos de un texto: sus partes entre líneas en blanco, sin los espacios de sus extremos; una parte solo de espacios no es un párrafo. Una línea en blanco (`BLANK_LINE`) son dos saltos de línea - `\n`, `\r\n`, `\r`, U+0085 o U+2028 - con solo espacios entre ellos, donde el espacio de anchura cero y la marca de orden de bytes cuentan como espacios, o un separador de párrafo U+2029; también termina las oraciones de `SentsExtractor` y los párrafos de `CohesionStats`. Las palabras de los párrafos dan los tamaños de las partes de `dispersion` por párrafo; un párrafo sin palabras, como una separación de escenas con asteriscos, sigue siendo un párrafo. Un texto que no es una cadena lanza `SourceTypeError`.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `text` | `str` | - | Cadena de texto |
+
+En esTS la función se importa de `ests.extractors`; las palabras de los párrafos dan a [`dispersion`](../corpus/dispersion.md) los tamaños de sus partes.
+
+=== "Código"
+
+    ``` python
+    from ests.extractors import split_paragraphs
+
+    split_paragraphs("Capítulo I\n\nEra una noche oscura.\nLlovía.\n\n* * *\n\nAmaneció.")
+    ```
+
+=== "Resultado"
+
+    ```
+    ['Capítulo I', 'Era una noche oscura.\nLlovía.', '* * *', 'Amaneció.']
+    ```

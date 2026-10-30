@@ -114,7 +114,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    [Palabras clave](corpus/keyness.md) frente a un corpus de referencia o al diccionario de frecuencias, [colocaciones](corpus/collocations.md), la [dispersión](corpus/dispersion.md) de una palabra por las partes de un texto, una [concordancia KWIC](corpus/kwic.md), la autoría por [estilometría](corpus/stylometry.md) (la Delta de Burrows, Zeta, la curva de Mendenhall, las palabras funcionales) y la [comparación de corpus](corpus/compare.md) por 133 rasgos de un texto
+    [Palabras clave](corpus/keyness.md) frente a un corpus de referencia o al diccionario de frecuencias, [colocaciones](corpus/collocations.md), la [dispersión](corpus/dispersion.md) de una palabra por las partes de un texto, una [concordancia KWIC](corpus/kwic.md), la autoría por [estilometría](corpus/stylometry.md) (la Delta de Burrows y la Delta móvil, Zeta y sus marcadores en segmentos, la curva de Mendenhall, las palabras funcionales) y la [comparación de corpus](corpus/compare.md) por 133 rasgos de un texto
 
     [:octicons-arrow-right-24: Medidas de corpus](corpus/keyness.md)
 
@@ -284,7 +284,7 @@ Un cuento analizado con todas las herramientas de la biblioteca está en el cuad
             *   fingerprinting.py - huella literaria
             *   highlight.py - resaltado del texto
             *   sentences.py - longitudes de las oraciones
-            *   stylometry.py - dendrograma, componentes principales, escalamiento, curvas de Mendenhall
+            *   stylometry.py - dendrograma, componentes principales, escalamiento, distancias dentro de un autor y entre autores, Delta móvil, marcadores de Zeta, curvas de Mendenhall
             *   vocabulary.py - crecimiento del vocabulario y espectro de frecuencias
             *   word_tree.py - árbol de palabras
             *   zipf.py - ley de Zipf

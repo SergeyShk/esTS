@@ -562,7 +562,7 @@ Las medidas de la lingüística de corpus que comparan corpus y describen el uso
 *   colocaciones por logDice, MI, MI³, t-score, Dice, razón de verosimilitud, NPMI y sensibilidad mínima; los colocados de una palabra a su izquierda o a su derecha
 *   la dispersión de una palabra por las partes de un texto: la DP de Gries, la DP normalizada, la D de Juilland, la D2 de Carroll, la S de Rosengren y la divergencia de Kullback-Leibler
 *   una concordancia KWIC por forma o por lema
-*   estilometría: las distancias entre textos por la Delta de Burrows y sus variantes, con la atribución de un texto a autores de referencia, los marcadores de palabras preferidas y evitadas por Zeta, el ji cuadrado de Kilgarriff, la curva de Mendenhall y el perfil de las palabras funcionales
+*   estilometría: las distancias entre textos por la Delta de Burrows y sus variantes, con la atribución de un texto a autores de referencia y la Delta móvil a lo largo de un texto, los marcadores de palabras preferidas y evitadas por Zeta y sus proporciones en segmentos, el ji cuadrado de Kilgarriff, la curva de Mendenhall y el perfil de las palabras funcionales
 *   la comparación de dos corpus por 133 rasgos de un texto en ventanas del mismo tamaño: la delta de Cliff, la d de Cohen y el AUC de cada rasgo, la prueba de Mann-Whitney con la corrección de Holm y un intervalo bootstrap de la diferencia de las medianas
 
 ```python
@@ -634,7 +634,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/datasets/spanish
 *   [Huella literaria](https://sergeyshk.github.io/esTS/es/visualizers/fingerprinting/)
 *   [Árbol de palabras](https://sergeyshk.github.io/esTS/es/visualizers/word_tree/)
 *   [Gráficos de corpus](https://sergeyshk.github.io/esTS/es/visualizers/corpus/): dispersión léxica, un diagrama de palabras clave, una red de colocaciones
-*   [Gráficos estilométricos](https://sergeyshk.github.io/esTS/es/visualizers/stylometry/): un dendrograma, las componentes principales y el escalamiento multidimensional por la Delta, las curvas de Mendenhall
+*   [Gráficos estilométricos](https://sergeyshk.github.io/esTS/es/visualizers/stylometry/): un dendrograma, las componentes principales y el escalamiento multidimensional por la Delta, los histogramas de las distancias dentro de un autor y entre autores, la Delta móvil, los segmentos por los marcadores de Zeta, las curvas de Mendenhall
 *   [Crecimiento del vocabulario y espectro de frecuencias](https://sergeyshk.github.io/esTS/es/visualizers/vocabulary/), [longitudes de las oraciones](https://sergeyshk.github.io/esTS/es/visualizers/sentences/) con una media móvil
 
 Los gráficos de matplotlib reciben los ejes `ax` y devuelven `Axes`; la red de colocaciones y el árbol de palabras los dibujan los ejecutables de Graphviz. La Delta coseno separa tres novelas de Galdós de tres de Unamuno:
