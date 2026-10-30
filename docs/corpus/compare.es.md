@@ -80,9 +80,9 @@ Galdós frente a Unamuno, tres novelas de cada uno del [corpus de literatura](..
     {'n_Galdós': 155, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0.35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones.
+Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0.35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones. La cohesión también los distingue (`result.filter(like="cohesion_", axis=0)`): Unamuno abre con un conector más del triple de oraciones (`cohesion_connectors_inter`, 20 frente a 6 por cada 1000 palabras) y repite más palabras con contenido de una oración en las dos siguientes (0.108 frente a 0.065). La repetición binaria en los pares contiguos y en todos los pares de oraciones repite en parte la longitud de las oraciones - la ρ de Spearman de `cohesion_content_overlap_all` con `sents_mean` por ventanas es de 0.76 en Galdós y 0.71 en Unamuno -, mientras que la proporción de palabras con contenido repetidas en las dos oraciones siguientes no depende de ella (0.02 y -0.01).
 
-Los valores p toman las 272 ventanas de seis novelas por independientes (véase el [aviso](#statistics) de abajo), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 43 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 6.7 palabras, donde las ventanas solas darían de 3.9 a 6.1.
+Los valores p toman las 272 ventanas de seis novelas por independientes (véase el [aviso](#statistics) de abajo), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 52 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 6.7 palabras, donde las ventanas solas darían de 3.9 a 6.1.
 
 ## Parámetros
 
@@ -109,7 +109,7 @@ Excepciones:
 text_features(text, nlp=None)
 ```
 
-Devuelve 133 rasgos de un texto con un prefijo según su fuente; un rasgo indefinido es `nan`.
+Devuelve 163 rasgos de un texto con un prefijo según su fuente, 209 con un pipeline que tiene analizador sintáctico; un rasgo indefinido es `nan`.
 
 | Prefijo | Rasgos | Fuente |
 | :------ | :----- | :----- |
@@ -119,24 +119,26 @@ Devuelve 133 rasgos de un texto con un prefijo según su fuente; un rasgo indefi
 | `morph_` | proporciones de los valores de cada rasgo morfológico (`morph_pos_NOUN`, `morph_mood_Sub`, `morph_polarity_Neg`) y los marcadores del español (`morph_p_gerund`, `morph_p_mente_adverbs`) | [`MorphStats`](../stats/morph_stats.md) con el modelo de spaCy |
 | `sents_` | longitud media de una oración en palabras, desviación típica, coeficiente de variación, autocorrelación de las longitudes vecinas ([`sentence_rhythm`](#sentence_rhythm)): el ritmo del texto | [`SentsExtractor`](../extractors/sentences.md) |
 | `punct_` | frecuencias de los signos de puntuación por tipo por cada 1000 palabras y la proporción de los signos de apertura | [`punctuation_profile`](../stats/basic_stats.md#punctuation) |
+| `cohesion_` | repetición de sustantivos, argumentos y palabras con contenido entre oraciones, información dada, cohesión temporal y densidades de los conectores por clase, tipo y lugar, salvo la repetición entre párrafos, que las ventanas cortan | [`CohesionStats`](../stats/cohesion_stats.md) según el modelo de spaCy |
+| `syntax_` | todas las estadísticas sintácticas, con un pipeline que tiene analizador sintáctico | [`SyntaxStats`](../stats/syntax_stats.md) |
 
 Se dejan fuera el tiempo de lectura, que solo sigue el número de palabras de una ventana, y los rasgos que repiten otros: la proporción de palabras únicas de `BasicStats`, que repite `diversity_ttr`, sus palabras por oración, que repiten `sents_mean`, y los marcadores de los modos de `get_markers`, que repiten `morph_mood_*`.
 
 Las categorías gramaticales y los rasgos de un solo valor - polaridad, cortesía, posesivo, reflexivo - son proporciones de todas las palabras (`morph_polarity_Neg` es la proporción de las negaciones), los demás rasgos, proporciones de las palabras que los llevan (`morph_mood_Sub` es el subjuntivo entre los modos). Un valor que no aparece en una ventana da 0; un rasgo ausente de la ventana por completo (sin verbos no hay tiempo) da `nan`. Un valor de varios valores (`PronType=Int,Rel` de *que*) se reparte a partes iguales entre sus partes, así que las proporciones de un rasgo siguen sumando uno.
 
-La morfología la analiza el modelo [`es_core_news_sm`](../installation.md#model) sin su analizador sintáctico, así que el marcador `morph_p_ser`, que lee las cópulas de las dependencias, se deja fuera; un pipeline pasado en `nlp` se ejecuta entero salvo el reconocedor de entidades, así que `functools.partial(text_features, nlp=get_nlp())` recupera el analizador sintáctico y `morph_p_ser`, y otro modelo entra en la comparación del mismo modo. Una novela se compara por ventanas y no entera, ya que el pipeline admite como mucho `max_length` caracteres.
+La morfología y la cohesión las analiza el modelo [`es_core_news_sm`](../installation.md#model) sin su analizador sintáctico, así que el marcador `morph_p_ser`, que lee las cópulas de las dependencias, y el grupo `syntax_` se dejan fuera; un pipeline pasado en `nlp` se ejecuta entero salvo el reconocedor de entidades, así que `functools.partial(text_features, nlp=get_nlp())` incorpora el analizador sintáctico, `morph_p_ser` y la sintaxis, y otro modelo entra en la comparación del mismo modo. El análisis toma las oraciones del grupo `sents_` ([`set_sent_starts`](https://sergeyshk.github.io/anyTS/utils/spacy/#set_sent_starts) del núcleo), así que la cohesión y la sintaxis cuentan las mismas oraciones que el ritmo. Una novela se compara por ventanas y no entera, ya que el pipeline admite como mucho `max_length` caracteres.
 
 Las proporciones de espacios, letras y signos de puntuación (`basic_p_spaces`, `basic_p_letters`, `basic_p_punctuations`) cuentan los caracteres tal cual: las sangrías, los espacios dobles y los de no separación de los archivos reflejan la composición de una edición y no el texto. En un corpus de fuentes distintas conviene colapsarlos antes, por ejemplo, con `re.sub(r"[^\S\n]+", " ", text)`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
 | `text` | `str` | - | Cadena de texto |
-| `nlp` | `Language` | `None` | Pipeline para la morfología; `None` - el modelo por defecto sin su analizador sintáctico |
+| `nlp` | `Language` | `None` | Pipeline para la morfología, la cohesión y, con analizador sintáctico, la sintaxis; `None` - el modelo por defecto sin su analizador sintáctico |
 
 Excepciones:
 
 - `SourceTypeError` - un texto que no es una cadena, un pipeline que no es un `Language` de spaCy;
-- `SourceError` - un texto sin palabras, con un carácter sin forma UTF-8 o más largo que el `max_length` del pipeline;
+- `SourceError` - un texto sin palabras, con un carácter sin forma UTF-8 o más largo que el `max_length` del pipeline, un pipeline que no da las categorías gramaticales o los lemas;
 - `DatasetNotFoundError` - el modelo por defecto no está instalado.
 
 ``` {.python .signature}
@@ -159,23 +161,17 @@ Excepciones:
 - `ParameterError` - un `window` o un `min_words` que no es un entero de al menos uno, un `min_words` mayor que `window`;
 - `DatasetNotFoundError` - los rasgos por defecto sin el modelo instalado.
 
-Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:
+Los rasgos sintácticos llegan con un pipeline que tiene analizador sintáctico, pasado en una función de los rasgos; los rasgos propios se pasan del mismo modo:
 
 === "Código"
 
     ``` python
-    from ests import SyntaxStats
+    from functools import partial
+
     from ests.corpus import compare_corpora, text_features
     from ests.utils import get_nlp
 
-    nlp = get_nlp()
-
-
-    def features(text):
-        stats = SyntaxStats(nlp(text)).get_stats()
-        return {**text_features(text), **{f"syntax_{key}": value for key, value in stats.items()}}
-
-
+    features = partial(text_features, nlp=get_nlp())
     result = compare_corpora(
         galdos, unamuno, window=1000, features=features, labels=("Galdós", "Unamuno")
     )
@@ -186,11 +182,11 @@ Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:
 
     ```
                                         median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    syntax_gerund_clauses_per_sent              0.156           0.047   0.092    0.132    1.494        0.854  0.927     0.0
-    syntax_complex_nominals_per_clause          0.695           0.483   0.178    0.236    1.237        0.709  0.855     0.0
-    syntax_tree_depth                           3.870           3.012   0.625    1.134    1.113        0.661  0.830     0.0
-    syntax_subtrees_per_sent                    7.193           4.864   1.500    3.351    0.975        0.648  0.824     0.0
-    syntax_p_complex_sents                      0.613           0.470   0.092    0.193    1.248        0.644  0.822     0.0
+    syntax_gerund_clauses_per_sent              0.145           0.045   0.088    0.119    1.460        0.848  0.924     0.0
+    syntax_complex_nominals_per_clause          0.684           0.474   0.185    0.240    1.221        0.710  0.855     0.0
+    syntax_tree_depth                           3.727           2.861   0.529    1.057    1.064        0.659  0.830     0.0
+    syntax_subtrees_per_sent                    6.742           4.494   1.484    2.921    0.932        0.656  0.828     0.0
+    syntax_t_units_per_sent                     1.077           1.010   0.028    0.159    1.350        0.650  0.825     0.0
     ```
 
 ## Comparación de tablas de rasgos { #compare_features }

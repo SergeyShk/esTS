@@ -114,7 +114,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    [Keywords](corpus/keyness.md) against a reference corpus or the frequency dictionary, [collocations](corpus/collocations.md), the [dispersion](corpus/dispersion.md) of a word over the parts of a text, a [KWIC concordance](corpus/kwic.md), authorship by [stylometry](corpus/stylometry.md) (Burrows's Delta and rolling Delta, Zeta and its markers in segments, the Mendenhall curve, the function words) and the [comparison of corpora](corpus/compare.md) over 133 features of a text
+    [Keywords](corpus/keyness.md) against a reference corpus or the frequency dictionary, [collocations](corpus/collocations.md), the [dispersion](corpus/dispersion.md) of a word over the parts of a text, a [KWIC concordance](corpus/kwic.md), authorship by [stylometry](corpus/stylometry.md) (Burrows's Delta and rolling Delta, Zeta and its markers in segments, the Mendenhall curve, the function words) and the [comparison of corpora](corpus/compare.md) over 163 features of a text
 
     [:octicons-arrow-right-24: Corpus measures](corpus/keyness.md)
 

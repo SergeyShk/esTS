@@ -80,9 +80,9 @@ Galdós against Unamuno, three novels each from the [corpus of literature](../da
     {'n_Galdós': 155, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós has the richer vocabulary: the measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Yule's K, which weighs the frequent words, gives a medium effect (0.35), so the difference lies mostly in the rare vocabulary. His words and sentences are longer, with nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue: two and a half times as many dashes and exclamation marks per 1000 words, and more negations.
+Galdós has the richer vocabulary: the measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Yule's K, which weighs the frequent words, gives a medium effect (0.35), so the difference lies mostly in the rare vocabulary. His words and sentences are longer, with nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue: two and a half times as many dashes and exclamation marks per 1000 words, and more negations. The cohesion tells them apart as well (`result.filter(like="cohesion_", axis=0)`): Unamuno opens more than three times as many sentences with a connector (`cohesion_connectors_inter`, 20 against 6 per 1000 words) and repeats more of the content words of a sentence in the next two (0.108 against 0.065). The binary overlaps of the adjacent and of all the pairs of sentences partly repeat the length of the sentences - Spearman's ρ of `cohesion_content_overlap_all` with `sents_mean` over the windows is 0.76 for Galdós and 0.71 for Unamuno - while the share of the content words repeated in the next two sentences is not tied to it (0.02 and -0.01).
 
-The p-values take the 272 windows of six novels for independent (see the [warning](#statistics) below), and by the same test two novels of Galdós, *Marianela* and *Misericordia*, differ in 43 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.1 to 6.7 words, where the windows alone would give 3.9 to 6.1.
+The p-values take the 272 windows of six novels for independent (see the [warning](#statistics) below), and by the same test two novels of Galdós, *Marianela* and *Misericordia*, differ in 52 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.1 to 6.7 words, where the windows alone would give 3.9 to 6.1.
 
 ## Parameters
 
@@ -109,7 +109,7 @@ Raises:
 text_features(text, nlp=None)
 ```
 
-Returns 133 features of a text prefixed by their source; an undefined feature is `nan`.
+Returns 163 features of a text prefixed by their source, 209 with a pipeline that has a parser; an undefined feature is `nan`.
 
 | Prefix | Features | Source |
 | :----- | :------- | :----- |
@@ -119,24 +119,26 @@ Returns 133 features of a text prefixed by their source; an undefined feature is
 | `morph_` | shares of the values of every morphological feature (`morph_pos_NOUN`, `morph_mood_Sub`, `morph_polarity_Neg`) and the markers of Spanish (`morph_p_gerund`, `morph_p_mente_adverbs`) | [`MorphStats`](../stats/morph_stats.md) by the spaCy model |
 | `sents_` | mean length of a sentence in words, standard deviation, coefficient of variation, autocorrelation of neighbouring lengths ([`sentence_rhythm`](#sentence_rhythm)) - the rhythm of the text | [`SentsExtractor`](../extractors/sentences.md) |
 | `punct_` | frequencies of the punctuation marks by type per 1000 words and the share of the inverted marks | [`punctuation_profile`](../stats/basic_stats.md#punctuation) |
+| `cohesion_` | overlaps of the nouns, arguments and content words of the sentences, givenness, temporal cohesion and the densities of the connectors by class, kind and place, but the overlaps between paragraphs, which the windows cut | [`CohesionStats`](../stats/cohesion_stats.md) by the spaCy model |
+| `syntax_` | every syntactic statistic, with a pipeline that has a parser | [`SyntaxStats`](../stats/syntax_stats.md) |
 
 Left out are the reading time, which only follows the number of words in a window, and the features that repeat others: the share of unique words of `BasicStats`, which repeats `diversity_ttr`, its words per sentence, which repeat `sents_mean`, and the markers of the moods of `get_markers`, which repeat `morph_mood_*`.
 
 The parts of speech and the features of a single value - polarity, polite, poss, reflex - are shares of all the words (`morph_polarity_Neg` is the share of the negations), the other features shares of the words that carry them (`morph_mood_Sub` is the subjunctive among the moods). A value that does not occur in a window gives 0, a feature absent from the window altogether (no verbs - no tense) gives `nan`. A value of several values (`PronType=Int,Rel` of *que*) is shared equally among its parts, so the shares of a feature still sum to one.
 
-The morphology is parsed by the model [`es_core_news_sm`](../installation.md#model) without its parser, so the marker `morph_p_ser`, which reads the copulas from the dependencies, is left out; a pipeline passed in `nlp` runs whole but for the entity recognizer, so `functools.partial(text_features, nlp=get_nlp())` brings the parser and `morph_p_ser` back, and another model goes into the comparison the same way. A novel is compared by windows and not whole, as the pipeline takes at most `max_length` characters.
+The morphology and the cohesion are parsed by the model [`es_core_news_sm`](../installation.md#model) without its parser, so the marker `morph_p_ser`, which reads the copulas from the dependencies, and the group `syntax_` are left out; a pipeline passed in `nlp` runs whole but for the entity recognizer, so `functools.partial(text_features, nlp=get_nlp())` brings the parser, `morph_p_ser` and the syntax in, and another model goes into the comparison the same way. The parse takes the sentences of the group `sents_` ([`set_sent_starts`](https://sergeyshk.github.io/anyTS/utils/spacy/#set_sent_starts) of the core), so the cohesion and the syntax count the same sentences as the rhythm. A novel is compared by windows and not whole, as the pipeline takes at most `max_length` characters.
 
 The shares of spaces, letters and punctuation marks (`basic_p_spaces`, `basic_p_letters`, `basic_p_punctuations`) count the characters as they are: indents, double and non-breaking spaces of the files reflect the typesetting of an edition and not the text. In a corpus from different sources collapse them beforehand, for instance with `re.sub(r"[^\S\n]+", " ", text)`.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
 | `text` | `str` | - | Text string |
-| `nlp` | `Language` | `None` | Pipeline for the morphology; `None` - the default model without its parser |
+| `nlp` | `Language` | `None` | Pipeline for the morphology, the cohesion and, with a parser, the syntax; `None` - the default model without its parser |
 
 Raises:
 
 - `SourceTypeError` - a text that is not a string, a pipeline that is not a spaCy `Language`;
-- `SourceError` - a text without words, with a character without a UTF-8 form or longer than the `max_length` of the pipeline;
+- `SourceError` - a text without words, with a character without a UTF-8 form or longer than the `max_length` of the pipeline, a pipeline that gives no parts of speech or no lemmas;
 - `DatasetNotFoundError` - the default model is not installed.
 
 ``` {.python .signature}
@@ -159,23 +161,17 @@ Raises:
 - `ParameterError` - a `window` or `min_words` that is not an integer of at least one, `min_words` above `window`;
 - `DatasetNotFoundError` - the default features without the model installed.
 
-Features of one's own, for instance the syntactic ones, are passed as a function:
+The syntactic features come with a pipeline that has a parser, passed in a function of the features; features of one's own are passed the same way:
 
 === "Code"
 
     ``` python
-    from ests import SyntaxStats
+    from functools import partial
+
     from ests.corpus import compare_corpora, text_features
     from ests.utils import get_nlp
 
-    nlp = get_nlp()
-
-
-    def features(text):
-        stats = SyntaxStats(nlp(text)).get_stats()
-        return {**text_features(text), **{f"syntax_{key}": value for key, value in stats.items()}}
-
-
+    features = partial(text_features, nlp=get_nlp())
     result = compare_corpora(
         galdos, unamuno, window=1000, features=features, labels=("Galdós", "Unamuno")
     )
@@ -186,11 +182,11 @@ Features of one's own, for instance the syntactic ones, are passed as a function
 
     ```
                                         median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    syntax_gerund_clauses_per_sent              0.156           0.047   0.092    0.132    1.494        0.854  0.927     0.0
-    syntax_complex_nominals_per_clause          0.695           0.483   0.178    0.236    1.237        0.709  0.855     0.0
-    syntax_tree_depth                           3.870           3.012   0.625    1.134    1.113        0.661  0.830     0.0
-    syntax_subtrees_per_sent                    7.193           4.864   1.500    3.351    0.975        0.648  0.824     0.0
-    syntax_p_complex_sents                      0.613           0.470   0.092    0.193    1.248        0.644  0.822     0.0
+    syntax_gerund_clauses_per_sent              0.145           0.045   0.088    0.119    1.460        0.848  0.924     0.0
+    syntax_complex_nominals_per_clause          0.684           0.474   0.185    0.240    1.221        0.710  0.855     0.0
+    syntax_tree_depth                           3.727           2.861   0.529    1.057    1.064        0.659  0.830     0.0
+    syntax_subtrees_per_sent                    6.742           4.494   1.484    2.921    0.932        0.656  0.828     0.0
+    syntax_t_units_per_sent                     1.077           1.010   0.028    0.159    1.350        0.650  0.825     0.0
     ```
 
 ## Comparison of feature tables { #compare_features }
