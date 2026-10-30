@@ -456,3 +456,8 @@ def test_word_length_entropy():
     # Letters: 2, 4, 6, 2, 4; syllables: 1, 2, 2, 1, 2
     assert bs.letters_entropy == pytest.approx(-(2 * 0.4 * log2(0.4) + 0.2 * log2(0.2)))
     assert bs.syllables_entropy == pytest.approx(-(0.4 * log2(0.4) + 0.6 * log2(0.6)))
+    doc = BasicStats(get_nlp()("El gato duerme en casa."))
+    assert (doc.letters_entropy, doc.syllables_entropy) == (
+        bs.letters_entropy,
+        bs.syllables_entropy,
+    )

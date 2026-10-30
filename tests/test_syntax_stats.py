@@ -39,6 +39,7 @@ from ests.syntax_stats import (
     is_participle_clause,
     is_passive,
     is_predicate,
+    is_prep_complement,
     is_split_predicate_noun,
     is_subordinate_clause_head,
     predicate_form,
@@ -791,3 +792,41 @@ def test_order_chains_and_t_units(nlp, text, expected):
     sentences, with the Spanish hooks of the clauses"""
     stats = SyntaxStats(nlp(text)).get_stats()
     assert {key: stats[key] for key in expected} == pytest.approx(expected)
+
+
+def test_similarity_of_adjacent_sentences(nlp):
+    """Sentences of one structure: no edit distance of their parts of speech, the same triples"""
+    stats = SyntaxStats(nlp("El niño lee un libro. La niña escribe una carta."))
+    assert (stats.pos_edit_distance, stats.syntax_similarity) == (0.0, 1.0)
+    one = SyntaxStats(nlp("El niño lee un libro."))
+    assert isnan(one.pos_edit_distance) and isnan(one.syntax_similarity)
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        # A coordination of the subjects and of the objects of one verb phrase
+        (
+            "Juan y María compraron manzanas y peras.",
+            {"n_coordinate_phrases": 2, "n_verb_phrases": 1, "n_t_units": 1},
+        ),
+        ("La casa grande de mi padre está cerca.", {"n_complex_nominals": 1}),
+        ("Compré el libro.", {"n_nominal_objects": 1, "n_preverbal_objects": 0}),
+    ],
+)
+def test_counts_of_l2sca_and_word_order(nlp, text, expected):
+    stats = SyntaxStats(nlp(text))
+    assert {key: getattr(stats, key) for key in expected} == expected
+
+
+def test_prep_complements_of_spanish_prepositions(nlp):
+    """A contraction (del) and a preposition of several words (junto a, a pesar de) mark a
+    complement; the complements of one chain make a prepositional chain"""
+    doc = nlp("Vive junto a la playa del norte. A pesar de la lluvia, salimos.")
+    assert [token.text for token in doc if is_prep_complement(token)] == [
+        "playa",
+        "norte",
+        "lluvia",
+    ]
+    stats = SyntaxStats(doc)
+    assert (stats.n_prep_chains, stats.max_prep_chain_len) == (1, 2)

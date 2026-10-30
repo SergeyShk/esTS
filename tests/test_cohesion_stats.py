@@ -505,3 +505,12 @@ def test_find_connectors_blocked(nlp):
     assert find_connectors(texts, pos=pos, blocked=blocked) == []
     with pytest.raises(ParameterError):
         find_connectors(texts, blocked={4})
+
+
+def test_paragraphs_of_a_doc_with_the_blank_lines_component():
+    """The component of the blank lines before the parser keeps the paragraphs of the string"""
+    pipeline = spacy.load("es_core_news_sm")
+    pipeline.add_pipe("ests_blank_lines", before="parser")
+    cs = CohesionStats(pipeline(PARAGRAPHS))
+    assert cs.n_paragraphs == 3
+    assert cs.noun_overlap_para == CohesionStats(PARAGRAPHS).noun_overlap_para
