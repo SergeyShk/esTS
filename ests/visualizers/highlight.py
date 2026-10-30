@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 import anyts.visualizers.highlight
 from anyts.constants import ALLITERATION_MIN_WORD_LEN, ALLITERATION_THRESHOLD, AUXILIARY_DEPS
 from anyts.syntax_stats import base_dep, get_children, get_words, is_root, subtree_len
-from anyts.utils import check_words, in_order, is_word
+from anyts.utils import check_words, has_feature, in_order, is_word
 from anyts.visualizers.highlight import (
     Highlight as Highlight,
     Sent as Sent,
@@ -67,8 +67,9 @@ ALLITERATION_FREQUENCIES = {sound: SOUND_FREQUENCIES[sound] for sound in CONSONA
 ARGUMENT_DEPS = frozenset({"nsubj", "obj", "iobj", "obl", "nmod", "conj"})
 NP_DEPS = frozenset({"det", "case", "cc"})
 NOMINAL_POS = frozenset({"NOUN", "PROPN", "ADJ", "NUM", "PRON"})
-# Parts of speech of a modifier coordinated to mismo before their noun (del mismo o distinto sexo)
-MODIFIER_POS = frozenset({"ADJ", "DET", "NUM"})
+# Pronoun types of a determiner that opens a noun phrase of its own, not a modifier coordinated
+# with mismo before their noun (de la misma o distinta categoría)
+NP_OPENING_PRON_TYPES = frozenset({"Art", "Prs"})
 
 
 class HighlightedText(anyts.visualizers.highlight.HighlightedText):
@@ -97,10 +98,11 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
                 unlikely by the frequencies of the Spanish sounds (PhonStats)
         HIGHLIGHT_LAYER_GROUPS groups the layers. The syntactic layers need a Doc
         with a dependency parse and the lemmas, verbal_nouns a Doc with the parts
-        of speech and the lemmas, anaphoric_mismo one with all three; a Doc without the sentence boundaries is split
-        by the rules of SentsExtractor. By default the layers of
-        HIGHLIGHT_DEFAULT_LAYERS the source allows are on (long sentences, complex
-        words, passive, chains of de, split predicates, clichés)
+        of speech and the lemmas, anaphoric_mismo one with all three; a Doc
+        without the sentence boundaries is split by the rules of SentsExtractor.
+        By default the layers of HIGHLIGHT_DEFAULT_LAYERS the source allows are on
+        (long sentences, complex words, passive, chains of de, split predicates,
+        clichés)
         A word is complex from 4 syllables here; complex_syl_factor=3 shows the
         words of n_complex_words
         The result shows in Jupyter as HTML with a legend (to_html); fragments of
@@ -789,9 +791,10 @@ def is_anaphoric_mismo(token: Token) -> bool:
         article of MISMO_ARTICLES and no other dependent, as an argument
         (se archivó el mismo, la duración del mismo, dentro de la misma), but
         not as the subject or the object after a verb of PREDICATIVE_VERBS,
-        where it means the same one (no parecía la misma), before que (el
-        mismo que el año pasado) or before a coordinated modifier of a shared
-        noun (del mismo o distinto sexo). The models attach some of them to
+        where it means the same one (no parecía la misma), right before que
+        (el mismo que el año pasado) or before a conjunction and an adjective
+        or a determiner that shares its noun (de la misma o distinta
+        categoría). The models attach some of them to
         their article (en la misma hay oficinas): such a form counts when no
         noun, adjective, numeral or pronoun follows it in its sentence. The
         identity of el mismo día, es el mismo, lo mismo and él mismo is no
@@ -805,12 +808,13 @@ def is_anaphoric_mismo(token: Token) -> bool:
     """
     if token.lower_ not in MISMO_FORMS:
         return False
-    following = list(
-        islice((word for word in token.doc[token.i + 1 : token.sent.end] if is_word(word)), 2)
+    sent_end = token.sent.end
+    after = list(
+        islice((word for word in token.doc[token.i + 1 : sent_end] if not word.is_space), 2)
     )
-    if following and following[0].lower_ == MISMO_COMPARATIVE:
+    if after and after[0].lower_ == MISMO_COMPARATIVE:
         return False
-    if len(following) == 2 and following[0].pos_ == "CCONJ" and following[1].pos_ in MODIFIER_POS:
+    if len(after) == 2 and after[0].pos_ == "CCONJ" and _is_modifier(after[1]):
         return False
     children = get_children(token)
     if any(child.lower_ in MISMO_ARTICLES and base_dep(child) in NP_DEPS for child in children):
@@ -827,7 +831,18 @@ def is_anaphoric_mismo(token: Token) -> bool:
     head = token.head
     if children or head.i != token.i - 1 or head.lower_ not in MISMO_ARTICLES:
         return False
-    return not following or following[0].pos_ not in NOMINAL_POS
+    following = next((word for word in token.doc[token.i + 1 : sent_end] if is_word(word)), None)
+    return following is None or following.pos_ not in NOMINAL_POS
+
+
+def _is_modifier(word: Token) -> bool:
+    """Whether a word after a conjunction modifies a noun with the word before it: an adjective,
+    or a determiner other than an article or a possessive"""
+    if word.pos_ == "ADJ":
+        return True
+    return word.pos_ == "DET" and not any(
+        has_feature(word, "PronType", value) for value in NP_OPENING_PRON_TYPES
+    )
 
 
 def find_anaphoric_mismo(doc: Doc) -> list[Highlight]:

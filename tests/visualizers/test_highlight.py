@@ -429,6 +429,9 @@ def test_split_predicates(doc):
         ("El edificio tiene tres plantas; en la misma hay oficinas.", ["la misma"]),
         ("El edificio tiene tres plantas; en la misma\nhay oficinas.", ["la misma"]),
         ("Se presentó el recurso, pero el mismo parece infundado.", ["el mismo"]),
+        ("Se dio traslado del mismo, que deberá ser contestado en diez días.", ["del mismo"]),
+        ("La duración del mismo y el precio se publicaron.", ["del mismo"]),
+        ("Se archivó el mismo y tres días después se notificó.", ["el mismo"]),
         # The identity, the emphasis and the adjective are no anaphora
         ("Llegaron el mismo día.", []),
         ("Este informe es el mismo que enviaste ayer.", []),
@@ -437,10 +440,11 @@ def test_split_predicates(doc):
         ("Los dos parecen el mismo.", []),
         ("La situación permanece la misma.", []),
         ("Se aplicará el mismo que en el ejercicio anterior.", []),
-        # A modifier coordinated to mismo before their noun
+        ("Vinieron los mismos de siempre.", []),
+        # A modifier coordinated with mismo before their noun, not a new noun phrase
         ("Podrán participar los funcionarios de la misma o superior categoría.", []),
         ("Los trabajadores que se encuentren en la misma o parecida situación cobrarán.", []),
-        ("Vinieron los mismos de siempre.", []),
+        ("Se trasladarán a la misma u otra sede.", []),
         ("Lo mismo ocurre con los demás.", []),
         ("Ella misma firmó el contrato.", []),
         ("Del mismo modo, los vecinos protestaron.", []),
