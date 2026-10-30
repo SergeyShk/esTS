@@ -2188,8 +2188,8 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 </div>
 </div>
 </div>
-<p>Galdós has the richer vocabulary: the measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Yule's K, which weighs the frequent words, gives a medium effect (0.35), so the difference lies mostly in the rare vocabulary. His words and sentences are longer, with nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue: two and a half times as many dashes and exclamation marks per 1000 words, and more negations.</p>
-<p>The p-values take the 272 windows of six novels for independent (see the <a href="#statistics">warning</a> below), and by the same test two novels of Galdós, <em>Marianela</em> and <em>Misericordia</em>, differ in 43 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.1 to 6.7 words, where the windows alone would give 3.9 to 6.1.</p>
+<p>Galdós has the richer vocabulary: the measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Yule's K, which weighs the frequent words, gives a medium effect (0.35), so the difference lies mostly in the rare vocabulary. His words and sentences are longer, with nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue: two and a half times as many dashes and exclamation marks per 1000 words, and more negations. The cohesion tells them apart as well (<code>result.filter(like="cohesion_", axis=0)</code>): per 1000 words Unamuno opens more than three times as many sentences with a connector (<code>cohesion_connectors_inter</code>, 20 against 6) - about 2.4 times as many per sentence, his sentences being shorter - and he repeats more of the content words of a sentence in the next two (0.108 against 0.065). Part of the cohesion follows the length of the sentences: Spearman's ρ with <code>sents_mean</code> over the windows is 0.76 for Galdós and 0.71 for Unamuno for <code>cohesion_content_overlap_all</code>, the binary overlap of all the pairs of sentences, and -0.49 and -0.61 for the connectors opening a sentence, while the share of the content words repeated in the next two sentences is not tied to it (0.02 and -0.01).</p>
+<p>The p-values take the 272 windows of six novels for independent (see the <a href="#statistics">warning</a> below), and by the same test two novels of Galdós, <em>Marianela</em> and <em>Misericordia</em>, differ in 52 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.1 to 6.7 words, where the windows alone would give 3.9 to 6.1.</p>
 <h2 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2244,7 +2244,7 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 <h2 id="text_features">Features<a class="headerlink" href="#text_features" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">text_features</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>Returns 133 features of a text prefixed by their source; an undefined feature is <code>nan</code>.</p>
+<p>Returns 163 features of a text prefixed by their source, 209 with a pipeline that has a parser; an undefined feature is <code>nan</code>.</p>
 <table>
 <thead>
 <tr>
@@ -2284,11 +2284,21 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 <td style="text-align: left;">frequencies of the punctuation marks by type per 1000 words and the share of the inverted marks</td>
 <td style="text-align: left;"><a href="../../stats/basic_stats/#punctuation"><code>punctuation_profile</code></a></td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>cohesion_</code></td>
+<td style="text-align: left;">overlaps of the nouns, arguments and content words of the sentences, givenness, temporal cohesion and the densities of the connectors by class, kind and place, but the overlaps between paragraphs, which the windows cut</td>
+<td style="text-align: left;"><a href="../../stats/cohesion_stats/"><code>CohesionStats</code></a> by the spaCy model</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>syntax_</code></td>
+<td style="text-align: left;">every syntactic statistic, with a pipeline that has a parser</td>
+<td style="text-align: left;"><a href="../../stats/syntax_stats/"><code>SyntaxStats</code></a></td>
+</tr>
 </tbody>
 </table>
 <p>Left out are the reading time, which only follows the number of words in a window, and the features that repeat others: the share of unique words of <code>BasicStats</code>, which repeats <code>diversity_ttr</code>, its words per sentence, which repeat <code>sents_mean</code>, and the markers of the moods of <code>get_markers</code>, which repeat <code>morph_mood_*</code>.</p>
 <p>The parts of speech and the features of a single value - polarity, polite, poss, reflex - are shares of all the words (<code>morph_polarity_Neg</code> is the share of the negations), the other features shares of the words that carry them (<code>morph_mood_Sub</code> is the subjunctive among the moods). A value that does not occur in a window gives 0, a feature absent from the window altogether (no verbs - no tense) gives <code>nan</code>. A value of several values (<code>PronType=Int,Rel</code> of <em>que</em>) is shared equally among its parts, so the shares of a feature still sum to one.</p>
-<p>The morphology is parsed by the model <a href="../../installation/#model"><code>es_core_news_sm</code></a> without its parser, so the marker <code>morph_p_ser</code>, which reads the copulas from the dependencies, is left out; a pipeline passed in <code>nlp</code> runs whole but for the entity recognizer, so <code>functools.partial(text_features, nlp=get_nlp())</code> brings the parser and <code>morph_p_ser</code> back, and another model goes into the comparison the same way. A novel is compared by windows and not whole, as the pipeline takes at most <code>max_length</code> characters.</p>
+<p>The morphology and the cohesion are parsed by the model <a href="../../installation/#model"><code>es_core_news_sm</code></a> without its parser, so the marker <code>morph_p_ser</code>, which reads the copulas from the dependencies, and the group <code>syntax_</code> are left out; a pipeline passed in <code>nlp</code> runs whole but for the entity recognizer, so <code>functools.partial(text_features, nlp=get_nlp())</code> brings the parser, <code>morph_p_ser</code> and the syntax in, and another model goes into the comparison the same way. The parse takes the sentences of the group <code>sents_</code> (<a href="https://sergeyshk.github.io/anyTS/utils/spacy/#set_sent_starts"><code>set_sent_starts</code></a> of the core), so the cohesion and the syntax count the same sentences as the rhythm. A novel is compared by windows and not whole, as the pipeline takes at most <code>max_length</code> characters.</p>
 <p>The shares of spaces, letters and punctuation marks (<code>basic_p_spaces</code>, <code>basic_p_letters</code>, <code>basic_p_punctuations</code>) count the characters as they are: indents, double and non-breaking spaces of the files reflect the typesetting of an edition and not the text. In a corpus from different sources collapse them beforehand, for instance with <code>re.sub(r"[^\S\n]+", " ", text)</code>.</p>
 <table>
 <thead>
@@ -2310,14 +2320,14 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 <td style="text-align: left;"><code>nlp</code></td>
 <td style="text-align: left;"><code>Language</code></td>
 <td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Pipeline for the morphology; <code>None</code> - the default model without its parser</td>
+<td style="text-align: left;">Pipeline for the morphology, the cohesion and, with a parser, the syntax; <code>None</code> - the default model without its parser</td>
 </tr>
 </tbody>
 </table>
 <p>Raises:</p>
 <ul>
 <li><code>SourceTypeError</code> - a text that is not a string, a pipeline that is not a spaCy <code>Language</code>;</li>
-<li><code>SourceError</code> - a text without words, with a character without a UTF-8 form or longer than the <code>max_length</code> of the pipeline;</li>
+<li><code>SourceError</code> - a text without words, with a character without a UTF-8 form or longer than the <code>max_length</code> of the pipeline, a pipeline that gives no parts of speech or no lemmas;</li>
 <li><code>DatasetNotFoundError</code> - the default model is not installed.</li>
 </ul>
 <div class="signature highlight"><pre><span></span><code><span class="n">corpus_features</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">text_features</span><span class="p">,</span> <span class="n">min_words</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -2366,22 +2376,16 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 <li><code>ParameterError</code> - a <code>window</code> or <code>min_words</code> that is not an integer of at least one, <code>min_words</code> above <code>window</code>;</li>
 <li><code>DatasetNotFoundError</code> - the default features without the model installed.</li>
 </ul>
-<p>Features of one's own, for instance the syntactic ones, are passed as a function:</p>
+<p>The syntactic features come with a pipeline that has a parser, passed in a function of the features; features of one's own are passed the same way:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Code</label><label for="__tabbed_2_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">SyntaxStats</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">compare_corpora</span><span class="p">,</span> <span class="n">text_features</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
 
-<span class="n">nlp</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">features</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-    <span class="n">stats</span> <span class="o">=</span> <span class="n">SyntaxStats</span><span class="p">(</span><span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">))</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
-    <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="n">text_features</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">"syntax_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">"</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">()}}</span>
-
-
+<span class="n">features</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">text_features</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="n">get_nlp</span><span class="p">())</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">compare_corpora</span><span class="p">(</span>
     <span class="n">galdos</span><span class="p">,</span> <span class="n">unamuno</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s2">"Galdós"</span><span class="p">,</span> <span class="s2">"Unamuno"</span><span class="p">)</span>
 <span class="p">)</span>
@@ -2390,11 +2394,11 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>                                    median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-syntax_gerund_clauses_per_sent              0.156           0.047   0.092    0.132    1.494        0.854  0.927     0.0
-syntax_complex_nominals_per_clause          0.695           0.483   0.178    0.236    1.237        0.709  0.855     0.0
-syntax_tree_depth                           3.870           3.012   0.625    1.134    1.113        0.661  0.830     0.0
-syntax_subtrees_per_sent                    7.193           4.864   1.500    3.351    0.975        0.648  0.824     0.0
-syntax_p_complex_sents                      0.613           0.470   0.092    0.193    1.248        0.644  0.822     0.0
+syntax_gerund_clauses_per_sent              0.145           0.045   0.088    0.119    1.460        0.848  0.924     0.0
+syntax_complex_nominals_per_clause          0.684           0.474   0.185    0.240    1.221        0.710  0.855     0.0
+syntax_tree_depth                           3.727           2.861   0.529    1.057    1.064        0.659  0.830     0.0
+syntax_subtrees_per_sent                    6.742           4.494   1.484    2.921    0.932        0.656  0.828     0.0
+syntax_t_units_per_sent                     1.077           1.010   0.028    0.159    1.350        0.650  0.825     0.0
 </code></pre></div>
 </div>
 </div>

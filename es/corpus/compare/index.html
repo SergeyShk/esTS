@@ -2188,8 +2188,8 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 </div>
 </div>
 </div>
-<p>Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0.35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones.</p>
-<p>Los valores p toman las 272 ventanas de seis novelas por independientes (véase el <a href="#statistics">aviso</a> de abajo), y según la misma prueba dos novelas de Galdós, <em>Marianela</em> y <em>Misericordia</em>, difieren en 43 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 6.7 palabras, donde las ventanas solas darían de 3.9 a 6.1.</p>
+<p>Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0.35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones. La cohesión también los distingue (<code>result.filter(like="cohesion_", axis=0)</code>): por cada 1000 palabras Unamuno abre con un conector más del triple de oraciones (<code>cohesion_connectors_inter</code>, 20 frente a 6) - unas 2.4 veces más por oración, ya que sus oraciones son más cortas - y repite más palabras con contenido de una oración en las dos siguientes (0.108 frente a 0.065). Parte de la cohesión sigue la longitud de las oraciones: la ρ de Spearman con <code>sents_mean</code> por ventanas es de 0.76 en Galdós y 0.71 en Unamuno para <code>cohesion_content_overlap_all</code>, la repetición binaria en todos los pares de oraciones, y de -0.49 y -0.61 para los conectores que abren una oración, mientras que la proporción de palabras con contenido repetidas en las dos oraciones siguientes no depende de ella (0.02 y -0.01).</p>
+<p>Los valores p toman las 272 ventanas de seis novelas por independientes (véase el <a href="#statistics">aviso</a> de abajo), y según la misma prueba dos novelas de Galdós, <em>Marianela</em> y <em>Misericordia</em>, difieren en 52 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 6.7 palabras, donde las ventanas solas darían de 3.9 a 6.1.</p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2244,7 +2244,7 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 <h2 id="text_features">Rasgos<a class="headerlink" href="#text_features" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">text_features</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>Devuelve 133 rasgos de un texto con un prefijo según su fuente; un rasgo indefinido es <code>nan</code>.</p>
+<p>Devuelve 163 rasgos de un texto con un prefijo según su fuente, 209 con un pipeline que tiene analizador sintáctico; un rasgo indefinido es <code>nan</code>.</p>
 <table>
 <thead>
 <tr>
@@ -2284,11 +2284,21 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 <td style="text-align: left;">frecuencias de los signos de puntuación por tipo por cada 1000 palabras y la proporción de los signos de apertura</td>
 <td style="text-align: left;"><a href="../../stats/basic_stats/#punctuation"><code>punctuation_profile</code></a></td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>cohesion_</code></td>
+<td style="text-align: left;">repetición de sustantivos, argumentos y palabras con contenido entre oraciones, información dada, cohesión temporal y densidades de los conectores por clase, tipo y lugar, salvo la repetición entre párrafos, que las ventanas cortan</td>
+<td style="text-align: left;"><a href="../../stats/cohesion_stats/"><code>CohesionStats</code></a> según el modelo de spaCy</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>syntax_</code></td>
+<td style="text-align: left;">todas las estadísticas sintácticas, con un pipeline que tiene analizador sintáctico</td>
+<td style="text-align: left;"><a href="../../stats/syntax_stats/"><code>SyntaxStats</code></a></td>
+</tr>
 </tbody>
 </table>
 <p>Se dejan fuera el tiempo de lectura, que solo sigue el número de palabras de una ventana, y los rasgos que repiten otros: la proporción de palabras únicas de <code>BasicStats</code>, que repite <code>diversity_ttr</code>, sus palabras por oración, que repiten <code>sents_mean</code>, y los marcadores de los modos de <code>get_markers</code>, que repiten <code>morph_mood_*</code>.</p>
 <p>Las categorías gramaticales y los rasgos de un solo valor - polaridad, cortesía, posesivo, reflexivo - son proporciones de todas las palabras (<code>morph_polarity_Neg</code> es la proporción de las negaciones), los demás rasgos, proporciones de las palabras que los llevan (<code>morph_mood_Sub</code> es el subjuntivo entre los modos). Un valor que no aparece en una ventana da 0; un rasgo ausente de la ventana por completo (sin verbos no hay tiempo) da <code>nan</code>. Un valor de varios valores (<code>PronType=Int,Rel</code> de <em>que</em>) se reparte a partes iguales entre sus partes, así que las proporciones de un rasgo siguen sumando uno.</p>
-<p>La morfología la analiza el modelo <a href="../../installation/#model"><code>es_core_news_sm</code></a> sin su analizador sintáctico, así que el marcador <code>morph_p_ser</code>, que lee las cópulas de las dependencias, se deja fuera; un pipeline pasado en <code>nlp</code> se ejecuta entero salvo el reconocedor de entidades, así que <code>functools.partial(text_features, nlp=get_nlp())</code> recupera el analizador sintáctico y <code>morph_p_ser</code>, y otro modelo entra en la comparación del mismo modo. Una novela se compara por ventanas y no entera, ya que el pipeline admite como mucho <code>max_length</code> caracteres.</p>
+<p>La morfología y la cohesión las analiza el modelo <a href="../../installation/#model"><code>es_core_news_sm</code></a> sin su analizador sintáctico, así que el marcador <code>morph_p_ser</code>, que lee las cópulas de las dependencias, y el grupo <code>syntax_</code> se dejan fuera; un pipeline pasado en <code>nlp</code> se ejecuta entero salvo el reconocedor de entidades, así que <code>functools.partial(text_features, nlp=get_nlp())</code> incorpora el analizador sintáctico, <code>morph_p_ser</code> y la sintaxis, y otro modelo entra en la comparación del mismo modo. El análisis toma las oraciones del grupo <code>sents_</code> (<a href="https://sergeyshk.github.io/anyTS/utils/spacy/#set_sent_starts"><code>set_sent_starts</code></a> del núcleo), así que la cohesión y la sintaxis cuentan las mismas oraciones que el ritmo. Una novela se compara por ventanas y no entera, ya que el pipeline admite como mucho <code>max_length</code> caracteres.</p>
 <p>Las proporciones de espacios, letras y signos de puntuación (<code>basic_p_spaces</code>, <code>basic_p_letters</code>, <code>basic_p_punctuations</code>) cuentan los caracteres tal cual: las sangrías, los espacios dobles y los de no separación de los archivos reflejan la composición de una edición y no el texto. En un corpus de fuentes distintas conviene colapsarlos antes, por ejemplo, con <code>re.sub(r"[^\S\n]+", " ", text)</code>.</p>
 <table>
 <thead>
@@ -2310,14 +2320,14 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 <td style="text-align: left;"><code>nlp</code></td>
 <td style="text-align: left;"><code>Language</code></td>
 <td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Pipeline para la morfología; <code>None</code> - el modelo por defecto sin su analizador sintáctico</td>
+<td style="text-align: left;">Pipeline para la morfología, la cohesión y, con analizador sintáctico, la sintaxis; <code>None</code> - el modelo por defecto sin su analizador sintáctico</td>
 </tr>
 </tbody>
 </table>
 <p>Excepciones:</p>
 <ul>
 <li><code>SourceTypeError</code> - un texto que no es una cadena, un pipeline que no es un <code>Language</code> de spaCy;</li>
-<li><code>SourceError</code> - un texto sin palabras, con un carácter sin forma UTF-8 o más largo que el <code>max_length</code> del pipeline;</li>
+<li><code>SourceError</code> - un texto sin palabras, con un carácter sin forma UTF-8 o más largo que el <code>max_length</code> del pipeline, un pipeline que no da las categorías gramaticales o los lemas;</li>
 <li><code>DatasetNotFoundError</code> - el modelo por defecto no está instalado.</li>
 </ul>
 <div class="signature highlight"><pre><span></span><code><span class="n">corpus_features</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">text_features</span><span class="p">,</span> <span class="n">min_words</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -2366,22 +2376,16 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 <li><code>ParameterError</code> - un <code>window</code> o un <code>min_words</code> que no es un entero de al menos uno, un <code>min_words</code> mayor que <code>window</code>;</li>
 <li><code>DatasetNotFoundError</code> - los rasgos por defecto sin el modelo instalado.</li>
 </ul>
-<p>Los rasgos propios, por ejemplo los sintácticos, se pasan como una función:</p>
+<p>Los rasgos sintácticos llegan con un pipeline que tiene analizador sintáctico, pasado en una función de los rasgos; los rasgos propios se pasan del mismo modo:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Código</label><label for="__tabbed_2_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">SyntaxStats</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">compare_corpora</span><span class="p">,</span> <span class="n">text_features</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
 
-<span class="n">nlp</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">features</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-    <span class="n">stats</span> <span class="o">=</span> <span class="n">SyntaxStats</span><span class="p">(</span><span class="n">nlp</span><span class="p">(</span><span class="n">text</span><span class="p">))</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
-    <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="n">text_features</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="o">**</span><span class="p">{</span><span class="sa">f</span><span class="s2">"syntax_</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">"</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">()}}</span>
-
-
+<span class="n">features</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">text_features</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="n">get_nlp</span><span class="p">())</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">compare_corpora</span><span class="p">(</span>
     <span class="n">galdos</span><span class="p">,</span> <span class="n">unamuno</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s2">"Galdós"</span><span class="p">,</span> <span class="s2">"Unamuno"</span><span class="p">)</span>
 <span class="p">)</span>
@@ -2390,11 +2394,11 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>                                    median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-syntax_gerund_clauses_per_sent              0.156           0.047   0.092    0.132    1.494        0.854  0.927     0.0
-syntax_complex_nominals_per_clause          0.695           0.483   0.178    0.236    1.237        0.709  0.855     0.0
-syntax_tree_depth                           3.870           3.012   0.625    1.134    1.113        0.661  0.830     0.0
-syntax_subtrees_per_sent                    7.193           4.864   1.500    3.351    0.975        0.648  0.824     0.0
-syntax_p_complex_sents                      0.613           0.470   0.092    0.193    1.248        0.644  0.822     0.0
+syntax_gerund_clauses_per_sent              0.145           0.045   0.088    0.119    1.460        0.848  0.924     0.0
+syntax_complex_nominals_per_clause          0.684           0.474   0.185    0.240    1.221        0.710  0.855     0.0
+syntax_tree_depth                           3.727           2.861   0.529    1.057    1.064        0.659  0.830     0.0
+syntax_subtrees_per_sent                    6.742           4.494   1.484    2.921    0.932        0.656  0.828     0.0
+syntax_t_units_per_sent                     1.077           1.010   0.028    0.159    1.350        0.650  0.825     0.0
 </code></pre></div>
 </div>
 </div>
