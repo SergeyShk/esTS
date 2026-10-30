@@ -2016,6 +2016,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#anaphoric-mismo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anaphoric el mismo
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2185,6 +2196,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#anaphoric-mismo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Anaphoric el mismo
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2300,6 +2322,12 @@
 <td style="text-align: left;"><a href="../../stats/style_stats/">StyleStats</a></td>
 </tr>
 <tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>anaphoric_mismo</code></td>
+<td style="text-align: left;">The anaphoric <code>el mismo</code> with its article (<code>se archivó el mismo</code>, <code>la duración del mismo</code>)</td>
+<td style="text-align: left;">-</td>
+</tr>
+<tr>
 <td style="text-align: left;">Style</td>
 <td style="text-align: left;"><code>stopwords</code></td>
 <td style="text-align: left;">Stopwords of <code>STOPWORDS</code> or of the parameter <code>stopwords</code>, the water of the text</td>
@@ -2325,7 +2353,7 @@
 </tr>
 </tbody>
 </table>
-<p>The groups are defined in <code>ests.constants.HIGHLIGHT_LAYER_GROUPS</code>. The layers of the group "Syntax" need a <code>Doc</code> with a dependency parse and the lemmas (the models <code>es_core_news_sm</code>, <code>es_core_news_md</code>, <code>es_core_news_lg</code>), as <a href="../../stats/syntax_stats/">SyntaxStats</a> does; <code>verbal_nouns</code> needs a <code>Doc</code> with the parts of speech and the lemmas. The layers of <code>HIGHLIGHT_DEFAULT_LAYERS</code> the source allows are on by default - long sentences, complex words, passive, chains of <code>de</code>, split predicates, clichés; <code>layers="all"</code> turns on every layer allowed. The layers overlap (a compound preposition is made of stopwords), so pick the ones you need.</p>
+<p>The groups are defined in <code>ests.constants.HIGHLIGHT_LAYER_GROUPS</code>. The layers of the group "Syntax" need a <code>Doc</code> with a dependency parse and the lemmas (the models <code>es_core_news_sm</code>, <code>es_core_news_md</code>, <code>es_core_news_lg</code>), as <a href="../../stats/syntax_stats/">SyntaxStats</a> does; <code>verbal_nouns</code> needs a <code>Doc</code> with the parts of speech and the lemmas, and <code>anaphoric_mismo</code> one with the dependency parse, the parts of speech and the lemmas. The layers of <code>HIGHLIGHT_DEFAULT_LAYERS</code> the source allows are on by default - long sentences, complex words, passive, chains of <code>de</code>, split predicates, clichés; <code>layers="all"</code> turns on every layer allowed. The layers overlap (a compound preposition is made of stopwords), so pick the ones you need.</p>
 <p>A sentence is long from 30 words, the bound of the Spanish-language guides to plain language (the <a href="https://www.comunidad.madrid/transparencia/sites/default/files/ckeditor/guia_tramites_claros-comunidad_madrid-noviembre_2021.pdf">Comunidad de Madrid</a> and the <a href="https://gcba.github.io/programadelenguajeclaro/Manual%20de%20lenguaje%20claro%202024%20(Final).pdf">Gobierno de la Ciudad de Buenos Aires</a>), and a word is complex from four syllables; <code>complex_syl_factor=3</code>, the bound of <code>BasicStats</code>, shows the words of <code>n_complex_words</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Alliteration</p>
@@ -2377,6 +2405,7 @@
  'verbal_nouns': 9,
  'compound_prepositions': 1,
  'cliches': 1,
+ 'anaphoric_mismo': 0,
  'stopwords': 48,
  'parentheticals': 0,
  'connectors': 3,
@@ -2626,7 +2655,7 @@
 </code></pre></div>
 <p>The words of every sentence; the words out of the sentences are skipped.</p>
 <h2 id="finders">Finders of the layers<a class="headerlink" href="#finders" title="Permanent link">&para;</a></h2>
-<p>The fragments of every layer are found by a function of <code>ests.visualizers.highlight</code> that returns a list of <code>Highlight</code>: from the words and the sentences of the text, or from the <code>Doc</code> for the syntactic layers (<code>SYNTAX_FINDERS</code> gives them by layer). All but the passive, the participial and gerund clauses and the chains of <code>de</code> are the <a href="https://sergeyshk.github.io/anyTS/visualizers/highlight/#finders">finders of the core</a> with the hooks of Spanish.</p>
+<p>The fragments of every layer are found by a function of <code>ests.visualizers.highlight</code> that returns a list of <code>Highlight</code>: from the words and the sentences of the text, or from the <code>Doc</code> for the syntactic layers (<code>SYNTAX_FINDERS</code> gives them by layer). All but the passive, the participial and gerund clauses, the chains of <code>de</code> and the anaphoric <code>el mismo</code> are the <a href="https://sergeyshk.github.io/anyTS/visualizers/highlight/#finders">finders of the core</a> with the hooks of Spanish.</p>
 <h3 id="long-sents">Long sentences and complex words<a class="headerlink" href="#long-sents" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">find_long_sents</span><span class="p">(</span><span class="n">sents</span><span class="p">,</span> <span class="n">long_sent_word_factor</span><span class="p">)</span>
 </code></pre></div>
@@ -3031,6 +3060,55 @@
 [Highlight(start=75, end=119, layer='gerund_clauses', note='gerund clause, 8 words')]
 [Highlight(start=89, end=119, layer='de_chains', note='chain of 2 complements with de')]
 [Highlight(start=55, end=73, layer='split_predicates', note='split predicate: hacer revisión')]
+</code></pre></div>
+</div>
+</div>
+</div>
+<h3 id="anaphoric-mismo">Anaphoric el mismo<a class="headerlink" href="#anaphoric-mismo" title="Permanent link">&para;</a></h3>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_anaphoric_mismo</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether a word is an anaphoric <code>el mismo</code>: a form of <code>mismo</code> that heads a noun phrase of its own with its article (<code>el</code>, <code>la</code>, <code>los</code>, <code>las</code>, <code>del</code>, <code>al</code>) and no other dependent, as an argument of a verb or a noun (<code>se archivó el mismo</code>, <code>la duración del mismo</code>, <code>dentro de la misma</code>). The <a href="https://www.rae.es/dpd/mismo">Diccionario panhispánico de dudas</a> takes this use of the administrative and the journalistic style for unnecessary and suggests a demonstrative, a possessive or a personal pronoun instead (<code>su duración</code>, <code>dentro de ella</code>). The identity is no anaphora: <code>el mismo día</code>, <code>es el mismo</code>, <code>lo mismo</code>, <code>él mismo</code>, a form after <code>ser</code>, <code>estar</code>, <code>parecer</code>, <code>permanecer</code> or <code>resultar</code> (<code>no parecía la misma</code>, <code>la situación permanece la misma</code>), right before <code>que</code> (<code>el mismo que el año pasado</code>, while <code>del mismo, que...</code> is anaphoric) and before a conjunction and an adjective or a determiner other than an article or a possessive, which share its noun (<code>de la misma o superior categoría</code>, <code>a la misma u otra sede</code>). The models attach some anaphoric forms to their article (<code>en la misma hay oficinas</code>): such a form counts when no noun, adjective, numeral or pronoun follows it in its sentence. Whitespace and punctuation are no dependents of the form, so a line break after it changes nothing.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">find_anaphoric_mismo</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</code></pre></div>
+<p>The layer <code>anaphoric_mismo</code>: every form of <code>is_anaphoric_mismo</code> with its article (<code>la misma</code>, <code>del mismo</code>), the two words in the note.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>doc</code></td>
+<td style="text-align: left;"><code>Doc</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Doc object with a dependency parse, the parts of speech and the lemmas</td>
+</tr>
+</tbody>
+</table>
+<div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Code</label><label for="__tabbed_10_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.visualizers.highlight</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_anaphoric_mismo</span><span class="p">,</span> <span class="n">is_anaphoric_mismo</span>
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"Se recibió la solicitud el mismo día, y se procedió al estudio de la misma."</span><span class="p">)</span>
+<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_anaphoric_mismo</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="n">find_anaphoric_mismo</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>['misma']
+[Highlight(start=66, end=74, layer='anaphoric_mismo', note='anaphoric la misma')]
 </code></pre></div>
 </div>
 </div>
