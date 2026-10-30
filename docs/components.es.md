@@ -166,7 +166,10 @@ Excepciones:
 MorphStatsComponent(nlp, name)
 ```
 
-`MorphStatsComponent` pone las estadísticas morfológicas en la extensión. El pipeline necesita un `morphologizer` y un `lemmatizer` antes del componente; la fábrica requiere `token.pos` y `token.lemma`, así que `nlp.analyze_pipes()` señala un pipeline sin alguno de ellos.
+<!-- core: components.md:MorphStatsComponent 5d99bc4 -->
+`MorphStatsComponent` pone las estadísticas morfológicas en la extensión; por defecto necesitan las categorías gramaticales antes de él.
+
+En esTS el pipeline necesita además un `lemmatizer` antes del componente; la fábrica requiere `token.pos` y `token.lemma`, así que `nlp.analyze_pipes()` señala un pipeline sin alguno de ellos.
 
 Excepciones:
 

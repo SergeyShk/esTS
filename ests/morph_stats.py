@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-from collections import Counter, OrderedDict
+from collections import Counter
 from collections.abc import Mapping
 from math import nan
 from typing import TYPE_CHECKING, Any, ClassVar
 
-from anyts.stats import Stats
-from anyts.utils import is_doc, iter_doc_tokens, safe_divide, source_type_error
+import anyts.morph_stats
+from anyts.morph_stats import MorphWord as MorphWord
+from anyts.utils import is_doc, iter_doc_tokens, safe_divide
 
 from .constants import (
     COPULAS,
@@ -60,19 +61,20 @@ def is_auxiliary(token: Token) -> bool:
     return token.head.pos_ == "VERB" and "Part" in token.head.morph.get("VerbForm", [])
 
 
-class MorphStats(Stats):
+class MorphStats(anyts.morph_stats.MorphStats):
     """
     Class for computing the morphological statistics of a text
 
     Description:
-        Counts the parts of speech and the features of MORPHOLOGY_FEATURES in
-        the tags of Universal Dependencies (NOUN, VERB; Ind, Sub; Pres, Past);
-        a feature with several values keeps the form of CoNLL-U
-        (PronType=Int,Rel), and tags holds the whole annotation of every word.
-        get_markers gives the markers of Spanish computed from the features
-        A Doc must carry the parts of speech (from a morphologizer, or a tagger
-        with an attribute ruler) and the lemmas. Punctuation marks and symbols
-        are not words
+        Extends the MorphStats of the anyTS core with the Spanish layer: a
+        string is parsed by the spaCy model, a Doc must carry the lemmas next
+        to the parts of speech, and get_markers gives the markers of Spanish
+        computed from the features. The statistics are the parts of speech
+        and the features of MORPHOLOGY_FEATURES in the tags of Universal
+        Dependencies (NOUN, VERB; Ind, Sub; Pres, Past); a feature with
+        several values keeps the form of CoNLL-U (PronType=Int,Rel), and tags
+        holds the whole annotation of every word. Punctuation marks and
+        symbols are not words
 
     References:
         https://universaldependencies.org/u/feat/
@@ -96,24 +98,25 @@ class MorphStats(Stats):
         words (tuple[str]): Tuple of extracted words
         lemmas (tuple[str]): Tuple of lemmas of the words
         tags (tuple[str]): Tuple of feature strings in the CoNLL-U format
-        pos (tuple[str]): Tuple of the parts of speech
-        case (tuple[str]): Tuple of the values of case
-        definite (tuple[str]): Tuple of the values of definiteness
-        degree (tuple[str]): Tuple of the values of degree
-        gender (tuple[str]): Tuple of the values of gender
-        mood (tuple[str]): Tuple of the values of mood
-        num_type (tuple[str]): Tuple of the values of the numeral type
-        number (tuple[str]): Tuple of the values of number
-        person (tuple[str]): Tuple of the values of person
-        polarity (tuple[str]): Tuple of the values of polarity
-        polite (tuple[str]): Tuple of the values of politeness
-        poss (tuple[str]): Tuple of the values of the possessive
-        pron_type (tuple[str]): Tuple of the values of the pronoun type
-        reflex (tuple[str]): Tuple of the values of the reflexive
-        tense (tuple[str]): Tuple of the values of tense
-        verb_form (tuple[str]): Tuple of the values of the verb form
+        pos (tuple[str|None]): Tuple of the parts of speech
+        case (tuple[str|None]): Tuple of the values of case
+        definite (tuple[str|None]): Tuple of the values of definiteness
+        degree (tuple[str|None]): Tuple of the values of degree
+        gender (tuple[str|None]): Tuple of the values of gender
+        mood (tuple[str|None]): Tuple of the values of mood
+        num_type (tuple[str|None]): Tuple of the values of the numeral type
+        number (tuple[str|None]): Tuple of the values of number
+        person (tuple[str|None]): Tuple of the values of person
+        polarity (tuple[str|None]): Tuple of the values of polarity
+        polite (tuple[str|None]): Tuple of the values of politeness
+        poss (tuple[str|None]): Tuple of the values of the possessive
+        pron_type (tuple[str|None]): Tuple of the values of the pronoun type
+        reflex (tuple[str|None]): Tuple of the values of the reflexive
+        tense (tuple[str|None]): Tuple of the values of tense
+        verb_form (tuple[str|None]): Tuple of the values of the verb form
 
     Methods:
+        analyze: Words of a source with their features, a string parsed
         describe: Reading of a statistic by its scale, None for every statistic
         get_stats: Getting the computed morphological statistics of the text
         to_dataframe: Getting the statistics as a table of one row
@@ -131,14 +134,54 @@ class MorphStats(Stats):
         DatasetNotFoundError: If a string is passed and the model is not installed
     """
 
+    feature_names = MORPHOLOGY_FEATURES
     stats_desc: ClassVar[Mapping[str, str]] = {
         stat: str(desc["name"]) for stat, desc in MORPHOLOGY_STATS_DESC.items()
     }
+    values_desc: ClassVar[Mapping[str, Mapping[str, str]]] = {
+        stat: dict(desc["values"])  # type: ignore[call-overload]
+        for stat, desc in MORPHOLOGY_STATS_DESC.items()
+    }
+    markers_desc = MORPHOLOGY_MARKERS_DESC
 
     def __init__(self, source: str | Doc, nlp: Language | None = None):
         _check_nlp(nlp)
+        self._nlp = nlp
+        super().__init__(source)
+        # analyze can be called again on the object; the markers read the words of the source
+        self.lemmas, self._parsed, self._auxiliary = self._found
+
+    def __getstate__(self) -> dict[str, Any]:
+        """State for pickle and copy without the pipeline, which is no part of the statistics"""
+        state = self.__dict__.copy()
+        state["_nlp"] = None
+        return state
+
+    def analyze(self, source: str | Doc) -> list[MorphWord]:
+        """
+        Getting the words of a source with their features
+
+        Description:
+            A string is parsed by nlp or get_nlp() without the named entities;
+            the words of the Doc are those of the core (token.pos_ and
+            token.morph), and the Doc must carry the lemmas too, which the
+            markers read
+
+        Arguments:
+            source (str|Doc): Data source
+
+        Returns:
+            list[MorphWord]: Words with their features
+
+        Raises:
+            SourceTypeError: If the source is neither a string nor a Doc object
+            SourceError: If a string is longer than the max_length of the pipeline or
+                has a character without a UTF-8 form, or the Doc has no parts of speech
+                or no lemmas
+            DatasetNotFoundError: If a string is passed and the model is not installed
+        """
         if isinstance(source, str):
-            pipeline = nlp or get_nlp()
+            pipeline = self._nlp or get_nlp()
             if len(source) > pipeline.max_length:
                 raise SourceError(
                     f"The text of {len(source)} characters is longer than the limit of the "
@@ -147,83 +190,19 @@ class MorphStats(Stats):
                 )
             _check_encoding(source)
             source = pipeline(source, disable=UNUSED_COMPONENTS)
-        elif not is_doc(source):
-            raise source_type_error(self.messages, source)
-        tokens = list(iter_doc_tokens(source))
-        if not tokens:
-            raise SourceError("The data source has no words")
-        if not source.has_annotation("POS"):
-            raise SourceError(self.messages["no_pos"])
+        # A Doc without words: the core raises no_words, whatever its annotation
+        if is_doc(source) and next(iter_doc_tokens(source), None) is None:
+            return []
+        words = list(super().analyze(source))
         if not source.has_annotation("LEMMA"):
             raise SourceError(self.messages["no_lemmas"])
-
-        self.words = tuple(token.text for token in tokens)
-        self.lemmas = tuple(token.lemma_ for token in tokens)
-        self.tags = tuple(str(token.morph) or "_" for token in tokens)
-        self.pos = tuple(token.pos_ or None for token in tokens)
-        features = [token.morph.to_dict() for token in tokens]
-        self.case = self.__feature(features, "case")
-        self.definite = self.__feature(features, "definite")
-        self.degree = self.__feature(features, "degree")
-        self.gender = self.__feature(features, "gender")
-        self.mood = self.__feature(features, "mood")
-        self.num_type = self.__feature(features, "num_type")
-        self.number = self.__feature(features, "number")
-        self.person = self.__feature(features, "person")
-        self.polarity = self.__feature(features, "polarity")
-        self.polite = self.__feature(features, "polite")
-        self.poss = self.__feature(features, "poss")
-        self.pron_type = self.__feature(features, "pron_type")
-        self.reflex = self.__feature(features, "reflex")
-        self.tense = self.__feature(features, "tense")
-        self.verb_form = self.__feature(features, "verb_form")
-        self.__parsed = source.has_annotation("DEP")
-        self.__auxiliary = tuple(is_auxiliary(token) for token in tokens)
-
-    @staticmethod
-    def __feature(features: list[dict[str, str]], stat: str) -> tuple[str | None, ...]:
-        """Values of one feature for every word, None where the model gives none"""
-        name = MORPHOLOGY_FEATURES[stat]
-        return tuple(word.get(name) for word in features)
-
-    def get_stats(  # type: ignore[override]
-        self, *args: str, filter_none: bool = False, flat: bool = False
-    ) -> dict[str, Any]:
-        """
-        Getting the computed morphological statistics of the text
-
-        Arguments:
-            args (tuple[str]): Names of the selected statistics
-            filter_none (bool): Filter out the empty values
-            flat (bool): Keys such as pos_NOUN instead of nested dictionaries, without
-                the words that lack the feature
-
-        Returns:
-            dict[str, dict[str, int]]: Dictionary of the computed morphological statistics;
-                with flat, the counts by keys statistic_value
-
-        Raises:
-            UnknownStatError: If a statistic is unknown
-
-        Example:
-            >>> from ests import MorphStats
-            >>> ms = MorphStats("Los niños juegan")
-            >>> ms.get_stats("number", filter_none=True)
-            {'number': {'Plur': 3}}
-        """
-        args = self._checked_stats(args)
-        stats: dict[str, dict[str | None, int]] = {}
-        for arg in args:
-            counts = dict(Counter(getattr(self, arg)))
-            stats[arg] = {k: v for k, v in counts.items() if k} if filter_none else counts
-        if flat:
-            return {
-                f"{stat}_{value}": n
-                for stat, counts in stats.items()
-                for value, n in counts.items()
-                if value is not None
-            }
-        return stats
+        tokens = list(iter_doc_tokens(source))
+        self._found = (
+            tuple(token.lemma_ for token in tokens),
+            source.has_annotation("DEP"),
+            tuple(is_auxiliary(token) for token in tokens),
+        )
+        return words
 
     def get_markers(self) -> dict[str, float]:
         """
@@ -260,7 +239,7 @@ class MorphStats(Stats):
         n_forms = sum(forms.values())
         copulas = Counter(
             lemma
-            for lemma, pos, auxiliary in zip(self.lemmas, self.pos, self.__auxiliary, strict=True)
+            for lemma, pos, auxiliary in zip(self.lemmas, self.pos, self._auxiliary, strict=True)
             if pos in VERBAL_POS and lemma in COPULAS and not auxiliary
         )
         adverbs = [word for word, pos in zip(self.words, self.pos, strict=True) if pos == "ADV"]
@@ -272,130 +251,9 @@ class MorphStats(Stats):
             {marker: safe_divide(forms[form], n_forms, nan) for marker, form in VERB_FORMS.items()}
         )
         markers["p_ser"] = (
-            safe_divide(copulas["ser"], sum(copulas.values()), nan) if self.__parsed else nan
+            safe_divide(copulas["ser"], sum(copulas.values()), nan) if self._parsed else nan
         )
         markers["p_mente_adverbs"] = safe_divide(
             sum(1 for adverb in adverbs if adverb.lower().endswith("mente")), len(adverbs), nan
         )
         return {marker: markers[marker] for marker in MORPHOLOGY_MARKERS_DESC}
-
-    def print_markers(self) -> None:
-        """
-        Printing the computed markers of Spanish with descriptions
-
-        Example:
-            >>> from ests import MorphStats
-            >>> MorphStats("Los niños juegan alegremente").print_markers()
-                                 Marker                     |   Value
-            -----------------------------------------------------------
-            Indicative among the finite forms              |  1.00
-            Subjunctive among the finite forms             |  0.00
-            Conditional among the finite forms             |  0.00
-            Imperative among the finite forms              |  0.00
-            Infinitive among the verb forms                |  0.00
-            Gerund among the verb forms                    |  0.00
-            Participle among the verb forms                |  0.00
-            ser among the copulas ser and estar            |  nan
-            Adverbs in -mente among the adverbs            |  1.00
-        """
-        markers = self.get_markers()
-        print(f"{'Marker'.center(47)}|{'Value'.center(11)}")
-        print("-" * 59)
-        for marker, desc in MORPHOLOGY_MARKERS_DESC.items():
-            print(f"{desc:47}|{markers[marker]:^11.2f}")
-
-    def explain_text(
-        self, *args: str, filter_none: bool = False
-    ) -> tuple[tuple[str, dict[str, str | None]], ...]:
-        """
-        Parsing the text by the morphological statistics
-
-        Arguments:
-            args (tuple[str]): Names of the selected statistics
-            filter_none (bool): Filter out the empty values
-
-        Returns:
-            tuple[tuple[str, dict[str, str]]]: Tuple of the words of the text
-                with their morphological statistics
-
-        Raises:
-            UnknownStatError: If a statistic is unknown
-
-        Example:
-            >>> from ests import MorphStats
-            >>> ms = MorphStats("Los niños juegan")
-            >>> ms.explain_text("pos", "number", filter_none=True)[2]
-            ('juegan', {'pos': 'VERB', 'number': 'Plur'})
-        """
-        args = self._checked_stats(args)
-        values = tuple(zip(*(getattr(self, arg) for arg in args), strict=True))
-        explains = tuple(
-            {
-                stat: value
-                for stat, value in zip(args, word_values, strict=True)
-                if value or not filter_none
-            }
-            for word_values in values
-        )
-        return tuple(zip(self.words, explains, strict=True))
-
-    def print_stats(self, *args: str, filter_none: bool = False) -> None:
-        """
-        Printing the computed morphological statistics with descriptions
-
-        Arguments:
-            args (tuple[str]): Names of the selected statistics
-            filter_none (bool): Filter out the empty values
-
-        Raises:
-            UnknownStatError: If a statistic is unknown
-
-        Example:
-            >>> from ests import MorphStats
-            >>> MorphStats("Los niños juegan alegremente").print_stats("number")
-            -----------------Number-----------------
-            Plural                        |    3
-            Unknown                       |    1
-        """
-        args = self._checked_stats(args)
-        for stat, values in self.get_stats(*args).items():
-            desc: Any = MORPHOLOGY_STATS_DESC[stat]
-            print(f"{desc['name'].center(40, '-')}")
-            for value, number in OrderedDict(
-                sorted(values.items(), key=lambda item: item[1], reverse=True)
-            ).items():
-                if filter_none and not value:
-                    continue
-                print(f"{self.__describe(desc['values'], value):30}|{number!s:^10}")
-            print()
-
-    @staticmethod
-    def __describe(values: dict[str, str], value: str | None) -> str:
-        """
-        Description of a value of a statistic
-
-        Description:
-            A value of several values (PronType=Int,Rel) joins the descriptions
-            of its parts with or; a value with no description is returned as is
-
-        Arguments:
-            values (dict[str, str]): Descriptions of the values of the statistic
-            value (str|None): Value of the statistic
-
-        Returns:
-            str: Description of the value
-        """
-        if not value:
-            return "Unknown"
-        if value in values:
-            return values[value]
-        if "," in value:
-            parts = [values.get(part, part) for part in value.split(",")]
-            return " or ".join([parts[0]] + [part.lower() for part in parts[1:]])
-        return value
-
-    def _checked_stats(self, args: tuple[str, ...]) -> tuple[str, ...]:
-        """The selected statistics checked by the dictionary; all of them when none is selected"""
-        for arg in args:
-            self._check_stat(arg)
-        return args or self.stat_names()

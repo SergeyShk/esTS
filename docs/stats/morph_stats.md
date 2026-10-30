@@ -4,15 +4,11 @@
 MorphStats(source, nlp=None)
 ```
 
-The morphological statistics of a text: the part of speech and the grammatical features of every word in [Universal Dependencies](https://universaldependencies.org/u/feat/) terms, their distributions and the markers of Spanish computed from them. The data source is a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library; the statistics are computed when the object is created.
+--8<-- "stats/morph_stats.md:MorphStats"
 
-A text is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`; a `Doc` must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer`. Words are taken from the tokens, punctuation marks and symbols are dropped. A text longer than the `max_length` of the pipeline - a million characters by default - has to be split into parts, or `max_length` raised on a pipeline of your own passed in `nlp`.
+The class extends the `MorphStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/morph_stats/) core with the Spanish layer and the [markers of Spanish](#markers); the statistics are computed when the object is created. In esTS the data source is a text or a `Doc`: a text is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, and a `Doc` must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer`. Words are taken from the tokens, punctuation marks and symbols are dropped. A text longer than the `max_length` of the pipeline - a million characters by default - has to be split into parts, or `max_length` raised on a pipeline of your own passed in `nlp`. The `print_stats` and `print_markers` tables take the descriptions of `MORPHOLOGY_STATS_DESC` and `MORPHOLOGY_MARKERS_DESC` of `ests.constants`.
 
-Raises:
-
-- `SourceTypeError` - a source that is neither a string nor a `Doc`, a pipeline that is not a spaCy `Language`;
-- `SourceError` - a source without words, a `Doc` without the parts of speech or the lemmas (a `Doc` of `spacy.blank("es")` or of a pipeline with the `lemmatizer` excluded), a string longer than the `max_length` of the pipeline or with a character that has no UTF-8 form;
-- `DatasetNotFoundError` - a string without `nlp` when the model `es_core_news_sm` is not installed.
+Besides, a pipeline in `nlp` that is not a spaCy `Language` raises `SourceTypeError`; a `Doc` without the lemmas (of a pipeline with the `lemmatizer` excluded), a string longer than the `max_length` of the pipeline or with a character that has no UTF-8 form raise `SourceError`; a string without `nlp` when the model `es_core_news_sm` is not installed raises `DatasetNotFoundError`.
 
 === "Code"
 
@@ -51,11 +47,9 @@ Raises:
 
 ## Attributes
 
-| Attribute | Type | Description |
-| :-------- | :--- | :---------- |
-| `words` | `tuple[str]` | Words |
-| `lemmas` | `tuple[str]` | Lemmas of the words |
-| `tags` | `tuple[str]` | Grammatical features of the words as strings in the CoNLL-U format (`Gender=Masc|Number=Sing`, `_` without features) |
+--8<-- "stats/morph_stats.md:MorphStats-attributes"
+
+In esTS the statistics are `case`, ..., `verb_form` of the [table below](#statistics); `animacy`, `aspect` and `voice` of the core are not among them. esTS also has the attribute `lemmas` (`tuple[str]`) - the lemmas of the words that the model gives.
 
 === "Code"
 
@@ -71,7 +65,7 @@ Raises:
     'Mood=Sub|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin'
     ```
 
-## Statistics
+## Statistics { #statistics }
 
 Every statistic is an attribute of the object, a tuple of the values of a feature by word (`None` for a word the model gives no value of the feature), and `get_stats` gives the distributions of their values. The values are read from `token.pos_` and `token.morph` of the parse, that is, by context. The statistics are the part of speech and the fifteen features of `MORPHOLOGY_FEATURES`; the value `Unknown` in the printed tables means that the model gave the word no value of the feature. The other features the models annotate (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`, `PunctSide`, `PunctType`) are not counted but stay in `tags`.
 
@@ -94,7 +88,7 @@ Every statistic is an attribute of the object, a tuple of the values of a featur
 | `tense` | Tense | `Pres`, `Past`, `Imp`, `Fut` |
 | `verb_form` | Verb form | `Fin`, `Inf`, `Part`, `Ger` |
 
-A feature with several values keeps the form of CoNLL-U: `qué`, `quién`, `cuál` have `pron_type` equal to `Int,Rel`, and `usted` has `case` equal to `Acc,Nom`. `print_stats` names the values by `MORPHOLOGY_STATS_DESC` of `ests.constants`, and such a value by the names of its parts - "Interrogative or relative", "Accusative or nominative".
+A feature with several values keeps the form of CoNLL-U: `qué`, `quién`, `cuál` have `pron_type` equal to `Int,Rel`, and `usted` has `case` equal to `Acc,Nom`. `print_stats` names the values by `MORPHOLOGY_STATS_DESC` of `ests.constants`, and such a value by the names of its parts joined with a slash - "Interrogative / Relative", "Accusative / Nominative".
 
 !!! warning "Warning"
     The statistics are as good as the annotation of the model. `es_core_news_sm` mis-analyses verbs with enclitic pronouns (`dámelo`, `cuéntamelo` come out as nouns with invented lemmas) and tags the imperatives of `tú` as indicative (`Abre la ventana` gets `Mood=Ind`), so `p_imperative` under-reports and `p_indicative` absorbs the orders: in the dialogue of the corpus of literature it finds about one imperative in ten. `es_core_news_lg` does little better (15%); the transformer model `es_dep_news_trf` passed in `nlp` finds 87% of them, and in drama `p_imperative` rises from 1.6% to 7.5% - at the cost of about 1 GB with PyTorch and five times the time on a CPU, and it needs the single line breaks of a hard-wrapped text joined first.
@@ -143,9 +137,13 @@ The base of `p_ser` is the copular uses alone, read from the parse: the auxiliar
 
 ## Methods
 
-`get_stats(*args, filter_none=False, flat=False)` returns the distributions of the values of the statistics as a dictionary of counts for each. The statistics are chosen by their names separated by commas, all of them without names, and `filter_none=True` drops the words without the feature (`None`); `flat=True` gives the counts by keys such as `mood_Sub`, without the words that lack the feature, and so does `to_dataframe()`, a table of one row. A name that is not a statistic raises `UnknownStatError` - here and in `print_stats` and `explain_text`. `to_dataframe` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the morphological statistics have no scales, so `describe` gives `None`.
+--8<-- "stats/morph_stats.md:MorphStats-get_stats"
 
-`print_stats(*args, filter_none=False)` prints the distributions of the chosen statistics as tables, the frequent values first (the example at the top of the page), and `explain_text(*args, filter_none=False)` returns the words of the text in order with the values of the chosen statistics.
+--8<-- "stats/morph_stats.md:MorphStats-explain_text"
+
+--8<-- "stats/morph_stats.md:MorphStats-print_stats"
+
+The example at the top of the page prints two of the tables. `to_dataframe` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the morphological statistics have no scales, so `describe` gives `None`.
 
 === "Code"
 
@@ -172,7 +170,9 @@ The base of `p_ser` is the copular uses alone, read from the parse: the auxiliar
      ('ayer', {'pos': 'ADV'}))
     ```
 
-`get_markers()` returns the [markers of Spanish](#markers) as a dictionary, and `print_markers()` prints them as a table.
+--8<-- "stats/morph_stats.md:MorphStats-markers"
+
+In esTS the markers are the [markers of Spanish](#markers).
 
 === "Code"
 
@@ -183,15 +183,19 @@ The base of `p_ser` is the copular uses alone, read from the parse: the auxiliar
 === "Result"
 
     ```
-                         Marker                    |   Value
-    -----------------------------------------------------------
-    Indicative among the finite forms              |   0.33
-    Subjunctive among the finite forms             |   0.33
-    Conditional among the finite forms             |   0.33
-    Imperative among the finite forms              |   0.00
-    Infinitive among the verb forms                |   0.00
-    Gerund among the verb forms                    |   0.00
-    Participle among the verb forms                |   0.00
-    ser among the copulas ser and estar            |    nan
-    Adverbs in -mente among the adverbs            |   0.00
+                   Marker               |  Value
+    -----------------------------------------------
+    Indicative among the finite forms   |   0.33
+    Subjunctive among the finite forms  |   0.33
+    Conditional among the finite forms  |   0.33
+    Imperative among the finite forms   |   0.00
+    Infinitive among the verb forms     |   0.00
+    Gerund among the verb forms         |   0.00
+    Participle among the verb forms     |   0.00
+    ser among the copulas ser and estar |   nan
+    Adverbs in -mente among the adverbs |   0.00
     ```
+
+--8<-- "stats/morph_stats.md:MorphWord"
+
+In esTS `MorphWord` is imported from `ests.morph_stats` too.

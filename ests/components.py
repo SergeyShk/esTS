@@ -178,7 +178,7 @@ class DiversityStatsComponent(_Component, anyts.components.DiversityStatsCompone
 
 
 @Language.factory("ests_morph", requires=["token.pos", "token.lemma"])
-class MorphStatsComponent(_Component):
+class MorphStatsComponent(_Component, anyts.components.MorphStatsComponent):
     """
     Class for the component of the morphological statistics of a text
 
