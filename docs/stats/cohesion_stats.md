@@ -194,7 +194,7 @@ $$
 
 --8<-- "stats/cohesion_stats.md:calc_forward_overlap"
 
-In esTS a string is parsed into a `Doc`, so both are split into paragraphs by the line breaks between their tokens (by the blank lines with `blank_lines`). A text whose lines are wrapped inside its paragraphs, such as the texts of [`SpanishLiterature`](../datasets/spanishliterature.md), needs `blank_lines=True`, or its lines are compared as paragraphs.
+In esTS a string is parsed into a `Doc`, so both are split into paragraphs by the line breaks between their tokens (by the blank lines with `blank_lines`). A text whose lines are wrapped inside its paragraphs, such as the texts of [`SpanishLiterature`](../datasets/spanishliterature.md), needs `blank_lines=True`, or its lines are compared as paragraphs; the [component](../components.md#CohesionStatsComponent) takes it in its `config`.
 
 === "Code"
 
