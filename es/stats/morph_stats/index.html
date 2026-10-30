@@ -2326,7 +2326,7 @@ Indicative                    |    1
 </tr>
 </tbody>
 </table>
-<p>Los cuatro primeros marcadores comparten la base de las formas personales y suman uno salvo que el modelo deje alguna forma personal sin modo. Los tres siguientes comparten la base de todas las formas verbales de verbos y auxiliares: un participio que el modelo anota como adjetivo (<code>la casa pintada</code>) queda fuera de la base, los de los tiempos compuestos y la pasiva (<code>he leído</code>, <code>fue escrito</code>) quedan dentro.</p>
+<p>Los cuatro primeros marcadores comparten la base de las formas personales y suman uno salvo que el modelo deje alguna forma personal sin modo o le dé varios (<code>Mood=Ind,Sub</code>, que cuenta en la proporción de cada uno; <code>es_core_news_sm</code> no los da). Los tres siguientes comparten la base de todas las formas verbales de verbos y auxiliares: un participio que el modelo anota como adjetivo (<code>la casa pintada</code>) queda fuera de la base, los de los tiempos compuestos y la pasiva (<code>he leído</code>, <code>fue escrito</code>) quedan dentro.</p>
 <p>La base de <code>p_ser</code> son solo los usos copulativos, leídos del análisis sintáctico: los auxiliares de la pasiva y de la perífrasis progresiva (<code>fue escrito</code>, <code>es financiado</code>, <code>está cantando</code>) quedan fuera, mientras que <code>es alta</code>, <code>está cansada</code> y <code>lo importante es que vengas</code> cuentan. Para un <code>Doc</code> sin análisis sintáctico el marcador es <code>nan</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
 <div class="tabbed-content">
@@ -2350,8 +2350,8 @@ Indicative                    |    1
 </div>
 </div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
-<!-- core: stats/morph_stats.md:MorphStats-get_stats 31a94da -->
-<p><code>get_stats(*stats, filter_none=False, flat=False)</code> da el número de las palabras por valor de cada estadística elegida, todas por defecto, en el orden de las primeras apariciones; <code>None</code> cuenta las palabras sin el rasgo, y <code>filter_none</code> las deja fuera. Con <code>flat</code> las claves son <code>estadística_valor</code>, como <code>pos_NOUN</code>, sin las palabras que carecen del rasgo, como en <code>to_dataframe</code>. Una estadística desconocida lanza <code>UnknownStatError</code>.</p>
+<!-- core: stats/morph_stats.md:MorphStats-get_stats 748058e -->
+<p><code>get_stats(*stats, filter_none=False, flat=False)</code> da el número de las palabras por valor de cada estadística elegida, todas por defecto, en el orden de las primeras apariciones; <code>None</code> cuenta las palabras sin el rasgo, y <code>filter_none</code> las deja fuera. Con <code>flat</code> las claves son <code>estadística_valor</code>, como <code>pos_NOUN</code>, sin las palabras que carecen del rasgo, como en <code>to_dataframe</code>. Una estadística desconocida lanza <code>UnknownStatError</code>, y un <code>filter_none</code> o un <code>flat</code> que no es un <code>bool</code>, <code>ParameterError</code>.</p>
 <!-- core: stats/morph_stats.md:MorphStats-explain_text 037565e -->
 <p><code>explain_text(*stats, filter_none=False)</code> da cada palabra con los valores de las estadísticas elegidas; <code>filter_none</code> deja fuera los que le faltan a una palabra. Una estadística desconocida lanza <code>UnknownStatError</code>.</p>
 <!-- core: stats/morph_stats.md:MorphStats-print_stats a935578 -->

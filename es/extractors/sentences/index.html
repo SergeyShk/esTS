@@ -2133,10 +2133,10 @@
 </div>
 </div>
 <h2 id="split_paragraphs">Párrafos<a class="headerlink" href="#split_paragraphs" title="Permanent link">&para;</a></h2>
-<!-- core: extractors/sentences.md:split_paragraphs 3fe9d43 -->
+<!-- core: extractors/sentences.md:split_paragraphs 3236b45 -->
 <div class="signature highlight"><pre><span></span><code><span class="n">split_paragraphs</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 </code></pre></div>
-<p>Los párrafos de un texto: sus partes entre líneas en blanco, sin los espacios de sus extremos; una parte solo de espacios no es un párrafo. Una línea en blanco (<code>BLANK_LINE</code>) son dos saltos de línea - <code>\n</code>, <code>\r\n</code>, <code>\r</code>, U+0085 o U+2028 - con solo espacios entre ellos, donde el espacio de anchura cero y la marca de orden de bytes cuentan como espacios, o un separador de párrafo U+2029; también termina las oraciones de <code>SentsExtractor</code> y los párrafos de <code>CohesionStats</code>. Las palabras de los párrafos dan los tamaños de las partes de <code>dispersion</code> por párrafo; un párrafo sin palabras, como una separación de escenas con asteriscos, sigue siendo un párrafo. Un texto que no es una cadena lanza <code>SourceTypeError</code>.</p>
+<p>Los párrafos de un texto: sus partes entre líneas en blanco, sin los espacios de sus extremos; una parte solo de espacios no es un párrafo. Una línea en blanco (<code>BLANK_LINE</code>) son dos saltos de línea - <code>\n</code>, <code>\r\n</code>, <code>\r</code>, U+0085 o U+2028 - con solo espacios entre ellos, donde el espacio de anchura cero y la marca de orden de bytes cuentan como espacios, o un separador de párrafo U+2029; también termina las oraciones de <code>SentsExtractor</code> y los párrafos de <code>CohesionStats</code> con <code>blank_lines</code>. Las palabras de los párrafos dan los tamaños de las partes de <code>dispersion</code> por párrafo; un párrafo sin palabras, como una separación de escenas con asteriscos, sigue siendo un párrafo. Un texto que no es una cadena lanza <code>SourceTypeError</code>.</p>
 <table>
 <thead>
 <tr>

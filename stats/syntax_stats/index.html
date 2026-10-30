@@ -2763,7 +2763,7 @@ Clauses per sentence                                       |   1.50
 Mean length of a clause (words)                            |   9.67
 Subordinate clauses per sentence                           |   0.50
 Share of sentences with a subordinate clause               |   0.50
-Infinitive clauses under a verb per sentence               |   0.00
+Infinitive clauses per sentence                            |   0.00
 T-units per sentence                                       |   1.00
 Mean length of a T-unit (words)                            |  14.50
 Clauses per T-unit                                         |   1.50
@@ -2859,12 +2859,17 @@ Ratio of nouns to verbs                                    |   3.00
 <tr>
 <td style="text-align: left;"><code>n_infinitive_clauses</code></td>
 <td style="text-align: left;"><code>int</code></td>
-<td style="text-align: left;">Number of the infinitive clauses under a verb</td>
+<td style="text-align: left;">Number of the infinitive clauses</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>n_t_units</code>, <code>n_complex_t_units</code></td>
 <td style="text-align: left;"><code>int</code></td>
 <td style="text-align: left;">Numbers of the T-units and of those with a subordinate clause</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_l2sca_clauses</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Number of the clauses of L2SCA, without the predicates sharing a subject and the infinitive clauses</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>n_verb_phrases</code>, <code>n_coordinate_phrases</code>, <code>n_complex_nominals</code></td>
@@ -3066,9 +3071,9 @@ Ratio of nouns to verbs                                    |   3.00
 </tr>
 <tr>
 <td style="text-align: left;"><a href="#infinitive_clauses"><code>infinitive_clauses_per_sent</code></a></td>
-<td style="text-align: left;">Infinitive clauses under a verb per sentence</td>
+<td style="text-align: left;">Infinitive clauses per sentence</td>
 <td style="text-align: left;">0 and above</td>
-<td style="text-align: left;">More infinitive complements</td>
+<td style="text-align: left;">More infinitive clauses</td>
 </tr>
 <tr>
 <td style="text-align: left;"><a href="#l2sca"><code>t_units_per_sent</code></a></td>
@@ -3339,7 +3344,7 @@ Ratio of nouns to verbs                                    |   3.00
 <p class="metric-meta"><code>subordinate_clauses_per_sent</code> · <code>p_complex_sents</code></p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_subordinate_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Checks whether a word heads a subordinate clause: a clause head (<code>is_clause_head</code>) with <code>ccomp</code>, <code>advcl</code>, <code>acl</code> or <code>csubj</code> (<code>anyts.constants.SUBORDINATE_CLAUSE_DEPS</code>), or under <code>xcomp</code> with a finite predicate, or a coordinated predicate of a subordinate clause, by the relation of the first word up its chain of conjuncts. An infinitive clause under a verb (<code>quiere salir</code>) is counted apart, among the <a href="#infinitive_clauses">infinitive clauses</a>.</p>
+<p>Checks whether a word heads a subordinate clause: a clause head (<code>is_clause_head</code>) whose predicate is no infinitive, with <code>ccomp</code>, <code>advcl</code>, <code>acl</code> or <code>csubj</code> (<code>anyts.constants.SUBORDINATE_CLAUSE_DEPS</code>) or under <code>xcomp</code>, or a coordinated predicate of a subordinate clause, by the relation of the first word up its chain of conjuncts. A clause under <code>conj</code> or <code>parataxis</code> with a subordinating conjunction (<code>is_subordinating_mark</code>) is subordinate too, with its conjuncts that have a subject of their own: the models attach a clause after <code>y</code>, <code>pero</code> or <code>sino</code> as a conjunct of the clause before it (<code>sino porque le había cobrado afición</code>, <code>quiero salir y que vengas</code>). An infinitive clause (<code>quiere salir</code>, <code>salió para ayudar</code>) is counted apart, among the <a href="#infinitive_clauses">infinitive clauses</a>.</p>
 <table>
 <thead>
 <tr>
@@ -3359,20 +3364,45 @@ Ratio of nouns to verbs                                    |   3.00
 </tbody>
 </table>
 <p><code>p_complex_sents</code> is the share of the sentences with at least one subordinate clause.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_subordinating_mark</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Checks whether a word with the relation <code>mark</code> is a subordinating conjunction: one of <code>SUBORDINATING_MARKS</code> with the words of its fixed expression (<code>que</code>, <code>si</code>, <code>como</code>, <code>cuando</code>, <code>porque</code>, <code>aunque</code>, <code>ya que</code>, <code>puesto que</code>), but not <code>que</code> after <code>sino</code>, which coordinates (<code>no lo dijo, sino que lo calló</code>). The models parse <code>para que</code>, <code>sin que</code> and <code>hasta que</code> with a mark <code>que</code> of their own. Prepositions are left out: <code>a</code> and <code>de</code> before an infinitive mostly make a periphrasis (<code>iba a preparar</code>, <code>ha de vivir</code>). It is the hook <code>is_subordinating_mark</code> of the <code>SyntaxStats</code> of the anyTS core.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+</tbody>
+</table>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Code</label><label for="__tabbed_3_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_clause_head</span><span class="p">,</span> <span class="n">is_subordinate_clause_head</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
 
-<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"Él quiere salir, pero tiene que quedarse porque parece cansado."</span><span class="p">)</span>
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"Él quiere salir, pero tiene que quedarse porque parece cansado."</span><span class="p">)</span>
 <span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_subordinate_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"Se sentaba a sus pies, no por servicio, sino porque le había cobrado afición."</span><span class="p">)</span>
 <span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_subordinate_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>['quiere', 'salir', 'tiene', 'parece']
 ['parece']
+['cobrado']
 </code></pre></div>
 </div>
 </div>
@@ -3383,7 +3413,7 @@ Ratio of nouns to verbs                                    |   3.00
 <p class="metric-meta"><code>infinitive_clauses_per_sent</code></p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_infinitive_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Checks whether a word heads an infinitive clause under a verb: a clause head (<code>is_clause_head</code>) whose predicate is an infinitive under <code>xcomp</code> (<code>quiere salir</code>, <code>le pidió salir</code>), or a conjunct of one, whatever its own form: the first word up its chain of conjuncts decides (<code>quiero salir y que vengas</code>). These clauses count among the clauses, but not among the subordinate ones: grammars take an infinitive complement for a part of a simple sentence, and the published correlations of the subordination were obtained for finite subordinate clauses. It is the <a href="https://sergeyshk.github.io/anyTS/stats/syntax_stats/#infinitive_clauses"><code>is_infinitive_clause_head</code></a> of the anyTS core over <code>is_clause_head</code>.</p>
+<p>Checks whether a word heads an infinitive clause: a clause head (<code>is_clause_head</code>) whose own predicate is an infinitive under <code>xcomp</code>, <code>ccomp</code>, <code>advcl</code> or <code>csubj</code> (<code>quiere salir</code>, <code>le pidió salir</code>, <code>salió para ayudar</code>, <code>es difícil decirlo</code>), an infinitive under <code>conj</code> or <code>parataxis</code> with a subordinating conjunction, or an infinitive conjunct of one; a finite conjunct of an infinitive (<code>quiero salir y que vengas</code>) is none. These clauses count among the clauses, but not among the subordinate ones: grammars take an infinitive complement for a part of a simple sentence, and the published correlations of the subordination were obtained for finite subordinate clauses. It is the <a href="https://sergeyshk.github.io/anyTS/stats/syntax_stats/#infinitive_clauses"><code>is_infinitive_clause_head</code></a> of the anyTS core over <code>is_clause_head</code>.</p>
 <table>
 <thead>
 <tr>
@@ -3426,17 +3456,17 @@ Ratio of nouns to verbs                                    |   3.00
 <p class="metric-meta"><code>t_units_per_sent</code> · <code>mean_t_unit_len</code> · <code>clauses_per_t_unit</code> · <code>p_complex_t_units</code> · <code>verb_phrases_per_t_unit</code> · <code>coordinate_phrases_per_clause</code> · <code>complex_nominals_per_clause</code> · <a href="https://doi.org/10.1075/ijcl.15.4.02lu">Lu 2010</a></p>
 <p>The indices of the L2 Syntactic Complexity Analyzer (L2SCA) that the other metrics do not give, on Universal Dependencies. MLC and C/S are <code>mean_clause_len</code> and <code>clauses_per_sent</code>; MLS and DC/C come from the counts, <code>n_words / n_sents</code> and <code>n_subordinate_clauses / n_clauses</code>.</p>
 <ul>
-<li>A T-unit is a main clause with the clauses that depend on it: the head of a sentence and every clause head joined to it through <code>conj</code> or <code>parataxis</code> (<code>anyts.constants.MAIN_CLAUSE_DEPS</code>), so <em>I came, and he left</em> holds two; a conjunct of a subordinate clause is none. A conjunct without a subject of its own (<em>I came and left</em>) is a predicate sharing the T-unit of the clause it is coordinated to, as in L2SCA, unless its person, number or gender - those of its auxiliary or copula, its own without one - differ from those of that clause: in a language that drops its subjects the ending names another one (<em>llegamos al puerto y nos esperabas</em>). An existential <em>there</em> (<code>expl</code> of ClearNLP) is a subject. A T-unit is complex with a subordinate clause (<code>is_subordinate_clause_head</code>) whose nearest T-unit above is it.</li>
-<li>A verb phrase is a predicate (<code>is_predicate</code>) that is no auxiliary or copula: a verb, an auxiliary used as a predicate (<em>there </em><em>is</em><em> trouble</em>), a word with a subject or a copula; an infinitive that makes one predicate with its head (<code>is_infinitive_periphrasis</code>), and its infinitive conjunct, is part of the verb phrase of the head.</li>
+<li>A T-unit is a main clause with the clauses that depend on it: the head of a sentence and every clause head joined to it through <code>conj</code> or <code>parataxis</code> (<code>anyts.constants.MAIN_CLAUSE_DEPS</code>), so <em>I came, and he left</em> holds two; a conjunct of a subordinate clause is none. A conjunct without a subject of its own (<em>I came and left</em>) is a predicate sharing the T-unit of the clause it is coordinated to, as in L2SCA, unless its person, number or gender - those of its auxiliary or copula, its own without one - differ from those of that clause: in a language that drops its subjects the ending names another one (<em>llegamos al puerto y nos esperabas</em>). An existential <em>there</em> (<code>expl</code> of ClearNLP) is a subject. A conjunct or a parataxis with a subordinating mark (<code>is_subordinating_mark</code>) heads a subordinate or an infinitive clause, which is no T-unit, nor is a clause under it. A finite conjunct with a subject of its own of an infinitive clause, a predicate a model attaches to the infinitive, joins the clause of the first word above the infinitives that is none (<em>he came to help and she stayed</em>: two T-units). A T-unit is complex with a subordinate clause (<code>is_subordinate_clause_head</code>) whose nearest T-unit above is it.</li>
+<li>A verb phrase is a predicate (<code>is_predicate</code>) that is no auxiliary or copula: a verb, an auxiliary used as a predicate (<em>there </em><em>is</em><em> trouble</em>), a word with a subject or a copula; an infinitive that makes one predicate with its head (<code>is_infinitive_periphrasis</code>), and its infinitive conjunct, is part of the verb phrase of the head. A participle or another non-finite form under <code>amod</code> or <code>acl</code>, or coordinated to one, without an auxiliary, a copula or a subject of its own is an attribute of its noun (<em>the house built by workers</em>), as in L2SCA, not a verb phrase.</li>
 <li>A coordinate phrase is a coordination with a conjunct that is no clause head (<em>the man and the woman</em>, <em>is big and nice</em>) or a predicate without a subject of its own (<em>came and left</em>), counted once by its first conjunct; a coordination of clauses with their own subjects counts as clauses.</li>
-<li>The clauses are those of <code>is_clause_head</code>, as in the other metrics: a predicate sharing a subject and an infinitive clause count as clauses, while L2SCA counts finite clauses with a subject, so C/T, C/S and CN/C run higher and MLC lower than in L2SCA.</li>
+<li>The clauses of C/T, CP/C and CN/C are those of L2SCA (<code>n_l2sca_clauses</code>): the clauses of <code>is_clause_head</code> without the predicates sharing a subject (<em>came and left</em>) and the infinitive clauses, as L2SCA counts finite clauses with a subject. C/S and MLC keep the clauses of the other metrics, so C/S runs higher and MLC lower than in L2SCA.</li>
 <li>A complex nominal is a noun with a modifier of <code>anyts.constants.COMPLEX_NOMINAL_DEPS</code> (an adjective, a complement, a relative or participial clause, an apposition, a possessive), or a nominal clause, a clause head of <code>anyts.constants.NOMINAL_CLAUSE_DEPS</code> or a conjunct of one.</li>
 </ul>
 <div class="arithmatex">\[
 \textrm{MLT} = \frac{\textrm{Words}}{\textrm{T-units}}, \quad
-\textrm{C/T} = \frac{\textrm{Clauses}}{\textrm{T-units}}, \quad
+\textrm{C/T} = \frac{\textrm{Clauses of L2SCA}}{\textrm{T-units}}, \quad
 \textrm{CT/T} = \frac{\textrm{Complex T-units}}{\textrm{T-units}}, \quad
-\textrm{CN/C} = \frac{\textrm{Complex nominals}}{\textrm{Clauses}}
+\textrm{CN/C} = \frac{\textrm{Complex nominals}}{\textrm{Clauses of L2SCA}}
 \]</div>
 <p>The clauses and the subordinate clauses are those of the Spanish rules of the cards above, and a periphrasis is one verb phrase (<code>puede venir</code>). The models attach the infinitive of some periphrases as a conjunct of their verb (<code>tiene que venir</code>): it stays inside the verb phrase of the verb, but the pair counts as a coordinate phrase too.</p>
 </div>
@@ -3763,7 +3793,7 @@ Ratio of nouns to verbs                                    |   3.00
 <div class="metric-card">
 <h3 id="similarity">Similarity of adjacent sentences<a class="headerlink" href="#similarity" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>pos_edit_distance</code> · <code>syntax_similarity</code> · <a href="https://doi.org/10.1017/CBO9780511894664">Coh-Metrix</a></p>
-<p>How alike the structures of two adjacent sentences are, averaged over the <span class="arithmatex">\(S - 1\)</span> pairs. <code>pos_edit_distance</code> is the edit distance of the parts of speech <span class="arithmatex">\(P_s\)</span> of the words of the sentences (SYNMEDpos of Coh-Metrix) over the length <span class="arithmatex">\(n\)</span> of the longer sentence of the pair, <code>calc_edit_distance</code>. <code>syntax_similarity</code> is the similarity of the multisets of the dependency triples <span class="arithmatex">\(T\)</span> of the two sentences (<code>dependency_triples</code>, <code>calc_multiset_similarity</code>), in the manner of SYNSTRUT of Coh-Metrix, which compares the nodes of phrase-structure trees.</p>
+<p>How alike the structures of two adjacent sentences are, averaged over the <span class="arithmatex">\(S - 1\)</span> pairs. <code>pos_edit_distance</code> is the edit distance of the parts of speech <span class="arithmatex">\(P_s\)</span> of the words of the sentences (SYNMEDpos of Coh-Metrix) over the length <span class="arithmatex">\(n\)</span> of the longer sentence of the pair, <code>calc_edit_distance</code>. <code>syntax_similarity</code> is the similarity of the multisets of the dependency triples <span class="arithmatex">\(T\)</span> of the two sentences (<code>dependency_triples</code>, <code>calc_multiset_similarity</code>), in the manner of SYNSTRUT of Coh-Metrix, which compares the nodes of phrase-structure trees. The edit distance reads only the order of the parts of speech: a sentence with its object first and one with its subject first are alike when that order is the same (a distance of 0). The triples read no order of the words at all: any order of the words of one tree gives a similarity of 1. The order of the subject and the object is read by <a href="#word_order"><code>p_preverbal_subjects</code> and <code>p_preverbal_objects</code></a>. The similarity of the triples grows with the length of the sentences.</p>
 <div class="arithmatex">\[
 \frac{1}{S - 1} \sum_{s=1}^{S-1} \frac{\textrm{lev}(P_s, P_{s+1})}{\max(n_s, n_{s+1})}, \quad
 \frac{1}{S - 1} \sum_{s=1}^{S-1} \frac{|T_s \cap T_{s+1}|}{|T_s \cup T_{s+1}|}
@@ -4034,7 +4064,7 @@ Ratio of nouns to verbs                                    |   3.00
 <h2 id="is_prep_complement">Complements with a preposition<a class="headerlink" href="#is_prep_complement" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_prep_complement</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
-<p>Checks whether a word is a complement with a preposition: a word with the relation <code>nmod</code> or <code>obl</code> or a subtype of them (<code>anyts.constants.PREP_COMPLEMENT_DEPS</code>), or a predicate with a copula out of a relative clause (<code>acl</code>), that has a dependent of the relation <code>case</code> that is an adposition (<code>ADP</code>) or begins one of several words (<code>fixed</code>: <em>in front of</em>). A noun in a case without a preposition and a possessive marker are none.</p>
+<p>Checks whether a word is a complement with a preposition: a word with the relation <code>nmod</code> or <code>obl</code> or a subtype of them (<code>anyts.constants.PREP_COMPLEMENT_DEPS</code>), or a predicate with a copula or a subject of its own out of a relative clause (<code>acl</code>), such as a nominal predicate of a language that drops the copula of the present tense, that has a dependent of the relation <code>case</code> that is an adposition (<code>ADP</code>) or begins one of several words (<code>fixed</code>: <em>in front of</em>). A noun in a case without a preposition and a possessive marker are none.</p>
 <table>
 <thead>
 <tr>

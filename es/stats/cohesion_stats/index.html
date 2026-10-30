@@ -2301,14 +2301,14 @@
 
 
 <h1 id="estadisticas-de-cohesion">Estadísticas de cohesión<a class="headerlink" href="#estadisticas-de-cohesion" title="Permanent link">&para;</a></h1>
-<div class="signature highlight"><pre><span></span><code><span class="n">CohesionStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">connectors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">CohesionStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">connectors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">blank_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
 <p>Las estadísticas de cohesión de un texto a la manera de <a href="https://doi.org/10.1017/CBO9780511894664">Coh-Metrix</a> y de su adaptación española <a href="https://aclanthology.org/L16-1745/">Coh-Metrix-Esp</a>: la repetición entre las oraciones, la información dada, la cohesión temporal y los conectores de un diccionario. Las oraciones se comparan por lemas. La fuente de datos es un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>, y tiene que estar anotada: una cadena se analiza con <a href="../../installation/#model"><code>es_core_news_sm</code></a> o con el pipeline indicado en <code>nlp</code>, sin las entidades nombradas, y un <code>Doc</code> debe llevar las categorías gramaticales, que vienen de un <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>), y los lemas, que vienen de un <code>lemmatizer</code>.</p>
 <p>Excepciones:</p>
 <ul>
 <li><code>SourceTypeError</code> - una fuente que no es ni una cadena ni un <code>Doc</code>, un extractor de otra clase, un pipeline en <code>nlp</code> que no es un <code>Language</code> de spaCy, unos conectores que no son un diccionario de locuciones y pares de cadenas;</li>
 <li><code>SourceError</code> - una fuente sin palabras; un <code>Doc</code> sin las categorías gramaticales o los lemas (un <code>Doc</code> de <code>spacy.blank("es")</code>); una cadena más larga que el <code>max_length</code> del pipeline o con un carácter sin forma UTF-8;</li>
-<li><code>ParameterError</code> - una clase o un tipo de conector desconocidos;</li>
+<li><code>ParameterError</code> - una clase o un tipo de conector desconocidos, un <code>blank_lines</code> que no es un <code>bool</code>;</li>
 <li><code>DatasetNotFoundError</code> - una cadena sin <code>nlp</code> cuando el modelo no está instalado.</li>
 </ul>
 <p>La clase extiende el <code>CohesionStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/cohesion_stats/">anyTS</a> con la capa del español. Un <code>Doc</code> sin límites de oración - de un pipeline sin analizador - se divide en oraciones con el <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> del español. Los rasgos de las palabras vienen de la anotación de <a href="https://universaldependencies.org/u/feat/">Universal Dependencies</a>, la cohesión temporal compara el tiempo y el modo de los verbos, y los conectores los halla <a href="#ConnectorMatcher"><code>SpanishConnectorMatcher</code></a> en el diccionario de <a href="#connectors"><code>load_connectors</code></a>. La tabla de <code>print_stats</code> toma las descripciones de <code>COHESION_STATS_DESC</code> de <code>ests.constants</code>.</p>
@@ -2437,10 +2437,16 @@ Secondary connectors per 1000 words                                |  103.45
 <td style="text-align: left;"><code>None</code></td>
 <td style="text-align: left;">Pipeline de spaCy que analiza una cadena; si no se indica, el modelo <code>es_core_news_sm</code> de <code>ests.utils.get_nlp</code></td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>blank_lines</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Empezar los párrafos solo tras las líneas en blanco, para un texto con líneas cortadas dentro de sus párrafos; por defecto, tras cada salto de línea</td>
+</tr>
 </tbody>
 </table>
 <h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
-<!-- core: stats/cohesion_stats.md:CohesionStats-attributes b48ff23 -->
+<!-- core: stats/cohesion_stats.md:CohesionStats-attributes 9407ea8 -->
 <table>
 <thead>
 <tr>
@@ -2461,9 +2467,14 @@ Secondary connectors per 1000 words                                |  103.45
 <td style="text-align: left;">Números de las oraciones con palabras y de las palabras</td>
 </tr>
 <tr>
+<td style="text-align: left;"><code>blank_lines</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;">Si los párrafos empiezan solo tras las líneas en blanco</td>
+</tr>
+<tr>
 <td style="text-align: left;"><code>n_paragraphs</code></td>
 <td style="text-align: left;"><code>int</code></td>
-<td style="text-align: left;">Número de los párrafos, las partes del texto entre líneas en blanco que tienen palabras</td>
+<td style="text-align: left;">Número de los párrafos, las líneas del texto con palabras con contenido (las partes entre líneas en blanco con <code>blank_lines</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>n_nouns</code>, <code>n_pronouns</code>, <code>n_demonstratives</code>, <code>n_content_words</code></td>
@@ -2698,8 +2709,8 @@ Secondary connectors per 1000 words                                |  103.45
 <div class="metric-card">
 <h3 id="forward_overlap">Repetición con las oraciones y los párrafos siguientes<a class="headerlink" href="#forward_overlap" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>noun_overlap_2_sent</code> · <code>argument_overlap_2_sent</code> · <code>content_overlap_2_sent</code> · <code>noun_overlap_para</code> · <code>argument_overlap_para</code> · <code>content_overlap_para</code> · <a href="https://doi.org/10.3758/s13428-015-0651-7">TAACO</a></p>
-<!-- core: stats/cohesion_stats.md:CohesionStats-forward_overlap 34e902e -->
-<p>La repetición contigua de TAACO, por los lemas de los sustantivos, de los argumentos y de las palabras con contenido: la proporción de los lemas distintos de una oración repetidos en una de las dos oraciones siguientes (<code>adjacent_overlap_2_*_sent</code>), y de un párrafo repetidos en el párrafo siguiente (<code>adjacent_overlap_*_para</code>), sobre todas las oraciones o párrafos que los tienen (<code>calc_forward_overlap</code>). A diferencia de la repetición binaria, un par de segmentos cuenta por la proporción de los lemas que comparten. Un párrafo es una parte del texto entre líneas en blanco que tiene palabras; una palabra que lleva <code>paragraph_start</code> abre uno, también dentro de una oración, como cuando un parser une un título a la oración siguiente. TAACO toma cada línea por un párrafo: un texto con un párrafo en cada línea y sin líneas en blanco es aquí un solo párrafo, y sus <code>*_para</code> son <code>nan</code>.</p>
+<!-- core: stats/cohesion_stats.md:CohesionStats-forward_overlap 7779dcb -->
+<p>La repetición contigua de TAACO, por los lemas de los sustantivos, de los argumentos y de las palabras con contenido: la proporción de los lemas distintos de una oración repetidos en una de las dos oraciones siguientes (<code>adjacent_overlap_2_*_sent</code>), y de un párrafo repetidos en el párrafo siguiente (<code>adjacent_overlap_*_para</code>), sobre todas las oraciones o párrafos que los tienen (<code>calc_forward_overlap</code>). A diferencia de la repetición binaria, un par de segmentos cuenta por la proporción de los lemas que comparten. Un párrafo es una línea del texto, como en TAACO, o una parte entre líneas en blanco con <code>blank_lines</code>, para un texto con líneas cortadas dentro de sus párrafos; una palabra que lleva <code>paragraph_start</code> abre uno, también dentro de una oración, como cuando un parser une un título a la oración siguiente. Un párrafo sin palabras con contenido, como el número de un capítulo, se une al siguiente, o al anterior si es el último.</p>
 <!-- core: stats/cohesion_stats.md:calc_forward_overlap 7389f78 -->
 <div class="signature highlight"><pre><span></span><code><span class="n">calc_forward_overlap</span><span class="p">(</span><span class="n">sets</span><span class="p">,</span> <span class="n">span</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
@@ -2732,7 +2743,7 @@ Secondary connectors per 1000 words                                |  103.45
 </tbody>
 </table>
 <p>Unos segmentos que son una cadena, un <code>Doc</code>, un iterador o un segmento que no es una lista de cadenas lanzan <code>SourceTypeError</code>, y un alcance que no es un entero mayor que 0, <code>ParameterError</code>.</p>
-<p>En esTS una cadena se analiza en un <code>Doc</code>, así que ambos se dividen en párrafos por las líneas en blanco entre sus tokens.</p>
+<p>En esTS una cadena se analiza en un <code>Doc</code>, así que ambos se dividen en párrafos por los saltos de línea entre sus tokens (por las líneas en blanco con <code>blank_lines</code>). Un texto con líneas cortadas dentro de sus párrafos, como los textos de <a href="../../datasets/spanishliterature/"><code>SpanishLiterature</code></a>, necesita <code>blank_lines=True</code>, o sus líneas se comparan como párrafos.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2867,7 +2878,7 @@ Secondary connectors per 1000 words                                |  103.45
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">cs</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
-<span class="n">cs</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="s2">"p_given"</span><span class="p">)</span>
+<span class="n">cs</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="s2">"p_given"</span><span class="p">),</span> <span class="n">cs</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="s2">"connectors"</span><span class="p">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -2904,7 +2915,7 @@ Secondary connectors per 1000 words                                |  103.45
  'connectors_reformulative': 34.48275862068966,
  'connectors_primary': 0.0,
  'connectors_secondary': 103.44827586206898}
-None
+(None, None)
 </code></pre></div>
 </div>
 </div>

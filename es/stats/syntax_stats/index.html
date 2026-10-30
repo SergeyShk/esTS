@@ -2763,7 +2763,7 @@ Clauses per sentence                                       |   1.50
 Mean length of a clause (words)                            |   9.67
 Subordinate clauses per sentence                           |   0.50
 Share of sentences with a subordinate clause               |   0.50
-Infinitive clauses under a verb per sentence               |   0.00
+Infinitive clauses per sentence                            |   0.00
 T-units per sentence                                       |   1.00
 Mean length of a T-unit (words)                            |  14.50
 Clauses per T-unit                                         |   1.50
@@ -2822,7 +2822,7 @@ Ratio of nouns to verbs                                    |   3.00
 </tbody>
 </table>
 <h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
-<!-- core: stats/syntax_stats.md:SyntaxStats-attributes 9a60cb2 -->
+<!-- core: stats/syntax_stats.md:SyntaxStats-attributes 53be7dd -->
 <table>
 <thead>
 <tr>
@@ -2860,12 +2860,17 @@ Ratio of nouns to verbs                                    |   3.00
 <tr>
 <td style="text-align: left;"><code>n_infinitive_clauses</code></td>
 <td style="text-align: left;"><code>int</code></td>
-<td style="text-align: left;">Número de las cláusulas de infinitivo bajo un verbo</td>
+<td style="text-align: left;">Número de las cláusulas de infinitivo</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>n_t_units</code>, <code>n_complex_t_units</code></td>
 <td style="text-align: left;"><code>int</code></td>
 <td style="text-align: left;">Números de las unidades T y de las que tienen una cláusula subordinada</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>n_l2sca_clauses</code></td>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Número de las cláusulas de L2SCA, sin los predicados que comparten sujeto ni las cláusulas de infinitivo</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>n_verb_phrases</code>, <code>n_coordinate_phrases</code>, <code>n_complex_nominals</code></td>
@@ -3067,9 +3072,9 @@ Ratio of nouns to verbs                                    |   3.00
 </tr>
 <tr>
 <td style="text-align: left;"><a href="#infinitive_clauses"><code>infinitive_clauses_per_sent</code></a></td>
-<td style="text-align: left;">Cláusulas de infinitivo bajo un verbo por oración</td>
+<td style="text-align: left;">Cláusulas de infinitivo por oración</td>
 <td style="text-align: left;">0 o más</td>
-<td style="text-align: left;">Más complementos de infinitivo</td>
+<td style="text-align: left;">Más cláusulas de infinitivo</td>
 </tr>
 <tr>
 <td style="text-align: left;"><a href="#l2sca"><code>t_units_per_sent</code></a></td>
@@ -3343,7 +3348,7 @@ Ratio of nouns to verbs                                    |   3.00
 <p class="metric-meta"><code>subordinate_clauses_per_sent</code> · <code>p_complex_sents</code></p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_subordinate_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Comprueba si una palabra encabeza una cláusula subordinada: un núcleo de cláusula (<code>is_clause_head</code>) con <code>ccomp</code>, <code>advcl</code>, <code>acl</code> o <code>csubj</code> (<code>anyts.constants.SUBORDINATE_CLAUSE_DEPS</code>), o bajo <code>xcomp</code> con un predicado en forma personal, o un predicado coordinado de una cláusula subordinada, por la relación de la primera palabra de su cadena de conjuntos hacia arriba. Una cláusula de infinitivo bajo un verbo (<code>quiere salir</code>) se cuenta aparte, entre las <a href="#infinitive_clauses">cláusulas de infinitivo</a>.</p>
+<p>Comprueba si una palabra encabeza una cláusula subordinada: un núcleo de cláusula (<code>is_clause_head</code>) cuyo predicado no es un infinitivo, con <code>ccomp</code>, <code>advcl</code>, <code>acl</code> o <code>csubj</code> (<code>anyts.constants.SUBORDINATE_CLAUSE_DEPS</code>) o bajo <code>xcomp</code>, o un predicado coordinado de una cláusula subordinada, por la relación de la primera palabra de su cadena de conjuntos hacia arriba. También es subordinada una cláusula bajo <code>conj</code> o <code>parataxis</code> con una conjunción subordinante (<code>is_subordinating_mark</code>), con sus conjuntos que tienen sujeto propio: los modelos unen una cláusula tras <code>y</code>, <code>pero</code> o <code>sino</code> como conjunto de la cláusula anterior (<code>sino porque le había cobrado afición</code>, <code>quiero salir y que vengas</code>). Una cláusula de infinitivo (<code>quiere salir</code>, <code>salió para ayudar</code>) se cuenta aparte, entre las <a href="#infinitive_clauses">cláusulas de infinitivo</a>.</p>
 <table>
 <thead>
 <tr>
@@ -3363,20 +3368,45 @@ Ratio of nouns to verbs                                    |   3.00
 </tbody>
 </table>
 <p><code>p_complex_sents</code> es la proporción de las oraciones con al menos una cláusula subordinada.</p>
+<div class="signature highlight"><pre><span></span><code><span class="n">is_subordinating_mark</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+</code></pre></div>
+<p>Comprueba si una palabra con la relación <code>mark</code> es una conjunción subordinante: una de <code>SUBORDINATING_MARKS</code> con las palabras de su expresión fija (<code>que</code>, <code>si</code>, <code>como</code>, <code>cuando</code>, <code>porque</code>, <code>aunque</code>, <code>ya que</code>, <code>puesto que</code>), pero no <code>que</code> tras <code>sino</code>, que coordina (<code>no lo dijo, sino que lo calló</code>). Los modelos analizan <code>para que</code>, <code>sin que</code> y <code>hasta que</code> con una marca <code>que</code> propia. Las preposiciones quedan fuera: <code>a</code> y <code>de</code> ante un infinitivo forman sobre todo una perífrasis (<code>iba a preparar</code>, <code>ha de vivir</code>). Es el gancho <code>is_subordinating_mark</code> del <code>SyntaxStats</code> del núcleo anyTS.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>token</code></td>
+<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">Token</td>
+</tr>
+</tbody>
+</table>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_clause_head</span><span class="p">,</span> <span class="n">is_subordinate_clause_head</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
 
-<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"Él quiere salir, pero tiene que quedarse porque parece cansado."</span><span class="p">)</span>
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"Él quiere salir, pero tiene que quedarse porque parece cansado."</span><span class="p">)</span>
 <span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_subordinate_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"Se sentaba a sus pies, no por servicio, sino porque le había cobrado afición."</span><span class="p">)</span>
 <span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_subordinate_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>['quiere', 'salir', 'tiene', 'parece']
 ['parece']
+['cobrado']
 </code></pre></div>
 </div>
 </div>
@@ -3387,7 +3417,7 @@ Ratio of nouns to verbs                                    |   3.00
 <p class="metric-meta"><code>infinitive_clauses_per_sent</code></p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_infinitive_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Comprueba si una palabra encabeza una cláusula de infinitivo bajo un verbo: un núcleo de cláusula (<code>is_clause_head</code>) cuyo predicado es un infinitivo bajo <code>xcomp</code> (<code>quiere salir</code>, <code>le pidió salir</code>), o un conjunto de uno, sea cual sea su propia forma: decide la primera palabra de su cadena de conjuntos hacia arriba (<code>quiero salir y que vengas</code>). Estas cláusulas se cuentan entre las cláusulas, pero no entre las subordinadas: las gramáticas toman un complemento de infinitivo por parte de una oración simple, y las correlaciones publicadas de la subordinación se obtuvieron para las subordinadas en forma personal. Es el <a href="https://sergeyshk.github.io/anyTS/stats/syntax_stats/#infinitive_clauses"><code>is_infinitive_clause_head</code></a> del núcleo anyTS sobre <code>is_clause_head</code>.</p>
+<p>Comprueba si una palabra encabeza una cláusula de infinitivo: un núcleo de cláusula (<code>is_clause_head</code>) cuyo propio predicado es un infinitivo bajo <code>xcomp</code>, <code>ccomp</code>, <code>advcl</code> o <code>csubj</code> (<code>quiere salir</code>, <code>le pidió salir</code>, <code>salió para ayudar</code>, <code>es difícil decirlo</code>), un infinitivo bajo <code>conj</code> o <code>parataxis</code> con una conjunción subordinante, o un conjunto en infinitivo de uno; un conjunto en forma personal de un infinitivo (<code>quiero salir y que vengas</code>) no lo es. Estas cláusulas se cuentan entre las cláusulas, pero no entre las subordinadas: las gramáticas toman un complemento de infinitivo por parte de una oración simple, y las correlaciones publicadas de la subordinación se obtuvieron para las subordinadas en forma personal. Es el <a href="https://sergeyshk.github.io/anyTS/stats/syntax_stats/#infinitive_clauses"><code>is_infinitive_clause_head</code></a> del núcleo anyTS sobre <code>is_clause_head</code>.</p>
 <table>
 <thead>
 <tr>
@@ -3428,20 +3458,20 @@ Ratio of nouns to verbs                                    |   3.00
 <div class="metric-card">
 <h3 id="l2sca">Unidades de producción de L2SCA<a class="headerlink" href="#l2sca" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>t_units_per_sent</code> · <code>mean_t_unit_len</code> · <code>clauses_per_t_unit</code> · <code>p_complex_t_units</code> · <code>verb_phrases_per_t_unit</code> · <code>coordinate_phrases_per_clause</code> · <code>complex_nominals_per_clause</code> · <a href="https://doi.org/10.1075/ijcl.15.4.02lu">Lu 2010</a></p>
-<!-- core: stats/syntax_stats.md:SyntaxStats-l2sca b816772 -->
+<!-- core: stats/syntax_stats.md:SyntaxStats-l2sca 9f73ddb -->
 <p>Los índices del L2 Syntactic Complexity Analyzer (L2SCA) que no dan las demás métricas, sobre Universal Dependencies. MLC y C/S son <code>mean_clause_len</code> y <code>clauses_per_sent</code>; MLS y DC/C salen de los recuentos, <code>n_words / n_sents</code> y <code>n_subordinate_clauses / n_clauses</code>.</p>
 <ul>
-<li>Una unidad T es una cláusula principal con las cláusulas que dependen de ella: el núcleo de una oración y cada núcleo de cláusula unido a él por <code>conj</code> o <code>parataxis</code> (<code>anyts.constants.MAIN_CLAUSE_DEPS</code>), así que <em>I came, and he left</em> tiene dos; un conjunto de una cláusula subordinada no lo es. Un conjunto sin sujeto propio (<em>I came and left</em>) es un predicado que comparte la unidad T de la cláusula con la que se coordina, como en L2SCA, salvo que su persona, número o género - los de su auxiliar o su cópula, los suyos propios sin ellos - difieran de los de esa cláusula: en una lengua que omite sus sujetos la terminación nombra otro sujeto (<em>llegamos al puerto y nos esperabas</em>). Un <em>there</em> existencial (<code>expl</code> de ClearNLP) es un sujeto. Una unidad T es compleja con una cláusula subordinada (<code>is_subordinate_clause_head</code>) cuya unidad T más cercana por encima es ella.</li>
-<li>Un sintagma verbal es un predicado (<code>is_predicate</code>) que no es auxiliar ni cópula: un verbo, un auxiliar usado como predicado (<em>there </em><em>is</em><em> trouble</em>), una palabra con sujeto o con cópula; un infinitivo que forma un solo predicado con su núcleo (<code>is_infinitive_periphrasis</code>), y su conjunto en infinitivo, forman parte del sintagma verbal del núcleo.</li>
+<li>Una unidad T es una cláusula principal con las cláusulas que dependen de ella: el núcleo de una oración y cada núcleo de cláusula unido a él por <code>conj</code> o <code>parataxis</code> (<code>anyts.constants.MAIN_CLAUSE_DEPS</code>), así que <em>I came, and he left</em> tiene dos; un conjunto de una cláusula subordinada no lo es. Un conjunto sin sujeto propio (<em>I came and left</em>) es un predicado que comparte la unidad T de la cláusula con la que se coordina, como en L2SCA, salvo que su persona, número o género - los de su auxiliar o su cópula, los suyos propios sin ellos - difieran de los de esa cláusula: en una lengua que omite sus sujetos la terminación nombra otro sujeto (<em>llegamos al puerto y nos esperabas</em>). Un <em>there</em> existencial (<code>expl</code> de ClearNLP) es un sujeto. Un conjunto o una parataxis con una marca subordinante (<code>is_subordinating_mark</code>) encabeza una cláusula subordinada o de infinitivo, que no es una unidad T, ni lo es una cláusula bajo ella. Un conjunto en forma personal y con sujeto propio de una cláusula de infinitivo, un predicado que un modelo cuelga del infinitivo, se une a la cláusula de la primera palabra por encima de los infinitivos que no es un infinitivo (<em>he came to help and she stayed</em>: dos unidades T). Una unidad T es compleja con una cláusula subordinada (<code>is_subordinate_clause_head</code>) cuya unidad T más cercana por encima es ella.</li>
+<li>Un sintagma verbal es un predicado (<code>is_predicate</code>) que no es auxiliar ni cópula: un verbo, un auxiliar usado como predicado (<em>there </em><em>is</em><em> trouble</em>), una palabra con sujeto o con cópula; un infinitivo que forma un solo predicado con su núcleo (<code>is_infinitive_periphrasis</code>), y su conjunto en infinitivo, forman parte del sintagma verbal del núcleo. Un participio u otra forma no personal bajo <code>amod</code> o <code>acl</code>, o coordinada con una, sin auxiliar, cópula ni sujeto propio es un modificador de su sustantivo (<em>the house built by workers</em>), como en L2SCA, no un sintagma verbal.</li>
 <li>Un sintagma coordinado es una coordinación con un conjunto que no es núcleo de cláusula (<em>the man and the woman</em>, <em>is big and nice</em>) o un predicado sin sujeto propio (<em>came and left</em>), contada una vez por su primer conjunto; una coordinación de cláusulas con sus propios sujetos cuenta como cláusulas.</li>
-<li>Las cláusulas son las de <code>is_clause_head</code>, como en las demás métricas: un predicado que comparte sujeto y una cláusula de infinitivo cuentan como cláusulas, mientras que L2SCA cuenta las cláusulas en forma personal con sujeto, así que C/T, C/S y CN/C salen más altos y MLC más bajo que en L2SCA.</li>
+<li>Las cláusulas de C/T, CP/C y CN/C son las de L2SCA (<code>n_l2sca_clauses</code>): las cláusulas de <code>is_clause_head</code> sin los predicados que comparten sujeto (<em>came and left</em>) ni las cláusulas de infinitivo, ya que L2SCA cuenta las cláusulas en forma personal con sujeto. C/S y MLC conservan las cláusulas de las demás métricas, así que C/S sale más alto y MLC más bajo que en L2SCA.</li>
 <li>Un nominal complejo es un sustantivo con un modificador de <code>anyts.constants.COMPLEX_NOMINAL_DEPS</code> (un adjetivo, un complemento, una cláusula de relativo o de participio, una aposición, un posesivo), o una cláusula nominal, un núcleo de cláusula de <code>anyts.constants.NOMINAL_CLAUSE_DEPS</code> o un conjunto de uno.</li>
 </ul>
 <div class="arithmatex">\[
 \textrm{MLT} = \frac{\textrm{Palabras}}{\textrm{Unidades T}}, \quad
-\textrm{C/T} = \frac{\textrm{Cláusulas}}{\textrm{Unidades T}}, \quad
+\textrm{C/T} = \frac{\textrm{Cláusulas de L2SCA}}{\textrm{Unidades T}}, \quad
 \textrm{CT/T} = \frac{\textrm{Unidades T complejas}}{\textrm{Unidades T}}, \quad
-\textrm{CN/C} = \frac{\textrm{Nominales complejos}}{\textrm{Cláusulas}}
+\textrm{CN/C} = \frac{\textrm{Nominales complejos}}{\textrm{Cláusulas de L2SCA}}
 \]</div>
 <p>Las cláusulas y las cláusulas subordinadas son las de las reglas españolas de las tarjetas de arriba, y una perífrasis es un solo sintagma verbal (<code>puede venir</code>). Los modelos cuelgan el infinitivo de algunas perífrasis como conjunto de su verbo (<code>tiene que venir</code>): queda dentro del sintagma verbal del verbo, pero el par cuenta además como un sintagma coordinado.</p>
 </div>
@@ -3773,8 +3803,8 @@ Ratio of nouns to verbs                                    |   3.00
 <div class="metric-card">
 <h3 id="similarity">Semejanza de las oraciones contiguas<a class="headerlink" href="#similarity" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>pos_edit_distance</code> · <code>syntax_similarity</code> · <a href="https://doi.org/10.1017/CBO9780511894664">Coh-Metrix</a></p>
-<!-- core: stats/syntax_stats.md:SyntaxStats-similarity 1203633 -->
-<p>Lo parecidas que son las estructuras de dos oraciones contiguas, promediado sobre los <span class="arithmatex">\(S - 1\)</span> pares. <code>pos_edit_distance</code> es la distancia de edición de las categorías gramaticales <span class="arithmatex">\(P_s\)</span> de las palabras de las oraciones (SYNMEDpos de Coh-Metrix) entre la longitud <span class="arithmatex">\(n\)</span> de la oración más larga del par, <code>calc_edit_distance</code>. <code>syntax_similarity</code> es la semejanza de los multiconjuntos de las ternas de dependencias <span class="arithmatex">\(T\)</span> de las dos oraciones (<code>dependency_triples</code>, <code>calc_multiset_similarity</code>), a la manera de SYNSTRUT de Coh-Metrix, que compara los nodos de los árboles de constituyentes.</p>
+<!-- core: stats/syntax_stats.md:SyntaxStats-similarity 401aba3 -->
+<p>Lo parecidas que son las estructuras de dos oraciones contiguas, promediado sobre los <span class="arithmatex">\(S - 1\)</span> pares. <code>pos_edit_distance</code> es la distancia de edición de las categorías gramaticales <span class="arithmatex">\(P_s\)</span> de las palabras de las oraciones (SYNMEDpos de Coh-Metrix) entre la longitud <span class="arithmatex">\(n\)</span> de la oración más larga del par, <code>calc_edit_distance</code>. <code>syntax_similarity</code> es la semejanza de los multiconjuntos de las ternas de dependencias <span class="arithmatex">\(T\)</span> de las dos oraciones (<code>dependency_triples</code>, <code>calc_multiset_similarity</code>), a la manera de SYNSTRUT de Coh-Metrix, que compara los nodos de los árboles de constituyentes. La distancia de edición solo lee el orden de las categorías gramaticales: una oración con el objeto delante y otra con el sujeto delante se parecen cuando ese orden es el mismo (una distancia de 0). Las ternas no leen ningún orden de las palabras: cualquier orden de las palabras de un mismo árbol da una semejanza de 1. El orden del sujeto y del objeto lo leen <a href="#word_order"><code>p_preverbal_subjects</code> y <code>p_preverbal_objects</code></a>. La semejanza de las ternas crece con la longitud de las oraciones.</p>
 <div class="arithmatex">\[
 \frac{1}{S - 1} \sum_{s=1}^{S-1} \frac{\textrm{lev}(P_s, P_{s+1})}{\max(n_s, n_{s+1})}, \quad
 \frac{1}{S - 1} \sum_{s=1}^{S-1} \frac{|T_s \cap T_{s+1}|}{|T_s \cup T_{s+1}|}
@@ -4050,10 +4080,10 @@ Ratio of nouns to verbs                                    |   3.00
 </table>
 <p>Una comprobación que no es invocable lanza <code>SourceTypeError</code>.</p>
 <h2 id="is_prep_complement">Complementos con preposición<a class="headerlink" href="#is_prep_complement" title="Permanent link">&para;</a></h2>
-<!-- core: stats/syntax_stats.md:is_prep_complement e341296 -->
+<!-- core: stats/syntax_stats.md:is_prep_complement 6a6701b -->
 <div class="signature highlight"><pre><span></span><code><span class="n">is_prep_complement</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
-<p>Comprueba si una palabra es un complemento con preposición: una palabra con la relación <code>nmod</code> u <code>obl</code> o un subtipo de ellas (<code>anyts.constants.PREP_COMPLEMENT_DEPS</code>), o un predicado con cópula fuera de una oración de relativo (<code>acl</code>), que tiene una dependiente de la relación <code>case</code> que es una adposición (<code>ADP</code>) o empieza una de varias palabras (<code>fixed</code>: <em>in front of</em>). Un sustantivo en un caso sin preposición y un marcador posesivo no lo son.</p>
+<p>Comprueba si una palabra es un complemento con preposición: una palabra con la relación <code>nmod</code> u <code>obl</code> o un subtipo de ellas (<code>anyts.constants.PREP_COMPLEMENT_DEPS</code>), o un predicado con cópula o con sujeto propio fuera de una oración de relativo (<code>acl</code>), como un predicado nominal de una lengua que omite la cópula en presente, que tiene una dependiente de la relación <code>case</code> que es una adposición (<code>ADP</code>) o empieza una de varias palabras (<code>fixed</code>: <em>in front of</em>). Un sustantivo en un caso sin preposición y un marcador posesivo no lo son.</p>
 <table>
 <thead>
 <tr>

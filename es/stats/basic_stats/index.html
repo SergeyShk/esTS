@@ -2166,7 +2166,7 @@ Entropy of the word lengths in syllables (bits) |   1.72
 <p>El objeto guarda <code>normalize</code>, <code>complex_syl_factor</code> y <code>long_word_letter_factor</code> con sus nombres.</p>
 <p>En esTS los umbrales son los del núcleo y de las fórmulas de legibilidad: una palabra compleja tiene tres o más sílabas, como en SMOG, y una palabra larga siete o más letras, como en LIX y RIX (<code>COMPLEX_SYL_FACTOR = 3</code> y <code>LONG_WORD_LETTER_FACTOR = 7</code> de <code>anyts.constants</code>).</p>
 <h2 id="estadisticas">Estadísticas<a class="headerlink" href="#estadisticas" title="Permanent link">&para;</a></h2>
-<!-- core: stats/basic_stats.md:BasicStats-attributes 0981aba -->
+<!-- core: stats/basic_stats.md:BasicStats-attributes d457364 -->
 <table>
 <thead>
 <tr>
@@ -2270,13 +2270,13 @@ Entropy of the word lengths in syllables (bits) |   1.72
 <tr>
 <td style="text-align: left;"><code>letters_entropy</code></td>
 <td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;">Entropía de Shannon en bits de las longitudes de las palabras en letras, de <code>c_letters</code>: 0 cuando las palabras tienen una sola longitud</td>
+<td style="text-align: left;">Entropía de Shannon en bits de las longitudes de las palabras en letras, de <code>c_letters</code>: 0 cuando las palabras tienen una sola longitud; la estimación a partir de las proporciones sale más baja en un texto corto, en décimas de bit con decenas de palabras</td>
 <td style="text-align: left;">-</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>syllables_entropy</code></td>
 <td style="text-align: left;"><code>float</code></td>
-<td style="text-align: left;">Entropía de Shannon en bits de las longitudes de las palabras en sílabas, de <code>c_syllables</code></td>
+<td style="text-align: left;">Entropía de Shannon en bits de las longitudes de las palabras en sílabas, de <code>c_syllables</code>, con el mismo sesgo</td>
 <td style="text-align: left;">-</td>
 </tr>
 <tr>

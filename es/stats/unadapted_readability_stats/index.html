@@ -2737,10 +2737,10 @@ r = \frac{\textrm{Palabras fáciles} + 3 \times \textrm{Palabras difíciles}}{\t
 <div class="metric-card">
 <h3 id="dickes_steiwer">Índice de Dickes-Steiwer<a class="headerlink" href="#dickes_steiwer" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>dickes_steiwer</code> · Dickes y Steiwer, 1977</p>
-<!-- core: stats/unadapted_readability_stats.md:calc_dickes_steiwer 0fea097 -->
+<!-- core: stats/unadapted_readability_stats.md:calc_dickes_steiwer e11c627 -->
 <div class="signature highlight"><pre><span></span><code><span class="n">calc_dickes_steiwer</span><span class="p">(</span><span class="n">n_letters</span><span class="p">,</span> <span class="n">n_words</span><span class="p">,</span> <span class="n">n_sents</span><span class="p">,</span> <span class="n">n_types</span><span class="p">)</span>
 </code></pre></div>
-<p>La fórmula corta de Dickes y Steiwer (1977) para el alemán, tal como la dan Bamberger y Vanecek (1984), según las letras por palabra, las palabras por oración y la proporción de lexemas entre las palabras (TTR), sin sílabas; un valor mayor indica un texto más fácil. <code>nan</code> sin palabras o sin oraciones.</p>
+<p>La fórmula corta de Dickes y Steiwer (1977) para el alemán, tal como la dan Bamberger y Vanecek (1984), según las letras por palabra, las palabras por oración y la proporción de lexemas entre las palabras (TTR), sin sílabas; un valor mayor indica un texto más fácil. <code>nan</code> sin palabras o sin oraciones. Esa proporción baja con la longitud de un texto, así que se comparan los valores de textos de igual longitud.</p>
 <div class="arithmatex">\[
 \textrm{DS} = 235.95993 - 73.021 \ln\left(\frac{\textrm{Letras}}{\textrm{Palabras}} + 1\right) - 12.56438 \ln\left(\frac{\textrm{Palabras}}{\textrm{Oraciones}} + 1\right) - 50.03293 \cdot \textrm{TTR}
 \]</div>
@@ -2863,10 +2863,10 @@ r = \frac{\textrm{Palabras fáciles} + 3 \times \textrm{Palabras difíciles}}{\t
 <div class="metric-card">
 <h3 id="strain_index">Índice Strain<a class="headerlink" href="#strain_index" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>strain_index</code> · Nathaniel, 2009</p>
-<!-- core: stats/unadapted_readability_stats.md:calc_strain_index d371c89 -->
+<!-- core: stats/unadapted_readability_stats.md:calc_strain_index 8373447 -->
 <div class="signature highlight"><pre><span></span><code><span class="n">calc_strain_index</span><span class="p">(</span><span class="n">n_syllables</span><span class="p">,</span> <span class="n">n_sents</span><span class="p">)</span>
 </code></pre></div>
-<p>El índice de Nathaniel (2009): las sílabas de tres oraciones divididas entre 10, aquí las de tres oraciones de media en todo el texto; <code>nan</code> sin oraciones.</p>
+<p>El índice de Nathaniel (2009): las sílabas de tres oraciones divididas entre 10, aquí las de tres oraciones de media en todo el texto, con lo que es 0.3 veces el índice de Fucks; <code>nan</code> sin oraciones.</p>
 <div class="arithmatex">\[
 \textrm{Strain} = \frac{3 \times \textrm{Sílabas}}{10 \times \textrm{Oraciones}}
 \]</div>
@@ -2941,10 +2941,10 @@ r = \frac{\textrm{Palabras fáciles} + 3 \times \textrm{Palabras difíciles}}{\t
 <div class="metric-card">
 <h3 id="wheeler_smith">Índice de Wheeler-Smith<a class="headerlink" href="#wheeler_smith" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>wheeler_smith</code> · Wheeler y Smith, 1954</p>
-<!-- core: stats/unadapted_readability_stats.md:calc_wheeler_smith de9b424 -->
+<!-- core: stats/unadapted_readability_stats.md:calc_wheeler_smith 7c17af5 -->
 <div class="signature highlight"><pre><span></span><code><span class="n">calc_wheeler_smith</span><span class="p">(</span><span class="n">n_polysyllable_words</span><span class="p">,</span> <span class="n">n_sents</span><span class="p">)</span>
 </code></pre></div>
-<p>El índice de Wheeler y Smith (1954) para textos de primaria: la longitud media de la oración por la proporción de palabras de dos o más sílabas, por 10, es decir, 10 veces esas palabras por oración; cuenta oraciones donde el original cuenta unidades terminadas por cualquier signo final. <code>nan</code> sin oraciones.</p>
+<p>El índice de Wheeler y Smith (1954) para textos de primaria: la longitud media de la oración por la proporción de palabras de dos o más sílabas, por 10: diez veces el número de esas palabras por oración; cuenta oraciones donde el original cuenta unidades terminadas por cualquier signo final. <code>nan</code> sin oraciones.</p>
 <div class="arithmatex">\[
 \textrm{WS} = 10 \times \textrm{ASL} \times \frac{\textrm{Palabras de dos o más sílabas}}{\textrm{Palabras}}
 \]</div>
