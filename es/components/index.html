@@ -2537,7 +2537,9 @@ True
 <h3 id="MorphStatsComponent">Estadísticas morfológicas<a class="headerlink" href="#MorphStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">MorphStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </code></pre></div>
-<p><code>MorphStatsComponent</code> pone las estadísticas morfológicas en la extensión. El pipeline necesita un <code>morphologizer</code> y un <code>lemmatizer</code> antes del componente; la fábrica requiere <code>token.pos</code> y <code>token.lemma</code>, así que <code>nlp.analyze_pipes()</code> señala un pipeline sin alguno de ellos.</p>
+<!-- core: components.md:MorphStatsComponent 5d99bc4 -->
+<p><code>MorphStatsComponent</code> pone las estadísticas morfológicas en la extensión; por defecto necesitan las categorías gramaticales antes de él.</p>
+<p>En esTS el pipeline necesita además un <code>lemmatizer</code> antes del componente; la fábrica requiere <code>token.pos</code> y <code>token.lemma</code>, así que <code>nlp.analyze_pipes()</code> señala un pipeline sin alguno de ellos.</p>
 <p>Excepciones:</p>
 <ul>
 <li><code>SourceError</code> - un documento sin las categorías gramaticales o sin los lemas.</li>

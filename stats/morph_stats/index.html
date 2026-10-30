@@ -2055,14 +2055,14 @@
 <h1 id="morphological-statistics">Morphological statistics<a class="headerlink" href="#morphological-statistics" title="Permanent link">&para;</a></h1>
 <div class="signature highlight"><pre><span></span><code><span class="n">MorphStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>The morphological statistics of a text: the part of speech and the grammatical features of every word in <a href="https://universaldependencies.org/u/feat/">Universal Dependencies</a> terms, their distributions and the markers of Spanish computed from them. The data source is a text or a <code>Doc</code> object of the <a href="https://github.com/explosion/spaCy">spaCy</a> library; the statistics are computed when the object is created.</p>
-<p>A text is parsed with <a href="../../installation/#model"><code>es_core_news_sm</code></a> or with the pipeline passed in <code>nlp</code>; a <code>Doc</code> must carry the parts of speech, which come from a <code>morphologizer</code> (or a <code>tagger</code> with an <code>attribute_ruler</code>), and the lemmas, which come from a <code>lemmatizer</code>. Words are taken from the tokens, punctuation marks and symbols are dropped. A text longer than the <code>max_length</code> of the pipeline - a million characters by default - has to be split into parts, or <code>max_length</code> raised on a pipeline of your own passed in <code>nlp</code>.</p>
+<p>The morphological statistics of a text: the part of speech and the features of <a href="https://universaldependencies.org/u/feat/">Universal Dependencies</a> of every word, counted by value or given word by word. By default the data source is a <code>Doc</code> object of <a href="https://github.com/explosion/spaCy">spaCy</a> with the parts of speech, read by <code>token.pos_</code> and <code>token.morph</code>; a language library reads a string or a <code>Doc</code> without them in its own way.</p>
 <p>Raises:</p>
 <ul>
-<li><code>SourceTypeError</code> - a source that is neither a string nor a <code>Doc</code>, a pipeline that is not a spaCy <code>Language</code>;</li>
-<li><code>SourceError</code> - a source without words, a <code>Doc</code> without the parts of speech or the lemmas (a <code>Doc</code> of <code>spacy.blank("es")</code> or of a pipeline with the <code>lemmatizer</code> excluded), a string longer than the <code>max_length</code> of the pipeline or with a character that has no UTF-8 form;</li>
-<li><code>DatasetNotFoundError</code> - a string without <code>nlp</code> when the model <code>es_core_news_sm</code> is not installed.</li>
+<li><code>SourceTypeError</code> - a source that is not a <code>Doc</code>, an <code>analyze</code> that does not give <code>MorphWord</code> objects;</li>
+<li><code>SourceError</code> - a source without parts of speech or without words.</li>
 </ul>
+<p>The class extends the <code>MorphStats</code> of the <a href="https://sergeyshk.github.io/anyTS/stats/morph_stats/">anyTS</a> core with the Spanish layer and the <a href="#markers">markers of Spanish</a>; the statistics are computed when the object is created. In esTS the data source is a text or a <code>Doc</code>: a text is parsed with <a href="../../installation/#model"><code>es_core_news_sm</code></a> or with the pipeline passed in <code>nlp</code>, and a <code>Doc</code> must carry the parts of speech, which come from a <code>morphologizer</code> (or a <code>tagger</code> with an <code>attribute_ruler</code>), and the lemmas, which come from a <code>lemmatizer</code>. Words are taken from the tokens, punctuation marks and symbols are dropped. A text longer than the <code>max_length</code> of the pipeline - a million characters by default - has to be split into parts, or <code>max_length</code> raised on a pipeline of your own passed in <code>nlp</code>. The <code>print_stats</code> and <code>print_markers</code> tables take the descriptions of <code>MORPHOLOGY_STATS_DESC</code> and <code>MORPHOLOGY_MARKERS_DESC</code> of <code>ests.constants</code>.</p>
+<p>Besides, a pipeline in <code>nlp</code> that is not a spaCy <code>Language</code> raises <code>SourceTypeError</code>; a <code>Doc</code> without the lemmas (of a pipeline with the <code>lemmatizer</code> excluded), a string longer than the <code>max_length</code> of the pipeline or with a character that has no UTF-8 form raise <code>SourceError</code>; a string without <code>nlp</code> when the model <code>es_core_news_sm</code> is not installed raises <code>DatasetNotFoundError</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Code</label><label for="__tabbed_1_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2129,20 +2129,26 @@ Indicative                    |    1
 <tr>
 <td style="text-align: left;"><code>words</code></td>
 <td style="text-align: left;"><code>tuple[str]</code></td>
-<td style="text-align: left;">Words</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>lemmas</code></td>
-<td style="text-align: left;"><code>tuple[str]</code></td>
-<td style="text-align: left;">Lemmas of the words</td>
+<td style="text-align: left;">Words of the text</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>tags</code></td>
 <td style="text-align: left;"><code>tuple[str]</code></td>
-<td style="text-align: left;">Grammatical features of the words as strings in the CoNLL-U format (<code>Gender=Masc|Number=Sing</code>, <code>_</code> without features)</td>
+<td style="text-align: left;">Features of every word in the CoNLL-U format (<code>Case=Nom|Number=Plur</code>), <code>_</code> for a word without them</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>pos</code></td>
+<td style="text-align: left;"><code>tuple[str / None]</code></td>
+<td style="text-align: left;">Part of speech of every word</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>animacy</code>, <code>aspect</code>, ..., <code>voice</code></td>
+<td style="text-align: left;"><code>tuple[str / None]</code></td>
+<td style="text-align: left;">Value of a statistic for every word, <code>None</code> for a word without the feature</td>
 </tr>
 </tbody>
 </table>
+<p>In esTS the statistics are <code>case</code>, ..., <code>verb_form</code> of the <a href="#statistics">table below</a>; <code>animacy</code>, <code>aspect</code> and <code>voice</code> of the core are not among them. esTS also has the attribute <code>lemmas</code> (<code>tuple[str]</code>) - the lemmas of the words that the model gives.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Code</label><label for="__tabbed_2_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2250,7 +2256,7 @@ Indicative                    |    1
 </tr>
 </tbody>
 </table>
-<p>A feature with several values keeps the form of CoNLL-U: <code>qué</code>, <code>quién</code>, <code>cuál</code> have <code>pron_type</code> equal to <code>Int,Rel</code>, and <code>usted</code> has <code>case</code> equal to <code>Acc,Nom</code>. <code>print_stats</code> names the values by <code>MORPHOLOGY_STATS_DESC</code> of <code>ests.constants</code>, and such a value by the names of its parts - "Interrogative or relative", "Accusative or nominative".</p>
+<p>A feature with several values keeps the form of CoNLL-U: <code>qué</code>, <code>quién</code>, <code>cuál</code> have <code>pron_type</code> equal to <code>Int,Rel</code>, and <code>usted</code> has <code>case</code> equal to <code>Acc,Nom</code>. <code>print_stats</code> names the values by <code>MORPHOLOGY_STATS_DESC</code> of <code>ests.constants</code>, and such a value by the names of its parts joined with a slash - "Interrogative / Relative", "Accusative / Nominative".</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The statistics are as good as the annotation of the model. <code>es_core_news_sm</code> mis-analyses verbs with enclitic pronouns (<code>dámelo</code>, <code>cuéntamelo</code> come out as nouns with invented lemmas) and tags the imperatives of <code>tú</code> as indicative (<code>Abre la ventana</code> gets <code>Mood=Ind</code>), so <code>p_imperative</code> under-reports and <code>p_indicative</code> absorbs the orders: in the dialogue of the corpus of literature it finds about one imperative in ten. <code>es_core_news_lg</code> does little better (15%); the transformer model <code>es_dep_news_trf</code> passed in <code>nlp</code> finds 87% of them, and in drama <code>p_imperative</code> rises from 1.6% to 7.5% - at the cost of about 1 GB with PyTorch and five times the time on a CPU, and it needs the single line breaks of a hard-wrapped text joined first.</p>
@@ -2314,8 +2320,10 @@ Indicative                    |    1
 </div>
 </div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
-<p><code>get_stats(*args, filter_none=False, flat=False)</code> returns the distributions of the values of the statistics as a dictionary of counts for each. The statistics are chosen by their names separated by commas, all of them without names, and <code>filter_none=True</code> drops the words without the feature (<code>None</code>); <code>flat=True</code> gives the counts by keys such as <code>mood_Sub</code>, without the words that lack the feature, and so does <code>to_dataframe()</code>, a table of one row. A name that is not a statistic raises <code>UnknownStatError</code> - here and in <code>print_stats</code> and <code>explain_text</code>. <code>to_dataframe</code> and <code>describe</code> are those of the <a href="https://sergeyshk.github.io/anyTS/stats/stats/">statistics interface</a> of the anyTS core; the morphological statistics have no scales, so <code>describe</code> gives <code>None</code>.</p>
-<p><code>print_stats(*args, filter_none=False)</code> prints the distributions of the chosen statistics as tables, the frequent values first (the example at the top of the page), and <code>explain_text(*args, filter_none=False)</code> returns the words of the text in order with the values of the chosen statistics.</p>
+<p><code>get_stats(*stats, filter_none=False, flat=False)</code> gives the number of the words by value of every statistic selected, all of them by default, in the order of the first occurrences; <code>None</code> counts the words without the feature, and <code>filter_none</code> leaves them out. With <code>flat</code> the keys are <code>statistic_value</code>, such as <code>pos_NOUN</code>, without the words that lack the feature, as in <code>to_dataframe</code>. An unknown statistic raises <code>UnknownStatError</code>.</p>
+<p><code>explain_text(*stats, filter_none=False)</code> gives every word with the values of the statistics selected; <code>filter_none</code> leaves out those a word lacks. An unknown statistic raises <code>UnknownStatError</code>.</p>
+<p><code>print_stats(*stats, filter_none=False)</code> prints a table for every statistic selected: the descriptions of its values from the most frequent, with the number of the words. A value of several joins the descriptions of its parts with a slash. An unknown statistic raises <code>UnknownStatError</code>.</p>
+<p>The example at the top of the page prints two of the tables. <code>to_dataframe</code> and <code>describe</code> are those of the <a href="https://sergeyshk.github.io/anyTS/stats/stats/">statistics interface</a> of the anyTS core; the morphological statistics have no scales, so <code>describe</code> gives <code>None</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Code</label><label for="__tabbed_4_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2341,7 +2349,8 @@ Indicative                    |    1
 </div>
 </div>
 </div>
-<p><code>get_markers()</code> returns the <a href="#markers">markers of Spanish</a> as a dictionary, and <code>print_markers()</code> prints them as a table.</p>
+<p><code>get_markers()</code> gives the markers of a language computed from the features - shares of grammatical forms, each of its own base - by the names of <code>markers_desc</code>, and <code>print_markers()</code> prints them with their descriptions. A library computes them; there are none by default.</p>
+<p>In esTS the markers are the <a href="#markers">markers of Spanish</a>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Code</label><label for="__tabbed_5_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2349,21 +2358,23 @@ Indicative                    |    1
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>                     Marker                    |   Value
------------------------------------------------------------
-Indicative among the finite forms              |   0.33
-Subjunctive among the finite forms             |   0.33
-Conditional among the finite forms             |   0.33
-Imperative among the finite forms              |   0.00
-Infinitive among the verb forms                |   0.00
-Gerund among the verb forms                    |   0.00
-Participle among the verb forms                |   0.00
-ser among the copulas ser and estar            |    nan
-Adverbs in -mente among the adverbs            |   0.00
+<div class="highlight"><pre><span></span><code>               Marker               |  Value
+-----------------------------------------------
+Indicative among the finite forms   |   0.33
+Subjunctive among the finite forms  |   0.33
+Conditional among the finite forms  |   0.33
+Imperative among the finite forms   |   0.00
+Infinitive among the verb forms     |   0.00
+Gerund among the verb forms         |   0.00
+Participle among the verb forms     |   0.00
+ser among the copulas ser and estar |   nan
+Adverbs in -mente among the adverbs |   0.00
 </code></pre></div>
 </div>
 </div>
 </div>
+<p><code>MorphWord</code> is a word of <code>analyze</code>: its text <code>word</code>, its part of speech <code>pos</code> (<code>None</code> when unknown) and its features <code>features</code> - the values of the features of Universal Dependencies by their names (<code>{"Case": "Nom"}</code>), a value of several joined by commas.</p>
+<p>In esTS <code>MorphWord</code> is imported from <code>ests.morph_stats</code> too.</p>
 
 
 

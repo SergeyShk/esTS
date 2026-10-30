@@ -2531,7 +2531,8 @@ True
 <h3 id="MorphStatsComponent">Morphological statistics<a class="headerlink" href="#MorphStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">MorphStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </code></pre></div>
-<p><code>MorphStatsComponent</code> puts the morphological statistics into the extension. The pipeline needs a <code>morphologizer</code> and a <code>lemmatizer</code> before the component; the factory requires <code>token.pos</code> and <code>token.lemma</code>, so <code>nlp.analyze_pipes()</code> names a pipeline without one of them.</p>
+<p><code>MorphStatsComponent</code> puts the morphological statistics into the extension; by default they need the parts of speech before it.</p>
+<p>In esTS the pipeline needs a <code>lemmatizer</code> before the component as well; the factory requires <code>token.pos</code> and <code>token.lemma</code>, so <code>nlp.analyze_pipes()</code> names a pipeline without one of them.</p>
 <p>Raises:</p>
 <ul>
 <li><code>SourceError</code> - a document without the parts of speech or the lemmas.</li>

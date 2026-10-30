@@ -1076,7 +1076,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#estadisticas" class="md-nav__link">
+  <a href="#statistics" class="md-nav__link">
     <span class="md-ellipsis">
       
         Estadísticas
@@ -1994,7 +1994,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#estadisticas" class="md-nav__link">
+  <a href="#statistics" class="md-nav__link">
     <span class="md-ellipsis">
       
         Estadísticas
@@ -2055,14 +2055,15 @@
 <h1 id="estadisticas-morfologicas">Estadísticas morfológicas<a class="headerlink" href="#estadisticas-morfologicas" title="Permanent link">&para;</a></h1>
 <div class="signature highlight"><pre><span></span><code><span class="n">MorphStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>Las estadísticas morfológicas de un texto: la categoría gramatical y los rasgos morfológicos de cada palabra en los términos de <a href="https://universaldependencies.org/u/feat/">Universal Dependencies</a>, sus distribuciones y los marcadores del español calculados a partir de ellos. La fuente de datos es un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>; las estadísticas se calculan al crear el objeto.</p>
-<p>Un texto se analiza con <a href="../../installation/#model"><code>es_core_news_sm</code></a> o con el pipeline indicado en <code>nlp</code>; un <code>Doc</code> debe llevar las categorías gramaticales, que vienen de un <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>), y los lemas, que vienen de un <code>lemmatizer</code>. Las palabras se toman de los tokens y los signos de puntuación y los símbolos se descartan. Un texto más largo que el <code>max_length</code> del pipeline - un millón de caracteres por defecto - hay que dividirlo en partes o subir <code>max_length</code> en un pipeline propio indicado en <code>nlp</code>.</p>
+<!-- core: stats/morph_stats.md:MorphStats 002c663 -->
+<p>Las estadísticas morfológicas de un texto: la categoría gramatical y los rasgos de <a href="https://universaldependencies.org/u/feat/">Universal Dependencies</a> de cada palabra, contados por valor o dados palabra por palabra. Por defecto la fuente de datos es un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> con las categorías gramaticales, leídas por <code>token.pos_</code> y <code>token.morph</code>; una biblioteca de un idioma lee a su manera una cadena o un <code>Doc</code> sin ellas.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - una fuente que no es ni una cadena ni un <code>Doc</code>, un pipeline que no es un <code>Language</code> de spaCy;</li>
-<li><code>SourceError</code> - una fuente sin palabras, un <code>Doc</code> sin las categorías gramaticales o sin los lemas (un <code>Doc</code> de <code>spacy.blank("es")</code> o de un pipeline con el <code>lemmatizer</code> excluido), una cadena más larga que el <code>max_length</code> del pipeline o con un carácter sin forma UTF-8;</li>
-<li><code>DatasetNotFoundError</code> - una cadena sin <code>nlp</code> cuando el modelo <code>es_core_news_sm</code> no está instalado.</li>
+<li><code>SourceTypeError</code> - una fuente que no es un <code>Doc</code>, un <code>analyze</code> que no da objetos <code>MorphWord</code>;</li>
+<li><code>SourceError</code> - una fuente sin categorías gramaticales o sin palabras.</li>
 </ul>
+<p>La clase extiende el <code>MorphStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/morph_stats/">anyTS</a> con la capa del español y los <a href="#markers">marcadores del español</a>; las estadísticas se calculan al crear el objeto. En esTS la fuente de datos es un texto o un <code>Doc</code>: un texto se analiza con <a href="../../installation/#model"><code>es_core_news_sm</code></a> o con el pipeline indicado en <code>nlp</code>, y un <code>Doc</code> debe llevar las categorías gramaticales, que vienen de un <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>), y los lemas, que vienen de un <code>lemmatizer</code>. Las palabras se toman de los tokens y los signos de puntuación y los símbolos se descartan. Un texto más largo que el <code>max_length</code> del pipeline - un millón de caracteres por defecto - hay que dividirlo en partes o subir <code>max_length</code> en un pipeline propio indicado en <code>nlp</code>. Las tablas de <code>print_stats</code> y <code>print_markers</code> toman las descripciones de <code>MORPHOLOGY_STATS_DESC</code> y <code>MORPHOLOGY_MARKERS_DESC</code> de <code>ests.constants</code>.</p>
+<p>Además, un pipeline en <code>nlp</code> que no es un <code>Language</code> de spaCy lanza <code>SourceTypeError</code>; un <code>Doc</code> sin los lemas (de un pipeline con el <code>lemmatizer</code> excluido), una cadena más larga que el <code>max_length</code> del pipeline o con un carácter sin forma UTF-8 lanzan <code>SourceError</code>; una cadena sin <code>nlp</code> cuando el modelo <code>es_core_news_sm</code> no está instalado lanza <code>DatasetNotFoundError</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2117,6 +2118,7 @@ Indicative                    |    1
 </tbody>
 </table>
 <h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
+<!-- core: stats/morph_stats.md:MorphStats-attributes 0edcb8a -->
 <table>
 <thead>
 <tr>
@@ -2129,20 +2131,26 @@ Indicative                    |    1
 <tr>
 <td style="text-align: left;"><code>words</code></td>
 <td style="text-align: left;"><code>tuple[str]</code></td>
-<td style="text-align: left;">Palabras</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>lemmas</code></td>
-<td style="text-align: left;"><code>tuple[str]</code></td>
-<td style="text-align: left;">Lemas de las palabras</td>
+<td style="text-align: left;">Palabras del texto</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>tags</code></td>
 <td style="text-align: left;"><code>tuple[str]</code></td>
-<td style="text-align: left;">Rasgos morfológicos de las palabras como cadenas en formato CoNLL-U (<code>Gender=Masc|Number=Sing</code>, <code>_</code> sin rasgos)</td>
+<td style="text-align: left;">Rasgos de cada palabra en el formato CoNLL-U (<code>Case=Nom|Number=Plur</code>), <code>_</code> para una palabra sin ellos</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>pos</code></td>
+<td style="text-align: left;"><code>tuple[str / None]</code></td>
+<td style="text-align: left;">Categoría gramatical de cada palabra</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>animacy</code>, <code>aspect</code>, ..., <code>voice</code></td>
+<td style="text-align: left;"><code>tuple[str / None]</code></td>
+<td style="text-align: left;">Valor de una estadística para cada palabra, <code>None</code> para una palabra sin el rasgo</td>
 </tr>
 </tbody>
 </table>
+<p>En esTS las estadísticas son <code>case</code>, ..., <code>verb_form</code> de la <a href="#statistics">tabla de abajo</a>; <code>animacy</code>, <code>aspect</code> y <code>voice</code> del núcleo no están entre ellas. esTS tiene además el atributo <code>lemmas</code> (<code>tuple[str]</code>): los lemas de las palabras que da el modelo.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Código</label><label for="__tabbed_2_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2157,7 +2165,7 @@ Indicative                    |    1
 </div>
 </div>
 </div>
-<h2 id="estadisticas">Estadísticas<a class="headerlink" href="#estadisticas" title="Permanent link">&para;</a></h2>
+<h2 id="statistics">Estadísticas<a class="headerlink" href="#statistics" title="Permanent link">&para;</a></h2>
 <p>Cada estadística es un atributo del objeto, una tupla de los valores de un rasgo por palabra (<code>None</code> para una palabra a la que el modelo no da ningún valor del rasgo), y <code>get_stats</code> devuelve las distribuciones de sus valores. Los valores se leen de <code>token.pos_</code> y <code>token.morph</code> del análisis, es decir, por el contexto. Las estadísticas son la categoría gramatical y los quince rasgos de <code>MORPHOLOGY_FEATURES</code>; el valor <code>Unknown</code> de las tablas impresas significa que el modelo no dio a la palabra ningún valor del rasgo. Los demás rasgos que anotan los modelos (<code>AdvType</code>, <code>Foreign</code>, <code>NumForm</code>, <code>Number[psor]</code>, <code>PrepCase</code>, <code>Typo</code>, <code>PunctSide</code>, <code>PunctType</code>) no se cuentan, pero quedan en <code>tags</code>.</p>
 <table>
 <thead>
@@ -2250,7 +2258,7 @@ Indicative                    |    1
 </tr>
 </tbody>
 </table>
-<p>Un rasgo con varios valores conserva la forma de CoNLL-U: <code>qué</code>, <code>quién</code>, <code>cuál</code> tienen <code>pron_type</code> igual a <code>Int,Rel</code>, y <code>usted</code> tiene <code>case</code> igual a <code>Acc,Nom</code>. <code>print_stats</code> nombra los valores según <code>MORPHOLOGY_STATS_DESC</code> de <code>ests.constants</code>, y un valor así, con los nombres de sus partes: «Interrogative or relative», «Accusative or nominative».</p>
+<p>Un rasgo con varios valores conserva la forma de CoNLL-U: <code>qué</code>, <code>quién</code>, <code>cuál</code> tienen <code>pron_type</code> igual a <code>Int,Rel</code>, y <code>usted</code> tiene <code>case</code> igual a <code>Acc,Nom</code>. <code>print_stats</code> nombra los valores según <code>MORPHOLOGY_STATS_DESC</code> de <code>ests.constants</code>, y un valor así, con los nombres de sus partes unidos por una barra: «Interrogative / Relative», «Accusative / Nominative».</p>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
 <p>Las estadísticas valen lo que vale la anotación del modelo. <code>es_core_news_sm</code> analiza mal los verbos con pronombres enclíticos (<code>dámelo</code>, <code>cuéntamelo</code> salen como sustantivos con lemas inventados) y etiqueta los imperativos de <code>tú</code> como indicativo (<code>Abre la ventana</code> recibe <code>Mood=Ind</code>), de modo que <code>p_imperative</code> se queda corto y <code>p_indicative</code> absorbe las órdenes: en el diálogo del corpus de literatura encuentra alrededor de un imperativo de cada diez. <code>es_core_news_lg</code> apenas mejora (15 %); el modelo de transformadores <code>es_dep_news_trf</code> indicado en <code>nlp</code> encuentra el 87 %, y en el teatro <code>p_imperative</code> sube del 1,6 % al 7,5 %, a costa de cerca de 1 GB con PyTorch y cinco veces más tiempo en una CPU, y necesita antes unir los saltos de línea simples de un texto con líneas cortadas.</p>
@@ -2314,8 +2322,13 @@ Indicative                    |    1
 </div>
 </div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
-<p><code>get_stats(*args, filter_none=False, flat=False)</code> devuelve las distribuciones de los valores de las estadísticas como un diccionario de recuentos para cada una. Las estadísticas se eligen por sus nombres separados por comas, todas sin nombres, y <code>filter_none=True</code> descarta las palabras sin el rasgo (<code>None</code>); <code>flat=True</code> da los recuentos por claves como <code>mood_Sub</code>, sin las palabras que carecen del rasgo, y lo mismo <code>to_dataframe()</code>, una tabla de una fila. Un nombre que no es una estadística lanza <code>UnknownStatError</code>, aquí y en <code>print_stats</code> y <code>explain_text</code>. <code>to_dataframe</code> y <code>describe</code> son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de las estadísticas</a> del núcleo anyTS; las estadísticas morfológicas no tienen escalas, así que <code>describe</code> da <code>None</code>.</p>
-<p><code>print_stats(*args, filter_none=False)</code> muestra las distribuciones de las estadísticas elegidas como tablas, primero los valores frecuentes (el ejemplo del principio de la página), y <code>explain_text(*args, filter_none=False)</code> devuelve las palabras del texto en orden con los valores de las estadísticas elegidas.</p>
+<!-- core: stats/morph_stats.md:MorphStats-get_stats 31a94da -->
+<p><code>get_stats(*stats, filter_none=False, flat=False)</code> da el número de las palabras por valor de cada estadística elegida, todas por defecto, en el orden de las primeras apariciones; <code>None</code> cuenta las palabras sin el rasgo, y <code>filter_none</code> las deja fuera. Con <code>flat</code> las claves son <code>estadística_valor</code>, como <code>pos_NOUN</code>, sin las palabras que carecen del rasgo, como en <code>to_dataframe</code>. Una estadística desconocida lanza <code>UnknownStatError</code>.</p>
+<!-- core: stats/morph_stats.md:MorphStats-explain_text 037565e -->
+<p><code>explain_text(*stats, filter_none=False)</code> da cada palabra con los valores de las estadísticas elegidas; <code>filter_none</code> deja fuera los que le faltan a una palabra. Una estadística desconocida lanza <code>UnknownStatError</code>.</p>
+<!-- core: stats/morph_stats.md:MorphStats-print_stats a935578 -->
+<p><code>print_stats(*stats, filter_none=False)</code> muestra una tabla para cada estadística elegida: las descripciones de sus valores desde el más frecuente, con el número de las palabras. Un valor de varios une las descripciones de sus partes con una barra. Una estadística desconocida lanza <code>UnknownStatError</code>.</p>
+<p>El ejemplo del principio de la página muestra dos de las tablas. <code>to_dataframe</code> y <code>describe</code> son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de las estadísticas</a> del núcleo anyTS; las estadísticas morfológicas no tienen escalas, así que <code>describe</code> da <code>None</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2341,7 +2354,9 @@ Indicative                    |    1
 </div>
 </div>
 </div>
-<p><code>get_markers()</code> devuelve los <a href="#markers">marcadores del español</a> como un diccionario, y <code>print_markers()</code> los muestra como una tabla.</p>
+<!-- core: stats/morph_stats.md:MorphStats-markers a7e33d7 -->
+<p><code>get_markers()</code> da los marcadores de un idioma calculados a partir de los rasgos - proporciones de formas gramaticales, cada una de su propia base - por los nombres de <code>markers_desc</code>, y <code>print_markers()</code> los muestra con sus descripciones. Los calcula una biblioteca; por defecto no hay ninguno.</p>
+<p>En esTS los marcadores son los <a href="#markers">marcadores del español</a>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2349,21 +2364,24 @@ Indicative                    |    1
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>                     Marker                    |   Value
------------------------------------------------------------
-Indicative among the finite forms              |   0.33
-Subjunctive among the finite forms             |   0.33
-Conditional among the finite forms             |   0.33
-Imperative among the finite forms              |   0.00
-Infinitive among the verb forms                |   0.00
-Gerund among the verb forms                    |   0.00
-Participle among the verb forms                |   0.00
-ser among the copulas ser and estar            |    nan
-Adverbs in -mente among the adverbs            |   0.00
+<div class="highlight"><pre><span></span><code>               Marker               |  Value
+-----------------------------------------------
+Indicative among the finite forms   |   0.33
+Subjunctive among the finite forms  |   0.33
+Conditional among the finite forms  |   0.33
+Imperative among the finite forms   |   0.00
+Infinitive among the verb forms     |   0.00
+Gerund among the verb forms         |   0.00
+Participle among the verb forms     |   0.00
+ser among the copulas ser and estar |   nan
+Adverbs in -mente among the adverbs |   0.00
 </code></pre></div>
 </div>
 </div>
 </div>
+<!-- core: stats/morph_stats.md:MorphWord 7a841ee -->
+<p><code>MorphWord</code> es una palabra de <code>analyze</code>: su texto <code>word</code>, su categoría gramatical <code>pos</code> (<code>None</code> cuando no se conoce) y sus rasgos <code>features</code> - los valores de los rasgos de Universal Dependencies por sus nombres (<code>{"Case": "Nom"}</code>), un valor de varios unidos por comas.</p>
+<p>En esTS <code>MorphWord</code> se importa también de <code>ests.morph_stats</code>.</p>
 
 
 
