@@ -62,7 +62,7 @@ Adding a component extends the tokenizer of its pipeline with the rules for the 
 | [`DiversityStatsComponent`](#DiversityStatsComponent) | `ests_diversity` | [`DiversityStats`](stats/diversity_stats.md) | `window_len`, `mtld_threshold`, `mtld_min_len`, `hdd_sample_size`, `log_base` |
 | [`MorphStatsComponent`](#MorphStatsComponent) | `ests_morph` | [`MorphStats`](stats/morph_stats.md) | - |
 | [`SyntaxStatsComponent`](#SyntaxStatsComponent) | `ests_syntax` | [`SyntaxStats`](stats/syntax_stats.md) | - |
-| [`CohesionStatsComponent`](#CohesionStatsComponent) | `ests_cohesion` | [`CohesionStats`](stats/cohesion_stats.md) | - |
+| [`CohesionStatsComponent`](#CohesionStatsComponent) | `ests_cohesion` | [`CohesionStats`](stats/cohesion_stats.md) | `blank_lines` |
 | [`LexicalStatsComponent`](#LexicalStatsComponent) | `ests_lexical` | [`LexicalStats`](stats/lexical_stats.md) | `data_dir` |
 | [`StyleStatsComponent`](#StyleStatsComponent) | `ests_style` | [`StyleStats`](stats/style_stats.md) | `stopwords`, `top_n`, `nausea_stopwords`, `cliches` |
 | [`PhonStatsComponent`](#PhonStatsComponent) | `ests_phon` | [`PhonStats`](stats/phon_stats.md) | `window_len` |
@@ -225,29 +225,35 @@ Raises:
 ### Cohesion statistics { #CohesionStatsComponent }
 
 ``` {.python .signature}
-CohesionStatsComponent(nlp, name)
+CohesionStatsComponent(nlp, name, blank_lines=False)
 ```
 
 --8<-- "components.md:CohesionStatsComponent"
 
-In the pipeline of `es_core_news_sm` they come from the `morphologizer` and the `lemmatizer`; the factory requires `token.pos` and `token.lemma`, so `nlp.analyze_pipes()` names a pipeline without one of them.
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `blank_lines` | `bool` | `False` | Start the paragraphs after the blank lines alone, for a text whose lines are wrapped inside its paragraphs; after every line break by default |
 
-Raises:
-
-- `SourceError` - a document without the parts of speech or the lemmas.
+In the pipeline of `es_core_news_sm` the parts of speech and the lemmas come from the `morphologizer` and the `lemmatizer`; the factory requires `token.pos` and `token.lemma`, so `nlp.analyze_pipes()` names a pipeline without one of them, and a document without them raises `SourceError`. The texts of [`SpanishLiterature`](datasets/spanishliterature.md) are wrapped inside their paragraphs and need `blank_lines`.
 
 === "Code"
 
     ``` python
     nlp.add_pipe("ests_cohesion", name="cohesion")
-    doc = nlp("El informe fue aprobado. Sin embargo, el informe no resuelve el problema.")
-    doc._.cohesion.noun_overlap_adjacent, round(doc._.cohesion.connectors, 2)
+    nlp.add_pipe("ests_cohesion", name="paragraphs", config={"blank_lines": True})
+    doc = nlp("El informe fue aprobado. Sin embargo, el informe\nno resuelve el problema.")
+    (
+        doc._.cohesion.noun_overlap_adjacent,
+        round(doc._.cohesion.connectors, 2),
+        doc._.cohesion.n_paragraphs,
+        doc._.paragraphs.n_paragraphs,
+    )
     ```
 
 === "Result"
 
     ```
-    (1.0, 83.33)
+    (1.0, 83.33, 2, 1)
     ```
 
 ### Lexical sophistication statistics { #LexicalStatsComponent }

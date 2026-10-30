@@ -300,8 +300,12 @@ class CohesionStatsComponent(_Component, anyts.components.CohesionStatsComponent
 
     Arguments:
         name (str): Name of the component in the pipeline
+        blank_lines (bool): Start the paragraphs after the blank lines alone, for a text
+            whose lines are wrapped inside its paragraphs; after every line break by
+            default
 
     Raises:
+        ParameterError: If blank_lines is not a bool
         SourceError: If the pipeline gives no parts of speech or no lemmas
     """
 

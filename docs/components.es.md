@@ -66,7 +66,7 @@ Añadir un componente amplía el tokenizador de su pipeline con las reglas de la
 | [`DiversityStatsComponent`](#DiversityStatsComponent) | `ests_diversity` | [`DiversityStats`](stats/diversity_stats.md) | `window_len`, `mtld_threshold`, `mtld_min_len`, `hdd_sample_size`, `log_base` |
 | [`MorphStatsComponent`](#MorphStatsComponent) | `ests_morph` | [`MorphStats`](stats/morph_stats.md) | - |
 | [`SyntaxStatsComponent`](#SyntaxStatsComponent) | `ests_syntax` | [`SyntaxStats`](stats/syntax_stats.md) | - |
-| [`CohesionStatsComponent`](#CohesionStatsComponent) | `ests_cohesion` | [`CohesionStats`](stats/cohesion_stats.md) | - |
+| [`CohesionStatsComponent`](#CohesionStatsComponent) | `ests_cohesion` | [`CohesionStats`](stats/cohesion_stats.md) | `blank_lines` |
 | [`LexicalStatsComponent`](#LexicalStatsComponent) | `ests_lexical` | [`LexicalStats`](stats/lexical_stats.md) | `data_dir` |
 | [`StyleStatsComponent`](#StyleStatsComponent) | `ests_style` | [`StyleStats`](stats/style_stats.md) | `stopwords`, `top_n`, `nausea_stopwords`, `cliches` |
 | [`PhonStatsComponent`](#PhonStatsComponent) | `ests_phon` | [`PhonStats`](stats/phon_stats.md) | `window_len` |
@@ -262,30 +262,40 @@ Excepciones:
 ### Estadísticas de cohesión { #CohesionStatsComponent }
 
 ``` {.python .signature}
-CohesionStatsComponent(nlp, name)
+CohesionStatsComponent(nlp, name, blank_lines=False)
 ```
 
-<!-- core: components.md:CohesionStatsComponent 51ecae4 -->
-`CohesionStatsComponent` pone las estadísticas de cohesión en la extensión; por defecto necesitan las categorías gramaticales y los lemas antes de él.
-
-En el pipeline de `es_core_news_sm` vienen del `morphologizer` y del `lemmatizer`; la fábrica requiere `token.pos` y `token.lemma`, así que `nlp.analyze_pipes()` señala un pipeline sin alguno de ellos.
+<!-- core: components.md:CohesionStatsComponent 47c308b -->
+`CohesionStatsComponent` pone las estadísticas de cohesión en la extensión; por defecto necesitan las categorías gramaticales y los lemas antes de él. Con `blank_lines` los párrafos empiezan solo tras las líneas en blanco, como en `CohesionStats`, para un texto con líneas cortadas dentro de sus párrafos.
 
 Excepciones:
 
-- `SourceError` - un documento sin las categorías gramaticales o sin los lemas.
+- `ParameterError` - un `blank_lines` que no es un `bool`.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :---------- | :---------- |
+| `blank_lines` | `bool` | `False` | Empezar los párrafos solo tras las líneas en blanco, para un texto con líneas cortadas dentro de sus párrafos; por defecto, tras cada salto de línea |
+
+En el pipeline de `es_core_news_sm` las categorías gramaticales y los lemas vienen del `morphologizer` y del `lemmatizer`; la fábrica requiere `token.pos` y `token.lemma`, así que `nlp.analyze_pipes()` señala un pipeline sin alguno de ellos, y un documento sin ellos lanza `SourceError`. Los textos de [`SpanishLiterature`](datasets/spanishliterature.md) tienen las líneas cortadas dentro de sus párrafos y necesitan `blank_lines`.
 
 === "Código"
 
     ``` python
     nlp.add_pipe("ests_cohesion", name="cohesion")
-    doc = nlp("El informe fue aprobado. Sin embargo, el informe no resuelve el problema.")
-    doc._.cohesion.noun_overlap_adjacent, round(doc._.cohesion.connectors, 2)
+    nlp.add_pipe("ests_cohesion", name="paragraphs", config={"blank_lines": True})
+    doc = nlp("El informe fue aprobado. Sin embargo, el informe\nno resuelve el problema.")
+    (
+        doc._.cohesion.noun_overlap_adjacent,
+        round(doc._.cohesion.connectors, 2),
+        doc._.cohesion.n_paragraphs,
+        doc._.paragraphs.n_paragraphs,
+    )
     ```
 
 === "Resultado"
 
     ```
-    (1.0, 83.33)
+    (1.0, 83.33, 2, 1)
     ```
 
 ### Estadísticas de complejidad léxica { #LexicalStatsComponent }

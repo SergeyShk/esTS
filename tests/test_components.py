@@ -184,6 +184,20 @@ def test_phon_parameters(nlp):
         pipeline.add_pipe("ests_phon", name="wrong", config={"window_len": 1})
 
 
+def test_cohesion_blank_lines(nlp):
+    text = "El gato duerme en la\nventana. El gato come.\n\nEl perro corre por el\nparque. El perro ladra."
+    pipeline = spacy.load("es_core_news_sm")
+    pipeline.add_pipe("ests_cohesion", name="lines", last=True)
+    pipeline.add_pipe("ests_cohesion", name="blank", config={"blank_lines": True}, last=True)
+    doc = pipeline(text)
+    assert doc._.lines.n_paragraphs == 4
+    assert doc._.blank.n_paragraphs == 2
+    expected = CohesionStats(nlp(text), blank_lines=True).get_stats()
+    assert doc._.blank.get_stats() == pytest.approx(expected, nan_ok=True)
+    with pytest.raises(ParameterError, match="blank_lines must be a bool"):
+        pipeline.add_pipe("ests_cohesion", name="wrong", config={"blank_lines": 1})
+
+
 def test_verse_component():
     pipeline = spacy.load("es_core_news_sm")
     pipeline.add_pipe("ests_verse", name="verse", last=True)
