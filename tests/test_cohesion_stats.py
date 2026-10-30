@@ -508,9 +508,14 @@ def test_find_connectors_blocked(nlp):
 
 
 def test_paragraphs_of_a_doc_with_the_blank_lines_component():
-    """The component of the blank lines before the parser keeps the paragraphs of the string"""
+    """Before the parser the component of the blank lines ends the sentences of paragraphs
+    without a final mark, as the string has them; without it the parser joins them"""
+    text = "El gato duerme en la casa\n\nEl perro mira la casa"
     pipeline = spacy.load("es_core_news_sm")
+    plain = CohesionStats(pipeline(text))
     pipeline.add_pipe("ests_blank_lines", before="parser")
-    cs = CohesionStats(pipeline(PARAGRAPHS))
-    assert cs.n_paragraphs == 3
-    assert cs.noun_overlap_para == CohesionStats(PARAGRAPHS).noun_overlap_para
+    cs = CohesionStats(pipeline(text))
+    string = CohesionStats(text)
+    assert (cs.n_sents, cs.n_paragraphs, cs.noun_overlap_adjacent) == (2, 2, 1.0)
+    assert (string.n_sents, string.n_paragraphs, string.noun_overlap_adjacent) == (2, 2, 1.0)
+    assert plain.n_sents == 1 and isnan(plain.noun_overlap_adjacent)
