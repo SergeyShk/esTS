@@ -226,6 +226,26 @@ def test_corpus_features():
         corpus_features(text)
 
 
+@pytest.mark.parametrize(
+    ("found", "message"),
+    [
+        (None, "not NoneType"),
+        ([1, 2], "not list"),
+        ({"a": "x"}, "not 'a': 'x'"),
+        ({"a": "1.5"}, "not 'a': '1.5'"),
+    ],
+)
+def test_corpus_features_of_a_function_giving_no_numbers(found, message):
+    with pytest.raises(SourceTypeError, match=f"mapping of numbers by name, {message}$"):
+        corpus_features([text], window=None, features=lambda t: found)
+
+
+def test_corpus_features_with_a_missing_value():
+    """None is a missing value, as a missing key is"""
+    table = corpus_features([text, text], window=None, features=lambda t: {"a": None, "b": 1})
+    assert table["a"].isna().all() and (table["b"] == 1.0).all()
+
+
 def test_compare_corpora():
     result = compare_corpora(
         short, long, window=None, labels=("cortos", "largos"), n_bootstrap=200

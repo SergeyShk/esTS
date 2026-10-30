@@ -757,7 +757,8 @@ CONNECTOR_BLOCKED_BEFORE = {
     # si of a hypothetical comparison (como si fuera) and of an emphatic phrase (vaya si lo sé)
     "si": frozenset({"como", "cual", "vaya", "maldito"}),
 }
-# Verbs after which si opens an indirect question, not a condition (no sé si viene, a ver si llega)
+# Verbs after which si opens an indirect question, not a condition (no sé si viene, a ver si llega,
+# indique si desea recibir notificaciones)
 CONNECTOR_QUESTION_VERBS = frozenset(
     {
         "saber",
@@ -778,8 +779,28 @@ CONNECTOR_QUESTION_VERBS = frozenset(
         "consultar",
         "investigar",
         "adivinar",
+        "indicar",
+        "señalar",
+        "especificar",
+        "precisar",
+        "verificar",
+        "confirmar",
+        "aclarar",
+        "valorar",
+        "evaluar",
+        "analizar",
+        "establecer",
+        "desconocer",
+        "manifestar",
+        "constar",
     }
 )
+# The complement of a verb of CONNECTOR_QUESTION_VERBS before si makes si a condition: an object
+# clitic (indíquelo si es necesario) or a direct object other than the datives the models tag as
+# one (le preguntaré si viene); the pronominal se of these verbs is tagged as that of a passive
+CONNECTOR_OBJECT_CLITICS = ("lo", "la", "los", "las")
+CONNECTOR_DATIVE_CLITICS = frozenset({"le", "les"})
+CONNECTOR_PRONOMINAL_VERBS = frozenset({"preguntar"})
 # Markers counted only at the start of a sentence or after these words (y encima llueve)
 CONNECTOR_ONLY_AFTER = {"encima": frozenset({"y", "e", "ni", "pero"})}
 # Markers not counted at the start of a sentence, where they open a reply (Pues bien...)
@@ -1411,6 +1432,13 @@ HIGHLIGHT_LAYER_STYLES = {
 # suggests a demonstrative, a possessive or a personal pronoun; after a verb of a predicate it means
 # "the same one" (no parecía la misma), and before que it compares (el mismo que el año pasado)
 MISMO_FORMS = frozenset({"mismo", "misma", "mismos", "mismas"})
+# The gender and the number of a form, which a noun after it agrees with
+MISMO_AGREEMENT = {
+    "mismo": ("Masc", "Sing"),
+    "misma": ("Fem", "Sing"),
+    "mismos": ("Masc", "Plur"),
+    "mismas": ("Fem", "Plur"),
+}
 MISMO_ARTICLES = frozenset({"el", "la", "los", "las", "del", "al"})
 MISMO_COMPARATIVE = "que"
 PREDICATIVE_VERBS = frozenset({"ser", "estar", "parecer", "semejar", "permanecer", "resultar"})

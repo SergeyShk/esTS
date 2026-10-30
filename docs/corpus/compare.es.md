@@ -98,7 +98,7 @@ Los valores p toman las 272 ventanas de seis novelas por independientes (véase 
 
 Excepciones:
 
-- `SourceTypeError` - unos textos que no son una lista de cadenas, unos `features` que no se pueden llamar;
+- `SourceTypeError` - unos textos que no son una lista de cadenas, unos `features` que no se pueden llamar o no dan un diccionario de números por nombre;
 - `SourceError` - un corpus sin una ventana de `min_words` palabras o más, un texto con un carácter sin forma UTF-8;
 - `ParameterError` - un `window` o un `min_words` que no es un entero de al menos uno, un `min_words` mayor que `window`, unas etiquetas, un número de remuestras o una semilla que rechaza `check_comparison_params`;
 - `DatasetNotFoundError` - los rasgos por defecto sin el modelo instalado.
@@ -156,7 +156,7 @@ Devuelve la matriz de rasgos de las ventanas con el índice (número del texto, 
 
 Excepciones:
 
-- `SourceTypeError` - unos textos que no son una lista de cadenas, unos `features` que no se pueden llamar;
+- `SourceTypeError` - unos textos que no son una lista de cadenas, unos `features` que no se pueden llamar o no dan un diccionario de números por nombre;
 - `SourceError` - un corpus sin una ventana de `min_words` palabras o más, un texto con un carácter sin forma UTF-8;
 - `ParameterError` - un `window` o un `min_words` que no es un entero de al menos uno, un `min_words` mayor que `window`;
 - `DatasetNotFoundError` - los rasgos por defecto sin el modelo instalado.

@@ -10,7 +10,7 @@ repository-code: "https://github.com/SergeyShk/esTS"
 url: "https://sergeyshk.github.io/esTS/"
 doi: 10.5281/zenodo.22924655
 license: MIT
-version: 0.8.0
+version: 0.9.0.dev8
 date-released: 2026-10-23
 keywords:
   - spanish
@@ -27,4 +27,4 @@ keywords:
   - stylometry
   - corpus linguistics
   - datasets
-abstract: "esTS computes text statistics for Spanish: extraction of sentences, words and character N-grams, rule-based syllabification and stress, basic counts, readability formulas with the scales of their authors, lexical diversity measures, lexical sophistication by a frequency dictionary of Google Books Ngram, morphological and syntactic statistics on Universal Dependencies, cohesion in the manner of Coh-Metrix with the Spanish discourse markers, style metrics (the SEO indicators and the markers of the officialese style), phonostatistics on a rule-based transcription, the meter, the rhyme and the strophes of Spanish verse, components that put them all on a spaCy pipeline, corpus measures (keyness, collocations, dispersion, concordances, stylometric distances, comparison of corpora), datasets (a corpus of Spanish literature, the sonnets of DISCO and the frequency dictionary), visualizations and the highlighting of a text."
+abstract: "esTS computes text statistics for Spanish: extraction of sentences, words and character N-grams, rule-based syllabification and stress, basic counts, readability formulas with the scales of their authors and the formulas of other languages over the Spanish syllables, lexical diversity measures, lexical sophistication by a frequency dictionary of Google Books Ngram, morphological and syntactic statistics on Universal Dependencies with the production units of L2SCA, cohesion in the manner of Coh-Metrix and TAACO with the Spanish discourse markers, style metrics (the SEO indicators and the markers of the officialese style), phonostatistics on a rule-based transcription, the meter, the rhyme and the strophes of Spanish verse, components that put them all on a spaCy pipeline, corpus measures (keyness, collocations, dispersion, concordances, stylometric distances, rolling Delta and Zeta, comparison of corpora), datasets (a corpus of Spanish literature, the sonnets of DISCO and the frequency dictionary), visualizations and the highlighting of a text."

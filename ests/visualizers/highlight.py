@@ -29,6 +29,7 @@ from ..constants import (
     HIGHLIGHT_LAYER_STYLES,
     HIGHLIGHT_LAYERS_DESC,
     LONG_SENT_WORD_FACTOR,
+    MISMO_AGREEMENT,
     MISMO_ARTICLES,
     MISMO_COMPARATIVE,
     MISMO_FORMS,
@@ -788,17 +789,20 @@ def is_anaphoric_mismo(token: Token) -> bool:
 
     Description:
         A form of MISMO_FORMS that heads a noun phrase of its own with an
-        article of MISMO_ARTICLES and no other dependent, as an argument
-        (se archivó el mismo, la duración del mismo, dentro de la misma), but
-        not as the subject or the object after a verb of PREDICATIVE_VERBS,
-        where it means the same one (no parecía la misma), right before que
-        (el mismo que el año pasado) or before a conjunction and an adjective
-        or a determiner that shares its noun (de la misma o distinta
-        categoría). The models attach some of them to
-        their article (en la misma hay oficinas): such a form counts when no
-        noun, adjective, numeral or pronoun follows it in its sentence. The
-        identity of el mismo día, es el mismo, lo mismo and él mismo is no
-        anaphora
+        article of MISMO_ARTICLES and no other dependent but a clause after a
+        comma, as an argument (se archivó el mismo, la duración del mismo,
+        contra la misma, que pone fin...), but not as the subject or the
+        object after a verb of PREDICATIVE_VERBS by the lemma of the model or
+        of simplemma, where it means the same one (no parecía la misma,
+        serás el mismo), right before que (el mismo que el año pasado) or
+        before a conjunction and an adjective or a determiner that shares its
+        noun (de la misma o distinta categoría). The models attach some of
+        them to their article (en la misma hay oficinas): such a form counts
+        when no noun, adjective, numeral or pronoun follows it in its
+        sentence, an adjective whose noun disagrees with the form being a verb
+        (contra la misma cabe recurso). The identity of el mismo día, es el
+        mismo, lo mismo and él mismo is no anaphora; a token without a parse is
+        none
 
     Arguments:
         token (Token): Token
@@ -806,7 +810,7 @@ def is_anaphoric_mismo(token: Token) -> bool:
     Returns:
         bool: Result of the check
     """
-    if token.lower_ not in MISMO_FORMS:
+    if token.lower_ not in MISMO_FORMS or not token.dep_:
         return False
     sent_end = token.sent.end
     after = list(
@@ -818,21 +822,43 @@ def is_anaphoric_mismo(token: Token) -> bool:
         return False
     children = get_children(token)
     if any(child.lower_ in MISMO_ARTICLES and base_dep(child) in NP_DEPS for child in children):
+        # A clause after a comma explains the noun phrase (contra la misma, que pone fin a...)
+        explained = bool(after) and after[0].text == ","
         if base_dep(token) not in ARGUMENT_DEPS or any(
-            base_dep(child) not in NP_DEPS for child in children
+            base_dep(child) not in NP_DEPS and not (explained and base_dep(child) == "acl")
+            for child in children
         ):
             return False
         head = token.head
         return not (
             base_dep(token) in ("nsubj", "obj")
             and head.i < token.i
-            and head.lemma_ in PREDICATIVE_VERBS
+            and PREDICATIVE_VERBS & {head.lemma_, lemmatize(head.lower_)}
         )
     head = token.head
     if children or head.i != token.i - 1 or head.lower_ not in MISMO_ARTICLES:
         return False
     following = next((word for word in token.doc[token.i + 1 : sent_end] if is_word(word)), None)
-    return following is None or following.pos_ not in NOMINAL_POS
+    return following is None or not _is_nominal(following, token)
+
+
+def _is_nominal(word: Token, form: Token) -> bool:
+    """Whether a word goes on the noun phrase of a form of mismo; an adjective whose noun after it
+    disagrees with the form in gender or number is a verb the model misread (contra la misma cabe
+    recurso: recurso is masculine)"""
+    if word.pos_ not in NOMINAL_POS:
+        return False
+    noun = word.head
+    if word.pos_ != "ADJ" or noun.i <= word.i or noun.pos_ not in ("NOUN", "PROPN"):
+        return True
+    gender, number = MISMO_AGREEMENT[form.lower_]
+    return not (_disagrees(noun, "Gender", gender) or _disagrees(noun, "Number", number))
+
+
+def _disagrees(word: Token, feature: str, value: str) -> bool:
+    """Whether a word has a feature without the value"""
+    values = word.morph.get(feature, [])
+    return bool(values) and value not in values
 
 
 def _is_modifier(word: Token) -> bool:

@@ -34,7 +34,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    Numbers of sentences, words, letters, syllables and punctuation marks by type and their distributions
+    Numbers of sentences, words, letters, syllables and punctuation marks by type, their distributions and the entropies of word lengths
 
     [:octicons-arrow-right-24: Basic statistics](stats/basic_stats.md)
 
@@ -50,7 +50,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    Type-Token Ratio and its variations, MATTR, MSTTR, Measure of Textual Lexical Diversity, HD-D, the indices of Simpson and Yule, entropy, the laws of Zipf and Heaps, over the whole text or over windows with confidence intervals
+    Type-Token Ratio and its variations, MATTR, MSTTR, Measure of Textual Lexical Diversity and its moving average, HD-D, the indices of Simpson and Yule, entropy, Orlov's Z, the burstiness of the lexemes, the laws of Zipf and Heaps, over the whole text or over windows with confidence intervals
 
     [:octicons-arrow-right-24: Lexical diversity metrics](stats/diversity_stats.md)
 
@@ -66,7 +66,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    Statistics of the dependency tree (dependency distances, depth, clauses, coordination) with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
+    Statistics of the dependency tree (dependency distances, depth, clauses, coordination, the production units of L2SCA, prepositional chains, the order of the subject and the object, the similarity of adjacent sentences) with the constructions of the administrative style: the passive with `ser` and with `se`, the participial and the gerund clauses, the chains of `de`, the split predicates
 
     [:octicons-arrow-right-24: Syntactic statistics](stats/syntax_stats.md)
 
@@ -74,7 +74,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    Overlap of nouns, arguments and content words between sentences in the manner of Coh-Metrix, givenness, temporal cohesion and the density of 273 Spanish discourse markers by class and by place, between and within sentences
+    Overlap of nouns, arguments and content words between sentences in the manner of Coh-Metrix and with the next sentences and paragraphs in the manner of TAACO, givenness, temporal cohesion and the density of 273 Spanish discourse markers by class and by place, between and within sentences
 
     [:octicons-arrow-right-24: Cohesion statistics](stats/cohesion_stats.md)
 

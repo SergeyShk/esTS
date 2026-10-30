@@ -265,7 +265,8 @@ def corpus_features(
         DataFrame: Features of the windows
 
     Raises:
-        SourceTypeError: If the texts are not a list of strings or the features are not a function
+        SourceTypeError: If the texts are not a list of strings, or the features are not a
+            function or give no mapping of numbers by name
         SourceError: If the corpus has no window of enough words
         ParameterError: If the size of a window or min_words is not an integer or is
             below one, or min_words is greater than the window
@@ -288,12 +289,31 @@ def corpus_features(
     rows = {}
     for text_index, text in enumerate(texts):
         for window_index, chunk in enumerate(split_windows(text, window, min_words)):
-            rows[text_index, window_index] = dict(features(chunk))
+            rows[text_index, window_index] = _feature_row(features(chunk))
     if not rows:
         raise SourceError("The data source has no window of enough words")
     table = pd.DataFrame.from_dict(rows, orient="index").astype(float)
     table.index = pd.MultiIndex.from_tuples(table.index, names=["text", "window"])
     return table
+
+
+def _feature_row(found: object) -> dict[str, float]:
+    """The features of a window as numbers by name"""
+    message = "The features must give a mapping of numbers by name, not {}"
+    if not isinstance(found, Mapping):
+        raise SourceTypeError(message.format(type(found).__name__))
+    row = {}
+    for name, value in found.items():
+        if value is None:
+            row[name] = nan
+            continue
+        try:
+            if isinstance(value, str):
+                raise TypeError
+            row[name] = float(value)
+        except (TypeError, ValueError):
+            raise SourceTypeError(message.format(f"{name!r}: {value!r}")) from None
+    return row
 
 
 def compare_corpora(
@@ -347,7 +367,8 @@ def compare_corpora(
             with the names of the corpora in the columns)
 
     Raises:
-        SourceTypeError: If the texts are not a list of strings or the features are not a function
+        SourceTypeError: If the texts are not a list of strings, or the features are not a
+            function or give no mapping of numbers by name
         SourceError: If one of the corpora has no window of enough words or a text has
             a character without a UTF-8 form
         DatasetNotFoundError: If the default features are read and the model is not

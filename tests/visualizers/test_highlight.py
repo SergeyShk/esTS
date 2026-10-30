@@ -429,6 +429,10 @@ def test_split_predicates(doc):
         ("El edificio tiene tres plantas; en la misma hay oficinas.", ["la misma"]),
         ("El edificio tiene tres plantas; en la misma\nhay oficinas.", ["la misma"]),
         ("Se presentó el recurso, pero el mismo parece infundado.", ["el mismo"]),
+        # The model tags the verb after la misma as an adjective
+        ("Contra la misma cabe recurso de alzada.", ["la misma"]),
+        # A clause after a comma explains the noun phrase
+        ("Contra la misma, que pone fin a la vía administrativa, cabe recurso.", ["la misma"]),
         ("Se dio traslado del mismo, que deberá ser contestado en diez días.", ["del mismo"]),
         ("La duración del mismo y el precio se publicaron.", ["del mismo"]),
         ("Se archivó el mismo y tres días después se notificó.", ["el mismo"]),
@@ -438,6 +442,13 @@ def test_split_predicates(doc):
         ("Este informe es el mismo que enviaste ayer.", []),
         ("Los resultados son los mismos.", []),
         ("No parecía la misma.", []),
+        # The lemma of the model is the form; that of simplemma is ser
+        ("Siempre serás el mismo.", []),
+        ("Los mismos familiares vinieron.", []),
+        ("Siguió con la misma amarga ironía.", []),
+        # The model leaves the gender of these adjectives out; their noun agrees with the form
+        ("Recorrió la misma angosta calle.", []),
+        ("Tomó la misma opuesta dirección.", []),
         ("Los dos parecen el mismo.", []),
         ("La situación permanece la misma.", []),
         ("Se aplicará el mismo que en el ejercicio anterior.", []),
@@ -486,6 +497,13 @@ def test_anaphoric_mismo_attached_to_its_article(pos, expected):
         assert [(h.start, h.end, h.note) for h in find_anaphoric_mismo(doc)] == [
             (3, 11, "anaphoric la misma")
         ]
+
+
+def test_anaphoric_mismo_without_a_parse(nlp):
+    """A Doc of the tokenizer alone has no anaphora, as for the other syntactic layers"""
+    doc = nlp.make_doc("se archivó el mismo")
+    assert find_anaphoric_mismo(doc) == []
+    assert not any(is_anaphoric_mismo(token) for token in doc)
 
 
 def test_anaphoric_mismo_at_the_end_of_its_sentence():
