@@ -42,6 +42,7 @@ CORE_MODULES = {
     "ests.syntax_stats": "anyts.syntax_stats",
     "ests.style_stats": "anyts.style_stats",
     "ests.lexical_stats": "anyts.lexical_stats",
+    "ests.morph_stats": "anyts.morph_stats",
     "ests.phon_stats": "anyts.phon_stats",
     "ests.corpus": "anyts.corpus",
     "ests.corpus.collocations": "anyts.corpus.collocations",
@@ -108,6 +109,7 @@ SPANISH = {
         "find_parentheticals",
     },
     "ests.lexical_stats": {"LEXICAL_STATS_DESC", "LexicalStats", "calc_surprisal"},
+    "ests.morph_stats": {"MorphStats"},
     "ests.phon_stats": {"PhonStats", "WordsExtractor", "cv_pattern"},
     "ests.syntax_stats": {
         "SYNTAX_STATS_DESC",
@@ -134,6 +136,8 @@ SPANISH = {
         "DiversityStatsComponent",
         "LexicalStats",
         "LexicalStatsComponent",
+        "MorphStats",
+        "MorphStatsComponent",
         "PhonStats",
         "PhonStatsComponent",
         "ReadabilityStats",
@@ -192,11 +196,6 @@ def test_subpackage_exports(name):
     assert all(hasattr(module, attr) for attr in module.__all__)
 
 
-# Names of the core the library has not moved onto the object of the core yet: MorphStats
-# before the frame of the core
-PENDING = {"ests.components": {"MorphStats", "MorphStatsComponent"}}
-
-
 @pytest.mark.parametrize(("library", "core"), CORE_MODULES.items())
 def test_core_names(library, core):
     """A name of the core in the library is the object of the core, not a copy of it"""
@@ -208,7 +207,6 @@ def test_core_names(library, core):
             name.startswith("_")
             or isinstance(value, ModuleType)
             or not hasattr(library_module, name)
-            or name in PENDING.get(library, ())
         ):
             continue
         own = getattr(library_module, name)

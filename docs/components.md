@@ -142,7 +142,9 @@ DiversityStatsComponent(nlp, name, window_len=50, mtld_threshold=0.72, mtld_min_
 MorphStatsComponent(nlp, name)
 ```
 
-`MorphStatsComponent` puts the morphological statistics into the extension. The pipeline needs a `morphologizer` and a `lemmatizer` before the component; the factory requires `token.pos` and `token.lemma`, so `nlp.analyze_pipes()` names a pipeline without one of them.
+--8<-- "components.md:MorphStatsComponent"
+
+In esTS the pipeline needs a `lemmatizer` before the component as well; the factory requires `token.pos` and `token.lemma`, so `nlp.analyze_pipes()` names a pipeline without one of them.
 
 Raises:
 

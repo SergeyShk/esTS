@@ -300,8 +300,8 @@ def test_print_stats_filter_none(short, capsys):
 @pytest.mark.parametrize(
     ("text", "stat", "expected"),
     [
-        ("No sé qué quieres", "pron_type", "Interrogative or relative"),
-        ("Usted lo ve", "case", "Accusative or nominative"),
+        ("No sé qué quieres", "pron_type", "Interrogative / Relative"),
+        ("Usted lo ve", "case", "Accusative / Nominative"),
     ],
 )
 def test_print_stats_combined_value(text, stat, expected, capsys):
@@ -330,7 +330,24 @@ def test_print_stats_unknown(short):
 def test_print_markers(short, capsys):
     short.print_markers()
     out = capsys.readouterr().out.splitlines()
-    assert out[0].split("|") == ["                     Marker                    ", "   Value   "]
-    assert out[2] == "Indicative among the finite forms              |   1.00    "
-    assert out[-1] == "Adverbs in -mente among the adverbs            |   1.00    "
-    assert out[-2] == "ser among the copulas ser and estar            |    nan    "
+    assert [part.strip() for part in out[0].split("|")] == ["Marker", "Value"]
+    assert out[2] == "Indicative among the finite forms   |   1.00   "
+    assert out[-1] == "Adverbs in -mente among the adverbs |   1.00   "
+    assert out[-2] == "ser among the copulas ser and estar |   nan    "
+
+
+def test_multiple_values_of_a_feature():
+    """A feature of several values of the annotation is kept whole, as in the core"""
+    from spacy.tokens import Doc
+
+    doc = Doc(
+        spacy.blank("es").vocab,
+        words=["usted", "ve"],
+        pos=["PRON", "VERB"],
+        lemmas=["usted", "ver"],
+        morphs=["Case=Acc,Nom|Number=Sing|Person=3|PronType=Prs", "Mood=Ind|VerbForm=Fin"],
+    )
+    ms = MorphStats(doc)
+    assert ms.case == ("Acc,Nom", None)
+    assert ms.tags[0] == "Case=Acc,Nom|Number=Sing|Person=3|PronType=Prs"
+    assert ms.lemmas == ("usted", "ver")
