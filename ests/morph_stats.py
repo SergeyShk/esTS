@@ -3,11 +3,11 @@ from __future__ import annotations
 from collections import Counter
 from collections.abc import Mapping
 from math import nan
-from typing import TYPE_CHECKING, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 import anyts.morph_stats
 from anyts.morph_stats import MorphWord as MorphWord
-from anyts.utils import iter_doc_tokens, safe_divide
+from anyts.utils import is_doc, iter_doc_tokens, safe_divide
 
 from .constants import (
     COPULAS,
@@ -98,25 +98,25 @@ class MorphStats(anyts.morph_stats.MorphStats):
         words (tuple[str]): Tuple of extracted words
         lemmas (tuple[str]): Tuple of lemmas of the words
         tags (tuple[str]): Tuple of feature strings in the CoNLL-U format
-        pos (tuple[str]): Tuple of the parts of speech
-        case (tuple[str]): Tuple of the values of case
-        definite (tuple[str]): Tuple of the values of definiteness
-        degree (tuple[str]): Tuple of the values of degree
-        gender (tuple[str]): Tuple of the values of gender
-        mood (tuple[str]): Tuple of the values of mood
-        num_type (tuple[str]): Tuple of the values of the numeral type
-        number (tuple[str]): Tuple of the values of number
-        person (tuple[str]): Tuple of the values of person
-        polarity (tuple[str]): Tuple of the values of polarity
-        polite (tuple[str]): Tuple of the values of politeness
-        poss (tuple[str]): Tuple of the values of the possessive
-        pron_type (tuple[str]): Tuple of the values of the pronoun type
-        reflex (tuple[str]): Tuple of the values of the reflexive
-        tense (tuple[str]): Tuple of the values of tense
-        verb_form (tuple[str]): Tuple of the values of the verb form
+        pos (tuple[str|None]): Tuple of the parts of speech
+        case (tuple[str|None]): Tuple of the values of case
+        definite (tuple[str|None]): Tuple of the values of definiteness
+        degree (tuple[str|None]): Tuple of the values of degree
+        gender (tuple[str|None]): Tuple of the values of gender
+        mood (tuple[str|None]): Tuple of the values of mood
+        num_type (tuple[str|None]): Tuple of the values of the numeral type
+        number (tuple[str|None]): Tuple of the values of number
+        person (tuple[str|None]): Tuple of the values of person
+        polarity (tuple[str|None]): Tuple of the values of polarity
+        polite (tuple[str|None]): Tuple of the values of politeness
+        poss (tuple[str|None]): Tuple of the values of the possessive
+        pron_type (tuple[str|None]): Tuple of the values of the pronoun type
+        reflex (tuple[str|None]): Tuple of the values of the reflexive
+        tense (tuple[str|None]): Tuple of the values of tense
+        verb_form (tuple[str|None]): Tuple of the values of the verb form
 
     Methods:
-        analyze: Words of a source with their features
+        analyze: Words of a source with their features, a string parsed
         describe: Reading of a statistic by its scale, None for every statistic
         get_stats: Getting the computed morphological statistics of the text
         to_dataframe: Getting the statistics as a table of one row
@@ -146,8 +146,42 @@ class MorphStats(anyts.morph_stats.MorphStats):
 
     def __init__(self, source: str | Doc, nlp: Language | None = None):
         _check_nlp(nlp)
+        self._nlp = nlp
+        super().__init__(source)
+        # analyze can be called again on the object; the markers read the words of the source
+        self.lemmas, self._parsed, self._auxiliary = self._found
+
+    def __getstate__(self) -> dict[str, Any]:
+        """State for pickle and copy without the pipeline, which is no part of the statistics"""
+        state = self.__dict__.copy()
+        state["_nlp"] = None
+        return state
+
+    def analyze(self, source: str | Doc) -> list[MorphWord]:
+        """
+        Getting the words of a source with their features
+
+        Description:
+            A string is parsed by nlp or get_nlp() without the named entities;
+            the words of the Doc are those of the core (token.pos_ and
+            token.morph), and the Doc must carry the lemmas too, which the
+            markers read
+
+        Arguments:
+            source (str|Doc): Data source
+
+        Returns:
+            list[MorphWord]: Words with their features
+
+        Raises:
+            SourceTypeError: If the source is neither a string nor a Doc object
+            SourceError: If a string is longer than the max_length of the pipeline or
+                has a character without a UTF-8 form, or the Doc has no parts of speech
+                or no lemmas
+            DatasetNotFoundError: If a string is passed and the model is not installed
+        """
         if isinstance(source, str):
-            pipeline = nlp or get_nlp()
+            pipeline = self._nlp or get_nlp()
             if len(source) > pipeline.max_length:
                 raise SourceError(
                     f"The text of {len(source)} characters is longer than the limit of the "
@@ -156,33 +190,18 @@ class MorphStats(anyts.morph_stats.MorphStats):
                 )
             _check_encoding(source)
             source = pipeline(source, disable=UNUSED_COMPONENTS)
-        super().__init__(source)
-        tokens = list(iter_doc_tokens(source))
-        self.lemmas = tuple(token.lemma_ for token in tokens)
-        self._parsed = source.has_annotation("DEP")
-        self._auxiliary = tuple(is_auxiliary(token) for token in tokens)
-
-    def analyze(self, source: str | Doc) -> list[MorphWord]:
-        """
-        Getting the words of a Doc with their features
-
-        Description:
-            The words of the core (token.pos_ and token.morph); the Doc must
-            carry the lemmas too, which the markers read
-
-        Arguments:
-            source (Doc): Data source; a string is parsed before
-
-        Returns:
-            list[MorphWord]: Words with their features
-
-        Raises:
-            SourceTypeError: If the source is not a Doc object
-            SourceError: If the Doc has no parts of speech or no lemmas
-        """
+        # A Doc without words: the core raises no_words, whatever its annotation
+        if is_doc(source) and next(iter_doc_tokens(source), None) is None:
+            return []
         words = list(super().analyze(source))
-        if words and not source.has_annotation("LEMMA"):  # type: ignore[union-attr]
+        if not source.has_annotation("LEMMA"):
             raise SourceError(self.messages["no_lemmas"])
+        tokens = list(iter_doc_tokens(source))
+        self._found = (
+            tuple(token.lemma_ for token in tokens),
+            source.has_annotation("DEP"),
+            tuple(is_auxiliary(token) for token in tokens),
+        )
         return words
 
     def get_markers(self) -> dict[str, float]:

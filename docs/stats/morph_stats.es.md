@@ -61,7 +61,7 @@ Además, un pipeline en `nlp` que no es un `Language` de spaCy lanza `SourceType
 | `pos` | `tuple[str / None]` | Categoría gramatical de cada palabra |
 | `animacy`, `aspect`, ..., `voice` | `tuple[str / None]` | Valor de una estadística para cada palabra, `None` para una palabra sin el rasgo |
 
-esTS tiene además el atributo `lemmas` (`tuple[str]`): los lemas de las palabras que da el modelo.
+En esTS las estadísticas son `case`, ..., `verb_form` de la [tabla de abajo](#statistics); `animacy`, `aspect` y `voice` del núcleo no están entre ellas. esTS tiene además el atributo `lemmas` (`tuple[str]`): los lemas de las palabras que da el modelo.
 
 === "Código"
 
@@ -77,7 +77,7 @@ esTS tiene además el atributo `lemmas` (`tuple[str]`): los lemas de las palabra
     'Mood=Sub|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin'
     ```
 
-## Estadísticas
+## Estadísticas { #statistics }
 
 Cada estadística es un atributo del objeto, una tupla de los valores de un rasgo por palabra (`None` para una palabra a la que el modelo no da ningún valor del rasgo), y `get_stats` devuelve las distribuciones de sus valores. Los valores se leen de `token.pos_` y `token.morph` del análisis, es decir, por el contexto. Las estadísticas son la categoría gramatical y los quince rasgos de `MORPHOLOGY_FEATURES`; el valor `Unknown` de las tablas impresas significa que el modelo no dio a la palabra ningún valor del rasgo. Los demás rasgos que anotan los modelos (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`, `PunctSide`, `PunctType`) no se cuentan, pero quedan en `tags`.
 

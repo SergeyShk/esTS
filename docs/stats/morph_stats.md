@@ -49,7 +49,7 @@ Besides, a pipeline in `nlp` that is not a spaCy `Language` raises `SourceTypeEr
 
 --8<-- "stats/morph_stats.md:MorphStats-attributes"
 
-esTS also has the attribute `lemmas` (`tuple[str]`) - the lemmas of the words that the model gives.
+In esTS the statistics are `case`, ..., `verb_form` of the [table below](#statistics); `animacy`, `aspect` and `voice` of the core are not among them. esTS also has the attribute `lemmas` (`tuple[str]`) - the lemmas of the words that the model gives.
 
 === "Code"
 
@@ -65,7 +65,7 @@ esTS also has the attribute `lemmas` (`tuple[str]`) - the lemmas of the words th
     'Mood=Sub|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin'
     ```
 
-## Statistics
+## Statistics { #statistics }
 
 Every statistic is an attribute of the object, a tuple of the values of a feature by word (`None` for a word the model gives no value of the feature), and `get_stats` gives the distributions of their values. The values are read from `token.pos_` and `token.morph` of the parse, that is, by context. The statistics are the part of speech and the fifteen features of `MORPHOLOGY_FEATURES`; the value `Unknown` in the printed tables means that the model gave the word no value of the feature. The other features the models annotate (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`, `PunctSide`, `PunctType`) are not counted but stay in `tags`.
 

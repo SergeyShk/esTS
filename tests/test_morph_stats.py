@@ -109,7 +109,9 @@ def test_source_type_error(source):
         MorphStats(source)
 
 
-@pytest.mark.parametrize("source", ["", "   ", "¡¿...!"])
+@pytest.mark.parametrize(
+    "source", ["", "   ", "¡¿...!", spacy.blank("es")("¡¿...!"), spacy.blank("es")("")]
+)
 def test_source_without_words(source):
     with pytest.raises(SourceError, match="no words"):
         MorphStats(source)
@@ -351,3 +353,13 @@ def test_multiple_values_of_a_feature():
     assert ms.case == ("Acc,Nom", None)
     assert ms.tags[0] == "Case=Acc,Nom|Number=Sing|Person=3|PronType=Prs"
     assert ms.lemmas == ("usted", "ver")
+
+
+def test_analyze_of_another_source(short):
+    """analyze parses a string and leaves the statistics of the object as they are"""
+    lemmas, pos = short.lemmas, short.pos
+    words = short.analyze("El perro ladra.")
+    assert [word.word for word in words] == ["El", "perro", "ladra"]
+    assert all(word.pos for word in words)
+    assert (short.lemmas, short.pos) == (lemmas, pos)
+    assert short.get_markers() == MorphStats(" ".join(short.words)).get_markers()
