@@ -14,7 +14,7 @@ Excepciones:
 
 La clase extiende el `MorphStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/morph_stats/) con la capa del español y los [marcadores del español](#markers); las estadísticas se calculan al crear el objeto. En esTS la fuente de datos es un texto o un `Doc`: un texto se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, y un `Doc` debe llevar las categorías gramaticales, que vienen de un `morphologizer` (o de un `tagger` con un `attribute_ruler`), y los lemas, que vienen de un `lemmatizer`. Las palabras se toman de los tokens y los signos de puntuación y los símbolos se descartan. Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto - hay que dividirlo en partes o subir `max_length` en un pipeline propio indicado en `nlp`. Las tablas de `print_stats` y `print_markers` toman las descripciones de `MORPHOLOGY_STATS_DESC` y `MORPHOLOGY_MARKERS_DESC` de `ests.constants`.
 
-Además, un pipeline en `nlp` que no es un `Language` de spaCy lanza `SourceTypeError`; un `Doc` sin los lemas (de un pipeline con el `lemmatizer` excluido), una cadena más larga que el `max_length` del pipeline o con un carácter sin forma UTF-8 lanzan `SourceError`; una cadena sin `nlp` cuando el modelo `es_core_news_sm` no está instalado lanza `DatasetNotFoundError`.
+Además, en esTS una fuente que no es ni una cadena ni un `Doc` y un pipeline en `nlp` que no es un `Language` de spaCy lanzan `SourceTypeError`; un `Doc` sin los lemas (de un pipeline con el `lemmatizer` excluido), una cadena más larga que el `max_length` del pipeline o con un carácter sin forma UTF-8 lanzan `SourceError`; una cadena sin `nlp` cuando el modelo `es_core_news_sm` no está instalado lanza `DatasetNotFoundError`.
 
 === "Código"
 
@@ -150,7 +150,7 @@ La base de `p_ser` son solo los usos copulativos, leídos del análisis sintáct
 ## Métodos
 
 <!-- core: stats/morph_stats.md:MorphStats-get_stats 748058e -->
-`get_stats(*stats, filter_none=False, flat=False)` da el número de las palabras por valor de cada estadística elegida, todas por defecto, en el orden de las primeras apariciones; `None` cuenta las palabras sin el rasgo, y `filter_none` las deja fuera. Con `flat` las claves son `estadística_valor`, como `pos_NOUN`, sin las palabras que carecen del rasgo, como en `to_dataframe`. Una estadística desconocida lanza `UnknownStatError`, y un `filter_none` o un `flat` que no es un `bool`, `ParameterError`.
+`get_stats(*stats, filter_none=False, flat=False)` da el número de las palabras por valor de cada estadística elegida, todas por defecto, en el orden de las primeras apariciones; `None` cuenta las palabras sin el rasgo, y `filter_none` las deja fuera. Con `flat` las claves son `statistic_value` (la estadística y el valor), como `pos_NOUN`, sin las palabras que carecen del rasgo, como en `to_dataframe`. Una estadística desconocida lanza `UnknownStatError`, y un `filter_none` o un `flat` que no es un `bool`, `ParameterError`.
 
 <!-- core: stats/morph_stats.md:MorphStats-explain_text 037565e -->
 `explain_text(*stats, filter_none=False)` da cada palabra con los valores de las estadísticas elegidas; `filter_none` deja fuera los que le faltan a una palabra. Una estadística desconocida lanza `UnknownStatError`.

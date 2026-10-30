@@ -479,6 +479,15 @@ def test_overlaps_with_the_next_two_sentences():
         ("Voy a ver si puedo venir.", []),
         ("Me preguntó si tenía hambre.", []),
         ("¡Si ya te lo dije!", []),
+        # The verbs of the administrative style, an imperative the model reads as a name
+        ("La comisión valorará si el proyecto se ajusta a las bases.", []),
+        ("Se hará constar si el interesado comparece.", []),
+        ("Indique si desea recibir notificaciones.", []),
+        ("Indíquenos si acepta la propuesta.", []),
+        # A direct object of the verb before si: a condition
+        ("Lo veré si tengo tiempo.", ["si"]),
+        ("Te lo explicaré si me dejas.", ["si"]),
+        ("Indique su domicilio si es distinto del anterior.", ["si"]),
         ("Lo miró como si fuera un fantasma.", []),
         ("Vaya si lo sé.", []),
         ("Si bien es cierto, no lo creo.", ["si bien"]),

@@ -226,6 +226,20 @@ def test_corpus_features():
         corpus_features(text)
 
 
+@pytest.mark.parametrize(
+    ("found", "message"),
+    [
+        (None, "not NoneType"),
+        ([1, 2], "not list"),
+        ({"a": "x"}, "not 'a': 'x'"),
+        ({"a": None}, "not 'a': None"),
+    ],
+)
+def test_corpus_features_of_a_function_giving_no_numbers(found, message):
+    with pytest.raises(SourceTypeError, match=f"mapping of numbers by name, {message}$"):
+        corpus_features([text], window=None, features=lambda t: found)
+
+
 def test_compare_corpora():
     result = compare_corpora(
         short, long, window=None, labels=("cortos", "largos"), n_bootstrap=200

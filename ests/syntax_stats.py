@@ -79,8 +79,8 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         subordinating conjunctions of SUBORDINATING_MARKS, the passive
         with ser and with se, the gerund clauses, the chains of de, the words
         of negation of NEGATION_WORDS and the split predicates. A string is
-        parsed by the spaCy model; a Doc must carry the dependencies and the
-        lemmas
+        parsed by the spaCy model; a Doc must carry the dependencies, the parts
+        of speech and the lemmas
 
     References:
         https://universaldependencies.org/u/dep/
@@ -197,9 +197,9 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc object, or the
             pipeline is not a spaCy Language
-        SourceError: If the source has no words, no parse or no lemmas, or is
-            a string longer than the max_length of the pipeline or with a character
-            without a UTF-8 form
+        SourceError: If the source has no words, no parse, no parts of speech or no
+            lemmas, or is a string longer than the max_length of the pipeline or with a
+            character without a UTF-8 form
         DatasetNotFoundError: If a string is passed and the model is not installed
     """
 

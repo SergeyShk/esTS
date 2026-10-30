@@ -757,7 +757,8 @@ CONNECTOR_BLOCKED_BEFORE = {
     # si of a hypothetical comparison (como si fuera) and of an emphatic phrase (vaya si lo sé)
     "si": frozenset({"como", "cual", "vaya", "maldito"}),
 }
-# Verbs after which si opens an indirect question, not a condition (no sé si viene, a ver si llega)
+# Verbs after which si opens an indirect question, not a condition (no sé si viene, a ver si llega,
+# indique si desea recibir notificaciones)
 CONNECTOR_QUESTION_VERBS = frozenset(
     {
         "saber",
@@ -778,6 +779,20 @@ CONNECTOR_QUESTION_VERBS = frozenset(
         "consultar",
         "investigar",
         "adivinar",
+        "indicar",
+        "señalar",
+        "especificar",
+        "precisar",
+        "verificar",
+        "confirmar",
+        "aclarar",
+        "valorar",
+        "evaluar",
+        "analizar",
+        "establecer",
+        "desconocer",
+        "manifestar",
+        "constar",
     }
 )
 # Markers counted only at the start of a sentence or after these words (y encima llueve)

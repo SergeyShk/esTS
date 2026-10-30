@@ -263,6 +263,13 @@ def test_wheel_contents(tmp_path):
     assert set(declared) == FACTORIES | CORE_COMPONENTS
 
 
+def test_citation_version():
+    """The version of CITATION.cff is that of the package"""
+    project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]
+    citation = (ROOT / "CITATION.cff").read_text(encoding="utf-8")
+    assert f"\nversion: {project['version']}\n" in citation
+
+
 @pytest.mark.parametrize("page", ["installation.md", "installation.es.md"])
 def test_installation_bounds(page):
     """The installation page states the lower bounds of anyTS and spaCy of the package"""

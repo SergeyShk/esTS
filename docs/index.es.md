@@ -34,7 +34,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    Número de oraciones, palabras, letras, sílabas y signos de puntuación por tipo y sus distribuciones
+    Número de oraciones, palabras, letras, sílabas y signos de puntuación por tipo, sus distribuciones y las entropías de las longitudes de las palabras
 
     [:octicons-arrow-right-24: Estadísticas básicas](stats/basic_stats.md)
 
@@ -50,7 +50,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    Type-Token Ratio y sus variantes, MATTR, MSTTR, Measure of Textual Lexical Diversity, HD-D, los índices de Simpson y de Yule, la entropía, las leyes de Zipf y de Heaps, sobre todo el texto o por ventanas con intervalos de confianza
+    Type-Token Ratio y sus variantes, MATTR, MSTTR, Measure of Textual Lexical Diversity y su media móvil, HD-D, los índices de Simpson y de Yule, la entropía, la Z de Orlov, las ráfagas de los lexemas, las leyes de Zipf y de Heaps, sobre todo el texto o por ventanas con intervalos de confianza
 
     [:octicons-arrow-right-24: Métricas de diversidad léxica](stats/diversity_stats.md)
 
@@ -66,7 +66,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    Estadísticas del árbol de dependencias (distancias, profundidad, cláusulas, coordinación) con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
+    Estadísticas del árbol de dependencias (distancias, profundidad, cláusulas, coordinación, las unidades de producción de L2SCA, las cadenas preposicionales, el orden del sujeto y del objeto, la semejanza de las oraciones contiguas) con las construcciones del estilo administrativo: la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos
 
     [:octicons-arrow-right-24: Estadísticas sintácticas](stats/syntax_stats.md)
 
@@ -74,7 +74,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    Repetición de sustantivos, argumentos y palabras con contenido entre oraciones a la manera de Coh-Metrix, información dada, cohesión temporal y la densidad de 273 marcadores del discurso del español por clase y por lugar, entre oraciones y dentro de ellas
+    Repetición de sustantivos, argumentos y palabras con contenido entre oraciones a la manera de Coh-Metrix y en las oraciones siguientes y los párrafos a la manera de TAACO, información dada, cohesión temporal y la densidad de 273 marcadores del discurso del español por clase y por lugar, entre oraciones y dentro de ellas
 
     [:octicons-arrow-right-24: Estadísticas de cohesión](stats/cohesion_stats.md)
 

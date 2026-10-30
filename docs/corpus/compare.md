@@ -98,7 +98,7 @@ The p-values take the 272 windows of six novels for independent (see the [warnin
 
 Raises:
 
-- `SourceTypeError` - texts that are not a list of strings, `features` that cannot be called;
+- `SourceTypeError` - texts that are not a list of strings, `features` that cannot be called or give no mapping of numbers by name;
 - `SourceError` - a corpus without a window of `min_words` words or more, a text with a character without a UTF-8 form;
 - `ParameterError` - a `window` or `min_words` that is not an integer of at least one, `min_words` above `window`, labels, a number of samples or a seed that `check_comparison_params` rejects;
 - `DatasetNotFoundError` - the default features without the model installed.
@@ -156,7 +156,7 @@ Returns the matrix of the features of the windows indexed by (number of the text
 
 Raises:
 
-- `SourceTypeError` - texts that are not a list of strings, `features` that cannot be called;
+- `SourceTypeError` - texts that are not a list of strings, `features` that cannot be called or give no mapping of numbers by name;
 - `SourceError` - a corpus without a window of `min_words` words or more, a text with a character without a UTF-8 form;
 - `ParameterError` - a `window` or `min_words` that is not an integer of at least one, `min_words` above `window`;
 - `DatasetNotFoundError` - the default features without the model installed.

@@ -44,7 +44,7 @@ from ..constants import (
 from ..datasets.freq_dict import lemma_key
 from ..lexical_stats import get_rank
 from ..phon_stats import CONSONANT_SOUNDS, transcribe
-from ..style_stats import expand_phrases, is_stopword
+from ..style_stats import INFINITIVE_ENDINGS, expand_phrases, is_stopword
 from ..syllables import count_syllables
 from ..syntax_stats import (
     find_split_predicates,
@@ -788,17 +788,20 @@ def is_anaphoric_mismo(token: Token) -> bool:
 
     Description:
         A form of MISMO_FORMS that heads a noun phrase of its own with an
-        article of MISMO_ARTICLES and no other dependent, as an argument
-        (se archivó el mismo, la duración del mismo, dentro de la misma), but
-        not as the subject or the object after a verb of PREDICATIVE_VERBS,
-        where it means the same one (no parecía la misma), right before que
-        (el mismo que el año pasado) or before a conjunction and an adjective
-        or a determiner that shares its noun (de la misma o distinta
-        categoría). The models attach some of them to
-        their article (en la misma hay oficinas): such a form counts when no
-        noun, adjective, numeral or pronoun follows it in its sentence. The
-        identity of el mismo día, es el mismo, lo mismo and él mismo is no
-        anaphora
+        article of MISMO_ARTICLES and no other dependent but a clause after a
+        comma, as an argument (se archivó el mismo, la duración del mismo,
+        contra la misma, que pone fin...), but not as the subject or the
+        object after a verb of PREDICATIVE_VERBS by the lemma of the model or
+        of simplemma, where it means the same one (no parecía la misma,
+        serás el mismo), right before que (el mismo que el año pasado) or
+        before a conjunction and an adjective or a determiner that shares its
+        noun (de la misma o distinta categoría). The models attach some of
+        them to their article (en la misma hay oficinas): such a form counts
+        when no noun, adjective, numeral or pronoun follows it in its
+        sentence, a singular adjective without gender whose lemma of
+        simplemma is an infinitive being a verb (contra la misma cabe
+        recurso). The identity of el mismo día, es el mismo, lo mismo and él
+        mismo is no anaphora; a token without a parse is none
 
     Arguments:
         token (Token): Token
@@ -806,7 +809,7 @@ def is_anaphoric_mismo(token: Token) -> bool:
     Returns:
         bool: Result of the check
     """
-    if token.lower_ not in MISMO_FORMS:
+    if token.lower_ not in MISMO_FORMS or not token.dep_:
         return False
     sent_end = token.sent.end
     after = list(
@@ -818,21 +821,40 @@ def is_anaphoric_mismo(token: Token) -> bool:
         return False
     children = get_children(token)
     if any(child.lower_ in MISMO_ARTICLES and base_dep(child) in NP_DEPS for child in children):
+        # A clause after a comma explains the noun phrase (contra la misma, que pone fin a...)
+        explained = bool(after) and after[0].text == ","
         if base_dep(token) not in ARGUMENT_DEPS or any(
-            base_dep(child) not in NP_DEPS for child in children
+            base_dep(child) not in NP_DEPS and not (explained and base_dep(child) == "acl")
+            for child in children
         ):
             return False
         head = token.head
         return not (
             base_dep(token) in ("nsubj", "obj")
             and head.i < token.i
-            and head.lemma_ in PREDICATIVE_VERBS
+            and PREDICATIVE_VERBS & {head.lemma_, lemmatize(head.lower_)}
         )
     head = token.head
     if children or head.i != token.i - 1 or head.lower_ not in MISMO_ARTICLES:
         return False
     following = next((word for word in token.doc[token.i + 1 : sent_end] if is_word(word)), None)
-    return following is None or following.pos_ not in NOMINAL_POS
+    return following is None or not _is_nominal(following)
+
+
+def _is_nominal(word: Token) -> bool:
+    """Whether a word goes on a noun phrase; a singular form without gender the model tags as
+    an adjective is a verb when simplemma gives it an infinitive of another form (contra la
+    misma cabe; la misma amarga ironía agrees in gender)"""
+    if word.pos_ not in NOMINAL_POS:
+        return False
+    if (
+        word.pos_ != "ADJ"
+        or not has_feature(word, "Number", "Sing")
+        or word.morph.get("Gender", [])
+    ):
+        return True
+    lemma = lemmatize(word.lower_)
+    return lemma == word.lower_ or not lemma.endswith(INFINITIVE_ENDINGS)
 
 
 def _is_modifier(word: Token) -> bool:

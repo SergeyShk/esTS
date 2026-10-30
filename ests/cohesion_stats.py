@@ -413,12 +413,14 @@ def is_connector_blocked(token: Token) -> bool:
     Checking whether no connector starts at a token by the words before it in a Doc
 
     Description:
-        A si opens no condition after a verb of CONNECTOR_QUESTION_VERBS, by
-        the lemma of the model without its enclitic pronoun or by that of
-        simplemma, and the part of speech VERB or AUX (no sé si viene, a ver si
-        llega, preguntándose si), and after an opening ¡ (¡Si ya te lo dije!);
-        a si after como or vaya is dropped by the matcher itself
-        (CONNECTOR_BLOCKED_BEFORE)
+        A si opens no condition after a verb of CONNECTOR_QUESTION_VERBS (no sé
+        si viene, a ver si llega, preguntándose si, indique si desea), unless
+        the verb has a direct object before it (lo veré si tengo tiempo), and
+        after an opening ¡ (¡Si ya te lo dije!); a si after como or vaya is
+        dropped by the matcher itself (CONNECTOR_BLOCKED_BEFORE). The verb is
+        a VERB or AUX by the lemma of the model or of simplemma; a word opening
+        a sentence that the model reads as a proper or a common noun (Indique,
+        Indíquenos) is one by the lemma of simplemma
 
     Arguments:
         token (Token): Token
@@ -440,10 +442,15 @@ def is_connector_blocked(token: Token) -> bool:
         return False
     if previous.text == "¡":
         return True
-    return previous.pos_ in ("VERB", "AUX") and (
-        previous.lemma_.lower().split(" ")[0] in CONNECTOR_QUESTION_VERBS
-        or lemmatize(previous.lower_) in CONNECTOR_QUESTION_VERBS
-    )
+    if previous.pos_ in ("VERB", "AUX"):
+        lemmas = {previous.lemma_.lower().split(" ")[0], lemmatize(previous.lower_)}
+    elif previous.pos_ in ("PROPN", "NOUN") and previous.is_sent_start:
+        lemmas = {lemmatize(previous.lower_)}
+    else:
+        return False
+    if not lemmas & CONNECTOR_QUESTION_VERBS:
+        return False
+    return not any(child.dep_ == "obj" and child.i < token.i for child in previous.children)
 
 
 def token_info(token: Token) -> WordInfo:
