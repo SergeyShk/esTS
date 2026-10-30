@@ -505,3 +505,17 @@ def test_find_connectors_blocked(nlp):
     assert find_connectors(texts, pos=pos, blocked=blocked) == []
     with pytest.raises(ParameterError):
         find_connectors(texts, blocked={4})
+
+
+def test_paragraphs_of_a_doc_with_the_blank_lines_component():
+    """Before the parser the component of the blank lines ends the sentences of paragraphs
+    without a final mark, as the string has them; without it the parser joins them"""
+    text = "El gato duerme en la casa\n\nEl perro mira la casa"
+    pipeline = spacy.load("es_core_news_sm")
+    plain = CohesionStats(pipeline(text))
+    pipeline.add_pipe("ests_blank_lines", before="parser")
+    cs = CohesionStats(pipeline(text))
+    string = CohesionStats(text)
+    assert (cs.n_sents, cs.n_paragraphs, cs.noun_overlap_adjacent) == (2, 2, 1.0)
+    assert (string.n_sents, string.n_paragraphs, string.noun_overlap_adjacent) == (2, 2, 1.0)
+    assert plain.n_sents == 1 and isnan(plain.noun_overlap_adjacent)

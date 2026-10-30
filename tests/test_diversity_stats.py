@@ -7,13 +7,17 @@ from anyts.constants import DIVERSITY_STATS_DESC
 from ests import DiversityStats, WordsExtractor
 from ests.diversity_stats import (
     WindowStats,
+    calc_burstiness,
     calc_dugast_k,
+    calc_mamtld,
     calc_mattr,
     calc_msttr,
     calc_mtld,
     calc_mttr,
+    calc_orlov_z,
 )
 from ests.exceptions import ParameterError, SourceError, SourceTypeError
+from ests.utils import get_nlp
 
 TEXT = (
     "Los tesauros son una clase especial de recursos lexicográficos que se caracterizan por"
@@ -167,3 +171,25 @@ def test_print_stats(capsys, ds):
     captured = capsys.readouterr()
     assert captured.out.count("|") == len(DIVERSITY_STATS_DESC) + 1
     assert "Yule's characteristic K" in captured.out
+
+
+def test_orlov_z_and_burstiness(ds):
+    """Orlov's Z and the burstiness of the core over the lower-cased Spanish words, of a string
+    and of a Doc"""
+    words = list(ds.words)
+    assert ds.orlov_z == pytest.approx(1568.9097662611887)
+    assert ds.orlov_z == calc_orlov_z(words)
+    # de, la, los, significados occur five times or more
+    assert ds.burstiness == pytest.approx(-0.2595819943256205)
+    assert ds.burstiness == calc_burstiness(words)
+    doc = DiversityStats(get_nlp()(TEXT))
+    assert (doc.orlov_z, doc.burstiness) == (ds.orlov_z, ds.burstiness)
+    assert isnan(DiversityStats(RIDDLE_TEXT).burstiness)
+    assert DiversityStats("sí no sí no sí no sí no sí no").burstiness == -1.0
+
+
+def test_mamtld_step(ds):
+    """The moving average of MTLD over every step-th window: step 1 is the metric of the class"""
+    words = list(ds.words)
+    assert calc_mamtld(words, step=1) == ds.mamtld
+    assert calc_mamtld(words, step=5) == pytest.approx(30.64)
