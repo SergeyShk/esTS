@@ -944,6 +944,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#UnadaptedReadabilityStatsComponent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fórmulas de otros idiomas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#DiversityStatsComponent" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1159,6 +1170,34 @@
     
   
     Métricas de legibilidad
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stats/unadapted_readability_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fórmulas de otros idiomas
   
 
     
@@ -2133,6 +2172,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#UnadaptedReadabilityStatsComponent" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fórmulas de otros idiomas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#DiversityStatsComponent" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2324,7 +2374,7 @@ True
 </table>
 <p>spaCy fija ambos en <code>nlp.add_pipe(factory, name=...)</code>; los demás parámetros de un componente se pasan en el diccionario <code>config</code> de la misma llamada.</p>
 <h2 id="names">Nombres<a class="headerlink" href="#names" title="Permanent link">&para;</a></h2>
-<p>Las fábricas llevan el prefijo de la biblioteca: <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code>, y el componente de los límites de oración <a href="#blank_lines"><code>ests_blank_lines</code></a>. Están declaradas como entry points de <code>spacy_factories</code>, así que un pipeline guardado con estos componentes (<code>nlp.to_disk(path)</code>, <code>spacy package</code>) se carga con <code>spacy.load(path)</code> sin importar la biblioteca. <code>import ests</code> no carga los componentes mientras spaCy no está cargado - los hallan los puntos de entrada, y <code>ests.StyleStatsComponent</code> los carga al usarlo por primera vez; desde las fuentes sin el paquete instalado, <code>import ests.components</code> va antes de <code>add_pipe</code>.</p>
+<p>Las fábricas llevan el prefijo de la biblioteca: <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_unadapted_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code>, y el componente de los límites de oración <a href="#blank_lines"><code>ests_blank_lines</code></a>. Están declaradas como entry points de <code>spacy_factories</code>, así que un pipeline guardado con estos componentes (<code>nlp.to_disk(path)</code>, <code>spacy package</code>) se carga con <code>spacy.load(path)</code> sin importar la biblioteca. <code>import ests</code> no carga los componentes mientras spaCy no está cargado - los hallan los puntos de entrada, y <code>ests.StyleStatsComponent</code> los carga al usarlo por primera vez; desde las fuentes sin el paquete instalado, <code>import ests.components</code> va antes de <code>add_pipe</code>.</p>
 <!-- core: components.md:StatsComponent-names 33ebb87 -->
 <p>El nombre del paso del pipeline es el nombre de la extensión: <code>nlp.add_pipe(factory, name="basic")</code> pone las estadísticas en <code>doc._.basic</code>. Sin <code>name</code> ambos toman el nombre de la fábrica. La extensión sigue al paso cuando el pipeline lo renombra (<code>nlp.rename_pipe</code>). Un nombre ocupado por una extensión de otro paquete lanza <code>ParameterError</code> en lugar de reemplazarla: en <code>add_pipe</code>, o con el primer documento después de <code>rename_pipe</code>, que renombra el paso antes de que el componente conozca su nombre. Un componente tomado de otro pipeline (<code>add_pipe(name, source=other)</code>) es el mismo objeto en ambos, así que con un nombre nuevo escribe también en esa extensión del otro pipeline; un componente independiente sale de la fábrica, <code>add_pipe(factory, name=...)</code>. El mismo componente puede añadirse dos veces con nombres distintos, con parámetros distintos. Un documento sin palabras - una cadena vacía, espacios, pura puntuación - pasa por un componente sin cambios, con su extensión en <code>None</code>.</p>
 <p>En <code>ests_lexical</code> también pasa intacto un documento solo de números, y en <code>ests_verse</code> un documento sin letras.</p>
@@ -2356,6 +2406,12 @@ True
 <td style="text-align: left;"><code>ests_readability</code></td>
 <td style="text-align: left;"><a href="../stats/readability_stats/"><code>ReadabilityStats</code></a></td>
 <td style="text-align: left;"><code>preset</code>, <code>basic</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#UnadaptedReadabilityStatsComponent"><code>UnadaptedReadabilityStatsComponent</code></a></td>
+<td style="text-align: left;"><code>ests_unadapted_readability</code></td>
+<td style="text-align: left;"><a href="../stats/unadapted_readability_stats/"><code>UnadaptedReadabilityStats</code></a></td>
+<td style="text-align: left;"><code>basic</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><a href="#DiversityStatsComponent"><code>DiversityStatsComponent</code></a></td>
@@ -2407,7 +2463,7 @@ True
 </tr>
 </tbody>
 </table>
-<p>Las estadísticas básicas, de legibilidad, de diversidad, fonéticas y del verso no necesitan ninguna anotación de un modelo. En el pipeline de <code>es_core_news_sm</code> las categorías gramaticales vienen del <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>; un <code>tagger</code> solo no las da), el análisis del <code>parser</code> y los lemas del <code>lemmatizer</code>. Un componente al que le falta la anotación, también con componentes <code>excluded</code>, lanza <code>SourceError</code> cuando el documento pasa por él; <code>ests_lexical</code> solo necesita las categorías gramaticales, y <code>ests_style</code> lanza el error cuando se lee <code>verbal_nouns</code> o <code>markers()</code>.</p>
+<p>Las estadísticas básicas, de legibilidad, de diversidad, fonéticas y del verso y las fórmulas de otros idiomas no necesitan ninguna anotación de un modelo. En el pipeline de <code>es_core_news_sm</code> las categorías gramaticales vienen del <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>; un <code>tagger</code> solo no las da), el análisis del <code>parser</code> y los lemas del <code>lemmatizer</code>. Un componente al que le falta la anotación, también con componentes <code>excluded</code>, lanza <code>SourceError</code> cuando el documento pasa por él; <code>ests_lexical</code> solo necesita las categorías gramaticales, y <code>ests_style</code> lanza el error cuando se lee <code>verbal_nouns</code> o <code>markers()</code>.</p>
 <h3 id="BasicStatsComponent">Estadísticas básicas<a class="headerlink" href="#BasicStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">BasicStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 </code></pre></div>
@@ -2468,6 +2524,55 @@ True
 </div>
 </div>
 </div>
+<h3 id="UnadaptedReadabilityStatsComponent">Fórmulas de otros idiomas<a class="headerlink" href="#UnadaptedReadabilityStatsComponent" title="Permanent link">&para;</a></h3>
+<div class="signature highlight"><pre><span></span><code><span class="n">UnadaptedReadabilityStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">basic</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<!-- core: components.md:UnadaptedReadabilityStatsComponent 7a47657 -->
+<p><code>UnadaptedReadabilityStatsComponent</code> pone en la extensión las fórmulas de legibilidad de otros idiomas, calculadas sobre el documento o, con <code>basic</code>, sobre las estadísticas básicas que otro componente puso en él. Una biblioteca fija <code>basic_factory</code>, como para <code>ReadabilityStatsComponent</code>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>basic</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Extensión de un componente de las estadísticas básicas que se reutilizan en lugar de calcularlas otra vez</td>
+</tr>
+</tbody>
+</table>
+<p>Excepciones:</p>
+<ul>
+<li><code>ParameterError</code> - una <code>stats_class</code> que no es concreta, una extensión no nombrada por una cadena;</li>
+<li><code>SourceTypeError</code> - una clase sin <code>basic_stats_class</code> y sin <code>basic</code>;</li>
+<li><code>SourceError</code> - un documento cuya extensión <code>basic</code> no tiene estadísticas básicas de la clase.</li>
+</ul>
+<p>Las fórmulas son las de <a href="../stats/unadapted_readability_stats/"><code>UnadaptedReadabilityStats</code></a>, con sus propios coeficientes y sin calibración para el español. Como en <code>ReadabilityStatsComponent</code>, los errores de <code>stats_class</code> y <code>SourceTypeError</code> no se dan en esTS, y el mensaje de <code>SourceError</code> nombra el componente <code>ests_basic</code> que hay que añadir antes que este.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_unadapted_readability"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"unadapted"</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">"basic"</span><span class="p">:</span> <span class="s2">"basic"</span><span class="p">})</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span>
+    <span class="s2">"El gato estaba en la ventana y miraba a los pájaros que volaban "</span>
+    <span class="s2">"sobre los tejados de las casas."</span>
+<span class="p">)</span>
+<span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">unadapted</span><span class="o">.</span><span class="n">gulpease</span><span class="p">,</span> <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">unadapted</span><span class="o">.</span><span class="n">forcast</span>
+<span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">unadapted</span><span class="o">.</span><span class="n">bs</span> <span class="ow">is</span> <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">basic</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>(64.78947368421052, 12.105263157894736)
+True
+</code></pre></div>
+</div>
+</div>
+</div>
 <h3 id="DiversityStatsComponent">Métricas de diversidad léxica<a class="headerlink" href="#DiversityStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">DiversityStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">mtld_threshold</span><span class="o">=</span><span class="mf">0.72</span><span class="p">,</span> <span class="n">mtld_min_len</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">hdd_sample_size</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">log_base</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </code></pre></div>
@@ -2519,7 +2624,7 @@ True
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"window_len"</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">"log_base"</span><span class="p">:</span> <span class="mf">2.718281828459045</span><span class="p">}</span>
@@ -2544,7 +2649,7 @@ True
 <ul>
 <li><code>SourceError</code> - un documento sin las categorías gramaticales o sin los lemas.</li>
 </ul>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_morph"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"morph"</span><span class="p">)</span>
@@ -2568,7 +2673,7 @@ True
 <ul>
 <li><code>SourceError</code> - un documento sin análisis de dependencias, sin las categorías gramaticales o sin los lemas.</li>
 </ul>
-<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_syntax"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"syntax"</span><span class="p">)</span>
@@ -2592,7 +2697,7 @@ True
 <ul>
 <li><code>SourceError</code> - un documento sin las categorías gramaticales o sin los lemas.</li>
 </ul>
-<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_cohesion"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"cohesion"</span><span class="p">)</span>
@@ -2636,7 +2741,7 @@ True
 <li><code>DatasetNotFoundError</code> - las estadísticas por el diccionario y <code>get_stats()</code> cuando el diccionario no está descargado;</li>
 <li><code>ConfigValidationError</code> de spaCy - un <code>data_dir</code> que no es una cadena, en <code>add_pipe</code>.</li>
 </ul>
-<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Código</label><label for="__tabbed_8_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_lexical"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"lexical"</span><span class="p">)</span>
@@ -2699,7 +2804,7 @@ True
 <li><code>ParameterError</code> - un <code>top_n</code> que no es un entero de al menos uno.</li>
 </ul>
 <p>Sin las listas, el contenido de agua toma las palabras vacías de <code>STOPWORDS</code> y las expresiones parentéticas de una palabra, la náusea académica deja fuera las palabras de <code>is_stopword</code>, y los clichés vienen de <code>OFFICIALESE_CLICHES</code>; <code>NAUSEA_TOP_N</code> es una constante de <code>anyts.constants</code>. Los sustantivos deverbales necesitan un <code>morphologizer</code> y un <code>lemmatizer</code> antes del componente, y sin ellos leer <code>verbal_nouns</code>, <code>markers()</code> o <code>get_stats()</code> lanza <code>SourceError</code>; las demás métricas solo leen las palabras.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Código</label><label for="__tabbed_8_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Código</label><label for="__tabbed_9_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_style"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"style"</span><span class="p">)</span>
@@ -2726,7 +2831,7 @@ True
 <ul>
 <li><code>ParameterError</code> - un <code>window_len</code> que no es un entero de al menos 2.</li>
 </ul>
-<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Código</label><label for="__tabbed_9_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Código</label><label for="__tabbed_10_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_phon"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"phon"</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">"window_len"</span><span class="p">:</span> <span class="mi">5</span><span class="p">})</span>
@@ -2766,7 +2871,7 @@ True
 <ul>
 <li><code>ConfigValidationError</code> de spaCy - un <code>seseo</code> que no es un booleano, en <code>add_pipe</code>.</li>
 </ul>
-<div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Código</label><label for="__tabbed_10_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="11:2"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><input id="__tabbed_11_2" name="__tabbed_11" type="radio" /><div class="tabbed-labels"><label for="__tabbed_11_1">Código</label><label for="__tabbed_11_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_verse"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"verse"</span><span class="p">)</span>
@@ -2806,7 +2911,7 @@ True
 </tbody>
 </table>
 <p>En esTS el componente está registrado como <code>ests_blank_lines</code>. Sin él, el modelo <code>es_core_news_sm</code> pega un párrafo sin signo final a la oración siguiente, y las estadísticas de un <code>Doc</code> difieren de las de la misma cadena. El pipeline de <code>ests.utils.get_nlp</code>, que analiza las cadenas de las estadísticas morfológicas, sintácticas, de cohesión y léxicas, lo tiene antes del parser.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="11:2"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><input id="__tabbed_11_2" name="__tabbed_11" type="radio" /><div class="tabbed-labels"><label for="__tabbed_11_1">Código</label><label for="__tabbed_11_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="12:2"><input checked="checked" id="__tabbed_12_1" name="__tabbed_12" type="radio" /><input id="__tabbed_12_2" name="__tabbed_12" type="radio" /><div class="tabbed-labels"><label for="__tabbed_12_1">Código</label><label for="__tabbed_12_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"es_core_news_sm"</span><span class="p">)</span>
@@ -2822,8 +2927,8 @@ True
 </div>
 </div>
 <h2 id="pipeline">Todo en un pipeline<a class="headerlink" href="#pipeline" title="Permanent link">&para;</a></h2>
-<p>Los diez componentes pueden compartir un pipeline.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="12:2"><input checked="checked" id="__tabbed_12_1" name="__tabbed_12" type="radio" /><input id="__tabbed_12_2" name="__tabbed_12" type="radio" /><div class="tabbed-labels"><label for="__tabbed_12_1">Código</label><label for="__tabbed_12_2">Resultado</label></div>
+<p>Los once componentes pueden compartir un pipeline.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="13:2"><input checked="checked" id="__tabbed_13_1" name="__tabbed_13" type="radio" /><input id="__tabbed_13_2" name="__tabbed_13" type="radio" /><div class="tabbed-labels"><label for="__tabbed_13_1">Código</label><label for="__tabbed_13_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">ests</span>
@@ -2834,6 +2939,7 @@ True
 <span class="n">factories</span> <span class="o">=</span> <span class="p">(</span>
     <span class="s2">"basic"</span><span class="p">,</span>
     <span class="s2">"readability"</span><span class="p">,</span>
+    <span class="s2">"unadapted_readability"</span><span class="p">,</span>
     <span class="s2">"diversity"</span><span class="p">,</span>
     <span class="s2">"morph"</span><span class="p">,</span>
     <span class="s2">"syntax"</span><span class="p">,</span>
@@ -2850,6 +2956,7 @@ True
 <span class="p">(</span>
     <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">basic</span><span class="o">.</span><span class="n">n_words</span><span class="p">,</span>
     <span class="nb">round</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">readability</span><span class="o">.</span><span class="n">flesch_reading_easy</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="nb">round</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">unadapted_readability</span><span class="o">.</span><span class="n">gulpease</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
     <span class="nb">round</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">diversity</span><span class="o">.</span><span class="n">ttr</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
     <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">morph</span><span class="o">.</span><span class="n">pos</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span>
     <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">syntax</span><span class="o">.</span><span class="n">tree_depth</span><span class="p">,</span>
@@ -2862,7 +2969,7 @@ True
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>(12, 102.19, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0, 0.457, 1)
+<div class="highlight"><pre><span></span><code>(12, 102.19, 99.83, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0, 0.457, 1)
 </code></pre></div>
 </div>
 </div>

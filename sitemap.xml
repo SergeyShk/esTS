@@ -197,6 +197,13 @@
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/syntax_stats/"/>
     </url>
     <url>
+        <loc>https://sergeyshk.github.io/esTS/stats/unadapted_readability_stats/</loc>
+        <lastmod>2026-10-30</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/unadapted_readability_stats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/unadapted_readability_stats/"/>
+    </url>
+    <url>
         <loc>https://sergeyshk.github.io/esTS/stats/verse_stats/</loc>
         <lastmod>2026-10-30</lastmod>
         <changefreq>daily</changefreq>
@@ -454,6 +461,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/syntax_stats/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/syntax_stats/"/>
+    </url>
+    <url>
+        <loc>https://sergeyshk.github.io/esTS/es/stats/unadapted_readability_stats/</loc>
+        <lastmod>2026-10-30</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/stats/unadapted_readability_stats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/stats/unadapted_readability_stats/"/>
     </url>
     <url>
         <loc>https://sergeyshk.github.io/esTS/es/stats/verse_stats/</loc>

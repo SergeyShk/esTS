@@ -16,7 +16,7 @@
         <link rel="prev" href="../basic_stats/">
       
       
-        <link rel="next" href="../diversity_stats/">
+        <link rel="next" href="../unadapted_readability_stats/">
       
       
         
@@ -1200,6 +1200,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../unadapted_readability_stats/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fórmulas de otros idiomas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -2449,7 +2477,7 @@ Reading time (min)                    |   0.04
 </div>
 </div>
 <h2 id="metricas">Métricas<a class="headerlink" href="#metricas" title="Permanent link">&para;</a></h2>
-<p>Una fórmula se calcula con la función de su tarjeta sobre los recuentos de <code>bs</code>. La facilidad de lectura toma sus coeficientes de <code>coefficients</code>, que fija el preajuste; las fórmulas de Gutiérrez de Polini, Crawford y SOL se calculan con los coeficientes de sus funciones, y <code>coefficients</code> no las afecta. Una fórmula de recuentos da <code>nan</code> cuando el número de palabras o de oraciones por el que divide es cero.</p>
+<p>Una fórmula se calcula con la función de su tarjeta sobre los recuentos de <code>bs</code>. La facilidad de lectura toma sus coeficientes de <code>coefficients</code>, que fija el preajuste; las fórmulas de Gutiérrez de Polini, Crawford y SOL se calculan con los coeficientes de sus funciones, y <code>coefficients</code> no las afecta. Una fórmula de recuentos da <code>nan</code> cuando el número de palabras o de oraciones por el que divide es cero. Las fórmulas de otros idiomas, con sus propios coeficientes y sin calibración para el español, las calcula la clase <a href="../unadapted_readability_stats/"><code>UnadaptedReadabilityStats</code></a>.</p>
 <table>
 <thead>
 <tr>
