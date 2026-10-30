@@ -2236,7 +2236,7 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 <p><code>labels</code>, <code>n_bootstrap</code> y <code>seed</code> pasan a <a href="#compare_features"><code>compare_features</code></a>. <code>compare_corpora</code> los comprueba antes con <code>check_comparison_params</code>, así que un nombre de corpus o una semilla erróneos fallan antes de analizar ningún texto.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - unos textos que no son una lista de cadenas, unos <code>features</code> que no se pueden llamar;</li>
+<li><code>SourceTypeError</code> - unos textos que no son una lista de cadenas, unos <code>features</code> que no se pueden llamar o no dan un diccionario de números por nombre;</li>
 <li><code>SourceError</code> - un corpus sin una ventana de <code>min_words</code> palabras o más, un texto con un carácter sin forma UTF-8;</li>
 <li><code>ParameterError</code> - un <code>window</code> o un <code>min_words</code> que no es un entero de al menos uno, un <code>min_words</code> mayor que <code>window</code>, unas etiquetas, un número de remuestras o una semilla que rechaza <code>check_comparison_params</code>;</li>
 <li><code>DatasetNotFoundError</code> - los rasgos por defecto sin el modelo instalado.</li>
@@ -2371,7 +2371,7 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 </table>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - unos textos que no son una lista de cadenas, unos <code>features</code> que no se pueden llamar;</li>
+<li><code>SourceTypeError</code> - unos textos que no son una lista de cadenas, unos <code>features</code> que no se pueden llamar o no dan un diccionario de números por nombre;</li>
 <li><code>SourceError</code> - un corpus sin una ventana de <code>min_words</code> palabras o más, un texto con un carácter sin forma UTF-8;</li>
 <li><code>ParameterError</code> - un <code>window</code> o un <code>min_words</code> que no es un entero de al menos uno, un <code>min_words</code> mayor que <code>window</code>;</li>
 <li><code>DatasetNotFoundError</code> - los rasgos por defecto sin el modelo instalado.</li>

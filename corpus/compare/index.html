@@ -2236,7 +2236,7 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 <p><code>labels</code>, <code>n_bootstrap</code> and <code>seed</code> go on to <a href="#compare_features"><code>compare_features</code></a>. <code>compare_corpora</code> checks them with <code>check_comparison_params</code> first, so a wrong name of a corpus or seed fails before any text is parsed.</p>
 <p>Raises:</p>
 <ul>
-<li><code>SourceTypeError</code> - texts that are not a list of strings, <code>features</code> that cannot be called;</li>
+<li><code>SourceTypeError</code> - texts that are not a list of strings, <code>features</code> that cannot be called or give no mapping of numbers by name;</li>
 <li><code>SourceError</code> - a corpus without a window of <code>min_words</code> words or more, a text with a character without a UTF-8 form;</li>
 <li><code>ParameterError</code> - a <code>window</code> or <code>min_words</code> that is not an integer of at least one, <code>min_words</code> above <code>window</code>, labels, a number of samples or a seed that <code>check_comparison_params</code> rejects;</li>
 <li><code>DatasetNotFoundError</code> - the default features without the model installed.</li>
@@ -2371,7 +2371,7 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 </table>
 <p>Raises:</p>
 <ul>
-<li><code>SourceTypeError</code> - texts that are not a list of strings, <code>features</code> that cannot be called;</li>
+<li><code>SourceTypeError</code> - texts that are not a list of strings, <code>features</code> that cannot be called or give no mapping of numbers by name;</li>
 <li><code>SourceError</code> - a corpus without a window of <code>min_words</code> words or more, a text with a character without a UTF-8 form;</li>
 <li><code>ParameterError</code> - a <code>window</code> or <code>min_words</code> that is not an integer of at least one, <code>min_words</code> above <code>window</code>;</li>
 <li><code>DatasetNotFoundError</code> - the default features without the model installed.</li>
