@@ -216,7 +216,8 @@ class MorphStats(anyts.morph_stats.MorphStats):
             progressive left out, see is_auxiliary) and the adverbs in -mente
             among the adverbs
             A marker whose base is empty is nan, and so is p_ser for a Doc
-            with no parse
+            with no parse; a feature of several values (Mood=Ind,Sub) counts
+            in the share of each
 
         Returns:
             dict[str, float]: Dictionary of the markers in the order of
@@ -228,15 +229,12 @@ class MorphStats(anyts.morph_stats.MorphStats):
             >>> ms.get_markers()["p_subjunctive"]
             0.3333333333333333
         """
-        verbs = [
-            (self.mood[i], form)
-            for i, form in enumerate(self.verb_form)
-            if form and self.pos[i] in VERBAL_POS
-        ]
-        moods = Counter(mood for mood, form in verbs if form == "Fin")
-        forms = Counter(form for _, form in verbs)
-        n_finite = forms["Fin"]
-        n_forms = sum(forms.values())
+        verbs = [i for i, form in enumerate(self.verb_form) if form and self.pos[i] in VERBAL_POS]
+        forms = Counter(value for i in verbs for value in _values(self.verb_form[i]))
+        finite = [i for i in verbs if "Fin" in _values(self.verb_form[i])]
+        moods = Counter(value for i in finite for value in _values(self.mood[i]))
+        n_finite = len(finite)
+        n_forms = len(verbs)
         copulas = Counter(
             lemma
             for lemma, pos, auxiliary in zip(self.lemmas, self.pos, self._auxiliary, strict=True)
@@ -257,3 +255,8 @@ class MorphStats(anyts.morph_stats.MorphStats):
             sum(1 for adverb in adverbs if adverb.lower().endswith("mente")), len(adverbs), nan
         )
         return {marker: markers[marker] for marker in MORPHOLOGY_MARKERS_DESC}
+
+
+def _values(value: str | None) -> list[str]:
+    """Values of a feature of several values joined by commas, none without the feature"""
+    return value.split(",") if value else []

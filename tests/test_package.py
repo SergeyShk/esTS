@@ -122,6 +122,7 @@ SPANISH = {
         "is_infinitive_clause_head",
         "is_passive",
         "is_subordinate_clause_head",
+        "is_subordinating_mark",
         "predicate_form",
     },
     "ests.corpus": {"keyness", "kwic", "split_windows"},

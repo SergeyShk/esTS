@@ -272,12 +272,12 @@ Un recuento que no es un entero no negativo lanza `ParameterError`.
 `dickes_steiwer` · Dickes y Steiwer, 1977
 { .metric-meta }
 
-<!-- core: stats/unadapted_readability_stats.md:calc_dickes_steiwer 0fea097 -->
+<!-- core: stats/unadapted_readability_stats.md:calc_dickes_steiwer e11c627 -->
 ``` {.python .signature}
 calc_dickes_steiwer(n_letters, n_words, n_sents, n_types)
 ```
 
-La fórmula corta de Dickes y Steiwer (1977) para el alemán, tal como la dan Bamberger y Vanecek (1984), según las letras por palabra, las palabras por oración y la proporción de lexemas entre las palabras (TTR), sin sílabas; un valor mayor indica un texto más fácil. `nan` sin palabras o sin oraciones.
+La fórmula corta de Dickes y Steiwer (1977) para el alemán, tal como la dan Bamberger y Vanecek (1984), según las letras por palabra, las palabras por oración y la proporción de lexemas entre las palabras (TTR), sin sílabas; un valor mayor indica un texto más fácil. `nan` sin palabras o sin oraciones. Esa proporción baja con la longitud de un texto, así que se comparan los valores de textos de igual longitud.
 
 $$
 \textrm{DS} = 235.95993 - 73.021 \ln\left(\frac{\textrm{Letras}}{\textrm{Palabras}} + 1\right) - 12.56438 \ln\left(\frac{\textrm{Palabras}}{\textrm{Oraciones}} + 1\right) - 50.03293 \cdot \textrm{TTR}
@@ -356,12 +356,12 @@ Un recuento que no es un entero no negativo lanza `ParameterError`.
 `strain_index` · Nathaniel, 2009
 { .metric-meta }
 
-<!-- core: stats/unadapted_readability_stats.md:calc_strain_index d371c89 -->
+<!-- core: stats/unadapted_readability_stats.md:calc_strain_index 8373447 -->
 ``` {.python .signature}
 calc_strain_index(n_syllables, n_sents)
 ```
 
-El índice de Nathaniel (2009): las sílabas de tres oraciones divididas entre 10, aquí las de tres oraciones de media en todo el texto; `nan` sin oraciones.
+El índice de Nathaniel (2009): las sílabas de tres oraciones divididas entre 10, aquí las de tres oraciones de media en todo el texto, con lo que es 0.3 veces el índice de Fucks; `nan` sin oraciones.
 
 $$
 \textrm{Strain} = \frac{3 \times \textrm{Sílabas}}{10 \times \textrm{Oraciones}}
@@ -411,12 +411,12 @@ Un recuento que no es un entero no negativo lanza `ParameterError`.
 `wheeler_smith` · Wheeler y Smith, 1954
 { .metric-meta }
 
-<!-- core: stats/unadapted_readability_stats.md:calc_wheeler_smith de9b424 -->
+<!-- core: stats/unadapted_readability_stats.md:calc_wheeler_smith 7c17af5 -->
 ``` {.python .signature}
 calc_wheeler_smith(n_polysyllable_words, n_sents)
 ```
 
-El índice de Wheeler y Smith (1954) para textos de primaria: la longitud media de la oración por la proporción de palabras de dos o más sílabas, por 10, es decir, 10 veces esas palabras por oración; cuenta oraciones donde el original cuenta unidades terminadas por cualquier signo final. `nan` sin oraciones.
+El índice de Wheeler y Smith (1954) para textos de primaria: la longitud media de la oración por la proporción de palabras de dos o más sílabas, por 10: diez veces el número de esas palabras por oración; cuenta oraciones donde el original cuenta unidades terminadas por cualquier signo final. `nan` sin oraciones.
 
 $$
 \textrm{WS} = 10 \times \textrm{ASL} \times \frac{\textrm{Palabras de dos o más sílabas}}{\textrm{Palabras}}

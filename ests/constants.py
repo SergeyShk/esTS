@@ -498,6 +498,31 @@ NEGATION_WORDS = frozenset(
         "tampoco",
     }
 )
+# Subordinating conjunctions that make a clause under conj or parataxis a subordinate one:
+# the models attach a clause after y or pero to the main one (y como dormía, no quiso
+# despertarle); para que, sin que and hasta que are parsed with a mark que of their own.
+# Prepositions are left out: a and de before an infinitive are periphrases (iba a preparar)
+SUBORDINATING_MARKS = frozenset(
+    {
+        "que",
+        "si",
+        "como",
+        "cuando",
+        "mientras",
+        "porque",
+        "aunque",
+        "según",
+        "ya que",
+        "puesto que",
+        "dado que",
+        "en cuanto",
+        "una vez que",
+        "así que",
+        "a pesar de que",
+    }
+)
+# After these words que coordinates (no lo dijo, sino que lo calló); sino porque does not
+NON_SUBORDINATING_PREV_PHRASES = frozenset({"sino"})
 # Suffixes and lemmas of the nouns derived from a verb, the nominal part of a split
 # predicate (hacer una revisión, tomar una decisión)
 VERBAL_NOUN_SUFFIXES = ("ción", "sión", "miento", "anza", "encia", "ancia", "aje", "dura", "azgo")
@@ -617,7 +642,7 @@ SYNTAX_STATS_DESC = {
     "mean_clause_len": "Mean length of a clause (words)",
     "subordinate_clauses_per_sent": "Subordinate clauses per sentence",
     "p_complex_sents": "Share of sentences with a subordinate clause",
-    "infinitive_clauses_per_sent": "Infinitive clauses under a verb per sentence",
+    "infinitive_clauses_per_sent": "Infinitive clauses per sentence",
     "t_units_per_sent": "T-units per sentence",
     "mean_t_unit_len": "Mean length of a T-unit (words)",
     "clauses_per_t_unit": "Clauses per T-unit",

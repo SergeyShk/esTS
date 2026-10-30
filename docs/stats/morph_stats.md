@@ -109,7 +109,7 @@ The shares of the forms that mark the register of a Spanish text, each of its ow
 | `p_ser` | of `ser` | copulas `ser` and `estar` |
 | `p_mente_adverbs` | of the adverbs in `-mente` | adverbs |
 
-The first four markers share the base of the finite forms and sum to one unless the model leaves a finite form without a mood. The next three share the base of all the verb forms of verbs and auxiliaries: a participle that the model annotates as an adjective (`la casa pintada`) is out of the base, the ones of the compound tenses and the passive (`he leído`, `fue escrito`) are in.
+The first four markers share the base of the finite forms and sum to one unless the model leaves a finite form without a mood or gives it several (`Mood=Ind,Sub`, which counts in the share of each; `es_core_news_sm` gives none). The next three share the base of all the verb forms of verbs and auxiliaries: a participle that the model annotates as an adjective (`la casa pintada`) is out of the base, the ones of the compound tenses and the passive (`he leído`, `fue escrito`) are in.
 
 The base of `p_ser` is the copular uses alone, read from the parse: the auxiliaries of the passive and of the progressive (`fue escrito`, `es financiado`, `está cantando`) are left out, while `es alta`, `está cansada` and `lo importante es que vengas` count. For a `Doc` without a parse the marker is `nan`.
 

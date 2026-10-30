@@ -42,6 +42,7 @@ from ests.syntax_stats import (
     is_prep_complement,
     is_split_predicate_noun,
     is_subordinate_clause_head,
+    is_subordinating_mark,
     predicate_form,
 )
 from ests.utils import get_nlp
@@ -741,6 +742,94 @@ def test_empty_bases():
     assert ss.max_de_chain_len == 0
 
 
+def marked_conjunct(words, deps, heads):
+    """A Doc of a main clause and a clause under conj with a subject of its own"""
+    pos = {"ROOT": "VERB", "conj": "VERB", "nsubj": "PRON", "cc": "CCONJ", "dep": "SPACE"}
+    return Doc(
+        spacy.blank("es").vocab,
+        words=words,
+        heads=heads,
+        deps=deps,
+        pos=[pos.get(dep, "SCONJ") for dep in deps],
+        morphs=["Mood=Ind|VerbForm=Fin" if pos.get(dep) == "VERB" else "" for dep in deps],
+        lemmas=[word.lower() for word in words],
+    )
+
+
+@pytest.mark.parametrize(
+    ("words", "deps", "heads", "expected"),
+    [
+        # A model attaches a clause after y to the main one
+        (
+            ["Entró", "y", "como", "ella", "dormía"],
+            ["ROOT", "cc", "mark", "nsubj", "conj"],
+            [0, 4, 4, 4, 0],
+            True,
+        ),
+        (
+            ["Salió", "ya", "que", "ella", "dormía"],
+            ["ROOT", "mark", "fixed", "nsubj", "conj"],
+            [0, 4, 1, 4, 0],
+            True,
+        ),
+        (
+            ["Salió", "ya", "ella", "dormía"],
+            ["ROOT", "mark", "nsubj", "conj"],
+            [0, 3, 3, 0],
+            False,
+        ),
+        (
+            ["Calló", "sino", "que", "ella", "habló"],
+            ["ROOT", "cc", "mark", "nsubj", "conj"],
+            [0, 4, 4, 4, 0],
+            False,
+        ),
+        # A line break of a wrapped text between the two words
+        (
+            ["Calló", "sino", "\n", "que", "ella", "habló"],
+            ["ROOT", "cc", "dep", "mark", "nsubj", "conj"],
+            [0, 5, 1, 5, 5, 0],
+            False,
+        ),
+        (
+            ["Calló", "sino", "porque", "ella", "habló"],
+            ["ROOT", "cc", "mark", "nsubj", "conj"],
+            [0, 4, 4, 4, 0],
+            True,
+        ),
+        (
+            ["Habló", "y", "que", "ella", "calló"],
+            ["ROOT", "cc", "mark", "nsubj", "conj"],
+            [0, 4, 4, 4, 0],
+            True,
+        ),
+    ],
+)
+def test_conjunct_with_a_subordinating_mark(words, deps, heads, expected):
+    """A conjunct with a conjunction of SUBORDINATING_MARKS, of one word or fixed, is a
+    subordinate clause and no T-unit of its own; sino que coordinates, sino porque does not"""
+    doc = marked_conjunct(words, deps, heads)
+    mark = next(token for token in doc if token.dep_ == "mark")
+    assert is_subordinating_mark(mark) is expected
+    assert is_subordinate_clause_head(doc[-1]) is expected
+    stats = SyntaxStats(doc)
+    assert (stats.n_subordinate_clauses, stats.n_t_units) == ((1, 1) if expected else (0, 2))
+
+
+def test_infinitive_conjunct_with_a_subordinating_mark(nlp):
+    """The model attaches an indirect question with an infinitive as a conjunct of its verb:
+    with its conjunction it heads an infinitive clause"""
+    tokens = words(nlp, "No sabía si quedarse o si marcharse.")
+    assert [token.dep_ for token in tokens if token.text in ("quedarse", "marcharse")] == [
+        "conj",
+        "conj",
+    ]
+    assert [token.text for token in tokens if is_infinitive_clause_head(token)] == [
+        "quedarse",
+        "marcharse",
+    ]
+
+
 def test_subordinate_clause_up_a_long_chain_of_conjuncts():
     """A chain of conjuncts longer than the limit of recursion is followed up to its head"""
     n = 700
@@ -782,9 +871,10 @@ def test_subordinate_clause_up_a_long_chain_of_conjuncts():
             "Sé que vendrá. Nos vamos.",
             {"t_units_per_sent": 1.0, "clauses_per_t_unit": 1.5, "p_complex_t_units": 0.5},
         ),
-        # A periphrasis is one predicate, an infinitive clause one of its own
+        # A periphrasis is one predicate; an infinitive clause is a verb phrase of its own,
+        # but no clause of L2SCA
         ("Puede venir.", {"clauses_per_t_unit": 1.0, "verb_phrases_per_t_unit": 1.0}),
-        ("Quiere venir.", {"clauses_per_t_unit": 2.0, "verb_phrases_per_t_unit": 2.0}),
+        ("Quiere venir.", {"clauses_per_t_unit": 1.0, "verb_phrases_per_t_unit": 2.0}),
     ],
 )
 def test_order_chains_and_t_units(nlp, text, expected):

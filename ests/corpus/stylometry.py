@@ -17,7 +17,7 @@ from anyts.corpus.stylometry import (
     zeta as zeta,
     zeta_segments as zeta_segments,
 )
-from anyts.utils import check_words, is_doc, is_punctuation, iter_doc_tokens
+from anyts.utils import check_words, has_pos, is_doc, is_punctuation, iter_doc_tokens
 
 from ..constants import FUNCTION_UD_POS
 from ..exceptions import SourceError
@@ -69,7 +69,7 @@ def function_words_profile(
         (0.3333333333333333, 0.16666666666666666)
     """
     _check_nlp(nlp)
-    if is_doc(source) and source.has_annotation("POS"):
+    if is_doc(source) and has_pos(source):
         tags = [token.pos_ for token in iter_doc_tokens(source)]
     elif is_doc(source):
         tags = _tag_words([token.text for token in source if not token.is_space], nlp)
@@ -106,7 +106,7 @@ def _tag_words(words: Sequence[str], nlp: Language | None) -> list[str]:
     for start, doc in zip(
         starts, pipeline.pipe(chunks, disable=UNUSED_COMPONENTS, batch_size=1), strict=True
     ):
-        if not doc.has_annotation("POS"):
+        if not has_pos(doc):
             raise SourceError("The pipeline does not tag the parts of speech")
         offset = min(start, CHUNK_MARGIN)
         tags.extend(

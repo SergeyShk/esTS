@@ -441,13 +441,26 @@ PARAGRAPHS = (
 
 
 def test_paragraphs(nlp):
-    """A paragraph is a part between blank lines, of a string and of a Doc"""
-    for source in (PARAGRAPHS, nlp(PARAGRAPHS)):
+    """A paragraph is a line, of a string and of a Doc; with blank_lines, a part between
+    blank lines, so the wrapped lines of a paragraph make one"""
+    lines = PARAGRAPHS.replace("\n\n", "\n")
+    for source in (PARAGRAPHS, nlp(PARAGRAPHS), lines, nlp(lines)):
         cs = CohesionStats(source)
         assert cs.n_paragraphs == 3
         # gato, casa, perro, calle | perro, casa | gato (salta): 2 of 4 and 0 of 2 come again
         assert cs.noun_overlap_para == pytest.approx(1 / 3)
-    assert CohesionStats(PARAGRAPHS.replace("\n\n", "\n")).n_paragraphs == 1
+    assert CohesionStats(PARAGRAPHS, blank_lines=True).n_paragraphs == 3
+    for source in (lines, nlp(lines)):
+        cs = CohesionStats(source, blank_lines=True)
+        assert (cs.blank_lines, cs.n_paragraphs) == (True, 1)
+        assert isnan(cs.noun_overlap_para)
+
+
+def test_paragraph_without_content_words_joins_the_next():
+    """The number of a chapter is no paragraph of its own"""
+    cs = CohesionStats("1\nEl gato duerme en la casa.\nLa casa es grande.")
+    # gato, casa | casa
+    assert (cs.n_paragraphs, cs.noun_overlap_para) == (2, 0.5)
 
 
 def test_overlaps_with_the_next_two_sentences():

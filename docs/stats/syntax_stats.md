@@ -51,7 +51,7 @@ The `max_length` of the pipeline is a million characters by default: split a lon
     Mean length of a clause (words)                            |   9.67
     Subordinate clauses per sentence                           |   0.50
     Share of sentences with a subordinate clause               |   0.50
-    Infinitive clauses under a verb per sentence               |   0.00
+    Infinitive clauses per sentence                            |   0.00
     T-units per sentence                                       |   1.00
     Mean length of a T-unit (words)                            |  14.50
     Clauses per T-unit                                         |   1.50
@@ -149,7 +149,7 @@ Every metric is an attribute of the object, computed when it is created, and `ge
 | [`mean_clause_len`](#clauses) | Mean length of a clause in words | 1 and above, `nan` without clauses | Longer clauses |
 | [`subordinate_clauses_per_sent`](#subordinate_clauses) | Subordinate clauses per sentence | 0 and above | More subordination |
 | [`p_complex_sents`](#subordinate_clauses) | Share of the sentences with a subordinate clause | 0-1 | More complex sentences |
-| [`infinitive_clauses_per_sent`](#infinitive_clauses) | Infinitive clauses under a verb per sentence | 0 and above | More infinitive complements |
+| [`infinitive_clauses_per_sent`](#infinitive_clauses) | Infinitive clauses per sentence | 0 and above | More infinitive clauses |
 | [`t_units_per_sent`](#l2sca) | T-units per sentence (T/S) | 0 and above | More main clauses in a sentence |
 | [`mean_t_unit_len`](#l2sca) | Mean length of a T-unit in words (MLT) | 1 and above, `nan` without T-units | Longer T-units |
 | [`clauses_per_t_unit`](#l2sca) | Clauses per T-unit (C/T) | 1 and above, `nan` without T-units | More subordination |
@@ -295,7 +295,7 @@ The mean length of a clause is the number of the words over the number of the cl
 is_subordinate_clause_head(token)
 ```
 
-Checks whether a word heads a subordinate clause: a clause head (`is_clause_head`) with `ccomp`, `advcl`, `acl` or `csubj` (`anyts.constants.SUBORDINATE_CLAUSE_DEPS`), or under `xcomp` with a finite predicate, or a coordinated predicate of a subordinate clause, by the relation of the first word up its chain of conjuncts. An infinitive clause under a verb (`quiere salir`) is counted apart, among the [infinitive clauses](#infinitive_clauses).
+Checks whether a word heads a subordinate clause: a clause head (`is_clause_head`) whose predicate is no infinitive, with `ccomp`, `advcl`, `acl` or `csubj` (`anyts.constants.SUBORDINATE_CLAUSE_DEPS`) or under `xcomp`, or a coordinated predicate of a subordinate clause, by the relation of the first word up its chain of conjuncts. A clause under `conj` or `parataxis` with a subordinating conjunction (`is_subordinating_mark`) is subordinate too, with its conjuncts that have a subject of their own: the models attach a clause after `y`, `pero` or `sino` as a conjunct of the clause before it (`sino porque le había cobrado afición`, `quiero salir y que vengas`). An infinitive clause (`quiere salir`, `salió para ayudar`) is counted apart, among the [infinitive clauses](#infinitive_clauses).
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
@@ -303,14 +303,27 @@ Checks whether a word heads a subordinate clause: a clause head (`is_clause_head
 
 `p_complex_sents` is the share of the sentences with at least one subordinate clause.
 
+``` {.python .signature}
+is_subordinating_mark(token)
+```
+
+Checks whether a word with the relation `mark` is a subordinating conjunction: one of `SUBORDINATING_MARKS` with the words of its fixed expression (`que`, `si`, `como`, `cuando`, `porque`, `aunque`, `ya que`, `puesto que`), but not `que` after `sino`, which coordinates (`no lo dijo, sino que lo calló`). The models parse `para que`, `sin que` and `hasta que` with a mark `que` of their own. Prepositions are left out: `a` and `de` before an infinitive mostly make a periphrasis (`iba a preparar`, `ha de vivir`). It is the hook `is_subordinating_mark` of the `SyntaxStats` of the anyTS core.
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `token` | `Token` | - | Token |
+
 === "Code"
 
     ``` python
     from ests.syntax_stats import is_clause_head, is_subordinate_clause_head
     from ests.utils import get_nlp
 
-    doc = get_nlp()("Él quiere salir, pero tiene que quedarse porque parece cansado.")
+    nlp = get_nlp()
+    doc = nlp("Él quiere salir, pero tiene que quedarse porque parece cansado.")
     [token.text for token in doc if is_clause_head(token)]
+    [token.text for token in doc if is_subordinate_clause_head(token)]
+    doc = nlp("Se sentaba a sus pies, no por servicio, sino porque le había cobrado afición.")
     [token.text for token in doc if is_subordinate_clause_head(token)]
     ```
 
@@ -319,6 +332,7 @@ Checks whether a word heads a subordinate clause: a clause head (`is_clause_head
     ```
     ['quiere', 'salir', 'tiene', 'parece']
     ['parece']
+    ['cobrado']
     ```
 
 </div>
@@ -334,7 +348,7 @@ Checks whether a word heads a subordinate clause: a clause head (`is_clause_head
 is_infinitive_clause_head(token)
 ```
 
-Checks whether a word heads an infinitive clause under a verb: a clause head (`is_clause_head`) whose predicate is an infinitive under `xcomp` (`quiere salir`, `le pidió salir`), or a conjunct of one, whatever its own form: the first word up its chain of conjuncts decides (`quiero salir y que vengas`). These clauses count among the clauses, but not among the subordinate ones: grammars take an infinitive complement for a part of a simple sentence, and the published correlations of the subordination were obtained for finite subordinate clauses. It is the [`is_infinitive_clause_head`](https://sergeyshk.github.io/anyTS/stats/syntax_stats/#infinitive_clauses) of the anyTS core over `is_clause_head`.
+Checks whether a word heads an infinitive clause: a clause head (`is_clause_head`) whose own predicate is an infinitive under `xcomp`, `ccomp`, `advcl` or `csubj` (`quiere salir`, `le pidió salir`, `salió para ayudar`, `es difícil decirlo`), an infinitive under `conj` or `parataxis` with a subordinating conjunction, or an infinitive conjunct of one; a finite conjunct of an infinitive (`quiero salir y que vengas`) is none. These clauses count among the clauses, but not among the subordinate ones: grammars take an infinitive complement for a part of a simple sentence, and the published correlations of the subordination were obtained for finite subordinate clauses. It is the [`is_infinitive_clause_head`](https://sergeyshk.github.io/anyTS/stats/syntax_stats/#infinitive_clauses) of the anyTS core over `is_clause_head`.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |

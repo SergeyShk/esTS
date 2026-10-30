@@ -792,12 +792,12 @@ $$
 `orlov_z` · [Tweedie y Baayen 1998](https://doi.org/10.1023/A:1001749303137)
 { .metric-meta }
 
-<!-- core: stats/diversity_stats.md:calc_orlov_z f1f1b1c -->
+<!-- core: stats/diversity_stats.md:calc_orlov_z 45a9bb7 -->
 ``` {.python .signature}
 calc_orlov_z(text)
 ```
 
-La longitud del texto con la que la ley de Zipf mejor se ajusta al vocabulario (Orlov 1983): la solución $Z$ para $N$ palabras, $V$ lexemas y la proporción $p$ del lexema más frecuente. El lado derecho, como función de $Z$, tiene un mínimo, y $Z$ es la solución por encima de él; es `nan` cuando $V$ queda en ese mínimo o por debajo o cuando cada palabra es un lexema propio, e `inf` cuando $V$ se acerca tanto a $N$ que $Z$ desborda un float. Junto con la K de Yule, Z fue la que mejor separó a los autores entre las medidas que compararon Tweedie y Baayen.
+La longitud del texto con la que la ley de Zipf mejor se ajusta al vocabulario (Orlov 1983): la solución $Z$ para $N$ palabras, $V$ lexemas y la proporción $p$ del lexema más frecuente. El lado derecho, como función de $Z$, tiene un mínimo, y $Z$ es la solución por encima de él; es `nan` cuando $V$ queda en ese mínimo o por debajo o cuando cada palabra es un lexema propio, e `inf` cuando $V$ se acerca tanto a $N$ que $Z$ desborda un float. Junto con la K de Yule, Z fue la que mejor separó a los autores entre las medidas que compararon Tweedie y Baayen. En un texto de menos de unas diez mil palabras Z es inestable y crece con la longitud, y sus valores abarcan órdenes de magnitud: se comparan textos de igual longitud, o por el logaritmo de Z.
 
 $$
 V = \frac{Z}{\ln(pZ)} \cdot \frac{N}{N - Z} \cdot \ln \frac{N}{Z}
@@ -1051,12 +1051,12 @@ El gráfico de la [ley de Heaps](../visualizers/vocabulary.md) se construye a pa
 `burstiness` · [Kim y Jo 2016](https://doi.org/10.1103/PhysRevE.94.032311)
 { .metric-meta }
 
-<!-- core: stats/diversity_stats.md:calc_burstiness d0ce1ff -->
+<!-- core: stats/diversity_stats.md:calc_burstiness 051a63c -->
 ``` {.python .signature}
 calc_burstiness(text, min_freq=5)
 ```
 
-En qué medida un lexema aparece en ráfagas en lugar de repartido por el texto, según el índice de ráfagas (burstiness) de Kim y Jo, que corrige el de Goh y Barabási para un número finito $n$ de eventos, promediado sobre los lexemas de `min_freq` apariciones o más (`BURSTINESS_MIN_FREQ`). Para las $n$ apariciones de un lexema, $r$ es el coeficiente de variación de sus $n$ intervalos, incluido el que va de la última a la primera dando la vuelta al final del texto. El valor es −1 para apariciones a intervalos iguales, incluido el que da la vuelta al final (*a x a x a x a x a x* da −1, *a x a x a x a x a* alrededor de −0.69), cerca de 0 para un lexema raro en lugares aleatorios y hasta 1 para apariciones en ráfagas; `nan` sin tales lexemas.
+En qué medida un lexema aparece en ráfagas en lugar de repartido por el texto, según el índice de ráfagas (burstiness) de Kim y Jo, que corrige el de Goh y Barabási para un número finito $n$ de eventos, promediado sobre los lexemas de `min_freq` apariciones o más (`BURSTINESS_MIN_FREQ`). Para las $n$ apariciones de un lexema, $r$ es el coeficiente de variación de sus $n$ intervalos, incluido el que va de la última a la primera dando la vuelta al final del texto. El valor es −1 para apariciones a intervalos iguales, incluido el que da la vuelta al final (*a x a x a x a x a x* da −1, *a x a x a x a x a* alrededor de −0.69), cerca de 0 para un lexema raro en lugares aleatorios y hasta 1 para apariciones en ráfagas; `nan` sin tales lexemas. En un texto corto o en una ventana los lexemas de `min_freq` apariciones son sobre todo palabras funcionales, y el valor crece con la longitud del texto.
 
 $$
 A_n = \frac{\sqrt{n + 1} \cdot r - \sqrt{n - 1}}{(\sqrt{n + 1} - 2) \cdot r + \sqrt{n - 1}}

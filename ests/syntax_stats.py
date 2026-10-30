@@ -23,7 +23,7 @@ from anyts.syntax_stats import (
     is_root,
     subtree_len,
 )
-from anyts.utils import has_feature
+from anyts.utils import has_feature, is_word
 
 from .constants import (
     AGENT_PREPOSITION,
@@ -34,12 +34,14 @@ from .constants import (
     INFINITIVE_PERIPHRASES,
     LIGHT_VERBS,
     NEGATION_WORDS,
+    NON_SUBORDINATING_PREV_PHRASES,
     PASSIVE_AUX,
     PREPOSITIONAL_LIGHT_VERBS,
     RAISING_VERBS,
     SE_IMPERSONAL_DEP,
     SE_PASSIVE_DEP,
     SPLIT_PREDICATE_NOUNS,
+    SUBORDINATING_MARKS,
     SYNTAX_STATS_DESC,
 )
 from .exceptions import SourceError
@@ -73,7 +75,8 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
 
     Description:
         Extends the SyntaxStats of the anyTS core with the constructions of the
-        Spanish administrative style: the clauses (is_clause_head), the passive
+        Spanish administrative style: the clauses (is_clause_head) with the
+        subordinating conjunctions of SUBORDINATING_MARKS, the passive
         with ser and with se, the gerund clauses, the chains of de, the words
         of negation of NEGATION_WORDS and the split predicates. A string is
         parsed by the spaCy model; a Doc must carry the dependencies and the
@@ -110,7 +113,7 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         n_clauses (int): Number of clauses
         n_subordinate_clauses (int): Number of subordinate clauses
         n_complex_sents (int): Number of sentences with a subordinate clause
-        n_infinitive_clauses (int): Number of infinitive clauses under a verb
+        n_infinitive_clauses (int): Number of infinitive clauses
         n_t_units, n_complex_t_units (int): Numbers of the T-units and of those with a
             subordinate clause
         n_verb_phrases, n_coordinate_phrases, n_complex_nominals (int): Numbers of the verb
@@ -152,7 +155,7 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         mean_clause_len (float): Mean length of a clause in words
         subordinate_clauses_per_sent (float): Subordinate clauses per sentence
         p_complex_sents (float): Share of sentences with at least one subordinate clause
-        infinitive_clauses_per_sent (float): Infinitive clauses under a verb per sentence
+        infinitive_clauses_per_sent (float): Infinitive clauses per sentence
         t_units_per_sent (float): T-units per sentence
         mean_t_unit_len (float): Mean length of a T-unit in words
         clauses_per_t_unit (float): Clauses per T-unit
@@ -202,6 +205,7 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
 
     requires_lemmas = True
     negation_words = NEGATION_WORDS
+    subordinating_marks = SUBORDINATING_MARKS
     stats_desc = SYNTAX_STATS_DESC
 
     def __init__(self, source: str | Doc, nlp: Language | None = None):
@@ -263,6 +267,10 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
     def is_infinitive_periphrasis(self, token: Token) -> bool:
         """Infinitive of one predicate with its verb by the Spanish rules (is_infinitive_periphrasis)"""
         return is_infinitive_periphrasis(token)
+
+    def is_subordinating_mark(self, token: Token) -> bool:
+        """Subordinating conjunction of a conjunct or a parataxis (is_subordinating_mark)"""
+        return is_subordinating_mark(token)
 
     def auxiliary_form(self, token: Token) -> str:
         """Form of an auxiliary without one by its ending (predicate_form)"""
@@ -365,11 +373,14 @@ def is_subordinate_clause_head(token: Token) -> bool:
     Checking whether a token heads a subordinate clause
 
     Description:
-        The is_subordinate_clause_head of the core over is_clause_head: the
-        head of a clause with the relation ccomp, advcl, acl or csubj, or under
-        xcomp with a finite predicate, and a coordinated predicate of a
-        subordinate clause. An infinitive clause under a verb (quiere salir)
-        is counted apart (is_infinitive_clause_head)
+        The is_subordinate_clause_head of the core over is_clause_head and
+        is_subordinating_mark: the head of a clause whose predicate is no
+        infinitive, with the relation ccomp, advcl, acl or csubj, or under xcomp,
+        a coordinated predicate of a subordinate clause, and a clause under conj
+        or parataxis with a subordinating conjunction (y como dormía, no quiso
+        despertarle) with its conjuncts that have a subject of their own. An
+        infinitive clause (quiere salir, salió para ayudar) is counted apart
+        (is_infinitive_clause_head)
 
     Arguments:
         token (Token): Token
@@ -377,19 +388,22 @@ def is_subordinate_clause_head(token: Token) -> bool:
     Returns:
         bool: Result of the check
     """
-    return anyts.syntax_stats.is_subordinate_clause_head(token, is_clause_head, _auxiliary_form)
+    return anyts.syntax_stats.is_subordinate_clause_head(
+        token, is_clause_head, _auxiliary_form, is_subordinating_mark=is_subordinating_mark
+    )
 
 
 def is_infinitive_clause_head(token: Token) -> bool:
     """
-    Checking whether a token heads an infinitive clause under a verb
+    Checking whether a token heads an infinitive clause
 
     Description:
-        The is_infinitive_clause_head of the core over is_clause_head: an
-        infinitive under xcomp that heads a clause of its own (quiere salir,
-        le pidió salir), or a conjunct of one, whatever its own form: the
-        first word up its chain of conjuncts decides (quiero salir y que
-        vengas)
+        The is_infinitive_clause_head of the core over is_clause_head and
+        is_subordinating_mark: an infinitive that heads a clause of its own
+        under xcomp, ccomp, advcl or csubj (quiere salir, le pidió salir, salió
+        para ayudar, es difícil decirlo), an infinitive under conj or parataxis
+        with a subordinating conjunction, or an infinitive conjunct of one; a
+        finite conjunct (quiero salir y que vengas) is none
 
     Arguments:
         token (Token): Token
@@ -397,7 +411,35 @@ def is_infinitive_clause_head(token: Token) -> bool:
     Returns:
         bool: Result of the check
     """
-    return anyts.syntax_stats.is_infinitive_clause_head(token, is_clause_head, _auxiliary_form)
+    return anyts.syntax_stats.is_infinitive_clause_head(
+        token, is_clause_head, _auxiliary_form, is_subordinating_mark=is_subordinating_mark
+    )
+
+
+def is_subordinating_mark(token: Token) -> bool:
+    """
+    Checking whether a mark is a subordinating conjunction
+
+    Description:
+        A mark of SUBORDINATING_MARKS with the words of its fixed expression
+        (ya que, puesto que), but not que after a word of
+        NON_SUBORDINATING_PREV_PHRASES: sino que coordinates (no lo dijo, sino
+        que lo calló), while sino porque does not
+
+    Arguments:
+        token (Token): Token
+
+    Returns:
+        bool: Result of the check
+    """
+    if not anyts.syntax_stats.is_subordinating_mark(token, SUBORDINATING_MARKS):
+        return False
+    if token.lower_ != "que":
+        return True
+    before = [word.lower_ for word in token.doc[max(token.i - 2, 0) : token.i] if is_word(word)]
+    return not any(
+        " ".join(before[-n:]) in NON_SUBORDINATING_PREV_PHRASES for n in range(1, len(before) + 1)
+    )
 
 
 def is_infinitive_clause(token: Token) -> bool:

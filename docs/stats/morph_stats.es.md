@@ -121,7 +121,7 @@ Las proporciones de las formas que marcan el registro de un texto español, cada
 | `p_ser` | de `ser` | cópulas `ser` y `estar` |
 | `p_mente_adverbs` | de los adverbios en `-mente` | adverbios |
 
-Los cuatro primeros marcadores comparten la base de las formas personales y suman uno salvo que el modelo deje alguna forma personal sin modo. Los tres siguientes comparten la base de todas las formas verbales de verbos y auxiliares: un participio que el modelo anota como adjetivo (`la casa pintada`) queda fuera de la base, los de los tiempos compuestos y la pasiva (`he leído`, `fue escrito`) quedan dentro.
+Los cuatro primeros marcadores comparten la base de las formas personales y suman uno salvo que el modelo deje alguna forma personal sin modo o le dé varios (`Mood=Ind,Sub`, que cuenta en la proporción de cada uno; `es_core_news_sm` no los da). Los tres siguientes comparten la base de todas las formas verbales de verbos y auxiliares: un participio que el modelo anota como adjetivo (`la casa pintada`) queda fuera de la base, los de los tiempos compuestos y la pasiva (`he leído`, `fue escrito`) quedan dentro.
 
 La base de `p_ser` son solo los usos copulativos, leídos del análisis sintáctico: los auxiliares de la pasiva y de la perífrasis progresiva (`fue escrito`, `es financiado`, `está cantando`) quedan fuera, mientras que `es alta`, `está cansada` y `lo importante es que vengas` cuentan. Para un `Doc` sin análisis sintáctico el marcador es `nan`.
 
@@ -149,8 +149,8 @@ La base de `p_ser` son solo los usos copulativos, leídos del análisis sintáct
 
 ## Métodos
 
-<!-- core: stats/morph_stats.md:MorphStats-get_stats 31a94da -->
-`get_stats(*stats, filter_none=False, flat=False)` da el número de las palabras por valor de cada estadística elegida, todas por defecto, en el orden de las primeras apariciones; `None` cuenta las palabras sin el rasgo, y `filter_none` las deja fuera. Con `flat` las claves son `estadística_valor`, como `pos_NOUN`, sin las palabras que carecen del rasgo, como en `to_dataframe`. Una estadística desconocida lanza `UnknownStatError`.
+<!-- core: stats/morph_stats.md:MorphStats-get_stats 748058e -->
+`get_stats(*stats, filter_none=False, flat=False)` da el número de las palabras por valor de cada estadística elegida, todas por defecto, en el orden de las primeras apariciones; `None` cuenta las palabras sin el rasgo, y `filter_none` las deja fuera. Con `flat` las claves son `estadística_valor`, como `pos_NOUN`, sin las palabras que carecen del rasgo, como en `to_dataframe`. Una estadística desconocida lanza `UnknownStatError`, y un `filter_none` o un `flat` que no es un `bool`, `ParameterError`.
 
 <!-- core: stats/morph_stats.md:MorphStats-explain_text 037565e -->
 `explain_text(*stats, filter_none=False)` da cada palabra con los valores de las estadísticas elegidas; `filter_none` deja fuera los que le faltan a una palabra. Una estadística desconocida lanza `UnknownStatError`.

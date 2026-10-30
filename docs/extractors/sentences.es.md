@@ -76,12 +76,12 @@ Un texto que no es una cadena y un tokenizador que no es invocable o no devuelve
 
 ## Párrafos { #split_paragraphs }
 
-<!-- core: extractors/sentences.md:split_paragraphs 3fe9d43 -->
+<!-- core: extractors/sentences.md:split_paragraphs 3236b45 -->
 ``` {.python .signature}
 split_paragraphs(text)
 ```
 
-Los párrafos de un texto: sus partes entre líneas en blanco, sin los espacios de sus extremos; una parte solo de espacios no es un párrafo. Una línea en blanco (`BLANK_LINE`) son dos saltos de línea - `\n`, `\r\n`, `\r`, U+0085 o U+2028 - con solo espacios entre ellos, donde el espacio de anchura cero y la marca de orden de bytes cuentan como espacios, o un separador de párrafo U+2029; también termina las oraciones de `SentsExtractor` y los párrafos de `CohesionStats`. Las palabras de los párrafos dan los tamaños de las partes de `dispersion` por párrafo; un párrafo sin palabras, como una separación de escenas con asteriscos, sigue siendo un párrafo. Un texto que no es una cadena lanza `SourceTypeError`.
+Los párrafos de un texto: sus partes entre líneas en blanco, sin los espacios de sus extremos; una parte solo de espacios no es un párrafo. Una línea en blanco (`BLANK_LINE`) son dos saltos de línea - `\n`, `\r\n`, `\r`, U+0085 o U+2028 - con solo espacios entre ellos, donde el espacio de anchura cero y la marca de orden de bytes cuentan como espacios, o un separador de párrafo U+2029; también termina las oraciones de `SentsExtractor` y los párrafos de `CohesionStats` con `blank_lines`. Las palabras de los párrafos dan los tamaños de las partes de `dispersion` por párrafo; un párrafo sin palabras, como una separación de escenas con asteriscos, sigue siendo un párrafo. Un texto que no es una cadena lanza `SourceTypeError`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
