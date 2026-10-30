@@ -545,7 +545,7 @@ Cada clase de estadísticas es también un componente de un pipeline, de modo qu
 (12, ('DET', 'NOUN'), 2.0)
 ```
 
-Las fábricas son `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` y `ests_verse`; el nombre del paso del pipeline es el nombre de la extensión. El componente `ests_blank_lines`, antes del parser, inicia una oración tras una línea en blanco, como la API de cadenas; el pipeline de `ests.utils.get_nlp` lo tiene.
+Las fábricas son `ests_basic`, `ests_readability`, `ests_unadapted_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` y `ests_verse`; el nombre del paso del pipeline es el nombre de la extensión. El componente `ests_blank_lines`, antes del parser, inicia una oración tras una línea en blanco, como la API de cadenas; el pipeline de `ests.utils.get_nlp` lo tiene.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/components/).
 

@@ -1,5 +1,6 @@
 from math import isnan
 
+import anyts.basic_stats
 import pytest
 import spacy
 from anyts.constants import UNADAPTED_READABILITY_STATS_DESC
@@ -61,4 +62,12 @@ def test_errors():
         UnadaptedReadabilityStats(5)
     with pytest.raises(SourceError, match=r"^The data source has no words$"):
         UnadaptedReadabilityStats("?!")
+
+    class Basic(anyts.basic_stats.BasicStats):
+        def count_syllables(self, word):
+            return 1
+
+    # The basic statistics of the core, without the Spanish syllables
+    with pytest.raises(SourceTypeError, match="BasicStats"):
+        UnadaptedReadabilityStats(Basic(text))
     assert not isnan(UnadaptedReadabilityStats("Gato.").forcast)

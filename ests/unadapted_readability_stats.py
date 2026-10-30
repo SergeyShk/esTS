@@ -67,8 +67,8 @@ class UnadaptedReadabilityStats(anyts.unadapted_readability_stats.UnadaptedReada
         print_stats: Printing the computed formulas with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string, a Doc object nor BasicStats,
-            or an extractor is of another type
+        SourceTypeError: If the source is neither a string, a Doc nor a BasicStats object,
+            the basic statistics are not those of esTS, or an extractor is of another type
         SourceError: If the source has no words or no sentences, or is a string with a
             character without a UTF-8 form
     """

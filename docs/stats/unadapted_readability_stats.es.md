@@ -16,7 +16,7 @@ La clase extiende el `UnadaptedReadabilityStats` del núcleo [anyTS](https://ser
 
 Las fórmulas no están calibradas para el español. Sus valores sirven para comparar textos españoles entre sí y con los resultados de estas fórmulas en otras herramientas, pero no dan un grado español: una palabra española tiene más sílabas que las inglesas con que se ajustaron las fórmulas, así que las fórmulas que cuentan sílabas leen un texto español como más difícil - en 60 ventanas de 1000 palabras de la prosa del [corpus de literatura](../datasets/spanishliterature.md), con 1.96 sílabas por palabra, la mediana de FORCAST es 13.2 y la de Linsear Write 13.7, frente a un [grado de consenso](readability_stats.md#consensus_grade) de 5.0 de las fórmulas españolas. Por eso estas fórmulas no tienen escalas de lectura, `describe` da `None` para ellas y no entran en el grado de consenso. Las fórmulas con coeficientes para el español están en [`ReadabilityStats`](readability_stats.md).
 
-En español las palabras sin sílabas son los números y las abreviaturas sin vocal (`Sr`, `pst`); las conjunciones `y` y `e`, así como la preposición `a`, tienen una sílaba.
+En español las palabras sin sílabas son los números, las abreviaturas sin vocal (`D.`, `Sr.`, `km`) y las interjecciones sin vocal (`pst`, `sh`); las conjunciones `y` y `e`, así como la preposición `a`, tienen una sílaba.
 
 === "Código"
 

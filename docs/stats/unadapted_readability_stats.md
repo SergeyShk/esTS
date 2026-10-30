@@ -10,7 +10,7 @@ The class extends the `UnadaptedReadabilityStats` of the [anyTS](https://sergeys
 
 The formulas are not calibrated for Spanish. Their values serve to compare Spanish texts with each other and with the results of these formulas in other tools, but they give no Spanish grade: a Spanish word has more syllables than the English ones the formulas were fitted on, so the formulas of syllables read a Spanish text as harder - on 60 windows of 1000 words of the prose of the [corpus of literature](../datasets/spanishliterature.md), with 1.96 syllables per word, the median FORCAST is 13.2 and the median Linsear Write 13.7, against a [consensus grade](readability_stats.md#consensus_grade) of 5.0 of the Spanish formulas. These formulas therefore have no reading scales, `describe` gives `None` for them, and they do not enter the consensus grade. The formulas with coefficients for Spanish are in [`ReadabilityStats`](readability_stats.md).
 
-In Spanish the words without syllables are the numbers and the abbreviations without a vowel (`Sr`, `pst`); the conjunctions `y` and `e` and the preposition `a` have one syllable.
+In Spanish the words without syllables are the numbers, the abbreviations without a vowel (`D.`, `Sr.`, `km`) and the interjections without a vowel (`pst`, `sh`); the conjunctions `y` and `e` and the preposition `a` have one syllable.
 
 === "Code"
 
