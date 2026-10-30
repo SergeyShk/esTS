@@ -37,7 +37,7 @@
 
 La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https://github.com/explosion/spaCy); la mayoría de las estadísticas no necesita un modelo entrenado (véase Instalación). Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://huggingface.co/spaces/SergeyShk/esTS): pegue un texto y obtenga su legibilidad, las métricas, los gráficos y el resaltado de sus fragmentos. Los [cuadernos](https://sergeyshk.github.io/esTS/es/examples/) muestran la biblioteca sobre sus conjuntos de datos - un cuento analizado con todas las herramientas, los prosistas, los sonetos y las medidas de corpus; el primero se abre en [Colab](https://colab.research.google.com/github/SergeyShk/esTS/blob/master/examples/01_text_walkthrough.ipynb).
 
-* **[Extracción de objetos](https://sergeyshk.github.io/esTS/es/extractors/sentences/)** - tokenizadores configurables de oraciones, palabras y N-gramas de caracteres que conocen los signos de apertura, la raya de diálogo y las abreviaturas del español
+* **[Extracción de objetos](https://sergeyshk.github.io/esTS/es/extractors/sentences/)** - tokenizadores configurables de oraciones, palabras y N-gramas de caracteres que conocen los signos de apertura, la raya de diálogo y las abreviaturas del español, y los párrafos de un texto
 * **[Sílabas y acento](https://sergeyshk.github.io/esTS/es/syllables/)** - silabificación por reglas y sílaba tónica deducida de la escritura, sin diccionario
 * **[Estadísticas básicas](https://sergeyshk.github.io/esTS/es/stats/basic_stats/)** - recuentos de oraciones, palabras, letras, sílabas y signos de puntuación por tipo, con distribuciones y proporciones normalizadas
 * **[Métricas de legibilidad](https://sergeyshk.github.io/esTS/es/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX, con grado de consenso, etapas escolares de España y tiempo de lectura, y fórmulas de otros idiomas con sus propios coeficientes
@@ -117,7 +117,7 @@ Las estadísticas según el diccionario de frecuencias lo necesitan descargado u
 
 ### Extracción de objetos
 
-Herramientas configurables extraen de un texto las oraciones, las palabras y los N-gramas de caracteres para las estadísticas. El segmentador de oraciones conoce los signos de apertura, la raya de diálogo y las abreviaturas del español; el tokenizador de palabras mantiene enteros los clíticos, los ordinales y los números escritos a la española, y los lemas vienen de [simplemma](https://github.com/adbar/simplemma), que no necesita modelo.
+Herramientas configurables extraen de un texto las oraciones, las palabras y los N-gramas de caracteres para las estadísticas, y `split_paragraphs` sus párrafos entre líneas en blanco. El segmentador de oraciones conoce los signos de apertura, la raya de diálogo y las abreviaturas del español; el tokenizador de palabras mantiene enteros los clíticos, los ordinales y los números escritos a la española, y los lemas vienen de [simplemma](https://github.com/adbar/simplemma), que no necesita modelo.
 
 ```python
 >>> from ests import CharNgramsExtractor, SentsExtractor, WordsExtractor
@@ -726,7 +726,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos en las [i
     *   constants.py - constantes de la lengua española y de las métricas
     *   diversity_stats.py - métricas de diversidad léxica del núcleo anyTS sobre una cadena o un Doc
     *   exceptions.py - excepciones de la biblioteca
-    *   extractors.py - los extractores del núcleo anyTS con los tokenizadores del español
+    *   extractors.py - los extractores del núcleo anyTS con los tokenizadores del español, los párrafos de un texto
     *   morph_stats.py - estadísticas morfológicas
     *   readability_stats.py - métricas de legibilidad: las fórmulas del español sobre las del núcleo anyTS
     *   unadapted_readability_stats.py - fórmulas de legibilidad de otros idiomas

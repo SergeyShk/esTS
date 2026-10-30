@@ -18,7 +18,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    Tokenizadores de [oraciones](extractors/sentences.md), [palabras](extractors/words.md) y [N-gramas de caracteres](extractors/char_ngrams.md) que conocen los signos de apertura, la raya de diálogo y las abreviaturas del español
+    Tokenizadores de [oraciones](extractors/sentences.md), [palabras](extractors/words.md) y [N-gramas de caracteres](extractors/char_ngrams.md) que conocen los signos de apertura, la raya de diálogo y las abreviaturas del español, y los [párrafos](extractors/sentences.md#split_paragraphs) de un texto
 
     [:octicons-arrow-right-24: Extracción](extractors/sentences.md)
 
@@ -256,7 +256,7 @@ Un cuento analizado con todas las herramientas de la biblioteca está en el cuad
         *   constants.py - constantes de la lengua española y de las métricas
         *   diversity_stats.py - métricas de diversidad léxica
         *   exceptions.py - excepciones de la biblioteca
-        *   extractors.py - extractores de oraciones, palabras y N-gramas de caracteres con los tokenizadores del español
+        *   extractors.py - extractores de oraciones, palabras y N-gramas de caracteres con los tokenizadores del español, los párrafos de un texto
         *   lexical_stats.py - estadísticas de complejidad léxica
         *   morph_stats.py - estadísticas morfológicas
         *   phon_stats.py - fonoestadística

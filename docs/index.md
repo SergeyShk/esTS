@@ -18,7 +18,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    Tokenizers of [sentences](extractors/sentences.md), [words](extractors/words.md) and [character N-grams](extractors/char_ngrams.md) that know the inverted marks, the dialogue dash and the abbreviations of Spanish
+    Tokenizers of [sentences](extractors/sentences.md), [words](extractors/words.md) and [character N-grams](extractors/char_ngrams.md) that know the inverted marks, the dialogue dash and the abbreviations of Spanish, and the [paragraphs](extractors/sentences.md#split_paragraphs) of a text
 
     [:octicons-arrow-right-24: Extraction](extractors/sentences.md)
 
@@ -256,7 +256,7 @@ A walkthrough of one short story with every tool of the library is in the notebo
         *   constants.py - constants of the Spanish language and of the metrics
         *   diversity_stats.py - lexical diversity metrics
         *   exceptions.py - library exceptions
-        *   extractors.py - extractors of sentences, words and character N-grams with the Spanish tokenizers
+        *   extractors.py - extractors of sentences, words and character N-grams with the Spanish tokenizers, the paragraphs of a text
         *   lexical_stats.py - lexical sophistication statistics
         *   morph_stats.py - morphological statistics
         *   phon_stats.py - phonostatistics

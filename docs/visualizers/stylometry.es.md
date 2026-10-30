@@ -205,7 +205,7 @@ corpora = {
 fig, axes = plt.subplots(1, 3, figsize=(19, 5))
 delta_histogram_plot(delta(corpus, n_mfw=100, variant="cosine"), authors, ax=axes[0])
 rolling_delta_plot(
-    rolling_delta(reference, corpus["Galdós 1"] + corpus["Unamuno 1"], window=5000, step=1000),
+    rolling_delta(reference, corpus["Galdós 1"] + corpus["Unamuno 1"], window=10000, step=1000),
     ax=axes[1],
 )
 zeta_scatter_plot(zeta_segments(corpora, preferred, avoided, segment_size=1000), ax=axes[2])
@@ -213,4 +213,4 @@ zeta_scatter_plot(zeta_segments(corpora, preferred, avoided, segment_size=1000),
 
 ![ests](../img/stylometry_authors.png){: .center }
 
-Las distancias entre las obras de un mismo autor quedan en su mayoría por debajo de las distancias entre obras de autores distintos. A lo largo de la novela de Galdós su autor más cercano es Galdós en 57 ventanas de 61; a lo largo de la de Unamuno, Unamuno en 26 de 42 y Pardo Bazán en las demás: una ventana de 5000 palabras es corta para Delta. En el plano de los marcadores de Zeta, los segmentos de las dos obras que quedaron fuera de su cálculo caen en las nubes de sus autores.
+Las distancias entre las obras de un mismo autor quedan en su mayoría por debajo de las distancias entre obras de autores distintos. A lo largo de *Bailén* de Galdós el autor más cercano es Galdós en las 59 ventanas de 10000 palabras; a lo largo de *Amor y pedagogía* de Unamuno es Unamuno hasta el epílogo (la palabra 35438 de la novela) y el tratado de cocotología añadido tras él (la palabra 42748), donde Pardo Bazán queda más cerca en las 8 últimas ventanas: la Delta móvil señala un cambio de registro dentro de una obra. En el plano de los marcadores de Zeta, los segmentos de las dos obras que quedaron fuera de su cálculo caen en las nubes de sus autores.

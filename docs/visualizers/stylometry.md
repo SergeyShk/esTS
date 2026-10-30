@@ -109,7 +109,7 @@ corpora = {
 fig, axes = plt.subplots(1, 3, figsize=(19, 5))
 delta_histogram_plot(delta(corpus, n_mfw=100, variant="cosine"), authors, ax=axes[0])
 rolling_delta_plot(
-    rolling_delta(reference, corpus["Galdós 1"] + corpus["Unamuno 1"], window=5000, step=1000),
+    rolling_delta(reference, corpus["Galdós 1"] + corpus["Unamuno 1"], window=10000, step=1000),
     ax=axes[1],
 )
 zeta_scatter_plot(zeta_segments(corpora, preferred, avoided, segment_size=1000), ax=axes[2])
@@ -117,4 +117,4 @@ zeta_scatter_plot(zeta_segments(corpora, preferred, avoided, segment_size=1000),
 
 ![ests](../img/stylometry_authors.png){: .center }
 
-The distances between the works of one author lie mostly below those between the works of different authors. Along the novel of Galdós its nearest author is Galdós in 57 windows of 61, along that of Unamuno Unamuno in 26 of 42, Pardo Bazán in the others: a window of 5000 words is short for Delta. On the markers of Zeta the segments of the two unseen works fall into the clouds of their authors.
+The distances between the works of one author lie mostly below those between the works of different authors. Along *Bailén* of Galdós the nearest author is Galdós in all the 59 windows of 10000 words; along *Amor y pedagogía* of Unamuno it is Unamuno until the epilogue (word 35438 of the novel) and the treatise of cocotology appended to it (word 42748), where Pardo Bazán comes nearest in the last 8 windows: rolling Delta marks a change of register inside a work. On the markers of Zeta the segments of the two unseen works fall into the clouds of their authors.
