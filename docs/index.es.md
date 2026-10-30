@@ -42,7 +42,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX con grado de consenso, etapas escolares de España y tiempo de lectura
+    Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX con grado de consenso, etapas escolares de España y tiempo de lectura, y fórmulas de otros idiomas con sus propios coeficientes
 
     [:octicons-arrow-right-24: Métricas de legibilidad](stats/readability_stats.md)
 
@@ -261,6 +261,7 @@ Un cuento analizado con todas las herramientas de la biblioteca está en el cuad
         *   morph_stats.py - estadísticas morfológicas
         *   phon_stats.py - fonoestadística
         *   readability_stats.py - métricas de legibilidad
+        *   unadapted_readability_stats.py - fórmulas de legibilidad de otros idiomas
         *   style_stats.py - métricas de estilo
         *   syllables.py - silabificación y acento
         *   syntax_stats.py - estadísticas sintácticas

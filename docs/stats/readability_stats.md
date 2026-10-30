@@ -75,7 +75,7 @@ The formula of Fernández Huerta takes the mean sentence length, with the correc
 
 ## Metrics
 
-A formula is computed by the function of its card on the counts of `bs`. The reading ease takes its coefficients from `coefficients`, set by the preset; the formulas of Gutiérrez de Polini, Crawford and SOL are computed with the coefficients of their functions, and `coefficients` does not affect them. A formula of counts gives `nan` when the number of words or of sentences it divides by is zero.
+A formula is computed by the function of its card on the counts of `bs`. The reading ease takes its coefficients from `coefficients`, set by the preset; the formulas of Gutiérrez de Polini, Crawford and SOL are computed with the coefficients of their functions, and `coefficients` does not affect them. A formula of counts gives `nan` when the number of words or of sentences it divides by is zero. The formulas of other languages, with their own coefficients and no calibration for Spanish, are computed by the [`UnadaptedReadabilityStats`](unadapted_readability_stats.md) class.
 
 | Metric | Measures | Range | Higher means |
 | :----- | :------- | :---- | :----------- |

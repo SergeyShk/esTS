@@ -40,7 +40,7 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Extracción de objetos](https://sergeyshk.github.io/esTS/es/extractors/sentences/)** - tokenizadores configurables de oraciones, palabras y N-gramas de caracteres que conocen los signos de apertura, la raya de diálogo y las abreviaturas del español
 * **[Sílabas y acento](https://sergeyshk.github.io/esTS/es/syllables/)** - silabificación por reglas y sílaba tónica deducida de la escritura, sin diccionario
 * **[Estadísticas básicas](https://sergeyshk.github.io/esTS/es/stats/basic_stats/)** - recuentos de oraciones, palabras, letras, sílabas y signos de puntuación por tipo, con distribuciones y proporciones normalizadas
-* **[Métricas de legibilidad](https://sergeyshk.github.io/esTS/es/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX, con grado de consenso, etapas escolares de España y tiempo de lectura
+* **[Métricas de legibilidad](https://sergeyshk.github.io/esTS/es/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX, con grado de consenso, etapas escolares de España y tiempo de lectura, y fórmulas de otros idiomas con sus propios coeficientes
 * **[Métricas de diversidad léxica](https://sergeyshk.github.io/esTS/es/stats/diversity_stats/)** - TTR y sus variantes, MATTR, MSTTR, MTLD, HD-D, índices de Simpson y de Yule, entropía, leyes de Zipf y de Heaps
 * **[Estadísticas morfológicas](https://sergeyshk.github.io/esTS/es/stats/morph_stats/)** - categorías gramaticales y quince rasgos morfológicos de Universal Dependencies, con los marcadores del español: los modos, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
 * **[Medidas de corpus](https://sergeyshk.github.io/esTS/es/corpus/keyness/)** - palabras clave frente a un corpus de referencia, colocaciones, la dispersión de una palabra por las partes de un texto, una concordancia KWIC y la estilometría de autoría: la Delta de Burrows con sus variantes, Zeta, la curva de Mendenhall, el perfil de las palabras funcionales; la comparación de dos corpus por 133 rasgos de un texto con tamaños del efecto
@@ -230,6 +230,7 @@ La biblioteca permite calcular las siguientes métricas de legibilidad:
 *   grado SOL, el índice SMOG convertido al español
 *   índice de legibilidad LIX
 *   índice de legibilidad RIX
+*   [Fórmulas de otros idiomas](https://sergeyshk.github.io/esTS/es/stats/unadapted_readability_stats/) (`UnadaptedReadabilityStats`): FORCAST, Linsear Write, Wiener Sachtextformel, Gulpease y otras con sus propios coeficientes, sin calibración para el español: para comparar textos entre sí y con otras herramientas, no para un grado del español
 
 Sobre las fórmulas: el nivel de una escala para la facilidad de lectura, la Legibilidad µ y LIX, la lectura de cualquier métrica, un grado de consenso (la mediana de las fórmulas de grado), la etapa escolar y la edad del lector en España, y el tiempo de lectura.
 
@@ -544,7 +545,7 @@ Cada clase de estadísticas es también un componente de un pipeline, de modo qu
 (12, ('DET', 'NOUN'), 2.0)
 ```
 
-Las fábricas son `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` y `ests_verse`; el nombre del paso del pipeline es el nombre de la extensión. El componente `ests_blank_lines`, antes del parser, inicia una oración tras una línea en blanco, como la API de cadenas; el pipeline de `ests.utils.get_nlp` lo tiene.
+Las fábricas son `ests_basic`, `ests_readability`, `ests_unadapted_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` y `ests_verse`; el nombre del paso del pipeline es el nombre de la extensión. El componente `ests_blank_lines`, antes del parser, inicia una oración tras una línea en blanco, como la API de cadenas; el pipeline de `ests.utils.get_nlp` lo tiene.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/components/).
 
@@ -728,6 +729,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos en las [i
     *   extractors.py - los extractores del núcleo anyTS con los tokenizadores del español
     *   morph_stats.py - estadísticas morfológicas
     *   readability_stats.py - métricas de legibilidad: las fórmulas del español sobre las del núcleo anyTS
+    *   unadapted_readability_stats.py - fórmulas de legibilidad de otros idiomas
     *   style_stats.py - métricas de estilo
     *   phon_stats.py - fonoestadística
     *   syntax_stats.py - estadísticas sintácticas

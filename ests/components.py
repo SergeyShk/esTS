@@ -35,6 +35,7 @@ from .phon_stats import PhonStats
 from .readability_stats import ReadabilityStats
 from .style_stats import StyleStats
 from .syntax_stats import SyntaxStats
+from .unadapted_readability_stats import UnadaptedReadabilityStats
 from .utils import add_dash_rules
 from .verse_stats import LETTER, VerseStats
 
@@ -129,6 +130,43 @@ class ReadabilityStatsComponent(_Component, anyts.components.ReadabilityStatsCom
     """
 
     stats_class = ReadabilityStats
+    basic_factory = "ests_basic"
+
+
+@Language.factory("ests_unadapted_readability")
+class UnadaptedReadabilityStatsComponent(
+    _Component, anyts.components.UnadaptedReadabilityStatsComponent
+):
+    """
+    Class for the component of the readability formulas of other languages
+
+    Description:
+        Puts an UnadaptedReadabilityStats object into doc._.<name>: the formulas
+        with their own coefficients, not calibrated for Spanish
+
+    Adding the component to a pipeline:
+        >>> import ests
+        >>> import spacy
+        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp.add_pipe("ests_unadapted_readability", name="unadapted", last=True)
+        <ests.components.UnadaptedReadabilityStatsComponent object at 0x...>
+
+    Reading the computed formulas:
+        >>> doc = nlp("el gato duerme")
+        >>> doc._.unadapted.gulpease
+        149.0
+
+    Arguments:
+        name (str): Name of the component in the pipeline
+        basic (str): Extension of a component of basic statistics to reuse
+            instead of computing them again
+
+    Raises:
+        ParameterError: If basic is not a string
+        SourceError: If the named extension holds no basic statistics
+    """
+
+    stats_class = UnadaptedReadabilityStats
     basic_factory = "ests_basic"
 
 

@@ -19,6 +19,7 @@ SUBPACKAGES = ("corpus", "datasets", "visualizers")
 FACTORIES = {
     "ests_basic",
     "ests_readability",
+    "ests_unadapted_readability",
     "ests_diversity",
     "ests_morph",
     "ests_syntax",
@@ -53,6 +54,7 @@ CORE_MODULES = {
     "ests.corpus.kwic": "anyts.corpus.kwic",
     "ests.basic_stats": "anyts.basic_stats",
     "ests.readability_stats": "anyts.readability_stats",
+    "ests.unadapted_readability_stats": "anyts.unadapted_readability_stats",
     "ests.components": "anyts.components",
     "ests.datasets.freq_dict": "anyts.datasets",
     "ests.datasets.spanish_literature": "anyts.datasets",
@@ -128,6 +130,7 @@ SPANISH = {
     "ests.corpus.kwic": {"kwic"},
     "ests.basic_stats": {*EXTRACTORS, "BasicStats"},
     "ests.readability_stats": {*EXTRACTORS, *READABILITY, "BasicStats"},
+    "ests.unadapted_readability_stats": {"BasicStats", "UnadaptedReadabilityStats"},
     "ests.components": {
         "BasicStats",
         "BasicStatsComponent",
@@ -146,6 +149,8 @@ SPANISH = {
         "StyleStatsComponent",
         "SyntaxStats",
         "SyntaxStatsComponent",
+        "UnadaptedReadabilityStats",
+        "UnadaptedReadabilityStatsComponent",
     },
     "ests.datasets.freq_dict": {"USER_AGENT"},
     "ests.datasets.spanish_literature": {"USER_AGENT"},
@@ -410,6 +415,7 @@ STATS_CLASSES = [
     "ReadabilityStats",
     "StyleStats",
     "SyntaxStats",
+    "UnadaptedReadabilityStats",
     "VerseStats",
 ]
 

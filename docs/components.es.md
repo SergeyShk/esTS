@@ -43,7 +43,7 @@ spaCy fija ambos en `nlp.add_pipe(factory, name=...)`; los demás parámetros de
 
 ## Nombres { #names }
 
-Las fábricas llevan el prefijo de la biblioteca: `ests_basic`, `ests_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`, y el componente de los límites de oración [`ests_blank_lines`](#blank_lines). Están declaradas como entry points de `spacy_factories`, así que un pipeline guardado con estos componentes (`nlp.to_disk(path)`, `spacy package`) se carga con `spacy.load(path)` sin importar la biblioteca. `import ests` no carga los componentes mientras spaCy no está cargado - los hallan los puntos de entrada, y `ests.StyleStatsComponent` los carga al usarlo por primera vez; desde las fuentes sin el paquete instalado, `import ests.components` va antes de `add_pipe`.
+Las fábricas llevan el prefijo de la biblioteca: `ests_basic`, `ests_readability`, `ests_unadapted_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`, y el componente de los límites de oración [`ests_blank_lines`](#blank_lines). Están declaradas como entry points de `spacy_factories`, así que un pipeline guardado con estos componentes (`nlp.to_disk(path)`, `spacy package`) se carga con `spacy.load(path)` sin importar la biblioteca. `import ests` no carga los componentes mientras spaCy no está cargado - los hallan los puntos de entrada, y `ests.StyleStatsComponent` los carga al usarlo por primera vez; desde las fuentes sin el paquete instalado, `import ests.components` va antes de `add_pipe`.
 
 <!-- core: components.md:StatsComponent-names 33ebb87 -->
 El nombre del paso del pipeline es el nombre de la extensión: `nlp.add_pipe(factory, name="basic")` pone las estadísticas en `doc._.basic`. Sin `name` ambos toman el nombre de la fábrica. La extensión sigue al paso cuando el pipeline lo renombra (`nlp.rename_pipe`). Un nombre ocupado por una extensión de otro paquete lanza `ParameterError` en lugar de reemplazarla: en `add_pipe`, o con el primer documento después de `rename_pipe`, que renombra el paso antes de que el componente conozca su nombre. Un componente tomado de otro pipeline (`add_pipe(name, source=other)`) es el mismo objeto en ambos, así que con un nombre nuevo escribe también en esa extensión del otro pipeline; un componente independiente sale de la fábrica, `add_pipe(factory, name=...)`. El mismo componente puede añadirse dos veces con nombres distintos, con parámetros distintos. Un documento sin palabras - una cadena vacía, espacios, pura puntuación - pasa por un componente sin cambios, con su extensión en `None`.
@@ -62,6 +62,7 @@ Añadir un componente amplía el tokenizador de su pipeline con las reglas de la
 | :--------- | :------ | :-------------------- | :--------- |
 | [`BasicStatsComponent`](#BasicStatsComponent) | `ests_basic` | [`BasicStats`](stats/basic_stats.md) | - |
 | [`ReadabilityStatsComponent`](#ReadabilityStatsComponent) | `ests_readability` | [`ReadabilityStats`](stats/readability_stats.md) | `preset`, `basic` |
+| [`UnadaptedReadabilityStatsComponent`](#UnadaptedReadabilityStatsComponent) | `ests_unadapted_readability` | [`UnadaptedReadabilityStats`](stats/unadapted_readability_stats.md) | `basic` |
 | [`DiversityStatsComponent`](#DiversityStatsComponent) | `ests_diversity` | [`DiversityStats`](stats/diversity_stats.md) | `window_len`, `mtld_threshold`, `mtld_min_len`, `hdd_sample_size`, `log_base` |
 | [`MorphStatsComponent`](#MorphStatsComponent) | `ests_morph` | [`MorphStats`](stats/morph_stats.md) | - |
 | [`SyntaxStatsComponent`](#SyntaxStatsComponent) | `ests_syntax` | [`SyntaxStats`](stats/syntax_stats.md) | - |
@@ -71,7 +72,7 @@ Añadir un componente amplía el tokenizador de su pipeline con las reglas de la
 | [`PhonStatsComponent`](#PhonStatsComponent) | `ests_phon` | [`PhonStats`](stats/phon_stats.md) | `window_len` |
 | [`VerseStatsComponent`](#VerseStatsComponent) | `ests_verse` | [`VerseStats`](stats/verse_stats.md) | `seseo` |
 
-Las estadísticas básicas, de legibilidad, de diversidad, fonéticas y del verso no necesitan ninguna anotación de un modelo. En el pipeline de `es_core_news_sm` las categorías gramaticales vienen del `morphologizer` (o de un `tagger` con un `attribute_ruler`; un `tagger` solo no las da), el análisis del `parser` y los lemas del `lemmatizer`. Un componente al que le falta la anotación, también con componentes `excluded`, lanza `SourceError` cuando el documento pasa por él; `ests_lexical` solo necesita las categorías gramaticales, y `ests_style` lanza el error cuando se lee `verbal_nouns` o `markers()`.
+Las estadísticas básicas, de legibilidad, de diversidad, fonéticas y del verso y las fórmulas de otros idiomas no necesitan ninguna anotación de un modelo. En el pipeline de `es_core_news_sm` las categorías gramaticales vienen del `morphologizer` (o de un `tagger` con un `attribute_ruler`; un `tagger` solo no las da), el análisis del `parser` y los lemas del `lemmatizer`. Un componente al que le falta la anotación, también con componentes `excluded`, lanza `SourceError` cuando el documento pasa por él; `ests_lexical` solo necesita las categorías gramaticales, y `ests_style` lanza el error cuando se lee `verbal_nouns` o `markers()`.
 
 ### Estadísticas básicas { #BasicStatsComponent }
 
@@ -122,6 +123,46 @@ Los [preajustes](stats/readability_stats.md#presets) de esTS son `general` y `cl
     ```
     102.19
     105.72
+    ```
+
+### Fórmulas de otros idiomas { #UnadaptedReadabilityStatsComponent }
+
+``` {.python .signature}
+UnadaptedReadabilityStatsComponent(nlp, name, basic=None)
+```
+
+<!-- core: components.md:UnadaptedReadabilityStatsComponent 7a47657 -->
+`UnadaptedReadabilityStatsComponent` pone en la extensión las fórmulas de legibilidad de otros idiomas, calculadas sobre el documento o, con `basic`, sobre las estadísticas básicas que otro componente puso en él. Una biblioteca fija `basic_factory`, como para `ReadabilityStatsComponent`.
+
+| Parámetro | Tipo | Por defecto | Descripción |
+| :-------- | :--- | :------ | :---------- |
+| `basic` | `str` | `None` | Extensión de un componente de las estadísticas básicas que se reutilizan en lugar de calcularlas otra vez |
+
+Excepciones:
+
+- `ParameterError` - una `stats_class` que no es concreta, una extensión no nombrada por una cadena;
+- `SourceTypeError` - una clase sin `basic_stats_class` y sin `basic`;
+- `SourceError` - un documento cuya extensión `basic` no tiene estadísticas básicas de la clase.
+
+Las fórmulas son las de [`UnadaptedReadabilityStats`](stats/unadapted_readability_stats.md), con sus propios coeficientes y sin calibración para el español. Como en `ReadabilityStatsComponent`, los errores de `stats_class` y `SourceTypeError` no se dan en esTS, y el mensaje de `SourceError` nombra el componente `ests_basic` que hay que añadir antes que este.
+
+=== "Código"
+
+    ``` python
+    nlp.add_pipe("ests_unadapted_readability", name="unadapted", config={"basic": "basic"})
+    doc = nlp(
+        "El gato estaba en la ventana y miraba a los pájaros que volaban "
+        "sobre los tejados de las casas."
+    )
+    doc._.unadapted.gulpease, doc._.unadapted.forcast
+    doc._.unadapted.bs is doc._.basic
+    ```
+
+=== "Resultado"
+
+    ```
+    (64.78947368421052, 12.105263157894736)
+    True
     ```
 
 ### Métricas de diversidad léxica { #DiversityStatsComponent }
@@ -416,7 +457,7 @@ En esTS el componente está registrado como `ests_blank_lines`. Sin él, el mode
 
 ## Todo en un pipeline { #pipeline }
 
-Los diez componentes pueden compartir un pipeline.
+Los once componentes pueden compartir un pipeline.
 
 === "Código"
 
@@ -429,6 +470,7 @@ Los diez componentes pueden compartir un pipeline.
     factories = (
         "basic",
         "readability",
+        "unadapted_readability",
         "diversity",
         "morph",
         "syntax",
@@ -445,6 +487,7 @@ Los diez componentes pueden compartir un pipeline.
     (
         doc._.basic.n_words,
         round(doc._.readability.flesch_reading_easy, 2),
+        round(doc._.unadapted_readability.gulpease, 2),
         round(doc._.diversity.ttr, 3),
         doc._.morph.pos[:2],
         doc._.syntax.tree_depth,
@@ -459,5 +502,5 @@ Los diez componentes pueden compartir un pipeline.
 === "Resultado"
 
     ```
-    (12, 102.19, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0, 0.457, 1)
+    (12, 102.19, 99.83, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0, 0.457, 1)
     ```

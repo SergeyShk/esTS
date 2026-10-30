@@ -27,6 +27,8 @@ from ests import (
     StyleStatsComponent,
     SyntaxStats,
     SyntaxStatsComponent,
+    UnadaptedReadabilityStats,
+    UnadaptedReadabilityStatsComponent,
     VerseStats,
     VerseStatsComponent,
 )
@@ -35,6 +37,11 @@ from ests.exceptions import ParameterError, SourceError, SourceTypeError
 COMPONENTS = (
     ("ests_basic", BasicStatsComponent, BasicStats),
     ("ests_readability", ReadabilityStatsComponent, ReadabilityStats),
+    (
+        "ests_unadapted_readability",
+        UnadaptedReadabilityStatsComponent,
+        UnadaptedReadabilityStats,
+    ),
     ("ests_diversity", DiversityStatsComponent, DiversityStats),
     ("ests_morph", MorphStatsComponent, MorphStats),
     ("ests_syntax", SyntaxStatsComponent, SyntaxStats),
@@ -217,25 +224,35 @@ def test_component_without_the_annotation(factory):
         pipeline("El gato duerme")
 
 
-def test_readability_reuses_the_basic_statistics(nlp):
+READABILITY_FACTORIES = [
+    ("ests_readability", ReadabilityStats),
+    ("ests_unadapted_readability", UnadaptedReadabilityStats),
+]
+
+
+@pytest.mark.parametrize(("factory", "stats_class"), READABILITY_FACTORIES)
+def test_readability_reuses_the_basic_statistics(nlp, factory, stats_class):
     pipeline = spacy.load("es_core_news_sm")
     pipeline.add_pipe("ests_basic", name="basic", last=True)
-    pipeline.add_pipe("ests_readability", name="stats", config={"basic": "basic"}, last=True)
+    pipeline.add_pipe(factory, name="stats", config={"basic": "basic"}, last=True)
     doc = pipeline(TEXT)
-    assert doc._.stats.get_stats() == ReadabilityStats(nlp(TEXT)).get_stats()
-    assert doc._.stats.get_stats() == ReadabilityStats(doc._.basic).get_stats()
+    assert doc._.stats.bs is doc._.basic
+    assert doc._.stats.get_stats() == stats_class(nlp(TEXT)).get_stats()
+    assert doc._.stats.get_stats() == stats_class(doc._.basic).get_stats()
 
 
-def test_readability_reuse_of_a_missing_component():
+@pytest.mark.parametrize("factory", [factory for factory, _ in READABILITY_FACTORIES])
+def test_readability_reuse_of_a_missing_component(factory):
     pipeline = spacy.load("es_core_news_sm")
-    pipeline.add_pipe("ests_readability", name="stats", config={"basic": "basic"}, last=True)
+    pipeline.add_pipe(factory, name="stats", config={"basic": "basic"}, last=True)
     with pytest.raises(SourceError, match="holds no BasicStats"):
         pipeline(TEXT)
 
 
-def test_readability_reuse_of_a_component_that_runs_later():
+@pytest.mark.parametrize("factory", [factory for factory, _ in READABILITY_FACTORIES])
+def test_readability_reuse_of_a_component_that_runs_later(factory):
     pipeline = spacy.load("es_core_news_sm")
-    pipeline.add_pipe("ests_readability", name="stats", config={"basic": "basic"}, last=True)
+    pipeline.add_pipe(factory, name="stats", config={"basic": "basic"}, last=True)
     pipeline.add_pipe("ests_basic", name="basic", last=True)
     with pytest.raises(SourceError, match="holds no BasicStats"):
         pipeline(TEXT)

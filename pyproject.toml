@@ -1,6 +1,6 @@
 [project]
 name = "pyests"
-version = "0.9.0.dev2"
+version = "0.9.0.dev3"
 description = "Spanish Texts Statistics"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -62,6 +62,7 @@ build-backend = "hatchling.build"
 [project.entry-points.spacy_factories]
 ests_basic = "ests.components:BasicStatsComponent"
 ests_readability = "ests.components:ReadabilityStatsComponent"
+ests_unadapted_readability = "ests.components:UnadaptedReadabilityStatsComponent"
 ests_diversity = "ests.components:DiversityStatsComponent"
 ests_morph = "ests.components:MorphStatsComponent"
 ests_syntax = "ests.components:SyntaxStatsComponent"

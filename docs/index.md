@@ -42,7 +42,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX with a consensus grade, the school stages of Spain and reading time
+    Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX with a consensus grade, the school stages of Spain and reading time, and formulas of other languages with their own coefficients
 
     [:octicons-arrow-right-24: Readability metrics](stats/readability_stats.md)
 
@@ -261,6 +261,7 @@ A walkthrough of one short story with every tool of the library is in the notebo
         *   morph_stats.py - morphological statistics
         *   phon_stats.py - phonostatistics
         *   readability_stats.py - readability metrics
+        *   unadapted_readability_stats.py - readability formulas of other languages
         *   style_stats.py - style metrics
         *   syllables.py - syllabification and stress
         *   syntax_stats.py - syntactic statistics

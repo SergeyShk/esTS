@@ -84,7 +84,7 @@ La fórmula de Fernández Huerta toma la longitud media de la oración, con la c
 
 ## Métricas
 
-Una fórmula se calcula con la función de su tarjeta sobre los recuentos de `bs`. La facilidad de lectura toma sus coeficientes de `coefficients`, que fija el preajuste; las fórmulas de Gutiérrez de Polini, Crawford y SOL se calculan con los coeficientes de sus funciones, y `coefficients` no las afecta. Una fórmula de recuentos da `nan` cuando el número de palabras o de oraciones por el que divide es cero.
+Una fórmula se calcula con la función de su tarjeta sobre los recuentos de `bs`. La facilidad de lectura toma sus coeficientes de `coefficients`, que fija el preajuste; las fórmulas de Gutiérrez de Polini, Crawford y SOL se calculan con los coeficientes de sus funciones, y `coefficients` no las afecta. Una fórmula de recuentos da `nan` cuando el número de palabras o de oraciones por el que divide es cero. Las fórmulas de otros idiomas, con sus propios coeficientes y sin calibración para el español, las calcula la clase [`UnadaptedReadabilityStats`](unadapted_readability_stats.md).
 
 | Métrica | Qué mide | Rango | Un valor mayor indica |
 | :------ | :------- | :---- | :-------------------- |
