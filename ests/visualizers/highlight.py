@@ -800,8 +800,9 @@ def is_anaphoric_mismo(token: Token) -> bool:
         them to their article (en la misma hay oficinas): such a form counts
         when no noun, adjective, numeral or pronoun follows it in its
         sentence, an adjective whose noun disagrees with the form being a verb
-        (contra la misma cabe recurso). The identity of el mismo día, es el mismo, lo mismo and él
-        mismo is no anaphora; a token without a parse is none
+        (contra la misma cabe recurso). The identity of el mismo día, es el
+        mismo, lo mismo and él mismo is no anaphora; a token without a parse is
+        none
 
     Arguments:
         token (Token): Token
