@@ -28,9 +28,12 @@ from ..constants import (
     HIGHLIGHT_LAYER_STYLES,
     HIGHLIGHT_LAYERS_DESC,
     LONG_SENT_WORD_FACTOR,
+    MISMO_ARTICLES,
+    MISMO_FORMS,
     OFFICIALESE_CLICHES,
     PARENTHETICALS,
     PASSIVE_AUX,
+    PREDICATIVE_VERBS,
     SE_PASSIVE_DEP,
     SOUND_FREQUENCIES,
     SOUND_SPELLINGS,
@@ -57,6 +60,11 @@ if TYPE_CHECKING:
 SPANISH_WORD = re.compile(r"[a-záéíóúüñ]{2,}", re.IGNORECASE)
 # Frequencies of the consonant sounds for the alliteration
 ALLITERATION_FREQUENCIES = {sound: SOUND_FREQUENCIES[sound] for sound in CONSONANT_SOUNDS}
+# Relations of an anaphoric el mismo to its head, of the words of its noun phrase, and the parts of
+# speech that go on a noun phrase after a mismo the models attach to its article
+ARGUMENT_DEPS = frozenset({"nsubj", "obj", "iobj", "obl", "nmod", "conj"})
+NP_DEPS = frozenset({"det", "case", "cc", "punct"})
+NOMINAL_POS = frozenset({"NOUN", "PROPN", "ADJ", "NUM", "PRON"})
 
 
 class HighlightedText(anyts.visualizers.highlight.HighlightedText):
@@ -767,6 +775,76 @@ def find_split_predicate_highlights(doc: Doc) -> list[Highlight]:
     return anyts.visualizers.highlight.find_split_predicate_highlights(find_split_predicates(doc))
 
 
+def is_anaphoric_mismo(token: Token) -> bool:
+    """
+    Checking whether a token is an anaphoric el mismo
+
+    Description:
+        A form of MISMO_FORMS that heads a noun phrase of its own with an
+        article of MISMO_ARTICLES and no other dependent, as an argument
+        (se archivó el mismo, la duración del mismo, dentro de la misma), but
+        not after a verb of PREDICATIVE_VERBS, where it means the same one (no
+        parecía la misma). The models attach some of them to their article
+        (en la misma hay oficinas): such a form counts when no noun,
+        adjective, numeral or pronoun follows it in its sentence. The identity
+        of el mismo día, es el mismo, el mismo que, lo mismo and él mismo is
+        no anaphora
+
+    Arguments:
+        token (Token): Token
+
+    Returns:
+        bool: Result of the check
+    """
+    if token.lower_ not in MISMO_FORMS:
+        return False
+    children = list(token.children)
+    if any(child.lower_ in MISMO_ARTICLES and base_dep(child) in NP_DEPS for child in children):
+        if base_dep(token) not in ARGUMENT_DEPS or any(
+            base_dep(child) not in NP_DEPS for child in children
+        ):
+            return False
+        head = token.head
+        return not (
+            base_dep(token) == "nsubj" and head.i < token.i and head.lemma_ in PREDICATIVE_VERBS
+        )
+    head = token.head
+    if children or head.i != token.i - 1 or head.lower_ not in MISMO_ARTICLES:
+        return False
+    following = next(
+        (word for word in token.doc[token.i + 1 : token.sent.end] if is_word(word)), None
+    )
+    return following is None or following.pos_ not in NOMINAL_POS
+
+
+def find_anaphoric_mismo(doc: Doc) -> list[Highlight]:
+    """
+    Finding the anaphoric el mismo
+
+    Description:
+        Every form of is_anaphoric_mismo with its article (la misma, del
+        mismo); the note gives the two words
+
+    Arguments:
+        doc (Doc): Doc object with a dependency parse
+
+    Returns:
+        list[Highlight]: Fragments of the layer anaphoric_mismo
+    """
+    highlights = []
+    for token in doc:
+        if not is_anaphoric_mismo(token):
+            continue
+        article = next(
+            (child for child in token.children if child.lower_ in MISMO_ARTICLES),
+            token.head,
+        )
+        start, end = tokens_span([article, token])
+        note = f"anaphoric {article.lower_} {token.lower_}"
+        highlights.append(Highlight(start, end, "anaphoric_mismo", note))
+    return highlights
+
+
 def _de_chain(token: Token) -> tuple[list[Token], int]:
     tokens = [token]
     depth = 1
@@ -816,4 +894,5 @@ SYNTAX_FINDERS: dict[str, Callable[[Doc], list[Highlight]]] = {
     "gerund_clauses": find_gerund_clauses,
     "de_chains": find_de_chains,
     "split_predicates": find_split_predicate_highlights,
+    "anaphoric_mismo": find_anaphoric_mismo,
 }

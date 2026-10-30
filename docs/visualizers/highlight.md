@@ -25,12 +25,13 @@ The function `highlight` returns a `HighlightedText` object of esTS with the lay
 | Officialese | `verbal_nouns` | Nouns derived from a verb | [StyleStats](../stats/style_stats.md) |
 | | `compound_prepositions` | Compound prepositions of `COMPOUND_PREPOSITIONS` | [StyleStats](../stats/style_stats.md) |
 | | `cliches` | Clichés of `OFFICIALESE_CLICHES` or of the parameter `cliches` | [StyleStats](../stats/style_stats.md) |
+| | `anaphoric_mismo` | The anaphoric `el mismo` with its article (`se archivó el mismo`, `la duración del mismo`) | - |
 | Style | `stopwords` | Stopwords of `STOPWORDS` or of the parameter `stopwords`, the water of the text | [StyleStats](../stats/style_stats.md) |
 | | `parentheticals` | Parenthetical expressions | [StyleStats](../stats/style_stats.md) |
 | | `connectors` | Discourse markers, the class and the kind in the note | [CohesionStats](../stats/cohesion_stats.md) |
 | Phonics | `alliteration` | Repetitions of a consonant sound in neighbouring words, unlikely by the frequencies of the Spanish sounds; the note gives the sound and the letters that write it | [PhonStats](../stats/phon_stats.md) |
 
-The groups are defined in `ests.constants.HIGHLIGHT_LAYER_GROUPS`. The layers of the group "Syntax" need a `Doc` with a dependency parse and the lemmas (the models `es_core_news_sm`, `es_core_news_md`, `es_core_news_lg`), as [SyntaxStats](../stats/syntax_stats.md) does; `verbal_nouns` needs a `Doc` with the parts of speech and the lemmas. The layers of `HIGHLIGHT_DEFAULT_LAYERS` the source allows are on by default - long sentences, complex words, passive, chains of `de`, split predicates, clichés; `layers="all"` turns on every layer allowed. The layers overlap (a compound preposition is made of stopwords), so pick the ones you need.
+The groups are defined in `ests.constants.HIGHLIGHT_LAYER_GROUPS`. The layers of the group "Syntax" need a `Doc` with a dependency parse and the lemmas (the models `es_core_news_sm`, `es_core_news_md`, `es_core_news_lg`), as [SyntaxStats](../stats/syntax_stats.md) does; `verbal_nouns` needs a `Doc` with the parts of speech and the lemmas, and `anaphoric_mismo` one with the dependency parse, the parts of speech and the lemmas. The layers of `HIGHLIGHT_DEFAULT_LAYERS` the source allows are on by default - long sentences, complex words, passive, chains of `de`, split predicates, clichés; `layers="all"` turns on every layer allowed. The layers overlap (a compound preposition is made of stopwords), so pick the ones you need.
 
 A sentence is long from 30 words, the bound of the Spanish-language guides to plain language (the [Comunidad de Madrid](https://www.comunidad.madrid/transparencia/sites/default/files/ckeditor/guia_tramites_claros-comunidad_madrid-noviembre_2021.pdf) and the [Gobierno de la Ciudad de Buenos Aires](https://gcba.github.io/programadelenguajeclaro/Manual%20de%20lenguaje%20claro%202024%20(Final).pdf)), and a word is complex from four syllables; `complex_syl_factor=3`, the bound of `BasicStats`, shows the words of `n_complex_words`.
 
@@ -86,6 +87,7 @@ The class extends the `HighlightedText` of the [anyTS](https://sergeyshk.github.
      'verbal_nouns': 9,
      'compound_prepositions': 1,
      'cliches': 1,
+     'anaphoric_mismo': 0,
      'stopwords': 48,
      'parentheticals': 0,
      'connectors': 3,
@@ -506,4 +508,41 @@ The layer `split_predicates`: the pairs of a light verb and a noun of [`find_spl
     [Highlight(start=75, end=119, layer='gerund_clauses', note='gerund clause, 8 words')]
     [Highlight(start=89, end=119, layer='de_chains', note='chain of 2 complements with de')]
     [Highlight(start=55, end=73, layer='split_predicates', note='split predicate: hacer revisión')]
+    ```
+
+### Anaphoric el mismo { #anaphoric-mismo }
+
+``` {.python .signature}
+is_anaphoric_mismo(token)
+```
+
+Checks whether a word is an anaphoric `el mismo`: a form of `mismo` that heads a noun phrase of its own with its article (`el`, `la`, `los`, `las`, `del`, `al`) and no other dependent, as an argument of a verb or a noun (`se archivó el mismo`, `la duración del mismo`, `dentro de la misma`). The [Diccionario panhispánico de dudas](https://www.rae.es/dpd/mismo) takes this use of the administrative and the journalistic style for unnecessary and suggests a demonstrative, a possessive or a personal pronoun instead (`su duración`, `dentro de ella`). The identity is no anaphora: `el mismo día`, `es el mismo`, `el mismo que...`, `lo mismo`, `él mismo`, and `la misma` after `ser`, `estar` or `parecer` (`no parecía la misma`). The models attach some anaphoric forms to their article (`en la misma hay oficinas`): such a form counts when no noun, adjective, numeral or pronoun follows it in its sentence.
+
+``` {.python .signature}
+find_anaphoric_mismo(doc)
+```
+
+The layer `anaphoric_mismo`: every form of `is_anaphoric_mismo` with its article (`la misma`, `del mismo`), the two words in the note.
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `token` | `Token` | - | Token |
+| `doc` | `Doc` | - | Doc object with a dependency parse, the parts of speech and the lemmas |
+
+=== "Code"
+
+    ``` python
+    from ests.utils import get_nlp
+    from ests.visualizers.highlight import find_anaphoric_mismo, is_anaphoric_mismo
+
+    doc = get_nlp()("Se recibió la solicitud el mismo día, y se procedió al estudio de la misma.")
+    [token.text for token in doc if is_anaphoric_mismo(token)]
+    find_anaphoric_mismo(doc)
+    ```
+
+=== "Result"
+
+    ```
+    ['misma']
+    [Highlight(start=66, end=74, layer='anaphoric_mismo', note='anaphoric la misma')]
     ```
