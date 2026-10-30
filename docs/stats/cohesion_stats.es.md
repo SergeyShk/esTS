@@ -221,7 +221,7 @@ $$
 
 Unos segmentos que son una cadena, un `Doc`, un iterador o un segmento que no es una lista de cadenas lanzan `SourceTypeError`, y un alcance que no es un entero mayor que 0, `ParameterError`.
 
-En esTS una cadena se analiza en un `Doc`, así que ambos se dividen en párrafos por los saltos de línea entre sus tokens (por las líneas en blanco con `blank_lines`).
+En esTS una cadena se analiza en un `Doc`, así que ambos se dividen en párrafos por los saltos de línea entre sus tokens (por las líneas en blanco con `blank_lines`). Un texto con líneas cortadas dentro de sus párrafos, como los textos de [`SpanishLiterature`](../datasets/spanishliterature.md), necesita `blank_lines=True`, o sus líneas se comparan como párrafos.
 
 === "Código"
 

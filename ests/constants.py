@@ -642,7 +642,7 @@ SYNTAX_STATS_DESC = {
     "mean_clause_len": "Mean length of a clause (words)",
     "subordinate_clauses_per_sent": "Subordinate clauses per sentence",
     "p_complex_sents": "Share of sentences with a subordinate clause",
-    "infinitive_clauses_per_sent": "Infinitive clauses under a verb per sentence",
+    "infinitive_clauses_per_sent": "Infinitive clauses per sentence",
     "t_units_per_sent": "T-units per sentence",
     "mean_t_unit_len": "Mean length of a T-unit (words)",
     "clauses_per_t_unit": "Clauses per T-unit",

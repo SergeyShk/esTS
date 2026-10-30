@@ -51,7 +51,7 @@ The `max_length` of the pipeline is a million characters by default: split a lon
     Mean length of a clause (words)                            |   9.67
     Subordinate clauses per sentence                           |   0.50
     Share of sentences with a subordinate clause               |   0.50
-    Infinitive clauses under a verb per sentence               |   0.00
+    Infinitive clauses per sentence                            |   0.00
     T-units per sentence                                       |   1.00
     Mean length of a T-unit (words)                            |  14.50
     Clauses per T-unit                                         |   1.50
@@ -149,7 +149,7 @@ Every metric is an attribute of the object, computed when it is created, and `ge
 | [`mean_clause_len`](#clauses) | Mean length of a clause in words | 1 and above, `nan` without clauses | Longer clauses |
 | [`subordinate_clauses_per_sent`](#subordinate_clauses) | Subordinate clauses per sentence | 0 and above | More subordination |
 | [`p_complex_sents`](#subordinate_clauses) | Share of the sentences with a subordinate clause | 0-1 | More complex sentences |
-| [`infinitive_clauses_per_sent`](#infinitive_clauses) | Infinitive clauses under a verb per sentence | 0 and above | More infinitive complements |
+| [`infinitive_clauses_per_sent`](#infinitive_clauses) | Infinitive clauses per sentence | 0 and above | More infinitive clauses |
 | [`t_units_per_sent`](#l2sca) | T-units per sentence (T/S) | 0 and above | More main clauses in a sentence |
 | [`mean_t_unit_len`](#l2sca) | Mean length of a T-unit in words (MLT) | 1 and above, `nan` without T-units | Longer T-units |
 | [`clauses_per_t_unit`](#l2sca) | Clauses per T-unit (C/T) | 1 and above, `nan` without T-units | More subordination |

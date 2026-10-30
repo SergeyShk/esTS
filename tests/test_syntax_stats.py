@@ -744,7 +744,7 @@ def test_empty_bases():
 
 def marked_conjunct(words, deps, heads):
     """A Doc of a main clause and a clause under conj with a subject of its own"""
-    pos = {"ROOT": "VERB", "conj": "VERB", "nsubj": "PRON", "cc": "CCONJ"}
+    pos = {"ROOT": "VERB", "conj": "VERB", "nsubj": "PRON", "cc": "CCONJ", "dep": "SPACE"}
     return Doc(
         spacy.blank("es").vocab,
         words=words,
@@ -784,6 +784,13 @@ def marked_conjunct(words, deps, heads):
             [0, 4, 4, 4, 0],
             False,
         ),
+        # A line break of a wrapped text between the two words
+        (
+            ["Calló", "sino", "\n", "que", "ella", "habló"],
+            ["ROOT", "cc", "dep", "mark", "nsubj", "conj"],
+            [0, 5, 1, 5, 5, 0],
+            False,
+        ),
         (
             ["Calló", "sino", "porque", "ella", "habló"],
             ["ROOT", "cc", "mark", "nsubj", "conj"],
@@ -807,6 +814,20 @@ def test_conjunct_with_a_subordinating_mark(words, deps, heads, expected):
     assert is_subordinate_clause_head(doc[-1]) is expected
     stats = SyntaxStats(doc)
     assert (stats.n_subordinate_clauses, stats.n_t_units) == ((1, 1) if expected else (0, 2))
+
+
+def test_infinitive_conjunct_with_a_subordinating_mark(nlp):
+    """The model attaches an indirect question with an infinitive as a conjunct of its verb:
+    with its conjunction it heads an infinitive clause"""
+    tokens = words(nlp, "No sabía si quedarse o si marcharse.")
+    assert [token.dep_ for token in tokens if token.text in ("quedarse", "marcharse")] == [
+        "conj",
+        "conj",
+    ]
+    assert [token.text for token in tokens if is_infinitive_clause_head(token)] == [
+        "quedarse",
+        "marcharse",
+    ]
 
 
 def test_subordinate_clause_up_a_long_chain_of_conjuncts():

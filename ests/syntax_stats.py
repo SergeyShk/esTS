@@ -113,7 +113,7 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         n_clauses (int): Number of clauses
         n_subordinate_clauses (int): Number of subordinate clauses
         n_complex_sents (int): Number of sentences with a subordinate clause
-        n_infinitive_clauses (int): Number of infinitive clauses under a verb
+        n_infinitive_clauses (int): Number of infinitive clauses
         n_t_units, n_complex_t_units (int): Numbers of the T-units and of those with a
             subordinate clause
         n_verb_phrases, n_coordinate_phrases, n_complex_nominals (int): Numbers of the verb
@@ -155,7 +155,7 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         mean_clause_len (float): Mean length of a clause in words
         subordinate_clauses_per_sent (float): Subordinate clauses per sentence
         p_complex_sents (float): Share of sentences with at least one subordinate clause
-        infinitive_clauses_per_sent (float): Infinitive clauses under a verb per sentence
+        infinitive_clauses_per_sent (float): Infinitive clauses per sentence
         t_units_per_sent (float): T-units per sentence
         mean_t_unit_len (float): Mean length of a T-unit in words
         clauses_per_t_unit (float): Clauses per T-unit
@@ -379,7 +379,7 @@ def is_subordinate_clause_head(token: Token) -> bool:
         a coordinated predicate of a subordinate clause, and a clause under conj
         or parataxis with a subordinating conjunction (y como dormía, no quiso
         despertarle) with its conjuncts that have a subject of their own. An
-        infinitive clause (quiere salir, vino a ayudar) is counted apart
+        infinitive clause (quiere salir, salió para ayudar) is counted apart
         (is_infinitive_clause_head)
 
     Arguments:
@@ -395,13 +395,13 @@ def is_subordinate_clause_head(token: Token) -> bool:
 
 def is_infinitive_clause_head(token: Token) -> bool:
     """
-    Checking whether a token heads an infinitive clause under a verb
+    Checking whether a token heads an infinitive clause
 
     Description:
         The is_infinitive_clause_head of the core over is_clause_head and
         is_subordinating_mark: an infinitive that heads a clause of its own
-        under xcomp, ccomp, advcl or csubj (quiere salir, le pidió salir, vino
-        a ayudar, es difícil decirlo), an infinitive under conj or parataxis
+        under xcomp, ccomp, advcl or csubj (quiere salir, le pidió salir, salió
+        para ayudar, es difícil decirlo), an infinitive under conj or parataxis
         with a subordinating conjunction, or an infinitive conjunct of one; a
         finite conjunct (quiero salir y que vengas) is none
 
