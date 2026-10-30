@@ -176,7 +176,9 @@ def test_text_features_parser():
 def test_text_features_sentences_of_the_parse():
     """The cohesion and the syntax take the sentences of the rhythm, which keep the dialogue tag
     with its turn, while the parser alone cuts the turn at the tag"""
-    dialogue = "—¿Viniste a casa? —preguntó la madre.\n—Vine ayer por la tarde.\n—Pues bien."
+    dialogue = (
+        "—¿Viniste a casa? —preguntó la madre.\n—Vine a casa ayer por la tarde.\n—Pues bien."
+    )
     nlp = get_nlp()
     starts = [start for start, _, _ in iter_text_sents(dialogue)]
     assert len(starts) == 3
@@ -186,8 +188,8 @@ def test_text_features_sentences_of_the_parse():
     assert syntax.n_sents == cohesion.n_sents == 3
     features = text_features(dialogue, nlp=nlp)
     assert features["syntax_clauses_per_sent"] == syntax.clauses_per_sent
-    assert features["cohesion_connectors"] == cohesion.connectors
-    assert features["cohesion_content_overlap_adjacent"] == cohesion.content_overlap_adjacent
+    # casa of the first turn comes again in the second: one of the two adjacent pairs
+    assert features["cohesion_noun_overlap_adjacent"] == cohesion.noun_overlap_adjacent == 0.5
 
 
 def test_sentence_rhythm():
