@@ -1,13 +1,13 @@
 # Dispersión de las palabras
 
-<!-- core: corpus/dispersion.md:dispersion 37e70ea -->
+<!-- core: corpus/dispersion.md:dispersion 29fca84 -->
 ``` {.python .signature}
 dispersion(words, parts=10, word=None, min_freq=1)
 ```
 
 La dispersión de una palabra es lo uniformemente que se reparte por las partes de un texto o de un corpus. La frecuencia no distingue una palabra que aparece una vez en cada capítulo de otra reunida en un solo capítulo; las medidas de dispersión ([Gries 2008](https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf), [2020](https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf)) la complementan.
 
-`parts` es el número de partes de tamaño aproximadamente igual o los tamaños de las partes en orden (oraciones, párrafos, capítulos, documentos de un corpus), que suman el número de palabras; `split_paragraphs` de `anyts.extractors` da los párrafos de un texto, cuyas palabras dan los tamaños; los párrafos sin palabras, como una separación de escenas con asteriscos, se descartan antes, ya que una parte necesita una palabra. Se calculan seis medidas a partir de las frecuencias de cada palabra por parte; Gries recomienda DP como la principal.
+`parts` es el número de partes de tamaño aproximadamente igual o los tamaños de las partes en orden (oraciones, párrafos, capítulos, documentos de un corpus), que suman el número de palabras; `split_paragraphs` de `anyts.extractors` da los párrafos de un texto entre líneas en blanco, cuyas palabras dan los tamaños (en un texto con un párrafo en cada línea, sus líneas son los párrafos, como en `CohesionStats`); los párrafos sin palabras, como una separación de escenas con asteriscos, se descartan antes, ya que una parte necesita una palabra. Se calculan seis medidas a partir de las frecuencias de cada palabra por parte; Gries recomienda DP como la principal.
 
 Las palabras se comparan tal cual: las mayúsculas y minúsculas y la lematización corresponden al extractor de palabras.
 

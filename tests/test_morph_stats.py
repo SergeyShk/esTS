@@ -355,6 +355,23 @@ def test_multiple_values_of_a_feature():
     assert ms.lemmas == ("usted", "ver")
 
 
+def test_markers_of_a_feature_of_several_values():
+    """A mood or a form of several values counts in the share of each, over the words"""
+    from spacy.tokens import Doc
+
+    doc = Doc(
+        spacy.blank("es").vocab,
+        words=["sea", "ve", "salir"],
+        pos=["AUX", "VERB", "VERB"],
+        lemmas=["ser", "ver", "salir"],
+        morphs=["Mood=Ind,Sub|VerbForm=Fin", "Mood=Ind|VerbForm=Fin", "VerbForm=Fin,Inf"],
+    )
+    markers = MorphStats(doc).get_markers()
+    assert markers["p_indicative"] == 2 / 3
+    assert markers["p_subjunctive"] == 1 / 3
+    assert markers["p_infinitive"] == 1 / 3
+
+
 def test_analyze_of_another_source(short):
     """analyze parses a string and leaves the statistics of the object as they are"""
     lemmas, pos = short.lemmas, short.pos

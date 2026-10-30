@@ -43,6 +43,11 @@ def test_function_words_profile():
     untagged = get_nlp()(texts["A"], disable=["morphologizer"])
     assert not untagged.has_annotation("POS")
     assert function_words_profile(untagged) == function_words_profile(get_nlp()(texts["A"]))
+    # The SPACE of a line break that the attribute ruler tags is no tagging of the words
+    lines = texts["A"].replace(". ", ".\n")
+    untagged = get_nlp()(lines, disable=["morphologizer"])
+    assert untagged.has_annotation("POS")
+    assert function_words_profile(untagged) == function_words_profile(get_nlp()(lines))
     assert function_words_profile(words, nlp=get_nlp()) == profile
 
 

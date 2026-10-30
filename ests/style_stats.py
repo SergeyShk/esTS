@@ -13,7 +13,7 @@ from anyts.style_stats import (
     calc_zipf_naturalness as calc_zipf_naturalness,
     check_params as check_params,
 )
-from anyts.utils import check_words, in_order, is_doc, iter_doc_tokens, safe_divide
+from anyts.utils import check_words, has_pos, in_order, is_doc, iter_doc_tokens, safe_divide
 
 from .constants import (
     COMPOUND_PREPOSITIONS,
@@ -270,7 +270,7 @@ def noun_lemmas(doc: Doc) -> list[str]:
 
 def _doc_nouns(doc: Doc, messages: Mapping[str, str] = MESSAGES) -> list[tuple[str, str]]:
     """The tokens of a Doc tagged NOUN, in lower case, with their lemmas"""
-    if not doc.has_annotation("POS"):
+    if not has_pos(doc):
         raise SourceError(messages["no_pos"])
     if not doc.has_annotation("LEMMA"):
         raise SourceError(messages["no_lemmas"])

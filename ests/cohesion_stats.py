@@ -157,14 +157,19 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
             and kind by connector; without it the dictionary of resources is used
         nlp (Language): Pipeline of spaCy that parses a string; without it
             the model of SPACY_MODEL is loaded
+        blank_lines (bool): Start the paragraphs after the blank lines alone, for a text
+            whose lines are wrapped inside its paragraphs; after every line break by
+            default
 
     Attributes:
         sents_extractor (SentsExtractor|None): Sentence extraction tool given
+        blank_lines (bool): Whether the paragraphs start after the blank lines alone
         words (tuple[tuple[str, ...], ...]): Tuple of the words of every sentence
         lemmas (tuple[tuple[str, ...], ...]): Tuple of the lemmas of every sentence
         n_sents (int): Number of sentences containing words
-        n_paragraphs (int): Number of paragraphs - parts of the text between blank lines
-            that hold words
+        n_paragraphs (int): Number of paragraphs - lines of the text (parts between blank
+            lines with blank_lines) with content words; a line without them, such as the
+            number of a chapter, joins the next one
         n_words (int): Number of words
         n_nouns (int): Number of nouns
         n_pronouns (int): Number of pronouns
@@ -236,7 +241,8 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
         SourceError: If the source has no words, no annotation of the parts of
             speech or no lemmas, or is a string longer than the max_length of
             the pipeline or with a character without a UTF-8 form
-        ParameterError: If the dictionary of connectors has an unknown class or kind
+        ParameterError: If the dictionary of connectors has an unknown class or kind,
+            or blank_lines is not a bool
         DatasetNotFoundError: If a string is passed and the model is not installed
     """
 
@@ -251,10 +257,11 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
         sents_extractor: anyts.SentsExtractor | None = None,
         connectors: Mapping[str, tuple[str, str]] | None = None,
         nlp: Language | None = None,
+        blank_lines: bool = False,
     ):
         _check_nlp(nlp)
         self._nlp = nlp
-        super().__init__(source, sents_extractor, connectors)  # type: ignore[arg-type]  # analyze takes a string too
+        super().__init__(source, sents_extractor, connectors, blank_lines)  # type: ignore[arg-type]  # analyze takes a string too
 
     def __getstate__(self) -> dict[str, Any]:
         """State for pickle and copy without the pipeline, which is no part of the statistics"""

@@ -9,7 +9,7 @@ import anyts
 import anyts.lexical_stats
 from anyts.constants import FREQUENCY_BANDS as FREQUENCY_BANDS
 from anyts.lexical_stats import LexicalWord
-from anyts.utils import is_doc, is_number, iter_doc_tokens, source_type_error
+from anyts.utils import has_pos, is_doc, is_number, iter_doc_tokens, source_type_error
 
 from .cohesion_stats import token_info
 from .constants import LEXICAL_STATS_DESC
@@ -177,7 +177,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         tokens = [
             token for token in iter_doc_tokens(source) if not is_number(token.text, NUMBER_PATTERN)
         ]
-        if tokens and not source.has_annotation("POS"):
+        if tokens and not has_pos(source):
             raise SourceError(self.messages["no_pos"])
         self._found_proper = tuple(token.pos_ == "PROPN" for token in tokens)
         return [

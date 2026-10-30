@@ -149,8 +149,8 @@ La base de `p_ser` son solo los usos copulativos, leídos del análisis sintáct
 
 ## Métodos
 
-<!-- core: stats/morph_stats.md:MorphStats-get_stats 31a94da -->
-`get_stats(*stats, filter_none=False, flat=False)` da el número de las palabras por valor de cada estadística elegida, todas por defecto, en el orden de las primeras apariciones; `None` cuenta las palabras sin el rasgo, y `filter_none` las deja fuera. Con `flat` las claves son `estadística_valor`, como `pos_NOUN`, sin las palabras que carecen del rasgo, como en `to_dataframe`. Una estadística desconocida lanza `UnknownStatError`.
+<!-- core: stats/morph_stats.md:MorphStats-get_stats 748058e -->
+`get_stats(*stats, filter_none=False, flat=False)` da el número de las palabras por valor de cada estadística elegida, todas por defecto, en el orden de las primeras apariciones; `None` cuenta las palabras sin el rasgo, y `filter_none` las deja fuera. Con `flat` las claves son `estadística_valor`, como `pos_NOUN`, sin las palabras que carecen del rasgo, como en `to_dataframe`. Una estadística desconocida lanza `UnknownStatError`, y un `filter_none` o un `flat` que no es un `bool`, `ParameterError`.
 
 <!-- core: stats/morph_stats.md:MorphStats-explain_text 037565e -->
 `explain_text(*stats, filter_none=False)` da cada palabra con los valores de las estadísticas elegidas; `filter_none` deja fuera los que le faltan a una palabra. Una estadística desconocida lanza `UnknownStatError`.

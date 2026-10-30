@@ -67,7 +67,7 @@ En esTS los umbrales son los del núcleo y de las fórmulas de legibilidad: una 
 
 ## Estadísticas
 
-<!-- core: stats/basic_stats.md:BasicStats-attributes 0981aba -->
+<!-- core: stats/basic_stats.md:BasicStats-attributes d457364 -->
 | Estadística | Tipo | Descripción | Normalizada |
 | :-------- | :--- | :---------- | :--------- |
 | `c_letters` | `dict[int, int]` | Distribución de las palabras por número de letras | - |
@@ -85,8 +85,8 @@ En esTS los umbrales son los del núcleo y de las fórmulas de legibilidad: una 
 | `n_spaces` | `int` | Número de espacios de Unicode (categoría Zs), como el espacio de no separación, y tabulaciones | `p_spaces` |
 | `n_syllables` | `int` | Número de sílabas | - |
 | `n_punctuations` | `int` | Número de signos de puntuación | `p_punctuations` |
-| `letters_entropy` | `float` | Entropía de Shannon en bits de las longitudes de las palabras en letras, de `c_letters`: 0 cuando las palabras tienen una sola longitud | - |
-| `syllables_entropy` | `float` | Entropía de Shannon en bits de las longitudes de las palabras en sílabas, de `c_syllables` | - |
+| `letters_entropy` | `float` | Entropía de Shannon en bits de las longitudes de las palabras en letras, de `c_letters`: 0 cuando las palabras tienen una sola longitud; la estimación a partir de las proporciones sale más baja en un texto corto, en décimas de bit con decenas de palabras | - |
+| `syllables_entropy` | `float` | Entropía de Shannon en bits de las longitudes de las palabras en sílabas, de `c_syllables`, con el mismo sesgo | - |
 | `c_punctuations` | `dict[str, int]` | Distribución de los signos de puntuación por tipo ([`count_punctuations`](#count_punctuations)) | - |
 
 Con `normalize=True` el objeto tiene también las estadísticas normalizadas, de tipo `float`: los recuentos de palabras divididos por el número de palabras, los de caracteres por el número de caracteres.

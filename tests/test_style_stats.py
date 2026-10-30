@@ -281,6 +281,16 @@ def test_copy_keeps_the_error_of_its_pipeline():
             _ = clone.verbal_nouns
 
 
+def test_doc_with_a_line_break_and_no_morphologizer():
+    """A line break tagged SPACE by the attribute ruler gives no parts of speech to the words"""
+    doc = get_nlp()(
+        "La revisión del expediente.\nLa decisión fue tomada.", disable=["morphologizer"]
+    )
+    assert doc.has_annotation("POS")
+    with pytest.raises(SourceError, match="no parts of speech"):
+        _ = StyleStats(doc).verbal_nouns
+
+
 def test_split_text():
     assert _split_text("El gato duerme.", 15) == ["El gato duerme."]
     # The parts are as long as the limit allows, without the spaces around the sentences

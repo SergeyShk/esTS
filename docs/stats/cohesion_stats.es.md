@@ -1,7 +1,7 @@
 # Estadísticas de cohesión
 
 ``` {.python .signature}
-CohesionStats(source, sents_extractor=None, connectors=None, nlp=None)
+CohesionStats(source, sents_extractor=None, connectors=None, nlp=None, blank_lines=False)
 ```
 
 Las estadísticas de cohesión de un texto a la manera de [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) y de su adaptación española [Coh-Metrix-Esp](https://aclanthology.org/L16-1745/): la repetición entre las oraciones, la información dada, la cohesión temporal y los conectores de un diccionario. Las oraciones se comparan por lemas. La fuente de datos es un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy), y tiene que estar anotada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, sin las entidades nombradas, y un `Doc` debe llevar las categorías gramaticales, que vienen de un `morphologizer` (o de un `tagger` con un `attribute_ruler`), y los lemas, que vienen de un `lemmatizer`.
@@ -10,7 +10,7 @@ Excepciones:
 
 - `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`, un extractor de otra clase, un pipeline en `nlp` que no es un `Language` de spaCy, unos conectores que no son un diccionario de locuciones y pares de cadenas;
 - `SourceError` - una fuente sin palabras; un `Doc` sin las categorías gramaticales o los lemas (un `Doc` de `spacy.blank("es")`); una cadena más larga que el `max_length` del pipeline o con un carácter sin forma UTF-8;
-- `ParameterError` - una clase o un tipo de conector desconocidos;
+- `ParameterError` - una clase o un tipo de conector desconocidos, un `blank_lines` que no es un `bool`;
 - `DatasetNotFoundError` - una cadena sin `nlp` cuando el modelo no está instalado.
 
 La clase extiende el `CohesionStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/cohesion_stats/) con la capa del español. Un `Doc` sin límites de oración - de un pipeline sin analizador - se divide en oraciones con el [`SentsExtractor`](../extractors/sentences.md) del español. Los rasgos de las palabras vienen de la anotación de [Universal Dependencies](https://universaldependencies.org/u/feat/), la cohesión temporal compara el tiempo y el modo de los verbos, y los conectores los halla [`SpanishConnectorMatcher`](#ConnectorMatcher) en el diccionario de [`load_connectors`](#connectors). La tabla de `print_stats` toma las descripciones de `COHESION_STATS_DESC` de `ests.constants`.
@@ -90,15 +90,17 @@ Las palabras se clasifican por la anotación de Universal Dependencies:
 | `sents_extractor` | `SentsExtractor` | `None` | Herramienta de extracción de oraciones; si se indica, divide un texto y un `Doc` por su texto, sean cuales sean los límites de oración del pipeline |
 | `connectors` | `dict[str, tuple[str, str]]` | `None` | Clase y tipo por conector; el diccionario de `load_connectors` por defecto |
 | `nlp` | `Language` | `None` | Pipeline de spaCy que analiza una cadena; si no se indica, el modelo `es_core_news_sm` de `ests.utils.get_nlp` |
+| `blank_lines` | `bool` | `False` | Empezar los párrafos solo tras las líneas en blanco, para un texto con líneas cortadas dentro de sus párrafos; por defecto, tras cada salto de línea |
 
 ## Atributos
 
-<!-- core: stats/cohesion_stats.md:CohesionStats-attributes b48ff23 -->
+<!-- core: stats/cohesion_stats.md:CohesionStats-attributes 9407ea8 -->
 | Atributo | Tipo | Descripción |
 | :------- | :--- | :---------- |
 | `words`, `lemmas` | `tuple[tuple[str]]` | Palabras y lemas de cada oración con palabras |
 | `n_sents`, `n_words` | `int` | Números de las oraciones con palabras y de las palabras |
-| `n_paragraphs` | `int` | Número de los párrafos, las partes del texto entre líneas en blanco que tienen palabras |
+| `blank_lines` | `bool` | Si los párrafos empiezan solo tras las líneas en blanco |
+| `n_paragraphs` | `int` | Número de los párrafos, las líneas del texto con palabras con contenido (las partes entre líneas en blanco con `blank_lines`) |
 | `n_nouns`, `n_pronouns`, `n_demonstratives`, `n_content_words` | `int` | Números de las palabras por clase |
 | `n_given` | `int` | Número de las palabras con contenido cuyo lema ya apareció antes |
 | `n_connectors`, `connector_spans`, `c_connectors` | `int`, `tuple[Connector]`, `dict[str, int]` | Número de los conectores, sus apariciones y su número por conector |
@@ -198,8 +200,8 @@ $$
 `noun_overlap_2_sent` · `argument_overlap_2_sent` · `content_overlap_2_sent` · `noun_overlap_para` · `argument_overlap_para` · `content_overlap_para` · [TAACO](https://doi.org/10.3758/s13428-015-0651-7)
 { .metric-meta }
 
-<!-- core: stats/cohesion_stats.md:CohesionStats-forward_overlap 34e902e -->
-La repetición contigua de TAACO, por los lemas de los sustantivos, de los argumentos y de las palabras con contenido: la proporción de los lemas distintos de una oración repetidos en una de las dos oraciones siguientes (`adjacent_overlap_2_*_sent`), y de un párrafo repetidos en el párrafo siguiente (`adjacent_overlap_*_para`), sobre todas las oraciones o párrafos que los tienen (`calc_forward_overlap`). A diferencia de la repetición binaria, un par de segmentos cuenta por la proporción de los lemas que comparten. Un párrafo es una parte del texto entre líneas en blanco que tiene palabras; una palabra que lleva `paragraph_start` abre uno, también dentro de una oración, como cuando un parser une un título a la oración siguiente. TAACO toma cada línea por un párrafo: un texto con un párrafo en cada línea y sin líneas en blanco es aquí un solo párrafo, y sus `*_para` son `nan`.
+<!-- core: stats/cohesion_stats.md:CohesionStats-forward_overlap 7779dcb -->
+La repetición contigua de TAACO, por los lemas de los sustantivos, de los argumentos y de las palabras con contenido: la proporción de los lemas distintos de una oración repetidos en una de las dos oraciones siguientes (`adjacent_overlap_2_*_sent`), y de un párrafo repetidos en el párrafo siguiente (`adjacent_overlap_*_para`), sobre todas las oraciones o párrafos que los tienen (`calc_forward_overlap`). A diferencia de la repetición binaria, un par de segmentos cuenta por la proporción de los lemas que comparten. Un párrafo es una línea del texto, como en TAACO, o una parte entre líneas en blanco con `blank_lines`, para un texto con líneas cortadas dentro de sus párrafos; una palabra que lleva `paragraph_start` abre uno, también dentro de una oración, como cuando un parser une un título a la oración siguiente. Un párrafo sin palabras con contenido, como el número de un capítulo, se une al siguiente, o al anterior si es el último.
 
 <!-- core: stats/cohesion_stats.md:calc_forward_overlap 7389f78 -->
 ``` {.python .signature}
@@ -219,7 +221,7 @@ $$
 
 Unos segmentos que son una cadena, un `Doc`, un iterador o un segmento que no es una lista de cadenas lanzan `SourceTypeError`, y un alcance que no es un entero mayor que 0, `ParameterError`.
 
-En esTS una cadena se analiza en un `Doc`, así que ambos se dividen en párrafos por las líneas en blanco entre sus tokens.
+En esTS una cadena se analiza en un `Doc`, así que ambos se dividen en párrafos por los saltos de línea entre sus tokens (por las líneas en blanco con `blank_lines`).
 
 === "Código"
 
@@ -356,7 +358,7 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
 
     ``` python
     cs.get_stats()
-    cs.describe("p_given")
+    cs.describe("p_given"), cs.describe("connectors")
     ```
 
 === "Resultado"
@@ -395,7 +397,7 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
      'connectors_reformulative': 34.48275862068966,
      'connectors_primary': 0.0,
      'connectors_secondary': 103.44827586206898}
-    None
+    (None, None)
     ```
 
 ## Buscador de conectores { #ConnectorMatcher }

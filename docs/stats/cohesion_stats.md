@@ -1,7 +1,7 @@
 # Cohesion statistics
 
 ``` {.python .signature}
-CohesionStats(source, sents_extractor=None, connectors=None, nlp=None)
+CohesionStats(source, sents_extractor=None, connectors=None, nlp=None, blank_lines=False)
 ```
 
 The cohesion statistics of a text in the manner of [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) and of its Spanish adaptation [Coh-Metrix-Esp](https://aclanthology.org/L16-1745/): the overlap of the sentences, the givenness, the temporal cohesion and the connectors of a dictionary. The sentences are compared by lemmas. The data source is a text or a `Doc` object of [spaCy](https://github.com/explosion/spaCy), and it has to be annotated: a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, without the named entities, and a `Doc` must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer`.
@@ -10,7 +10,7 @@ Raises:
 
 - `SourceTypeError` - a source that is neither a string nor a `Doc`, an extractor of another type, a pipeline in `nlp` that is not a spaCy `Language`, connectors that are not a dictionary of phrases and pairs of strings;
 - `SourceError` - a source without words; a `Doc` without the parts of speech or the lemmas (a `Doc` of `spacy.blank("es")`); a string longer than the `max_length` of the pipeline or with a character without a UTF-8 form;
-- `ParameterError` - an unknown class or kind of a connector;
+- `ParameterError` - an unknown class or kind of a connector, a `blank_lines` that is not a `bool`;
 - `DatasetNotFoundError` - a string without `nlp` when the model is not installed.
 
 The class extends the `CohesionStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/cohesion_stats/) core with the Spanish layer. A `Doc` without sentence boundaries - from a pipeline without a parser - is split into sentences by the Spanish [`SentsExtractor`](../extractors/sentences.md). The features of the words come from the [Universal Dependencies](https://universaldependencies.org/u/feat/) annotation, the temporal cohesion compares the tense and the mood of the verbs, and the connectors are found by [`SpanishConnectorMatcher`](#ConnectorMatcher) over the dictionary of [`load_connectors`](#connectors). The `print_stats` table takes the descriptions of `COHESION_STATS_DESC` of `ests.constants`.
@@ -90,6 +90,7 @@ The words are classified by the Universal Dependencies annotation:
 | `sents_extractor` | `SentsExtractor` | `None` | Sentence extraction tool; given, it splits a text and a `Doc` by their text, whatever the sentence boundaries of the pipeline |
 | `connectors` | `dict[str, tuple[str, str]]` | `None` | Class and kind by connector; the dictionary of `load_connectors` by default |
 | `nlp` | `Language` | `None` | spaCy pipeline that parses a string; the model `es_core_news_sm` of `ests.utils.get_nlp` if not given |
+| `blank_lines` | `bool` | `False` | Start the paragraphs after the blank lines alone, for a text whose lines are wrapped inside its paragraphs; after every line break by default |
 
 ## Attributes
 
@@ -193,7 +194,7 @@ $$
 
 --8<-- "stats/cohesion_stats.md:calc_forward_overlap"
 
-In esTS a string is parsed into a `Doc`, so both are split into paragraphs by the blank lines between their tokens.
+In esTS a string is parsed into a `Doc`, so both are split into paragraphs by the line breaks between their tokens (by the blank lines with `blank_lines`).
 
 === "Code"
 
@@ -320,7 +321,7 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
 
     ``` python
     cs.get_stats()
-    cs.describe("p_given")
+    cs.describe("p_given"), cs.describe("connectors")
     ```
 
 === "Result"
@@ -359,7 +360,7 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
      'connectors_reformulative': 34.48275862068966,
      'connectors_primary': 0.0,
      'connectors_secondary': 103.44827586206898}
-    None
+    (None, None)
     ```
 
 ## Connector matcher { #ConnectorMatcher }

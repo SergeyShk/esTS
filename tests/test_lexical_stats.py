@@ -225,3 +225,12 @@ def test_print_stats(ls, capsys):
     assert len(lines) == len(LEXICAL_STATS_DESC) + 2
     assert lines[2].startswith("Share of words found in the frequency dictionary")
     assert lines[2].rstrip().endswith("|   1.00")
+
+
+def test_doc_with_a_line_break_and_no_morphologizer():
+    """Without the morphologizer the attribute ruler still tags a line break SPACE, and the
+    Doc has no parts of speech all the same"""
+    doc = get_nlp()("El gato duerme.\nLa casa es grande.", disable=["morphologizer"])
+    assert doc.has_annotation("POS")
+    with pytest.raises(SourceError, match="no parts of speech"):
+        LexicalStats(doc)
