@@ -40,7 +40,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Object extraction](https://sergeyshk.github.io/esTS/extractors/sentences/)** - configurable sentence, word and character N-gram tokenizers that know the inverted marks, the dialogue dash and the abbreviations of Spanish
 * **[Syllables and stress](https://sergeyshk.github.io/esTS/syllables/)** - rule-based syllabification and the stressed syllable derived from the spelling, with no dictionary
 * **[Basic statistics](https://sergeyshk.github.io/esTS/stats/basic_stats/)** - counts of sentences, words, letters, syllables and punctuation marks by type, with distributions and normalized shares
-* **[Readability metrics](https://sergeyshk.github.io/esTS/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX, with a consensus grade, the school stages of Spain and reading time
+* **[Readability metrics](https://sergeyshk.github.io/esTS/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX, with a consensus grade, the school stages of Spain and reading time, and formulas of other languages with their own coefficients
 * **[Lexical diversity metrics](https://sergeyshk.github.io/esTS/stats/diversity_stats/)** - TTR and its variations, MATTR, MSTTR, MTLD, HD-D, Simpson's and Yule's indices, entropy, Zipf's and Heaps' laws
 * **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
 * **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text, a KWIC concordance and the stylometry of authorship: Burrows's Delta with its variants, Zeta, the Mendenhall curve, the profile of the function words; the comparison of two corpora by 133 features of a text with effect sizes
@@ -230,6 +230,7 @@ The library allows counting the following readability metrics:
 *   SOL grade, the SMOG index converted to Spanish
 *   LIX readability measure
 *   RIX readability measure
+*   [Formulas of other languages](https://sergeyshk.github.io/esTS/stats/unadapted_readability_stats/) (`UnadaptedReadabilityStats`): FORCAST, Linsear Write, Wiener Sachtextformel, Gulpease and others with their own coefficients, with no calibration for Spanish - to compare texts with each other and with other tools, not for a Spanish grade
 
 On top of the formulas: the band of a scale for the reading ease, Legibilidad µ and LIX, the reading of any metric, a consensus grade (the median of the grade formulas), the school stage and the reader age in Spain, and reading time.
 
@@ -728,6 +729,7 @@ Bug reports, ideas and pull requests are welcome in the [issues](https://github.
     *   extractors.py - the extractors of the anyTS core with the Spanish tokenizers
     *   morph_stats.py - morphological statistics
     *   readability_stats.py - readability metrics: the Spanish formulas over those of the anyTS core
+    *   unadapted_readability_stats.py - readability formulas of other languages
     *   style_stats.py - style metrics
     *   phon_stats.py - phonostatistics
     *   syntax_stats.py - syntactic statistics

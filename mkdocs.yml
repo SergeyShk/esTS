@@ -23,6 +23,7 @@ nav:
     - Statistics:
       - Basic statistics: stats/basic_stats.md
       - Readability metrics: stats/readability_stats.md
+      - Formulas of other languages: stats/unadapted_readability_stats.md
       - Lexical diversity metrics: stats/diversity_stats.md
       - Morphological statistics: stats/morph_stats.md
       - Syntactic statistics: stats/syntax_stats.md
@@ -118,6 +119,7 @@ plugins:
             Statistics: Estadísticas
             Basic statistics: Estadísticas básicas
             Readability metrics: Métricas de legibilidad
+            Formulas of other languages: Fórmulas de otros idiomas
             Lexical diversity metrics: Métricas de diversidad léxica
             Morphological statistics: Estadísticas morfológicas
             Syntactic statistics: Estadísticas sintácticas
