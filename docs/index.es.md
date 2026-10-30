@@ -114,7 +114,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    [Palabras clave](corpus/keyness.md) frente a un corpus de referencia o al diccionario de frecuencias, [colocaciones](corpus/collocations.md), la [dispersión](corpus/dispersion.md) de una palabra por las partes de un texto, una [concordancia KWIC](corpus/kwic.md), la autoría por [estilometría](corpus/stylometry.md) (la Delta de Burrows y la Delta móvil, Zeta y sus marcadores en segmentos, la curva de Mendenhall, las palabras funcionales) y la [comparación de corpus](corpus/compare.md) por 133 rasgos de un texto
+    [Palabras clave](corpus/keyness.md) frente a un corpus de referencia o al diccionario de frecuencias, [colocaciones](corpus/collocations.md), la [dispersión](corpus/dispersion.md) de una palabra por las partes de un texto, una [concordancia KWIC](corpus/kwic.md), la autoría por [estilometría](corpus/stylometry.md) (la Delta de Burrows y la Delta móvil, Zeta y sus marcadores en segmentos, la curva de Mendenhall, las palabras funcionales) y la [comparación de corpus](corpus/compare.md) por 163 rasgos de un texto
 
     [:octicons-arrow-right-24: Medidas de corpus](corpus/keyness.md)
 

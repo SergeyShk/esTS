@@ -2,8 +2,10 @@ from math import isnan
 
 import numpy as np
 import pytest
+from anyts.utils import set_sent_starts
 
-from ests.constants import MORPHOLOGY_MARKERS_DESC, MORPHOLOGY_STATS_DESC
+from ests import CohesionStats, SyntaxStats
+from ests.constants import MORPHOLOGY_MARKERS_DESC, MORPHOLOGY_STATS_DESC, SYNTAX_STATS_DESC
 from ests.corpus import (
     compare_corpora,
     corpus_features,
@@ -14,7 +16,7 @@ from ests.corpus import (
 from ests.corpus.compare import COMPARISON_COLUMNS
 from ests.exceptions import ParameterError, SourceError, SourceTypeError
 from ests.morph_stats import FINITE_MOODS
-from ests.utils import get_nlp
+from ests.utils import get_nlp, iter_text_sents
 
 text = (
     "El gato estaba en la ventana. Miraba los pájaros, pero los pájaros se fueron. "
@@ -119,8 +121,11 @@ def test_split_windows():
 def test_text_features():
     features = text_features(text)
     prefixes = {key.split("_", 1)[0] for key in features}
-    assert prefixes == {"basic", "readability", "diversity", "morph", "sents", "punct"}
-    assert len(features) == 133
+    assert prefixes == {"basic", "readability", "diversity", "morph", "sents", "punct", "cohesion"}
+    assert len(features) == 163
+    # The cohesion but the overlaps between paragraphs, which the windows cut
+    assert sum(1 for key in features if key.startswith("cohesion_")) == 30
+    assert not any(key.endswith("_para") for key in features)
     assert features["sents_mean"] == 7.0
     assert features["basic_letters_per_word"] == pytest.approx(4.5, rel=0.2)
     assert features["morph_pos_NOUN"] == pytest.approx(7 / 28)
@@ -156,13 +161,35 @@ def test_text_features_morphology():
 
 
 def test_text_features_parser():
+    """A pipeline with a parser adds the syntax of its parse and p_ser, the rest stays"""
     features = text_features(text)
     parsed = text_features(text, nlp=get_nlp())
-    assert set(parsed) - set(features) == {"morph_p_ser"}
+    syntax = {key for key in parsed if key.startswith("syntax_")}
+    assert syntax == {f"syntax_{key}" for key in SYNTAX_STATS_DESC}
+    assert set(parsed) - set(features) == syntax | {"morph_p_ser"}
     assert {key: parsed[key] for key in features} == pytest.approx(features, nan_ok=True)
     assert text_features("El gato es negro y está en casa.", nlp=get_nlp())["morph_p_ser"] == 0.5
     with pytest.raises(SourceError, match="longer than the limit"):
         text_features("El gato duerme. " * 70000)
+
+
+def test_text_features_sentences_of_the_parse():
+    """The cohesion and the syntax take the sentences of the rhythm, which keep the dialogue tag
+    with its turn, while the parser alone cuts the turn at the tag"""
+    dialogue = (
+        "—¿Viniste a casa? —preguntó la madre.\n—Vine a casa ayer por la tarde.\n—Pues bien."
+    )
+    nlp = get_nlp()
+    starts = [start for start, _, _ in iter_text_sents(dialogue)]
+    assert len(starts) == 3
+    assert SyntaxStats(nlp(dialogue)).n_sents == 4
+    doc = nlp(set_sent_starts(nlp.make_doc(dialogue), starts), disable=["ner"])
+    syntax, cohesion = SyntaxStats(doc), CohesionStats(doc)
+    assert syntax.n_sents == cohesion.n_sents == 3
+    features = text_features(dialogue, nlp=nlp)
+    assert features["syntax_clauses_per_sent"] == syntax.clauses_per_sent
+    # casa of the first turn comes again in the second: one of the two adjacent pairs
+    assert features["cohesion_noun_overlap_adjacent"] == cohesion.noun_overlap_adjacent == 0.5
 
 
 def test_sentence_rhythm():

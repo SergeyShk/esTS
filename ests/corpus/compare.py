@@ -19,14 +19,16 @@ from anyts.corpus.compare import (
     sentence_rhythm as sentence_rhythm,
 )
 from anyts.extractors import FixedSentsExtractor, FixedWordsExtractor
-from anyts.utils import check_words
+from anyts.utils import check_words, set_sent_starts
 
 from ..basic_stats import BasicStats, punctuation_profile
+from ..cohesion_stats import CohesionStats
 from ..constants import MORPHOLOGY_STATS_DESC, OPENING_MARKS, SYMMETRIC_MARKS
 from ..diversity_stats import DiversityStats
 from ..exceptions import SourceError, SourceTypeError
 from ..morph_stats import FINITE_MOODS, MorphStats
 from ..readability_stats import ReadabilityStats
+from ..syntax_stats import SyntaxStats
 from ..utils import (
     _check_nlp,
     count_words_by_spans,
@@ -112,7 +114,11 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         (DiversityStats); morph_ - the
         shares of the values of every feature of MORPHOLOGY_STATS_DESC and the
         markers of MorphStats.get_markers except the moods; sents_ - the rhythm
-        of the sentences (sentence_rhythm); punct_ - punctuation_profile
+        of the sentences (sentence_rhythm); punct_ - punctuation_profile;
+        cohesion_ - the cohesion statistics (CohesionStats) but the overlaps
+        between paragraphs, which the windows cut; syntax_ - the syntactic
+        statistics (SyntaxStats) when the parse has dependencies. The parse
+        takes the sentences of the other groups (set_sent_starts)
         A morphological value that does not occur gives 0, a feature absent
         from the window (no verbs - no tense) nan. The parts of speech and the
         features of a single value (polarity, polite, poss, reflex) are shares
@@ -120,22 +126,22 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         them; a value of several values (PronType=Int,Rel) is shared equally
         among its parts. The default model runs without its parser; a
         pipeline passed in nlp runs whole except the entity recognizer, and
-        with a parser it adds morph_p_ser
+        with a parser it adds morph_p_ser and the group syntax_
         The shares of spaces, letters and marks count the characters as they
         are: in a corpus from different editions collapse the whitespace beforehand
 
     Arguments:
         text (str): Text string
-        nlp (Language): Pipeline for the morphology; None - the default model
-            without its parser
+        nlp (Language): Pipeline for the morphology, the cohesion and, with a parser,
+            the syntax; None - the default model without its parser
 
     Returns:
         dict[str, float]: Features; the undefined values are nan
 
     Raises:
         SourceTypeError: If the text is not a string or the pipeline is not a spaCy Language
-        SourceError: If the text has no words or a character without a UTF-8 form, or is longer than
-            the max_length of the pipeline
+        SourceError: If the text has no words or a character without a UTF-8 form, is longer than
+            the max_length of the pipeline, or the pipeline gives no parts of speech or no lemmas
         DatasetNotFoundError: If the default model is not installed
 
     Example:
@@ -172,8 +178,9 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
     for key, score in DiversityStats(text, words_extractor=words).get_stats().items():
         if key != "orlov_z":
             features[f"diversity_{key}"] = float(score)
-    doc = _parse(text, nlp)
-    features.update(_morph_features(MorphStats(doc), doc.has_annotation("DEP")))
+    doc = _parse(text, nlp, [start for start, _ in spans])
+    parsed = doc.has_annotation("DEP")
+    features.update(_morph_features(MorphStats(doc), parsed))
     features.update(
         sentence_rhythm(count_words_by_spans([start for start, _, _ in positions], spans))
     )
@@ -181,11 +188,21 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         (f"punct_{key}", float(value))
         for key, value in punctuation_profile(text, basic.n_words).items()
     )
+    features.update(
+        (f"cohesion_{key}", float(value))
+        for key, value in CohesionStats(doc).get_stats().items()
+        if not key.endswith("_para")
+    )
+    if parsed:
+        features.update(
+            (f"syntax_{key}", float(value)) for key, value in SyntaxStats(doc).get_stats().items()
+        )
     return features
 
 
-def _parse(text: str, nlp: Language | None) -> Doc:
-    """Parsing a text: the default model without its parser, or the pipeline without ner"""
+def _parse(text: str, nlp: Language | None, starts: Sequence[int]) -> Doc:
+    """Parsing a text with the sentences that start at the offsets: the default model without
+    its parser, or the pipeline without ner"""
     pipeline = nlp or get_nlp()
     if len(text) > pipeline.max_length:
         raise SourceError(
@@ -193,7 +210,8 @@ def _parse(text: str, nlp: Language | None) -> Doc:
             f"pipeline ({pipeline.max_length}): split it into windows or raise "
             "max_length on a pipeline of your own and pass it in nlp"
         )
-    return pipeline(text, disable=["parser", "ner"] if nlp is None else ["ner"])
+    doc = set_sent_starts(pipeline.make_doc(text), starts)
+    return pipeline(doc, disable=["parser", "ner"] if nlp is None else ["ner"])
 
 
 def _morph_features(morph: MorphStats, parsed: bool) -> dict[str, float]:
