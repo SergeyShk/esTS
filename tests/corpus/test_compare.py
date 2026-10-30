@@ -173,22 +173,21 @@ def test_text_features_parser():
         text_features("El gato duerme. " * 70000)
 
 
-@pytest.mark.parametrize("separator", ["\n\n", "\n"])
-def test_text_features_sentences_of_the_parse(separator):
-    """The cohesion and the syntax take the sentences of the rhythm, across a blank line and
-    across the line break between the turns of a dialogue"""
-    dialogue = separator.join(["—¿Viniste a casa?", "—Vine ayer por la tarde.", "—Pues bien."])
+def test_text_features_sentences_of_the_parse():
+    """The cohesion and the syntax take the sentences of the rhythm, which keep the dialogue tag
+    with its turn, while the parser alone cuts the turn at the tag"""
+    dialogue = "—¿Viniste a casa? —preguntó la madre.\n—Vine ayer por la tarde.\n—Pues bien."
     nlp = get_nlp()
+    starts = [start for start, _, _ in iter_text_sents(dialogue)]
+    assert len(starts) == 3
+    assert SyntaxStats(nlp(dialogue)).n_sents == 4
+    doc = nlp(set_sent_starts(nlp.make_doc(dialogue), starts), disable=["ner"])
+    syntax, cohesion = SyntaxStats(doc), CohesionStats(doc)
+    assert syntax.n_sents == cohesion.n_sents == 3
     features = text_features(dialogue, nlp=nlp)
-    doc = set_sent_starts(
-        nlp.make_doc(dialogue), [start for start, _, _ in iter_text_sents(dialogue)]
-    )
-    stats = SyntaxStats(nlp(doc, disable=["ner"]))
-    assert stats.n_sents == 3
-    assert features["syntax_clauses_per_sent"] == stats.clauses_per_sent
-    assert (
-        features["cohesion_noun_overlap_adjacent"] == CohesionStats(dialogue).noun_overlap_adjacent
-    )
+    assert features["syntax_clauses_per_sent"] == syntax.clauses_per_sent
+    assert features["cohesion_connectors"] == cohesion.connectors
+    assert features["cohesion_content_overlap_adjacent"] == cohesion.content_overlap_adjacent
 
 
 def test_sentence_rhythm():
