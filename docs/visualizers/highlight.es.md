@@ -250,7 +250,7 @@ Las palabras de cada oración; las palabras fuera de las oraciones se omiten.
 
 ## Búsqueda de las capas { #finders }
 
-Los fragmentos de cada capa los encuentra una función de `ests.visualizers.highlight` que devuelve una lista de `Highlight`: a partir de las palabras y las oraciones del texto, o del `Doc` para las capas sintácticas (`SYNTAX_FINDERS` las da por capa). Todas salvo la pasiva, las construcciones de participio y de gerundio y las cadenas de `de` son las [funciones de búsqueda del núcleo](https://sergeyshk.github.io/anyTS/visualizers/highlight/#finders) con los ganchos del español.
+Los fragmentos de cada capa los encuentra una función de `ests.visualizers.highlight` que devuelve una lista de `Highlight`: a partir de las palabras y las oraciones del texto, o del `Doc` para las capas sintácticas (`SYNTAX_FINDERS` las da por capa). Todas salvo la pasiva, las construcciones de participio y de gerundio, las cadenas de `de` y el `el mismo` anafórico son las [funciones de búsqueda del núcleo](https://sergeyshk.github.io/anyTS/visualizers/highlight/#finders) con los ganchos del español.
 
 ### Oraciones largas y palabras complejas { #long-sents }
 
@@ -567,7 +567,7 @@ La capa `split_predicates`: los pares de un verbo de apoyo y un sustantivo de [`
 is_anaphoric_mismo(token)
 ```
 
-Comprueba si una palabra es un `el mismo` anafórico: una forma de `mismo` que encabeza un sintagma nominal propio con su artículo (`el`, `la`, `los`, `las`, `del`, `al`) y sin otro dependiente, como argumento de un verbo o de un sustantivo (`se archivó el mismo`, `la duración del mismo`, `dentro de la misma`). El [Diccionario panhispánico de dudas](https://www.rae.es/dpd/mismo) tiene por innecesario este uso del estilo administrativo y periodístico y propone en su lugar un demostrativo, un posesivo o un pronombre personal (`su duración`, `dentro de ella`). La identidad no es anáfora: `el mismo día`, `es el mismo`, `el mismo que...`, `lo mismo`, `él mismo`, y `la misma` tras `ser`, `estar` o `parecer` (`no parecía la misma`). Los modelos cuelgan algunas formas anafóricas de su artículo (`en la misma hay oficinas`): esa forma cuenta cuando no la sigue en su oración un sustantivo, un adjetivo, un numeral o un pronombre.
+Comprueba si una palabra es un `el mismo` anafórico: una forma de `mismo` que encabeza un sintagma nominal propio con su artículo (`el`, `la`, `los`, `las`, `del`, `al`) y sin otro dependiente, como argumento de un verbo o de un sustantivo (`se archivó el mismo`, `la duración del mismo`, `dentro de la misma`). El [Diccionario panhispánico de dudas](https://www.rae.es/dpd/mismo) tiene por innecesario este uso del estilo administrativo y periodístico y propone en su lugar un demostrativo, un posesivo o un pronombre personal (`su duración`, `dentro de ella`). La identidad no es anáfora: `el mismo día`, `es el mismo`, `lo mismo`, `él mismo`, una forma tras `ser`, `estar`, `parecer`, `permanecer` o `resultar` (`no parecía la misma`, `la situación permanece la misma`), ante `que` (`el mismo que el año pasado`) y ante un modificador coordinado con ella sobre su sustantivo (`de la misma o superior categoría`). Los modelos cuelgan algunas formas anafóricas de su artículo (`en la misma hay oficinas`): esa forma cuenta cuando no la sigue en su oración un sustantivo, un adjetivo, un numeral o un pronombre. Los espacios y los signos de puntuación no son dependientes de la forma, así que un salto de línea tras ella no cambia nada.
 
 ``` {.python .signature}
 find_anaphoric_mismo(doc)

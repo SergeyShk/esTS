@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable, Collection, Iterable, Iterator, Sequence
+from itertools import islice
 from typing import TYPE_CHECKING
 
 import anyts.visualizers.highlight
@@ -29,6 +30,7 @@ from ..constants import (
     HIGHLIGHT_LAYERS_DESC,
     LONG_SENT_WORD_FACTOR,
     MISMO_ARTICLES,
+    MISMO_COMPARATIVE,
     MISMO_FORMS,
     OFFICIALESE_CLICHES,
     PARENTHETICALS,
@@ -63,8 +65,10 @@ ALLITERATION_FREQUENCIES = {sound: SOUND_FREQUENCIES[sound] for sound in CONSONA
 # Relations of an anaphoric el mismo to its head, of the words of its noun phrase, and the parts of
 # speech that go on a noun phrase after a mismo the models attach to its article
 ARGUMENT_DEPS = frozenset({"nsubj", "obj", "iobj", "obl", "nmod", "conj"})
-NP_DEPS = frozenset({"det", "case", "cc", "punct"})
+NP_DEPS = frozenset({"det", "case", "cc"})
 NOMINAL_POS = frozenset({"NOUN", "PROPN", "ADJ", "NUM", "PRON"})
+# Parts of speech of a modifier coordinated to mismo before their noun (del mismo o distinto sexo)
+MODIFIER_POS = frozenset({"ADJ", "DET", "NUM"})
 
 
 class HighlightedText(anyts.visualizers.highlight.HighlightedText):
@@ -84,6 +88,7 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
             verbal_nouns - nouns derived from a verb (StyleStats)
             compound_prepositions - compound prepositions (StyleStats)
             cliches - clichés of OFFICIALESE_CLICHES or of the list passed (StyleStats)
+            anaphoric_mismo - the anaphoric el mismo with its article, of no statistic
             stopwords - stopwords of STOPWORDS or of the list passed, the water (StyleStats)
             parentheticals - parenthetical expressions (StyleStats)
             connectors - discourse markers, with the class and the kind in the note
@@ -92,7 +97,7 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
                 unlikely by the frequencies of the Spanish sounds (PhonStats)
         HIGHLIGHT_LAYER_GROUPS groups the layers. The syntactic layers need a Doc
         with a dependency parse and the lemmas, verbal_nouns a Doc with the parts
-        of speech and the lemmas; a Doc without the sentence boundaries is split
+        of speech and the lemmas, anaphoric_mismo one with all three; a Doc without the sentence boundaries is split
         by the rules of SentsExtractor. By default the layers of
         HIGHLIGHT_DEFAULT_LAYERS the source allows are on (long sentences, complex
         words, passive, chains of de, split predicates, clichés)
@@ -783,12 +788,14 @@ def is_anaphoric_mismo(token: Token) -> bool:
         A form of MISMO_FORMS that heads a noun phrase of its own with an
         article of MISMO_ARTICLES and no other dependent, as an argument
         (se archivó el mismo, la duración del mismo, dentro de la misma), but
-        not after a verb of PREDICATIVE_VERBS, where it means the same one (no
-        parecía la misma). The models attach some of them to their article
-        (en la misma hay oficinas): such a form counts when no noun,
-        adjective, numeral or pronoun follows it in its sentence. The identity
-        of el mismo día, es el mismo, el mismo que, lo mismo and él mismo is
-        no anaphora
+        not as the subject or the object after a verb of PREDICATIVE_VERBS,
+        where it means the same one (no parecía la misma), before que (el
+        mismo que el año pasado) or before a coordinated modifier of a shared
+        noun (del mismo o distinto sexo). The models attach some of them to
+        their article (en la misma hay oficinas): such a form counts when no
+        noun, adjective, numeral or pronoun follows it in its sentence. The
+        identity of el mismo día, es el mismo, lo mismo and él mismo is no
+        anaphora
 
     Arguments:
         token (Token): Token
@@ -798,7 +805,14 @@ def is_anaphoric_mismo(token: Token) -> bool:
     """
     if token.lower_ not in MISMO_FORMS:
         return False
-    children = list(token.children)
+    following = list(
+        islice((word for word in token.doc[token.i + 1 : token.sent.end] if is_word(word)), 2)
+    )
+    if following and following[0].lower_ == MISMO_COMPARATIVE:
+        return False
+    if len(following) == 2 and following[0].pos_ == "CCONJ" and following[1].pos_ in MODIFIER_POS:
+        return False
+    children = get_children(token)
     if any(child.lower_ in MISMO_ARTICLES and base_dep(child) in NP_DEPS for child in children):
         if base_dep(token) not in ARGUMENT_DEPS or any(
             base_dep(child) not in NP_DEPS for child in children
@@ -806,15 +820,14 @@ def is_anaphoric_mismo(token: Token) -> bool:
             return False
         head = token.head
         return not (
-            base_dep(token) == "nsubj" and head.i < token.i and head.lemma_ in PREDICATIVE_VERBS
+            base_dep(token) in ("nsubj", "obj")
+            and head.i < token.i
+            and head.lemma_ in PREDICATIVE_VERBS
         )
     head = token.head
     if children or head.i != token.i - 1 or head.lower_ not in MISMO_ARTICLES:
         return False
-    following = next(
-        (word for word in token.doc[token.i + 1 : token.sent.end] if is_word(word)), None
-    )
-    return following is None or following.pos_ not in NOMINAL_POS
+    return not following or following[0].pos_ not in NOMINAL_POS
 
 
 def find_anaphoric_mismo(doc: Doc) -> list[Highlight]:
@@ -826,7 +839,8 @@ def find_anaphoric_mismo(doc: Doc) -> list[Highlight]:
         mismo); the note gives the two words
 
     Arguments:
-        doc (Doc): Doc object with a dependency parse
+        doc (Doc): Doc object with a dependency parse, the parts of speech and the
+            lemmas
 
     Returns:
         list[Highlight]: Fragments of the layer anaphoric_mismo

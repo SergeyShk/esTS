@@ -427,11 +427,20 @@ def test_split_predicates(doc):
         ("El paciente ingresó el martes y el mismo fue dado de alta.", ["el mismo"]),
         ("Las bases están publicadas y los aspirantes deben leer las mismas.", ["las mismas"]),
         ("El edificio tiene tres plantas; en la misma hay oficinas.", ["la misma"]),
+        ("El edificio tiene tres plantas; en la misma\nhay oficinas.", ["la misma"]),
+        ("Se presentó el recurso, pero el mismo parece infundado.", ["el mismo"]),
         # The identity, the emphasis and the adjective are no anaphora
         ("Llegaron el mismo día.", []),
         ("Este informe es el mismo que enviaste ayer.", []),
         ("Los resultados son los mismos.", []),
         ("No parecía la misma.", []),
+        ("Los dos parecen el mismo.", []),
+        ("La situación permanece la misma.", []),
+        ("Se aplicará el mismo que en el ejercicio anterior.", []),
+        # A modifier coordinated to mismo before their noun
+        ("Podrán participar los funcionarios de la misma o superior categoría.", []),
+        ("Los trabajadores que se encuentren en la misma o parecida situación cobrarán.", []),
+        ("Vinieron los mismos de siempre.", []),
         ("Lo mismo ocurre con los demás.", []),
         ("Ella misma firmó el contrato.", []),
         ("Del mismo modo, los vecinos protestaron.", []),
@@ -446,38 +455,44 @@ def test_anaphoric_mismo(nlp, sentence, expected):
     ]
 
 
-def test_anaphoric_mismo_attached_to_its_article():
-    """A mismo the model attaches to its article heads a noun phrase when no noun follows it
-    in its sentence"""
+@pytest.mark.parametrize(
+    ("pos", "expected"),
+    [
+        ("VERB", True),
+        ("NOUN", False),
+        ("PROPN", False),
+        ("ADJ", False),
+        ("NUM", False),
+        ("PRON", False),
+    ],
+)
+def test_anaphoric_mismo_attached_to_its_article(pos, expected):
+    """A mismo the model attaches to its article heads a noun phrase when no noun, adjective,
+    numeral or pronoun follows it in its sentence"""
+    doc = Doc(
+        spacy.blank("es").vocab,
+        words=["en", "la", "misma", "hay", ".", "Casa", "nueva"],
+        deps=["case", "obl", "det", "ROOT", "punct", "ROOT", "amod"],
+        heads=[1, 3, 1, 3, 3, 5, 5],
+        pos=["ADP", "DET", "DET", pos, "PUNCT", "NOUN", "ADJ"],
+    )
+    assert is_anaphoric_mismo(doc[2]) is expected
+    if expected:
+        assert [(h.start, h.end, h.note) for h in find_anaphoric_mismo(doc)] == [
+            (3, 11, "anaphoric la misma")
+        ]
 
-    def doc(words, deps, heads, pos):
-        return Doc(spacy.blank("es").vocab, words=words, deps=deps, heads=heads, pos=pos)
 
-    pronoun = doc(
-        ["en", "la", "misma", "hay", "oficinas", ".", "Casa", "nueva"],
-        ["case", "obl", "det", "ROOT", "obj", "punct", "ROOT", "amod"],
-        [1, 3, 1, 3, 3, 3, 6, 6],
-        ["ADP", "DET", "DET", "VERB", "NOUN", "PUNCT", "NOUN", "ADJ"],
+def test_anaphoric_mismo_at_the_end_of_its_sentence():
+    """Nothing follows the form in its sentence; the noun of the next one does not count"""
+    doc = Doc(
+        spacy.blank("es").vocab,
+        words=["vi", "la", "misma", ".", "Casa", "nueva"],
+        deps=["ROOT", "obj", "det", "punct", "ROOT", "amod"],
+        heads=[0, 0, 1, 0, 4, 4],
+        pos=["VERB", "DET", "DET", "PUNCT", "NOUN", "ADJ"],
     )
-    adjective = doc(
-        ["la", "misma", "casa"],
-        ["det", "det", "ROOT"],
-        [2, 0, 2],
-        ["DET", "DET", "NOUN"],
-    )
-    # Nothing after it in its sentence, a noun in the next one
-    last = doc(
-        ["vi", "la", "misma", ".", "Casa", "nueva"],
-        ["ROOT", "obj", "det", "punct", "ROOT", "amod"],
-        [0, 0, 1, 0, 4, 4],
-        ["VERB", "DET", "DET", "PUNCT", "NOUN", "ADJ"],
-    )
-    assert [token.text for token in pronoun if is_anaphoric_mismo(token)] == ["misma"]
-    assert not any(is_anaphoric_mismo(token) for token in adjective)
-    assert [token.text for token in last if is_anaphoric_mismo(token)] == ["misma"]
-    assert [(h.start, h.end, h.note) for h in find_anaphoric_mismo(pronoun)] == [
-        (3, 11, "anaphoric la misma")
-    ]
+    assert [token.text for token in doc if is_anaphoric_mismo(token)] == ["misma"]
 
 
 def test_doc_long_sents(nlp):

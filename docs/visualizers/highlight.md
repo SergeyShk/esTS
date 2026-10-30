@@ -199,7 +199,7 @@ The words and the sentences the finders of the layers take; the helpers are in `
 
 ## Finders of the layers { #finders }
 
-The fragments of every layer are found by a function of `ests.visualizers.highlight` that returns a list of `Highlight`: from the words and the sentences of the text, or from the `Doc` for the syntactic layers (`SYNTAX_FINDERS` gives them by layer). All but the passive, the participial and gerund clauses and the chains of `de` are the [finders of the core](https://sergeyshk.github.io/anyTS/visualizers/highlight/#finders) with the hooks of Spanish.
+The fragments of every layer are found by a function of `ests.visualizers.highlight` that returns a list of `Highlight`: from the words and the sentences of the text, or from the `Doc` for the syntactic layers (`SYNTAX_FINDERS` gives them by layer). All but the passive, the participial and gerund clauses, the chains of `de` and the anaphoric `el mismo` are the [finders of the core](https://sergeyshk.github.io/anyTS/visualizers/highlight/#finders) with the hooks of Spanish.
 
 ### Long sentences and complex words { #long-sents }
 
@@ -516,7 +516,7 @@ The layer `split_predicates`: the pairs of a light verb and a noun of [`find_spl
 is_anaphoric_mismo(token)
 ```
 
-Checks whether a word is an anaphoric `el mismo`: a form of `mismo` that heads a noun phrase of its own with its article (`el`, `la`, `los`, `las`, `del`, `al`) and no other dependent, as an argument of a verb or a noun (`se archivó el mismo`, `la duración del mismo`, `dentro de la misma`). The [Diccionario panhispánico de dudas](https://www.rae.es/dpd/mismo) takes this use of the administrative and the journalistic style for unnecessary and suggests a demonstrative, a possessive or a personal pronoun instead (`su duración`, `dentro de ella`). The identity is no anaphora: `el mismo día`, `es el mismo`, `el mismo que...`, `lo mismo`, `él mismo`, and `la misma` after `ser`, `estar` or `parecer` (`no parecía la misma`). The models attach some anaphoric forms to their article (`en la misma hay oficinas`): such a form counts when no noun, adjective, numeral or pronoun follows it in its sentence.
+Checks whether a word is an anaphoric `el mismo`: a form of `mismo` that heads a noun phrase of its own with its article (`el`, `la`, `los`, `las`, `del`, `al`) and no other dependent, as an argument of a verb or a noun (`se archivó el mismo`, `la duración del mismo`, `dentro de la misma`). The [Diccionario panhispánico de dudas](https://www.rae.es/dpd/mismo) takes this use of the administrative and the journalistic style for unnecessary and suggests a demonstrative, a possessive or a personal pronoun instead (`su duración`, `dentro de ella`). The identity is no anaphora: `el mismo día`, `es el mismo`, `lo mismo`, `él mismo`, a form after `ser`, `estar`, `parecer`, `permanecer` or `resultar` (`no parecía la misma`, `la situación permanece la misma`), before `que` (`el mismo que el año pasado`) and before a modifier coordinated to it over their noun (`de la misma o superior categoría`). The models attach some anaphoric forms to their article (`en la misma hay oficinas`): such a form counts when no noun, adjective, numeral or pronoun follows it in its sentence. Whitespace and punctuation are no dependents of the form, so a line break after it changes nothing.
 
 ``` {.python .signature}
 find_anaphoric_mismo(doc)

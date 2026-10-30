@@ -1409,10 +1409,11 @@ HIGHLIGHT_LAYER_STYLES = {
 # The anaphoric el mismo (se archivó el mismo, la duración del mismo): a form of mismo that heads
 # a noun phrase of its own with its article, for which the Diccionario panhispánico de dudas
 # suggests a demonstrative, a possessive or a personal pronoun; after a verb of a predicate it means
-# "the same one" (no parecía la misma)
+# "the same one" (no parecía la misma), and before que it compares (el mismo que el año pasado)
 MISMO_FORMS = frozenset({"mismo", "misma", "mismos", "mismas"})
 MISMO_ARTICLES = frozenset({"el", "la", "los", "las", "del", "al"})
-PREDICATIVE_VERBS = frozenset({"ser", "estar", "parecer", "semejar"})
+MISMO_COMPARATIVE = "que"
+PREDICATIVE_VERBS = frozenset({"ser", "estar", "parecer", "semejar", "permanecer", "resultar"})
 # Number of words from which a sentence is long, by the Spanish-language guides to plain language
 # (Comunidad de Madrid 2021, Gobierno and Legislatura de la Ciudad de Buenos Aires 2024)
 LONG_SENT_WORD_FACTOR = 30
