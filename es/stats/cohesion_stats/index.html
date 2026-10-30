@@ -2520,7 +2520,7 @@ Secondary connectors per 1000 words                                |  103.45
 </div>
 </div>
 <h2 id="metricas">Métricas<a class="headerlink" href="#metricas" title="Permanent link">&para;</a></h2>
-<p>Cada métrica es un atributo del objeto, calculado al crearlo, y <code>get_stats</code> da las métricas de la tabla; <code>aspect_repetition</code> es un atributo fuera de él.</p>
+<p>Cada métrica es un atributo del objeto, calculado al crearlo, y <code>get_stats</code> da las métricas de la tabla; <code>aspect_repetition</code> es un atributo fuera de ella.</p>
 <table>
 <thead>
 <tr>
@@ -2743,7 +2743,7 @@ Secondary connectors per 1000 words                                |  103.45
 </tbody>
 </table>
 <p>Unos segmentos que son una cadena, un <code>Doc</code>, un iterador o un segmento que no es una lista de cadenas lanzan <code>SourceTypeError</code>, y un alcance que no es un entero mayor que 0, <code>ParameterError</code>.</p>
-<p>En esTS una cadena se analiza en un <code>Doc</code>, así que ambos se dividen en párrafos por los saltos de línea entre sus tokens (por las líneas en blanco con <code>blank_lines</code>). Un texto con líneas cortadas dentro de sus párrafos, como los textos de <a href="../../datasets/spanishliterature/"><code>SpanishLiterature</code></a>, necesita <code>blank_lines=True</code>, o sus líneas se comparan como párrafos.</p>
+<p>En esTS una cadena se analiza en un <code>Doc</code>, así que ambos se dividen en párrafos por los saltos de línea entre sus tokens (por las líneas en blanco con <code>blank_lines</code>). Un texto con líneas cortadas dentro de sus párrafos, como los textos de <a href="../../datasets/spanishliterature/"><code>SpanishLiterature</code></a>, necesita <code>blank_lines=True</code>, o sus líneas se comparan como párrafos; el <a href="../../components/#CohesionStatsComponent">componente</a> lo toma en su <code>config</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

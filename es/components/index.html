@@ -2435,7 +2435,7 @@ True
 <td style="text-align: left;"><a href="#CohesionStatsComponent"><code>CohesionStatsComponent</code></a></td>
 <td style="text-align: left;"><code>ests_cohesion</code></td>
 <td style="text-align: left;"><a href="../stats/cohesion_stats/"><code>CohesionStats</code></a></td>
-<td style="text-align: left;">-</td>
+<td style="text-align: left;"><code>blank_lines</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><a href="#LexicalStatsComponent"><code>LexicalStatsComponent</code></a></td>
@@ -2688,25 +2688,49 @@ True
 </div>
 </div>
 <h3 id="CohesionStatsComponent">Estadísticas de cohesión<a class="headerlink" href="#CohesionStatsComponent" title="Permanent link">&para;</a></h3>
-<div class="signature highlight"><pre><span></span><code><span class="n">CohesionStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">CohesionStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">blank_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: components.md:CohesionStatsComponent 51ecae4 -->
-<p><code>CohesionStatsComponent</code> pone las estadísticas de cohesión en la extensión; por defecto necesitan las categorías gramaticales y los lemas antes de él.</p>
-<p>En el pipeline de <code>es_core_news_sm</code> vienen del <code>morphologizer</code> y del <code>lemmatizer</code>; la fábrica requiere <code>token.pos</code> y <code>token.lemma</code>, así que <code>nlp.analyze_pipes()</code> señala un pipeline sin alguno de ellos.</p>
+<!-- core: components.md:CohesionStatsComponent 47c308b -->
+<p><code>CohesionStatsComponent</code> pone las estadísticas de cohesión en la extensión; por defecto necesitan las categorías gramaticales y los lemas antes de él. Con <code>blank_lines</code> los párrafos empiezan solo tras las líneas en blanco, como en <code>CohesionStats</code>, para un texto con líneas cortadas dentro de sus párrafos.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceError</code> - un documento sin las categorías gramaticales o sin los lemas.</li>
+<li><code>ParameterError</code> - un <code>blank_lines</code> que no es un <code>bool</code>.</li>
 </ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parámetro</th>
+<th style="text-align: left;">Tipo</th>
+<th style="text-align: left;">Por defecto</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>blank_lines</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Empezar los párrafos solo tras las líneas en blanco, para un texto con líneas cortadas dentro de sus párrafos; por defecto, tras cada salto de línea</td>
+</tr>
+</tbody>
+</table>
+<p>En el pipeline de <code>es_core_news_sm</code> las categorías gramaticales y los lemas vienen del <code>morphologizer</code> y del <code>lemmatizer</code>; la fábrica requiere <code>token.pos</code> y <code>token.lemma</code>, así que <code>nlp.analyze_pipes()</code> señala un pipeline sin alguno de ellos, y un documento sin ellos lanza <code>SourceError</code>. Los textos de <a href="../datasets/spanishliterature/"><code>SpanishLiterature</code></a> tienen las líneas cortadas dentro de sus párrafos y necesitan <code>blank_lines</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_cohesion"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"cohesion"</span><span class="p">)</span>
-<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"El informe fue aprobado. Sin embargo, el informe no resuelve el problema."</span><span class="p">)</span>
-<span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">cohesion</span><span class="o">.</span><span class="n">noun_overlap_adjacent</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">cohesion</span><span class="o">.</span><span class="n">connectors</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_cohesion"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"paragraphs"</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="p">{</span><span class="s2">"blank_lines"</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"El informe fue aprobado. Sin embargo, el informe</span><span class="se">\n</span><span class="s2">no resuelve el problema."</span><span class="p">)</span>
+<span class="p">(</span>
+    <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">cohesion</span><span class="o">.</span><span class="n">noun_overlap_adjacent</span><span class="p">,</span>
+    <span class="nb">round</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">cohesion</span><span class="o">.</span><span class="n">connectors</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">cohesion</span><span class="o">.</span><span class="n">n_paragraphs</span><span class="p">,</span>
+    <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">paragraphs</span><span class="o">.</span><span class="n">n_paragraphs</span><span class="p">,</span>
+<span class="p">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>(1.0, 83.33)
+<div class="highlight"><pre><span></span><code>(1.0, 83.33, 2, 1)
 </code></pre></div>
 </div>
 </div>

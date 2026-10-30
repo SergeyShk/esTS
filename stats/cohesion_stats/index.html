@@ -2740,7 +2740,7 @@ Secondary connectors per 1000 words                                |  103.45
 </tbody>
 </table>
 <p>Segments that are a string, a <code>Doc</code>, an iterator or a segment that is not a list of strings raise <code>SourceTypeError</code>, a span that is not an integer above 0 <code>ParameterError</code>.</p>
-<p>In esTS a string is parsed into a <code>Doc</code>, so both are split into paragraphs by the line breaks between their tokens (by the blank lines with <code>blank_lines</code>). A text whose lines are wrapped inside its paragraphs, such as the texts of <a href="../../datasets/spanishliterature/"><code>SpanishLiterature</code></a>, needs <code>blank_lines=True</code>, or its lines are compared as paragraphs.</p>
+<p>In esTS a string is parsed into a <code>Doc</code>, so both are split into paragraphs by the line breaks between their tokens (by the blank lines with <code>blank_lines</code>). A text whose lines are wrapped inside its paragraphs, such as the texts of <a href="../../datasets/spanishliterature/"><code>SpanishLiterature</code></a>, needs <code>blank_lines=True</code>, or its lines are compared as paragraphs; the <a href="../../components/#CohesionStatsComponent">component</a> takes it in its <code>config</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Code</label><label for="__tabbed_3_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
