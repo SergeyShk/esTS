@@ -446,6 +446,9 @@ def test_split_predicates(doc):
         ("Siempre serás el mismo.", []),
         ("Los mismos familiares vinieron.", []),
         ("Siguió con la misma amarga ironía.", []),
+        # The model leaves the gender of these adjectives out; their noun agrees with the form
+        ("Recorrió la misma angosta calle.", []),
+        ("Tomó la misma opuesta dirección.", []),
         ("Los dos parecen el mismo.", []),
         ("La situación permanece la misma.", []),
         ("Se aplicará el mismo que en el ejercicio anterior.", []),

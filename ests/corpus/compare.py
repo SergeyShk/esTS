@@ -304,7 +304,12 @@ def _feature_row(found: object) -> dict[str, float]:
         raise SourceTypeError(message.format(type(found).__name__))
     row = {}
     for name, value in found.items():
+        if value is None:
+            row[name] = nan
+            continue
         try:
+            if isinstance(value, str):
+                raise TypeError
             row[name] = float(value)
         except (TypeError, ValueError):
             raise SourceTypeError(message.format(f"{name!r}: {value!r}")) from None

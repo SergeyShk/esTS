@@ -484,9 +484,17 @@ def test_overlaps_with_the_next_two_sentences():
         ("Se hará constar si el interesado comparece.", []),
         ("Indique si desea recibir notificaciones.", []),
         ("Indíquenos si acepta la propuesta.", []),
-        # A direct object of the verb before si: a condition
+        ("—Indique si desea factura.", []),
+        # The complement of the verb before si: a condition
         ("Lo veré si tengo tiempo.", ["si"]),
         ("Te lo explicaré si me dejas.", ["si"]),
+        ("Indíquelo si es necesario.", ["si"]),
+        ("Deberá indicarlo si procede.", ["si"]),
+        ("La solicitud se valorará si cumple los requisitos.", ["si"]),
+        ("El dato constará si se aporta el certificado.", ["si"]),
+        # A dative tagged as an object and the pronominal se are no complements
+        ("Le preguntaré si puede venir.", []),
+        ("El juez se preguntaba si valía la pena.", []),
         ("Indique su domicilio si es distinto del anterior.", ["si"]),
         ("Lo miró como si fuera un fantasma.", []),
         ("Vaya si lo sé.", []),
@@ -502,6 +510,21 @@ def test_overlaps_with_the_next_two_sentences():
 def test_si_without_a_condition(text, expected):
     """si of an indirect question, of an exclamation and of a comparison is no conditional"""
     assert [connector.text for connector in CohesionStats(text).connector_spans] == expected
+
+
+def test_si_with_an_object_after_it():
+    """An object the model attaches to the verb after si is no complement before it"""
+    from spacy.tokens import Doc
+
+    doc = Doc(
+        spacy.blank("es").vocab,
+        words=["no", "sé", "si", "tema", "o", "espere"],
+        heads=[1, 1, 3, 1, 5, 3],
+        deps=["advmod", "ROOT", "mark", "obj", "cc", "conj"],
+        pos=["ADV", "VERB", "SCONJ", "VERB", "CCONJ", "VERB"],
+        lemmas=["no", "saber", "si", "temer", "o", "esperar"],
+    )
+    assert is_connector_blocked(doc[2])
 
 
 def test_is_connector_blocked(nlp):

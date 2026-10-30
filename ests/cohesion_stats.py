@@ -20,11 +20,14 @@ from .constants import (
     CONNECTOR_BLOCKED_AFTER,
     CONNECTOR_BLOCKED_AFTER_POS,
     CONNECTOR_BLOCKED_BEFORE,
+    CONNECTOR_DATIVE_CLITICS,
     CONNECTOR_NOT_AT_START,
+    CONNECTOR_OBJECT_CLITICS,
     CONNECTOR_ONLY_AFTER,
     CONNECTOR_PARCELLATION,
     CONNECTOR_POS,
     CONNECTOR_POS_EXTRA,
+    CONNECTOR_PRONOMINAL_VERBS,
     CONNECTOR_QUESTION_VERBS,
     CONNECTOR_SPLIT_BY_MARKS,
     CONNECTOR_SUBORDINATORS,
@@ -37,6 +40,8 @@ if TYPE_CHECKING:
     from spacy.language import Language
     from spacy.tokens import Doc, Token
 
+# The vowels with a written accent and without it
+UNACCENTED = str.maketrans("áéíóú", "aeiou")
 CONNECTORS_FILE = Path(__file__).parent / "resources" / "connectors.tsv"
 # Components the statistics never read
 UNUSED_COMPONENTS = ["ner"]
@@ -415,12 +420,15 @@ def is_connector_blocked(token: Token) -> bool:
     Description:
         A si opens no condition after a verb of CONNECTOR_QUESTION_VERBS (no sé
         si viene, a ver si llega, preguntándose si, indique si desea), unless
-        the verb has a direct object before it (lo veré si tengo tiempo), and
-        after an opening ¡ (¡Si ya te lo dije!); a si after como or vaya is
-        dropped by the matcher itself (CONNECTOR_BLOCKED_BEFORE). The verb is
-        a VERB or AUX by the lemma of the model or of simplemma; a word opening
-        a sentence that the model reads as a proper or a common noun (Indique,
-        Indíquenos) is one by the lemma of simplemma
+        the verb has before it the complement the question would fill: an
+        object clitic, a direct object other than a dative, the subject of a
+        passive with se or of constar (indíquelo si es necesario, lo veré si
+        tengo tiempo, la solicitud se valorará si cumple); and after an opening
+        ¡ (¡Si ya te lo dije!); a si after como or vaya is dropped by the
+        matcher itself
+        (CONNECTOR_BLOCKED_BEFORE). The verb is a VERB or AUX by the lemma of
+        the model or of simplemma, or a word the model reads as a proper or a
+        common noun (Indique, Indíquenos) by the lemma of simplemma
 
     Arguments:
         token (Token): Token
@@ -444,13 +452,56 @@ def is_connector_blocked(token: Token) -> bool:
         return True
     if previous.pos_ in ("VERB", "AUX"):
         lemmas = {previous.lemma_.lower().split(" ")[0], lemmatize(previous.lower_)}
-    elif previous.pos_ in ("PROPN", "NOUN") and previous.is_sent_start:
+    elif previous.pos_ in ("PROPN", "NOUN"):
         lemmas = {lemmatize(previous.lower_)}
     else:
         return False
-    if not lemmas & CONNECTOR_QUESTION_VERBS:
-        return False
-    return not any(child.dep_ == "obj" and child.i < token.i for child in previous.children)
+    lemmas &= CONNECTOR_QUESTION_VERBS
+    return bool(lemmas) and not _has_question_complement(previous, lemmas, token.i)
+
+
+def _has_question_complement(verb: Token, lemmas: Collection[str], end: int) -> bool:
+    """
+    Checking whether a verb has the complement an indirect question would fill before a position
+
+    Description:
+        An object clitic of CONNECTOR_OBJECT_CLITICS at the end of the verb
+        whose stem has the same lemma (indíquelo, confírmalo; señala is no
+        señar), a direct object other than a dative of CONNECTOR_DATIVE_CLITICS
+        (lo veré, te lo explicaré; le preguntaré is a question), or the
+        subject of a passive with se or of constar (la solicitud se valorará,
+        el dato constará); the pronominal se of CONNECTOR_PRONOMINAL_VERBS is
+        none (se preguntó)
+
+    Arguments:
+        verb (Token): Verb before si
+        lemmas (list[str]): Lemmas of the verb among CONNECTOR_QUESTION_VERBS
+        end (int): Position of si
+
+    Returns:
+        bool: Result of the check
+    """
+    form = verb.lower_
+    for clitic in CONNECTOR_OBJECT_CLITICS:
+        stem = form.removesuffix(clitic)
+        if stem != form and len(stem) > 2 and lemmatize(_without_accent(stem)) in lemmas:
+            return True
+    before = [child for child in verb.children if child.i < end]
+    if any(
+        child.dep_ == "obj" and child.lower_ not in CONNECTOR_DATIVE_CLITICS for child in before
+    ):
+        return True
+    passive = any(child.dep_ == "expl:pass" for child in before) and not any(
+        lemma in CONNECTOR_PRONOMINAL_VERBS for lemma in lemmas
+    )
+    return (passive or "constar" in lemmas) and any(
+        child.dep_.startswith("nsubj") for child in before
+    )
+
+
+def _without_accent(word: str) -> str:
+    """A word without the written accent of its vowels"""
+    return word.translate(UNACCENTED)
 
 
 def token_info(token: Token) -> WordInfo:

@@ -29,6 +29,7 @@ from ..constants import (
     HIGHLIGHT_LAYER_STYLES,
     HIGHLIGHT_LAYERS_DESC,
     LONG_SENT_WORD_FACTOR,
+    MISMO_AGREEMENT,
     MISMO_ARTICLES,
     MISMO_COMPARATIVE,
     MISMO_FORMS,
@@ -44,7 +45,7 @@ from ..constants import (
 from ..datasets.freq_dict import lemma_key
 from ..lexical_stats import get_rank
 from ..phon_stats import CONSONANT_SOUNDS, transcribe
-from ..style_stats import INFINITIVE_ENDINGS, expand_phrases, is_stopword
+from ..style_stats import expand_phrases, is_stopword
 from ..syllables import count_syllables
 from ..syntax_stats import (
     find_split_predicates,
@@ -798,9 +799,8 @@ def is_anaphoric_mismo(token: Token) -> bool:
         noun (de la misma o distinta categoría). The models attach some of
         them to their article (en la misma hay oficinas): such a form counts
         when no noun, adjective, numeral or pronoun follows it in its
-        sentence, a singular adjective without gender whose lemma of
-        simplemma is an infinitive being a verb (contra la misma cabe
-        recurso). The identity of el mismo día, es el mismo, lo mismo and él
+        sentence, an adjective whose noun disagrees with the form being a verb
+        (contra la misma cabe recurso). The identity of el mismo día, es el mismo, lo mismo and él
         mismo is no anaphora; a token without a parse is none
 
     Arguments:
@@ -838,23 +838,26 @@ def is_anaphoric_mismo(token: Token) -> bool:
     if children or head.i != token.i - 1 or head.lower_ not in MISMO_ARTICLES:
         return False
     following = next((word for word in token.doc[token.i + 1 : sent_end] if is_word(word)), None)
-    return following is None or not _is_nominal(following)
+    return following is None or not _is_nominal(following, token)
 
 
-def _is_nominal(word: Token) -> bool:
-    """Whether a word goes on a noun phrase; a singular form without gender the model tags as
-    an adjective is a verb when simplemma gives it an infinitive of another form (contra la
-    misma cabe; la misma amarga ironía agrees in gender)"""
+def _is_nominal(word: Token, form: Token) -> bool:
+    """Whether a word goes on the noun phrase of a form of mismo; an adjective whose noun after it
+    disagrees with the form in gender or number is a verb the model misread (contra la misma cabe
+    recurso: recurso is masculine)"""
     if word.pos_ not in NOMINAL_POS:
         return False
-    if (
-        word.pos_ != "ADJ"
-        or not has_feature(word, "Number", "Sing")
-        or word.morph.get("Gender", [])
-    ):
+    noun = word.head
+    if word.pos_ != "ADJ" or noun.i <= word.i or noun.pos_ not in ("NOUN", "PROPN"):
         return True
-    lemma = lemmatize(word.lower_)
-    return lemma == word.lower_ or not lemma.endswith(INFINITIVE_ENDINGS)
+    gender, number = MISMO_AGREEMENT[form.lower_]
+    return not (_disagrees(noun, "Gender", gender) or _disagrees(noun, "Number", number))
+
+
+def _disagrees(word: Token, feature: str, value: str) -> bool:
+    """Whether a word has a feature without the value"""
+    values = word.morph.get(feature, [])
+    return bool(values) and value not in values
 
 
 def _is_modifier(word: Token) -> bool:
