@@ -37,7 +37,7 @@
 
 The library works both with raw strings and with `Doc` objects of [spaCy](https://github.com/explosion/spaCy); most statistics need no trained model (see Installation). Try it without installing in the [demo on Hugging Face Spaces](https://huggingface.co/spaces/SergeyShk/esTS): paste a text and get its readability, the metrics, the plots and the highlighting of its fragments. The [notebooks](https://sergeyshk.github.io/esTS/examples/) show the library on its datasets - a short story through every tool, prose authors, sonnets and corpus measures; the first one opens in [Colab](https://colab.research.google.com/github/SergeyShk/esTS/blob/master/examples/01_text_walkthrough.ipynb).
 
-* **[Object extraction](https://sergeyshk.github.io/esTS/extractors/sentences/)** - configurable sentence, word and character N-gram tokenizers that know the inverted marks, the dialogue dash and the abbreviations of Spanish
+* **[Object extraction](https://sergeyshk.github.io/esTS/extractors/sentences/)** - configurable sentence, word and character N-gram tokenizers that know the inverted marks, the dialogue dash and the abbreviations of Spanish, and the paragraphs of a text
 * **[Syllables and stress](https://sergeyshk.github.io/esTS/syllables/)** - rule-based syllabification and the stressed syllable derived from the spelling, with no dictionary
 * **[Basic statistics](https://sergeyshk.github.io/esTS/stats/basic_stats/)** - counts of sentences, words, letters, syllables and punctuation marks by type, with distributions and normalized shares
 * **[Readability metrics](https://sergeyshk.github.io/esTS/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX, with a consensus grade, the school stages of Spain and reading time, and formulas of other languages with their own coefficients
@@ -117,7 +117,7 @@ The statistics by the frequency dictionary need it downloaded once with `FreqDic
 
 ### Object extraction
 
-Configurable tools extract sentences, words and character N-grams from a text for the statistics. The sentence splitter knows the inverted marks, the dialogue dash and the abbreviations of Spanish; the word tokenizer keeps clitics, ordinals and Spanish numbers whole, and lemmas come from [simplemma](https://github.com/adbar/simplemma), which needs no model.
+Configurable tools extract sentences, words and character N-grams from a text for the statistics, and `split_paragraphs` its paragraphs between blank lines. The sentence splitter knows the inverted marks, the dialogue dash and the abbreviations of Spanish; the word tokenizer keeps clitics, ordinals and Spanish numbers whole, and lemmas come from [simplemma](https://github.com/adbar/simplemma), which needs no model.
 
 ```python
 >>> from ests import CharNgramsExtractor, SentsExtractor, WordsExtractor
@@ -562,7 +562,7 @@ The measures of corpus linguistics that compare corpora and describe the use of 
 *   collocations by logDice, MI, MI³, t-score, Dice, log-likelihood, NPMI and minimum sensitivity; the collocates of a word on its left or right
 *   the dispersion of a word over the parts of a text: DP of Gries, normalized DP, Juilland's D, Carroll's D2, Rosengren's S and the Kullback-Leibler divergence
 *   a KWIC concordance by word form or by lemma
-*   stylometry: the distances between texts by Burrows's Delta and its variants, with the attribution of a text to reference authors, the markers of preferred and avoided words by Zeta, Kilgarriff's chi-square, the Mendenhall curve and the profile of the function words
+*   stylometry: the distances between texts by Burrows's Delta and its variants, with the attribution of a text to reference authors and rolling Delta along a text, the markers of preferred and avoided words by Zeta and their shares in segments, Kilgarriff's chi-square, the Mendenhall curve and the profile of the function words
 *   the comparison of two corpora by 133 features of a text over windows of the same size: Cliff's delta, Cohen's d and the AUC of every feature, the Mann-Whitney test with Holm's correction and a bootstrap interval of the difference of the medians
 
 ```python
@@ -634,7 +634,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/datasets/spanishlit
 *   [Literature fingerprinting](https://sergeyshk.github.io/esTS/visualizers/fingerprinting/)
 *   [Word tree](https://sergeyshk.github.io/esTS/visualizers/word_tree/)
 *   [Corpus plots](https://sergeyshk.github.io/esTS/visualizers/corpus/): lexical dispersion, a chart of keywords, a network of collocations
-*   [Stylometric plots](https://sergeyshk.github.io/esTS/visualizers/stylometry/): a dendrogram, the principal components and the multidimensional scaling by Delta, the Mendenhall curves
+*   [Stylometric plots](https://sergeyshk.github.io/esTS/visualizers/stylometry/): a dendrogram, the principal components and the multidimensional scaling by Delta, the histograms of the distances within and between authors, rolling Delta, the segments by the markers of Zeta, the Mendenhall curves
 *   [Vocabulary growth and frequency spectrum](https://sergeyshk.github.io/esTS/visualizers/vocabulary/), [sentence lengths](https://sergeyshk.github.io/esTS/visualizers/sentences/) with a moving average
 
 The matplotlib plots take the axes `ax` and return `Axes`; the network of collocations and the word tree are rendered by the executables of Graphviz. Cosine Delta separates three novels by Galdós from three by Unamuno:
@@ -726,7 +726,7 @@ Bug reports, ideas and pull requests are welcome in the [issues](https://github.
     *   constants.py - constants of the Spanish language and of the metrics
     *   diversity_stats.py - lexical diversity metrics of the anyTS core over a string or a Doc
     *   exceptions.py - library exceptions
-    *   extractors.py - the extractors of the anyTS core with the Spanish tokenizers
+    *   extractors.py - the extractors of the anyTS core with the Spanish tokenizers, the paragraphs of a text
     *   morph_stats.py - morphological statistics
     *   readability_stats.py - readability metrics: the Spanish formulas over those of the anyTS core
     *   unadapted_readability_stats.py - readability formulas of other languages

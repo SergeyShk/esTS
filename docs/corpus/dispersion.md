@@ -32,6 +32,30 @@
     [('el', 0.1), ('gato', 0.02), ('en', 0.02), ('ventana', 0.02), ('y', 0.02), ('a', 0.34), ('pájaro', 0.32)]
     ```
 
+The paragraphs of a text come from [`split_paragraphs`](../extractors/sentences.md#split_paragraphs), imported from `ests.extractors`; a scene break of asterisks has no words and is dropped:
+
+=== "Code"
+
+    ``` python
+    from ests.extractors import split_paragraphs
+
+    text = (
+        "Capítulo I\n\nEl gato estaba en la ventana y miraba a los pájaros.\n\n* * *\n\n"
+        "Los pájaros se fueron y el gato se durmió en la ventana.\n\n"
+        "Mañana el gato volverá a estar en la ventana."
+    )
+    sizes = [n for n in (len(we.extract(part)) for part in split_paragraphs(text)) if n]
+    sizes
+    [(d.word, round(d.dp, 2)) for d in dispersion(we.extract(text), parts=sizes, min_freq=3)]
+    ```
+
+=== "Result"
+
+    ```
+    [2, 11, 12, 9]
+    [('el', 0.07), ('gato', 0.08), ('en', 0.08), ('ventana', 0.08)]
+    ```
+
 ## Parameters
 
 --8<-- "corpus/dispersion.md:dispersion-parameters"

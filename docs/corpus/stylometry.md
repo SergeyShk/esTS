@@ -61,6 +61,36 @@ The functions are those of the [anyTS](https://sergeyshk.github.io/anyTS/corpus/
     ?  0.249  1.464  0.942
     ```
 
+## Rolling Delta { #rolling_delta }
+
+--8<-- "corpus/stylometry.md:rolling_delta"
+
+=== "Code"
+
+    ``` python
+    from ests.corpus import rolling_delta
+
+    rolling_delta(corpus, corpus["A"] + corpus["B"], window=6, step=3, n_mfw=10).round(3)
+    ```
+
+=== "Result"
+
+    ```
+            A      B      C
+    3   0.830  1.181  0.954
+    6   0.709  1.166  0.845
+    9   0.957  1.225  0.942
+    12  0.799  1.067  0.784
+    15  0.761  0.687  0.757
+    18  0.830  1.181  0.954
+    21  1.048  0.919  0.954
+    24  1.216  0.610  1.123
+    27  1.003  0.381  1.087
+    30  1.221  0.377  0.999
+    33  0.980  0.425  0.757
+    36  1.003  0.381  1.087
+    ```
+
 ## Zeta { #zeta }
 
 --8<-- "corpus/stylometry.md:zeta"
@@ -79,6 +109,36 @@ The functions are those of the [anyTS](https://sergeyshk.github.io/anyTS/corpus/
     ```
     [ZetaScore(word='gato', dp_target=0.5, dp_comparison=0.0, zeta=0.5, log_zeta=2.0), ZetaScore(word='la', dp_target=0.5, dp_comparison=0.0, zeta=0.5, log_zeta=2.0)]
     ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2.0)
+    ```
+
+--8<-- "corpus/stylometry.md:zeta_segments"
+
+=== "Code"
+
+    ``` python
+    from ests.corpus import zeta_segments
+
+    scores = zeta(corpus["A"], corpus["B"], segment_size=5)
+    preferred = [score.word for score in scores if score.zeta > 0]
+    avoided = [score.word for score in scores if score.zeta < 0]
+    zeta_segments(corpus, preferred, avoided, segment_size=5).round(3)
+    ```
+
+=== "Result"
+
+    ```
+       corpus  preferred  avoided
+    0       A      0.333    0.125
+    1       A      0.333    0.000
+    2       A      0.333    0.125
+    3       A      0.444    0.000
+    4       B      0.000    0.250
+    5       B      0.000    0.500
+    6       B      0.000    0.500
+    7       B      0.000    0.375
+    8       C      0.111    0.125
+    9       C      0.333    0.000
+    10      C      0.111    0.250
     ```
 
 ## Kilgarriff's chi-square { #kilgarriff_chi2 }

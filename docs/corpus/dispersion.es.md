@@ -41,6 +41,30 @@ Las palabras se comparan tal cual: las mayúsculas y minúsculas y la lematizaci
     [('el', 0.1), ('gato', 0.02), ('en', 0.02), ('ventana', 0.02), ('y', 0.02), ('a', 0.34), ('pájaro', 0.32)]
     ```
 
+Los párrafos de un texto los da [`split_paragraphs`](../extractors/sentences.md#split_paragraphs), que se importa de `ests.extractors`; una separación de escenas con asteriscos no tiene palabras y se descarta:
+
+=== "Código"
+
+    ``` python
+    from ests.extractors import split_paragraphs
+
+    text = (
+        "Capítulo I\n\nEl gato estaba en la ventana y miraba a los pájaros.\n\n* * *\n\n"
+        "Los pájaros se fueron y el gato se durmió en la ventana.\n\n"
+        "Mañana el gato volverá a estar en la ventana."
+    )
+    sizes = [n for n in (len(we.extract(part)) for part in split_paragraphs(text)) if n]
+    sizes
+    [(d.word, round(d.dp, 2)) for d in dispersion(we.extract(text), parts=sizes, min_freq=3)]
+    ```
+
+=== "Resultado"
+
+    ```
+    [2, 11, 12, 9]
+    [('el', 0.07), ('gato', 0.08), ('en', 0.08), ('ventana', 0.08)]
+    ```
+
 ## Parámetros
 
 <!-- core: corpus/dispersion.md:dispersion-parameters 2fdf192 -->

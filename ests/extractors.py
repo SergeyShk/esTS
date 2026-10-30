@@ -3,6 +3,7 @@ from collections.abc import Iterable
 from typing import ClassVar
 
 import anyts
+from anyts.extractors import split_paragraphs as split_paragraphs
 
 from .utils import lemmatize, sentenize, tokenize
 

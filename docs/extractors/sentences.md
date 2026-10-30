@@ -51,3 +51,23 @@ The class extends the `SentsExtractor` of the [anyTS](https://sergeyshk.github.i
     ('Novedades', 'Importación más rápida\nMenos errores', '¡Gracias!')
     ('No tengas 100 euros', 'ten 100 amigos')
     ```
+
+## Paragraphs { #split_paragraphs }
+
+--8<-- "extractors/sentences.md:split_paragraphs"
+
+In esTS the function is imported from `ests.extractors`; the words of the paragraphs give [`dispersion`](../corpus/dispersion.md) the sizes of its parts.
+
+=== "Code"
+
+    ``` python
+    from ests.extractors import split_paragraphs
+
+    split_paragraphs("Capítulo I\n\nEra una noche oscura.\nLlovía.\n\n* * *\n\nAmaneció.")
+    ```
+
+=== "Result"
+
+    ```
+    ['Capítulo I', 'Era una noche oscura.\nLlovía.', '* * *', 'Amaneció.']
+    ```

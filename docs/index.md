@@ -18,7 +18,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    Tokenizers of [sentences](extractors/sentences.md), [words](extractors/words.md) and [character N-grams](extractors/char_ngrams.md) that know the inverted marks, the dialogue dash and the abbreviations of Spanish
+    Tokenizers of [sentences](extractors/sentences.md), [words](extractors/words.md) and [character N-grams](extractors/char_ngrams.md) that know the inverted marks, the dialogue dash and the abbreviations of Spanish, and the [paragraphs](extractors/sentences.md#split_paragraphs) of a text
 
     [:octicons-arrow-right-24: Extraction](extractors/sentences.md)
 
@@ -114,7 +114,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    [Keywords](corpus/keyness.md) against a reference corpus or the frequency dictionary, [collocations](corpus/collocations.md), the [dispersion](corpus/dispersion.md) of a word over the parts of a text, a [KWIC concordance](corpus/kwic.md), authorship by [stylometry](corpus/stylometry.md) (Burrows's Delta, Zeta, the Mendenhall curve, the function words) and the [comparison of corpora](corpus/compare.md) over 133 features of a text
+    [Keywords](corpus/keyness.md) against a reference corpus or the frequency dictionary, [collocations](corpus/collocations.md), the [dispersion](corpus/dispersion.md) of a word over the parts of a text, a [KWIC concordance](corpus/kwic.md), authorship by [stylometry](corpus/stylometry.md) (Burrows's Delta and rolling Delta, Zeta and its markers in segments, the Mendenhall curve, the function words) and the [comparison of corpora](corpus/compare.md) over 133 features of a text
 
     [:octicons-arrow-right-24: Corpus measures](corpus/keyness.md)
 
@@ -256,7 +256,7 @@ A walkthrough of one short story with every tool of the library is in the notebo
         *   constants.py - constants of the Spanish language and of the metrics
         *   diversity_stats.py - lexical diversity metrics
         *   exceptions.py - library exceptions
-        *   extractors.py - extractors of sentences, words and character N-grams with the Spanish tokenizers
+        *   extractors.py - extractors of sentences, words and character N-grams with the Spanish tokenizers, the paragraphs of a text
         *   lexical_stats.py - lexical sophistication statistics
         *   morph_stats.py - morphological statistics
         *   phon_stats.py - phonostatistics
@@ -284,7 +284,7 @@ A walkthrough of one short story with every tool of the library is in the notebo
             *   fingerprinting.py - literature fingerprinting
             *   highlight.py - text highlighting
             *   sentences.py - sentence lengths
-            *   stylometry.py - dendrogram, principal components, scaling, Mendenhall curves
+            *   stylometry.py - dendrogram, principal components, scaling, distances within and between authors, rolling Delta, Zeta markers, Mendenhall curves
             *   vocabulary.py - vocabulary growth and frequency spectrum
             *   word_tree.py - word tree
             *   zipf.py - Zipf's law
