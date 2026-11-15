@@ -1048,10 +1048,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#blank_lines" class="md-nav__link">
+  <a href="#load_pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Sentences after blank lines
+        Recommended pipeline
       
     </span>
   </a>
@@ -2276,10 +2276,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#blank_lines" class="md-nav__link">
+  <a href="#load_pipeline" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Sentences after blank lines
+        Recommended pipeline
       
     </span>
   </a>
@@ -2330,9 +2330,8 @@
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">ests</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">spacy</span>
 
-<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"es_core_news_sm"</span><span class="p">)</span>
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">ests</span><span class="o">.</span><span class="n">load_pipeline</span><span class="p">()</span>
 <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_basic"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"basic"</span><span class="p">)</span>
 <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"El gato duerme en la ventana. Los niños juegan en el parque."</span><span class="p">)</span>
 <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">basic</span><span class="o">.</span><span class="n">n_words</span><span class="p">,</span> <span class="n">doc</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">basic</span><span class="o">.</span><span class="n">c_letters</span>
@@ -2373,14 +2372,14 @@ True
 </table>
 <p>spaCy sets both at <code>nlp.add_pipe(factory, name=...)</code>; the other parameters of a component are passed in the <code>config</code> dictionary of the same call.</p>
 <h2 id="names">Names<a class="headerlink" href="#names" title="Permanent link">&para;</a></h2>
-<p>The factories carry the prefix of the library: <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_unadapted_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code>, and the component of sentence boundaries <a href="#blank_lines"><code>ests_blank_lines</code></a>. They are declared as entry points of <code>spacy_factories</code>, so a pipeline saved with these components (<code>nlp.to_disk(path)</code>, <code>spacy package</code>) loads with <code>spacy.load(path)</code> without importing the library. <code>import ests</code> does not load the components while spaCy is not loaded - the entry points find them, and <code>ests.StyleStatsComponent</code> loads them on first use; from the sources without an installed package, <code>import ests.components</code> comes before <code>add_pipe</code>.</p>
+<p>The factories carry the prefix of the library: <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_unadapted_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code>. They are declared as entry points of <code>spacy_factories</code>, so a pipeline saved with these components (<code>nlp.to_disk(path)</code>, <code>spacy package</code>) loads with <code>spacy.load(path)</code> without importing the library. <code>import ests</code> does not load the components while spaCy is not loaded - the entry points find them, and <code>ests.StyleStatsComponent</code> loads them on first use; from the sources without an installed package, <code>import ests.components</code> comes before <code>add_pipe</code>.</p>
 <p>The name of the pipe is the name of the extension: <code>nlp.add_pipe(factory, name="basic")</code> puts the statistics into <code>doc._.basic</code>. Without <code>name</code> both take the name of the factory. The extension follows the pipe when the pipeline renames it (<code>nlp.rename_pipe</code>). A name taken by an extension of another package raises <code>ParameterError</code> instead of replacing it: at <code>add_pipe</code>, or at the first document after <code>rename_pipe</code>, which renames the pipe before the component learns its name. A component taken from another pipeline (<code>add_pipe(name, source=other)</code>) is the same object in both, so under a new name it writes to that extension in the other pipeline too; a separate component comes from the factory, <code>add_pipe(factory, name=...)</code>. The same component can be added twice under different names, with different parameters. A document with no words - an empty string, whitespace, punctuation alone - passes through a component untouched, its extension left at <code>None</code>.</p>
 <p>In <code>ests_lexical</code> a document of numbers alone passes untouched as well, and in <code>ests_verse</code> a document without letters.</p>
 <div class="admonition warning">
 <p class="admonition-title">Serialization</p>
 <p>A component keeps an object of statistics in <code>doc._.&lt;name&gt;</code>, and spaCy cannot serialize it: <code>Doc.to_bytes()</code>, <code>DocBin(store_user_data=True)</code> and <code>nlp.pipe(..., n_process&gt;1)</code> fail with these components in the pipeline. To save a document, leave the user data out (<code>doc.to_bytes(exclude=["user_data"])</code>) or keep <code>doc._.&lt;name&gt;.get_stats()</code> separately; for multiprocessing compute the statistics in the main process after <code>nlp.pipe</code>, without the components.</p>
 </div>
-<p>Adding a component extends the tokenizer of its pipeline with the rules for the dashes of a dialogue glued to the words and for the abbreviations in every case (<a href="../extractors/words/"><code>add_dash_rules</code></a>), as in the string API: <code>sí--dijo</code> is two words and a dash, <code>SR.</code> one word. A tokenizer that is not the <code>Tokenizer</code> of spaCy is left as it is.</p>
+<p>A component reads the <code>Doc</code> of its pipeline as it is and leaves its tokenizer alone: the words and the sentences of the string API come with the pipeline of <a href="#load_pipeline"><code>load_pipeline</code></a>, where <code>sí--dijo</code> is two words and a dash and a blank line ends a sentence.</p>
 <h2 id="class-components">Components of the classes of statistics<a class="headerlink" href="#class-components" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2898,10 +2897,10 @@ True
 </div>
 </div>
 </div>
-<h2 id="blank_lines">Sentences after blank lines<a class="headerlink" href="#blank_lines" title="Permanent link">&para;</a></h2>
-<div class="signature highlight"><pre><span></span><code><span class="n">start_sents_after_blank_lines</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+<h2 id="load_pipeline">Recommended pipeline<a class="headerlink" href="#load_pipeline" title="Permanent link">&para;</a></h2>
+<div class="signature highlight"><pre><span></span><code><span class="n">load_pipeline</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s1">'es_core_news_sm'</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">(),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </code></pre></div>
-<p>A component that starts a sentence at the first token after a blank line - a line break, optional whitespace and another line break - so that a heading, a list item or a paragraph without a final mark is a sentence of its own, as in the sentence extractor. It goes before the parser, <code>senter</code> or <code>sentencizer</code>, which keeps its starts and places the others. The whitespace before such a start stays with the sentence before it, and the marks that open a paragraph (a dash of a dialogue, <code>¡</code>, <code>«</code>) stay with its first word. Alone, the component leaves the sentences within a paragraph unsplit and sets partial boundaries (<code>has_sents</code>), so the statistics take the sentences of such a document from its text. A parsed document, such as one passed through the pipeline again, passes untouched, since spaCy keeps its sentences. A language library registers the component under its prefix, <code>Language.component("&lt;prefix&gt;_blank_lines", func=start_sents_after_blank_lines)</code>.</p>
+<p>A spaCy model with the tokenizer <code>anyseg.Tokenizer.v1</code> and the component <code>anyseg_sentencizer</code> first, both of <a href="https://github.com/SergeyShk/anySeg">anySeg</a>: the tokens and the sentences of a <code>Doc</code> are those the <a href="../extractors/sentences/">extractors</a> give its text, so the statistics of a <code>Doc</code> and of the string count the same words and sentences. The tags, the lemmas, the parser and the other components are the model's. A contraction (<code>del</code>, <code>al</code>) is one token, with its words in <code>token._.anyseg_words</code>. A saved pipeline loads with <code>spacy.load(path)</code>, as the factories of anySeg are entry points. <code>ests.utils.get_nlp</code>, which parses the strings of the morphological, syntactic, cohesion, lexical and style statistics, loads it once per process and model.</p>
 <table>
 <thead>
 <tr>
@@ -2913,25 +2912,44 @@ True
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>doc</code></td>
-<td style="text-align: left;"><code>Doc</code></td>
-<td style="text-align: left;">-</td>
-<td style="text-align: left;">Doc object</td>
+<td style="text-align: left;"><code>model</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>'es_core_news_sm'</code></td>
+<td style="text-align: left;">Name or path of a spaCy model: <code>es_core_news_sm</code>, <code>es_core_news_md</code>, <code>es_core_news_lg</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>exclude</code></td>
+<td style="text-align: left;"><code>str</code> / <code>list[str]</code></td>
+<td style="text-align: left;"><code>()</code></td>
+<td style="text-align: left;">Components of the model not to load, e.g. <code>ner</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>**kwargs</code></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">The other parameters of <code>spacy.load</code>; the tokenizer of <code>config</code> is replaced by that of anySeg</td>
 </tr>
 </tbody>
 </table>
-<p>In esTS the component is registered as <code>ests_blank_lines</code>. Without it the <code>es_core_news_sm</code> model glues a paragraph without a final mark to the next sentence, and the statistics of a <code>Doc</code> differ from those of the same string. The pipeline of <code>ests.utils.get_nlp</code>, which parses the strings of the morphological, syntactic, cohesion and lexical statistics, has it before the parser.</p>
+<p>Raises:</p>
+<ul>
+<li><code>DatasetNotFoundError</code> - a model that is not installed.</li>
+</ul>
+<p>A pipeline of one's own, such as <code>spacy.load("es_core_news_sm")</code>, keeps the tokenizer of spaCy: <code>sí--dijo</code> is one token there, and the parser joins a paragraph without a final mark to the next sentence across a blank line, so the statistics of its <code>Doc</code> differ from those of the string.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="12:2"><input checked="checked" id="__tabbed_12_1" name="__tabbed_12" type="radio" /><input id="__tabbed_12_2" name="__tabbed_12" type="radio" /><div class="tabbed-labels"><label for="__tabbed_12_1">Code</label><label for="__tabbed_12_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"es_core_news_sm"</span><span class="p">)</span>
-<span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_blank_lines"</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="s2">"parser"</span><span class="p">)</span>
-<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"Novedades</span><span class="se">\n\n</span><span class="s2">Importación rápida. Menos errores"</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">ests</span>
+
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">ests</span><span class="o">.</span><span class="n">load_pipeline</span><span class="p">()</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"Novedades</span><span class="se">\n\n</span><span class="s2">Importación rápida. Menos errores</span><span class="se">\n\n</span><span class="s2">--Sí --dijo él. Vino del pueblo."</span><span class="p">)</span>
 <span class="p">[</span><span class="n">sent</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">sents</span><span class="p">]</span>
+<span class="p">[(</span><span class="n">token</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">token</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">anyseg_words</span><span class="p">)</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s2">"del"</span><span class="p">]</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>['Novedades', 'Importación rápida.', 'Menos errores']
+<div class="highlight"><pre><span></span><code>['Novedades', 'Importación rápida.', 'Menos errores', '--Sí --dijo él.', 'Vino del pueblo.']
+[('del', [{'form': 'de'}, {'form': 'el'}])]
 </code></pre></div>
 </div>
 </div>
@@ -2942,10 +2960,8 @@ True
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">ests</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">spacy</span>
 
-<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"es_core_news_sm"</span><span class="p">)</span>
-<span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="s2">"ests_blank_lines"</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="s2">"parser"</span><span class="p">)</span>
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">ests</span><span class="o">.</span><span class="n">load_pipeline</span><span class="p">()</span>
 <span class="n">factories</span> <span class="o">=</span> <span class="p">(</span>
     <span class="s2">"basic"</span><span class="p">,</span>
     <span class="s2">"readability"</span><span class="p">,</span>

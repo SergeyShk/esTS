@@ -2307,7 +2307,7 @@
 <p>Raises:</p>
 <ul>
 <li><code>SourceTypeError</code> - a source that is neither a string nor a <code>Doc</code>, an extractor of another type, a pipeline in <code>nlp</code> that is not a spaCy <code>Language</code>, connectors that are not a dictionary of phrases and pairs of strings;</li>
-<li><code>SourceError</code> - a source without words; a <code>Doc</code> without the parts of speech or the lemmas (a <code>Doc</code> of <code>spacy.blank("es")</code>); a string longer than the <code>max_length</code> of the pipeline or with a character without a UTF-8 form;</li>
+<li><code>SourceError</code> - a source without words; a <code>Doc</code> without the parts of speech or the lemmas (a <code>Doc</code> of <code>spacy.blank("es")</code>); a string longer than the <code>max_length</code> of the pipeline;</li>
 <li><code>ParameterError</code> - an unknown class or kind of a connector, a <code>blank_lines</code> that is not a <code>bool</code>;</li>
 <li><code>DatasetNotFoundError</code> - a string without <code>nlp</code> when the model is not installed.</li>
 </ul>

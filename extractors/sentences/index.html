@@ -2117,12 +2117,12 @@
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
-<span class="n">SentsExtractor</span><span class="p">()</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s2">"Novedades</span><span class="se">\n\n</span><span class="s2">Importación más rápida</span><span class="se">\n</span><span class="s2">Menos errores</span><span class="se">\n\n</span><span class="s2">¡Gracias!"</span><span class="p">)</span>
+<span class="n">SentsExtractor</span><span class="p">()</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s2">"Novedades</span><span class="se">\n\n</span><span class="s2">Importación más</span><span class="se">\n</span><span class="s2">rápida. Menos errores</span><span class="se">\n\n</span><span class="s2">¡Gracias!"</span><span class="p">)</span>
 <span class="n">SentsExtractor</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">", "</span><span class="p">))</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="s2">"No tengas 100 euros, ten 100 amigos"</span><span class="p">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>('Novedades', 'Importación más rápida\nMenos errores', '¡Gracias!')
+<div class="highlight"><pre><span></span><code>('Novedades', 'Importación más\nrápida.', 'Menos errores', '¡Gracias!')
 ('No tengas 100 euros', 'ten 100 amigos')
 </code></pre></div>
 </div>
