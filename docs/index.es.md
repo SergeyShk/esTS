@@ -58,7 +58,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    Categorías gramaticales y quince rasgos morfológicos de Universal Dependencies con los marcadores del español: los modos, las formas no personales, las cópulas `ser` y `estar`, los adverbios en `-mente`
+    Categorías gramaticales y quince rasgos morfológicos de Universal Dependencies con los marcadores del español: los modos, las formas no personales, los pronombres clíticos, las cópulas `ser` y `estar`, los adverbios en `-mente`
 
     [:octicons-arrow-right-24: Estadísticas morfológicas](stats/morph_stats.md)
 

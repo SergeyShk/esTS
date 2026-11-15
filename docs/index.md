@@ -58,7 +58,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    Parts of speech and fifteen grammatical features of Universal Dependencies with the markers of Spanish: the moods, the non-finite forms, the copulas `ser` and `estar`, the adverbs in `-mente`
+    Parts of speech and fifteen grammatical features of Universal Dependencies with the markers of Spanish: the moods, the non-finite forms, the clitic pronouns, the copulas `ser` and `estar`, the adverbs in `-mente`
 
     [:octicons-arrow-right-24: Morphological statistics](stats/morph_stats.md)
 

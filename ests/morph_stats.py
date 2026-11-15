@@ -20,7 +20,7 @@ from .constants import (
     MORPHOLOGY_STATS_DESC,
 )
 from .exceptions import SourceError
-from .utils import _annotate_text, get_document, get_morph_analyzer
+from .utils import SEGMENTER, _annotate_text, get_document, get_morph_analyzer
 
 if TYPE_CHECKING:
     from anyseg import Document
@@ -89,11 +89,12 @@ def has_enclitics(token: TreeWord) -> bool:
     Checking whether a verb form of the tree carries enclitic pronouns
 
     Description:
-        A VERB or an AUX whose token is, by its first analysis as a verb in
-        esMorph, a verb with pronouns after it (dámelo - da + me + lo,
-        escribirle, pasábanse); the forms in -se of the subjunctive are one
-        word (hablase). In a string the words of the token are the verb and its
-        pronouns, in a Doc the token is one word
+        A VERB or an AUX whose token the segmenter anySeg splits into the verb
+        and its pronouns (dale - da + le, dámelo - da + me + lo, buscarla) or
+        whose first analysis as a verb in esMorph has pronouns after it
+        (pasábanse, díjole); the forms in -se of the subjunctive are one word
+        (hablase). The rule reads the text of the token, so a string and a Doc
+        give the same
 
     Arguments:
         token (TreeWord): Word of the tree
@@ -117,7 +118,10 @@ def has_enclitics(token: TreeWord) -> bool:
 
 @lru_cache(maxsize=65536)
 def _verb_with_pronouns(text: str) -> bool:
-    """Whether the first analysis of a token as a verb in esMorph has more than one word"""
+    """Whether anySeg splits a token into words or its first analysis as a verb in esMorph has
+    more than one word"""
+    if len(SEGMENTER.segment(text).tokens[0].words) > 1:
+        return True
     analyses = get_morph_analyzer().analyze(text)
     return next((len(a.words) > 1 for a in analyses if a.pos in VERBAL_POS), False)
 
@@ -305,8 +309,10 @@ class MorphStats(anyts.morph_stats.MorphStats):
 
         Description:
             Every marker is a share of its own base: the moods among the
-            finite forms, the non-finite forms among the verb forms (VERB and
-            AUX, so participles tagged ADJ stay out), ser among the copular
+            finite forms, the non-finite forms and the forms with enclitics or
+            after proclitics (has_enclitics, has_proclitics) among the verb
+            forms (VERB and AUX, so participles tagged ADJ stay out), ser among
+            the copular
             uses of ser and estar (the auxiliaries of the passive and of the
             progressive left out, see is_auxiliary) and the adverbs in -mente
             among the adverbs

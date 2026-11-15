@@ -221,6 +221,13 @@ def test_markers_clitics(source):
     assert markers["p_proclitics"] == pytest.approx(1 / 5)
 
 
+@pytest.mark.parametrize("source", [str, get_nlp()])
+def test_markers_enclitics_split_by_the_segmenter(source):
+    """Imperatives and infinitives that anySeg splits and esMorph alone would not"""
+    text = "Dale el libro. Date prisa. ¡Cállate! Dinos la verdad. Fue a buscarla."
+    assert MorphStats(source(text)).get_markers()["p_enclitics"] == pytest.approx(5 / 6)
+
+
 def test_markers_clitics_of_the_subjunctive_in_se():
     """The imperfect subjunctive in -se is one word, no verb with an enclitic"""
     markers = MorphStats("Si hablase y comiese más, se quedase.").get_markers()

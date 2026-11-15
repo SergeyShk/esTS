@@ -42,7 +42,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Basic statistics](https://sergeyshk.github.io/esTS/stats/basic_stats/)** - counts of sentences, words, letters, syllables and punctuation marks by type, with distributions, normalized shares and the entropies of word lengths
 * **[Readability metrics](https://sergeyshk.github.io/esTS/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos with the INFLESZ scale, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX and RIX, with a consensus grade, the school stages of Spain and reading time, and formulas of other languages with their own coefficients
 * **[Lexical diversity metrics](https://sergeyshk.github.io/esTS/stats/diversity_stats/)** - TTR and its variations, MATTR, MSTTR, MTLD and MAMTLD, HD-D, Simpson's and Yule's indices, entropy, Orlov's Z, the burstiness of the lexemes, Zipf's and Heaps' laws
-* **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
+* **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, the clitic pronouns, `ser` against `estar`, the adverbs in `-mente`
 * **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text, a KWIC concordance and the stylometry of authorship: Burrows's Delta with its variants, Zeta, the Mendenhall curve, the profile of the function words; the comparison of two corpora by 166 features of a text with effect sizes
 * **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, the distances within and between authors, rolling Delta and Zeta, vocabulary growth, sentence lengths, and the highlighting of the fragments the statistics count, such as long sentences and passives
 * **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors in four genres; 4,259 sonnets of the 15th-20th centuries with the metrical pattern and the rhyme of every line; a frequency dictionary of 86,196 lemmas by Google Books Ngram
@@ -332,7 +332,7 @@ The parts of speech and the grammatical features of Universal Dependencies, as t
 
 *   the part of speech and fifteen features: case, definiteness, degree, gender, mood, numeral type, number, person, polarity, politeness, possessive, pronoun type, reflexive, tense and verb form
 *   the distribution of the words by the values of any feature, and the parse of the text word by word
-*   the markers of Spanish: the moods among the finite forms, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
+*   the markers of Spanish: the moods among the finite forms, the non-finite forms, the forms with enclitic and after proclitic pronouns, `ser` against `estar`, the adverbs in `-mente`
 
 ```python
 >>> from ests import MorphStats
