@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import re
 from collections.abc import Iterable, Iterator
 from functools import lru_cache
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import simplemma
@@ -22,6 +24,9 @@ if TYPE_CHECKING:
 
 # The segmenter of Spanish into tokens and sentences
 SEGMENTER = Segmenter("es")
+ANYSEG_TOKENIZER = "anyseg.Tokenizer.v1"
+# A name of an installed model, as opposed to a path
+PACKAGE_NAME = re.compile(r"[\w.-]+")
 
 
 def iter_tokens(text: str) -> Iterator[tuple[int, int, str]]:
@@ -177,21 +182,23 @@ def load_pipeline(
         anyseg_sentencizer first, so that the tokens and the sentences of a Doc are
         those of a string (iter_tokens, iter_text_sents); the tags, the lemmas, the
         parser and the other components are the model's. A contraction (del, al) is
-        one token, its words are in token._.anyseg_words. A saved pipeline with
-        these components loads as it is
+        one token, its words are in token._.anyseg_words. A tokenizer of anySeg
+        that config or a saved pipeline has is kept with its lists of
+        abbreviations and tokens, so a saved pipeline loads as it is
 
     Arguments:
         model (str): Name or path of a spaCy model: es_core_news_sm, es_core_news_md,
             es_core_news_lg
         exclude (str|list[str]): Components of the model not to load, e.g. ner
-        **kwargs: The other parameters of spacy.load; the tokenizer of config is
-            replaced by that of anySeg
+        **kwargs: The other parameters of spacy.load; another tokenizer of config
+            is replaced by that of anySeg
 
     Returns:
         Language: Pipeline
 
     Raises:
-        DatasetNotFoundError: If the model is not installed
+        DatasetNotFoundError: If the model is not installed or the pipeline of a path
+            cannot be loaded
 
     Example:
         >>> from ests import load_pipeline
@@ -208,16 +215,39 @@ def load_pipeline(
 
     excluded = [exclude] if isinstance(exclude, str) else list(exclude)
     config = dict(kwargs.pop("config", {}))
-    config["nlp"] = {**config.get("nlp", {}), "tokenizer": {"@tokenizers": "anyseg.Tokenizer.v1"}}
+    nlp_config = dict(config.get("nlp", {}))
+    nlp_config["tokenizer"] = _tokenizer_config(model, nlp_config.get("tokenizer"))
+    config["nlp"] = nlp_config
     try:
         nlp = spacy.load(model, exclude=excluded, config=config, **kwargs)
     except OSError as error:
+        if Path(model).exists() or not PACKAGE_NAME.fullmatch(str(model)):
+            raise DatasetNotFoundError(
+                f"The spaCy pipeline {model} cannot be loaded: {error}"
+            ) from error
         raise DatasetNotFoundError(
             f"The spaCy model {model} is not installed: python -m spacy download {model}"
         ) from error
     if "anyseg_sentencizer" not in nlp.component_names:
         nlp.add_pipe("anyseg_sentencizer", first=True)
     return nlp
+
+
+def _tokenizer_config(model: str, given: object) -> dict[str, Any]:
+    """
+    The [nlp.tokenizer] block of load_pipeline: the tokenizer of anySeg that config or
+    the config.cfg of a saved pipeline gives, with its lists, or a new one
+    """
+    if isinstance(given, dict) and given.get("@tokenizers") == ANYSEG_TOKENIZER:
+        return given
+    saved = Path(model) / "config.cfg"
+    if saved.is_file():
+        import spacy
+
+        tokenizer = dict(spacy.util.load_config(saved)["nlp"]["tokenizer"])
+        if tokenizer.get("@tokenizers") == ANYSEG_TOKENIZER:
+            return tokenizer
+    return {"@tokenizers": ANYSEG_TOKENIZER}
 
 
 @lru_cache(maxsize=4)

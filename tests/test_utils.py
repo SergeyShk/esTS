@@ -509,6 +509,27 @@ def test_load_pipeline_not_installed():
         load_pipeline("es_core_news_xxl")
 
 
+def test_load_pipeline_of_a_wrong_path(tmp_path):
+    with pytest.raises(DatasetNotFoundError, match="cannot be loaded") as error:
+        load_pipeline(str(tmp_path))
+    assert "spacy download" not in str(error.value)
+
+
+def test_load_pipeline_keeps_the_tokenizer_of_anyseg(tmp_path):
+    """The lists of a tokenizer of anySeg in config or in a saved pipeline are kept"""
+    tokenizer = {"@tokenizers": "anyseg.Tokenizer.v1", "abbreviations": ["xyz"]}
+    nlp = load_pipeline(exclude=["parser", "ner"], config={"nlp": {"tokenizer": tokenizer}})
+    text = "El xyz. dijo algo."
+    assert [token.text for token in nlp(text)][:3] == ["El", "xyz.", "dijo"]
+    nlp.to_disk(tmp_path / "anyseg")
+    saved = load_pipeline(str(tmp_path / "anyseg"))
+    assert [token.text for token in saved(text)][:3] == ["El", "xyz.", "dijo"]
+    # A saved pipeline with the tokenizer of spaCy gets that of anySeg
+    spacy.load("es_core_news_sm", exclude=["parser", "ner"]).to_disk(tmp_path / "spacy")
+    plain = load_pipeline(str(tmp_path / "spacy"))
+    assert plain.config["nlp"]["tokenizer"] == {"@tokenizers": "anyseg.Tokenizer.v1"}
+
+
 def test_get_nlp_not_installed():
     with pytest.raises(DatasetNotFoundError, match="spacy download"):
         get_nlp("es_core_news_xxl")
