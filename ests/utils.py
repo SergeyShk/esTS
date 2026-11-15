@@ -1,38 +1,25 @@
 from __future__ import annotations
 
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
 from functools import lru_cache
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import simplemma
 from anyseg import Segmenter
 from anyts.constants import MESSAGES
 from anyts.utils import (
-    add_tokenizer_rules,
     count_words_by_spans as count_words_by_spans,
     find_phrases as find_phrases,
     is_language,
     is_punctuation,
 )
 
-from .constants import (
-    SPACY_MODEL,
-    TOKENIZER_ABBREVIATIONS,
-    TOKENIZER_INFIXES,
-    TOKENIZER_PREFIXES,
-    TOKENIZER_SUFFIXES,
-    VERBAL_NOUN_LEMMAS,
-    VERBAL_NOUN_SUFFIXES,
-)
+from .constants import SPACY_MODEL, VERBAL_NOUN_LEMMAS, VERBAL_NOUN_SUFFIXES
 from .exceptions import DatasetNotFoundError, SourceError, SourceTypeError
 
 if TYPE_CHECKING:
     from spacy.language import Language
 
-# Byte order mark glued to the start of a text read with utf-8 instead of utf-8-sig
-BYTE_ORDER_MARK = "\ufeff"
-# Components of spaCy that set the sentences of a Doc
-SENTENCE_SETTERS = ("parser", "senter", "sentencizer")
 # The segmenter of Spanish into tokens and sentences
 SEGMENTER = Segmenter("es")
 
@@ -139,45 +126,6 @@ def _check_text(text: object) -> None:
         raise SourceTypeError(MESSAGES["text_type"].format(type=type(text).__name__))
 
 
-def add_dash_rules(nlp: Language) -> None:
-    """
-    Adding the rules for the dashes of a dialogue to the tokenizer of a pipeline
-
-    Description:
-        The rules of TOKENIZER_PREFIXES, TOKENIZER_SUFFIXES and TOKENIZER_INFIXES
-        split the dashes glued to the words off (--No, -dijo, reírse—me,
-        dijo:—¡Mis) and leave a hyphen between letters (franco-alemán) or before
-        a digit (-5) alone; a byte order mark glued to the start of a text is
-        split off as well, so the marks after it are split as usual. The
-        abbreviations of TOKENIZER_ABBREVIATIONS become single tokens in lower
-        case, capitalized and in upper case (sr., Sr., SR.), when the tokenizer
-        keeps one of their forms whole; get_nlp has the rules already. The
-        add_tokenizer_rules of the core: a rule the tokenizer has is not added
-        twice, and a tokenizer that is not the Tokenizer of spaCy, or whose rules
-        are not regular expressions, is left as it is
-
-    Arguments:
-        nlp (Language): Pipeline whose tokenizer gets the rules
-
-    Example:
-        >>> import spacy
-        >>> from ests.utils import add_dash_rules
-        >>> nlp = spacy.blank("es")
-        >>> [token.text for token in nlp("--No --dijo él.")]
-        ['--No', '--dijo', 'él', '.']
-        >>> add_dash_rules(nlp)
-        >>> [token.text for token in nlp("--No --dijo él.")]
-        ['--', 'No', '--', 'dijo', 'él', '.']
-    """
-    add_tokenizer_rules(
-        nlp,
-        prefixes=(BYTE_ORDER_MARK, *TOKENIZER_PREFIXES),
-        suffixes=TOKENIZER_SUFFIXES,
-        infixes=TOKENIZER_INFIXES,
-        abbreviations=TOKENIZER_ABBREVIATIONS,
-    )
-
-
 def _check_nlp(nlp: object) -> None:
     """A pipeline that is not a spaCy Language (is_language)"""
     if nlp is not None and not is_language(nlp):
@@ -218,37 +166,72 @@ def lemmatize(word: str) -> str:
     return simplemma.lemmatize(word, lang="es") if word != "" else word
 
 
-@lru_cache(maxsize=4)
-def _load_nlp(model: str) -> Language:
-    """Loading a pipeline by the name of its model, once per name, with the dash rules"""
+def load_pipeline(
+    model: str = SPACY_MODEL, exclude: str | Iterable[str] = (), **kwargs: Any
+) -> Language:
+    """
+    Loading the recommended spaCy pipeline
+
+    Description:
+        A spaCy model with the tokenizer anyseg.Tokenizer.v1 and the component
+        anyseg_sentencizer first, so that the tokens and the sentences of a Doc are
+        those of a string (iter_tokens, iter_text_sents); the tags, the lemmas, the
+        parser and the other components are the model's. A contraction (del, al) is
+        one token, its words are in token._.anyseg_words. A saved pipeline with
+        these components loads as it is
+
+    Arguments:
+        model (str): Name or path of a spaCy model: es_core_news_sm, es_core_news_md,
+            es_core_news_lg
+        exclude (str|list[str]): Components of the model not to load, e.g. ner
+        **kwargs: The other parameters of spacy.load; the tokenizer of config is
+            replaced by that of anySeg
+
+    Returns:
+        Language: Pipeline
+
+    Raises:
+        DatasetNotFoundError: If the model is not installed
+
+    Example:
+        >>> from ests import load_pipeline
+        >>> nlp = load_pipeline(exclude="ner")
+        >>> nlp.pipe_names
+        ['anyseg_sentencizer', 'tok2vec', 'morphologizer', 'parser', 'attribute_ruler', 'lemmatizer']
+        >>> doc = nlp("--Dámelo --dijo el Sr. García.\\n\\nVino del pueblo")
+        >>> [token.text for token in doc if not token.is_space]
+        ['--', 'Dámelo', '--', 'dijo', 'el', 'Sr.', 'García', '.', 'Vino', 'del', 'pueblo']
+        >>> [sent.text.strip() for sent in doc.sents]
+        ['--Dámelo --dijo el Sr. García.', 'Vino del pueblo']
+    """
     import spacy
 
-    from . import components  # noqa: F401  # registers ests_blank_lines
-
+    excluded = [exclude] if isinstance(exclude, str) else list(exclude)
+    config = dict(kwargs.pop("config", {}))
+    config["nlp"] = {**config.get("nlp", {}), "tokenizer": {"@tokenizers": "anyseg.Tokenizer.v1"}}
     try:
-        nlp = spacy.load(model)
+        nlp = spacy.load(model, exclude=excluded, config=config, **kwargs)
     except OSError as error:
         raise DatasetNotFoundError(
             f"The spaCy model {model} is not installed: python -m spacy download {model}"
         ) from error
-    add_dash_rules(nlp)
-    setters = [name for name in nlp.pipe_names if name in SENTENCE_SETTERS]
-    if setters and "ests_blank_lines" not in nlp.component_names:
-        nlp.add_pipe("ests_blank_lines", before=setters[0])
+    if "anyseg_sentencizer" not in nlp.component_names:
+        nlp.add_pipe("anyseg_sentencizer", first=True)
     return nlp
+
+
+@lru_cache(maxsize=4)
+def _load_nlp(model: str) -> Language:
+    """The pipeline of load_pipeline, once per model"""
+    return load_pipeline(model)
 
 
 def get_nlp(model: str = SPACY_MODEL) -> Language:
     """
-    Loading a spaCy pipeline, once per process
-
-    Description:
-        The tokenizer of the pipeline gets the rules of add_dash_rules, and the
-        component ests_blank_lines goes before the parser, senter or sentencizer,
-        so a blank line ends a sentence of a Doc as of a string
+    Loading the pipeline of load_pipeline, once per process and model
 
     Arguments:
-        model (str): Name of the model
+        model (str): Name or path of the model
 
     Returns:
         Language: Loaded pipeline

@@ -16,9 +16,8 @@ Los componentes de esTS son subclases del `StatsComponent` del núcleo [anyTS](h
 
     ``` python
     import ests
-    import spacy
 
-    nlp = spacy.load("es_core_news_sm")
+    nlp = ests.load_pipeline()
     nlp.add_pipe("ests_basic", name="basic")
     doc = nlp("El gato duerme en la ventana. Los niños juegan en el parque.")
     doc._.basic.n_words, doc._.basic.c_letters
@@ -43,7 +42,7 @@ spaCy fija ambos en `nlp.add_pipe(factory, name=...)`; los demás parámetros de
 
 ## Nombres { #names }
 
-Las fábricas llevan el prefijo de la biblioteca: `ests_basic`, `ests_readability`, `ests_unadapted_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`, y el componente de los límites de oración [`ests_blank_lines`](#blank_lines). Están declaradas como entry points de `spacy_factories`, así que un pipeline guardado con estos componentes (`nlp.to_disk(path)`, `spacy package`) se carga con `spacy.load(path)` sin importar la biblioteca. `import ests` no carga los componentes mientras spaCy no está cargado - los hallan los puntos de entrada, y `ests.StyleStatsComponent` los carga al usarlo por primera vez; desde las fuentes sin el paquete instalado, `import ests.components` va antes de `add_pipe`.
+Las fábricas llevan el prefijo de la biblioteca: `ests_basic`, `ests_readability`, `ests_unadapted_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`. Están declaradas como entry points de `spacy_factories`, así que un pipeline guardado con estos componentes (`nlp.to_disk(path)`, `spacy package`) se carga con `spacy.load(path)` sin importar la biblioteca. `import ests` no carga los componentes mientras spaCy no está cargado - los hallan los puntos de entrada, y `ests.StyleStatsComponent` los carga al usarlo por primera vez; desde las fuentes sin el paquete instalado, `import ests.components` va antes de `add_pipe`.
 
 <!-- core: components.md:StatsComponent-names 33ebb87 -->
 El nombre del paso del pipeline es el nombre de la extensión: `nlp.add_pipe(factory, name="basic")` pone las estadísticas en `doc._.basic`. Sin `name` ambos toman el nombre de la fábrica. La extensión sigue al paso cuando el pipeline lo renombra (`nlp.rename_pipe`). Un nombre ocupado por una extensión de otro paquete lanza `ParameterError` en lugar de reemplazarla: en `add_pipe`, o con el primer documento después de `rename_pipe`, que renombra el paso antes de que el componente conozca su nombre. Un componente tomado de otro pipeline (`add_pipe(name, source=other)`) es el mismo objeto en ambos, así que con un nombre nuevo escribe también en esa extensión del otro pipeline; un componente independiente sale de la fábrica, `add_pipe(factory, name=...)`. El mismo componente puede añadirse dos veces con nombres distintos, con parámetros distintos. Un documento sin palabras - una cadena vacía, espacios, pura puntuación - pasa por un componente sin cambios, con su extensión en `None`.
@@ -54,7 +53,7 @@ En `ests_lexical` también pasa intacto un documento solo de números, y en `est
 !!! warning "Serialización"
     Un componente guarda un objeto de estadísticas en `doc._.<name>`, y spaCy no sabe serializarlo: `Doc.to_bytes()`, `DocBin(store_user_data=True)` y `nlp.pipe(..., n_process>1)` fallan con estos componentes en el pipeline. Para guardar un documento, deje fuera los datos de usuario (`doc.to_bytes(exclude=["user_data"])`) o guarde `doc._.<name>.get_stats()` por separado; para el multiproceso, calcule las estadísticas en el proceso principal después de `nlp.pipe`, sin los componentes.
 
-Añadir un componente amplía el tokenizador de su pipeline con las reglas de las rayas de un diálogo pegadas a las palabras y de las abreviaturas en cualquier caja ([`add_dash_rules`](extractors/words.md)), como en la API de cadenas: `sí--dijo` son dos palabras y una raya, `SR.` una palabra. Un tokenizador que no es el `Tokenizer` de spaCy se queda como está.
+Un componente lee el `Doc` de su pipeline tal cual y no toca su tokenizador: las palabras y las oraciones de la API de cadenas vienen con el pipeline de [`load_pipeline`](#load_pipeline), donde `sí--dijo` son dos palabras y una raya y una línea en blanco cierra la oración.
 
 ## Componentes de las clases de estadísticas { #class-components }
 
@@ -435,34 +434,42 @@ Excepciones:
     ('octosílabo', {'aguda': 2, 'llana': 2})
     ```
 
-## Oraciones tras líneas en blanco { #blank_lines }
+## Pipeline recomendado { #load_pipeline }
 
-<!-- core: components.md:start_sents_after_blank_lines b811493 -->
 ``` {.python .signature}
-start_sents_after_blank_lines(doc)
+load_pipeline(model='es_core_news_sm', exclude=(), **kwargs)
 ```
 
-Un componente que inicia una oración en el primer token tras una línea en blanco - un salto de línea, espacios opcionales y otro salto de línea -, para que un título, un elemento de una lista o un párrafo sin signo final sean una oración propia, como en el extractor de oraciones. Va antes del parser, `senter` o `sentencizer`, que conserva sus inicios y coloca los demás. Los espacios ante tal inicio se quedan con la oración anterior, y los signos que abren un párrafo (una raya de diálogo, `¡`, `«`) se quedan con su primera palabra. Por sí solo, el componente no divide las oraciones dentro de un párrafo y fija límites parciales (`has_sents`), así que las estadísticas toman las oraciones de tal documento de su texto. Un documento ya analizado, como uno que vuelve a pasar por el pipeline, pasa intacto, porque spaCy conserva sus oraciones. Una biblioteca del idioma registra el componente con su prefijo, `Language.component("<prefix>_blank_lines", func=start_sents_after_blank_lines)`.
+Un modelo de spaCy con el tokenizador `anyseg.Tokenizer.v1` y el componente `anyseg_sentencizer` en primer lugar, ambos de [anySeg](https://github.com/SergeyShk/anySeg): los tokens y las oraciones de un `Doc` son los que los [extractores](extractors/sentences.md) dan a su texto, así que las estadísticas de un `Doc` y de la cadena cuentan las mismas palabras y oraciones. Las etiquetas, los lemas, el analizador sintáctico y los demás componentes son los del modelo. Una contracción (`del`, `al`) es un token, con sus palabras en `token._.anyseg_words`. Un pipeline guardado con estos componentes se carga tal cual: sus fábricas son puntos de entrada de anySeg. `ests.utils.get_nlp`, que analiza las cadenas de las estadísticas morfológicas, sintácticas, de cohesión, léxicas y de estilo, lo carga una vez por proceso y modelo.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
-| `doc` | `Doc` | - | Objeto Doc |
+| `model` | `str` | `'es_core_news_sm'` | Nombre o ruta de un modelo de spaCy: `es_core_news_sm`, `es_core_news_md`, `es_core_news_lg` |
+| `exclude` | `str` / `list[str]` | `()` | Componentes del modelo que no se cargan, por ejemplo `ner` |
+| `**kwargs` | | | Los demás parámetros de `spacy.load`; el tokenizador de `config` se sustituye por el de anySeg |
 
-En esTS el componente está registrado como `ests_blank_lines`. Sin él, el modelo `es_core_news_sm` pega un párrafo sin signo final a la oración siguiente, y las estadísticas de un `Doc` difieren de las de la misma cadena. El pipeline de `ests.utils.get_nlp`, que analiza las cadenas de las estadísticas morfológicas, sintácticas, de cohesión y léxicas, lo tiene antes del parser.
+Excepciones:
+
+- `DatasetNotFoundError` - un modelo que no está instalado.
+
+Un pipeline propio, como `spacy.load("es_core_news_sm")`, conserva el tokenizador de spaCy: allí `sí--dijo` es un solo token, y el analizador pega un párrafo sin signo final a la oración siguiente por encima de una línea en blanco, así que las estadísticas de su `Doc` difieren de las de la cadena.
 
 === "Código"
 
     ``` python
-    nlp = spacy.load("es_core_news_sm")
-    nlp.add_pipe("ests_blank_lines", before="parser")
-    doc = nlp("Novedades\n\nImportación rápida. Menos errores")
+    import ests
+
+    nlp = ests.load_pipeline()
+    doc = nlp("Novedades\n\nImportación rápida. Menos errores\n\n--Sí --dijo él. Vino del pueblo.")
     [sent.text.strip() for sent in doc.sents]
+    [(token.text, token._.anyseg_words) for token in doc if token.text == "del"]
     ```
 
 === "Resultado"
 
     ```
-    ['Novedades', 'Importación rápida.', 'Menos errores']
+    ['Novedades', 'Importación rápida.', 'Menos errores', '--Sí --dijo él.', 'Vino del pueblo.']
+    [('del', [{'form': 'de'}, {'form': 'el'}])]
     ```
 
 ## Todo en un pipeline { #pipeline }
@@ -473,10 +480,8 @@ Los once componentes pueden compartir un pipeline.
 
     ``` python
     import ests
-    import spacy
 
-    nlp = spacy.load("es_core_news_sm")
-    nlp.add_pipe("ests_blank_lines", before="parser")
+    nlp = ests.load_pipeline()
     factories = (
         "basic",
         "readability",

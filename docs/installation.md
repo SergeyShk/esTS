@@ -32,7 +32,7 @@ uv sync --all-groups
 
 ## The spaCy model { #model }
 
-Basic statistics, readability, lexical diversity, the style metrics except the verbal nouns, phonostatistics and verse statistics need no trained model. The [morphological](stats/morph_stats.md), the [syntactic](stats/syntax_stats.md) (with a parser), the [cohesion](stats/cohesion_stats.md) and the [lexical sophistication statistics](stats/lexical_stats.md) of a string need one, and so do the verbal nouns of the [style metrics](stats/style_stats.md), [`function_words_profile`](corpus/stylometry.md), the features of a text, the [comparison of corpora](corpus/compare.md) and building a `Doc` yourself. The test suite needs it too; the `test` dependency group installs it:
+Basic statistics, readability, lexical diversity, the style metrics except the verbal nouns, phonostatistics and verse statistics need no trained model. The [morphological](stats/morph_stats.md), the [syntactic](stats/syntax_stats.md) (with a parser), the [cohesion](stats/cohesion_stats.md) and the [lexical sophistication statistics](stats/lexical_stats.md) of a string need one, and so do the verbal nouns of the [style metrics](stats/style_stats.md), [`function_words_profile`](corpus/stylometry.md), the features of a text, the [comparison of corpora](corpus/compare.md) and building a `Doc` yourself, best with [`ests.load_pipeline()`](components.md#load_pipeline), which gives a `Doc` the tokens and the sentences of its string. The test suite needs it too; the `test` dependency group installs it:
 
 ``` bash
 python -m spacy download es_core_news_sm

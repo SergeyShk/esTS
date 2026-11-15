@@ -77,11 +77,11 @@ Against the dictionary the words of a play of Lope de Vega from the [corpus of l
 === "Result"
 
     ```
-    laurencia 135 0.32 2528.7 14.96
-    mengo 105 0.13 2102.5 15.9
-    comendador 154 5.33 2059.9 11.09
-    frondoso 113 3.84 1515.6 11.12
-    barrildo 52 0.1 995.7 15.26
+    laurencia 135 0.32 2528.5 14.96
+    mengo 105 0.13 2102.3 15.89
+    comendador 154 5.33 2059.6 11.09
+    frondoso 113 3.84 1515.4 11.12
+    barrildo 52 0.1 995.6 15.26
     ```
 
 ## Result

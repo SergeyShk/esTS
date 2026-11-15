@@ -15,9 +15,8 @@ The components of esTS are subclasses of the `StatsComponent` of the [anyTS](htt
 
     ``` python
     import ests
-    import spacy
 
-    nlp = spacy.load("es_core_news_sm")
+    nlp = ests.load_pipeline()
     nlp.add_pipe("ests_basic", name="basic")
     doc = nlp("El gato duerme en la ventana. Los niños juegan en el parque.")
     doc._.basic.n_words, doc._.basic.c_letters
@@ -42,7 +41,7 @@ spaCy sets both at `nlp.add_pipe(factory, name=...)`; the other parameters of a 
 
 ## Names { #names }
 
-The factories carry the prefix of the library: `ests_basic`, `ests_readability`, `ests_unadapted_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`, and the component of sentence boundaries [`ests_blank_lines`](#blank_lines). They are declared as entry points of `spacy_factories`, so a pipeline saved with these components (`nlp.to_disk(path)`, `spacy package`) loads with `spacy.load(path)` without importing the library. `import ests` does not load the components while spaCy is not loaded - the entry points find them, and `ests.StyleStatsComponent` loads them on first use; from the sources without an installed package, `import ests.components` comes before `add_pipe`.
+The factories carry the prefix of the library: `ests_basic`, `ests_readability`, `ests_unadapted_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`. They are declared as entry points of `spacy_factories`, so a pipeline saved with these components (`nlp.to_disk(path)`, `spacy package`) loads with `spacy.load(path)` without importing the library. `import ests` does not load the components while spaCy is not loaded - the entry points find them, and `ests.StyleStatsComponent` loads them on first use; from the sources without an installed package, `import ests.components` comes before `add_pipe`.
 
 --8<-- "components.md:StatsComponent-names"
 
@@ -50,7 +49,7 @@ In `ests_lexical` a document of numbers alone passes untouched as well, and in `
 
 --8<-- "components.md:StatsComponent-serialization"
 
-Adding a component extends the tokenizer of its pipeline with the rules for the dashes of a dialogue glued to the words and for the abbreviations in every case ([`add_dash_rules`](extractors/words.md)), as in the string API: `sí--dijo` is two words and a dash, `SR.` one word. A tokenizer that is not the `Tokenizer` of spaCy is left as it is.
+A component reads the `Doc` of its pipeline as it is and leaves its tokenizer alone: the words and the sentences of the string API come with the pipeline of [`load_pipeline`](#load_pipeline), where `sí--dijo` is two words and a dash and a blank line ends a sentence.
 
 ## Components of the classes of statistics { #class-components }
 
@@ -374,25 +373,42 @@ Raises:
     ('octosílabo', {'aguda': 2, 'llana': 2})
     ```
 
-## Sentences after blank lines { #blank_lines }
+## Recommended pipeline { #load_pipeline }
 
---8<-- "components.md:start_sents_after_blank_lines"
+``` {.python .signature}
+load_pipeline(model='es_core_news_sm', exclude=(), **kwargs)
+```
 
-In esTS the component is registered as `ests_blank_lines`. Without it the `es_core_news_sm` model glues a paragraph without a final mark to the next sentence, and the statistics of a `Doc` differ from those of the same string. The pipeline of `ests.utils.get_nlp`, which parses the strings of the morphological, syntactic, cohesion and lexical statistics, has it before the parser.
+A spaCy model with the tokenizer `anyseg.Tokenizer.v1` and the component `anyseg_sentencizer` first, both of [anySeg](https://github.com/SergeyShk/anySeg): the tokens and the sentences of a `Doc` are those the [extractors](extractors/sentences.md) give its text, so the statistics of a `Doc` and of the string count the same words and sentences. The tags, the lemmas, the parser and the other components are the model's. A contraction (`del`, `al`) is one token, with its words in `token._.anyseg_words`. A saved pipeline with these components loads as it is: their factories are entry points of anySeg. `ests.utils.get_nlp`, which parses the strings of the morphological, syntactic, cohesion, lexical and style statistics, loads it once per process and model.
+
+| Parameter | Type | Default | Description |
+| :-------- | :--- | :------ | :---------- |
+| `model` | `str` | `'es_core_news_sm'` | Name or path of a spaCy model: `es_core_news_sm`, `es_core_news_md`, `es_core_news_lg` |
+| `exclude` | `str` / `list[str]` | `()` | Components of the model not to load, e.g. `ner` |
+| `**kwargs` | | | The other parameters of `spacy.load`; the tokenizer of `config` is replaced by that of anySeg |
+
+Raises:
+
+- `DatasetNotFoundError` - a model that is not installed.
+
+A pipeline of one's own, such as `spacy.load("es_core_news_sm")`, keeps the tokenizer of spaCy: `sí--dijo` is one token there, and the parser joins a paragraph without a final mark to the next sentence across a blank line, so the statistics of its `Doc` differ from those of the string.
 
 === "Code"
 
     ``` python
-    nlp = spacy.load("es_core_news_sm")
-    nlp.add_pipe("ests_blank_lines", before="parser")
-    doc = nlp("Novedades\n\nImportación rápida. Menos errores")
+    import ests
+
+    nlp = ests.load_pipeline()
+    doc = nlp("Novedades\n\nImportación rápida. Menos errores\n\n--Sí --dijo él. Vino del pueblo.")
     [sent.text.strip() for sent in doc.sents]
+    [(token.text, token._.anyseg_words) for token in doc if token.text == "del"]
     ```
 
 === "Result"
 
     ```
-    ['Novedades', 'Importación rápida.', 'Menos errores']
+    ['Novedades', 'Importación rápida.', 'Menos errores', '--Sí --dijo él.', 'Vino del pueblo.']
+    [('del', [{'form': 'de'}, {'form': 'el'}])]
     ```
 
 ## Everything in one pipeline { #pipeline }
@@ -403,10 +419,8 @@ The eleven components can share one pipeline.
 
     ``` python
     import ests
-    import spacy
 
-    nlp = spacy.load("es_core_news_sm")
-    nlp.add_pipe("ests_blank_lines", before="parser")
+    nlp = ests.load_pipeline()
     factories = (
         "basic",
         "readability",

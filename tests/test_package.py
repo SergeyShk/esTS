@@ -29,8 +29,6 @@ FACTORIES = {
     "ests_phon",
     "ests_verse",
 }
-# The component of the core registered under the prefix of the library
-CORE_COMPONENTS = {"ests_blank_lines"}
 RESOURCES = {"connectors.tsv", "google_books_top10000.txt"}
 # Modules of the library and the modules of the core they build on
 CORE_MODULES = {
@@ -233,12 +231,9 @@ def test_entry_points():
     points = {
         point.name: point for point in importlib.metadata.entry_points(group="spacy_factories")
     }
-    assert set(points) >= FACTORIES | CORE_COMPONENTS
+    assert set(points) >= FACTORIES
     for name in FACTORIES:
         assert points[name].load().__module__ == "ests.components"
-        assert Language.has_factory(name)
-    for name in CORE_COMPONENTS:
-        assert points[name].load().__module__ == "anyts.components"
         assert Language.has_factory(name)
 
 
@@ -260,7 +255,7 @@ def test_wheel_contents(tmp_path):
     assert {f"ests/resources/{name}" for name in RESOURCES} <= names
     # The archives of the datasets are downloaded, not installed
     assert not any(name.startswith("ests/datasets/data/") for name in names)
-    assert set(declared) == FACTORIES | CORE_COMPONENTS
+    assert set(declared) == FACTORIES
 
 
 def test_citation_version():

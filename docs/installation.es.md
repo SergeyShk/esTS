@@ -32,7 +32,7 @@ uv sync --all-groups
 
 ## El modelo de spaCy { #model }
 
-Las estadísticas básicas, la legibilidad, la diversidad léxica, las métricas de estilo salvo los sustantivos deverbales, la fonoestadística y las estadísticas del verso no necesitan ningún modelo entrenado. Las [estadísticas morfológicas](stats/morph_stats.md), las [sintácticas](stats/syntax_stats.md) (con analizador), las [de cohesión](stats/cohesion_stats.md) y las [de complejidad léxica](stats/lexical_stats.md) de una cadena sí lo necesitan, igual que los sustantivos deverbales de las [métricas de estilo](stats/style_stats.md), [`function_words_profile`](corpus/stylometry.md), los rasgos de un texto, la [comparación de corpus](corpus/compare.md) y construir un `Doc` por su cuenta. Las pruebas también lo necesitan; lo instala el grupo de dependencias `test`:
+Las estadísticas básicas, la legibilidad, la diversidad léxica, las métricas de estilo salvo los sustantivos deverbales, la fonoestadística y las estadísticas del verso no necesitan ningún modelo entrenado. Las [estadísticas morfológicas](stats/morph_stats.md), las [sintácticas](stats/syntax_stats.md) (con analizador), las [de cohesión](stats/cohesion_stats.md) y las [de complejidad léxica](stats/lexical_stats.md) de una cadena sí lo necesitan, igual que los sustantivos deverbales de las [métricas de estilo](stats/style_stats.md), [`function_words_profile`](corpus/stylometry.md), los rasgos de un texto, la [comparación de corpus](corpus/compare.md) y construir un `Doc` por su cuenta, mejor con [`ests.load_pipeline()`](components.md#load_pipeline), que da a un `Doc` los tokens y las oraciones de su cadena. Las pruebas también lo necesitan; lo instala el grupo de dependencias `test`:
 
 ``` bash
 python -m spacy download es_core_news_sm

@@ -160,14 +160,7 @@ def test_kwic_of_a_doc_finds_every_word_by_its_own_form():
 @pytest.mark.parametrize(
     ("text", "keyword", "expected"),
     [
-        pytest.param(
-            "Viajó a EE. UU. en mayo.",
-            "EE. UU.",
-            "EE. UU.",
-            marks=pytest.mark.xfail(
-                strict=True, reason="spaCy tokens of get_nlp until load_pipeline"
-            ),
-        ),
+        ("Viajó a EE. UU. en mayo.", "EE. UU.", "EE. UU."),
         ("¿Dónde está?", "¿Dónde", "Dónde"),
         ("Pagó 20 € por él.", "20 €", "20"),
     ],

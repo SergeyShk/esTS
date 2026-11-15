@@ -102,7 +102,7 @@ def test_verb_tagged_as_proper_noun(freq_dict):
 
 
 def test_abbreviations(freq_dict):
-    ls = LexicalStats("El Sr. Pérez y la SRA. Gómez leen la pág. 5, etc.", freq_dict)
+    ls = LexicalStats("El Sr. Pérez y la SRA. GÓMEZ leen la pág. 5, etc. y salen.", freq_dict)
     assert [ls.keys[ls.words.index(word)] for word in ("Sr.", "SRA.", "pág.", "etc.")] == [
         "sr",
         "sra",

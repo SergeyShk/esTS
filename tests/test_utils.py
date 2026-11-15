@@ -1,16 +1,11 @@
 import pytest
 import spacy
 from anyts.utils import has_words, is_punctuation, iter_doc_tokens, iter_doc_words
-from spacy.attrs import NORM, ORTH
-from spacy.tokens import Doc
-from spacy.util import compile_infix_regex
 
-from ests import BasicStats, CohesionStats, StyleStats, WordsExtractor
-from ests.constants import TOKENIZER_ABBREVIATIONS
+from ests import BasicStats, CohesionStats, StyleStats, WordsExtractor, load_pipeline
 from ests.corpus import kwic, text_features
 from ests.exceptions import DatasetNotFoundError, SourceError, SourceTypeError
 from ests.utils import (
-    add_dash_rules,
     get_nlp,
     iter_text_sents,
     iter_text_words,
@@ -26,13 +21,6 @@ def split_sents(text):
 
 def split_tokens(text):
     return [token for *_, token in iter_tokens(text)]
-
-
-def dash_tokens(text):
-    """Tokens of the tokenizer of a blank pipeline with the rules of add_dash_rules"""
-    nlp = spacy.blank("es")
-    add_dash_rules(nlp)
-    return [token.text for token in nlp(text)]
 
 
 @pytest.mark.parametrize(
@@ -374,103 +362,6 @@ def test_abbreviation_in_capitals(abbreviation):
     assert split_tokens(f"DE {upper} ESTO") == ["DE", *upper.split(), "ESTO"]
 
 
-def test_tokenizer_abbreviations():
-    assert all(form == form.lower() and len(form) > 2 for form in TOKENIZER_ABBREVIATIONS)
-    # Every abbreviation with a period that spaCy keeps whole is whole in every case or in none
-    rules = spacy.blank("es").tokenizer.rules
-    spacy_forms = {
-        form.lower()
-        for form in rules
-        if form[:1].isalpha() and form.endswith(".") and len(form) > 2
-    }
-    for abbreviation in spacy_forms - {"dna."}:
-        forms = (abbreviation, abbreviation[:1].upper() + abbreviation[1:], abbreviation.upper())
-        assert len({dash_tokens(form) == [form] for form in forms}) == 1, abbreviation
-    assert dash_tokens("el sr. Pérez, SR. OBISPO, la Pág. 5 y ee. uu.") == [
-        "el",
-        "sr.",
-        "Pérez",
-        ",",
-        "SR.",
-        "OBISPO",
-        ",",
-        "la",
-        "Pág.",
-        "5",
-        "y",
-        "ee. uu.",
-    ]
-    # A form takes the attributes of the one the tokenizer of spaCy has
-    nlp = spacy.blank("es")
-    add_dash_rules(nlp)
-    rules = nlp.tokenizer.rules
-    for form in ("ud.", "Ud.", "UD."):
-        assert rules[form] == [{ORTH: form, NORM: "usted"}]
-    # Interjections are left alone, and a tokenizer without any form gets none
-    assert dash_tokens("--Ej...") == ["--", "Ej", "..."]
-    other = spacy.blank("xx")
-    add_dash_rules(other)
-    assert [token.text for token in other("el Sr. X y el sr. X")] == [
-        "el",
-        "Sr",
-        ".",
-        "X",
-        "y",
-        "el",
-        "sr",
-        ".",
-        "X",
-    ]
-
-
-def test_add_dash_rules():
-    nlp = spacy.blank("es")
-    assert [token.text for token in nlp("--No")] == ["--No"]
-    add_dash_rules(nlp)
-    assert [token.text for token in nlp("--No")] == ["--", "No"]
-    # The model of get_nlp has the rules
-    text = "--No --dijo él. Y reírse—me decía:—¡Vete!"
-    assert [token.text for token in get_nlp()(text)] == dash_tokens(text)
-    # The rules a pipeline has already are kept, and a second call adds nothing
-    extended = spacy.blank("es")
-    extended.tokenizer.infix_finditer = compile_infix_regex(
-        (*extended.Defaults.infixes, "§")
-    ).finditer
-    add_dash_rules(extended)
-    assert [token.text for token in extended("a§b --No")] == ["a", "§", "b", "--", "No"]
-    rules = [
-        extended.tokenizer.prefix_search.__self__.pattern,
-        extended.tokenizer.suffix_search.__self__.pattern,
-        extended.tokenizer.infix_finditer.__self__.pattern,
-    ]
-    searches = (extended.tokenizer.prefix_search, extended.tokenizer.suffix_search)
-    add_dash_rules(extended)
-    # A tokenizer that has every rule is not reloaded
-    assert (extended.tokenizer.prefix_search, extended.tokenizer.suffix_search) == searches
-    assert extended.tokenizer.prefix_search.__self__.pattern == rules[0]
-    assert extended.tokenizer.suffix_search.__self__.pattern == rules[1]
-    assert extended.tokenizer.infix_finditer.__self__.pattern == rules[2]
-    # A tokenizer without a rule gets the rules alone, one not read from a regular
-    # expression is left as it is
-    bare = spacy.blank("es")
-    bare.tokenizer.prefix_search = None
-    bare.tokenizer.suffix_search = None
-    bare.tokenizer.infix_finditer = lambda text: iter(())
-    add_dash_rules(bare)
-    assert [token.text for token in bare("--No sé--")] == ["--", "No", "sé", "--"]
-    unread = spacy.blank("es")
-    unread.tokenizer.prefix_search = lambda text: None
-    unread.tokenizer.suffix_search = lambda text: None
-    unread.tokenizer.infix_finditer = None
-    add_dash_rules(unread)
-    assert [token.text for token in unread("--No sí--dijo")] == ["--No", "sí", "--", "dijo"]
-    # A tokenizer of one's own is left as it is
-    custom = spacy.blank("es")
-    custom.tokenizer = lambda text: Doc(custom.vocab, words=text.split())
-    add_dash_rules(custom)
-    assert [token.text for token in custom("--No sé")] == ["--No", "sé"]
-
-
 @pytest.mark.parametrize(
     ("word", "expected"),
     [
@@ -552,26 +443,19 @@ def test_get_nlp_cached():
 
 
 def test_get_nlp_of_a_saved_pipeline(tmp_path):
-    """A pipeline saved with the component of the blank lines gets it once"""
+    """A saved pipeline of load_pipeline loads as it is"""
     get_nlp().to_disk(tmp_path)
-    nlp = get_nlp(str(tmp_path))
-    assert nlp.pipe_names.count("ests_blank_lines") == 1
-    # A pipeline without a component that sets the sentences gets none
-    blank = spacy.blank("es")
-    blank.to_disk(tmp_path / "blank")
-    assert "ests_blank_lines" not in get_nlp(str(tmp_path / "blank")).pipe_names
+    assert get_nlp(str(tmp_path)).pipe_names == get_nlp().pipe_names
 
 
 def test_get_nlp_starts_a_sentence_after_a_blank_line():
-    nlp = get_nlp()
-    assert nlp.pipe_names.index("ests_blank_lines") == nlp.pipe_names.index("parser") - 1
     text = "Novedades\n\nImportación rápida. Menos errores\n\nEl gato duerme"
-    sents = [sent.text.strip() for sent in nlp(text).sents]
+    sents = [sent.text.strip() for sent in get_nlp()(text).sents]
     assert sents == split_sents(text)
 
 
 def test_get_nlp_without_the_parser():
-    """The starts of ests_blank_lines alone leave the sentences to the extractor"""
+    """The sentences of anyseg_sentencizer alone are those of the string"""
     text = (
         "El perro come carne. La casa es grande. El gato duerme\n\nEl perro corre. La casa arde."
     )
@@ -579,6 +463,50 @@ def test_get_nlp_without_the_parser():
     assert BasicStats(doc).n_sents == BasicStats(text).n_sents == 5
     assert sentence_lengths(doc) == sentence_lengths(text) == [4, 4, 3, 3, 3]
     assert CohesionStats(doc).noun_overlap_adjacent == 0.0
+
+
+TEXTS = [
+    "--Dámelo --dijo el Sr. García.\n\nVino del pueblo al mar, etc. Luego se fue.",
+    "—¿Vienes? —preguntó María. —Sí —dijo él.\n1. Primero\n2. Segundo",
+    "Llegó a las 3 p. m. Comimos en EE. UU. el 3.º día; costó 1.500,50 euros.",
+    "Título sin punto\n\nPrimera frase. Segunda\nfrase con salto. Tercera",
+]
+
+
+@pytest.mark.parametrize("text", TEXTS)
+def test_load_pipeline_segments_like_a_string(text):
+    """The tokens and the sentences of a Doc are those of the string"""
+    doc = get_nlp()(text)
+    assert [token.text for token in doc if not token.is_space] == split_tokens(text)
+    assert [sent.text.strip() for sent in doc.sents] == split_sents(text)
+    assert BasicStats(doc).n_words == BasicStats(text).n_words
+    assert BasicStats(doc).n_sents == BasicStats(text).n_sents
+
+
+def test_load_pipeline():
+    nlp = load_pipeline(exclude="ner")
+    assert nlp.pipe_names == [
+        "anyseg_sentencizer",
+        "tok2vec",
+        "morphologizer",
+        "parser",
+        "attribute_ruler",
+        "lemmatizer",
+    ]
+    assert nlp.config["nlp"]["tokenizer"] == {"@tokenizers": "anyseg.Tokenizer.v1"}
+    assert "ner" not in load_pipeline(exclude=["ner", "parser"]).component_names
+    contraction = nlp("Vino del pueblo")[1]
+    assert contraction.text == "del"
+    assert [word["form"] for word in contraction._.anyseg_words] == ["de", "el"]
+    # The other parameters go to spacy.load, the tokenizer of config is replaced
+    custom = load_pipeline(config={"nlp": {"batch_size": 7, "tokenizer": {"@tokenizers": "x"}}})
+    assert custom.batch_size == 7
+    assert custom.config["nlp"]["tokenizer"] == {"@tokenizers": "anyseg.Tokenizer.v1"}
+
+
+def test_load_pipeline_not_installed():
+    with pytest.raises(DatasetNotFoundError, match="spacy download es_core_news_xxl"):
+        load_pipeline("es_core_news_xxl")
 
 
 def test_get_nlp_not_installed():
