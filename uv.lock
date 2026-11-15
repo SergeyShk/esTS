@@ -1134,6 +1134,30 @@ wheels = [
 ]
 
 [[package]]
+name = "esmorph"
+version = "0.3.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/fd/9a/90c43ca6713c7512fde0efd3bb2981496c648324b49a4f570d21f13babdf/esmorph-0.3.0.tar.gz", hash = "sha256:070fec7139bce94a5c660d5b3fba7530cd218e08db4c26baecbf0c2b7393f859", size = 4623653, upload-time = "2026-11-13T00:43:42.272Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/13/7f/6bf720bcbf024abf8211247ccd012df895ddbac068f2ecfdf7c37c8e955a/esmorph-0.3.0-cp311-abi3-macosx_10_12_x86_64.whl", hash = "sha256:bd11b4e92e64d005a97d6061cb572a60ce903206074ceadeafc386c45fec0b5f", size = 4320742, upload-time = "2026-11-13T00:43:17.532Z" },
+    { url = "https://files.pythonhosted.org/packages/8c/e3/4c66bf5d91c69c34d7c2cebee8e1ae4a5ca234d55a77f6903122b4fc40dd/esmorph-0.3.0-cp311-abi3-macosx_11_0_arm64.whl", hash = "sha256:515276827aa211a5414f0bd7a06d37de77fa682dc533217e7f8de226401890ad", size = 4278541, upload-time = "2026-11-13T00:43:19.259Z" },
+    { url = "https://files.pythonhosted.org/packages/ff/b8/3b7e94c3db16b499f698b14da70f6e6eb9818f56aad2faa94d26fbaccdda/esmorph-0.3.0-cp311-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:588d00dba0c812d48a062aa6a5bcc4854377437fbea068a529d4ea947824b577", size = 4325145, upload-time = "2026-11-13T00:43:20.546Z" },
+    { url = "https://files.pythonhosted.org/packages/0e/45/a1bce4ef844b2b7982444a317505eab49674319fa1863a1231811dfaa043/esmorph-0.3.0-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8646cb87cc903bb1881006dd4c56f69b7237f72a81947fea891e14921c72cd5d", size = 4353174, upload-time = "2026-11-13T00:43:21.895Z" },
+    { url = "https://files.pythonhosted.org/packages/22/45/79dfabc45f127b61751a307e0250552d3883d62d26df6f7bd6f50f78a9cb/esmorph-0.3.0-cp311-abi3-musllinux_1_2_aarch64.whl", hash = "sha256:526310e9d62e78a918708ed17841b6bbe4c45e0c2ad1ae2c99f264371cef372f", size = 4502191, upload-time = "2026-11-13T00:43:23.368Z" },
+    { url = "https://files.pythonhosted.org/packages/6e/76/70b7dff52b6465a5e40764dee8a4288250aeab89f106a5d6ca5180c1c440/esmorph-0.3.0-cp311-abi3-musllinux_1_2_x86_64.whl", hash = "sha256:f6861b3617e21af1478370e91aa424307ce1fe8721aad7898d5241b754b489f1", size = 4564244, upload-time = "2026-11-13T00:43:25.083Z" },
+    { url = "https://files.pythonhosted.org/packages/6e/4e/b08fbc181e9910567b0de9b1f31dc5f3f1378e78ee45f4f9e90069167eaa/esmorph-0.3.0-cp311-abi3-win_amd64.whl", hash = "sha256:bd0b6d62f207573a035852e8652c53ddb6f027d7e009dd83ff0663f867816438", size = 4248671, upload-time = "2026-11-13T00:43:26.723Z" },
+    { url = "https://files.pythonhosted.org/packages/38/d3/971ffbd451e880eca12049e13dbcfd7bef554399083efeb3cc8a884f40aa/esmorph-0.3.0-cp311-abi3-win_arm64.whl", hash = "sha256:d34169b1622fc213b4f4f92b84d08b0c90fdef6bfc23eb627f1f522dafec20ff", size = 4209111, upload-time = "2026-11-13T00:43:28.033Z" },
+    { url = "https://files.pythonhosted.org/packages/74/45/4f22139768bd0e5a797a54d2795ac02f57274209bd81dcfb496a765dfe33/esmorph-0.3.0-cp314-cp314t-macosx_10_12_x86_64.whl", hash = "sha256:aa37db6e5515acafad98cd92d18975d6721911b4a9a6994f2e2271d3466036be", size = 4322231, upload-time = "2026-11-13T00:43:29.344Z" },
+    { url = "https://files.pythonhosted.org/packages/3f/67/87dad12cdbf59aa7cb9b437500735eea714bb4b3dc3b79caea565be8fd21/esmorph-0.3.0-cp314-cp314t-macosx_11_0_arm64.whl", hash = "sha256:7438244f84d021c1933c0ab9fcd6285d210f3f18336d8fd0d6ced4ae5580f2e7", size = 4268833, upload-time = "2026-11-13T00:43:30.788Z" },
+    { url = "https://files.pythonhosted.org/packages/12/e5/74d7b558f9a3f4472b64f12bde16bdf34086381d1b06fdd143839c45eef9/esmorph-0.3.0-cp314-cp314t-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:756c2704c2667f357b8cdfab86e56d5168e904e15e77745f1455312bcfc0036c", size = 4321229, upload-time = "2026-11-13T00:43:33.157Z" },
+    { url = "https://files.pythonhosted.org/packages/6d/ad/18f26b22c994c0a5eabd6ee1e238e0b92653397446aa960b1a574aaf2aaa/esmorph-0.3.0-cp314-cp314t-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6ec6bf864f85f33172f36685b060e5962f9b5d75c66f6e7de109a67da9b5020e", size = 4349834, upload-time = "2026-11-13T00:43:34.488Z" },
+    { url = "https://files.pythonhosted.org/packages/1e/90/acf854902a0a11bf31c421410826de78896209950d343e7311dbeb8072db/esmorph-0.3.0-cp314-cp314t-musllinux_1_2_aarch64.whl", hash = "sha256:24818fa831188ce297b3e7adf563a5cc85f55366e95a89d70edf3a81e20dd4b5", size = 4498959, upload-time = "2026-11-13T00:43:35.972Z" },
+    { url = "https://files.pythonhosted.org/packages/cb/fa/8b4bcb905ed4e46f3cf4b58d0a7c2ea9f2f157d3bcf4bd581e8dca807e52/esmorph-0.3.0-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:13c8b54f733f4b1350c10de2cb2242634ea354c9832c3149b800f03cdfbe93e9", size = 4560819, upload-time = "2026-11-13T00:43:37.833Z" },
+    { url = "https://files.pythonhosted.org/packages/70/4b/a89f50c3a4007f54b05743ef76b6e2e6bf1381e2b437bc455313c684e1a7/esmorph-0.3.0-cp314-cp314t-win_amd64.whl", hash = "sha256:ebda4012f37ff9c1631c9339ccc4d86cff945a4361fb0ca5e116a48f9308e401", size = 4242190, upload-time = "2026-11-13T00:43:39.434Z" },
+    { url = "https://files.pythonhosted.org/packages/69/80/56963ceca130d051580c011e6070686fa399cede0cde9470c436ddd06241/esmorph-0.3.0-cp314-cp314t-win_arm64.whl", hash = "sha256:a78d026e6fbb8e936c9216e1c1d5f7526180af5b20ed74ab211c98a734383f94", size = 4202208, upload-time = "2026-11-13T00:43:40.83Z" },
+]
+
+[[package]]
 name = "executing"
 version = "2.2.1"
 source = { registry = "https://pypi.org/simple" }
@@ -3204,11 +3228,12 @@ wheels = [
 
 [[package]]
 name = "pyests"
-version = "0.10.0.dev3"
+version = "0.10.0.dev4"
 source = { editable = "." }
 dependencies = [
     { name = "anyseg" },
     { name = "anyts" },
+    { name = "esmorph" },
     { name = "graphviz" },
     { name = "matplotlib" },
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
@@ -3259,6 +3284,7 @@ test = [
 requires-dist = [
     { name = "anyseg", specifier = ">=0.3,<0.4" },
     { name = "anyts", specifier = ">=0.5,<0.6" },
+    { name = "esmorph", specifier = ">=0.3,<0.4" },
     { name = "graphviz", specifier = ">=0.20.3" },
     { name = "matplotlib", specifier = ">=3.8" },
     { name = "numpy", specifier = ">=1.26" },
