@@ -339,7 +339,6 @@ Un texto sin palabras o más corto que `min_words` da una lista vacía.
 Excepciones:
 
 - `SourceTypeError` - un texto que no es una cadena;
-- `SourceError` - un carácter sin forma UTF-8;
 - `ParameterError` - un `window` o un `min_words` que no es un entero de al menos uno, un `min_words` mayor que la ventana.
 
 === "Código"

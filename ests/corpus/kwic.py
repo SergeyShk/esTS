@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from typing import TYPE_CHECKING
 
 import anyts.corpus
@@ -29,12 +29,14 @@ def kwic(
     Description:
         The occurrences of a word or a phrase are looked for among the words of
         the text by the word form, ignoring case or not, or by the lemma (gatos
-        is found by gato). The text and the keyword are tokenized the same way
-        (EE. UU. is one word); punctuation and symbols are not words. By lemma,
+        is found by gato). The text and the keyword are tokenized the same way;
+        punctuation and symbols are not words, and a word is compared without
+        the period of an abbreviation, which the end of a sentence splits off
+        (Sr. and Sr in "Vino el Sr." are one word). By lemma,
         a word matches by its lemma of simplemma and, in a Doc with lemmas, by
         the lemma of the model too; the keyword is lemmatized by simplemma.
         A phrase does not run across the end of a paragraph or of a sentence -
-        a boundary of a Doc, or the end of a sentence of sentenize in a text
+        a boundary of a Doc, or the end of a sentence of anySeg in a text
         without boundaries or with partial ones (has_sents) - unless the
         keyword has one in the same place.
         The context is window words on each side as written, with the
@@ -70,10 +72,21 @@ def kwic(
         window,
         by_lemma,
         ignore_case,
-        tokenize=iter_text_words,
+        tokenize=_words,
         lemmatize=_lemmas,
+        fold=_fold,
         sentenize=iter_text_sents,
     )
+
+
+def _words(text: str) -> Iterator[tuple[int, int, str]]:
+    """The words of iter_text_words without the period of an abbreviation"""
+    return ((start, end, word.removesuffix(".")) for start, end, word in iter_text_words(text))
+
+
+def _fold(word: str) -> str:
+    """A word in lower case without the period of an abbreviation, as a Doc writes it"""
+    return word.lower().removesuffix(".")
 
 
 def _lemmas(word: str, tokens: Sequence[Token]) -> tuple[str, ...]:

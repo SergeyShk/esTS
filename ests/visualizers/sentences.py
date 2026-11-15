@@ -47,8 +47,7 @@ def sentence_lengths_plot(
         SourceTypeError: If the data source or an extractor is set incorrectly
         ParameterError: If the window is not an integer or is below one, or the
             labels are set incorrectly or ax is not a matplotlib Axes (check_axes)
-        SourceError: If there are no sentences, a length is negative or a string has a
-            character without a UTF-8 form
+        SourceError: If there are no sentences or a length is negative
     """
     return anyts.visualizers.sentence_lengths_plot(
         source,
@@ -87,8 +86,7 @@ def sentence_lengths(
 
     Raises:
         SourceTypeError: If the data source or an extractor is set incorrectly
-        SourceError: If a length is negative or a string has a character without a UTF-8
-            form
+        SourceError: If a length is negative
 
     Example:
         >>> from ests.visualizers import sentence_lengths

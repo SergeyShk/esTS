@@ -250,7 +250,6 @@ A text without words or shorter than `min_words` gives an empty list.
 Raises:
 
 - `SourceTypeError` - a text that is not a string;
-- `SourceError` - a character without a UTF-8 form;
 - `ParameterError` - a `window` or `min_words` that is not an integer of at least one, `min_words` above the window.
 
 === "Code"

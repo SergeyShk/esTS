@@ -1,24 +1,21 @@
 from __future__ import annotations
 
-import re
 from collections.abc import Iterator
 from functools import lru_cache
 from typing import TYPE_CHECKING
 
 import simplemma
-from anyts.extractors import iter_part_sents
+from anyseg import Segmenter
+from anyts.constants import MESSAGES
 from anyts.utils import (
     add_tokenizer_rules,
     count_words_by_spans as count_words_by_spans,
     find_phrases as find_phrases,
     is_language,
-    iter_doc_words,
+    is_punctuation,
 )
 
 from .constants import (
-    ABBREVIATIONS,
-    DASHES,
-    SENTENCE_OPENERS,
     SPACY_MODEL,
     TOKENIZER_ABBREVIATIONS,
     TOKENIZER_INFIXES,
@@ -31,134 +28,89 @@ from .exceptions import DatasetNotFoundError, SourceError, SourceTypeError
 
 if TYPE_CHECKING:
     from spacy.language import Language
-    from spacy.tokenizer import Tokenizer
 
-# End of a sentence: terminal marks, optionally closing quotes or brackets and a dash
-# that closes a line of dialogue (¡Traidores!--), before whitespace, the end of the text
-# or a dash glued to them that opens a line of dialogue (baja.--Tiene) - a raya or a run
-# of hyphens before the next word or opening mark within the line, not a digit and not
-# the punctuation after a closing dash, or a single hyphen before an opening mark
-# (cuatro.-¿Cinco?), since one before a word numbers an article (Artículo 1.- Objeto)
-SENTENCE_END = re.compile(
-    r"(?<![.!?…])(?P<marks>[.!?…]++)(?P<closers>[»”’\"')\]]*)"
-    rf"(?P<dash>(?:--+|[—–―][{DASHES}]*)(?=\s|$))?"
-    rf"(?=\s|$|(?:--+|[—–―][{DASHES}]*)[ \t]*+[^\s\d.,;:!?…{DASHES}]|-[¿¡«“])"
-)
-NON_SPACE = re.compile(r"\S")
-NON_DASH = re.compile(rf"[^\s{DASHES}]")
-INITIAL = re.compile(r"[A-ZÁÉÍÓÚÜÑ]\.")
-# A period inside an abbreviation written without spaces (a.C., p.ej., EE.UU.)
-INNER_PERIOD = re.compile(r"\.(?=\w)")
-# Marker of a list (1. 2.1. b. IV.) that opens a sentence or a line, at the end of the window
-LIST_MARKER = re.compile(r"(?:^|\n)[ \t]*(?:\d+(?:\.\d+)*|[a-z]|[IVXLC]+)\.\Z")
-OPENING_CHARS = "(«“\"'["
-# Characters looked back from a period for an abbreviation or an initial
-LOOKBACK = 64
 # Byte order mark glued to the start of a text read with utf-8 instead of utf-8-sig
 BYTE_ORDER_MARK = "\ufeff"
 # Components of spaCy that set the sentences of a Doc
 SENTENCE_SETTERS = ("parser", "senter", "sentencizer")
+# The segmenter of Spanish into tokens and sentences
+SEGMENTER = Segmenter("es")
 
 
-def _opens_remark(text: str, position: int) -> bool:
+def iter_tokens(text: str) -> Iterator[tuple[int, int, str]]:
     """
-    Whether the dash before the position opens the remark of the narrator
+    Tokenizing a string with the segmenter anySeg
 
     Description:
-        A remark of the narrator opens in lower case ("-Sí -dijo él"),
-        a new line of dialogue in upper case
-
-    Arguments:
-        text (str): Text string
-        position (int): Position right after the dash
-
-    Returns:
-        bool: Result of the check
-    """
-    following = NON_DASH.search(text, position)
-    return following is not None and following.group().islower()
-
-
-def _ends_sentence(text: str, start: int, match: re.Match[str]) -> bool:
-    """
-    Checking whether the terminal marks found in a text end a sentence
-
-    Description:
-        The rules of sentenize; the next non-space character must be an
-        upper-case letter, a digit or one of SENTENCE_OPENERS. Opening quotes
-        and brackets are stripped from the tokens before the abbreviation
-        check, so "(EE. UU. Es grande)" stays together
-
-    Arguments:
-        text (str): Text string
-        start (int): Position where the current sentence starts
-        match (Match): Match of SENTENCE_END in the text
-
-    Returns:
-        bool: Result of the check
-    """
-    following = NON_SPACE.search(text, match.end())
-    if following is None:
-        return True
-    first = following.group()
-    if not (first.isupper() or first.isdigit() or first in SENTENCE_OPENERS):
-        return False
-    if first in DASHES and _opens_remark(text, following.end()):
-        return False
-    if match.group("marks") != "." or match.group("closers"):
-        return True
-    window_start = max(start, match.end("marks") - LOOKBACK)
-    window = text[window_start : match.end("marks")]
-    if LIST_MARKER.search(window):
-        return False
-    tokens = [stripped for token in window.split() if (stripped := token.lstrip(OPENING_CHARS))]
-    last = tokens[-1].lower()
-    return not (
-        INITIAL.fullmatch(tokens[-1])
-        or last in ABBREVIATIONS
-        or INNER_PERIOD.sub(". ", last) in ABBREVIATIONS
-        or " ".join(tokens[-2:]).lower() in ABBREVIATIONS
-    )
-
-
-def sentenize(text: str) -> Iterator[str]:
-    """
-    Splitting a text into sentences by rules
-
-    Description:
-        A sentence ends with a period, an exclamation or question mark or
-        an ellipsis, possibly followed by closing quotes or brackets, when
-        the next word starts with an upper-case letter, a digit, an inverted
-        mark, an opening quote or bracket or a dash, also a dash glued to
-        the mark (baja.--Tiene), while a glued dash before whitespace closes
-        a line of dialogue and stays with its sentence; a blank line ends one
-        too. A dash before a lower-case word opens a remark of the narrator
-        and keeps the sentence going. A single period after an abbreviation
-        (Sr., p. ej., EE. UU., also without spaces: p.ej.), a capital initial
-        or a list marker opening a sentence or a line (1. 2.1. IV.) does not
-        end a sentence, nor does a single line break. Sentences are stripped
-        of surrounding whitespace
+        Tokens follow the conventions of UD for Spanish (AnCora): the dashes of
+        a dialogue glued to the words are tokens of their own (--No --dijo él),
+        punctuation marks (¿, ¡), numbers (1.500,50, 3.º, 1990-1995) and
+        abbreviations (Sr., p.ej.) are single tokens, as are contractions (del,
+        al) and words with enclitic pronouns (dámelo); an abbreviation written
+        with spaces is a token for each part (EE., UU.), and the period of one
+        that ends a sentence is a token of its own. A byte order mark is no
+        token, a lone surrogate is a token of its own
 
     Arguments:
         text (str): Text string
 
     Returns:
-        iterator[str]: Iterator of sentences
+        iterator[tuple[int, int, str]]: Position of the first character,
+            position after the last character and text of each token
 
     Raises:
         SourceTypeError: If the text is not a string
+
+    Example:
+        >>> from ests.utils import iter_tokens
+        >>> [token for *_, token in iter_tokens("--Dámelo --dijo el Sr. García.")]
+        ['--', 'Dámelo', '--', 'dijo', 'el', 'Sr.', 'García', '.']
     """
-    return (sent for _, _, sent in iter_text_sents(text))
+    _check_text(text)
+    return ((span.start, span.end, span.text) for span in SEGMENTER.tokenize(text))
+
+
+def iter_text_words(text: str) -> Iterator[tuple[int, int, str]]:
+    """
+    Extracting words with positions from a string
+
+    Description:
+        The tokens of iter_tokens without punctuation marks and symbols,
+        as in WordsExtractor
+
+    Arguments:
+        text (str): Text string
+
+    Returns:
+        iterator[tuple[int, int, str]]: Position of the first character,
+            position after the last character and text of each word
+
+    Raises:
+        SourceTypeError: If the text is not a string
+
+    Example:
+        >>> from ests.utils import iter_text_words
+        >>> list(iter_text_words("¡Hola, mundo!"))
+        [(1, 5, 'Hola'), (7, 12, 'mundo')]
+    """
+    return (token for token in iter_tokens(text) if not is_punctuation(token[2]))
 
 
 def iter_text_sents(text: str) -> Iterator[tuple[int, int, str]]:
     """
-    Splitting a text into sentences with positions
+    Splitting a string into sentences of the segmenter anySeg, with positions
 
     Description:
-        The sentences of sentenize with their positions in the string; the parts
-        of the text between blank lines are split one by one (iter_part_sents of
-        the core)
+        A sentence ends with a period, an exclamation or question mark or an
+        ellipsis before a word in upper case, a digit, an inverted mark, an opening
+        quote or bracket or a dash of a dialogue; a dash before a word in lower case
+        opens a remark of the narrator and keeps the sentence going. A period after
+        an abbreviation (Sr., p. ej.) or an initial does not end a sentence, unless
+        the abbreviation may close one (etc., p. m., EE. UU.) and a word in upper
+        case follows. A blank line ends a sentence, as does a line without a final
+        mark before a line in upper case, a dash or a list marker (a heading, an
+        item of a list); a line break before a word in lower case does not.
+        Sentences are stripped of the surrounding whitespace
 
     Arguments:
         text (str): Text string
@@ -174,46 +126,17 @@ def iter_text_sents(text: str) -> Iterator[tuple[int, int, str]]:
         >>> from ests.utils import iter_text_sents
         >>> list(iter_text_sents("Hola.  ¿Qué tal?"))
         [(0, 5, 'Hola.'), (7, 16, '¿Qué tal?')]
+        >>> [sent for *_, sent in iter_text_sents("--Sí --dijo él--. Vámonos.")]
+        ['--Sí --dijo él--.', 'Vámonos.']
     """
-    return iter_part_sents(_iter_sents, text)
+    _check_text(text)
+    return ((span.start, span.end, span.text) for span in SEGMENTER.sentenize(text))
 
 
-def _iter_sents(text: str) -> Iterator[tuple[int, int, str]]:
-    """Sentences of a part of a text without blank lines, with their positions"""
-    start = 0
-    for match in SENTENCE_END.finditer(text):
-        if not _ends_sentence(text, start, match):
-            continue
-        yield from _stripped_span(text, start, match.end())
-        start = match.end()
-    yield from _stripped_span(text, start, len(text))
-
-
-def _stripped_span(text: str, start: int, stop: int) -> Iterator[tuple[int, int, str]]:
-    """The span of the text between the positions without surrounding whitespace, if any is left"""
-    chunk = text[start:stop]
-    sent = chunk.strip()
-    if sent:
-        begin = start + len(chunk) - len(chunk.lstrip())
-        yield begin, begin + len(sent), sent
-
-
-@lru_cache(maxsize=1)
-def get_tokenizer() -> Tokenizer:
-    """
-    Getting the rule-based tokenizer of the spaCy Spanish language class
-
-    Description:
-        The tokenizer of a blank "es" pipeline, with the rules of add_dash_rules
-
-    Returns:
-        Tokenizer: spaCy tokenizer
-    """
-    import spacy
-
-    nlp = spacy.blank("es")
-    add_dash_rules(nlp)
-    return nlp.tokenizer
+def _check_text(text: object) -> None:
+    """A text that is not a string"""
+    if not isinstance(text, str):
+        raise SourceTypeError(MESSAGES["text_type"].format(type=type(text).__name__))
 
 
 def add_dash_rules(nlp: Language) -> None:
@@ -228,11 +151,10 @@ def add_dash_rules(nlp: Language) -> None:
         split off as well, so the marks after it are split as usual. The
         abbreviations of TOKENIZER_ABBREVIATIONS become single tokens in lower
         case, capitalized and in upper case (sr., Sr., SR.), when the tokenizer
-        keeps one of their forms whole; get_tokenizer and get_nlp
-        have the rules already. The add_tokenizer_rules of the core: a rule the
-        tokenizer has is not added twice, and a tokenizer that is not the
-        Tokenizer of spaCy, or whose rules are not regular expressions, is left
-        as it is
+        keeps one of their forms whole; get_nlp has the rules already. The
+        add_tokenizer_rules of the core: a rule the tokenizer has is not added
+        twice, and a tokenizer that is not the Tokenizer of spaCy, or whose rules
+        are not regular expressions, is left as it is
 
     Arguments:
         nlp (Language): Pipeline whose tokenizer gets the rules
@@ -273,34 +195,6 @@ def _check_encoding(text: str) -> None:
         ) from None
 
 
-def tokenize(text: str) -> Iterator[str]:
-    """
-    Splitting a text into tokens with the spaCy Spanish tokenizer
-
-    Description:
-        Whitespace tokens are dropped; punctuation marks (¿, ¡), numbers
-        (1.500,50, 3.º, 1990-1995), abbreviations (Sr., EE. UU.) and words
-        with enclitic pronouns (dámelo) are single tokens; the dashes of
-        a dialogue are split off by add_dash_rules; a byte order mark glued to
-        the start of a token is dropped
-
-    Arguments:
-        text (str): Text string
-
-    Returns:
-        iterator[str]: Iterator of tokens
-
-    Raises:
-        SourceError: If the text has a character without a UTF-8 form
-    """
-    _check_encoding(text)
-    return (
-        word
-        for token in get_tokenizer()(text)
-        if not token.is_space and (word := token.text.lstrip(BYTE_ORDER_MARK))
-    )
-
-
 @lru_cache(maxsize=131072)
 def lemmatize(word: str) -> str:
     """
@@ -318,33 +212,6 @@ def lemmatize(word: str) -> str:
         str: Lemma
     """
     return simplemma.lemmatize(word, lang="es") if word != "" else word
-
-
-def iter_text_words(text: str) -> Iterator[tuple[int, int, str]]:
-    """
-    Extracting words with positions from a string
-
-    Description:
-        The tokens of get_tokenizer without punctuation marks and symbols,
-        as in WordsExtractor
-
-    Arguments:
-        text (str): Text string
-
-    Returns:
-        iterator[tuple[int, int, str]]: Position of the first character,
-            position after the last character and text of each word
-
-    Raises:
-        SourceError: If the text has a character without a UTF-8 form
-
-    Example:
-        >>> from ests.utils import iter_text_words
-        >>> list(iter_text_words("¡Hola, mundo!"))
-        [(1, 5, 'Hola'), (7, 12, 'mundo')]
-    """
-    _check_encoding(text)
-    return iter_doc_words(get_tokenizer()(text))
 
 
 @lru_cache(maxsize=4)

@@ -161,7 +161,7 @@ The frequencies of the punctuation marks by type (`count_punctuations`) per 1000
 Raises:
 
 - `SourceTypeError` - a text that is not a string;
-- `SourceError` - without `n_words`, a text with a character without a UTF-8 form;
+- `SourceError` - without `n_words`;
 - `ParameterError` - a number of words that is not a non-negative integer.
 
 The profile depends on text formatting (typographic quotation marks and dashes, the inverted marks), so it is best read separately from linguistic features.

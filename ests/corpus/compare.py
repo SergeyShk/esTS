@@ -30,6 +30,7 @@ from ..morph_stats import FINITE_MOODS, MorphStats
 from ..readability_stats import ReadabilityStats
 from ..syntax_stats import SyntaxStats
 from ..utils import (
+    _check_encoding,
     _check_nlp,
     count_words_by_spans,
     get_nlp,
@@ -74,7 +75,6 @@ def split_windows(text: str, window: int | None = 1000, min_words: int | None = 
 
     Raises:
         SourceTypeError: If the text is not a string
-        SourceError: If the text has a character without a UTF-8 form
         ParameterError: If the size of a window or min_words is not an integer or is
             below one, or min_words is greater than the window
 
@@ -210,6 +210,7 @@ def _parse(text: str, nlp: Language | None, starts: Sequence[int]) -> Doc:
             f"pipeline ({pipeline.max_length}): split it into windows or raise "
             "max_length on a pipeline of your own and pass it in nlp"
         )
+    _check_encoding(text)
     doc = set_sent_starts(pipeline.make_doc(text), starts)
     return pipeline(doc, disable=["parser", "ner"] if nlp is None else ["ner"])
 

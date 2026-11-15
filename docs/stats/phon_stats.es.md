@@ -13,8 +13,6 @@ Excepciones:
 - `SourceError` - una fuente sin palabras;
 - `ParameterError` - una ventana que no es un entero de al menos 2.
 
-Además de las excepciones anteriores, una cadena con un carácter sin forma UTF-8 lanza `SourceError` desde el tokenizador del español.
-
 La clase extiende el `PhonStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/phon_stats/) con los sonidos del español. Los sonidos son los de la transcripción de las palabras ([`transcribe`](#transcribe)), no sus letras: `ch`, `ll`, `rr` y `qu` son un sonido, la `h` y la `u` de `que` y `gui` ninguno, y la `x` dos. La pronunciación es la del estándar de España: yeísmo (`ll` e `y` son un solo sonido) y distinción (`c` ante `e` e `i` y `z` son θ, distinta de `s`). Las clases de los sonidos son las constantes de `ests.constants` de la tabla siguiente. Las sílabas son las de [`syllabify`](../syllables.md#syllabify), por las reglas ortográficas, y un hiato son dos vocales en dos sílabas vecinas de una palabra (`po-e-ta`, `dí-a`, `bú-ho`). Las palabras de una cadena las extrae el [`WordsExtractor`](../extractors/words.md) español; sin extractor, las palabras de un `Doc` salen de sus tokens. No hace falta ningún modelo entrenado. La tabla de `print_stats` lleva las descripciones inglesas del núcleo, `anyts.constants.PHON_STATS_DESC`.
 
 | Clase | Sonidos | Constante |

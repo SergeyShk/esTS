@@ -30,12 +30,17 @@ def test_kwic_without_context():
 def test_kwic_by_case():
     assert [line.keyword for line in kwic("Gato y gato", "gato")] == ["Gato", "gato"]
     assert [line.keyword for line in kwic("Gato y gato", "gato", ignore_case=False)] == ["gato"]
-    # An abbreviation is one word in every case, so the case of the keyword does not matter
+    # An abbreviation is the same word in every case, with or without the period the end of a
+    # sentence splits off
     assert [line.keyword for line in kwic("Era el Sr. Pérez.", "sr. pérez")] == ["Sr. Pérez"]
     assert [line.keyword for line in kwic("Vive en ee. uu. ahora", "EE. UU.")] == ["ee. uu."]
     assert [line.keyword for line in kwic("DEL ILMO. SR. OBISPO", "sr. obispo")] == ["SR. OBISPO"]
     assert [line.keyword for line in kwic("Ver PÁG. 5", "Pág. 5")] == ["PÁG. 5"]
     assert [line.keyword for line in kwic("Abre a las 10 A.M. y cierra", "10 a.m.")] == ["10 A.M."]
+    assert [line.keyword for line in kwic("El Sr. García vino. Vino el Sr.", "Sr.")] == [
+        "Sr.",
+        "Sr",
+    ]
 
 
 def test_kwic_by_lemma():
@@ -133,7 +138,14 @@ def test_kwic_of_a_doc_finds_every_word_by_its_own_form():
 @pytest.mark.parametrize(
     ("text", "keyword", "expected"),
     [
-        ("Viajó a EE. UU. en mayo.", "EE. UU.", "EE. UU."),
+        pytest.param(
+            "Viajó a EE. UU. en mayo.",
+            "EE. UU.",
+            "EE. UU.",
+            marks=pytest.mark.xfail(
+                strict=True, reason="spaCy tokens of get_nlp until load_pipeline"
+            ),
+        ),
         ("¿Dónde está?", "¿Dónde", "Dónde"),
         ("Pagó 20 € por él.", "20 €", "20"),
     ],

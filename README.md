@@ -117,7 +117,7 @@ The statistics by the frequency dictionary need it downloaded once with `FreqDic
 
 ### Object extraction
 
-Configurable tools extract sentences, words and character N-grams from a text for the statistics, and `split_paragraphs` its paragraphs between blank lines. The sentence splitter knows the inverted marks, the dialogue dash and the abbreviations of Spanish; the word tokenizer keeps clitics, ordinals and Spanish numbers whole, and lemmas come from [simplemma](https://github.com/adbar/simplemma), which needs no model.
+Configurable tools extract sentences, words and character N-grams from a text for the statistics, and `split_paragraphs` its paragraphs between blank lines. Sentences and tokens come from the segmenter [anySeg](https://github.com/SergeyShk/anySeg), which knows the inverted marks, the dialogue dash and the abbreviations of Spanish and keeps clitics, ordinals and Spanish numbers whole, and lemmas come from [simplemma](https://github.com/adbar/simplemma), which needs no model.
 
 ```python
 >>> from ests import CharNgramsExtractor, SentsExtractor, WordsExtractor

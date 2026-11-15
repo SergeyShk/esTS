@@ -7,7 +7,7 @@ from ests import WordsExtractor
 from ests.constants import FUNCTION_UD_POS
 from ests.corpus import function_words_profile, stylometry
 from ests.exceptions import SourceError, SourceTypeError
-from ests.utils import get_nlp, tokenize
+from ests.utils import get_nlp, iter_tokens
 
 texts = {
     "A": (
@@ -53,7 +53,7 @@ def test_function_words_profile():
 
 def test_function_words_profile_chunks(monkeypatch):
     # Chunks with a margin of context give the tags of one sequence, chunks without it do not
-    words = list(tokenize(" ".join(texts.values())))
+    words = [token for *_, token in iter_tokens(" ".join(texts.values()))]
     whole = function_words_profile(words)
     monkeypatch.setattr(stylometry, "CHUNK_SIZE", 4)
     assert function_words_profile(words) == whole

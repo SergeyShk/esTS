@@ -101,7 +101,7 @@ class BasicStats(anyts.basic_stats.BasicStats):
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc object, or an extractor
             is of another type
-        SourceError: If the source has no words or is a string with a character without a UTF-8 form
+        SourceError: If the source has no words
         ParameterError: If a factor is not an integer or is below one, or normalize is not
             a bool
     """
@@ -144,7 +144,6 @@ def punctuation_profile(text: str, n_words: int | None = None) -> dict[str, floa
 
     Raises:
         SourceTypeError: If the text is not a string
-        SourceError: If the text has a character without a UTF-8 form
         ParameterError: If the number of words is not an integer or is negative
     """
     if n_words is not None:

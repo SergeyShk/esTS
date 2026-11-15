@@ -219,7 +219,7 @@ Las frecuencias de los signos de puntuación por tipo (`count_punctuations`) por
 Excepciones:
 
 - `SourceTypeError` - un texto que no es una cadena;
-- `SourceError` - sin `n_words`, un texto con un carácter sin forma UTF-8;
+- `SourceError` - sin `n_words`;
 - `ParameterError` - un número de palabras que no es un entero no negativo.
 
 El perfil depende del formato del texto (comillas y rayas tipográficas, signos de apertura), así que conviene leerlo aparte de los rasgos lingüísticos.
