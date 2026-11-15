@@ -48,7 +48,7 @@ Además, en esTS una fuente que no es ni una cadena ni un `Doc` y un pipeline en
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `source` | `str` / `Doc` | - | Fuente de datos |
+| `source` | `str` / `Doc` / `Document` | - | Fuente de datos |
 | `nlp` | `Language` | `None` | Pipeline de spaCy que analiza una cadena; sin él se carga el modelo `es_core_news_sm` |
 
 ## Atributos

@@ -86,7 +86,7 @@ Las palabras se clasifican por la anotación de Universal Dependencies:
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `source` | `str` / `Doc` | - | Fuente de datos: un texto o un `Doc` con las categorías gramaticales y los lemas |
+| `source` | `str` / `Doc` / `Document` | - | Fuente de datos: un texto, o un `Doc` o un `Document` con las categorías gramaticales y los lemas |
 | `sents_extractor` | `SentsExtractor` | `None` | Herramienta de extracción de oraciones; si se indica, divide un texto y un `Doc` por su texto, sean cuales sean los límites de oración del pipeline |
 | `connectors` | `dict[str, tuple[str, str]]` | `None` | Clase y tipo por conector; el diccionario de `load_connectors` por defecto |
 | `nlp` | `Language` | `None` | Pipeline de spaCy que analiza una cadena; si no se indica, el modelo `es_core_news_sm` de `ests.utils.get_nlp` |

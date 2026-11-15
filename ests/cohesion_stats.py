@@ -402,7 +402,7 @@ def find_connectors(
     return matcher.find(words, sent_index, pos, breaks, blocked)
 
 
-def is_connector_blocked(word: TreeWord) -> bool:
+def is_connector_blocked(token: TreeWord) -> bool:
     """
     Checking whether no connector starts at a word of the tree by the words before it
 
@@ -420,7 +420,7 @@ def is_connector_blocked(word: TreeWord) -> bool:
         simplemma
 
     Arguments:
-        word (TreeWord): Word of the tree
+        token (TreeWord): Word of the tree
 
     Returns:
         bool: Whether no connector starts at the word
@@ -433,9 +433,9 @@ def is_connector_blocked(word: TreeWord) -> bool:
         >>> [is_connector_blocked(word) for word in tree.words if word.form.lower() == "si"]
         [True, False]
     """
-    if word.form.lower() != "si" or not word.index:
+    if token.form.lower() != "si" or not token.index:
         return False
-    previous = word.tree.words[word.index - 1]
+    previous = token.tree.words[token.index - 1]
     if previous.form == "¡":
         return True
     form = previous.form.lower()
@@ -446,7 +446,7 @@ def is_connector_blocked(word: TreeWord) -> bool:
     else:
         return False
     lemmas &= CONNECTOR_QUESTION_VERBS
-    return bool(lemmas) and not _has_question_complement(previous, lemmas, word.index)
+    return bool(lemmas) and not _has_question_complement(previous, lemmas, token.index)
 
 
 def _has_question_complement(verb: TreeWord, lemmas: Collection[str], end: int) -> bool:

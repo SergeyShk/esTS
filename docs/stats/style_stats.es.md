@@ -56,7 +56,7 @@ Los ejemplos de esta página toman un aviso escrito en estilo administrativo:
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `source` | `str` / `Doc` | - | Fuente de datos |
+| `source` | `str` / `Doc` / `Document` | - | Fuente de datos |
 | `words_extractor` | `WordsExtractor` | `None` | Herramienta de extracción de palabras; para un `Doc` se aplica a su texto |
 | `stopwords` | `list[str]` / `set[str]` | `None` | Palabras de agua; `is_stopword` si no se dan |
 | `top_n` | `int` | `10` | Número de las palabras más frecuentes de la náusea académica y de la naturalidad según la ley de Zipf (`NAUSEA_TOP_N`) |

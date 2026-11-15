@@ -11,7 +11,7 @@ from math import nan
 from typing import TYPE_CHECKING, NamedTuple
 
 from anyts.stats import Stats
-from anyts.utils import check_bool, is_doc, safe_divide, source_type_error
+from anyts.utils import check_bool, is_doc, is_document, safe_divide, source_type_error
 
 from .constants import (
     ACCENTED_VOWELS,
@@ -37,6 +37,7 @@ from .exceptions import SourceError
 from .syllables import WORD_PARTS, syllabify, word_stresses
 
 if TYPE_CHECKING:
+    from anyseg import Document
     from spacy.tokens import Doc
 
 ACUTE = "\u0301"
@@ -223,16 +224,16 @@ class VerseStats(Stats):
         accentuate: Getting the text with the stresses marked
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc
+        SourceTypeError: If the source is neither a string, a Doc nor a Document
         SourceError: If the source has no words
         ParameterError: If seseo is not a bool
     """
 
     stats_desc = VERSE_STATS_DESC
 
-    def __init__(self, source: str | Doc, seseo: bool = False):
+    def __init__(self, source: str | Doc | Document, seseo: bool = False):
         check_bool(seseo, "seseo")
-        if is_doc(source):
+        if is_doc(source) or is_document(source):
             text = source.text
         elif isinstance(source, str):
             text = source

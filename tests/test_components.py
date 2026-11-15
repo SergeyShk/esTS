@@ -33,7 +33,7 @@ from ests import (
     VerseStatsComponent,
     load_pipeline,
 )
-from ests.exceptions import ParameterError, SourceError, SourceTypeError
+from ests.exceptions import ParameterError, SourceError
 
 COMPONENTS = (
     ("ests_basic", BasicStatsComponent, BasicStats),

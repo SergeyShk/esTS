@@ -49,7 +49,7 @@ La clase extiende el `ReadabilityStats` del núcleo [anyTS](https://sergeyshk.gi
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `source` | `str` / `Doc` / `BasicStats` | - | Fuente de datos (cadena, objeto Doc o estadísticas básicas ya calculadas) |
+| `source` | `str` / `Doc` / `Document` / `BasicStats` | - | Fuente de datos (cadena, objeto Doc, `Document` o estadísticas básicas ya calculadas) |
 | `sents_extractor` | `SentsExtractor` | `None` | Herramienta de extracción de oraciones |
 | `words_extractor` | `WordsExtractor` | `None` | Herramienta de extracción de palabras |
 | `preset` | `str` | `'general'` | Preajuste de coeficientes: `general` o `classic` |

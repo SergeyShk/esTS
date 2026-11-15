@@ -86,7 +86,7 @@ The `max_length` of the pipeline is a million characters by default: split a lon
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `str` / `Doc` | - | Data source: a text or a `Doc` with the dependencies and the lemmas |
+| `source` | `str` / `Doc` / `Document` | - | Data source: a text, or a `Doc` or a `Document` with the dependencies and the lemmas |
 | `nlp` | `Language` | `None` | spaCy pipeline that parses a string; the model `es_core_news_sm` of `ests.utils.get_nlp` if not given |
 
 ## Attributes
@@ -102,7 +102,7 @@ The attributes of the constructions of esTS are `n_de_chains`, `n_gerund_clauses
     ss.n_de_chains, ss.n_se_passives, ss.split_predicates
     ss.c_children
     ss.c_deps
-    ss.sents[0]
+    [word.form for word in ss.sents[0]]
     ```
 
 === "Result"
@@ -111,8 +111,7 @@ The attributes of the constructions of esTS are `n_de_chains`, `n_gerund_clauses
     (3, 9, 3)
     (1, 1, ('llevó cabo', 'hiciera mención'))
     {0: 16, 1: 5, 2: 4, 3: 2, 4: 2}
-    {'ROOT': 2,
-     'advcl': 1,
+    {'advcl': 1,
      'amod': 1,
      'aux': 1,
      'case': 6,
@@ -123,8 +122,9 @@ The attributes of the constructions of esTS are `n_de_chains`, `n_gerund_clauses
      'nmod': 3,
      'nsubj': 3,
      'obj': 2,
-     'obl': 1}
-    (La, revisión, de, las, cuentas, del, organismo, fue, realizada, por, el, comité)
+     'obl': 1,
+     'root': 2}
+    ['La', 'revisión', 'de', 'las', 'cuentas', 'del', 'organismo', 'fue', 'realizada', 'por', 'el', 'comité']
     ```
 
 ## Metrics
@@ -278,7 +278,7 @@ Checks whether an infinitive makes one predicate with its head: an infinitive un
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Word of the tree |
 
 The mean length of a clause is the number of the words over the number of the clauses.
 
@@ -299,7 +299,7 @@ Checks whether a word heads a subordinate clause: a clause head (`is_clause_head
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Word of the tree |
 
 `p_complex_sents` is the share of the sentences with at least one subordinate clause.
 
@@ -311,20 +311,23 @@ Checks whether a word with the relation `mark` is a subordinating conjunction: o
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Word of the tree |
 
 === "Code"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import is_clause_head, is_subordinate_clause_head
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
     nlp = get_nlp()
     doc = nlp("Él quiere salir, pero tiene que quedarse porque parece cansado.")
-    [token.text for token in doc if is_clause_head(token)]
-    [token.text for token in doc if is_subordinate_clause_head(token)]
+    words = get_tree(get_document(doc)).words
+    [word.form for word in words if is_clause_head(word)]
+    [word.form for word in words if is_subordinate_clause_head(word)]
     doc = nlp("Se sentaba a sus pies, no por servicio, sino porque le había cobrado afición.")
-    [token.text for token in doc if is_subordinate_clause_head(token)]
+    words = get_tree(get_document(doc)).words
+    [word.form for word in words if is_subordinate_clause_head(word)]
     ```
 
 === "Result"
@@ -352,17 +355,19 @@ Checks whether a word heads an infinitive clause: a clause head (`is_clause_head
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Word of the tree |
 
 === "Code"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import is_clause_head, is_infinitive_clause_head
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
     doc = get_nlp()("Quiere salir y volver, pero intentando salir se cayó.")
-    [token.text for token in doc if is_clause_head(token)]
-    [token.text for token in doc if is_infinitive_clause_head(token)]
+    words = get_tree(get_document(doc)).words
+    [word.form for word in words if is_clause_head(word)]
+    [word.form for word in words if is_infinitive_clause_head(word)]
     ```
 
 === "Result"
@@ -434,18 +439,23 @@ Checks whether a word is a complement introduced by `de`: a word with the relati
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `tokens` | `Doc` / `Span` / `list[Token]` | - | Sequence of tokens (`calc_de_chains`) |
-| `token` | `Token` | - | Token (`is_de_modifier`) |
+| `tokens` | `list[TreeWord]` | - | Words of the tree (`calc_de_chains`) |
+| `token` | `TreeWord` | - | Word of the tree (`is_de_modifier`) |
 
 `max_de_chain_len` is the longest chain of the text, 0 without chains.
 
 === "Code"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import calc_de_chains
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
-    calc_de_chains(get_nlp()("El aumento de la eficiencia del uso de los recursos fue notable."))
+    calc_de_chains(
+        get_tree(
+            get_document(get_nlp()("El aumento de la eficiencia del uso de los recursos fue notable."))
+        ).words
+    )
     ```
 
 === "Result"
@@ -473,16 +483,18 @@ Checks whether a word heads a participial clause: a participle ([`is_participle`
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Word of the tree |
 
 === "Code"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import is_participle_clause, subtree_len
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
     doc = get_nlp()("La casa, construida por los obreros en 1900, fue vendida.")
-    [(token.text, subtree_len(token)) for token in doc if is_participle_clause(token)]
+    words = get_tree(get_document(doc)).words
+    [(word.form, subtree_len(word)) for word in words if is_participle_clause(word)]
     ```
 
 === "Result"
@@ -508,16 +520,18 @@ Checks whether a word heads a gerund clause: a predicate in the form of a gerund
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Word of the tree |
 
 === "Code"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import is_gerund_clause
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
     doc = get_nlp()("Llegando tarde, encontró la puerta cerrada y siguió trabajando.")
-    [token.text for token in doc if is_gerund_clause(token)]
+    words = get_tree(get_document(doc)).words
+    [word.form for word in words if is_gerund_clause(word)]
     ```
 
 === "Result"
@@ -555,21 +569,23 @@ Checks whether a word is the agent of a passive: a complement whose preposition 
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Word of the tree |
 
 The verb forms of `p_passive` are the words tagged `VERB`.
 
 === "Code"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import is_agentless, is_passive
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
     doc = get_nlp()(
         "La casa fue construida por los obreros y el proyecto es financiado por el Estado. "
         "Se construyó la casa."
     )
-    [(token.text, is_agentless(token)) for token in doc if is_passive(token)]
+    words = get_tree(get_document(doc)).words
+    [(word.form, is_agentless(word)) for word in words if is_passive(word)]
     ```
 
 === "Result"
@@ -638,28 +654,30 @@ The split predicates, pairs of a verb and a noun in the order of the words, repl
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `token` | `Token` | - | Token |
-| `tokens` | `Doc` / `Span` / `list[Token]` | - | Sequence of tokens (`find_split_predicates`) |
-| `verb` | `Token` | - | Verb the noun depends on (`is_split_predicate_noun`) |
+| `token` | `TreeWord` | - | Word of the tree |
+| `tokens` | `list[TreeWord]` | - | Words of the tree (`find_split_predicates`) |
+| `verb` | `TreeWord` | - | Verb the noun depends on (`is_split_predicate_noun`) |
 
 === "Code"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import find_split_predicates, is_negation
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
     doc = get_nlp()(
         "Se procedió a la votación y el comité tomó parte en la revisión. "
         "No vino nadie, ni Juan ni María."
     )
-    find_split_predicates(doc)
-    [token.text for token in doc if is_negation(token)]
+    words = get_tree(get_document(doc)).words
+    [(verb.form, noun.form) for verb, noun in find_split_predicates(words)]
+    [word.form for word in words if is_negation(word)]
     ```
 
 === "Result"
 
     ```
-    [(procedió, votación), (tomó, parte)]
+    [('procedió', 'votación'), ('tomó', 'parte')]
     ['No', 'nadie']
     ```
 
@@ -763,7 +781,7 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
     (None, None)
     ```
 
-The functions work with spaCy tokens: the `calc_*` and `find_*` functions and `dependency_triples` take a sequence of tokens (`Doc`, `Span` or a list), the `is_*`, `has_*` and `count_*` functions a single token, and `calc_edit_distance` and `calc_multiset_similarity` lists of the items of sentences; the words of a sequence are the tokens of `is_word` of `anyts.utils`. The functions of the dependency tree come from the core, those of the Spanish constructions are esTS's own.
+The functions work with the words of the tree of a document (`TreeWord`, `get_tree` of the [anyTS](https://sergeyshk.github.io/anyTS/document/) core): the `calc_*` and `find_*` functions and `dependency_triples` take a list of them, the `is_*`, `has_*` and `count_*` functions a single word, and `calc_edit_distance` and `calc_multiset_similarity` lists of the items of sentences; the words of a list are those with a letter or a digit (`get_words`). The functions of the dependency tree come from the core, those of the Spanish constructions are esTS's own.
 
 ## Words of a sequence { #get_words }
 
@@ -803,18 +821,20 @@ has_auxiliary(token)
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Word of the tree |
 
 === "Code"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import is_participle, predicate_form
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
     doc = get_nlp()(
         "Dijo que había llegado tarde. Lo acusan de haber matado al rey siendo elegido presidente."
     )
-    [(token.text, predicate_form(token)) for token in doc if is_participle(token)]
+    words = get_tree(get_document(doc)).words
+    [(word.form, predicate_form(word)) for word in words if is_participle(word)]
     ```
 
 === "Result"

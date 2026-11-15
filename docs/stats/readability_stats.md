@@ -40,7 +40,7 @@ The class extends the `ReadabilityStats` of the [anyTS](https://sergeyshk.github
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `str` / `Doc` / `BasicStats` | - | Data source (a string, a Doc object or ready basic statistics) |
+| `source` | `str` / `Doc` / `Document` / `BasicStats` | - | Data source (a string, a Doc object, a Document or ready basic statistics) |
 | `sents_extractor` | `SentsExtractor` | `None` | Sentence extraction tool |
 | `words_extractor` | `WordsExtractor` | `None` | Word extraction tool |
 | `preset` | `str` | `'general'` | Coefficient preset: `general` or `classic` |

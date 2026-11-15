@@ -47,7 +47,7 @@ The examples of this page take a notice written in the administrative style:
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `str` / `Doc` | - | Data source |
+| `source` | `str` / `Doc` / `Document` | - | Data source |
 | `words_extractor` | `WordsExtractor` | `None` | Word extraction tool; for a `Doc` it is applied to its text |
 | `stopwords` | `list[str]` / `set[str]` | `None` | Words of water; `is_stopword` if not given |
 | `top_n` | `int` | `10` | Number of the most frequent words of the academic nausea and the naturalness by Zipf's law (`NAUSEA_TOP_N`) |

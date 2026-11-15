@@ -86,7 +86,7 @@ El `max_length` del pipeline es de un millón de caracteres por defecto: divida 
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `source` | `str` / `Doc` | - | Fuente de datos: un texto o un `Doc` con las dependencias y los lemas |
+| `source` | `str` / `Doc` / `Document` | - | Fuente de datos: un texto, o un `Doc` o un `Document` con las dependencias y los lemas |
 | `nlp` | `Language` | `None` | Pipeline de spaCy que analiza una cadena; si no se indica, el modelo `es_core_news_sm` de `ests.utils.get_nlp` |
 
 ## Atributos

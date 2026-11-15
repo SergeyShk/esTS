@@ -51,7 +51,7 @@ The `max_length` of the pipeline is a million characters by default: split a lon
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `str` / `Doc` | - | Data source |
+| `source` | `str` / `Doc` / `Document` | - | Data source |
 | `freq_dict` | `FreqDict` | `None` | Frequency dictionary; `FreqDict()` from the default directory by default |
 | `nlp` | `Language` | `None` | Pipeline of spaCy that parses a string; without it the model `es_core_news_sm` is loaded |
 

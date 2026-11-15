@@ -57,7 +57,7 @@ El `max_length` del pipeline es de un millón de caracteres por defecto: divida 
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `source` | `str` / `Doc` | - | Fuente de datos |
+| `source` | `str` / `Doc` / `Document` | - | Fuente de datos |
 | `freq_dict` | `FreqDict` | `None` | Diccionario de frecuencias; `FreqDict()` del directorio por defecto si no se indica |
 | `nlp` | `Language` | `None` | Pipeline de spaCy que analiza una cadena; sin él se carga el modelo `es_core_news_sm` |
 

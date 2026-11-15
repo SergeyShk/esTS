@@ -18,6 +18,7 @@ from ests.datasets import (
     spanish_sonnets as sonnets_module,
 )
 from ests.exceptions import ParameterError, SourceError, SourceTypeError
+from ests.utils import get_document
 from ests.verse_stats import (
     _default_joins,
     _endecasyllable_type,
@@ -712,3 +713,7 @@ def test_sonnets(sonnets):
     assert common / pairs > 0.98
     assert common / gold_pairs > 0.975
     assert forms["soneto"] > 3650
+
+
+def test_document_source():
+    assert VerseStats(get_document(GARCILASO)).get_stats() == VerseStats(GARCILASO).get_stats()

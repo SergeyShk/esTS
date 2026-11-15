@@ -58,13 +58,14 @@ from anyts.diversity_stats import (
     vocabulary_growth as vocabulary_growth,
 )
 from anyts.document import document_words
-from anyts.utils import is_doc, source_type_error
+from anyts.utils import is_doc, is_document, source_type_error
 
 from .exceptions import SourceTypeError
 from .extractors import WordsExtractor
 from .utils import get_document
 
 if TYPE_CHECKING:
+    from anyseg import Document
     from spacy.tokens import Doc
 
 
@@ -158,15 +159,15 @@ class DiversityStats(anyts.DiversityStats):
         print_stats: Printing the computed lexical diversity metrics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object, or the
-            extractor is not a WordsExtractor
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, or
+            the extractor is not a WordsExtractor
         SourceError: If the source has no words
         ParameterError: If the parameters of the metrics are set incorrectly
     """
 
     def __init__(
         self,
-        source: str | Doc,
+        source: str | Doc | Document,
         words_extractor: anyts.WordsExtractor | None = None,
         window_len: int = MATTR_WINDOW_LEN,
         mtld_threshold: float = MTLD_TTR_THRESHOLD,
@@ -177,7 +178,7 @@ class DiversityStats(anyts.DiversityStats):
         if words_extractor is not None and not isinstance(words_extractor, anyts.WordsExtractor):
             raise SourceTypeError("The word extractor must be a WordsExtractor")
         check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)
-        if is_doc(source):
+        if is_doc(source) or is_document(source):
             words: Sequence[str] = (
                 document_words(get_document(source))
                 if words_extractor is None

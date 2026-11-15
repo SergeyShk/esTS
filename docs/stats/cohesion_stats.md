@@ -86,7 +86,7 @@ The words are classified by the Universal Dependencies annotation:
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `str` / `Doc` | - | Data source: a text or a `Doc` with the parts of speech and the lemmas |
+| `source` | `str` / `Doc` / `Document` | - | Data source: a text, or a `Doc` or a `Document` with the parts of speech and the lemmas |
 | `sents_extractor` | `SentsExtractor` | `None` | Sentence extraction tool; given, it splits a text and a `Doc` by their text, whatever the sentence boundaries of the pipeline |
 | `connectors` | `dict[str, tuple[str, str]]` | `None` | Class and kind by connector; the dictionary of `load_connectors` by default |
 | `nlp` | `Language` | `None` | spaCy pipeline that parses a string; the model `es_core_news_sm` of `ests.utils.get_nlp` if not given |
@@ -452,21 +452,22 @@ Searches a sentence for connectors with the `find` method of `SpanishConnectorMa
 token_info(token)
 ```
 
-The features of a spaCy token for the cohesion statistics by its Universal Dependencies annotation, after the table of the classes of words: a `WordInfo` named tuple with `lemma` (the `lemma_` of the token in lower case), `noun`, `pronoun`, `demonstrative`, `argument`, `content`, `tense` and `mood` (the first value of `Tense` and of `Mood`, `None` without it). [`LexicalStats`](lexical_stats.md) takes its content words from it.
+The features of a word of the tree (`TreeWord` of the [anyTS](https://sergeyshk.github.io/anyTS/document/) core) for the cohesion statistics by its Universal Dependencies annotation, after the table of the classes of words: a `WordInfo` named tuple with `lemma` (the lemma of the word in lower case), `noun`, `pronoun`, `demonstrative`, `argument`, `content`, `tense` and `mood` (the first value of `Tense` and of `Mood`, `None` without it). [`LexicalStats`](lexical_stats.md) takes its content words from it.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `token` | `Token` | - | spaCy token |
+| `token` | `TreeWord` | - | Word of the tree |
 
 === "Code"
 
     ``` python
+    from anyts.document import get_tree
     from ests.cohesion_stats import token_info
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
-    doc = get_nlp()("Mi hermano miraba este libro.")
-    token_info(doc[2])
-    token_info(doc[3])
+    words = get_tree(get_document(get_nlp()("Mi hermano miraba este libro."))).words
+    token_info(words[2])
+    token_info(words[3])
     ```
 
 === "Result"
@@ -482,20 +483,22 @@ The features of a spaCy token for the cohesion statistics by its Universal Depen
 is_connector_blocked(token)
 ```
 
-Checks whether no connector starts at a token by the words before it in a `Doc`: a `si` that opens no condition. It is so after a verb of `CONNECTOR_QUESTION_VERBS` - `saber`, `ver`, `mirar`, `preguntar`, `dudar`, `ignorar`, `pensar`, `averiguar`, `probar`, `comprobar`, `observar`, `examinar`, `determinar`, `decidir`, `considerar`, `consultar`, `investigar`, `adivinar`, and those of the administrative style `indicar`, `señalar`, `especificar`, `precisar`, `verificar`, `confirmar`, `aclarar`, `valorar`, `evaluar`, `analizar`, `establecer`, `desconocer`, `manifestar`, `constar` - tagged `VERB` or `AUX`, by the lemma of the model without its enclitic pronoun or by that of `ests.utils.lemmatize` (`no sé si vendrá`, `a ver si llega`, `preguntó si tenía hambre`, `preguntándose si`, `la comisión valorará si`), or a word that the model reads as a proper or a common noun, by the lemma of `lemmatize` (`Indique si desea...`, `Indíquenos si acepta...`), unless the verb has before `si` the complement the question would fill, so that `si` is a condition: an object clitic at its end (`indíquelo si es necesario`), a direct object other than the datives `le` and `les` the model tags as one (`lo veré si tengo tiempo`, while `le preguntaré si puede venir` is a question), or the subject of a passive with `se` or of `constar` (`la solicitud se valorará si cumple los requisitos`), the pronominal `se` of `preguntar` being none (`el juez se preguntaba si...`); and after an opening `¡` (`¡Si ya te lo dije!`). On a sample of the literature the rule of the verbs was right in all the cases checked, that of `¡` in about nine of ten; of 22 indirect questions of the administrative style it takes 18, and none of 7 conditions. `informar`, `comunicar` and `estudiar` are left out: after them `si` often opens a condition (`le informaremos si hay cambios`). `CohesionStats` sets `connector_blocked` of the words of the core by it, and the [`connectors`](../visualizers/highlight.md) layer of the highlighting of a `Doc` drops the same `si`.
+Checks whether no connector starts at a word of the tree by the words before it: a `si` that opens no condition. It is so after a verb of `CONNECTOR_QUESTION_VERBS` - `saber`, `ver`, `mirar`, `preguntar`, `dudar`, `ignorar`, `pensar`, `averiguar`, `probar`, `comprobar`, `observar`, `examinar`, `determinar`, `decidir`, `considerar`, `consultar`, `investigar`, `adivinar`, and those of the administrative style `indicar`, `señalar`, `especificar`, `precisar`, `verificar`, `confirmar`, `aclarar`, `valorar`, `evaluar`, `analizar`, `establecer`, `desconocer`, `manifestar`, `constar` - tagged `VERB` or `AUX`, by the lemma of the model without its enclitic pronoun or by that of `ests.utils.lemmatize` (`no sé si vendrá`, `a ver si llega`, `preguntó si tenía hambre`, `preguntándose si`, `la comisión valorará si`), or a word that the model reads as a proper or a common noun, by the lemma of `lemmatize` (`Indique si desea...`, `Indíquenos si acepta...`), unless the verb has before `si` the complement the question would fill, so that `si` is a condition: an object clitic at its end (`indíquelo si es necesario`), a direct object other than the datives `le` and `les` the model tags as one (`lo veré si tengo tiempo`, while `le preguntaré si puede venir` is a question), or the subject of a passive with `se` or of `constar` (`la solicitud se valorará si cumple los requisitos`), the pronominal `se` of `preguntar` being none (`el juez se preguntaba si...`); and after an opening `¡` (`¡Si ya te lo dije!`). On a sample of the literature the rule of the verbs was right in all the cases checked, that of `¡` in about nine of ten; of 22 indirect questions of the administrative style it takes 18, and none of 7 conditions. `informar`, `comunicar` and `estudiar` are left out: after them `si` often opens a condition (`le informaremos si hay cambios`). `CohesionStats` sets `connector_blocked` of the words of the core by it, and the [`connectors`](../visualizers/highlight.md) layer of the highlighting drops the same `si`; without the parts of speech, as in a string not parsed by the model, only the `si` after `¡` is known.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `token` | `Token` | - | spaCy token |
+| `token` | `TreeWord` | - | Word of the tree |
 
 === "Code"
 
     ``` python
+    from anyts.document import get_tree
     from ests.cohesion_stats import is_connector_blocked
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
-    doc = get_nlp()("No sé si vendrá. Si llueve, me quedo. ¡Si ya te lo dije!")
-    [is_connector_blocked(token) for token in doc if token.lower_ == "si"]
+    text = "No sé si vendrá. Si llueve, me quedo. ¡Si ya te lo dije!"
+    words = get_tree(get_document(get_nlp()(text))).words
+    [is_connector_blocked(word) for word in words if word.form.lower() == "si"]
     ```
 
 === "Result"
