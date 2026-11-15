@@ -360,14 +360,14 @@ Raises:
 find_connector_highlights(words, sents, text=None, doc=None)
 ```
 
-The layer `connectors`: the connectors of [`CohesionStats`](../stats/cohesion_stats.md#connectors) inside every sentence, found by its matcher [`SpanishConnectorMatcher`](../stats/cohesion_stats.md#ConnectorMatcher), a one-word connector checked by its part of speech when the words have it; the note gives the connector, its class and its kind. With the text, the rules of the matcher read no word across a punctuation mark between two words, so `así, que` is no connector; with the `Doc`, no connector starts at a `si` that opens no condition, as in `CohesionStats` ([`is_connector_blocked`](../stats/cohesion_stats.md#is_connector_blocked): `no sé si vendrá`). `HighlightedText` passes the text of its source and its `Doc`; in a string, which it does not parse, only the rules of the matcher drop a `si` (`como si fuera`).
+The layer `connectors`: the connectors of [`CohesionStats`](../stats/cohesion_stats.md#connectors) inside every sentence, found by its matcher [`SpanishConnectorMatcher`](../stats/cohesion_stats.md#ConnectorMatcher), a one-word connector checked by its part of speech when the words have it; the note gives the connector, its class and its kind. With the text, the rules of the matcher read no word across a punctuation mark between two words, so `así, que` is no connector; with the document, no connector starts at a `si` that opens no condition, as in `CohesionStats` ([`is_connector_blocked`](../stats/cohesion_stats.md#is_connector_blocked): `no sé si vendrá`). `HighlightedText` passes the text of its source and its document; in a string, which it does not parse, only the `si` after `¡` and the rules of the matcher drop a `si` (`¡Si ya te lo dije!`, `como si fuera`).
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
 | `words` | `list[Word]` | - | Words with their positions and parts of speech |
 | `sents` | `list[Sent]` | - | Sentences with their positions |
 | `text` | `str` | `None` | Text of the words, for the punctuation marks between them |
-| `doc` | `Doc` | `None` | `Doc` of the words, for the rules by its tokens |
+| `doc` | `Document` | `None` | Document of the words, for the rules by its tree |
 
 Raises:
 
@@ -475,12 +475,12 @@ The layer `split_predicates`: the pairs of a light verb and a noun of [`find_spl
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `doc` | `Doc` | - | Doc object with a dependency parse and the lemmas |
+| `doc` | `Document` | - | Document with a dependency parse and the lemmas |
 
 === "Code"
 
     ``` python
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
     from ests.visualizers.highlight import (
         find_de_chains,
         find_gerund_clauses,
@@ -489,9 +489,11 @@ The layer `split_predicates`: the pairs of a light verb and a noun of [`find_spl
         find_split_predicate_highlights,
     )
 
-    doc = get_nlp()(
-        "El informe, redactado por el comité, fue aprobado tras hacer una revisión, "
-        "siguiendo las normas del uso de los recursos."
+    doc = get_document(
+        get_nlp()(
+            "El informe, redactado por el comité, fue aprobado tras hacer una revisión, "
+            "siguiendo las normas del uso de los recursos."
+        )
     )
     find_passive(doc)
     find_participle_clauses(doc)
@@ -526,17 +528,19 @@ The layer `anaphoric_mismo`: every form of `is_anaphoric_mismo` with its article
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `token` | `Token` | - | Token |
-| `doc` | `Doc` | - | Doc object with a dependency parse, the parts of speech and the lemmas |
+| `token` | `TreeWord` | - | Word of the tree |
+| `doc` | `Document` | - | Document with a dependency parse, the parts of speech and the lemmas |
 
 === "Code"
 
     ``` python
-    from ests.utils import get_nlp
+    from anyts.document import get_tree
+    from ests.utils import get_document, get_nlp
     from ests.visualizers.highlight import find_anaphoric_mismo, is_anaphoric_mismo
 
-    doc = get_nlp()("Se recibió la solicitud el mismo día, y se procedió al estudio de la misma.")
-    [token.text for token in doc if is_anaphoric_mismo(token)]
+    text = "Se recibió la solicitud el mismo día, y se procedió al estudio de la misma."
+    doc = get_document(get_nlp()(text))
+    [word.form for word in get_tree(doc).words if is_anaphoric_mismo(word)]
     find_anaphoric_mismo(doc)
     ```
 

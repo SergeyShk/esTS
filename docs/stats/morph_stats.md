@@ -6,9 +6,9 @@ MorphStats(source, nlp=None)
 
 --8<-- "stats/morph_stats.md:MorphStats"
 
-The class extends the `MorphStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/morph_stats/) core with the Spanish layer and the [markers of Spanish](#markers); the statistics are computed when the object is created. In esTS the data source is a text or a `Doc`: a text is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, and a `Doc` must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer`. Words are taken from the tokens, punctuation marks and symbols are dropped. A text longer than the `max_length` of the pipeline - a million characters by default - has to be split into parts, or `max_length` raised on a pipeline of your own passed in `nlp`. The `print_stats` and `print_markers` tables take the descriptions of `MORPHOLOGY_STATS_DESC` and `MORPHOLOGY_MARKERS_DESC` of `ests.constants`.
+The class extends the `MorphStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/morph_stats/) core with the Spanish layer and the [markers of Spanish](#markers); the statistics are computed when the object is created. In esTS the data source is a text, a `Doc` or a `Document`: a text is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, and a `Doc` must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer`. The words are those of the document with a letter or a digit; a contraction (`del`, `al`) stays one word, as the model annotates its token as one. A text longer than the `max_length` of the pipeline - a million characters by default - has to be split into parts, or `max_length` raised on a pipeline of your own passed in `nlp`. The `print_stats` and `print_markers` tables take the descriptions of `MORPHOLOGY_STATS_DESC` and `MORPHOLOGY_MARKERS_DESC` of `ests.constants`.
 
-Besides, in esTS a source that is neither a string nor a `Doc` and a pipeline in `nlp` that is not a spaCy `Language` raise `SourceTypeError`; a `Doc` without the lemmas (of a pipeline with the `lemmatizer` excluded), a string longer than the `max_length` of the pipeline raise `SourceError`; a string without `nlp` when the model `es_core_news_sm` is not installed raises `DatasetNotFoundError`.
+Besides, in esTS a source that is neither a string, a `Doc` nor a `Document` and a pipeline in `nlp` that is not a spaCy `Language` raise `SourceTypeError`; a `Doc` without the lemmas (of a pipeline with the `lemmatizer` excluded), a string longer than the `max_length` of the pipeline raise `SourceError`; a string without `nlp` when the model `es_core_news_sm` is not installed raises `DatasetNotFoundError`.
 
 === "Code"
 
@@ -42,7 +42,7 @@ Besides, in esTS a source that is neither a string nor a `Doc` and a pipeline in
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `str` / `Doc` | - | Data source |
+| `source` | `str` / `Doc` / `Document` | - | Data source |
 | `nlp` | `Language` | `None` | Pipeline of spaCy that parses a string; without it the model `es_core_news_sm` is loaded |
 
 ## Attributes

@@ -6,8 +6,9 @@ from math import nan
 from typing import TYPE_CHECKING, Any, ClassVar
 
 import anyts.morph_stats
+from anyts.document import get_tree
 from anyts.morph_stats import MorphWord as MorphWord
-from anyts.utils import is_doc, iter_doc_tokens, safe_divide
+from anyts.utils import has_words, safe_divide
 
 from .constants import (
     COPULAS,
@@ -17,11 +18,13 @@ from .constants import (
     PASSIVE_AUX,
 )
 from .exceptions import SourceError
-from .utils import _check_nlp, get_nlp
+from .utils import _check_nlp, _parse_text, get_document
 
 if TYPE_CHECKING:
+    from anyseg import Document
+    from anyts.document import TreeWord
     from spacy.language import Language
-    from spacy.tokens import Doc, Token
+    from spacy.tokens import Doc
 
 FINITE_MOODS = {
     "p_indicative": "Ind",
@@ -39,9 +42,9 @@ COPULA_DEP = "cop"
 UNUSED_COMPONENTS = ["ner"]
 
 
-def is_auxiliary(token: Token) -> bool:
+def is_auxiliary(token: TreeWord) -> bool:
     """
-    Checking whether a token is an auxiliary and not a copula
+    Checking whether a word of the tree is an auxiliary and not a copula
 
     Description:
         A token with the dependency aux or aux:pass, or ser with the dependency
@@ -49,16 +52,18 @@ def is_auxiliary(token: Token) -> bool:
         (el proyecto es financiado) as a copula
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): Word of the tree
 
     Returns:
         bool: Result of the check
     """
-    if token.dep_.startswith(AUXILIARY_DEP):
+    deprel = token.deprel or ""
+    if deprel.startswith(AUXILIARY_DEP):
         return True
-    if token.dep_ != COPULA_DEP or token.lemma_ != PASSIVE_AUX:
+    head = token.head
+    if deprel != COPULA_DEP or token.lemma != PASSIVE_AUX or head is None:
         return False
-    return token.head.pos_ == "VERB" and "Part" in token.head.morph.get("VerbForm", [])
+    return head.upos == "VERB" and "Part" in head.feats.get("VerbForm", "").split(",")
 
 
 class MorphStats(anyts.morph_stats.MorphStats):
@@ -90,7 +95,7 @@ class MorphStats(anyts.morph_stats.MorphStats):
         'Gender=Masc|Number=Sing'
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
+        source (str|Doc|Document): Data source (a string, a Doc or a Document)
         nlp (Language): Pipeline of spaCy that parses a string; without it
             the model of SPACY_MODEL is loaded
 
@@ -126,7 +131,7 @@ class MorphStats(anyts.morph_stats.MorphStats):
         print_markers: Printing the computed markers of Spanish with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object, or the
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, or the
             pipeline is not a spaCy Language
         SourceError: If the source has no words, no annotation of the parts of
             speech or no lemmas, or is a string longer than the max_length of
@@ -144,7 +149,7 @@ class MorphStats(anyts.morph_stats.MorphStats):
     }
     markers_desc = MORPHOLOGY_MARKERS_DESC
 
-    def __init__(self, source: str | Doc, nlp: Language | None = None):
+    def __init__(self, source: str | Doc | Document, nlp: Language | None = None):
         _check_nlp(nlp)
         self._nlp = nlp
         super().__init__(source)
@@ -157,48 +162,61 @@ class MorphStats(anyts.morph_stats.MorphStats):
         state["_nlp"] = None
         return state
 
-    def analyze(self, source: str | Doc) -> list[MorphWord]:
+    def parse(self, source: str | Doc | Document) -> Document:
+        """
+        Getting the document of a source
+
+        Description:
+            A string is parsed by nlp or get_nlp() without the named entities; a
+            Doc or a Document goes to get_document
+
+        Arguments:
+            source (str|Doc|Document): Data source
+
+        Returns:
+            Document: Document of anySeg
+
+        Raises:
+            SourceTypeError: If the source is neither a string, a Doc nor a Document
+            SourceError: If a string is longer than the max_length of the pipeline
+            DatasetNotFoundError: If a string is passed and the model is not installed
+        """
+        if isinstance(source, str):
+            return _parse_text(source, self._nlp, UNUSED_COMPONENTS)
+        return get_document(source)
+
+    def analyze(self, source: str | Doc | Document) -> list[MorphWord]:
         """
         Getting the words of a source with their features
 
         Description:
-            A string is parsed by nlp or get_nlp() without the named entities;
-            the words of the Doc are those of the core (token.pos_ and
-            token.morph), and the Doc must carry the lemmas too, which the
-            markers read
+            The words of the core; the document must carry the lemmas too, which
+            the markers read with the auxiliaries of the tree
 
         Arguments:
-            source (str|Doc): Data source
+            source (str|Doc|Document): Data source
 
         Returns:
             list[MorphWord]: Words with their features
 
         Raises:
-            SourceTypeError: If the source is neither a string nor a Doc object
+            SourceTypeError: If the source is neither a string, a Doc nor a Document
             SourceError: If a string is longer than the max_length of the pipeline, or the
-                Doc has no parts of speech or no lemmas
+                words have no parts of speech or no lemmas
             DatasetNotFoundError: If a string is passed and the model is not installed
         """
-        if isinstance(source, str):
-            pipeline = self._nlp or get_nlp()
-            if len(source) > pipeline.max_length:
-                raise SourceError(
-                    f"The text of {len(source)} characters is longer than the limit of the "
-                    f"pipeline ({pipeline.max_length}): split it into parts or raise "
-                    "max_length on a pipeline of your own and pass it in nlp"
-                )
-            source = pipeline(source, disable=UNUSED_COMPONENTS)
-        # A Doc without words: the core raises no_words, whatever its annotation
-        if is_doc(source) and next(iter_doc_tokens(source), None) is None:
+        document = self._document(source)
+        # A source without words: the core raises no_words, whatever its annotation
+        words = list(super().analyze(document))
+        if not words:
             return []
-        words = list(super().analyze(source))
-        if not source.has_annotation("LEMMA"):
+        if not any(document.column("lemma")):
             raise SourceError(self.messages["no_lemmas"])
-        tokens = list(iter_doc_tokens(source))
+        found = [word for word in get_tree(document).words if has_words(word.form)]
         self._found = (
-            tuple(token.lemma_ for token in tokens),
-            source.has_annotation("DEP"),
-            tuple(is_auxiliary(token) for token in tokens),
+            tuple(word.lemma or "" for word in found),
+            any(document.column("deprel")),
+            tuple(is_auxiliary(word) for word in found),
         )
         return words
 

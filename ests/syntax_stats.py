@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Any
 
 import anyts.syntax_stats
 from anyts.constants import AUXILIARY_DEPS
+from anyts.document import TreeWord
 from anyts.syntax_stats import (
     base_dep,
     calc_edit_distance as calc_edit_distance,
@@ -23,7 +24,7 @@ from anyts.syntax_stats import (
     is_root,
     subtree_len,
 )
-from anyts.utils import has_feature, is_word
+from anyts.utils import has_feature, is_punctuation
 
 from .constants import (
     AGENT_PREPOSITION,
@@ -44,12 +45,12 @@ from .constants import (
     SUBORDINATING_MARKS,
     SYNTAX_STATS_DESC,
 )
-from .exceptions import SourceError
-from .utils import _check_nlp, get_nlp, is_verbal_noun, lemmatize
+from .utils import _check_nlp, _parse_text, get_document, is_verbal_noun, lemmatize
 
 if TYPE_CHECKING:
+    from anyseg import Document
     from spacy.language import Language
-    from spacy.tokens import Doc, Token
+    from spacy.tokens import Doc
 
 # Dependencies of the nominal part of a split predicate, in the order of preference
 SPLIT_PREDICATE_DEPS = ("compound", "obj", "nsubj", "iobj", "nmod", "obl")
@@ -99,12 +100,12 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         2
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
+        source (str|Doc|Document): Data source (a string, a Doc or a Document)
         nlp (Language): Pipeline of spaCy that parses a string; without it
             the model of SPACY_MODEL is loaded
 
     Attributes:
-        sents (tuple[tuple[Token]]): Words of every sentence with words
+        sents (tuple[tuple[TreeWord]]): Words of every sentence with words
         n_sents (int): Number of sentences containing words
         n_words (int): Number of words
         n_leaves (int): Number of leaves - words with no dependent word
@@ -195,7 +196,7 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         print_stats: Printing the computed syntactic statistics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object, or the
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, or the
             pipeline is not a spaCy Language
         SourceError: If the source has no words, no parse, no parts of speech or no
             lemmas, or is a string longer than the max_length of the pipeline
@@ -207,17 +208,17 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
     subordinating_marks = SUBORDINATING_MARKS
     stats_desc = SYNTAX_STATS_DESC
 
-    def __init__(self, source: str | Doc, nlp: Language | None = None):
+    def __init__(self, source: str | Doc | Document, nlp: Language | None = None):
         _check_nlp(nlp)
         self._nlp = nlp
-        super().__init__(source)  # type: ignore[arg-type]  # parse takes a string too
+        super().__init__(source)
         words = [token for sent in self.sents for token in sent]
         de_chains = [length for sent in self.sents for length in calc_de_chains(sent)]
         self.n_de_chains = len(de_chains)
         gerund_clauses = [subtree_len(token) for token in words if is_gerund_clause(token)]
         self.n_gerund_clauses = len(gerund_clauses)
-        self.n_se_passives = sum(1 for token in words if token.dep_ == SE_PASSIVE_DEP)
-        self.n_impersonal_se = sum(1 for token in words if token.dep_ == SE_IMPERSONAL_DEP)
+        self.n_se_passives = sum(1 for token in words if token.deprel == SE_PASSIVE_DEP)
+        self.n_impersonal_se = sum(1 for token in words if token.deprel == SE_IMPERSONAL_DEP)
         self.de_chains_per_sent = self.n_de_chains / self.n_sents
         self.max_de_chain_len = max(de_chains, default=0)
         self.gerund_clauses_per_sent = self.n_gerund_clauses / self.n_sents
@@ -225,68 +226,61 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         self.se_passives_per_sent = self.n_se_passives / self.n_sents
         self.impersonal_se_per_sent = self.n_impersonal_se / self.n_sents
 
-    def parse(self, source: str | Doc) -> Doc:
+    def parse(self, source: str | Doc | Document) -> Document:
         """
-        Getting the Doc of a source
+        Getting the document of a source
 
         Description:
-            A string is parsed by nlp or get_nlp() without the named entities;
-            a Doc is taken as it is
+            A string is parsed by nlp or get_nlp() without the named entities; a
+            Doc or a Document goes to get_document
 
         Arguments:
-            source (str|Doc): Data source
+            source (str|Doc|Document): Data source
 
         Returns:
-            Doc: Doc with a dependency parse
+            Document: Document of anySeg with a dependency parse
 
         Raises:
-            SourceTypeError: If the source is neither a string nor a Doc object
+            SourceTypeError: If the source is neither a string, a Doc nor a Document
             SourceError: If a string is longer than the max_length of the pipeline
             DatasetNotFoundError: If a string is passed and the model is not installed
         """
         if isinstance(source, str):
-            pipeline = getattr(self, "_nlp", None) or get_nlp()
-            if len(source) > pipeline.max_length:
-                raise SourceError(
-                    f"The text of {len(source)} characters is longer than the limit of the "
-                    f"pipeline ({pipeline.max_length}): split it into parts or raise "
-                    "max_length on a pipeline of your own and pass it in nlp"
-                )
-            return pipeline(source, disable=UNUSED_COMPONENTS)
-        return super().parse(source)
+            return _parse_text(source, getattr(self, "_nlp", None), UNUSED_COMPONENTS)
+        return get_document(source)
 
     def __getstate__(self) -> dict[str, Any]:
         """State for pickle and copy without the pipeline, which is no part of the statistics"""
-        state = super().__getstate__()
+        state = self.__dict__.copy()
         state.pop("_nlp", None)
         return state
 
-    def is_infinitive_periphrasis(self, token: Token) -> bool:
+    def is_infinitive_periphrasis(self, token: TreeWord) -> bool:
         """Infinitive of one predicate with its verb by the Spanish rules (is_infinitive_periphrasis)"""
         return is_infinitive_periphrasis(token)
 
-    def is_subordinating_mark(self, token: Token) -> bool:
+    def is_subordinating_mark(self, token: TreeWord) -> bool:
         """Subordinating conjunction of a conjunct or a parataxis (is_subordinating_mark)"""
         return is_subordinating_mark(token)
 
-    def auxiliary_form(self, token: Token) -> str:
+    def auxiliary_form(self, token: TreeWord) -> str:
         """Form of an auxiliary without one by its ending (predicate_form)"""
         return _auxiliary_form(token)
 
-    def is_passive(self, token: Token) -> bool:
+    def is_passive(self, token: TreeWord) -> bool:
         """Passive with ser or with se (is_passive)"""
         return is_passive(token)
 
-    def is_agentless(self, token: Token) -> bool:
+    def is_agentless(self, token: TreeWord) -> bool:
         """Passive form with no complement of por (is_agentless)"""
         return is_agentless(token)
 
-    def find_split_predicates(self, words: Sequence[Token]) -> list[tuple[Token, Token]]:
+    def find_split_predicates(self, words: Sequence[TreeWord]) -> list[tuple[TreeWord, TreeWord]]:
         """Split predicates of a light verb and a verbal noun (find_split_predicates)"""
         return find_split_predicates(words)
 
 
-def is_participle(token: Token) -> bool:
+def is_participle(token: TreeWord) -> bool:
     """
     Checking whether a token is a participle
 
@@ -295,7 +289,7 @@ def is_participle(token: Token) -> bool:
         a participle that modifies a noun (la casa pintada) as an adjective
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
@@ -303,12 +297,12 @@ def is_participle(token: Token) -> bool:
     return has_feature(token, "VerbForm", "Part")
 
 
-def is_gerund(token: Token) -> bool:
+def is_gerund(token: TreeWord) -> bool:
     """
     Checking whether a token is a gerund
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
@@ -316,7 +310,7 @@ def is_gerund(token: Token) -> bool:
     return has_feature(token, "VerbForm", "Ger")
 
 
-def is_negation(token: Token) -> bool:
+def is_negation(token: TreeWord) -> bool:
     """
     Checking whether a token is a word of negation
 
@@ -325,17 +319,17 @@ def is_negation(token: Token) -> bool:
         is not. Every such word counts, so no vino nadie gives two
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
     """
-    if token.pos_ in ("CCONJ", "SCONJ"):
+    if token.upos in ("CCONJ", "SCONJ"):
         return False
-    return has_feature(token, "Polarity", "Neg") or token.text.lower() in NEGATION_WORDS
+    return has_feature(token, "Polarity", "Neg") or token.form.lower() in NEGATION_WORDS
 
 
-def is_clause_head(token: Token) -> bool:
+def is_clause_head(token: TreeWord) -> bool:
     """
     Checking whether a token heads a clause
 
@@ -355,7 +349,7 @@ def is_clause_head(token: Token) -> bool:
         salir, llega a convertirse) is none
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
@@ -365,7 +359,7 @@ def is_clause_head(token: Token) -> bool:
     )
 
 
-def is_subordinate_clause_head(token: Token) -> bool:
+def is_subordinate_clause_head(token: TreeWord) -> bool:
     """
     Checking whether a token heads a subordinate clause
 
@@ -380,7 +374,7 @@ def is_subordinate_clause_head(token: Token) -> bool:
         (is_infinitive_clause_head)
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
@@ -390,7 +384,7 @@ def is_subordinate_clause_head(token: Token) -> bool:
     )
 
 
-def is_infinitive_clause_head(token: Token) -> bool:
+def is_infinitive_clause_head(token: TreeWord) -> bool:
     """
     Checking whether a token heads an infinitive clause
 
@@ -403,7 +397,7 @@ def is_infinitive_clause_head(token: Token) -> bool:
         finite conjunct (quiero salir y que vengas) is none
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
@@ -413,7 +407,7 @@ def is_infinitive_clause_head(token: Token) -> bool:
     )
 
 
-def is_subordinating_mark(token: Token) -> bool:
+def is_subordinating_mark(token: TreeWord) -> bool:
     """
     Checking whether a mark is a subordinating conjunction
 
@@ -424,22 +418,26 @@ def is_subordinating_mark(token: Token) -> bool:
         que lo calló), while sino porque does not
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
     """
     if not anyts.syntax_stats.is_subordinating_mark(token, SUBORDINATING_MARKS):
         return False
-    if token.lower_ != "que":
+    if token.form.lower() != "que":
         return True
-    before = [word.lower_ for word in token.doc[max(token.i - 2, 0) : token.i] if is_word(word)]
+    before = [
+        word.form.lower()
+        for word in token.tree.words[max(token.index - 2, 0) : token.index]
+        if not is_punctuation(word.form)
+    ]
     return not any(
         " ".join(before[-n:]) in NON_SUBORDINATING_PREV_PHRASES for n in range(1, len(before) + 1)
     )
 
 
-def is_infinitive_clause(token: Token) -> bool:
+def is_infinitive_clause(token: TreeWord) -> bool:
     """
     Checking whether an infinitive under xcomp heads a clause of its own
 
@@ -454,7 +452,7 @@ def is_infinitive_clause(token: Token) -> bool:
         clause
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
@@ -464,7 +462,7 @@ def is_infinitive_clause(token: Token) -> bool:
     )
 
 
-def is_infinitive_periphrasis(token: Token) -> bool:
+def is_infinitive_periphrasis(token: TreeWord) -> bool:
     """
     Checking whether an infinitive makes one predicate with its head
 
@@ -476,7 +474,7 @@ def is_infinitive_periphrasis(token: Token) -> bool:
         read as a; the verbs taking no word (puede salir) need none
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
@@ -489,17 +487,17 @@ def is_infinitive_periphrasis(token: Token) -> bool:
     links: set[str | None] = {
         _linking_word(child)
         for child in token.children
-        if child.i < token.i and base_dep(child) in LINKING_DEPS
+        if child.index < token.index and base_dep(child) in LINKING_DEPS
     }
-    # The models parse the old spelling á as a dependent of the head
-    if token.i - 1 > token.head.i:
-        previous = _linking_word(token.doc[token.i - 1])
+    # The models parse the old spelling á as a dependent of the head; the head of a root is itself
+    if token.index - 1 > (token.head or token).index:
+        previous = _linking_word(token.tree.words[token.index - 1])
         if previous in LINKING_WORDS:
             links.add(previous)
     return bool(allowed & (links or {None}))
 
 
-def _head_verb(token: Token, verbs: Collection[str]) -> str:
+def _head_verb(token: TreeWord, verbs: Collection[str]) -> str:
     """
     Lemma of the head of a token looked up among some verbs
 
@@ -509,17 +507,18 @@ def _head_verb(token: Token, verbs: Collection[str]) -> str:
         read a verb opening a sentence as a proper noun (Solía salir) or
         invent a lemma for an old form (debiérar)
     """
-    words = token.head.lemma_.lower().split()
+    head = token.head or token
+    words = (head.lemma or "").lower().split()
     lemma = words[0] if words else ""
-    return lemma if lemma in verbs else lemmatize(token.head.text.lower())
+    return lemma if lemma in verbs else lemmatize(head.form.lower())
 
 
-def _linking_word(token: Token) -> str:
+def _linking_word(token: TreeWord) -> str:
     """Text of a word that may link an infinitive, the old spelling á read as a"""
-    return token.text.lower().replace("á", "a")
+    return token.form.lower().replace("á", "a")
 
 
-def is_de_modifier(token: Token) -> bool:
+def is_de_modifier(token: TreeWord) -> bool:
     """
     Checking whether a token is a complement introduced by de
 
@@ -528,7 +527,7 @@ def is_de_modifier(token: Token) -> bool:
         del: el uso del agua, but not la vuelta al campo
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
@@ -536,11 +535,12 @@ def is_de_modifier(token: Token) -> bool:
     if base_dep(token) != "nmod":
         return False
     return any(
-        child.dep_ == "case" and child.text.lower() in DE_PREPOSITIONS for child in token.children
+        child.deprel == "case" and child.form.lower() in DE_PREPOSITIONS
+        for child in token.children
     )
 
 
-def calc_de_chains(tokens: Iterable[Token]) -> list[int]:
+def calc_de_chains(tokens: Iterable[TreeWord]) -> list[int]:
     """
     Computing the lengths of the chains of de
 
@@ -550,7 +550,7 @@ def calc_de_chains(tokens: Iterable[Token]) -> list[int]:
         of complements in the longest branch
 
     Arguments:
-        tokens (Doc|Span|list[Token]): Sequence of tokens
+        tokens (list[TreeWord]): Words of the tree
 
     Returns:
         list[int]: Lengths of the chains in the order of the words
@@ -558,7 +558,7 @@ def calc_de_chains(tokens: Iterable[Token]) -> list[int]:
     return calc_modifier_chains(tokens, is_de_modifier)
 
 
-def is_participle_clause(token: Token) -> bool:
+def is_participle_clause(token: TreeWord) -> bool:
     """
     Checking whether a token heads a participial clause
 
@@ -567,7 +567,7 @@ def is_participle_clause(token: Token) -> bool:
         ha pintado and fue construida are predicates, not clauses
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
@@ -577,7 +577,7 @@ def is_participle_clause(token: Token) -> bool:
     return calc_valency(token) > 0
 
 
-def is_gerund_clause(token: Token) -> bool:
+def is_gerund_clause(token: TreeWord) -> bool:
     """
     Checking whether a token heads a gerund clause
 
@@ -589,26 +589,30 @@ def is_gerund_clause(token: Token) -> bool:
         trabajando) is none
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
     """
     if predicate_form(token) != "Ger" or is_root(token):
         return False
-    if token.dep_ in PERIPHRASIS_DEPS and token.head.lemma_.lower() in GERUND_PERIPHRASIS_VERBS:
+    if (
+        token.deprel in PERIPHRASIS_DEPS
+        and token.head is not None
+        and (token.head.lemma or "").lower() in GERUND_PERIPHRASIS_VERBS
+    ):
         return False
     return _valency(token) > 0
 
 
-def _valency(token: Token) -> int:
+def _valency(token: TreeWord) -> int:
     """Valency of a predicate without its auxiliaries and copulas"""
     return calc_valency(token) - sum(
         1 for child in token.children if base_dep(child) in AUXILIARY_DEPS
     )
 
 
-def predicate_form(token: Token) -> str:
+def predicate_form(token: TreeWord) -> str:
     """
     Getting the verb form of a predicate
 
@@ -625,7 +629,7 @@ def predicate_form(token: Token) -> str:
         Spanish reading of an auxiliary without a form
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         str: Fin, Inf, Ger or Part, an empty string for a word with no verb form
@@ -633,20 +637,20 @@ def predicate_form(token: Token) -> str:
     return anyts.syntax_stats.predicate_form(token, _auxiliary_form)
 
 
-def _auxiliary_form(token: Token) -> str:
+def _auxiliary_form(token: TreeWord) -> str:
     """Verb form of an auxiliary the model leaves without one, by its ending"""
-    word = token.text.lower()
+    word = token.form.lower()
     if lemmatize(word) not in AUXILIARY_VERBS:
         return ""
     return next((form for form, ending in NONFINITE_ENDINGS if ending.search(word)), "Fin")
 
 
-def has_auxiliary(token: Token) -> bool:
+def has_auxiliary(token: TreeWord) -> bool:
     """
     Checking whether a token carries an auxiliary or a copula
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
@@ -654,7 +658,7 @@ def has_auxiliary(token: Token) -> bool:
     return any(base_dep(child) in AUXILIARY_DEPS for child in token.children)
 
 
-def is_passive(token: Token) -> bool:
+def is_passive(token: TreeWord) -> bool:
     """
     Checking whether a token is a passive verb form
 
@@ -665,24 +669,24 @@ def is_passive(token: Token) -> bool:
         (la casa construida por los obreros) is a participial clause instead
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
     """
-    if token.pos_ != "VERB":
+    if token.upos != "VERB":
         return False
-    if any(child.dep_ == SE_PASSIVE_DEP for child in token.children):
+    if any(child.deprel == SE_PASSIVE_DEP for child in token.children):
         return True
     if not is_participle(token):
         return False
     return any(
-        base_dep(child) in AUXILIARY_DEPS and child.lemma_ == PASSIVE_AUX
+        base_dep(child) in AUXILIARY_DEPS and child.lemma == PASSIVE_AUX
         for child in token.children
     )
 
 
-def is_agentless(token: Token) -> bool:
+def is_agentless(token: TreeWord) -> bool:
     """
     Checking whether a token is a passive form with no agent
 
@@ -691,7 +695,7 @@ def is_agentless(token: Token) -> bool:
         construida, but not la casa fue construida por los obreros
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
@@ -701,7 +705,7 @@ def is_agentless(token: Token) -> bool:
     return not any(is_agent(child) for child in get_children(token))
 
 
-def is_agent(token: Token) -> bool:
+def is_agent(token: TreeWord) -> bool:
     """
     Checking whether a token is the agent of a passive
 
@@ -710,18 +714,18 @@ def is_agent(token: Token) -> bool:
         models have no obl:agent
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
     """
     return any(
-        child.dep_ == "case" and child.text.lower() == AGENT_PREPOSITION
+        child.deprel == "case" and child.form.lower() == AGENT_PREPOSITION
         for child in token.children
     )
 
 
-def is_light_verb(token: Token) -> bool:
+def is_light_verb(token: TreeWord) -> bool:
     """
     Checking whether a token is a light verb
 
@@ -729,15 +733,15 @@ def is_light_verb(token: Token) -> bool:
         A verb with a lemma of LIGHT_VERBS (hacer, dar, tomar, realizar...)
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): TreeWord
 
     Returns:
         bool: Result of the check
     """
-    return token.pos_ == "VERB" and token.lemma_.lower() in LIGHT_VERBS
+    return token.upos == "VERB" and (token.lemma or "").lower() in LIGHT_VERBS
 
 
-def is_split_predicate_noun(token: Token, verb: Token) -> bool:
+def is_split_predicate_noun(token: TreeWord, verb: TreeWord) -> bool:
     """
     Checking whether a token can be the nominal part of a split predicate
 
@@ -747,21 +751,21 @@ def is_split_predicate_noun(token: Token, verb: Token) -> bool:
         (cabo with llevar, parte with tomar)
 
     Arguments:
-        token (Token): Token
-        verb (Token): Verb the token depends on
+        token (TreeWord): TreeWord
+        verb (TreeWord): Verb the token depends on
 
     Returns:
         bool: Result of the check
     """
-    if token.pos_ != "NOUN":
+    if token.upos != "NOUN":
         return False
-    lemma = token.lemma_.lower()
+    lemma = (token.lemma or "").lower()
     if is_verbal_noun(lemma):
         return True
-    return verb.lemma_.lower() in SPLIT_PREDICATE_NOUNS.get(lemma, ())
+    return (verb.lemma or "").lower() in SPLIT_PREDICATE_NOUNS.get(lemma, ())
 
 
-def find_split_predicates(tokens: Iterable[Token]) -> list[tuple[Token, Token]]:
+def find_split_predicates(tokens: Iterable[TreeWord]) -> list[tuple[TreeWord, TreeWord]]:
     """
     Finding the split predicates
 
@@ -776,10 +780,10 @@ def find_split_predicates(tokens: Iterable[Token]) -> list[tuple[Token, Token]]:
         PREPOSITIONAL_LIGHT_VERBS; the agent of a passive is always left out
 
     Arguments:
-        tokens (Doc|Span|list[Token]): Sequence of tokens
+        tokens (list[TreeWord]): Words of the tree
 
     Returns:
-        list[tuple[Token, Token]]: Pairs of verb and noun in the order of the words
+        list[tuple[TreeWord, TreeWord]]: Pairs of verb and noun in the order of the words
     """
     pairs = []
     for token in get_words(tokens):
@@ -795,21 +799,22 @@ def find_split_predicates(tokens: Iterable[Token]) -> list[tuple[Token, Token]]:
     return pairs
 
 
-def _is_nominal_part(child: Token, verb: Token) -> bool:
+def _is_nominal_part(child: TreeWord, verb: TreeWord) -> bool:
     dep = base_dep(child)
     if dep not in SPLIT_PREDICATE_DEPS:
         return False
     if dep == "nsubj":
-        return any(grandchild.dep_ == SE_PASSIVE_DEP for grandchild in verb.children)
+        return any(grandchild.deprel == SE_PASSIVE_DEP for grandchild in verb.children)
     if is_agent(child):
         return False
+    verb_lemma = (verb.lemma or "").lower()
     if (
-        verb.lemma_.lower() in SPLIT_PREDICATE_NOUNS.get(child.lemma_.lower(), ())
-        or verb.lemma_.lower() in PREPOSITIONAL_LIGHT_VERBS
+        verb_lemma in SPLIT_PREDICATE_NOUNS.get((child.lemma or "").lower(), ())
+        or verb_lemma in PREPOSITIONAL_LIGHT_VERBS
     ):
         return True
-    return not any(grandchild.dep_ == "case" for grandchild in child.children)
+    return not any(grandchild.deprel == "case" for grandchild in child.children)
 
 
-def _nominal_part_rank(child: Token) -> int:
+def _nominal_part_rank(child: TreeWord) -> int:
     return SPLIT_PREDICATE_DEPS.index(base_dep(child))

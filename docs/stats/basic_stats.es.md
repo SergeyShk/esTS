@@ -4,14 +4,14 @@
 BasicStats(source, sents_extractor=None, words_extractor=None, normalize=False, complex_syl_factor=3, long_word_letter_factor=7)
 ```
 
-<!-- core: stats/basic_stats.md:BasicStats c1092e0 -->
-Las estadísticas básicas de un texto: el número de sus oraciones, palabras, caracteres, sílabas y signos de puntuación y las distribuciones de sus palabras. La fuente de datos es un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy). Las letras se cuentan con `str.isalpha`, así que las cifras, los guiones y los signos dentro de una palabra no son letras.
+<!-- core: stats/basic_stats.md:BasicStats 259a268 -->
+Las estadísticas básicas de un texto: el número de sus oraciones, palabras, caracteres, sílabas y signos de puntuación y las distribuciones de sus palabras. La fuente de datos es un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) o un `Document` de [anySeg](https://github.com/SergeyShk/anySeg). Las letras se cuentan con `str.isalpha`, así que las cifras, los guiones y los signos dentro de una palabra no son letras.
 
-Las palabras y las oraciones de una cadena salen de los extractores. Un `Doc` da sus tokens como palabras, sin los signos de puntuación ni los símbolos como `€` o `%`, y sus límites como oraciones, o los del extractor de oraciones cuando no los tiene o solo tiene algunos (`has_sents`); un extractor indicado se usa en su lugar, sobre su texto. Una línea en blanco termina una oración de una cadena y de un `Doc` sin límites; un `Doc` con límites también, cuando su pipeline tiene `start_sents_after_blank_lines` (que una biblioteca del idioma registra con su propio nombre) antes del parser, `senter` o `sentencizer`. Una oración sin palabras, como una de pura puntuación, no se cuenta.
+Las palabras y las oraciones salen del [documento](https://sergeyshk.github.io/anyTS/document/) de la fuente (`parse`): sus tokens sin los signos de puntuación ni los símbolos como `€` o `%` (`doc_words`) y sus oraciones; un extractor indicado se usa en su lugar, sobre el texto. Un `Doc` conserva sus comienzos de oración, y uno que no los tiene o solo tiene algunos (un token cuyo `is_sent_start` no está fijado) recibe los de `parse`. Una línea en blanco termina una oración de cualquier fuente, ya que termina un párrafo del documento. Una oración sin palabras, como una de pura puntuación, no se cuenta.
 
 Excepciones:
 
-- `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`, un extractor de otro tipo;
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni un `Document`, un `parse` que no devuelve un `Document`, un `doc_words` que no devuelve una secuencia de cadenas, un extractor de otro tipo;
 - `SourceError` - una fuente sin palabras;
 - `ParameterError` - un umbral que no es un entero de al menos uno, un `normalize` que no es un `bool`.
 
@@ -51,12 +51,12 @@ La clase extiende el `BasicStats` del núcleo [anyTS](https://sergeyshk.github.i
 
 ## Parámetros
 
-<!-- core: stats/basic_stats.md:BasicStats-parameters 362b585 -->
+<!-- core: stats/basic_stats.md:BasicStats-parameters 2d8e54b -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `str` / `Doc` | - | Fuente de datos (cadena u objeto Doc) |
-| `sents_extractor` | `SentsExtractor` | `None` | Herramienta de extracción de oraciones; se usa también con un Doc, sobre su texto |
-| `words_extractor` | `WordsExtractor` | `None` | Herramienta de extracción de palabras; se usa también con un Doc, sobre su texto |
+| `source` | `str` / `Doc` / `Document` | - | Fuente de datos |
+| `sents_extractor` | `SentsExtractor` | `None` | Herramienta de extracción de oraciones, que se usa sobre el texto en lugar de las oraciones del documento |
+| `words_extractor` | `WordsExtractor` | `None` | Herramienta de extracción de palabras, que se usa sobre el texto en lugar de las palabras del documento |
 | `normalize` | `bool` | `False` | Calcular las estadísticas normalizadas |
 | `complex_syl_factor` | `int` | `COMPLEX_SYL_FACTOR` | Número mínimo de sílabas de una palabra compleja |
 | `long_word_letter_factor` | `int` | `LONG_WORD_LETTER_FACTOR` | Número mínimo de letras de una palabra larga |
@@ -67,7 +67,7 @@ En esTS los umbrales son los del núcleo y de las fórmulas de legibilidad: una 
 
 ## Estadísticas
 
-<!-- core: stats/basic_stats.md:BasicStats-attributes d457364 -->
+<!-- core: stats/basic_stats.md:BasicStats-attributes ba0510d -->
 | Estadística | Tipo | Descripción | Normalizada |
 | :-------- | :--- | :---------- | :--------- |
 | `c_letters` | `dict[int, int]` | Distribución de las palabras por número de letras | - |
@@ -80,7 +80,7 @@ En esTS los umbrales son los del núcleo y de las fórmulas de legibilidad: una 
 | `n_simple_words` | `int` | Número de palabras simples: con alguna sílaba, por debajo de las complejas | `p_simple_words` |
 | `n_monosyllable_words` | `int` | Número de palabras monosílabas | `p_monosyllable_words` |
 | `n_polysyllable_words` | `int` | Número de palabras polisílabas, de dos o más sílabas | `p_polysyllable_words` |
-| `n_chars` | `int` | Número de caracteres sin los saltos de línea | - |
+| `n_chars` | `int` | Número de caracteres sin los saltos de línea (`LINE_BREAK`: `\n`, `\r\n`, `\r`, la tabulación vertical, el salto de página, U+0085, U+2028, U+2029) | - |
 | `n_letters` | `int` | Número de letras | `p_letters` |
 | `n_spaces` | `int` | Número de espacios de Unicode (categoría Zs), como el espacio de no separación, y tabulaciones | `p_spaces` |
 | `n_syllables` | `int` | Número de sílabas | - |
@@ -98,8 +98,8 @@ Con `normalize=True` el objeto tiene también las estadísticas normalizadas, de
 
 Los métodos vuelven a contar las palabras complejas y largas con un umbral distinto del fijado al crear el objeto; [`ReadabilityStats`](readability_stats.md) cuenta con ellos las palabras polisílabas de SOL y las palabras largas de LIX y RIX, así que estas no dependen de los umbrales del objeto.
 
-<!-- core: stats/basic_stats.md:BasicStats-get_stats 5352c3c -->
-`get_stats(flat)` devuelve un diccionario con las distribuciones `c_letters` y `c_syllables`, las estadísticas de `stats_desc`, la distribución `c_punctuations` y, con `normalize=True`, los recuentos normalizados, como una copia: editarlo no cambia el objeto. Con `flat=True` las distribuciones dan una clave por cada valor que tiene el texto, como `c_letters_3` y `c_punctuations_comma`.
+<!-- core: stats/basic_stats.md:BasicStats-get_stats 7d91a7c -->
+`get_stats(*, flat=False)` devuelve un diccionario con las distribuciones `c_letters` y `c_syllables`, las estadísticas de `stats_desc`, la distribución `c_punctuations` y, con `normalize=True`, los recuentos normalizados, como una copia: editarlo no cambia el objeto. Con `flat=True` las distribuciones dan una clave por cada valor que tiene el texto, como `c_letters_3` y `c_punctuations_comma`.
 
 <!-- core: stats/basic_stats.md:BasicStats-print_stats 129bbf6 -->
 `print_stats()` muestra una tabla con las estadísticas de `stats_desc`, sus descripciones y los encabezados de `stats_headers`.

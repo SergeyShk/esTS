@@ -273,7 +273,7 @@ Raises:
 
 - `SourceError` - a document without the parts of speech;
 - `DatasetNotFoundError` - the statistics by the dictionary and `get_stats()` when the dictionary is not downloaded;
-- `ConfigValidationError` of spaCy - a `data_dir` that is not a string, at `add_pipe`.
+- `ParameterError` - a `data_dir` that is not a string.
 
 === "Code"
 
@@ -355,7 +355,7 @@ VerseStatsComponent(nlp, name, seseo=False)
 
 Raises:
 
-- `ConfigValidationError` of spaCy - a `seseo` that is not a boolean, at `add_pipe`.
+- `ParameterError` - a `seseo` that is not a boolean.
 
 === "Code"
 

@@ -17,7 +17,7 @@ from ests.diversity_stats import (
     calc_orlov_z,
 )
 from ests.exceptions import ParameterError, SourceError, SourceTypeError
-from ests.utils import get_nlp
+from ests.utils import get_document, get_nlp
 
 TEXT = (
     "Los tesauros son una clase especial de recursos lexicográficos que se caracterizan por"
@@ -193,3 +193,8 @@ def test_mamtld_step(ds):
     words = list(ds.words)
     assert calc_mamtld(words, step=1) == ds.mamtld
     assert calc_mamtld(words, step=5) == pytest.approx(30.64)
+
+
+def test_document_source():
+    text = "El gato duerme en la casa. El perro duerme en la calle."
+    assert DiversityStats(get_document(text)).get_stats() == DiversityStats(text).get_stats()

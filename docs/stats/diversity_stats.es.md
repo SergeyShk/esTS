@@ -9,7 +9,7 @@ Las principales métricas de [diversidad léxica](https://en.wikipedia.org/wiki/
 
 Excepciones:
 
-- `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`, un extractor de otro tipo;
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc` ni un `Document`, un extractor de otro tipo;
 - `SourceError` - una fuente sin palabras;
 - `ParameterError` - un parámetro que `check_params` rechaza.
 
@@ -70,7 +70,7 @@ La clase extiende el `DiversityStats` del núcleo [anyTS](https://sergeyshk.gith
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `source` | `str` / `Doc` | - | Fuente de datos |
+| `source` | `str` / `Doc` / `Document` | - | Fuente de datos |
 | `words_extractor` | `WordsExtractor` | `None` | Herramienta de extracción de palabras; para un `Doc` se aplica a su texto |
 | `window_len` | `int` | `50` | Tamaño de la ventana para MATTR y del segmento para MSTTR (`MATTR_WINDOW_LEN`) |
 | `mtld_threshold` | `float` | `0.72` | Umbral de TTR para MTLD, MA-MTLD y MTLD-W (`MTLD_TTR_THRESHOLD`) |

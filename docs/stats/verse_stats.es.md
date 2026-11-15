@@ -10,7 +10,7 @@ El metro del verso español es silábico: un verso se mide por sus sílabas mét
 
 Excepciones:
 
-- `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`;
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc` ni un `Document`;
 - `SourceError` - una fuente sin letras (vacía, solo cifras y signos de puntuación);
 - `ParameterError` - un `seseo` que no es un `bool`.
 
@@ -50,7 +50,7 @@ Excepciones:
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `source` | `str` / `Doc` | - | Fuente de datos |
+| `source` | `str` / `Doc` / `Document` | - | Fuente de datos |
 | `seseo` | `bool` | `False` | Pronunciar `c` y `z` ante `e` e `i` como `s` en la rima, como en Andalucía y en América: `voz` - `dos` |
 
 ## Atributos

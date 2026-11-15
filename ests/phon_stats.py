@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 from collections import Counter
 from collections.abc import Sequence
 from functools import lru_cache
 from itertools import pairwise
+from typing import TYPE_CHECKING
 
 import anyts.phon_stats
 from anyts.constants import PHON_WINDOW_LEN
@@ -14,8 +17,12 @@ from anyts.utils import check_words, shannon_entropy
 
 from .constants import SONORANT_SOUNDS, VOICED_SOUNDS, VOICELESS_SOUNDS, VOWEL_SOUNDS
 from .exceptions import SourceTypeError
-from .extractors import WordsExtractor
 from .syllables import syllabify
+from .utils import get_document
+
+if TYPE_CHECKING:
+    from anyseg import Document
+    from spacy.tokens import Doc
 
 CONSONANT_SOUNDS = SONORANT_SOUNDS | VOICED_SOUNDS | VOICELESS_SOUNDS
 CACHE_SIZE = 1 << 16
@@ -83,7 +90,7 @@ class PhonStats(anyts.phon_stats.PhonStats):
         (('t', 'r', 'e', 's'), ('tri', 'gal'))
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
+        source (str|Doc|Document): Data source (a string, a Doc or a Document)
         words_extractor (WordsExtractor): Word extraction tool; for a Doc it is applied
             to its text
         window_len (int): Window in words for the alliteration and the assonance
@@ -122,17 +129,20 @@ class PhonStats(anyts.phon_stats.PhonStats):
         print_stats: Printing the computed phonostatistics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc, or the extractor is
-            not a WordsExtractor
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, or the
+            extractor is not a WordsExtractor
         SourceError: If the source has no words
         ParameterError: If the window is not an integer or is below 2
     """
 
-    words_extractor_class = WordsExtractor
     vowels = VOWEL_SOUNDS
     sonorants = SONORANT_SOUNDS
     voiced = VOICED_SOUNDS
     voiceless = VOICELESS_SOUNDS
+
+    def parse(self, source: str | Doc | Document) -> Document:
+        """The document of anySeg (ests.utils.get_document)"""
+        return get_document(source)
 
     def transcribe(self, word: str) -> tuple[str, ...]:
         """Sounds of a word by the Spanish orthography (transcribe)"""

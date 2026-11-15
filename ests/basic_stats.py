@@ -1,10 +1,19 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import anyts.basic_stats
 from anyts.basic_stats import count_punctuations as count_punctuations
 from anyts.utils import check_integer
 
 from .exceptions import ParameterError
-from .extractors import SentsExtractor, WordsExtractor
+from .extractors import WordsExtractor
 from .syllables import count_syllables
+from .utils import get_document
+
+if TYPE_CHECKING:
+    from anyseg import Document
+    from spacy.tokens import Doc
 
 
 class BasicStats(anyts.basic_stats.BasicStats):
@@ -48,8 +57,8 @@ class BasicStats(anyts.basic_stats.BasicStats):
                             'other': 0}}
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object); for a Doc the
-            words come from the tokens and the sentences from the annotation,
+        source (str|Doc|Document): Data source (a string, a Doc or a Document); for a
+            Doc the words come from the tokens and the sentences from the annotation,
             without sentence boundaries they come from SentsExtractor
         sents_extractor (SentsExtractor): Sentence extraction tool; if given,
             used on the text of a Doc too
@@ -99,15 +108,16 @@ class BasicStats(anyts.basic_stats.BasicStats):
         print_stats: Printing the computed statistics of the text with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object, or an extractor
-            is of another type
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, or an
+            extractor is of another type
         SourceError: If the source has no words
         ParameterError: If a factor is not an integer or is below one, or normalize is not
             a bool
     """
 
-    sents_extractor_class = SentsExtractor
-    words_extractor_class = WordsExtractor
+    def parse(self, source: str | Doc | Document) -> Document:
+        """The document of anySeg (ests.utils.get_document)"""
+        return get_document(source)
 
     def count_syllables(self, word: str) -> int:
         """

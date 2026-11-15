@@ -4,15 +4,15 @@
 LexicalStats(source, freq_dict=None, nlp=None)
 ```
 
-<!-- core: stats/lexical_stats.md:LexicalStats baa1034 -->
-Complejidad léxica a la manera de TAALES (Kyle, Crossley y Berger, 2018) - cuán raras son las palabras de un texto: estadísticas según un diccionario de frecuencias y su modelo de unigramas, las proporciones de las bandas de frecuencia de una lista de los lemas más frecuentes y la densidad léxica. Las estadísticas según el diccionario se calculan la primera vez que se leen, así que las bandas y la densidad léxica no necesitan los datos del diccionario.
+<!-- core: stats/lexical_stats.md:LexicalStats 5286466 -->
+Complejidad léxica a la manera de TAALES (Kyle, Crossley y Berger, 2018) - cuán raras son las palabras de un texto: estadísticas según un diccionario de frecuencias y su modelo de unigramas, las proporciones de las bandas de frecuencia de una lista de los lemas más frecuentes y la densidad léxica. Las estadísticas según el diccionario se calculan la primera vez que se leen, así que las bandas y la densidad léxica no necesitan los datos del diccionario. La fuente de datos es un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) o un `Document` de [anySeg](https://github.com/SergeyShk/anySeg), que se lee a través de su [documento](https://sergeyshk.github.io/anyTS/document/): por defecto, sus palabras de Universal Dependencies sin los números, con sus lemas y sus categorías gramaticales.
 
 Excepciones:
 
-- `SourceTypeError` - un diccionario de otra clase que la de la biblioteca o, sin `freq_dict_class`, uno sin `lookup` e `ipm` o ninguno; un `analyze` que no da objetos `LexicalWord`;
-- `SourceError` - una fuente sin palabras.
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni un `Document`, un `parse` que no devuelve un `Document`, un diccionario de otra clase que la de la biblioteca o, sin `freq_dict_class`, uno sin `lookup` e `ipm` o ninguno; un `analyze` que no da objetos `LexicalWord`;
+- `SourceError` - palabras sin categorías gramaticales, una fuente sin palabras.
 
-En esTS una fuente que no es ni una cadena ni un `Doc` y un pipeline en `nlp` que no es un `Language` de spaCy también lanzan `SourceTypeError`; una fuente sin las categorías gramaticales y una cadena más larga que el `max_length` del pipeline, `SourceError`; y las métricas según el diccionario sin el diccionario descargado, `DatasetNotFoundError`.
+En esTS una fuente que no es ni una cadena, ni un `Doc` ni un `Document` y un pipeline en `nlp` que no es un `Language` de spaCy también lanzan `SourceTypeError`; una fuente sin las categorías gramaticales y una cadena más larga que el `max_length` del pipeline, `SourceError`; y las métricas según el diccionario sin el diccionario descargado, `DatasetNotFoundError`.
 
 A diferencia de las [métricas de diversidad léxica](diversity_stats.md), que comparan las palabras de un texto entre sí, aquí las palabras se comparan con las frecuencias de la lengua ([TAALES](https://doi.org/10.3758/s13428-017-0924-4)). La fuente de datos es un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy).
 
@@ -57,7 +57,7 @@ El `max_length` del pipeline es de un millón de caracteres por defecto: divida 
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `source` | `str` / `Doc` | - | Fuente de datos |
+| `source` | `str` / `Doc` / `Document` | - | Fuente de datos |
 | `freq_dict` | `FreqDict` | `None` | Diccionario de frecuencias; `FreqDict()` del directorio por defecto si no se indica |
 | `nlp` | `Language` | `None` | Pipeline de spaCy que analiza una cadena; sin él se carga el modelo `es_core_news_sm` |
 

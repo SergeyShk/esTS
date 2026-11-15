@@ -44,14 +44,14 @@ spaCy fija ambos en `nlp.add_pipe(factory, name=...)`; los demás parámetros de
 
 Las fábricas llevan el prefijo de la biblioteca: `ests_basic`, `ests_readability`, `ests_unadapted_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon`, `ests_verse`. Están declaradas como entry points de `spacy_factories`, así que un pipeline guardado con estos componentes (`nlp.to_disk(path)`, `spacy package`) se carga con `spacy.load(path)` sin importar la biblioteca. `import ests` no carga los componentes mientras spaCy no está cargado - los hallan los puntos de entrada, y `ests.StyleStatsComponent` los carga al usarlo por primera vez; desde las fuentes sin el paquete instalado, `import ests.components` va antes de `add_pipe`.
 
-<!-- core: components.md:StatsComponent-names 33ebb87 -->
-El nombre del paso del pipeline es el nombre de la extensión: `nlp.add_pipe(factory, name="basic")` pone las estadísticas en `doc._.basic`. Sin `name` ambos toman el nombre de la fábrica. La extensión sigue al paso cuando el pipeline lo renombra (`nlp.rename_pipe`). Un nombre ocupado por una extensión de otro paquete lanza `ParameterError` en lugar de reemplazarla: en `add_pipe`, o con el primer documento después de `rename_pipe`, que renombra el paso antes de que el componente conozca su nombre. Un componente tomado de otro pipeline (`add_pipe(name, source=other)`) es el mismo objeto en ambos, así que con un nombre nuevo escribe también en esa extensión del otro pipeline; un componente independiente sale de la fábrica, `add_pipe(factory, name=...)`. El mismo componente puede añadirse dos veces con nombres distintos, con parámetros distintos. Un documento sin palabras - una cadena vacía, espacios, pura puntuación - pasa por un componente sin cambios, con su extensión en `None`.
+<!-- core: components.md:StatsComponent-names 737f20b -->
+El nombre del paso del pipeline es el nombre de la extensión: `nlp.add_pipe(factory, name="basic")` pone las estadísticas en `doc._.basic`. Sin `name` ambos toman el nombre de la fábrica. La extensión sigue al paso cuando el pipeline lo renombra (`nlp.rename_pipe`), y una extensión eliminada con `Doc.remove_extension` mientras el componente vive se registra de nuevo con su siguiente documento. Un nombre ocupado por una extensión de otro paquete lanza `ParameterError` en lugar de reemplazarla: en `add_pipe`, o con el primer documento después de `rename_pipe`, que renombra el paso antes de que el componente conozca su nombre. Un componente tomado de otro pipeline (`add_pipe(name, source=other)`) es el mismo objeto en ambos, así que con un nombre nuevo escribe también en esa extensión del otro pipeline; un componente independiente sale de la fábrica, `add_pipe(factory, name=...)`. El mismo componente puede añadirse dos veces con nombres distintos, con parámetros distintos. Un documento sin palabras - una cadena vacía, espacios, pura puntuación - pasa por un componente sin cambios, con su extensión en `None`. Un documento sin una anotación que las estadísticas necesitan, como el análisis de `SyntaxStats` en un pipeline sin parser, lanza `SourceError` en el componente, así que la llamada del pipeline falla.
 
 En `ests_lexical` también pasa intacto un documento solo de números, y en `ests_verse` un documento sin letras.
 
-<!-- core: components.md:StatsComponent-serialization a238412 -->
+<!-- core: components.md:StatsComponent-serialization b114bf2 -->
 !!! warning "Serialización"
-    Un componente guarda un objeto de estadísticas en `doc._.<name>`, y spaCy no sabe serializarlo: `Doc.to_bytes()`, `DocBin(store_user_data=True)` y `nlp.pipe(..., n_process>1)` fallan con estos componentes en el pipeline. Para guardar un documento, deje fuera los datos de usuario (`doc.to_bytes(exclude=["user_data"])`) o guarde `doc._.<name>.get_stats()` por separado; para el multiproceso, calcule las estadísticas en el proceso principal después de `nlp.pipe`, sin los componentes.
+    Un componente guarda un objeto de estadísticas en `doc._.<name>`, y spaCy no sabe serializarlo: `Doc.to_bytes()`, `DocBin(store_user_data=True)` y `nlp.pipe(..., n_process>1)` fallan con estos componentes en el pipeline. Para guardar un documento, guarde `doc._.<name>.get_stats()` por separado y vacíe la extensión (`doc._.<name> = None`) antes de `doc.to_bytes()`: dejar fuera todos los datos de usuario (`exclude=["user_data"]`) pierde también las palabras de los tokens multipalabra de anySeg (`token._.anyseg_words`), y un documento cuyas palabras llevan columnas propias, como uno de `anyseg.spacy.to_doc`, se lee de vuelta con otras palabras. Para el multiproceso, calcule las estadísticas en el proceso principal después de `nlp.pipe`, sin los componentes.
 
 Un componente lee el `Doc` de su pipeline tal cual y no toca su tokenizador: las palabras y las oraciones de la API de cadenas vienen con el pipeline de [`load_pipeline`](#load_pipeline), donde `sí--dijo` son dos palabras y una raya y una línea en blanco cierra la oración.
 
@@ -88,7 +88,7 @@ BasicStatsComponent(nlp, name)
 ReadabilityStatsComponent(nlp, name, preset=None, basic=None)
 ```
 
-<!-- core: components.md:ReadabilityStatsComponent 78d49ec -->
+<!-- core: components.md:ReadabilityStatsComponent 58263af -->
 `ReadabilityStatsComponent` pone en la extensión las métricas de legibilidad, calculadas sobre el documento o, con `basic`, sobre las estadísticas básicas que otro componente puso en él. Una biblioteca fija `basic_factory`, la fábrica de su componente de las estadísticas básicas, que el error nombra cuando esa extensión no las tiene.
 
 | Parámetro | Tipo | Por defecto | Descripción |
@@ -100,7 +100,7 @@ Con `preset` en `None` la configuración de un pipeline guardado no lleva preaju
 
 Excepciones:
 
-- `ParameterError` - una `stats_class` que no es concreta, un preajuste que no es una cadena o no es de la clase, una extensión no nombrada por una cadena;
+- `ParameterError` - una `stats_class` que no es concreta, un preajuste que no es una cadena o no es de la clase, una extensión no nombrada por una cadena o nombrada por una vacía;
 - `SourceTypeError` - una clase sin `basic_stats_class` y sin `basic`;
 - `SourceError` - un documento cuya extensión `basic` no tiene estadísticas básicas de la clase.
 
@@ -130,7 +130,7 @@ Los [preajustes](stats/readability_stats.md#presets) de esTS son `general` y `cl
 UnadaptedReadabilityStatsComponent(nlp, name, basic=None)
 ```
 
-<!-- core: components.md:UnadaptedReadabilityStatsComponent 7a47657 -->
+<!-- core: components.md:UnadaptedReadabilityStatsComponent b7871a2 -->
 `UnadaptedReadabilityStatsComponent` pone en la extensión las fórmulas de legibilidad de otros idiomas, calculadas sobre el documento o, con `basic`, sobre las estadísticas básicas que otro componente puso en él. Una biblioteca fija `basic_factory`, como para `ReadabilityStatsComponent`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
@@ -139,7 +139,7 @@ UnadaptedReadabilityStatsComponent(nlp, name, basic=None)
 
 Excepciones:
 
-- `ParameterError` - una `stats_class` que no es concreta, una extensión no nombrada por una cadena;
+- `ParameterError` - una `stats_class` que no es concreta, una extensión no nombrada por una cadena o nombrada por una vacía;
 - `SourceTypeError` - una clase sin `basic_stats_class` y sin `basic`;
 - `SourceError` - un documento cuya extensión `basic` no tiene estadísticas básicas de la clase.
 
@@ -303,8 +303,8 @@ En el pipeline de `es_core_news_sm` las categorías gramaticales y los lemas vie
 LexicalStatsComponent(nlp, name, data_dir=None)
 ```
 
-<!-- core: components.md:LexicalStatsComponent 7d94500 -->
-`LexicalStatsComponent` pone en la extensión las estadísticas de complejidad léxica, con el diccionario de frecuencias de su atributo `freq_dict`: `None` por defecto, para el diccionario de la clase, y fijado por una biblioteca en el constructor de su componente. Un documento recibe las estadísticas cuando tiene una palabra de `iter_doc_words` (con `join_hyphens`) que no es un número del método `is_number`, `anyts.utils.is_number` por defecto; una biblioteca da los números que su clase deja fuera, así que un documento solo de números pasa intacto.
+<!-- core: components.md:LexicalStatsComponent 5077aef -->
+`LexicalStatsComponent` pone en la extensión las estadísticas de complejidad léxica, con el diccionario de frecuencias de su atributo `freq_dict`: `None` por defecto, para el diccionario de la clase, y fijado por una biblioteca antes del constructor del núcleo; una clase sin diccionario propio y sin `freq_dict` lanza `ParameterError` al crearse el componente. Un documento recibe las estadísticas cuando tiene un token con una letra o una cifra (`has_words`) que no es un número del método `is_number`, `anyts.utils.is_number` por defecto; una biblioteca da los números que su clase deja fuera, así que un documento solo de números pasa intacto.
 
 En esTS `freq_dict` es el [diccionario de frecuencias](datasets/freqdict.md) `FreqDict` del directorio `data_dir`, e `is_number` toma los números del `NUMBER_PATTERN` del español (`2020`, `1.500,50`, `3.º`). El pipeline necesita un `morphologizer` antes del componente, y la fábrica requiere `token.pos`; los lemas del modelo no se usan. Las bandas de frecuencia y la densidad léxica se calculan sin el diccionario, las estadísticas por el diccionario lo necesitan descargado.
 
@@ -316,7 +316,7 @@ Excepciones:
 
 - `SourceError` - un documento sin las categorías gramaticales;
 - `DatasetNotFoundError` - las estadísticas por el diccionario y `get_stats()` cuando el diccionario no está descargado;
-- `ConfigValidationError` de spaCy - un `data_dir` que no es una cadena, en `add_pipe`.
+- `ParameterError` - un `data_dir` que no es una cadena.
 
 === "Código"
 
@@ -340,7 +340,7 @@ Excepciones:
 StyleStatsComponent(nlp, name, stopwords=None, top_n=10, nausea_stopwords=None, cliches=None)
 ```
 
-<!-- core: components.md:StyleStatsComponent 0abace1 -->
+<!-- core: components.md:StyleStatsComponent 957821f -->
 `StyleStatsComponent` pone las métricas de estilo en la extensión.
 
 | Parámetro | Tipo | Por defecto | Descripción |
@@ -352,8 +352,7 @@ StyleStatsComponent(nlp, name, stopwords=None, top_n=10, nausea_stopwords=None, 
 
 Excepciones:
 
-- `SourceTypeError` - palabras vacías, palabras vacías de la náusea o clichés que no son una lista de cadenas;
-- `ParameterError` - un `top_n` que no es un entero de al menos uno.
+- `ParameterError` - palabras vacías, palabras vacías de la náusea o clichés que no son una lista de cadenas, un `top_n` que no es un entero de al menos uno.
 
 Sin las listas, el contenido de agua toma las palabras vacías de `STOPWORDS` y las expresiones parentéticas de una palabra, la náusea académica deja fuera las palabras de `is_stopword`, y los clichés vienen de `OFFICIALESE_CLICHES`; `NAUSEA_TOP_N` es una constante de `anyts.constants`. Los sustantivos deverbales necesitan un `morphologizer` y un `lemmatizer` antes del componente, y sin ellos leer `verbal_nouns`, `markers()` o `get_stats()` lanza `SourceError`; las demás métricas solo leen las palabras.
 
@@ -416,7 +415,7 @@ VerseStatsComponent(nlp, name, seseo=False)
 
 Excepciones:
 
-- `ConfigValidationError` de spaCy - un `seseo` que no es un booleano, en `add_pipe`.
+- `ParameterError` - un `seseo` que no es un booleano.
 
 === "Código"
 

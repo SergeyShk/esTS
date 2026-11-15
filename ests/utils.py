@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Any
 import simplemma
 from anyseg import Segmenter
 from anyts.constants import MESSAGES
+from anyts.document import to_document
 from anyts.utils import (
     count_words_by_spans as count_words_by_spans,
     find_phrases as find_phrases,
@@ -15,10 +16,12 @@ from anyts.utils import (
 )
 
 from .constants import SPACY_MODEL, VERBAL_NOUN_LEMMAS, VERBAL_NOUN_SUFFIXES
-from .exceptions import DatasetNotFoundError, SourceTypeError
+from .exceptions import DatasetNotFoundError, SourceError, SourceTypeError
 
 if TYPE_CHECKING:
+    from anyseg import Document
     from spacy.language import Language
+    from spacy.tokens import Doc
 
 # The segmenter of Spanish into tokens and sentences
 SEGMENTER = Segmenter("es")
@@ -118,6 +121,54 @@ def iter_text_sents(text: str) -> Iterator[tuple[int, int, str]]:
     """
     _check_text(text)
     return ((span.start, span.end, span.text) for span in SEGMENTER.sentenize(text))
+
+
+def get_document(source: str | Doc | Document) -> Document:
+    """
+    Getting the document of a data source in the model of anySeg
+
+    Description:
+        A string is segmented by anySeg (the tokens of iter_tokens, the sentences
+        of iter_text_sents); a Doc keeps its tokens, columns and sentences, and a
+        Doc without sentences gets those of iter_text_sents (to_document of the
+        core); a Document is returned as it is
+
+    Arguments:
+        source (str|Doc|Document): Data source
+
+    Returns:
+        Document: Document of anySeg
+
+    Raises:
+        SourceTypeError: If the source is neither a string, a Doc nor a Document
+
+    Example:
+        >>> from ests.utils import get_document
+        >>> document = get_document("Vino del pueblo. ¿Y tú?")
+        >>> [token.text for token in document.tokens]
+        ['Vino', 'del', 'pueblo', '.', '¿', 'Y', 'tú', '?']
+        >>> [word.form for word in document.tokens[1].words]
+        ['de', 'el']
+    """
+    if isinstance(source, str):
+        return SEGMENTER.segment(source)
+    return to_document(source, sentenize=iter_text_sents)
+
+
+def _parse_text(text: str, nlp: Language | None, disable: Iterable[str]) -> Document:
+    """
+    The document of a string parsed by a pipeline, nlp or get_nlp(), without the
+    components of disable; a string longer than the max_length of the pipeline raises
+    SourceError
+    """
+    pipeline = nlp or get_nlp()
+    if len(text) > pipeline.max_length:
+        raise SourceError(
+            f"The text of {len(text)} characters is longer than the limit of the "
+            f"pipeline ({pipeline.max_length}): split it into parts or raise "
+            "max_length on a pipeline of your own and pass it in nlp"
+        )
+    return get_document(pipeline(text, disable=list(disable)))
 
 
 def _check_text(text: object) -> None:

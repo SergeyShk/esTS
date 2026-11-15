@@ -4,10 +4,10 @@
 kwic(source, keyword, window=5, by_lemma=False, ignore_case=True)
 ```
 
-<!-- core: corpus/kwic.md:kwic 481d7d1 -->
-Una concordancia KWIC (keyword in context) - todas las apariciones de una palabra o de una expresión con su contexto a ambos lados. Las apariciones se buscan entre las palabras del texto por la forma, sin distinguir mayúsculas y minúsculas o distinguiéndolas (`ignore_case=False`), o por el lema (`by_lemma=True`); la palabra clave se lematiza como una cadena, así que con un lematizador una expresión puede escribirse en cualquier forma y sin él se da por lemas. Las palabras de una cadena y de la palabra clave salen del tokenizador, las de un `Doc` de sus tokens: un tokenizador que divide una cadena como lo hace el pipeline encuentra lo mismo en ambos. La puntuación y los símbolos no son palabras; las formas se comparan en la forma compuesta de Unicode (NFC), sin guiones blandos.
+<!-- core: corpus/kwic.md:kwic 99648cb -->
+Una concordancia KWIC (keyword in context) - todas las apariciones de una palabra o de una expresión con su contexto a ambos lados. Las apariciones se buscan entre las palabras del texto por la forma, sin distinguir mayúsculas y minúsculas o distinguiéndolas (`ignore_case=False`), o por el lema (`by_lemma=True`); la palabra clave se lematiza como una cadena, así que con un lematizador una expresión puede escribirse en cualquier forma y sin él se da por lemas. Las palabras son las del [documento](https://sergeyshk.github.io/anyTS/document/) del texto - los tokens de una cadena, del tokenizador, y los de un `Doc` o de un `Document`, los suyos propios - y la palabra clave se divide como una cadena: un tokenizador que divide una cadena como lo hace el pipeline encuentra lo mismo en ambos. Una palabra tiene una letra o una cifra, así que la puntuación y los símbolos no son palabras; las formas se comparan en la forma compuesta de Unicode (NFC), sin guiones blandos.
 
-Una expresión no cruza el final de un párrafo o de una oración salvo que la palabra clave tenga un signo final o un comienzo de oración en el mismo lugar (`U.S. Army`). Una oración termina en un límite de un `Doc` en cualquier punto entre las palabras, incluido un signo de apertura, o, sin límites o con límites parciales (`has_sents`), en un comienzo de oración del segmentador de oraciones, por defecto un signo final ante un espacio. El contexto son `window` palabras a cada lado tal como están escritas, puntuación incluida; los espacios se reducen a uno, y las apariciones no se solapan.
+Una expresión no cruza el final de una oración o de un párrafo del documento salvo que la palabra clave tenga un signo final o un comienzo de oración en el mismo lugar (`U.S. Army`). Las oraciones son las de un `Doc` o de un `Document`, o las del segmentador de oraciones para una cadena, la palabra clave y un `Doc` sin ellas (por defecto, las de `SentsExtractor`). El contexto son `window` palabras a cada lado tal como están escritas, puntuación incluida; los espacios se reducen a uno, y las apariciones no se solapan.
 
 La función llama al `kwic` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/kwic/) con los ganchos del español. El texto y la palabra clave se dividen en palabras del mismo modo, con el segmentador [anySeg](https://github.com/SergeyShk/anySeg), y una palabra se compara sin el punto de una abreviatura, que el final de una oración separa: `Sr.` encuentra `Sr.` en medio de una oración y al final, y `sr. pérez` encuentra `Sr. Pérez` y `SR. PÉREZ`. La puntuación y los símbolos no son palabras de ninguno: `¿Dónde` encuentra `Dónde`, `20 €` encuentra `20`. Las formas y los lemas se pasan a minúsculas; las tildes forman parte de la forma: `solo` y `sólo` son dos formas. Las oraciones de una cadena, de la palabra clave y del texto de un `Doc` sin límites son las de [`SentsExtractor`](../extractors/sentences.md): unos puntos suspensivos o una exclamación seguidos de una palabra en minúscula no terminan la oración, así que `honrado piensa` encuentra `honrado... piensa`.
 
@@ -41,16 +41,16 @@ Por lema, la palabra clave se lematiza con simplemma, así que una expresión se
 
 ## Parámetros
 
-<!-- core: corpus/kwic.md:kwic-parameters cc1548f -->
+<!-- core: corpus/kwic.md:kwic-parameters cb6665e -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `str` / `Doc` | - | Texto u objeto Doc |
+| `source` | `str` / `Doc` / `Document` | - | Texto u objeto Doc o Document |
 | `keyword` | `str` | - | Palabra o expresión |
 | `window` | `int` | `5` | Número de palabras de contexto a cada lado |
 | `by_lemma` | `bool` | `False` | Comparar lemas en lugar de formas |
 | `ignore_case` | `bool` | `True` | No distinguir mayúsculas y minúsculas al comparar formas |
 
-Una palabra clave sin palabras, una ventana que no es un entero o es negativa y un `by_lemma` o un `ignore_case` que no es un `bool` lanzan `ParameterError`; una fuente que no es ni una cadena ni un `Doc`, una palabra clave que no es una cadena y un gancho que no es invocable lanzan `SourceTypeError`.
+Una palabra clave sin palabras, una ventana que no es un entero o es negativa y un `by_lemma` o un `ignore_case` que no es un `bool` lanzan `ParameterError`; una fuente que no es ni una cadena, ni un `Doc`, ni un `Document`, una palabra clave que no es una cadena y un gancho que no es invocable lanzan `SourceTypeError`, y un `Doc` con un token que cruza una línea en blanco, `SourceError`.
 
 ## Resultado
 

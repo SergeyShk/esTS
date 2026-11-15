@@ -183,9 +183,9 @@ Los rasgos sintácticos llegan con un pipeline que tiene analizador sintáctico,
     ```
                                         median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
     syntax_gerund_clauses_per_sent              0.143           0.045   0.090    0.116    1.473        0.852  0.926     0.0
-    syntax_complex_nominals_per_clause          0.808           0.548   0.215    0.302    1.163        0.690  0.845     0.0
+    syntax_complex_nominals_per_clause          0.808           0.548   0.215    0.302    1.164        0.690  0.845     0.0
     syntax_tree_depth                           3.763           2.888   0.594    1.062    1.078        0.664  0.832     0.0
-    syntax_t_units_per_sent                     1.073           1.009   0.029    0.157    1.376        0.664  0.832     0.0
+    syntax_t_units_per_sent                     1.073           1.009   0.029    0.157    1.374        0.664  0.832     0.0
     syntax_subtrees_per_sent                    6.800           4.534   1.567    2.917    0.942        0.661  0.830     0.0
     ```
 

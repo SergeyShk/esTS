@@ -57,12 +57,15 @@ from anyts.diversity_stats import (
     fit_zipf_mandelbrot as fit_zipf_mandelbrot,
     vocabulary_growth as vocabulary_growth,
 )
-from anyts.utils import is_doc, iter_doc_words, source_type_error
+from anyts.document import document_words
+from anyts.utils import is_doc, is_document, source_type_error
 
 from .exceptions import SourceTypeError
 from .extractors import WordsExtractor
+from .utils import get_document
 
 if TYPE_CHECKING:
+    from anyseg import Document
     from spacy.tokens import Doc
 
 
@@ -94,7 +97,7 @@ class DiversityStats(anyts.DiversityStats):
         WindowStats(mean=0.9333, std=0.1155, lower=0.6465, upper=1.2202, n_windows=3)
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object); words are
+        source (str|Doc|Document): Data source (a string, a Doc or a Document); words are
             always lower-cased
         words_extractor (WordsExtractor): Word extraction tool; for a Doc it is
             applied to the text of the Doc, without it the words come from the tokens
@@ -156,15 +159,15 @@ class DiversityStats(anyts.DiversityStats):
         print_stats: Printing the computed lexical diversity metrics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object, or the
-            extractor is not a WordsExtractor
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, or
+            the extractor is not a WordsExtractor
         SourceError: If the source has no words
         ParameterError: If the parameters of the metrics are set incorrectly
     """
 
     def __init__(
         self,
-        source: str | Doc,
+        source: str | Doc | Document,
         words_extractor: anyts.WordsExtractor | None = None,
         window_len: int = MATTR_WINDOW_LEN,
         mtld_threshold: float = MTLD_TTR_THRESHOLD,
@@ -175,9 +178,9 @@ class DiversityStats(anyts.DiversityStats):
         if words_extractor is not None and not isinstance(words_extractor, anyts.WordsExtractor):
             raise SourceTypeError("The word extractor must be a WordsExtractor")
         check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)
-        if is_doc(source):
+        if is_doc(source) or is_document(source):
             words: Sequence[str] = (
-                [word for _, _, word in iter_doc_words(source)]
+                document_words(get_document(source))
                 if words_extractor is None
                 else words_extractor.extract(source.text)
             )

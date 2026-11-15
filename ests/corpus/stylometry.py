@@ -17,11 +17,12 @@ from anyts.corpus.stylometry import (
     zeta as zeta,
     zeta_segments as zeta_segments,
 )
-from anyts.utils import check_words, has_pos, is_doc, is_punctuation, iter_doc_tokens
+from anyts.document import get_tree
+from anyts.utils import check_words, has_words, is_doc, is_document, is_punctuation
 
 from ..constants import FUNCTION_UD_POS
 from ..exceptions import SourceError
-from ..utils import _check_nlp, get_nlp
+from ..utils import _check_nlp, get_document, get_nlp
 
 if TYPE_CHECKING:
     from spacy.language import Language
@@ -68,10 +69,13 @@ def function_words_profile(
         (0.3333333333333333, 0.16666666666666666)
     """
     _check_nlp(nlp)
-    if is_doc(source) and has_pos(source):
-        tags = [token.pos_ for token in iter_doc_tokens(source)]
-    elif is_doc(source):
-        tags = _tag_words([token.text for token in source if not token.is_space], nlp)
+    if is_doc(source) or is_document(source):
+        tree = get_tree(get_document(source))
+        words = [word for word in tree.words if has_words(word.form)]
+        if any(word.upos for word in words):
+            tags = [word.upos or "" for word in words]
+        else:
+            tags = _tag_words([word.form for word in tree.words], nlp)
     else:
         check_words(source)
         tags = _tag_words([word for word in cast("Sequence[str]", source) if word.strip()], nlp)
@@ -104,7 +108,7 @@ def _tag_words(words: Sequence[str], nlp: Language | None) -> list[str]:
     for start, doc in zip(
         starts, pipeline.pipe(chunks, disable=UNUSED_COMPONENTS, batch_size=1), strict=True
     ):
-        if not has_pos(doc):
+        if not _has_pos(doc):
             raise SourceError("The pipeline does not tag the parts of speech")
         offset = min(start, CHUNK_MARGIN)
         tags.extend(
@@ -113,3 +117,14 @@ def _tag_words(words: Sequence[str], nlp: Language | None) -> list[str]:
             if not is_punctuation(token.text)
         )
     return tags
+
+
+def _has_pos(doc: Doc) -> bool:
+    """Whether a word of a Doc carries a part of speech, or a Doc without words was tagged"""
+    words = False
+    for token in doc:
+        if not token.is_space and not is_punctuation(token.text):
+            if token.pos_:
+                return True
+            words = True
+    return not words and doc.has_annotation("POS")

@@ -1,5 +1,6 @@
 import pytest
 import spacy
+from anyts.document import get_tree
 from anyts.visualizers.highlight import Sent, Word
 from spacy.tokens import Doc
 
@@ -11,7 +12,7 @@ from ests.constants import (
     HIGHLIGHT_LAYERS_DESC,
 )
 from ests.exceptions import ParameterError, SourceError, SourceTypeError
-from ests.utils import get_nlp, iter_text_words
+from ests.utils import get_document, get_nlp, iter_text_words
 from ests.visualizers import Highlight, HighlightedText, highlight
 from ests.visualizers.highlight import (
     calc_alliteration_runs,
@@ -49,7 +50,7 @@ TEXT_LAYERS = [
     layer for layer in HIGHLIGHT_LAYERS_DESC if layer not in HIGHLIGHT_LAYER_ANNOTATIONS
 ]
 SYNTAX_LAYERS = sorted(
-    layer for layer, needs in HIGHLIGHT_LAYER_ANNOTATIONS.items() if "DEP" in needs
+    layer for layer, needs in HIGHLIGHT_LAYER_ANNOTATIONS.items() if "deprel" in needs
 )
 
 
@@ -203,7 +204,11 @@ def test_highlights_sorted(ht):
 def test_words_and_sents_of_a_string():
     sample = "Hola, mundo. ¿Qué tal estás?"
     ht = highlight(sample, layers="long_sents", long_sent_word_factor=1)
-    assert list(ht.iter_words("¿Hola, mundo?")) == [(1, 5, "Hola"), (7, 12, "mundo")]
+    words = ht.doc_words(ht.parse("¿Hola, mundo?"))
+    assert [(word.start, word.end, word.text) for word in words] == [
+        (1, 5, "Hola"),
+        (7, 12, "mundo"),
+    ]
     assert [(ht.text[h.start : h.end], h.note) for h in ht.highlights] == [
         ("Hola, mundo.", "long sentence, 2 words"),
         ("¿Qué tal estás?", "long sentence, 3 words"),
@@ -339,14 +344,14 @@ def test_connectors_pos():
 
 
 def test_connectors_si_without_a_condition(nlp):
-    """With a Doc the layer drops the si of CohesionStats that opens no condition"""
+    """The layer drops the si of CohesionStats that opens no condition"""
     text = "No sé si vendrá. Si llueve, me quedo. ¡Si ya te lo dije!"
     doc = nlp(text)
     ht = highlight(doc, layers="connectors")
     assert [(h.start, h.end) for h in ht.highlights] == [(17, 19)]
     assert len(ht.highlights) == len(CohesionStats(doc).connector_spans)
-    # A string has no parse: every si counts
-    assert len(highlight(text, layers="connectors").highlights) == 3
+    # A string has no parse: only the si after ¡ is dropped
+    assert len(highlight(text, layers="connectors").highlights) == 2
 
 
 def test_passive(doc):
@@ -409,7 +414,7 @@ def test_de_chains_skip_punctuation():
         deps=["ROOT", "case", "nmod", "case", "nmod", "flat"],
         pos=["NOUN", "ADP", "NOUN", "ADP", "PUNCT", "PROPN"],
     )
-    assert find_de_chains(doc) == []
+    assert find_de_chains(get_document(doc)) == []
 
 
 def test_split_predicates(doc):
@@ -492,18 +497,18 @@ def test_anaphoric_mismo_attached_to_its_article(pos, expected):
         heads=[1, 3, 1, 3, 3, 5, 5],
         pos=["ADP", "DET", "DET", pos, "PUNCT", "NOUN", "ADJ"],
     )
-    assert is_anaphoric_mismo(doc[2]) is expected
+    assert is_anaphoric_mismo(get_tree(get_document(doc)).words[2]) is expected
     if expected:
-        assert [(h.start, h.end, h.note) for h in find_anaphoric_mismo(doc)] == [
+        assert [(h.start, h.end, h.note) for h in find_anaphoric_mismo(get_document(doc))] == [
             (3, 11, "anaphoric la misma")
         ]
 
 
 def test_anaphoric_mismo_without_a_parse(nlp):
     """A Doc of the tokenizer alone has no anaphora, as for the other syntactic layers"""
-    doc = nlp.make_doc("se archivó el mismo")
-    assert find_anaphoric_mismo(doc) == []
-    assert not any(is_anaphoric_mismo(token) for token in doc)
+    document = get_document(nlp.make_doc("se archivó el mismo"))
+    assert find_anaphoric_mismo(document) == []
+    assert not any(is_anaphoric_mismo(word) for word in get_tree(document).words)
 
 
 def test_anaphoric_mismo_at_the_end_of_its_sentence():
@@ -515,7 +520,8 @@ def test_anaphoric_mismo_at_the_end_of_its_sentence():
         heads=[0, 0, 1, 0, 4, 4],
         pos=["VERB", "DET", "DET", "PUNCT", "NOUN", "ADJ"],
     )
-    assert [token.text for token in doc if is_anaphoric_mismo(token)] == ["misma"]
+    words = get_tree(get_document(doc)).words
+    assert [word.form for word in words if is_anaphoric_mismo(word)] == ["misma"]
 
 
 def test_doc_long_sents(nlp):

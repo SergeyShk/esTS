@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Collection, Iterable, Mapping, Sequence
+from collections.abc import Collection, Mapping, Sequence
 from functools import cache
 from pathlib import Path
 from types import MappingProxyType
@@ -32,13 +32,13 @@ from .constants import (
     CONNECTOR_SPLIT_BY_MARKS,
     CONNECTOR_SUBORDINATORS,
 )
-from .exceptions import SourceError
-from .extractors import SentsExtractor
-from .utils import _check_nlp, get_nlp, lemmatize
+from .utils import _check_nlp, _parse_text, get_document, lemmatize
 
 if TYPE_CHECKING:
+    from anyseg import Document
+    from anyts.document import TreeWord
     from spacy.language import Language
-    from spacy.tokens import Doc, Token
+    from spacy.tokens import Doc
 
 # The vowels with a written accent and without it
 UNACCENTED = str.maketrans("áéíóú", "aeiou")
@@ -154,7 +154,7 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
          Connector(sent=2, start=6, end=7, text='y', cls='additive', kind='primary'))
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
+        source (str|Doc|Document): Data source (a string, a Doc or a Document)
         sents_extractor (SentsExtractor): Sentence extraction tool; an extractor
             given here is used whatever the source, and without one a Doc with no
             sentence boundaries is split by the rules of the default extractor
@@ -240,8 +240,8 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
         print_stats: Printing the computed cohesion statistics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object, the extractor
-            or the pipeline is of another type, or the connectors are not a dictionary
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, the
+            extractor or the pipeline is of another type, or the connectors are not a dictionary
             of phrases and pairs of strings
         SourceError: If the source has no words, no annotation of the parts of
             speech or no lemmas, or is a string longer than the max_length of
@@ -251,14 +251,13 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
         DatasetNotFoundError: If a string is passed and the model is not installed
     """
 
-    sents_extractor_class = SentsExtractor
     connector_matcher_class = SpanishConnectorMatcher
     temporal_features = ("tense", "mood")
     stats_desc = COHESION_STATS_DESC
 
     def __init__(
         self,
-        source: str | Doc,
+        source: str | Doc | Document,
         sents_extractor: anyts.SentsExtractor | None = None,
         connectors: Mapping[str, tuple[str, str]] | None = None,
         nlp: Language | None = None,
@@ -266,7 +265,7 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
     ):
         _check_nlp(nlp)
         self._nlp = nlp
-        super().__init__(source, sents_extractor, connectors, blank_lines)  # type: ignore[arg-type]  # analyze takes a string too
+        super().__init__(source, sents_extractor, connectors, blank_lines)
 
     def __getstate__(self) -> dict[str, Any]:
         """State for pickle and copy without the pipeline, which is no part of the statistics"""
@@ -279,55 +278,47 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
         """Dictionary of the Spanish connectors (load_connectors)"""
         return load_connectors()
 
-    def analyze(self, source: str | Doc) -> Iterable[Sequence[anyts.cohesion_stats.CohesionWord]]:
+    def parse(self, source: str | Doc | Document) -> Document:
         """
-        Getting the words of the sentences of a source with their features
+        Getting the document of a source
 
         Description:
-            A string is parsed by nlp or get_nlp() without the named entities;
-            the words of the Doc then come with the features of the core
+            A string is parsed by nlp or get_nlp() without the named entities; a
+            Doc or a Document goes to get_document
 
         Arguments:
-            source (str|Doc): Data source
+            source (str|Doc|Document): Data source
 
         Returns:
-            iterable[list[CohesionWord]]: Words of every sentence
+            Document: Document of anySeg
 
         Raises:
-            SourceTypeError: If the source is neither a string nor a Doc object
-            SourceError: If a string is longer than the max_length of the pipeline, or the
-                Doc has no parts of speech or no lemmas
+            SourceTypeError: If the source is neither a string, a Doc nor a Document
+            SourceError: If a string is longer than the max_length of the pipeline
             DatasetNotFoundError: If a string is passed and the model is not installed
         """
         if isinstance(source, str):
-            pipeline = getattr(self, "_nlp", None) or get_nlp()
-            if len(source) > pipeline.max_length:
-                raise SourceError(
-                    f"The text of {len(source)} characters is longer than the limit of the "
-                    f"pipeline ({pipeline.max_length}): split it into parts or raise "
-                    "max_length on a pipeline of your own and pass it in nlp"
-                )
-            source = pipeline(source, disable=UNUSED_COMPONENTS)
-        return super().analyze(source)
+            return _parse_text(source, getattr(self, "_nlp", None), UNUSED_COMPONENTS)
+        return get_document(source)
 
-    def word_info(self, unit: Sequence[Token]) -> CohesionWord:
+    def word_info(self, word: TreeWord) -> CohesionWord:
         """
-        Getting the features of a word of a Doc
+        Getting the features of a word of the tree
 
         Description:
             The features of the core; no connector starts at a si that opens
             no condition (is_connector_blocked)
 
         Arguments:
-            unit (list[Token]): Tokens of the word
+            word (TreeWord): Word of the tree
 
         Returns:
             CohesionWord: Word with its features
         """
-        word = super().word_info(unit)
-        if is_connector_blocked(unit[0]):
-            return word._replace(connector_blocked=True)
-        return word
+        info = super().word_info(word)
+        if is_connector_blocked(word):
+            return info._replace(connector_blocked=True)
+        return info
 
 
 @cache
@@ -411,9 +402,9 @@ def find_connectors(
     return matcher.find(words, sent_index, pos, breaks, blocked)
 
 
-def is_connector_blocked(token: Token) -> bool:
+def is_connector_blocked(token: TreeWord) -> bool:
     """
-    Checking whether no connector starts at a token by the words before it in a Doc
+    Checking whether no connector starts at a word of the tree by the words before it
 
     Description:
         A si opens no condition after a verb of CONNECTOR_QUESTION_VERBS (no sé
@@ -429,36 +420,36 @@ def is_connector_blocked(token: Token) -> bool:
         simplemma
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): Word of the tree
 
     Returns:
-        bool: Whether no connector starts at the token
+        bool: Whether no connector starts at the word
 
     Example:
+        >>> from anyts.document import get_tree
         >>> from ests.cohesion_stats import is_connector_blocked
-        >>> from ests.utils import get_nlp
-        >>> doc = get_nlp()("No sé si vendrá. Si llueve, me quedo.")
-        >>> [is_connector_blocked(token) for token in doc if token.lower_ == "si"]
+        >>> from ests.utils import get_document, get_nlp
+        >>> tree = get_tree(get_document(get_nlp()("No sé si vendrá. Si llueve, me quedo.")))
+        >>> [is_connector_blocked(word) for word in tree.words if word.form.lower() == "si"]
         [True, False]
     """
-    if token.lower_ != "si":
+    if token.form.lower() != "si" or not token.index:
         return False
-    previous = next((word for word in reversed(token.doc[: token.i]) if not word.is_space), None)
-    if previous is None:
-        return False
-    if previous.text == "¡":
+    previous = token.tree.words[token.index - 1]
+    if previous.form == "¡":
         return True
-    if previous.pos_ in ("VERB", "AUX"):
-        lemmas = {previous.lemma_.lower().split(" ")[0], lemmatize(previous.lower_)}
-    elif previous.pos_ in ("PROPN", "NOUN"):
-        lemmas = {lemmatize(previous.lower_)}
+    form = previous.form.lower()
+    if previous.upos in ("VERB", "AUX"):
+        lemmas = {(previous.lemma or "").lower().split(" ")[0], lemmatize(form)}
+    elif previous.upos in ("PROPN", "NOUN"):
+        lemmas = {lemmatize(form)}
     else:
         return False
     lemmas &= CONNECTOR_QUESTION_VERBS
-    return bool(lemmas) and not _has_question_complement(previous, lemmas, token.i)
+    return bool(lemmas) and not _has_question_complement(previous, lemmas, token.index)
 
 
-def _has_question_complement(verb: Token, lemmas: Collection[str], end: int) -> bool:
+def _has_question_complement(verb: TreeWord, lemmas: Collection[str], end: int) -> bool:
     """
     Checking whether a verb has the complement an indirect question would fill before a position
 
@@ -472,28 +463,29 @@ def _has_question_complement(verb: Token, lemmas: Collection[str], end: int) -> 
         none (se preguntó)
 
     Arguments:
-        verb (Token): Verb before si
+        verb (TreeWord): Verb before si
         lemmas (list[str]): Lemmas of the verb among CONNECTOR_QUESTION_VERBS
         end (int): Position of si
 
     Returns:
         bool: Result of the check
     """
-    form = verb.lower_
+    form = verb.form.lower()
     for clitic in CONNECTOR_OBJECT_CLITICS:
         stem = form.removesuffix(clitic)
         if stem != form and len(stem) > 2 and lemmatize(_without_accent(stem)) in lemmas:
             return True
-    before = [child for child in verb.children if child.i < end]
+    before = [child for child in verb.children if child.index < end]
     if any(
-        child.dep_ == "obj" and child.lower_ not in CONNECTOR_DATIVE_CLITICS for child in before
+        child.deprel == "obj" and child.form.lower() not in CONNECTOR_DATIVE_CLITICS
+        for child in before
     ):
         return True
-    passive = any(child.dep_ == "expl:pass" for child in before) and not any(
+    passive = any(child.deprel == "expl:pass" for child in before) and not any(
         lemma in CONNECTOR_PRONOMINAL_VERBS for lemma in lemmas
     )
     return (passive or "constar" in lemmas) and any(
-        child.dep_.startswith("nsubj") for child in before
+        (child.deprel or "").startswith("nsubj") for child in before
     )
 
 
@@ -502,7 +494,7 @@ def _without_accent(word: str) -> str:
     return word.translate(UNACCENTED)
 
 
-def token_info(token: Token) -> WordInfo:
+def token_info(token: TreeWord) -> WordInfo:
     """
     Getting the features of a token by the annotation of Universal Dependencies
 
@@ -514,31 +506,32 @@ def token_info(token: Token) -> WordInfo:
         demonstrative
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): Word of the tree
 
     Returns:
         WordInfo: Features of the word
     """
-    pron_type = token.morph.get("PronType", [])
-    tense = token.morph.get("Tense", [])
-    mood = token.morph.get("Mood", [])
+    feats = token.feats
+    pron_type = feats.get("PronType", "").split(",")
+    tense = feats.get("Tense")
+    mood = feats.get("Mood")
     demonstrative = "Dem" in pron_type
     return WordInfo(
-        lemma=token.lemma_.lower(),
-        noun=token.pos_ in ("NOUN", "PROPN"),
-        pronoun=token.pos_ == "PRON" or _is_pronominal_det(token, pron_type),
+        lemma=(token.lemma or "").lower(),
+        noun=token.upos in ("NOUN", "PROPN"),
+        pronoun=token.upos == "PRON" or _is_pronominal_det(token, pron_type),
         demonstrative=demonstrative,
-        argument=token.pos_ in ("NOUN", "PROPN", "PRON"),
-        content=not demonstrative and token.pos_ in CONTENT_UD_POS,
-        tense=tense[0] if tense else None,
-        mood=mood[0] if mood else None,
+        argument=token.upos in ("NOUN", "PROPN", "PRON"),
+        content=not demonstrative and token.upos in CONTENT_UD_POS,
+        tense=tense.split(",")[0] if tense else None,
+        mood=mood.split(",")[0] if mood else None,
     )
 
 
-def _is_pronominal_det(token: Token, pron_type: list[str]) -> bool:
+def _is_pronominal_det(token: TreeWord, pron_type: list[str]) -> bool:
     """Whether a determiner points at something: mi libro, su libro, este libro"""
-    if token.pos_ != "DET":
+    if token.upos != "DET":
         return False
-    if "Yes" in token.morph.get("Poss", []):
+    if "Yes" in token.feats.get("Poss", "").split(","):
         return True
     return bool({"Dem", "Prs"} & set(pron_type))

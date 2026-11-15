@@ -8,7 +8,7 @@ DiversityStats(source, words_extractor=None, window_len=50, mtld_threshold=0.72,
 
 Raises:
 
-- `SourceTypeError` - a source that is neither a string nor a `Doc`, an extractor of another type;
+- `SourceTypeError` - a source that is neither a string, a `Doc` nor a `Document`, an extractor of another type;
 - `SourceError` - a source without words;
 - `ParameterError` - a parameter that `check_params` rejects.
 
@@ -69,7 +69,7 @@ The class extends the `DiversityStats` of the [anyTS](https://sergeyshk.github.i
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `str` / `Doc` | - | Data source |
+| `source` | `str` / `Doc` / `Document` | - | Data source |
 | `words_extractor` | `WordsExtractor` | `None` | Word extraction tool; for a `Doc` it is applied to its text |
 | `window_len` | `int` | `50` | Window size for MATTR and segment size for MSTTR (`MATTR_WINDOW_LEN`) |
 | `mtld_threshold` | `float` | `0.72` | TTR threshold for MTLD, MA-MTLD and MTLD-W (`MTLD_TTR_THRESHOLD`) |

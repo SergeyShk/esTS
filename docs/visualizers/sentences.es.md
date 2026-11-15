@@ -7,7 +7,7 @@ sentence_lengths_plot(source, window=10, inset=True, ax=None, labels=None, sents
 <!-- core: visualizers/sentences.md:sentence_lengths_plot 36b6cdc -->
 La curva de las longitudes de las oraciones, el ritmo de un texto: la longitud de cada oración en palabras, en orden, la media móvil sobre `window` oraciones y un recuadro con el histograma de las longitudes. Oraciones cortas y largas que se alternan son un signo editorial de un texto vivo; una curva plana, de uno monótono. La función recibe los ejes `ax` y devuelve `Axes`.
 
-Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visualizers/sentences/); para una cadena esTS pasa por defecto sus extractores del español, [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md), y los parámetros `sents_extractor` y `words_extractor` los sustituyen. Las etiquetas por defecto son las inglesas de `VISUALIZER_LABELS` en `anyts.constants`; `labels` sustituye cualquiera de ellas.
+Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visualizers/sentences/); por defecto esTS lee las oraciones del documento de una cadena, un `Doc` o un `Document` (el segmentador [anySeg](https://github.com/SergeyShk/anySeg)) y sus palabras con una letra o una cifra; con el parámetro `sents_extractor` o `words_extractor` una cadena o un `Doc` sin oraciones se divide con los extractores, los del español [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) para el que no se indica, mientras que un `Doc` con oraciones y un `Document` conservan las suyas. Las etiquetas por defecto son las inglesas de `VISUALIZER_LABELS` en `anyts.constants`; `labels` sustituye cualquiera de ellas.
 
 La curva de la segunda ventana de 2000 palabras de *Niebla* de Unamuno del [corpus de literatura](../datasets/spanishliterature.md); una ventana se corta por palabras, así que empieza con el final de una oración:
 
@@ -29,16 +29,16 @@ sentence_lengths_plot(chapter, window=10)
 
 ## Parámetros
 
-<!-- core: visualizers/sentences.md:sentence_lengths_plot-parameters e2b67de -->
+<!-- core: visualizers/sentences.md:sentence_lengths_plot-parameters 1d34170 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `str` / `Doc` / `Iterable[int]` | - | Texto, objeto Doc o longitudes de las oraciones (una lista, un array de numpy, una Series) |
+| `source` | `str` / `Doc` / `Document` / `Iterable[int]` | - | Texto, objeto Doc o Document o longitudes de las oraciones (una lista, un array de numpy, una Series) |
 | `window` | `int` | `10` | Ventana de la media móvil en oraciones |
 | `inset` | `bool` | `True` | Mostrar el recuadro con el histograma |
 | `ax` | `Axes` | `None` | Ejes para el gráfico |
 | `labels` | `dict[str, str]` | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel`, `ylabel`, `length` (la curva), `average` (una cadena de formato con `window`), `distribution` (el recuadro) |
-| `sents_extractor` | `SentsExtractor` | `None` | Extractor de las oraciones de una cadena; por defecto, el extractor de oraciones de la biblioteca |
-| `words_extractor` | `WordsExtractor` | `None` | Extractor de las palabras de una oración de una cadena; por defecto, el extractor de palabras de la biblioteca |
+| `sents_extractor` | `SentsExtractor` | `None` | Extractor de las oraciones de una cadena o de un `Doc` sin oraciones, que se usa en lugar de las del documento |
+| `words_extractor` | `WordsExtractor` | `None` | Extractor de las palabras de una oración de una cadena o de un `Doc` sin oraciones, que se usa en lugar de las del documento |
 
 La fuente y los extractores lanzan los errores de `sentence_lengths`, y la falta de oraciones lanza `SourceError`; un `window` que no es un entero de al menos uno, unas etiquetas que `merge_labels` rechaza y un `ax` que no es un `Axes` de matplotlib lanzan `ParameterError`.
 
@@ -48,11 +48,11 @@ La fuente y los extractores lanzan los errores de `sentence_lengths`, y la falta
 sentence_lengths(source, sents_extractor=None, words_extractor=None)
 ```
 
-Las longitudes de las oraciones en palabras, en orden: una cadena se divide en oraciones con el extractor de oraciones y cada oración en palabras con el extractor de palabras; las oraciones de un `Doc` salen de sus límites y sus palabras de sus tokens, sin la puntuación ni los símbolos, mientras que un `Doc` sin límites o con límites parciales (`has_sents`) se cuenta como su texto, con los extractores. Las oraciones sin palabras se omiten. Las longitudes ya hechas (enteros no negativos en una secuencia o un iterador) se usan tal cual. Los argumentos son los de `sentence_lengths_plot`.
+Las longitudes de las oraciones en palabras, en orden: las oraciones del documento de una cadena, un `Doc` o un `Document` y sus palabras con una letra o una cifra, o, con un extractor, las oraciones del extractor de oraciones y sus palabras del extractor de palabras en una cadena o un `Doc` sin oraciones; un `Doc` con oraciones y un `Document` conservan las suyas. Las oraciones sin palabras se omiten. Las longitudes ya hechas (enteros no negativos en una secuencia o un iterador) se usan tal cual. Los argumentos son los de `sentence_lengths_plot`.
 
 Excepciones:
 
-- `SourceTypeError` - un objeto que no es una cadena, un `Doc`, una secuencia ni un iterador, una tabla, un conjunto, un mapeo, bytes, una longitud que no es un entero, un extractor de otro tipo;
+- `SourceTypeError` - un objeto que no es una cadena, un `Doc`, un `Document`, una secuencia ni un iterador, una tabla, un conjunto, un mapeo, bytes, una longitud que no es un entero, un extractor de otro tipo;
 - `SourceError` - una longitud negativa.
 
 === "Código"

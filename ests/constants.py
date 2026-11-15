@@ -1197,13 +1197,13 @@ HIGHLIGHT_DEFAULT_LAYERS = (
 # Annotations of a Doc a layer needs: the syntactic layers read the dependency tree, the
 # verbal nouns the parts of speech; the other layers are available for a string too
 HIGHLIGHT_LAYER_ANNOTATIONS = {
-    "passive": ("DEP", "LEMMA"),
-    "participle_clauses": ("DEP", "LEMMA"),
-    "gerund_clauses": ("DEP", "LEMMA"),
-    "de_chains": ("DEP", "LEMMA"),
-    "split_predicates": ("DEP", "LEMMA"),
-    "verbal_nouns": ("POS", "LEMMA"),
-    "anaphoric_mismo": ("DEP", "POS", "LEMMA"),
+    "passive": ("deprel", "lemma"),
+    "participle_clauses": ("deprel", "lemma"),
+    "gerund_clauses": ("deprel", "lemma"),
+    "de_chains": ("deprel", "lemma"),
+    "split_predicates": ("deprel", "lemma"),
+    "verbal_nouns": ("upos", "lemma"),
+    "anaphoric_mismo": ("deprel", "upos", "lemma"),
 }
 # CSS declarations of the layers; a later one wins where the backgrounds of layers overlap
 HIGHLIGHT_LAYER_STYLES = {

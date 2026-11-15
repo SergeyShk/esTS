@@ -4,12 +4,12 @@
 UnadaptedReadabilityStats(source, sents_extractor=None, words_extractor=None)
 ```
 
-<!-- core: stats/unadapted_readability_stats.md:UnadaptedReadabilityStats 0fc386b -->
-Fórmulas de legibilidad creadas para el inglés, el alemán o el italiano, calculadas a partir de las estadísticas básicas de un texto con los coeficientes con que se publicaron (Linsear Write en la forma de textstat), sin calibración para su idioma. Sus valores comparan entre sí los textos de un mismo idioma; no son grados escolares de otro idioma. Una palabra sin sílabas (un número, una preposición de una sola consonante) cuenta como monosílaba en FORCAST y en las Wiener Sachtextformeln y como fácil en Linsear Write, como en textstat. La fuente de datos es un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) o un objeto `BasicStats` ya calculado, como para `ReadabilityStats`.
+<!-- core: stats/unadapted_readability_stats.md:UnadaptedReadabilityStats 966a27a -->
+Fórmulas de legibilidad creadas para el inglés, el alemán o el italiano, calculadas a partir de las estadísticas básicas de un texto con los coeficientes con que se publicaron (Linsear Write en la forma de textstat), sin calibración para su idioma. Sus valores comparan entre sí los textos de un mismo idioma; no son grados escolares de otro idioma. Una palabra sin sílabas (un número, una preposición de una sola consonante) cuenta como monosílaba en FORCAST y en las Wiener Sachtextformeln y como fácil en Linsear Write, como en textstat. La fuente de datos es un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy), un `Document` de [anySeg](https://github.com/SergeyShk/anySeg) o un objeto `BasicStats` ya calculado, como para `ReadabilityStats`.
 
 Excepciones:
 
-- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni un objeto `BasicStats`, unas estadísticas básicas de otra clase, un extractor de otro tipo, una cadena o un `Doc` pasados a una clase sin `basic_stats_class`;
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni un `Document`, ni un objeto `BasicStats`, unas estadísticas básicas de otra clase, un extractor de otro tipo, una fuente distinta de unas estadísticas básicas pasada a una clase sin `basic_stats_class`;
 - `SourceError` - una fuente sin palabras o sin oraciones.
 
 La clase extiende el `UnadaptedReadabilityStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/unadapted_readability_stats/) con las [estadísticas básicas](basic_stats.md) de esTS, que cuentan las sílabas y las letras de las palabras españolas y toman por defecto los [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) del español. La tabla de `print_stats` lleva las descripciones inglesas del núcleo, `anyts.constants.UNADAPTED_READABILITY_STATS_DESC`.
@@ -54,10 +54,10 @@ En español las palabras sin sílabas son los números, las abreviaturas sin voc
 
 ## Parámetros
 
-<!-- core: stats/unadapted_readability_stats.md:UnadaptedReadabilityStats-parameters 2f3854b -->
+<!-- core: stats/unadapted_readability_stats.md:UnadaptedReadabilityStats-parameters 5e63df9 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `str` / `Doc` / `BasicStats` | - | Fuente de datos |
+| `source` | `str` / `Doc` / `Document` / `BasicStats` | - | Fuente de datos (una cadena, un objeto Doc o Document, o unas estadísticas básicas ya calculadas) |
 | `sents_extractor` | `SentsExtractor` | `None` | Herramienta de extracción de oraciones, que no se usa con unas estadísticas básicas ya calculadas |
 | `words_extractor` | `WordsExtractor` | `None` | Herramienta de extracción de palabras, que no se usa con unas estadísticas básicas ya calculadas |
 

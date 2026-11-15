@@ -8,17 +8,19 @@ from typing import TYPE_CHECKING, Any
 import anyts
 import anyts.lexical_stats
 from anyts.constants import FREQUENCY_BANDS as FREQUENCY_BANDS
+from anyts.document import get_tree
 from anyts.lexical_stats import LexicalWord
-from anyts.utils import has_pos, is_doc, is_number, iter_doc_tokens, source_type_error
+from anyts.utils import has_words, is_number
 
 from .cohesion_stats import token_info
 from .constants import LEXICAL_STATS_DESC
 from .datasets.freq_dict import FreqDict, lemma_key
 from .exceptions import SourceError, SourceTypeError
 from .extractors import NUMBER_PATTERN
-from .utils import _check_nlp, get_nlp
+from .utils import _check_nlp, _parse_text, get_document
 
 if TYPE_CHECKING:
+    from anyseg import Document
     from spacy.language import Language
     from spacy.tokens import Doc
 
@@ -65,7 +67,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         {1000: 0.6666666666666666, 2000: 0.7777777777777778, 5000: 1.0, 10000: 1.0}
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
+        source (str|Doc|Document): Data source (a string, a Doc or a Document)
         freq_dict (FreqDict): Frequency dictionary; FreqDict() of the default
             directory if not given
         nlp (Language): Pipeline of spaCy that parses a string; without it the
@@ -110,8 +112,8 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         print_stats: Printing the computed statistics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc, or the dictionary or
-            the pipeline is of another type
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, or the
+            dictionary or the pipeline is of another type
         SourceError: If the source has no words, lacks the parts of speech or
             is a string longer than the max_length of the pipeline
         DatasetNotFoundError: When a statistic by the dictionary is read and the
@@ -124,7 +126,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
 
     def __init__(
         self,
-        source: str | Doc,
+        source: str | Doc | Document,
         freq_dict: FreqDict | None = None,
         nlp: Language | None = None,
     ):
@@ -140,51 +142,64 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         state["_nlp"] = None
         return state
 
-    def analyze(self, source: str | Doc) -> list[LexicalWord]:
+    def parse(self, source: str | Doc | Document) -> Document:
+        """
+        Getting the document of a source
+
+        Description:
+            A string is parsed by nlp or get_nlp() without the parser, the
+            lemmatizer and the named entities; a Doc or a Document goes to
+            get_document
+
+        Arguments:
+            source (str|Doc|Document): Data source
+
+        Returns:
+            Document: Document of anySeg
+
+        Raises:
+            SourceTypeError: If the source is neither a string, a Doc nor a Document
+            SourceError: If a string is longer than the max_length of the pipeline
+        """
+        if isinstance(source, str):
+            return _parse_text(source, self._nlp, UNUSED_COMPONENTS)
+        return get_document(source)
+
+    def analyze(self, source: str | Doc | Document) -> list[LexicalWord]:
         """
         Getting the words of a source with their lemmas and their kind
 
         Description:
-            The tokens of a Doc, or of a string parsed by nlp or get_nlp()
-            without the parser, the lemmatizer and the named entities, without
-            the numbers of NUMBER_PATTERN; the lemma of lemma_key, a proper noun
-            in lower case, and the content words of token_info
+            The words of the tree of the document of parse with a letter or a
+            digit, without the numbers of NUMBER_PATTERN; the lemma of lemma_key, a proper
+            noun in lower case, and the content words of token_info
 
         Arguments:
-            source (str|Doc): Data source
+            source (str|Doc|Document): Data source
 
         Returns:
             list[LexicalWord]: Word, lemma and whether it is a content word
 
         Raises:
-            SourceTypeError: If the source is neither a string nor a Doc
+            SourceTypeError: If the source is neither a string, a Doc nor a Document
             SourceError: If a string is longer than the max_length of the pipeline, or the
                 words lack the parts of speech
         """
-        if isinstance(source, str):
-            pipeline = self._nlp or get_nlp()
-            if len(source) > pipeline.max_length:
-                raise SourceError(
-                    f"The text of {len(source)} characters is longer than the limit of the "
-                    f"pipeline ({pipeline.max_length}): split it into parts or raise "
-                    "max_length on a pipeline of your own and pass it in nlp"
-                )
-            source = pipeline(source, disable=UNUSED_COMPONENTS)
-        elif not is_doc(source):
-            raise source_type_error(self.messages, source)
-        tokens = [
-            token for token in iter_doc_tokens(source) if not is_number(token.text, NUMBER_PATTERN)
+        words = [
+            word
+            for word in get_tree(self._document(source)).words
+            if has_words(word.form) and not is_number(word.form, NUMBER_PATTERN)
         ]
-        if tokens and not has_pos(source):
+        if words and not any(word.upos for word in words):
             raise SourceError(self.messages["no_pos"])
-        self._found_proper = tuple(token.pos_ == "PROPN" for token in tokens)
+        self._found_proper = tuple(word.upos == "PROPN" for word in words)
         return [
             LexicalWord(
-                token.text,
-                lemma_key(_without_period(token.text), proper),
-                token_info(token).content,
+                word.form,
+                lemma_key(_without_period(word.form), proper),
+                token_info(word).content,
             )
-            for token, proper in zip(tokens, self._found_proper, strict=True)
+            for word, proper in zip(words, self._found_proper, strict=True)
         ]
 
     def dictionary_keys(self) -> tuple[str, ...]:

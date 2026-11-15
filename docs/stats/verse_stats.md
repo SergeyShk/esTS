@@ -10,7 +10,7 @@ The meter of Spanish verse is syllabic: a line is measured by its metrical sylla
 
 Raises:
 
-- `SourceTypeError` - a source that is neither a string nor a `Doc`;
+- `SourceTypeError` - a source that is neither a string, a `Doc` nor a `Document`;
 - `SourceError` - a source without letters (empty, digits and punctuation only);
 - `ParameterError` - a `seseo` that is not a `bool`.
 
@@ -50,7 +50,7 @@ Raises:
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `str` / `Doc` | - | Data source |
+| `source` | `str` / `Doc` / `Document` | - | Data source |
 | `seseo` | `bool` | `False` | Pronounce `c` and `z` before `e` and `i` as `s` in the rhyme, as in Andalusia and in America: `voz` - `dos` |
 
 ## Attributes
