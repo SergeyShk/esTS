@@ -109,7 +109,7 @@ Raises:
 text_features(text, nlp=None)
 ```
 
-Returns 163 features of a text prefixed by their source, 209 with a pipeline that has a parser; an undefined feature is `nan`.
+Returns 164 features of a text prefixed by their source, 209 with a pipeline that has a parser; an undefined feature is `nan`.
 
 | Prefix | Features | Source |
 | :----- | :------- | :----- |
@@ -126,7 +126,7 @@ Left out are the reading time, which only follows the number of words in a windo
 
 The parts of speech and the features of a single value - polarity, polite, poss, reflex - are shares of all the words (`morph_polarity_Neg` is the share of the negations), the other features shares of the words that carry them (`morph_mood_Sub` is the subjunctive among the moods). A value that does not occur in a window gives 0, a feature absent from the window altogether (no verbs - no tense) gives `nan`. A value of several values (`PronType=Int,Rel` of *que*) is shared equally among its parts, so the shares of a feature still sum to one.
 
-The morphology and the cohesion are parsed by the model [`es_core_news_sm`](../installation.md#model) without its parser, so the marker `morph_p_ser`, which reads the copulas from the dependencies, and the group `syntax_` are left out; a pipeline passed in `nlp` runs whole but for the entity recognizer, so `functools.partial(text_features, nlp=get_nlp())` brings the parser, `morph_p_ser` and the syntax in, and another model goes into the comparison the same way. The pipeline of [`load_pipeline`](../components.md#load_pipeline), the default one, splits the text into the sentences of the group `sents_`, so the cohesion and the syntax count the same sentences as the rhythm; a pipeline of one's own gives its own sentences. A novel is compared by windows and not whole, as the pipeline takes at most `max_length` characters.
+The morphology and the cohesion are parsed by the model [`es_core_news_sm`](../installation.md#model) without its parser, so the group `syntax_` is left out; a pipeline passed in `nlp` runs whole but for the entity recognizer, so `functools.partial(text_features, nlp=get_nlp())` brings the parser and the syntax in, and another model goes into the comparison the same way. The pipeline of [`load_pipeline`](../components.md#load_pipeline), the default one, splits the text into the sentences of the group `sents_`, so the cohesion and the syntax count the same sentences as the rhythm; a pipeline of one's own gives its own sentences. A novel is compared by windows and not whole, as the pipeline takes at most `max_length` characters.
 
 The shares of spaces, letters and punctuation marks (`basic_p_spaces`, `basic_p_letters`, `basic_p_punctuations`) count the characters as they are: indents, double and non-breaking spaces of the files reflect the typesetting of an edition and not the text. In a corpus from different sources collapse them beforehand, for instance with `re.sub(r"[^\S\n]+", " ", text)`.
 

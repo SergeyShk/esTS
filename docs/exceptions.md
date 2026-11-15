@@ -18,7 +18,7 @@ All library exceptions inherit the base class `EstsError` and a built-in Python 
 The classes are available from `ests` and from `ests.exceptions`. They are the classes of the [anyTS](https://sergeyshk.github.io/anyTS/exceptions/) core under the same names, `EstsError` being its `anyts.exceptions.AnyTSError`: aliases, not subclasses, so `except EstsError` catches the errors raised by the code of the core too, and a traceback shows `anyts.exceptions.SourceTypeError`.
 
 !!! note "Note"
-    `DatasetNotFoundError` is the first error a new user usually meets: `MorphStats("El gato duerme")` without the model `es_core_news_sm` raises it with the download command. `SpanishLiterature().get_texts()` before `download()` and the statistics of `LexicalStats` by the frequency dictionary raise it too.
+    `DatasetNotFoundError` is the first error a new user usually meets: `SyntaxStats("El gato duerme")` without the model `es_core_news_sm` raises it with the download command. `SpanishLiterature().get_texts()` before `download()` and the statistics of `LexicalStats` by the frequency dictionary raise it too.
 
 === "Code"
 

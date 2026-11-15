@@ -122,7 +122,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    A [corpus of Spanish-language literature](datasets/spanishliterature.md) in the public domain (150 works by 33 authors in four genres), a [collection of sonnets](datasets/spanishsonnets.md) of the 15th-20th centuries with the metrical pattern and the rhyme of every line and a [frequency dictionary](datasets/freqdict.md) of 83,785 lemmas by Google Books Ngram
+    A [corpus of Spanish-language literature](datasets/spanishliterature.md) in the public domain (150 works by 33 authors in four genres), a [collection of sonnets](datasets/spanishsonnets.md) of the 15th-20th centuries with the metrical pattern and the rhyme of every line and a [frequency dictionary](datasets/freqdict.md) of 86,196 lemmas by Google Books Ngram
 
     [:octicons-arrow-right-24: Datasets](datasets/spanishliterature.md)
 

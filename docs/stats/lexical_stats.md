@@ -1,18 +1,16 @@
 # Lexical sophistication statistics
 
 ``` {.python .signature}
-LexicalStats(source, freq_dict=None, nlp=None)
+LexicalStats(source, freq_dict=None)
 ```
 
 --8<-- "stats/lexical_stats.md:LexicalStats"
 
-In esTS a source that is neither a string, a `Doc` nor a `Document` and a pipeline in `nlp` that is not a spaCy `Language` raise `SourceTypeError` too; a source without the parts of speech and a string longer than the `max_length` of the pipeline `SourceError`; and the metrics by the dictionary without the dictionary downloaded `DatasetNotFoundError`.
+In esTS a source that is neither a string, a `Doc` nor a `Document` raises `SourceTypeError` too; a `Doc` without the parts of speech `SourceError`; and the metrics by the dictionary without the dictionary downloaded `DatasetNotFoundError`.
 
 Unlike the [lexical diversity metrics](diversity_stats.md), which compare the words of a text with each other, here the words are compared with the frequencies of the language ([TAALES](https://doi.org/10.3758/s13428-017-0924-4)). The data source is a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library.
 
-The class extends the `LexicalStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/lexical_stats/) core with the Spanish layer: the dictionary is the Google Books Ngram [`FreqDict`](../datasets/freqdict.md) (`freq_dict_class`), and the ranks of the lemmas and the size of the list (`rank`, `top_size`) come from the embedded list of its 10,000 most frequent lemmas ([`get_rank`](#bands)). Whether a word is a proper noun, and whether it is a content word, comes from the annotation, so the source has to be annotated: a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, without the parser, the lemmatizer and the named entities, and a `Doc` must carry the parts of speech (a `morphologizer`, or a `tagger` with an `attribute_ruler`). Numbers (`2020`, `5,5`, `3.º`) are not words. The lemmas come from [`lemma_key`](../datasets/freqdict.md#lemma_key), the simplemma lemma in lower case, not from the model; a proper noun keeps its lower-case form. A content word is defined as in [`CohesionStats`](cohesion_stats.md): one of `CONTENT_UD_POS` (nouns, proper nouns, adjectives, verbs, adverbs) and no demonstrative. The `print_stats` table has the descriptions of `LEXICAL_STATS_DESC` of `ests.constants`, with the range in years out of 40.
-
-The `max_length` of the pipeline is a million characters by default: split a longer text into parts, or raise `max_length` on a pipeline of your own and pass it in `nlp`.
+The class extends the `LexicalStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/lexical_stats/) core with the Spanish layer: the dictionary is the Google Books Ngram [`FreqDict`](../datasets/freqdict.md) (`freq_dict_class`), and the ranks of the lemmas and the size of the list (`rank`, `top_size`) come from the embedded list of its 10,000 most frequent lemmas ([`get_rank`](#bands)). Whether a word is a proper noun, and whether it is a content word, comes from the annotation, so the source has to be annotated: a string gets the analyses of [esMorph](https://github.com/SergeyShk/esMorph) in the context of its sentences, without spaCy, and a `Doc` must carry the parts of speech (a `morphologizer`, or a `tagger` with an `attribute_ruler`). Numbers (`2020`, `5,5`, `3.º`) are not words. The lemmas come from [`lemma_key`](../datasets/freqdict.md#lemma_key) with the part of speech of the word, the lemma of esMorph in lower case, the lemmatizer the dictionary is built with, not from the model; a proper noun keeps its lower-case form. A content word is defined as in [`CohesionStats`](cohesion_stats.md): one of `CONTENT_UD_POS` (nouns, proper nouns, adjectives, verbs, adverbs) and no demonstrative. The `print_stats` table has the descriptions of `LEXICAL_STATS_DESC` of `ests.constants`, with the range in years out of 40.
 
 === "Code"
 
@@ -31,14 +29,14 @@ The `max_length` of the pipeline is a million characters by default: split a lon
                         Statistic                    |  Value
     ------------------------------------------------------------
     Share of words found in the frequency dictionary |   1.00
-    Mean frequency (ipm)                             | 34283.75
-    Mean frequency of content words (ipm)            |  956.33
+    Mean frequency (ipm)                             | 34471.00
+    Mean frequency of content words (ipm)            |  805.65
     Mean log frequency (lg ipm)                      |   3.56
-    Mean log frequency of content words              |   2.19
+    Mean log frequency of content words              |   2.17
     Mean range (years out of 40)                     |  40.00
-    Mean dispersion (D)                              |  97.64
-    Mean surprisal (bits)                            |   8.11
-    Unigram perplexity                               |  275.44
+    Mean dispersion (D)                              |  97.18
+    Mean surprisal (bits)                            |   8.10
+    Unigram perplexity                               |  275.12
     Share of words in the top 1000                   |   0.73
     Share of words in the top 2000                   |   0.82
     Share of words in the top 5000                   |   1.00
@@ -53,13 +51,12 @@ The `max_length` of the pipeline is a million characters by default: split a lon
 | :-------- | :--- | :------ | :---------- |
 | `source` | `str` / `Doc` / `Document` | - | Data source |
 | `freq_dict` | `FreqDict` | `None` | Frequency dictionary; `FreqDict()` from the default directory by default |
-| `nlp` | `Language` | `None` | Pipeline of spaCy that parses a string; without it the model `es_core_news_sm` is loaded |
 
 ## Attributes
 
 --8<-- "stats/lexical_stats.md:LexicalStats-attributes"
 
-In esTS the dictionary is a `FreqDict`, and its entries are the named tuples [`Entry`](../datasets/freqdict.md). The keys of the words in the dictionary (`keys`, `dictionary_keys`) are their lemmas, and a proper noun is looked up by its form when the dictionary has it (`París` as `parís`, not the verb `parir`) and by its lemma otherwise (`Estados` of *Estados Unidos* as `estado`, a sentence-initial `Miró` tagged `PROPN` as `mirar`). A word is looked up without the period of an abbreviation (`Sr.` as `sr`, `pág.` as `página`); an initial (`D.`, `J.`) keeps it and is out of the dictionary.
+In esTS the dictionary is a `FreqDict`, and its entries are the named tuples [`Entry`](../datasets/freqdict.md). The keys of the words in the dictionary (`keys`, `dictionary_keys`) are their lemmas, and a proper noun is looked up by its form when the dictionary has it (`París` as `parís`) and by its lemma otherwise (`Estados` of *Estados Unidos* as `estado`). A word is looked up without the period of an abbreviation (`Sr.` as `sr`, `pág.` as `pág`); an initial (`D.`, `J.`) keeps it and is out of the dictionary.
 
 === "Code"
 
@@ -72,7 +69,7 @@ In esTS the dictionary is a `FreqDict`, and its entries are the named tuples [`E
 === "Result"
 
     ```
-    ('miró', 'desde', 'parís', 'hacia', 'el', 'estados', 'unidos')
+    ('mirar', 'desde', 'parís', 'hacia', 'el', 'estados', 'unidos')
     ('mirar', 'desde', 'parís', 'hacia', 'el', 'estado', 'unidos')
     ```
 
@@ -84,7 +81,7 @@ The metrics rely on two resources; always read the means by the dictionary next 
 
 | Resource | Metrics | Availability |
 | :------- | :------ | :----------- |
-| [`FreqDict`](../datasets/freqdict.md) - 83,785 lemmas of Google Books Ngram (1980-2019) with ipm, range and dispersion | `coverage`, `mean_ipm*`, `mean_log_ipm*`, `mean_range`, `mean_dispersion`, `surprisal`, `perplexity` | downloaded once with `FreqDict().download()` |
+| [`FreqDict`](../datasets/freqdict.md) - 86,196 lemmas of Google Books Ngram (1980-2019) with ipm, range and dispersion | `coverage`, `mean_ipm*`, `mean_log_ipm*`, `mean_range`, `mean_dispersion`, `surprisal`, `perplexity` | downloaded once with `FreqDict().download()` |
 | The embedded list of the 10,000 most frequent lemmas of the same dictionary (`ests/resources/google_books_top10000.txt`, CC BY 3.0) | `p_top1000`, `p_top2000`, `p_top5000`, `p_top10000`, `p_beyond_top10000`, `band_coverage` | always |
 
 <div class="metric-card" markdown>
@@ -110,7 +107,7 @@ Rare words lower the coverage and the log frequency and raise the surprisal and 
 === "Result"
 
     ```
-    (0.8571428571428571, 2.3529196195453976, 13.70650419215419, 0.4285714285714286)
+    (0.875, 2.8003798879556743, 12.206981533297302, 0.375)
     ```
 
 </div>
@@ -138,7 +135,7 @@ In esTS the dictionary is a `FreqDict` with the lowest frequency of 0.1 ipm: a d
 === "Result"
 
     ```
-    15.392368319318606
+    15.554697256684591
     ```
 
 </div>
@@ -168,7 +165,7 @@ The rank of a lemma by the embedded list, `None` for a lemma outside the list; t
 load_top_lemmas()
 ```
 
-The whole list from the file `ests/resources/google_books_top10000.txt`, derived from Google Books Ngram under CC BY 3.0: the rank of every lemma, starting from 1. The list holds the 10,000 most frequent lemmas of the [frequency dictionary](../datasets/freqdict.md) by decreasing frequency, the parts of speech of a lemma summed; it leaves out the proper nouns, the single letters other than the Spanish words `a`, `e`, `o`, `u`, `y`, `á`, `é`, `ó`, and the two-letter lemmas and Roman numerals that simplemma does not know (`pp`, `xix`), while the abbreviations of the references (`cit`) and the English words of the bibliographies (`the`) stay.
+The whole list from the file `ests/resources/google_books_top10000.txt`, derived from Google Books Ngram under CC BY 3.0: the rank of every lemma, starting from 1. The list holds the 10,000 most frequent lemmas of the [frequency dictionary](../datasets/freqdict.md) by decreasing frequency, the parts of speech of a lemma summed; it leaves out the proper nouns and the lemmas whose rows of proper nouns outweigh the others (`garcía`), the single letters other than the Spanish words `a`, `e`, `o`, `u`, `y`, `á`, `é`, `ó`, and the two-letter lemmas and Roman numerals that esMorph does not know or that have no vowel (`pp`, `km`, `xix`), while the abbreviations of the references (`cit`) and the English words of the bibliographies (`the`) stay.
 
 === "Code"
 
@@ -182,7 +179,7 @@ The whole list from the file `ests/resources/google_books_top10000.txt`, derived
 === "Result"
 
     ```
-    (1, 2851, None)
+    (1, 3123, None)
     10000
     ```
 
@@ -236,14 +233,14 @@ The other methods - `get_stats`, `to_dataframe`, `print_stats` and `describe` - 
 
     ```
     {'coverage': 1.0,
-     'mean_ipm': 34283.74818181818,
-     'mean_ipm_content': 956.3320000000001,
-     'mean_log_ipm': 3.559971676175293,
-     'mean_log_ipm_content': 2.1916598821626314,
+     'mean_ipm': 34470.99727272727,
+     'mean_ipm_content': 805.65,
+     'mean_log_ipm': 3.5604802847439285,
+     'mean_log_ipm_content': 2.172562226515112,
      'mean_range': 40.0,
-     'mean_dispersion': 97.63636363636364,
-     'surprisal': 8.105598641234213,
-     'perplexity': 275.4408334528846,
+     'mean_dispersion': 97.18181818181819,
+     'surprisal': 8.103909080140765,
+     'perplexity': 275.11844950775145,
      'p_top1000': 0.7272727272727273,
      'p_top2000': 0.8181818181818182,
      'p_top5000': 1.0,

@@ -1,14 +1,14 @@
 # Style metrics
 
 ``` {.python .signature}
-StyleStats(source, words_extractor=None, stopwords=None, top_n=10, cliches=None, nlp=None, nausea_stopwords=None)
+StyleStats(source, words_extractor=None, stopwords=None, top_n=10, cliches=None, nausea_stopwords=None)
 ```
 
 --8<-- "stats/style_stats.md:StyleStats"
 
-The class extends the `StyleStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/style_stats/) core with the hooks of Spanish, given in the cards of the metrics: the stopwords, the compound prepositions, parenthetical expressions and clichés that the Spanish-language guides to plain language warn about, found with their contractions and the forms of their verbs, and the nouns derived from a verb among the nouns of the spaCy model. The words of a string are extracted by the Spanish [`WordsExtractor`](../extractors/words.md) and are not lemmatized, so the forms of one word count as different words, as in Advego; to compute by lemmas, pass a `WordsExtractor` with `use_lexemes=True` and `lowercase=True`. The `print_stats` table takes the descriptions of `ests.constants.STYLE_STATS_DESC`.
+The class extends the `StyleStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/style_stats/) core with the hooks of Spanish, given in the cards of the metrics: the stopwords, the compound prepositions, parenthetical expressions and clichés that the Spanish-language guides to plain language warn about, found with their contractions and the forms of their verbs, and the nouns derived from a verb among the nouns. The words of a string are extracted by the Spanish [`WordsExtractor`](../extractors/words.md) and are not lemmatized, so the forms of one word count as different words, as in Advego; to compute by lemmas, pass a `WordsExtractor` with `use_lexemes=True` and `lowercase=True`. The `print_stats` table takes the descriptions of `ests.constants.STYLE_STATS_DESC`.
 
-The verbal nouns need the parts of speech and the lemmas: a `Doc` gives its own annotation, also when an extractor takes its text, and a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp` the first time `verbal_nouns` or [`markers()`](#methods) is read - the other metrics of a string need no model. A string longer than the `max_length` of the pipeline is parsed in parts of whole sentences. Besides the errors above, a pipeline that is not a spaCy `Language` raises `SourceTypeError`; reading `verbal_nouns` or `markers()` raises `SourceError` for a `Doc` without the parts of speech or the lemmas and for a string with a sentence longer than the `max_length` of the pipeline.
+The verbal nouns need the parts of speech and the lemmas: a `Doc` gives its own annotation, also when an extractor takes its text, and a string gets those of [esMorph](https://github.com/SergeyShk/esMorph) in the context of its sentences the first time `verbal_nouns` or [`markers()`](#methods) is read - the other metrics of a string need no analysis. Besides the errors above, reading `verbal_nouns` or `markers()` raises `SourceError` for a `Doc` without the parts of speech or the lemmas.
 
 The examples of this page take a notice written in the administrative style:
 
@@ -37,7 +37,7 @@ The examples of this page take a notice written in the administrative style:
     Water content (%)                         |  57.14
     Spam score (%)                            |  37.50
     Naturalness by Zipf's law (%)             |  53.57
-    Verbal nouns (% of nouns)                 |  47.06
+    Verbal nouns (% of nouns)                 |  50.00
     Compound prepositions (per 100 words)     |   5.36
     Parenthetical expressions (per 100 words) |   1.79
     Officialese clichés (per 100 words)       |   8.93
@@ -52,7 +52,6 @@ The examples of this page take a notice written in the administrative style:
 | `stopwords` | `list[str]` / `set[str]` | `None` | Words of water; `is_stopword` if not given |
 | `top_n` | `int` | `10` | Number of the most frequent words of the academic nausea and the naturalness by Zipf's law (`NAUSEA_TOP_N`) |
 | `cliches` | `list[str]` / `set[str]` | `None` | Clichés; `OFFICIALESE_CLICHES` if not given |
-| `nlp` | `Language` | `None` | spaCy pipeline that parses a string for the verbal nouns; the model `es_core_news_sm` of `ests.utils.get_nlp` if not given |
 | `nausea_stopwords` | `list[str]` / `set[str]` | `None` | Stopwords left out of the most frequent words of the academic nausea; `is_stopword` if not given |
 
 A set of words is taken in sorted order. `NAUSEA_TOP_N` is a constant of `anyts.constants`.
@@ -62,8 +61,6 @@ A set of words is taken in sorted order. `NAUSEA_TOP_N` is a constant of `anyts.
 ## Attributes
 
 --8<-- "stats/style_stats.md:StyleStats-attributes"
-
-The pipeline of the parameter `nlp` is kept in the attribute `nlp`, `None` if not given.
 
 ## Metrics
 
@@ -293,7 +290,7 @@ Raises:
 expand_phrases(text, phrases)
 ```
 
-The phrases spelled out in the forms of a text, each with the phrase of the list it spells out. A phrase ending in `a` or `de` also takes the contraction with the article (`a efectos del`, `conforme al`), and a phrase whose first word is an infinitive takes the forms of the text with that lemma (`proceder a` - `procedió a`, `ser de aplicación` - `es de aplicación`). The lemma is the one of simplemma, and a pronominal lemma counts for its verb (`llévese` - `llevar`); the forms simplemma does not lemmatize - some participles (`ha dado`, `ha hecho`) and the imperative `dese` - are given by `IRREGULAR_VERB_FORMS`. The words after the verb rule out the readings as a noun (`el hecho`, `el puesto`). When two phrases spell out the same words, a phrase written so wins over the forms of another (`a efectos del` stays itself next to `a efectos de`), and then the first phrase of a list, or of a set in sorted order.
+The phrases spelled out in the forms of a text, each with the phrase of the list it spells out. A phrase ending in `a` or `de` also takes the contraction with the article (`a efectos del`, `conforme al`), and a phrase whose first word is an infinitive takes the forms of the text with that lemma (`proceder a` - `procedió a`, `ser de aplicación` - `es de aplicación`). The lemma is the one of a verb by `ests.utils.lemmatize` (`ha dado` - `dar`, `ha hecho` - `hacer`), and a pronominal lemma counts for its verb (`llévese` - `llevar`); the imperative of `dar` with `se` written without an accent (`dese`, `dense`), which esMorph does not read as the verb, is given by `IRREGULAR_VERB_FORMS`. The words after the verb rule out the readings as a noun (`el hecho`, `el puesto`). When two phrases spell out the same words, a phrase written so wins over the forms of another (`a efectos del` stays itself next to `a efectos de`), and then the first phrase of a list, or of a set in sorted order.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
@@ -449,7 +446,7 @@ The functions of the core cards check their words too: words and keywords that a
 
 --8<-- "stats/style_stats.md:StyleStats-markers"
 
-A phrase is found with its contractions and the forms of its verb ([`expand_phrases`](#phrase_density)). The verbal nouns need the parts of speech and the lemmas, as their metric does, so a string is parsed by the model and a `Doc` without them raises `SourceError`.
+A phrase is found with its contractions and the forms of its verb ([`expand_phrases`](#phrase_density)). The verbal nouns need the parts of speech and the lemmas, as their metric does, so a string gets those of esMorph and a `Doc` without them raises `SourceError`.
 
 === "Code"
 

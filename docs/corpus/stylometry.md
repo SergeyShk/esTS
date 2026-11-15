@@ -184,23 +184,21 @@ The functions are those of the [anyTS](https://sergeyshk.github.io/anyTS/corpus/
 ## Function word profile { #function_words_profile }
 
 ``` {.python .signature}
-function_words_profile(source, nlp=None)
+function_words_profile(source)
 ```
 
 The shares of the adpositions, the coordinating and subordinating conjunctions, the particles, the pronouns, the determiners and the interjections (`ests.constants.FUNCTION_UD_POS`: `ADP`, `CCONJ`, `SCONJ`, `PART`, `PRON`, `DET`, `INTJ`) among the words of the text. Function words do not depend on the topic, so their profile is a classic feature of authorship since Mosteller and Wallace (1964).
 
-The parts of speech are those of the annotation of a `Doc` that carries them. The words of a list or of a `Doc` without parts of speech are tagged by the model in their context, so they are to be passed in the order of the text; the punctuation of the list helps the tagging and is not counted. The pipeline is the model [`es_core_news_sm`](../installation.md#model) or the one passed in `nlp`, without the parser, the lemmatizer and the entity recognizer. In Spanish Universal Dependencies the negation *no* is an adverb and not a particle, so `PART` is rare.
+The parts of speech are those of the annotation of a `Doc` that carries them. The words of a list or of a `Doc` without parts of speech get those of [esMorph](https://github.com/SergeyShk/esMorph) in their context, so they are to be passed in the order of the text; the punctuation of the list helps the analysis and is not counted, and a word esMorph has no analysis for is `X`. In Spanish Universal Dependencies the negation *no* is an adverb and not a particle, so `PART` is rare.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
 | `source` | `list[str]` / `Doc` | - | Words of the text or Doc object |
-| `nlp` | `Language` | `None` | Pipeline for a list of words; `None` - the default model |
 
 Raises:
 
-- `SourceTypeError` - words that are not a list of strings, a pipeline that is not a spaCy `Language`;
-- `SourceError` - a source without words, a pipeline that does not tag the parts of speech (`spacy.blank("es")`);
-- `DatasetNotFoundError` - the default model is not installed.
+- `SourceTypeError` - words that are not a list of strings;
+- `SourceError` - a source without words.
 
 === "Code"
 

@@ -45,7 +45,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, `ser` against `estar`, the adverbs in `-mente`
 * **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text, a KWIC concordance and the stylometry of authorship: Burrows's Delta with its variants, Zeta, the Mendenhall curve, the profile of the function words; the comparison of two corpora by 163 features of a text with effect sizes
 * **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, the distances within and between authors, rolling Delta and Zeta, vocabulary growth, sentence lengths, and the highlighting of the fragments the statistics count, such as long sentences and passives
-* **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors in four genres; 4,259 sonnets of the 15th-20th centuries with the metrical pattern and the rhyme of every line; a frequency dictionary of 83,785 lemmas by Google Books Ngram
+* **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors in four genres; 4,259 sonnets of the 15th-20th centuries with the metrical pattern and the rhyme of every line; a frequency dictionary of 86,196 lemmas by Google Books Ngram
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass
 * **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, the overlap with the next sentences and paragraphs of TAACO, with the density of 273 Spanish discourse markers by class and by place
 * **[Lexical sophistication statistics](https://sergeyshk.github.io/esTS/stats/lexical_stats/)** - how rare the words of a text are in the language: the frequency, range and dispersion of the lemmas by a dictionary of Google Books Ngram, the frequency bands top-1000 to 10000, surprisal, perplexity and lexical density
@@ -117,7 +117,7 @@ The statistics by the frequency dictionary need it downloaded once with `FreqDic
 
 ### Object extraction
 
-Configurable tools extract sentences, words and character N-grams from a text for the statistics, and `split_paragraphs` its paragraphs between blank lines. Sentences and tokens come from the segmenter [anySeg](https://github.com/SergeyShk/anySeg), which knows the inverted marks, the dialogue dash and the abbreviations of Spanish and keeps clitics, ordinals and Spanish numbers whole, and lemmas come from [simplemma](https://github.com/adbar/simplemma), which needs no model.
+Configurable tools extract sentences, words and character N-grams from a text for the statistics, and `split_paragraphs` its paragraphs between blank lines. Sentences and tokens come from the segmenter [anySeg](https://github.com/SergeyShk/anySeg), which knows the inverted marks, the dialogue dash and the abbreviations of Spanish and keeps clitics, ordinals and Spanish numbers whole, and lemmas come from the morphological analyzer [esMorph](https://github.com/SergeyShk/esMorph), which needs no model of spaCy.
 
 ```python
 >>> from ests import CharNgramsExtractor, SentsExtractor, WordsExtractor
@@ -352,7 +352,7 @@ The parts of speech and the grammatical features of Universal Dependencies, as t
 0.5
 ```
 
-A text is parsed with `es_core_news_sm`; another pipeline can be passed in `nlp`.
+A text is analyzed by [esMorph](https://github.com/SergeyShk/esMorph) in the context of its sentences, without spaCy; a `Doc` keeps the annotation of its pipeline.
 
 More in the [documentation](https://sergeyshk.github.io/esTS/stats/morph_stats/).
 
@@ -601,7 +601,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/corpus/keyness/).
 
 *   [spanish_literature](https://sergeyshk.github.io/esTS/datasets/spanishliterature/) - Spanish-language literature in the public domain: 150 works by 33 authors from Spain, Latin America and the Philippines, from Cervantes to the 1920s, in prose, poems, drama and publicism
 *   [spanish_sonnets](https://sergeyshk.github.io/esTS/datasets/spanishsonnets/) - Spanish sonnets of the Diachronic Spanish Sonnet Corpus (DISCO) in the public domain: 4,259 sonnets by 1,167 authors of the 15th-20th centuries, every line with its metrical pattern and the label of its rhyme, the automatic annotation of DISCO (CC BY 4.0)
-*   [freq_dict](https://sergeyshk.github.io/esTS/datasets/freqdict/) - a frequency dictionary of 83,785 Spanish lemmas from the books of Google Books Ngram of 1980-2019: ipm, range and Juilland's D over the years, the number of books and the part of speech (CC BY 3.0)
+*   [freq_dict](https://sergeyshk.github.io/esTS/datasets/freqdict/) - a frequency dictionary of 86,196 Spanish lemmas from the books of Google Books Ngram of 1980-2019: ipm, range and Juilland's D over the years, the number of books and the part of speech (CC BY 3.0)
 
 The texts are cut to the text of the author and come with the genre, the author, the title, the years of the first publication and the country; the records can be filtered by any of them and by the length of the text.
 
