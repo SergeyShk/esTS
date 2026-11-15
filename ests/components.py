@@ -16,9 +16,11 @@ Description:
     sentences of a string are those of the pipeline of load_pipeline
 """
 
+from __future__ import annotations
+
 import anyts.components
 from anyts.components import StatsComponent
-from anyts.utils import is_number
+from anyts.utils import check_bool, is_number
 from spacy.language import Language
 from spacy.tokens import Doc
 
@@ -26,6 +28,7 @@ from .basic_stats import BasicStats
 from .cohesion_stats import CohesionStats
 from .datasets.freq_dict import FreqDict
 from .diversity_stats import DiversityStats
+from .exceptions import ParameterError
 from .extractors import NUMBER_PATTERN
 from .lexical_stats import LexicalStats
 from .morph_stats import MorphStats
@@ -340,12 +343,14 @@ class LexicalStatsComponent(anyts.components.LexicalStatsComponent):
         SourceError: If the pipeline gives no parts of speech
         DatasetNotFoundError: When a statistic by the dictionary is read and the
             dictionary is not downloaded
-        ConfigValidationError: If data_dir is not a string, raised by spaCy at add_pipe
+        ParameterError: If data_dir is not a string
     """
 
     stats_class = LexicalStats
 
     def __init__(self, nlp: Language, name: str, data_dir: str | None = None):
+        if data_dir is not None and not isinstance(data_dir, str):
+            raise ParameterError(f"The data_dir must be a string, not {type(data_dir).__name__}")
         self.freq_dict = FreqDict(data_dir) if data_dir else FreqDict()
         super().__init__(nlp, name)
 
@@ -472,13 +477,14 @@ class VerseStatsComponent(StatsComponent):
         seseo (bool): Pronounce c and z before e and i as s in the rhyme
 
     Raises:
-        ConfigValidationError: If seseo is not a boolean, raised by spaCy at add_pipe
+        ParameterError: If seseo is not a bool
     """
 
     stats_class = VerseStats
     stats_params = ("seseo",)
 
     def __init__(self, nlp: Language, name: str, seseo: bool = False):
+        check_bool(seseo, "seseo", message=self.messages["bool_param"])
         self.seseo = seseo
         super().__init__(nlp, name)
 

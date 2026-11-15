@@ -316,7 +316,7 @@ Excepciones:
 
 - `SourceError` - un documento sin las categorías gramaticales;
 - `DatasetNotFoundError` - las estadísticas por el diccionario y `get_stats()` cuando el diccionario no está descargado;
-- `ConfigValidationError` de spaCy - un `data_dir` que no es una cadena, en `add_pipe`.
+- `ParameterError` - un `data_dir` que no es una cadena.
 
 === "Código"
 
@@ -416,7 +416,7 @@ VerseStatsComponent(nlp, name, seseo=False)
 
 Excepciones:
 
-- `ConfigValidationError` de spaCy - un `seseo` que no es un booleano, en `add_pipe`.
+- `ParameterError` - un `seseo` que no es un booleano.
 
 === "Código"
 

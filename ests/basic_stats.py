@@ -1,10 +1,19 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import anyts.basic_stats
 from anyts.basic_stats import count_punctuations as count_punctuations
 from anyts.utils import check_integer
 
 from .exceptions import ParameterError
-from .extractors import SentsExtractor, WordsExtractor
+from .extractors import WordsExtractor
 from .syllables import count_syllables
+from .utils import get_document
+
+if TYPE_CHECKING:
+    from anyseg import Document
+    from spacy.tokens import Doc
 
 
 class BasicStats(anyts.basic_stats.BasicStats):
@@ -106,8 +115,9 @@ class BasicStats(anyts.basic_stats.BasicStats):
             a bool
     """
 
-    sents_extractor_class = SentsExtractor
-    words_extractor_class = WordsExtractor
+    def parse(self, source: str | Doc | Document) -> Document:
+        """The document of anySeg (ests.utils.get_document)"""
+        return get_document(source)
 
     def count_syllables(self, word: str) -> int:
         """

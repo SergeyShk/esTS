@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any
 
 import anyts.style_stats
 from anyts.constants import MESSAGES, NAUSEA_TOP_N
+from anyts.document import get_tree
 from anyts.style_stats import (
     calc_classic_nausea as calc_classic_nausea,
     calc_keyword_density as calc_keyword_density,
@@ -13,7 +14,7 @@ from anyts.style_stats import (
     calc_zipf_naturalness as calc_zipf_naturalness,
     check_params as check_params,
 )
-from anyts.utils import check_words, has_pos, in_order, is_doc, iter_doc_tokens, safe_divide
+from anyts.utils import check_words, in_order, is_doc, is_document, is_punctuation, safe_divide
 
 from .constants import (
     COMPOUND_PREPOSITIONS,
@@ -24,10 +25,10 @@ from .constants import (
     STYLE_STATS_DESC,
 )
 from .exceptions import SourceError, SourceTypeError
-from .extractors import WordsExtractor
-from .utils import _check_nlp, get_nlp, is_verbal_noun, iter_text_sents, lemmatize
+from .utils import _check_nlp, get_document, get_nlp, is_verbal_noun, iter_text_sents, lemmatize
 
 if TYPE_CHECKING:
+    from anyseg import Document
     from spacy.language import Language
     from spacy.tokens import Doc
 
@@ -117,7 +118,6 @@ class StyleStats(anyts.style_stats.StyleStats):
             below one
     """
 
-    words_extractor_class = WordsExtractor
     compound_prepositions_list = COMPOUND_PREPOSITIONS
     parentheticals_list = PARENTHETICALS
     cliches_list = OFFICIALESE_CLICHES
@@ -147,6 +147,10 @@ class StyleStats(anyts.style_stats.StyleStats):
                 self._nouns = _doc_nouns(source, self.messages)
             except SourceError as error:
                 self._annotation_error = str(error)
+
+    def parse(self, source: str | Doc | Document) -> Document:
+        """The document of anySeg (ests.utils.get_document)"""
+        return get_document(source)
 
     def is_stopword(self, word: str) -> bool:
         """Stopword of STOPWORD_FORMS (is_stopword)"""
@@ -262,22 +266,22 @@ def noun_lemmas(doc: Doc) -> list[str]:
         SourceTypeError: If the source is not a Doc
         SourceError: If the Doc lacks the parts of speech or the lemmas
     """
-    if not is_doc(doc):
+    if not (is_doc(doc) or is_document(doc)):
         raise SourceTypeError(f"A Doc is expected, not {type(doc).__name__}")
     return [lemma for _, lemma in _doc_nouns(doc)]
 
 
-def _doc_nouns(doc: Doc, messages: Mapping[str, str] = MESSAGES) -> list[tuple[str, str]]:
-    """The tokens of a Doc tagged NOUN, in lower case, with their lemmas"""
-    if not has_pos(doc):
+def _doc_nouns(
+    doc: Doc | Document, messages: Mapping[str, str] = MESSAGES
+) -> list[tuple[str, str]]:
+    """The words of a Doc or a Document tagged NOUN, in lower case, with their lemmas"""
+    document = get_document(doc)
+    words = [word for word in get_tree(document).words if not is_punctuation(word.form)]
+    if not any(word.upos for word in words) and (words or not any(document.column("upos"))):
         raise SourceError(messages["no_pos"])
-    if not doc.has_annotation("LEMMA"):
+    if not any(document.column("lemma")):
         raise SourceError(messages["no_lemmas"])
-    return [
-        (token.text.lower(), token.lemma_)
-        for token in iter_doc_tokens(doc)
-        if token.pos_ == "NOUN"
-    ]
+    return [(word.form.lower(), word.lemma or "") for word in words if word.upos == "NOUN"]
 
 
 def is_stopword(word: str) -> bool:

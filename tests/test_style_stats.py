@@ -82,9 +82,9 @@ def test_init_type_error(source):
 
 def test_init_lists_as_a_string():
     # A string would be taken letter by letter
-    with pytest.raises(TypeError, match="list of stopwords"):
+    with pytest.raises(TypeError, match="stopwords must be a list of strings"):
         StyleStats(text, stopwords="de la")
-    with pytest.raises(TypeError, match="list of cliches"):
+    with pytest.raises(TypeError, match="cliches must be a list of strings"):
         StyleStats(text, cliches="a la mayor brevedad")
 
 

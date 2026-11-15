@@ -3,6 +3,7 @@ from math import isnan
 
 import pytest
 import spacy
+from anyts.document import get_tree
 from anyts.syntax_stats import (
     base_dep,
     calc_coordination_chains,
@@ -14,7 +15,7 @@ from anyts.syntax_stats import (
     is_root,
     subtree_len,
 )
-from anyts.utils import has_feature, is_finite_verb, is_infinitive, is_word
+from anyts.utils import has_feature, is_finite_verb, is_infinitive
 from spacy.tokens import Doc
 
 from ests import BasicStats, SyntaxStats
@@ -45,7 +46,7 @@ from ests.syntax_stats import (
     is_subordinating_mark,
     predicate_form,
 )
-from ests.utils import get_nlp
+from ests.utils import get_document, get_nlp
 
 TEXT = (
     "La casa, construida por los obreros en 1900, fue vendida. "
@@ -63,8 +64,13 @@ def ss():
     return SyntaxStats(TEXT)
 
 
+def tree(source):
+    """The words of the tree of a source, punctuation included"""
+    return get_tree(get_document(source)).words
+
+
 def words(nlp, text):
-    return get_words(nlp(text, disable=["ner"]))
+    return get_words(tree(nlp(text, disable=["ner"])))
 
 
 def test_counts(ss):
@@ -116,7 +122,7 @@ def test_pipeline_parses_after_and_is_not_pickled(nlp):
     restored = pickle.loads(pickle.dumps(ss))
     assert "_nlp" not in vars(restored)
     assert repr(restored.get_stats()) == repr(ss.get_stats())
-    assert [token.text for token in restored.sents[0]] == ["La", "casa", "fue", "vendida"]
+    assert [token.form for token in restored.sents[0]] == ["La", "casa", "fue", "vendida"]
 
 
 def test_source_without_parse():
@@ -135,19 +141,14 @@ def test_source_too_long(nlp):
         SyntaxStats("hola " * (nlp.max_length // 4), nlp=nlp)
 
 
-def test_is_word(nlp):
-    doc = nlp("La casa, blanca")
-    assert [token.text for token in doc if is_word(token)] == ["La", "casa", "blanca"]
-
-
 def test_symbols_are_not_words(nlp):
     doc = nlp("El 5 % de la gente paga 10 € o 3 $ + 2. Es así.")
     assert SyntaxStats(doc).n_words == BasicStats(doc).n_words
-    assert "%" not in [token.text for token in get_words(doc)]
+    assert "%" not in [token.form for token in get_words(tree(doc))]
 
 
 def test_is_root(nlp):
-    assert [token.text for token in nlp("La casa es blanca") if is_root(token)] == ["blanca"]
+    assert [token.form for token in tree(nlp("La casa es blanca")) if is_root(token)] == ["blanca"]
 
 
 def test_base_dep(nlp):
@@ -192,18 +193,18 @@ def test_has_feature(nlp):
     ],
 )
 def test_word_checks(nlp, text, check, expected):
-    assert [token.text for token in words(nlp, text) if check(token)] == [expected]
+    assert [token.form for token in words(nlp, text) if check(token)] == [expected]
 
 
 def test_negative_concord(nlp):
-    assert [token.text for token in words(nlp, "No vino nadie") if is_negation(token)] == [
+    assert [token.form for token in words(nlp, "No vino nadie") if is_negation(token)] == [
         "No",
         "nadie",
     ]
 
 
 def test_negation_conjunction(nlp):
-    assert [token.text for token in words(nlp, "Ni tú ni yo") if is_negation(token)] == []
+    assert [token.form for token in words(nlp, "Ni tú ni yo") if is_negation(token)] == []
 
 
 def test_valency(nlp):
@@ -221,12 +222,12 @@ def test_coordination_chains_none(nlp):
 
 def test_clause_heads(nlp):
     tokens = words(nlp, "Dijo que vendría y se fue")
-    assert [token.text for token in tokens if is_clause_head(token)] == ["Dijo", "vendría", "fue"]
+    assert [token.form for token in tokens if is_clause_head(token)] == ["Dijo", "vendría", "fue"]
 
 
 def test_subordinate_clause_heads(nlp):
     tokens = words(nlp, "Dijo que vendría cuando terminara")
-    assert [token.text for token in tokens if is_subordinate_clause_head(token)] == [
+    assert [token.form for token in tokens if is_subordinate_clause_head(token)] == [
         "vendría",
         "terminara",
     ]
@@ -245,7 +246,7 @@ def test_noun_modifiers(nlp):
 
 def test_de_modifier(nlp):
     tokens = words(nlp, "El uso del agua y la vuelta al campo")
-    assert [token.text for token in tokens if is_de_modifier(token)] == ["agua"]
+    assert [token.form for token in tokens if is_de_modifier(token)] == ["agua"]
 
 
 def test_de_chains(nlp):
@@ -266,7 +267,7 @@ def test_de_chains_skip_punctuation():
         deps=["ROOT", "case", "nmod", "case", "nmod", "flat"],
         pos=["NOUN", "ADP", "NOUN", "ADP", "PUNCT", "PROPN"],
     )
-    assert calc_de_chains(doc) == []
+    assert calc_de_chains(tree(doc)) == []
 
 
 @pytest.mark.parametrize(
@@ -283,7 +284,7 @@ def test_de_chains_skip_punctuation():
     ],
 )
 def test_passive(nlp, text, expected):
-    assert [token.text for token in words(nlp, text) if is_passive(token)] == expected
+    assert [token.form for token in words(nlp, text) if is_passive(token)] == expected
 
 
 @pytest.mark.parametrize(
@@ -305,7 +306,7 @@ def test_agentless_of_an_active_form(nlp):
 
 def test_agent(nlp):
     tokens = words(nlp, "La casa fue construida por los obreros")
-    assert [token.text for token in tokens if is_agent(token)] == ["obreros"]
+    assert [token.form for token in tokens if is_agent(token)] == ["obreros"]
 
 
 def test_has_auxiliary(nlp):
@@ -333,17 +334,17 @@ def test_predicate_form(nlp, text, index, form):
 
 def test_participle_clause(nlp):
     tokens = words(nlp, "La casa, construida por los obreros, se vendió")
-    assert [token.text for token in tokens if is_participle_clause(token)] == ["construida"]
+    assert [token.form for token in tokens if is_participle_clause(token)] == ["construida"]
 
 
 def test_participle_of_a_compound_tense_is_not_a_clause(nlp):
     tokens = words(nlp, "El autor ha escrito el libro")
-    assert [token.text for token in tokens if is_participle_clause(token)] == []
+    assert [token.form for token in tokens if is_participle_clause(token)] == []
 
 
 def test_gerund_clause(nlp):
     tokens = words(nlp, "Hablando en voz alta, entró en la sala")
-    assert [token.text for token in tokens if is_gerund_clause(token)] == ["Hablando"]
+    assert [token.form for token in tokens if is_gerund_clause(token)] == ["Hablando"]
 
 
 @pytest.mark.parametrize(
@@ -357,7 +358,7 @@ def test_gerund_clause(nlp):
     ],
 )
 def test_gerund_of_a_periphrasis_is_not_a_clause(nlp, text):
-    assert [token.text for token in words(nlp, text) if is_gerund_clause(token)] == []
+    assert [token.form for token in words(nlp, text) if is_gerund_clause(token)] == []
 
 
 @pytest.mark.parametrize(
@@ -387,12 +388,12 @@ def test_gerund_of_a_periphrasis_is_not_a_clause(nlp, text):
 )
 def test_split_predicates(nlp, text, expected):
     found = find_split_predicates(words(nlp, text))
-    assert [f"{verb.text} {noun.text}" for verb, noun in found] == expected
+    assert [f"{verb.form} {noun.form}" for verb, noun in found] == expected
 
 
 def test_split_predicate_prefers_the_fixed_part(nlp):
     found = find_split_predicates(words(nlp, "Dio comienzo a la sesión"))
-    assert [noun.text for _, noun in found] == ["comienzo"]
+    assert [noun.form for _, noun in found] == ["comienzo"]
 
 
 @pytest.mark.parametrize(
@@ -423,9 +424,9 @@ def test_split_predicate_prefers_the_fixed_part(nlp):
 def test_clause_head_of_an_infinitive(nlp, text, clauses, infinitive_clauses):
     """An infinitive under xcomp is a clause unless it makes one predicate with its verb"""
     doc = nlp(text)
-    assert sum(is_clause_head(token) for token in doc) == clauses
-    assert sum(is_infinitive_clause_head(token) for token in doc) == infinitive_clauses
-    subordinate = sum(is_subordinate_clause_head(token) for token in doc)
+    assert sum(is_clause_head(token) for token in tree(doc)) == clauses
+    assert sum(is_infinitive_clause_head(token) for token in tree(doc)) == infinitive_clauses
+    subordinate = sum(is_subordinate_clause_head(token) for token in tree(doc))
     assert subordinate == clauses - 1 - infinitive_clauses
     ss = SyntaxStats(doc)
     assert (ss.n_clauses, ss.n_infinitive_clauses) == (clauses, infinitive_clauses)
@@ -448,8 +449,8 @@ def test_clause_head_of_an_infinitive(nlp, text, clauses, infinitive_clauses):
 def test_clause_head_by_the_form_of_the_predicate(nlp, text, clauses, gerund_clauses):
     """The first auxiliary or copula gives the form of a predicate"""
     doc = nlp(text)
-    assert sum(is_clause_head(token) for token in doc) == clauses
-    assert [token.text for token in doc if is_gerund_clause(token)] == gerund_clauses
+    assert sum(is_clause_head(token) for token in tree(doc)) == clauses
+    assert [token.form for token in tree(doc) if is_gerund_clause(token)] == gerund_clauses
 
 
 @pytest.mark.parametrize(
@@ -482,7 +483,7 @@ def test_clause_head_of_an_infinitive_by_its_link(nlp, words, deps, lemmas, expe
         lemmas=lemmas,
         morphs=["", "", "VerbForm=Inf"],
     )
-    assert is_clause_head(doc[2]) is expected
+    assert is_clause_head(tree(doc)[2]) is expected
 
 
 def test_clause_head_of_an_infinitive_under_a_misread_verb(nlp):
@@ -496,7 +497,7 @@ def test_clause_head_of_an_infinitive_under_a_misread_verb(nlp):
         lemmas=["Solía", "salir"],
         morphs=["", "VerbForm=Inf"],
     )
-    assert not is_clause_head(doc[1])
+    assert not is_clause_head(tree(doc)[1])
 
 
 @pytest.mark.parametrize(
@@ -544,7 +545,7 @@ def test_clause_head_of_an_infinitive_subject_or_conjunct(
         lemmas=lemmas,
         morphs=["VerbForm=Inf" if word.endswith(("r", "rse")) else "" for word in words],
     )
-    infinitive = next(token for token in doc if token.dep_ in ("csubj", "conj"))
+    infinitive = next(token for token in tree(doc) if token.deprel in ("csubj", "conj"))
     assert is_clause_head(infinitive) is clause
 
 
@@ -559,7 +560,7 @@ def test_clause_head_of_an_infinitive_subject_or_conjunct(
 )
 def test_infinitive_clause(nlp, text, expected):
     """An infinitive in a gerund phrase belongs to that phrase"""
-    (infinitive,) = [token for token in nlp(text) if token.dep_ == "xcomp"]
+    (infinitive,) = [token for token in tree(nlp(text)) if token.deprel == "xcomp"]
     assert is_infinitive_clause(infinitive) is expected
 
 
@@ -583,7 +584,7 @@ def test_predicate_form_of_an_auxiliary_without_a_form(nlp, auxiliary, form):
         deps=["aux", "ROOT"],
         morphs=["", "VerbForm=Part"],
     )
-    assert predicate_form(doc[1]) == form
+    assert predicate_form(tree(doc)[1]) == form
 
 
 @pytest.mark.parametrize(
@@ -637,12 +638,12 @@ def test_clause_head_by_a_built_form(nlp, words, heads, deps, morphs, form, clau
         lemmas=[{"Voy": "ir", "á": "á"}.get(word, word.lower()) for word in words],
         morphs=morphs,
     )
-    assert predicate_form(doc[-1]) == form
-    assert is_clause_head(doc[-1]) is clause
+    assert predicate_form(tree(doc)[-1]) == form
+    assert is_clause_head(tree(doc)[-1]) is clause
 
 
 def test_clause_head_of_a_punctuation_mark(nlp):
-    assert not is_clause_head(nlp("La casa es blanca.")[-1])
+    assert not is_clause_head(tree(nlp("La casa es blanca."))[-1])
 
 
 @pytest.mark.parametrize(
@@ -657,7 +658,7 @@ def test_clause_head_of_a_parenthetical(nlp, pos, expected):
         deps=["det", "nsubj", "cop", "ROOT", "parataxis"],
         pos=["DET", "NOUN", "AUX", "ADJ", pos],
     )
-    assert is_clause_head(doc[4]) is expected
+    assert is_clause_head(tree(doc)[4]) is expected
 
 
 def test_split_predicate_of_an_unlisted_relation(nlp):
@@ -669,12 +670,12 @@ def test_split_predicate_of_an_unlisted_relation(nlp):
         pos=["VERB", "DET", "NOUN", "NOUN"],
         lemmas=["hacer", "el", "trabajo", "revisión"],
     )
-    assert find_split_predicates(get_words(doc)) == []
+    assert find_split_predicates(get_words(tree(doc))) == []
 
 
 def test_light_verb(nlp):
     tokens = words(nlp, "El director hizo una revisión")
-    assert [token.text for token in tokens if is_light_verb(token)] == ["hizo"]
+    assert [token.form for token in tokens if is_light_verb(token)] == ["hizo"]
 
 
 def test_split_predicate_noun(nlp):
@@ -693,10 +694,10 @@ def test_split_predicate_noun(nlp):
 )
 def test_split_predicate_noun_of_a_fixed_expression(nlp, noun_text, verb_text, expected):
     noun = next(
-        token for token in words(nlp, f"Se llevó a {noun_text} el plan") if token.text == noun_text
+        token for token in words(nlp, f"Se llevó a {noun_text} el plan") if token.form == noun_text
     )
     verb = next(
-        token for token in words(nlp, f"El juez {verb_text} el plan") if token.text == verb_text
+        token for token in words(nlp, f"El juez {verb_text} el plan") if token.form == verb_text
     )
     assert is_split_predicate_noun(noun, verb) is expected
 
@@ -809,9 +810,9 @@ def test_conjunct_with_a_subordinating_mark(words, deps, heads, expected):
     """A conjunct with a conjunction of SUBORDINATING_MARKS, of one word or fixed, is a
     subordinate clause and no T-unit of its own; sino que coordinates, sino porque does not"""
     doc = marked_conjunct(words, deps, heads)
-    mark = next(token for token in doc if token.dep_ == "mark")
+    mark = next(token for token in tree(doc) if token.deprel == "mark")
     assert is_subordinating_mark(mark) is expected
-    assert is_subordinate_clause_head(doc[-1]) is expected
+    assert is_subordinate_clause_head(tree(doc)[-1]) is expected
     stats = SyntaxStats(doc)
     assert (stats.n_subordinate_clauses, stats.n_t_units) == ((1, 1) if expected else (0, 2))
 
@@ -820,11 +821,11 @@ def test_infinitive_conjunct_with_a_subordinating_mark(nlp):
     """The model attaches an indirect question with an infinitive as a conjunct of its verb:
     with its conjunction it heads an infinitive clause"""
     tokens = words(nlp, "No sabía si quedarse o si marcharse.")
-    assert [token.dep_ for token in tokens if token.text in ("quedarse", "marcharse")] == [
+    assert [token.deprel for token in tokens if token.form in ("quedarse", "marcharse")] == [
         "conj",
         "conj",
     ]
-    assert [token.text for token in tokens if is_infinitive_clause_head(token)] == [
+    assert [token.form for token in tokens if is_infinitive_clause_head(token)] == [
         "quedarse",
         "marcharse",
     ]
@@ -840,8 +841,8 @@ def test_subordinate_clause_up_a_long_chain_of_conjuncts():
         deps=["ROOT", "advcl", *["conj"] * (n - 2)],
         pos=["VERB"] * n,
     )
-    assert is_subordinate_clause_head(doc[-1])
-    assert not is_subordinate_clause_head(doc[0])
+    assert is_subordinate_clause_head(tree(doc)[-1])
+    assert not is_subordinate_clause_head(tree(doc)[0])
     # A clause beside the root, not under it, is not subordinate
     doc = Doc(
         spacy.blank("es").vocab,
@@ -850,7 +851,7 @@ def test_subordinate_clause_up_a_long_chain_of_conjuncts():
         deps=["ROOT", "parataxis", "conj"],
         pos=["VERB"] * 3,
     )
-    assert not any(is_subordinate_clause_head(token) for token in doc)
+    assert not any(is_subordinate_clause_head(token) for token in tree(doc))
 
 
 @pytest.mark.parametrize(
@@ -913,7 +914,7 @@ def test_prep_complements_of_spanish_prepositions(nlp):
     """A contraction (del) and a preposition of several words (junto a, a pesar de) mark a
     complement; the complements of one chain make a prepositional chain"""
     doc = nlp("Vive junto a la playa del norte. A pesar de la lluvia, salimos.")
-    assert [token.text for token in doc if is_prep_complement(token)] == [
+    assert [token.form for token in tree(doc) if is_prep_complement(token)] == [
         "playa",
         "norte",
         "lluvia",

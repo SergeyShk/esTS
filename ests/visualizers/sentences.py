@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 from collections.abc import Iterable, Mapping
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import anyts.visualizers
+from anyts.utils import is_doc, is_document
 from matplotlib.axes import Axes
 
 from ..extractors import SentsExtractor, WordsExtractor
+from ..utils import get_document
 
 if TYPE_CHECKING:
     from spacy.tokens import Doc
@@ -49,14 +51,11 @@ def sentence_lengths_plot(
             labels are set incorrectly or ax is not a matplotlib Axes (check_axes)
         SourceError: If there are no sentences or a length is negative
     """
+    source, sents_extractor, words_extractor = _lengths_args(
+        source, sents_extractor, words_extractor
+    )
     return anyts.visualizers.sentence_lengths_plot(
-        source,
-        window,
-        inset,
-        ax,
-        labels,
-        SentsExtractor() if sents_extractor is None else sents_extractor,
-        WordsExtractor() if words_extractor is None else words_extractor,
+        source, window, inset, ax, labels, sents_extractor, words_extractor
     )
 
 
@@ -94,6 +93,22 @@ def sentence_lengths(
         [3, 3, 3]
     """
     return anyts.visualizers.sentence_lengths(
+        *_lengths_args(source, sents_extractor, words_extractor)
+    )
+
+
+def _lengths_args(
+    source: Any,
+    sents_extractor: SentsExtractor | None,
+    words_extractor: WordsExtractor | None,
+) -> tuple[Any, SentsExtractor | None, WordsExtractor | None]:
+    """The document of a text, a Doc or a Document of get_document when no extractor is given;
+    with one given the text is split by the extractors, the Spanish one for the missing one"""
+    if sents_extractor is None and words_extractor is None:
+        if isinstance(source, str) or is_doc(source) or is_document(source):
+            return get_document(source), None, None
+        return source, None, None
+    return (
         source,
         SentsExtractor() if sents_extractor is None else sents_extractor,
         WordsExtractor() if words_extractor is None else words_extractor,

@@ -1,10 +1,12 @@
 import pytest
 import spacy
-from anyts.utils import has_words, is_punctuation, iter_doc_tokens, iter_doc_words
+from anyts.document import document_words
+from anyts.utils import has_words, is_punctuation
 
 from ests import BasicStats, CohesionStats, load_pipeline
 from ests.exceptions import DatasetNotFoundError, SourceTypeError
 from ests.utils import (
+    get_document,
     get_nlp,
     iter_text_sents,
     iter_text_words,
@@ -373,7 +375,7 @@ def test_tokens_byte_order_mark(text, expected):
     assert split_tokens(text) == expected
     words = [token for token in expected if not is_punctuation(token)]
     assert [word for _, _, word in iter_text_words(text)] == words
-    assert [token.text for token in iter_doc_tokens(get_nlp()(text))] == words
+    assert list(document_words(get_document(get_nlp()(text)))) == words
 
 
 def test_lemmatize_empty():
@@ -386,28 +388,6 @@ def test_lemmatize_cached():
     assert lemmatize("amigos") == "amigo"
     assert lemmatize.cache_info().hits == 1
     assert lemmatize.cache_info().misses == 1
-
-
-def test_iter_doc_tokens():
-    doc = spacy.blank("es")("El 50 % de los libros, ¡vaya!")
-    assert [token.text for token in iter_doc_tokens(doc)] == [
-        "El",
-        "50",
-        "de",
-        "los",
-        "libros",
-        "vaya",
-    ]
-
-
-def test_iter_doc_tokens_span():
-    doc = spacy.blank("es")("El gato duerme. Los niños juegan")
-    assert [token.text for token in iter_doc_tokens(doc[4:])] == ["Los", "niños", "juegan"]
-
-
-def test_iter_doc_words():
-    doc = spacy.blank("es")("El gato duerme")
-    assert list(iter_doc_words(doc)) == [(0, 2, "El"), (3, 7, "gato"), (8, 14, "duerme")]
 
 
 def test_get_nlp():

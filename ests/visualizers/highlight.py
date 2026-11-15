@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 import re
-from collections.abc import Callable, Collection, Iterable, Iterator, Sequence
+from collections.abc import Callable, Collection, Iterable, Sequence
 from itertools import islice
 from typing import TYPE_CHECKING
 
 import anyts.visualizers.highlight
 from anyts.constants import ALLITERATION_MIN_WORD_LEN, ALLITERATION_THRESHOLD, AUXILIARY_DEPS
+from anyts.document import TreeWord, get_tree
 from anyts.syntax_stats import base_dep, get_children, get_words, is_root, subtree_len
-from anyts.utils import check_words, has_feature, in_order, is_word
+from anyts.utils import check_words, has_feature, in_order, is_punctuation
 from anyts.visualizers.highlight import (
     Highlight as Highlight,
     Sent as Sent,
@@ -55,10 +56,11 @@ from ..syntax_stats import (
     is_participle_clause,
     is_passive,
 )
-from ..utils import is_verbal_noun, iter_text_sents, iter_text_words, lemmatize
+from ..utils import get_document, is_verbal_noun, lemmatize
 
 if TYPE_CHECKING:
-    from spacy.tokens import Doc, Token
+    from anyseg import Document
+    from spacy.tokens import Doc
 
 SPANISH_WORD = re.compile(r"[a-záéíóúüñ]{2,}", re.IGNORECASE)
 # Frequencies of the consonant sounds for the alliteration
@@ -191,16 +193,12 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
         self._alliteration_threshold = alliteration_threshold
         super().__init__(source, layers)
 
-    def iter_words(self, text: str) -> Iterator[tuple[int, int, str]]:
-        """The words of a string by iter_text_words, without the punctuation"""
-        return iter_text_words(text)
-
-    def iter_sents(self, text: str) -> Iterator[tuple[int, int, str]]:
-        """The sentences of a string by iter_text_sents"""
-        return iter_text_sents(text)
+    def parse(self, source: str | Doc | Document) -> Document:
+        """The document of anySeg (ests.utils.get_document)"""
+        return get_document(source)
 
     def find(
-        self, layer: str, words: Sequence[Word], sents: Sequence[Sent], doc: Doc | None
+        self, layer: str, words: Sequence[Word], sents: Sequence[Sent], doc: Document
     ) -> list[Highlight]:
         """
         Finding the fragments of a layer
@@ -209,13 +207,13 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
             layer (str): Layer of the highlighting
             words (list[Word]): Words of the text with their positions
             sents (list[Sent]): Sentences of the text with their positions
-            doc (Doc): Doc object of the source; None for a string
+            doc (Document): Document of the source (parse)
 
         Returns:
             list[Highlight]: Fragments of the layer
         """
         if layer in SYNTAX_FINDERS:
-            return SYNTAX_FINDERS[layer](doc) if doc is not None else []
+            return SYNTAX_FINDERS[layer](doc)
         finders: dict[str, Callable[[], list[Highlight]]] = {
             "long_sents": lambda: find_long_sents(sents, self._long_sent_word_factor),
             "complex_words": lambda: find_complex_words(words, self._complex_syl_factor),
@@ -502,7 +500,7 @@ def find_connector_highlights(
     words: Sequence[Word],
     sents: Sequence[Sent],
     text: str | None = None,
-    doc: Doc | None = None,
+    doc: Document | None = None,
 ) -> list[Highlight]:
     """
     Finding the connectors
@@ -541,9 +539,9 @@ def find_connector_highlights(
     )
 
 
-def _blocked_words(doc: Doc) -> Callable[[Word], bool]:
-    """Whether no connector starts at a word of a Doc, by the position of its token"""
-    starts = frozenset(token.idx for token in doc if is_connector_blocked(token))
+def _blocked_words(doc: Document) -> Callable[[Word], bool]:
+    """Whether no connector starts at a word of a document, by the position of its token"""
+    starts = frozenset(word.start for word in get_tree(doc).words if is_connector_blocked(word))
     return lambda word: word.start in starts
 
 
@@ -662,7 +660,7 @@ def _alliteration_note(sound: str) -> str:
     return f"alliteration on /{sound}/" + (f" ({spellings})" if spellings != sound else "")
 
 
-def find_passive(doc: Doc) -> list[Highlight]:
+def find_passive(doc: Document) -> list[Highlight]:
     """
     Finding the passive verb forms
 
@@ -678,14 +676,14 @@ def find_passive(doc: Doc) -> list[Highlight]:
         list[Highlight]: Fragments of the layer passive
     """
     highlights = []
-    for token in doc:
-        if not (is_word(token) and is_passive(token)):
+    for token in get_tree(doc).words:
+        if is_punctuation(token.form) or not is_passive(token):
             continue
-        se = [child for child in token.children if child.dep_ == SE_PASSIVE_DEP]
+        se = [child for child in token.children if child.deprel == SE_PASSIVE_DEP]
         auxiliaries = [
             child
             for child in token.children
-            if base_dep(child) in AUXILIARY_DEPS and child.lemma_ == PASSIVE_AUX
+            if base_dep(child) in AUXILIARY_DEPS and child.lemma == PASSIVE_AUX
         ]
         start, end = tokens_span([token, *se, *auxiliaries])
         if se:
@@ -696,34 +694,34 @@ def find_passive(doc: Doc) -> list[Highlight]:
     return highlights
 
 
-def _subtree(token: Token) -> list[Token]:
+def _subtree(token: TreeWord) -> list[TreeWord]:
     """
     Getting the tokens of the subtree of a token
 
     Description:
-        Unlike Token.subtree, the walk keeps the tokens it has visited, so it
+        Unlike a plain walk, it keeps the tokens it has visited, so it
         ends on a broken parse whose heads form a loop
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): Word of the tree
 
     Returns:
-        list[Token]: Tokens of the subtree
+        list[TreeWord]: Words of the subtree
     """
     tokens = []
     stack = [token]
-    seen = {token.i}
+    seen = {token.index}
     while stack:
         current = stack.pop()
         tokens.append(current)
         for child in current.children:
-            if child.i not in seen:
-                seen.add(child.i)
+            if child.index not in seen:
+                seen.add(child.index)
                 stack.append(child)
     return tokens
 
 
-def find_participle_clauses(doc: Doc) -> list[Highlight]:
+def find_participle_clauses(doc: Document) -> list[Highlight]:
     """
     Finding the participial clauses
 
@@ -734,7 +732,7 @@ def find_participle_clauses(doc: Doc) -> list[Highlight]:
         list[Highlight]: Fragments of the layer participle_clauses
     """
     highlights = []
-    for token in doc:
+    for token in get_tree(doc).words:
         if is_participle_clause(token):
             start, end = tokens_span(_subtree(token))
             n_words = subtree_len(token)
@@ -743,7 +741,7 @@ def find_participle_clauses(doc: Doc) -> list[Highlight]:
     return highlights
 
 
-def find_gerund_clauses(doc: Doc) -> list[Highlight]:
+def find_gerund_clauses(doc: Document) -> list[Highlight]:
     """
     Finding the gerund clauses
 
@@ -754,7 +752,7 @@ def find_gerund_clauses(doc: Doc) -> list[Highlight]:
         list[Highlight]: Fragments of the layer gerund_clauses
     """
     highlights = []
-    for token in doc:
+    for token in get_tree(doc).words:
         if is_gerund_clause(token):
             start, end = tokens_span(_subtree(token))
             n_words = subtree_len(token)
@@ -763,7 +761,7 @@ def find_gerund_clauses(doc: Doc) -> list[Highlight]:
     return highlights
 
 
-def find_split_predicate_highlights(doc: Doc) -> list[Highlight]:
+def find_split_predicate_highlights(doc: Document) -> list[Highlight]:
     """
     Finding the split predicates
 
@@ -778,10 +776,12 @@ def find_split_predicate_highlights(doc: Doc) -> list[Highlight]:
     Returns:
         list[Highlight]: Fragments of the layer split_predicates
     """
-    return anyts.visualizers.highlight.find_split_predicate_highlights(find_split_predicates(doc))
+    return anyts.visualizers.highlight.find_split_predicate_highlights(
+        find_split_predicates(get_tree(doc).words)
+    )
 
 
-def is_anaphoric_mismo(token: Token) -> bool:
+def is_anaphoric_mismo(token: TreeWord) -> bool:
     """
     Checking whether a token is an anaphoric el mismo
 
@@ -803,73 +803,78 @@ def is_anaphoric_mismo(token: Token) -> bool:
         none
 
     Arguments:
-        token (Token): Token
+        token (TreeWord): Word of the tree
 
     Returns:
         bool: Result of the check
     """
-    if token.lower_ not in MISMO_FORMS or not token.dep_:
+    if token.form.lower() not in MISMO_FORMS or not token.deprel:
         return False
-    sent_end = token.sent.end
-    after = list(
-        islice((word for word in token.doc[token.i + 1 : sent_end] if not word.is_space), 2)
-    )
-    if after and after[0].lower_ == MISMO_COMPARATIVE:
+    words = token.tree.words
+    sent_end = token.tree.sentences[token.sentence][-1].index + 1
+    after = list(islice(words[token.index + 1 : sent_end], 2))
+    if after and after[0].form.lower() == MISMO_COMPARATIVE:
         return False
-    if len(after) == 2 and after[0].pos_ == "CCONJ" and _is_modifier(after[1]):
+    if len(after) == 2 and after[0].upos == "CCONJ" and _is_modifier(after[1]):
         return False
     children = get_children(token)
-    if any(child.lower_ in MISMO_ARTICLES and base_dep(child) in NP_DEPS for child in children):
+    if any(
+        child.form.lower() in MISMO_ARTICLES and base_dep(child) in NP_DEPS for child in children
+    ):
         # A clause after a comma explains the noun phrase (contra la misma, que pone fin a...)
-        explained = bool(after) and after[0].text == ","
+        explained = bool(after) and after[0].form == ","
         if base_dep(token) not in ARGUMENT_DEPS or any(
             base_dep(child) not in NP_DEPS and not (explained and base_dep(child) == "acl")
             for child in children
         ):
             return False
-        head = token.head
+        # The head of a root is itself, as in spaCy
+        head = token.head or token
         return not (
             base_dep(token) in ("nsubj", "obj")
-            and head.i < token.i
-            and PREDICATIVE_VERBS & {head.lemma_, lemmatize(head.lower_)}
+            and head.index < token.index
+            and PREDICATIVE_VERBS & {head.lemma or "", lemmatize(head.form.lower())}
         )
-    head = token.head
-    if children or head.i != token.i - 1 or head.lower_ not in MISMO_ARTICLES:
+    head = token.head or token
+    if children or head.index != token.index - 1 or head.form.lower() not in MISMO_ARTICLES:
         return False
-    following = next((word for word in token.doc[token.i + 1 : sent_end] if is_word(word)), None)
+    following = next(
+        (word for word in words[token.index + 1 : sent_end] if not is_punctuation(word.form)),
+        None,
+    )
     return following is None or not _is_nominal(following, token)
 
 
-def _is_nominal(word: Token, form: Token) -> bool:
+def _is_nominal(word: TreeWord, form: TreeWord) -> bool:
     """Whether a word goes on the noun phrase of a form of mismo; an adjective whose noun after it
     disagrees with the form in gender or number is a verb the model misread (contra la misma cabe
     recurso: recurso is masculine)"""
-    if word.pos_ not in NOMINAL_POS:
+    if word.upos not in NOMINAL_POS:
         return False
-    noun = word.head
-    if word.pos_ != "ADJ" or noun.i <= word.i or noun.pos_ not in ("NOUN", "PROPN"):
+    noun = word.head or word
+    if word.upos != "ADJ" or noun.index <= word.index or noun.upos not in ("NOUN", "PROPN"):
         return True
-    gender, number = MISMO_AGREEMENT[form.lower_]
+    gender, number = MISMO_AGREEMENT[form.form.lower()]
     return not (_disagrees(noun, "Gender", gender) or _disagrees(noun, "Number", number))
 
 
-def _disagrees(word: Token, feature: str, value: str) -> bool:
+def _disagrees(word: TreeWord, feature: str, value: str) -> bool:
     """Whether a word has a feature without the value"""
-    values = word.morph.get(feature, [])
+    values = word.feats[feature].split(",") if feature in word.feats else []
     return bool(values) and value not in values
 
 
-def _is_modifier(word: Token) -> bool:
+def _is_modifier(word: TreeWord) -> bool:
     """Whether a word after a conjunction modifies a noun with the word before it: an adjective,
     or a determiner other than an article or a possessive"""
-    if word.pos_ == "ADJ":
+    if word.upos == "ADJ":
         return True
-    return word.pos_ == "DET" and not any(
+    return word.upos == "DET" and not any(
         has_feature(word, "PronType", value) for value in NP_OPENING_PRON_TYPES
     )
 
 
-def find_anaphoric_mismo(doc: Doc) -> list[Highlight]:
+def find_anaphoric_mismo(doc: Document) -> list[Highlight]:
     """
     Finding the anaphoric el mismo
 
@@ -885,20 +890,20 @@ def find_anaphoric_mismo(doc: Doc) -> list[Highlight]:
         list[Highlight]: Fragments of the layer anaphoric_mismo
     """
     highlights = []
-    for token in doc:
+    for token in get_tree(doc).words:
         if not is_anaphoric_mismo(token):
             continue
         article = next(
-            (child for child in token.children if child.lower_ in MISMO_ARTICLES),
-            token.head,
+            (child for child in token.children if child.form.lower() in MISMO_ARTICLES),
+            token.head or token,
         )
         start, end = tokens_span([article, token])
-        note = f"anaphoric {article.lower_} {token.lower_}"
+        note = f"anaphoric {article.form.lower()} {token.form.lower()}"
         highlights.append(Highlight(start, end, "anaphoric_mismo", note))
     return highlights
 
 
-def _de_chain(token: Token) -> tuple[list[Token], int]:
+def _de_chain(token: TreeWord) -> tuple[list[TreeWord], int]:
     tokens = [token]
     depth = 1
     for child in get_children(token):
@@ -909,7 +914,7 @@ def _de_chain(token: Token) -> tuple[list[Token], int]:
     return tokens, depth
 
 
-def find_de_chains(doc: Doc) -> list[Highlight]:
+def find_de_chains(doc: Document) -> list[Highlight]:
     """
     Finding the chains of de
 
@@ -925,23 +930,23 @@ def find_de_chains(doc: Doc) -> list[Highlight]:
         list[Highlight]: Fragments of the layer de_chains
     """
     highlights = []
-    for token in get_words(doc):
+    for token in get_words(get_tree(doc).words):
         if not is_de_modifier(token):
             continue
-        head = token.head
-        if not is_root(token) and is_word(head) and is_de_modifier(head):
+        head = token.head or token
+        if not is_root(token) and not is_punctuation(head.form) and is_de_modifier(head):
             continue
         chain, depth = _de_chain(token)
         if depth < 2:
             continue
-        start, end = tokens_span([token.head, *chain])
+        start, end = tokens_span([head, *chain])
         note = f"chain of {plural(depth, 'complement')} with de"
         highlights.append(Highlight(start, end, "de_chains", note))
     return highlights
 
 
 # Finders of the layers read from the dependency tree of a Doc
-SYNTAX_FINDERS: dict[str, Callable[[Doc], list[Highlight]]] = {
+SYNTAX_FINDERS: dict[str, Callable[[Document], list[Highlight]]] = {
     "passive": find_passive,
     "participle_clauses": find_participle_clauses,
     "gerund_clauses": find_gerund_clauses,

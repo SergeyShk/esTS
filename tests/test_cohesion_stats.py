@@ -3,6 +3,7 @@ from math import isnan
 
 import pytest
 import spacy
+from anyts.document import get_tree
 
 from ests import CohesionStats, SentsExtractor
 from ests.cohesion_stats import (
@@ -21,7 +22,7 @@ from ests.constants import (
     CONNECTOR_TYPES,
 )
 from ests.exceptions import ParameterError, SourceError, SourceTypeError
-from ests.utils import get_nlp
+from ests.utils import get_document, get_nlp
 
 TEXT = (
     "El gato estaba en la ventana. Miraba a los pájaros. "
@@ -422,16 +423,21 @@ def test_find_connectors_custom():
     assert found[0] == Connector(0, 0, 1, "bueno", "additive", "primary")
 
 
+def tree(source):
+    """The words of the tree of a source"""
+    return get_tree(get_document(source)).words
+
+
 def test_token_info(nlp):
-    tokens = {token.text: token for token in nlp("Este libro me gusta mucho")}
+    tokens = {word.form: word for word in tree(nlp("Este libro me gusta mucho"))}
     assert token_info(tokens["libro"]).noun
     assert token_info(tokens["Este"]).demonstrative
     assert token_info(tokens["me"]).pronoun
     assert token_info(tokens["gusta"]).tense == "Pres"
     assert token_info(tokens["gusta"]).mood == "Ind"
     assert not token_info(tokens["Este"]).content
-    assert token_info(nlp("Mi libro")[0]).pronoun
-    assert not token_info(nlp("El libro")[0]).pronoun
+    assert token_info(tree(nlp("Mi libro"))[0]).pronoun
+    assert not token_info(tree(nlp("El libro"))[0]).pronoun
 
 
 PARAGRAPHS = (
@@ -524,28 +530,31 @@ def test_si_with_an_object_after_it():
         pos=["ADV", "VERB", "SCONJ", "VERB", "CCONJ", "VERB"],
         lemmas=["no", "saber", "si", "temer", "o", "esperar"],
     )
-    assert is_connector_blocked(doc[2])
+    assert is_connector_blocked(tree(doc)[2])
 
 
 def test_is_connector_blocked(nlp):
-    doc = nlp("No sé si vendrá. Si llueve, me quedo. ¡Si ya te lo dije!")
-    assert [is_connector_blocked(token) for token in doc if token.lower_ == "si"] == [
+    words = tree(nlp("No sé si vendrá. Si llueve, me quedo. ¡Si ya te lo dije!"))
+    assert [is_connector_blocked(word) for word in words if word.form.lower() == "si"] == [
         True,
         False,
         True,
     ]
-    assert not any(is_connector_blocked(token) for token in doc if token.lower_ != "si")
+    assert not any(is_connector_blocked(word) for word in words if word.form.lower() != "si")
     # Without the parts of speech only the exclamation is known
-    doc = spacy.blank("es")("No sé si vendrá. ¡Si ya te lo dije!")
-    assert [is_connector_blocked(token) for token in doc if token.lower_ == "si"] == [False, True]
+    words = tree("No sé si vendrá. ¡Si ya te lo dije!")
+    assert [is_connector_blocked(word) for word in words if word.form.lower() == "si"] == [
+        False,
+        True,
+    ]
 
 
 def test_find_connectors_blocked(nlp):
     """The positions of is_connector_blocked drop the si that CohesionStats drops"""
-    words = [token for token in nlp("No sé si vendrá.") if not token.is_punct]
-    texts, pos = [token.text for token in words], [token.pos_ for token in words]
+    words = [word for word in tree(nlp("No sé si vendrá.")) if word.upos != "PUNCT"]
+    texts, pos = [word.form for word in words], [word.upos for word in words]
     assert [c.text for c in find_connectors(texts, pos=pos)] == ["si"]
-    blocked = {i for i, token in enumerate(words) if is_connector_blocked(token)}
+    blocked = {i for i, word in enumerate(words) if is_connector_blocked(word)}
     assert blocked == {2}
     assert find_connectors(texts, pos=pos, blocked=blocked) == []
     with pytest.raises(ParameterError):
@@ -553,12 +562,9 @@ def test_find_connectors_blocked(nlp):
 
 
 def test_paragraphs_of_a_doc_of_load_pipeline():
-    """The sentences of anySeg end the paragraphs without a final mark, as the string has
-    them; the parser alone joins them"""
+    """A blank line ends the sentence of a paragraph without a final mark, as the string has
+    it, in the Doc of load_pipeline and of the model alone"""
     text = "El gato duerme en la casa\n\nEl perro mira la casa"
-    plain = CohesionStats(spacy.load("es_core_news_sm")(text))
-    cs = CohesionStats(get_nlp()(text))
-    string = CohesionStats(text)
-    assert (cs.n_sents, cs.n_paragraphs, cs.noun_overlap_adjacent) == (2, 2, 1.0)
-    assert (string.n_sents, string.n_paragraphs, string.noun_overlap_adjacent) == (2, 2, 1.0)
-    assert plain.n_sents == 1 and isnan(plain.noun_overlap_adjacent)
+    for source in (text, get_nlp()(text), spacy.load("es_core_news_sm")(text)):
+        cs = CohesionStats(source)
+        assert (cs.n_sents, cs.n_paragraphs, cs.noun_overlap_adjacent) == (2, 2, 1.0)

@@ -3,8 +3,8 @@
 ## Requisitos
 
 *   `python` 3.11 o superior
-*   `spaCy` 3.8.15 o superior dentro de 3
-*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.4.6 o superior dentro de 0.4, el núcleo independiente del idioma: los extractores, las estadísticas básicas y las fórmulas comunes de legibilidad, las métricas de diversidad léxica, las medidas de corpus, los gráficos y el mecanismo del resaltado vienen de él con el tokenizador, el lematizador, el segmentador de oraciones y las sílabas del español
+*   `spaCy` 3.8.17 o superior dentro de 3
+*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.5 o superior dentro de 0.5, el núcleo independiente del idioma: los extractores, las estadísticas básicas y las fórmulas comunes de legibilidad, las métricas de diversidad léxica, las medidas de corpus, los gráficos y el mecanismo del resaltado vienen de él con el tokenizador, el lematizador, el segmentador de oraciones y las sílabas del español
 *   [`anyseg`](https://github.com/SergeyShk/anySeg) 0.3 o superior dentro de 0.3, el segmentador en tokens y oraciones
 *   `numpy`, `scipy`, `pandas`, `simplemma` 2
 *   `matplotlib` y `graphviz` para las [visualizaciones](visualizers/zipf.md)

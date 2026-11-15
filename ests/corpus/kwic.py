@@ -14,11 +14,12 @@ from anyts.utils import check_bool
 from ..utils import iter_text_sents, iter_text_words, lemmatize
 
 if TYPE_CHECKING:
-    from spacy.tokens import Doc, Token
+    from anyseg import Document, Word
+    from spacy.tokens import Doc
 
 
 def kwic(
-    source: str | Doc,
+    source: str | Doc | Document,
     keyword: str,
     window: int = 5,
     by_lemma: bool = False,
@@ -91,11 +92,11 @@ def _fold(word: str) -> str:
     return word.lower().removesuffix(".")
 
 
-def _lemmas(word: str, tokens: Sequence[Token]) -> tuple[str, ...]:
+def _lemmas(word: str, tokens: Sequence[Word]) -> tuple[str, ...]:
     """
     The lemma of simplemma of the word without the period of an abbreviation and, for
     a word of a Doc with lemmas, the lemma of the model
     """
     own = lemmatize(word.removesuffix("."))
-    lemma = tokens[0].lemma_ if tokens else ""
+    lemma = (tokens[0].lemma or "") if tokens else ""
     return (own, lemma) if lemma else (own,)

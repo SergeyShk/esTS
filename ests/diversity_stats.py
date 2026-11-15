@@ -57,10 +57,12 @@ from anyts.diversity_stats import (
     fit_zipf_mandelbrot as fit_zipf_mandelbrot,
     vocabulary_growth as vocabulary_growth,
 )
-from anyts.utils import is_doc, iter_doc_words, source_type_error
+from anyts.document import document_words
+from anyts.utils import is_doc, source_type_error
 
 from .exceptions import SourceTypeError
 from .extractors import WordsExtractor
+from .utils import get_document
 
 if TYPE_CHECKING:
     from spacy.tokens import Doc
@@ -177,7 +179,7 @@ class DiversityStats(anyts.DiversityStats):
         check_params(window_len, mtld_threshold, mtld_min_len, hdd_sample_size, log_base)
         if is_doc(source):
             words: Sequence[str] = (
-                [word for _, _, word in iter_doc_words(source)]
+                document_words(get_document(source))
                 if words_extractor is None
                 else words_extractor.extract(source.text)
             )

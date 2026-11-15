@@ -158,13 +158,21 @@ def test_style_parameters(nlp):
         pipeline.add_pipe("ests_style", name="wrong", config={"top_n": 0})
 
 
+@pytest.mark.parametrize(
+    ("factory", "config"), [("ests_verse", {"seseo": "yes"}), ("ests_lexical", {"data_dir": 5})]
+)
+def test_config_of_a_wrong_type(factory, config):
+    with pytest.raises(ParameterError):
+        spacy.blank("es").add_pipe(factory, name="stats", config=config)
+
+
 def test_style_cliches():
     pipeline = spacy.blank("es")
     pipeline.add_pipe("ests_style", name="style", config={"cliches": ["a la mayor brevedad"]})
     doc = pipeline("Se hará a la mayor brevedad")
     assert doc._.style.cliches_list == ("a la mayor brevedad",)
     assert doc._.style.cliches == pytest.approx(100 * 1 / 6)
-    with pytest.raises(SourceTypeError):
+    with pytest.raises(ParameterError):
         pipeline.add_pipe("ests_style", name="wrong", config={"cliches": [1, 2]})
 
 
