@@ -2879,7 +2879,7 @@
 <p>Raises:</p>
 <ul>
 <li><code>SourceTypeError</code> - a source that is neither a string nor a <code>Doc</code>, an extractor of another type;</li>
-<li><code>SourceError</code> - a source without words, a string with a character without a UTF-8 form;</li>
+<li><code>SourceError</code> - a source without words;</li>
 <li><code>ParameterError</code> - a parameter that <code>check_params</code> rejects.</li>
 </ul>
 <p>The class extends the <code>DiversityStats</code> of the <a href="https://sergeyshk.github.io/anyTS/stats/diversity_stats/">anyTS</a> core: instead of a list of words it takes a text or a <code>Doc</code> object of the <a href="https://github.com/explosion/spaCy">spaCy</a> library. The words of a text are extracted by the Spanish <a href="../../extractors/words/"><code>WordsExtractor</code></a> or by a given one, which for a <code>Doc</code> is applied to its text; without an extractor the words of a <code>Doc</code> come from its tokens. The words are always lower-cased, since every metric counts lexemes. The <code>print_stats</code> table has the English descriptions of the metrics of the core, <code>anyts.constants.DIVERSITY_STATS_DESC</code>.</p>

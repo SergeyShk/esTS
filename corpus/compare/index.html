@@ -2237,7 +2237,7 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 <p>Raises:</p>
 <ul>
 <li><code>SourceTypeError</code> - texts that are not a list of strings, <code>features</code> that cannot be called or give no mapping of numbers by name;</li>
-<li><code>SourceError</code> - a corpus without a window of <code>min_words</code> words or more, a text with a character without a UTF-8 form;</li>
+<li><code>SourceError</code> - a corpus without a window of <code>min_words</code> words or more, a text with a character without a UTF-8 form for the default features;</li>
 <li><code>ParameterError</code> - a <code>window</code> or <code>min_words</code> that is not an integer of at least one, <code>min_words</code> above <code>window</code>, labels, a number of samples or a seed that <code>check_comparison_params</code> rejects;</li>
 <li><code>DatasetNotFoundError</code> - the default features without the model installed.</li>
 </ul>
@@ -2372,7 +2372,7 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676 
 <p>Raises:</p>
 <ul>
 <li><code>SourceTypeError</code> - texts that are not a list of strings, <code>features</code> that cannot be called or give no mapping of numbers by name;</li>
-<li><code>SourceError</code> - a corpus without a window of <code>min_words</code> words or more, a text with a character without a UTF-8 form;</li>
+<li><code>SourceError</code> - a corpus without a window of <code>min_words</code> words or more, a text with a character without a UTF-8 form for the default features;</li>
 <li><code>ParameterError</code> - a <code>window</code> or <code>min_words</code> that is not an integer of at least one, <code>min_words</code> above <code>window</code>;</li>
 <li><code>DatasetNotFoundError</code> - the default features without the model installed.</li>
 </ul>
@@ -2700,7 +2700,6 @@ syntax_subtrees_per_sent                    6.742           4.494   1.484    2.9
 <p>Raises:</p>
 <ul>
 <li><code>SourceTypeError</code> - a text that is not a string;</li>
-<li><code>SourceError</code> - a character without a UTF-8 form;</li>
 <li><code>ParameterError</code> - a <code>window</code> or <code>min_words</code> that is not an integer of at least one, <code>min_words</code> above the window.</li>
 </ul>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Code</label><label for="__tabbed_4_2">Result</label></div>

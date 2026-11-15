@@ -2080,7 +2080,7 @@
 <li><code>SourceError</code> - una fuente sin palabras;</li>
 <li><code>ParameterError</code> - un umbral que no es un entero de al menos uno, un <code>normalize</code> que no es un <code>bool</code>.</li>
 </ul>
-<p>La clase extiende el <code>BasicStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/basic_stats/">anyTS</a> con los ganchos del español: las sílabas de una palabra se cuentan con <a href="../../syllables/#count_syllables"><code>count_syllables</code></a>, y los extractores por defecto son los <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> y <a href="../../extractors/words/"><code>WordsExtractor</code></a> del español. Los indicadores ordinales <code>º</code> y <code>ª</code> son letras (<code>3.º</code> es una palabra de una letra). El componente de líneas en blanco de esTS se llama <a href="../../components/#blank_lines"><code>ests_blank_lines</code></a>: <code>nlp.add_pipe("ests_blank_lines", before="parser")</code>. Las estadísticas se calculan al crear el objeto. Una cadena con un carácter sin forma UTF-8, como la de un fichero leído con una codificación errónea, lanza <code>SourceError</code> desde el tokenizador del español.</p>
+<p>La clase extiende el <code>BasicStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/basic_stats/">anyTS</a> con los ganchos del español: las sílabas de una palabra se cuentan con <a href="../../syllables/#count_syllables"><code>count_syllables</code></a>, y los extractores por defecto son los <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> y <a href="../../extractors/words/"><code>WordsExtractor</code></a> del español. Los indicadores ordinales <code>º</code> y <code>ª</code> son letras (<code>3.º</code> es una palabra de una letra). El componente de líneas en blanco de esTS se llama <a href="../../components/#blank_lines"><code>ests_blank_lines</code></a>: <code>nlp.add_pipe("ests_blank_lines", before="parser")</code>. Las estadísticas se calculan al crear el objeto.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2441,7 +2441,7 @@ Entropy of the word lengths in syllables (bits) |   1.72
 <p>Excepciones:</p>
 <ul>
 <li><code>SourceTypeError</code> - un texto que no es una cadena;</li>
-<li><code>SourceError</code> - sin <code>n_words</code>, un texto con un carácter sin forma UTF-8;</li>
+<li><code>SourceError</code> - sin <code>n_words</code>;</li>
 <li><code>ParameterError</code> - un número de palabras que no es un entero no negativo.</li>
 </ul>
 <p>El perfil depende del formato del texto (comillas y rayas tipográficas, signos de apertura), así que conviene leerlo aparte de los rasgos lingüísticos.</p>
