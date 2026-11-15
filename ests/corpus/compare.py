@@ -30,7 +30,6 @@ from ..morph_stats import FINITE_MOODS, MorphStats
 from ..readability_stats import ReadabilityStats
 from ..syntax_stats import SyntaxStats
 from ..utils import (
-    _check_encoding,
     _check_nlp,
     count_words_by_spans,
     get_nlp,
@@ -140,8 +139,8 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
 
     Raises:
         SourceTypeError: If the text is not a string or the pipeline is not a spaCy Language
-        SourceError: If the text has no words or a character without a UTF-8 form, is longer than
-            the max_length of the pipeline, or the pipeline gives no parts of speech or no lemmas
+        SourceError: If the text has no words, is longer than the max_length of the pipeline, or
+            the pipeline gives no parts of speech or no lemmas
         DatasetNotFoundError: If the default model is not installed
 
     Example:
@@ -209,7 +208,6 @@ def _parse(text: str, nlp: Language | None) -> Doc:
             f"pipeline ({pipeline.max_length}): split it into windows or raise "
             "max_length on a pipeline of your own and pass it in nlp"
         )
-    _check_encoding(text)
     return pipeline(text, disable=["parser", "ner"] if nlp is None else ["ner"])
 
 
@@ -266,8 +264,7 @@ def corpus_features(
     Raises:
         SourceTypeError: If the texts are not a list of strings, or the features are not a
             function or give no mapping of numbers by name
-        SourceError: If the corpus has no window of enough words, or a text has a
-            character without a UTF-8 form for the default features
+        SourceError: If the corpus has no window of enough words
         ParameterError: If the size of a window or min_words is not an integer or is
             below one, or min_words is greater than the window
         DatasetNotFoundError: If the default features need the model and it is not installed
@@ -369,8 +366,7 @@ def compare_corpora(
     Raises:
         SourceTypeError: If the texts are not a list of strings, or the features are not a
             function or give no mapping of numbers by name
-        SourceError: If one of the corpora has no window of enough words, or a text has a
-            character without a UTF-8 form for the default features
+        SourceError: If one of the corpora has no window of enough words
         DatasetNotFoundError: If the default features are read and the model is not
             installed
         ParameterError: If the names of the corpora are not two strings that give

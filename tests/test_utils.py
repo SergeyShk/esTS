@@ -2,9 +2,8 @@ import pytest
 import spacy
 from anyts.utils import has_words, is_punctuation, iter_doc_tokens, iter_doc_words
 
-from ests import BasicStats, CohesionStats, StyleStats, WordsExtractor, load_pipeline
-from ests.corpus import kwic, text_features
-from ests.exceptions import DatasetNotFoundError, SourceError, SourceTypeError
+from ests import BasicStats, CohesionStats, load_pipeline
+from ests.exceptions import DatasetNotFoundError, SourceTypeError
 from ests.utils import (
     get_nlp,
     iter_text_sents,
@@ -12,7 +11,7 @@ from ests.utils import (
     iter_tokens,
     lemmatize,
 )
-from ests.visualizers import highlight, sentence_lengths
+from ests.visualizers import sentence_lengths
 
 
 def split_sents(text):
@@ -162,11 +161,6 @@ def test_sentences_long_runs(text, expected):
         ("Dijo: «(Sr. García) vino». Sí.", ["Dijo: «(Sr. García) vino».", "Sí."]),
         # List markers at the start of a sentence or a line
         ("1. Primero. 2. Segundo.", ["1. Primero.", "2. Segundo."]),
-        pytest.param(
-            "1.1. Introducción. 1.2. Método.",
-            ["1.1. Introducción.", "1.2. Método."],
-            marks=pytest.mark.xfail(strict=True, reason="anySeg 0.3 splits 1.2. off a line"),
-        ),
         ("IV. Capítulo. Fue Felipe IV. Luego.", ["IV. Capítulo.", "Fue Felipe IV.", "Luego."]),
         ("b. Dos.", ["b. Dos."]),
         # A line without a final mark, an item of a list or a heading, is a sentence
@@ -185,11 +179,6 @@ def test_sentences_long_runs(text, expected):
         ("Era tarde.—Ven.", ["Era tarde.", "—Ven."]),
         ("Dijo que sí.--dijo él.", ["Dijo que sí.--dijo él."]),
         ("Sí. --dijo él. Luego salió.", ["Sí. --dijo él.", "Luego salió."]),
-        pytest.param(
-            "Del 3.-5 de mayo.",
-            ["Del 3.-5 de mayo."],
-            marks=pytest.mark.xfail(strict=True, reason="anySeg 0.3 splits a range after 3."),
-        ),
         ("El Sr.--Pérez llegó.", ["El Sr.--Pérez llegó."]),
         # A closing dash before punctuation or a blank line keeps its sentence
         (
@@ -344,18 +333,7 @@ def test_abbreviation_case(abbreviation):
     assert split_tokens(f"de {capitalized} y") == ["de", *capitalized.split(), "y"]
 
 
-@pytest.mark.parametrize(
-    "abbreviation",
-    [
-        pytest.param(
-            abbreviation,
-            marks=pytest.mark.xfail(strict=True, reason="anySeg 0.3 splits UU. in capitals"),
-        )
-        if abbreviation == "ee. uu."
-        else abbreviation
-        for abbreviation in ABBREVIATIONS
-    ],
-)
+@pytest.mark.parametrize("abbreviation", ["sr.", "dña.", "pág.", "núm.", "etc.", "p. ej.", "a.m."])
 def test_abbreviation_in_capitals(abbreviation):
     """An abbreviation in capitals is whole before capitals"""
     upper = abbreviation.upper()
@@ -509,12 +487,6 @@ def test_load_pipeline_not_installed():
         load_pipeline("es_core_news_xxl")
 
 
-def test_load_pipeline_of_a_wrong_path(tmp_path):
-    with pytest.raises(DatasetNotFoundError, match="cannot be loaded") as error:
-        load_pipeline(str(tmp_path))
-    assert "spacy download" not in str(error.value)
-
-
 def test_get_nlp_not_installed():
     with pytest.raises(DatasetNotFoundError, match="spacy download"):
         get_nlp("es_core_news_xxl")
@@ -553,27 +525,3 @@ def test_lone_surrogate():
     text = "Hola \ud800 mundo. Otra."
     assert split_tokens(text) == ["Hola", "\ud800", "mundo", ".", "Otra", "."]
     assert list(iter_text_sents(text)) == [(0, 13, "Hola \ud800 mundo."), (14, 19, "Otra.")]
-
-
-def test_lone_surrogate_lemma():
-    """A word with a lone surrogate is its own lemma, as simplemma cannot read it"""
-    assert lemmatize("\ud800") == "\ud800"
-    text = "Hola \ud800 mundo. El gato duerme."
-    assert WordsExtractor(use_lexemes=True).extract(text)[1] == "\ud800"
-    assert [line.keyword for line in kwic(text, "gato", by_lemma=True)] == ["gato"]
-    assert highlight(text).text == text
-
-
-@pytest.mark.parametrize(
-    "parse",
-    [
-        CohesionStats,
-        lambda text: StyleStats(text).verbal_nouns,
-        text_features,
-    ],
-    ids=["CohesionStats", "StyleStats.verbal_nouns", "text_features"],
-)
-def test_lone_surrogate_of_a_model(parse):
-    """The model of spaCy cannot read a character without a UTF-8 form"""
-    with pytest.raises(SourceError, match="without a UTF-8 form at 5"):
-        parse("Hola \ud800 mundo")

@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import re
 from collections.abc import Iterable, Iterator
 from functools import lru_cache
-from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import simplemma
@@ -17,15 +15,13 @@ from anyts.utils import (
 )
 
 from .constants import SPACY_MODEL, VERBAL_NOUN_LEMMAS, VERBAL_NOUN_SUFFIXES
-from .exceptions import DatasetNotFoundError, SourceError, SourceTypeError
+from .exceptions import DatasetNotFoundError, SourceTypeError
 
 if TYPE_CHECKING:
     from spacy.language import Language
 
 # The segmenter of Spanish into tokens and sentences
 SEGMENTER = Segmenter("es")
-# A name of an installed model, as opposed to a path
-PACKAGE_NAME = re.compile(r"[\w.-]+")
 
 
 def iter_tokens(text: str) -> Iterator[tuple[int, int, str]]:
@@ -136,17 +132,6 @@ def _check_nlp(nlp: object) -> None:
         raise SourceTypeError("The pipeline must be a spaCy Language")
 
 
-def _check_encoding(text: str) -> None:
-    """A text the tokenizer of spaCy cannot read: a lone surrogate has no UTF-8 form"""
-    try:
-        text.encode("utf-8")
-    except UnicodeEncodeError as error:
-        raise SourceError(
-            f"The text has a character without a UTF-8 form at {error.start}: "
-            "read the file again with its encoding"
-        ) from None
-
-
 @lru_cache(maxsize=131072)
 def lemmatize(word: str) -> str:
     """
@@ -155,7 +140,7 @@ def lemmatize(word: str) -> str:
     Description:
         A known form is mapped to its lower-case lemma (Tienes - tener,
         cantándole - cantar), an unknown form is returned unchanged (Madrid,
-        dámelo), as is a word with a lone surrogate, which has no UTF-8 form
+        dámelo)
 
     Arguments:
         word (str): Word form
@@ -163,10 +148,6 @@ def lemmatize(word: str) -> str:
     Returns:
         str: Lemma
     """
-    try:
-        word.encode("utf-8")
-    except UnicodeEncodeError:
-        return word
     return simplemma.lemmatize(word, lang="es") if word != "" else word
 
 
@@ -195,8 +176,7 @@ def load_pipeline(
         Language: Pipeline
 
     Raises:
-        DatasetNotFoundError: If the model is not installed or the pipeline of a path
-            cannot be loaded
+        DatasetNotFoundError: If the model is not installed
 
     Example:
         >>> from ests import load_pipeline
@@ -217,10 +197,6 @@ def load_pipeline(
     try:
         nlp = spacy.load(model, exclude=excluded, config=config, **kwargs)
     except OSError as error:
-        if Path(model).exists() or not PACKAGE_NAME.fullmatch(str(model)):
-            raise DatasetNotFoundError(
-                f"The spaCy pipeline {model} cannot be loaded: {error}"
-            ) from error
         raise DatasetNotFoundError(
             f"The spaCy model {model} is not installed: python -m spacy download {model}"
         ) from error

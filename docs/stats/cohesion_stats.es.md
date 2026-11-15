@@ -9,7 +9,7 @@ Las estadísticas de cohesión de un texto a la manera de [Coh-Metrix](https://d
 Excepciones:
 
 - `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`, un extractor de otra clase, un pipeline en `nlp` que no es un `Language` de spaCy, unos conectores que no son un diccionario de locuciones y pares de cadenas;
-- `SourceError` - una fuente sin palabras; un `Doc` sin las categorías gramaticales o los lemas (un `Doc` de `spacy.blank("es")`); una cadena más larga que el `max_length` del pipeline o con un carácter sin forma UTF-8;
+- `SourceError` - una fuente sin palabras; un `Doc` sin las categorías gramaticales o los lemas (un `Doc` de `spacy.blank("es")`); una cadena más larga que el `max_length` del pipeline;
 - `ParameterError` - una clase o un tipo de conector desconocidos, un `blank_lines` que no es un `bool`;
 - `DatasetNotFoundError` - una cadena sin `nlp` cuando el modelo no está instalado.
 
