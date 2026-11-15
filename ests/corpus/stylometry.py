@@ -18,7 +18,7 @@ from anyts.corpus.stylometry import (
     zeta_segments as zeta_segments,
 )
 from anyts.document import get_tree
-from anyts.utils import check_words, is_doc, is_document, is_punctuation
+from anyts.utils import check_words, has_words, is_doc, is_document, is_punctuation
 
 from ..constants import FUNCTION_UD_POS
 from ..exceptions import SourceError
@@ -71,7 +71,7 @@ def function_words_profile(
     _check_nlp(nlp)
     if is_doc(source) or is_document(source):
         tree = get_tree(get_document(source))
-        words = [word for word in tree.words if not is_punctuation(word.form)]
+        words = [word for word in tree.words if has_words(word.form)]
         if any(word.upos for word in words):
             tags = [word.upos or "" for word in words]
         else:

@@ -97,7 +97,7 @@ class DiversityStats(anyts.DiversityStats):
         WindowStats(mean=0.9333, std=0.1155, lower=0.6465, upper=1.2202, n_windows=3)
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object); words are
+        source (str|Doc|Document): Data source (a string, a Doc or a Document); words are
             always lower-cased
         words_extractor (WordsExtractor): Word extraction tool; for a Doc it is
             applied to the text of the Doc, without it the words come from the tokens

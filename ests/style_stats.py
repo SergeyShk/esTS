@@ -71,7 +71,7 @@ class StyleStats(anyts.style_stats.StyleStats):
         (8.333333333333332, 8.333333333333332, 8.333333333333332)
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
+        source (str|Doc|Document): Data source (a string, a Doc or a Document)
         words_extractor (WordsExtractor): Word extraction tool; for a Doc it is applied
             to its text
         stopwords (list[str]|set[str]): Stopwords for the water content; is_stopword if
@@ -108,7 +108,7 @@ class StyleStats(anyts.style_stats.StyleStats):
         print_stats: Printing the computed style metrics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc, the stopwords,
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, the stopwords,
             the nausea stopwords or the clichés are not a list or a set of strings, or
             the extractor or the pipeline is of another type
         SourceError: If the source has no words; when the verbal nouns or the markers are
@@ -125,7 +125,7 @@ class StyleStats(anyts.style_stats.StyleStats):
 
     def __init__(
         self,
-        source: str | Doc,
+        source: str | Doc | Document,
         words_extractor: anyts.WordsExtractor | None = None,
         stopwords: Collection[str] | None = None,
         top_n: int = NAUSEA_TOP_N,
@@ -252,19 +252,19 @@ def _split_text(text: str, max_length: int) -> list[str]:
     return parts
 
 
-def noun_lemmas(doc: Doc) -> list[str]:
+def noun_lemmas(doc: Doc | Document) -> list[str]:
     """
-    Getting the lemmas of the nouns of a Doc
+    Getting the lemmas of the nouns of a Doc or a Document
 
     Arguments:
-        doc (Doc): Doc object
+        doc (Doc|Document): Doc object or Document
 
     Returns:
         list[str]: Lemmas of the tokens tagged NOUN
 
     Raises:
-        SourceTypeError: If the source is not a Doc
-        SourceError: If the Doc lacks the parts of speech or the lemmas
+        SourceTypeError: If the source is neither a Doc nor a Document
+        SourceError: If the source lacks the parts of speech or the lemmas
     """
     if not (is_doc(doc) or is_document(doc)):
         raise SourceTypeError(f"A Doc is expected, not {type(doc).__name__}")

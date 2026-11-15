@@ -127,7 +127,7 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
         '<div class="ests-highlight"><div class="ests-highlight-text">Se procedió ... <span class="ests-hl ests-hl-parentheticals" title="parenthetical expression: «sin embargo»">Sin embargo</span>, el gato duerme.</div></div>'
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
+        source (str|Doc|Document): Data source (a string, a Doc or a Document)
         layers (list[str]|str): Layers of the highlighting; the layers of
             HIGHLIGHT_DEFAULT_LAYERS the source allows if not set; "all" - every
             layer the source allows
@@ -151,7 +151,7 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
         css: Getting the styles of the layers
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc
+        SourceTypeError: If the source is neither a string, a Doc nor a Document
         SourceError: If the source has no words
         SourceTypeError: If the stopwords or the clichés are not a list or a set of strings
         ParameterError: If a layer is unknown or not allowed by the source, or a
@@ -166,7 +166,7 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
 
     def __init__(
         self,
-        source: str | Doc,
+        source: str | Doc | Document,
         layers: Sequence[str] | str | None = None,
         long_sent_word_factor: int = LONG_SENT_WORD_FACTOR,
         complex_syl_factor: int = HIGHLIGHT_COMPLEX_SYL_FACTOR,
@@ -230,7 +230,7 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
 
 
 def highlight(
-    source: str | Doc,
+    source: str | Doc | Document,
     layers: Sequence[str] | str | None = None,
     long_sent_word_factor: int = LONG_SENT_WORD_FACTOR,
     complex_syl_factor: int = HIGHLIGHT_COMPLEX_SYL_FACTOR,
@@ -246,7 +246,7 @@ def highlight(
         HighlightedText
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
+        source (str|Doc|Document): Data source (a string, a Doc or a Document)
         layers (list[str]|str): Layers of the highlighting; the layers of
             HIGHLIGHT_DEFAULT_LAYERS the source allows if not set; "all" - every
             layer the source allows
@@ -263,7 +263,7 @@ def highlight(
         HighlightedText: Highlighted text with an HTML view for Jupyter
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc
+        SourceTypeError: If the source is neither a string, a Doc nor a Document
         SourceError: If the source has no words
         SourceTypeError: If the stopwords or the clichés are not a list or a set of strings
         ParameterError: If a layer is unknown or not allowed by the source, or a
@@ -518,7 +518,7 @@ def find_connector_highlights(
         words (list[Word]): Words with their positions
         sents (list[Sent]): Sentences with their positions
         text (str): Text of the words, for the punctuation marks between them
-        doc (Doc): Doc object of the words, for the rules by its tokens
+        doc (Document): Document of the words, for the rules by its tree
 
     Returns:
         list[Highlight]: Fragments of the layer connectors
@@ -670,7 +670,7 @@ def find_passive(doc: Document) -> list[Highlight]:
         from the one with ser, and a passive with ser without an agent
 
     Arguments:
-        doc (Doc): Doc object with a dependency parse
+        doc (Document): Document with a dependency parse
 
     Returns:
         list[Highlight]: Fragments of the layer passive
@@ -726,7 +726,7 @@ def find_participle_clauses(doc: Document) -> list[Highlight]:
     Finding the participial clauses
 
     Arguments:
-        doc (Doc): Doc object with a dependency parse
+        doc (Document): Document with a dependency parse
 
     Returns:
         list[Highlight]: Fragments of the layer participle_clauses
@@ -746,7 +746,7 @@ def find_gerund_clauses(doc: Document) -> list[Highlight]:
     Finding the gerund clauses
 
     Arguments:
-        doc (Doc): Doc object with a dependency parse
+        doc (Document): Document with a dependency parse
 
     Returns:
         list[Highlight]: Fragments of the layer gerund_clauses
@@ -771,7 +771,7 @@ def find_split_predicate_highlights(doc: Document) -> list[Highlight]:
         revisión). The find_split_predicate_highlights of the core
 
     Arguments:
-        doc (Doc): Doc object with a dependency parse
+        doc (Document): Document with a dependency parse
 
     Returns:
         list[Highlight]: Fragments of the layer split_predicates
@@ -883,7 +883,7 @@ def find_anaphoric_mismo(doc: Document) -> list[Highlight]:
         mismo); the note gives the two words
 
     Arguments:
-        doc (Doc): Doc object with a dependency parse, the parts of speech and the
+        doc (Document): Document with a dependency parse, the parts of speech and the
             lemmas
 
     Returns:
@@ -924,7 +924,7 @@ def find_de_chains(doc: Document) -> list[Highlight]:
         chain: el aumento de la eficiencia del uso de los recursos
 
     Arguments:
-        doc (Doc): Doc object with a dependency parse
+        doc (Document): Document with a dependency parse
 
     Returns:
         list[Highlight]: Fragments of the layer de_chains

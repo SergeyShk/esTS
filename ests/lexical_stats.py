@@ -10,7 +10,7 @@ import anyts.lexical_stats
 from anyts.constants import FREQUENCY_BANDS as FREQUENCY_BANDS
 from anyts.document import get_tree
 from anyts.lexical_stats import LexicalWord
-from anyts.utils import is_number, is_punctuation
+from anyts.utils import has_words, is_number
 
 from .cohesion_stats import token_info
 from .constants import LEXICAL_STATS_DESC
@@ -170,8 +170,8 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         Getting the words of a source with their lemmas and their kind
 
         Description:
-            The words of the tree of the document of parse without punctuation
-            and the numbers of NUMBER_PATTERN; the lemma of lemma_key, a proper
+            The words of the tree of the document of parse with a letter or a
+            digit, without the numbers of NUMBER_PATTERN; the lemma of lemma_key, a proper
             noun in lower case, and the content words of token_info
 
         Arguments:
@@ -188,7 +188,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         words = [
             word
             for word in get_tree(self._document(source)).words
-            if not is_punctuation(word.form) and not is_number(word.form, NUMBER_PATTERN)
+            if has_words(word.form) and not is_number(word.form, NUMBER_PATTERN)
         ]
         if words and not any(word.upos for word in words):
             raise SourceError(self.messages["no_pos"])

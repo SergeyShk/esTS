@@ -11,11 +11,12 @@ from ..extractors import SentsExtractor, WordsExtractor
 from ..utils import get_document
 
 if TYPE_CHECKING:
+    from anyseg import Document
     from spacy.tokens import Doc
 
 
 def sentence_lengths_plot(
-    source: str | Doc | Iterable[int],
+    source: str | Doc | Document | Iterable[int],
     window: int = 10,
     inset: bool = True,
     ax: Axes | None = None,
@@ -32,7 +33,7 @@ def sentence_lengths_plot(
         histogram of the lengths; the lengths come from sentence_lengths
 
     Arguments:
-        source (str|Doc|Iterable[int]): Text, Doc object or lengths of the
+        source (str|Doc|Document|Iterable[int]): Text, Doc object, Document or lengths of the
             sentences (a list, a numpy array, a Series)
         window (int): Window of the moving average in sentences
         inset (bool): Show the inset with the histogram
@@ -60,7 +61,7 @@ def sentence_lengths_plot(
 
 
 def sentence_lengths(
-    source: str | Doc | Iterable[int],
+    source: str | Doc | Document | Iterable[int],
     sents_extractor: SentsExtractor | None = None,
     words_extractor: WordsExtractor | None = None,
 ) -> list[int]:
@@ -68,15 +69,15 @@ def sentence_lengths(
     Extracting the lengths of the sentences in words
 
     Description:
-        A string is split into sentences by sents_extractor and every sentence
-        into words by words_extractor, the Spanish SentsExtractor and
-        WordsExtractor by default; a Doc by its sentence boundaries, or as its
-        text without them or with partial ones (has_sents); ready lengths (a
-        sequence or an iterator of integers that are not negative) are used as
-        they are. Sentences without words are skipped
+        A string, a Doc or a Document gives the sentences of its document
+        (get_document) and their words with a letter or a digit; with an
+        extractor, the text is split by sents_extractor and words_extractor, the
+        Spanish SentsExtractor and WordsExtractor for the one not given. Ready
+        lengths (a sequence or an iterator of integers that are not negative)
+        are used as they are. Sentences without words are skipped
 
     Arguments:
-        source (str|Doc|Iterable[int]): Text, Doc object or ready lengths
+        source (str|Doc|Document|Iterable[int]): Text, Doc object, Document or ready lengths
         sents_extractor (SentsExtractor): Extractor of the sentences of a string
         words_extractor (WordsExtractor): Extractor of the words of a sentence of a string
 

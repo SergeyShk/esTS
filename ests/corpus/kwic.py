@@ -38,8 +38,7 @@ def kwic(
         a word matches by its lemma of simplemma and, in a Doc with lemmas, by
         the lemma of the model too; the keyword is lemmatized by simplemma.
         A phrase does not run across the end of a paragraph or of a sentence -
-        a boundary of a Doc, or the end of a sentence of anySeg in a text
-        without boundaries or with partial ones (has_sents) - unless the
+        a sentence of the document of the text (get_document) - unless the
         keyword has one in the same place.
         The context is window words on each side as written, with the
         punctuation between them; whitespace collapses to one space;
@@ -47,7 +46,7 @@ def kwic(
         sólo are two forms
 
     Arguments:
-        source (str|Doc): Text or Doc object
+        source (str|Doc|Document): Text, Doc object or Document
         keyword (str): Word or phrase
         window (int): Number of words of context on each side
         by_lemma (bool): Compare lemmas instead of word forms
@@ -57,7 +56,7 @@ def kwic(
         list[Concordance]: Occurrences in the order of the text
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object or the keyword
+        SourceTypeError: If the source is neither a string, a Doc nor a Document or the keyword
             is not a string
         ParameterError: If the keyword has no words, the window is not an integer or is
             negative, or by_lemma or ignore_case is not a bool

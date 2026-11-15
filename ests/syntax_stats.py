@@ -100,7 +100,7 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         2
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
+        source (str|Doc|Document): Data source (a string, a Doc or a Document)
         nlp (Language): Pipeline of spaCy that parses a string; without it
             the model of SPACY_MODEL is loaded
 
@@ -196,7 +196,7 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         print_stats: Printing the computed syntactic statistics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object, or the
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, or the
             pipeline is not a spaCy Language
         SourceError: If the source has no words, no parse, no parts of speech or no
             lemmas, or is a string longer than the max_length of the pipeline
@@ -550,7 +550,7 @@ def calc_de_chains(tokens: Iterable[TreeWord]) -> list[int]:
         of complements in the longest branch
 
     Arguments:
-        tokens (Doc|Span|list[TreeWord]): Sequence of tokens
+        tokens (list[TreeWord]): Words of the tree
 
     Returns:
         list[int]: Lengths of the chains in the order of the words
@@ -780,7 +780,7 @@ def find_split_predicates(tokens: Iterable[TreeWord]) -> list[tuple[TreeWord, Tr
         PREPOSITIONAL_LIGHT_VERBS; the agent of a passive is always left out
 
     Arguments:
-        tokens (Doc|Span|list[TreeWord]): Sequence of tokens
+        tokens (list[TreeWord]): Words of the tree
 
     Returns:
         list[tuple[TreeWord, TreeWord]]: Pairs of verb and noun in the order of the words
