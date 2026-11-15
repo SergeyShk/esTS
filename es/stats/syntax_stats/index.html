@@ -2721,11 +2721,11 @@
 <h1 id="estadisticas-sintacticas">Estadísticas sintácticas<a class="headerlink" href="#estadisticas-sintacticas" title="Permanent link">&para;</a></h1>
 <div class="signature highlight"><pre><span></span><code><span class="n">SyntaxStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>Las estadísticas sintácticas de un texto por su árbol de dependencias (<a href="https://dialogue-conf.org/media/4302/ivanovvv.pdf">Ivanov, Solnyshkina y Solovyev 2018</a>): las medidas del árbol y de las construcciones sintácticas. La fuente de datos es un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>, y tiene que estar analizada: una cadena se analiza con <a href="../../installation/#model"><code>es_core_news_sm</code></a> o con el pipeline indicado en <code>nlp</code>, sin las entidades nombradas, y un <code>Doc</code> debe llevar las dependencias, que vienen de un <code>parser</code>, las categorías gramaticales, que vienen de un <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>), y los lemas, que vienen de un <code>lemmatizer</code>. Los signos de puntuación, los símbolos (<code>%</code>, <code>€</code>, <code>+</code>) y los espacios no son nodos del árbol, y las distancias se cuentan en posiciones de palabras.</p>
+<p>Las estadísticas sintácticas de un texto por su árbol de dependencias (<a href="https://dialogue-conf.org/media/4302/ivanovvv.pdf">Ivanov, Solnyshkina y Solovyev 2018</a>): las medidas del árbol y de las construcciones sintácticas. La fuente de datos es un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>, y tiene que estar analizada: una cadena se analiza con el pipeline de <a href="../../components/#load_pipeline"><code>load_pipeline</code></a> - <a href="../../installation/#model"><code>es_core_news_sm</code></a> con los análisis de esMorph - o con el pipeline indicado en <code>nlp</code>, sin las entidades nombradas, y un <code>Doc</code> debe llevar las dependencias, que vienen de un <code>parser</code>, y las categorías gramaticales y los lemas, que vienen de <code>esmorph</code> de <code>load_pipeline</code> o de un <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>) y de un <code>lemmatizer</code>. Los signos de puntuación, los símbolos (<code>%</code>, <code>€</code>, <code>+</code>) y los espacios no son nodos del árbol, y las distancias se cuentan en posiciones de palabras.</p>
 <p>Excepciones:</p>
 <ul>
 <li><code>SourceTypeError</code> - una fuente que no es ni una cadena, ni un <code>Doc</code> ni un <code>Document</code>, un pipeline en <code>nlp</code> que no es un <code>Language</code> de spaCy;</li>
-<li><code>SourceError</code> - una fuente sin palabras; un <code>Doc</code> sin las dependencias, las categorías gramaticales o los lemas (un <code>Doc</code> de <code>spacy.blank("es")</code>, de un pipeline sin analizador o con el <code>morphologizer</code> o el <code>lemmatizer</code> excluido); una cadena más larga que el <code>max_length</code> del pipeline;</li>
+<li><code>SourceError</code> - una fuente sin palabras; un <code>Doc</code> sin las dependencias, las categorías gramaticales o los lemas (un <code>Doc</code> de <code>spacy.blank("es")</code>, de un pipeline sin analizador o sin <code>esmorph</code>, un <code>morphologizer</code> o un <code>lemmatizer</code>); una cadena más larga que el <code>max_length</code> del pipeline;</li>
 <li><code>DatasetNotFoundError</code> - una cadena sin <code>nlp</code> cuando el modelo no está instalado.</li>
 </ul>
 <p>La clase extiende el <code>SyntaxStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/syntax_stats/">anyTS</a> con la capa del español. Las relaciones y los rasgos son los de la anotación de <a href="https://universaldependencies.org/u/dep/">Universal Dependencies</a> de los modelos <code>es_core_news_sm</code>, <code>es_core_news_md</code> y <code>es_core_news_lg</code>, y las estadísticas valen lo que vale el análisis sintáctico. Las cláusulas, la pasiva, las negaciones y los predicados escindidos siguen las reglas del español descritas en las tarjetas de las métricas, y esTS añade sus propias métricas de las cadenas de <code>de</code>, las cláusulas de gerundio y las oraciones con <code>se</code>. Las construcciones del estilo administrativo - la pasiva con <code>ser</code> y con <code>se</code>, las cláusulas de participio y de gerundio, las cadenas de <code>de</code>, los predicados escindidos - son las que advierten las guías de lenguaje claro en español. La tabla de <code>print_stats</code> toma las descripciones de <code>SYNTAX_STATS_DESC</code> de <code>ests.constants</code>.</p>
@@ -2771,7 +2771,7 @@ Share of T-units with a subordinate clause                 |   0.50
 Verb phrases per T-unit                                    |   1.50
 Coordinate phrases per clause                              |   0.00
 Complex nominals per clause                                |   1.33
-Modifiers per noun phrase                                  |   1.00
+Modifiers per noun phrase                                  |   1.12
 Prepositional chains per sentence                          |   0.50
 Maximum length of a prepositional chain                    |    2
 Chains of de per sentence                                  |   0.50
@@ -2789,9 +2789,9 @@ Words of negation per sentence                             |   0.50
 Split predicates per sentence                              |   1.00
 Share of nominal subjects before their head                |   0.50
 Share of nominal objects before their head                 |   0.00
-Edit distance of the parts of speech of adjacent sentences |   0.47
-Syntactic similarity of adjacent sentences                 |   0.45
-Ratio of nouns to verbs                                    |   3.00
+Edit distance of the parts of speech of adjacent sentences |   0.53
+Syntactic similarity of adjacent sentences                 |   0.38
+Ratio of nouns to verbs                                    |   2.67
 </code></pre></div>
 </div>
 </div>
@@ -2941,7 +2941,7 @@ Ratio of nouns to verbs                                    |   3.00
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>(3, 9, 3)
+<div class="highlight"><pre><span></span><code>(3, 8, 3)
 (1, 1, ('llevó cabo', 'hiciera mención'))
 {0: 16, 1: 5, 2: 4, 3: 2, 4: 2}
 {'advcl': 1,
@@ -2957,7 +2957,18 @@ Ratio of nouns to verbs                                    |   3.00
  'obj': 2,
  'obl': 1,
  'root': 2}
-['La', 'revisión', 'de', 'las', 'cuentas', 'del', 'organismo', 'fue', 'realizada', 'por', 'el', 'comité']
+['La',
+ 'revisión',
+ 'de',
+ 'las',
+ 'cuentas',
+ 'del',
+ 'organismo',
+ 'fue',
+ 'realizada',
+ 'por',
+ 'el',
+ 'comité']
 </code></pre></div>
 </div>
 </div>
@@ -3316,7 +3327,7 @@ Ratio of nouns to verbs                                    |   3.00
 <p>Comprueba si un infinitivo bajo <code>xcomp</code> encabeza una cláusula propia: un predicado en forma de infinitivo que completa a su núcleo (<code>quiere salir</code>, <code>le hizo reír</code>, <code>quiere ser médico</code>, <code>quiere ser elegido</code>, <code>cree haber ganado</code>), salvo que los dos formen un solo predicado (<code>is_infinitive_periphrasis</code>: <code>puede salir</code>, <code>parece dormir</code>) o que la palabra que completa no encabece ninguna cláusula (<code>is_clause_head</code>): un infinitivo en una construcción de gerundio o de participio pertenece a ella (<code>intentando salir</code>, <code>destinada a disculpar</code>).</p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_infinitive_periphrasis</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Comprueba si un infinitivo forma un solo predicado con su núcleo: un infinitivo bajo <code>xcomp</code> de un verbo de <code>RAISING_VERBS</code>, <code>parecer</code> (<code>parece dormir</code>), o una perífrasis. En una perífrasis el núcleo es un verbo de <code>INFINITIVE_PERIPHRASES</code> (NGLE, cap. 28) y el infinitivo se une a él por uno de los nexos de ese verbo - un <code>mark</code>, <code>case</code> o <code>cc</code> antes del infinitivo, o la palabra justo anterior, con la grafía antigua <code>á</code> leída como <code>a</code>. Los verbos son <code>poder</code>, <code>soler</code> y <code>deber</code> sin nexo (<code>puede salir</code>, <code>suele salir</code>), <code>deber de</code>, <code>tener que</code>, <code>haber que</code>, <code>haber de</code>, <code>ir a</code>, <code>venir a</code>, <code>pasar a</code>, <code>volver a</code>, <code>tornar a</code>, <code>empezar a</code> y <code>por</code>, <code>comenzar a</code> y <code>por</code>, <code>principiar a</code>, <code>poner a</code>, <code>echar a</code>, <code>romper a</code>, <code>llegar a</code>, <code>alcanzar a</code>, <code>acabar de</code> y <code>por</code>, <code>terminar de</code> y <code>por</code>, <code>dejar de</code>, <code>cesar de</code>, <code>parar de</code>, <code>estar para</code> y <code>por</code>. El lema del núcleo es el del modelo, o el de <code>ests.utils.lemmatize</code> cuando el del modelo no es ninguno de esos verbos (puede leer un verbo que abre la oración como nombre propio: <code>Solía salir</code>).</p>
+<p>Comprueba si un infinitivo forma un solo predicado con su núcleo: un infinitivo bajo <code>xcomp</code> de un verbo de <code>RAISING_VERBS</code>, <code>parecer</code> (<code>parece dormir</code>), o una perífrasis. En una perífrasis el núcleo es un verbo de <code>INFINITIVE_PERIPHRASES</code> (NGLE, cap. 28) y el infinitivo se une a él por uno de los nexos de ese verbo - un <code>mark</code>, <code>case</code> o <code>cc</code> antes del infinitivo, o la palabra justo anterior, con la grafía antigua <code>á</code> leída como <code>a</code>. Los verbos son <code>poder</code>, <code>soler</code> y <code>deber</code> sin nexo (<code>puede salir</code>, <code>suele salir</code>), <code>deber de</code>, <code>tener que</code>, <code>haber que</code>, <code>haber de</code>, <code>ir a</code>, <code>venir a</code>, <code>pasar a</code>, <code>volver a</code>, <code>tornar a</code>, <code>empezar a</code> y <code>por</code>, <code>comenzar a</code> y <code>por</code>, <code>principiar a</code>, <code>poner a</code>, <code>echar a</code>, <code>romper a</code>, <code>llegar a</code>, <code>alcanzar a</code>, <code>acabar de</code> y <code>por</code>, <code>terminar de</code> y <code>por</code>, <code>dejar de</code>, <code>cesar de</code>, <code>parar de</code>, <code>estar para</code> y <code>por</code>. El lema del núcleo es el del etiquetador, o el de <code>ests.utils.lemmatize</code> cuando el del etiquetador no es ninguno de esos verbos (puede leer un verbo como sustantivo o darle el lema de otro verbo: <code>vayas</code> - <code>vaya</code>, <code>venga</code> - <code>vengar</code>).</p>
 <table>
 <thead>
 <tr>
@@ -3860,7 +3871,7 @@ Ratio of nouns to verbs                                    |   3.00
  'verb_phrases_per_t_unit': 1.5,
  'coordinate_phrases_per_clause': 0.0,
  'complex_nominals_per_clause': 1.3333333333333333,
- 'modifiers_per_noun': 1.0,
+ 'modifiers_per_noun': 1.125,
  'prep_chains_per_sent': 0.5,
  'max_prep_chain_len': 2,
  'de_chains_per_sent': 0.5,
@@ -3878,9 +3889,9 @@ Ratio of nouns to verbs                                    |   3.00
  'split_predicates_per_sent': 1.0,
  'p_preverbal_subjects': 0.5,
  'p_preverbal_objects': 0.0,
- 'pos_edit_distance': 0.47058823529411764,
- 'syntax_similarity': 0.45,
- 'noun_verb_ratio': 3.0}
+ 'pos_edit_distance': 0.5294117647058824,
+ 'syntax_similarity': 0.38095238095238093,
+ 'noun_verb_ratio': 2.6666666666666665}
 (None, None)
 </code></pre></div>
 </div>
@@ -3963,7 +3974,7 @@ Ratio of nouns to verbs                                    |   3.00
 <h2 id="verb-forms">Formas verbales<a class="headerlink" href="#verb-forms" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">predicate_form</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>La forma verbal de un predicado por las formas (<code>VerbForm</code>) de sus auxiliares y cópulas (<code>aux</code>, <code>cop</code>): un auxiliar en forma personal hace el predicado personal (<code>había llegado</code>, <code>estaba cantando</code>); si no, decide el primer auxiliar (<code>de haber matado</code> es un infinitivo, <code>siendo elegido</code> un gerundio), y sin auxiliares la propia palabra. Un auxiliar en participio cuenta como forma personal: <code>sido</code> y <code>estado</code> siguen a una forma de <code>haber</code>, que los modelos pueden colgar de otra palabra (<code>hubieras sido albañil</code>). Un auxiliar que el modelo deja sin forma se lee por su terminación cuando es un verbo de <code>AUXILIARY_VERBS</code> (<code>habéis llegado</code>) - un infinitivo en <code>-r</code> y un gerundio en <code>-ndo</code>, con enclíticos detrás (<code>ENCLITICS</code>), una forma personal en otro caso - y se omite cuando no lo es (la grafía antigua <code>á</code>). Es el <code>predicate_form</code> del núcleo anyTS con la lectura española de un auxiliar sin forma. La forma es <code>'Fin'</code>, <code>'Inf'</code>, <code>'Ger'</code> o <code>'Part'</code>, una cadena vacía para una palabra sin forma verbal.</p>
+<p>La forma verbal de un predicado por las formas (<code>VerbForm</code>) de sus auxiliares y cópulas (<code>aux</code>, <code>cop</code>): un auxiliar en forma personal hace el predicado personal (<code>había llegado</code>, <code>estaba cantando</code>); si no, decide el primer auxiliar (<code>de haber matado</code> es un infinitivo, <code>siendo elegido</code> un gerundio), y sin auxiliares la propia palabra. Un auxiliar en participio cuenta como forma personal: <code>sido</code> y <code>estado</code> siguen a una forma de <code>haber</code>, que los modelos pueden colgar de otra palabra (<code>hubieras sido albañil</code>). Un auxiliar que el etiquetador deja sin forma, como un infinitivo leído como sustantivo (<code>el ser saludado</code>), se lee por su terminación cuando es un verbo de <code>AUXILIARY_VERBS</code> - un infinitivo en <code>-r</code> y un gerundio en <code>-ndo</code>, con enclíticos detrás (<code>ENCLITICS</code>), una forma personal en otro caso - y se omite cuando no lo es (la grafía antigua <code>á</code>). Es el <code>predicate_form</code> del núcleo anyTS con la lectura española de un auxiliar sin forma. La forma es <code>'Fin'</code>, <code>'Inf'</code>, <code>'Ger'</code> o <code>'Part'</code>, una cadena vacía para una palabra sin forma verbal.</p>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_participle</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_gerund</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
