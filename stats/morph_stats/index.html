@@ -2307,6 +2307,11 @@ Indicative                    |    1
 <td style="text-align: left;">verb forms</td>
 </tr>
 <tr>
+<td style="text-align: left;"><code>p_enclitics</code>, <code>p_proclitics</code></td>
+<td style="text-align: left;">of the forms with enclitic pronouns and of those after proclitic ones</td>
+<td style="text-align: left;">verb forms</td>
+</tr>
+<tr>
 <td style="text-align: left;"><code>p_ser</code></td>
 <td style="text-align: left;">of <code>ser</code></td>
 <td style="text-align: left;">copulas <code>ser</code> and <code>estar</code></td>
@@ -2319,6 +2324,7 @@ Indicative                    |    1
 </tbody>
 </table>
 <p>The first four markers share the base of the finite forms and sum to one unless the model leaves a finite form without a mood or gives it several (<code>Mood=Ind,Sub</code>, which counts in the share of each; <code>es_core_news_sm</code> gives none). The next three share the base of all the verb forms of verbs and auxiliaries: a participle that the model annotates as an adjective (<code>la casa pintada</code>) is out of the base, the ones of the compound tenses and the passive (<code>he leído</code>, <code>fue escrito</code>) are in.</p>
+<p>The clitic pronouns (<code>ENCLITICS</code>) go after the infinitive, the gerund and the imperative (<code>dámelo</code>, <code>escribirle</code>, <code>diciéndole</code>) and before the other forms (<code>se lo dijo</code>, <code>me ha visto</code>), and the old literary language puts them after a finite form too (<code>pasábanse</code>, <code>díjole</code>), so <code>p_enclitics</code> measures that register and the orders of a dialogue. A form has enclitics when the segmenter anySeg splits its token into the verb and its pronouns (<code>dale</code> - <code>da</code> + <code>le</code>) or the first analysis of esMorph as a verb has pronouns after it (<code>pasábanse</code>) (<code>ests.morph_stats.has_enclitics</code>); the imperfect subjunctive in <code>-se</code> (<code>hablase</code>) is one word. A form comes after proclitics when the word before it is a clitic pronoun of a token of its own (<code>ests.morph_stats.has_proclitics</code>), so in a compound tense the pronouns count for the auxiliary (<code>se ha ido</code>). In the corpus of literature (characters 2,000 to 22,000 of every work) the medians of <code>p_enclitics</code> are 8.8% of the verb forms in prose, 8.2% in drama, 7.7% in journalism and 3.9% in verse, those of <code>p_proclitics</code> 18%, 19%, 13% and 12%.</p>
 <p>The base of <code>p_ser</code> is the copular uses alone, read from the morphology: <code>ser</code> before a participle and <code>estar</code> before a gerund, with adverbs and pronouns between them, are the auxiliaries of the passive and of the progressive (<code>fue escrito</code>, <code>es financiado</code>, <code>está cantando</code>) and are left out, while <code>es alta</code>, <code>está cansada</code> and <code>lo importante es que vengas</code> count. The rule needs no parse, so a text and a <code>Doc</code> without a parser have the marker too; a participle that the tagger reads as an adjective (<code>fue muy bien recibido</code>) leaves its <code>ser</code> a copula.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Code</label><label for="__tabbed_3_2">Result</label></div>
 <div class="tabbed-content">
@@ -2334,6 +2340,8 @@ Indicative                    |    1
  'p_infinitive': 0.0,
  'p_gerund': 0.0,
  'p_participle': 0.0,
+ 'p_enclitics': 0.0,
+ 'p_proclitics': 0.3333333333333333,
  'p_ser': nan,
  'p_mente_adverbs': 0.0}
 </code></pre></div>
@@ -2380,17 +2388,19 @@ Indicative                    |    1
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>               Marker               |  Value
------------------------------------------------
-Indicative among the finite forms   |   0.33
-Subjunctive among the finite forms  |   0.33
-Conditional among the finite forms  |   0.33
-Imperative among the finite forms   |   0.00
-Infinitive among the verb forms     |   0.00
-Gerund among the verb forms         |   0.00
-Participle among the verb forms     |   0.00
-ser among the copulas ser and estar |   nan
-Adverbs in -mente among the adverbs |   0.00
+<div class="highlight"><pre><span></span><code>                   Marker                   |  Value
+-------------------------------------------------------
+Indicative among the finite forms           |   0.33
+Subjunctive among the finite forms          |   0.33
+Conditional among the finite forms          |   0.33
+Imperative among the finite forms           |   0.00
+Infinitive among the verb forms             |   0.00
+Gerund among the verb forms                 |   0.00
+Participle among the verb forms             |   0.00
+Forms with enclitics among the verb forms   |   0.00
+Forms after proclitics among the verb forms |   0.33
+ser among the copulas ser and estar         |   nan
+Adverbs in -mente among the adverbs         |   0.00
 </code></pre></div>
 </div>
 </div>

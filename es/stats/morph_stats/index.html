@@ -2309,6 +2309,11 @@ Indicative                    |    1
 <td style="text-align: left;">formas verbales</td>
 </tr>
 <tr>
+<td style="text-align: left;"><code>p_enclitics</code>, <code>p_proclitics</code></td>
+<td style="text-align: left;">de las formas con pronombres enclíticos y de las que siguen a proclíticos</td>
+<td style="text-align: left;">formas verbales</td>
+</tr>
+<tr>
 <td style="text-align: left;"><code>p_ser</code></td>
 <td style="text-align: left;">de <code>ser</code></td>
 <td style="text-align: left;">cópulas <code>ser</code> y <code>estar</code></td>
@@ -2321,6 +2326,7 @@ Indicative                    |    1
 </tbody>
 </table>
 <p>Los cuatro primeros marcadores comparten la base de las formas personales y suman uno salvo que el modelo deje alguna forma personal sin modo o le dé varios (<code>Mood=Ind,Sub</code>, que cuenta en la proporción de cada uno; <code>es_core_news_sm</code> no los da). Los tres siguientes comparten la base de todas las formas verbales de verbos y auxiliares: un participio que el modelo anota como adjetivo (<code>la casa pintada</code>) queda fuera de la base, los de los tiempos compuestos y la pasiva (<code>he leído</code>, <code>fue escrito</code>) quedan dentro.</p>
+<p>Los pronombres clíticos (<code>ENCLITICS</code>) van tras el infinitivo, el gerundio y el imperativo (<code>dámelo</code>, <code>escribirle</code>, <code>diciéndole</code>) y ante las otras formas (<code>se lo dijo</code>, <code>me ha visto</code>), y la lengua literaria antigua los pone también tras una forma personal (<code>pasábanse</code>, <code>díjole</code>), así que <code>p_enclitics</code> mide ese registro y las órdenes de un diálogo. Una forma tiene enclíticos cuando el segmentador anySeg divide su token en el verbo y sus pronombres (<code>dale</code> - <code>da</code> + <code>le</code>) o el primer análisis de esMorph como verbo tiene pronombres detrás (<code>pasábanse</code>) (<code>ests.morph_stats.has_enclitics</code>); el imperfecto de subjuntivo en <code>-se</code> (<code>hablase</code>) es una sola palabra. Una forma sigue a proclíticos cuando la palabra anterior es un pronombre clítico que es un token propio (<code>ests.morph_stats.has_proclitics</code>), así que en un tiempo compuesto los pronombres cuentan para el auxiliar (<code>se ha ido</code>). En el corpus de literatura (caracteres 2000 a 22 000 de cada obra) las medianas de <code>p_enclitics</code> son el 8,8 % de las formas verbales en prosa, el 8,2 % en teatro, el 7,7 % en periodismo y el 3,9 % en verso, las de <code>p_proclitics</code> el 18 %, 19 %, 13 % y 12 %.</p>
 <p>La base de <code>p_ser</code> son solo los usos copulativos, leídos de la morfología: <code>ser</code> ante un participio y <code>estar</code> ante un gerundio, con adverbios y pronombres entre ellos, son los auxiliares de la pasiva y de la perífrasis progresiva (<code>fue escrito</code>, <code>es financiado</code>, <code>está cantando</code>) y quedan fuera, mientras que <code>es alta</code>, <code>está cansada</code> y <code>lo importante es que vengas</code> cuentan. La regla no necesita análisis sintáctico, así que un texto y un <code>Doc</code> sin analizador también tienen el marcador; un participio que el etiquetador lee como adjetivo (<code>fue muy bien recibido</code>) deja su <code>ser</code> como cópula.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
 <div class="tabbed-content">
@@ -2336,6 +2342,8 @@ Indicative                    |    1
  'p_infinitive': 0.0,
  'p_gerund': 0.0,
  'p_participle': 0.0,
+ 'p_enclitics': 0.0,
+ 'p_proclitics': 0.3333333333333333,
  'p_ser': nan,
  'p_mente_adverbs': 0.0}
 </code></pre></div>
@@ -2386,17 +2394,19 @@ Indicative                    |    1
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>               Marker               |  Value
------------------------------------------------
-Indicative among the finite forms   |   0.33
-Subjunctive among the finite forms  |   0.33
-Conditional among the finite forms  |   0.33
-Imperative among the finite forms   |   0.00
-Infinitive among the verb forms     |   0.00
-Gerund among the verb forms         |   0.00
-Participle among the verb forms     |   0.00
-ser among the copulas ser and estar |   nan
-Adverbs in -mente among the adverbs |   0.00
+<div class="highlight"><pre><span></span><code>                   Marker                   |  Value
+-------------------------------------------------------
+Indicative among the finite forms           |   0.33
+Subjunctive among the finite forms          |   0.33
+Conditional among the finite forms          |   0.33
+Imperative among the finite forms           |   0.00
+Infinitive among the verb forms             |   0.00
+Gerund among the verb forms                 |   0.00
+Participle among the verb forms             |   0.00
+Forms with enclitics among the verb forms   |   0.00
+Forms after proclitics among the verb forms |   0.33
+ser among the copulas ser and estar         |   nan
+Adverbs in -mente among the adverbs         |   0.00
 </code></pre></div>
 </div>
 </div>
