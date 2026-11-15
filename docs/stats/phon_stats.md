@@ -6,8 +6,6 @@ PhonStats(source, words_extractor=None, window_len=3)
 
 --8<-- "stats/phon_stats.md:PhonStats"
 
-Besides the errors above, a string with a character without a UTF-8 form raises `SourceError` from the Spanish tokenizer.
-
 The class extends the `PhonStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/phon_stats/) core with the sounds of Spanish. The sounds are those of the transcription of the words ([`transcribe`](#transcribe)), not their letters: `ch`, `ll`, `rr` and `qu` are one sound, `h` and the `u` of `que` and `gui` none, and `x` two. The pronunciation is the one of the standard of Spain: yeísmo (`ll` and `y` are one sound) and distinción (`c` before `e` and `i` and `z` are θ, apart from `s`). The classes of the sounds are the constants of `ests.constants` in the table below. The syllables are those of [`syllabify`](../syllables.md#syllabify), by the orthographic rules, and a hiatus is two vowels in two neighbouring syllables of a word (`po-e-ta`, `dí-a`, `bú-ho`). The words of a string are extracted by the Spanish [`WordsExtractor`](../extractors/words.md); without an extractor the words of a `Doc` come from its tokens. No trained model is needed. The `print_stats` table has the English descriptions of the core, `anyts.constants.PHON_STATS_DESC`.
 
 | Class | Sounds | Constant |

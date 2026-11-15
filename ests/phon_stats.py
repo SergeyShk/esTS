@@ -124,8 +124,7 @@ class PhonStats(anyts.phon_stats.PhonStats):
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc, or the extractor is
             not a WordsExtractor
-        SourceError: If the source has no words or a string has a character without a
-            UTF-8 form
+        SourceError: If the source has no words
         ParameterError: If the window is not an integer or is below 2
     """
 

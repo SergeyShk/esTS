@@ -16,12 +16,12 @@ La clase extiende el `WordsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 
 | Gancho | Español |
 | :----- | :------ |
-| `tokenize(text)` | el tokenizador por reglas de la clase de idioma español de spaCy, `ests.utils.tokenize` |
+| `tokenize(text)` | los tokens del segmentador [anySeg](https://github.com/SergeyShk/anySeg), `ests.utils.iter_tokens` |
 | `lemmatize(word)` | los lemas de simplemma, `ests.utils.lemmatize` |
 | `number_pattern` | números con signo, rangos, fracciones, fechas, horas, porcentajes y ordinales: `-5`, `+7`, `1990-1995`, `1.500,50`, `12/03/2020`, `3:30`, `10%`, `3.º`, `1.ª`, `2do` |
 
 !!! note "Nota"
-    El tokenizador no necesita un modelo entrenado. Los signos de puntuación, incluidos `¿` y `¡`, los números como `1.500,50`, `3.º`, `1990-1995` y las abreviaturas como `Sr.`, `EE. UU.` son tokens únicos, y las abreviaturas de `ests.constants.TOKENIZER_ABBREVIATIONS` en cualquier caja (`sr.`, `SR.`, `ee. uu.`, `Pág.`, `a.m.`); las palabras con pronombres enclíticos (`dámelo`) no se separan. Las rayas de un diálogo pegadas a las palabras se separan: `--No`, `sí--dijo`, `―dijo él―.` dan las palabras `No`, `sí`, `dijo`, `él`, también junto a los guiones bajos de la cursiva (`--_Siguro_`), mientras que un guion entre letras (`franco-alemán`) o ante una cifra (`-5`) se queda en su token; un sufijo citado con su guion (`-mente`) también lo pierde, y lo mismo el número de un punto de una lista (`Artículo 1.- El objeto` da el número `1`). Una marca de orden de bytes al principio de un texto, como en un fichero leído con `utf-8` en lugar de `utf-8-sig`, se separa y se descarta. `ests.utils.add_dash_rules(nlp)` añade las mismas reglas a las que ya tiene un pipeline de spaCy propio; el modelo de `get_nlp` ya las tiene, y los [componentes](../components.md) de la biblioteca las añaden a su pipeline.
+    El segmentador no necesita un modelo entrenado; sus tokens siguen las convenciones de UD para el español (AnCora). Los signos de puntuación, incluidos `¿` y `¡`, los números como `1.500,50`, `3.º`, `1990-1995`, las contracciones `del` y `al` y las abreviaturas como `Sr.`, `p.ej.` son tokens únicos; una abreviatura escrita con espacios da un token por cada parte (`EE.`, `UU.`), y una en mayúsculas conserva su punto ante mayúsculas o una cifra (`VÉASE PÁG. 5`). El punto de una abreviatura que cierra una oración es un token aparte: `etc.` al final de una oración da la palabra `etc`. Las palabras con pronombres enclíticos (`dámelo`) no se separan. Las rayas de un diálogo pegadas a las palabras se separan: `--No`, `sí--dijo`, `―dijo él―.` dan las palabras `No`, `sí`, `dijo`, `él`, también junto a los guiones bajos de la cursiva (`--_Siguro_`), mientras que un guion entre letras (`franco-alemán`) o ante una cifra (`-5`) se queda en su token; un sufijo citado con su guion (`-mente`) también lo pierde, y lo mismo el número de un punto de una lista (`Artículo 1.- El objeto` da el número `1`). Una marca de orden de bytes, como en un fichero leído con `utf-8` en lugar de `utf-8-sig`, no es un token, y un sustituto (surrogate) aislado es un token propio. `ests.utils.add_dash_rules(nlp)` añade reglas para las rayas y las abreviaturas al tokenizador de un pipeline de spaCy propio; el modelo de `get_nlp` ya las tiene, y los [componentes](../components.md) de la biblioteca las añaden a su pipeline.
 
 !!! note "Nota"
     [simplemma](https://github.com/adbar/simplemma) trabaja con un diccionario sin modelo entrenado: una forma conocida se convierte en su lema en minúsculas (`Tienes` - `tener`, `NIÑOS` - `niño`), una forma desconocida se devuelve sin cambios (`Madrid`, `dámelo`).
@@ -74,8 +74,6 @@ La clase extiende el `WordsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 | `text` | `str` | - | Cadena de texto |
 
 Un texto que no es una cadena y un tokenizador que no es invocable o no devuelve cadenas lanzan `SourceTypeError`.
-
-Con el tokenizador por defecto, un texto con un carácter sin forma UTF-8, como el de un fichero leído con una codificación errónea, lanza `SourceError`, igual que las clases y funciones que extraen con él las palabras de una cadena.
 
 <!-- core: extractors/words.md:WordsExtractor-get_most_common 7c47d0f -->
 `get_most_common(n=10)` devuelve las palabras más frecuentes del texto como una lista de pares (palabra, frecuencia), la más frecuente primero.

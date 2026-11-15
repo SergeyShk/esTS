@@ -9,6 +9,7 @@ from anyts.corpus.kwic import (
     format_kwic as format_kwic,
     print_kwic as print_kwic,
 )
+from anyts.utils import check_bool
 
 from ..utils import iter_text_sents, iter_text_words, lemmatize
 
@@ -29,12 +30,14 @@ def kwic(
     Description:
         The occurrences of a word or a phrase are looked for among the words of
         the text by the word form, ignoring case or not, or by the lemma (gatos
-        is found by gato). The text and the keyword are tokenized the same way
-        (EE. UU. is one word); punctuation and symbols are not words. By lemma,
+        is found by gato). The text and the keyword are tokenized the same way;
+        punctuation and symbols are not words, and a word is compared without
+        the period of an abbreviation, which the end of a sentence splits off
+        (Sr. and Sr in "Vino el Sr." are one word). By lemma,
         a word matches by its lemma of simplemma and, in a Doc with lemmas, by
         the lemma of the model too; the keyword is lemmatized by simplemma.
         A phrase does not run across the end of a paragraph or of a sentence -
-        a boundary of a Doc, or the end of a sentence of sentenize in a text
+        a boundary of a Doc, or the end of a sentence of anySeg in a text
         without boundaries or with partial ones (has_sents) - unless the
         keyword has one in the same place.
         The context is window words on each side as written, with the
@@ -64,19 +67,35 @@ def kwic(
         >>> [line.keyword for line in kwic(text, "gato", by_lemma=True)]
         ['gato', 'gatos']
     """
+    check_bool(ignore_case, "folding of the case")
     return anyts.corpus.kwic(
         source,
         keyword,
         window,
         by_lemma,
-        ignore_case,
+        True,
         tokenize=iter_text_words,
         lemmatize=_lemmas,
+        fold=_fold if ignore_case or by_lemma else _strip_period,
         sentenize=iter_text_sents,
     )
 
 
+def _strip_period(word: str) -> str:
+    """A word without the period of an abbreviation"""
+    return word.removesuffix(".")
+
+
+def _fold(word: str) -> str:
+    """A word in lower case without the period of an abbreviation"""
+    return word.lower().removesuffix(".")
+
+
 def _lemmas(word: str, tokens: Sequence[Token]) -> tuple[str, ...]:
-    """The lemma of simplemma and, for a word of a Doc with lemmas, the lemma of the model"""
+    """
+    The lemma of simplemma of the word without the period of an abbreviation and, for
+    a word of a Doc with lemmas, the lemma of the model
+    """
+    own = lemmatize(word.removesuffix("."))
     lemma = tokens[0].lemma_ if tokens else ""
-    return (lemmatize(word), lemma) if lemma else (lemmatize(word),)
+    return (own, lemma) if lemma else (own,)

@@ -117,7 +117,7 @@ Las estadísticas según el diccionario de frecuencias lo necesitan descargado u
 
 ### Extracción de objetos
 
-Herramientas configurables extraen de un texto las oraciones, las palabras y los N-gramas de caracteres para las estadísticas, y `split_paragraphs` sus párrafos entre líneas en blanco. El segmentador de oraciones conoce los signos de apertura, la raya de diálogo y las abreviaturas del español; el tokenizador de palabras mantiene enteros los clíticos, los ordinales y los números escritos a la española, y los lemas vienen de [simplemma](https://github.com/adbar/simplemma), que no necesita modelo.
+Herramientas configurables extraen de un texto las oraciones, las palabras y los N-gramas de caracteres para las estadísticas, y `split_paragraphs` sus párrafos entre líneas en blanco. Las oraciones y los tokens vienen del segmentador [anySeg](https://github.com/SergeyShk/anySeg), que conoce los signos de apertura, la raya de diálogo y las abreviaturas del español y mantiene enteros los clíticos, los ordinales y los números escritos a la española, y los lemas vienen de [simplemma](https://github.com/adbar/simplemma), que no necesita modelo.
 
 ```python
 >>> from ests import CharNgramsExtractor, SentsExtractor, WordsExtractor

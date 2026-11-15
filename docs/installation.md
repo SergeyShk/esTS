@@ -4,11 +4,12 @@
 
 *   `python` 3.11 or newer
 *   `spaCy` 3.8.15 or newer within 3
-*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.4.5 or newer within 0.4, the language-independent core: the extractors, the basic statistics and the common readability formulas, the lexical diversity metrics, the corpus measures, the plots and the machinery of the highlighting come from it with the tokenizer, the lemmatizer, the sentence splitter and the syllables of Spanish
+*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.4.6 or newer within 0.4, the language-independent core: the extractors, the basic statistics and the common readability formulas, the lexical diversity metrics, the corpus measures, the plots and the machinery of the highlighting come from it with the tokenizer, the lemmatizer, the sentence splitter and the syllables of Spanish
+*   [`anyseg`](https://github.com/SergeyShk/anySeg) 0.3 or newer within 0.3, the segmenter into tokens and sentences
 *   `numpy`, `scipy`, `pandas`, `simplemma` 2
 *   `matplotlib` and `graphviz` for the [visualizers](visualizers/zipf.md)
 
-The dependencies are installed with the package. `import ests` loads neither spaCy nor matplotlib nor pandas: spaCy comes with the first text, whose words its Spanish tokenizer finds, and the plots and the corpus functions on first use.
+The dependencies are installed with the package. `import ests` loads neither spaCy nor matplotlib nor pandas, and the statistics of a string that need no model leave spaCy out: it comes with the first statistics that read the parse of its model, and the plots and the corpus functions on first use.
 
 !!! warning "Graphviz"
     The `graphviz` package among the dependencies is only a wrapper: rendering the [word tree](visualizers/word_tree.md) and the [network of collocations](visualizers/corpus.md#collocation_network) requires the executables of [Graphviz](https://graphviz.org/download/), installed separately (`brew install graphviz`, `apt install graphviz`, `conda install graphviz`), otherwise `render()` and displaying the graph in Jupyter fail with `ExecutableNotFound`. Nothing else needs them.

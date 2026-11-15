@@ -4,11 +4,12 @@
 
 *   `python` 3.11 o superior
 *   `spaCy` 3.8.15 o superior dentro de 3
-*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.4.5 o superior dentro de 0.4, el núcleo independiente del idioma: los extractores, las estadísticas básicas y las fórmulas comunes de legibilidad, las métricas de diversidad léxica, las medidas de corpus, los gráficos y el mecanismo del resaltado vienen de él con el tokenizador, el lematizador, el segmentador de oraciones y las sílabas del español
+*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.4.6 o superior dentro de 0.4, el núcleo independiente del idioma: los extractores, las estadísticas básicas y las fórmulas comunes de legibilidad, las métricas de diversidad léxica, las medidas de corpus, los gráficos y el mecanismo del resaltado vienen de él con el tokenizador, el lematizador, el segmentador de oraciones y las sílabas del español
+*   [`anyseg`](https://github.com/SergeyShk/anySeg) 0.3 o superior dentro de 0.3, el segmentador en tokens y oraciones
 *   `numpy`, `scipy`, `pandas`, `simplemma` 2
 *   `matplotlib` y `graphviz` para las [visualizaciones](visualizers/zipf.md)
 
-Las dependencias se instalan con el paquete. `import ests` no carga spaCy, matplotlib ni pandas: spaCy llega con el primer texto, cuyas palabras halla su tokenizador español, y los gráficos y las funciones de corpus al usarlos por primera vez.
+Las dependencias se instalan con el paquete. `import ests` no carga spaCy, matplotlib ni pandas, y las estadísticas de una cadena que no necesitan modelo prescinden de spaCy: llega con las primeras estadísticas que leen el análisis de su modelo, y los gráficos y las funciones de corpus al usarlos por primera vez.
 
 !!! warning "Graphviz"
     El paquete `graphviz` de las dependencias es solo un envoltorio: para dibujar el [árbol de palabras](visualizers/word_tree.md) y la [red de colocaciones](visualizers/corpus.md#collocation_network) hacen falta los ejecutables de [Graphviz](https://graphviz.org/download/), que se instalan aparte (`brew install graphviz`, `apt install graphviz`, `conda install graphviz`); sin ellos `render()` y la visualización del grafo en Jupyter fallan con `ExecutableNotFound`. Nada más los necesita.

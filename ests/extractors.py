@@ -5,7 +5,7 @@ from typing import ClassVar
 import anyts
 from anyts.extractors import split_paragraphs as split_paragraphs
 
-from .utils import lemmatize, sentenize, tokenize
+from .utils import iter_text_sents, iter_tokens, lemmatize
 
 NUMBER_PATTERN = re.compile(
     r"[+\-−]?\d+(?:[.,:/-]\d+)*"
@@ -26,7 +26,7 @@ class SentsExtractor(anyts.SentsExtractor):
         ('No tengas 100 euros', 'ten 100 amigos')
 
     Description:
-        The default tokenizer is the rule-based splitter ests.utils.sentenize
+        The default tokenizer is the segmenter anySeg (ests.utils.iter_text_sents)
 
     Arguments:
         tokenizer (pattern|callable): Tokenizer or regular expression
@@ -42,8 +42,8 @@ class SentsExtractor(anyts.SentsExtractor):
     """
 
     def sentenize(self, text: str) -> Iterable[str]:
-        """Splitting a text into sentences with ests.utils.sentenize"""
-        return sentenize(text)
+        """Splitting a text into sentences of anySeg (ests.utils.iter_text_sents)"""
+        return (sent for *_, sent in iter_text_sents(text))
 
 
 class WordsExtractor(anyts.WordsExtractor):
@@ -59,11 +59,12 @@ class WordsExtractor(anyts.WordsExtractor):
         ('tener', 'euro', 'tener', 'amigo', 'tener_euro', 'euro_tener', 'tener_amigo')
 
     Description:
-        The default tokenizer is ests.utils.tokenize, the lemmas come from
-        ests.utils.lemmatize. The filters are applied in order: punctuation,
-        numbers, lemmatization, lower case, stop words, word length. Numbers
-        include signed numbers, ranges, fractions, dates, times, percentages
-        and ordinals: -5, 1990-1995, 1.500,50, 12/03/2020, 3:30, 10%, 3.º, 2do
+        The default tokenizer is the segmenter anySeg (ests.utils.iter_tokens),
+        the lemmas come from ests.utils.lemmatize. The filters are applied in
+        order: punctuation, numbers, lemmatization, lower case, stop words, word
+        length. Numbers include signed numbers, ranges, fractions, dates, times,
+        percentages and ordinals: -5, 1990-1995, 1.500,50, 12/03/2020, 3:30, 10%,
+        3.º, 2do
 
     Arguments:
         tokenizer (pattern|callable): Tokenizer or regular expression
@@ -91,8 +92,8 @@ class WordsExtractor(anyts.WordsExtractor):
     number_pattern: ClassVar[re.Pattern[str]] = NUMBER_PATTERN
 
     def tokenize(self, text: str) -> Iterable[str]:
-        """Splitting a text into tokens with ests.utils.tokenize"""
-        return tokenize(text)
+        """Splitting a text into tokens of anySeg (ests.utils.iter_tokens)"""
+        return (token for *_, token in iter_tokens(text))
 
     def lemmatize(self, word: str) -> str:
         """Lemma of a word by ests.utils.lemmatize"""
@@ -117,7 +118,7 @@ class CharNgramsExtractor(anyts.CharNgramsExtractor):
     Description:
         A sliding window over the text with whitespace runs collapsed into one
         space and punctuation kept (Stamatatos 2009); with within_words, over
-        each word of the tokenizer, ests.utils.tokenize by default, punctuation
+        each word of the tokenizer, ests.utils.iter_tokens by default, punctuation
         dropped, so words shorter than N yield no N-grams
 
     Arguments:
@@ -137,5 +138,5 @@ class CharNgramsExtractor(anyts.CharNgramsExtractor):
     """
 
     def tokenize(self, text: str) -> Iterable[str]:
-        """Splitting a text into tokens with ests.utils.tokenize"""
-        return tokenize(text)
+        """Splitting a text into tokens of anySeg (ests.utils.iter_tokens)"""
+        return (token for *_, token in iter_tokens(text))

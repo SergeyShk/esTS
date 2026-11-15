@@ -406,8 +406,8 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
 SpanishConnectorMatcher(connectors)
 ```
 
-<!-- core: stats/cohesion_stats.md:ConnectorMatcher 4bd17e8 -->
-La búsqueda de los conectores (marcadores del discurso: *porque*, *sin embargo*, *por otra parte*) de un diccionario en las oraciones de un texto. El diccionario da la clase de cada conector - causal, adversativa, concesiva, temporal, aditiva, condicional o reformulativa (`CONNECTOR_CLASSES`) - y su tipo, primario o secundario (`CONNECTOR_KINDS`). Un conector se reconoce por las formas normalizadas de sus palabras, el más largo en cada posición, sin solapamientos; un punto o un guion dentro de un conector puede quedar separado por el tokenizador (*e.g.* como `e`, `g`). Una aparición es un `Connector`: el número de la oración `sent`, las posiciones `start` y `end` de sus palabras, el conector `text` tal como lo escribe el diccionario, su clase `cls` y su tipo `kind`.
+<!-- core: stats/cohesion_stats.md:ConnectorMatcher 257e835 -->
+La búsqueda de los conectores (marcadores del discurso: *porque*, *sin embargo*, *por otra parte*) de un diccionario en las oraciones de un texto. El diccionario da la clase de cada conector - causal, adversativa, concesiva, temporal, aditiva, condicional o reformulativa (`CONNECTOR_CLASSES`) - y su tipo, primario o secundario (`CONNECTOR_KINDS`). Un conector se reconoce por las formas normalizadas de sus palabras, el más largo en cada posición, sin solapamientos; un punto o un guion dentro de un conector puede quedar separado por el tokenizador (*e.g.* como `e`, `g`), y el punto de una abreviatura puede quedarse con cada una de sus partes, como en los tokens de UD (`e.`, `g.`). Una aparición es un `Connector`: el número de la oración `sent`, las posiciones `start` y `end` de sus palabras, el conector `text` tal como lo escribe el diccionario, su clase `cls` y su tipo `kind`.
 
 Excepciones:
 

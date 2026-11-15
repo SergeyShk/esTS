@@ -272,16 +272,17 @@ def test_citation_version():
 
 @pytest.mark.parametrize("page", ["installation.md", "installation.es.md"])
 def test_installation_bounds(page):
-    """The installation page states the lower bounds of anyTS and spaCy of the package"""
+    """The installation page states the lower bounds of anyTS, anySeg and spaCy of the package"""
     requirements = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     bounds = {
         match[1]: match[2]
         for requirement in requirements["project"]["dependencies"]
-        if (match := re.match(r"(anyts|spacy)>=([\d.]+)", requirement))
+        if (match := re.match(r"(anyts|anyseg|spacy)>=([\d.]+)", requirement))
     }
     text = (ROOT / "docs" / page).read_text(encoding="utf-8")
     assert f"`spaCy` {bounds['spacy']} " in text
     assert f"(https://sergeyshk.github.io/anyTS/) {bounds['anyts']} " in text
+    assert f"(https://github.com/SergeyShk/anySeg) {bounds['anyseg']} " in text
 
 
 def _run(code: str) -> str:
@@ -298,7 +299,13 @@ def _run(code: str) -> str:
         ("import ests", ("spacy", "thinc", "scipy", "pandas", "matplotlib")),
         ("from ests.visualizers import highlight", ("spacy", "pandas", "matplotlib")),
         ("from ests.corpus import kwic", ("spacy", "pandas", "matplotlib")),
+        (
+            "import ests\nfor cls in (ests.BasicStats, ests.ReadabilityStats, ests.DiversityStats):\n"
+            "    cls('Hola, mundo. ¿Qué tal?').get_stats()",
+            ("spacy", "thinc"),
+        ),
     ],
+    ids=["ests", "highlight", "kwic", "string statistics"],
 )
 def test_imports_are_light(statement, absent):
     loaded = _run(f"import sys\n{statement}\nprint(' '.join(sorted(sys.modules)))").split()
