@@ -343,7 +343,9 @@ class MorphStats(anyts.morph_stats.MorphStats):
             {marker: safe_divide(forms[form], n_forms, nan) for marker, form in VERB_FORMS.items()}
         )
         markers["p_enclitics"] = safe_divide(sum(self._enclitics[i] for i in verbs), n_forms, nan)
-        markers["p_proclitics"] = safe_divide(sum(self._proclitics[i] for i in verbs), n_forms, nan)
+        markers["p_proclitics"] = safe_divide(
+            sum(self._proclitics[i] for i in verbs), n_forms, nan
+        )
         markers["p_ser"] = safe_divide(copulas["ser"], sum(copulas.values()), nan)
         markers["p_mente_adverbs"] = safe_divide(
             sum(1 for adverb in adverbs if adverb.lower().endswith("mente")), len(adverbs), nan
