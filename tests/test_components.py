@@ -31,6 +31,7 @@ from ests import (
     UnadaptedReadabilityStatsComponent,
     VerseStats,
     VerseStatsComponent,
+    load_pipeline,
 )
 from ests.exceptions import ParameterError, SourceError, SourceTypeError
 
@@ -316,38 +317,21 @@ def test_pipeline_is_loaded_without_importing_the_package(tmp_path):
     assert result.stdout.strip() == "6"
 
 
-def test_blank_lines_component(nlp):
-    """Before the parser ests_blank_lines gives a Doc the sentences of its string"""
-    text = "Novedades\n\nImportación rápida. Menos errores\n\nLista de cambios"
-    assert BasicStats(nlp(text)).n_sents == 2
-    nlp.add_pipe("ests_blank_lines", before="parser")
-    try:
-        doc = nlp(text)
-    finally:
-        nlp.remove_pipe("ests_blank_lines")
-    assert [sent.text.strip() for sent in doc.sents] == [
-        "Novedades",
-        "Importación rápida.",
-        "Menos errores",
-        "Lista de cambios",
-    ]
-    assert BasicStats(doc).n_sents == BasicStats(text).n_sents == 4
-
-
-def test_blank_lines_pipeline_is_loaded_without_importing_the_package(tmp_path):
-    pipeline = spacy.blank("es")
-    pipeline.add_pipe("ests_blank_lines")
-    pipeline.add_pipe("sentencizer")
+def test_saved_load_pipeline_is_loaded_without_importing_the_package(tmp_path):
+    """A saved pipeline of load_pipeline keeps the tokens and the sentences of anySeg"""
+    pipeline = load_pipeline(exclude=["parser", "ner"])
+    pipeline.add_pipe("ests_basic", name="basic", last=True)
     pipeline.to_disk(tmp_path)
     code = (
         "import spacy;"
         f"nlp = spacy.load({str(tmp_path)!r});"
-        "print(len(list(nlp('Resultados\\n\\nTodo en orden').sents)))"
+        "doc = nlp('Resultados\\n\\n--Todo en orden --dijo');"
+        "print(doc._.basic.n_sents, [token.text for token in doc if not token.is_space])"
     )
     result = subprocess.run(
         [sys.executable, "-c", code], capture_output=True, text=True, check=True
     )
-    assert result.stdout.strip() == "2"
+    assert result.stdout.strip() == "2 ['Resultados', '--', 'Todo', 'en', 'orden', '--', 'dijo']"
 
 
 @pytest.mark.parametrize(("factory", "component", "stats"), COMPONENTS)
@@ -432,15 +416,17 @@ def test_lexical_component_without_the_annotation():
 
 
 @pytest.mark.parametrize("factory", [factory for factory, _, _ in ALL_COMPONENTS])
-def test_component_adds_the_dash_rules(factory):
+def test_component_keeps_the_tokenizer(factory):
+    """A component reads the Doc of its pipeline as it is"""
     pipeline = spacy.load("es_core_news_sm")
-    assert [token.text for token in pipeline.make_doc("sí--dijo él")] == ["sí--dijo", "él"]
+    tokenizer = pipeline.tokenizer
     pipeline.add_pipe(factory, name="stats", last=True)
-    assert [token.text for token in pipeline.make_doc("sí--dijo él")] == ["sí", "--", "dijo", "él"]
+    assert pipeline.tokenizer is tokenizer
+    assert [token.text for token in pipeline.make_doc("sí--dijo él")] == ["sí--dijo", "él"]
 
 
 def test_component_words_are_the_words_of_the_string_api():
     text = "-Hola -dijo Juan-. Y sí--dijo él."
-    pipeline = spacy.load("es_core_news_sm")
+    pipeline = load_pipeline()
     pipeline.add_pipe("ests_basic", name="basic", last=True)
     assert pipeline(text)._.basic.n_words == BasicStats(text).n_words == 7

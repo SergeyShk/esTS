@@ -41,14 +41,14 @@ The class extends the `SentsExtractor` of the [anyTS](https://sergeyshk.github.i
     ``` python
     import re
 
-    SentsExtractor().extract("Novedades\n\nImportación más rápida\nMenos errores\n\n¡Gracias!")
+    SentsExtractor().extract("Novedades\n\nImportación más\nrápida. Menos errores\n\n¡Gracias!")
     SentsExtractor(tokenizer=re.compile(r", ")).extract("No tengas 100 euros, ten 100 amigos")
     ```
 
 === "Result"
 
     ```
-    ('Novedades', 'Importación más rápida\nMenos errores', '¡Gracias!')
+    ('Novedades', 'Importación más\nrápida.', 'Menos errores', '¡Gracias!')
     ('No tengas 100 euros', 'ten 100 amigos')
     ```
 

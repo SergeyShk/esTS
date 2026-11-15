@@ -161,7 +161,7 @@ def test_layers_unavailable(layer, requirement):
 
 
 def test_doc_without_the_sentence_boundaries(nlp):
-    doc = nlp(long_sent + " " + text, disable=["parser"])
+    doc = nlp(long_sent + " " + text, disable=["anyseg_sentencizer", "parser"])
     assert not doc.has_annotation("SENT_START")
     for layer in ("long_sents", "connectors"):
         assert spans(highlight(doc, layers=layer), layer) == spans(

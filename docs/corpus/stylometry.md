@@ -199,7 +199,7 @@ The parts of speech are those of the annotation of a `Doc` that carries them. Th
 Raises:
 
 - `SourceTypeError` - words that are not a list of strings, a pipeline that is not a spaCy `Language`;
-- `SourceError` - a source without words, a pipeline that does not tag the parts of speech (`spacy.blank("es")`), a character without a UTF-8 form;
+- `SourceError` - a source without words, a pipeline that does not tag the parts of speech (`spacy.blank("es")`);
 - `DatasetNotFoundError` - the default model is not installed.
 
 === "Code"

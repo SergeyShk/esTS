@@ -45,7 +45,7 @@ from .constants import (
     SYNTAX_STATS_DESC,
 )
 from .exceptions import SourceError
-from .utils import _check_encoding, _check_nlp, get_nlp, is_verbal_noun, lemmatize
+from .utils import _check_nlp, get_nlp, is_verbal_noun, lemmatize
 
 if TYPE_CHECKING:
     from spacy.language import Language
@@ -198,8 +198,7 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
         SourceTypeError: If the source is neither a string nor a Doc object, or the
             pipeline is not a spaCy Language
         SourceError: If the source has no words, no parse, no parts of speech or no
-            lemmas, or is a string longer than the max_length of the pipeline or with a
-            character without a UTF-8 form
+            lemmas, or is a string longer than the max_length of the pipeline
         DatasetNotFoundError: If a string is passed and the model is not installed
     """
 
@@ -242,8 +241,7 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
 
         Raises:
             SourceTypeError: If the source is neither a string nor a Doc object
-            SourceError: If a string is longer than the max_length of the pipeline or
-                has a character without a UTF-8 form
+            SourceError: If a string is longer than the max_length of the pipeline
             DatasetNotFoundError: If a string is passed and the model is not installed
         """
         if isinstance(source, str):
@@ -254,7 +252,6 @@ class SyntaxStats(anyts.syntax_stats.SyntaxStats):
                     f"pipeline ({pipeline.max_length}): split it into parts or raise "
                     "max_length on a pipeline of your own and pass it in nlp"
                 )
-            _check_encoding(source)
             return pipeline(source, disable=UNUSED_COMPONENTS)
         return super().parse(source)
 

@@ -19,7 +19,7 @@ from anyts.corpus.compare import (
     sentence_rhythm as sentence_rhythm,
 )
 from anyts.extractors import FixedSentsExtractor, FixedWordsExtractor
-from anyts.utils import check_words, set_sent_starts
+from anyts.utils import check_words
 
 from ..basic_stats import BasicStats, punctuation_profile
 from ..cohesion_stats import CohesionStats
@@ -30,7 +30,6 @@ from ..morph_stats import FINITE_MOODS, MorphStats
 from ..readability_stats import ReadabilityStats
 from ..syntax_stats import SyntaxStats
 from ..utils import (
-    _check_encoding,
     _check_nlp,
     count_words_by_spans,
     get_nlp,
@@ -117,8 +116,8 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         of the sentences (sentence_rhythm); punct_ - punctuation_profile;
         cohesion_ - the cohesion statistics (CohesionStats) but the overlaps
         between paragraphs, which the windows cut; syntax_ - the syntactic
-        statistics (SyntaxStats) when the parse has dependencies. The parse
-        takes the sentences of the other groups (set_sent_starts)
+        statistics (SyntaxStats) when the parse has dependencies. The model of
+        get_nlp parses the sentences of the other groups (load_pipeline)
         A morphological value that does not occur gives 0, a feature absent
         from the window (no verbs - no tense) nan. The parts of speech and the
         features of a single value (polarity, polite, poss, reflex) are shares
@@ -140,8 +139,8 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
 
     Raises:
         SourceTypeError: If the text is not a string or the pipeline is not a spaCy Language
-        SourceError: If the text has no words or a character without a UTF-8 form, is longer than
-            the max_length of the pipeline, or the pipeline gives no parts of speech or no lemmas
+        SourceError: If the text has no words, is longer than the max_length of the pipeline, or
+            the pipeline gives no parts of speech or no lemmas
         DatasetNotFoundError: If the default model is not installed
 
     Example:
@@ -178,7 +177,7 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
     for key, score in DiversityStats(text, words_extractor=words).get_stats().items():
         if key != "orlov_z":
             features[f"diversity_{key}"] = float(score)
-    doc = _parse(text, nlp, [start for start, _ in spans])
+    doc = _parse(text, nlp)
     parsed = doc.has_annotation("DEP")
     features.update(_morph_features(MorphStats(doc), parsed))
     features.update(
@@ -200,9 +199,8 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
     return features
 
 
-def _parse(text: str, nlp: Language | None, starts: Sequence[int]) -> Doc:
-    """Parsing a text with the sentences that start at the offsets: the default model without
-    its parser, or the pipeline without ner"""
+def _parse(text: str, nlp: Language | None) -> Doc:
+    """Parsing a text by the default model without its parser, or by the pipeline without ner"""
     pipeline = nlp or get_nlp()
     if len(text) > pipeline.max_length:
         raise SourceError(
@@ -210,9 +208,7 @@ def _parse(text: str, nlp: Language | None, starts: Sequence[int]) -> Doc:
             f"pipeline ({pipeline.max_length}): split it into windows or raise "
             "max_length on a pipeline of your own and pass it in nlp"
         )
-    _check_encoding(text)
-    doc = set_sent_starts(pipeline.make_doc(text), starts)
-    return pipeline(doc, disable=["parser", "ner"] if nlp is None else ["ner"])
+    return pipeline(text, disable=["parser", "ner"] if nlp is None else ["ner"])
 
 
 def _morph_features(morph: MorphStats, parsed: bool) -> dict[str, float]:
@@ -268,8 +264,7 @@ def corpus_features(
     Raises:
         SourceTypeError: If the texts are not a list of strings, or the features are not a
             function or give no mapping of numbers by name
-        SourceError: If the corpus has no window of enough words, or a text has a
-            character without a UTF-8 form for the default features
+        SourceError: If the corpus has no window of enough words
         ParameterError: If the size of a window or min_words is not an integer or is
             below one, or min_words is greater than the window
         DatasetNotFoundError: If the default features need the model and it is not installed
@@ -371,8 +366,7 @@ def compare_corpora(
     Raises:
         SourceTypeError: If the texts are not a list of strings, or the features are not a
             function or give no mapping of numbers by name
-        SourceError: If one of the corpora has no window of enough words, or a text has a
-            character without a UTF-8 form for the default features
+        SourceError: If one of the corpora has no window of enough words
         DatasetNotFoundError: If the default features are read and the model is not
             installed
         ParameterError: If the names of the corpora are not two strings that give

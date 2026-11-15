@@ -16,7 +16,7 @@ from .constants import LEXICAL_STATS_DESC
 from .datasets.freq_dict import FreqDict, lemma_key
 from .exceptions import SourceError, SourceTypeError
 from .extractors import NUMBER_PATTERN
-from .utils import _check_encoding, _check_nlp, get_nlp
+from .utils import _check_nlp, get_nlp
 
 if TYPE_CHECKING:
     from spacy.language import Language
@@ -113,7 +113,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         SourceTypeError: If the source is neither a string nor a Doc, or the dictionary or
             the pipeline is of another type
         SourceError: If the source has no words, lacks the parts of speech or
-            is a string longer than the max_length of the pipeline or with a character without a UTF-8 form
+            is a string longer than the max_length of the pipeline
         DatasetNotFoundError: When a statistic by the dictionary is read and the
             dictionary is not downloaded
     """
@@ -158,9 +158,8 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
 
         Raises:
             SourceTypeError: If the source is neither a string nor a Doc
-            SourceError: If a string is longer than the max_length of the pipeline or
-                has a character without a UTF-8 form, or the words lack the parts of
-                speech
+            SourceError: If a string is longer than the max_length of the pipeline, or the
+                words lack the parts of speech
         """
         if isinstance(source, str):
             pipeline = self._nlp or get_nlp()
@@ -170,7 +169,6 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
                     f"pipeline ({pipeline.max_length}): split it into parts or raise "
                     "max_length on a pipeline of your own and pass it in nlp"
                 )
-            _check_encoding(source)
             source = pipeline(source, disable=UNUSED_COMPONENTS)
         elif not is_doc(source):
             raise source_type_error(self.messages, source)

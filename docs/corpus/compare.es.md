@@ -62,27 +62,27 @@ Galdós frente a Unamuno, tres novelas de cada uno del [corpus de literatura](..
     ```
                       median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
     diversity_mtldw         105.455          66.179  37.104   43.799    3.260        0.988  0.994     0.0
-    diversity_mamtld        103.316          64.814  35.107   45.657    3.083        0.981  0.990     0.0
-    diversity_mtld          103.655          63.851  38.546   47.911    3.110        0.981  0.990     0.0
-    diversity_mattr           0.817           0.769   0.046    0.057    2.952        0.979  0.990     0.0
-    diversity_msttr           0.819           0.769   0.047    0.059    2.929        0.979  0.989     0.0
+    diversity_mamtld        103.316          64.997  35.107   45.657    3.084        0.981  0.990     0.0
+    diversity_mtld          103.655          64.594  37.536   47.169    3.107        0.981  0.990     0.0
+    diversity_mattr           0.817           0.769   0.046    0.057    2.951        0.979  0.990     0.0
+    diversity_msttr           0.819           0.769   0.047    0.059    2.927        0.979  0.989     0.0
 
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
     basic_letters_per_word          4.441           4.130   0.243    0.358    1.695        0.784  0.892     0.0
-    readability_lix                37.906          29.721   7.097   11.023    1.084        0.694  0.847     0.0
+    readability_lix                38.321          29.758   7.140   11.170    1.091        0.698  0.849     0.0
     morph_p_gerund                  0.069           0.037   0.026    0.035    1.533        0.742  0.871     0.0
-    morph_polarity_Neg              0.019           0.028  -0.011   -0.009   -1.122       -0.559  0.221     0.0
-    sents_mean                     16.393          11.494   3.078    6.688    0.833        0.610  0.805     0.0
+    morph_polarity_Neg              0.019           0.028  -0.011   -0.009   -1.123       -0.559  0.221     0.0
+    sents_mean                     16.393          11.494   3.105    6.818    0.843        0.616  0.808     0.0
     punct_dash                     19.000          46.000 -39.000  -14.000   -1.287       -0.605  0.197     0.0
     punct_exclamation               9.000          24.000 -23.000   -2.000   -1.251       -0.637  0.181     0.0
-    diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676       -0.351  0.324     0.0
+    diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.675       -0.351  0.325     0.0
 
     {'n_Galdós': 155, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0.35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones. La cohesión también los distingue (`result.filter(like="cohesion_", axis=0)`): por cada 1000 palabras Unamuno abre con un conector más del triple de oraciones (`cohesion_connectors_inter`, 20 frente a 6) - unas 2.4 veces más por oración, ya que sus oraciones son más cortas - y repite más palabras con contenido de una oración en las dos siguientes (0.108 frente a 0.065). Parte de la cohesión sigue la longitud de las oraciones: la ρ de Spearman con `sents_mean` por ventanas es de 0.76 en Galdós y 0.71 en Unamuno para `cohesion_content_overlap_all`, la repetición binaria en todos los pares de oraciones, y de -0.49 y -0.61 para los conectores que abren una oración, mientras que la proporción de palabras con contenido repetidas en las dos oraciones siguientes no depende de ella (0.02 y -0.01).
+Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0.35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones. La cohesión también los distingue (`result.filter(like="cohesion_", axis=0)`): por cada 1000 palabras Unamuno abre con un conector más del triple de oraciones (`cohesion_connectors_inter`, 20 frente a 6) - unas 2.4 veces más por oración, ya que sus oraciones son más cortas - y repite más palabras con contenido de una oración en las dos siguientes (0.108 frente a 0.066). Parte de la cohesión sigue la longitud de las oraciones: la ρ de Spearman con `sents_mean` por ventanas es de 0.76 en Galdós y 0.71 en Unamuno para `cohesion_content_overlap_all`, la repetición binaria en todos los pares de oraciones, y de -0.49 y -0.60 para los conectores que abren una oración, mientras que la proporción de palabras con contenido repetidas en las dos oraciones siguientes no depende de ella (0.01 y 0.02).
 
-Los valores p toman las 272 ventanas de seis novelas por independientes (véase el [aviso](#statistics) de abajo), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 52 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 6.7 palabras, donde las ventanas solas darían de 3.9 a 6.1.
+Los valores p toman las 272 ventanas de seis novelas por independientes (véase el [aviso](#statistics) de abajo), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 51 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 6.8 palabras, donde las ventanas solas darían de 4.0 a 6.2.
 
 ## Parámetros
 
@@ -99,7 +99,7 @@ Los valores p toman las 272 ventanas de seis novelas por independientes (véase 
 Excepciones:
 
 - `SourceTypeError` - unos textos que no son una lista de cadenas, unos `features` que no se pueden llamar o no dan un diccionario de números por nombre;
-- `SourceError` - un corpus sin una ventana de `min_words` palabras o más, un texto con un carácter sin forma UTF-8 con los rasgos por defecto;
+- `SourceError` - un corpus sin una ventana de `min_words` palabras o más;
 - `ParameterError` - un `window` o un `min_words` que no es un entero de al menos uno, un `min_words` mayor que `window`, unas etiquetas, un número de remuestras o una semilla que rechaza `check_comparison_params`;
 - `DatasetNotFoundError` - los rasgos por defecto sin el modelo instalado.
 
@@ -126,7 +126,7 @@ Se dejan fuera el tiempo de lectura, que solo sigue el número de palabras de un
 
 Las categorías gramaticales y los rasgos de un solo valor - polaridad, cortesía, posesivo, reflexivo - son proporciones de todas las palabras (`morph_polarity_Neg` es la proporción de las negaciones), los demás rasgos, proporciones de las palabras que los llevan (`morph_mood_Sub` es el subjuntivo entre los modos). Un valor que no aparece en una ventana da 0; un rasgo ausente de la ventana por completo (sin verbos no hay tiempo) da `nan`. Un valor de varios valores (`PronType=Int,Rel` de *que*) se reparte a partes iguales entre sus partes, así que las proporciones de un rasgo siguen sumando uno.
 
-La morfología y la cohesión las analiza el modelo [`es_core_news_sm`](../installation.md#model) sin su analizador sintáctico, así que el marcador `morph_p_ser`, que lee las cópulas de las dependencias, y el grupo `syntax_` se dejan fuera; un pipeline pasado en `nlp` se ejecuta entero salvo el reconocedor de entidades, así que `functools.partial(text_features, nlp=get_nlp())` incorpora el analizador sintáctico, `morph_p_ser` y la sintaxis, y otro modelo entra en la comparación del mismo modo. El análisis toma las oraciones del grupo `sents_` ([`set_sent_starts`](https://sergeyshk.github.io/anyTS/utils/spacy/#set_sent_starts) del núcleo), así que la cohesión y la sintaxis cuentan las mismas oraciones que el ritmo. Una novela se compara por ventanas y no entera, ya que el pipeline admite como mucho `max_length` caracteres.
+La morfología y la cohesión las analiza el modelo [`es_core_news_sm`](../installation.md#model) sin su analizador sintáctico, así que el marcador `morph_p_ser`, que lee las cópulas de las dependencias, y el grupo `syntax_` se dejan fuera; un pipeline pasado en `nlp` se ejecuta entero salvo el reconocedor de entidades, así que `functools.partial(text_features, nlp=get_nlp())` incorpora el analizador sintáctico, `morph_p_ser` y la sintaxis, y otro modelo entra en la comparación del mismo modo. El pipeline de [`load_pipeline`](../components.md#load_pipeline), el de por defecto, divide el texto en las oraciones del grupo `sents_`, así que la cohesión y la sintaxis cuentan las mismas oraciones que el ritmo; un pipeline propio da sus propias oraciones. Una novela se compara por ventanas y no entera, ya que el pipeline admite como mucho `max_length` caracteres.
 
 Las proporciones de espacios, letras y signos de puntuación (`basic_p_spaces`, `basic_p_letters`, `basic_p_punctuations`) cuentan los caracteres tal cual: las sangrías, los espacios dobles y los de no separación de los archivos reflejan la composición de una edición y no el texto. En un corpus de fuentes distintas conviene colapsarlos antes, por ejemplo, con `re.sub(r"[^\S\n]+", " ", text)`.
 
@@ -138,7 +138,7 @@ Las proporciones de espacios, letras y signos de puntuación (`basic_p_spaces`, 
 Excepciones:
 
 - `SourceTypeError` - un texto que no es una cadena, un pipeline que no es un `Language` de spaCy;
-- `SourceError` - un texto sin palabras, con un carácter sin forma UTF-8 o más largo que el `max_length` del pipeline, un pipeline que no da las categorías gramaticales o los lemas;
+- `SourceError` - un texto sin palabras o más largo que el `max_length` del pipeline, un pipeline que no da las categorías gramaticales o los lemas;
 - `DatasetNotFoundError` - el modelo por defecto no está instalado.
 
 ``` {.python .signature}
@@ -157,7 +157,7 @@ Devuelve la matriz de rasgos de las ventanas con el índice (número del texto, 
 Excepciones:
 
 - `SourceTypeError` - unos textos que no son una lista de cadenas, unos `features` que no se pueden llamar o no dan un diccionario de números por nombre;
-- `SourceError` - un corpus sin una ventana de `min_words` palabras o más, un texto con un carácter sin forma UTF-8 con los rasgos por defecto;
+- `SourceError` - un corpus sin una ventana de `min_words` palabras o más;
 - `ParameterError` - un `window` o un `min_words` que no es un entero de al menos uno, un `min_words` mayor que `window`;
 - `DatasetNotFoundError` - los rasgos por defecto sin el modelo instalado.
 
@@ -182,11 +182,11 @@ Los rasgos sintácticos llegan con un pipeline que tiene analizador sintáctico,
 
     ```
                                         median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    syntax_gerund_clauses_per_sent              0.145           0.045   0.088    0.119    1.460        0.848  0.924     0.0
-    syntax_complex_nominals_per_clause          0.809           0.550   0.213    0.307    1.158        0.688  0.844     0.0
-    syntax_tree_depth                           3.727           2.861   0.529    1.057    1.064        0.659  0.830     0.0
-    syntax_t_units_per_sent                     1.073           1.009   0.028    0.156    1.365        0.657  0.829     0.0
-    syntax_subtrees_per_sent                    6.742           4.494   1.484    2.921    0.932        0.656  0.828     0.0
+    syntax_gerund_clauses_per_sent              0.143           0.045   0.090    0.116    1.473        0.852  0.926     0.0
+    syntax_complex_nominals_per_clause          0.808           0.548   0.215    0.302    1.163        0.690  0.845     0.0
+    syntax_tree_depth                           3.763           2.888   0.594    1.062    1.078        0.664  0.832     0.0
+    syntax_t_units_per_sent                     1.073           1.009   0.029    0.157    1.376        0.664  0.832     0.0
+    syntax_subtrees_per_sent                    6.800           4.534   1.567    2.917    0.942        0.661  0.830     0.0
     ```
 
 ## Comparación de tablas de rasgos { #compare_features }

@@ -21,7 +21,7 @@ from anyts.utils import check_words, has_pos, is_doc, is_punctuation, iter_doc_t
 
 from ..constants import FUNCTION_UD_POS
 from ..exceptions import SourceError
-from ..utils import _check_encoding, _check_nlp, get_nlp
+from ..utils import _check_nlp, get_nlp
 
 if TYPE_CHECKING:
     from spacy.language import Language
@@ -58,8 +58,7 @@ def function_words_profile(
     Raises:
         SourceTypeError: If the words are not a list of strings or the pipeline is not a
             spaCy Language
-        SourceError: If there are no words, a word has a character without a UTF-8 form or the
-            pipeline does not tag the parts of speech
+        SourceError: If there are no words or the pipeline does not tag the parts of speech
         DatasetNotFoundError: If the default model is not installed
 
     Example:
@@ -88,7 +87,6 @@ def _tag_words(words: Sequence[str], nlp: Language | None) -> list[str]:
         return []
     from spacy.tokens import Doc
 
-    _check_encoding("".join(words))
     pipeline = nlp or get_nlp()
     starts = range(0, len(words), CHUNK_SIZE)
     chunks = (

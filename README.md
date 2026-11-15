@@ -531,9 +531,8 @@ Every statistics class is also a component of a pipeline, so a text is annotated
 
 ```python
 >>> import ests
->>> import spacy
 
->>> nlp = spacy.load("es_core_news_sm")
+>>> nlp = ests.load_pipeline()
 >>> for factory in ("basic", "morph", "syntax"):
 ...     _ = nlp.add_pipe(f"ests_{factory}", name=factory, last=True)
 
@@ -545,7 +544,7 @@ Every statistics class is also a component of a pipeline, so a text is annotated
 (12, ('DET', 'NOUN'), 2.0)
 ```
 
-The factories are `ests_basic`, `ests_readability`, `ests_unadapted_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` and `ests_verse`; the name of the pipe is the name of the extension. The component `ests_blank_lines`, before the parser, starts a sentence after a blank line, as the string API does; the pipeline of `ests.utils.get_nlp` has it.
+The factories are `ests_basic`, `ests_readability`, `ests_unadapted_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` and `ests_verse`; the name of the pipe is the name of the extension. The pipeline of `ests.load_pipeline()` takes the tokens and the sentences of [anySeg](https://github.com/SergeyShk/anySeg), so a `Doc` counts the words and the sentences of its string.
 
 More in the [documentation](https://sergeyshk.github.io/esTS/components/).
 

@@ -2,7 +2,7 @@ from math import isnan
 
 import numpy as np
 import pytest
-from anyts.utils import set_sent_starts
+import spacy
 
 from ests import CohesionStats, SyntaxStats
 from ests.constants import MORPHOLOGY_MARKERS_DESC, MORPHOLOGY_STATS_DESC, SYNTAX_STATS_DESC
@@ -179,11 +179,10 @@ def test_text_features_sentences_of_the_parse():
     dialogue = (
         "—¿Viniste a casa? —preguntó la madre.\n—Vine a casa ayer por la tarde.\n—Pues bien."
     )
+    assert len(list(iter_text_sents(dialogue))) == 3
+    assert SyntaxStats(spacy.load("es_core_news_sm")(dialogue)).n_sents == 4
     nlp = get_nlp()
-    starts = [start for start, _, _ in iter_text_sents(dialogue)]
-    assert len(starts) == 3
-    assert SyntaxStats(nlp(dialogue)).n_sents == 4
-    doc = nlp(set_sent_starts(nlp.make_doc(dialogue), starts), disable=["ner"])
+    doc = nlp(dialogue, disable=["ner"])
     syntax, cohesion = SyntaxStats(doc), CohesionStats(doc)
     assert syntax.n_sents == cohesion.n_sents == 3
     features = text_features(dialogue, nlp=nlp)

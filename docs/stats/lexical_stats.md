@@ -6,7 +6,7 @@ LexicalStats(source, freq_dict=None, nlp=None)
 
 --8<-- "stats/lexical_stats.md:LexicalStats"
 
-In esTS a source that is neither a string nor a `Doc` and a pipeline in `nlp` that is not a spaCy `Language` raise `SourceTypeError` too; a source without the parts of speech, a string longer than the `max_length` of the pipeline and a string with a character without a UTF-8 form `SourceError`; and the metrics by the dictionary without the dictionary downloaded `DatasetNotFoundError`.
+In esTS a source that is neither a string nor a `Doc` and a pipeline in `nlp` that is not a spaCy `Language` raise `SourceTypeError` too; a source without the parts of speech and a string longer than the `max_length` of the pipeline `SourceError`; and the metrics by the dictionary without the dictionary downloaded `DatasetNotFoundError`.
 
 Unlike the [lexical diversity metrics](diversity_stats.md), which compare the words of a text with each other, here the words are compared with the frequencies of the language ([TAALES](https://doi.org/10.3758/s13428-017-0924-4)). The data source is a text or a `Doc` object of the [spaCy](https://github.com/explosion/spaCy) library.
 

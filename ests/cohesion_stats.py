@@ -34,7 +34,7 @@ from .constants import (
 )
 from .exceptions import SourceError
 from .extractors import SentsExtractor
-from .utils import _check_encoding, _check_nlp, get_nlp, lemmatize
+from .utils import _check_nlp, get_nlp, lemmatize
 
 if TYPE_CHECKING:
     from spacy.language import Language
@@ -245,7 +245,7 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
             of phrases and pairs of strings
         SourceError: If the source has no words, no annotation of the parts of
             speech or no lemmas, or is a string longer than the max_length of
-            the pipeline or with a character without a UTF-8 form
+            the pipeline
         ParameterError: If the dictionary of connectors has an unknown class or kind,
             or blank_lines is not a bool
         DatasetNotFoundError: If a string is passed and the model is not installed
@@ -295,9 +295,8 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
 
         Raises:
             SourceTypeError: If the source is neither a string nor a Doc object
-            SourceError: If a string is longer than the max_length of the pipeline or
-                has a character without a UTF-8 form, or the Doc has no parts of speech
-                or no lemmas
+            SourceError: If a string is longer than the max_length of the pipeline, or the
+                Doc has no parts of speech or no lemmas
             DatasetNotFoundError: If a string is passed and the model is not installed
         """
         if isinstance(source, str):
@@ -308,7 +307,6 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
                     f"pipeline ({pipeline.max_length}): split it into parts or raise "
                     "max_length on a pipeline of your own and pass it in nlp"
                 )
-            _check_encoding(source)
             source = pipeline(source, disable=UNUSED_COMPONENTS)
         return super().analyze(source)
 

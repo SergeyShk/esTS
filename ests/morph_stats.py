@@ -17,7 +17,7 @@ from .constants import (
     PASSIVE_AUX,
 )
 from .exceptions import SourceError
-from .utils import _check_encoding, _check_nlp, get_nlp
+from .utils import _check_nlp, get_nlp
 
 if TYPE_CHECKING:
     from spacy.language import Language
@@ -130,7 +130,7 @@ class MorphStats(anyts.morph_stats.MorphStats):
             pipeline is not a spaCy Language
         SourceError: If the source has no words, no annotation of the parts of
             speech or no lemmas, or is a string longer than the max_length of
-            the pipeline or with a character without a UTF-8 form
+            the pipeline
         DatasetNotFoundError: If a string is passed and the model is not installed
     """
 
@@ -175,9 +175,8 @@ class MorphStats(anyts.morph_stats.MorphStats):
 
         Raises:
             SourceTypeError: If the source is neither a string nor a Doc object
-            SourceError: If a string is longer than the max_length of the pipeline or
-                has a character without a UTF-8 form, or the Doc has no parts of speech
-                or no lemmas
+            SourceError: If a string is longer than the max_length of the pipeline, or the
+                Doc has no parts of speech or no lemmas
             DatasetNotFoundError: If a string is passed and the model is not installed
         """
         if isinstance(source, str):
@@ -188,7 +187,6 @@ class MorphStats(anyts.morph_stats.MorphStats):
                     f"pipeline ({pipeline.max_length}): split it into parts or raise "
                     "max_length on a pipeline of your own and pass it in nlp"
                 )
-            _check_encoding(source)
             source = pipeline(source, disable=UNUSED_COMPONENTS)
         # A Doc without words: the core raises no_words, whatever its annotation
         if is_doc(source) and next(iter_doc_tokens(source), None) is None:

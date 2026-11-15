@@ -25,7 +25,7 @@ from .constants import (
 )
 from .exceptions import SourceError, SourceTypeError
 from .extractors import WordsExtractor
-from .utils import _check_encoding, _check_nlp, get_nlp, is_verbal_noun, iter_text_sents, lemmatize
+from .utils import _check_nlp, get_nlp, is_verbal_noun, iter_text_sents, lemmatize
 
 if TYPE_CHECKING:
     from spacy.language import Language
@@ -111,9 +111,8 @@ class StyleStats(anyts.style_stats.StyleStats):
             the nausea stopwords or the clichés are not a list or a set of strings, or
             the extractor or the pipeline is of another type
         SourceError: If the source has no words; when the verbal nouns or the markers are
-            read, if the source lacks the parts of speech or the lemmas, or a string has a
-            sentence longer than the max_length of the pipeline or a character without a
-            UTF-8 form
+            read, if the source lacks the parts of speech or the lemmas or a sentence of a
+            string is longer than the max_length of the pipeline
         ParameterError: If the number of the most frequent words is not an integer or is
             below one
     """
@@ -191,13 +190,11 @@ class StyleStats(anyts.style_stats.StyleStats):
 
         Raises:
             SourceError: If the source lacks the parts of speech or the lemmas, or a
-                sentence of a string is longer than the max_length of the pipeline or
-                the string has a character without a UTF-8 form
+                sentence of a string is longer than the max_length of the pipeline
         """
         if self._nouns is None:
             if self._text is None:
                 raise SourceError(self._annotation_error)
-            _check_encoding(self._text)
             pipeline = self.nlp or get_nlp()
             parts = _split_text(self._text, pipeline.max_length)
             self._nouns = [

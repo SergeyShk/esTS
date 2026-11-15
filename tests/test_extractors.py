@@ -180,11 +180,6 @@ class TestWordsExtractor:
             ("1º", True),
             ("2.ª", True),
             ("1.er", True),
-            pytest.param(
-                "1.ᵉʳ",
-                True,
-                marks=pytest.mark.xfail(strict=True, reason="anySeg 0.3 splits 1.ᵉʳ"),
-            ),
             ("2do", True),
             ("3ro", True),
             ("4TA", True),

@@ -12,14 +12,12 @@ Description:
     A document with no words passes untouched, its extension left at None; a
     pipeline without an annotation a component needs raises SourceError, and
     a name taken by an extension of another package raises ParameterError
-    Adding a component extends the tokenizer of its pipeline with add_dash_rules
-    ests_blank_lines - the component start_sents_after_blank_lines of the core:
-    starts a sentence after a blank line when added before the parser, senter
-    or sentencizer; get_nlp has it already
+    A component reads the Doc of its pipeline as it is; the tokens and the
+    sentences of a string are those of the pipeline of load_pipeline
 """
 
 import anyts.components
-from anyts.components import StatsComponent, start_sents_after_blank_lines
+from anyts.components import StatsComponent
 from anyts.utils import is_number
 from spacy.language import Language
 from spacy.tokens import Doc
@@ -36,21 +34,11 @@ from .readability_stats import ReadabilityStats
 from .style_stats import StyleStats
 from .syntax_stats import SyntaxStats
 from .unadapted_readability_stats import UnadaptedReadabilityStats
-from .utils import add_dash_rules
 from .verse_stats import LETTER, VerseStats
-
-Language.component("ests_blank_lines", func=start_sents_after_blank_lines)
-
-
-class _Component(StatsComponent):
-    """Component of esTS: extends the tokenizer of its pipeline with add_dash_rules"""
-
-    def prepare(self, nlp: Language) -> None:
-        add_dash_rules(nlp)
 
 
 @Language.factory("ests_basic")
-class BasicStatsComponent(_Component, anyts.components.BasicStatsComponent):
+class BasicStatsComponent(anyts.components.BasicStatsComponent):
     """
     Class for the component of the basic statistics of a text
 
@@ -78,7 +66,7 @@ class BasicStatsComponent(_Component, anyts.components.BasicStatsComponent):
 
 
 @Language.factory("ests_readability")
-class ReadabilityStatsComponent(_Component, anyts.components.ReadabilityStatsComponent):
+class ReadabilityStatsComponent(anyts.components.ReadabilityStatsComponent):
     """
     Class for the component of the readability metrics of a text
 
@@ -134,9 +122,7 @@ class ReadabilityStatsComponent(_Component, anyts.components.ReadabilityStatsCom
 
 
 @Language.factory("ests_unadapted_readability")
-class UnadaptedReadabilityStatsComponent(
-    _Component, anyts.components.UnadaptedReadabilityStatsComponent
-):
+class UnadaptedReadabilityStatsComponent(anyts.components.UnadaptedReadabilityStatsComponent):
     """
     Class for the component of the readability formulas of other languages
 
@@ -171,7 +157,7 @@ class UnadaptedReadabilityStatsComponent(
 
 
 @Language.factory("ests_diversity")
-class DiversityStatsComponent(_Component, anyts.components.DiversityStatsComponent):
+class DiversityStatsComponent(anyts.components.DiversityStatsComponent):
     """
     Class for the component of the lexical diversity metrics of a text
 
@@ -216,7 +202,7 @@ class DiversityStatsComponent(_Component, anyts.components.DiversityStatsCompone
 
 
 @Language.factory("ests_morph", requires=["token.pos", "token.lemma"])
-class MorphStatsComponent(_Component, anyts.components.MorphStatsComponent):
+class MorphStatsComponent(anyts.components.MorphStatsComponent):
     """
     Class for the component of the morphological statistics of a text
 
@@ -247,7 +233,7 @@ class MorphStatsComponent(_Component, anyts.components.MorphStatsComponent):
 
 
 @Language.factory("ests_syntax", requires=["token.dep", "token.head", "token.pos", "token.lemma"])
-class SyntaxStatsComponent(_Component, anyts.components.SyntaxStatsComponent):
+class SyntaxStatsComponent(anyts.components.SyntaxStatsComponent):
     """
     Class for the component of the syntactic statistics of a text
 
@@ -278,7 +264,7 @@ class SyntaxStatsComponent(_Component, anyts.components.SyntaxStatsComponent):
 
 
 @Language.factory("ests_cohesion", requires=["token.pos", "token.lemma"])
-class CohesionStatsComponent(_Component, anyts.components.CohesionStatsComponent):
+class CohesionStatsComponent(anyts.components.CohesionStatsComponent):
     """
     Class for the component of the cohesion statistics of a text
 
@@ -319,7 +305,7 @@ class CohesionStatsComponent(_Component, anyts.components.CohesionStatsComponent
 
 
 @Language.factory("ests_lexical", requires=["token.pos"])
-class LexicalStatsComponent(_Component, anyts.components.LexicalStatsComponent):
+class LexicalStatsComponent(anyts.components.LexicalStatsComponent):
     """
     Class for the component of the lexical sophistication statistics of a text
 
@@ -369,7 +355,7 @@ class LexicalStatsComponent(_Component, anyts.components.LexicalStatsComponent):
 
 
 @Language.factory("ests_style")
-class StyleStatsComponent(_Component, anyts.components.StyleStatsComponent):
+class StyleStatsComponent(anyts.components.StyleStatsComponent):
     """
     Class for the component of the style metrics of a text
 
@@ -421,7 +407,7 @@ class StyleStatsComponent(_Component, anyts.components.StyleStatsComponent):
 
 
 @Language.factory("ests_phon")
-class PhonStatsComponent(_Component, anyts.components.PhonStatsComponent):
+class PhonStatsComponent(anyts.components.PhonStatsComponent):
     """
     Class for the component of the phonostatistics of a text
 
@@ -456,7 +442,7 @@ class PhonStatsComponent(_Component, anyts.components.PhonStatsComponent):
 
 
 @Language.factory("ests_verse")
-class VerseStatsComponent(_Component):
+class VerseStatsComponent(StatsComponent):
     """
     Class for the component of the verse statistics of a text
 

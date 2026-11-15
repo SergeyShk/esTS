@@ -62,27 +62,27 @@ Galdós against Unamuno, three novels each from the [corpus of literature](../da
     ```
                       median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
     diversity_mtldw         105.455          66.179  37.104   43.799    3.260        0.988  0.994     0.0
-    diversity_mamtld        103.316          64.814  35.107   45.657    3.083        0.981  0.990     0.0
-    diversity_mtld          103.655          63.851  38.546   47.911    3.110        0.981  0.990     0.0
-    diversity_mattr           0.817           0.769   0.046    0.057    2.952        0.979  0.990     0.0
-    diversity_msttr           0.819           0.769   0.047    0.059    2.929        0.979  0.989     0.0
+    diversity_mamtld        103.316          64.997  35.107   45.657    3.084        0.981  0.990     0.0
+    diversity_mtld          103.655          64.594  37.536   47.169    3.107        0.981  0.990     0.0
+    diversity_mattr           0.817           0.769   0.046    0.057    2.951        0.979  0.990     0.0
+    diversity_msttr           0.819           0.769   0.047    0.059    2.927        0.979  0.989     0.0
 
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
     basic_letters_per_word          4.441           4.130   0.243    0.358    1.695        0.784  0.892     0.0
-    readability_lix                37.906          29.721   7.097   11.023    1.084        0.694  0.847     0.0
+    readability_lix                38.321          29.758   7.140   11.170    1.091        0.698  0.849     0.0
     morph_p_gerund                  0.069           0.037   0.026    0.035    1.533        0.742  0.871     0.0
-    morph_polarity_Neg              0.019           0.028  -0.011   -0.009   -1.122       -0.559  0.221     0.0
-    sents_mean                     16.393          11.494   3.078    6.688    0.833        0.610  0.805     0.0
+    morph_polarity_Neg              0.019           0.028  -0.011   -0.009   -1.123       -0.559  0.221     0.0
+    sents_mean                     16.393          11.494   3.105    6.818    0.843        0.616  0.808     0.0
     punct_dash                     19.000          46.000 -39.000  -14.000   -1.287       -0.605  0.197     0.0
     punct_exclamation               9.000          24.000 -23.000   -2.000   -1.251       -0.637  0.181     0.0
-    diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.676       -0.351  0.324     0.0
+    diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.675       -0.351  0.325     0.0
 
     {'n_Galdós': 155, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós has the richer vocabulary: the measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Yule's K, which weighs the frequent words, gives a medium effect (0.35), so the difference lies mostly in the rare vocabulary. His words and sentences are longer, with nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue: two and a half times as many dashes and exclamation marks per 1000 words, and more negations. The cohesion tells them apart as well (`result.filter(like="cohesion_", axis=0)`): per 1000 words Unamuno opens more than three times as many sentences with a connector (`cohesion_connectors_inter`, 20 against 6) - about 2.4 times as many per sentence, his sentences being shorter - and he repeats more of the content words of a sentence in the next two (0.108 against 0.065). Part of the cohesion follows the length of the sentences: Spearman's ρ with `sents_mean` over the windows is 0.76 for Galdós and 0.71 for Unamuno for `cohesion_content_overlap_all`, the binary overlap of all the pairs of sentences, and -0.49 and -0.61 for the connectors opening a sentence, while the share of the content words repeated in the next two sentences is not tied to it (0.02 and -0.01).
+Galdós has the richer vocabulary: the measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Yule's K, which weighs the frequent words, gives a medium effect (0.35), so the difference lies mostly in the rare vocabulary. His words and sentences are longer, with nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue: two and a half times as many dashes and exclamation marks per 1000 words, and more negations. The cohesion tells them apart as well (`result.filter(like="cohesion_", axis=0)`): per 1000 words Unamuno opens more than three times as many sentences with a connector (`cohesion_connectors_inter`, 20 against 6) - about 2.4 times as many per sentence, his sentences being shorter - and he repeats more of the content words of a sentence in the next two (0.108 against 0.066). Part of the cohesion follows the length of the sentences: Spearman's ρ with `sents_mean` over the windows is 0.76 for Galdós and 0.71 for Unamuno for `cohesion_content_overlap_all`, the binary overlap of all the pairs of sentences, and -0.49 and -0.60 for the connectors opening a sentence, while the share of the content words repeated in the next two sentences is not tied to it (0.01 and 0.02).
 
-The p-values take the 272 windows of six novels for independent (see the [warning](#statistics) below), and by the same test two novels of Galdós, *Marianela* and *Misericordia*, differ in 52 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.1 to 6.7 words, where the windows alone would give 3.9 to 6.1.
+The p-values take the 272 windows of six novels for independent (see the [warning](#statistics) below), and by the same test two novels of Galdós, *Marianela* and *Misericordia*, differ in 51 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.1 to 6.8 words, where the windows alone would give 4.0 to 6.2.
 
 ## Parameters
 
@@ -99,7 +99,7 @@ The p-values take the 272 windows of six novels for independent (see the [warnin
 Raises:
 
 - `SourceTypeError` - texts that are not a list of strings, `features` that cannot be called or give no mapping of numbers by name;
-- `SourceError` - a corpus without a window of `min_words` words or more, a text with a character without a UTF-8 form for the default features;
+- `SourceError` - a corpus without a window of `min_words` words or more;
 - `ParameterError` - a `window` or `min_words` that is not an integer of at least one, `min_words` above `window`, labels, a number of samples or a seed that `check_comparison_params` rejects;
 - `DatasetNotFoundError` - the default features without the model installed.
 
@@ -126,7 +126,7 @@ Left out are the reading time, which only follows the number of words in a windo
 
 The parts of speech and the features of a single value - polarity, polite, poss, reflex - are shares of all the words (`morph_polarity_Neg` is the share of the negations), the other features shares of the words that carry them (`morph_mood_Sub` is the subjunctive among the moods). A value that does not occur in a window gives 0, a feature absent from the window altogether (no verbs - no tense) gives `nan`. A value of several values (`PronType=Int,Rel` of *que*) is shared equally among its parts, so the shares of a feature still sum to one.
 
-The morphology and the cohesion are parsed by the model [`es_core_news_sm`](../installation.md#model) without its parser, so the marker `morph_p_ser`, which reads the copulas from the dependencies, and the group `syntax_` are left out; a pipeline passed in `nlp` runs whole but for the entity recognizer, so `functools.partial(text_features, nlp=get_nlp())` brings the parser, `morph_p_ser` and the syntax in, and another model goes into the comparison the same way. The parse takes the sentences of the group `sents_` ([`set_sent_starts`](https://sergeyshk.github.io/anyTS/utils/spacy/#set_sent_starts) of the core), so the cohesion and the syntax count the same sentences as the rhythm. A novel is compared by windows and not whole, as the pipeline takes at most `max_length` characters.
+The morphology and the cohesion are parsed by the model [`es_core_news_sm`](../installation.md#model) without its parser, so the marker `morph_p_ser`, which reads the copulas from the dependencies, and the group `syntax_` are left out; a pipeline passed in `nlp` runs whole but for the entity recognizer, so `functools.partial(text_features, nlp=get_nlp())` brings the parser, `morph_p_ser` and the syntax in, and another model goes into the comparison the same way. The pipeline of [`load_pipeline`](../components.md#load_pipeline), the default one, splits the text into the sentences of the group `sents_`, so the cohesion and the syntax count the same sentences as the rhythm; a pipeline of one's own gives its own sentences. A novel is compared by windows and not whole, as the pipeline takes at most `max_length` characters.
 
 The shares of spaces, letters and punctuation marks (`basic_p_spaces`, `basic_p_letters`, `basic_p_punctuations`) count the characters as they are: indents, double and non-breaking spaces of the files reflect the typesetting of an edition and not the text. In a corpus from different sources collapse them beforehand, for instance with `re.sub(r"[^\S\n]+", " ", text)`.
 
@@ -138,7 +138,7 @@ The shares of spaces, letters and punctuation marks (`basic_p_spaces`, `basic_p_
 Raises:
 
 - `SourceTypeError` - a text that is not a string, a pipeline that is not a spaCy `Language`;
-- `SourceError` - a text without words, with a character without a UTF-8 form or longer than the `max_length` of the pipeline, a pipeline that gives no parts of speech or no lemmas;
+- `SourceError` - a text without words or longer than the `max_length` of the pipeline, a pipeline that gives no parts of speech or no lemmas;
 - `DatasetNotFoundError` - the default model is not installed.
 
 ``` {.python .signature}
@@ -157,7 +157,7 @@ Returns the matrix of the features of the windows indexed by (number of the text
 Raises:
 
 - `SourceTypeError` - texts that are not a list of strings, `features` that cannot be called or give no mapping of numbers by name;
-- `SourceError` - a corpus without a window of `min_words` words or more, a text with a character without a UTF-8 form for the default features;
+- `SourceError` - a corpus without a window of `min_words` words or more;
 - `ParameterError` - a `window` or `min_words` that is not an integer of at least one, `min_words` above `window`;
 - `DatasetNotFoundError` - the default features without the model installed.
 
@@ -182,11 +182,11 @@ The syntactic features come with a pipeline that has a parser, passed in a funct
 
     ```
                                         median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    syntax_gerund_clauses_per_sent              0.145           0.045   0.088    0.119    1.460        0.848  0.924     0.0
-    syntax_complex_nominals_per_clause          0.809           0.550   0.213    0.307    1.158        0.688  0.844     0.0
-    syntax_tree_depth                           3.727           2.861   0.529    1.057    1.064        0.659  0.830     0.0
-    syntax_t_units_per_sent                     1.073           1.009   0.028    0.156    1.365        0.657  0.829     0.0
-    syntax_subtrees_per_sent                    6.742           4.494   1.484    2.921    0.932        0.656  0.828     0.0
+    syntax_gerund_clauses_per_sent              0.143           0.045   0.090    0.116    1.473        0.852  0.926     0.0
+    syntax_complex_nominals_per_clause          0.808           0.548   0.215    0.302    1.163        0.690  0.845     0.0
+    syntax_tree_depth                           3.763           2.888   0.594    1.062    1.078        0.664  0.832     0.0
+    syntax_t_units_per_sent                     1.073           1.009   0.029    0.157    1.376        0.664  0.832     0.0
+    syntax_subtrees_per_sent                    6.800           4.534   1.567    2.917    0.942        0.661  0.830     0.0
     ```
 
 ## Comparison of feature tables { #compare_features }

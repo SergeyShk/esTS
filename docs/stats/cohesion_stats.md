@@ -9,7 +9,7 @@ The cohesion statistics of a text in the manner of [Coh-Metrix](https://doi.org/
 Raises:
 
 - `SourceTypeError` - a source that is neither a string nor a `Doc`, an extractor of another type, a pipeline in `nlp` that is not a spaCy `Language`, connectors that are not a dictionary of phrases and pairs of strings;
-- `SourceError` - a source without words; a `Doc` without the parts of speech or the lemmas (a `Doc` of `spacy.blank("es")`); a string longer than the `max_length` of the pipeline or with a character without a UTF-8 form;
+- `SourceError` - a source without words; a `Doc` without the parts of speech or the lemmas (a `Doc` of `spacy.blank("es")`); a string longer than the `max_length` of the pipeline;
 - `ParameterError` - an unknown class or kind of a connector, a `blank_lines` that is not a `bool`;
 - `DatasetNotFoundError` - a string without `nlp` when the model is not installed.
 

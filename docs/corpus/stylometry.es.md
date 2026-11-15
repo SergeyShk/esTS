@@ -347,7 +347,7 @@ Las categorías gramaticales son las de la anotación de un `Doc` que las lleva.
 Excepciones:
 
 - `SourceTypeError` - unas palabras que no son una lista de cadenas, un pipeline que no es un `Language` de spaCy;
-- `SourceError` - una fuente sin palabras, un pipeline que no etiqueta las categorías gramaticales (`spacy.blank("es")`), un carácter sin forma UTF-8;
+- `SourceError` - una fuente sin palabras, un pipeline que no etiqueta las categorías gramaticales (`spacy.blank("es")`);
 - `DatasetNotFoundError` - el modelo por defecto no está instalado.
 
 === "Código"
