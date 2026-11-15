@@ -3,11 +3,13 @@ from typing import ClassVar
 
 import pytest
 import spacy
+from anyts.document import get_tree
 
 from ests import MorphStats
 from ests.constants import MORPHOLOGY_FEATURES, MORPHOLOGY_MARKERS_DESC, MORPHOLOGY_STATS_DESC
 from ests.exceptions import SourceError, SourceTypeError, UnknownStatError
-from ests.utils import get_nlp
+from ests.morph_stats import is_auxiliary
+from ests.utils import _annotate_text, get_nlp
 
 TEXT = (
     "El gato duerme en la ventana mientras los niños juegan. "
@@ -262,6 +264,13 @@ def test_markers_auxiliaries_are_not_copulas(text):
 def test_markers_passive_auxiliary_is_not_a_copula(text, expected):
     value = MorphStats(text).get_markers()["p_ser"]
     assert isnan(value) if expected is None else value == expected
+
+
+@pytest.mark.parametrize("text", ["Así está\n\nCantando llegó el día", "Ya lo sé, así es"])
+def test_auxiliary_within_its_sentence(text):
+    """A copula at the end of a sentence or of the text is no auxiliary of the next verb form"""
+    tree = get_tree(_annotate_text(text))
+    assert not any(is_auxiliary(word) for word in tree.words)
 
 
 def test_markers_copulas():
