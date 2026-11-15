@@ -456,11 +456,10 @@ def test_load_pipeline():
     nlp = load_pipeline(exclude="ner")
     assert nlp.pipe_names == [
         "anyseg_sentencizer",
+        "esmorph",
         "tok2vec",
-        "morphologizer",
         "parser",
         "attribute_ruler",
-        "lemmatizer",
     ]
     assert nlp.config["nlp"]["tokenizer"] == {"@tokenizers": "anyseg.Tokenizer.v1"}
     assert "ner" not in load_pipeline(exclude=["ner", "parser"]).component_names

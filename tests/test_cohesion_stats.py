@@ -49,7 +49,7 @@ def test_counts(cs):
     assert cs.n_sents == 3
     assert cs.n_words == sum(len(sent) for sent in cs.words)
     assert cs.n_nouns == 6
-    assert cs.n_content_words == 10
+    assert cs.n_content_words == 9
 
 
 def test_get_stats(cs):
@@ -346,9 +346,11 @@ def test_find_connectors_pos_filter():
     ("text", "expected"),
     [
         ("El antes y el después no importan.", ["y"]),
-        ("Habló con Juan Luego ayer.", []),
         ("Resumiendo, el texto es claro.", ["resumiendo"]),
         ("Primeramente, hay que leer.", ["primeramente"]),
+        ("Luego salió de casa.", ["luego"]),
+        ("No vino, pues estaba enfermo.", ["pues"]),
+        ("Hay frutas tropicales, verbigracia, la papaya.", ["verbigracia"]),
     ],
 )
 def test_connector_spans_of_a_parsed_text(text, expected):

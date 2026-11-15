@@ -502,14 +502,12 @@ def _head_verb(token: TreeWord, verbs: Collection[str]) -> str:
     Lemma of the head of a token looked up among some verbs
 
     Description:
-        The first word of the lemma of the model (it can give hacer él); when
-        it is none of the verbs, the lemma of lemmatize, since the model can
-        read a verb opening a sentence as a proper noun (Solía salir) or
-        invent a lemma for an old form (debiérar)
+        The lemma of the head; when it is none of the verbs, the lemma of
+        lemmatize, since the tagger can read a verb as a noun or give it the
+        lemma of another verb (vayas - vaya, venga - vengar)
     """
     head = token.head or token
-    words = (head.lemma or "").lower().split()
-    lemma = words[0] if words else ""
+    lemma = (head.lemma or "").lower()
     return lemma if lemma in verbs else lemmatize(head.form.lower())
 
 
@@ -620,10 +618,10 @@ def predicate_form(token: TreeWord) -> str:
         The form of the auxiliaries and copulas of a word: Fin when one of them
         is finite or the first one is a participle, else the form of the first
         one (había llegado is finite, de haber matado an infinitive, siendo
-        elegido a gerund), and without them the form of the word itself. An auxiliary the
-        model leaves without a form is read by its ending when it is a verb of
-        AUXILIARY_VERBS (habéis llegado) and skipped otherwise (the old
-        spelling á). A participle auxiliary counts as finite: sido and estado
+        elegido a gerund), and without them the form of the word itself. An
+        auxiliary the tagger leaves without a form, as an infinitive read as a
+        noun (puede ser, va a poder), is read by its ending when it is a verb of
+        AUXILIARY_VERBS and skipped otherwise (the old spelling á). A participle auxiliary counts as finite: sido and estado
         follow a form of haber, which the models may attach to another word
         (hubieras sido albañil). The predicate_form of the core with the
         Spanish reading of an auxiliary without a form
@@ -638,7 +636,7 @@ def predicate_form(token: TreeWord) -> str:
 
 
 def _auxiliary_form(token: TreeWord) -> str:
-    """Verb form of an auxiliary the model leaves without one, by its ending"""
+    """Verb form of an auxiliary the tagger leaves without one, by its ending"""
     word = token.form.lower()
     if lemmatize(word) not in AUXILIARY_VERBS:
         return ""

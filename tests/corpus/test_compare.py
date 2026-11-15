@@ -152,11 +152,11 @@ def test_text_features():
 
 
 def test_text_features_morphology():
-    # A feature of a single value is a share of all the words; qué is half Int, half Rel
-    features = text_features("No sé qué pasó.")
-    assert features["morph_polarity_Neg"] == 0.25
-    assert features["morph_pron_type_Int"] == features["morph_pron_type_Rel"] == 0.5
-    assert sum(features[f"morph_pron_type_{value}"] for value in ("Int", "Rel", "Dem")) == 1.0
+    # A feature of a single value is a share of all the words; usted is half Nom, half Acc
+    features = text_features("Usted no sabe qué pasó.")
+    assert features["morph_polarity_Neg"] == 0.2
+    assert features["morph_case_Nom"] == features["morph_case_Acc"] == 0.5
+    assert sum(features[f"morph_case_{value}"] for value in ("Nom", "Acc", "Dat")) == 1.0
     assert isnan(text_features("Juan duerme.")["morph_pron_type_Int"])
 
 

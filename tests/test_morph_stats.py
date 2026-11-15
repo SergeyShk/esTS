@@ -97,9 +97,11 @@ def test_punctuations_and_symbols_dropped():
     assert ms.words == ("El", "50", "de", "los", "libros", "vaya")
 
 
-def test_doc_source():
-    """A Doc keeps the analysis of its pipeline, a string gets that of esMorph"""
-    assert MorphStats(get_nlp()("No sé qué quieres")).pron_type == (None, None, "Int,Rel", None)
+def test_doc_source(ms):
+    """A Doc of load_pipeline has the analyses of esMorph, as a string"""
+    assert MorphStats(get_nlp()(TEXT)).tags == ms.tags
+    doc = spacy.load("es_core_news_sm")("No sé qué quieres")
+    assert MorphStats(doc).pron_type == (None, None, "Int,Rel", None)
     assert MorphStats("No sé qué quieres").pron_type == (None, None, "Int", None)
 
 

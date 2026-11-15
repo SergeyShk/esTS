@@ -492,15 +492,12 @@ CONNECTOR_CLASSES = {
 # Kinds of the discourse markers: conjunctions, conjunctive locutions and adverbs
 # against the lexicalized phrases (sin embargo, por lo tanto, es decir)
 CONNECTOR_TYPES = {"primary": "primary", "secondary": "secondary"}
-# Parts of speech a one-word marker may carry (PROPN for one that opens a sentence)
-CONNECTOR_POS = frozenset({"CCONJ", "SCONJ", "PART", "ADV", "ADP", "INTJ", "PROPN", "X"})
-# Parts of speech allowed for single markers on top of CONNECTOR_POS
+# Parts of speech allowed for single markers on top of CONNECTOR_POS of anyts.constants:
+# the gerunds of the reformulative markers
 CONNECTOR_POS_EXTRA = {
-    "pues": frozenset({"NOUN"}),
     "resumiendo": frozenset({"VERB"}),
     "recapitulando": frozenset({"VERB"}),
     "concluyendo": frozenset({"VERB"}),
-    "verbigracia": frozenset({"NOUN"}),
 }
 # Words after or before a marker that make it a part of a prepositional phrase
 # (antes de la reunión, por encima de 80)
