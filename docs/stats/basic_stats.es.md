@@ -15,7 +15,7 @@ Excepciones:
 - `SourceError` - una fuente sin palabras;
 - `ParameterError` - un umbral que no es un entero de al menos uno, un `normalize` que no es un `bool`.
 
-La clase extiende el `BasicStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/basic_stats/) con los ganchos del español: las sílabas de una palabra se cuentan con [`count_syllables`](../syllables.md#count_syllables), y los extractores por defecto son los [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) del español. Los indicadores ordinales `º` y `ª` son letras (`3.º` es una palabra de una letra). El componente de líneas en blanco de esTS se llama [`ests_blank_lines`](../components.md#blank_lines): `nlp.add_pipe("ests_blank_lines", before="parser")`. Las estadísticas se calculan al crear el objeto.
+La clase extiende el `BasicStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/basic_stats/) con los ganchos del español: las sílabas de una palabra se cuentan con [`count_syllables`](../syllables.md#count_syllables), y los extractores por defecto son los [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) del español. Los indicadores ordinales `º` y `ª` son letras (`3.º` es una palabra de una letra). Un `Doc` de [`ests.load_pipeline()`](../components.md#load_pipeline) tiene las oraciones de su cadena, y una línea en blanco cierra una. Las estadísticas se calculan al crear el objeto.
 
 === "Código"
 
