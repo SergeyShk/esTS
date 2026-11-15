@@ -267,17 +267,18 @@ def test_citation_version():
 
 @pytest.mark.parametrize("page", ["installation.md", "installation.es.md"])
 def test_installation_bounds(page):
-    """The installation page states the lower bounds of anyTS, anySeg and spaCy of the package"""
+    """The installation page states the lower bounds of anyTS, anySeg, esMorph and spaCy"""
     requirements = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
     bounds = {
         match[1]: match[2]
         for requirement in requirements["project"]["dependencies"]
-        if (match := re.match(r"(anyts|anyseg|spacy)>=([\d.]+)", requirement))
+        if (match := re.match(r"(anyts|anyseg|esmorph|spacy)>=([\d.]+)", requirement))
     }
     text = (ROOT / "docs" / page).read_text(encoding="utf-8")
     assert f"`spaCy` {bounds['spacy']} " in text
     assert f"(https://sergeyshk.github.io/anyTS/) {bounds['anyts']} " in text
     assert f"(https://github.com/SergeyShk/anySeg) {bounds['anyseg']} " in text
+    assert f"(https://github.com/SergeyShk/esMorph) {bounds['esmorph']} " in text
 
 
 def _run(code: str) -> str:
@@ -408,7 +409,7 @@ def test_pipeline_check_without_spacy():
     code = (
         "import sys, ests\n"
         "try:\n"
-        "    ests.StyleStats('El gato duerme.', nlp='es_core_news_sm')\n"
+        "    ests.SyntaxStats('El gato duerme.', nlp='es_core_news_sm')\n"
         "except ests.SourceTypeError as error:\n"
         "    print(error, 'spacy' in sys.modules)"
     )
@@ -500,26 +501,21 @@ def test_demo_computes_its_examples(monkeypatch, freq_dict):
     assert result["text"] == "Hola, " + "!?" * 5 + " " + "_" * 10 + " mundo."
 
 
-@pytest.mark.parametrize(
-    "name", ["CohesionStats", "LexicalStats", "MorphStats", "StyleStats", "SyntaxStats"]
-)
-def test_pickle_without_the_pipeline(name, freq_dict):
+@pytest.mark.parametrize("name", ["CohesionStats", "SyntaxStats"])
+def test_pickle_without_the_pipeline(name):
     """A copy of a class built with a pipeline keeps its statistics but not the pipeline"""
     import copy
     import pickle
 
     from ests.utils import get_nlp
 
-    extra = {"freq_dict": freq_dict} if name == "LexicalStats" else {}
     stats = getattr(ests, name)(
-        "La revisión del expediente fue realizada por el comité.", nlp=get_nlp(), **extra
+        "La revisión del expediente fue realizada por el comité.", nlp=get_nlp()
     )
     data = pickle.dumps(stats)
     assert len(data) < 100_000
     for clone in (pickle.loads(data), copy.deepcopy(stats)):
         assert repr(clone.get_stats()) == repr(stats.get_stats())
-        if name == "LexicalStats":
-            assert clone.analyze("El perro ladra.") == stats.analyze("El perro ladra.")
 
 
 def test_version_of_the_notebooks():

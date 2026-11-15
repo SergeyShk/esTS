@@ -6,10 +6,11 @@
 *   `spaCy` 3.8.17 or newer within 3
 *   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.5 or newer within 0.5, the language-independent core: the extractors, the basic statistics and the common readability formulas, the lexical diversity metrics, the corpus measures, the plots and the machinery of the highlighting come from it with the tokenizer, the lemmatizer, the sentence splitter and the syllables of Spanish
 *   [`anyseg`](https://github.com/SergeyShk/anySeg) 0.3 or newer within 0.3, the segmenter into tokens and sentences
-*   `numpy`, `scipy`, `pandas`, `simplemma` 2
+*   [`esmorph`](https://github.com/SergeyShk/esMorph) 0.3 or newer within 0.3, the morphological analyzer: the lemmas, the parts of speech and the features of a text; its dictionary, built from the Spanish entries of the English Wiktionary with the context model of the UD treebanks AnCora and GSD, is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+*   `numpy`, `scipy`, `pandas`
 *   `matplotlib` and `graphviz` for the [visualizers](visualizers/zipf.md)
 
-The dependencies are installed with the package. `import ests` loads neither spaCy nor matplotlib nor pandas, and the statistics of a string that need no model leave spaCy out: it comes with the first statistics that read the parse of its model, and the plots and the corpus functions on first use.
+The dependencies are installed with the package. `import ests` loads neither spaCy nor matplotlib nor pandas, and the statistics of a string leave spaCy out, the morphology and the lexicon included: it comes with the first statistics that read the parse of its model - the syntax and the cohesion -, and the plots and the corpus functions on first use.
 
 !!! warning "Graphviz"
     The `graphviz` package among the dependencies is only a wrapper: rendering the [word tree](visualizers/word_tree.md) and the [network of collocations](visualizers/corpus.md#collocation_network) requires the executables of [Graphviz](https://graphviz.org/download/), installed separately (`brew install graphviz`, `apt install graphviz`, `conda install graphviz`), otherwise `render()` and displaying the graph in Jupyter fail with `ExecutableNotFound`. Nothing else needs them.
@@ -32,7 +33,7 @@ uv sync --all-groups
 
 ## The spaCy model { #model }
 
-Basic statistics, readability, lexical diversity, the style metrics except the verbal nouns, phonostatistics and verse statistics need no trained model. The [morphological](stats/morph_stats.md), the [syntactic](stats/syntax_stats.md) (with a parser), the [cohesion](stats/cohesion_stats.md) and the [lexical sophistication statistics](stats/lexical_stats.md) of a string need one, and so do the verbal nouns of the [style metrics](stats/style_stats.md), [`function_words_profile`](corpus/stylometry.md), the features of a text, the [comparison of corpora](corpus/compare.md) and building a `Doc` yourself, best with [`ests.load_pipeline()`](components.md#load_pipeline), which gives a `Doc` the tokens and the sentences of its string. The test suite needs it too; the `test` dependency group installs it:
+Basic statistics, readability, lexical diversity, the [morphological](stats/morph_stats.md) and the [lexical sophistication statistics](stats/lexical_stats.md), the style metrics, phonostatistics and verse statistics of a string need no trained model: the morphology comes from esMorph. The [syntactic](stats/syntax_stats.md) (with a parser) and the [cohesion statistics](stats/cohesion_stats.md) of a string need one, and so do the features of a text, the [comparison of corpora](corpus/compare.md) and building a `Doc` yourself, best with [`ests.load_pipeline()`](components.md#load_pipeline), which gives a `Doc` the tokens and the sentences of its string. The test suite needs it too; the `test` dependency group installs it:
 
 ``` bash
 python -m spacy download es_core_news_sm

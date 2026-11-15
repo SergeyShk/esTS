@@ -352,14 +352,25 @@ def test_abbreviation_in_capitals(abbreviation):
         ("Los", "el"),
         ("cantándole", "cantar"),
         ("decírselo", "decir"),
-        ("dámelo", "dámelo"),
+        ("dámelo", "dar"),
+        ("del", "de"),
         ("Madrid", "Madrid"),
         ("1990", "1990"),
         ("3.º", "3.º"),
+        ("xqzw", "xqzw"),
     ],
 )
 def test_lemmatize(word, expected):
     assert lemmatize(word) == expected
+
+
+@pytest.mark.parametrize(
+    ("word", "pos", "expected"),
+    [("vino", "VERB", "venir"), ("vino", "NOUN", "vino"), ("vino", "ADV", "vino")],
+)
+def test_lemmatize_pos(word, pos, expected):
+    """The lemma of the first analysis with the part of speech, of the first one without it"""
+    assert lemmatize(word, pos) == expected
 
 
 @pytest.mark.parametrize(

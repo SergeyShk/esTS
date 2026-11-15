@@ -67,19 +67,19 @@ def test_keyness_against_the_frequency_dictionary_negative(freq_dict):
 
 
 def test_keyness_against_the_frequency_dictionary_proper_nouns(freq_dict):
-    # The row of Roma goes to romo, the key the word Roma reaches with no part of speech
+    # The row of Tomás goes to tomar, the key the word Tomás reaches with no part of speech
     rows = {(r["lemma"], r["pos"]): r["ipm"] for r in freq_dict}
-    romo = (
-        sum(ipm for (lemma, pos), ipm in rows.items() if lemma == "romo") + rows["roma", "PROPN"]
+    tomar = (
+        sum(ipm for (lemma, pos), ipm in rows.items() if lemma == "tomar") + rows["tomás", "PROPN"]
     )
-    assert freq_dict.word_ipm["romo"] == pytest.approx(romo)
-    assert "roma" not in freq_dict.word_ipm
-    words = ["Roma"] * 80 + ["el", "de", "la"] * 100
+    assert freq_dict.word_ipm["tomar"] >= tomar
+    assert "tomás" not in freq_dict.word_ipm
+    words = ["Tomás"] * 80 + ["el", "de", "la"] * 100
     keyword = keyness(words, freq_dict, top_n=1)[0]
-    assert keyword.word == "romo"
-    assert keyword.freq_reference == pytest.approx(romo * CORPUS_SIZE / 1e6)
+    assert keyword.word == "tomar"
+    assert keyword.freq_reference == pytest.approx(freq_dict.word_ipm["tomar"] * CORPUS_SIZE / 1e6)
     negative = keyness(words, freq_dict, positive=False)
-    assert all(k.word not in ("roma", "romo") for k in negative)
+    assert all(k.word not in ("tomás", "tomar") for k in negative)
 
 
 def test_keyness_against_the_frequency_dictionary_alphabet(freq_dict):

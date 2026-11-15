@@ -122,7 +122,7 @@ def test_text_features():
     features = text_features(text)
     prefixes = {key.split("_", 1)[0] for key in features}
     assert prefixes == {"basic", "readability", "diversity", "morph", "sents", "punct", "cohesion"}
-    assert len(features) == 163
+    assert len(features) == 164
     # The cohesion but the overlaps between paragraphs, which the windows cut
     assert sum(1 for key in features if key.startswith("cohesion_")) == 30
     assert not any(key.endswith("_para") for key in features)
@@ -133,8 +133,8 @@ def test_text_features():
     assert features["morph_mood_Sub"] == 0.0
     assert isnan(text_features("El gato, el perro, la casa.")["morph_tense_Past"])
     n_values = sum(len(desc["values"]) for desc in MORPHOLOGY_STATS_DESC.values())
-    # The markers of the moods repeat the shares of mood, p_ser needs the parser
-    markers = set(MORPHOLOGY_MARKERS_DESC) - set(FINITE_MOODS) - {"p_ser"}
+    # The markers of the moods repeat the shares of mood
+    markers = set(MORPHOLOGY_MARKERS_DESC) - set(FINITE_MOODS)
     assert {key for key in features if key.startswith("morph_p_")} == {
         f"morph_{marker}" for marker in markers
     }
@@ -161,12 +161,12 @@ def test_text_features_morphology():
 
 
 def test_text_features_parser():
-    """A pipeline with a parser adds the syntax of its parse and p_ser, the rest stays"""
+    """A pipeline with a parser adds the syntax of its parse, the rest stays"""
     features = text_features(text)
     parsed = text_features(text, nlp=get_nlp())
     syntax = {key for key in parsed if key.startswith("syntax_")}
     assert syntax == {f"syntax_{key}" for key in SYNTAX_STATS_DESC}
-    assert set(parsed) - set(features) == syntax | {"morph_p_ser"}
+    assert set(parsed) - set(features) == syntax
     assert {key: parsed[key] for key in features} == pytest.approx(features, nan_ok=True)
     assert text_features("El gato es negro y está en casa.", nlp=get_nlp())["morph_p_ser"] == 0.5
     with pytest.raises(SourceError, match="longer than the limit"):

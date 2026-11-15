@@ -4,7 +4,7 @@
 FreqDict(data_dir=DEFAULT_DATASET_DIR)
 ```
 
-A frequency dictionary of Spanish lemmas built from the Spanish books of [Google Books Ngram](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html) (version 20200217): 83,785 lemmas (109,178 rows of a lemma and a part of speech) of the books of 1980-2019, 63 billion words. Every row has the frequency per million words (ipm), the range (the number of years out of 40 in which the lemma occurs), Juilland's D over the years (0-100) and the number of books with the most widespread form of the lemma. The parts of speech are those of Google, with the names of Universal Dependencies: `NOUN`, `PROPN`, `VERB`, `ADJ`, `ADV`, `PRON`, `DET`, `ADP`, `CONJ` (coordinating and subordinating together).
+A frequency dictionary of Spanish lemmas built from the Spanish books of [Google Books Ngram](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html) (version 20200217): 86,196 lemmas (107,032 rows of a lemma and a part of speech) of the books of 1980-2019, 63 billion words. Every row has the frequency per million words (ipm), the range (the number of years out of 40 in which the lemma occurs), Juilland's D over the years (0-100) and the number of books with the most widespread form of the lemma. The parts of speech are those of Google, with the names of Universal Dependencies: `NOUN`, `PROPN`, `VERB`, `ADJ`, `ADV`, `PRON`, `DET`, `ADP`, `CONJ` (coordinating and subordinating together).
 
 The dictionary is built by `scripts/build_freq_dict.py` from the 1-grams: only the forms tagged with a part of speech and made of letters are counted (numbers, punctuation and the tag `X` are dropped), and every form goes to its key by [`lemma_key`](#lemma_key). Google has no tag for proper nouns, so a noun form capitalized in at least 90% of its occurrences is `PROPN` and keeps its form. The decision is taken for the whole form: `dios`, capitalized in 92% of its occurrences, is `PROPN` in lower case too, while its `NOUN` row comes mostly from the plural `dioses`. The rows below 0.1 ipm or found in fewer than 5 years are left out. The dispersion is computed on the relative frequency of every year; the number of books is a lower bound, as a book with several forms of the lemma is counted once.
 
@@ -52,7 +52,7 @@ Raises:
 | `filepath` | `str` | Path to the file of the dictionary, `None` before the download |
 | `entries` | `dict[str, Entry]` | Entries by lemma, the parts of speech merged |
 | `min_ipm` | `float` | Minimum frequency in the dictionary (0.1) |
-| `word_ipm` | `dict[str, float]` | Frequencies by the key a word form reaches without a part of speech: the rows of the proper nouns go to `lemma_key` of their forms (`roma` to `romo`); the reference of [`keyness`](../corpus/keyness.md) |
+| `word_ipm` | `dict[str, float]` | Frequencies by the key a word form reaches without a part of speech: the rows of the proper nouns go to `lemma_key` of their forms (`tomás` to `tomar`); the reference of [`keyness`](../corpus/keyness.md) |
 
 ``` {.python .signature}
 Entry(lemma, pos, ipm, range, dispersion, docs)
@@ -69,7 +69,7 @@ An entry of the dictionary: a named tuple.
 | `dispersion` | `int` | Juilland's D over the years, from 0 to 100 |
 | `docs` | `int` | Number of books with the most widespread form of the lemma |
 
-The dictionary iterates over its records as `get_records()` without filters: `for record in fd` goes over the 109,178 rows of a lemma and a part of speech, while `len(fd)` counts the 83,785 lemmas with their parts of speech merged, as `lookup` and `in` see them.
+The dictionary iterates over its records as `get_records()` without filters: `for record in fd` goes over the 107,032 rows of a lemma and a part of speech, while `len(fd)` counts the 86,196 lemmas with their parts of speech merged, as `lookup` and `in` see them.
 
 ## Methods
 
@@ -83,7 +83,7 @@ An archive that cannot be downloaded or fails the checksum twice raises `Downloa
 
 `check_data()` checks that the file of the dictionary is in place and returns `True`; a dictionary that is not downloaded raises `DatasetNotFoundError` with the commands to download it. The other methods and the attributes of the entries and frequencies check it themselves.
 
-`lookup(lemma)` returns the entry of a lemma in any case, `None` for a lemma out of the dictionary; `ipm(lemma)` returns the frequency of a lemma per million words, 0 for a lemma out of the dictionary. The argument is a key of the dictionary, not a word form: a word form is looked up by its key, `computadoras` by `lemma_key("computadoras")` (`computador`), not by `computadora`; the lemma of `usted` in simplemma is `tú`, so `fd.lookup("usted")` is `None`. The same holds for `in`; [`LexicalStats`](../stats/lexical_stats.md) and [`keyness`](../corpus/keyness.md) go to the keys themselves.
+`lookup(lemma)` returns the entry of a lemma in any case, `None` for a lemma out of the dictionary; `ipm(lemma)` returns the frequency of a lemma per million words, 0 for a lemma out of the dictionary. The argument is a key of the dictionary, not a word form: a word form is looked up by its key, `computadoras` by `lemma_key("computadoras")` (`computadora`); the lemma of `usted` in esMorph is `tú`, so `fd.lookup("usted")` is `None`. The same holds for `in`; [`LexicalStats`](../stats/lexical_stats.md) and [`keyness`](../corpus/keyness.md) go to the keys themselves.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
@@ -99,18 +99,18 @@ A lemma that is not a string raises `SourceTypeError`.
     fd.lookup("Gato")
     fd.lookup("dios")
     fd.lookup("usted"), fd.ipm(lemma_key("usted"))
-    fd.ipm("computadora"), fd.ipm(lemma_key("computadoras"))
+    fd.ipm("computador"), fd.ipm(lemma_key("computadoras"))
     "gato" in fd, len(fd), sum(1 for _ in fd)
     ```
 
 === "Result"
 
     ```
-    Entry(lemma='gato', pos=('NOUN', 'ADJ'), ipm=29.08, range=40, dispersion=95, docs=232841)
-    Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.42, range=40, dispersion=98, docs=566129)
-    (None, 1396.74)
-    (0.0, 20.07)
-    (True, 83785, 109178)
+    Entry(lemma='gato', pos=('NOUN', 'ADJ'), ipm=25.37, range=40, dispersion=95, docs=232841)
+    Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.46, range=40, dispersion=98, docs=566129)
+    (None, 1463.67)
+    (4.72, 15.35)
+    (True, 86196, 107032)
     ```
 
 `get_records(pos=None, min_ipm=None, limit=None)` returns the records of the dictionary - a row for every lemma and part of speech, by frequency - filtered by the part of speech and the minimum frequency; `get_texts` with the same parameters returns the lemmas.
@@ -141,22 +141,21 @@ An unknown part of speech, a minimum frequency that is not a number and a `limit
     ```
 
 !!! warning "The register of the books"
-    The dictionary describes the written language of books, a good part of them scholarly, and keeps what the books have: the abbreviations of the references are frequent words (`pp`, `cit`, `vol`), and so are the English words of the bibliographies (`the`, `of`) and the old spellings of the reprints (`fué`). The texts are recognized from scans and tagged automatically, so misreadings and tagging errors remain, mostly among the rare lemmas; the lemmatizer knows no context, so a form shared by two lemmas goes to one of them (`como` is only `como`, never `comer`), and a form it does not know stays as it is (`darle`, `verlo`).
+    The dictionary describes the written language of books, a good part of them scholarly, and keeps what the books have: the abbreviations of the references are frequent words (`pp`, `cit`, `vol`), and so are the English words of the bibliographies (`the`, `of`). The texts are recognized from scans and tagged automatically, so misreadings and tagging errors remain, mostly among the rare lemmas. A form gets the lemma of esMorph for the part of speech Google gives it, without the context of its sentence: `como` tagged as a verb is `comer`, otherwise `como`, and a verb form of two verbs goes to the first of them (`fue` is `ser`, never `ir`).
 
 ## Key of a word { #lemma_key }
 
 ``` {.python .signature}
-lemma_key(word, proper=False)
+lemma_key(word, proper=False, pos='')
 ```
 
-The key by which a word is looked up in the dictionary, and by which the dictionary is built (`ests.datasets.freq_dict.lemma_key`): the word goes to lower case, so that a word at the start of a sentence finds its lemma (`Miró` - `mirar`), and then to its lemma by `lemmatize`. A proper noun keeps its form in lower case (`proper=True`): `París` is `parís`, not the verb `parir`.
-
-The lemmas depend on the version of simplemma: the dictionary is built with 2.0.0 (the constant `SIMPLEMMA_VERSION`), and a `FreqDict` warns once per process when another version is installed, as some words may then miss the dictionary.
+The key by which a word is looked up in the dictionary, and by which the dictionary is built (`ests.datasets.freq_dict.lemma_key`): the word goes to lower case, so that a word at the start of a sentence finds its lemma (`Miró` - `mirar`), and then to its lemma by `ests.utils.lemmatize` - of esMorph, with the part of speech of Universal Dependencies when it is given (`vino` - `vino`, as a verb `venir`). A verb and an auxiliary take the first analysis of either (`fue` - `ser`), as Google tags both as verbs. A proper noun keeps its form in lower case (`proper=True`): `Tomás` is `tomás`, not the verb `tomar`. The dictionary is built with the lemmas of esMorph 0.3 and the parts of speech of Google.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
 | `word` | `str` | - | Word form in any case |
 | `proper` | `bool` | `False` | The word is a proper noun |
+| `pos` | `str` | `''` | Part of speech of UD; without it the first analysis of esMorph |
 
 === "Code"
 
@@ -164,12 +163,14 @@ The lemmas depend on the version of simplemma: the dictionary is built with 2.0.
     from ests.datasets.freq_dict import lemma_key
 
     lemma_key("Miró"), lemma_key("computadoras"), lemma_key("fue")
-    lemma_key("París"), lemma_key("París", proper=True)
+    lemma_key("vino"), lemma_key("vino", pos="VERB")
+    lemma_key("Tomás"), lemma_key("Tomás", proper=True)
     ```
 
 === "Result"
 
     ```
-    ('mirar', 'computador', 'ser')
-    ('parir', 'parís')
+    ('mirar', 'computadora', 'ser')
+    ('vino', 'venir')
+    ('tomar', 'tomás')
     ```

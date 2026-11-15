@@ -46,8 +46,11 @@ long_sent = (
     )
     + "."
 )
+# A string gets the parts of speech and the lemmas of esMorph, but no parse
 TEXT_LAYERS = [
-    layer for layer in HIGHLIGHT_LAYERS_DESC if layer not in HIGHLIGHT_LAYER_ANNOTATIONS
+    layer
+    for layer in HIGHLIGHT_LAYERS_DESC
+    if "deprel" not in HIGHLIGHT_LAYER_ANNOTATIONS.get(layer, ())
 ]
 SYNTAX_LAYERS = sorted(
     layer for layer, needs in HIGHLIGHT_LAYER_ANNOTATIONS.items() if "deprel" in needs
@@ -153,7 +156,6 @@ def test_layers_unknown():
     [
         ("passive", "dependency parse"),
         ("de_chains", "dependency parse"),
-        ("verbal_nouns", "parts of speech, lemmas"),
     ],
 )
 def test_layers_unavailable(layer, requirement):
@@ -278,10 +280,10 @@ def test_rare_words():
 
 
 def test_rare_words_proper_nouns(nlp):
-    # a proper noun of a tagged Doc keeps its form, parís; a string takes the lemma parir
+    # A proper noun keeps its form, parís, in a Doc and in a string
     doc = nlp("Viajó a París en tren.")
     assert "París" in spans(highlight(doc, layers="rare_words"), "rare_words")
-    assert "París" not in spans(highlight(doc.text, layers="rare_words"), "rare_words")
+    assert "París" in spans(highlight(doc.text, layers="rare_words"), "rare_words")
 
 
 def test_verbal_nouns(doc):
@@ -350,8 +352,9 @@ def test_connectors_si_without_a_condition(nlp):
     ht = highlight(doc, layers="connectors")
     assert [(h.start, h.end) for h in ht.highlights] == [(17, 19)]
     assert len(ht.highlights) == len(CohesionStats(doc).connector_spans)
-    # A string has no parse: only the si after ¡ is dropped
-    assert len(highlight(text, layers="connectors").highlights) == 2
+    # A string has the parts of speech of esMorph but no parse: the si after a verb of a
+    # question is dropped as in the Doc
+    assert highlight(text, layers="connectors").highlights == ht.highlights
 
 
 def test_passive(doc):
@@ -447,7 +450,7 @@ def test_split_predicates(doc):
         ("Este informe es el mismo que enviaste ayer.", []),
         ("Los resultados son los mismos.", []),
         ("No parecía la misma.", []),
-        # The lemma of the model is the form; that of simplemma is ser
+        # The lemma of the model is the form; that of lemmatize is ser
         ("Siempre serás el mismo.", []),
         ("Los mismos familiares vinieron.", []),
         ("Siguió con la misma amarga ironía.", []),

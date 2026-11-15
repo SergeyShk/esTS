@@ -3,11 +3,13 @@ from typing import ClassVar
 
 import pytest
 import spacy
+from anyts.document import get_tree
 
 from ests import MorphStats
 from ests.constants import MORPHOLOGY_FEATURES, MORPHOLOGY_MARKERS_DESC, MORPHOLOGY_STATS_DESC
 from ests.exceptions import SourceError, SourceTypeError, UnknownStatError
-from ests.utils import get_nlp
+from ests.morph_stats import is_auxiliary
+from ests.utils import _annotate_text, get_nlp
 
 TEXT = (
     "El gato duerme en la ventana mientras los niños juegan. "
@@ -87,7 +89,7 @@ def test_feature_values(text, stat, expected):
 
 
 def test_multiple_values():
-    assert "Int,Rel" in MorphStats("No sé qué quieres").pron_type
+    assert "Acc,Nom" in MorphStats("Usted lo ve").case
 
 
 def test_punctuations_and_symbols_dropped():
@@ -95,12 +97,10 @@ def test_punctuations_and_symbols_dropped():
     assert ms.words == ("El", "50", "de", "los", "libros", "vaya")
 
 
-def test_doc_source(ms):
-    assert MorphStats(get_nlp()(TEXT)).tags == ms.tags
-
-
-def test_nlp_parameter(ms):
-    assert MorphStats(TEXT, nlp=get_nlp()).tags == ms.tags
+def test_doc_source():
+    """A Doc keeps the analysis of its pipeline, a string gets that of esMorph"""
+    assert MorphStats(get_nlp()("No sé qué quieres")).pron_type == (None, None, "Int,Rel", None)
+    assert MorphStats("No sé qué quieres").pron_type == (None, None, "Int", None)
 
 
 @pytest.mark.parametrize("source", [1, ["El", "gato"], None, spacy.blank("es")])
@@ -115,12 +115,6 @@ def test_source_type_error(source):
 def test_source_without_words(source):
     with pytest.raises(SourceError, match="no words"):
         MorphStats(source)
-
-
-def test_source_too_long():
-    nlp = get_nlp()
-    with pytest.raises(SourceError, match="longer than the limit"):
-        MorphStats("hola " * (nlp.max_length // 4), nlp=nlp)
 
 
 def test_source_without_annotation():
@@ -272,14 +266,22 @@ def test_markers_passive_auxiliary_is_not_a_copula(text, expected):
     assert isnan(value) if expected is None else value == expected
 
 
+@pytest.mark.parametrize("text", ["Así está\n\nCantando llegó el día", "Ya lo sé, así es"])
+def test_auxiliary_within_its_sentence(text):
+    """A copula at the end of a sentence or of the text is no auxiliary of the next verb form"""
+    tree = get_tree(_annotate_text(text))
+    assert not any(is_auxiliary(word) for word in tree.words)
+
+
 def test_markers_copulas():
     assert MorphStats("Ella es alta pero hoy está cansada").get_markers()["p_ser"] == 0.5
 
 
 def test_markers_ser_without_parse():
+    """The auxiliaries are found by the morphology, so a Doc without a parse has p_ser"""
     doc = get_nlp()("Ella es alta pero hoy está cansada", disable=["parser"])
     assert not doc.has_annotation("DEP")
-    assert isnan(MorphStats(doc).get_markers()["p_ser"])
+    assert MorphStats(doc).get_markers()["p_ser"] == 0.5
 
 
 def test_print_stats(short, capsys):
@@ -302,7 +304,6 @@ def test_print_stats_filter_none(short, capsys):
 @pytest.mark.parametrize(
     ("text", "stat", "expected"),
     [
-        ("No sé qué quieres", "pron_type", "Interrogative / Relative"),
         ("Usted lo ve", "case", "Accusative / Nominative"),
     ],
 )

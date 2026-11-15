@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Collection, Mapping, Sequence
 from math import nan
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import anyts.style_stats
 from anyts.constants import MESSAGES, NAUSEA_TOP_N
@@ -25,15 +25,12 @@ from .constants import (
     STYLE_STATS_DESC,
 )
 from .exceptions import SourceError, SourceTypeError
-from .utils import _check_nlp, get_document, get_nlp, is_verbal_noun, iter_text_sents, lemmatize
+from .utils import _annotate_text, _verb_lemmas, get_document, is_verbal_noun, lemmatize
 
 if TYPE_CHECKING:
     from anyseg import Document
-    from spacy.language import Language
     from spacy.tokens import Doc
 
-# Components the parts of speech and the lemmas of the nouns do not need
-UNUSED_COMPONENTS = ["parser", "ner"]
 # One-word parenthetical expressions, which the water counts as stopwords
 PARENTHETICAL_WORDS = frozenset(phrase for phrase in PARENTHETICALS if " " not in phrase)
 # The word forms of is_stopword
@@ -79,15 +76,12 @@ class StyleStats(anyts.style_stats.StyleStats):
         top_n (int): Number of the most frequent words for the academic nausea
             and the naturalness by Zipf's law
         cliches (list[str]|set[str]): List or set of clichés; OFFICIALESE_CLICHES if not set
-        nlp (Language): Pipeline that parses a string for the verbal nouns;
-            get_nlp() if not set
         nausea_stopwords (list[str]|set[str]): Stopwords left out of the most frequent words
             of the academic nausea; is_stopword if not set
 
     Attributes:
         words (tuple[str]): Tuple of the extracted words
         forms (tuple[str]): Tuple of the unfiltered word forms in lower case
-        nlp (Language|None): Pipeline of the verbal nouns
         classic_nausea (float): Classic nausea
         academic_nausea (float): Academic nausea in percent
         water (float): Water content in percent
@@ -110,10 +104,9 @@ class StyleStats(anyts.style_stats.StyleStats):
     Raises:
         SourceTypeError: If the source is neither a string, a Doc nor a Document, the stopwords,
             the nausea stopwords or the clichés are not a list or a set of strings, or
-            the extractor or the pipeline is of another type
-        SourceError: If the source has no words; when the verbal nouns or the markers are
-            read, if the source lacks the parts of speech or the lemmas or a sentence of a
-            string is longer than the max_length of the pipeline
+            the extractor is of another type
+        SourceError: If the source has no words; when the verbal nouns are read, if a Doc
+            or a Document lacks the parts of speech or the lemmas
         ParameterError: If the number of the most frequent words is not an integer or is
             below one
     """
@@ -130,12 +123,9 @@ class StyleStats(anyts.style_stats.StyleStats):
         stopwords: Collection[str] | None = None,
         top_n: int = NAUSEA_TOP_N,
         cliches: Collection[str] | None = None,
-        nlp: Language | None = None,
         nausea_stopwords: Collection[str] | None = None,
     ):
-        _check_nlp(nlp)
         super().__init__(source, words_extractor, stopwords, top_n, cliches, nausea_stopwords)
-        self.nlp = nlp
         # The Doc is not kept: this object in an extension of the Doc would make a cycle
         self._text: str | None = None
         self._nouns: list[tuple[str, str]] | None = None
@@ -164,92 +154,29 @@ class StyleStats(anyts.style_stats.StyleStats):
         """Phrases with their contractions and the forms of their verbs (expand_phrases)"""
         return expand_phrases(text, phrases)
 
-    def __getstate__(self) -> dict[str, Any]:
-        """
-        State for pickle and copy without the pipeline: the nouns of a string are read by
-        it first, so the copy keeps them or the error of reading them
-        """
-        state = self.__dict__.copy()
-        if state.get("nlp") is not None:
-            try:
-                state["_nouns"] = self.nouns()
-            except SourceError as error:
-                state["_text"] = None
-                state["_annotation_error"] = str(error)
-            state["nlp"] = None
-        return state
-
     def nouns(self) -> list[tuple[str, str]]:
         """
         Getting the nouns of the text with their lemmas
 
         Description:
-            The tokens tagged NOUN of a Doc, or of a string parsed by nlp or
-            get_nlp() when they are first read, without the parser and the named
-            entities; a string longer than the max_length of the pipeline is
-            parsed in parts of whole sentences
+            The words tagged NOUN of a Doc or a Document, or of a string analyzed
+            by esMorph in the context of its sentences when they are first read
 
         Returns:
             list[tuple[str, str]]: Nouns in lower case with their lemmas
 
         Raises:
-            SourceError: If the source lacks the parts of speech or the lemmas, or a
-                sentence of a string is longer than the max_length of the pipeline
+            SourceError: If a Doc or a Document lacks the parts of speech or the lemmas
         """
         if self._nouns is None:
             if self._text is None:
                 raise SourceError(self._annotation_error)
-            pipeline = self.nlp or get_nlp()
-            parts = _split_text(self._text, pipeline.max_length)
-            self._nouns = [
-                noun
-                for doc in pipeline.pipe(parts, disable=UNUSED_COMPONENTS)
-                for noun in _doc_nouns(doc, self.messages)
-            ]
+            self._nouns = _doc_nouns(_annotate_text(self._text), self.messages)
         return self._nouns
 
     def is_verbal_noun(self, lemma: str) -> bool:
         """Noun derived from a verb (ests.utils.is_verbal_noun)"""
         return is_verbal_noun(lemma)
-
-
-def _split_text(text: str, max_length: int) -> list[str]:
-    """
-    Splitting a text into parts of whole sentences no longer than a limit
-
-    Description:
-        A text within the limit is one part; a longer one is cut at the ends
-        of the sentences of iter_text_sents, every part as long as the limit allows
-
-    Arguments:
-        text (str): Text
-        max_length (int): Maximum length of a part in characters
-
-    Returns:
-        list[str]: Parts of the text
-
-    Raises:
-        SourceError: If a sentence is longer than the limit
-    """
-    if len(text) <= max_length:
-        return [text]
-    parts = []
-    start = stop = -1
-    for begin, end, _ in iter_text_sents(text):
-        if end - begin > max_length:
-            raise SourceError(
-                f"A sentence of {end - begin} characters is longer than the limit of the "
-                f"pipeline ({max_length}): raise max_length on a pipeline of your own "
-                "and pass it in nlp"
-            )
-        if start < 0:
-            start = begin
-        elif end - start > max_length:
-            parts.append(text[start:stop])
-            start = begin
-        stop = end
-    parts.append(text[start:stop])
-    return parts
 
 
 def noun_lemmas(doc: Doc | Document) -> list[str]:
@@ -369,9 +296,10 @@ def expand_phrases(text: Sequence[str], phrases: Collection[str]) -> dict[str, s
     Description:
         A phrase ending in a or de also takes al or del (conforme al). A phrase
         whose first word is an infinitive (dar cumplimiento) takes the forms of
-        the text with that lemma (dio cumplimiento): the lemma of lemmatize, a
-        pronominal one counting for its verb (llevarse - llevar), or of
-        IRREGULAR_VERB_FORMS (dado, hecho, dese). When phrases spell out the
+        the text with that lemma (dio cumplimiento, ha dado cumplimiento, fue de
+        aplicación): any lemma of the form as a verb or an auxiliary in esMorph,
+        a pronominal one counting for its verb (llevarse - llevar), or of
+        IRREGULAR_VERB_FORMS (dese). When phrases spell out the
         same words, a phrase written so wins over the forms of another, then
         the first phrase of a list or of a set in sorted order
 
@@ -407,11 +335,12 @@ def expand_phrases(text: Sequence[str], phrases: Collection[str]) -> dict[str, s
     forms: dict[str, set[str]] = {head: {head} for head in heads}
     if heads:
         for form in {word.lower() for word in text}:
-            lemma = IRREGULAR_VERB_FORMS.get(form) or lemmatize(form)
-            if lemma not in forms:
-                lemma = lemma.removesuffix("se")
-            if lemma in forms:
-                forms[lemma].add(form)
+            irregular = IRREGULAR_VERB_FORMS.get(form)
+            for lemma in (irregular,) if irregular else _verb_lemmas(form):
+                if lemma not in forms:
+                    lemma = lemma.removesuffix("se")
+                if lemma in forms:
+                    forms[lemma].add(form)
     ordered = [
         (phrase, words) for phrase in in_order(phrases) if (words := phrase.lower().split())
     ]

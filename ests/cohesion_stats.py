@@ -415,9 +415,9 @@ def is_connector_blocked(token: TreeWord) -> bool:
         tengo tiempo, la solicitud se valorará si cumple); and after an opening
         ¡ (¡Si ya te lo dije!); a si after como or vaya is dropped by the
         matcher itself (CONNECTOR_BLOCKED_BEFORE). The verb is a VERB or AUX
-        by the lemma of the model or of simplemma, or a word the model reads
+        by the lemma of the model or of lemmatize, or a word the model reads
         as a proper or a common noun (Indique, Indíquenos) by the lemma of
-        simplemma
+        lemmatize
 
     Arguments:
         token (TreeWord): Word of the tree

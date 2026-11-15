@@ -4,7 +4,7 @@
 FreqDict(data_dir=DEFAULT_DATASET_DIR)
 ```
 
-Un diccionario de frecuencias de lemas del español construido a partir de los libros en español de [Google Books Ngram](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html) (versión 20200217): 83 785 lemas (109 178 filas de un lema y una categoría gramatical) de los libros de 1980-2019, 63 000 millones de palabras. Cada fila tiene la frecuencia por millón de palabras (ipm), el rango (el número de años, de 40, en que aparece el lema), la D de Juilland por años (0-100) y el número de libros con la forma más extendida del lema. Las categorías gramaticales son las de Google, con los nombres de Universal Dependencies: `NOUN`, `PROPN`, `VERB`, `ADJ`, `ADV`, `PRON`, `DET`, `ADP`, `CONJ` (coordinantes y subordinantes juntas).
+Un diccionario de frecuencias de lemas del español construido a partir de los libros en español de [Google Books Ngram](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html) (versión 20200217): 86 196 lemas (107 032 filas de un lema y una categoría gramatical) de los libros de 1980-2019, 63 000 millones de palabras. Cada fila tiene la frecuencia por millón de palabras (ipm), el rango (el número de años, de 40, en que aparece el lema), la D de Juilland por años (0-100) y el número de libros con la forma más extendida del lema. Las categorías gramaticales son las de Google, con los nombres de Universal Dependencies: `NOUN`, `PROPN`, `VERB`, `ADJ`, `ADV`, `PRON`, `DET`, `ADP`, `CONJ` (coordinantes y subordinantes juntas).
 
 El diccionario lo construye `scripts/build_freq_dict.py` a partir de los 1-gramas: se cuentan solo las formas etiquetadas con una categoría gramatical y hechas de letras (se quitan los números, la puntuación y la etiqueta `X`), y cada forma pasa a su clave por [`lemma_key`](#lemma_key). Google no tiene etiqueta para los nombres propios, así que una forma de sustantivo escrita con mayúscula en al menos el 90 % de sus apariciones es `PROPN` y conserva su forma. La decisión se toma para la forma entera: `dios`, con mayúscula en el 92 % de sus apariciones, es `PROPN` también en minúsculas, mientras que su fila `NOUN` viene sobre todo del plural `dioses`. Se dejan fuera las filas por debajo de 0,1 ipm o presentes en menos de 5 años. La dispersión se calcula sobre la frecuencia relativa de cada año; el número de libros es una cota inferior, ya que un libro con varias formas del lema se cuenta una vez.
 
@@ -52,7 +52,7 @@ Excepciones:
 | `filepath` | `str` | Ruta al fichero del diccionario, `None` antes de la descarga |
 | `entries` | `dict[str, Entry]` | Entradas por lema, con las categorías gramaticales unidas |
 | `min_ipm` | `float` | Frecuencia mínima del diccionario (0,1) |
-| `word_ipm` | `dict[str, float]` | Frecuencias por la clave a la que llega una forma sin categoría gramatical: las filas de los nombres propios van a `lemma_key` de sus formas (`roma` a `romo`); la referencia de [`keyness`](../corpus/keyness.md) |
+| `word_ipm` | `dict[str, float]` | Frecuencias por la clave a la que llega una forma sin categoría gramatical: las filas de los nombres propios van a `lemma_key` de sus formas (`tomás` a `tomar`); la referencia de [`keyness`](../corpus/keyness.md) |
 
 ``` {.python .signature}
 Entry(lemma, pos, ipm, range, dispersion, docs)
@@ -69,7 +69,7 @@ Una entrada del diccionario: una tupla con nombre.
 | `dispersion` | `int` | D de Juilland por años, de 0 a 100 |
 | `docs` | `int` | Número de libros con la forma más extendida del lema |
 
-El diccionario se recorre por sus registros como `get_records()` sin filtros: `for record in fd` pasa por las 109 178 filas de un lema y una categoría gramatical, mientras que `len(fd)` cuenta los 83 785 lemas con sus categorías unidas, tal como los ven `lookup` e `in`.
+El diccionario se recorre por sus registros como `get_records()` sin filtros: `for record in fd` pasa por las 107 032 filas de un lema y una categoría gramatical, mientras que `len(fd)` cuenta los 86 196 lemas con sus categorías unidas, tal como los ven `lookup` e `in`.
 
 ## Métodos
 
@@ -83,7 +83,7 @@ Un archivo que no se puede descargar o que no pasa la suma de comprobación dos 
 
 `check_data()` comprueba que el fichero del diccionario está en su sitio y devuelve `True`; un diccionario sin descargar lanza `DatasetNotFoundError` con las órdenes para descargarlo. Los demás métodos y los atributos de las entradas y las frecuencias lo comprueban por sí mismos.
 
-`lookup(lemma)` devuelve la entrada de un lema en cualquier combinación de mayúsculas y minúsculas, `None` para un lema que no está en el diccionario; `ipm(lemma)` devuelve la frecuencia de un lema por millón de palabras, 0 para un lema que no está en el diccionario. El argumento es una clave del diccionario, no una forma: una forma se busca por su clave, `computadoras` por `lemma_key("computadoras")` (`computador`), no por `computadora`; el lema de `usted` en simplemma es `tú`, así que `fd.lookup("usted")` es `None`. Lo mismo vale para `in`; [`LexicalStats`](../stats/lexical_stats.md) y [`keyness`](../corpus/keyness.md) pasan a las claves por sí mismos.
+`lookup(lemma)` devuelve la entrada de un lema en cualquier combinación de mayúsculas y minúsculas, `None` para un lema que no está en el diccionario; `ipm(lemma)` devuelve la frecuencia de un lema por millón de palabras, 0 para un lema que no está en el diccionario. El argumento es una clave del diccionario, no una forma: una forma se busca por su clave, `computadoras` por `lemma_key("computadoras")` (`computadora`); el lema de `usted` en esMorph es `tú`, así que `fd.lookup("usted")` es `None`. Lo mismo vale para `in`; [`LexicalStats`](../stats/lexical_stats.md) y [`keyness`](../corpus/keyness.md) pasan a las claves por sí mismos.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
@@ -99,18 +99,18 @@ Un lema que no es una cadena lanza `SourceTypeError`.
     fd.lookup("Gato")
     fd.lookup("dios")
     fd.lookup("usted"), fd.ipm(lemma_key("usted"))
-    fd.ipm("computadora"), fd.ipm(lemma_key("computadoras"))
+    fd.ipm("computador"), fd.ipm(lemma_key("computadoras"))
     "gato" in fd, len(fd), sum(1 for _ in fd)
     ```
 
 === "Resultado"
 
     ```
-    Entry(lemma='gato', pos=('NOUN', 'ADJ'), ipm=29.08, range=40, dispersion=95, docs=232841)
-    Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.42, range=40, dispersion=98, docs=566129)
-    (None, 1396.74)
-    (0.0, 20.07)
-    (True, 83785, 109178)
+    Entry(lemma='gato', pos=('NOUN', 'ADJ'), ipm=25.37, range=40, dispersion=95, docs=232841)
+    Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.46, range=40, dispersion=98, docs=566129)
+    (None, 1463.67)
+    (4.72, 15.35)
+    (True, 86196, 107032)
     ```
 
 `get_records(pos=None, min_ipm=None, limit=None)` devuelve los registros del diccionario - una fila por lema y categoría gramatical, por frecuencia - filtrados por la categoría gramatical y la frecuencia mínima; `get_texts` con los mismos parámetros devuelve los lemas.
@@ -141,22 +141,21 @@ Una categoría desconocida, una frecuencia mínima que no es un número y un `li
     ```
 
 !!! warning "El registro de los libros"
-    El diccionario describe la lengua escrita de los libros, buena parte de ellos académicos, y conserva lo que tienen los libros: las abreviaturas de las referencias son palabras frecuentes (`pp`, `cit`, `vol`), igual que las palabras inglesas de las bibliografías (`the`, `of`) y las grafías antiguas de las reediciones (`fué`). Los textos se reconocen a partir de escaneos y se etiquetan automáticamente, así que quedan malas lecturas y errores de etiquetado, sobre todo entre los lemas raros; el lematizador no ve el contexto, así que una forma compartida por dos lemas va a uno de ellos (`como` es siempre `como`, nunca `comer`), y una forma que no conoce se queda como está (`darle`, `verlo`).
+    El diccionario describe la lengua escrita de los libros, buena parte de ellos académicos, y conserva lo que tienen los libros: las abreviaturas de las referencias son palabras frecuentes (`pp`, `cit`, `vol`), igual que las palabras inglesas de las bibliografías (`the`, `of`). Los textos se reconocen a partir de escaneos y se etiquetan automáticamente, así que quedan malas lecturas y errores de etiquetado, sobre todo entre los lemas raros. Una forma recibe el lema de esMorph para la categoría gramatical que le da Google, sin el contexto de su oración: `como` etiquetado como verbo es `comer`, si no, `como`, y una forma verbal de dos verbos va al primero de ellos (`fue` es `ser`, nunca `ir`).
 
 ## Clave de una palabra { #lemma_key }
 
 ``` {.python .signature}
-lemma_key(word, proper=False)
+lemma_key(word, proper=False, pos='')
 ```
 
-La clave por la que se busca una palabra en el diccionario y con la que se construye el diccionario (`ests.datasets.freq_dict.lemma_key`): la palabra pasa a minúsculas, para que una palabra al principio de una oración encuentre su lema (`Miró` - `mirar`), y luego a su lema por `lemmatize`. Un nombre propio conserva su forma en minúsculas (`proper=True`): `París` es `parís`, no el verbo `parir`.
-
-Los lemas dependen de la versión de simplemma: el diccionario se construye con la 2.0.0 (la constante `SIMPLEMMA_VERSION`), y un `FreqDict` avisa una vez por proceso cuando está instalada otra versión, ya que entonces algunas palabras pueden no encontrarse en el diccionario.
+La clave por la que se busca una palabra en el diccionario y con la que se construye el diccionario (`ests.datasets.freq_dict.lemma_key`): la palabra pasa a minúsculas, para que una palabra al principio de una oración encuentre su lema (`Miró` - `mirar`), y luego a su lema por `ests.utils.lemmatize` - el de esMorph, con la categoría gramatical de Universal Dependencies cuando se da (`vino` - `vino`, como verbo `venir`). Un verbo y un auxiliar toman el primer análisis de cualquiera de los dos (`fue` - `ser`), porque Google etiqueta ambos como verbos. Un nombre propio conserva su forma en minúsculas (`proper=True`): `Tomás` es `tomás`, no el verbo `tomar`. El diccionario se construye con los lemas de esMorph 0.3 y las categorías gramaticales de Google.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
 | `word` | `str` | - | Forma de la palabra en cualquier combinación de mayúsculas y minúsculas |
 | `proper` | `bool` | `False` | La palabra es un nombre propio |
+| `pos` | `str` | `''` | Categoría gramatical de UD; sin ella, el primer análisis de esMorph |
 
 === "Código"
 
@@ -164,12 +163,14 @@ Los lemas dependen de la versión de simplemma: el diccionario se construye con 
     from ests.datasets.freq_dict import lemma_key
 
     lemma_key("Miró"), lemma_key("computadoras"), lemma_key("fue")
-    lemma_key("París"), lemma_key("París", proper=True)
+    lemma_key("vino"), lemma_key("vino", pos="VERB")
+    lemma_key("Tomás"), lemma_key("Tomás", proper=True)
     ```
 
 === "Resultado"
 
     ```
-    ('mirar', 'computador', 'ser')
-    ('parir', 'parís')
+    ('mirar', 'computadora', 'ser')
+    ('vino', 'venir')
+    ('tomar', 'tomás')
     ```

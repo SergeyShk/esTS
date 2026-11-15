@@ -125,7 +125,7 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         them; a value of several values (PronType=Int,Rel) is shared equally
         among its parts. The default model runs without its parser; a
         pipeline passed in nlp runs whole except the entity recognizer, and
-        with a parser it adds morph_p_ser and the group syntax_
+        with a parser it adds the group syntax_
         The shares of spaces, letters and marks count the characters as they
         are: in a corpus from different editions collapse the whitespace beforehand
 
@@ -179,7 +179,7 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
             features[f"diversity_{key}"] = float(score)
     doc = _parse(text, nlp)
     parsed = doc.has_annotation("DEP")
-    features.update(_morph_features(MorphStats(doc), parsed))
+    features.update(_morph_features(MorphStats(doc)))
     features.update(
         sentence_rhythm(count_words_by_spans([start for start, _, _ in positions], spans))
     )
@@ -211,10 +211,10 @@ def _parse(text: str, nlp: Language | None) -> Doc:
     return pipeline(text, disable=["parser", "ner"] if nlp is None else ["ner"])
 
 
-def _morph_features(morph: MorphStats, parsed: bool) -> dict[str, float]:
+def _morph_features(morph: MorphStats) -> dict[str, float]:
     """
     Morphological features of text_features: the shares of the values of every feature and
-    the markers except the moods; p_ser only for a parse with dependencies
+    the markers except the moods
     """
     n_words = len(morph.words)
     features: dict[str, float] = {}
@@ -231,7 +231,7 @@ def _morph_features(morph: MorphStats, parsed: bool) -> dict[str, float]:
                 counts[label] / denominator if denominator else nan
             )
     for marker, share in morph.get_markers().items():
-        if marker not in FINITE_MOODS and (parsed or marker != "p_ser"):
+        if marker not in FINITE_MOODS:
             features[f"morph_{marker}"] = float(share)
     return features
 

@@ -5,9 +5,9 @@ import spacy
 
 from ests import WordsExtractor
 from ests.constants import FUNCTION_UD_POS
-from ests.corpus import function_words_profile, stylometry
+from ests.corpus import function_words_profile
 from ests.exceptions import SourceError, SourceTypeError
-from ests.utils import get_nlp, iter_tokens
+from ests.utils import get_nlp
 
 texts = {
     "A": (
@@ -42,23 +42,16 @@ def test_function_words_profile():
     assert function_words_profile(spacy.blank("es")(" ".join(words))) == profile
     untagged = get_nlp()(texts["A"], disable=["morphologizer"])
     assert not untagged.has_annotation("POS")
-    assert function_words_profile(untagged) == function_words_profile(get_nlp()(texts["A"]))
+    assert function_words_profile(untagged) == function_words_profile(
+        [token.text for token in untagged]
+    )
     # The SPACE of a line break that the attribute ruler tags is no tagging of the words
     lines = texts["A"].replace(". ", ".\n")
     untagged = get_nlp()(lines, disable=["morphologizer"])
     assert untagged.has_annotation("POS")
-    assert function_words_profile(untagged) == function_words_profile(get_nlp()(lines))
-    assert function_words_profile(words, nlp=get_nlp()) == profile
-
-
-def test_function_words_profile_chunks(monkeypatch):
-    # Chunks with a margin of context give the tags of one sequence, chunks without it do not
-    words = [token for *_, token in iter_tokens(" ".join(texts.values()))]
-    whole = function_words_profile(words)
-    monkeypatch.setattr(stylometry, "CHUNK_SIZE", 4)
-    assert function_words_profile(words) == whole
-    monkeypatch.setattr(stylometry, "CHUNK_MARGIN", 0)
-    assert function_words_profile(words) != whole
+    assert function_words_profile(untagged) == function_words_profile(
+        [token.text for token in untagged]
+    )
 
 
 def test_function_words_profile_tagged():
@@ -80,8 +73,6 @@ def test_function_words_profile_errors():
         function_words_profile(spacy.blank("es")("¿?"))
     with pytest.raises(SourceTypeError):
         function_words_profile(texts["A"])
-    with pytest.raises(SourceError, match="parts of speech"):
-        function_words_profile(corpus["A"], nlp=spacy.blank("es"))
 
 
 @pytest.mark.parametrize("container", [np.array, pd.Series])

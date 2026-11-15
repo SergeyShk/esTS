@@ -109,7 +109,7 @@ Excepciones:
 text_features(text, nlp=None)
 ```
 
-Devuelve 163 rasgos de un texto con un prefijo según su fuente, 209 con un pipeline que tiene analizador sintáctico; un rasgo indefinido es `nan`.
+Devuelve 164 rasgos de un texto con un prefijo según su fuente, 209 con un pipeline que tiene analizador sintáctico; un rasgo indefinido es `nan`.
 
 | Prefijo | Rasgos | Fuente |
 | :------ | :----- | :----- |
@@ -126,7 +126,7 @@ Se dejan fuera el tiempo de lectura, que solo sigue el número de palabras de un
 
 Las categorías gramaticales y los rasgos de un solo valor - polaridad, cortesía, posesivo, reflexivo - son proporciones de todas las palabras (`morph_polarity_Neg` es la proporción de las negaciones), los demás rasgos, proporciones de las palabras que los llevan (`morph_mood_Sub` es el subjuntivo entre los modos). Un valor que no aparece en una ventana da 0; un rasgo ausente de la ventana por completo (sin verbos no hay tiempo) da `nan`. Un valor de varios valores (`PronType=Int,Rel` de *que*) se reparte a partes iguales entre sus partes, así que las proporciones de un rasgo siguen sumando uno.
 
-La morfología y la cohesión las analiza el modelo [`es_core_news_sm`](../installation.md#model) sin su analizador sintáctico, así que el marcador `morph_p_ser`, que lee las cópulas de las dependencias, y el grupo `syntax_` se dejan fuera; un pipeline pasado en `nlp` se ejecuta entero salvo el reconocedor de entidades, así que `functools.partial(text_features, nlp=get_nlp())` incorpora el analizador sintáctico, `morph_p_ser` y la sintaxis, y otro modelo entra en la comparación del mismo modo. El pipeline de [`load_pipeline`](../components.md#load_pipeline), el de por defecto, divide el texto en las oraciones del grupo `sents_`, así que la cohesión y la sintaxis cuentan las mismas oraciones que el ritmo; un pipeline propio da sus propias oraciones. Una novela se compara por ventanas y no entera, ya que el pipeline admite como mucho `max_length` caracteres.
+La morfología y la cohesión las analiza el modelo [`es_core_news_sm`](../installation.md#model) sin su analizador sintáctico, así que el grupo `syntax_` se deja fuera; un pipeline pasado en `nlp` se ejecuta entero salvo el reconocedor de entidades, así que `functools.partial(text_features, nlp=get_nlp())` incorpora el analizador sintáctico y la sintaxis, y otro modelo entra en la comparación del mismo modo. El pipeline de [`load_pipeline`](../components.md#load_pipeline), el de por defecto, divide el texto en las oraciones del grupo `sents_`, así que la cohesión y la sintaxis cuentan las mismas oraciones que el ritmo; un pipeline propio da sus propias oraciones. Una novela se compara por ventanas y no entera, ya que el pipeline admite como mucho `max_length` caracteres.
 
 Las proporciones de espacios, letras y signos de puntuación (`basic_p_spaces`, `basic_p_letters`, `basic_p_punctuations`) cuentan los caracteres tal cual: las sangrías, los espacios dobles y los de no separación de los archivos reflejan la composición de una edición y no el texto. En un corpus de fuentes distintas conviene colapsarlos antes, por ejemplo, con `re.sub(r"[^\S\n]+", " ", text)`.
 

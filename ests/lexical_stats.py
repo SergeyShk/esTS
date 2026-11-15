@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections.abc import Sequence
 from functools import cache
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import anyts
 import anyts.lexical_stats
@@ -17,16 +17,13 @@ from .constants import LEXICAL_STATS_DESC
 from .datasets.freq_dict import FreqDict, lemma_key
 from .exceptions import SourceError, SourceTypeError
 from .extractors import NUMBER_PATTERN
-from .utils import _check_nlp, _parse_text, get_document
+from .utils import _annotate_text, get_document
 
 if TYPE_CHECKING:
     from anyseg import Document
-    from spacy.language import Language
     from spacy.tokens import Doc
 
 TOP_LEMMAS_FILE = Path(__file__).parent / "resources" / "google_books_top10000.txt"
-# Components a parse of the text does not need: the lemmas come from lemma_key
-UNUSED_COMPONENTS = ["parser", "lemmatizer", "ner"]
 
 
 def _without_period(word: str) -> str:
@@ -44,10 +41,10 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
     Description:
         Extends the LexicalStats of the anyTS core with the Spanish layer: the
         frequency dictionary of Google Books Ngram (FreqDict) with its embedded
-        list of the 10000 most frequent lemmas, the lemmas of lemma_key and the
-        content words of the spaCy model, as in CohesionStats. The source needs
-        the parts of speech: a string is parsed with the model es_core_news_sm
-        or the pipeline in nlp, a Doc must carry them. Numbers (2020, 5,5,
+        list of the 10000 most frequent lemmas, the lemmas of lemma_key by the
+        part of speech of every word and the content words, as in
+        CohesionStats. The source needs the parts of speech: a string gets
+        those of esMorph in the context of its sentences, a Doc must carry them. Numbers (2020, 5,5,
         3.º) are no words. The statistics by the dictionary need a downloaded
         FreqDict, the bands and the lexical density do not
 
@@ -62,7 +59,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         >>> ls.lemmas
         ('el', 'gato', 'estar', 'en', 'el', 'ventana', 'y', 'mirar', 'a', 'el', 'pájaro')
         >>> round(ls.p_top1000, 3), round(ls.mean_log_ipm_content, 3), round(ls.surprisal, 3)
-        (0.727, 2.192, 8.106)
+        (0.727, 2.173, 8.104)
         >>> ls.band_coverage(unique=True)
         {1000: 0.6666666666666666, 2000: 0.7777777777777778, 5000: 1.0, 10000: 1.0}
 
@@ -70,8 +67,6 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         source (str|Doc|Document): Data source (a string, a Doc or a Document)
         freq_dict (FreqDict): Frequency dictionary; FreqDict() of the default
             directory if not given
-        nlp (Language): Pipeline of spaCy that parses a string; without it the
-            model of SPACY_MODEL is loaded
 
     Attributes:
         freq_dict (FreqDict): Frequency dictionary
@@ -113,9 +108,8 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
 
     Raises:
         SourceTypeError: If the source is neither a string, a Doc nor a Document, or the
-            dictionary or the pipeline is of another type
-        SourceError: If the source has no words, lacks the parts of speech or
-            is a string longer than the max_length of the pipeline
+            dictionary is of another type
+        SourceError: If the source has no words or lacks the parts of speech
         DatasetNotFoundError: When a statistic by the dictionary is read and the
             dictionary is not downloaded
     """
@@ -124,32 +118,18 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
     freq_dict_class = FreqDict
     stats_desc = LEXICAL_STATS_DESC
 
-    def __init__(
-        self,
-        source: str | Doc | Document,
-        freq_dict: FreqDict | None = None,
-        nlp: Language | None = None,
-    ):
-        _check_nlp(nlp)
-        self._nlp = nlp
+    def __init__(self, source: str | Doc | Document, freq_dict: FreqDict | None = None):
         super().__init__(source, freq_dict)
         # analyze can be called again on the object; the keys read the words of the source
         self._proper = self._found_proper
-
-    def __getstate__(self) -> dict[str, Any]:
-        """State for pickle and copy without the pipeline, which is no part of the statistics"""
-        state = self.__dict__.copy()
-        state["_nlp"] = None
-        return state
 
     def parse(self, source: str | Doc | Document) -> Document:
         """
         Getting the document of a source
 
         Description:
-            A string is parsed by nlp or get_nlp() without the parser, the
-            lemmatizer and the named entities; a Doc or a Document goes to
-            get_document
+            A string is segmented by anySeg and analyzed by esMorph in the
+            context of its sentences; a Doc or a Document goes to get_document
 
         Arguments:
             source (str|Doc|Document): Data source
@@ -159,10 +139,9 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
 
         Raises:
             SourceTypeError: If the source is neither a string, a Doc nor a Document
-            SourceError: If a string is longer than the max_length of the pipeline
         """
         if isinstance(source, str):
-            return _parse_text(source, self._nlp, UNUSED_COMPONENTS)
+            return _annotate_text(source)
         return get_document(source)
 
     def analyze(self, source: str | Doc | Document) -> list[LexicalWord]:
@@ -171,8 +150,9 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
 
         Description:
             The words of the tree of the document of parse with a letter or a
-            digit, without the numbers of NUMBER_PATTERN; the lemma of lemma_key, a proper
-            noun in lower case, and the content words of token_info
+            digit, without the numbers of NUMBER_PATTERN; the lemma of lemma_key by the
+            part of speech of the word, a proper noun in lower case, and the content
+            words of token_info
 
         Arguments:
             source (str|Doc|Document): Data source
@@ -182,8 +162,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
 
         Raises:
             SourceTypeError: If the source is neither a string, a Doc nor a Document
-            SourceError: If a string is longer than the max_length of the pipeline, or the
-                words lack the parts of speech
+            SourceError: If the words lack the parts of speech
         """
         words = [
             word
@@ -196,7 +175,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         return [
             LexicalWord(
                 word.form,
-                lemma_key(_without_period(word.form), proper),
+                lemma_key(_without_period(word.form), proper, word.upos or ""),
                 token_info(word).content,
             )
             for word, proper in zip(words, self._found_proper, strict=True)
@@ -235,9 +214,10 @@ def load_top_lemmas() -> dict[str, int]:
 
     Description:
         The 10000 most frequent lemmas of FreqDict by decreasing frequency, the
-        parts of speech summed, without the proper nouns, the letters that are
-        no words and the lemmas of two letters or Roman numerals unknown to
-        simplemma (pp, vs, xix). The file resources/google_books_top10000.txt
+        parts of speech summed, without the proper nouns and the lemmas where
+        they outweigh the others (garcía), the letters that are no words, and
+        the lemmas of two letters or Roman numerals unknown to esMorph or
+        without a vowel (pp, km, xix). The file resources/google_books_top10000.txt
         is derived from Google Books Ngram under CC BY 3.0
 
     Returns:
@@ -261,7 +241,7 @@ def get_rank(lemma: str) -> int | None:
     Example:
         >>> from ests.lexical_stats import get_rank
         >>> get_rank("el"), get_rank("gato"), get_rank("gatuno")
-        (1, 2851, None)
+        (1, 3123, None)
     """
     return load_top_lemmas().get(lemma.lower())
 

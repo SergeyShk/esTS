@@ -1,9 +1,7 @@
 import csv
 import re
-import warnings
 from collections.abc import Iterator
 from functools import cache
-from importlib.metadata import version
 from itertools import islice
 from numbers import Real
 from pathlib import Path
@@ -13,10 +11,10 @@ from anyts.datasets import Dataset, check_limit, fetch_archive, to_path
 
 from ..constants import DEFAULT_DATA_DIR, USER_AGENT
 from ..exceptions import DatasetNotFoundError, ParameterError, SourceTypeError
-from ..utils import lemmatize
+from ..utils import _verb_lemmas, lemmatize
 
 NAME = "freq_dict"
-VERSION = 1
+VERSION = 2
 META = {
     "url": "https://storage.googleapis.com/books/ngrams/books/datasetsv3.html",
     "description": "Frequency dictionary of Spanish lemmas by Google Books Ngram",
@@ -30,10 +28,8 @@ META = {
 }
 ARCHIVE = f"{NAME}_v{VERSION}.tar.xz"
 DOWNLOAD_URL = f"https://github.com/SergeyShk/esTS/raw/master/ests/datasets/data/{ARCHIVE}"
-ARCHIVE_SHA256 = "f38c6a17b484f84eaa3d92fb06f6c8d571f1a2d720287368b8bc5c5cb7a5a9a7"
+ARCHIVE_SHA256 = "db0a5420cb9b824fb378012af86eb3334719969a4b4f9d10268f976119ab8f44"
 FILENAME = "freq_dict.tsv"
-# Version of simplemma whose lemmas the dictionary is built with
-SIMPLEMMA_VERSION = "2.0.0"
 CORPUS_SIZE = 63_090_618_290
 POS_TAGS = ("NOUN", "PROPN", "VERB", "ADJ", "ADV", "PRON", "DET", "ADP", "CONJ")
 # Forms the dictionary and CORPUS_SIZE count: no numbers, no forms with a hyphen or a dot
@@ -62,19 +58,22 @@ class Entry(NamedTuple):
     docs: int
 
 
-def lemma_key(word: str, proper: bool = False) -> str:
+def lemma_key(word: str, proper: bool = False, pos: str = "") -> str:
     """
     Key of a word in the frequency dictionary
 
     Description:
-        The word goes to lower case and then to its lemma by lemmatize, so a
-        capitalized word at the start of a sentence finds its lemma; a proper
-        noun keeps its form in lower case. The dictionary is built with this
-        function and simplemma SIMPLEMMA_VERSION
+        The word goes to lower case and then to its lemma by lemmatize with the
+        part of speech, so a capitalized word at the start of a sentence finds
+        its lemma; a proper noun keeps its form in lower case. A verb and an
+        auxiliary take the first analysis of either (fue - ser), as Google
+        Books tags both as verbs. The dictionary is built with this function and
+        the parts of speech of Google Books
 
     Arguments:
         word (str): Word form in any case
         proper (bool): The word is a proper noun
+        pos (str): Part of speech of UD; without it the first analysis of esMorph
 
     Returns:
         str: Key of the dictionary
@@ -82,12 +81,18 @@ def lemma_key(word: str, proper: bool = False) -> str:
     Example:
         >>> from ests.datasets.freq_dict import lemma_key
         >>> lemma_key("Miró"), lemma_key("computadoras"), lemma_key("fue")
-        ('mirar', 'computador', 'ser')
-        >>> lemma_key("París"), lemma_key("París", proper=True)
-        ('parir', 'parís')
+        ('mirar', 'computadora', 'ser')
+        >>> lemma_key("vino"), lemma_key("vino", pos="VERB")
+        ('vino', 'venir')
+        >>> lemma_key("Tomás"), lemma_key("Tomás", proper=True)
+        ('tomar', 'tomás')
     """
     form = word.lower()
-    return form if proper else lemmatize(form).lower()
+    if proper:
+        return form
+    if pos in ("VERB", "AUX") and (verbs := _verb_lemmas(form)):
+        return verbs[0].lower()
+    return lemmatize(form, pos).lower()
 
 
 class FreqDict(Dataset):
@@ -95,12 +100,13 @@ class FreqDict(Dataset):
     Frequency dictionary of Spanish lemmas by Google Books Ngram
 
     Description:
-        83,785 lemmas (109,178 rows of a lemma and a part of speech) of the
+        86,196 lemmas (107,032 rows of a lemma and a part of speech) of the
         Spanish books of Google Books Ngram of 1980-2019, 63 billion words, with
         the frequency per million words, the range (the number of years out of
         40 in which the lemma occurs), Juilland's D over the years and the
-        number of books. The forms are lower-cased and lemmatized by simplemma
-        2.0.0, so a word is looked up by its lemma_key; a noun form written
+        number of books. The forms are lower-cased and lemmatized by esMorph
+        with their part of speech, so a word is looked up by its lemma_key; a
+        noun form written
         with a capital letter in 90% of its occurrences is a proper noun
         (PROPN), as Google tags none. The rows below 0.1 ipm or found in fewer
         than 5 years are left out. The dictionary is derived from Google Books
@@ -123,14 +129,14 @@ class FreqDict(Dataset):
 
     Looking up a lemma:
         >>> fd.lookup("gato")
-        Entry(lemma='gato', pos=('NOUN', 'ADJ'), ipm=29.08, range=40, dispersion=95, docs=232841)
+        Entry(lemma='gato', pos=('NOUN', 'ADJ'), ipm=25.37, range=40, dispersion=95, docs=232841)
         >>> fd.ipm("perro"), fd.ipm("computadora"), fd.ipm("computador")
-        (62.57, 0.0, 20.07)
+        (58.41, 15.35, 4.72)
 
     Iterating over the dictionary:
         >>> for record in fd.get_records(pos="NOUN", limit=2):
         ...     print(record)
-        {'lemma': 'año', 'pos': 'NOUN', 'ipm': 1639.27, 'range': 40, 'dispersion': 98, 'docs': 837102}
+        {'lemma': 'año', 'pos': 'NOUN', 'ipm': 1639.31, 'range': 40, 'dispersion': 98, 'docs': 837102}
         {'lemma': 'parte', 'pos': 'NOUN', 'ipm': 1295.88, 'range': 40, 'dispersion': 99, 'docs': 852898}
 
     Arguments:
@@ -160,7 +166,6 @@ class FreqDict(Dataset):
         self._archive = self.data_dir.joinpath(ARCHIVE)
         self._filepath = self.data_dir.joinpath(f"{NAME}_v{VERSION}", FILENAME)
         self._checked = False
-        check_simplemma()
 
     @property
     def filepath(self) -> str | None:
@@ -354,7 +359,7 @@ class FreqDict(Dataset):
             >>> from ests.datasets.freq_dict import lemma_key
             >>> fd = FreqDict()
             >>> fd.lookup("usted"), fd.ipm(lemma_key("usted"))
-            (None, 1396.74)
+            (None, 1463.67)
         """
         if not isinstance(lemma, str):
             raise SourceTypeError(f"The lemma must be a string, not {type(lemma).__name__}")
@@ -388,21 +393,6 @@ class FreqDict(Dataset):
 
     def __contains__(self, lemma: object) -> bool:
         return isinstance(lemma, str) and lemma.lower() in self.entries
-
-
-@cache
-def check_simplemma() -> None:
-    """
-    Warning once if the installed simplemma is not the one of the dictionary
-    """
-    installed = version("simplemma")
-    if installed != SIMPLEMMA_VERSION:
-        warnings.warn(
-            f"The frequency dictionary is built with the lemmas of simplemma "
-            f"{SIMPLEMMA_VERSION}, simplemma {installed} is installed: "
-            "some words may be missed in the dictionary",
-            stacklevel=3,
-        )
 
 
 @cache

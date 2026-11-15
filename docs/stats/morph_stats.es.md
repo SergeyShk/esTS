@@ -1,7 +1,7 @@
 # Estadísticas morfológicas
 
 ``` {.python .signature}
-MorphStats(source, nlp=None)
+MorphStats(source)
 ```
 
 <!-- core: stats/morph_stats.md:MorphStats e18b976 -->
@@ -12,9 +12,9 @@ Excepciones:
 - `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni un `Document`, un `parse` que no devuelve un `Document`, un `analyze` que no da objetos `MorphWord`;
 - `SourceError` - palabras sin categorías gramaticales, una fuente sin palabras.
 
-La clase extiende el `MorphStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/morph_stats/) con la capa del español y los [marcadores del español](#markers); las estadísticas se calculan al crear el objeto. En esTS la fuente de datos es un texto, un `Doc` o un `Document`: un texto se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, y un `Doc` debe llevar las categorías gramaticales, que vienen de un `morphologizer` (o de un `tagger` con un `attribute_ruler`), y los lemas, que vienen de un `lemmatizer`. Las palabras son las del documento con una letra o una cifra; una contracción (`del`, `al`) queda como una palabra, ya que el modelo anota su token como uno. Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto - hay que dividirlo en partes o subir `max_length` en un pipeline propio indicado en `nlp`. Las tablas de `print_stats` y `print_markers` toman las descripciones de `MORPHOLOGY_STATS_DESC` y `MORPHOLOGY_MARKERS_DESC` de `ests.constants`.
+La clase extiende el `MorphStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/morph_stats/) con la capa del español y los [marcadores del español](#markers); las estadísticas se calculan al crear el objeto. En esTS la fuente de datos es un texto, un `Doc` o un `Document`: un texto recibe los análisis de [esMorph](https://github.com/SergeyShk/esMorph) en el contexto de sus oraciones, sin spaCy, y un `Doc` debe llevar las categorías gramaticales, que vienen de un `morphologizer` (o de un `tagger` con un `attribute_ruler`), y los lemas, que vienen de un `lemmatizer`. Las palabras son las del documento con una letra o una cifra: en un texto las palabras de una contracción y de un verbo con clíticos son palabras aparte (`del` - `de` + `el`, `dámelo` - `da` + `me` + `lo`), mientras que un `Doc` conserva entero el token del modelo. Las tablas de `print_stats` y `print_markers` toman las descripciones de `MORPHOLOGY_STATS_DESC` y `MORPHOLOGY_MARKERS_DESC` de `ests.constants`.
 
-Además, en esTS una fuente que no es ni una cadena, ni un `Doc` ni un `Document` y un pipeline en `nlp` que no es un `Language` de spaCy lanzan `SourceTypeError`; un `Doc` sin los lemas (de un pipeline con el `lemmatizer` excluido), una cadena más larga que el `max_length` del pipeline lanzan `SourceError`; una cadena sin `nlp` cuando el modelo `es_core_news_sm` no está instalado lanza `DatasetNotFoundError`.
+Además, en esTS una fuente que no es ni una cadena, ni un `Doc` ni un `Document` lanza `SourceTypeError`, y un `Doc` sin los lemas (de un pipeline con el `lemmatizer` excluido) lanza `SourceError`.
 
 === "Código"
 
@@ -49,7 +49,6 @@ Además, en esTS una fuente que no es ni una cadena, ni un `Doc` ni un `Document
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
 | `source` | `str` / `Doc` / `Document` | - | Fuente de datos |
-| `nlp` | `Language` | `None` | Pipeline de spaCy que analiza una cadena; sin él se carga el modelo `es_core_news_sm` |
 
 ## Atributos
 
@@ -61,7 +60,7 @@ Además, en esTS una fuente que no es ni una cadena, ni un `Doc` ni un `Document
 | `pos` | `tuple[str / None]` | Categoría gramatical de cada palabra |
 | `animacy`, `aspect`, ..., `voice` | `tuple[str / None]` | Valor de una estadística para cada palabra, `None` para una palabra sin el rasgo |
 
-En esTS las estadísticas son `case`, ..., `verb_form` de la [tabla de abajo](#statistics); `animacy`, `aspect` y `voice` del núcleo no están entre ellas. esTS tiene además el atributo `lemmas` (`tuple[str]`): los lemas de las palabras que da el modelo.
+En esTS las estadísticas son `case`, ..., `verb_form` de la [tabla de abajo](#statistics); `animacy`, `aspect` y `voice` del núcleo no están entre ellas. esTS tiene además el atributo `lemmas` (`tuple[str]`): los lemas de las palabras, de esMorph para un texto y del pipeline para un `Doc`.
 
 === "Código"
 
@@ -100,10 +99,10 @@ Cada estadística es un atributo del objeto, una tupla de los valores de un rasg
 | `tense` | Tiempo verbal | `Pres`, `Past`, `Imp`, `Fut` |
 | `verb_form` | Forma verbal | `Fin`, `Inf`, `Part`, `Ger` |
 
-Un rasgo con varios valores conserva la forma de CoNLL-U: `qué`, `quién`, `cuál` tienen `pron_type` igual a `Int,Rel`, y `usted` tiene `case` igual a `Acc,Nom`. `print_stats` nombra los valores según `MORPHOLOGY_STATS_DESC` de `ests.constants`, y un valor así, con los nombres de sus partes unidos por una barra: «Interrogative / Relative», «Accusative / Nominative».
+Un rasgo con varios valores conserva la forma de CoNLL-U: `usted` tiene `case` igual a `Acc,Nom`, y en un `Doc` de `es_core_news_sm` `qué`, `quién`, `cuál` tienen `pron_type` igual a `Int,Rel`. `print_stats` nombra los valores según `MORPHOLOGY_STATS_DESC` de `ests.constants`, y un valor así, con los nombres de sus partes unidos por una barra: «Interrogative / Relative», «Accusative / Nominative».
 
 !!! warning "Aviso"
-    Las estadísticas valen lo que vale la anotación del modelo. `es_core_news_sm` analiza mal los verbos con pronombres enclíticos (`dámelo`, `cuéntamelo` salen como sustantivos con lemas inventados) y etiqueta los imperativos de `tú` como indicativo (`Abre la ventana` recibe `Mood=Ind`), de modo que `p_imperative` se queda corto y `p_indicative` absorbe las órdenes: en el diálogo del corpus de literatura encuentra alrededor de un imperativo de cada diez. `es_core_news_lg` apenas mejora (15 %); el modelo de transformadores `es_dep_news_trf` indicado en `nlp` encuentra el 87 %, y en el teatro `p_imperative` sube del 1,6 % al 7,5 %, a costa de cerca de 1 GB con PyTorch y cinco veces más tiempo en una CPU, y necesita antes unir los saltos de línea simples de un texto con líneas cortadas.
+    Las estadísticas valen lo que vale la anotación. esMorph analiza un verbo con clíticos como el verbo (`dámelo` - el imperativo de `dar`), pero, como los modelos, lee como indicativo el imperativo de `tú` que tiene la forma del indicativo (`Abre la ventana`). En un `Doc`, `es_core_news_sm` analiza mal los verbos con pronombres enclíticos (`dámelo`, `cuéntamelo` salen como sustantivos con lemas inventados) y etiqueta los imperativos de `tú` como indicativo (`Abre la ventana` recibe `Mood=Ind`), de modo que `p_imperative` se queda corto y `p_indicative` absorbe las órdenes: en el diálogo del corpus de literatura encuentra alrededor de un imperativo de cada diez. `es_core_news_lg` apenas mejora (15 %); el modelo de transformadores `es_dep_news_trf`, que construye el `Doc`, encuentra el 87 %, y en el teatro `p_imperative` sube del 1,6 % al 7,5 %, a costa de cerca de 1 GB con PyTorch y cinco veces más tiempo en una CPU, y necesita antes unir los saltos de línea simples de un texto con líneas cortadas.
 
 <div class="metric-card" markdown>
 
@@ -123,7 +122,7 @@ Las proporciones de las formas que marcan el registro de un texto español, cada
 
 Los cuatro primeros marcadores comparten la base de las formas personales y suman uno salvo que el modelo deje alguna forma personal sin modo o le dé varios (`Mood=Ind,Sub`, que cuenta en la proporción de cada uno; `es_core_news_sm` no los da). Los tres siguientes comparten la base de todas las formas verbales de verbos y auxiliares: un participio que el modelo anota como adjetivo (`la casa pintada`) queda fuera de la base, los de los tiempos compuestos y la pasiva (`he leído`, `fue escrito`) quedan dentro.
 
-La base de `p_ser` son solo los usos copulativos, leídos del análisis sintáctico: los auxiliares de la pasiva y de la perífrasis progresiva (`fue escrito`, `es financiado`, `está cantando`) quedan fuera, mientras que `es alta`, `está cansada` y `lo importante es que vengas` cuentan. Para un `Doc` sin análisis sintáctico el marcador es `nan`.
+La base de `p_ser` son solo los usos copulativos, leídos de la morfología: `ser` ante un participio y `estar` ante un gerundio, con adverbios y pronombres entre ellos, son los auxiliares de la pasiva y de la perífrasis progresiva (`fue escrito`, `es financiado`, `está cantando`) y quedan fuera, mientras que `es alta`, `está cansada` y `lo importante es que vengas` cuentan. La regla no necesita análisis sintáctico, así que un texto y un `Doc` sin analizador también tienen el marcador; un participio que el etiquetador lee como adjetivo (`fue muy bien recibido`) deja su `ser` como cópula.
 
 === "Código"
 
@@ -172,7 +171,7 @@ El ejemplo del principio de la página muestra dos de las tablas. `to_dataframe`
     ```
     {'pos': {'SCONJ': 1, 'VERB': 3, 'NOUN': 2, 'DET': 1, 'PRON': 2, 'ADV': 1},
      'mood': {'Sub': 1, 'Cnd': 1, 'Ind': 1},
-     'tense': {'Imp': 1, 'Pres': 1}}
+     'tense': {'Imp': 1, 'Past': 1}}
     (('Si', {'pos': 'SCONJ'}),
      ('tuviera', {'pos': 'VERB', 'mood': 'Sub', 'tense': 'Imp'}),
      ('tiempo', {'pos': 'NOUN'}),
@@ -181,7 +180,7 @@ El ejemplo del principio de la página muestra dos de las tablas. `to_dataframe`
      ('libro', {'pos': 'NOUN'}),
      ('que', {'pos': 'PRON'}),
      ('me', {'pos': 'PRON'}),
-     ('recomendaste', {'pos': 'VERB', 'mood': 'Ind', 'tense': 'Pres'}),
+     ('recomendaste', {'pos': 'VERB', 'mood': 'Ind', 'tense': 'Past'}),
      ('ayer', {'pos': 'ADV'}))
     ```
 

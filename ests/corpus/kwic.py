@@ -11,7 +11,7 @@ from anyts.corpus.kwic import (
 )
 from anyts.utils import check_bool
 
-from ..utils import iter_text_sents, iter_text_words, lemmatize
+from ..utils import _annotate_text, get_morph_analyzer, iter_text_sents, iter_text_words, lemmatize
 
 if TYPE_CHECKING:
     from anyseg import Document, Word
@@ -34,9 +34,12 @@ def kwic(
         is found by gato). The text and the keyword are tokenized the same way;
         punctuation and symbols are not words, and a word is compared without
         the period of an abbreviation, which the end of a sentence splits off
-        (Sr. and Sr in "Vino el Sr." are one word). By lemma,
-        a word matches by its lemma of simplemma and, in a Doc with lemmas, by
-        the lemma of the model too; the keyword is lemmatized by simplemma.
+        (Sr. and Sr in "Vino el Sr." are one word). By lemma, a word matches
+        by the lemma of lemmatize with its part of speech - of esMorph in the
+        context of its sentence for a string, of the model for a Doc -, a word
+        of a Doc or a Document without the parts of speech by its first
+        analysis, and a word of the keyword, which has no context, by the
+        lemmas of all its analyses (vino finds vino and venir).
         A phrase does not run across the end of a paragraph or of a sentence -
         a sentence of the document of the text (get_document) - unless the
         keyword has one in the same place.
@@ -68,6 +71,8 @@ def kwic(
         ['gato', 'gatos']
     """
     check_bool(ignore_case, "folding of the case")
+    if by_lemma is True and isinstance(source, str):
+        source = _annotate_text(source)
     return anyts.corpus.kwic(
         source,
         keyword,
@@ -91,11 +96,14 @@ def _fold(word: str) -> str:
     return word.lower().removesuffix(".")
 
 
-def _lemmas(word: str, tokens: Sequence[Word]) -> tuple[str, ...]:
+def _lemmas(word: str, words: Sequence[Word]) -> str | tuple[str, ...]:
     """
-    The lemma of simplemma of the word without the period of an abbreviation and, for
-    a word of a Doc with lemmas, the lemma of the model
+    Lemmas of a word without the period of an abbreviation: lemmatize with the part of
+    speech of a token of one word, and the lemmas of all the analyses for a word of the
+    keyword
     """
-    own = lemmatize(word.removesuffix("."))
-    lemma = (tokens[0].lemma or "") if tokens else ""
-    return (own, lemma) if lemma else (own,)
+    form = word.removesuffix(".")
+    if not words:
+        analyses = get_morph_analyzer().analyze(form)
+        return tuple(dict.fromkeys(analysis.lemma for analysis in analyses)) or (form,)
+    return lemmatize(form, (words[0].upos or "") if len(words) == 1 else "")

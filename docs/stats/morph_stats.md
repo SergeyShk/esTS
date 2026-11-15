@@ -1,14 +1,14 @@
 # Morphological statistics
 
 ``` {.python .signature}
-MorphStats(source, nlp=None)
+MorphStats(source)
 ```
 
 --8<-- "stats/morph_stats.md:MorphStats"
 
-The class extends the `MorphStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/morph_stats/) core with the Spanish layer and the [markers of Spanish](#markers); the statistics are computed when the object is created. In esTS the data source is a text, a `Doc` or a `Document`: a text is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, and a `Doc` must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer`. The words are those of the document with a letter or a digit; a contraction (`del`, `al`) stays one word, as the model annotates its token as one. A text longer than the `max_length` of the pipeline - a million characters by default - has to be split into parts, or `max_length` raised on a pipeline of your own passed in `nlp`. The `print_stats` and `print_markers` tables take the descriptions of `MORPHOLOGY_STATS_DESC` and `MORPHOLOGY_MARKERS_DESC` of `ests.constants`.
+The class extends the `MorphStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/morph_stats/) core with the Spanish layer and the [markers of Spanish](#markers); the statistics are computed when the object is created. In esTS the data source is a text, a `Doc` or a `Document`: a text gets the analyses of [esMorph](https://github.com/SergeyShk/esMorph) in the context of its sentences, without spaCy, and a `Doc` must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer`. The words are those of the document with a letter or a digit: in a text the words of a contraction and of a verb with clitics are words of their own (`del` - `de` + `el`, `dámelo` - `da` + `me` + `lo`), while a `Doc` keeps the token of the model whole. The `print_stats` and `print_markers` tables take the descriptions of `MORPHOLOGY_STATS_DESC` and `MORPHOLOGY_MARKERS_DESC` of `ests.constants`.
 
-Besides, in esTS a source that is neither a string, a `Doc` nor a `Document` and a pipeline in `nlp` that is not a spaCy `Language` raise `SourceTypeError`; a `Doc` without the lemmas (of a pipeline with the `lemmatizer` excluded), a string longer than the `max_length` of the pipeline raise `SourceError`; a string without `nlp` when the model `es_core_news_sm` is not installed raises `DatasetNotFoundError`.
+Besides, in esTS a source that is neither a string, a `Doc` nor a `Document` raises `SourceTypeError`, and a `Doc` without the lemmas (of a pipeline with the `lemmatizer` excluded) raises `SourceError`.
 
 === "Code"
 
@@ -43,13 +43,12 @@ Besides, in esTS a source that is neither a string, a `Doc` nor a `Document` and
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
 | `source` | `str` / `Doc` / `Document` | - | Data source |
-| `nlp` | `Language` | `None` | Pipeline of spaCy that parses a string; without it the model `es_core_news_sm` is loaded |
 
 ## Attributes
 
 --8<-- "stats/morph_stats.md:MorphStats-attributes"
 
-In esTS the statistics are `case`, ..., `verb_form` of the [table below](#statistics); `animacy`, `aspect` and `voice` of the core are not among them. esTS also has the attribute `lemmas` (`tuple[str]`) - the lemmas of the words that the model gives.
+In esTS the statistics are `case`, ..., `verb_form` of the [table below](#statistics); `animacy`, `aspect` and `voice` of the core are not among them. esTS also has the attribute `lemmas` (`tuple[str]`) - the lemmas of the words, of esMorph for a text and of the pipeline for a `Doc`.
 
 === "Code"
 
@@ -88,10 +87,10 @@ Every statistic is an attribute of the object, a tuple of the values of a featur
 | `tense` | Tense | `Pres`, `Past`, `Imp`, `Fut` |
 | `verb_form` | Verb form | `Fin`, `Inf`, `Part`, `Ger` |
 
-A feature with several values keeps the form of CoNLL-U: `qué`, `quién`, `cuál` have `pron_type` equal to `Int,Rel`, and `usted` has `case` equal to `Acc,Nom`. `print_stats` names the values by `MORPHOLOGY_STATS_DESC` of `ests.constants`, and such a value by the names of its parts joined with a slash - "Interrogative / Relative", "Accusative / Nominative".
+A feature with several values keeps the form of CoNLL-U: `usted` has `case` equal to `Acc,Nom`, and in a `Doc` of `es_core_news_sm` `qué`, `quién`, `cuál` have `pron_type` equal to `Int,Rel`. `print_stats` names the values by `MORPHOLOGY_STATS_DESC` of `ests.constants`, and such a value by the names of its parts joined with a slash - "Interrogative / Relative", "Accusative / Nominative".
 
 !!! warning "Warning"
-    The statistics are as good as the annotation of the model. `es_core_news_sm` mis-analyses verbs with enclitic pronouns (`dámelo`, `cuéntamelo` come out as nouns with invented lemmas) and tags the imperatives of `tú` as indicative (`Abre la ventana` gets `Mood=Ind`), so `p_imperative` under-reports and `p_indicative` absorbs the orders: in the dialogue of the corpus of literature it finds about one imperative in ten. `es_core_news_lg` does little better (15%); the transformer model `es_dep_news_trf` passed in `nlp` finds 87% of them, and in drama `p_imperative` rises from 1.6% to 7.5% - at the cost of about 1 GB with PyTorch and five times the time on a CPU, and it needs the single line breaks of a hard-wrapped text joined first.
+    The statistics are as good as the annotation. esMorph analyzes a verb with clitics as the verb (`dámelo` - the imperative of `dar`), but, like the models, reads the imperative of `tú` that has the form of the indicative (`Abre la ventana`) as indicative. In a `Doc`, `es_core_news_sm` mis-analyses verbs with enclitic pronouns (`dámelo`, `cuéntamelo` come out as nouns with invented lemmas) and tags the imperatives of `tú` as indicative (`Abre la ventana` gets `Mood=Ind`), so `p_imperative` under-reports and `p_indicative` absorbs the orders: in the dialogue of the corpus of literature it finds about one imperative in ten. `es_core_news_lg` does little better (15%); the transformer model `es_dep_news_trf`, which builds the `Doc`, finds 87% of them, and in drama `p_imperative` rises from 1.6% to 7.5% - at the cost of about 1 GB with PyTorch and five times the time on a CPU, and it needs the single line breaks of a hard-wrapped text joined first.
 
 <div class="metric-card" markdown>
 
@@ -111,7 +110,7 @@ The shares of the forms that mark the register of a Spanish text, each of its ow
 
 The first four markers share the base of the finite forms and sum to one unless the model leaves a finite form without a mood or gives it several (`Mood=Ind,Sub`, which counts in the share of each; `es_core_news_sm` gives none). The next three share the base of all the verb forms of verbs and auxiliaries: a participle that the model annotates as an adjective (`la casa pintada`) is out of the base, the ones of the compound tenses and the passive (`he leído`, `fue escrito`) are in.
 
-The base of `p_ser` is the copular uses alone, read from the parse: the auxiliaries of the passive and of the progressive (`fue escrito`, `es financiado`, `está cantando`) are left out, while `es alta`, `está cansada` and `lo importante es que vengas` count. For a `Doc` without a parse the marker is `nan`.
+The base of `p_ser` is the copular uses alone, read from the morphology: `ser` before a participle and `estar` before a gerund, with adverbs and pronouns between them, are the auxiliaries of the passive and of the progressive (`fue escrito`, `es financiado`, `está cantando`) and are left out, while `es alta`, `está cansada` and `lo importante es que vengas` count. The rule needs no parse, so a text and a `Doc` without a parser have the marker too; a participle that the tagger reads as an adjective (`fue muy bien recibido`) leaves its `ser` a copula.
 
 === "Code"
 
@@ -157,7 +156,7 @@ The example at the top of the page prints two of the tables. `to_dataframe` and 
     ```
     {'pos': {'SCONJ': 1, 'VERB': 3, 'NOUN': 2, 'DET': 1, 'PRON': 2, 'ADV': 1},
      'mood': {'Sub': 1, 'Cnd': 1, 'Ind': 1},
-     'tense': {'Imp': 1, 'Pres': 1}}
+     'tense': {'Imp': 1, 'Past': 1}}
     (('Si', {'pos': 'SCONJ'}),
      ('tuviera', {'pos': 'VERB', 'mood': 'Sub', 'tense': 'Imp'}),
      ('tiempo', {'pos': 'NOUN'}),
@@ -166,7 +165,7 @@ The example at the top of the page prints two of the tables. `to_dataframe` and 
      ('libro', {'pos': 'NOUN'}),
      ('que', {'pos': 'PRON'}),
      ('me', {'pos': 'PRON'}),
-     ('recomendaste', {'pos': 'VERB', 'mood': 'Ind', 'tense': 'Pres'}),
+     ('recomendaste', {'pos': 'VERB', 'mood': 'Ind', 'tense': 'Past'}),
      ('ayer', {'pos': 'ADV'}))
     ```
 

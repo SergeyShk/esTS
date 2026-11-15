@@ -4,7 +4,7 @@ from collections.abc import Iterable, Iterator
 from functools import lru_cache
 from typing import TYPE_CHECKING, Any
 
-import simplemma
+import esmorph
 from anyseg import Segmenter
 from anyts.constants import MESSAGES
 from anyts.document import to_document
@@ -155,6 +155,14 @@ def get_document(source: str | Doc | Document) -> Document:
     return to_document(source, sentenize=iter_text_sents)
 
 
+def _annotate_text(text: str) -> Document:
+    """The document of a string (get_document) with the lemmas, the parts of speech and the
+    features of esMorph in the context of its sentences"""
+    document = SEGMENTER.segment(text)
+    get_morph_analyzer().annotate(document)
+    return document
+
+
 def _parse_text(text: str, nlp: Language | None, disable: Iterable[str]) -> Document:
     """
     The document of a string parsed by a pipeline, nlp or get_nlp(), without the
@@ -183,23 +191,52 @@ def _check_nlp(nlp: object) -> None:
         raise SourceTypeError("The pipeline must be a spaCy Language")
 
 
-@lru_cache(maxsize=131072)
-def lemmatize(word: str) -> str:
+@lru_cache(maxsize=1)
+def get_morph_analyzer() -> esmorph.Analyzer:
     """
-    Lemmatizing a word form with simplemma, with caching
+    Getting the morphological analyzer esMorph
+
+    Returns:
+        Analyzer: Morphological analyzer
+    """
+    return esmorph.Analyzer()
+
+
+@lru_cache(maxsize=131072)
+def lemmatize(word: str, pos: str = "") -> str:
+    """
+    Lemmatizing a word form with esMorph given its part of speech of Universal Dependencies
 
     Description:
-        A known form is mapped to its lower-case lemma (Tienes - tener,
-        cantándole - cantar), an unknown form is returned unchanged (Madrid,
-        dámelo)
+        The lemma of the first analysis with the part of speech (vino: NOUN -
+        vino, VERB - venir), and without the part of speech or such an analysis
+        the lemma of the first analysis (Tienes - tener, cantándole - cantar,
+        del - de); a word without analyses is its own lemma
 
     Arguments:
         word (str): Word form
+        pos (str): Part of speech of UD
 
     Returns:
         str: Lemma
+
+    Example:
+        >>> from ests.utils import lemmatize
+        >>> lemmatize("vino"), lemmatize("vino", "VERB")
+        ('vino', 'venir')
     """
-    return simplemma.lemmatize(word, lang="es") if word != "" else word
+    analyses = get_morph_analyzer().analyze(word)
+    if not analyses:
+        return word
+    return next((analysis for analysis in analyses if analysis.pos == pos), analyses[0]).lemma
+
+
+@lru_cache(maxsize=131072)
+def _verb_lemmas(word: str) -> tuple[str, ...]:
+    """Lemmas of the analyses of a word form as a verb or an auxiliary (VERB, AUX) of esMorph,
+    in their order: fue - ser, ir"""
+    analyses = get_morph_analyzer().analyze(word)
+    return tuple(dict.fromkeys(a.lemma for a in analyses if a.pos in ("VERB", "AUX")))
 
 
 def load_pipeline(

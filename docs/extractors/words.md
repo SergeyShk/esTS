@@ -11,14 +11,14 @@ The class extends the `WordsExtractor` of the [anyTS](https://sergeyshk.github.i
 | Hook | Spanish |
 | :--- | :------ |
 | `tokenize(text)` | the tokens of the segmenter [anySeg](https://github.com/SergeyShk/anySeg), `ests.utils.iter_tokens` |
-| `lemmatize(word)` | the lemmas of simplemma, `ests.utils.lemmatize` |
+| `lemmatize(word)` | the lemmas of esMorph, `ests.utils.lemmatize` |
 | `number_pattern` | signed numbers, ranges, fractions, dates, times, percentages and ordinals: `-5`, `+7`, `1990-1995`, `1.500,50`, `12/03/2020`, `3:30`, `10%`, `3.º`, `1.ª`, `2do` |
 
 !!! note "Note"
     The segmenter needs no trained model; its tokens follow the conventions of UD for Spanish (AnCora). Punctuation marks, including `¿` and `¡`, numbers like `1.500,50`, `3.º`, `1990-1995`, the contractions `del` and `al` and abbreviations like `Sr.`, `p.ej.` are single tokens; an abbreviation written with spaces is a token for each part (`EE.`, `UU.`), and one in capitals keeps its period before capitals or a digit (`VÉASE PÁG. 5`). The period of an abbreviation that ends a sentence is a token of its own: `etc.` at the end of a sentence gives the word `etc`. Words with enclitic pronouns (`dámelo`) are not split. The dashes of a dialogue glued to the words are split off: `--No`, `sí--dijo`, `―dijo él―.` give the words `No`, `sí`, `dijo`, `él`, also next to the underscores of italics (`--_Siguro_`), while a hyphen between letters (`franco-alemán`) or before a digit (`-5`) stays in its token; a suffix quoted with its hyphen (`-mente`) loses it as well, and so does the number of an item of a list (`Artículo 1.- El objeto` gives the number `1`). A byte order mark, as in a file read with `utf-8` instead of `utf-8-sig`, is no token. A `Doc` gets the same tokens from the pipeline of [`ests.load_pipeline()`](../components.md#load_pipeline), whose tokenizer is that of anySeg.
 
 !!! note "Note"
-    [simplemma](https://github.com/adbar/simplemma) works from a dictionary without a trained model: a known form is mapped to its lower-case lemma (`Tienes` - `tener`, `NIÑOS` - `niño`), an unknown form is returned unchanged (`Madrid`, `dámelo`).
+    [esMorph](https://github.com/SergeyShk/esMorph) works from a dictionary of Wiktionary without a trained model of spaCy. The extractor takes every word apart, without its sentence, and gives it the lemma of its first analysis: `Tienes` - `tener`, `NIÑOS` - `niño`, a verb with clitics is the verb (`dámelo` - `dar`), and a proper noun keeps its form (`Madrid`).
 
 === "Code"
 
