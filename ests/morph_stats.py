@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections import Counter
 from collections.abc import Mapping
+from functools import lru_cache
 from math import nan
 from typing import TYPE_CHECKING, ClassVar
 
@@ -13,12 +14,13 @@ from anyts.utils import has_words, safe_divide
 from .constants import (
     COPULA_AUXILIARY_FORMS,
     COPULAS,
+    ENCLITICS,
     MORPHOLOGY_FEATURES,
     MORPHOLOGY_MARKERS_DESC,
     MORPHOLOGY_STATS_DESC,
 )
 from .exceptions import SourceError
-from .utils import _annotate_text, get_document
+from .utils import SEGMENTER, _annotate_text, get_document, get_morph_analyzer
 
 if TYPE_CHECKING:
     from anyseg import Document
@@ -80,6 +82,85 @@ def is_auxiliary(token: TreeWord) -> bool:
         if word.upos not in AUXILIARY_GAP_POS:
             return word.upos in VERBAL_POS and form in word.feats.get("VerbForm", "").split(",")
     return False
+
+
+def has_enclitics(token: TreeWord) -> bool:
+    """
+    Checking whether a verb form of the tree carries enclitic pronouns
+
+    Description:
+        A VERB or an AUX whose token the segmenter anySeg splits into the verb
+        and its pronouns (dale - da + le, dámelo - da + me + lo, buscarla) or
+        whose first analysis as a verb in esMorph has pronouns after it
+        (pasábanse, díjole); the forms in -se of the subjunctive are one word
+        (hablase). The rule reads the text of the token, so a string and a Doc
+        give the same
+
+    Arguments:
+        token (TreeWord): Word of the tree
+
+    Returns:
+        bool: Result of the check
+
+    Example:
+        >>> from anyts.document import get_tree
+        >>> from ests.morph_stats import has_enclitics
+        >>> from ests.utils import get_document, get_morph_analyzer
+        >>> document = get_document("Dámelo, que quiero leerlo si hablase de ti.")
+        >>> get_morph_analyzer().annotate(document)
+        >>> [word.form for word in get_tree(document).words if has_enclitics(word)]
+        ['Da', 'leer']
+    """
+    if token.upos not in VERBAL_POS:
+        return False
+    return _verb_with_pronouns(token.tree.text[token.start : token.end].lower())
+
+
+@lru_cache(maxsize=65536)
+def _verb_with_pronouns(text: str) -> bool:
+    """Whether anySeg splits a token into words or its first analysis as a verb in esMorph has
+    more than one word"""
+    if len(SEGMENTER.segment(text).tokens[0].words) > 1:
+        return True
+    analyses = get_morph_analyzer().analyze(text)
+    return next((len(a.words) > 1 for a in analyses if a.pos in VERBAL_POS), False)
+
+
+def has_proclitics(token: TreeWord) -> bool:
+    """
+    Checking whether a verb form of the tree comes after proclitic pronouns
+
+    Description:
+        A VERB or an AUX right after a pronoun of ENCLITICS that is a token of
+        its own, in the same sentence; the pronouns may be a chain (se lo
+        dijo), and the enclitic of the verb before is none (hallándose
+        expresado). In a compound tense the pronouns go before the auxiliary
+        (se ha ido)
+
+    Arguments:
+        token (TreeWord): Word of the tree
+
+    Returns:
+        bool: Result of the check
+
+    Example:
+        >>> from anyts.document import get_tree
+        >>> from ests.morph_stats import has_proclitics
+        >>> from ests.utils import get_document, get_morph_analyzer
+        >>> document = get_document("No se lo dijo, pero lo sabía y se ha ido.")
+        >>> get_morph_analyzer().annotate(document)
+        >>> [word.form for word in get_tree(document).words if has_proclitics(word)]
+        ['dijo', 'sabía', 'ha']
+    """
+    if token.upos not in VERBAL_POS or not token.index:
+        return False
+    previous = token.tree.words[token.index - 1]
+    return (
+        previous.sentence == token.sentence
+        and previous.upos == "PRON"
+        and previous.form.lower() in ENCLITICS
+        and token.tree.text[previous.start : previous.end].lower() == previous.form.lower()
+    )
 
 
 class MorphStats(anyts.morph_stats.MorphStats):
@@ -165,7 +246,7 @@ class MorphStats(anyts.morph_stats.MorphStats):
     def __init__(self, source: str | Doc | Document):
         super().__init__(source)
         # analyze can be called again on the object; the markers read the words of the source
-        self.lemmas, self._auxiliary = self._found
+        self.lemmas, self._auxiliary, self._enclitics, self._proclitics = self._found
 
     def parse(self, source: str | Doc | Document) -> Document:
         """
@@ -217,6 +298,8 @@ class MorphStats(anyts.morph_stats.MorphStats):
         self._found = (
             tuple(word.lemma or "" for word in found),
             tuple(is_auxiliary(word) for word in found),
+            tuple(has_enclitics(word) for word in found),
+            tuple(has_proclitics(word) for word in found),
         )
         return words
 
@@ -226,8 +309,10 @@ class MorphStats(anyts.morph_stats.MorphStats):
 
         Description:
             Every marker is a share of its own base: the moods among the
-            finite forms, the non-finite forms among the verb forms (VERB and
-            AUX, so participles tagged ADJ stay out), ser among the copular
+            finite forms, the non-finite forms and the forms with enclitics or
+            after proclitics (has_enclitics, has_proclitics) among the verb
+            forms (VERB and AUX, so participles tagged ADJ stay out), ser among
+            the copular
             uses of ser and estar (the auxiliaries of the passive and of the
             progressive left out, see is_auxiliary) and the adverbs in -mente
             among the adverbs
@@ -262,6 +347,10 @@ class MorphStats(anyts.morph_stats.MorphStats):
         }
         markers.update(
             {marker: safe_divide(forms[form], n_forms, nan) for marker, form in VERB_FORMS.items()}
+        )
+        markers["p_enclitics"] = safe_divide(sum(self._enclitics[i] for i in verbs), n_forms, nan)
+        markers["p_proclitics"] = safe_divide(
+            sum(self._proclitics[i] for i in verbs), n_forms, nan
         )
         markers["p_ser"] = safe_divide(copulas["ser"], sum(copulas.values()), nan)
         markers["p_mente_adverbs"] = safe_divide(

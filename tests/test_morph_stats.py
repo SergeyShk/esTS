@@ -210,6 +210,31 @@ def test_markers_moods_sum_to_one(ms):
     ) == pytest.approx(1)
 
 
+@pytest.mark.parametrize("source", [str, get_nlp()])
+def test_markers_clitics(source):
+    """A verb with enclitics and one after proclitics, in a string and in a Doc alike"""
+    text = "Dámelo ya, que no se lo dije y quiero leerlo hallándose escrito."
+    markers = MorphStats(source(text)).get_markers()
+    # da, dije, quiero, leer, hallando (escrito is an adjective): three with enclitics, one
+    # after proclitics
+    assert markers["p_enclitics"] == pytest.approx(3 / 5)
+    assert markers["p_proclitics"] == pytest.approx(1 / 5)
+
+
+@pytest.mark.parametrize("source", [str, get_nlp()])
+def test_markers_enclitics_split_by_the_segmenter(source):
+    """Imperatives and infinitives that anySeg splits and esMorph alone would not"""
+    text = "Dale el libro. Date prisa. ¡Cállate! Dinos la verdad. Fue a buscarla."
+    assert MorphStats(source(text)).get_markers()["p_enclitics"] == pytest.approx(5 / 6)
+
+
+def test_markers_clitics_of_the_subjunctive_in_se():
+    """The imperfect subjunctive in -se is one word, no verb with an enclitic"""
+    markers = MorphStats("Si hablase y comiese más, se quedase.").get_markers()
+    assert markers["p_enclitics"] == 0.0
+    assert markers["p_proclitics"] == pytest.approx(1 / 3)
+
+
 def test_markers_non_finite():
     markers = MorphStats("Quiero leer un libro escrito cantando").get_markers()
     assert markers["p_infinitive"] == pytest.approx(1 / 3)
@@ -336,9 +361,9 @@ def test_print_markers(short, capsys):
     short.print_markers()
     out = capsys.readouterr().out.splitlines()
     assert [part.strip() for part in out[0].split("|")] == ["Marker", "Value"]
-    assert out[2] == "Indicative among the finite forms   |   1.00   "
-    assert out[-1] == "Adverbs in -mente among the adverbs |   1.00   "
-    assert out[-2] == "ser among the copulas ser and estar |   nan    "
+    assert out[2] == "Indicative among the finite forms           |   1.00   "
+    assert out[-1] == "Adverbs in -mente among the adverbs         |   1.00   "
+    assert out[-2] == "ser among the copulas ser and estar         |   nan    "
 
 
 def test_multiple_values_of_a_feature():
