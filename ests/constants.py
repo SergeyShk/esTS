@@ -260,6 +260,8 @@ MORPHOLOGY_MARKERS_DESC = {
     "p_infinitive": "Infinitive among the verb forms",
     "p_gerund": "Gerund among the verb forms",
     "p_participle": "Participle among the verb forms",
+    "p_enclitics": "Forms with enclitics among the verb forms",
+    "p_proclitics": "Forms after proclitics among the verb forms",
     "p_ser": "ser among the copulas ser and estar",
     "p_mente_adverbs": "Adverbs in -mente among the adverbs",
 }
@@ -273,7 +275,8 @@ COPULA_AUXILIARY_FORMS = {"ser": "Part", "estar": "Ger"}
 AUXILIARY_VERBS = frozenset(
     {"haber", "ser", "estar", "ir", "poder", "deber", "querer", "soler", "tener", "saber"}
 )
-# Enclitic pronouns after an infinitive, a gerund or an imperative (decírselo)
+# The clitic pronouns: enclitic after an infinitive, a gerund or an imperative (decírselo),
+# proclitic before a verb (se lo dijo)
 ENCLITICS = ("me", "te", "se", "nos", "os", "lo", "la", "los", "las", "le", "les")
 
 
