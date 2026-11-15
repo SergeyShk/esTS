@@ -266,6 +266,9 @@ MORPHOLOGY_MARKERS_DESC = {
 
 # The two copulas of Spanish, by lemma
 COPULAS = ("ser", "estar")
+# The verb form after a copula that makes it an auxiliary: ser of the passive (fue
+# escrito), estar of the progressive (está cantando)
+COPULA_AUXILIARY_FORMS = {"ser": "Part", "estar": "Ger"}
 # Verbs the models attach as auxiliaries or copulas, by lemma
 AUXILIARY_VERBS = frozenset(
     {"haber", "ser", "estar", "ir", "poder", "deber", "querer", "soler", "tener", "saber"}
@@ -992,25 +995,9 @@ OFFICIALESE_CLICHES = (
     "tomar un acuerdo",
     "y para que así conste",
 )
-# Forms of the verbs of the clichés that simplemma leaves as they are, by their
-# infinitive: some participles (ha dado cumplimiento) and the imperative with se (dese)
-IRREGULAR_VERB_FORMS = {
-    "dado": "dar",
-    "dados": "dar",
-    "dese": "dar",
-    "dése": "dar",
-    "dense": "dar",
-    "dénse": "dar",
-    "hecho": "hacer",
-    "hechos": "hacer",
-    "llevada": "llevar",
-    "llevadas": "llevar",
-    "puesto": "poner",
-    "puesta": "poner",
-    "puestos": "poner",
-    "puestas": "poner",
-    "resultado": "resultar",
-}
+# Forms of the verbs of the clichés that esMorph does not read as the verb: the
+# imperative of dar with se, written without an accent (dese traslado)
+IRREGULAR_VERB_FORMS = {"dese": "dar", "dense": "dar"}
 # Parenthetical expressions, set off by commas or standing at the edge of a sentence,
 # as the corpus of literature mostly sets them off
 PARENTHETICALS = (

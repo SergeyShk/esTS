@@ -87,7 +87,7 @@ def test_feature_values(text, stat, expected):
 
 
 def test_multiple_values():
-    assert "Int,Rel" in MorphStats("No sé qué quieres").pron_type
+    assert "Acc,Nom" in MorphStats("Usted lo ve").case
 
 
 def test_punctuations_and_symbols_dropped():
@@ -95,12 +95,10 @@ def test_punctuations_and_symbols_dropped():
     assert ms.words == ("El", "50", "de", "los", "libros", "vaya")
 
 
-def test_doc_source(ms):
-    assert MorphStats(get_nlp()(TEXT)).tags == ms.tags
-
-
-def test_nlp_parameter(ms):
-    assert MorphStats(TEXT, nlp=get_nlp()).tags == ms.tags
+def test_doc_source():
+    """A Doc keeps the analysis of its pipeline, a string gets that of esMorph"""
+    assert MorphStats(get_nlp()("No sé qué quieres")).pron_type == (None, None, "Int,Rel", None)
+    assert MorphStats("No sé qué quieres").pron_type == (None, None, "Int", None)
 
 
 @pytest.mark.parametrize("source", [1, ["El", "gato"], None, spacy.blank("es")])
@@ -115,12 +113,6 @@ def test_source_type_error(source):
 def test_source_without_words(source):
     with pytest.raises(SourceError, match="no words"):
         MorphStats(source)
-
-
-def test_source_too_long():
-    nlp = get_nlp()
-    with pytest.raises(SourceError, match="longer than the limit"):
-        MorphStats("hola " * (nlp.max_length // 4), nlp=nlp)
 
 
 def test_source_without_annotation():
@@ -277,9 +269,10 @@ def test_markers_copulas():
 
 
 def test_markers_ser_without_parse():
+    """The auxiliaries are found by the morphology, so a Doc without a parse has p_ser"""
     doc = get_nlp()("Ella es alta pero hoy está cansada", disable=["parser"])
     assert not doc.has_annotation("DEP")
-    assert isnan(MorphStats(doc).get_markers()["p_ser"])
+    assert MorphStats(doc).get_markers()["p_ser"] == 0.5
 
 
 def test_print_stats(short, capsys):
@@ -302,7 +295,6 @@ def test_print_stats_filter_none(short, capsys):
 @pytest.mark.parametrize(
     ("text", "stat", "expected"),
     [
-        ("No sé qué quieres", "pron_type", "Interrogative / Relative"),
         ("Usted lo ve", "case", "Accusative / Nominative"),
     ],
 )

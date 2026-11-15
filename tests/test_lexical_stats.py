@@ -29,7 +29,7 @@ def test_words_and_lemmas(ls):
     assert ls.n_content_words == 5
     assert ls.lexical_density == pytest.approx(5 / 11)
     assert ls.ranks == tuple(get_rank(lemma) for lemma in LEMMAS)
-    assert ls.ranks[:2] == (1, 2851)
+    assert ls.ranks[:2] == (1, 3123)
 
 
 def test_frequency(ls, freq_dict):
@@ -50,7 +50,7 @@ def test_surprisal(ls, freq_dict):
     expected = sum(-log2(freq_dict.ipm(lemma) / 1_000_000) for lemma in LEMMAS) / 11
     assert ls.surprisal == pytest.approx(expected)
     assert ls.perplexity == pytest.approx(2**expected)
-    assert calc_surprisal(["gato"], freq_dict) == pytest.approx(-log2(29.08 / 1_000_000))
+    assert calc_surprisal(["gato"], freq_dict) == pytest.approx(-log2(25.37 / 1_000_000))
     floor = freq_dict.min_ipm
     assert calc_surprisal(["gatx"], freq_dict) == pytest.approx(-log2(floor / 1_000_000))
     assert isnan(calc_surprisal([], freq_dict))
@@ -106,8 +106,8 @@ def test_abbreviations(freq_dict):
     assert [ls.keys[ls.words.index(word)] for word in ("Sr.", "SRA.", "pág.", "etc.")] == [
         "sr",
         "sra",
-        "página",
-        "etcétera",
+        "pág",
+        "etc",
     ]
     assert ls.coverage == 1.0
     initials = LexicalStats("Llegó D. Francisco con J. López", freq_dict)
@@ -132,13 +132,6 @@ def test_is_number(word, expected):
 def test_doc_source(ls, freq_dict):
     doc = get_nlp()(TEXT)
     assert LexicalStats(doc, freq_dict).get_stats() == ls.get_stats()
-
-
-def test_nlp_is_used(freq_dict):
-    pipeline = spacy.load("es_core_news_sm")
-    pipeline.max_length = 5
-    with pytest.raises(SourceError, match="longer than the limit"):
-        LexicalStats(TEXT, freq_dict, nlp=pipeline)
 
 
 @pytest.mark.parametrize("source", [666, ["a", "b"], {"a": "b"}])

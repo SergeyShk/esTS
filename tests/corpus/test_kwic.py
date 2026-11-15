@@ -62,7 +62,6 @@ def test_kwic_abbreviation_by_lemma():
         found = kwic(source, "etc.", by_lemma=True)
         assert [line.keyword.removesuffix(".") for line in found] == ["etc", "etc"]
         assert [line.keyword for line in kwic(source, "pág.", by_lemma=True)] == ["pág."]
-        assert [line.keyword for line in kwic(source, "página", by_lemma=True)] == ["pág."]
 
 
 def test_kwic_by_lemma():
@@ -126,13 +125,15 @@ def test_kwic_of_a_blank_doc():
     assert kwic(spacy.blank("es")(text), "gato", window=2) == kwic(text, "gato", window=2)
 
 
-def test_kwic_of_a_doc_with_lemmas():
-    doc = get_nlp()("Mi amigo vino con una botella de vino.")
-    assert [(line.start, line.keyword) for line in kwic(doc, "venir", by_lemma=True)] == [
-        (9, "vino")
-    ]
-    assert [line.start for line in kwic(doc, "vino", by_lemma=True)] == [9, 33]
-    assert kwic(doc.text, "venir", by_lemma=True) == []
+def test_kwic_by_lemma_with_the_part_of_speech():
+    """A word takes the lemma of its part of speech: of the model in a Doc, of esMorph in
+    the context of its sentence in a string"""
+    text = "Mi amigo vino con una botella de vino."
+    for source in (text, get_nlp()(text)):
+        assert [(line.start, line.keyword) for line in kwic(source, "venir", by_lemma=True)] == [
+            (9, "vino")
+        ]
+        assert [line.start for line in kwic(source, "vino", by_lemma=True)] == [9, 33]
 
 
 @pytest.mark.parametrize(

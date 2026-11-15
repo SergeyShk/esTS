@@ -6,7 +6,10 @@ The source is the Spanish corpus of Google Books Ngram, version 20200217, 1-gram
 of speech are counted (the untagged lines repeat their sums), only the years
 FIRST_YEAR-LAST_YEAR, and only the forms of letters: numbers, punctuation and the
 tag X go. The forms go to their keys by lemma_key, the function by which the library
-looks a word up: lower case, then the lemma by simplemma.
+looks a word up: lower case, then the lemma of esMorph with the part of speech of
+Google in the tags of Universal Dependencies (UD_TAGS); Google tags the auxiliaries and
+the copulas as verbs, so a verb takes the first analysis of a VERB or an AUX (fue -
+ser, not ir).
 
 For every lemma and part of speech the dictionary gives:
     ipm - occurrences per million words of the period (the words are all the
@@ -43,16 +46,9 @@ from importlib.metadata import version
 from pathlib import Path
 
 import numpy as np
-import simplemma
 
-from ests.datasets.freq_dict import (
-    FILENAME,
-    NAME,
-    SIMPLEMMA_VERSION,
-    VERSION,
-    WORD_PATTERN,
-    lemma_key,
-)
+from ests.datasets.freq_dict import FILENAME, NAME, VERSION, WORD_PATTERN, lemma_key
+from ests.utils import get_morph_analyzer
 
 FIRST_YEAR, LAST_YEAR = 1980, 2019
 N_YEARS = LAST_YEAR - FIRST_YEAR + 1
@@ -69,6 +65,10 @@ TAGS = {
     "ADP": "ADP",
     "CONJ": "CONJ",
 }
+# Parts of speech of UD for the lemmas of esMorph: Google does not tell a coordinating
+# from a subordinating conjunction, and the first analysis of a CONJ form is taken
+UD_TAGS = {tag: "" if tag == "CONJ" else tag for tag in TAGS.values()}
+VERBAL_POS = ("VERB", "AUX")
 # A form below this count in the period is not kept: it adds less than 0.002 ipm
 MIN_FORM_COUNT = 100
 PROPER_SHARE = 0.9
@@ -80,6 +80,7 @@ ROOT = f"{NAME}_v{VERSION}"
 TOP_FILE = "google_books_top10000.txt"
 TOP_SIZE = 10_000
 SPANISH_LETTERS = frozenset("aeouyáéó")
+VOWELS = frozenset("aeiouáéíóúü")
 ROMAN = re.compile(r"m{0,3}(?:c[md]|d?c{0,3})(?:x[cl]|l?x{0,3})(?:i[xv]|v?i{0,3})")
 README = """Frequency dictionary of Spanish lemmas
 
@@ -89,9 +90,9 @@ the Creative Commons Attribution 3.0 Unported License
 (https://creativecommons.org/licenses/by/3.0/).
 
 Changes: the forms tagged with a part of speech of the years 1980-2019 were
-lower-cased, lemmatized by simplemma {simplemma} and summed by lemma and part of
-speech; nouns written with a capital letter in 90% of their occurrences are proper
-nouns (PROPN) and keep their forms.
+lower-cased, lemmatized by esMorph {esmorph} with their part of speech and summed by
+lemma and part of speech; nouns written with a capital letter in 90% of their
+occurrences are proper nouns (PROPN) and keep their forms.
 {size} words; {rows} rows with at least 0.1 occurrences per million words found in
 at least 5 of the 40 years.
 
@@ -190,9 +191,9 @@ def aggregate(cache: Path) -> tuple[np.ndarray, dict[tuple[str, str], list]]:
         totals = np.array(file.readline().rstrip("\n").split("\t")[2:], dtype=np.int64)
         for line in file:
             form, tag, count, books, capitals, *years = line.rstrip("\n").split("\t")
-            # A proper noun keeps its form: simplemma would read Morales as moral
+            # A proper noun keeps its form: a lemma would read Morales as moral
             proper = tag == "NOUN" and int(capitals) >= PROPER_SHARE * int(count)
-            key = (lemma_key(form, proper), "PROPN" if proper else tag)
+            key = (form_key(form, tag, proper), "PROPN" if proper else tag)
             counts = np.array(years, dtype=np.int64)
             stored = lemmas.get(key)
             if stored is None:
@@ -202,6 +203,17 @@ def aggregate(cache: Path) -> tuple[np.ndarray, dict[tuple[str, str], list]]:
                 stored[1] = max(stored[1], int(books))
                 stored[2] = stored[2] + counts
     return totals, lemmas
+
+
+def form_key(form: str, tag: str, proper: bool) -> str:
+    """The key of a form by lemma_key; a verb of Google takes the first analysis of a VERB
+    or an AUX"""
+    if tag == "VERB" and not proper:
+        analyses = get_morph_analyzer().analyze(form)
+        lemma = next((analysis.lemma for analysis in analyses if analysis.pos in VERBAL_POS), None)
+        if lemma is not None:
+            return lemma.lower()
+    return lemma_key(form, proper, UD_TAGS[tag])
 
 
 def juilland(counts: np.ndarray, totals: np.ndarray) -> float:
@@ -233,31 +245,35 @@ def is_vocabulary(lemma: str) -> bool:
         A letter is a word only if it is one in Spanish (a, e, o, u, y and the
         accented á, é, ó of the older spelling), the others are the letters of
         enumerations and initials. A lemma of two letters and a Roman numeral go
-        unless simplemma knows them as words (su, ya, mi, vi): the others are
-        abbreviations (pp, ss, vs) and numbers of volumes and centuries (ii, xix)
+        unless the dictionary of esMorph has them and they have a vowel (su, ya,
+        mi): the others are abbreviations (pp, km, vs) and numbers of volumes
+        and centuries (ii, xix)
     """
     if len(lemma) == 1:
         return lemma in SPANISH_LETTERS
     if len(lemma) == 2 or ROMAN.fullmatch(lemma):
-        return simplemma.is_known(lemma, lang="es")
+        return get_morph_analyzer().is_known(lemma) and not VOWELS.isdisjoint(lemma)
     return True
 
 
 def top_lemmas(rows: list[tuple], size: int) -> list[str]:
-    """The most frequent lemmas of the vocabulary, the parts of speech summed, no proper nouns"""
+    """
+    The most frequent lemmas of the vocabulary, the parts of speech summed, without the
+    proper nouns: a lemma whose rows of PROPN outweigh the others goes too (garcía, which
+    Google also tags as a verb)
+    """
     ipm: dict[str, float] = defaultdict(float)
+    proper: dict[str, float] = defaultdict(float)
     for lemma, tag, value, *_ in rows:
-        if tag != "PROPN" and is_vocabulary(lemma):
+        if tag == "PROPN":
+            proper[lemma] += value
+        elif is_vocabulary(lemma):
             ipm[lemma] += value
-    return sorted(ipm, key=lambda lemma: (-ipm[lemma], lemma))[:size]
+    kept = [lemma for lemma in ipm if ipm[lemma] > proper[lemma]]
+    return sorted(kept, key=lambda lemma: (-ipm[lemma], lemma))[:size]
 
 
 def main(ngrams: Path, output: Path) -> None:
-    installed = version("simplemma")
-    if installed != SIMPLEMMA_VERSION:
-        raise SystemExit(
-            f"simplemma {installed} is installed, the dictionary needs {SIMPLEMMA_VERSION}"
-        )
     totals, lemmas = aggregate(count_forms(ngrams))
     rows = build_rows(totals, lemmas)
     header = "lemma\tpos\tipm\trange\tdispersion\tdocs"
@@ -265,7 +281,7 @@ def main(ngrams: Path, output: Path) -> None:
     files = {
         f"{ROOT}/{FILENAME}": table.encode("utf-8"),
         f"{ROOT}/README.txt": README.format(
-            size=totals.sum(), rows=len(rows), simplemma=SIMPLEMMA_VERSION
+            size=totals.sum(), rows=len(rows), esmorph=version("esmorph")
         ).encode("utf-8"),
     }
     output.mkdir(parents=True, exist_ok=True)

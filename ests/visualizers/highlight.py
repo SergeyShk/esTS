@@ -56,7 +56,7 @@ from ..syntax_stats import (
     is_participle_clause,
     is_passive,
 )
-from ..utils import get_document, is_verbal_noun, lemmatize
+from ..utils import _annotate_text, get_document, is_verbal_noun, lemmatize
 
 if TYPE_CHECKING:
     from anyseg import Document
@@ -99,10 +99,12 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
                 (CohesionStats)
             alliteration - repetitions of a consonant sound in neighbouring words,
                 unlikely by the frequencies of the Spanish sounds (PhonStats)
-        HIGHLIGHT_LAYER_GROUPS groups the layers. The syntactic layers need a Doc
-        with a dependency parse and the lemmas, verbal_nouns a Doc with the parts
-        of speech and the lemmas, anaphoric_mismo one with all three; a Doc
-        without the sentence boundaries is split by the rules of SentsExtractor.
+        HIGHLIGHT_LAYER_GROUPS groups the layers. A string gets the parts of
+        speech and the lemmas of esMorph in the context of its sentences; the
+        syntactic layers need a Doc with a dependency parse and the lemmas,
+        verbal_nouns the parts of speech and the lemmas, anaphoric_mismo all
+        three; a Doc without the sentence boundaries is split by the rules of
+        SentsExtractor.
         By default the layers of HIGHLIGHT_DEFAULT_LAYERS the source allows are on
         (long sentences, complex words, passive, chains of de, split predicates,
         clichés)
@@ -194,7 +196,10 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
         super().__init__(source, layers)
 
     def parse(self, source: str | Doc | Document) -> Document:
-        """The document of anySeg (ests.utils.get_document)"""
+        """The document of anySeg (ests.utils.get_document); a string with the analyses of
+        esMorph in the context of its sentences"""
+        if isinstance(source, str):
+            return _annotate_text(source)
         return get_document(source)
 
     def find(
@@ -372,9 +377,9 @@ def find_rare_words(words: Iterable[Word]) -> list[Highlight]:
     Finding the rare words
 
     Description:
-        The words whose lemma_key is beyond the 10,000 most frequent lemmas
-        (get_rank), as p_beyond_top10000 of LexicalStats counts them; a proper
-        noun of a tagged Doc keeps its form. Only the words of two Spanish
+        The words whose lemma_key with their part of speech is beyond the
+        10,000 most frequent lemmas (get_rank), as p_beyond_top10000 of
+        LexicalStats counts them; a proper noun keeps its form. Only the words of two Spanish
         letters or more that are not stopwords are looked at
 
     Arguments:
@@ -388,7 +393,7 @@ def find_rare_words(words: Iterable[Word]) -> list[Highlight]:
         lambda word: (
             SPANISH_WORD.fullmatch(word.text) is not None
             and not is_stopword(word.text)
-            and get_rank(lemma_key(word.text, word.pos == "PROPN")) is None
+            and get_rank(lemma_key(word.text, word.pos == "PROPN", word.pos or "")) is None
         ),
         "rare_words",
         "rare word: beyond the top 10000",
@@ -791,7 +796,7 @@ def is_anaphoric_mismo(token: TreeWord) -> bool:
         comma, as an argument (se archivó el mismo, la duración del mismo,
         contra la misma, que pone fin...), but not as the subject or the
         object after a verb of PREDICATIVE_VERBS by the lemma of the model or
-        of simplemma, where it means the same one (no parecía la misma,
+        of lemmatize, where it means the same one (no parecía la misma,
         serás el mismo), right before que (el mismo que el año pasado) or
         before a conjunction and an adjective or a determiner that shares its
         noun (de la misma o distinta categoría). The models attach some of

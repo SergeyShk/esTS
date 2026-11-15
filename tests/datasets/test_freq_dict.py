@@ -1,6 +1,5 @@
 import hashlib
 import shutil
-import warnings
 from collections import Counter
 from pathlib import Path
 
@@ -58,7 +57,7 @@ def test_download(tmp_path):
     assert dictionary.filepath == str(
         tmp_path / f"{module.NAME}_v{module.VERSION}" / "freq_dict.tsv"
     )
-    assert len(dictionary) == 83785
+    assert len(dictionary) == 86196
 
 
 def test_download_extracts_again(tmp_path):
@@ -68,26 +67,26 @@ def test_download_extracts_again(tmp_path):
     assert dictionary.filepath == str(
         tmp_path / f"{module.NAME}_v{module.VERSION}" / "freq_dict.tsv"
     )
-    assert dictionary.ipm("gato") == 29.08
+    assert dictionary.ipm("gato") == 25.37
     Path(dictionary.filepath).unlink()
     dictionary.download()
     # A new download reads the dictionary anew
     assert load_entries.cache_info().currsize == 0
     assert load_word_ipm.cache_info().currsize == 0
-    assert dictionary.ipm("gato") == 29.08
+    assert dictionary.ipm("gato") == 25.37
     readme = Path(dictionary.filepath).with_name("README.txt").read_text(encoding="utf-8")
     assert "Creative Commons Attribution 3.0" in readme
 
 
 def test_lookup(dictionary):
     entry = dictionary.lookup("gato")
-    assert entry == Entry("gato", ("NOUN", "ADJ"), 29.08, 40, 95, 232841)
+    assert entry == Entry("gato", ("NOUN", "ADJ"), 25.37, 40, 95, 232841)
     assert dictionary.lookup("Gato") == entry
     assert dictionary.lookup("gatx") is None
     assert dictionary.lookup("madrid").pos == ("PROPN",)
-    assert dictionary.ipm("perro") == 62.57
-    assert dictionary.ipm("computadora") == 0.0
-    assert dictionary.ipm("computador") == 20.07
+    assert dictionary.ipm("perro") == 58.41
+    assert dictionary.ipm("computadora") == 15.35
+    assert dictionary.ipm("computador") == 4.72
     assert "Gato" in dictionary
     assert "gatx" not in dictionary
     assert 5 not in dictionary
@@ -95,11 +94,11 @@ def test_lookup(dictionary):
 
 def test_word_ipm(dictionary, records):
     word_ipm = dictionary.word_ipm
-    assert word_ipm["gato"] == dictionary.ipm("gato")
-    # The row of the proper noun París goes to parir, the key the word París reaches
-    parir = sum(r["ipm"] for r in records if r["lemma"] == "parir")
-    paris = next(r["ipm"] for r in records if r["lemma"] == "parís" and r["pos"] == "PROPN")
-    assert word_ipm["parir"] >= parir + paris
+    assert word_ipm["gato"] == pytest.approx(dictionary.ipm("gato"))
+    # The row of the proper noun Tomás goes to tomar, the key the word Tomás reaches
+    tomar = sum(r["ipm"] for r in records if r["lemma"] == "tomar")
+    tomas = next(r["ipm"] for r in records if r["lemma"] == "tomás" and r["pos"] == "PROPN")
+    assert word_ipm["tomar"] >= tomar + tomas
     santo = sum(r["ipm"] for r in records if r["lemma"] == "santo")
     proper = sum(
         r["ipm"] for r in records if r["lemma"] in ("san", "santa") and r["pos"] == "PROPN"
@@ -109,7 +108,7 @@ def test_word_ipm(dictionary, records):
 
 
 def test_entries(dictionary, records):
-    assert len(dictionary) == 83785
+    assert len(dictionary) == 86196
     assert dictionary.min_ipm == 0.1
     rows = [record for record in records if record["lemma"] == "ser"]
     entry = dictionary.lookup("ser")
@@ -119,11 +118,11 @@ def test_entries(dictionary, records):
 
 
 def test_records(records):
-    assert len(records) == 109178
+    assert len(records) == 107032
     assert records[0] == {
         "lemma": "el",
         "pos": "DET",
-        "ipm": 96989.39,
+        "ipm": 96989.4,
         "range": 40,
         "dispersion": 99,
         "docs": 905361,
@@ -167,35 +166,25 @@ def test_bad_filters(dictionary, bad_filter):
         ("sé", "saber"),
         ("Miró", "mirar"),
         ("Déjame", "dejar"),
-        ("computadoras", "computador"),
+        ("computadoras", "computadora"),
     ],
 )
 def test_lemma_key(dictionary, word, key):
-    # Lemmas that differ between the versions of simplemma the dictionary is built with
+    # The keys are the lemmas of esMorph, which the dictionary is built with
     assert lemma_key(word) == key
     assert key in dictionary
 
 
+def test_lemma_key_pos(dictionary):
+    assert lemma_key("vino") == "vino"
+    assert lemma_key("vino", pos="VERB") == "venir"
+    assert "venir" in dictionary
+
+
 def test_lemma_key_proper(dictionary):
-    assert lemma_key("París") == "parir"
-    assert lemma_key("París", proper=True) == "parís"
-    assert dictionary.lookup(lemma_key("París", proper=True)).pos == ("PROPN",)
-
-
-def test_simplemma_version(monkeypatch, tmp_path):
-    module.check_simplemma.cache_clear()
-    monkeypatch.setattr(module, "version", lambda name: "2.1.0")
-    with pytest.warns(UserWarning, match=r"simplemma 2\.0\.0, simplemma 2\.1\.0 is installed"):
-        FreqDict(data_dir=tmp_path)
-    # The warning is given once per process
-    with warnings.catch_warnings():
-        warnings.simplefilter("error")
-        FreqDict(data_dir=tmp_path)
-    module.check_simplemma.cache_clear()
-    monkeypatch.setattr(module, "version", lambda name: module.SIMPLEMMA_VERSION)
-    with warnings.catch_warnings():
-        warnings.simplefilter("error")
-        FreqDict(data_dir=tmp_path)
+    assert lemma_key("Tomás") == "tomar"
+    assert lemma_key("Tomás", proper=True) == "tomás"
+    assert dictionary.lookup(lemma_key("Tomás", proper=True)).pos == ("PROPN",)
 
 
 def test_lookup_by_key(dictionary):

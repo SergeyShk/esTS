@@ -18,7 +18,6 @@ from ests.constants import (
 )
 from ests.exceptions import SourceError, SourceTypeError
 from ests.style_stats import (
-    _split_text,
     calc_academic_nausea,
     calc_classic_nausea,
     calc_keyword_density,
@@ -92,8 +91,11 @@ def test_init_doc(nlp):
     assert StyleStats(riddle_text).words == riddle
     doc = spacy.blank("es")(riddle_text)
     assert StyleStats(doc).words == riddle
+    # The nouns of a Doc are those of its pipeline, of a string those of esMorph
     stats = StyleStats(nlp(text)).get_stats()
-    assert stats == StyleStats(text).get_stats()
+    expected = StyleStats(text).get_stats()
+    assert stats.pop("verbal_nouns") != expected.pop("verbal_nouns")
+    assert stats == expected
 
 
 def test_init_lexemes():
@@ -228,17 +230,19 @@ def test_keyword_density():
 
 def test_verbal_nouns(ss, nlp):
     assert calc_verbal_nouns(["revisión", "proyecto", "nombramiento", "casa"]) == 50.0
-    assert calc_verbal_nouns(noun_lemmas(nlp(text))) == ss.verbal_nouns
+    assert calc_verbal_nouns(noun_lemmas(nlp(text))) == pytest.approx(100 * 6 / 15)
     with pytest.raises(SourceTypeError):
         noun_lemmas(text)
     assert calc_verbal_nouns(["uso", "viaje", "Aprendizaje"]) == 100.0
     assert isnan(calc_verbal_nouns([]))
-    # revisión x2, nombramiento, comisión, votación, uso among the 15 nouns of the model
+    # revisión x2, nombramiento, comisión, votación, uso among the 13 nouns of esMorph; the
+    # model reads es decir as two nouns more
+    assert [noun for noun, _ in ss.nouns()].count("revisión") == 2
+    assert len(ss.nouns()) == 13
+    assert ss.verbal_nouns == pytest.approx(100 * 6 / 13)
     nouns = [token.lemma_ for token in nlp(text) if token.pos_ == "NOUN"]
     assert len(nouns) == 15
-    assert ss.verbal_nouns == pytest.approx(100 * 6 / 15)
-    assert StyleStats(nlp(text)).verbal_nouns == ss.verbal_nouns
-    assert StyleStats(text, nlp=nlp).verbal_nouns == ss.verbal_nouns
+    assert StyleStats(nlp(text)).verbal_nouns == pytest.approx(100 * 6 / 15)
 
 
 def test_verbal_nouns_without_the_annotation(nlp):
@@ -251,34 +255,6 @@ def test_verbal_nouns_without_the_annotation(nlp):
     assert ss.spam == StyleStats(text).spam
     with pytest.raises(SourceError, match="no lemmas"):
         _ = ss.verbal_nouns
-    pipeline = spacy.load("es_core_news_sm", exclude=["lemmatizer"])
-    with pytest.raises(SourceError, match="no lemmas"):
-        _ = StyleStats(text, nlp=pipeline).verbal_nouns
-
-
-def test_verbal_nouns_of_a_long_text(nlp, monkeypatch):
-    # The text of 223 characters is parsed in its three sentences, with the same nouns
-    monkeypatch.setattr(nlp, "max_length", 100)
-    assert _split_text(text, 100) == [text[:63], text[64:163], text[164:]]
-    assert StyleStats(text).verbal_nouns == pytest.approx(100 * 6 / 15)
-    # A sentence longer than the limit cannot be parsed
-    pipeline = spacy.blank("es")
-    pipeline.max_length = 20
-    ss = StyleStats(text, nlp=pipeline)
-    assert ss.spam == StyleStats(text).spam
-    with pytest.raises(SourceError, match="A sentence of 63 characters is longer than the limit"):
-        _ = ss.verbal_nouns
-
-
-def test_copy_keeps_the_error_of_its_pipeline():
-    import copy
-    import pickle
-
-    ss = StyleStats("La revisión del expediente fue realizada.", nlp=spacy.blank("es"))
-    for clone in (pickle.loads(pickle.dumps(ss)), copy.deepcopy(ss)):
-        assert clone.nlp is None
-        with pytest.raises(SourceError, match="no parts of speech"):
-            _ = clone.verbal_nouns
 
 
 def test_doc_with_a_line_break_and_no_morphologizer():
@@ -289,18 +265,6 @@ def test_doc_with_a_line_break_and_no_morphologizer():
     assert doc.has_annotation("POS")
     with pytest.raises(SourceError, match="no parts of speech"):
         _ = StyleStats(doc).verbal_nouns
-
-
-def test_split_text():
-    assert _split_text("El gato duerme.", 15) == ["El gato duerme."]
-    # The parts are as long as the limit allows, without the spaces around the sentences
-    parts = _split_text("  El gato duerme. El perro ladra. Llueve. ", 32)
-    assert parts == ["El gato duerme. El perro ladra.", "Llueve."]
-    assert _split_text("El gato duerme. El perro ladra. Llueve.", 16) == [
-        "El gato duerme.",
-        "El perro ladra.",
-        "Llueve.",
-    ]
 
 
 def test_parentheticals(ss):
@@ -383,13 +347,13 @@ def test_expand_phrases():
         "han resultado beneficiarios",
         "dese traslado a las partes",
         "dénse por notificados",
-        # the pronominal lemmas of simplemma: llevarse, ponerse
+        # pronominal forms: llevarse, ponerse
         "llévese a cabo",
         "deberá llevarse a cabo",
         "poniéndose de manifiesto",
     ],
 )
-def test_expand_phrases_of_the_forms_simplemma_misses(phrase):
+def test_expand_phrases_of_the_verb_forms(phrase):
     words = phrase.split()
     cliches = ["dar cumplimiento", "hacer entrega", "poner de manifiesto", "dar traslado"]
     cliches += ["resultar beneficiarios", "dar por notificados", "llevar a cabo"]
@@ -417,7 +381,7 @@ def test_markers(nlp):
     ss = StyleStats(officialese)
     markers = ss.markers()
     assert markers == {
-        "verbal_nouns": ("revisión", "cumplimiento", "resolución"),
+        "verbal_nouns": ("revisión", "comisión", "cumplimiento", "resolución"),
         "compound_prepositions": ("a efectos del", "en el marco de", "conforme al"),
         "parentheticals": ("no obstante",),
         "cliches": ("procedió a", "dio cumplimiento", "a la mayor brevedad"),
@@ -425,7 +389,10 @@ def test_markers(nlp):
     # The markers are the ones the metrics count
     for name in ("compound_prepositions", "parentheticals", "cliches"):
         assert getattr(ss, name) == pytest.approx(100 * len(markers[name]) / len(ss.forms))
-    assert StyleStats(nlp(officialese)).markers() == markers
+    # The model reads comisión as no noun
+    doc_markers = StyleStats(nlp(officialese)).markers()
+    assert doc_markers.pop("verbal_nouns") == ("revisión", "cumplimiento", "resolución")
+    assert doc_markers == {key: value for key, value in markers.items() if key != "verbal_nouns"}
     # revisión twice, in the order of the text
     assert StyleStats(text).markers()["verbal_nouns"] == (
         "revisión",
