@@ -55,6 +55,16 @@ def test_kwic_abbreviation_of_a_doc(ignore_case):
     assert kwic(doc, "sr.", ignore_case=False) == []
 
 
+def test_kwic_abbreviation_by_lemma():
+    """An abbreviation and its form at the end of a sentence share a lemma"""
+    text = "Compró pan, etc. y leche. Vio la pág. 5. Compró pan, etc."
+    for source in (text, get_nlp()(text)):
+        found = kwic(source, "etc.", by_lemma=True)
+        assert [line.keyword.removesuffix(".") for line in found] == ["etc", "etc"]
+        assert [line.keyword for line in kwic(source, "pág.", by_lemma=True)] == ["pág."]
+        assert [line.keyword for line in kwic(source, "página", by_lemma=True)] == ["pág."]
+
+
 def test_kwic_by_lemma():
     assert [line.keyword for line in kwic(text, "gato", by_lemma=True)] == [
         "gato",

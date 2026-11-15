@@ -92,6 +92,10 @@ def _fold(word: str) -> str:
 
 
 def _lemmas(word: str, tokens: Sequence[Token]) -> tuple[str, ...]:
-    """The lemma of simplemma and, for a word of a Doc with lemmas, the lemma of the model"""
+    """
+    The lemma of simplemma of the word without the period of an abbreviation and, for
+    a word of a Doc with lemmas, the lemma of the model
+    """
+    own = lemmatize(word.removesuffix("."))
     lemma = tokens[0].lemma_ if tokens else ""
-    return (lemmatize(word), lemma) if lemma else (lemmatize(word),)
+    return (own, lemma) if lemma else (own,)
