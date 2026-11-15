@@ -6,10 +6,11 @@
 *   `spaCy` 3.8.17 o superior dentro de 3
 *   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.5 o superior dentro de 0.5, el núcleo independiente del idioma: los extractores, las estadísticas básicas y las fórmulas comunes de legibilidad, las métricas de diversidad léxica, las medidas de corpus, los gráficos y el mecanismo del resaltado vienen de él con el tokenizador, el lematizador, el segmentador de oraciones y las sílabas del español
 *   [`anyseg`](https://github.com/SergeyShk/anySeg) 0.3 o superior dentro de 0.3, el segmentador en tokens y oraciones
-*   `numpy`, `scipy`, `pandas`, `simplemma` 2
+*   [`esmorph`](https://github.com/SergeyShk/esMorph) 0.3 o superior dentro de 0.3, el analizador morfológico: los lemas, las categorías gramaticales y los rasgos de un texto; su diccionario, construido a partir de las entradas en español del Wiktionary inglés con el modelo de contexto de los treebanks de UD AnCora y GSD, se distribuye con la licencia [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+*   `numpy`, `scipy`, `pandas`
 *   `matplotlib` y `graphviz` para las [visualizaciones](visualizers/zipf.md)
 
-Las dependencias se instalan con el paquete. `import ests` no carga spaCy, matplotlib ni pandas, y las estadísticas de una cadena que no necesitan modelo prescinden de spaCy: llega con las primeras estadísticas que leen el análisis de su modelo, y los gráficos y las funciones de corpus al usarlos por primera vez.
+Las dependencias se instalan con el paquete. `import ests` no carga spaCy, matplotlib ni pandas, y las estadísticas de una cadena prescinden de spaCy, la morfología y el léxico incluidos: llega con las primeras estadísticas que leen el análisis de su modelo - la sintaxis y la cohesión -, y los gráficos y las funciones de corpus al usarlos por primera vez.
 
 !!! warning "Graphviz"
     El paquete `graphviz` de las dependencias es solo un envoltorio: para dibujar el [árbol de palabras](visualizers/word_tree.md) y la [red de colocaciones](visualizers/corpus.md#collocation_network) hacen falta los ejecutables de [Graphviz](https://graphviz.org/download/), que se instalan aparte (`brew install graphviz`, `apt install graphviz`, `conda install graphviz`); sin ellos `render()` y la visualización del grafo en Jupyter fallan con `ExecutableNotFound`. Nada más los necesita.
@@ -32,7 +33,7 @@ uv sync --all-groups
 
 ## El modelo de spaCy { #model }
 
-Las estadísticas básicas, la legibilidad, la diversidad léxica, las métricas de estilo salvo los sustantivos deverbales, la fonoestadística y las estadísticas del verso no necesitan ningún modelo entrenado. Las [estadísticas morfológicas](stats/morph_stats.md), las [sintácticas](stats/syntax_stats.md) (con analizador), las [de cohesión](stats/cohesion_stats.md) y las [de complejidad léxica](stats/lexical_stats.md) de una cadena sí lo necesitan, igual que los sustantivos deverbales de las [métricas de estilo](stats/style_stats.md), [`function_words_profile`](corpus/stylometry.md), los rasgos de un texto, la [comparación de corpus](corpus/compare.md) y construir un `Doc` por su cuenta, mejor con [`ests.load_pipeline()`](components.md#load_pipeline), que da a un `Doc` los tokens y las oraciones de su cadena. Las pruebas también lo necesitan; lo instala el grupo de dependencias `test`:
+Las estadísticas básicas, la legibilidad, la diversidad léxica, las [estadísticas morfológicas](stats/morph_stats.md) y las [de complejidad léxica](stats/lexical_stats.md), las métricas de estilo, la fonoestadística y las estadísticas del verso de una cadena no necesitan ningún modelo entrenado: la morfología viene de esMorph. Las estadísticas [sintácticas](stats/syntax_stats.md) (con analizador) y las [de cohesión](stats/cohesion_stats.md) de una cadena sí lo necesitan, igual que los rasgos de un texto, la [comparación de corpus](corpus/compare.md) y construir un `Doc` por su cuenta, mejor con [`ests.load_pipeline()`](components.md#load_pipeline), que da a un `Doc` los tokens y las oraciones de su cadena. Las pruebas también lo necesitan; lo instala el grupo de dependencias `test`:
 
 ``` bash
 python -m spacy download es_core_news_sm

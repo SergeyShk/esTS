@@ -1,7 +1,7 @@
 # Estadísticas de complejidad léxica
 
 ``` {.python .signature}
-LexicalStats(source, freq_dict=None, nlp=None)
+LexicalStats(source, freq_dict=None)
 ```
 
 <!-- core: stats/lexical_stats.md:LexicalStats 5286466 -->
@@ -12,13 +12,11 @@ Excepciones:
 - `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni un `Document`, un `parse` que no devuelve un `Document`, un diccionario de otra clase que la de la biblioteca o, sin `freq_dict_class`, uno sin `lookup` e `ipm` o ninguno; un `analyze` que no da objetos `LexicalWord`;
 - `SourceError` - palabras sin categorías gramaticales, una fuente sin palabras.
 
-En esTS una fuente que no es ni una cadena, ni un `Doc` ni un `Document` y un pipeline en `nlp` que no es un `Language` de spaCy también lanzan `SourceTypeError`; una fuente sin las categorías gramaticales y una cadena más larga que el `max_length` del pipeline, `SourceError`; y las métricas según el diccionario sin el diccionario descargado, `DatasetNotFoundError`.
+En esTS una fuente que no es ni una cadena, ni un `Doc` ni un `Document` también lanza `SourceTypeError`; un `Doc` sin las categorías gramaticales, `SourceError`; y las métricas según el diccionario sin el diccionario descargado, `DatasetNotFoundError`.
 
 A diferencia de las [métricas de diversidad léxica](diversity_stats.md), que comparan las palabras de un texto entre sí, aquí las palabras se comparan con las frecuencias de la lengua ([TAALES](https://doi.org/10.3758/s13428-017-0924-4)). La fuente de datos es un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy).
 
-La clase extiende el `LexicalStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/lexical_stats/) con la capa del español: el diccionario es el [`FreqDict`](../datasets/freqdict.md) de Google Books Ngram (`freq_dict_class`), y las posiciones de los lemas y el tamaño de la lista (`rank`, `top_size`) salen de la lista integrada de sus 10 000 lemas más frecuentes ([`get_rank`](#bands)). Si una palabra es un nombre propio, y si es una palabra con contenido, sale de la anotación, así que la fuente tiene que estar anotada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline pasado en `nlp`, sin el parser, el lematizador ni las entidades nombradas, y un `Doc` debe llevar las categorías gramaticales (un `morphologizer`, o un `tagger` con un `attribute_ruler`). Los números (`2020`, `5,5`, `3.º`) no son palabras. Los lemas salen de [`lemma_key`](../datasets/freqdict.md#lemma_key), el lema de simplemma en minúsculas, no del modelo; un nombre propio conserva su forma en minúsculas. Una palabra con contenido se define como en [`CohesionStats`](cohesion_stats.md): una de `CONTENT_UD_POS` (sustantivos, nombres propios, adjetivos, verbos, adverbios) y no demostrativa. La tabla de `print_stats` lleva las descripciones de `LEXICAL_STATS_DESC` de `ests.constants`, con el rango en años de 40.
-
-El `max_length` del pipeline es de un millón de caracteres por defecto: divida un texto más largo en partes, o suba `max_length` en un pipeline propio y páselo en `nlp`.
+La clase extiende el `LexicalStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/lexical_stats/) con la capa del español: el diccionario es el [`FreqDict`](../datasets/freqdict.md) de Google Books Ngram (`freq_dict_class`), y las posiciones de los lemas y el tamaño de la lista (`rank`, `top_size`) salen de la lista integrada de sus 10 000 lemas más frecuentes ([`get_rank`](#bands)). Si una palabra es un nombre propio, y si es una palabra con contenido, sale de la anotación, así que la fuente tiene que estar anotada: una cadena recibe los análisis de [esMorph](https://github.com/SergeyShk/esMorph) en el contexto de sus oraciones, sin spaCy, y un `Doc` debe llevar las categorías gramaticales (un `morphologizer`, o un `tagger` con un `attribute_ruler`). Los números (`2020`, `5,5`, `3.º`) no son palabras. Los lemas salen de [`lemma_key`](../datasets/freqdict.md#lemma_key) con la categoría gramatical de la palabra, el lema de esMorph en minúsculas, el lematizador con el que se construye el diccionario, no del modelo; un nombre propio conserva su forma en minúsculas. Una palabra con contenido se define como en [`CohesionStats`](cohesion_stats.md): una de `CONTENT_UD_POS` (sustantivos, nombres propios, adjetivos, verbos, adverbios) y no demostrativa. La tabla de `print_stats` lleva las descripciones de `LEXICAL_STATS_DESC` de `ests.constants`, con el rango en años de 40.
 
 === "Código"
 
@@ -37,14 +35,14 @@ El `max_length` del pipeline es de un millón de caracteres por defecto: divida 
                         Statistic                    |  Value
     ------------------------------------------------------------
     Share of words found in the frequency dictionary |   1.00
-    Mean frequency (ipm)                             | 34283.75
-    Mean frequency of content words (ipm)            |  956.33
+    Mean frequency (ipm)                             | 34471.00
+    Mean frequency of content words (ipm)            |  805.65
     Mean log frequency (lg ipm)                      |   3.56
-    Mean log frequency of content words              |   2.19
+    Mean log frequency of content words              |   2.17
     Mean range (years out of 40)                     |  40.00
-    Mean dispersion (D)                              |  97.64
-    Mean surprisal (bits)                            |   8.11
-    Unigram perplexity                               |  275.44
+    Mean dispersion (D)                              |  97.18
+    Mean surprisal (bits)                            |   8.10
+    Unigram perplexity                               |  275.12
     Share of words in the top 1000                   |   0.73
     Share of words in the top 2000                   |   0.82
     Share of words in the top 5000                   |   1.00
@@ -59,7 +57,6 @@ El `max_length` del pipeline es de un millón de caracteres por defecto: divida 
 | :-------- | :--- | :---------- | :---------- |
 | `source` | `str` / `Doc` / `Document` | - | Fuente de datos |
 | `freq_dict` | `FreqDict` | `None` | Diccionario de frecuencias; `FreqDict()` del directorio por defecto si no se indica |
-| `nlp` | `Language` | `None` | Pipeline de spaCy que analiza una cadena; sin él se carga el modelo `es_core_news_sm` |
 
 ## Atributos
 
@@ -73,7 +70,7 @@ El `max_length` del pipeline es de un millón de caracteres por defecto: divida 
 | `ranks` | `tuple[int / None]` | Posiciones de los lemas, `None` fuera de la lista |
 | `n_words`, `n_content_words`, `n_found` | `int` | Número de palabras, de palabras con contenido y de palabras encontradas en el diccionario |
 
-En esTS el diccionario es un `FreqDict`, y sus entradas son las tuplas con nombre [`Entry`](../datasets/freqdict.md). Las claves de las palabras en el diccionario (`keys`, `dictionary_keys`) son sus lemas, y un nombre propio se busca por su forma cuando el diccionario la tiene (`París` como `parís`, no como el verbo `parir`) y por su lema si no (`Estados` de *Estados Unidos* como `estado`, un `Miró` a principio de oración etiquetado `PROPN` como `mirar`). Una palabra se busca sin el punto de una abreviatura (`Sr.` como `sr`, `pág.` como `página`); una inicial (`D.`, `J.`) lo conserva y queda fuera del diccionario.
+En esTS el diccionario es un `FreqDict`, y sus entradas son las tuplas con nombre [`Entry`](../datasets/freqdict.md). Las claves de las palabras en el diccionario (`keys`, `dictionary_keys`) son sus lemas, y un nombre propio se busca por su forma cuando el diccionario la tiene (`París` como `parís`) y por su lema si no (`Estados` de *Estados Unidos* como `estado`). Una palabra se busca sin el punto de una abreviatura (`Sr.` como `sr`, `pág.` como `pág`); una inicial (`D.`, `J.`) lo conserva y queda fuera del diccionario.
 
 === "Código"
 
@@ -86,7 +83,7 @@ En esTS el diccionario es un `FreqDict`, y sus entradas son las tuplas con nombr
 === "Resultado"
 
     ```
-    ('miró', 'desde', 'parís', 'hacia', 'el', 'estados', 'unidos')
+    ('mirar', 'desde', 'parís', 'hacia', 'el', 'estados', 'unidos')
     ('mirar', 'desde', 'parís', 'hacia', 'el', 'estado', 'unidos')
     ```
 
@@ -112,7 +109,7 @@ Las métricas se apoyan en dos recursos; lea siempre las medias según el diccio
 
 | Recurso | Métricas | Disponibilidad |
 | :------ | :------- | :------------- |
-| [`FreqDict`](../datasets/freqdict.md) - 83 785 lemas de Google Books Ngram (1980-2019) con ipm, rango y dispersión | `coverage`, `mean_ipm*`, `mean_log_ipm*`, `mean_range`, `mean_dispersion`, `surprisal`, `perplexity` | se descarga una vez con `FreqDict().download()` |
+| [`FreqDict`](../datasets/freqdict.md) - 86 196 lemas de Google Books Ngram (1980-2019) con ipm, rango y dispersión | `coverage`, `mean_ipm*`, `mean_log_ipm*`, `mean_range`, `mean_dispersion`, `surprisal`, `perplexity` | se descarga una vez con `FreqDict().download()` |
 | La lista integrada de los 10 000 lemas más frecuentes del mismo diccionario (`ests/resources/google_books_top10000.txt`, CC BY 3.0) | `p_top1000`, `p_top2000`, `p_top5000`, `p_top10000`, `p_beyond_top10000`, `band_coverage` | siempre |
 
 <div class="metric-card" markdown>
@@ -138,7 +135,7 @@ Las palabras raras bajan la cobertura y la frecuencia logarítmica y suben la so
 === "Resultado"
 
     ```
-    (0.8571428571428571, 2.3529196195453976, 13.70650419215419, 0.4285714285714286)
+    (0.875, 2.8003798879556743, 12.206981533297302, 0.375)
     ```
 
 </div>
@@ -182,7 +179,7 @@ En esTS el diccionario es un `FreqDict` con la frecuencia más baja de 0,1 ipm: 
 === "Resultado"
 
     ```
-    15.392368319318606
+    15.554697256684591
     ```
 
 </div>
@@ -217,7 +214,7 @@ La posición de un lema según la lista integrada, `None` para un lema fuera de 
 load_top_lemmas()
 ```
 
-La lista entera del fichero `ests/resources/google_books_top10000.txt`, derivado de Google Books Ngram con licencia CC BY 3.0: la posición de cada lema, empezando por 1. La lista recoge los 10 000 lemas más frecuentes del [diccionario de frecuencias](../datasets/freqdict.md) por frecuencia decreciente, con las categorías gramaticales de un lema sumadas; deja fuera los nombres propios, las letras sueltas salvo las palabras del español `a`, `e`, `o`, `u`, `y`, `á`, `é`, `ó`, y los lemas de dos letras y los números romanos que simplemma no conoce (`pp`, `xix`), mientras que las abreviaturas de las referencias (`cit`) y las palabras inglesas de las bibliografías (`the`) se quedan.
+La lista entera del fichero `ests/resources/google_books_top10000.txt`, derivado de Google Books Ngram con licencia CC BY 3.0: la posición de cada lema, empezando por 1. La lista recoge los 10 000 lemas más frecuentes del [diccionario de frecuencias](../datasets/freqdict.md) por frecuencia decreciente, con las categorías gramaticales de un lema sumadas; deja fuera los nombres propios y los lemas cuyas filas de nombres propios pesan más que las demás (`garcía`), las letras sueltas salvo las palabras del español `a`, `e`, `o`, `u`, `y`, `á`, `é`, `ó`, y los lemas de dos letras y los números romanos que esMorph no conoce o que no tienen vocal (`pp`, `km`, `xix`), mientras que las abreviaturas de las referencias (`cit`) y las palabras inglesas de las bibliografías (`the`) se quedan.
 
 === "Código"
 
@@ -231,7 +228,7 @@ La lista entera del fichero `ests/resources/google_books_top10000.txt`, derivado
 === "Resultado"
 
     ```
-    (1, 2851, None)
+    (1, 3123, None)
     10000
     ```
 
@@ -286,14 +283,14 @@ Los demás métodos, `get_stats`, `to_dataframe`, `print_stats` y `describe`, so
 
     ```
     {'coverage': 1.0,
-     'mean_ipm': 34283.74818181818,
-     'mean_ipm_content': 956.3320000000001,
-     'mean_log_ipm': 3.559971676175293,
-     'mean_log_ipm_content': 2.1916598821626314,
+     'mean_ipm': 34470.99727272727,
+     'mean_ipm_content': 805.65,
+     'mean_log_ipm': 3.5604802847439285,
+     'mean_log_ipm_content': 2.172562226515112,
      'mean_range': 40.0,
-     'mean_dispersion': 97.63636363636364,
-     'surprisal': 8.105598641234213,
-     'perplexity': 275.4408334528846,
+     'mean_dispersion': 97.18181818181819,
+     'surprisal': 8.103909080140765,
+     'perplexity': 275.11844950775145,
      'p_top1000': 0.7272727272727273,
      'p_top2000': 0.8181818181818182,
      'p_top5000': 1.0,

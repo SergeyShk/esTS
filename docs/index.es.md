@@ -114,7 +114,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    [Palabras clave](corpus/keyness.md) frente a un corpus de referencia o al diccionario de frecuencias, [colocaciones](corpus/collocations.md), la [dispersión](corpus/dispersion.md) de una palabra por las partes de un texto, una [concordancia KWIC](corpus/kwic.md), la autoría por [estilometría](corpus/stylometry.md) (la Delta de Burrows y la Delta móvil, Zeta y sus marcadores en segmentos, la curva de Mendenhall, las palabras funcionales) y la [comparación de corpus](corpus/compare.md) por 163 rasgos de un texto
+    [Palabras clave](corpus/keyness.md) frente a un corpus de referencia o al diccionario de frecuencias, [colocaciones](corpus/collocations.md), la [dispersión](corpus/dispersion.md) de una palabra por las partes de un texto, una [concordancia KWIC](corpus/kwic.md), la autoría por [estilometría](corpus/stylometry.md) (la Delta de Burrows y la Delta móvil, Zeta y sus marcadores en segmentos, la curva de Mendenhall, las palabras funcionales) y la [comparación de corpus](corpus/compare.md) por 164 rasgos de un texto
 
     [:octicons-arrow-right-24: Medidas de corpus](corpus/keyness.md)
 
@@ -122,7 +122,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    Un [corpus de literatura en español](datasets/spanishliterature.md) de dominio público (150 obras de 33 autores en cuatro géneros), una [colección de sonetos](datasets/spanishsonnets.md) de los siglos XV-XX con el patrón métrico y la rima de cada verso y un [diccionario de frecuencias](datasets/freqdict.md) de 83 785 lemas según Google Books Ngram
+    Un [corpus de literatura en español](datasets/spanishliterature.md) de dominio público (150 obras de 33 autores en cuatro géneros), una [colección de sonetos](datasets/spanishsonnets.md) de los siglos XV-XX con el patrón métrico y la rima de cada verso y un [diccionario de frecuencias](datasets/freqdict.md) de 86 196 lemas según Google Books Ngram
 
     [:octicons-arrow-right-24: Conjuntos de datos](datasets/spanishliterature.md)
 

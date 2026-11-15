@@ -43,9 +43,9 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Métricas de legibilidad](https://sergeyshk.github.io/esTS/es/stats/readability_stats/)** - Fernández Huerta, Szigriszt-Pazos con la escala INFLESZ, Gutiérrez de Polini, Crawford, Legibilidad µ, SOL, LIX y RIX, con grado de consenso, etapas escolares de España y tiempo de lectura, y fórmulas de otros idiomas con sus propios coeficientes
 * **[Métricas de diversidad léxica](https://sergeyshk.github.io/esTS/es/stats/diversity_stats/)** - TTR y sus variantes, MATTR, MSTTR, MTLD y MAMTLD, HD-D, índices de Simpson y de Yule, entropía, la Z de Orlov, las ráfagas de los lexemas, leyes de Zipf y de Heaps
 * **[Estadísticas morfológicas](https://sergeyshk.github.io/esTS/es/stats/morph_stats/)** - categorías gramaticales y quince rasgos morfológicos de Universal Dependencies, con los marcadores del español: los modos, las formas no personales, `ser` frente a `estar`, los adverbios en `-mente`
-* **[Medidas de corpus](https://sergeyshk.github.io/esTS/es/corpus/keyness/)** - palabras clave frente a un corpus de referencia, colocaciones, la dispersión de una palabra por las partes de un texto, una concordancia KWIC y la estilometría de autoría: la Delta de Burrows con sus variantes, Zeta, la curva de Mendenhall, el perfil de las palabras funcionales; la comparación de dos corpus por 163 rasgos de un texto con tamaños del efecto
+* **[Medidas de corpus](https://sergeyshk.github.io/esTS/es/corpus/keyness/)** - palabras clave frente a un corpus de referencia, colocaciones, la dispersión de una palabra por las partes de un texto, una concordancia KWIC y la estilometría de autoría: la Delta de Burrows con sus variantes, Zeta, la curva de Mendenhall, el perfil de las palabras funcionales; la comparación de dos corpus por 164 rasgos de un texto con tamaños del efecto
 * **[Visualizaciones](https://sergeyshk.github.io/esTS/es/visualizers/zipf/)** - ley de Zipf, huella literaria, árbol de palabras, dispersión léxica y palabras clave, red de colocaciones, dendrograma, PCA y MDS por la Delta, las distancias dentro de los autores y entre ellos, la Delta móvil y Zeta, crecimiento del vocabulario, longitudes de las oraciones y el resaltado de los fragmentos que cuentan las estadísticas, como las oraciones largas y las pasivas
-* **[Conjuntos de datos](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/)** - literatura en español de dominio público: 150 obras de 33 autores en cuatro géneros; 4259 sonetos de los siglos XV-XX con el patrón métrico y la rima de cada verso; un diccionario de frecuencias de 83 785 lemas según Google Books Ngram
+* **[Conjuntos de datos](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/)** - literatura en español de dominio público: 150 obras de 33 autores en cuatro géneros; 4259 sonetos de los siglos XV-XX con el patrón métrico y la rima de cada verso; un diccionario de frecuencias de 86 196 lemas según Google Books Ngram
 * **[Componentes de spaCy](https://sergeyshk.github.io/esTS/es/components/)** - cada clase de estadísticas como componente de un pipeline, con las estadísticas puestas en el `Doc` en una sola pasada
 * **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, la repetición en las oraciones siguientes y entre párrafos de TAACO, con la densidad de 273 marcadores del discurso españoles por clase y por lugar
 * **[Estadísticas de complejidad léxica](https://sergeyshk.github.io/esTS/es/stats/lexical_stats/)** - cuán raras son las palabras de un texto en la lengua: la frecuencia, el rango y la dispersión de los lemas según un diccionario de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la sorpresa, la perplejidad y la densidad léxica
@@ -117,7 +117,7 @@ Las estadísticas según el diccionario de frecuencias lo necesitan descargado u
 
 ### Extracción de objetos
 
-Herramientas configurables extraen de un texto las oraciones, las palabras y los N-gramas de caracteres para las estadísticas, y `split_paragraphs` sus párrafos entre líneas en blanco. Las oraciones y los tokens vienen del segmentador [anySeg](https://github.com/SergeyShk/anySeg), que conoce los signos de apertura, la raya de diálogo y las abreviaturas del español y mantiene enteros los clíticos, los ordinales y los números escritos a la española, y los lemas vienen de [simplemma](https://github.com/adbar/simplemma), que no necesita modelo.
+Herramientas configurables extraen de un texto las oraciones, las palabras y los N-gramas de caracteres para las estadísticas, y `split_paragraphs` sus párrafos entre líneas en blanco. Las oraciones y los tokens vienen del segmentador [anySeg](https://github.com/SergeyShk/anySeg), que conoce los signos de apertura, la raya de diálogo y las abreviaturas del español y mantiene enteros los clíticos, los ordinales y los números escritos a la española, y los lemas vienen del analizador morfológico [esMorph](https://github.com/SergeyShk/esMorph), que no necesita ningún modelo de spaCy.
 
 ```python
 >>> from ests import CharNgramsExtractor, SentsExtractor, WordsExtractor
@@ -340,7 +340,7 @@ Las categorías gramaticales y los rasgos morfológicos de Universal Dependencie
 >>> ms = MorphStats("Si tuviera tiempo, leería el libro que me recomendaste ayer")
 
 >>> ms.get_stats("mood", "tense", filter_none=True)
-{'mood': {'Sub': 1, 'Cnd': 1, 'Ind': 1}, 'tense': {'Imp': 1, 'Pres': 1}}
+{'mood': {'Sub': 1, 'Cnd': 1, 'Ind': 1}, 'tense': {'Imp': 1, 'Past': 1}}
 
 >>> ms.tags[1]
 'Mood=Sub|Number=Sing|Person=3|Tense=Imp|VerbForm=Fin'
@@ -352,7 +352,7 @@ Las categorías gramaticales y los rasgos morfológicos de Universal Dependencie
 0.5
 ```
 
-El texto se analiza con `es_core_news_sm`; en `nlp` puede indicarse otro pipeline.
+El texto lo analiza [esMorph](https://github.com/SergeyShk/esMorph) en el contexto de sus oraciones, sin spaCy; un `Doc` conserva la anotación de su pipeline.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/morph_stats/).
 
@@ -562,7 +562,7 @@ Las medidas de la lingüística de corpus que comparan corpus y describen el uso
 *   la dispersión de una palabra por las partes de un texto: la DP de Gries, la DP normalizada, la D de Juilland, la D2 de Carroll, la S de Rosengren y la divergencia de Kullback-Leibler
 *   una concordancia KWIC por forma o por lema
 *   estilometría: las distancias entre textos por la Delta de Burrows y sus variantes, con la atribución de un texto a autores de referencia y la Delta móvil a lo largo de un texto, los marcadores de palabras preferidas y evitadas por Zeta y sus proporciones en segmentos, el ji cuadrado de Kilgarriff, la curva de Mendenhall y el perfil de las palabras funcionales
-*   la comparación de dos corpus por 163 rasgos de un texto en ventanas del mismo tamaño: la delta de Cliff, la d de Cohen y el AUC de cada rasgo, la prueba de Mann-Whitney con la corrección de Holm y un intervalo bootstrap de la diferencia de las medianas
+*   la comparación de dos corpus por 164 rasgos de un texto en ventanas del mismo tamaño: la delta de Cliff, la d de Cohen y el AUC de cada rasgo, la prueba de Mann-Whitney con la corrección de Holm y un intervalo bootstrap de la diferencia de las medianas
 
 ```python
 >>> from ests import WordsExtractor
@@ -601,7 +601,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/corpus/keyness/)
 
 *   [spanish_literature](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/) - literatura en español de dominio público: 150 obras de 33 autores de España, Hispanoamérica y Filipinas, de Cervantes a los años veinte, en prosa, poesía, teatro y ensayo
 *   [spanish_sonnets](https://sergeyshk.github.io/esTS/es/datasets/spanishsonnets/) - sonetos en español del Diachronic Spanish Sonnet Corpus (DISCO) de dominio público: 4259 sonetos de 1167 autores de los siglos XV-XX, cada verso con su patrón métrico y la etiqueta de su rima, la anotación automática de DISCO (CC BY 4.0)
-*   [freq_dict](https://sergeyshk.github.io/esTS/es/datasets/freqdict/) - un diccionario de frecuencias de 83 785 lemas del español a partir de los libros de Google Books Ngram de 1980-2019: ipm, rango y D de Juilland por años, número de libros y categoría gramatical (CC BY 3.0)
+*   [freq_dict](https://sergeyshk.github.io/esTS/es/datasets/freqdict/) - un diccionario de frecuencias de 86 196 lemas del español a partir de los libros de Google Books Ngram de 1980-2019: ipm, rango y D de Juilland por años, número de libros y categoría gramatical (CC BY 3.0)
 
 Los textos se recortan al texto del autor y llevan el género, el autor, el título, los años de la primera publicación y el país; los registros se pueden filtrar por cualquiera de ellos y por la longitud del texto.
 

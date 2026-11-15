@@ -516,5 +516,5 @@ Los once componentes pueden compartir un pipeline.
 === "Resultado"
 
     ```
-    (12, 102.19, 99.83, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.667, 50.0, 0.457, 1)
+    (12, 102.19, 99.83, 0.833, ('DET', 'NOUN'), 2.0, 0.0, 0.583, 50.0, 0.457, 1)
     ```

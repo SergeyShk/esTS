@@ -229,7 +229,7 @@ Raises:
 noun_lemmas(doc)
 ```
 
-The lemmas of the tokens of a `Doc` tagged `NOUN`. `StyleStats` takes the nouns of a `Doc` the same way, and those of a string from its parse by the pipeline of `nlp` or `get_nlp`, run without the parser and the named entities.
+The lemmas of the tokens of a `Doc` tagged `NOUN`. `StyleStats` takes the nouns of a `Doc` the same way, and those of a string from the analyses of esMorph in the context of its sentences.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |

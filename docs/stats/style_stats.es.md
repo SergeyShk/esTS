@@ -1,7 +1,7 @@
 # Métricas de estilo
 
 ``` {.python .signature}
-StyleStats(source, words_extractor=None, stopwords=None, top_n=10, cliches=None, nlp=None, nausea_stopwords=None)
+StyleStats(source, words_extractor=None, stopwords=None, top_n=10, cliches=None, nausea_stopwords=None)
 ```
 
 <!-- core: stats/style_stats.md:StyleStats 8cd38b0 -->
@@ -15,9 +15,9 @@ Excepciones:
 - `SourceError` - una fuente sin palabras;
 - `ParameterError` - un `top_n` que no es un entero de al menos uno.
 
-La clase extiende el `StyleStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/style_stats/) con los ganchos del español, descritos en las tarjetas de las métricas: las palabras vacías, las locuciones prepositivas, las expresiones parentéticas y los clichés contra los que advierten las guías de lenguaje claro en español, que se encuentran con sus contracciones y las formas de sus verbos, y los sustantivos derivados de un verbo entre los sustantivos del modelo de spaCy. Las palabras de una cadena las extrae el [`WordsExtractor`](../extractors/words.md) del español y no se lematizan, así que las formas de una palabra cuentan como palabras distintas, como en Advego; para calcular por lemas, pase un `WordsExtractor` con `use_lexemes=True` y `lowercase=True`. La tabla de `print_stats` toma las descripciones de `ests.constants.STYLE_STATS_DESC`.
+La clase extiende el `StyleStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/style_stats/) con los ganchos del español, descritos en las tarjetas de las métricas: las palabras vacías, las locuciones prepositivas, las expresiones parentéticas y los clichés contra los que advierten las guías de lenguaje claro en español, que se encuentran con sus contracciones y las formas de sus verbos, y los sustantivos derivados de un verbo entre los sustantivos. Las palabras de una cadena las extrae el [`WordsExtractor`](../extractors/words.md) del español y no se lematizan, así que las formas de una palabra cuentan como palabras distintas, como en Advego; para calcular por lemas, pase un `WordsExtractor` con `use_lexemes=True` y `lowercase=True`. La tabla de `print_stats` toma las descripciones de `ests.constants.STYLE_STATS_DESC`.
 
-Los sustantivos deverbales necesitan las categorías gramaticales y los lemas: un `Doc` da su propia anotación, también cuando un extractor toma su texto, y una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline pasado en `nlp` la primera vez que se lee `verbal_nouns` o [`markers()`](#methods); las demás métricas de una cadena no necesitan modelo. Una cadena más larga que el `max_length` del pipeline se analiza en partes de oraciones enteras. Además de las excepciones anteriores, un pipeline que no es un `Language` de spaCy lanza `SourceTypeError`; leer `verbal_nouns` o `markers()` lanza `SourceError` para un `Doc` sin las categorías gramaticales o los lemas y para una cadena con una oración más larga que el `max_length` del pipeline.
+Los sustantivos deverbales necesitan las categorías gramaticales y los lemas: un `Doc` da su propia anotación, también cuando un extractor toma su texto, y una cadena recibe los de [esMorph](https://github.com/SergeyShk/esMorph) en el contexto de sus oraciones la primera vez que se lee `verbal_nouns` o [`markers()`](#methods); las demás métricas de una cadena no necesitan análisis. Además de las excepciones anteriores, leer `verbal_nouns` o `markers()` lanza `SourceError` para un `Doc` sin las categorías gramaticales o los lemas.
 
 Los ejemplos de esta página toman un aviso escrito en estilo administrativo:
 
@@ -46,7 +46,7 @@ Los ejemplos de esta página toman un aviso escrito en estilo administrativo:
     Water content (%)                         |  57.14
     Spam score (%)                            |  37.50
     Naturalness by Zipf's law (%)             |  53.57
-    Verbal nouns (% of nouns)                 |  47.06
+    Verbal nouns (% of nouns)                 |  50.00
     Compound prepositions (per 100 words)     |   5.36
     Parenthetical expressions (per 100 words) |   1.79
     Officialese clichés (per 100 words)       |   8.93
@@ -61,7 +61,6 @@ Los ejemplos de esta página toman un aviso escrito en estilo administrativo:
 | `stopwords` | `list[str]` / `set[str]` | `None` | Palabras de agua; `is_stopword` si no se dan |
 | `top_n` | `int` | `10` | Número de las palabras más frecuentes de la náusea académica y de la naturalidad según la ley de Zipf (`NAUSEA_TOP_N`) |
 | `cliches` | `list[str]` / `set[str]` | `None` | Clichés; `OFFICIALESE_CLICHES` si no se dan |
-| `nlp` | `Language` | `None` | Pipeline de spaCy que analiza una cadena para los sustantivos deverbales; el modelo `es_core_news_sm` de `ests.utils.get_nlp` si no se da |
 | `nausea_stopwords` | `list[str]` / `set[str]` | `None` | Palabras vacías que se dejan fuera de las palabras más frecuentes de la náusea académica; `is_stopword` si no se dan |
 
 Un conjunto de palabras se toma en orden alfabético. `NAUSEA_TOP_N` es una constante de `anyts.constants`.
@@ -82,8 +81,6 @@ Comprueba el número de las palabras más frecuentes: uno que no es un entero de
 | `forms` | `tuple[str]` | Formas en minúsculas, de los marcadores |
 
 Las métricas son propiedades que se calculan en cada acceso.
-
-El pipeline del parámetro `nlp` se guarda en el atributo `nlp`, `None` si no se da.
 
 ## Métricas
 
@@ -308,7 +305,7 @@ Excepciones:
 noun_lemmas(doc)
 ```
 
-Los lemas de los tokens de un `Doc` etiquetados `NOUN`. `StyleStats` toma así los sustantivos de un `Doc`, y los de una cadena, de su análisis con el pipeline de `nlp` o de `get_nlp`, que se ejecuta sin el analizador sintáctico ni las entidades nombradas.
+Los lemas de los tokens de un `Doc` etiquetados `NOUN`. `StyleStats` toma así los sustantivos de un `Doc`, y los de una cadena, de los análisis de esMorph en el contexto de sus oraciones.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
@@ -369,7 +366,7 @@ Excepciones:
 expand_phrases(text, phrases)
 ```
 
-Las expresiones escritas en las formas de un texto, cada una con la expresión de la lista que escribe. Una expresión que termina en `a` o `de` también recibe la contracción con el artículo (`a efectos del`, `conforme al`), y una expresión cuya primera palabra es un infinitivo recibe las formas del texto con ese lema (`proceder a` - `procedió a`, `ser de aplicación` - `es de aplicación`). El lema es el de simplemma, y un lema pronominal vale por su verbo (`llévese` - `llevar`); las formas que simplemma no lematiza - algunos participios (`ha dado`, `ha hecho`) y el imperativo `dese` - las da `IRREGULAR_VERB_FORMS`. Las palabras que siguen al verbo descartan la lectura como sustantivo (`el hecho`, `el puesto`). Cuando dos expresiones dan las mismas palabras, una expresión escrita así gana a las formas de otra (`a efectos del` sigue siendo ella misma junto a `a efectos de`), y después la primera expresión de una lista, o de un conjunto en orden alfabético.
+Las expresiones escritas en las formas de un texto, cada una con la expresión de la lista que escribe. Una expresión que termina en `a` o `de` también recibe la contracción con el artículo (`a efectos del`, `conforme al`), y una expresión cuya primera palabra es un infinitivo recibe las formas del texto con ese lema (`proceder a` - `procedió a`, `ser de aplicación` - `es de aplicación`). El lema es el de un verbo según `ests.utils.lemmatize` (`ha dado` - `dar`, `ha hecho` - `hacer`), y un lema pronominal vale por su verbo (`llévese` - `llevar`); el imperativo de `dar` con `se` escrito sin tilde (`dese`, `dense`), que esMorph no lee como el verbo, lo da `IRREGULAR_VERB_FORMS`. Las palabras que siguen al verbo descartan la lectura como sustantivo (`el hecho`, `el puesto`). Cuando dos expresiones dan las mismas palabras, una expresión escrita así gana a las formas de otra (`a efectos del` sigue siendo ella misma junto a `a efectos de`), y después la primera expresión de una lista, o de un conjunto en orden alfabético.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
@@ -538,7 +535,7 @@ Las funciones de las tarjetas del núcleo también comprueban sus palabras: unas
 <!-- core: stats/style_stats.md:StyleStats-markers 18537e6 -->
 `markers()` devuelve los marcadores del estilo burocrático encontrados por métrica - `verbal_nouns`, `compound_prepositions`, `parentheticals`, `cliches` - tal como los escriben las formas, en el orden del texto.
 
-Una expresión se encuentra con sus contracciones y las formas de su verbo ([`expand_phrases`](#phrase_density)). Los sustantivos deverbales necesitan las categorías gramaticales y los lemas, como su métrica, así que una cadena se analiza con el modelo y un `Doc` sin ellos lanza `SourceError`.
+Una expresión se encuentra con sus contracciones y las formas de su verbo ([`expand_phrases`](#phrase_density)). Los sustantivos deverbales necesitan las categorías gramaticales y los lemas, como su métrica, así que una cadena recibe los de esMorph y un `Doc` sin ellos lanza `SourceError`.
 
 === "Código"
 

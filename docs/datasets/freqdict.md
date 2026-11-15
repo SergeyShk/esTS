@@ -52,7 +52,7 @@ Raises:
 | `filepath` | `str` | Path to the file of the dictionary, `None` before the download |
 | `entries` | `dict[str, Entry]` | Entries by lemma, the parts of speech merged |
 | `min_ipm` | `float` | Minimum frequency in the dictionary (0.1) |
-| `word_ipm` | `dict[str, float]` | Frequencies by the key a word form reaches without a part of speech: the rows of the proper nouns go to `lemma_key` of their forms (`roma` to `romo`); the reference of [`keyness`](../corpus/keyness.md) |
+| `word_ipm` | `dict[str, float]` | Frequencies by the key a word form reaches without a part of speech: the rows of the proper nouns go to `lemma_key` of their forms (`tomás` to `tomar`); the reference of [`keyness`](../corpus/keyness.md) |
 
 ``` {.python .signature}
 Entry(lemma, pos, ipm, range, dispersion, docs)
@@ -141,12 +141,12 @@ An unknown part of speech, a minimum frequency that is not a number and a `limit
     ```
 
 !!! warning "The register of the books"
-    The dictionary describes the written language of books, a good part of them scholarly, and keeps what the books have: the abbreviations of the references are frequent words (`pp`, `cit`, `vol`), and so are the English words of the bibliographies (`the`, `of`) The texts are recognized from scans and tagged automatically, so misreadings and tagging errors remain, mostly among the rare lemmas. A form gets the lemma of esMorph for the part of speech Google gives it, without the context of its sentence: `como` tagged as a verb is `comer`, otherwise `como`, and a verb form of two verbs goes to the first of them (`fue` is `ser`, never `ir`).
+    The dictionary describes the written language of books, a good part of them scholarly, and keeps what the books have: the abbreviations of the references are frequent words (`pp`, `cit`, `vol`), and so are the English words of the bibliographies (`the`, `of`). The texts are recognized from scans and tagged automatically, so misreadings and tagging errors remain, mostly among the rare lemmas. A form gets the lemma of esMorph for the part of speech Google gives it, without the context of its sentence: `como` tagged as a verb is `comer`, otherwise `como`, and a verb form of two verbs goes to the first of them (`fue` is `ser`, never `ir`).
 
 ## Key of a word { #lemma_key }
 
 ``` {.python .signature}
-lemma_key(word, proper=False, pos="")
+lemma_key(word, proper=False, pos='')
 ```
 
 The key by which a word is looked up in the dictionary, and by which the dictionary is built (`ests.datasets.freq_dict.lemma_key`): the word goes to lower case, so that a word at the start of a sentence finds its lemma (`Miró` - `mirar`), and then to its lemma by `ests.utils.lemmatize` - of esMorph, with the part of speech of Universal Dependencies when it is given (`vino` - `vino`, as a verb `venir`). A proper noun keeps its form in lower case (`proper=True`): `Tomás` is `tomás`, not the verb `tomar`. The dictionary is built with the lemmas of esMorph 0.3 and the parts of speech of Google.
@@ -155,7 +155,7 @@ The key by which a word is looked up in the dictionary, and by which the diction
 | :-------- | :--- | :------ | :---------- |
 | `word` | `str` | - | Word form in any case |
 | `proper` | `bool` | `False` | The word is a proper noun |
-| `pos` | `str` | `""` | Part of speech of UD; without it the first analysis of esMorph |
+| `pos` | `str` | `''` | Part of speech of UD; without it the first analysis of esMorph |
 
 === "Code"
 
