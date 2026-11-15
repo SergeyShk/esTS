@@ -4,10 +4,10 @@
 CharNgramsExtractor(n=2, lowercase=False, within_words=False, tokenizer=None)
 ```
 
-<!-- core: extractors/char_ngrams.md:CharNgramsExtractor 1d91165 -->
+<!-- core: extractors/char_ngrams.md:CharNgramsExtractor af76148 -->
 Clase para extraer N-gramas de caracteres de un texto: secuencias de N caracteres tomadas con una ventana deslizante sobre la cadena. Los N-gramas de caracteres son un rasgo clásico de la estilometría y la atribución de autoría (Stamatatos 2009) y pueden sustituir a las palabras en medidas como la Delta de Burrows.
 
-Las secuencias de espacios se reducen a un solo espacio y los signos de puntuación se conservan. Con `within_words=True` los N-gramas no cruzan los límites de las palabras: el texto se divide en palabras con el tokenizador, la puntuación se descarta y las palabras más cortas que N no producen N-gramas.
+Las secuencias de espacios se reducen a un solo espacio y los signos de puntuación se conservan; el guion blando, el unidor de palabras y la marca de orden de bytes se dejan fuera y un espacio de anchura cero es un espacio entre palabras, una vez que el tokenizador ha dividido las palabras, mientras que el unidor y el no unidor de anchura cero se quedan. Con `within_words=True` los N-gramas no cruzan los límites de las palabras: el texto se divide en palabras con el tokenizador, la puntuación se descarta y las palabras más cortas que N no producen N-gramas.
 
 Excepciones:
 

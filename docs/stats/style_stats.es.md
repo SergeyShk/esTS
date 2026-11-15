@@ -4,14 +4,14 @@
 StyleStats(source, words_extractor=None, stopwords=None, top_n=10, cliches=None, nlp=None, nausea_stopwords=None)
 ```
 
-<!-- core: stats/style_stats.md:StyleStats 145407f -->
-Las métricas de estilo de un texto: las métricas SEO de Advego y Text.ru y los marcadores del estilo burocrático. Los servicios no publican sus fórmulas, así que se toman las definiciones comunes. La fuente de datos es un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy).
+<!-- core: stats/style_stats.md:StyleStats 8cd38b0 -->
+Las métricas de estilo de un texto: las métricas SEO de Advego y Text.ru y los marcadores del estilo burocrático. Los servicios no publican sus fórmulas, así que se toman las definiciones comunes. La fuente de datos es un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) o un `Document` de [anySeg](https://github.com/SergeyShk/anySeg).
 
-Las métricas SEO se cuentan sobre las palabras del extractor de palabras, en minúsculas por defecto, o sobre los tokens de un `Doc`; un extractor pasado explícitamente se aplica al texto de un `Doc`. Los marcadores se cuentan sobre las formas en minúsculas (`forms`), sea cual sea el extractor.
+Las métricas SEO se cuentan sobre las palabras del [documento](https://sergeyshk.github.io/anyTS/document/) de la fuente en minúsculas (`doc_words`), o sobre las de un extractor pasado explícitamente, que se aplica al texto. Los marcadores se cuentan sobre las palabras del documento (`forms`), sea cual sea el extractor.
 
 Excepciones:
 
-- `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`, un extractor de otro tipo, una lista que no es una lista de cadenas;
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni un `Document`, un `parse` que no devuelve un `Document`, un `doc_words` que no devuelve una secuencia de cadenas, un extractor de otro tipo, una lista que no es una lista de cadenas;
 - `SourceError` - una fuente sin palabras;
 - `ParameterError` - un `top_n` que no es un entero de al menos uno.
 

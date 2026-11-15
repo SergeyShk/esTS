@@ -4,13 +4,13 @@
 HighlightedText(source, layers=None, long_sent_word_factor=30, complex_syl_factor=4, stopwords=None, cliches=None, alliteration_threshold=0.001)
 ```
 
-<!-- core: visualizers/highlight.md:HighlightedText f056ba1 -->
-Resaltado de un texto por capas, a la manera de los correctores de estilo: cada capa marca los fragmentos de un texto que cuenta una estadística - las oraciones largas, las palabras complejas, la pasiva. La fuente de datos es un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy). El resultado se muestra en Jupyter como HTML con estilos y una leyenda; `to_html` devuelve el marcado, y `highlights` guarda los fragmentos para una representación propia. Los fragmentos de capas distintas pueden solaparse.
+<!-- core: visualizers/highlight.md:HighlightedText 403548f -->
+Resaltado de un texto por capas, a la manera de los correctores de estilo: cada capa marca los fragmentos de un texto que cuenta una estadística - las oraciones largas, las palabras complejas, la pasiva. La fuente de datos es un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) o un `Document` de [anySeg](https://github.com/SergeyShk/anySeg), que se lee a través de su [documento](https://sergeyshk.github.io/anyTS/document/). El resultado se muestra en Jupyter como HTML con estilos y una leyenda; `to_html` devuelve el marcado, y `highlights` guarda los fragmentos para una representación propia. Los fragmentos de capas distintas pueden solaparse.
 
 Excepciones:
 
-- `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`;
-- `SourceError` - una fuente sin palabras;
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni un `Document`, un `parse` que no devuelve un `Document`;
+- `SourceError` - una fuente sin palabras, un `Doc` con un token que cruza una línea en blanco;
 - `ParameterError` - unas capas que no son un nombre ni una lista de nombres, una capa desconocida o una que necesita una anotación que le falta a la fuente.
 
 ``` {.python .signature}
@@ -151,10 +151,10 @@ Una cadena sin modelo de spaCy permite todas las capas salvo las sintácticas y 
 
 ## Parámetros
 
-<!-- core: visualizers/highlight.md:HighlightedText-parameters da96774 -->
+<!-- core: visualizers/highlight.md:HighlightedText-parameters bedd6da -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `str` / `Doc` | - | Fuente de datos (una cadena o un objeto Doc) |
+| `source` | `str` / `Doc` / `Document` | - | Fuente de datos |
 | `layers` | `list[str]` / `str` | `None` | Capas del resaltado; si no se dan, las capas por defecto que la fuente permite; `"all"` - todas las permitidas |
 
 Los parámetros de las capas de esTS:
@@ -197,8 +197,8 @@ Las notas de esTS están en inglés: dan el número de palabras de la oración o
 
 ## Métodos
 
-<!-- core: visualizers/highlight.md:HighlightedText-to_html 1693b8b -->
-`to_html(legend=True, css=True)` devuelve el marcado HTML del texto resaltado: un `div` de la clase `<prefix>-highlight` con la leyenda, sus recuentos y el texto, donde un segmento resaltado es un `span` de las clases `<prefix>-hl` y `<prefix>-hl-<layer>` con las notas en su `title`; `<prefix>` es `css_prefix`. Los fragmentos solapados de capas distintas dan segmentos con varias clases, en el orden de dibujo. Los saltos de línea (`\n`, `\r\n`, `\r`) se convierten en referencias de caracteres, una por salto, así que el marcado puede ir en Markdown.
+<!-- core: visualizers/highlight.md:HighlightedText-to_html 8ab98d7 -->
+`to_html(legend=True, css=True)` devuelve el marcado HTML del texto resaltado: un `div` de la clase `<prefix>-highlight` con la leyenda, sus recuentos y el texto, donde un segmento resaltado es un `span` de las clases `<prefix>-hl` y `<prefix>-hl-<layer>` con las notas en su `title`; `<prefix>` es `css_prefix`. Los fragmentos solapados de capas distintas dan segmentos con varias clases, en el orden de dibujo. Los saltos de línea (`LINE_BREAK`: `\n`, `\r\n`, `\r`, la tabulación vertical, el salto de página, U+0085, U+2028, U+2029) se convierten en referencias de caracteres, una por salto, así que el marcado puede ir en Markdown; los caracteres de control que HTML no admite, como NUL, se dejan fuera.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |

@@ -4,13 +4,13 @@
 MorphStats(source, nlp=None)
 ```
 
-<!-- core: stats/morph_stats.md:MorphStats 002c663 -->
-Las estadísticas morfológicas de un texto: la categoría gramatical y los rasgos de [Universal Dependencies](https://universaldependencies.org/u/feat/) de cada palabra, contados por valor o dados palabra por palabra. Por defecto la fuente de datos es un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) con las categorías gramaticales, leídas por `token.pos_` y `token.morph`; una biblioteca de un idioma lee a su manera una cadena o un `Doc` sin ellas.
+<!-- core: stats/morph_stats.md:MorphStats e18b976 -->
+Las estadísticas morfológicas de un texto: la categoría gramatical y los rasgos de [Universal Dependencies](https://universaldependencies.org/u/feat/) de cada palabra, contados por valor o dados palabra por palabra. La fuente de datos es un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) o un `Document` de [anySeg](https://github.com/SergeyShk/anySeg); las palabras son las palabras de Universal Dependencies de su [documento](https://sergeyshk.github.io/anyTS/document/) con una letra o una cifra (el español `del` da `de` y `el`), y sus categorías gramaticales y sus rasgos son sus columnas `upos` y `feats`. Una biblioteca de un idioma anota una cadena en su `parse`, o lee los rasgos en su propio `analyze`.
 
 Excepciones:
 
-- `SourceTypeError` - una fuente que no es un `Doc`, un `analyze` que no da objetos `MorphWord`;
-- `SourceError` - una fuente sin categorías gramaticales o sin palabras.
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni un `Document`, un `parse` que no devuelve un `Document`, un `analyze` que no da objetos `MorphWord`;
+- `SourceError` - palabras sin categorías gramaticales, una fuente sin palabras.
 
 La clase extiende el `MorphStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/morph_stats/) con la capa del español y los [marcadores del español](#markers); las estadísticas se calculan al crear el objeto. En esTS la fuente de datos es un texto o un `Doc`: un texto se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, y un `Doc` debe llevar las categorías gramaticales, que vienen de un `morphologizer` (o de un `tagger` con un `attribute_ruler`), y los lemas, que vienen de un `lemmatizer`. Las palabras se toman de los tokens y los signos de puntuación y los símbolos se descartan. Un texto más largo que el `max_length` del pipeline - un millón de caracteres por defecto - hay que dividirlo en partes o subir `max_length` en un pipeline propio indicado en `nlp`. Las tablas de `print_stats` y `print_markers` toman las descripciones de `MORPHOLOGY_STATS_DESC` y `MORPHOLOGY_MARKERS_DESC` de `ests.constants`.
 

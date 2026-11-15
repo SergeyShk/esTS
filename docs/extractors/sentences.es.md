@@ -33,7 +33,7 @@ La clase extiende el `SentsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 
 ## Parámetros
 
-<!-- core: extractors/sentences.md:SentsExtractor-parameters df5b0a4 -->
+<!-- core: extractors/sentences.md:SentsExtractor-parameters b09d3ad -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `tokenizer` | `Pattern` / `Callable` | `None` | Tokenizador o expresión regular; por defecto, el método `sentenize` |
@@ -41,7 +41,7 @@ La clase extiende el `SentsExtractor` del núcleo [anyTS](https://sergeyshk.gith
 | `max_len` | `int` | `0` | Longitud máxima de la oración extraída en caracteres, `0` sin límite |
 
 !!! note "Nota"
-    Una expresión regular como tokenizador es un separador para `re.split`. Una línea en blanco - un salto de línea, espacios opcionales y otro salto de línea - termina una oración con cualquier tokenizador: el texto se divide primero por las líneas en blanco y cada parte pasa al tokenizador, así que un título o un párrafo sin signo final es una oración propia, y también lo es una parte sin palabras, como una línea de asteriscos, que las estadísticas descartan. A las oraciones se les quitan los espacios de los extremos antes de aplicar los límites de longitud, y las vacías se descartan.
+    Una expresión regular como tokenizador es un separador para `re.split`. Una línea en blanco (`BLANK_LINE`) termina una oración con cualquier tokenizador: el texto se divide primero por las líneas en blanco y cada parte pasa al tokenizador, así que un título o un párrafo sin signo final es una oración propia, y también lo es una parte sin palabras, como una línea de asteriscos, que las estadísticas descartan. A las oraciones se les quitan los espacios, los caracteres de control y los separadores invisibles (el guion blando, los caracteres de anchura cero, la marca de orden de bytes) de los extremos antes de aplicar los límites de longitud, y las vacías se descartan.
 
 <!-- core: extractors/sentences.md:SentsExtractor-pipeline 13ed66c -->
 !!! note "Nota"
@@ -76,12 +76,12 @@ Un texto que no es una cadena y un tokenizador que no es invocable o no devuelve
 
 ## Párrafos { #split_paragraphs }
 
-<!-- core: extractors/sentences.md:split_paragraphs 3236b45 -->
+<!-- core: extractors/sentences.md:split_paragraphs db688fc -->
 ``` {.python .signature}
 split_paragraphs(text)
 ```
 
-Los párrafos de un texto: sus partes entre líneas en blanco, sin los espacios de sus extremos; una parte solo de espacios no es un párrafo. Una línea en blanco (`BLANK_LINE`) son dos saltos de línea - `\n`, `\r\n`, `\r`, U+0085 o U+2028 - con solo espacios entre ellos, donde el espacio de anchura cero y la marca de orden de bytes cuentan como espacios, o un separador de párrafo U+2029; también termina las oraciones de `SentsExtractor` y los párrafos de `CohesionStats` con `blank_lines`. Las palabras de los párrafos dan los tamaños de las partes de `dispersion` por párrafo; un párrafo sin palabras, como una separación de escenas con asteriscos, sigue siendo un párrafo. Un texto que no es una cadena lanza `SourceTypeError`.
+Los párrafos de un texto: sus partes entre líneas en blanco, sin los espacios, los caracteres de control y los separadores invisibles (el guion blando, los caracteres de anchura cero, la marca de orden de bytes) de sus extremos; una parte sin nada más no es un párrafo. Una línea en blanco (`BLANK_LINE`) son dos saltos de línea - `\n`, `\r\n`, `\r`, la tabulación vertical, el salto de página, U+0085 o U+2028 - sin nada más que esos caracteres entre ellos, o un separador de párrafo U+2029: un salto de párrafo de anySeg, así que estos son también los párrafos de un [documento](https://sergeyshk.github.io/anyTS/document/); también termina las oraciones de `SentsExtractor` y los párrafos de `CohesionStats` con `blank_lines`. Las palabras de los párrafos dan los tamaños de las partes de `dispersion` por párrafo; un párrafo sin palabras, como una separación de escenas con asteriscos, sigue siendo un párrafo. Un texto que no es una cadena lanza `SourceTypeError`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |

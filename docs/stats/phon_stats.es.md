@@ -4,12 +4,12 @@
 PhonStats(source, words_extractor=None, window_len=3)
 ```
 
-<!-- core: stats/phon_stats.md:PhonStats 408ded2 -->
-Las estadísticas fonéticas de un texto: sus sonidos por clase, sus grupos, secuencias y repeticiones, y sus sílabas. Un sonido es por defecto una letra de una palabra, o un sonido de su transcripción cuando una biblioteca la da. La fuente de datos es un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy); las palabras se toman en minúsculas, y un extractor pasado explícitamente se aplica al texto de un `Doc`.
+<!-- core: stats/phon_stats.md:PhonStats 1a12443 -->
+Las estadísticas fonéticas de un texto: sus sonidos por clase, sus grupos, secuencias y repeticiones, y sus sílabas. Un sonido es por defecto una letra de una palabra, o un sonido de su transcripción cuando una biblioteca la da. La fuente de datos es un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) o un `Document` de [anySeg](https://github.com/SergeyShk/anySeg); las palabras son las de su [documento](https://sergeyshk.github.io/anyTS/document/) en minúsculas (`doc_words`), o las de un extractor pasado explícitamente, que se aplica al texto.
 
 Excepciones:
 
-- `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`, un extractor de otro tipo;
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni un `Document`, un `parse` que no devuelve un `Document`, un `doc_words`, `syllabify` o `transcribe` que no devuelve cadenas, un extractor de otro tipo;
 - `SourceError` - una fuente sin palabras;
 - `ParameterError` - una ventana que no es un entero de al menos 2.
 
@@ -62,11 +62,11 @@ La clase extiende el `PhonStats` del núcleo [anyTS](https://sergeyshk.github.io
 
 ## Parámetros
 
-<!-- core: stats/phon_stats.md:PhonStats-parameters b90ae7b -->
+<!-- core: stats/phon_stats.md:PhonStats-parameters e3fdd09 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `source` | `str` / `Doc` | - | Fuente de datos |
-| `words_extractor` | `WordsExtractor` | `None` | Herramienta de extracción de palabras; se usa también con un `Doc`, sobre su texto |
+| `source` | `str` / `Doc` / `Document` | - | Fuente de datos |
+| `words_extractor` | `WordsExtractor` | `None` | Herramienta de extracción de palabras, que se usa sobre el texto en lugar de las palabras del documento |
 | `window_len` | `int` | `3` | Ventana en palabras de la aliteración y la asonancia (`PHON_WINDOW_LEN`) |
 
 `PHON_WINDOW_LEN` es una constante de `anyts.constants`.

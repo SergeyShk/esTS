@@ -91,10 +91,10 @@ El `max_length` del pipeline es de un millón de caracteres por defecto: divida 
 
 ## Atributos
 
-<!-- core: stats/syntax_stats.md:SyntaxStats-attributes 53be7dd -->
+<!-- core: stats/syntax_stats.md:SyntaxStats-attributes 08df3d6 -->
 | Atributo | Tipo | Descripción |
 | :------- | :--- | :---------- |
-| `sents` | `tuple[tuple[Token]]` | Palabras de cada oración con palabras, sobre una copia del `Doc` sin su tensor ni sus datos de usuario |
+| `sents` | `tuple[tuple[TreeWord]]` | Palabras del árbol de cada oración con palabras |
 | `n_sents`, `n_words` | `int` | Números de las oraciones con palabras y de las palabras |
 | `n_leaves`, `n_subtrees` | `int` | Números de las palabras sin dependientes y con ellas |
 | `n_coordination_chains` | `int` | Número de las cadenas de coordinación |
@@ -261,17 +261,16 @@ La incrustación a la izquierda de Coh-Metrix (SYNLE): el número de las palabra
 `verb_valency`
 { .metric-meta }
 
-<!-- core: stats/syntax_stats.md:calc_valency 4a77742 -->
+<!-- core: stats/syntax_stats.md:calc_valency ad471db -->
 ``` {.python .signature}
-calc_valency(token, join_hyphens=False)
+calc_valency(word)
 ```
 
-La valencia de un token: el número de sus palabras dependientes, sin las relaciones `cc`, `conj`, `parataxis` y `punct` (`anyts.constants.VALENCY_IGNORED_DEPS`); con `join_hyphens=True` una dependiente con guion cuenta una vez, así que `came` en `Some-one came` tiene una dependiente y no dos.
+La valencia de una palabra: el número de sus palabras dependientes (`get_children`), sin las relaciones `cc`, `conj`, `parataxis` y `punct` ni sus subtipos (`parataxis:discourse`) (`anyts.constants.VALENCY_IGNORED_DEPS`).
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
-| `join_hyphens` | `bool` | `False` | Tomar una palabra con guion por una sola palabra |
+| `word` | `TreeWord` | - | Palabra del árbol |
 
 Un verbo en forma personal es una palabra etiquetada `VERB` con `VerbForm=Fin` (`is_finite_verb` de `anyts.utils`). Los modelos del español etiquetan el participio de un tiempo compuesto o de la pasiva con `ser` (`ha llegado`, `fue construida`) como el verbo y su auxiliar como `AUX`, así que esos predicados quedan fuera.
 
@@ -418,14 +417,14 @@ Comprueba si una palabra encabeza una cláusula de infinitivo: un núcleo de cl�
 `t_units_per_sent` · `mean_t_unit_len` · `clauses_per_t_unit` · `p_complex_t_units` · `verb_phrases_per_t_unit` · `coordinate_phrases_per_clause` · `complex_nominals_per_clause` · [Lu 2010](https://doi.org/10.1075/ijcl.15.4.02lu)
 { .metric-meta }
 
-<!-- core: stats/syntax_stats.md:SyntaxStats-l2sca fc77bf3 -->
+<!-- core: stats/syntax_stats.md:SyntaxStats-l2sca 3f2fd4a -->
 Los índices del L2 Syntactic Complexity Analyzer (L2SCA) que no dan las demás métricas, sobre Universal Dependencies. MLC y C/S son `mean_clause_len` y `clauses_per_sent`; MLS y DC/C salen de los recuentos, `n_words / n_sents` y `n_subordinate_clauses / n_clauses`.
 
-- Una unidad T es una cláusula principal con las cláusulas que dependen de ella: el núcleo de una oración y cada núcleo de cláusula unido a él por `conj` o `parataxis` (`anyts.constants.MAIN_CLAUSE_DEPS`), así que *I came, and he left* tiene dos; un conjunto de una cláusula subordinada no lo es. Un conjunto sin sujeto propio (*I came and left*) es un predicado que comparte la unidad T de la cláusula con la que se coordina, como en L2SCA, salvo que su persona, número o género - los de su auxiliar o su cópula, los suyos propios sin ellos - difieran de los de esa cláusula: en una lengua que omite sus sujetos la terminación nombra otro sujeto (*llegamos al puerto y nos esperabas*). Un *there* existencial (`expl` de ClearNLP) es un sujeto. Un conjunto o una parataxis con una marca subordinante (`is_subordinating_mark`) encabeza una cláusula subordinada o de infinitivo, que no es una unidad T, ni lo es una cláusula bajo ella. Un conjunto en forma personal y con sujeto propio de una cláusula de infinitivo, un predicado que un modelo cuelga del infinitivo, se une a la cláusula de la primera palabra por encima de los infinitivos que no es un infinitivo (*he came to help and she stayed*: dos unidades T). Una unidad T es compleja con una cláusula subordinada (`is_subordinate_clause_head`) cuya unidad T más cercana por encima es ella.
+- Una unidad T es una cláusula principal con las cláusulas que dependen de ella: el núcleo de una oración y cada núcleo de cláusula unido a él por `conj` o `parataxis` (`anyts.constants.MAIN_CLAUSE_DEPS`), así que *I came, and he left* tiene dos; un conjunto de una cláusula subordinada no lo es. Un conjunto sin sujeto propio (*I came and left*) es un predicado que comparte la unidad T de la cláusula con la que se coordina, como en L2SCA, salvo que su persona, número o género - los de su auxiliar o su cópula, los suyos propios sin ellos - difieran de los de esa cláusula: en una lengua que omite sus sujetos la terminación nombra otro sujeto (*llegamos al puerto y nos esperabas*). Un *there* existencial (`expl` de ClearNLP) es un sujeto. Un conjunto o una parataxis con una marca subordinante (`is_subordinating_mark`) encabeza una cláusula subordinada o de infinitivo, que no es una unidad T, ni lo es una cláusula bajo ella. Un conjunto en forma personal y con sujeto propio de una cláusula de infinitivo, un predicado que un modelo cuelga del infinitivo, se une a la cláusula de la primera palabra por encima de los infinitivos que no es un infinitivo (*he came to help and she stayed*: dos unidades T); uno de una cláusula marcada sin conjunción coordinante propia se une a la cláusula de la que cuelga la marcada (*he left, for he was tired, she slept*: dos unidades T), y uno con sujeto propio sobre el infinitivo de una perífrasis se une a la cláusula de la perífrasis (*he must leave and she stayed*: dos unidades T). Una unidad T es compleja con una cláusula subordinada (`is_subordinate_clause_head`) cuya unidad T más cercana por encima es ella.
 - Un sintagma verbal es un predicado (`is_predicate`) que no es auxiliar ni cópula: un verbo, un auxiliar usado como predicado (*there **is** trouble*), una palabra con sujeto o con cópula; un infinitivo que forma un solo predicado con su núcleo (`is_infinitive_periphrasis`), y su conjunto en infinitivo, forman parte del sintagma verbal del núcleo. Un participio u otra forma no personal bajo `amod` o `acl`, o coordinada con una, sin auxiliar, cópula ni sujeto propio es un modificador de su sustantivo (*the house built by workers*), como en L2SCA, no un sintagma verbal.
-- Un sintagma coordinado es una coordinación con un conjunto que no es núcleo de cláusula (*the man and the woman*, *is big and nice*) o un predicado sin sujeto propio (*came and left*), contada una vez por su primer conjunto; una coordinación de cláusulas con sus propios sujetos cuenta como cláusulas.
-- Las cláusulas de C/T, CP/C y CN/C son las de L2SCA (`n_l2sca_clauses`): las cláusulas de `is_clause_head` sin los predicados que comparten sujeto (*came and left*) ni las cláusulas de infinitivo, ya que L2SCA cuenta las cláusulas en forma personal con sujeto. El núcleo de una oración encabeza una cláusula y una unidad T incluso sin predicado (*Sí.*, un título, el nombre de quien habla), como un fragmento en L2SCA. C/S y MLC conservan las cláusulas de las demás métricas, así que C/S sale más alto y MLC más bajo que en L2SCA.
-- Un nominal complejo es un sustantivo con un modificador de `anyts.constants.COMPLEX_NOMINAL_DEPS` (un adjetivo, un complemento, una cláusula de relativo o de participio, una aposición, un posesivo), o una cláusula nominal, un núcleo de cláusula de `anyts.constants.NOMINAL_CLAUSE_DEPS` o un conjunto de uno.
+- Un sintagma coordinado es una coordinación con un conjunto que no es núcleo de cláusula (*the man and the woman*, *is big and nice*) o un predicado sin sujeto propio (*came and left*), contada una vez por su primer conjunto; una coordinación de cláusulas con sus propios sujetos cuenta como cláusulas. Un infinitivo que forma un solo predicado con su núcleo (`is_infinitive_periphrasis`) no es un conjunto cuando un modelo lo cuelga como `conj` (*he must leave*).
+- Las cláusulas de C/T, CP/C y CN/C son las de L2SCA (`n_l2sca_clauses`): las cláusulas de `is_clause_head` sin los predicados que comparten sujeto (*came and left*) ni las cláusulas de infinitivo, ya que L2SCA cuenta las cláusulas en forma personal con sujeto; un conjunto o una parataxis con una marca subordinante propia es una cláusula subordinada, y cuenta con sujeto o sin él. El núcleo de una oración encabeza una cláusula y una unidad T sea cual sea su relación e incluso sin predicado (*Sí.*, un título, el nombre de quien habla), como un fragmento en L2SCA. C/S y MLC conservan las cláusulas de las demás métricas, así que C/S sale más alto y MLC más bajo que en L2SCA.
+- Un nominal complejo es un sustantivo con un modificador de `anyts.constants.COMPLEX_NOMINAL_DEPS` (un adjetivo, un complemento, una cláusula de relativo o de participio, una aposición, un posesivo), o una cláusula nominal, un núcleo de cláusula de `anyts.constants.NOMINAL_CLAUSE_DEPS`, un conjunto de uno o un conjunto que se une a uno, como para las unidades T.
 
 $$
 \textrm{MLT} = \frac{\textrm{Palabras}}{\textrm{Unidades T}}, \quad
@@ -445,17 +444,16 @@ Las cláusulas y las cláusulas subordinadas son las de las reglas españolas de
 `modifiers_per_noun`
 { .metric-meta }
 
-<!-- core: stats/syntax_stats.md:count_noun_modifiers 6775fc1 -->
+<!-- core: stats/syntax_stats.md:count_noun_modifiers cf97360 -->
 ``` {.python .signature}
-count_noun_modifiers(token, join_hyphens=False)
+count_noun_modifiers(word)
 ```
 
-Cuenta los modificadores de un sintagma nominal: las dependientes con las relaciones `amod`, `det`, `nmod`, `nummod`, `acl` y sus subtipos (`anyts.constants.NOUN_MODIFIER_DEPS`); `conj` y `appos` no son modificadores.
+Cuenta los modificadores de un sintagma nominal: las palabras dependientes (`get_children`) con las relaciones `amod`, `det`, `nmod`, `nummod`, `acl` y sus subtipos (`anyts.constants.NOUN_MODIFIER_DEPS`); `conj` y `appos` no son modificadores.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
-| `join_hyphens` | `bool` | `False` | Tomar una palabra con guion por una sola palabra |
+| `word` | `TreeWord` | - | Palabra del árbol |
 
 Los sustantivos son las palabras etiquetadas `NOUN` o `PROPN`: `la nueva casa de mi padre` da a `casa` tres modificadores, `la`, `nueva` y `padre`.
 
@@ -848,51 +846,49 @@ Las funciones trabajan con tokens de spaCy: las funciones `calc_*` y `find_*` y 
 
 ## Palabras de una secuencia { #get_words }
 
-<!-- core: stats/syntax_stats.md:get_words fb9eece -->
+<!-- core: stats/syntax_stats.md:get_words bf0ccab -->
 ``` {.python .signature}
-get_words(tokens, join_hyphens=False)
+get_words(words)
 ```
 
-Las palabras de una secuencia de tokens en su orden; con `join_hyphens=True` una palabra que el tokenizador dividió por sus guiones es una sola palabra, dada por la parte que lleva su relación, como con las dependientes de `get_children` (`governor` en `He is vice-governor`), o por su primera parte cuando la lleva un guion.
+Las palabras de una secuencia de palabras del árbol en su orden: las que tienen una letra o una cifra, así que los signos de puntuación y los símbolos se descartan.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `tokens` | `Doc` / `Span` / `list[Token]` | - | Secuencia de tokens |
-| `join_hyphens` | `bool` | `False` | Tomar una palabra con guion por una sola palabra |
+| `words` | `list[TreeWord]` | - | Palabras del árbol, como las de una oración |
 
 ## Relación base { #base_dep }
 
-<!-- core: stats/syntax_stats.md:base_dep 66fdc26 -->
+<!-- core: stats/syntax_stats.md:base_dep bce7c64 -->
 ``` {.python .signature}
-base_dep(token)
+base_dep(word)
 ```
 
-La relación de un token sin su subtipo, que Universal Dependencies separa con dos puntos: `nsubj:pass` da `nsubj`, `expl:pass` da `expl`.
+La relación de una palabra sin su subtipo, que Universal Dependencies separa con dos puntos: `nsubj:pass` da `nsubj`, `expl:pass` da `expl`; una palabra sin relación da una cadena vacía.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
+| `word` | `TreeWord` | - | Palabra del árbol |
 
 ## Palabras dependientes { #get_children }
 
-<!-- core: stats/syntax_stats.md:get_children 2fc8508 -->
+<!-- core: stats/syntax_stats.md:get_children fb62782 -->
 ``` {.python .signature}
-get_children(token, join_hyphens=False)
+get_children(word)
 ```
 
-Las palabras dependientes de un token, sin la puntuación ni los espacios; con `join_hyphens=True`, las dependientes de toda la palabra con guion a la que pertenece el token.
+Las palabras dependientes de una palabra, sin los signos de puntuación ni los símbolos.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
-| `join_hyphens` | `bool` | `False` | Tomar una palabra con guion por una sola palabra |
+| `word` | `TreeWord` | - | Palabra del árbol |
 
-<!-- core: stats/syntax_stats.md:subtree_len bfb372e -->
+<!-- core: stats/syntax_stats.md:subtree_len b6a3e96 -->
 ``` {.python .signature}
-subtree_len(token, join_hyphens=False)
+subtree_len(word)
 ```
 
-El número de palabras del subárbol de un token: el propio token y todas sus dependientes directas e indirectas; los argumentos son los de `get_children`.
+El número de palabras del subárbol de una palabra: la propia palabra y todas sus dependientes directas e indirectas, sin la puntuación; el argumento es el de `get_children`.
 
 ## Formas verbales { #verb-forms }
 
@@ -940,68 +936,64 @@ has_auxiliary(token)
 
 ## Predicado de una cláusula { #is_predicate }
 
-<!-- core: stats/syntax_stats.md:is_predicate b814232 -->
+<!-- core: stats/syntax_stats.md:is_predicate c2f06e2 -->
 ``` {.python .signature}
-is_predicate(token, join_hyphens=False)
+is_predicate(word)
 ```
 
 Comprueba si una palabra puede ser el predicado de su cláusula: un verbo (`VERB`, `AUX`), una palabra con sujeto propio (`nsubj`, `csubj` y sus subtipos, `anyts.constants.SUBJECT_DEPS`) o con cópula (`cop`), de modo que el predicado nominal de `he is tall` y de una lengua que omite el sujeto pasa y una palabra parentética no.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
-| `join_hyphens` | `bool` | `False` | Tomar una palabra con guion por una sola palabra |
+| `word` | `TreeWord` | - | Palabra del árbol |
 
-Un valor que no es un `Token` lanza `SourceTypeError`.
+Un valor que no es un `TreeWord` lanza `SourceTypeError`.
 
 ## Cadenas de modificadores { #calc_modifier_chains }
 
-<!-- core: stats/syntax_stats.md:calc_modifier_chains f16f96d -->
+<!-- core: stats/syntax_stats.md:calc_modifier_chains a9096ac -->
 ``` {.python .signature}
-calc_modifier_chains(tokens, is_modifier, join_hyphens=False)
+calc_modifier_chains(words, is_modifier)
 ```
 
-Las longitudes de las cadenas de modificadores encajados, en el orden de las palabras. Una cadena son dos o más modificadores, cada uno colgado del anterior, como los complementos de `the increase of the efficiency of the use of resources` (longitud 3); la comprobación `is_modifier` de una lengua dice qué es un modificador (un complemento con preposición, un sustantivo en genitivo). Una cadena empieza en un modificador cuyo núcleo no lo es, y su longitud es el número de modificadores de su rama más larga. Los enlaces son los de `get_children`: la puntuación no es un enlace, y con `join_hyphens` una palabra con guion es un solo enlace.
+Las longitudes de las cadenas de modificadores encajados, en el orden de las palabras. Una cadena son dos o más modificadores, cada uno colgado del anterior, como los complementos de `the increase of the efficiency of the use of resources` (longitud 3); la comprobación `is_modifier` de una lengua dice qué es un modificador (un complemento con preposición, un sustantivo en genitivo). Una cadena empieza en un modificador cuyo núcleo no lo es, y su longitud es el número de modificadores de su rama más larga. Los enlaces son los de `get_children`: la puntuación no es un enlace.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `tokens` | `Doc` / `Span` / `list[Token]` | - | Secuencia de tokens |
-| `is_modifier` | `Callable[[Token], bool]` | - | Si una palabra es un modificador de la cadena |
-| `join_hyphens` | `bool` | `False` | Tomar una palabra con guion por una sola palabra |
+| `words` | `list[TreeWord]` | - | Palabras del árbol, como las de una oración |
+| `is_modifier` | `Callable[[TreeWord], bool]` | - | Si una palabra es un modificador de la cadena |
 
 Una comprobación que no es invocable lanza `SourceTypeError`.
 
 ## Complementos con preposición { #is_prep_complement }
 
-<!-- core: stats/syntax_stats.md:is_prep_complement 6a6701b -->
+<!-- core: stats/syntax_stats.md:is_prep_complement eb56245 -->
 ``` {.python .signature}
-is_prep_complement(token, join_hyphens=False)
+is_prep_complement(word)
 ```
 
 Comprueba si una palabra es un complemento con preposición: una palabra con la relación `nmod` u `obl` o un subtipo de ellas (`anyts.constants.PREP_COMPLEMENT_DEPS`), o un predicado con cópula o con sujeto propio fuera de una oración de relativo (`acl`), como un predicado nominal de una lengua que omite la cópula en presente, que tiene una dependiente de la relación `case` que es una adposición (`ADP`) o empieza una de varias palabras (`fixed`: *in front of*). Un sustantivo en un caso sin preposición y un marcador posesivo no lo son.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
-| `join_hyphens` | `bool` | `False` | Tomar una palabra con guion por una sola palabra |
+| `word` | `TreeWord` | - | Palabra del árbol |
 
-Un valor que no es un `Token` lanza `SourceTypeError`.
+Un valor que no es un `TreeWord` lanza `SourceTypeError`.
 
 ## Ternas de dependencias { #dependency_triples }
 
-<!-- core: stats/syntax_stats.md:dependency_triples 8643971 -->
+<!-- core: stats/syntax_stats.md:dependency_triples 2cc48fb -->
 ``` {.python .signature}
-dependency_triples(tokens, join_hyphens=False)
+dependency_triples(words)
 ```
 
 Las ternas de dependencias de las palabras de una oración (`get_words`), en su orden: la categoría gramatical del núcleo de una palabra - la palabra más cercana por encima de ella a través de la puntuación -, su relación sin subtipo (`base_dep`) y su propia categoría gramatical, como `("NOUN", "amod", "ADJ")` para *a red house*. El núcleo de la oración, y una palabra sin ninguna palabra por encima, dan un núcleo vacío y la relación `root`, sea cual sea su etiqueta.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `tokens` | `Doc` / `Span` / `list[Token]` | - | Secuencia de tokens |
-| `join_hyphens` | `bool` | `False` | Tomar una palabra con guion por una sola palabra |
+| `words` | `list[TreeWord]` | - | Palabras del árbol de una oración |
 
-Unos tokens que no son un `Doc`, un `Span` ni una lista de objetos `Token` lanzan `SourceTypeError`.
+Unas palabras que no son una lista de objetos `TreeWord` lanzan `SourceTypeError`.
 
 ## Distancia de edición y semejanza de multiconjuntos { #calc_edit_distance }
 

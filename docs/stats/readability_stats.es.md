@@ -4,14 +4,14 @@
 ReadabilityStats(source, sents_extractor=None, words_extractor=None, preset='general')
 ```
 
-<!-- core: stats/readability_stats.md:ReadabilityStats 5dd9076 -->
-Las métricas de [legibilidad](https://es.wikipedia.org/wiki/Legibilidad) de un texto a partir de sus estadísticas básicas: la longitud media de la oración en palabras, la longitud media de la palabra en sílabas o en letras, la proporción de palabras polisílabas y de palabras largas y la variabilidad de la longitud de las palabras. La fuente de datos es un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) o unas estadísticas básicas ya calculadas, que se reutilizan tal cual; los extractores se pasan a las estadísticas básicas de un texto o de un `Doc`. Las fórmulas solo cuentan las letras de las palabras contadas, así que un extractor de palabras que descarta palabras no alarga la palabra media.
+<!-- core: stats/readability_stats.md:ReadabilityStats 7a36eb3 -->
+Las métricas de [legibilidad](https://es.wikipedia.org/wiki/Legibilidad) de un texto a partir de sus estadísticas básicas: la longitud media de la oración en palabras, la longitud media de la palabra en sílabas o en letras, la proporción de palabras polisílabas y de palabras largas y la variabilidad de la longitud de las palabras. La fuente de datos es un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy), un `Document` de [anySeg](https://github.com/SergeyShk/anySeg) o unas estadísticas básicas ya calculadas, que se reutilizan tal cual; los extractores se pasan a las estadísticas básicas de las demás fuentes. Las fórmulas solo cuentan las letras de las palabras contadas, así que un extractor de palabras que descarta palabras no alarga la palabra media.
 
 Las métricas son propiedades que se calculan en cada acceso, así que un cambio de los `coefficients` de un objeto se aplica en el acto.
 
 Excepciones:
 
-- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni unas estadísticas básicas, unas estadísticas básicas de una clase distinta de las de la biblioteca, un extractor de otro tipo, una cadena o un `Doc` pasados a una clase sin `basic_stats_class`;
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni un `Document`, ni unas estadísticas básicas, unas estadísticas básicas de una clase distinta de las de la biblioteca, un extractor de otro tipo, una fuente distinta de unas estadísticas básicas pasada a una clase sin `basic_stats_class`;
 - `SourceError` - una fuente sin palabras o sin oraciones;
 - `ParameterError` - un preajuste desconocido o que no es una cadena.
 

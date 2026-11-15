@@ -29,16 +29,16 @@ sentence_lengths_plot(chapter, window=10)
 
 ## Parámetros
 
-<!-- core: visualizers/sentences.md:sentence_lengths_plot-parameters e2b67de -->
+<!-- core: visualizers/sentences.md:sentence_lengths_plot-parameters 1d34170 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `str` / `Doc` / `Iterable[int]` | - | Texto, objeto Doc o longitudes de las oraciones (una lista, un array de numpy, una Series) |
+| `source` | `str` / `Doc` / `Document` / `Iterable[int]` | - | Texto, objeto Doc o Document o longitudes de las oraciones (una lista, un array de numpy, una Series) |
 | `window` | `int` | `10` | Ventana de la media móvil en oraciones |
 | `inset` | `bool` | `True` | Mostrar el recuadro con el histograma |
 | `ax` | `Axes` | `None` | Ejes para el gráfico |
 | `labels` | `dict[str, str]` | `None` | Etiquetas sobre las de por defecto: `title`, `xlabel`, `ylabel`, `length` (la curva), `average` (una cadena de formato con `window`), `distribution` (el recuadro) |
-| `sents_extractor` | `SentsExtractor` | `None` | Extractor de las oraciones de una cadena; por defecto, el extractor de oraciones de la biblioteca |
-| `words_extractor` | `WordsExtractor` | `None` | Extractor de las palabras de una oración de una cadena; por defecto, el extractor de palabras de la biblioteca |
+| `sents_extractor` | `SentsExtractor` | `None` | Extractor de las oraciones de una cadena o de un `Doc` sin oraciones, que se usa en lugar de las del documento |
+| `words_extractor` | `WordsExtractor` | `None` | Extractor de las palabras de una oración de una cadena o de un `Doc` sin oraciones, que se usa en lugar de las del documento |
 
 La fuente y los extractores lanzan los errores de `sentence_lengths`, y la falta de oraciones lanza `SourceError`; un `window` que no es un entero de al menos uno, unas etiquetas que `merge_labels` rechaza y un `ax` que no es un `Axes` de matplotlib lanzan `ParameterError`.
 
