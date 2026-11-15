@@ -9,7 +9,7 @@ Las principales métricas de [diversidad léxica](https://en.wikipedia.org/wiki/
 
 Excepciones:
 
-- `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`, un extractor de otro tipo;
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc` ni un `Document`, un extractor de otro tipo;
 - `SourceError` - una fuente sin palabras;
 - `ParameterError` - un parámetro que `check_params` rechaza.
 

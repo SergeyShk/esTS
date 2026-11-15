@@ -8,7 +8,7 @@ Las estadísticas sintácticas de un texto por su árbol de dependencias ([Ivano
 
 Excepciones:
 
-- `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`, un pipeline en `nlp` que no es un `Language` de spaCy;
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc` ni un `Document`, un pipeline en `nlp` que no es un `Language` de spaCy;
 - `SourceError` - una fuente sin palabras; un `Doc` sin las dependencias, las categorías gramaticales o los lemas (un `Doc` de `spacy.blank("es")`, de un pipeline sin analizador o con el `morphologizer` o el `lemmatizer` excluido); una cadena más larga que el `max_length` del pipeline;
 - `DatasetNotFoundError` - una cadena sin `nlp` cuando el modelo no está instalado.
 
@@ -123,7 +123,7 @@ Los atributos de las construcciones de esTS son `n_de_chains`, `n_gerund_clauses
     ss.n_de_chains, ss.n_se_passives, ss.split_predicates
     ss.c_children
     ss.c_deps
-    ss.sents[0]
+    [word.form for word in ss.sents[0]]
     ```
 
 === "Resultado"
@@ -132,8 +132,7 @@ Los atributos de las construcciones de esTS son `n_de_chains`, `n_gerund_clauses
     (3, 9, 3)
     (1, 1, ('llevó cabo', 'hiciera mención'))
     {0: 16, 1: 5, 2: 4, 3: 2, 4: 2}
-    {'ROOT': 2,
-     'advcl': 1,
+    {'advcl': 1,
      'amod': 1,
      'aux': 1,
      'case': 6,
@@ -144,8 +143,9 @@ Los atributos de las construcciones de esTS son `n_de_chains`, `n_gerund_clauses
      'nmod': 3,
      'nsubj': 3,
      'obj': 2,
-     'obl': 1}
-    (La, revisión, de, las, cuentas, del, organismo, fue, realizada, por, el, comité)
+     'obl': 1,
+     'root': 2}
+    ['La', 'revisión', 'de', 'las', 'cuentas', 'del', 'organismo', 'fue', 'realizada', 'por', 'el', 'comité']
     ```
 
 ## Métricas
@@ -314,7 +314,7 @@ Comprueba si un infinitivo forma un solo predicado con su núcleo: un infinitivo
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Palabra del árbol |
 
 La longitud media de una cláusula es el número de las palabras entre el número de las cláusulas.
 
@@ -335,7 +335,7 @@ Comprueba si una palabra encabeza una cláusula subordinada: un núcleo de cláu
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Palabra del árbol |
 
 `p_complex_sents` es la proporción de las oraciones con al menos una cláusula subordinada.
 
@@ -347,20 +347,23 @@ Comprueba si una palabra con la relación `mark` es una conjunción subordinante
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Palabra del árbol |
 
 === "Código"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import is_clause_head, is_subordinate_clause_head
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
     nlp = get_nlp()
     doc = nlp("Él quiere salir, pero tiene que quedarse porque parece cansado.")
-    [token.text for token in doc if is_clause_head(token)]
-    [token.text for token in doc if is_subordinate_clause_head(token)]
+    words = get_tree(get_document(doc)).words
+    [word.form for word in words if is_clause_head(word)]
+    [word.form for word in words if is_subordinate_clause_head(word)]
     doc = nlp("Se sentaba a sus pies, no por servicio, sino porque le había cobrado afición.")
-    [token.text for token in doc if is_subordinate_clause_head(token)]
+    words = get_tree(get_document(doc)).words
+    [word.form for word in words if is_subordinate_clause_head(word)]
     ```
 
 === "Resultado"
@@ -388,17 +391,19 @@ Comprueba si una palabra encabeza una cláusula de infinitivo: un núcleo de cl�
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Palabra del árbol |
 
 === "Código"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import is_clause_head, is_infinitive_clause_head
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
     doc = get_nlp()("Quiere salir y volver, pero intentando salir se cayó.")
-    [token.text for token in doc if is_clause_head(token)]
-    [token.text for token in doc if is_infinitive_clause_head(token)]
+    words = get_tree(get_document(doc)).words
+    [word.form for word in words if is_clause_head(word)]
+    [word.form for word in words if is_infinitive_clause_head(word)]
     ```
 
 === "Resultado"
@@ -433,7 +438,7 @@ $$
 \textrm{CN/C} = \frac{\textrm{Nominales complejos}}{\textrm{Cláusulas de L2SCA}}
 $$
 
-Las cláusulas y las cláusulas subordinadas son las de las reglas españolas de las tarjetas de arriba, y una perífrasis es un solo sintagma verbal (`puede venir`). Los modelos cuelgan el infinitivo de algunas perífrasis como conjunto de su verbo (`tiene que venir`): queda dentro del sintagma verbal del verbo, pero el par cuenta además como un sintagma coordinado.
+Las cláusulas y las cláusulas subordinadas son las de las reglas españolas de las tarjetas de arriba, y una perífrasis es un solo sintagma verbal (`puede venir`). Los modelos cuelgan el infinitivo de algunas perífrasis como conjunto de su verbo (`tiene que venir`): queda dentro del sintagma verbal del verbo y no es un sintagma coordinado.
 
 </div>
 
@@ -494,18 +499,23 @@ Comprueba si una palabra es un complemento introducido por `de`: una palabra con
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `tokens` | `Doc` / `Span` / `list[Token]` | - | Secuencia de tokens (`calc_de_chains`) |
-| `token` | `Token` | - | Token (`is_de_modifier`) |
+| `tokens` | `list[TreeWord]` | - | Palabras del árbol (`calc_de_chains`) |
+| `token` | `TreeWord` | - | Palabra del árbol (`is_de_modifier`) |
 
 `max_de_chain_len` es la cadena más larga del texto, 0 sin cadenas.
 
 === "Código"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import calc_de_chains
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
-    calc_de_chains(get_nlp()("El aumento de la eficiencia del uso de los recursos fue notable."))
+    calc_de_chains(
+        get_tree(
+            get_document(get_nlp()("El aumento de la eficiencia del uso de los recursos fue notable."))
+        ).words
+    )
     ```
 
 === "Resultado"
@@ -534,16 +544,18 @@ Comprueba si una palabra encabeza una cláusula de participio: un participio ([`
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Palabra del árbol |
 
 === "Código"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import is_participle_clause, subtree_len
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
     doc = get_nlp()("La casa, construida por los obreros en 1900, fue vendida.")
-    [(token.text, subtree_len(token)) for token in doc if is_participle_clause(token)]
+    words = get_tree(get_document(doc)).words
+    [(word.form, subtree_len(word)) for word in words if is_participle_clause(word)]
     ```
 
 === "Resultado"
@@ -569,16 +581,18 @@ Comprueba si una palabra encabeza una cláusula de gerundio: un predicado en for
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Palabra del árbol |
 
 === "Código"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import is_gerund_clause
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
     doc = get_nlp()("Llegando tarde, encontró la puerta cerrada y siguió trabajando.")
-    [token.text for token in doc if is_gerund_clause(token)]
+    words = get_tree(get_document(doc)).words
+    [word.form for word in words if is_gerund_clause(word)]
     ```
 
 === "Resultado"
@@ -616,21 +630,23 @@ Comprueba si una palabra es el agente de una pasiva: un complemento cuya preposi
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Palabra del árbol |
 
 Las formas verbales de `p_passive` son las palabras etiquetadas `VERB`.
 
 === "Código"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import is_agentless, is_passive
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
     doc = get_nlp()(
         "La casa fue construida por los obreros y el proyecto es financiado por el Estado. "
         "Se construyó la casa."
     )
-    [(token.text, is_agentless(token)) for token in doc if is_passive(token)]
+    words = get_tree(get_document(doc)).words
+    [(word.form, is_agentless(word)) for word in words if is_passive(word)]
     ```
 
 === "Resultado"
@@ -700,28 +716,30 @@ Los predicados escindidos, pares de un verbo y un sustantivo en el orden de las 
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
-| `tokens` | `Doc` / `Span` / `list[Token]` | - | Secuencia de tokens (`find_split_predicates`) |
-| `verb` | `Token` | - | Verbo del que depende el sustantivo (`is_split_predicate_noun`) |
+| `token` | `TreeWord` | - | Palabra del árbol |
+| `tokens` | `list[TreeWord]` | - | Palabras del árbol (`find_split_predicates`) |
+| `verb` | `TreeWord` | - | Verbo del que depende el sustantivo (`is_split_predicate_noun`) |
 
 === "Código"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import find_split_predicates, is_negation
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
     doc = get_nlp()(
         "Se procedió a la votación y el comité tomó parte en la revisión. "
         "No vino nadie, ni Juan ni María."
     )
-    find_split_predicates(doc)
-    [token.text for token in doc if is_negation(token)]
+    words = get_tree(get_document(doc)).words
+    [(verb.form, noun.form) for verb, noun in find_split_predicates(words)]
+    [word.form for word in words if is_negation(word)]
     ```
 
 === "Resultado"
 
     ```
-    [(procedió, votación), (tomó, parte)]
+    [('procedió', 'votación'), ('tomó', 'parte')]
     ['No', 'nadie']
     ```
 
@@ -842,7 +860,7 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
     (None, None)
     ```
 
-Las funciones trabajan con tokens de spaCy: las funciones `calc_*` y `find_*` y `dependency_triples` reciben una secuencia de tokens (`Doc`, `Span` o una lista), las funciones `is_*`, `has_*` y `count_*` un solo token, y `calc_edit_distance` y `calc_multiset_similarity` listas de los elementos de las oraciones; las palabras de una secuencia son los tokens de `is_word` de `anyts.utils`. Las funciones del árbol de dependencias vienen del núcleo, las de las construcciones del español son propias de esTS.
+Las funciones trabajan con las palabras del árbol de un documento (`TreeWord`, `get_tree` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/document/)): las funciones `calc_*` y `find_*` y `dependency_triples` reciben una lista de ellas, las funciones `is_*`, `has_*` y `count_*` una sola palabra, y `calc_edit_distance` y `calc_multiset_similarity` listas de los elementos de las oraciones; las palabras de una lista son las que tienen una letra o una cifra (`get_words`). Las funciones del árbol de dependencias vienen del núcleo, las de las construcciones del español son propias de esTS.
 
 ## Palabras de una secuencia { #get_words }
 
@@ -914,18 +932,20 @@ has_auxiliary(token)
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
+| `token` | `TreeWord` | - | Palabra del árbol |
 
 === "Código"
 
     ``` python
+    from anyts.document import get_tree
     from ests.syntax_stats import is_participle, predicate_form
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
     doc = get_nlp()(
         "Dijo que había llegado tarde. Lo acusan de haber matado al rey siendo elegido presidente."
     )
-    [(token.text, predicate_form(token)) for token in doc if is_participle(token)]
+    words = get_tree(get_document(doc)).words
+    [(word.form, predicate_form(word)) for word in words if is_participle(word)]
     ```
 
 === "Resultado"

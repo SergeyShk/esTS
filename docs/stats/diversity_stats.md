@@ -8,7 +8,7 @@ DiversityStats(source, words_extractor=None, window_len=50, mtld_threshold=0.72,
 
 Raises:
 
-- `SourceTypeError` - a source that is neither a string nor a `Doc`, an extractor of another type;
+- `SourceTypeError` - a source that is neither a string, a `Doc` nor a `Document`, an extractor of another type;
 - `SourceError` - a source without words;
 - `ParameterError` - a parameter that `check_params` rejects.
 

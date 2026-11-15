@@ -8,7 +8,7 @@ The syntactic statistics of a text by its dependency tree ([Ivanov, Solnyshkina 
 
 Raises:
 
-- `SourceTypeError` - a source that is neither a string nor a `Doc`, a pipeline in `nlp` that is not a spaCy `Language`;
+- `SourceTypeError` - a source that is neither a string, a `Doc` nor a `Document`, a pipeline in `nlp` that is not a spaCy `Language`;
 - `SourceError` - a source without words; a `Doc` without the dependencies, the parts of speech or the lemmas (a `Doc` of `spacy.blank("es")`, of a pipeline without a parser or with the `morphologizer` or the `lemmatizer` excluded); a string longer than the `max_length` of the pipeline;
 - `DatasetNotFoundError` - a string without `nlp` when the model is not installed.
 
@@ -388,7 +388,7 @@ Checks whether a word heads an infinitive clause: a clause head (`is_clause_head
 
 --8<-- "stats/syntax_stats.md:SyntaxStats-l2sca"
 
-The clauses and the subordinate clauses are those of the Spanish rules of the cards above, and a periphrasis is one verb phrase (`puede venir`). The models attach the infinitive of some periphrases as a conjunct of their verb (`tiene que venir`): it stays inside the verb phrase of the verb, but the pair counts as a coordinate phrase too.
+The clauses and the subordinate clauses are those of the Spanish rules of the cards above, and a periphrasis is one verb phrase (`puede venir`). The models attach the infinitive of some periphrases as a conjunct of their verb (`tiene que venir`): it stays inside the verb phrase of the verb and is no coordinate phrase.
 
 </div>
 

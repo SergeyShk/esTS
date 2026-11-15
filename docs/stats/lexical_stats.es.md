@@ -12,7 +12,7 @@ Excepciones:
 - `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni un `Document`, un `parse` que no devuelve un `Document`, un diccionario de otra clase que la de la biblioteca o, sin `freq_dict_class`, uno sin `lookup` e `ipm` o ninguno; un `analyze` que no da objetos `LexicalWord`;
 - `SourceError` - palabras sin categorías gramaticales, una fuente sin palabras.
 
-En esTS una fuente que no es ni una cadena ni un `Doc` y un pipeline en `nlp` que no es un `Language` de spaCy también lanzan `SourceTypeError`; una fuente sin las categorías gramaticales y una cadena más larga que el `max_length` del pipeline, `SourceError`; y las métricas según el diccionario sin el diccionario descargado, `DatasetNotFoundError`.
+En esTS una fuente que no es ni una cadena, ni un `Doc` ni un `Document` y un pipeline en `nlp` que no es un `Language` de spaCy también lanzan `SourceTypeError`; una fuente sin las categorías gramaticales y una cadena más larga que el `max_length` del pipeline, `SourceError`; y las métricas según el diccionario sin el diccionario descargado, `DatasetNotFoundError`.
 
 A diferencia de las [métricas de diversidad léxica](diversity_stats.md), que comparan las palabras de un texto entre sí, aquí las palabras se comparan con las frecuencias de la lengua ([TAALES](https://doi.org/10.3758/s13428-017-0924-4)). La fuente de datos es un texto o un objeto `Doc` de la biblioteca [spaCy](https://github.com/explosion/spaCy).
 

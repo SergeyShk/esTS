@@ -411,14 +411,14 @@ Excepciones:
 find_connector_highlights(words, sents, text=None, doc=None)
 ```
 
-La capa `connectors`: los conectores de [`CohesionStats`](../stats/cohesion_stats.md#connectors) dentro de cada oración, encontrados por su buscador [`SpanishConnectorMatcher`](../stats/cohesion_stats.md#ConnectorMatcher), un conector de una palabra comprobado por su categoría gramatical cuando las palabras la tienen; la nota da el conector, su clase y su tipo. Con el texto, las reglas del buscador no leen ninguna palabra a través de un signo de puntuación entre dos palabras, así que `así, que` no es conector; con el `Doc`, ningún conector empieza en un `si` que no abre ninguna condición, como en `CohesionStats` ([`is_connector_blocked`](../stats/cohesion_stats.md#is_connector_blocked): `no sé si vendrá`). `HighlightedText` pasa el texto de su fuente y su `Doc`; en una cadena, que no analiza, solo las reglas del buscador descartan un `si` (`como si fuera`).
+La capa `connectors`: los conectores de [`CohesionStats`](../stats/cohesion_stats.md#connectors) dentro de cada oración, encontrados por su buscador [`SpanishConnectorMatcher`](../stats/cohesion_stats.md#ConnectorMatcher), un conector de una palabra comprobado por su categoría gramatical cuando las palabras la tienen; la nota da el conector, su clase y su tipo. Con el texto, las reglas del buscador no leen ninguna palabra a través de un signo de puntuación entre dos palabras, así que `así, que` no es conector; con el documento, ningún conector empieza en un `si` que no abre ninguna condición, como en `CohesionStats` ([`is_connector_blocked`](../stats/cohesion_stats.md#is_connector_blocked): `no sé si vendrá`). `HighlightedText` pasa el texto de su fuente y su documento; en una cadena, que no analiza, solo el `si` tras `¡` y las reglas del buscador descartan un `si` (`¡Si ya te lo dije!`, `como si fuera`).
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `words` | `list[Word]` | - | Palabras con sus posiciones y sus categorías gramaticales |
 | `sents` | `list[Sent]` | - | Oraciones con sus posiciones |
 | `text` | `str` | `None` | Texto de las palabras, para los signos de puntuación entre ellas |
-| `doc` | `Doc` | `None` | `Doc` de las palabras, para las reglas por sus tokens |
+| `doc` | `Document` | `None` | Documento de las palabras, para las reglas por su árbol |
 
 Excepciones:
 
@@ -526,12 +526,12 @@ La capa `split_predicates`: los pares de un verbo de apoyo y un sustantivo de [`
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
-| `doc` | `Doc` | - | Objeto Doc con análisis de dependencias y lemas |
+| `doc` | `Document` | - | Documento con análisis de dependencias y lemas |
 
 === "Código"
 
     ``` python
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
     from ests.visualizers.highlight import (
         find_de_chains,
         find_gerund_clauses,
@@ -540,9 +540,11 @@ La capa `split_predicates`: los pares de un verbo de apoyo y un sustantivo de [`
         find_split_predicate_highlights,
     )
 
-    doc = get_nlp()(
-        "El informe, redactado por el comité, fue aprobado tras hacer una revisión, "
-        "siguiendo las normas del uso de los recursos."
+    doc = get_document(
+        get_nlp()(
+            "El informe, redactado por el comité, fue aprobado tras hacer una revisión, "
+            "siguiendo las normas del uso de los recursos."
+        )
     )
     find_passive(doc)
     find_participle_clauses(doc)
@@ -577,17 +579,19 @@ La capa `anaphoric_mismo`: cada forma de `is_anaphoric_mismo` con su artículo (
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token |
-| `doc` | `Doc` | - | Objeto Doc con análisis de dependencias, categorías gramaticales y lemas |
+| `token` | `TreeWord` | - | Palabra del árbol |
+| `doc` | `Document` | - | Documento con análisis de dependencias, categorías gramaticales y lemas |
 
 === "Código"
 
     ``` python
-    from ests.utils import get_nlp
+    from anyts.document import get_tree
+    from ests.utils import get_document, get_nlp
     from ests.visualizers.highlight import find_anaphoric_mismo, is_anaphoric_mismo
 
-    doc = get_nlp()("Se recibió la solicitud el mismo día, y se procedió al estudio de la misma.")
-    [token.text for token in doc if is_anaphoric_mismo(token)]
+    text = "Se recibió la solicitud el mismo día, y se procedió al estudio de la misma."
+    doc = get_document(get_nlp()(text))
+    [word.form for word in get_tree(doc).words if is_anaphoric_mismo(word)]
     find_anaphoric_mismo(doc)
     ```
 

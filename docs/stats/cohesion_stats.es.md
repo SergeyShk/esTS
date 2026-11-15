@@ -8,7 +8,7 @@ Las estadísticas de cohesión de un texto a la manera de [Coh-Metrix](https://d
 
 Excepciones:
 
-- `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`, un extractor de otra clase, un pipeline en `nlp` que no es un `Language` de spaCy, unos conectores que no son un diccionario de locuciones y pares de cadenas;
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc` ni un `Document`, un extractor de otra clase, un pipeline en `nlp` que no es un `Language` de spaCy, unos conectores que no son un diccionario de locuciones y pares de cadenas;
 - `SourceError` - una fuente sin palabras; un `Doc` sin las categorías gramaticales o los lemas (un `Doc` de `spacy.blank("es")`); una cadena más larga que el `max_length` del pipeline;
 - `ParameterError` - una clase o un tipo de conector desconocidos, un `blank_lines` que no es un `bool`;
 - `DatasetNotFoundError` - una cadena sin `nlp` cuando el modelo no está instalado.
@@ -507,21 +507,22 @@ Busca los conectores de una oración con el método `find` de `SpanishConnectorM
 token_info(token)
 ```
 
-Los rasgos de un token de spaCy para las estadísticas de cohesión según su anotación de Universal Dependencies, por la tabla de las clases de palabras: una tupla con nombre `WordInfo` con `lemma` (el `lemma_` del token en minúscula), `noun`, `pronoun`, `demonstrative`, `argument`, `content`, `tense` y `mood` (el primer valor de `Tense` y de `Mood`, `None` sin él). [`LexicalStats`](lexical_stats.md) toma de ella sus palabras con contenido.
+Los rasgos de una palabra del árbol (`TreeWord` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/document/)) para las estadísticas de cohesión según su anotación de Universal Dependencies, por la tabla de las clases de palabras: una tupla con nombre `WordInfo` con `lemma` (el lema de la palabra en minúscula), `noun`, `pronoun`, `demonstrative`, `argument`, `content`, `tense` y `mood` (el primer valor de `Tense` y de `Mood`, `None` sin él). [`LexicalStats`](lexical_stats.md) toma de ella sus palabras con contenido.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token de spaCy |
+| `token` | `TreeWord` | - | Palabra del árbol |
 
 === "Código"
 
     ``` python
+    from anyts.document import get_tree
     from ests.cohesion_stats import token_info
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
-    doc = get_nlp()("Mi hermano miraba este libro.")
-    token_info(doc[2])
-    token_info(doc[3])
+    words = get_tree(get_document(get_nlp()("Mi hermano miraba este libro."))).words
+    token_info(words[2])
+    token_info(words[3])
     ```
 
 === "Resultado"
@@ -537,20 +538,22 @@ Los rasgos de un token de spaCy para las estadísticas de cohesión según su an
 is_connector_blocked(token)
 ```
 
-Comprueba si ningún conector empieza en un token por las palabras que lo preceden en un `Doc`: un `si` que no abre ninguna condición. Es así tras un verbo de `CONNECTOR_QUESTION_VERBS` - `saber`, `ver`, `mirar`, `preguntar`, `dudar`, `ignorar`, `pensar`, `averiguar`, `probar`, `comprobar`, `observar`, `examinar`, `determinar`, `decidir`, `considerar`, `consultar`, `investigar`, `adivinar`, y los del estilo administrativo `indicar`, `señalar`, `especificar`, `precisar`, `verificar`, `confirmar`, `aclarar`, `valorar`, `evaluar`, `analizar`, `establecer`, `desconocer`, `manifestar`, `constar` - etiquetado `VERB` o `AUX`, por el lema del modelo sin su pronombre enclítico o por el de `ests.utils.lemmatize` (`no sé si vendrá`, `a ver si llega`, `preguntó si tenía hambre`, `preguntándose si`, `la comisión valorará si`), o una palabra que el modelo lee como un nombre propio o común, por el lema de `lemmatize` (`Indique si desea...`, `Indíquenos si acepta...`), salvo que el verbo tenga antes de `si` el complemento que llenaría la interrogativa, de modo que `si` es una condición: un clítico de objeto al final (`indíquelo si es necesario`), un complemento directo que no sea uno de los dativos `le` y `les` que el modelo etiqueta así (`lo veré si tengo tiempo`, mientras que `le preguntaré si puede venir` es una interrogativa), o el sujeto de una pasiva con `se` o de `constar` (`la solicitud se valorará si cumple los requisitos`), sin contar el `se` pronominal de `preguntar` (`el juez se preguntaba si...`); y tras un `¡` de apertura (`¡Si ya te lo dije!`). En una muestra de la literatura la regla de los verbos acertó en todos los casos revisados, la de `¡` en unos nueve de cada diez; de 22 interrogativas indirectas del estilo administrativo toma 18, y ninguna de 7 condiciones. `informar`, `comunicar` y `estudiar` quedan fuera: tras ellos `si` abre a menudo una condición (`le informaremos si hay cambios`). `CohesionStats` fija con ella el `connector_blocked` de las palabras del núcleo, y la capa [`connectors`](../visualizers/highlight.md) del resaltado de un `Doc` descarta los mismos `si`.
+Comprueba si ningún conector empieza en una palabra del árbol por las palabras que la preceden: un `si` que no abre ninguna condición. Es así tras un verbo de `CONNECTOR_QUESTION_VERBS` - `saber`, `ver`, `mirar`, `preguntar`, `dudar`, `ignorar`, `pensar`, `averiguar`, `probar`, `comprobar`, `observar`, `examinar`, `determinar`, `decidir`, `considerar`, `consultar`, `investigar`, `adivinar`, y los del estilo administrativo `indicar`, `señalar`, `especificar`, `precisar`, `verificar`, `confirmar`, `aclarar`, `valorar`, `evaluar`, `analizar`, `establecer`, `desconocer`, `manifestar`, `constar` - etiquetado `VERB` o `AUX`, por el lema del modelo sin su pronombre enclítico o por el de `ests.utils.lemmatize` (`no sé si vendrá`, `a ver si llega`, `preguntó si tenía hambre`, `preguntándose si`, `la comisión valorará si`), o una palabra que el modelo lee como un nombre propio o común, por el lema de `lemmatize` (`Indique si desea...`, `Indíquenos si acepta...`), salvo que el verbo tenga antes de `si` el complemento que llenaría la interrogativa, de modo que `si` es una condición: un clítico de objeto al final (`indíquelo si es necesario`), un complemento directo que no sea uno de los dativos `le` y `les` que el modelo etiqueta así (`lo veré si tengo tiempo`, mientras que `le preguntaré si puede venir` es una interrogativa), o el sujeto de una pasiva con `se` o de `constar` (`la solicitud se valorará si cumple los requisitos`), sin contar el `se` pronominal de `preguntar` (`el juez se preguntaba si...`); y tras un `¡` de apertura (`¡Si ya te lo dije!`). En una muestra de la literatura la regla de los verbos acertó en todos los casos revisados, la de `¡` en unos nueve de cada diez; de 22 interrogativas indirectas del estilo administrativo toma 18, y ninguna de 7 condiciones. `informar`, `comunicar` y `estudiar` quedan fuera: tras ellos `si` abre a menudo una condición (`le informaremos si hay cambios`). `CohesionStats` fija con ella el `connector_blocked` de las palabras del núcleo, y la capa [`connectors`](../visualizers/highlight.md) del resaltado descarta los mismos `si`; sin las categorías gramaticales, como en una cadena que el modelo no analiza, solo se conoce el `si` tras `¡`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `token` | `Token` | - | Token de spaCy |
+| `token` | `TreeWord` | - | Palabra del árbol |
 
 === "Código"
 
     ``` python
+    from anyts.document import get_tree
     from ests.cohesion_stats import is_connector_blocked
-    from ests.utils import get_nlp
+    from ests.utils import get_document, get_nlp
 
-    doc = get_nlp()("No sé si vendrá. Si llueve, me quedo. ¡Si ya te lo dije!")
-    [is_connector_blocked(token) for token in doc if token.lower_ == "si"]
+    text = "No sé si vendrá. Si llueve, me quedo. ¡Si ya te lo dije!"
+    words = get_tree(get_document(get_nlp()(text))).words
+    [is_connector_blocked(word) for word in words if word.form.lower() == "si"]
     ```
 
 === "Resultado"

@@ -10,7 +10,7 @@ El metro del verso español es silábico: un verso se mide por sus sílabas mét
 
 Excepciones:
 
-- `SourceTypeError` - una fuente que no es ni una cadena ni un `Doc`;
+- `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc` ni un `Document`;
 - `SourceError` - una fuente sin letras (vacía, solo cifras y signos de puntuación);
 - `ParameterError` - un `seseo` que no es un `bool`.
 
