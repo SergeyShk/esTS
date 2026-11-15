@@ -513,6 +513,9 @@ def test_load_pipeline_of_a_wrong_path(tmp_path):
     with pytest.raises(DatasetNotFoundError, match="cannot be loaded") as error:
         load_pipeline(str(tmp_path))
     assert "spacy download" not in str(error.value)
+    (tmp_path / "config.cfg").write_text("[paths]\n", encoding="utf-8")
+    with pytest.raises(DatasetNotFoundError, match="cannot be loaded"):
+        load_pipeline(str(tmp_path))
 
 
 def test_load_pipeline_keeps_the_tokenizer_of_anyseg(tmp_path):
@@ -528,6 +531,28 @@ def test_load_pipeline_keeps_the_tokenizer_of_anyseg(tmp_path):
     spacy.load("es_core_news_sm", exclude=["parser", "ner"]).to_disk(tmp_path / "spacy")
     plain = load_pipeline(str(tmp_path / "spacy"))
     assert plain.config["nlp"]["tokenizer"] == {"@tokenizers": "anyseg.Tokenizer.v1"}
+
+
+def test_load_pipeline_of_an_installed_package(tmp_path, monkeypatch):
+    """A pipeline installed as a package keeps the lists of its tokenizer of anySeg"""
+    tokenizer = {"@tokenizers": "anyseg.Tokenizer.v1", "abbreviations": ["xyz"]}
+    nlp = load_pipeline(exclude=["parser", "ner"], config={"nlp": {"tokenizer": tokenizer}})
+    package = tmp_path / "es_mypipe"
+    package.mkdir()
+    nlp.to_disk(package / "es_mypipe-0.0.0")
+    load = spacy.load
+    monkeypatch.setattr(spacy.util, "is_package", lambda name: name == "es_mypipe")
+    monkeypatch.setattr(spacy.util, "get_package_path", lambda name: package)
+    monkeypatch.setattr(
+        spacy.util,
+        "get_model_meta",
+        lambda path: {"lang": "es", "name": "mypipe", "version": "0.0.0"},
+    )
+    monkeypatch.setattr(
+        spacy, "load", lambda name, **kwargs: load(package / "es_mypipe-0.0.0", **kwargs)
+    )
+    installed = load_pipeline("es_mypipe")
+    assert [token.text for token in installed("El xyz. dijo algo.")][:3] == ["El", "xyz.", "dijo"]
 
 
 def test_get_nlp_not_installed():

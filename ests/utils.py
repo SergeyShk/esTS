@@ -236,18 +236,32 @@ def load_pipeline(
 def _tokenizer_config(model: str, given: object) -> dict[str, Any]:
     """
     The [nlp.tokenizer] block of load_pipeline: the tokenizer of anySeg that config or
-    the config.cfg of a saved pipeline gives, with its lists, or a new one
+    the config.cfg of a saved or installed pipeline gives, with its lists, or a new one
     """
     if isinstance(given, dict) and given.get("@tokenizers") == ANYSEG_TOKENIZER:
         return given
-    saved = Path(model) / "config.cfg"
-    if saved.is_file():
+    saved = _saved_config(model)
+    if saved is not None and saved.is_file():
         import spacy
 
-        tokenizer = dict(spacy.util.load_config(saved)["nlp"]["tokenizer"])
+        nlp = spacy.util.load_config(saved).get("nlp", {})
+        tokenizer = dict(nlp.get("tokenizer", {}))
         if tokenizer.get("@tokenizers") == ANYSEG_TOKENIZER:
             return tokenizer
     return {"@tokenizers": ANYSEG_TOKENIZER}
+
+
+def _saved_config(model: str) -> Path | None:
+    """The config.cfg of a pipeline: in its directory or in the data of its package"""
+    import spacy
+
+    if Path(model).is_dir():
+        return Path(model) / "config.cfg"
+    if not spacy.util.is_package(str(model)):
+        return None
+    package = spacy.util.get_package_path(str(model))
+    meta = spacy.util.get_model_meta(package)
+    return package / f"{meta['lang']}_{meta['name']}-{meta['version']}" / "config.cfg"
 
 
 @lru_cache(maxsize=4)
