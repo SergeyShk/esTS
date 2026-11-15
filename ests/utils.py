@@ -203,7 +203,7 @@ def lemmatize(word: str) -> str:
     Description:
         A known form is mapped to its lower-case lemma (Tienes - tener,
         cantándole - cantar), an unknown form is returned unchanged (Madrid,
-        dámelo)
+        dámelo), as is a word with a lone surrogate, which has no UTF-8 form
 
     Arguments:
         word (str): Word form
@@ -211,6 +211,10 @@ def lemmatize(word: str) -> str:
     Returns:
         str: Lemma
     """
+    try:
+        word.encode("utf-8")
+    except UnicodeEncodeError:
+        return word
     return simplemma.lemmatize(word, lang="es") if word != "" else word
 
 

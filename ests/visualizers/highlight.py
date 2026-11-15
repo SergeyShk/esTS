@@ -150,8 +150,7 @@ class HighlightedText(anyts.visualizers.highlight.HighlightedText):
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc
-        SourceError: If the source has no words or is a string with a character without a
-            UTF-8 form
+        SourceError: If the source has no words
         SourceTypeError: If the stopwords or the clichés are not a list or a set of strings
         ParameterError: If a layer is unknown or not allowed by the source, or a
             threshold of a layer is out of its range
@@ -267,8 +266,7 @@ def highlight(
 
     Raises:
         SourceTypeError: If the source is neither a string nor a Doc
-        SourceError: If the source has no words or is a string with a character without a
-            UTF-8 form
+        SourceError: If the source has no words
         SourceTypeError: If the stopwords or the clichés are not a list or a set of strings
         ParameterError: If a layer is unknown or not allowed by the source, or a
             threshold of a layer is out of its range

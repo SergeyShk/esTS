@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Iterator, Sequence
+from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
 import anyts.corpus
@@ -9,6 +9,7 @@ from anyts.corpus.kwic import (
     format_kwic as format_kwic,
     print_kwic as print_kwic,
 )
+from anyts.utils import check_bool
 
 from ..utils import iter_text_sents, iter_text_words, lemmatize
 
@@ -66,26 +67,27 @@ def kwic(
         >>> [line.keyword for line in kwic(text, "gato", by_lemma=True)]
         ['gato', 'gatos']
     """
+    check_bool(ignore_case, "folding of the case")
     return anyts.corpus.kwic(
         source,
         keyword,
         window,
         by_lemma,
-        ignore_case,
-        tokenize=_words,
+        True,
+        tokenize=iter_text_words,
         lemmatize=_lemmas,
-        fold=_fold,
+        fold=_fold if ignore_case or by_lemma else _strip_period,
         sentenize=iter_text_sents,
     )
 
 
-def _words(text: str) -> Iterator[tuple[int, int, str]]:
-    """The words of iter_text_words without the period of an abbreviation"""
-    return ((start, end, word.removesuffix(".")) for start, end, word in iter_text_words(text))
+def _strip_period(word: str) -> str:
+    """A word without the period of an abbreviation"""
+    return word.removesuffix(".")
 
 
 def _fold(word: str) -> str:
-    """A word in lower case without the period of an abbreviation, as a Doc writes it"""
+    """A word in lower case without the period of an abbreviation"""
     return word.lower().removesuffix(".")
 
 

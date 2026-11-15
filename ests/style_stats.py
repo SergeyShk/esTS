@@ -110,10 +110,10 @@ class StyleStats(anyts.style_stats.StyleStats):
         SourceTypeError: If the source is neither a string nor a Doc, the stopwords,
             the nausea stopwords or the clichés are not a list or a set of strings, or
             the extractor or the pipeline is of another type
-        SourceError: If the source has no words or a string has a character without a
-            UTF-8 form; when the verbal nouns or the markers are read, if the source lacks
-            the parts of speech or the lemmas or a sentence of a string is longer than the
-            max_length of the pipeline
+        SourceError: If the source has no words; when the verbal nouns or the markers are
+            read, if the source lacks the parts of speech or the lemmas, or a string has a
+            sentence longer than the max_length of the pipeline or a character without a
+            UTF-8 form
         ParameterError: If the number of the most frequent words is not an integer or is
             below one
     """

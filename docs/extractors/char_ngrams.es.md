@@ -13,7 +13,7 @@ Excepciones:
 
 - `ParameterError` - un `n` que no es un entero de al menos uno, un `lowercase` o un `within_words` que no es un `bool`.
 
-La clase extiende el `CharNgramsExtractor` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/extractors/char_ngrams/) con el gancho del español: su tokenizador de palabras por defecto para `within_words`, el método `tokenize(text)`, es el tokenizador por defecto de [`WordsExtractor`](words.md), el tokenizador por reglas de la clase de idioma español de [spaCy](https://github.com/explosion/spaCy) `ests.utils.tokenize`. La lista de N-gramas se pasa a [`delta`](../corpus/stylometry.md) como unidades del texto en lugar de las palabras.
+La clase extiende el `CharNgramsExtractor` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/extractors/char_ngrams/) con el gancho del español: su tokenizador de palabras por defecto para `within_words`, el método `tokenize(text)`, es el tokenizador por defecto de [`WordsExtractor`](words.md), los tokens del segmentador [anySeg](https://github.com/SergeyShk/anySeg) (`ests.utils.iter_tokens`). La lista de N-gramas se pasa a [`delta`](../corpus/stylometry.md) como unidades del texto en lugar de las palabras.
 
 === "Código"
 

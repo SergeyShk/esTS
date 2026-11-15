@@ -268,7 +268,8 @@ def corpus_features(
     Raises:
         SourceTypeError: If the texts are not a list of strings, or the features are not a
             function or give no mapping of numbers by name
-        SourceError: If the corpus has no window of enough words
+        SourceError: If the corpus has no window of enough words, or a text has a
+            character without a UTF-8 form for the default features
         ParameterError: If the size of a window or min_words is not an integer or is
             below one, or min_words is greater than the window
         DatasetNotFoundError: If the default features need the model and it is not installed
@@ -370,8 +371,8 @@ def compare_corpora(
     Raises:
         SourceTypeError: If the texts are not a list of strings, or the features are not a
             function or give no mapping of numbers by name
-        SourceError: If one of the corpora has no window of enough words or a text has
-            a character without a UTF-8 form
+        SourceError: If one of the corpora has no window of enough words, or a text has a
+            character without a UTF-8 form for the default features
         DatasetNotFoundError: If the default features are read and the model is not
             installed
         ParameterError: If the names of the corpora are not two strings that give

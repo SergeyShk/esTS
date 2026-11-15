@@ -5,8 +5,9 @@ from spacy.attrs import NORM, ORTH
 from spacy.tokens import Doc
 from spacy.util import compile_infix_regex
 
-from ests import BasicStats, CohesionStats
+from ests import BasicStats, CohesionStats, StyleStats, WordsExtractor
 from ests.constants import TOKENIZER_ABBREVIATIONS
+from ests.corpus import kwic, text_features
 from ests.exceptions import DatasetNotFoundError, SourceError, SourceTypeError
 from ests.utils import (
     add_dash_rules,
@@ -16,7 +17,7 @@ from ests.utils import (
     iter_tokens,
     lemmatize,
 )
-from ests.visualizers import sentence_lengths
+from ests.visualizers import highlight, sentence_lengths
 
 
 def split_sents(text):
@@ -344,16 +345,31 @@ def test_tokens_dialogue_dashes(text, expected):
     assert split_tokens(text) == expected
 
 
-@pytest.mark.parametrize(
-    "abbreviation", ["sr.", "dña.", "pág.", "núm.", "etc.", "p. ej.", "a.m.", "ee. uu."]
-)
+ABBREVIATIONS = ["sr.", "dña.", "pág.", "núm.", "etc.", "p. ej.", "a.m.", "ee. uu."]
+
+
+@pytest.mark.parametrize("abbreviation", ABBREVIATIONS)
 def test_abbreviation_case(abbreviation):
-    """An abbreviation is whole in lower case, capitalized and in capitals before capitals"""
+    """An abbreviation is whole in lower case and capitalized"""
     capitalized = abbreviation[:1].upper() + abbreviation[1:]
     assert split_tokens(f"de {abbreviation} y") == ["de", *abbreviation.split(), "y"]
     assert split_tokens(f"de {capitalized} y") == ["de", *capitalized.split(), "y"]
-    if abbreviation == "ee. uu.":
-        pytest.xfail("anySeg 0.3 splits the period of UU. in capitals")
+
+
+@pytest.mark.parametrize(
+    "abbreviation",
+    [
+        pytest.param(
+            abbreviation,
+            marks=pytest.mark.xfail(strict=True, reason="anySeg 0.3 splits UU. in capitals"),
+        )
+        if abbreviation == "ee. uu."
+        else abbreviation
+        for abbreviation in ABBREVIATIONS
+    ],
+)
+def test_abbreviation_in_capitals(abbreviation):
+    """An abbreviation in capitals is whole before capitals"""
     upper = abbreviation.upper()
     assert split_tokens(f"DE {upper} ESTO") == ["DE", *upper.split(), "ESTO"]
 
@@ -605,7 +621,25 @@ def test_lone_surrogate():
     assert list(iter_text_sents(text)) == [(0, 13, "Hola \ud800 mundo."), (14, 19, "Otra.")]
 
 
-def test_lone_surrogate_of_a_model():
+def test_lone_surrogate_lemma():
+    """A word with a lone surrogate is its own lemma, as simplemma cannot read it"""
+    assert lemmatize("\ud800") == "\ud800"
+    text = "Hola \ud800 mundo. El gato duerme."
+    assert WordsExtractor(use_lexemes=True).extract(text)[1] == "\ud800"
+    assert [line.keyword for line in kwic(text, "gato", by_lemma=True)] == ["gato"]
+    assert highlight(text).text == text
+
+
+@pytest.mark.parametrize(
+    "parse",
+    [
+        CohesionStats,
+        lambda text: StyleStats(text).verbal_nouns,
+        text_features,
+    ],
+    ids=["CohesionStats", "StyleStats.verbal_nouns", "text_features"],
+)
+def test_lone_surrogate_of_a_model(parse):
     """The model of spaCy cannot read a character without a UTF-8 form"""
     with pytest.raises(SourceError, match="without a UTF-8 form at 5"):
-        CohesionStats("Hola \ud800 mundo")
+        parse("Hola \ud800 mundo")

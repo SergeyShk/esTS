@@ -43,6 +43,18 @@ def test_kwic_by_case():
     ]
 
 
+@pytest.mark.parametrize("ignore_case", [True, False])
+def test_kwic_abbreviation_of_a_doc(ignore_case):
+    """An abbreviation of a keyword is found in a Doc with or without folding the case"""
+    doc = get_nlp()("El Sr. García vino y vio la Pág. 5.")
+    for keyword in ("Sr.", "Sr. García", "Pág. 5"):
+        assert [line.keyword for line in kwic(doc, keyword, ignore_case=ignore_case)] == [keyword]
+        assert [line.keyword for line in kwic(doc.text, keyword, ignore_case=ignore_case)] == [
+            keyword
+        ]
+    assert kwic(doc, "sr.", ignore_case=False) == []
+
+
 def test_kwic_by_lemma():
     assert [line.keyword for line in kwic(text, "gato", by_lemma=True)] == [
         "gato",
