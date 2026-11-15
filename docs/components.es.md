@@ -71,7 +71,7 @@ Un componente lee el `Doc` de su pipeline tal cual y no toca su tokenizador: las
 | [`PhonStatsComponent`](#PhonStatsComponent) | `ests_phon` | [`PhonStats`](stats/phon_stats.md) | `window_len` |
 | [`VerseStatsComponent`](#VerseStatsComponent) | `ests_verse` | [`VerseStats`](stats/verse_stats.md) | `seseo` |
 
-Las estadísticas básicas, de legibilidad, de diversidad, fonéticas y del verso y las fórmulas de otros idiomas no necesitan ninguna anotación de un modelo. En el pipeline de `es_core_news_sm` las categorías gramaticales vienen del `morphologizer` (o de un `tagger` con un `attribute_ruler`; un `tagger` solo no las da), el análisis del `parser` y los lemas del `lemmatizer`. Un componente al que le falta la anotación, también con componentes `excluded`, lanza `SourceError` cuando el documento pasa por él; `ests_lexical` solo necesita las categorías gramaticales, y `ests_style` lanza el error cuando se lee `verbal_nouns` o `markers()`.
+Las estadísticas básicas, de legibilidad, de diversidad, fonéticas y del verso y las fórmulas de otros idiomas no necesitan ninguna anotación de un modelo. En el pipeline de [`load_pipeline`](#load_pipeline) las categorías gramaticales, los rasgos y los lemas vienen del componente `esmorph` de [esMorph](https://github.com/SergeyShk/esMorph) y el análisis del `parser` del modelo; en el pipeline del propio `es_core_news_sm` vienen del `morphologizer` (o de un `tagger` con un `attribute_ruler`; un `tagger` solo no las da) y del `lemmatizer`. Un componente al que le falta la anotación, también con componentes `excluded`, lanza `SourceError` cuando el documento pasa por él; `ests_lexical` solo necesita las categorías gramaticales, y `ests_style` lanza el error cuando se lee `verbal_nouns` o `markers()`.
 
 ### Estadísticas básicas { #BasicStatsComponent }
 
@@ -209,7 +209,7 @@ MorphStatsComponent(nlp, name)
 <!-- core: components.md:MorphStatsComponent 5d99bc4 -->
 `MorphStatsComponent` pone las estadísticas morfológicas en la extensión; por defecto necesitan las categorías gramaticales antes de él.
 
-En esTS el pipeline necesita además un `lemmatizer` antes del componente; la fábrica requiere `token.pos` y `token.lemma`, así que `nlp.analyze_pipes()` señala un pipeline sin alguno de ellos.
+En esTS el pipeline necesita además los lemas antes del componente, de `esmorph` o de un `lemmatizer`; la fábrica requiere `token.pos` y `token.lemma`, así que `nlp.analyze_pipes()` señala un pipeline sin alguno de ellos.
 
 Excepciones:
 
@@ -238,7 +238,7 @@ SyntaxStatsComponent(nlp, name)
 <!-- core: components.md:SyntaxStatsComponent f99599b -->
 `SyntaxStatsComponent` pone las estadísticas sintácticas en la extensión; necesitan un parser y las categorías gramaticales antes de él.
 
-En esTS necesitan también un `lemmatizer` antes de él; la fábrica requiere `token.dep`, `token.head`, `token.pos` y `token.lemma`, así que `nlp.analyze_pipes()` señala un pipeline sin alguno de ellos.
+En esTS necesitan también los lemas antes de él, de `esmorph` o de un `lemmatizer`; la fábrica requiere `token.dep`, `token.head`, `token.pos` y `token.lemma`, así que `nlp.analyze_pipes()` señala un pipeline sin alguno de ellos.
 
 Excepciones:
 
@@ -275,7 +275,7 @@ Excepciones:
 | :-------- | :--- | :---------- | :---------- |
 | `blank_lines` | `bool` | `False` | Empezar los párrafos solo tras las líneas en blanco, para un texto con líneas cortadas dentro de sus párrafos; por defecto, tras cada salto de línea |
 
-En el pipeline de `es_core_news_sm` las categorías gramaticales y los lemas vienen del `morphologizer` y del `lemmatizer`; la fábrica requiere `token.pos` y `token.lemma`, así que `nlp.analyze_pipes()` señala un pipeline sin alguno de ellos, y un documento sin ellos lanza `SourceError`. Los textos de [`SpanishLiterature`](datasets/spanishliterature.md) tienen las líneas cortadas dentro de sus párrafos y necesitan `blank_lines`.
+En el pipeline de `load_pipeline` las categorías gramaticales y los lemas vienen de `esmorph`, en el de `es_core_news_sm`, del `morphologizer` y del `lemmatizer`; la fábrica requiere `token.pos` y `token.lemma`, así que `nlp.analyze_pipes()` señala un pipeline sin alguno de ellos, y un documento sin ellos lanza `SourceError`. Los textos de [`SpanishLiterature`](datasets/spanishliterature.md) tienen las líneas cortadas dentro de sus párrafos y necesitan `blank_lines`.
 
 === "Código"
 
@@ -306,7 +306,7 @@ LexicalStatsComponent(nlp, name, data_dir=None)
 <!-- core: components.md:LexicalStatsComponent 5077aef -->
 `LexicalStatsComponent` pone en la extensión las estadísticas de complejidad léxica, con el diccionario de frecuencias de su atributo `freq_dict`: `None` por defecto, para el diccionario de la clase, y fijado por una biblioteca antes del constructor del núcleo; una clase sin diccionario propio y sin `freq_dict` lanza `ParameterError` al crearse el componente. Un documento recibe las estadísticas cuando tiene un token con una letra o una cifra (`has_words`) que no es un número del método `is_number`, `anyts.utils.is_number` por defecto; una biblioteca da los números que su clase deja fuera, así que un documento solo de números pasa intacto.
 
-En esTS `freq_dict` es el [diccionario de frecuencias](datasets/freqdict.md) `FreqDict` del directorio `data_dir`, e `is_number` toma los números del `NUMBER_PATTERN` del español (`2020`, `1.500,50`, `3.º`). El pipeline necesita un `morphologizer` antes del componente, y la fábrica requiere `token.pos`; los lemas del modelo no se usan. Las bandas de frecuencia y la densidad léxica se calculan sin el diccionario, las estadísticas por el diccionario lo necesitan descargado.
+En esTS `freq_dict` es el [diccionario de frecuencias](datasets/freqdict.md) `FreqDict` del directorio `data_dir`, e `is_number` toma los números del `NUMBER_PATTERN` del español (`2020`, `1.500,50`, `3.º`). El pipeline necesita las categorías gramaticales antes del componente, de `esmorph` o de un `morphologizer`, y la fábrica requiere `token.pos`; los lemas del modelo no se usan. Las bandas de frecuencia y la densidad léxica se calculan sin el diccionario, las estadísticas por el diccionario lo necesitan descargado.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
@@ -354,7 +354,7 @@ Excepciones:
 
 - `ParameterError` - palabras vacías, palabras vacías de la náusea o clichés que no son una lista de cadenas, un `top_n` que no es un entero de al menos uno.
 
-Sin las listas, el contenido de agua toma las palabras vacías de `STOPWORDS` y las expresiones parentéticas de una palabra, la náusea académica deja fuera las palabras de `is_stopword`, y los clichés vienen de `OFFICIALESE_CLICHES`; `NAUSEA_TOP_N` es una constante de `anyts.constants`. Los sustantivos deverbales necesitan un `morphologizer` y un `lemmatizer` antes del componente, y sin ellos leer `verbal_nouns`, `markers()` o `get_stats()` lanza `SourceError`; las demás métricas solo leen las palabras.
+Sin las listas, el contenido de agua toma las palabras vacías de `STOPWORDS` y las expresiones parentéticas de una palabra, la náusea académica deja fuera las palabras de `is_stopword`, y los clichés vienen de `OFFICIALESE_CLICHES`; `NAUSEA_TOP_N` es una constante de `anyts.constants`. Los sustantivos deverbales necesitan las categorías gramaticales y los lemas antes del componente, de `esmorph` o de un `morphologizer` y un `lemmatizer`, y sin ellos leer `verbal_nouns`, `markers()` o `get_stats()` lanza `SourceError`; las demás métricas solo leen las palabras.
 
 === "Código"
 
@@ -439,7 +439,7 @@ Excepciones:
 load_pipeline(model='es_core_news_sm', exclude=(), **kwargs)
 ```
 
-Un modelo de spaCy con el tokenizador `anyseg.Tokenizer.v1` y el componente `anyseg_sentencizer` en primer lugar, ambos de [anySeg](https://github.com/SergeyShk/anySeg): los tokens y las oraciones de un `Doc` son los que los [extractores](extractors/sentences.md) dan a su texto, así que las estadísticas de un `Doc` y de la cadena cuentan las mismas palabras y oraciones. Las etiquetas, los lemas, el analizador sintáctico y los demás componentes son los del modelo. Una contracción (`del`, `al`) es un token, con sus palabras en `token._.anyseg_words`. Un pipeline guardado se carga con `spacy.load(path)`, ya que las fábricas de anySeg son puntos de entrada. `ests.utils.get_nlp`, que analiza las cadenas de las estadísticas morfológicas, sintácticas, de cohesión, léxicas y de estilo, lo carga una vez por proceso y modelo.
+Un modelo de spaCy con el tokenizador `anyseg.Tokenizer.v1` y el componente `anyseg_sentencizer` en primer lugar, ambos de [anySeg](https://github.com/SergeyShk/anySeg): los tokens y las oraciones de un `Doc` son los que los [extractores](extractors/sentences.md) dan a su texto, así que las estadísticas de un `Doc` y de la cadena cuentan las mismas palabras y oraciones. Tras `anyseg_sentencizer` va el componente `esmorph` de [esMorph](https://github.com/SergeyShk/esMorph), en lugar del `morphologizer` y del `lemmatizer` del modelo: las categorías gramaticales, los rasgos y los lemas de un `Doc` son los de una cadena, elegidos en el contexto de la oración, mientras que el analizador sintáctico, cuyos árboles no dependen de las categorías gramaticales, y los demás componentes son los del modelo. Una contracción (`del`, `al`) o un verbo con clíticos (`dámelo`) es un token con el análisis de su primera palabra (`de`, `dar`), con sus palabras en `token._.anyseg_words`; una cadena las cuenta como palabras aparte, así que las estadísticas morfológicas y léxicas de un `Doc` y de su cadena difieren un poco. Un pipeline guardado se carga con `spacy.load(path)`, ya que las fábricas de anySeg y de esMorph son puntos de entrada. `ests.utils.get_nlp`, que analiza las cadenas de las estadísticas morfológicas, sintácticas, de cohesión, léxicas y de estilo, lo carga una vez por proceso y modelo.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |

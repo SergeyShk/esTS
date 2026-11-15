@@ -210,8 +210,9 @@ class MorphStatsComponent(anyts.components.MorphStatsComponent):
     Class for the component of the morphological statistics of a text
 
     Description:
-        Puts a MorphStats object into doc._.<name>; needs a morphologizer (or
-        a tagger with an attribute ruler) and a lemmatizer before it
+        Puts a MorphStats object into doc._.<name>; needs the parts of speech
+        and the lemmas before it (esmorph of load_pipeline, or a morphologizer
+        and a lemmatizer)
 
     Adding the component to a pipeline:
         >>> import ests
@@ -241,8 +242,9 @@ class SyntaxStatsComponent(anyts.components.SyntaxStatsComponent):
     Class for the component of the syntactic statistics of a text
 
     Description:
-        Puts a SyntaxStats object into doc._.<name>; needs a parser, a
-        morphologizer and a lemmatizer before it
+        Puts a SyntaxStats object into doc._.<name>; needs a parser, the parts
+        of speech and the lemmas before it (esmorph of load_pipeline, or a
+        morphologizer and a lemmatizer)
 
     Adding the component to a pipeline:
         >>> import ests
@@ -272,8 +274,9 @@ class CohesionStatsComponent(anyts.components.CohesionStatsComponent):
     Class for the component of the cohesion statistics of a text
 
     Description:
-        Puts a CohesionStats object into doc._.<name>; needs a morphologizer (or
-        a tagger with an attribute ruler) and a lemmatizer before it
+        Puts a CohesionStats object into doc._.<name>; needs the parts of speech
+        and the lemmas before it (esmorph of load_pipeline, or a morphologizer
+        and a lemmatizer)
 
     Adding the component to a pipeline:
         >>> import ests
@@ -313,9 +316,9 @@ class LexicalStatsComponent(anyts.components.LexicalStatsComponent):
     Class for the component of the lexical sophistication statistics of a text
 
     Description:
-        Puts a LexicalStats object into doc._.<name>; needs a morphologizer (or
-        a tagger with an attribute ruler) before it, and the statistics by the
-        frequency dictionary need it downloaded
+        Puts a LexicalStats object into doc._.<name>; needs the parts of speech
+        before it (esmorph of load_pipeline, or a morphologizer), and the
+        statistics by the frequency dictionary need it downloaded
 
     Adding the component to a pipeline:
         >>> import ests
@@ -365,8 +368,9 @@ class StyleStatsComponent(anyts.components.StyleStatsComponent):
     Class for the component of the style metrics of a text
 
     Description:
-        Puts a StyleStats object into doc._.<name>; the verbal nouns need
-        a morphologizer and a lemmatizer before it
+        Puts a StyleStats object into doc._.<name>; the verbal nouns need the
+        parts of speech and the lemmas before it (esmorph of load_pipeline, or a
+        morphologizer and a lemmatizer)
 
     Adding the component to a pipeline:
         >>> import ests

@@ -263,7 +263,7 @@ LexicalStatsComponent(nlp, name, data_dir=None)
 
 --8<-- "components.md:LexicalStatsComponent"
 
-In esTS `freq_dict` is the [frequency dictionary](datasets/freqdict.md) `FreqDict` of the directory `data_dir`, and `is_number` takes the numbers of the Spanish `NUMBER_PATTERN` (`2020`, `1.500,50`, `3.º`). The pipeline needs a `morphologizer` before the component, and the factory requires `token.pos`; the lemmas of the model are not used. The frequency bands and the lexical density are computed without the dictionary, the statistics by the dictionary need it downloaded.
+In esTS `freq_dict` is the [frequency dictionary](datasets/freqdict.md) `FreqDict` of the directory `data_dir`, and `is_number` takes the numbers of the Spanish `NUMBER_PATTERN` (`2020`, `1.500,50`, `3.º`). The pipeline needs the parts of speech before the component, of `esmorph` or of a `morphologizer`, and the factory requires `token.pos`; the lemmas of the model are not used. The frequency bands and the lexical density are computed without the dictionary, the statistics by the dictionary need it downloaded.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
@@ -299,7 +299,7 @@ StyleStatsComponent(nlp, name, stopwords=None, top_n=10, nausea_stopwords=None, 
 
 --8<-- "components.md:StyleStatsComponent"
 
-Without the lists the water content takes the stopwords of `STOPWORDS` and the one-word parenthetical expressions, the academic nausea leaves out the words of `is_stopword`, and the clichés come from `OFFICIALESE_CLICHES`; `NAUSEA_TOP_N` is a constant of `anyts.constants`. The verbal nouns need a `morphologizer` and a `lemmatizer` before the component, and without them reading `verbal_nouns`, `markers()` or `get_stats()` raises `SourceError`; the other metrics read the words alone.
+Without the lists the water content takes the stopwords of `STOPWORDS` and the one-word parenthetical expressions, the academic nausea leaves out the words of `is_stopword`, and the clichés come from `OFFICIALESE_CLICHES`; `NAUSEA_TOP_N` is a constant of `anyts.constants`. The verbal nouns need the parts of speech and the lemmas before the component, of `esmorph` or of a `morphologizer` and a `lemmatizer`, and without them reading `verbal_nouns`, `markers()` or `get_stats()` raises `SourceError`; the other metrics read the words alone.
 
 === "Code"
 

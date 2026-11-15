@@ -60,31 +60,27 @@ Galdós against Unamuno, three novels each from the [corpus of literature](../da
 === "Result"
 
     ```
-                      median_Galdós  median_Unamuno  ...    auc  p_holm
-    diversity_mtldw         105.455          66.179  ...  0.994     0.0
-    diversity_mamtld        103.316          64.997  ...  0.990     0.0
-    diversity_mtld          103.655          64.594  ...  0.990     0.0
-    diversity_mattr           0.817           0.769  ...  0.990     0.0
-    diversity_msttr           0.819           0.769  ...  0.989     0.0
-
-    [5 rows x 8 columns]
-                            median_Galdós  median_Unamuno  ...    auc  p_holm
-    basic_letters_per_word          4.441           4.130  ...  0.892     0.0
-    readability_lix                38.321          29.758  ...  0.849     0.0
-    morph_p_gerund                  0.069           0.037  ...  0.862     0.0
-    morph_polarity_Neg              0.019           0.029  ...  0.218     0.0
-    sents_mean                     16.393          11.494  ...  0.808     0.0
-    punct_dash                     19.000          46.000  ...  0.197     0.0
-    punct_exclamation               9.000          24.000  ...  0.181     0.0
-    diversity_yule_k              103.620         112.500  ...  0.325     0.0
-
-    [8 rows x 8 columns]
+                      median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
+    diversity_mtldw         105.455          66.179  37.104   43.799    3.260        0.988  0.994     0.0
+    diversity_mamtld        103.316          64.997  35.107   45.657    3.084        0.981  0.990     0.0
+    diversity_mtld          103.655          64.594  37.536   47.169    3.107        0.981  0.990     0.0
+    diversity_mattr           0.817           0.769   0.046    0.057    2.951        0.979  0.990     0.0
+    diversity_msttr           0.819           0.769   0.047    0.059    2.927        0.979  0.989     0.0
+                            median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
+    basic_letters_per_word          4.441           4.130   0.243    0.358    1.695        0.784  0.892     0.0
+    readability_lix                38.321          29.758   7.140   11.170    1.091        0.698  0.849     0.0
+    morph_p_gerund                  0.069           0.037   0.031    0.033    1.504        0.725  0.862     0.0
+    morph_polarity_Neg              0.019           0.029  -0.011   -0.009   -1.136       -0.564  0.218     0.0
+    sents_mean                     16.393          11.494   3.105    6.818    0.843        0.616  0.808     0.0
+    punct_dash                     19.000          46.000 -39.000  -14.000   -1.287       -0.605  0.197     0.0
+    punct_exclamation               9.000          24.000 -23.000   -2.000   -1.251       -0.637  0.181     0.0
+    diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.675       -0.351  0.325     0.0
     {'n_Galdós': 155, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós has the richer vocabulary: the measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Yule's K, which weighs the frequent words, gives a medium effect (0.35), so the difference lies mostly in the rare vocabulary. His words and sentences are longer, with nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue: two and a half times as many dashes and exclamation marks per 1000 words, and more negations. The cohesion tells them apart as well (`result.filter(like="cohesion_", axis=0)`): per 1000 words Unamuno opens more than three times as many sentences with a connector (`cohesion_connectors_inter`, 20 against 6) - about 2.4 times as many per sentence, his sentences being shorter - and he repeats more of the content words of a sentence in the next two (0.108 against 0.066). Part of the cohesion follows the length of the sentences: Spearman's ρ with `sents_mean` over the windows is 0.76 for Galdós and 0.71 for Unamuno for `cohesion_content_overlap_all`, the binary overlap of all the pairs of sentences, and -0.49 and -0.60 for the connectors opening a sentence, while the share of the content words repeated in the next two sentences is not tied to it (0.01 and 0.02).
+Galdós has the richer vocabulary: the measures built on the number of distinct words - TTR and its transformations, MATTR, MTLD, the hapaxes - tell the authors apart with a delta near or above 0.9, while Yule's K, which weighs the frequent words, gives a medium effect (0.35), so the difference lies mostly in the rare vocabulary. His words and sentences are longer, with nearly twice as many gerunds among the verb forms. Unamuno writes in dialogue: two and a half times as many dashes and exclamation marks per 1000 words, and more negations. The cohesion tells them apart as well (`result.filter(like="cohesion_", axis=0)`): per 1000 words Unamuno opens more than three times as many sentences with a connector (`cohesion_connectors_inter`, 20 against 6) - about 2.3 times as many per sentence, his sentences being shorter - and he repeats more of the content words of a sentence in the next two (0.126 against 0.073). Part of the cohesion follows the length of the sentences: Spearman's ρ with `sents_mean` over the windows is 0.75 for Galdós and 0.74 for Unamuno for `cohesion_content_overlap_all`, the binary overlap of all the pairs of sentences, and -0.49 and -0.61 for the connectors opening a sentence, while the share of the content words repeated in the next two sentences is not tied to it (-0.05 and -0.09).
 
-The p-values take the 272 windows of six novels for independent (see the [warning](#statistics) below), and by the same test two novels of Galdós, *Marianela* and *Misericordia*, differ in 51 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.1 to 6.8 words, where the windows alone would give 4.0 to 6.2.
+The p-values take the 272 windows of six novels for independent (see the [warning](#statistics) below), and by the same test two novels of Galdós, *Marianela* and *Misericordia*, differ in 54 features. The interval of the difference of the medians resamples whole novels and is the safer guide: for the length of a sentence it spans 3.1 to 6.8 words, where the windows alone would give 4.0 to 6.2.
 
 ## Parameters
 
@@ -183,14 +179,12 @@ The syntactic features come with a pipeline that has a parser, passed in a funct
 === "Result"
 
     ```
-                                        median_Galdós  ...  p_holm
-    syntax_gerund_clauses_per_sent              0.148  ...     0.0
-    syntax_complex_nominals_per_clause          0.766  ...     0.0
-    syntax_tree_depth                           3.763  ...     0.0
-    syntax_subtrees_per_sent                    6.800  ...     0.0
-    syntax_t_units_per_sent                     1.074  ...     0.0
-
-    [5 rows x 8 columns]
+                                        median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
+    syntax_gerund_clauses_per_sent              0.148           0.048   0.079    0.118    1.453        0.848  0.924     0.0
+    syntax_complex_nominals_per_clause          0.766           0.520   0.216    0.304    1.132        0.669  0.835     0.0
+    syntax_tree_depth                           3.763           2.888   0.594    1.062    1.078        0.664  0.832     0.0
+    syntax_subtrees_per_sent                    6.800           4.534   1.567    2.917    0.942        0.661  0.830     0.0
+    syntax_t_units_per_sent                     1.074           1.008   0.029    0.150    1.372        0.650  0.825     0.0
     ```
 
 ## Comparison of feature tables { #compare_features }

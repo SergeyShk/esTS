@@ -128,8 +128,8 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
         load_connectors by SpanishConnectorMatcher; si is no conditional
         connector after a verb of CONNECTOR_QUESTION_VERBS (no sé si viene) and
         after an opening ¡ (¡Si ya te lo dije!). A Doc must
-        carry the parts of speech (from a morphologizer, or a tagger with an
-        attribute ruler) and the lemmas
+        carry the parts of speech and the lemmas (from esmorph of
+        load_pipeline, or from a morphologizer and a lemmatizer)
 
     References:
         https://doi.org/10.1017/CBO9780511894664 (McNamara et al. 2014, Coh-Metrix)

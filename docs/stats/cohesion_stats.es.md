@@ -4,7 +4,7 @@
 CohesionStats(source, sents_extractor=None, connectors=None, nlp=None, blank_lines=False)
 ```
 
-Las estadísticas de cohesión de un texto a la manera de [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) y de su adaptación española [Coh-Metrix-Esp](https://aclanthology.org/L16-1745/): la repetición entre las oraciones, la información dada, la cohesión temporal y los conectores de un diccionario. Las oraciones se comparan por lemas. La fuente de datos es un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy), y tiene que estar anotada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, sin las entidades nombradas, y un `Doc` debe llevar las categorías gramaticales, que vienen de un `morphologizer` (o de un `tagger` con un `attribute_ruler`), y los lemas, que vienen de un `lemmatizer`.
+Las estadísticas de cohesión de un texto a la manera de [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) y de su adaptación española [Coh-Metrix-Esp](https://aclanthology.org/L16-1745/): la repetición entre las oraciones, la información dada, la cohesión temporal y los conectores de un diccionario. Las oraciones se comparan por lemas. La fuente de datos es un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy), y tiene que estar anotada: una cadena se analiza con el pipeline de [`load_pipeline`](../components.md#load_pipeline) - [`es_core_news_sm`](../installation.md#model) con los análisis de esMorph - o con el pipeline indicado en `nlp`, sin las entidades nombradas, y un `Doc` debe llevar las categorías gramaticales y los lemas, que vienen de `esmorph` de `load_pipeline` o de un `morphologizer` (o de un `tagger` con un `attribute_ruler`) y de un `lemmatizer`.
 
 Excepciones:
 
@@ -54,20 +54,20 @@ Las palabras se clasifican por la anotación de Universal Dependencies:
     Content word overlap in adjacent sentences                         |   0.33
     Content word overlap in all pairs of sentences                     |   0.50
     Share of shared content words in adjacent sentences                |   0.08
-    Share of shared content words in all pairs of sentences            |   0.12
+    Share of shared content words in all pairs of sentences            |   0.13
     Share of the nouns of a sentence repeated in the next two          |   0.60
     Share of the arguments of a sentence repeated in the next two      |   0.60
     Share of the content words of a sentence repeated in the next two  |   0.38
     Share of the nouns of a paragraph repeated in the next one         |   nan
     Share of the arguments of a paragraph repeated in the next one     |   nan
     Share of the content words of a paragraph repeated in the next one |   nan
-    Share of pronouns                                                  |   0.03
-    Ratio of pronouns to nouns                                         |   0.09
-    Share of demonstratives                                            |   0.00
-    Share of content words seen before                                 |   0.18
-    Repetition of the tense in adjacent sentences                      |   0.00
+    Share of pronouns                                                  |   0.07
+    Ratio of pronouns to nouns                                         |   0.25
+    Share of demonstratives                                            |   0.03
+    Share of content words seen before                                 |   0.20
+    Repetition of the tense in adjacent sentences                      |   0.67
     Repetition of the mood in adjacent sentences                       |   1.00
-    Temporal cohesion                                                  |   0.50
+    Temporal cohesion                                                  |   0.83
     Connectors per 1000 words                                          |  103.45
     Connectors linking a sentence to the ones before per 1000 words    |  103.45
     Connectors linking the parts of a sentence per 1000 words          |   0.00
@@ -121,7 +121,7 @@ El extractor indicado se guarda en el atributo `sents_extractor`, `None` sin él
 
     ```
     ('sin', 'embargo', 'el', 'informe', 'no', 'resolver', 'el', 'problema')
-    (11, 1, 17, 3)
+    (8, 2, 15, 3)
     (Connector(sent=1, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary'),
      Connector(sent=2, start=0, end=2, text='es decir', cls='reformulative', kind='secondary'),
      Connector(sent=3, start=0, end=3, text='por lo tanto', cls='causal', kind='secondary'))
@@ -371,20 +371,20 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
      'content_overlap_adjacent': 0.3333333333333333,
      'content_overlap_all': 0.5,
      'content_overlap_prop_adjacent': 0.08333333333333333,
-     'content_overlap_prop_all': 0.12037037037037035,
+     'content_overlap_prop_all': 0.13095238095238093,
      'noun_overlap_2_sent': 0.6,
      'argument_overlap_2_sent': 0.6,
      'content_overlap_2_sent': 0.375,
      'noun_overlap_para': nan,
      'argument_overlap_para': nan,
      'content_overlap_para': nan,
-     'p_pronouns': 0.034482758620689655,
-     'pronoun_noun_ratio': 0.09090909090909091,
-     'p_demonstratives': 0.0,
-     'p_given': 0.17647058823529413,
-     'tense_repetition': 0.0,
+     'p_pronouns': 0.06896551724137931,
+     'pronoun_noun_ratio': 0.25,
+     'p_demonstratives': 0.034482758620689655,
+     'p_given': 0.2,
+     'tense_repetition': 0.6666666666666666,
      'mood_repetition': 1.0,
-     'temporal_cohesion': 0.5,
+     'temporal_cohesion': 0.8333333333333333,
      'connectors': 103.44827586206898,
      'connectors_inter': 103.44827586206898,
      'connectors_intra': 0.0,
@@ -414,7 +414,7 @@ Excepciones:
 - `SourceTypeError` - un diccionario que no es una correspondencia de una locución a un par de cadenas;
 - `ParameterError` - una clase o un tipo desconocidos.
 
-`SpanishConnectorMatcher` es una subclase del `ConnectorMatcher` del núcleo con las reglas del español; las palabras y los conectores se comparan en minúscula. Un conector de una palabra lleva una categoría de `CONNECTOR_POS` - conjunción, partícula, adverbio, adposición, interjección, nombre propio o `X` - o de `CONNECTOR_POS_EXTRA` para su forma (`pues` y `verbigracia` como `NOUN`, `resumiendo`, `recapitulando` y `concluyendo` como `VERB`). No es conector justo tras un determinante, así que `el antes y el después` lleva un conector, `y`, y no tres; y como nombre propio cuenta solo al principio de la oración, donde los modelos leen así un marcador (`Primeramente`), de modo que el apellido de `Habló con Juan Luego ayer` no es conector. Un marcador que forma parte de otra locución se descarta: las palabras que lo siguen de `CONNECTOR_BLOCKED_AFTER` (`antes de la reunión`, `en cuanto a`, `a pesar de todo lo que`), las que lo preceden de `CONNECTOR_BLOCKED_BEFORE` (`algo así como`, `como si fuera`) y las categorías de la palabra siguiente de `CONNECTOR_BLOCKED_AFTER_POS` (`sobre todo el texto`, `a pesar de todo el esfuerzo`) lo anulan, mientras que `antes, firmó el acta` y `sobre todo cuando llueve` cuentan su marcador. Algunos marcadores dependen de su lugar: `pues` al principio de la oración abre una réplica (`Pues bien`) y no es conector (`CONNECTOR_NOT_AT_START`), y `encima` cuenta dentro de la oración solo tras `y`, `e`, `ni` o `pero` (`y encima llueve`, `CONNECTOR_ONLY_AFTER`). Estas listas son atributos del buscador: `CONNECTOR_POS` es `pos_tags`, las demás se llaman sin `CONNECTOR_` en minúscula (`CONNECTOR_BLOCKED_AFTER` es `blocked_after`); `not_after_pos` es el determinante `DET`, `start_only_pos` el nombre propio `PROPN`, y `read_through_marks` está vacío en esTS. Un signo de puntuación dentro de una locución conjuntiva que acaba en `que`, `como` o `si` (`CONNECTOR_SPLIT_BY_MARKS`) hace de la conjunción una palabra aparte, así que `No tire así, que se romperá` y `lo de siempre, que...` no tienen conector; las locuciones consecutivas con `de modo`, `de manera`, `de forma` o `de suerte` (`de modo que`, `de tal manera que`) y `bien es verdad que` quedan fuera, porque los textos antiguos ponen una coma antes de su `que` (`de tal modo, que`).
+`SpanishConnectorMatcher` es una subclase del `ConnectorMatcher` del núcleo con las reglas del español; las palabras y los conectores se comparan en minúscula. Un conector de una palabra lleva una categoría de `CONNECTOR_POS` de `anyts.constants` - conjunción, partícula, adverbio, adposición, interjección o `X` - o de `CONNECTOR_POS_EXTRA` para su forma (`resumiendo`, `recapitulando` y `concluyendo` como `VERB`). No es conector justo tras un determinante, así que `el antes y el después` lleva un conector, `y`, y no tres. Un marcador que forma parte de otra locución se descarta: las palabras que lo siguen de `CONNECTOR_BLOCKED_AFTER` (`antes de la reunión`, `en cuanto a`, `a pesar de todo lo que`), las que lo preceden de `CONNECTOR_BLOCKED_BEFORE` (`algo así como`, `como si fuera`) y las categorías de la palabra siguiente de `CONNECTOR_BLOCKED_AFTER_POS` (`sobre todo el texto`, `a pesar de todo el esfuerzo`) lo anulan, mientras que `antes, firmó el acta` y `sobre todo cuando llueve` cuentan su marcador. Algunos marcadores dependen de su lugar: `pues` al principio de la oración abre una réplica (`Pues bien`) y no es conector (`CONNECTOR_NOT_AT_START`), y `encima` cuenta dentro de la oración solo tras `y`, `e`, `ni` o `pero` (`y encima llueve`, `CONNECTOR_ONLY_AFTER`). Estas listas son atributos del buscador: `CONNECTOR_POS` es `pos_tags`, las demás se llaman sin `CONNECTOR_` en minúscula (`CONNECTOR_BLOCKED_AFTER` es `blocked_after`); `not_after_pos` es el determinante `DET`, y `start_only_pos` y `read_through_marks` están vacío en esTS. Un signo de puntuación dentro de una locución conjuntiva que acaba en `que`, `como` o `si` (`CONNECTOR_SPLIT_BY_MARKS`) hace de la conjunción una palabra aparte, así que `No tire así, que se romperá` y `lo de siempre, que...` no tienen conector; las locuciones consecutivas con `de modo`, `de manera`, `de forma` o `de suerte` (`de modo que`, `de tal manera que`) y `bien es verdad que` quedan fuera, porque los textos antiguos ponen una coma antes de su `que` (`de tal modo, que`).
 
 <!-- core: stats/cohesion_stats.md:ConnectorMatcher-find 8e0022c -->
 `find(words, sent_index, pos, breaks, blocked)` devuelve las apariciones de los conectores en una oración en el orden de sus palabras. Las palabras son las de una oración sin puntuación, la primera su inicio. Con las categorías gramaticales, un conector de una palabra cuenta solo con una de `pos_tags` o de `pos_extra` para su forma, nunca tras una de `not_after_pos`, y con una de `start_only_pos` solo al principio de la oración; una palabra sin categoría (`None`) pasa. Sin las categorías gramaticales se omiten las reglas que las leen. Las posiciones de los signos de puntuación `breaks` separan un conector de sus vecinas: una regla no lee una palabra a través de un signo, así que en *so, the end* la palabra tras la coma ni bloquea el conector ni le deja contar, salvo que el conector sea uno de `read_through_marks`, y un signo entre las palabras de un conector de `split_by_marks` lo anula; sin ellas las palabras se leen como contiguas. Ningún conector empieza en una palabra de `blocked`, que una lengua descarta por algo más que las palabras y sus categorías gramaticales, como su análisis sintáctico.
@@ -538,7 +538,7 @@ Los rasgos de una palabra del árbol (`TreeWord` del núcleo [anyTS](https://ser
 is_connector_blocked(token)
 ```
 
-Comprueba si ningún conector empieza en una palabra del árbol por las palabras que la preceden: un `si` que no abre ninguna condición. Es así tras un verbo de `CONNECTOR_QUESTION_VERBS` - `saber`, `ver`, `mirar`, `preguntar`, `dudar`, `ignorar`, `pensar`, `averiguar`, `probar`, `comprobar`, `observar`, `examinar`, `determinar`, `decidir`, `considerar`, `consultar`, `investigar`, `adivinar`, y los del estilo administrativo `indicar`, `señalar`, `especificar`, `precisar`, `verificar`, `confirmar`, `aclarar`, `valorar`, `evaluar`, `analizar`, `establecer`, `desconocer`, `manifestar`, `constar` - etiquetado `VERB` o `AUX`, por el lema del modelo sin su pronombre enclítico o por el de `ests.utils.lemmatize` (`no sé si vendrá`, `a ver si llega`, `preguntó si tenía hambre`, `preguntándose si`, `la comisión valorará si`), o una palabra que el modelo lee como un nombre propio o común, por el lema de `lemmatize` (`Indique si desea...`, `Indíquenos si acepta...`), salvo que el verbo tenga antes de `si` el complemento que llenaría la interrogativa, de modo que `si` es una condición: un clítico de objeto al final (`indíquelo si es necesario`), un complemento directo que no sea uno de los dativos `le` y `les` que el modelo etiqueta así (`lo veré si tengo tiempo`, mientras que `le preguntaré si puede venir` es una interrogativa), o el sujeto de una pasiva con `se` o de `constar` (`la solicitud se valorará si cumple los requisitos`), sin contar el `se` pronominal de `preguntar` (`el juez se preguntaba si...`); y tras un `¡` de apertura (`¡Si ya te lo dije!`). En una muestra de la literatura la regla de los verbos acertó en todos los casos revisados, la de `¡` en unos nueve de cada diez; de 22 interrogativas indirectas del estilo administrativo toma 18, y ninguna de 7 condiciones. `informar`, `comunicar` y `estudiar` quedan fuera: tras ellos `si` abre a menudo una condición (`le informaremos si hay cambios`). `CohesionStats` fija con ella el `connector_blocked` de las palabras del núcleo, y la capa [`connectors`](../visualizers/highlight.md) del resaltado descarta los mismos `si`; sin las categorías gramaticales, como en una cadena que el modelo no analiza, solo se conoce el `si` tras `¡`.
+Comprueba si ningún conector empieza en una palabra del árbol por las palabras que la preceden: un `si` que no abre ninguna condición. Es así tras un verbo de `CONNECTOR_QUESTION_VERBS` - `saber`, `ver`, `mirar`, `preguntar`, `dudar`, `ignorar`, `pensar`, `averiguar`, `probar`, `comprobar`, `observar`, `examinar`, `determinar`, `decidir`, `considerar`, `consultar`, `investigar`, `adivinar`, y los del estilo administrativo `indicar`, `señalar`, `especificar`, `precisar`, `verificar`, `confirmar`, `aclarar`, `valorar`, `evaluar`, `analizar`, `establecer`, `desconocer`, `manifestar`, `constar` - etiquetado `VERB` o `AUX`, por su lema (`no sé si vendrá`, `a ver si llega`, `preguntó si tenía hambre`, `preguntándose si`, `la comisión valorará si`), o una palabra que el etiquetador lee como un nombre propio o común, por el lema de `ests.utils.lemmatize` (`Indique si desea...`, `Indíquenos si acepta...`), salvo que el verbo tenga antes de `si` el complemento que llenaría la interrogativa, de modo que `si` es una condición: un clítico de objeto al final (`indíquelo si es necesario`), un complemento directo que no sea uno de los dativos `le` y `les` que el modelo etiqueta así (`lo veré si tengo tiempo`, mientras que `le preguntaré si puede venir` es una interrogativa), o el sujeto de una pasiva con `se` o de `constar` (`la solicitud se valorará si cumple los requisitos`), sin contar el `se` pronominal de `preguntar` (`el juez se preguntaba si...`); y tras un `¡` de apertura (`¡Si ya te lo dije!`). En una muestra de la literatura la regla de los verbos acertó en todos los casos revisados, la de `¡` en unos nueve de cada diez; de 22 interrogativas indirectas del estilo administrativo toma 18, y ninguna de 7 condiciones. `informar`, `comunicar` y `estudiar` quedan fuera: tras ellos `si` abre a menudo una condición (`le informaremos si hay cambios`). `CohesionStats` fija con ella el `connector_blocked` de las palabras del núcleo, y la capa [`connectors`](../visualizers/highlight.md) del resaltado descarta los mismos `si`; sin las categorías gramaticales, como en una cadena que el modelo no analiza, solo se conoce el `si` tras `¡`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |

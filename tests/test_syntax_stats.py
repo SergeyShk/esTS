@@ -587,6 +587,15 @@ def test_predicate_form_of_an_auxiliary_without_a_form(nlp, auxiliary, form):
     assert predicate_form(tree(doc)[1]) == form
 
 
+def test_auxiliary_form_of_an_infinitive_read_as_a_noun(nlp):
+    """The tagger can read an infinitive auxiliary as a noun without a verb form (el ser)"""
+    doc = nlp("Me valió el ser saludado por todos.")
+    ss = SyntaxStats(doc)
+    (word,) = [word for word in tree(doc) if word.form == "ser"]
+    assert word.upos == "NOUN" and "VerbForm" not in word.feats
+    assert ss.auxiliary_form(word) == "Inf"
+
+
 @pytest.mark.parametrize(
     ("words", "heads", "deps", "morphs", "form", "clause"),
     [
