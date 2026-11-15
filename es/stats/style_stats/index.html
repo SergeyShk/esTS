@@ -2259,12 +2259,12 @@
 <h1 id="metricas-de-estilo">Métricas de estilo<a class="headerlink" href="#metricas-de-estilo" title="Permanent link">&para;</a></h1>
 <div class="signature highlight"><pre><span></span><code><span class="n">StyleStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cliches</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nausea_stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: stats/style_stats.md:StyleStats 145407f -->
-<p>Las métricas de estilo de un texto: las métricas SEO de Advego y Text.ru y los marcadores del estilo burocrático. Los servicios no publican sus fórmulas, así que se toman las definiciones comunes. La fuente de datos es un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>.</p>
-<p>Las métricas SEO se cuentan sobre las palabras del extractor de palabras, en minúsculas por defecto, o sobre los tokens de un <code>Doc</code>; un extractor pasado explícitamente se aplica al texto de un <code>Doc</code>. Los marcadores se cuentan sobre las formas en minúsculas (<code>forms</code>), sea cual sea el extractor.</p>
+<!-- core: stats/style_stats.md:StyleStats 8cd38b0 -->
+<p>Las métricas de estilo de un texto: las métricas SEO de Advego y Text.ru y los marcadores del estilo burocrático. Los servicios no publican sus fórmulas, así que se toman las definiciones comunes. La fuente de datos es un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> o un <code>Document</code> de <a href="https://github.com/SergeyShk/anySeg">anySeg</a>.</p>
+<p>Las métricas SEO se cuentan sobre las palabras del <a href="https://sergeyshk.github.io/anyTS/document/">documento</a> de la fuente en minúsculas (<code>doc_words</code>), o sobre las de un extractor pasado explícitamente, que se aplica al texto. Los marcadores se cuentan sobre las palabras del documento (<code>forms</code>), sea cual sea el extractor.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - una fuente que no es ni una cadena ni un <code>Doc</code>, un extractor de otro tipo, una lista que no es una lista de cadenas;</li>
+<li><code>SourceTypeError</code> - una fuente que no es ni una cadena, ni un <code>Doc</code>, ni un <code>Document</code>, un <code>parse</code> que no devuelve un <code>Document</code>, un <code>doc_words</code> que no devuelve una secuencia de cadenas, un extractor de otro tipo, una lista que no es una lista de cadenas;</li>
 <li><code>SourceError</code> - una fuente sin palabras;</li>
 <li><code>ParameterError</code> - un <code>top_n</code> que no es un entero de al menos uno.</li>
 </ul>
@@ -2315,7 +2315,7 @@ Officialese clichés (per 100 words)       |   8.93
 <tbody>
 <tr>
 <td style="text-align: left;"><code>source</code></td>
-<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code> / <code>Document</code></td>
 <td style="text-align: left;">-</td>
 <td style="text-align: left;">Fuente de datos</td>
 </tr>

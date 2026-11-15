@@ -2374,13 +2374,13 @@ True
 <p>spaCy fija ambos en <code>nlp.add_pipe(factory, name=...)</code>; los demás parámetros de un componente se pasan en el diccionario <code>config</code> de la misma llamada.</p>
 <h2 id="names">Nombres<a class="headerlink" href="#names" title="Permanent link">&para;</a></h2>
 <p>Las fábricas llevan el prefijo de la biblioteca: <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_unadapted_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code>. Están declaradas como entry points de <code>spacy_factories</code>, así que un pipeline guardado con estos componentes (<code>nlp.to_disk(path)</code>, <code>spacy package</code>) se carga con <code>spacy.load(path)</code> sin importar la biblioteca. <code>import ests</code> no carga los componentes mientras spaCy no está cargado - los hallan los puntos de entrada, y <code>ests.StyleStatsComponent</code> los carga al usarlo por primera vez; desde las fuentes sin el paquete instalado, <code>import ests.components</code> va antes de <code>add_pipe</code>.</p>
-<!-- core: components.md:StatsComponent-names 33ebb87 -->
-<p>El nombre del paso del pipeline es el nombre de la extensión: <code>nlp.add_pipe(factory, name="basic")</code> pone las estadísticas en <code>doc._.basic</code>. Sin <code>name</code> ambos toman el nombre de la fábrica. La extensión sigue al paso cuando el pipeline lo renombra (<code>nlp.rename_pipe</code>). Un nombre ocupado por una extensión de otro paquete lanza <code>ParameterError</code> en lugar de reemplazarla: en <code>add_pipe</code>, o con el primer documento después de <code>rename_pipe</code>, que renombra el paso antes de que el componente conozca su nombre. Un componente tomado de otro pipeline (<code>add_pipe(name, source=other)</code>) es el mismo objeto en ambos, así que con un nombre nuevo escribe también en esa extensión del otro pipeline; un componente independiente sale de la fábrica, <code>add_pipe(factory, name=...)</code>. El mismo componente puede añadirse dos veces con nombres distintos, con parámetros distintos. Un documento sin palabras - una cadena vacía, espacios, pura puntuación - pasa por un componente sin cambios, con su extensión en <code>None</code>.</p>
+<!-- core: components.md:StatsComponent-names 737f20b -->
+<p>El nombre del paso del pipeline es el nombre de la extensión: <code>nlp.add_pipe(factory, name="basic")</code> pone las estadísticas en <code>doc._.basic</code>. Sin <code>name</code> ambos toman el nombre de la fábrica. La extensión sigue al paso cuando el pipeline lo renombra (<code>nlp.rename_pipe</code>), y una extensión eliminada con <code>Doc.remove_extension</code> mientras el componente vive se registra de nuevo con su siguiente documento. Un nombre ocupado por una extensión de otro paquete lanza <code>ParameterError</code> en lugar de reemplazarla: en <code>add_pipe</code>, o con el primer documento después de <code>rename_pipe</code>, que renombra el paso antes de que el componente conozca su nombre. Un componente tomado de otro pipeline (<code>add_pipe(name, source=other)</code>) es el mismo objeto en ambos, así que con un nombre nuevo escribe también en esa extensión del otro pipeline; un componente independiente sale de la fábrica, <code>add_pipe(factory, name=...)</code>. El mismo componente puede añadirse dos veces con nombres distintos, con parámetros distintos. Un documento sin palabras - una cadena vacía, espacios, pura puntuación - pasa por un componente sin cambios, con su extensión en <code>None</code>. Un documento sin una anotación que las estadísticas necesitan, como el análisis de <code>SyntaxStats</code> en un pipeline sin parser, lanza <code>SourceError</code> en el componente, así que la llamada del pipeline falla.</p>
 <p>En <code>ests_lexical</code> también pasa intacto un documento solo de números, y en <code>ests_verse</code> un documento sin letras.</p>
-<!-- core: components.md:StatsComponent-serialization a238412 -->
+<!-- core: components.md:StatsComponent-serialization b114bf2 -->
 <div class="admonition warning">
 <p class="admonition-title">Serialización</p>
-<p>Un componente guarda un objeto de estadísticas en <code>doc._.&lt;name&gt;</code>, y spaCy no sabe serializarlo: <code>Doc.to_bytes()</code>, <code>DocBin(store_user_data=True)</code> y <code>nlp.pipe(..., n_process&gt;1)</code> fallan con estos componentes en el pipeline. Para guardar un documento, deje fuera los datos de usuario (<code>doc.to_bytes(exclude=["user_data"])</code>) o guarde <code>doc._.&lt;name&gt;.get_stats()</code> por separado; para el multiproceso, calcule las estadísticas en el proceso principal después de <code>nlp.pipe</code>, sin los componentes.</p>
+<p>Un componente guarda un objeto de estadísticas en <code>doc._.&lt;name&gt;</code>, y spaCy no sabe serializarlo: <code>Doc.to_bytes()</code>, <code>DocBin(store_user_data=True)</code> y <code>nlp.pipe(..., n_process&gt;1)</code> fallan con estos componentes en el pipeline. Para guardar un documento, guarde <code>doc._.&lt;name&gt;.get_stats()</code> por separado y vacíe la extensión (<code>doc._.&lt;name&gt; = None</code>) antes de <code>doc.to_bytes()</code>: dejar fuera todos los datos de usuario (<code>exclude=["user_data"]</code>) pierde también las palabras de los tokens multipalabra de anySeg (<code>token._.anyseg_words</code>), y un documento cuyas palabras llevan columnas propias, como uno de <code>anyseg.spacy.to_doc</code>, se lee de vuelta con otras palabras. Para el multiproceso, calcule las estadísticas en el proceso principal después de <code>nlp.pipe</code>, sin los componentes.</p>
 </div>
 <p>Un componente lee el <code>Doc</code> de su pipeline tal cual y no toca su tokenizador: las palabras y las oraciones de la API de cadenas vienen con el pipeline de <a href="#load_pipeline"><code>load_pipeline</code></a>, donde <code>sí--dijo</code> son dos palabras y una raya y una línea en blanco cierra la oración.</p>
 <h2 id="class-components">Componentes de las clases de estadísticas<a class="headerlink" href="#class-components" title="Permanent link">&para;</a></h2>
@@ -2471,7 +2471,7 @@ True
 <h3 id="ReadabilityStatsComponent">Métricas de legibilidad<a class="headerlink" href="#ReadabilityStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">ReadabilityStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">preset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">basic</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: components.md:ReadabilityStatsComponent 78d49ec -->
+<!-- core: components.md:ReadabilityStatsComponent 58263af -->
 <p><code>ReadabilityStatsComponent</code> pone en la extensión las métricas de legibilidad, calculadas sobre el documento o, con <code>basic</code>, sobre las estadísticas básicas que otro componente puso en él. Una biblioteca fija <code>basic_factory</code>, la fábrica de su componente de las estadísticas básicas, que el error nombra cuando esa extensión no las tiene.</p>
 <table>
 <thead>
@@ -2500,7 +2500,7 @@ True
 <p>Con <code>preset</code> en <code>None</code> la configuración de un pipeline guardado no lleva preajuste, y el pipeline toma el de la clase por defecto al cargarse; una biblioteca que quiere su valor por defecto escrito en la configuración lo da en la firma de su subclase.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>ParameterError</code> - una <code>stats_class</code> que no es concreta, un preajuste que no es una cadena o no es de la clase, una extensión no nombrada por una cadena;</li>
+<li><code>ParameterError</code> - una <code>stats_class</code> que no es concreta, un preajuste que no es una cadena o no es de la clase, una extensión no nombrada por una cadena o nombrada por una vacía;</li>
 <li><code>SourceTypeError</code> - una clase sin <code>basic_stats_class</code> y sin <code>basic</code>;</li>
 <li><code>SourceError</code> - un documento cuya extensión <code>basic</code> no tiene estadísticas básicas de la clase.</li>
 </ul>
@@ -2526,7 +2526,7 @@ True
 <h3 id="UnadaptedReadabilityStatsComponent">Fórmulas de otros idiomas<a class="headerlink" href="#UnadaptedReadabilityStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">UnadaptedReadabilityStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">basic</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: components.md:UnadaptedReadabilityStatsComponent 7a47657 -->
+<!-- core: components.md:UnadaptedReadabilityStatsComponent b7871a2 -->
 <p><code>UnadaptedReadabilityStatsComponent</code> pone en la extensión las fórmulas de legibilidad de otros idiomas, calculadas sobre el documento o, con <code>basic</code>, sobre las estadísticas básicas que otro componente puso en él. Una biblioteca fija <code>basic_factory</code>, como para <code>ReadabilityStatsComponent</code>.</p>
 <table>
 <thead>
@@ -2548,7 +2548,7 @@ True
 </table>
 <p>Excepciones:</p>
 <ul>
-<li><code>ParameterError</code> - una <code>stats_class</code> que no es concreta, una extensión no nombrada por una cadena;</li>
+<li><code>ParameterError</code> - una <code>stats_class</code> que no es concreta, una extensión no nombrada por una cadena o nombrada por una vacía;</li>
 <li><code>SourceTypeError</code> - una clase sin <code>basic_stats_class</code> y sin <code>basic</code>;</li>
 <li><code>SourceError</code> - un documento cuya extensión <code>basic</code> no tiene estadísticas básicas de la clase.</li>
 </ul>
@@ -2737,8 +2737,8 @@ True
 <h3 id="LexicalStatsComponent">Estadísticas de complejidad léxica<a class="headerlink" href="#LexicalStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">LexicalStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: components.md:LexicalStatsComponent 7d94500 -->
-<p><code>LexicalStatsComponent</code> pone en la extensión las estadísticas de complejidad léxica, con el diccionario de frecuencias de su atributo <code>freq_dict</code>: <code>None</code> por defecto, para el diccionario de la clase, y fijado por una biblioteca en el constructor de su componente. Un documento recibe las estadísticas cuando tiene una palabra de <code>iter_doc_words</code> (con <code>join_hyphens</code>) que no es un número del método <code>is_number</code>, <code>anyts.utils.is_number</code> por defecto; una biblioteca da los números que su clase deja fuera, así que un documento solo de números pasa intacto.</p>
+<!-- core: components.md:LexicalStatsComponent 5077aef -->
+<p><code>LexicalStatsComponent</code> pone en la extensión las estadísticas de complejidad léxica, con el diccionario de frecuencias de su atributo <code>freq_dict</code>: <code>None</code> por defecto, para el diccionario de la clase, y fijado por una biblioteca antes del constructor del núcleo; una clase sin diccionario propio y sin <code>freq_dict</code> lanza <code>ParameterError</code> al crearse el componente. Un documento recibe las estadísticas cuando tiene un token con una letra o una cifra (<code>has_words</code>) que no es un número del método <code>is_number</code>, <code>anyts.utils.is_number</code> por defecto; una biblioteca da los números que su clase deja fuera, así que un documento solo de números pasa intacto.</p>
 <p>En esTS <code>freq_dict</code> es el <a href="../datasets/freqdict/">diccionario de frecuencias</a> <code>FreqDict</code> del directorio <code>data_dir</code>, e <code>is_number</code> toma los números del <code>NUMBER_PATTERN</code> del español (<code>2020</code>, <code>1.500,50</code>, <code>3.º</code>). El pipeline necesita un <code>morphologizer</code> antes del componente, y la fábrica requiere <code>token.pos</code>; los lemas del modelo no se usan. Las bandas de frecuencia y la densidad léxica se calculan sin el diccionario, las estadísticas por el diccionario lo necesitan descargado.</p>
 <table>
 <thead>
@@ -2762,7 +2762,7 @@ True
 <ul>
 <li><code>SourceError</code> - un documento sin las categorías gramaticales;</li>
 <li><code>DatasetNotFoundError</code> - las estadísticas por el diccionario y <code>get_stats()</code> cuando el diccionario no está descargado;</li>
-<li><code>ConfigValidationError</code> de spaCy - un <code>data_dir</code> que no es una cadena, en <code>add_pipe</code>.</li>
+<li><code>ParameterError</code> - un <code>data_dir</code> que no es una cadena.</li>
 </ul>
 <div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Código</label><label for="__tabbed_8_2">Resultado</label></div>
 <div class="tabbed-content">
@@ -2783,7 +2783,7 @@ True
 <h3 id="StyleStatsComponent">Métricas de estilo<a class="headerlink" href="#StyleStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">StyleStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">nausea_stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cliches</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: components.md:StyleStatsComponent 0abace1 -->
+<!-- core: components.md:StyleStatsComponent 957821f -->
 <p><code>StyleStatsComponent</code> pone las métricas de estilo en la extensión.</p>
 <table>
 <thead>
@@ -2823,8 +2823,7 @@ True
 </table>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - palabras vacías, palabras vacías de la náusea o clichés que no son una lista de cadenas;</li>
-<li><code>ParameterError</code> - un <code>top_n</code> que no es un entero de al menos uno.</li>
+<li><code>ParameterError</code> - palabras vacías, palabras vacías de la náusea o clichés que no son una lista de cadenas, un <code>top_n</code> que no es un entero de al menos uno.</li>
 </ul>
 <p>Sin las listas, el contenido de agua toma las palabras vacías de <code>STOPWORDS</code> y las expresiones parentéticas de una palabra, la náusea académica deja fuera las palabras de <code>is_stopword</code>, y los clichés vienen de <code>OFFICIALESE_CLICHES</code>; <code>NAUSEA_TOP_N</code> es una constante de <code>anyts.constants</code>. Los sustantivos deverbales necesitan un <code>morphologizer</code> y un <code>lemmatizer</code> antes del componente, y sin ellos leer <code>verbal_nouns</code>, <code>markers()</code> o <code>get_stats()</code> lanza <code>SourceError</code>; las demás métricas solo leen las palabras.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Código</label><label for="__tabbed_9_2">Resultado</label></div>
@@ -2892,7 +2891,7 @@ True
 </table>
 <p>Excepciones:</p>
 <ul>
-<li><code>ConfigValidationError</code> de spaCy - un <code>seseo</code> que no es un booleano, en <code>add_pipe</code>.</li>
+<li><code>ParameterError</code> - un <code>seseo</code> que no es un booleano.</li>
 </ul>
 <div class="tabbed-set tabbed-alternate" data-tabs="11:2"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><input id="__tabbed_11_2" name="__tabbed_11" type="radio" /><div class="tabbed-labels"><label for="__tabbed_11_1">Código</label><label for="__tabbed_11_2">Resultado</label></div>
 <div class="tabbed-content">

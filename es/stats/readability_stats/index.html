@@ -2359,12 +2359,12 @@
 <h1 id="metricas-de-legibilidad">Métricas de legibilidad<a class="headerlink" href="#metricas-de-legibilidad" title="Permanent link">&para;</a></h1>
 <div class="signature highlight"><pre><span></span><code><span class="n">ReadabilityStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">preset</span><span class="o">=</span><span class="s1">'general'</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: stats/readability_stats.md:ReadabilityStats 5dd9076 -->
-<p>Las métricas de <a href="https://es.wikipedia.org/wiki/Legibilidad">legibilidad</a> de un texto a partir de sus estadísticas básicas: la longitud media de la oración en palabras, la longitud media de la palabra en sílabas o en letras, la proporción de palabras polisílabas y de palabras largas y la variabilidad de la longitud de las palabras. La fuente de datos es un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> o unas estadísticas básicas ya calculadas, que se reutilizan tal cual; los extractores se pasan a las estadísticas básicas de un texto o de un <code>Doc</code>. Las fórmulas solo cuentan las letras de las palabras contadas, así que un extractor de palabras que descarta palabras no alarga la palabra media.</p>
+<!-- core: stats/readability_stats.md:ReadabilityStats 7a36eb3 -->
+<p>Las métricas de <a href="https://es.wikipedia.org/wiki/Legibilidad">legibilidad</a> de un texto a partir de sus estadísticas básicas: la longitud media de la oración en palabras, la longitud media de la palabra en sílabas o en letras, la proporción de palabras polisílabas y de palabras largas y la variabilidad de la longitud de las palabras. La fuente de datos es un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>, un <code>Document</code> de <a href="https://github.com/SergeyShk/anySeg">anySeg</a> o unas estadísticas básicas ya calculadas, que se reutilizan tal cual; los extractores se pasan a las estadísticas básicas de las demás fuentes. Las fórmulas solo cuentan las letras de las palabras contadas, así que un extractor de palabras que descarta palabras no alarga la palabra media.</p>
 <p>Las métricas son propiedades que se calculan en cada acceso, así que un cambio de los <code>coefficients</code> de un objeto se aplica en el acto.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - una fuente que no es ni una cadena, ni un <code>Doc</code>, ni unas estadísticas básicas, unas estadísticas básicas de una clase distinta de las de la biblioteca, un extractor de otro tipo, una cadena o un <code>Doc</code> pasados a una clase sin <code>basic_stats_class</code>;</li>
+<li><code>SourceTypeError</code> - una fuente que no es ni una cadena, ni un <code>Doc</code>, ni un <code>Document</code>, ni unas estadísticas básicas, unas estadísticas básicas de una clase distinta de las de la biblioteca, un extractor de otro tipo, una fuente distinta de unas estadísticas básicas pasada a una clase sin <code>basic_stats_class</code>;</li>
 <li><code>SourceError</code> - una fuente sin palabras o sin oraciones;</li>
 <li><code>ParameterError</code> - un preajuste desconocido o que no es una cadena.</li>
 </ul>
@@ -2409,9 +2409,9 @@ Reading time (min)                    |   0.04
 <tbody>
 <tr>
 <td style="text-align: left;"><code>source</code></td>
-<td style="text-align: left;"><code>str</code> / <code>Doc</code> / <code>BasicStats</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code> / <code>Document</code> / <code>BasicStats</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Fuente de datos (cadena, objeto Doc o estadísticas básicas ya calculadas)</td>
+<td style="text-align: left;">Fuente de datos (cadena, objeto Doc, <code>Document</code> o estadísticas básicas ya calculadas)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>sents_extractor</code></td>

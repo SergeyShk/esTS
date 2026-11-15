@@ -2007,7 +2007,7 @@
 </code></pre></div>
 <!-- core: visualizers/sentences.md:sentence_lengths_plot 36b6cdc -->
 <p>La curva de las longitudes de las oraciones, el ritmo de un texto: la longitud de cada oración en palabras, en orden, la media móvil sobre <code>window</code> oraciones y un recuadro con el histograma de las longitudes. Oraciones cortas y largas que se alternan son un signo editorial de un texto vivo; una curva plana, de uno monótono. La función recibe los ejes <code>ax</code> y devuelve <code>Axes</code>.</p>
-<p>Las funciones son las del núcleo <a href="https://sergeyshk.github.io/anyTS/visualizers/sentences/">anyTS</a>; para una cadena esTS pasa por defecto sus extractores del español, <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> y <a href="../../extractors/words/"><code>WordsExtractor</code></a>, y los parámetros <code>sents_extractor</code> y <code>words_extractor</code> los sustituyen. Las etiquetas por defecto son las inglesas de <code>VISUALIZER_LABELS</code> en <code>anyts.constants</code>; <code>labels</code> sustituye cualquiera de ellas.</p>
+<p>Las funciones son las del núcleo <a href="https://sergeyshk.github.io/anyTS/visualizers/sentences/">anyTS</a>; por defecto esTS lee las oraciones del documento de una cadena, un <code>Doc</code> o un <code>Document</code> (el segmentador <a href="https://github.com/SergeyShk/anySeg">anySeg</a>) y sus palabras con una letra o una cifra; con el parámetro <code>sents_extractor</code> o <code>words_extractor</code> una cadena o un <code>Doc</code> sin oraciones se divide con los extractores, los del español <a href="../../extractors/sentences/"><code>SentsExtractor</code></a> y <a href="../../extractors/words/"><code>WordsExtractor</code></a> para el que no se indica, mientras que un <code>Doc</code> con oraciones y un <code>Document</code> conservan las suyas. Las etiquetas por defecto son las inglesas de <code>VISUALIZER_LABELS</code> en <code>anyts.constants</code>; <code>labels</code> sustituye cualquiera de ellas.</p>
 <p>La curva de la segunda ventana de 2000 palabras de <em>Niebla</em> de Unamuno del <a href="../../datasets/spanishliterature/">corpus de literatura</a>; una ventana se corta por palabras, así que empieza con el final de una oración:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.corpus</span><span class="w"> </span><span class="kn">import</span> <span class="n">split_windows</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpanishLiterature</span>
@@ -2023,7 +2023,7 @@
 </code></pre></div>
 <p><img alt="ests" class="center" src="../../../img/sentences.png" /></p>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/sentences.md:sentence_lengths_plot-parameters e2b67de -->
+<!-- core: visualizers/sentences.md:sentence_lengths_plot-parameters 1d34170 -->
 <table>
 <thead>
 <tr>
@@ -2036,9 +2036,9 @@
 <tbody>
 <tr>
 <td style="text-align: left;"><code>source</code></td>
-<td style="text-align: left;"><code>str</code> / <code>Doc</code> / <code>Iterable[int]</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code> / <code>Document</code> / <code>Iterable[int]</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Texto, objeto Doc o longitudes de las oraciones (una lista, un array de numpy, una Series)</td>
+<td style="text-align: left;">Texto, objeto Doc o Document o longitudes de las oraciones (una lista, un array de numpy, una Series)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>window</code></td>
@@ -2068,13 +2068,13 @@
 <td style="text-align: left;"><code>sents_extractor</code></td>
 <td style="text-align: left;"><code>SentsExtractor</code></td>
 <td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Extractor de las oraciones de una cadena; por defecto, el extractor de oraciones de la biblioteca</td>
+<td style="text-align: left;">Extractor de las oraciones de una cadena o de un <code>Doc</code> sin oraciones, que se usa en lugar de las del documento</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>words_extractor</code></td>
 <td style="text-align: left;"><code>WordsExtractor</code></td>
 <td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Extractor de las palabras de una oración de una cadena; por defecto, el extractor de palabras de la biblioteca</td>
+<td style="text-align: left;">Extractor de las palabras de una oración de una cadena o de un <code>Doc</code> sin oraciones, que se usa en lugar de las del documento</td>
 </tr>
 </tbody>
 </table>
@@ -2082,10 +2082,10 @@
 <h2 id="sentence_lengths">Longitudes de las oraciones<a class="headerlink" href="#sentence_lengths" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">sentence_lengths</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>Las longitudes de las oraciones en palabras, en orden: una cadena se divide en oraciones con el extractor de oraciones y cada oración en palabras con el extractor de palabras; las oraciones de un <code>Doc</code> salen de sus límites y sus palabras de sus tokens, sin la puntuación ni los símbolos, mientras que un <code>Doc</code> sin límites o con límites parciales (<code>has_sents</code>) se cuenta como su texto, con los extractores. Las oraciones sin palabras se omiten. Las longitudes ya hechas (enteros no negativos en una secuencia o un iterador) se usan tal cual. Los argumentos son los de <code>sentence_lengths_plot</code>.</p>
+<p>Las longitudes de las oraciones en palabras, en orden: las oraciones del documento de una cadena, un <code>Doc</code> o un <code>Document</code> y sus palabras con una letra o una cifra, o, con un extractor, las oraciones del extractor de oraciones y sus palabras del extractor de palabras en una cadena o un <code>Doc</code> sin oraciones; un <code>Doc</code> con oraciones y un <code>Document</code> conservan las suyas. Las oraciones sin palabras se omiten. Las longitudes ya hechas (enteros no negativos en una secuencia o un iterador) se usan tal cual. Los argumentos son los de <code>sentence_lengths_plot</code>.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - un objeto que no es una cadena, un <code>Doc</code>, una secuencia ni un iterador, una tabla, un conjunto, un mapeo, bytes, una longitud que no es un entero, un extractor de otro tipo;</li>
+<li><code>SourceTypeError</code> - un objeto que no es una cadena, un <code>Doc</code>, un <code>Document</code>, una secuencia ni un iterador, una tabla, un conjunto, un mapeo, bytes, una longitud que no es un entero, un extractor de otro tipo;</li>
 <li><code>SourceError</code> - una longitud negativa.</li>
 </ul>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>

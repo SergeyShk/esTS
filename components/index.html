@@ -2373,11 +2373,11 @@ True
 <p>spaCy sets both at <code>nlp.add_pipe(factory, name=...)</code>; the other parameters of a component are passed in the <code>config</code> dictionary of the same call.</p>
 <h2 id="names">Names<a class="headerlink" href="#names" title="Permanent link">&para;</a></h2>
 <p>The factories carry the prefix of the library: <code>ests_basic</code>, <code>ests_readability</code>, <code>ests_unadapted_readability</code>, <code>ests_diversity</code>, <code>ests_morph</code>, <code>ests_syntax</code>, <code>ests_cohesion</code>, <code>ests_lexical</code>, <code>ests_style</code>, <code>ests_phon</code>, <code>ests_verse</code>. They are declared as entry points of <code>spacy_factories</code>, so a pipeline saved with these components (<code>nlp.to_disk(path)</code>, <code>spacy package</code>) loads with <code>spacy.load(path)</code> without importing the library. <code>import ests</code> does not load the components while spaCy is not loaded - the entry points find them, and <code>ests.StyleStatsComponent</code> loads them on first use; from the sources without an installed package, <code>import ests.components</code> comes before <code>add_pipe</code>.</p>
-<p>The name of the pipe is the name of the extension: <code>nlp.add_pipe(factory, name="basic")</code> puts the statistics into <code>doc._.basic</code>. Without <code>name</code> both take the name of the factory. The extension follows the pipe when the pipeline renames it (<code>nlp.rename_pipe</code>). A name taken by an extension of another package raises <code>ParameterError</code> instead of replacing it: at <code>add_pipe</code>, or at the first document after <code>rename_pipe</code>, which renames the pipe before the component learns its name. A component taken from another pipeline (<code>add_pipe(name, source=other)</code>) is the same object in both, so under a new name it writes to that extension in the other pipeline too; a separate component comes from the factory, <code>add_pipe(factory, name=...)</code>. The same component can be added twice under different names, with different parameters. A document with no words - an empty string, whitespace, punctuation alone - passes through a component untouched, its extension left at <code>None</code>.</p>
+<p>The name of the pipe is the name of the extension: <code>nlp.add_pipe(factory, name="basic")</code> puts the statistics into <code>doc._.basic</code>. Without <code>name</code> both take the name of the factory. The extension follows the pipe when the pipeline renames it (<code>nlp.rename_pipe</code>), and an extension removed by <code>Doc.remove_extension</code> while the component lives is registered again at its next document. A name taken by an extension of another package raises <code>ParameterError</code> instead of replacing it: at <code>add_pipe</code>, or at the first document after <code>rename_pipe</code>, which renames the pipe before the component learns its name. A component taken from another pipeline (<code>add_pipe(name, source=other)</code>) is the same object in both, so under a new name it writes to that extension in the other pipeline too; a separate component comes from the factory, <code>add_pipe(factory, name=...)</code>. The same component can be added twice under different names, with different parameters. A document with no words - an empty string, whitespace, punctuation alone - passes through a component untouched, its extension left at <code>None</code>. A document without an annotation the statistics need, such as the parse of <code>SyntaxStats</code> in a pipeline without a parser, raises <code>SourceError</code> in the component, and so the call of the pipeline fails.</p>
 <p>In <code>ests_lexical</code> a document of numbers alone passes untouched as well, and in <code>ests_verse</code> a document without letters.</p>
 <div class="admonition warning">
 <p class="admonition-title">Serialization</p>
-<p>A component keeps an object of statistics in <code>doc._.&lt;name&gt;</code>, and spaCy cannot serialize it: <code>Doc.to_bytes()</code>, <code>DocBin(store_user_data=True)</code> and <code>nlp.pipe(..., n_process&gt;1)</code> fail with these components in the pipeline. To save a document, leave the user data out (<code>doc.to_bytes(exclude=["user_data"])</code>) or keep <code>doc._.&lt;name&gt;.get_stats()</code> separately; for multiprocessing compute the statistics in the main process after <code>nlp.pipe</code>, without the components.</p>
+<p>A component keeps an object of statistics in <code>doc._.&lt;name&gt;</code>, and spaCy cannot serialize it: <code>Doc.to_bytes()</code>, <code>DocBin(store_user_data=True)</code> and <code>nlp.pipe(..., n_process&gt;1)</code> fail with these components in the pipeline. To save a document, keep <code>doc._.&lt;name&gt;.get_stats()</code> separately and clear the extension (<code>doc._.&lt;name&gt; = None</code>) before <code>doc.to_bytes()</code>: leaving all the user data out (<code>exclude=["user_data"]</code>) drops the words of the multiword tokens of anySeg (<code>token._.anyseg_words</code>) too, and a document whose words carry columns of their own, such as one of <code>anyseg.spacy.to_doc</code>, is read back with other words. For multiprocessing compute the statistics in the main process after <code>nlp.pipe</code>, without the components.</p>
 </div>
 <p>A component reads the <code>Doc</code> of its pipeline as it is and leaves its tokenizer alone: the words and the sentences of the string API come with the pipeline of <a href="#load_pipeline"><code>load_pipeline</code></a>, where <code>sí--dijo</code> is two words and a dash and a blank line ends a sentence.</p>
 <h2 id="class-components">Components of the classes of statistics<a class="headerlink" href="#class-components" title="Permanent link">&para;</a></h2>
@@ -2495,7 +2495,7 @@ True
 <p>With <code>preset</code> left at <code>None</code> the config of a saved pipeline holds no preset, and the pipeline takes the default of the class when it is loaded; a library that wants its default written into the config gives it in the signature of its subclass.</p>
 <p>Raises:</p>
 <ul>
-<li><code>ParameterError</code> - a <code>stats_class</code> that is not concrete, a preset that is not a string or not one of the class, an extension not named by a string;</li>
+<li><code>ParameterError</code> - a <code>stats_class</code> that is not concrete, a preset that is not a string or not one of the class, an extension not named by a string or named by an empty one;</li>
 <li><code>SourceTypeError</code> - a class without <code>basic_stats_class</code> and no <code>basic</code>;</li>
 <li><code>SourceError</code> - a document whose extension <code>basic</code> holds no basic statistics of the class.</li>
 </ul>
@@ -2542,7 +2542,7 @@ True
 </table>
 <p>Raises:</p>
 <ul>
-<li><code>ParameterError</code> - a <code>stats_class</code> that is not concrete, an extension not named by a string;</li>
+<li><code>ParameterError</code> - a <code>stats_class</code> that is not concrete, an extension not named by a string or named by an empty one;</li>
 <li><code>SourceTypeError</code> - a class without <code>basic_stats_class</code> and no <code>basic</code>;</li>
 <li><code>SourceError</code> - a document whose extension <code>basic</code> holds no basic statistics of the class.</li>
 </ul>
@@ -2727,7 +2727,7 @@ True
 <h3 id="LexicalStatsComponent">Lexical sophistication statistics<a class="headerlink" href="#LexicalStatsComponent" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">LexicalStatsComponent</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">data_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p><code>LexicalStatsComponent</code> puts the lexical sophistication statistics into the extension, with the frequency dictionary of its attribute <code>freq_dict</code>: <code>None</code> by default, for the dictionary of the class, and set by a library in the constructor of its component. A document gets the statistics when it has a word of <code>iter_doc_words</code> (with <code>join_hyphens</code>) other than a number of the method <code>is_number</code>, <code>anyts.utils.is_number</code> by default; a library gives the numbers its class leaves out, so a document of numbers alone passes untouched.</p>
+<p><code>LexicalStatsComponent</code> puts the lexical sophistication statistics into the extension, with the frequency dictionary of its attribute <code>freq_dict</code>: <code>None</code> by default, for the dictionary of the class, and set by a library before the constructor of the core; a class without a dictionary of its own and no <code>freq_dict</code> raise <code>ParameterError</code> when the component is made. A document gets the statistics when it has a token with a letter or a digit (<code>has_words</code>) other than a number of the method <code>is_number</code>, <code>anyts.utils.is_number</code> by default; a library gives the numbers its class leaves out, so a document of numbers alone passes untouched.</p>
 <p>In esTS <code>freq_dict</code> is the <a href="../datasets/freqdict/">frequency dictionary</a> <code>FreqDict</code> of the directory <code>data_dir</code>, and <code>is_number</code> takes the numbers of the Spanish <code>NUMBER_PATTERN</code> (<code>2020</code>, <code>1.500,50</code>, <code>3.º</code>). The pipeline needs a <code>morphologizer</code> before the component, and the factory requires <code>token.pos</code>; the lemmas of the model are not used. The frequency bands and the lexical density are computed without the dictionary, the statistics by the dictionary need it downloaded.</p>
 <table>
 <thead>
@@ -2751,7 +2751,7 @@ True
 <ul>
 <li><code>SourceError</code> - a document without the parts of speech;</li>
 <li><code>DatasetNotFoundError</code> - the statistics by the dictionary and <code>get_stats()</code> when the dictionary is not downloaded;</li>
-<li><code>ConfigValidationError</code> of spaCy - a <code>data_dir</code> that is not a string, at <code>add_pipe</code>.</li>
+<li><code>ParameterError</code> - a <code>data_dir</code> that is not a string.</li>
 </ul>
 <div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Code</label><label for="__tabbed_8_2">Result</label></div>
 <div class="tabbed-content">
@@ -2811,8 +2811,7 @@ True
 </table>
 <p>Raises:</p>
 <ul>
-<li><code>SourceTypeError</code> - stopwords, nausea stopwords or cliches that are not a list of strings;</li>
-<li><code>ParameterError</code> - a <code>top_n</code> that is not an integer of at least one.</li>
+<li><code>ParameterError</code> - stopwords, nausea stopwords or cliches that are not a list of strings, a <code>top_n</code> that is not an integer of at least one.</li>
 </ul>
 <p>Without the lists the water content takes the stopwords of <code>STOPWORDS</code> and the one-word parenthetical expressions, the academic nausea leaves out the words of <code>is_stopword</code>, and the clichés come from <code>OFFICIALESE_CLICHES</code>; <code>NAUSEA_TOP_N</code> is a constant of <code>anyts.constants</code>. The verbal nouns need a <code>morphologizer</code> and a <code>lemmatizer</code> before the component, and without them reading <code>verbal_nouns</code>, <code>markers()</code> or <code>get_stats()</code> raises <code>SourceError</code>; the other metrics read the words alone.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Code</label><label for="__tabbed_9_2">Result</label></div>
@@ -2879,7 +2878,7 @@ True
 </table>
 <p>Raises:</p>
 <ul>
-<li><code>ConfigValidationError</code> of spaCy - a <code>seseo</code> that is not a boolean, at <code>add_pipe</code>.</li>
+<li><code>ParameterError</code> - a <code>seseo</code> that is not a boolean.</li>
 </ul>
 <div class="tabbed-set tabbed-alternate" data-tabs="11:2"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><input id="__tabbed_11_2" name="__tabbed_11" type="radio" /><div class="tabbed-labels"><label for="__tabbed_11_1">Code</label><label for="__tabbed_11_2">Result</label></div>
 <div class="tabbed-content">

@@ -2241,7 +2241,7 @@
 <p>El metro del verso español es silábico: un verso se mide por sus sílabas métricas, y los acentos dan forma a su ritmo. El texto se divide en versos y estrofas (por las líneas en blanco), las palabras se dividen en sílabas y se acentúan con <a href="../../syllables/"><code>syllabify</code></a> y <a href="../../syllables/#word_stresses"><code>word_stresses</code></a>, y las sílabas de un verso se cuentan con las sinalefas y la ley del acento final; un verso compuesto, ante todo el alejandrino, se lee como dos hemistiquios (<a href="#algorithm">algoritmo</a>). Un texto con letras pero sin sílabas españolas (otro alfabeto) da estadísticas vacías: <code>n_lines</code> 0, el metro <code>None</code>, las proporciones <code>nan</code>.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - una fuente que no es ni una cadena ni un <code>Doc</code>;</li>
+<li><code>SourceTypeError</code> - una fuente que no es ni una cadena, ni un <code>Doc</code> ni un <code>Document</code>;</li>
 <li><code>SourceError</code> - una fuente sin letras (vacía, solo cifras y signos de puntuación);</li>
 <li><code>ParameterError</code> - un <code>seseo</code> que no es un <code>bool</code>.</li>
 </ul>
@@ -2290,7 +2290,7 @@ Share of proparoxytone endings (esdrújula)   |     0.00
 <tbody>
 <tr>
 <td style="text-align: left;"><code>source</code></td>
-<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code> / <code>Document</code></td>
 <td style="text-align: left;">-</td>
 <td style="text-align: left;">Fuente de datos</td>
 </tr>

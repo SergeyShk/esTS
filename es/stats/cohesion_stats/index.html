@@ -2306,7 +2306,7 @@
 <p>Las estadísticas de cohesión de un texto a la manera de <a href="https://doi.org/10.1017/CBO9780511894664">Coh-Metrix</a> y de su adaptación española <a href="https://aclanthology.org/L16-1745/">Coh-Metrix-Esp</a>: la repetición entre las oraciones, la información dada, la cohesión temporal y los conectores de un diccionario. Las oraciones se comparan por lemas. La fuente de datos es un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>, y tiene que estar anotada: una cadena se analiza con <a href="../../installation/#model"><code>es_core_news_sm</code></a> o con el pipeline indicado en <code>nlp</code>, sin las entidades nombradas, y un <code>Doc</code> debe llevar las categorías gramaticales, que vienen de un <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>), y los lemas, que vienen de un <code>lemmatizer</code>.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - una fuente que no es ni una cadena ni un <code>Doc</code>, un extractor de otra clase, un pipeline en <code>nlp</code> que no es un <code>Language</code> de spaCy, unos conectores que no son un diccionario de locuciones y pares de cadenas;</li>
+<li><code>SourceTypeError</code> - una fuente que no es ni una cadena, ni un <code>Doc</code> ni un <code>Document</code>, un extractor de otra clase, un pipeline en <code>nlp</code> que no es un <code>Language</code> de spaCy, unos conectores que no son un diccionario de locuciones y pares de cadenas;</li>
 <li><code>SourceError</code> - una fuente sin palabras; un <code>Doc</code> sin las categorías gramaticales o los lemas (un <code>Doc</code> de <code>spacy.blank("es")</code>); una cadena más larga que el <code>max_length</code> del pipeline;</li>
 <li><code>ParameterError</code> - una clase o un tipo de conector desconocidos, un <code>blank_lines</code> que no es un <code>bool</code>;</li>
 <li><code>DatasetNotFoundError</code> - una cadena sin <code>nlp</code> cuando el modelo no está instalado.</li>
@@ -2415,9 +2415,9 @@ Secondary connectors per 1000 words                                |  103.45
 <tbody>
 <tr>
 <td style="text-align: left;"><code>source</code></td>
-<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code> / <code>Document</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Fuente de datos: un texto o un <code>Doc</code> con las categorías gramaticales y los lemas</td>
+<td style="text-align: left;">Fuente de datos: un texto, o un <code>Doc</code> o un <code>Document</code> con las categorías gramaticales y los lemas</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>sents_extractor</code></td>
@@ -3058,7 +3058,7 @@ False
 <h2 id="token_info">Rasgos de las palabras<a class="headerlink" href="#token_info" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">token_info</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Los rasgos de un token de spaCy para las estadísticas de cohesión según su anotación de Universal Dependencies, por la tabla de las clases de palabras: una tupla con nombre <code>WordInfo</code> con <code>lemma</code> (el <code>lemma_</code> del token en minúscula), <code>noun</code>, <code>pronoun</code>, <code>demonstrative</code>, <code>argument</code>, <code>content</code>, <code>tense</code> y <code>mood</code> (el primer valor de <code>Tense</code> y de <code>Mood</code>, <code>None</code> sin él). <a href="../lexical_stats/"><code>LexicalStats</code></a> toma de ella sus palabras con contenido.</p>
+<p>Los rasgos de una palabra del árbol (<code>TreeWord</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/document/">anyTS</a>) para las estadísticas de cohesión según su anotación de Universal Dependencies, por la tabla de las clases de palabras: una tupla con nombre <code>WordInfo</code> con <code>lemma</code> (el lema de la palabra en minúscula), <code>noun</code>, <code>pronoun</code>, <code>demonstrative</code>, <code>argument</code>, <code>content</code>, <code>tense</code> y <code>mood</code> (el primer valor de <code>Tense</code> y de <code>Mood</code>, <code>None</code> sin él). <a href="../lexical_stats/"><code>LexicalStats</code></a> toma de ella sus palabras con contenido.</p>
 <table>
 <thead>
 <tr>
@@ -3071,21 +3071,22 @@ False
 <tbody>
 <tr>
 <td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token de spaCy</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
 <div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Código</label><label for="__tabbed_9_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.cohesion_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">token_info</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">anyts.document</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.cohesion_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">token_info</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_document</span><span class="p">,</span> <span class="n">get_nlp</span>
 
-<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"Mi hermano miraba este libro."</span><span class="p">)</span>
-<span class="n">token_info</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="n">token_info</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">get_tree</span><span class="p">(</span><span class="n">get_document</span><span class="p">(</span><span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"Mi hermano miraba este libro."</span><span class="p">)))</span><span class="o">.</span><span class="n">words</span>
+<span class="n">token_info</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">token_info</span><span class="p">(</span><span class="n">words</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -3098,7 +3099,7 @@ WordInfo(lemma='este', noun=False, pronoun=True, demonstrative=True, argument=Fa
 <h2 id="is_connector_blocked">Conectores bloqueados<a class="headerlink" href="#is_connector_blocked" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">is_connector_blocked</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
-<p>Comprueba si ningún conector empieza en un token por las palabras que lo preceden en un <code>Doc</code>: un <code>si</code> que no abre ninguna condición. Es así tras un verbo de <code>CONNECTOR_QUESTION_VERBS</code> - <code>saber</code>, <code>ver</code>, <code>mirar</code>, <code>preguntar</code>, <code>dudar</code>, <code>ignorar</code>, <code>pensar</code>, <code>averiguar</code>, <code>probar</code>, <code>comprobar</code>, <code>observar</code>, <code>examinar</code>, <code>determinar</code>, <code>decidir</code>, <code>considerar</code>, <code>consultar</code>, <code>investigar</code>, <code>adivinar</code>, y los del estilo administrativo <code>indicar</code>, <code>señalar</code>, <code>especificar</code>, <code>precisar</code>, <code>verificar</code>, <code>confirmar</code>, <code>aclarar</code>, <code>valorar</code>, <code>evaluar</code>, <code>analizar</code>, <code>establecer</code>, <code>desconocer</code>, <code>manifestar</code>, <code>constar</code> - etiquetado <code>VERB</code> o <code>AUX</code>, por el lema del modelo sin su pronombre enclítico o por el de <code>ests.utils.lemmatize</code> (<code>no sé si vendrá</code>, <code>a ver si llega</code>, <code>preguntó si tenía hambre</code>, <code>preguntándose si</code>, <code>la comisión valorará si</code>), o una palabra que el modelo lee como un nombre propio o común, por el lema de <code>lemmatize</code> (<code>Indique si desea...</code>, <code>Indíquenos si acepta...</code>), salvo que el verbo tenga antes de <code>si</code> el complemento que llenaría la interrogativa, de modo que <code>si</code> es una condición: un clítico de objeto al final (<code>indíquelo si es necesario</code>), un complemento directo que no sea uno de los dativos <code>le</code> y <code>les</code> que el modelo etiqueta así (<code>lo veré si tengo tiempo</code>, mientras que <code>le preguntaré si puede venir</code> es una interrogativa), o el sujeto de una pasiva con <code>se</code> o de <code>constar</code> (<code>la solicitud se valorará si cumple los requisitos</code>), sin contar el <code>se</code> pronominal de <code>preguntar</code> (<code>el juez se preguntaba si...</code>); y tras un <code>¡</code> de apertura (<code>¡Si ya te lo dije!</code>). En una muestra de la literatura la regla de los verbos acertó en todos los casos revisados, la de <code>¡</code> en unos nueve de cada diez; de 22 interrogativas indirectas del estilo administrativo toma 18, y ninguna de 7 condiciones. <code>informar</code>, <code>comunicar</code> y <code>estudiar</code> quedan fuera: tras ellos <code>si</code> abre a menudo una condición (<code>le informaremos si hay cambios</code>). <code>CohesionStats</code> fija con ella el <code>connector_blocked</code> de las palabras del núcleo, y la capa <a href="../../visualizers/highlight/"><code>connectors</code></a> del resaltado de un <code>Doc</code> descarta los mismos <code>si</code>.</p>
+<p>Comprueba si ningún conector empieza en una palabra del árbol por las palabras que la preceden: un <code>si</code> que no abre ninguna condición. Es así tras un verbo de <code>CONNECTOR_QUESTION_VERBS</code> - <code>saber</code>, <code>ver</code>, <code>mirar</code>, <code>preguntar</code>, <code>dudar</code>, <code>ignorar</code>, <code>pensar</code>, <code>averiguar</code>, <code>probar</code>, <code>comprobar</code>, <code>observar</code>, <code>examinar</code>, <code>determinar</code>, <code>decidir</code>, <code>considerar</code>, <code>consultar</code>, <code>investigar</code>, <code>adivinar</code>, y los del estilo administrativo <code>indicar</code>, <code>señalar</code>, <code>especificar</code>, <code>precisar</code>, <code>verificar</code>, <code>confirmar</code>, <code>aclarar</code>, <code>valorar</code>, <code>evaluar</code>, <code>analizar</code>, <code>establecer</code>, <code>desconocer</code>, <code>manifestar</code>, <code>constar</code> - etiquetado <code>VERB</code> o <code>AUX</code>, por el lema del modelo sin su pronombre enclítico o por el de <code>ests.utils.lemmatize</code> (<code>no sé si vendrá</code>, <code>a ver si llega</code>, <code>preguntó si tenía hambre</code>, <code>preguntándose si</code>, <code>la comisión valorará si</code>), o una palabra que el modelo lee como un nombre propio o común, por el lema de <code>lemmatize</code> (<code>Indique si desea...</code>, <code>Indíquenos si acepta...</code>), salvo que el verbo tenga antes de <code>si</code> el complemento que llenaría la interrogativa, de modo que <code>si</code> es una condición: un clítico de objeto al final (<code>indíquelo si es necesario</code>), un complemento directo que no sea uno de los dativos <code>le</code> y <code>les</code> que el modelo etiqueta así (<code>lo veré si tengo tiempo</code>, mientras que <code>le preguntaré si puede venir</code> es una interrogativa), o el sujeto de una pasiva con <code>se</code> o de <code>constar</code> (<code>la solicitud se valorará si cumple los requisitos</code>), sin contar el <code>se</code> pronominal de <code>preguntar</code> (<code>el juez se preguntaba si...</code>); y tras un <code>¡</code> de apertura (<code>¡Si ya te lo dije!</code>). En una muestra de la literatura la regla de los verbos acertó en todos los casos revisados, la de <code>¡</code> en unos nueve de cada diez; de 22 interrogativas indirectas del estilo administrativo toma 18, y ninguna de 7 condiciones. <code>informar</code>, <code>comunicar</code> y <code>estudiar</code> quedan fuera: tras ellos <code>si</code> abre a menudo una condición (<code>le informaremos si hay cambios</code>). <code>CohesionStats</code> fija con ella el <code>connector_blocked</code> de las palabras del núcleo, y la capa <a href="../../visualizers/highlight/"><code>connectors</code></a> del resaltado descarta los mismos <code>si</code>; sin las categorías gramaticales, como en una cadena que el modelo no analiza, solo se conoce el <code>si</code> tras <code>¡</code>.</p>
 <table>
 <thead>
 <tr>
@@ -3111,20 +3112,22 @@ WordInfo(lemma='este', noun=False, pronoun=True, demonstrative=True, argument=Fa
 <tbody>
 <tr>
 <td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token de spaCy</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
 <div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Código</label><label for="__tabbed_10_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.cohesion_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_connector_blocked</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">anyts.document</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.cohesion_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_connector_blocked</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_document</span><span class="p">,</span> <span class="n">get_nlp</span>
 
-<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"No sé si vendrá. Si llueve, me quedo. ¡Si ya te lo dije!"</span><span class="p">)</span>
-<span class="p">[</span><span class="n">is_connector_blocked</span><span class="p">(</span><span class="n">token</span><span class="p">)</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">token</span><span class="o">.</span><span class="n">lower_</span> <span class="o">==</span> <span class="s2">"si"</span><span class="p">]</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"No sé si vendrá. Si llueve, me quedo. ¡Si ya te lo dije!"</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">get_tree</span><span class="p">(</span><span class="n">get_document</span><span class="p">(</span><span class="n">get_nlp</span><span class="p">()(</span><span class="n">text</span><span class="p">)))</span><span class="o">.</span><span class="n">words</span>
+<span class="p">[</span><span class="n">is_connector_blocked</span><span class="p">(</span><span class="n">word</span><span class="p">)</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">word</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"si"</span><span class="p">]</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">

@@ -2241,7 +2241,7 @@
 <p>The meter of Spanish verse is syllabic: a line is measured by its metrical syllables, and the stresses shape its rhythm. The text is split into lines and stanzas (by blank lines), the words are split into syllables and stressed by <a href="../../syllables/"><code>syllabify</code></a> and <a href="../../syllables/#word_stresses"><code>word_stresses</code></a>, and the syllables of a line are counted with the synalephas and the law of the final stress; a compound verse, the alejandrino above all, is read as two hemistichs (<a href="#algorithm">algorithm</a>). A text with letters but without Spanish syllables (another alphabet) gives empty statistics - <code>n_lines</code> 0, meter <code>None</code>, shares <code>nan</code>.</p>
 <p>Raises:</p>
 <ul>
-<li><code>SourceTypeError</code> - a source that is neither a string nor a <code>Doc</code>;</li>
+<li><code>SourceTypeError</code> - a source that is neither a string, a <code>Doc</code> nor a <code>Document</code>;</li>
 <li><code>SourceError</code> - a source without letters (empty, digits and punctuation only);</li>
 <li><code>ParameterError</code> - a <code>seseo</code> that is not a <code>bool</code>.</li>
 </ul>
@@ -2290,7 +2290,7 @@ Share of proparoxytone endings (esdrújula)   |     0.00
 <tbody>
 <tr>
 <td style="text-align: left;"><code>source</code></td>
-<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code> / <code>Document</code></td>
 <td style="text-align: left;">-</td>
 <td style="text-align: left;">Data source</td>
 </tr>

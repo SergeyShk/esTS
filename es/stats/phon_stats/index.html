@@ -2259,11 +2259,11 @@
 <h1 id="fonoestadistica">Fonoestadística<a class="headerlink" href="#fonoestadistica" title="Permanent link">&para;</a></h1>
 <div class="signature highlight"><pre><span></span><code><span class="n">PhonStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: stats/phon_stats.md:PhonStats 408ded2 -->
-<p>Las estadísticas fonéticas de un texto: sus sonidos por clase, sus grupos, secuencias y repeticiones, y sus sílabas. Un sonido es por defecto una letra de una palabra, o un sonido de su transcripción cuando una biblioteca la da. La fuente de datos es un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>; las palabras se toman en minúsculas, y un extractor pasado explícitamente se aplica al texto de un <code>Doc</code>.</p>
+<!-- core: stats/phon_stats.md:PhonStats 1a12443 -->
+<p>Las estadísticas fonéticas de un texto: sus sonidos por clase, sus grupos, secuencias y repeticiones, y sus sílabas. Un sonido es por defecto una letra de una palabra, o un sonido de su transcripción cuando una biblioteca la da. La fuente de datos es un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> o un <code>Document</code> de <a href="https://github.com/SergeyShk/anySeg">anySeg</a>; las palabras son las de su <a href="https://sergeyshk.github.io/anyTS/document/">documento</a> en minúsculas (<code>doc_words</code>), o las de un extractor pasado explícitamente, que se aplica al texto.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - una fuente que no es ni una cadena ni un <code>Doc</code>, un extractor de otro tipo;</li>
+<li><code>SourceTypeError</code> - una fuente que no es ni una cadena, ni un <code>Doc</code>, ni un <code>Document</code>, un <code>parse</code> que no devuelve un <code>Document</code>, un <code>doc_words</code>, <code>syllabify</code> o <code>transcribe</code> que no devuelve cadenas, un extractor de otro tipo;</li>
 <li><code>SourceError</code> - una fuente sin palabras;</li>
 <li><code>ParameterError</code> - una ventana que no es un entero de al menos 2.</li>
 </ul>
@@ -2338,7 +2338,7 @@ Mean length of a syllable (sounds)         |   2.19
 </div>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: stats/phon_stats.md:PhonStats-parameters b90ae7b -->
+<!-- core: stats/phon_stats.md:PhonStats-parameters e3fdd09 -->
 <table>
 <thead>
 <tr>
@@ -2351,7 +2351,7 @@ Mean length of a syllable (sounds)         |   2.19
 <tbody>
 <tr>
 <td style="text-align: left;"><code>source</code></td>
-<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code> / <code>Document</code></td>
 <td style="text-align: left;">-</td>
 <td style="text-align: left;">Fuente de datos</td>
 </tr>
@@ -2359,7 +2359,7 @@ Mean length of a syllable (sounds)         |   2.19
 <td style="text-align: left;"><code>words_extractor</code></td>
 <td style="text-align: left;"><code>WordsExtractor</code></td>
 <td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Herramienta de extracción de palabras; se usa también con un <code>Doc</code>, sobre su texto</td>
+<td style="text-align: left;">Herramienta de extracción de palabras, que se usa sobre el texto en lugar de las palabras del documento</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>window_len</code></td>

@@ -2235,12 +2235,12 @@
 <h1 id="resaltado-del-texto">Resaltado del texto<a class="headerlink" href="#resaltado-del-texto" title="Permanent link">&para;</a></h1>
 <div class="signature highlight"><pre><span></span><code><span class="n">HighlightedText</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">long_sent_word_factor</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">complex_syl_factor</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cliches</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alliteration_threshold</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: visualizers/highlight.md:HighlightedText f056ba1 -->
-<p>Resaltado de un texto por capas, a la manera de los correctores de estilo: cada capa marca los fragmentos de un texto que cuenta una estadística - las oraciones largas, las palabras complejas, la pasiva. La fuente de datos es un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>. El resultado se muestra en Jupyter como HTML con estilos y una leyenda; <code>to_html</code> devuelve el marcado, y <code>highlights</code> guarda los fragmentos para una representación propia. Los fragmentos de capas distintas pueden solaparse.</p>
+<!-- core: visualizers/highlight.md:HighlightedText 403548f -->
+<p>Resaltado de un texto por capas, a la manera de los correctores de estilo: cada capa marca los fragmentos de un texto que cuenta una estadística - las oraciones largas, las palabras complejas, la pasiva. La fuente de datos es un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> o un <code>Document</code> de <a href="https://github.com/SergeyShk/anySeg">anySeg</a>, que se lee a través de su <a href="https://sergeyshk.github.io/anyTS/document/">documento</a>. El resultado se muestra en Jupyter como HTML con estilos y una leyenda; <code>to_html</code> devuelve el marcado, y <code>highlights</code> guarda los fragmentos para una representación propia. Los fragmentos de capas distintas pueden solaparse.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - una fuente que no es ni una cadena ni un <code>Doc</code>;</li>
-<li><code>SourceError</code> - una fuente sin palabras;</li>
+<li><code>SourceTypeError</code> - una fuente que no es ni una cadena, ni un <code>Doc</code>, ni un <code>Document</code>, un <code>parse</code> que no devuelve un <code>Document</code>;</li>
+<li><code>SourceError</code> - una fuente sin palabras, un <code>Doc</code> con un token que cruza una línea en blanco;</li>
 <li><code>ParameterError</code> - unas capas que no son un nombre ni una lista de nombres, una capa desconocida o una que necesita una anotación que le falta a la fuente.</li>
 </ul>
 <div class="signature highlight"><pre><span></span><code><span class="n">highlight</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">layers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">long_sent_word_factor</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">complex_syl_factor</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cliches</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alliteration_threshold</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
@@ -2462,7 +2462,7 @@
 </div>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/highlight.md:HighlightedText-parameters da96774 -->
+<!-- core: visualizers/highlight.md:HighlightedText-parameters bedd6da -->
 <table>
 <thead>
 <tr>
@@ -2475,9 +2475,9 @@
 <tbody>
 <tr>
 <td style="text-align: left;"><code>source</code></td>
-<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code> / <code>Document</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Fuente de datos (una cadena o un objeto Doc)</td>
+<td style="text-align: left;">Fuente de datos</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>layers</code></td>
@@ -2606,8 +2606,8 @@
 </table>
 <p>Las notas de esTS están en inglés: dan el número de palabras de la oración o de la construcción, de sílabas de la palabra, la longitud de la cadena, la expresión de la lista, la clase y el tipo del conector, el sonido de la aliteración y sus letras.</p>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
-<!-- core: visualizers/highlight.md:HighlightedText-to_html 1693b8b -->
-<p><code>to_html(legend=True, css=True)</code> devuelve el marcado HTML del texto resaltado: un <code>div</code> de la clase <code>&lt;prefix&gt;-highlight</code> con la leyenda, sus recuentos y el texto, donde un segmento resaltado es un <code>span</code> de las clases <code>&lt;prefix&gt;-hl</code> y <code>&lt;prefix&gt;-hl-&lt;layer&gt;</code> con las notas en su <code>title</code>; <code>&lt;prefix&gt;</code> es <code>css_prefix</code>. Los fragmentos solapados de capas distintas dan segmentos con varias clases, en el orden de dibujo. Los saltos de línea (<code>\n</code>, <code>\r\n</code>, <code>\r</code>) se convierten en referencias de caracteres, una por salto, así que el marcado puede ir en Markdown.</p>
+<!-- core: visualizers/highlight.md:HighlightedText-to_html 8ab98d7 -->
+<p><code>to_html(legend=True, css=True)</code> devuelve el marcado HTML del texto resaltado: un <code>div</code> de la clase <code>&lt;prefix&gt;-highlight</code> con la leyenda, sus recuentos y el texto, donde un segmento resaltado es un <code>span</code> de las clases <code>&lt;prefix&gt;-hl</code> y <code>&lt;prefix&gt;-hl-&lt;layer&gt;</code> con las notas en su <code>title</code>; <code>&lt;prefix&gt;</code> es <code>css_prefix</code>. Los fragmentos solapados de capas distintas dan segmentos con varias clases, en el orden de dibujo. Los saltos de línea (<code>LINE_BREAK</code>: <code>\n</code>, <code>\r\n</code>, <code>\r</code>, la tabulación vertical, el salto de página, U+0085, U+2028, U+2029) se convierten en referencias de caracteres, una por salto, así que el marcado puede ir en Markdown; los caracteres de control que HTML no admite, como NUL, se dejan fuera.</p>
 <table>
 <thead>
 <tr>
@@ -2873,7 +2873,7 @@
 <h3 id="connectors">Conectores<a class="headerlink" href="#connectors" title="Permanent link">&para;</a></h3>
 <div class="signature highlight"><pre><span></span><code><span class="n">find_connector_highlights</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">sents</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>La capa <code>connectors</code>: los conectores de <a href="../../stats/cohesion_stats/#connectors"><code>CohesionStats</code></a> dentro de cada oración, encontrados por su buscador <a href="../../stats/cohesion_stats/#ConnectorMatcher"><code>SpanishConnectorMatcher</code></a>, un conector de una palabra comprobado por su categoría gramatical cuando las palabras la tienen; la nota da el conector, su clase y su tipo. Con el texto, las reglas del buscador no leen ninguna palabra a través de un signo de puntuación entre dos palabras, así que <code>así, que</code> no es conector; con el <code>Doc</code>, ningún conector empieza en un <code>si</code> que no abre ninguna condición, como en <code>CohesionStats</code> (<a href="../../stats/cohesion_stats/#is_connector_blocked"><code>is_connector_blocked</code></a>: <code>no sé si vendrá</code>). <code>HighlightedText</code> pasa el texto de su fuente y su <code>Doc</code>; en una cadena, que no analiza, solo las reglas del buscador descartan un <code>si</code> (<code>como si fuera</code>).</p>
+<p>La capa <code>connectors</code>: los conectores de <a href="../../stats/cohesion_stats/#connectors"><code>CohesionStats</code></a> dentro de cada oración, encontrados por su buscador <a href="../../stats/cohesion_stats/#ConnectorMatcher"><code>SpanishConnectorMatcher</code></a>, un conector de una palabra comprobado por su categoría gramatical cuando las palabras la tienen; la nota da el conector, su clase y su tipo. Con el texto, las reglas del buscador no leen ninguna palabra a través de un signo de puntuación entre dos palabras, así que <code>así, que</code> no es conector; con el documento, ningún conector empieza en un <code>si</code> que no abre ninguna condición, como en <code>CohesionStats</code> (<a href="../../stats/cohesion_stats/#is_connector_blocked"><code>is_connector_blocked</code></a>: <code>no sé si vendrá</code>). <code>HighlightedText</code> pasa el texto de su fuente y su documento; en una cadena, que no analiza, solo el <code>si</code> tras <code>¡</code> y las reglas del buscador descartan un <code>si</code> (<code>¡Si ya te lo dije!</code>, <code>como si fuera</code>).</p>
 <table>
 <thead>
 <tr>
@@ -2904,9 +2904,9 @@
 </tr>
 <tr>
 <td style="text-align: left;"><code>doc</code></td>
-<td style="text-align: left;"><code>Doc</code></td>
+<td style="text-align: left;"><code>Document</code></td>
 <td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;"><code>Doc</code> de las palabras, para las reglas por sus tokens</td>
+<td style="text-align: left;">Documento de las palabras, para las reglas por su árbol</td>
 </tr>
 </tbody>
 </table>
@@ -3034,16 +3034,16 @@
 <tbody>
 <tr>
 <td style="text-align: left;"><code>doc</code></td>
-<td style="text-align: left;"><code>Doc</code></td>
+<td style="text-align: left;"><code>Document</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Objeto Doc con análisis de dependencias y lemas</td>
+<td style="text-align: left;">Documento con análisis de dependencias y lemas</td>
 </tr>
 </tbody>
 </table>
 <div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Código</label><label for="__tabbed_9_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_document</span><span class="p">,</span> <span class="n">get_nlp</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.visualizers.highlight</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">find_de_chains</span><span class="p">,</span>
     <span class="n">find_gerund_clauses</span><span class="p">,</span>
@@ -3052,9 +3052,11 @@
     <span class="n">find_split_predicate_highlights</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span>
-    <span class="s2">"El informe, redactado por el comité, fue aprobado tras hacer una revisión, "</span>
-    <span class="s2">"siguiendo las normas del uso de los recursos."</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">get_document</span><span class="p">(</span>
+    <span class="n">get_nlp</span><span class="p">()(</span>
+        <span class="s2">"El informe, redactado por el comité, fue aprobado tras hacer una revisión, "</span>
+        <span class="s2">"siguiendo las normas del uso de los recursos."</span>
+    <span class="p">)</span>
 <span class="p">)</span>
 <span class="n">find_passive</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 <span class="n">find_participle_clauses</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
@@ -3092,26 +3094,28 @@
 <tbody>
 <tr>
 <td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>doc</code></td>
-<td style="text-align: left;"><code>Doc</code></td>
+<td style="text-align: left;"><code>Document</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Objeto Doc con análisis de dependencias, categorías gramaticales y lemas</td>
+<td style="text-align: left;">Documento con análisis de dependencias, categorías gramaticales y lemas</td>
 </tr>
 </tbody>
 </table>
 <div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Código</label><label for="__tabbed_10_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">anyts.document</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_document</span><span class="p">,</span> <span class="n">get_nlp</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.visualizers.highlight</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_anaphoric_mismo</span><span class="p">,</span> <span class="n">is_anaphoric_mismo</span>
 
-<span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"Se recibió la solicitud el mismo día, y se procedió al estudio de la misma."</span><span class="p">)</span>
-<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_anaphoric_mismo</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"Se recibió la solicitud el mismo día, y se procedió al estudio de la misma."</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">get_document</span><span class="p">(</span><span class="n">get_nlp</span><span class="p">()(</span><span class="n">text</span><span class="p">))</span>
+<span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">form</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">get_tree</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span><span class="o">.</span><span class="n">words</span> <span class="k">if</span> <span class="n">is_anaphoric_mismo</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span>
 <span class="n">find_anaphoric_mismo</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 </code></pre></div>
 </div>

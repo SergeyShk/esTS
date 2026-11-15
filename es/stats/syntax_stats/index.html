@@ -2724,7 +2724,7 @@
 <p>Las estadísticas sintácticas de un texto por su árbol de dependencias (<a href="https://dialogue-conf.org/media/4302/ivanovvv.pdf">Ivanov, Solnyshkina y Solovyev 2018</a>): las medidas del árbol y de las construcciones sintácticas. La fuente de datos es un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>, y tiene que estar analizada: una cadena se analiza con <a href="../../installation/#model"><code>es_core_news_sm</code></a> o con el pipeline indicado en <code>nlp</code>, sin las entidades nombradas, y un <code>Doc</code> debe llevar las dependencias, que vienen de un <code>parser</code>, las categorías gramaticales, que vienen de un <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>), y los lemas, que vienen de un <code>lemmatizer</code>. Los signos de puntuación, los símbolos (<code>%</code>, <code>€</code>, <code>+</code>) y los espacios no son nodos del árbol, y las distancias se cuentan en posiciones de palabras.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - una fuente que no es ni una cadena ni un <code>Doc</code>, un pipeline en <code>nlp</code> que no es un <code>Language</code> de spaCy;</li>
+<li><code>SourceTypeError</code> - una fuente que no es ni una cadena, ni un <code>Doc</code> ni un <code>Document</code>, un pipeline en <code>nlp</code> que no es un <code>Language</code> de spaCy;</li>
 <li><code>SourceError</code> - una fuente sin palabras; un <code>Doc</code> sin las dependencias, las categorías gramaticales o los lemas (un <code>Doc</code> de <code>spacy.blank("es")</code>, de un pipeline sin analizador o con el <code>morphologizer</code> o el <code>lemmatizer</code> excluido); una cadena más larga que el <code>max_length</code> del pipeline;</li>
 <li><code>DatasetNotFoundError</code> - una cadena sin <code>nlp</code> cuando el modelo no está instalado.</li>
 </ul>
@@ -2809,9 +2809,9 @@ Ratio of nouns to verbs                                    |   3.00
 <tbody>
 <tr>
 <td style="text-align: left;"><code>source</code></td>
-<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code> / <code>Document</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Fuente de datos: un texto o un <code>Doc</code> con las dependencias y los lemas</td>
+<td style="text-align: left;">Fuente de datos: un texto, o un <code>Doc</code> o un <code>Document</code> con las dependencias y los lemas</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>nlp</code></td>
@@ -2822,7 +2822,7 @@ Ratio of nouns to verbs                                    |   3.00
 </tbody>
 </table>
 <h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
-<!-- core: stats/syntax_stats.md:SyntaxStats-attributes 53be7dd -->
+<!-- core: stats/syntax_stats.md:SyntaxStats-attributes 08df3d6 -->
 <table>
 <thead>
 <tr>
@@ -2834,8 +2834,8 @@ Ratio of nouns to verbs                                    |   3.00
 <tbody>
 <tr>
 <td style="text-align: left;"><code>sents</code></td>
-<td style="text-align: left;"><code>tuple[tuple[Token]]</code></td>
-<td style="text-align: left;">Palabras de cada oración con palabras, sobre una copia del <code>Doc</code> sin su tensor ni sus datos de usuario</td>
+<td style="text-align: left;"><code>tuple[tuple[TreeWord]]</code></td>
+<td style="text-align: left;">Palabras del árbol de cada oración con palabras</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>n_sents</code>, <code>n_words</code></td>
@@ -2937,15 +2937,14 @@ Ratio of nouns to verbs                                    |   3.00
 <span class="n">ss</span><span class="o">.</span><span class="n">n_de_chains</span><span class="p">,</span> <span class="n">ss</span><span class="o">.</span><span class="n">n_se_passives</span><span class="p">,</span> <span class="n">ss</span><span class="o">.</span><span class="n">split_predicates</span>
 <span class="n">ss</span><span class="o">.</span><span class="n">c_children</span>
 <span class="n">ss</span><span class="o">.</span><span class="n">c_deps</span>
-<span class="n">ss</span><span class="o">.</span><span class="n">sents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">form</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">ss</span><span class="o">.</span><span class="n">sents</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>(3, 9, 3)
 (1, 1, ('llevó cabo', 'hiciera mención'))
 {0: 16, 1: 5, 2: 4, 3: 2, 4: 2}
-{'ROOT': 2,
- 'advcl': 1,
+{'advcl': 1,
  'amod': 1,
  'aux': 1,
  'case': 6,
@@ -2956,8 +2955,9 @@ Ratio of nouns to verbs                                    |   3.00
  'nmod': 3,
  'nsubj': 3,
  'obj': 2,
- 'obl': 1}
-(La, revisión, de, las, cuentas, del, organismo, fue, realizada, por, el, comité)
+ 'obl': 1,
+ 'root': 2}
+['La', 'revisión', 'de', 'las', 'cuentas', 'del', 'organismo', 'fue', 'realizada', 'por', 'el', 'comité']
 </code></pre></div>
 </div>
 </div>
@@ -3276,10 +3276,10 @@ Ratio of nouns to verbs                                    |   3.00
 <div class="metric-card">
 <h3 id="valency">Valencia de los verbos en forma personal<a class="headerlink" href="#valency" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>verb_valency</code></p>
-<!-- core: stats/syntax_stats.md:calc_valency 4a77742 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">calc_valency</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<!-- core: stats/syntax_stats.md:calc_valency ad471db -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_valency</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
 </code></pre></div>
-<p>La valencia de un token: el número de sus palabras dependientes, sin las relaciones <code>cc</code>, <code>conj</code>, <code>parataxis</code> y <code>punct</code> (<code>anyts.constants.VALENCY_IGNORED_DEPS</code>); con <code>join_hyphens=True</code> una dependiente con guion cuenta una vez, así que <code>came</code> en <code>Some-one came</code> tiene una dependiente y no dos.</p>
+<p>La valencia de una palabra: el número de sus palabras dependientes (<code>get_children</code>), sin las relaciones <code>cc</code>, <code>conj</code>, <code>parataxis</code> y <code>punct</code> ni sus subtipos (<code>parataxis:discourse</code>) (<code>anyts.constants.VALENCY_IGNORED_DEPS</code>).</p>
 <table>
 <thead>
 <tr>
@@ -3291,16 +3291,10 @@ Ratio of nouns to verbs                                    |   3.00
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>join_hyphens</code></td>
-<td style="text-align: left;"><code>bool</code></td>
-<td style="text-align: left;"><code>False</code></td>
-<td style="text-align: left;">Tomar una palabra con guion por una sola palabra</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
@@ -3335,9 +3329,9 @@ Ratio of nouns to verbs                                    |   3.00
 <tbody>
 <tr>
 <td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
@@ -3361,9 +3355,9 @@ Ratio of nouns to verbs                                    |   3.00
 <tbody>
 <tr>
 <td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
@@ -3383,24 +3377,27 @@ Ratio of nouns to verbs                                    |   3.00
 <tbody>
 <tr>
 <td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_clause_head</span><span class="p">,</span> <span class="n">is_subordinate_clause_head</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">anyts.document</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_clause_head</span><span class="p">,</span> <span class="n">is_subordinate_clause_head</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_document</span><span class="p">,</span> <span class="n">get_nlp</span>
 
 <span class="n">nlp</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()</span>
 <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"Él quiere salir, pero tiene que quedarse porque parece cansado."</span><span class="p">)</span>
-<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
-<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_subordinate_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">get_tree</span><span class="p">(</span><span class="n">get_document</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span><span class="o">.</span><span class="n">words</span>
+<span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">form</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">is_clause_head</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span>
+<span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">form</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">is_subordinate_clause_head</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span>
 <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">"Se sentaba a sus pies, no por servicio, sino porque le había cobrado afición."</span><span class="p">)</span>
-<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_subordinate_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">get_tree</span><span class="p">(</span><span class="n">get_document</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span><span class="o">.</span><span class="n">words</span>
+<span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">form</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">is_subordinate_clause_head</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -3430,21 +3427,23 @@ Ratio of nouns to verbs                                    |   3.00
 <tbody>
 <tr>
 <td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_clause_head</span><span class="p">,</span> <span class="n">is_infinitive_clause_head</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">anyts.document</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_clause_head</span><span class="p">,</span> <span class="n">is_infinitive_clause_head</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_document</span><span class="p">,</span> <span class="n">get_nlp</span>
 
 <span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"Quiere salir y volver, pero intentando salir se cayó."</span><span class="p">)</span>
-<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
-<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_infinitive_clause_head</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">get_tree</span><span class="p">(</span><span class="n">get_document</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span><span class="o">.</span><span class="n">words</span>
+<span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">form</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">is_clause_head</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span>
+<span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">form</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">is_infinitive_clause_head</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -3458,14 +3457,14 @@ Ratio of nouns to verbs                                    |   3.00
 <div class="metric-card">
 <h3 id="l2sca">Unidades de producción de L2SCA<a class="headerlink" href="#l2sca" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>t_units_per_sent</code> · <code>mean_t_unit_len</code> · <code>clauses_per_t_unit</code> · <code>p_complex_t_units</code> · <code>verb_phrases_per_t_unit</code> · <code>coordinate_phrases_per_clause</code> · <code>complex_nominals_per_clause</code> · <a href="https://doi.org/10.1075/ijcl.15.4.02lu">Lu 2010</a></p>
-<!-- core: stats/syntax_stats.md:SyntaxStats-l2sca fc77bf3 -->
+<!-- core: stats/syntax_stats.md:SyntaxStats-l2sca 3f2fd4a -->
 <p>Los índices del L2 Syntactic Complexity Analyzer (L2SCA) que no dan las demás métricas, sobre Universal Dependencies. MLC y C/S son <code>mean_clause_len</code> y <code>clauses_per_sent</code>; MLS y DC/C salen de los recuentos, <code>n_words / n_sents</code> y <code>n_subordinate_clauses / n_clauses</code>.</p>
 <ul>
-<li>Una unidad T es una cláusula principal con las cláusulas que dependen de ella: el núcleo de una oración y cada núcleo de cláusula unido a él por <code>conj</code> o <code>parataxis</code> (<code>anyts.constants.MAIN_CLAUSE_DEPS</code>), así que <em>I came, and he left</em> tiene dos; un conjunto de una cláusula subordinada no lo es. Un conjunto sin sujeto propio (<em>I came and left</em>) es un predicado que comparte la unidad T de la cláusula con la que se coordina, como en L2SCA, salvo que su persona, número o género - los de su auxiliar o su cópula, los suyos propios sin ellos - difieran de los de esa cláusula: en una lengua que omite sus sujetos la terminación nombra otro sujeto (<em>llegamos al puerto y nos esperabas</em>). Un <em>there</em> existencial (<code>expl</code> de ClearNLP) es un sujeto. Un conjunto o una parataxis con una marca subordinante (<code>is_subordinating_mark</code>) encabeza una cláusula subordinada o de infinitivo, que no es una unidad T, ni lo es una cláusula bajo ella. Un conjunto en forma personal y con sujeto propio de una cláusula de infinitivo, un predicado que un modelo cuelga del infinitivo, se une a la cláusula de la primera palabra por encima de los infinitivos que no es un infinitivo (<em>he came to help and she stayed</em>: dos unidades T). Una unidad T es compleja con una cláusula subordinada (<code>is_subordinate_clause_head</code>) cuya unidad T más cercana por encima es ella.</li>
+<li>Una unidad T es una cláusula principal con las cláusulas que dependen de ella: el núcleo de una oración y cada núcleo de cláusula unido a él por <code>conj</code> o <code>parataxis</code> (<code>anyts.constants.MAIN_CLAUSE_DEPS</code>), así que <em>I came, and he left</em> tiene dos; un conjunto de una cláusula subordinada no lo es. Un conjunto sin sujeto propio (<em>I came and left</em>) es un predicado que comparte la unidad T de la cláusula con la que se coordina, como en L2SCA, salvo que su persona, número o género - los de su auxiliar o su cópula, los suyos propios sin ellos - difieran de los de esa cláusula: en una lengua que omite sus sujetos la terminación nombra otro sujeto (<em>llegamos al puerto y nos esperabas</em>). Un <em>there</em> existencial (<code>expl</code> de ClearNLP) es un sujeto. Un conjunto o una parataxis con una marca subordinante (<code>is_subordinating_mark</code>) encabeza una cláusula subordinada o de infinitivo, que no es una unidad T, ni lo es una cláusula bajo ella. Un conjunto en forma personal y con sujeto propio de una cláusula de infinitivo, un predicado que un modelo cuelga del infinitivo, se une a la cláusula de la primera palabra por encima de los infinitivos que no es un infinitivo (<em>he came to help and she stayed</em>: dos unidades T); uno de una cláusula marcada sin conjunción coordinante propia se une a la cláusula de la que cuelga la marcada (<em>he left, for he was tired, she slept</em>: dos unidades T), y uno con sujeto propio sobre el infinitivo de una perífrasis se une a la cláusula de la perífrasis (<em>he must leave and she stayed</em>: dos unidades T). Una unidad T es compleja con una cláusula subordinada (<code>is_subordinate_clause_head</code>) cuya unidad T más cercana por encima es ella.</li>
 <li>Un sintagma verbal es un predicado (<code>is_predicate</code>) que no es auxiliar ni cópula: un verbo, un auxiliar usado como predicado (<em>there </em><em>is</em><em> trouble</em>), una palabra con sujeto o con cópula; un infinitivo que forma un solo predicado con su núcleo (<code>is_infinitive_periphrasis</code>), y su conjunto en infinitivo, forman parte del sintagma verbal del núcleo. Un participio u otra forma no personal bajo <code>amod</code> o <code>acl</code>, o coordinada con una, sin auxiliar, cópula ni sujeto propio es un modificador de su sustantivo (<em>the house built by workers</em>), como en L2SCA, no un sintagma verbal.</li>
-<li>Un sintagma coordinado es una coordinación con un conjunto que no es núcleo de cláusula (<em>the man and the woman</em>, <em>is big and nice</em>) o un predicado sin sujeto propio (<em>came and left</em>), contada una vez por su primer conjunto; una coordinación de cláusulas con sus propios sujetos cuenta como cláusulas.</li>
-<li>Las cláusulas de C/T, CP/C y CN/C son las de L2SCA (<code>n_l2sca_clauses</code>): las cláusulas de <code>is_clause_head</code> sin los predicados que comparten sujeto (<em>came and left</em>) ni las cláusulas de infinitivo, ya que L2SCA cuenta las cláusulas en forma personal con sujeto. El núcleo de una oración encabeza una cláusula y una unidad T incluso sin predicado (<em>Sí.</em>, un título, el nombre de quien habla), como un fragmento en L2SCA. C/S y MLC conservan las cláusulas de las demás métricas, así que C/S sale más alto y MLC más bajo que en L2SCA.</li>
-<li>Un nominal complejo es un sustantivo con un modificador de <code>anyts.constants.COMPLEX_NOMINAL_DEPS</code> (un adjetivo, un complemento, una cláusula de relativo o de participio, una aposición, un posesivo), o una cláusula nominal, un núcleo de cláusula de <code>anyts.constants.NOMINAL_CLAUSE_DEPS</code> o un conjunto de uno.</li>
+<li>Un sintagma coordinado es una coordinación con un conjunto que no es núcleo de cláusula (<em>the man and the woman</em>, <em>is big and nice</em>) o un predicado sin sujeto propio (<em>came and left</em>), contada una vez por su primer conjunto; una coordinación de cláusulas con sus propios sujetos cuenta como cláusulas. Un infinitivo que forma un solo predicado con su núcleo (<code>is_infinitive_periphrasis</code>) no es un conjunto cuando un modelo lo cuelga como <code>conj</code> (<em>he must leave</em>).</li>
+<li>Las cláusulas de C/T, CP/C y CN/C son las de L2SCA (<code>n_l2sca_clauses</code>): las cláusulas de <code>is_clause_head</code> sin los predicados que comparten sujeto (<em>came and left</em>) ni las cláusulas de infinitivo, ya que L2SCA cuenta las cláusulas en forma personal con sujeto; un conjunto o una parataxis con una marca subordinante propia es una cláusula subordinada, y cuenta con sujeto o sin él. El núcleo de una oración encabeza una cláusula y una unidad T sea cual sea su relación e incluso sin predicado (<em>Sí.</em>, un título, el nombre de quien habla), como un fragmento en L2SCA. C/S y MLC conservan las cláusulas de las demás métricas, así que C/S sale más alto y MLC más bajo que en L2SCA.</li>
+<li>Un nominal complejo es un sustantivo con un modificador de <code>anyts.constants.COMPLEX_NOMINAL_DEPS</code> (un adjetivo, un complemento, una cláusula de relativo o de participio, una aposición, un posesivo), o una cláusula nominal, un núcleo de cláusula de <code>anyts.constants.NOMINAL_CLAUSE_DEPS</code>, un conjunto de uno o un conjunto que se une a uno, como para las unidades T.</li>
 </ul>
 <div class="arithmatex">\[
 \textrm{MLT} = \frac{\textrm{Palabras}}{\textrm{Unidades T}}, \quad
@@ -3473,15 +3472,15 @@ Ratio of nouns to verbs                                    |   3.00
 \textrm{CT/T} = \frac{\textrm{Unidades T complejas}}{\textrm{Unidades T}}, \quad
 \textrm{CN/C} = \frac{\textrm{Nominales complejos}}{\textrm{Cláusulas de L2SCA}}
 \]</div>
-<p>Las cláusulas y las cláusulas subordinadas son las de las reglas españolas de las tarjetas de arriba, y una perífrasis es un solo sintagma verbal (<code>puede venir</code>). Los modelos cuelgan el infinitivo de algunas perífrasis como conjunto de su verbo (<code>tiene que venir</code>): queda dentro del sintagma verbal del verbo, pero el par cuenta además como un sintagma coordinado.</p>
+<p>Las cláusulas y las cláusulas subordinadas son las de las reglas españolas de las tarjetas de arriba, y una perífrasis es un solo sintagma verbal (<code>puede venir</code>). Los modelos cuelgan el infinitivo de algunas perífrasis como conjunto de su verbo (<code>tiene que venir</code>): queda dentro del sintagma verbal del verbo y no es un sintagma coordinado.</p>
 </div>
 <div class="metric-card">
 <h3 id="noun_modifiers">Modificadores de un sustantivo<a class="headerlink" href="#noun_modifiers" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>modifiers_per_noun</code></p>
-<!-- core: stats/syntax_stats.md:count_noun_modifiers 6775fc1 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">count_noun_modifiers</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<!-- core: stats/syntax_stats.md:count_noun_modifiers cf97360 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">count_noun_modifiers</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
 </code></pre></div>
-<p>Cuenta los modificadores de un sintagma nominal: las dependientes con las relaciones <code>amod</code>, <code>det</code>, <code>nmod</code>, <code>nummod</code>, <code>acl</code> y sus subtipos (<code>anyts.constants.NOUN_MODIFIER_DEPS</code>); <code>conj</code> y <code>appos</code> no son modificadores.</p>
+<p>Cuenta los modificadores de un sintagma nominal: las palabras dependientes (<code>get_children</code>) con las relaciones <code>amod</code>, <code>det</code>, <code>nmod</code>, <code>nummod</code>, <code>acl</code> y sus subtipos (<code>anyts.constants.NOUN_MODIFIER_DEPS</code>); <code>conj</code> y <code>appos</code> no son modificadores.</p>
 <table>
 <thead>
 <tr>
@@ -3493,16 +3492,10 @@ Ratio of nouns to verbs                                    |   3.00
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>join_hyphens</code></td>
-<td style="text-align: left;"><code>bool</code></td>
-<td style="text-align: left;"><code>False</code></td>
-<td style="text-align: left;">Tomar una palabra con guion por una sola palabra</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
@@ -3536,15 +3529,15 @@ Ratio of nouns to verbs                                    |   3.00
 <tbody>
 <tr>
 <td style="text-align: left;"><code>tokens</code></td>
-<td style="text-align: left;"><code>Doc</code> / <code>Span</code> / <code>list[Token]</code></td>
+<td style="text-align: left;"><code>list[TreeWord]</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Secuencia de tokens (<code>calc_de_chains</code>)</td>
+<td style="text-align: left;">Palabras del árbol (<code>calc_de_chains</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token (<code>is_de_modifier</code>)</td>
+<td style="text-align: left;">Palabra del árbol (<code>is_de_modifier</code>)</td>
 </tr>
 </tbody>
 </table>
@@ -3552,10 +3545,15 @@ Ratio of nouns to verbs                                    |   3.00
 <div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_de_chains</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">anyts.document</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_de_chains</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_document</span><span class="p">,</span> <span class="n">get_nlp</span>
 
-<span class="n">calc_de_chains</span><span class="p">(</span><span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"El aumento de la eficiencia del uso de los recursos fue notable."</span><span class="p">))</span>
+<span class="n">calc_de_chains</span><span class="p">(</span>
+    <span class="n">get_tree</span><span class="p">(</span>
+        <span class="n">get_document</span><span class="p">(</span><span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"El aumento de la eficiencia del uso de los recursos fue notable."</span><span class="p">))</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">words</span>
+<span class="p">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -3585,20 +3583,22 @@ Ratio of nouns to verbs                                    |   3.00
 <tbody>
 <tr>
 <td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
 <div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_participle_clause</span><span class="p">,</span> <span class="n">subtree_len</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">anyts.document</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_participle_clause</span><span class="p">,</span> <span class="n">subtree_len</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_document</span><span class="p">,</span> <span class="n">get_nlp</span>
 
 <span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"La casa, construida por los obreros en 1900, fue vendida."</span><span class="p">)</span>
-<span class="p">[(</span><span class="n">token</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">subtree_len</span><span class="p">(</span><span class="n">token</span><span class="p">))</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_participle_clause</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">get_tree</span><span class="p">(</span><span class="n">get_document</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span><span class="o">.</span><span class="n">words</span>
+<span class="p">[(</span><span class="n">word</span><span class="o">.</span><span class="n">form</span><span class="p">,</span> <span class="n">subtree_len</span><span class="p">(</span><span class="n">word</span><span class="p">))</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">is_participle_clause</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -3626,20 +3626,22 @@ Ratio of nouns to verbs                                    |   3.00
 <tbody>
 <tr>
 <td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
 <div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_gerund_clause</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">anyts.document</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_gerund_clause</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_document</span><span class="p">,</span> <span class="n">get_nlp</span>
 
 <span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span><span class="s2">"Llegando tarde, encontró la puerta cerrada y siguió trabajando."</span><span class="p">)</span>
-<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_gerund_clause</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">get_tree</span><span class="p">(</span><span class="n">get_document</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span><span class="o">.</span><span class="n">words</span>
+<span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">form</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">is_gerund_clause</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -3673,9 +3675,9 @@ Ratio of nouns to verbs                                    |   3.00
 <tbody>
 <tr>
 <td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
@@ -3683,14 +3685,16 @@ Ratio of nouns to verbs                                    |   3.00
 <div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Código</label><label for="__tabbed_8_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_agentless</span><span class="p">,</span> <span class="n">is_passive</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">anyts.document</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_agentless</span><span class="p">,</span> <span class="n">is_passive</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_document</span><span class="p">,</span> <span class="n">get_nlp</span>
 
 <span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span>
     <span class="s2">"La casa fue construida por los obreros y el proyecto es financiado por el Estado. "</span>
     <span class="s2">"Se construyó la casa."</span>
 <span class="p">)</span>
-<span class="p">[(</span><span class="n">token</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">is_agentless</span><span class="p">(</span><span class="n">token</span><span class="p">))</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_passive</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">get_tree</span><span class="p">(</span><span class="n">get_document</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span><span class="o">.</span><span class="n">words</span>
+<span class="p">[(</span><span class="n">word</span><span class="o">.</span><span class="n">form</span><span class="p">,</span> <span class="n">is_agentless</span><span class="p">(</span><span class="n">word</span><span class="p">))</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">is_passive</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -3749,19 +3753,19 @@ Ratio of nouns to verbs                                    |   3.00
 <tbody>
 <tr>
 <td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>tokens</code></td>
-<td style="text-align: left;"><code>Doc</code> / <code>Span</code> / <code>list[Token]</code></td>
+<td style="text-align: left;"><code>list[TreeWord]</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Secuencia de tokens (<code>find_split_predicates</code>)</td>
+<td style="text-align: left;">Palabras del árbol (<code>find_split_predicates</code>)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>verb</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
 <td style="text-align: left;">Verbo del que depende el sustantivo (<code>is_split_predicate_noun</code>)</td>
 </tr>
@@ -3770,19 +3774,21 @@ Ratio of nouns to verbs                                    |   3.00
 <div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Código</label><label for="__tabbed_10_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_split_predicates</span><span class="p">,</span> <span class="n">is_negation</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">anyts.document</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_split_predicates</span><span class="p">,</span> <span class="n">is_negation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_document</span><span class="p">,</span> <span class="n">get_nlp</span>
 
 <span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span>
     <span class="s2">"Se procedió a la votación y el comité tomó parte en la revisión. "</span>
     <span class="s2">"No vino nadie, ni Juan ni María."</span>
 <span class="p">)</span>
-<span class="n">find_split_predicates</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
-<span class="p">[</span><span class="n">token</span><span class="o">.</span><span class="n">text</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_negation</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">get_tree</span><span class="p">(</span><span class="n">get_document</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span><span class="o">.</span><span class="n">words</span>
+<span class="p">[(</span><span class="n">verb</span><span class="o">.</span><span class="n">form</span><span class="p">,</span> <span class="n">noun</span><span class="o">.</span><span class="n">form</span><span class="p">)</span> <span class="k">for</span> <span class="n">verb</span><span class="p">,</span> <span class="n">noun</span> <span class="ow">in</span> <span class="n">find_split_predicates</span><span class="p">(</span><span class="n">words</span><span class="p">)]</span>
+<span class="p">[</span><span class="n">word</span><span class="o">.</span><span class="n">form</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">is_negation</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>[(procedió, votación), (tomó, parte)]
+<div class="highlight"><pre><span></span><code>[('procedió', 'votación'), ('tomó', 'parte')]
 ['No', 'nadie']
 </code></pre></div>
 </div>
@@ -3880,12 +3886,12 @@ Ratio of nouns to verbs                                    |   3.00
 </div>
 </div>
 </div>
-<p>Las funciones trabajan con tokens de spaCy: las funciones <code>calc_*</code> y <code>find_*</code> y <code>dependency_triples</code> reciben una secuencia de tokens (<code>Doc</code>, <code>Span</code> o una lista), las funciones <code>is_*</code>, <code>has_*</code> y <code>count_*</code> un solo token, y <code>calc_edit_distance</code> y <code>calc_multiset_similarity</code> listas de los elementos de las oraciones; las palabras de una secuencia son los tokens de <code>is_word</code> de <code>anyts.utils</code>. Las funciones del árbol de dependencias vienen del núcleo, las de las construcciones del español son propias de esTS.</p>
+<p>Las funciones trabajan con las palabras del árbol de un documento (<code>TreeWord</code>, <code>get_tree</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/document/">anyTS</a>): las funciones <code>calc_*</code> y <code>find_*</code> y <code>dependency_triples</code> reciben una lista de ellas, las funciones <code>is_*</code>, <code>has_*</code> y <code>count_*</code> una sola palabra, y <code>calc_edit_distance</code> y <code>calc_multiset_similarity</code> listas de los elementos de las oraciones; las palabras de una lista son las que tienen una letra o una cifra (<code>get_words</code>). Las funciones del árbol de dependencias vienen del núcleo, las de las construcciones del español son propias de esTS.</p>
 <h2 id="get_words">Palabras de una secuencia<a class="headerlink" href="#get_words" title="Permanent link">&para;</a></h2>
-<!-- core: stats/syntax_stats.md:get_words fb9eece -->
-<div class="signature highlight"><pre><span></span><code><span class="n">get_words</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<!-- core: stats/syntax_stats.md:get_words bf0ccab -->
+<div class="signature highlight"><pre><span></span><code><span class="n">get_words</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
 </code></pre></div>
-<p>Las palabras de una secuencia de tokens en su orden; con <code>join_hyphens=True</code> una palabra que el tokenizador dividió por sus guiones es una sola palabra, dada por la parte que lleva su relación, como con las dependientes de <code>get_children</code> (<code>governor</code> en <code>He is vice-governor</code>), o por su primera parte cuando la lleva un guion.</p>
+<p>Las palabras de una secuencia de palabras del árbol en su orden: las que tienen una letra o una cifra, así que los signos de puntuación y los símbolos se descartan.</p>
 <table>
 <thead>
 <tr>
@@ -3897,24 +3903,18 @@ Ratio of nouns to verbs                                    |   3.00
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>tokens</code></td>
-<td style="text-align: left;"><code>Doc</code> / <code>Span</code> / <code>list[Token]</code></td>
+<td style="text-align: left;"><code>words</code></td>
+<td style="text-align: left;"><code>list[TreeWord]</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Secuencia de tokens</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>join_hyphens</code></td>
-<td style="text-align: left;"><code>bool</code></td>
-<td style="text-align: left;"><code>False</code></td>
-<td style="text-align: left;">Tomar una palabra con guion por una sola palabra</td>
+<td style="text-align: left;">Palabras del árbol, como las de una oración</td>
 </tr>
 </tbody>
 </table>
 <h2 id="base_dep">Relación base<a class="headerlink" href="#base_dep" title="Permanent link">&para;</a></h2>
-<!-- core: stats/syntax_stats.md:base_dep 66fdc26 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">base_dep</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+<!-- core: stats/syntax_stats.md:base_dep bce7c64 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">base_dep</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
 </code></pre></div>
-<p>La relación de un token sin su subtipo, que Universal Dependencies separa con dos puntos: <code>nsubj:pass</code> da <code>nsubj</code>, <code>expl:pass</code> da <code>expl</code>.</p>
+<p>La relación de una palabra sin su subtipo, que Universal Dependencies separa con dos puntos: <code>nsubj:pass</code> da <code>nsubj</code>, <code>expl:pass</code> da <code>expl</code>; una palabra sin relación da una cadena vacía.</p>
 <table>
 <thead>
 <tr>
@@ -3926,18 +3926,18 @@ Ratio of nouns to verbs                                    |   3.00
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
 <h2 id="get_children">Palabras dependientes<a class="headerlink" href="#get_children" title="Permanent link">&para;</a></h2>
-<!-- core: stats/syntax_stats.md:get_children 2fc8508 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">get_children</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<!-- core: stats/syntax_stats.md:get_children fb62782 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">get_children</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
 </code></pre></div>
-<p>Las palabras dependientes de un token, sin la puntuación ni los espacios; con <code>join_hyphens=True</code>, las dependientes de toda la palabra con guion a la que pertenece el token.</p>
+<p>Las palabras dependientes de una palabra, sin los signos de puntuación ni los símbolos.</p>
 <table>
 <thead>
 <tr>
@@ -3949,23 +3949,17 @@ Ratio of nouns to verbs                                    |   3.00
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>join_hyphens</code></td>
-<td style="text-align: left;"><code>bool</code></td>
-<td style="text-align: left;"><code>False</code></td>
-<td style="text-align: left;">Tomar una palabra con guion por una sola palabra</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
-<!-- core: stats/syntax_stats.md:subtree_len bfb372e -->
-<div class="signature highlight"><pre><span></span><code><span class="n">subtree_len</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<!-- core: stats/syntax_stats.md:subtree_len b6a3e96 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">subtree_len</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
 </code></pre></div>
-<p>El número de palabras del subárbol de un token: el propio token y todas sus dependientes directas e indirectas; los argumentos son los de <code>get_children</code>.</p>
+<p>El número de palabras del subárbol de una palabra: la propia palabra y todas sus dependientes directas e indirectas, sin la puntuación; el argumento es el de <code>get_children</code>.</p>
 <h2 id="verb-forms">Formas verbales<a class="headerlink" href="#verb-forms" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">predicate_form</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 </code></pre></div>
@@ -3989,22 +3983,24 @@ Ratio of nouns to verbs                                    |   3.00
 <tbody>
 <tr>
 <td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
 <div class="tabbed-set tabbed-alternate" data-tabs="12:2"><input checked="checked" id="__tabbed_12_1" name="__tabbed_12" type="radio" /><input id="__tabbed_12_2" name="__tabbed_12" type="radio" /><div class="tabbed-labels"><label for="__tabbed_12_1">Código</label><label for="__tabbed_12_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_participle</span><span class="p">,</span> <span class="n">predicate_form</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_nlp</span>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">anyts.document</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.syntax_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_participle</span><span class="p">,</span> <span class="n">predicate_form</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ests.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_document</span><span class="p">,</span> <span class="n">get_nlp</span>
 
 <span class="n">doc</span> <span class="o">=</span> <span class="n">get_nlp</span><span class="p">()(</span>
     <span class="s2">"Dijo que había llegado tarde. Lo acusan de haber matado al rey siendo elegido presidente."</span>
 <span class="p">)</span>
-<span class="p">[(</span><span class="n">token</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">predicate_form</span><span class="p">(</span><span class="n">token</span><span class="p">))</span> <span class="k">for</span> <span class="n">token</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">is_participle</span><span class="p">(</span><span class="n">token</span><span class="p">)]</span>
+<span class="n">words</span> <span class="o">=</span> <span class="n">get_tree</span><span class="p">(</span><span class="n">get_document</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span><span class="o">.</span><span class="n">words</span>
+<span class="p">[(</span><span class="n">word</span><span class="o">.</span><span class="n">form</span><span class="p">,</span> <span class="n">predicate_form</span><span class="p">(</span><span class="n">word</span><span class="p">))</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">words</span> <span class="k">if</span> <span class="n">is_participle</span><span class="p">(</span><span class="n">word</span><span class="p">)]</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -4014,8 +4010,8 @@ Ratio of nouns to verbs                                    |   3.00
 </div>
 </div>
 <h2 id="is_predicate">Predicado de una cláusula<a class="headerlink" href="#is_predicate" title="Permanent link">&para;</a></h2>
-<!-- core: stats/syntax_stats.md:is_predicate b814232 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">is_predicate</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<!-- core: stats/syntax_stats.md:is_predicate c2f06e2 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">is_predicate</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
 </code></pre></div>
 <p>Comprueba si una palabra puede ser el predicado de su cláusula: un verbo (<code>VERB</code>, <code>AUX</code>), una palabra con sujeto propio (<code>nsubj</code>, <code>csubj</code> y sus subtipos, <code>anyts.constants.SUBJECT_DEPS</code>) o con cópula (<code>cop</code>), de modo que el predicado nominal de <code>he is tall</code> y de una lengua que omite el sujeto pasa y una palabra parentética no.</p>
 <table>
@@ -4029,25 +4025,19 @@ Ratio of nouns to verbs                                    |   3.00
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>join_hyphens</code></td>
-<td style="text-align: left;"><code>bool</code></td>
-<td style="text-align: left;"><code>False</code></td>
-<td style="text-align: left;">Tomar una palabra con guion por una sola palabra</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
-<p>Un valor que no es un <code>Token</code> lanza <code>SourceTypeError</code>.</p>
+<p>Un valor que no es un <code>TreeWord</code> lanza <code>SourceTypeError</code>.</p>
 <h2 id="calc_modifier_chains">Cadenas de modificadores<a class="headerlink" href="#calc_modifier_chains" title="Permanent link">&para;</a></h2>
-<!-- core: stats/syntax_stats.md:calc_modifier_chains f16f96d -->
-<div class="signature highlight"><pre><span></span><code><span class="n">calc_modifier_chains</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">is_modifier</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<!-- core: stats/syntax_stats.md:calc_modifier_chains a9096ac -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_modifier_chains</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">is_modifier</span><span class="p">)</span>
 </code></pre></div>
-<p>Las longitudes de las cadenas de modificadores encajados, en el orden de las palabras. Una cadena son dos o más modificadores, cada uno colgado del anterior, como los complementos de <code>the increase of the efficiency of the use of resources</code> (longitud 3); la comprobación <code>is_modifier</code> de una lengua dice qué es un modificador (un complemento con preposición, un sustantivo en genitivo). Una cadena empieza en un modificador cuyo núcleo no lo es, y su longitud es el número de modificadores de su rama más larga. Los enlaces son los de <code>get_children</code>: la puntuación no es un enlace, y con <code>join_hyphens</code> una palabra con guion es un solo enlace.</p>
+<p>Las longitudes de las cadenas de modificadores encajados, en el orden de las palabras. Una cadena son dos o más modificadores, cada uno colgado del anterior, como los complementos de <code>the increase of the efficiency of the use of resources</code> (longitud 3); la comprobación <code>is_modifier</code> de una lengua dice qué es un modificador (un complemento con preposición, un sustantivo en genitivo). Una cadena empieza en un modificador cuyo núcleo no lo es, y su longitud es el número de modificadores de su rama más larga. Los enlaces son los de <code>get_children</code>: la puntuación no es un enlace.</p>
 <table>
 <thead>
 <tr>
@@ -4059,29 +4049,23 @@ Ratio of nouns to verbs                                    |   3.00
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>tokens</code></td>
-<td style="text-align: left;"><code>Doc</code> / <code>Span</code> / <code>list[Token]</code></td>
+<td style="text-align: left;"><code>words</code></td>
+<td style="text-align: left;"><code>list[TreeWord]</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Secuencia de tokens</td>
+<td style="text-align: left;">Palabras del árbol, como las de una oración</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>is_modifier</code></td>
-<td style="text-align: left;"><code>Callable[[Token], bool]</code></td>
+<td style="text-align: left;"><code>Callable[[TreeWord], bool]</code></td>
 <td style="text-align: left;">-</td>
 <td style="text-align: left;">Si una palabra es un modificador de la cadena</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>join_hyphens</code></td>
-<td style="text-align: left;"><code>bool</code></td>
-<td style="text-align: left;"><code>False</code></td>
-<td style="text-align: left;">Tomar una palabra con guion por una sola palabra</td>
 </tr>
 </tbody>
 </table>
 <p>Una comprobación que no es invocable lanza <code>SourceTypeError</code>.</p>
 <h2 id="is_prep_complement">Complementos con preposición<a class="headerlink" href="#is_prep_complement" title="Permanent link">&para;</a></h2>
-<!-- core: stats/syntax_stats.md:is_prep_complement 6a6701b -->
-<div class="signature highlight"><pre><span></span><code><span class="n">is_prep_complement</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<!-- core: stats/syntax_stats.md:is_prep_complement eb56245 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">is_prep_complement</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
 </code></pre></div>
 <p>Comprueba si una palabra es un complemento con preposición: una palabra con la relación <code>nmod</code> u <code>obl</code> o un subtipo de ellas (<code>anyts.constants.PREP_COMPLEMENT_DEPS</code>), o un predicado con cópula o con sujeto propio fuera de una oración de relativo (<code>acl</code>), como un predicado nominal de una lengua que omite la cópula en presente, que tiene una dependiente de la relación <code>case</code> que es una adposición (<code>ADP</code>) o empieza una de varias palabras (<code>fixed</code>: <em>in front of</em>). Un sustantivo en un caso sin preposición y un marcador posesivo no lo son.</p>
 <table>
@@ -4095,23 +4079,17 @@ Ratio of nouns to verbs                                    |   3.00
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>token</code></td>
-<td style="text-align: left;"><code>Token</code></td>
+<td style="text-align: left;"><code>word</code></td>
+<td style="text-align: left;"><code>TreeWord</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Token</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>join_hyphens</code></td>
-<td style="text-align: left;"><code>bool</code></td>
-<td style="text-align: left;"><code>False</code></td>
-<td style="text-align: left;">Tomar una palabra con guion por una sola palabra</td>
+<td style="text-align: left;">Palabra del árbol</td>
 </tr>
 </tbody>
 </table>
-<p>Un valor que no es un <code>Token</code> lanza <code>SourceTypeError</code>.</p>
+<p>Un valor que no es un <code>TreeWord</code> lanza <code>SourceTypeError</code>.</p>
 <h2 id="dependency_triples">Ternas de dependencias<a class="headerlink" href="#dependency_triples" title="Permanent link">&para;</a></h2>
-<!-- core: stats/syntax_stats.md:dependency_triples 8643971 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">dependency_triples</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">join_hyphens</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<!-- core: stats/syntax_stats.md:dependency_triples 2cc48fb -->
+<div class="signature highlight"><pre><span></span><code><span class="n">dependency_triples</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
 </code></pre></div>
 <p>Las ternas de dependencias de las palabras de una oración (<code>get_words</code>), en su orden: la categoría gramatical del núcleo de una palabra - la palabra más cercana por encima de ella a través de la puntuación -, su relación sin subtipo (<code>base_dep</code>) y su propia categoría gramatical, como <code>("NOUN", "amod", "ADJ")</code> para <em>a red house</em>. El núcleo de la oración, y una palabra sin ninguna palabra por encima, dan un núcleo vacío y la relación <code>root</code>, sea cual sea su etiqueta.</p>
 <table>
@@ -4125,20 +4103,14 @@ Ratio of nouns to verbs                                    |   3.00
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><code>tokens</code></td>
-<td style="text-align: left;"><code>Doc</code> / <code>Span</code> / <code>list[Token]</code></td>
+<td style="text-align: left;"><code>words</code></td>
+<td style="text-align: left;"><code>list[TreeWord]</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Secuencia de tokens</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>join_hyphens</code></td>
-<td style="text-align: left;"><code>bool</code></td>
-<td style="text-align: left;"><code>False</code></td>
-<td style="text-align: left;">Tomar una palabra con guion por una sola palabra</td>
+<td style="text-align: left;">Palabras del árbol de una oración</td>
 </tr>
 </tbody>
 </table>
-<p>Unos tokens que no son un <code>Doc</code>, un <code>Span</code> ni una lista de objetos <code>Token</code> lanzan <code>SourceTypeError</code>.</p>
+<p>Unas palabras que no son una lista de objetos <code>TreeWord</code> lanzan <code>SourceTypeError</code>.</p>
 <h2 id="calc_edit_distance">Distancia de edición y semejanza de multiconjuntos<a class="headerlink" href="#calc_edit_distance" title="Permanent link">&para;</a></h2>
 <!-- core: stats/syntax_stats.md:calc_edit_distance c75df9c -->
 <div class="signature highlight"><pre><span></span><code><span class="n">calc_edit_distance</span><span class="p">(</span><span class="n">sents</span><span class="p">)</span>

@@ -2071,12 +2071,12 @@
 <h1 id="estadisticas-basicas">Estadísticas básicas<a class="headerlink" href="#estadisticas-basicas" title="Permanent link">&para;</a></h1>
 <div class="signature highlight"><pre><span></span><code><span class="n">BasicStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">complex_syl_factor</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">long_word_letter_factor</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: stats/basic_stats.md:BasicStats c1092e0 -->
-<p>Las estadísticas básicas de un texto: el número de sus oraciones, palabras, caracteres, sílabas y signos de puntuación y las distribuciones de sus palabras. La fuente de datos es un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>. Las letras se cuentan con <code>str.isalpha</code>, así que las cifras, los guiones y los signos dentro de una palabra no son letras.</p>
-<p>Las palabras y las oraciones de una cadena salen de los extractores. Un <code>Doc</code> da sus tokens como palabras, sin los signos de puntuación ni los símbolos como <code>€</code> o <code>%</code>, y sus límites como oraciones, o los del extractor de oraciones cuando no los tiene o solo tiene algunos (<code>has_sents</code>); un extractor indicado se usa en su lugar, sobre su texto. Una línea en blanco termina una oración de una cadena y de un <code>Doc</code> sin límites; un <code>Doc</code> con límites también, cuando su pipeline tiene <code>start_sents_after_blank_lines</code> (que una biblioteca del idioma registra con su propio nombre) antes del parser, <code>senter</code> o <code>sentencizer</code>. Una oración sin palabras, como una de pura puntuación, no se cuenta.</p>
+<!-- core: stats/basic_stats.md:BasicStats 259a268 -->
+<p>Las estadísticas básicas de un texto: el número de sus oraciones, palabras, caracteres, sílabas y signos de puntuación y las distribuciones de sus palabras. La fuente de datos es un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> o un <code>Document</code> de <a href="https://github.com/SergeyShk/anySeg">anySeg</a>. Las letras se cuentan con <code>str.isalpha</code>, así que las cifras, los guiones y los signos dentro de una palabra no son letras.</p>
+<p>Las palabras y las oraciones salen del <a href="https://sergeyshk.github.io/anyTS/document/">documento</a> de la fuente (<code>parse</code>): sus tokens sin los signos de puntuación ni los símbolos como <code>€</code> o <code>%</code> (<code>doc_words</code>) y sus oraciones; un extractor indicado se usa en su lugar, sobre el texto. Un <code>Doc</code> conserva sus comienzos de oración, y uno que no los tiene o solo tiene algunos (un token cuyo <code>is_sent_start</code> no está fijado) recibe los de <code>parse</code>. Una línea en blanco termina una oración de cualquier fuente, ya que termina un párrafo del documento. Una oración sin palabras, como una de pura puntuación, no se cuenta.</p>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - una fuente que no es ni una cadena ni un <code>Doc</code>, un extractor de otro tipo;</li>
+<li><code>SourceTypeError</code> - una fuente que no es ni una cadena, ni un <code>Doc</code>, ni un <code>Document</code>, un <code>parse</code> que no devuelve un <code>Document</code>, un <code>doc_words</code> que no devuelve una secuencia de cadenas, un extractor de otro tipo;</li>
 <li><code>SourceError</code> - una fuente sin palabras;</li>
 <li><code>ParameterError</code> - un umbral que no es un entero de al menos uno, un <code>normalize</code> que no es un <code>bool</code>.</li>
 </ul>
@@ -2114,7 +2114,7 @@ Entropy of the word lengths in syllables (bits) |   1.72
 </div>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: stats/basic_stats.md:BasicStats-parameters 362b585 -->
+<!-- core: stats/basic_stats.md:BasicStats-parameters 2d8e54b -->
 <table>
 <thead>
 <tr>
@@ -2127,21 +2127,21 @@ Entropy of the word lengths in syllables (bits) |   1.72
 <tbody>
 <tr>
 <td style="text-align: left;"><code>source</code></td>
-<td style="text-align: left;"><code>str</code> / <code>Doc</code></td>
+<td style="text-align: left;"><code>str</code> / <code>Doc</code> / <code>Document</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Fuente de datos (cadena u objeto Doc)</td>
+<td style="text-align: left;">Fuente de datos</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>sents_extractor</code></td>
 <td style="text-align: left;"><code>SentsExtractor</code></td>
 <td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Herramienta de extracción de oraciones; se usa también con un Doc, sobre su texto</td>
+<td style="text-align: left;">Herramienta de extracción de oraciones, que se usa sobre el texto en lugar de las oraciones del documento</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>words_extractor</code></td>
 <td style="text-align: left;"><code>WordsExtractor</code></td>
 <td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Herramienta de extracción de palabras; se usa también con un Doc, sobre su texto</td>
+<td style="text-align: left;">Herramienta de extracción de palabras, que se usa sobre el texto en lugar de las palabras del documento</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>normalize</code></td>
@@ -2166,7 +2166,7 @@ Entropy of the word lengths in syllables (bits) |   1.72
 <p>El objeto guarda <code>normalize</code>, <code>complex_syl_factor</code> y <code>long_word_letter_factor</code> con sus nombres.</p>
 <p>En esTS los umbrales son los del núcleo y de las fórmulas de legibilidad: una palabra compleja tiene tres o más sílabas, como en SMOG, y una palabra larga siete o más letras, como en LIX y RIX (<code>COMPLEX_SYL_FACTOR = 3</code> y <code>LONG_WORD_LETTER_FACTOR = 7</code> de <code>anyts.constants</code>).</p>
 <h2 id="estadisticas">Estadísticas<a class="headerlink" href="#estadisticas" title="Permanent link">&para;</a></h2>
-<!-- core: stats/basic_stats.md:BasicStats-attributes d457364 -->
+<!-- core: stats/basic_stats.md:BasicStats-attributes ba0510d -->
 <table>
 <thead>
 <tr>
@@ -2240,7 +2240,7 @@ Entropy of the word lengths in syllables (bits) |   1.72
 <tr>
 <td style="text-align: left;"><code>n_chars</code></td>
 <td style="text-align: left;"><code>int</code></td>
-<td style="text-align: left;">Número de caracteres sin los saltos de línea</td>
+<td style="text-align: left;">Número de caracteres sin los saltos de línea (<code>LINE_BREAK</code>: <code>\n</code>, <code>\r\n</code>, <code>\r</code>, la tabulación vertical, el salto de página, U+0085, U+2028, U+2029)</td>
 <td style="text-align: left;">-</td>
 </tr>
 <tr>
@@ -2292,8 +2292,8 @@ Entropy of the word lengths in syllables (bits) |   1.72
 <!-- core: stats/basic_stats.md:BasicStats-count_words_by abc6821 -->
 <p><code>count_words_by_syllables(min_syllables)</code> y <code>count_words_by_letters(min_letters)</code> devuelven el número de palabras con al menos el número de sílabas o de letras indicado; un mínimo que no es un entero lanza <code>ParameterError</code>.</p>
 <p>Los métodos vuelven a contar las palabras complejas y largas con un umbral distinto del fijado al crear el objeto; <a href="../readability_stats/"><code>ReadabilityStats</code></a> cuenta con ellos las palabras polisílabas de SOL y las palabras largas de LIX y RIX, así que estas no dependen de los umbrales del objeto.</p>
-<!-- core: stats/basic_stats.md:BasicStats-get_stats 5352c3c -->
-<p><code>get_stats(flat)</code> devuelve un diccionario con las distribuciones <code>c_letters</code> y <code>c_syllables</code>, las estadísticas de <code>stats_desc</code>, la distribución <code>c_punctuations</code> y, con <code>normalize=True</code>, los recuentos normalizados, como una copia: editarlo no cambia el objeto. Con <code>flat=True</code> las distribuciones dan una clave por cada valor que tiene el texto, como <code>c_letters_3</code> y <code>c_punctuations_comma</code>.</p>
+<!-- core: stats/basic_stats.md:BasicStats-get_stats 7d91a7c -->
+<p><code>get_stats(*, flat=False)</code> devuelve un diccionario con las distribuciones <code>c_letters</code> y <code>c_syllables</code>, las estadísticas de <code>stats_desc</code>, la distribución <code>c_punctuations</code> y, con <code>normalize=True</code>, los recuentos normalizados, como una copia: editarlo no cambia el objeto. Con <code>flat=True</code> las distribuciones dan una clave por cada valor que tiene el texto, como <code>c_letters_3</code> y <code>c_punctuations_comma</code>.</p>
 <!-- core: stats/basic_stats.md:BasicStats-print_stats 129bbf6 -->
 <p><code>print_stats()</code> muestra una tabla con las estadísticas de <code>stats_desc</code>, sus descripciones y los encabezados de <code>stats_headers</code>.</p>
 <p>Las estadísticas normalizadas <code>p_*</code> no están en la tabla.</p>
