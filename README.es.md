@@ -418,7 +418,7 @@ La cohesión referencial a la manera de Coh-Metrix y de su adaptación española
 (3, 23)
 
 >>> cs.noun_overlap_adjacent, round(cs.p_given, 3)
-(0.5, 0.167)
+(0.5, 0.182)
 
 >>> cs.c_connectors
 {'por lo tanto': 1, 'sin embargo': 1}
@@ -544,7 +544,7 @@ Cada clase de estadísticas es también un componente de un pipeline, de modo qu
 (12, ('DET', 'NOUN'), 2.0)
 ```
 
-Las fábricas son `ests_basic`, `ests_readability`, `ests_unadapted_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` y `ests_verse`; el nombre del paso del pipeline es el nombre de la extensión. El pipeline de `ests.load_pipeline()` toma los tokens y las oraciones de [anySeg](https://github.com/SergeyShk/anySeg), así que un `Doc` cuenta las palabras y las oraciones de su cadena.
+Las fábricas son `ests_basic`, `ests_readability`, `ests_unadapted_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` y `ests_verse`; el nombre del paso del pipeline es el nombre de la extensión. El pipeline de `ests.load_pipeline()` toma los tokens y las oraciones de [anySeg](https://github.com/SergeyShk/anySeg) y las categorías gramaticales, los rasgos y los lemas de [esMorph](https://github.com/SergeyShk/esMorph), así que un `Doc` cuenta las palabras y las oraciones de su cadena y tiene su morfología.
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/components/).
 

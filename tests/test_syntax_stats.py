@@ -90,7 +90,7 @@ def test_get_stats_values(ss):
     assert stats["tree_depth"] == 4
     assert stats["clauses_per_sent"] == 2
     assert stats["p_complex_sents"] == 0.5
-    assert stats["noun_verb_ratio"] == 1
+    assert stats["noun_verb_ratio"] == 0.75
 
 
 def test_print_stats(ss, capsys):
@@ -376,7 +376,7 @@ def test_gerund_of_a_periphrasis_is_not_a_clause(nlp, text):
         ("Se hizo por decisión del comité", []),
         ("Hizo el trabajo con dedicación", []),
         ("La decisión tomó forma", []),
-        ("El tribunal dio traslado a las partes", []),
+        ("El tribunal dio traslado a las partes", ["dio traslado"]),
         ("La empresa puso en primer lugar la seguridad", []),
         ("El secretario dio lectura al acuerdo", ["dio lectura"]),
         ("Se procedió a la notificación de la resolución", ["procedió notificación"]),
@@ -585,6 +585,15 @@ def test_predicate_form_of_an_auxiliary_without_a_form(nlp, auxiliary, form):
         morphs=["", "VerbForm=Part"],
     )
     assert predicate_form(tree(doc)[1]) == form
+
+
+def test_auxiliary_form_of_an_infinitive_read_as_a_noun(nlp):
+    """The tagger can read an infinitive auxiliary as a noun without a verb form (el ser)"""
+    doc = nlp("Me valió el ser saludado por todos.")
+    ss = SyntaxStats(doc)
+    (word,) = [word for word in tree(doc) if word.form == "ser"]
+    assert word.upos == "NOUN" and "VerbForm" not in word.feats
+    assert ss.auxiliary_form(word) == "Inf"
 
 
 @pytest.mark.parametrize(

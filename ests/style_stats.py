@@ -48,10 +48,8 @@ class StyleStats(anyts.style_stats.StyleStats):
         stopwords and the one-word parenthetical expressions (is_stopword), the
         phrases with their contractions and the forms of their verbs
         (expand_phrases), the lists COMPOUND_PREPOSITIONS, PARENTHETICALS and
-        OFFICIALESE_CLICHES, and the verbal nouns among the nouns of the spaCy
-        model. The nouns of a string are parsed by the model only when they
-        are first read, in parts of whole sentences if it is longer than the
-        max_length of the pipeline
+        OFFICIALESE_CLICHES, and the verbal nouns among the nouns. The nouns of
+        a string are analyzed by esMorph only when they are first read
 
     Example:
         >>> from ests import StyleStats

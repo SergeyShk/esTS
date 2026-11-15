@@ -66,23 +66,21 @@ Galdós frente a Unamuno, tres novelas de cada uno del [corpus de literatura](..
     diversity_mtld          103.655          64.594  37.536   47.169    3.107        0.981  0.990     0.0
     diversity_mattr           0.817           0.769   0.046    0.057    2.951        0.979  0.990     0.0
     diversity_msttr           0.819           0.769   0.047    0.059    2.927        0.979  0.989     0.0
-
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
     basic_letters_per_word          4.441           4.130   0.243    0.358    1.695        0.784  0.892     0.0
     readability_lix                38.321          29.758   7.140   11.170    1.091        0.698  0.849     0.0
-    morph_p_gerund                  0.069           0.037   0.026    0.035    1.533        0.742  0.871     0.0
-    morph_polarity_Neg              0.019           0.028  -0.011   -0.009   -1.123       -0.559  0.221     0.0
+    morph_p_gerund                  0.069           0.037   0.031    0.033    1.504        0.725  0.862     0.0
+    morph_polarity_Neg              0.019           0.029  -0.011   -0.009   -1.136       -0.564  0.218     0.0
     sents_mean                     16.393          11.494   3.105    6.818    0.843        0.616  0.808     0.0
     punct_dash                     19.000          46.000 -39.000  -14.000   -1.287       -0.605  0.197     0.0
     punct_exclamation               9.000          24.000 -23.000   -2.000   -1.251       -0.637  0.181     0.0
     diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.675       -0.351  0.325     0.0
-
     {'n_Galdós': 155, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0.35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones. La cohesión también los distingue (`result.filter(like="cohesion_", axis=0)`): por cada 1000 palabras Unamuno abre con un conector más del triple de oraciones (`cohesion_connectors_inter`, 20 frente a 6) - unas 2.4 veces más por oración, ya que sus oraciones son más cortas - y repite más palabras con contenido de una oración en las dos siguientes (0.108 frente a 0.066). Parte de la cohesión sigue la longitud de las oraciones: la ρ de Spearman con `sents_mean` por ventanas es de 0.76 en Galdós y 0.71 en Unamuno para `cohesion_content_overlap_all`, la repetición binaria en todos los pares de oraciones, y de -0.49 y -0.60 para los conectores que abren una oración, mientras que la proporción de palabras con contenido repetidas en las dos oraciones siguientes no depende de ella (0.01 y 0.02).
+Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0.35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones. La cohesión también los distingue (`result.filter(like="cohesion_", axis=0)`): por cada 1000 palabras Unamuno abre con un conector más del triple de oraciones (`cohesion_connectors_inter`, 20 frente a 6) - unas 2.3 veces más por oración, ya que sus oraciones son más cortas - y repite más palabras con contenido de una oración en las dos siguientes (0.126 frente a 0.073). Parte de la cohesión sigue la longitud de las oraciones: la ρ de Spearman con `sents_mean` por ventanas es de 0.75 en Galdós y 0.74 en Unamuno para `cohesion_content_overlap_all`, la repetición binaria en todos los pares de oraciones, y de -0.49 y -0.61 para los conectores que abren una oración, mientras que la proporción de palabras con contenido repetidas en las dos oraciones siguientes no depende de ella (-0.05 y -0.09).
 
-Los valores p toman las 272 ventanas de seis novelas por independientes (véase el [aviso](#statistics) de abajo), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 51 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 6.8 palabras, donde las ventanas solas darían de 4.0 a 6.2.
+Los valores p toman las 272 ventanas de seis novelas por independientes (véase el [aviso](#statistics) de abajo), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 54 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 6.8 palabras, donde las ventanas solas darían de 4.0 a 6.2.
 
 ## Parámetros
 
@@ -116,17 +114,17 @@ Devuelve 164 rasgos de un texto con un prefijo según su fuente, 209 con un pipe
 | `basic_` | proporciones de palabras largas, complejas, simples, monosílabas y polisílabas, de letras, espacios y signos de puntuación; letras y sílabas por palabra | [`BasicStats`](../stats/basic_stats.md) |
 | `readability_` | todas las fórmulas de legibilidad y el grado de consenso | [`ReadabilityStats`](../stats/readability_stats.md) |
 | `diversity_` | todas las medidas de diversidad léxica salvo la Z de Orlov, inestable en una ventana | [`DiversityStats`](../stats/diversity_stats.md) |
-| `morph_` | proporciones de los valores de cada rasgo morfológico (`morph_pos_NOUN`, `morph_mood_Sub`, `morph_polarity_Neg`) y los marcadores del español (`morph_p_gerund`, `morph_p_mente_adverbs`) | [`MorphStats`](../stats/morph_stats.md) con el modelo de spaCy |
+| `morph_` | proporciones de los valores de cada rasgo morfológico (`morph_pos_NOUN`, `morph_mood_Sub`, `morph_polarity_Neg`) y los marcadores del español (`morph_p_gerund`, `morph_p_mente_adverbs`) | [`MorphStats`](../stats/morph_stats.md) con el pipeline de `load_pipeline` |
 | `sents_` | longitud media de una oración en palabras, desviación típica, coeficiente de variación, autocorrelación de las longitudes vecinas ([`sentence_rhythm`](#sentence_rhythm)): el ritmo del texto | [`SentsExtractor`](../extractors/sentences.md) |
 | `punct_` | frecuencias de los signos de puntuación por tipo por cada 1000 palabras y la proporción de los signos de apertura | [`punctuation_profile`](../stats/basic_stats.md#punctuation) |
-| `cohesion_` | repetición de sustantivos, argumentos y palabras con contenido entre oraciones, información dada, cohesión temporal y densidades de los conectores por clase, tipo y lugar, salvo la repetición entre párrafos, que las ventanas cortan | [`CohesionStats`](../stats/cohesion_stats.md) según el modelo de spaCy |
+| `cohesion_` | repetición de sustantivos, argumentos y palabras con contenido entre oraciones, información dada, cohesión temporal y densidades de los conectores por clase, tipo y lugar, salvo la repetición entre párrafos, que las ventanas cortan | [`CohesionStats`](../stats/cohesion_stats.md) según el pipeline de `load_pipeline` |
 | `syntax_` | todas las estadísticas sintácticas, con un pipeline que tiene analizador sintáctico | [`SyntaxStats`](../stats/syntax_stats.md) |
 
 Se dejan fuera el tiempo de lectura, que solo sigue el número de palabras de una ventana, y los rasgos que repiten otros: la proporción de palabras únicas de `BasicStats`, que repite `diversity_ttr`, sus palabras por oración, que repiten `sents_mean`, y los marcadores de los modos de `get_markers`, que repiten `morph_mood_*`.
 
 Las categorías gramaticales y los rasgos de un solo valor - polaridad, cortesía, posesivo, reflexivo - son proporciones de todas las palabras (`morph_polarity_Neg` es la proporción de las negaciones), los demás rasgos, proporciones de las palabras que los llevan (`morph_mood_Sub` es el subjuntivo entre los modos). Un valor que no aparece en una ventana da 0; un rasgo ausente de la ventana por completo (sin verbos no hay tiempo) da `nan`. Un valor de varios valores (`PronType=Int,Rel` de *que*) se reparte a partes iguales entre sus partes, así que las proporciones de un rasgo siguen sumando uno.
 
-La morfología y la cohesión las analiza el modelo [`es_core_news_sm`](../installation.md#model) sin su analizador sintáctico, así que el grupo `syntax_` se deja fuera; un pipeline pasado en `nlp` se ejecuta entero salvo el reconocedor de entidades, así que `functools.partial(text_features, nlp=get_nlp())` incorpora el analizador sintáctico y la sintaxis, y otro modelo entra en la comparación del mismo modo. El pipeline de [`load_pipeline`](../components.md#load_pipeline), el de por defecto, divide el texto en las oraciones del grupo `sents_`, así que la cohesión y la sintaxis cuentan las mismas oraciones que el ritmo; un pipeline propio da sus propias oraciones. Una novela se compara por ventanas y no entera, ya que el pipeline admite como mucho `max_length` caracteres.
+La morfología y la cohesión las analiza el pipeline de [`load_pipeline`](../components.md#load_pipeline) - [`es_core_news_sm`](../installation.md#model) con los análisis de esMorph - sin su analizador sintáctico, así que el grupo `syntax_` se deja fuera; un pipeline pasado en `nlp` se ejecuta entero salvo el reconocedor de entidades, así que `functools.partial(text_features, nlp=get_nlp())` incorpora el analizador sintáctico y la sintaxis, y otro modelo entra en la comparación del mismo modo. El pipeline de [`load_pipeline`](../components.md#load_pipeline), el de por defecto, divide el texto en las oraciones del grupo `sents_`, así que la cohesión y la sintaxis cuentan las mismas oraciones que el ritmo; un pipeline propio da sus propias oraciones. Una novela se compara por ventanas y no entera, ya que el pipeline admite como mucho `max_length` caracteres.
 
 Las proporciones de espacios, letras y signos de puntuación (`basic_p_spaces`, `basic_p_letters`, `basic_p_punctuations`) cuentan los caracteres tal cual: las sangrías, los espacios dobles y los de no separación de los archivos reflejan la composición de una edición y no el texto. En un corpus de fuentes distintas conviene colapsarlos antes, por ejemplo, con `re.sub(r"[^\S\n]+", " ", text)`.
 
@@ -182,11 +180,11 @@ Los rasgos sintácticos llegan con un pipeline que tiene analizador sintáctico,
 
     ```
                                         median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    syntax_gerund_clauses_per_sent              0.143           0.045   0.090    0.116    1.473        0.852  0.926     0.0
-    syntax_complex_nominals_per_clause          0.808           0.548   0.215    0.302    1.164        0.690  0.845     0.0
+    syntax_gerund_clauses_per_sent              0.148           0.048   0.079    0.118    1.453        0.848  0.924     0.0
+    syntax_complex_nominals_per_clause          0.766           0.520   0.216    0.304    1.132        0.669  0.835     0.0
     syntax_tree_depth                           3.763           2.888   0.594    1.062    1.078        0.664  0.832     0.0
-    syntax_t_units_per_sent                     1.073           1.009   0.029    0.157    1.374        0.664  0.832     0.0
     syntax_subtrees_per_sent                    6.800           4.534   1.567    2.917    0.942        0.661  0.830     0.0
+    syntax_t_units_per_sent                     1.074           1.008   0.029    0.150    1.372        0.650  0.825     0.0
     ```
 
 ## Comparación de tablas de rasgos { #compare_features }

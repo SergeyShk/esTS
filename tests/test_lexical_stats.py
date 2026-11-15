@@ -223,7 +223,7 @@ def test_print_stats(ls, capsys):
 def test_doc_with_a_line_break_and_no_morphologizer():
     """Without the morphologizer the attribute ruler still tags a line break SPACE, and the
     Doc has no parts of speech all the same"""
-    doc = get_nlp()("El gato duerme.\nLa casa es grande.", disable=["morphologizer"])
+    doc = get_nlp()("El gato duerme.\nLa casa es grande.", disable=["esmorph"])
     assert doc.has_annotation("POS")
     with pytest.raises(SourceError, match="no parts of speech"):
         LexicalStats(doc)

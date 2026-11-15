@@ -25,6 +25,8 @@ if TYPE_CHECKING:
 
 # The segmenter of Spanish into tokens and sentences
 SEGMENTER = Segmenter("es")
+# Components of a model that the component esmorph replaces in load_pipeline
+MORPH_COMPONENTS = ("morphologizer", "lemmatizer")
 
 
 def iter_tokens(text: str) -> Iterator[tuple[int, int, str]]:
@@ -248,10 +250,13 @@ def load_pipeline(
     Description:
         A spaCy model with the tokenizer anyseg.Tokenizer.v1 and the component
         anyseg_sentencizer first, so that the tokens and the sentences of a Doc are
-        those of a string (iter_tokens, iter_text_sents); the tags, the lemmas, the
-        parser and the other components are the model's. A contraction (del, al) is
-        one token, its words are in token._.anyseg_words. A saved pipeline loads
-        with spacy.load, as the factories of anySeg are entry points
+        those of a string (iter_tokens, iter_text_sents), and the component esmorph
+        of esMorph after it in place of the morphologizer and the lemmatizer of the
+        model, so that the parts of speech, the features and the lemmas are those
+        of a string too; the parser and the other components are the model's. A
+        contraction (del, al) is one token with the analysis of its first word, its
+        words are in token._.anyseg_words. A saved pipeline loads with spacy.load,
+        as the factories of anySeg and esMorph are entry points
 
     Arguments:
         model (str): Name or path of a spaCy model: es_core_news_sm, es_core_news_md,
@@ -270,7 +275,7 @@ def load_pipeline(
         >>> from ests import load_pipeline
         >>> nlp = load_pipeline(exclude="ner")
         >>> nlp.pipe_names
-        ['anyseg_sentencizer', 'tok2vec', 'morphologizer', 'parser', 'attribute_ruler', 'lemmatizer']
+        ['anyseg_sentencizer', 'esmorph', 'tok2vec', 'parser', 'attribute_ruler']
         >>> doc = nlp("--Dámelo --dijo el Sr. García.\\n\\nVino del pueblo")
         >>> [token.text for token in doc if not token.is_space]
         ['--', 'Dámelo', '--', 'dijo', 'el', 'Sr.', 'García', '.', 'Vino', 'del', 'pueblo']
@@ -283,13 +288,15 @@ def load_pipeline(
     config = dict(kwargs.pop("config", {}))
     config["nlp"] = {**config.get("nlp", {}), "tokenizer": {"@tokenizers": "anyseg.Tokenizer.v1"}}
     try:
-        nlp = spacy.load(model, exclude=excluded, config=config, **kwargs)
+        nlp = spacy.load(model, exclude=[*excluded, *MORPH_COMPONENTS], config=config, **kwargs)
     except OSError as error:
         raise DatasetNotFoundError(
             f"The spaCy model {model} is not installed: python -m spacy download {model}"
         ) from error
     if "anyseg_sentencizer" not in nlp.component_names:
         nlp.add_pipe("anyseg_sentencizer", first=True)
+    if "esmorph" not in nlp.component_names:
+        nlp.add_pipe("esmorph", after="anyseg_sentencizer")
     return nlp
 
 

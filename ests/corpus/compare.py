@@ -200,7 +200,8 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
 
 
 def _parse(text: str, nlp: Language | None) -> Doc:
-    """Parsing a text by the default model without its parser, or by the pipeline without ner"""
+    """Parsing a text by the default pipeline without its parser and the tok2vec that feeds it,
+    or by the pipeline without ner"""
     pipeline = nlp or get_nlp()
     if len(text) > pipeline.max_length:
         raise SourceError(
@@ -208,7 +209,7 @@ def _parse(text: str, nlp: Language | None) -> Doc:
             f"pipeline ({pipeline.max_length}): split it into windows or raise "
             "max_length on a pipeline of your own and pass it in nlp"
         )
-    return pipeline(text, disable=["parser", "ner"] if nlp is None else ["ner"])
+    return pipeline(text, disable=["tok2vec", "parser", "ner"] if nlp is None else ["ner"])
 
 
 def _morph_features(morph: MorphStats) -> dict[str, float]:

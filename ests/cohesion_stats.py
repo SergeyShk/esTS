@@ -25,7 +25,6 @@ from .constants import (
     CONNECTOR_OBJECT_CLITICS,
     CONNECTOR_ONLY_AFTER,
     CONNECTOR_PARCELLATION,
-    CONNECTOR_POS,
     CONNECTOR_POS_EXTRA,
     CONNECTOR_PRONOMINAL_VERBS,
     CONNECTOR_QUESTION_VERBS,
@@ -79,9 +78,8 @@ class SpanishConnectorMatcher(ConnectorMatcher):
     Description:
         Extends the ConnectorMatcher of the anyTS core with the rules of
         Spanish: a one-word connector counts with a part of speech of
-        CONNECTOR_POS or of CONNECTOR_POS_EXTRA for that word, never after a
-        determiner and, as a proper noun, only at the start of the sentence; a
-        marker that heads a prepositional phrase (antes de la reunión, por
+        CONNECTOR_POS of anyts.constants or of CONNECTOR_POS_EXTRA for that
+        word, never after a determiner; a marker that heads a prepositional phrase (antes de la reunión, por
         encima de 80) is dropped (CONNECTOR_BLOCKED_AFTER, CONNECTOR_BLOCKED_BEFORE,
         CONNECTOR_BLOCKED_AFTER_POS), and so are one of CONNECTOR_NOT_AT_START
         opening the sentence (Pues bien) and one of CONNECTOR_ONLY_AFTER inside
@@ -105,10 +103,8 @@ class SpanishConnectorMatcher(ConnectorMatcher):
         ParameterError: If a class or a kind of the dictionary is unknown
     """
 
-    pos_tags = CONNECTOR_POS
     pos_extra = CONNECTOR_POS_EXTRA
     not_after_pos = frozenset({"DET"})
-    start_only_pos = frozenset({"PROPN"})
     blocked_after = CONNECTOR_BLOCKED_AFTER
     blocked_before = CONNECTOR_BLOCKED_BEFORE
     blocked_after_pos = CONNECTOR_BLOCKED_AFTER_POS
@@ -132,8 +128,8 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
         load_connectors by SpanishConnectorMatcher; si is no conditional
         connector after a verb of CONNECTOR_QUESTION_VERBS (no sé si viene) and
         after an opening ¡ (¡Si ya te lo dije!). A Doc must
-        carry the parts of speech (from a morphologizer, or a tagger with an
-        attribute ruler) and the lemmas
+        carry the parts of speech and the lemmas (from esmorph of
+        load_pipeline, or from a morphologizer and a lemmatizer)
 
     References:
         https://doi.org/10.1017/CBO9780511894664 (McNamara et al. 2014, Coh-Metrix)
@@ -415,9 +411,8 @@ def is_connector_blocked(token: TreeWord) -> bool:
         tengo tiempo, la solicitud se valorará si cumple); and after an opening
         ¡ (¡Si ya te lo dije!); a si after como or vaya is dropped by the
         matcher itself (CONNECTOR_BLOCKED_BEFORE). The verb is a VERB or AUX
-        by the lemma of the model or of lemmatize, or a word the model reads
-        as a proper or a common noun (Indique, Indíquenos) by the lemma of
-        lemmatize
+        by its lemma, or a word the tagger reads as a proper or a common noun
+        (Indique, Indíquenos) by the lemma of lemmatize
 
     Arguments:
         token (TreeWord): Word of the tree
@@ -438,11 +433,10 @@ def is_connector_blocked(token: TreeWord) -> bool:
     previous = token.tree.words[token.index - 1]
     if previous.form == "¡":
         return True
-    form = previous.form.lower()
     if previous.upos in ("VERB", "AUX"):
-        lemmas = {(previous.lemma or "").lower().split(" ")[0], lemmatize(form)}
+        lemmas = {(previous.lemma or "").lower()}
     elif previous.upos in ("PROPN", "NOUN"):
-        lemmas = {lemmatize(form)}
+        lemmas = {lemmatize(previous.form.lower())}
     else:
         return False
     lemmas &= CONNECTOR_QUESTION_VERBS

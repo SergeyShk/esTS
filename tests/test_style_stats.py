@@ -91,11 +91,8 @@ def test_init_doc(nlp):
     assert StyleStats(riddle_text).words == riddle
     doc = spacy.blank("es")(riddle_text)
     assert StyleStats(doc).words == riddle
-    # The nouns of a Doc are those of its pipeline, of a string those of esMorph
     stats = StyleStats(nlp(text)).get_stats()
-    expected = StyleStats(text).get_stats()
-    assert stats.pop("verbal_nouns") != expected.pop("verbal_nouns")
-    assert stats == expected
+    assert stats == StyleStats(text).get_stats()
 
 
 def test_init_lexemes():
@@ -230,19 +227,16 @@ def test_keyword_density():
 
 def test_verbal_nouns(ss, nlp):
     assert calc_verbal_nouns(["revisión", "proyecto", "nombramiento", "casa"]) == 50.0
-    assert calc_verbal_nouns(noun_lemmas(nlp(text))) == pytest.approx(100 * 6 / 15)
+    assert calc_verbal_nouns(noun_lemmas(nlp(text))) == ss.verbal_nouns
     with pytest.raises(SourceTypeError):
         noun_lemmas(text)
     assert calc_verbal_nouns(["uso", "viaje", "Aprendizaje"]) == 100.0
     assert isnan(calc_verbal_nouns([]))
-    # revisión x2, nombramiento, comisión, votación, uso among the 13 nouns of esMorph; the
-    # model reads es decir as two nouns more
+    # revisión x2, nombramiento, comisión, votación, uso among the 13 nouns
     assert [noun for noun, _ in ss.nouns()].count("revisión") == 2
     assert len(ss.nouns()) == 13
     assert ss.verbal_nouns == pytest.approx(100 * 6 / 13)
-    nouns = [token.lemma_ for token in nlp(text) if token.pos_ == "NOUN"]
-    assert len(nouns) == 15
-    assert StyleStats(nlp(text)).verbal_nouns == pytest.approx(100 * 6 / 15)
+    assert StyleStats(nlp(text)).verbal_nouns == ss.verbal_nouns
 
 
 def test_verbal_nouns_without_the_annotation(nlp):
@@ -251,7 +245,10 @@ def test_verbal_nouns_without_the_annotation(nlp):
     with pytest.raises(SourceError, match="parts of speech"):
         _ = ss.verbal_nouns
     # the parts of speech without the lemmas give every noun an empty lemma
-    ss = StyleStats(nlp(text, disable=["lemmatizer"]))
+    doc = nlp(text)
+    for token in doc:
+        token.lemma_ = ""
+    ss = StyleStats(doc)
     assert ss.spam == StyleStats(text).spam
     with pytest.raises(SourceError, match="no lemmas"):
         _ = ss.verbal_nouns
@@ -259,9 +256,7 @@ def test_verbal_nouns_without_the_annotation(nlp):
 
 def test_doc_with_a_line_break_and_no_morphologizer():
     """A line break tagged SPACE by the attribute ruler gives no parts of speech to the words"""
-    doc = get_nlp()(
-        "La revisión del expediente.\nLa decisión fue tomada.", disable=["morphologizer"]
-    )
+    doc = get_nlp()("La revisión del expediente.\nLa decisión fue tomada.", disable=["esmorph"])
     assert doc.has_annotation("POS")
     with pytest.raises(SourceError, match="no parts of speech"):
         _ = StyleStats(doc).verbal_nouns
@@ -393,10 +388,7 @@ def test_markers(nlp):
     # The markers are the ones the metrics count
     for name in ("compound_prepositions", "parentheticals", "cliches"):
         assert getattr(ss, name) == pytest.approx(100 * len(markers[name]) / len(ss.forms))
-    # The model reads comisión as no noun
-    doc_markers = StyleStats(nlp(officialese)).markers()
-    assert doc_markers.pop("verbal_nouns") == ("revisión", "cumplimiento", "resolución")
-    assert doc_markers == {key: value for key, value in markers.items() if key != "verbal_nouns"}
+    assert StyleStats(nlp(officialese)).markers() == markers
     # revisión twice, in the order of the text
     assert StyleStats(text).markers()["verbal_nouns"] == (
         "revisión",

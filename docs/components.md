@@ -67,7 +67,7 @@ A component reads the `Doc` of its pipeline as it is and leaves its tokenizer al
 | [`PhonStatsComponent`](#PhonStatsComponent) | `ests_phon` | [`PhonStats`](stats/phon_stats.md) | `window_len` |
 | [`VerseStatsComponent`](#VerseStatsComponent) | `ests_verse` | [`VerseStats`](stats/verse_stats.md) | `seseo` |
 
-The basic, readability, diversity, phonetic and verse statistics and the formulas of other languages need no annotation of a model. In the pipeline of `es_core_news_sm` the parts of speech come from the `morphologizer` (or a `tagger` with an `attribute_ruler`; a `tagger` alone does not give them), the parse from the `parser` and the lemmas from the `lemmatizer`. A component whose annotation is missing, `excluded` components included, raises `SourceError` when the document goes through it; `ests_lexical` needs only the parts of speech, and `ests_style` raises when `verbal_nouns` or `markers()` is read.
+The basic, readability, diversity, phonetic and verse statistics and the formulas of other languages need no annotation of a model. In the pipeline of [`load_pipeline`](#load_pipeline) the parts of speech, the features and the lemmas come from the component `esmorph` of [esMorph](https://github.com/SergeyShk/esMorph) and the parse from the `parser` of the model; in the pipeline of `es_core_news_sm` itself they come from the `morphologizer` (or a `tagger` with an `attribute_ruler`; a `tagger` alone does not give them) and the `lemmatizer`. A component whose annotation is missing, `excluded` components included, raises `SourceError` when the document goes through it; `ests_lexical` needs only the parts of speech, and `ests_style` raises when `verbal_nouns` or `markers()` is read.
 
 ### Basic statistics { #BasicStatsComponent }
 
@@ -173,7 +173,7 @@ MorphStatsComponent(nlp, name)
 
 --8<-- "components.md:MorphStatsComponent"
 
-In esTS the pipeline needs a `lemmatizer` before the component as well; the factory requires `token.pos` and `token.lemma`, so `nlp.analyze_pipes()` names a pipeline without one of them.
+In esTS the pipeline needs the lemmas before the component as well, of `esmorph` or of a `lemmatizer`; the factory requires `token.pos` and `token.lemma`, so `nlp.analyze_pipes()` names a pipeline without one of them.
 
 Raises:
 
@@ -201,7 +201,7 @@ SyntaxStatsComponent(nlp, name)
 
 --8<-- "components.md:SyntaxStatsComponent"
 
-In esTS they need a `lemmatizer` before it as well; the factory requires `token.dep`, `token.head`, `token.pos` and `token.lemma`, so `nlp.analyze_pipes()` names a pipeline without one of them.
+In esTS they need the lemmas before it as well, of `esmorph` or of a `lemmatizer`; the factory requires `token.dep`, `token.head`, `token.pos` and `token.lemma`, so `nlp.analyze_pipes()` names a pipeline without one of them.
 
 Raises:
 
@@ -233,7 +233,7 @@ CohesionStatsComponent(nlp, name, blank_lines=False)
 | :-------- | :--- | :------ | :---------- |
 | `blank_lines` | `bool` | `False` | Start the paragraphs after the blank lines alone, for a text whose lines are wrapped inside its paragraphs; after every line break by default |
 
-In the pipeline of `es_core_news_sm` the parts of speech and the lemmas come from the `morphologizer` and the `lemmatizer`; the factory requires `token.pos` and `token.lemma`, so `nlp.analyze_pipes()` names a pipeline without one of them, and a document without them raises `SourceError`. The texts of [`SpanishLiterature`](datasets/spanishliterature.md) are wrapped inside their paragraphs and need `blank_lines`.
+In the pipeline of `load_pipeline` the parts of speech and the lemmas come from `esmorph`, in that of `es_core_news_sm` from the `morphologizer` and the `lemmatizer`; the factory requires `token.pos` and `token.lemma`, so `nlp.analyze_pipes()` names a pipeline without one of them, and a document without them raises `SourceError`. The texts of [`SpanishLiterature`](datasets/spanishliterature.md) are wrapped inside their paragraphs and need `blank_lines`.
 
 === "Code"
 
@@ -263,7 +263,7 @@ LexicalStatsComponent(nlp, name, data_dir=None)
 
 --8<-- "components.md:LexicalStatsComponent"
 
-In esTS `freq_dict` is the [frequency dictionary](datasets/freqdict.md) `FreqDict` of the directory `data_dir`, and `is_number` takes the numbers of the Spanish `NUMBER_PATTERN` (`2020`, `1.500,50`, `3.º`). The pipeline needs a `morphologizer` before the component, and the factory requires `token.pos`; the lemmas of the model are not used. The frequency bands and the lexical density are computed without the dictionary, the statistics by the dictionary need it downloaded.
+In esTS `freq_dict` is the [frequency dictionary](datasets/freqdict.md) `FreqDict` of the directory `data_dir`, and `is_number` takes the numbers of the Spanish `NUMBER_PATTERN` (`2020`, `1.500,50`, `3.º`). The pipeline needs the parts of speech before the component, of `esmorph` or of a `morphologizer`, and the factory requires `token.pos`; the lemmas of the model are not used. The frequency bands and the lexical density are computed without the dictionary, the statistics by the dictionary need it downloaded.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
@@ -299,7 +299,7 @@ StyleStatsComponent(nlp, name, stopwords=None, top_n=10, nausea_stopwords=None, 
 
 --8<-- "components.md:StyleStatsComponent"
 
-Without the lists the water content takes the stopwords of `STOPWORDS` and the one-word parenthetical expressions, the academic nausea leaves out the words of `is_stopword`, and the clichés come from `OFFICIALESE_CLICHES`; `NAUSEA_TOP_N` is a constant of `anyts.constants`. The verbal nouns need a `morphologizer` and a `lemmatizer` before the component, and without them reading `verbal_nouns`, `markers()` or `get_stats()` raises `SourceError`; the other metrics read the words alone.
+Without the lists the water content takes the stopwords of `STOPWORDS` and the one-word parenthetical expressions, the academic nausea leaves out the words of `is_stopword`, and the clichés come from `OFFICIALESE_CLICHES`; `NAUSEA_TOP_N` is a constant of `anyts.constants`. The verbal nouns need the parts of speech and the lemmas before the component, of `esmorph` or of a `morphologizer` and a `lemmatizer`, and without them reading `verbal_nouns`, `markers()` or `get_stats()` raises `SourceError`; the other metrics read the words alone.
 
 === "Code"
 
@@ -379,7 +379,7 @@ Raises:
 load_pipeline(model='es_core_news_sm', exclude=(), **kwargs)
 ```
 
-A spaCy model with the tokenizer `anyseg.Tokenizer.v1` and the component `anyseg_sentencizer` first, both of [anySeg](https://github.com/SergeyShk/anySeg): the tokens and the sentences of a `Doc` are those the [extractors](extractors/sentences.md) give its text, so the statistics of a `Doc` and of the string count the same words and sentences. The tags, the lemmas, the parser and the other components are the model's. A contraction (`del`, `al`) is one token, with its words in `token._.anyseg_words`. A saved pipeline loads with `spacy.load(path)`, as the factories of anySeg are entry points. `ests.utils.get_nlp`, which parses the strings of the morphological, syntactic, cohesion, lexical and style statistics, loads it once per process and model.
+A spaCy model with the tokenizer `anyseg.Tokenizer.v1` and the component `anyseg_sentencizer` first, both of [anySeg](https://github.com/SergeyShk/anySeg): the tokens and the sentences of a `Doc` are those the [extractors](extractors/sentences.md) give its text, so the statistics of a `Doc` and of the string count the same words and sentences. The component `esmorph` of [esMorph](https://github.com/SergeyShk/esMorph) comes after it in place of the `morphologizer` and the `lemmatizer` of the model: the parts of speech, the features and the lemmas of a `Doc` are those of a string, chosen in the context of the sentence, while the parser, whose trees do not depend on the parts of speech, and the other components are the model's. A contraction (`del`, `al`) or a verb with clitics (`dámelo`) is one token with the analysis of its first word (`de`, `dar`), its words in `token._.anyseg_words`; a string counts them as words of their own, so the morphological and lexical statistics of a `Doc` and of its string differ a little. A saved pipeline loads with `spacy.load(path)`, as the factories of anySeg and esMorph are entry points. `ests.utils.get_nlp`, which parses the strings of the syntactic and cohesion statistics and of `text_features`, loads it once per process and model.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |

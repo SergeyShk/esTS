@@ -4,7 +4,7 @@
 CohesionStats(source, sents_extractor=None, connectors=None, nlp=None, blank_lines=False)
 ```
 
-The cohesion statistics of a text in the manner of [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) and of its Spanish adaptation [Coh-Metrix-Esp](https://aclanthology.org/L16-1745/): the overlap of the sentences, the givenness, the temporal cohesion and the connectors of a dictionary. The sentences are compared by lemmas. The data source is a text or a `Doc` object of [spaCy](https://github.com/explosion/spaCy), and it has to be annotated: a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, without the named entities, and a `Doc` must carry the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer`.
+The cohesion statistics of a text in the manner of [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) and of its Spanish adaptation [Coh-Metrix-Esp](https://aclanthology.org/L16-1745/): the overlap of the sentences, the givenness, the temporal cohesion and the connectors of a dictionary. The sentences are compared by lemmas. The data source is a text or a `Doc` object of [spaCy](https://github.com/explosion/spaCy), and it has to be annotated: a string is parsed with the pipeline of [`load_pipeline`](../components.md#load_pipeline) - [`es_core_news_sm`](../installation.md#model) with the analyses of esMorph - or with the pipeline passed in `nlp`, without the named entities, and a `Doc` must carry the parts of speech and the lemmas, which come from `esmorph` of `load_pipeline` or from a `morphologizer` (or a `tagger` with an `attribute_ruler`) and a `lemmatizer`. The connectors follow the tags of the `Doc`: in a pipeline of one's own, `es_core_news_sm` reads some markers opening a sentence as proper nouns (`Primeramente`, `Conque`), which then do not count, and gives some verbs before `si` a lemma of no verb (`Veamos si` - `vear`), so that `si` counts as a condition.
 
 Raises:
 
@@ -54,20 +54,20 @@ The words are classified by the Universal Dependencies annotation:
     Content word overlap in adjacent sentences                         |   0.33
     Content word overlap in all pairs of sentences                     |   0.50
     Share of shared content words in adjacent sentences                |   0.08
-    Share of shared content words in all pairs of sentences            |   0.12
+    Share of shared content words in all pairs of sentences            |   0.13
     Share of the nouns of a sentence repeated in the next two          |   0.60
     Share of the arguments of a sentence repeated in the next two      |   0.60
     Share of the content words of a sentence repeated in the next two  |   0.38
     Share of the nouns of a paragraph repeated in the next one         |   nan
     Share of the arguments of a paragraph repeated in the next one     |   nan
     Share of the content words of a paragraph repeated in the next one |   nan
-    Share of pronouns                                                  |   0.03
-    Ratio of pronouns to nouns                                         |   0.09
-    Share of demonstratives                                            |   0.00
-    Share of content words seen before                                 |   0.18
-    Repetition of the tense in adjacent sentences                      |   0.00
+    Share of pronouns                                                  |   0.07
+    Ratio of pronouns to nouns                                         |   0.25
+    Share of demonstratives                                            |   0.03
+    Share of content words seen before                                 |   0.20
+    Repetition of the tense in adjacent sentences                      |   0.67
     Repetition of the mood in adjacent sentences                       |   1.00
-    Temporal cohesion                                                  |   0.50
+    Temporal cohesion                                                  |   0.83
     Connectors per 1000 words                                          |  103.45
     Connectors linking a sentence to the ones before per 1000 words    |  103.45
     Connectors linking the parts of a sentence per 1000 words          |   0.00
@@ -111,7 +111,7 @@ The extractor given is kept in the attribute `sents_extractor`, `None` without i
 
     ```
     ('sin', 'embargo', 'el', 'informe', 'no', 'resolver', 'el', 'problema')
-    (11, 1, 17, 3)
+    (8, 2, 15, 3)
     (Connector(sent=1, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary'),
      Connector(sent=2, start=0, end=2, text='es decir', cls='reformulative', kind='secondary'),
      Connector(sent=3, start=0, end=3, text='por lo tanto', cls='causal', kind='secondary'))
@@ -334,20 +334,20 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
      'content_overlap_adjacent': 0.3333333333333333,
      'content_overlap_all': 0.5,
      'content_overlap_prop_adjacent': 0.08333333333333333,
-     'content_overlap_prop_all': 0.12037037037037035,
+     'content_overlap_prop_all': 0.13095238095238093,
      'noun_overlap_2_sent': 0.6,
      'argument_overlap_2_sent': 0.6,
      'content_overlap_2_sent': 0.375,
      'noun_overlap_para': nan,
      'argument_overlap_para': nan,
      'content_overlap_para': nan,
-     'p_pronouns': 0.034482758620689655,
-     'pronoun_noun_ratio': 0.09090909090909091,
-     'p_demonstratives': 0.0,
-     'p_given': 0.17647058823529413,
-     'tense_repetition': 0.0,
+     'p_pronouns': 0.06896551724137931,
+     'pronoun_noun_ratio': 0.25,
+     'p_demonstratives': 0.034482758620689655,
+     'p_given': 0.2,
+     'tense_repetition': 0.6666666666666666,
      'mood_repetition': 1.0,
-     'temporal_cohesion': 0.5,
+     'temporal_cohesion': 0.8333333333333333,
      'connectors': 103.44827586206898,
      'connectors_inter': 103.44827586206898,
      'connectors_intra': 0.0,
@@ -371,7 +371,7 @@ SpanishConnectorMatcher(connectors)
 
 --8<-- "stats/cohesion_stats.md:ConnectorMatcher"
 
-`SpanishConnectorMatcher` is a subclass of the core `ConnectorMatcher` with the rules of Spanish; words and connectors are compared in lower case. A one-word connector takes a part of speech of `CONNECTOR_POS` - a conjunction, a particle, an adverb, an adposition, an interjection, a proper noun or `X` - or of `CONNECTOR_POS_EXTRA` for its form (`pues` and `verbigracia` as `NOUN`, `resumiendo`, `recapitulando` and `concluyendo` as `VERB`). It is no connector right after a determiner, so `el antes y el después` holds one connector, `y`, and not three; and as a proper noun it counts only at the start of a sentence, where the models read a marker so (`Primeramente`), so the surname in `Habló con Juan Luego ayer` is no connector. A marker that is part of another phrase is dropped: the words after it of `CONNECTOR_BLOCKED_AFTER` (`antes de la reunión`, `en cuanto a`, `a pesar de todo lo que`), the words before it of `CONNECTOR_BLOCKED_BEFORE` (`algo así como`, `como si fuera`) and the parts of speech of the word after it of `CONNECTOR_BLOCKED_AFTER_POS` (`sobre todo el texto`, `a pesar de todo el esfuerzo`) make it none, while `antes, firmó el acta` and `sobre todo cuando llueve` count their marker. A few markers depend on their place: `pues` opening a sentence opens a reply (`Pues bien`) and is no connector (`CONNECTOR_NOT_AT_START`), and `encima` counts inside a sentence only after `y`, `e`, `ni` or `pero` (`y encima llueve`, `CONNECTOR_ONLY_AFTER`). These lists are attributes of the matcher: `CONNECTOR_POS` is `pos_tags`, the others are named without `CONNECTOR_` in lower case (`CONNECTOR_BLOCKED_AFTER` is `blocked_after`); `not_after_pos` is the determiner `DET`, `start_only_pos` the proper noun `PROPN`, and `read_through_marks` is empty in esTS. A punctuation mark inside a conjunctive phrase ending in `que`, `como` or `si` (`CONNECTOR_SPLIT_BY_MARKS`) makes the conjunction a word of its own, so `No tire así, que se romperá` and `lo de siempre, que...` hold no connector; the consecutive phrases with `de modo`, `de manera`, `de forma` or `de suerte` (`de modo que`, `de tal manera que`) and `bien es verdad que` are left out, as old texts put a comma before their `que` (`de tal modo, que`).
+`SpanishConnectorMatcher` is a subclass of the core `ConnectorMatcher` with the rules of Spanish; words and connectors are compared in lower case. A one-word connector takes a part of speech of `CONNECTOR_POS` of `anyts.constants` - a conjunction, a particle, an adverb, an adposition, an interjection or `X` - or of `CONNECTOR_POS_EXTRA` for its form (`resumiendo`, `recapitulando` and `concluyendo` as `VERB`). It is no connector right after a determiner, so `el antes y el después` holds one connector, `y`, and not three. A marker that is part of another phrase is dropped: the words after it of `CONNECTOR_BLOCKED_AFTER` (`antes de la reunión`, `en cuanto a`, `a pesar de todo lo que`), the words before it of `CONNECTOR_BLOCKED_BEFORE` (`algo así como`, `como si fuera`) and the parts of speech of the word after it of `CONNECTOR_BLOCKED_AFTER_POS` (`sobre todo el texto`, `a pesar de todo el esfuerzo`) make it none, while `antes, firmó el acta` and `sobre todo cuando llueve` count their marker. A few markers depend on their place: `pues` opening a sentence opens a reply (`Pues bien`) and is no connector (`CONNECTOR_NOT_AT_START`), and `encima` counts inside a sentence only after `y`, `e`, `ni` or `pero` (`y encima llueve`, `CONNECTOR_ONLY_AFTER`). These lists are attributes of the matcher: `CONNECTOR_POS` is `pos_tags`, the others are named without `CONNECTOR_` in lower case (`CONNECTOR_BLOCKED_AFTER` is `blocked_after`); `not_after_pos` is the determiner `DET`, and `start_only_pos` and `read_through_marks` are empty in esTS. A punctuation mark inside a conjunctive phrase ending in `que`, `como` or `si` (`CONNECTOR_SPLIT_BY_MARKS`) makes the conjunction a word of its own, so `No tire así, que se romperá` and `lo de siempre, que...` hold no connector; the consecutive phrases with `de modo`, `de manera`, `de forma` or `de suerte` (`de modo que`, `de tal manera que`) and `bien es verdad que` are left out, as old texts put a comma before their `que` (`de tal modo, que`).
 
 --8<-- "stats/cohesion_stats.md:ConnectorMatcher-find"
 
@@ -483,7 +483,7 @@ The features of a word of the tree (`TreeWord` of the [anyTS](https://sergeyshk.
 is_connector_blocked(token)
 ```
 
-Checks whether no connector starts at a word of the tree by the words before it: a `si` that opens no condition. It is so after a verb of `CONNECTOR_QUESTION_VERBS` - `saber`, `ver`, `mirar`, `preguntar`, `dudar`, `ignorar`, `pensar`, `averiguar`, `probar`, `comprobar`, `observar`, `examinar`, `determinar`, `decidir`, `considerar`, `consultar`, `investigar`, `adivinar`, and those of the administrative style `indicar`, `señalar`, `especificar`, `precisar`, `verificar`, `confirmar`, `aclarar`, `valorar`, `evaluar`, `analizar`, `establecer`, `desconocer`, `manifestar`, `constar` - tagged `VERB` or `AUX`, by the lemma of the model without its enclitic pronoun or by that of `ests.utils.lemmatize` (`no sé si vendrá`, `a ver si llega`, `preguntó si tenía hambre`, `preguntándose si`, `la comisión valorará si`), or a word that the model reads as a proper or a common noun, by the lemma of `lemmatize` (`Indique si desea...`, `Indíquenos si acepta...`), unless the verb has before `si` the complement the question would fill, so that `si` is a condition: an object clitic at its end (`indíquelo si es necesario`), a direct object other than the datives `le` and `les` the model tags as one (`lo veré si tengo tiempo`, while `le preguntaré si puede venir` is a question), or the subject of a passive with `se` or of `constar` (`la solicitud se valorará si cumple los requisitos`), the pronominal `se` of `preguntar` being none (`el juez se preguntaba si...`); and after an opening `¡` (`¡Si ya te lo dije!`). On a sample of the literature the rule of the verbs was right in all the cases checked, that of `¡` in about nine of ten; of 22 indirect questions of the administrative style it takes 18, and none of 7 conditions. `informar`, `comunicar` and `estudiar` are left out: after them `si` often opens a condition (`le informaremos si hay cambios`). `CohesionStats` sets `connector_blocked` of the words of the core by it, and the [`connectors`](../visualizers/highlight.md) layer of the highlighting drops the same `si`; without the parts of speech, as in a string not parsed by the model, only the `si` after `¡` is known.
+Checks whether no connector starts at a word of the tree by the words before it: a `si` that opens no condition. It is so after a verb of `CONNECTOR_QUESTION_VERBS` - `saber`, `ver`, `mirar`, `preguntar`, `dudar`, `ignorar`, `pensar`, `averiguar`, `probar`, `comprobar`, `observar`, `examinar`, `determinar`, `decidir`, `considerar`, `consultar`, `investigar`, `adivinar`, and those of the administrative style `indicar`, `señalar`, `especificar`, `precisar`, `verificar`, `confirmar`, `aclarar`, `valorar`, `evaluar`, `analizar`, `establecer`, `desconocer`, `manifestar`, `constar` - tagged `VERB` or `AUX`, by its lemma (`no sé si vendrá`, `a ver si llega`, `preguntó si tenía hambre`, `preguntándose si`, `la comisión valorará si`), or a word that the tagger reads as a proper or a common noun, by the lemma of `ests.utils.lemmatize` (`Indique si desea...`, `Indíquenos si acepta...`), unless the verb has before `si` the complement the question would fill, so that `si` is a condition: an object clitic at its end (`indíquelo si es necesario`), a direct object other than the datives `le` and `les` the model tags as one (`lo veré si tengo tiempo`, while `le preguntaré si puede venir` is a question), or the subject of a passive with `se` or of `constar` (`la solicitud se valorará si cumple los requisitos`), the pronominal `se` of `preguntar` being none (`el juez se preguntaba si...`); and after an opening `¡` (`¡Si ya te lo dije!`). On a sample of the literature the rule of the verbs was right in all the cases checked, that of `¡` in about nine of ten; of 22 indirect questions of the administrative style it takes 18, and none of 7 conditions. `informar`, `comunicar` and `estudiar` are left out: after them `si` often opens a condition (`le informaremos si hay cambios`). `CohesionStats` sets `connector_blocked` of the words of the core by it, and the [`connectors`](../visualizers/highlight.md) layer of the highlighting drops the same `si`; without the parts of speech, as in a string not parsed by the model, only the `si` after `¡` is known.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |

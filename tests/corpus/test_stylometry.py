@@ -40,14 +40,14 @@ def test_function_words_profile():
     )
     # A Doc without parts of speech is tagged as a list of its words
     assert function_words_profile(spacy.blank("es")(" ".join(words))) == profile
-    untagged = get_nlp()(texts["A"], disable=["morphologizer"])
+    untagged = get_nlp()(texts["A"], disable=["esmorph"])
     assert not untagged.has_annotation("POS")
     assert function_words_profile(untagged) == function_words_profile(
         [token.text for token in untagged]
     )
     # The SPACE of a line break that the attribute ruler tags is no tagging of the words
     lines = texts["A"].replace(". ", ".\n")
-    untagged = get_nlp()(lines, disable=["morphologizer"])
+    untagged = get_nlp()(lines, disable=["esmorph"])
     assert untagged.has_annotation("POS")
     assert function_words_profile(untagged) == function_words_profile(
         [token.text for token in untagged]

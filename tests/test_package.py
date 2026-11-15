@@ -93,7 +93,6 @@ SPANISH = {
     "ests.diversity_stats": {"DiversityStats"},
     "ests.cohesion_stats": {
         "COHESION_STATS_DESC",
-        "CONNECTOR_POS",
         "CohesionStats",
         "SentsExtractor",
     },

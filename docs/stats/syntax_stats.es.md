@@ -4,12 +4,12 @@
 SyntaxStats(source, nlp=None)
 ```
 
-Las estadísticas sintácticas de un texto por su árbol de dependencias ([Ivanov, Solnyshkina y Solovyev 2018](https://dialogue-conf.org/media/4302/ivanovvv.pdf)): las medidas del árbol y de las construcciones sintácticas. La fuente de datos es un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy), y tiene que estar analizada: una cadena se analiza con [`es_core_news_sm`](../installation.md#model) o con el pipeline indicado en `nlp`, sin las entidades nombradas, y un `Doc` debe llevar las dependencias, que vienen de un `parser`, las categorías gramaticales, que vienen de un `morphologizer` (o de un `tagger` con un `attribute_ruler`), y los lemas, que vienen de un `lemmatizer`. Los signos de puntuación, los símbolos (`%`, `€`, `+`) y los espacios no son nodos del árbol, y las distancias se cuentan en posiciones de palabras.
+Las estadísticas sintácticas de un texto por su árbol de dependencias ([Ivanov, Solnyshkina y Solovyev 2018](https://dialogue-conf.org/media/4302/ivanovvv.pdf)): las medidas del árbol y de las construcciones sintácticas. La fuente de datos es un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy), y tiene que estar analizada: una cadena se analiza con el pipeline de [`load_pipeline`](../components.md#load_pipeline) - [`es_core_news_sm`](../installation.md#model) con los análisis de esMorph - o con el pipeline indicado en `nlp`, sin las entidades nombradas, y un `Doc` debe llevar las dependencias, que vienen de un `parser`, y las categorías gramaticales y los lemas, que vienen de `esmorph` de `load_pipeline` o de un `morphologizer` (o de un `tagger` con un `attribute_ruler`) y de un `lemmatizer`. Los signos de puntuación, los símbolos (`%`, `€`, `+`) y los espacios no son nodos del árbol, y las distancias se cuentan en posiciones de palabras.
 
 Excepciones:
 
 - `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc` ni un `Document`, un pipeline en `nlp` que no es un `Language` de spaCy;
-- `SourceError` - una fuente sin palabras; un `Doc` sin las dependencias, las categorías gramaticales o los lemas (un `Doc` de `spacy.blank("es")`, de un pipeline sin analizador o con el `morphologizer` o el `lemmatizer` excluido); una cadena más larga que el `max_length` del pipeline;
+- `SourceError` - una fuente sin palabras; un `Doc` sin las dependencias, las categorías gramaticales o los lemas (un `Doc` de `spacy.blank("es")`, de un pipeline sin analizador o sin `esmorph`, un `morphologizer` o un `lemmatizer`); una cadena más larga que el `max_length` del pipeline;
 - `DatasetNotFoundError` - una cadena sin `nlp` cuando el modelo no está instalado.
 
 La clase extiende el `SyntaxStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/syntax_stats/) con la capa del español. Las relaciones y los rasgos son los de la anotación de [Universal Dependencies](https://universaldependencies.org/u/dep/) de los modelos `es_core_news_sm`, `es_core_news_md` y `es_core_news_lg`, y las estadísticas valen lo que vale el análisis sintáctico. Las cláusulas, la pasiva, las negaciones y los predicados escindidos siguen las reglas del español descritas en las tarjetas de las métricas, y esTS añade sus propias métricas de las cadenas de `de`, las cláusulas de gerundio y las oraciones con `se`. Las construcciones del estilo administrativo - la pasiva con `ser` y con `se`, las cláusulas de participio y de gerundio, las cadenas de `de`, los predicados escindidos - son las que advierten las guías de lenguaje claro en español. La tabla de `print_stats` toma las descripciones de `SYNTAX_STATS_DESC` de `ests.constants`.
@@ -59,7 +59,7 @@ El `max_length` del pipeline es de un millón de caracteres por defecto: divida 
     Verb phrases per T-unit                                    |   1.50
     Coordinate phrases per clause                              |   0.00
     Complex nominals per clause                                |   1.33
-    Modifiers per noun phrase                                  |   1.00
+    Modifiers per noun phrase                                  |   1.12
     Prepositional chains per sentence                          |   0.50
     Maximum length of a prepositional chain                    |    2
     Chains of de per sentence                                  |   0.50
@@ -77,9 +77,9 @@ El `max_length` del pipeline es de un millón de caracteres por defecto: divida 
     Split predicates per sentence                              |   1.00
     Share of nominal subjects before their head                |   0.50
     Share of nominal objects before their head                 |   0.00
-    Edit distance of the parts of speech of adjacent sentences |   0.47
-    Syntactic similarity of adjacent sentences                 |   0.45
-    Ratio of nouns to verbs                                    |   3.00
+    Edit distance of the parts of speech of adjacent sentences |   0.53
+    Syntactic similarity of adjacent sentences                 |   0.38
+    Ratio of nouns to verbs                                    |   2.67
     ```
 
 ## Parámetros
@@ -129,7 +129,7 @@ Los atributos de las construcciones de esTS son `n_de_chains`, `n_gerund_clauses
 === "Resultado"
 
     ```
-    (3, 9, 3)
+    (3, 8, 3)
     (1, 1, ('llevó cabo', 'hiciera mención'))
     {0: 16, 1: 5, 2: 4, 3: 2, 4: 2}
     {'advcl': 1,
@@ -145,7 +145,18 @@ Los atributos de las construcciones de esTS son `n_de_chains`, `n_gerund_clauses
      'obj': 2,
      'obl': 1,
      'root': 2}
-    ['La', 'revisión', 'de', 'las', 'cuentas', 'del', 'organismo', 'fue', 'realizada', 'por', 'el', 'comité']
+    ['La',
+     'revisión',
+     'de',
+     'las',
+     'cuentas',
+     'del',
+     'organismo',
+     'fue',
+     'realizada',
+     'por',
+     'el',
+     'comité']
     ```
 
 ## Métricas
@@ -310,7 +321,7 @@ Comprueba si un infinitivo bajo `xcomp` encabeza una cláusula propia: un predic
 is_infinitive_periphrasis(token)
 ```
 
-Comprueba si un infinitivo forma un solo predicado con su núcleo: un infinitivo bajo `xcomp` de un verbo de `RAISING_VERBS`, `parecer` (`parece dormir`), o una perífrasis. En una perífrasis el núcleo es un verbo de `INFINITIVE_PERIPHRASES` (NGLE, cap. 28) y el infinitivo se une a él por uno de los nexos de ese verbo - un `mark`, `case` o `cc` antes del infinitivo, o la palabra justo anterior, con la grafía antigua `á` leída como `a`. Los verbos son `poder`, `soler` y `deber` sin nexo (`puede salir`, `suele salir`), `deber de`, `tener que`, `haber que`, `haber de`, `ir a`, `venir a`, `pasar a`, `volver a`, `tornar a`, `empezar a` y `por`, `comenzar a` y `por`, `principiar a`, `poner a`, `echar a`, `romper a`, `llegar a`, `alcanzar a`, `acabar de` y `por`, `terminar de` y `por`, `dejar de`, `cesar de`, `parar de`, `estar para` y `por`. El lema del núcleo es el del modelo, o el de `ests.utils.lemmatize` cuando el del modelo no es ninguno de esos verbos (puede leer un verbo que abre la oración como nombre propio: `Solía salir`).
+Comprueba si un infinitivo forma un solo predicado con su núcleo: un infinitivo bajo `xcomp` de un verbo de `RAISING_VERBS`, `parecer` (`parece dormir`), o una perífrasis. En una perífrasis el núcleo es un verbo de `INFINITIVE_PERIPHRASES` (NGLE, cap. 28) y el infinitivo se une a él por uno de los nexos de ese verbo - un `mark`, `case` o `cc` antes del infinitivo, o la palabra justo anterior, con la grafía antigua `á` leída como `a`. Los verbos son `poder`, `soler` y `deber` sin nexo (`puede salir`, `suele salir`), `deber de`, `tener que`, `haber que`, `haber de`, `ir a`, `venir a`, `pasar a`, `volver a`, `tornar a`, `empezar a` y `por`, `comenzar a` y `por`, `principiar a`, `poner a`, `echar a`, `romper a`, `llegar a`, `alcanzar a`, `acabar de` y `por`, `terminar de` y `por`, `dejar de`, `cesar de`, `parar de`, `estar para` y `por`. El lema del núcleo es el del etiquetador, o el de `ests.utils.lemmatize` cuando el del etiquetador no es ninguno de esos verbos (puede leer un verbo como sustantivo o darle el lema de otro verbo: `vayas` - `vaya`, `venga` - `vengar`).
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
@@ -836,7 +847,7 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
      'verb_phrases_per_t_unit': 1.5,
      'coordinate_phrases_per_clause': 0.0,
      'complex_nominals_per_clause': 1.3333333333333333,
-     'modifiers_per_noun': 1.0,
+     'modifiers_per_noun': 1.125,
      'prep_chains_per_sent': 0.5,
      'max_prep_chain_len': 2,
      'de_chains_per_sent': 0.5,
@@ -854,9 +865,9 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
      'split_predicates_per_sent': 1.0,
      'p_preverbal_subjects': 0.5,
      'p_preverbal_objects': 0.0,
-     'pos_edit_distance': 0.47058823529411764,
-     'syntax_similarity': 0.45,
-     'noun_verb_ratio': 3.0}
+     'pos_edit_distance': 0.5294117647058824,
+     'syntax_similarity': 0.38095238095238093,
+     'noun_verb_ratio': 2.6666666666666665}
     (None, None)
     ```
 
@@ -914,7 +925,7 @@ El número de palabras del subárbol de una palabra: la propia palabra y todas s
 predicate_form(token)
 ```
 
-La forma verbal de un predicado por las formas (`VerbForm`) de sus auxiliares y cópulas (`aux`, `cop`): un auxiliar en forma personal hace el predicado personal (`había llegado`, `estaba cantando`); si no, decide el primer auxiliar (`de haber matado` es un infinitivo, `siendo elegido` un gerundio), y sin auxiliares la propia palabra. Un auxiliar en participio cuenta como forma personal: `sido` y `estado` siguen a una forma de `haber`, que los modelos pueden colgar de otra palabra (`hubieras sido albañil`). Un auxiliar que el modelo deja sin forma se lee por su terminación cuando es un verbo de `AUXILIARY_VERBS` (`habéis llegado`) - un infinitivo en `-r` y un gerundio en `-ndo`, con enclíticos detrás (`ENCLITICS`), una forma personal en otro caso - y se omite cuando no lo es (la grafía antigua `á`). Es el `predicate_form` del núcleo anyTS con la lectura española de un auxiliar sin forma. La forma es `'Fin'`, `'Inf'`, `'Ger'` o `'Part'`, una cadena vacía para una palabra sin forma verbal.
+La forma verbal de un predicado por las formas (`VerbForm`) de sus auxiliares y cópulas (`aux`, `cop`): un auxiliar en forma personal hace el predicado personal (`había llegado`, `estaba cantando`); si no, decide el primer auxiliar (`de haber matado` es un infinitivo, `siendo elegido` un gerundio), y sin auxiliares la propia palabra. Un auxiliar en participio cuenta como forma personal: `sido` y `estado` siguen a una forma de `haber`, que los modelos pueden colgar de otra palabra (`hubieras sido albañil`). Un auxiliar que el etiquetador deja sin forma, como un infinitivo leído como sustantivo (`el ser saludado`), se lee por su terminación cuando es un verbo de `AUXILIARY_VERBS` - un infinitivo en `-r` y un gerundio en `-ndo`, con enclíticos detrás (`ENCLITICS`), una forma personal en otro caso - y se omite cuando no lo es (la grafía antigua `á`). Es el `predicate_form` del núcleo anyTS con la lectura española de un auxiliar sin forma. La forma es `'Fin'`, `'Inf'`, `'Ger'` o `'Part'`, una cadena vacía para una palabra sin forma verbal.
 
 ``` {.python .signature}
 is_participle(token)

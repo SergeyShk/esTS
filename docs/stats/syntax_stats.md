@@ -4,12 +4,12 @@
 SyntaxStats(source, nlp=None)
 ```
 
-The syntactic statistics of a text by its dependency tree ([Ivanov, Solnyshkina and Solovyev 2018](https://dialogue-conf.org/media/4302/ivanovvv.pdf)): the measures of the tree and of the syntactic constructions. The data source is a text or a `Doc` object of [spaCy](https://github.com/explosion/spaCy), and it has to be parsed: a string is parsed with [`es_core_news_sm`](../installation.md#model) or with the pipeline passed in `nlp`, without the named entities, and a `Doc` must carry the dependencies, which come from a `parser`, the parts of speech, which come from a `morphologizer` (or a `tagger` with an `attribute_ruler`), and the lemmas, which come from a `lemmatizer`. Punctuation marks, symbols (`%`, `€`, `+`) and whitespace are no nodes of the tree, and the distances are counted in positions of words.
+The syntactic statistics of a text by its dependency tree ([Ivanov, Solnyshkina and Solovyev 2018](https://dialogue-conf.org/media/4302/ivanovvv.pdf)): the measures of the tree and of the syntactic constructions. The data source is a text or a `Doc` object of [spaCy](https://github.com/explosion/spaCy), and it has to be parsed: a string is parsed with the pipeline of [`load_pipeline`](../components.md#load_pipeline) - [`es_core_news_sm`](../installation.md#model) with the analyses of esMorph - or with the pipeline passed in `nlp`, without the named entities, and a `Doc` must carry the dependencies, which come from a `parser`, and the parts of speech and the lemmas, which come from `esmorph` of `load_pipeline` or from a `morphologizer` (or a `tagger` with an `attribute_ruler`) and a `lemmatizer`. Punctuation marks, symbols (`%`, `€`, `+`) and whitespace are no nodes of the tree, and the distances are counted in positions of words.
 
 Raises:
 
 - `SourceTypeError` - a source that is neither a string, a `Doc` nor a `Document`, a pipeline in `nlp` that is not a spaCy `Language`;
-- `SourceError` - a source without words; a `Doc` without the dependencies, the parts of speech or the lemmas (a `Doc` of `spacy.blank("es")`, of a pipeline without a parser or with the `morphologizer` or the `lemmatizer` excluded); a string longer than the `max_length` of the pipeline;
+- `SourceError` - a source without words; a `Doc` without the dependencies, the parts of speech or the lemmas (a `Doc` of `spacy.blank("es")`, of a pipeline without a parser or without `esmorph`, a `morphologizer` or a `lemmatizer`); a string longer than the `max_length` of the pipeline;
 - `DatasetNotFoundError` - a string without `nlp` when the model is not installed.
 
 The class extends the `SyntaxStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/syntax_stats/) core with the Spanish layer. The relations and features are those of the [Universal Dependencies](https://universaldependencies.org/u/dep/) annotation of the `es_core_news_sm`, `es_core_news_md` and `es_core_news_lg` models, and the statistics are as good as the parse. The clauses, the passive, the negations and the split predicates follow the rules of Spanish given in the cards of the metrics, and esTS adds its own metrics of the chains of `de`, the gerund clauses and the sentences with `se`. The constructions of the administrative style - the passive with `ser` and with `se`, the participial and gerund clauses, the chains of `de`, the split predicates - are the ones the Spanish-language guides to plain language (*lenguaje claro*) warn about. The `print_stats` table takes the descriptions of `SYNTAX_STATS_DESC` of `ests.constants`.
@@ -59,7 +59,7 @@ The `max_length` of the pipeline is a million characters by default: split a lon
     Verb phrases per T-unit                                    |   1.50
     Coordinate phrases per clause                              |   0.00
     Complex nominals per clause                                |   1.33
-    Modifiers per noun phrase                                  |   1.00
+    Modifiers per noun phrase                                  |   1.12
     Prepositional chains per sentence                          |   0.50
     Maximum length of a prepositional chain                    |    2
     Chains of de per sentence                                  |   0.50
@@ -77,9 +77,9 @@ The `max_length` of the pipeline is a million characters by default: split a lon
     Split predicates per sentence                              |   1.00
     Share of nominal subjects before their head                |   0.50
     Share of nominal objects before their head                 |   0.00
-    Edit distance of the parts of speech of adjacent sentences |   0.47
-    Syntactic similarity of adjacent sentences                 |   0.45
-    Ratio of nouns to verbs                                    |   3.00
+    Edit distance of the parts of speech of adjacent sentences |   0.53
+    Syntactic similarity of adjacent sentences                 |   0.38
+    Ratio of nouns to verbs                                    |   2.67
     ```
 
 ## Parameters
@@ -108,7 +108,7 @@ The attributes of the constructions of esTS are `n_de_chains`, `n_gerund_clauses
 === "Result"
 
     ```
-    (3, 9, 3)
+    (3, 8, 3)
     (1, 1, ('llevó cabo', 'hiciera mención'))
     {0: 16, 1: 5, 2: 4, 3: 2, 4: 2}
     {'advcl': 1,
@@ -124,7 +124,18 @@ The attributes of the constructions of esTS are `n_de_chains`, `n_gerund_clauses
      'obj': 2,
      'obl': 1,
      'root': 2}
-    ['La', 'revisión', 'de', 'las', 'cuentas', 'del', 'organismo', 'fue', 'realizada', 'por', 'el', 'comité']
+    ['La',
+     'revisión',
+     'de',
+     'las',
+     'cuentas',
+     'del',
+     'organismo',
+     'fue',
+     'realizada',
+     'por',
+     'el',
+     'comité']
     ```
 
 ## Metrics
@@ -274,7 +285,7 @@ Checks whether an infinitive under `xcomp` heads a clause of its own: a predicat
 is_infinitive_periphrasis(token)
 ```
 
-Checks whether an infinitive makes one predicate with its head: an infinitive under `xcomp` of a verb of `RAISING_VERBS`, `parecer` (`parece dormir`), or a periphrasis. In a periphrasis the head is a verb of `INFINITIVE_PERIPHRASES` (NGLE, ch. 28) and the infinitive is linked to it by one of the words of that verb - a `mark`, `case` or `cc` before the infinitive, or the word right before it, the old spelling `á` read as `a`. The verbs are `poder`, `soler` and `deber` with no word (`puede salir`, `suele salir`), `deber de`, `tener que`, `haber que`, `haber de`, `ir a`, `venir a`, `pasar a`, `volver a`, `tornar a`, `empezar a` and `por`, `comenzar a` and `por`, `principiar a`, `poner a`, `echar a`, `romper a`, `llegar a`, `alcanzar a`, `acabar de` and `por`, `terminar de` and `por`, `dejar de`, `cesar de`, `parar de`, `estar para` and `por`. The lemma of the head is that of the model, or of `ests.utils.lemmatize` when the model gives none of these verbs (it can read a verb opening a sentence as a proper noun: `Solía salir`).
+Checks whether an infinitive makes one predicate with its head: an infinitive under `xcomp` of a verb of `RAISING_VERBS`, `parecer` (`parece dormir`), or a periphrasis. In a periphrasis the head is a verb of `INFINITIVE_PERIPHRASES` (NGLE, ch. 28) and the infinitive is linked to it by one of the words of that verb - a `mark`, `case` or `cc` before the infinitive, or the word right before it, the old spelling `á` read as `a`. The verbs are `poder`, `soler` and `deber` with no word (`puede salir`, `suele salir`), `deber de`, `tener que`, `haber que`, `haber de`, `ir a`, `venir a`, `pasar a`, `volver a`, `tornar a`, `empezar a` and `por`, `comenzar a` and `por`, `principiar a`, `poner a`, `echar a`, `romper a`, `llegar a`, `alcanzar a`, `acabar de` and `por`, `terminar de` and `por`, `dejar de`, `cesar de`, `parar de`, `estar para` and `por`. The lemma of the head is that of the tagger, or of `ests.utils.lemmatize` when the tagger gives none of these verbs (it can read a verb as a noun or give it the lemma of another verb: `vayas` - `vaya`, `venga` - `vengar`).
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
@@ -757,7 +768,7 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
      'verb_phrases_per_t_unit': 1.5,
      'coordinate_phrases_per_clause': 0.0,
      'complex_nominals_per_clause': 1.3333333333333333,
-     'modifiers_per_noun': 1.0,
+     'modifiers_per_noun': 1.125,
      'prep_chains_per_sent': 0.5,
      'max_prep_chain_len': 2,
      'de_chains_per_sent': 0.5,
@@ -775,9 +786,9 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
      'split_predicates_per_sent': 1.0,
      'p_preverbal_subjects': 0.5,
      'p_preverbal_objects': 0.0,
-     'pos_edit_distance': 0.47058823529411764,
-     'syntax_similarity': 0.45,
-     'noun_verb_ratio': 3.0}
+     'pos_edit_distance': 0.5294117647058824,
+     'syntax_similarity': 0.38095238095238093,
+     'noun_verb_ratio': 2.6666666666666665}
     (None, None)
     ```
 
@@ -803,7 +814,7 @@ The functions work with the words of the tree of a document (`TreeWord`, `get_tr
 predicate_form(token)
 ```
 
-The verb form of a predicate by the forms (`VerbForm`) of its auxiliaries and copulas (`aux`, `cop`): a finite auxiliary makes the predicate finite (`había llegado`, `estaba cantando`); otherwise the first auxiliary decides (`de haber matado` is an infinitive, `siendo elegido` a gerund), and without auxiliaries the word itself. A participle auxiliary counts as finite: `sido` and `estado` follow a form of `haber`, which the models may attach to another word (`hubieras sido albañil`). An auxiliary the model leaves without a form is read by its ending when it is a verb of `AUXILIARY_VERBS` (`habéis llegado`) - an infinitive in `-r` and a gerund in `-ndo`, enclitics after them (`ENCLITICS`), a finite form otherwise - and skipped when it is not (the old spelling `á`). It is the `predicate_form` of the anyTS core with the Spanish reading of an auxiliary without a form. The form is `'Fin'`, `'Inf'`, `'Ger'` or `'Part'`, an empty string for a word with no verb form.
+The verb form of a predicate by the forms (`VerbForm`) of its auxiliaries and copulas (`aux`, `cop`): a finite auxiliary makes the predicate finite (`había llegado`, `estaba cantando`); otherwise the first auxiliary decides (`de haber matado` is an infinitive, `siendo elegido` a gerund), and without auxiliaries the word itself. A participle auxiliary counts as finite: `sido` and `estado` follow a form of `haber`, which the models may attach to another word (`hubieras sido albañil`). An auxiliary the tagger leaves without a form, as an infinitive read as a noun (`el ser saludado`), is read by its ending when it is a verb of `AUXILIARY_VERBS` - an infinitive in `-r` and a gerund in `-ndo`, enclitics after them (`ENCLITICS`), a finite form otherwise - and skipped when it is not (the old spelling `á`). It is the `predicate_form` of the anyTS core with the Spanish reading of an auxiliary without a form. The form is `'Fin'`, `'Inf'`, `'Ger'` or `'Part'`, an empty string for a word with no verb form.
 
 ``` {.python .signature}
 is_participle(token)

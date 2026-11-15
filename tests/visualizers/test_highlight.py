@@ -62,6 +62,13 @@ def nlp():
     return get_nlp()
 
 
+def without_lemmas(doc):
+    """A Doc with the parts of speech and no lemmas, as of a pipeline without its lemmatizer"""
+    for token in doc:
+        token.lemma_ = ""
+    return doc
+
+
 @pytest.fixture(scope="module")
 def doc(nlp):
     return nlp(text)
@@ -176,7 +183,7 @@ def test_doc_without_the_sentence_boundaries(nlp):
 @pytest.mark.parametrize("layer", SYNTAX_LAYERS)
 def test_syntax_layers_without_the_lemmas(nlp, layer):
     # the syntactic layers read the lemmas
-    doc = nlp(text, disable=["lemmatizer"])
+    doc = without_lemmas(nlp(text))
     with pytest.raises(ParameterError, match=r"parse, (parts of speech, )?lemmas"):
         highlight(doc, layers=layer)
     assert highlight(doc).layers == ("long_sents", "complex_words", "cliches")
@@ -295,7 +302,7 @@ def test_verbal_nouns(doc):
 
 def test_verbal_nouns_without_the_lemmas(nlp):
     with pytest.raises(ParameterError, match="lemmas"):
-        highlight(nlp(text, disable=["lemmatizer"]), layers="verbal_nouns")
+        highlight(without_lemmas(nlp(text)), layers="verbal_nouns")
 
 
 def test_compound_prepositions(ht):
