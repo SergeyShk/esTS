@@ -40,8 +40,10 @@ def sentence_lengths_plot(
         ax (Axes): Axes for the plot; if not given, a new figure is created
         labels (dict[str, str]): Labels over VISUALIZER_LABELS["sentence_lengths_plot"]
             of anyts.constants
-        sents_extractor (SentsExtractor): Extractor of the sentences of a string
-        words_extractor (WordsExtractor): Extractor of the words of a sentence of a string
+        sents_extractor (SentsExtractor): Extractor of the sentences of a string or of
+            a Doc without sentences
+        words_extractor (WordsExtractor): Extractor of the words of a sentence of a
+            string or of a Doc without sentences
 
     Returns:
         Axes: Axes with the plot
@@ -71,15 +73,18 @@ def sentence_lengths(
     Description:
         A string, a Doc or a Document gives the sentences of its document
         (get_document) and their words with a letter or a digit; with an
-        extractor, the text is split by sents_extractor and words_extractor, the
-        Spanish SentsExtractor and WordsExtractor for the one not given. Ready
-        lengths (a sequence or an iterator of integers that are not negative)
+        extractor, a string or a Doc without sentences is split by
+        sents_extractor and words_extractor, the Spanish SentsExtractor and
+        WordsExtractor for the one not given, while a Doc with sentences and a
+        Document keep theirs. Ready lengths (a sequence or an iterator of integers that are not negative)
         are used as they are. Sentences without words are skipped
 
     Arguments:
         source (str|Doc|Document|Iterable[int]): Text, Doc object, Document or ready lengths
-        sents_extractor (SentsExtractor): Extractor of the sentences of a string
-        words_extractor (WordsExtractor): Extractor of the words of a sentence of a string
+        sents_extractor (SentsExtractor): Extractor of the sentences of a string or of
+            a Doc without sentences
+        words_extractor (WordsExtractor): Extractor of the words of a sentence of a
+            string or of a Doc without sentences
 
     Returns:
         list[int]: Lengths of the sentences in order
@@ -104,7 +109,7 @@ def _lengths_args(
     words_extractor: WordsExtractor | None,
 ) -> tuple[Any, SentsExtractor | None, WordsExtractor | None]:
     """The document of a text, a Doc or a Document of get_document when no extractor is given;
-    with one given the text is split by the extractors, the Spanish one for the missing one"""
+    with one given the extractors, the Spanish one for the missing one"""
     if sents_extractor is None and words_extractor is None:
         if isinstance(source, str) or is_doc(source) or is_document(source):
             return get_document(source), None, None

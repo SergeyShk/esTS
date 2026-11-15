@@ -154,7 +154,7 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
          Connector(sent=2, start=6, end=7, text='y', cls='additive', kind='primary'))
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
+        source (str|Doc|Document): Data source (a string, a Doc or a Document)
         sents_extractor (SentsExtractor): Sentence extraction tool; an extractor
             given here is used whatever the source, and without one a Doc with no
             sentence boundaries is split by the rules of the default extractor
@@ -240,8 +240,8 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
         print_stats: Printing the computed cohesion statistics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object, the extractor
-            or the pipeline is of another type, or the connectors are not a dictionary
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, the
+            extractor or the pipeline is of another type, or the connectors are not a dictionary
             of phrases and pairs of strings
         SourceError: If the source has no words, no annotation of the parts of
             speech or no lemmas, or is a string longer than the max_length of

@@ -57,8 +57,8 @@ class BasicStats(anyts.basic_stats.BasicStats):
                             'other': 0}}
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object); for a Doc the
-            words come from the tokens and the sentences from the annotation,
+        source (str|Doc|Document): Data source (a string, a Doc or a Document); for a
+            Doc the words come from the tokens and the sentences from the annotation,
             without sentence boundaries they come from SentsExtractor
         sents_extractor (SentsExtractor): Sentence extraction tool; if given,
             used on the text of a Doc too
@@ -108,8 +108,8 @@ class BasicStats(anyts.basic_stats.BasicStats):
         print_stats: Printing the computed statistics of the text with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object, or an extractor
-            is of another type
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, or an
+            extractor is of another type
         SourceError: If the source has no words
         ParameterError: If a factor is not an integer or is below one, or normalize is not
             a bool

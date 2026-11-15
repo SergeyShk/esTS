@@ -88,8 +88,8 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
         'ESO (12-16 years)'
 
     Arguments:
-        source (str|Doc|BasicStats): Data source - a string, a Doc object or
-            a ready BasicStats object to reuse
+        source (str|Doc|Document|BasicStats): Data source - a string, a Doc, a
+            Document or a ready BasicStats object to reuse
         sents_extractor (SentsExtractor): Sentence extraction tool
         words_extractor (WordsExtractor): Word extraction tool
         preset (str): Coefficient preset (general, classic)
@@ -126,8 +126,8 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
         print_stats: Printing the computed readability metrics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string, a Doc nor a BasicStats object,
-            the basic statistics are not those of esTS, or an extractor is of another type
+        SourceTypeError: If the source is neither a string, a Doc, a Document nor a
+            BasicStats object, the basic statistics are not those of esTS, or an extractor is of another type
         SourceError: If the source has no words or no sentences
         ParameterError: If the coefficient preset is not a string or is unknown
     """

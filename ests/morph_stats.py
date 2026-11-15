@@ -95,7 +95,7 @@ class MorphStats(anyts.morph_stats.MorphStats):
         'Gender=Masc|Number=Sing'
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
+        source (str|Doc|Document): Data source (a string, a Doc or a Document)
         nlp (Language): Pipeline of spaCy that parses a string; without it
             the model of SPACY_MODEL is loaded
 
@@ -131,7 +131,7 @@ class MorphStats(anyts.morph_stats.MorphStats):
         print_markers: Printing the computed markers of Spanish with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc object, or the
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, or the
             pipeline is not a spaCy Language
         SourceError: If the source has no words, no annotation of the parts of
             speech or no lemmas, or is a string longer than the max_length of

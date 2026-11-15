@@ -67,7 +67,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         {1000: 0.6666666666666666, 2000: 0.7777777777777778, 5000: 1.0, 10000: 1.0}
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
+        source (str|Doc|Document): Data source (a string, a Doc or a Document)
         freq_dict (FreqDict): Frequency dictionary; FreqDict() of the default
             directory if not given
         nlp (Language): Pipeline of spaCy that parses a string; without it the
@@ -112,8 +112,8 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         print_stats: Printing the computed statistics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc, or the dictionary or
-            the pipeline is of another type
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, or the
+            dictionary or the pipeline is of another type
         SourceError: If the source has no words, lacks the parts of speech or
             is a string longer than the max_length of the pipeline
         DatasetNotFoundError: When a statistic by the dictionary is read and the

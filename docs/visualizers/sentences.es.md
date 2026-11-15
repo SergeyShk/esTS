@@ -7,7 +7,7 @@ sentence_lengths_plot(source, window=10, inset=True, ax=None, labels=None, sents
 <!-- core: visualizers/sentences.md:sentence_lengths_plot 36b6cdc -->
 La curva de las longitudes de las oraciones, el ritmo de un texto: la longitud de cada oración en palabras, en orden, la media móvil sobre `window` oraciones y un recuadro con el histograma de las longitudes. Oraciones cortas y largas que se alternan son un signo editorial de un texto vivo; una curva plana, de uno monótono. La función recibe los ejes `ax` y devuelve `Axes`.
 
-Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visualizers/sentences/); por defecto esTS lee las oraciones del documento de una cadena, un `Doc` o un `Document` (el segmentador [anySeg](https://github.com/SergeyShk/anySeg)) y sus palabras con una letra o una cifra; con el parámetro `sents_extractor` o `words_extractor` el texto se divide con los extractores, los del español [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) para el que no se indica. Las etiquetas por defecto son las inglesas de `VISUALIZER_LABELS` en `anyts.constants`; `labels` sustituye cualquiera de ellas.
+Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/visualizers/sentences/); por defecto esTS lee las oraciones del documento de una cadena, un `Doc` o un `Document` (el segmentador [anySeg](https://github.com/SergeyShk/anySeg)) y sus palabras con una letra o una cifra; con el parámetro `sents_extractor` o `words_extractor` una cadena o un `Doc` sin oraciones se divide con los extractores, los del español [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) para el que no se indica, mientras que un `Doc` con oraciones y un `Document` conservan las suyas. Las etiquetas por defecto son las inglesas de `VISUALIZER_LABELS` en `anyts.constants`; `labels` sustituye cualquiera de ellas.
 
 La curva de la segunda ventana de 2000 palabras de *Niebla* de Unamuno del [corpus de literatura](../datasets/spanishliterature.md); una ventana se corta por palabras, así que empieza con el final de una oración:
 
@@ -48,11 +48,11 @@ La fuente y los extractores lanzan los errores de `sentence_lengths`, y la falta
 sentence_lengths(source, sents_extractor=None, words_extractor=None)
 ```
 
-Las longitudes de las oraciones en palabras, en orden: las oraciones del documento de una cadena, un `Doc` o un `Document` y sus palabras con una letra o una cifra, o, con un extractor, las oraciones del extractor de oraciones y sus palabras del extractor de palabras. Las oraciones sin palabras se omiten. Las longitudes ya hechas (enteros no negativos en una secuencia o un iterador) se usan tal cual. Los argumentos son los de `sentence_lengths_plot`.
+Las longitudes de las oraciones en palabras, en orden: las oraciones del documento de una cadena, un `Doc` o un `Document` y sus palabras con una letra o una cifra, o, con un extractor, las oraciones del extractor de oraciones y sus palabras del extractor de palabras en una cadena o un `Doc` sin oraciones; un `Doc` con oraciones y un `Document` conservan las suyas. Las oraciones sin palabras se omiten. Las longitudes ya hechas (enteros no negativos en una secuencia o un iterador) se usan tal cual. Los argumentos son los de `sentence_lengths_plot`.
 
 Excepciones:
 
-- `SourceTypeError` - un objeto que no es una cadena, un `Doc`, una secuencia ni un iterador, una tabla, un conjunto, un mapeo, bytes, una longitud que no es un entero, un extractor de otro tipo;
+- `SourceTypeError` - un objeto que no es una cadena, un `Doc`, un `Document`, una secuencia ni un iterador, una tabla, un conjunto, un mapeo, bytes, una longitud que no es un entero, un extractor de otro tipo;
 - `SourceError` - una longitud negativa.
 
 === "Código"

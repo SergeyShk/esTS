@@ -90,7 +90,7 @@ class PhonStats(anyts.phon_stats.PhonStats):
         (('t', 'r', 'e', 's'), ('tri', 'gal'))
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
+        source (str|Doc|Document): Data source (a string, a Doc or a Document)
         words_extractor (WordsExtractor): Word extraction tool; for a Doc it is applied
             to its text
         window_len (int): Window in words for the alliteration and the assonance
@@ -129,8 +129,8 @@ class PhonStats(anyts.phon_stats.PhonStats):
         print_stats: Printing the computed phonostatistics with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string nor a Doc, or the extractor is
-            not a WordsExtractor
+        SourceTypeError: If the source is neither a string, a Doc nor a Document, or the
+            extractor is not a WordsExtractor
         SourceError: If the source has no words
         ParameterError: If the window is not an integer or is below 2
     """

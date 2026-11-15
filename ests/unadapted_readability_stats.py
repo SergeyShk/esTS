@@ -36,8 +36,8 @@ class UnadaptedReadabilityStats(anyts.unadapted_readability_stats.UnadaptedReada
         (17.0, 56.33)
 
     Arguments:
-        source (str|Doc|BasicStats): Data source - a string, a Doc object or a ready
-            BasicStats object
+        source (str|Doc|Document|BasicStats): Data source - a string, a Doc, a Document
+            or a ready BasicStats object
         sents_extractor (SentsExtractor): Sentence extraction tool; not used for ready
             basic statistics
         words_extractor (WordsExtractor): Word extraction tool; not used for ready basic
@@ -67,8 +67,8 @@ class UnadaptedReadabilityStats(anyts.unadapted_readability_stats.UnadaptedReada
         print_stats: Printing the computed formulas with descriptions
 
     Raises:
-        SourceTypeError: If the source is neither a string, a Doc nor a BasicStats object,
-            the basic statistics are not those of esTS, or an extractor is of another type
+        SourceTypeError: If the source is neither a string, a Doc, a Document nor a
+            BasicStats object, the basic statistics are not those of esTS, or an extractor is of another type
         SourceError: If the source has no words or no sentences
     """
 

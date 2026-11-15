@@ -168,7 +168,7 @@ class VerseStats(Stats):
         que a mayór mál pudiéra habér llegádo.
 
     Arguments:
-        source (str|Doc): Data source (a string or a Doc object)
+        source (str|Doc|Document): Data source (a string, a Doc or a Document)
         seseo (bool): Pronounce c and z before e and i as s in the rhyme, as in
             Andalusia and in America: voz - dos, caza - casa
 
