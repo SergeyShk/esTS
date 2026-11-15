@@ -60,23 +60,25 @@ Galdós against Unamuno, three novels each from the [corpus of literature](../da
 === "Result"
 
     ```
-                      median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    diversity_mtldw         105.455          66.179  37.104   43.799    3.260        0.988  0.994     0.0
-    diversity_mamtld        103.316          64.997  35.107   45.657    3.084        0.981  0.990     0.0
-    diversity_mtld          103.655          64.594  37.536   47.169    3.107        0.981  0.990     0.0
-    diversity_mattr           0.817           0.769   0.046    0.057    2.951        0.979  0.990     0.0
-    diversity_msttr           0.819           0.769   0.047    0.059    2.927        0.979  0.989     0.0
+                      median_Galdós  median_Unamuno  ...    auc  p_holm
+    diversity_mtldw         105.455          66.179  ...  0.994     0.0
+    diversity_mamtld        103.316          64.997  ...  0.990     0.0
+    diversity_mtld          103.655          64.594  ...  0.990     0.0
+    diversity_mattr           0.817           0.769  ...  0.990     0.0
+    diversity_msttr           0.819           0.769  ...  0.989     0.0
 
-                            median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    basic_letters_per_word          4.441           4.130   0.243    0.358    1.695        0.784  0.892     0.0
-    readability_lix                38.321          29.758   7.140   11.170    1.091        0.698  0.849     0.0
-    morph_p_gerund                  0.069           0.037   0.026    0.035    1.533        0.742  0.871     0.0
-    morph_polarity_Neg              0.019           0.028  -0.011   -0.009   -1.123       -0.559  0.221     0.0
-    sents_mean                     16.393          11.494   3.105    6.818    0.843        0.616  0.808     0.0
-    punct_dash                     19.000          46.000 -39.000  -14.000   -1.287       -0.605  0.197     0.0
-    punct_exclamation               9.000          24.000 -23.000   -2.000   -1.251       -0.637  0.181     0.0
-    diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.675       -0.351  0.325     0.0
+    [5 rows x 8 columns]
+                            median_Galdós  median_Unamuno  ...    auc  p_holm
+    basic_letters_per_word          4.441           4.130  ...  0.892     0.0
+    readability_lix                38.321          29.758  ...  0.849     0.0
+    morph_p_gerund                  0.069           0.037  ...  0.862     0.0
+    morph_polarity_Neg              0.019           0.029  ...  0.218     0.0
+    sents_mean                     16.393          11.494  ...  0.808     0.0
+    punct_dash                     19.000          46.000  ...  0.197     0.0
+    punct_exclamation               9.000          24.000  ...  0.181     0.0
+    diversity_yule_k              103.620         112.500  ...  0.325     0.0
 
+    [8 rows x 8 columns]
     {'n_Galdós': 155, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
@@ -116,17 +118,17 @@ Returns 164 features of a text prefixed by their source, 209 with a pipeline tha
 | `basic_` | shares of long, complex, simple, mono- and polysyllabic words, of letters, spaces and punctuation marks; letters and syllables per word | [`BasicStats`](../stats/basic_stats.md) |
 | `readability_` | every readability formula and the consensus grade | [`ReadabilityStats`](../stats/readability_stats.md) |
 | `diversity_` | every measure of lexical diversity but Orlov's Z, unstable on a window | [`DiversityStats`](../stats/diversity_stats.md) |
-| `morph_` | shares of the values of every morphological feature (`morph_pos_NOUN`, `morph_mood_Sub`, `morph_polarity_Neg`) and the markers of Spanish (`morph_p_gerund`, `morph_p_mente_adverbs`) | [`MorphStats`](../stats/morph_stats.md) by the spaCy model |
+| `morph_` | shares of the values of every morphological feature (`morph_pos_NOUN`, `morph_mood_Sub`, `morph_polarity_Neg`) and the markers of Spanish (`morph_p_gerund`, `morph_p_mente_adverbs`) | [`MorphStats`](../stats/morph_stats.md) by the pipeline of `load_pipeline` |
 | `sents_` | mean length of a sentence in words, standard deviation, coefficient of variation, autocorrelation of neighbouring lengths ([`sentence_rhythm`](#sentence_rhythm)) - the rhythm of the text | [`SentsExtractor`](../extractors/sentences.md) |
 | `punct_` | frequencies of the punctuation marks by type per 1000 words and the share of the inverted marks | [`punctuation_profile`](../stats/basic_stats.md#punctuation) |
-| `cohesion_` | overlaps of the nouns, arguments and content words of the sentences, givenness, temporal cohesion and the densities of the connectors by class, kind and place, but the overlaps between paragraphs, which the windows cut | [`CohesionStats`](../stats/cohesion_stats.md) by the spaCy model |
+| `cohesion_` | overlaps of the nouns, arguments and content words of the sentences, givenness, temporal cohesion and the densities of the connectors by class, kind and place, but the overlaps between paragraphs, which the windows cut | [`CohesionStats`](../stats/cohesion_stats.md) by the pipeline of `load_pipeline` |
 | `syntax_` | every syntactic statistic, with a pipeline that has a parser | [`SyntaxStats`](../stats/syntax_stats.md) |
 
 Left out are the reading time, which only follows the number of words in a window, and the features that repeat others: the share of unique words of `BasicStats`, which repeats `diversity_ttr`, its words per sentence, which repeat `sents_mean`, and the markers of the moods of `get_markers`, which repeat `morph_mood_*`.
 
 The parts of speech and the features of a single value - polarity, polite, poss, reflex - are shares of all the words (`morph_polarity_Neg` is the share of the negations), the other features shares of the words that carry them (`morph_mood_Sub` is the subjunctive among the moods). A value that does not occur in a window gives 0, a feature absent from the window altogether (no verbs - no tense) gives `nan`. A value of several values (`PronType=Int,Rel` of *que*) is shared equally among its parts, so the shares of a feature still sum to one.
 
-The morphology and the cohesion are parsed by the model [`es_core_news_sm`](../installation.md#model) without its parser, so the group `syntax_` is left out; a pipeline passed in `nlp` runs whole but for the entity recognizer, so `functools.partial(text_features, nlp=get_nlp())` brings the parser and the syntax in, and another model goes into the comparison the same way. The pipeline of [`load_pipeline`](../components.md#load_pipeline), the default one, splits the text into the sentences of the group `sents_`, so the cohesion and the syntax count the same sentences as the rhythm; a pipeline of one's own gives its own sentences. A novel is compared by windows and not whole, as the pipeline takes at most `max_length` characters.
+The morphology and the cohesion are parsed by the pipeline of [`load_pipeline`](../components.md#load_pipeline) - [`es_core_news_sm`](../installation.md#model) with the analyses of esMorph - without its parser, so the group `syntax_` is left out; a pipeline passed in `nlp` runs whole but for the entity recognizer, so `functools.partial(text_features, nlp=get_nlp())` brings the parser and the syntax in, and another model goes into the comparison the same way. The pipeline of [`load_pipeline`](../components.md#load_pipeline), the default one, splits the text into the sentences of the group `sents_`, so the cohesion and the syntax count the same sentences as the rhythm; a pipeline of one's own gives its own sentences. A novel is compared by windows and not whole, as the pipeline takes at most `max_length` characters.
 
 The shares of spaces, letters and punctuation marks (`basic_p_spaces`, `basic_p_letters`, `basic_p_punctuations`) count the characters as they are: indents, double and non-breaking spaces of the files reflect the typesetting of an edition and not the text. In a corpus from different sources collapse them beforehand, for instance with `re.sub(r"[^\S\n]+", " ", text)`.
 
@@ -181,12 +183,14 @@ The syntactic features come with a pipeline that has a parser, passed in a funct
 === "Result"
 
     ```
-                                        median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    syntax_gerund_clauses_per_sent              0.143           0.045   0.090    0.116    1.473        0.852  0.926     0.0
-    syntax_complex_nominals_per_clause          0.808           0.548   0.215    0.302    1.164        0.690  0.845     0.0
-    syntax_tree_depth                           3.763           2.888   0.594    1.062    1.078        0.664  0.832     0.0
-    syntax_t_units_per_sent                     1.073           1.009   0.029    0.157    1.374        0.664  0.832     0.0
-    syntax_subtrees_per_sent                    6.800           4.534   1.567    2.917    0.942        0.661  0.830     0.0
+                                        median_Galdós  ...  p_holm
+    syntax_gerund_clauses_per_sent              0.148  ...     0.0
+    syntax_complex_nominals_per_clause          0.766  ...     0.0
+    syntax_tree_depth                           3.763  ...     0.0
+    syntax_subtrees_per_sent                    6.800  ...     0.0
+    syntax_t_units_per_sent                     1.074  ...     0.0
+
+    [5 rows x 8 columns]
     ```
 
 ## Comparison of feature tables { #compare_features }

@@ -418,7 +418,7 @@ Referential cohesion in the manner of Coh-Metrix and its Spanish adaptation Coh-
 (3, 23)
 
 >>> cs.noun_overlap_adjacent, round(cs.p_given, 3)
-(0.5, 0.167)
+(0.5, 0.182)
 
 >>> cs.c_connectors
 {'por lo tanto': 1, 'sin embargo': 1}
@@ -544,7 +544,7 @@ Every statistics class is also a component of a pipeline, so a text is annotated
 (12, ('DET', 'NOUN'), 2.0)
 ```
 
-The factories are `ests_basic`, `ests_readability`, `ests_unadapted_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` and `ests_verse`; the name of the pipe is the name of the extension. The pipeline of `ests.load_pipeline()` takes the tokens and the sentences of [anySeg](https://github.com/SergeyShk/anySeg), so a `Doc` counts the words and the sentences of its string.
+The factories are `ests_basic`, `ests_readability`, `ests_unadapted_readability`, `ests_diversity`, `ests_morph`, `ests_syntax`, `ests_cohesion`, `ests_lexical`, `ests_style`, `ests_phon` and `ests_verse`; the name of the pipe is the name of the extension. The pipeline of `ests.load_pipeline()` takes the tokens and the sentences of [anySeg](https://github.com/SergeyShk/anySeg) and the parts of speech, the features and the lemmas of [esMorph](https://github.com/SergeyShk/esMorph), so a `Doc` counts the words and the sentences of its string and has its morphology.
 
 More in the [documentation](https://sergeyshk.github.io/esTS/components/).
 
