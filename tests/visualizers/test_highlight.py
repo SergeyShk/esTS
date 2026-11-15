@@ -450,7 +450,7 @@ def test_split_predicates(doc):
         ("Este informe es el mismo que enviaste ayer.", []),
         ("Los resultados son los mismos.", []),
         ("No parecía la misma.", []),
-        # The lemma of the model is the form; that of simplemma is ser
+        # The lemma of the model is the form; that of lemmatize is ser
         ("Siempre serás el mismo.", []),
         ("Los mismos familiares vinieron.", []),
         ("Siguió con la misma amarga ironía.", []),

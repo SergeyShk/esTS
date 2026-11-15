@@ -346,6 +346,9 @@ def test_expand_phrases():
         "ha puesto de manifiesto",
         "han resultado beneficiarios",
         "dese traslado a las partes",
+        # ser as an auxiliary, and fue and fuere of ir as well
+        "fue de aplicación",
+        "si fuere de aplicación",
         "dénse por notificados",
         # pronominal forms: llevarse, ponerse
         "llévese a cabo",
@@ -357,6 +360,7 @@ def test_expand_phrases_of_the_verb_forms(phrase):
     words = phrase.split()
     cliches = ["dar cumplimiento", "hacer entrega", "poner de manifiesto", "dar traslado"]
     cliches += ["resultar beneficiarios", "dar por notificados", "llevar a cabo"]
+    cliches += ["ser de aplicación"]
     assert calc_phrase_density(words, cliches) == pytest.approx(100 / len(words))
 
 

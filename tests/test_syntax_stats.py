@@ -487,7 +487,7 @@ def test_clause_head_of_an_infinitive_by_its_link(nlp, words, deps, lemmas, expe
 
 
 def test_clause_head_of_an_infinitive_under_a_misread_verb(nlp):
-    """A verb the model reads as a proper noun is looked up by its lemma of simplemma"""
+    """A verb the model reads as a proper noun is looked up by its lemma of lemmatize"""
     doc = Doc(
         nlp.vocab,
         words=["Solía", "salir"],

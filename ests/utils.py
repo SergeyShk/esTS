@@ -231,6 +231,14 @@ def lemmatize(word: str, pos: str = "") -> str:
     return next((analysis for analysis in analyses if analysis.pos == pos), analyses[0]).lemma
 
 
+@lru_cache(maxsize=131072)
+def _verb_lemmas(word: str) -> tuple[str, ...]:
+    """Lemmas of the analyses of a word form as a verb or an auxiliary (VERB, AUX) of esMorph,
+    in their order: fue - ser, ir"""
+    analyses = get_morph_analyzer().analyze(word)
+    return tuple(dict.fromkeys(a.lemma for a in analyses if a.pos in ("VERB", "AUX")))
+
+
 def load_pipeline(
     model: str = SPACY_MODEL, exclude: str | Iterable[str] = (), **kwargs: Any
 ) -> Language:

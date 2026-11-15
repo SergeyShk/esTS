@@ -68,7 +68,7 @@ O con [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-La distribución en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad, la diversidad léxica, las métricas de estilo salvo los sustantivos deverbales, la fonoestadística y las estadísticas del verso no necesitan ningún modelo de spaCy. Las estadísticas morfológicas, las sintácticas, las de cohesión y las de complejidad léxica de una cadena sí lo necesitan, igual que los sustantivos deverbales, el perfil de las palabras funcionales, los rasgos de un texto, la comparación de corpus y analizar un `Doc` por su cuenta:
+La distribución en PyPI se llama `pyests` y el paquete que instala es `ests`. Las estadísticas básicas, la legibilidad, la diversidad léxica, las estadísticas morfológicas y las de complejidad léxica, las métricas de estilo, la fonoestadística y las estadísticas del verso de una cadena no necesitan ningún modelo de spaCy: la morfología viene de esMorph. Las estadísticas sintácticas y las de cohesión de una cadena sí lo necesitan, igual que los rasgos de un texto, la comparación de corpus y analizar un `Doc` por su cuenta:
 
 ```bash
 python -m spacy download es_core_news_sm
@@ -447,7 +447,7 @@ Cuán raras son las palabras de un texto en la lengua, a la manera de TAALES: la
 >>> FreqDict().download()
 >>> ls = LexicalStats("El felinólogo examinaba al minino con parsimonia")
 >>> ls.coverage, ls.p_top1000, round(ls.surprisal, 2)
-(0.8571428571428571, 0.42857142857142855, 13.71)
+(0.875, 0.5, 12.21)
 ```
 
 Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/lexical_stats/).

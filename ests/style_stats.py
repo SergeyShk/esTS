@@ -25,7 +25,7 @@ from .constants import (
     STYLE_STATS_DESC,
 )
 from .exceptions import SourceError, SourceTypeError
-from .utils import _annotate_text, get_document, is_verbal_noun, lemmatize
+from .utils import _annotate_text, _verb_lemmas, get_document, is_verbal_noun, lemmatize
 
 if TYPE_CHECKING:
     from anyseg import Document
@@ -296,9 +296,10 @@ def expand_phrases(text: Sequence[str], phrases: Collection[str]) -> dict[str, s
     Description:
         A phrase ending in a or de also takes al or del (conforme al). A phrase
         whose first word is an infinitive (dar cumplimiento) takes the forms of
-        the text with that lemma (dio cumplimiento, ha dado cumplimiento): the
-        lemma of a verb by lemmatize, a pronominal one counting for its verb
-        (llevarse - llevar), or of IRREGULAR_VERB_FORMS (dese). When phrases spell out the
+        the text with that lemma (dio cumplimiento, ha dado cumplimiento, fue de
+        aplicación): any lemma of the form as a verb or an auxiliary in esMorph,
+        a pronominal one counting for its verb (llevarse - llevar), or of
+        IRREGULAR_VERB_FORMS (dese). When phrases spell out the
         same words, a phrase written so wins over the forms of another, then
         the first phrase of a list or of a set in sorted order
 
@@ -334,11 +335,12 @@ def expand_phrases(text: Sequence[str], phrases: Collection[str]) -> dict[str, s
     forms: dict[str, set[str]] = {head: {head} for head in heads}
     if heads:
         for form in {word.lower() for word in text}:
-            lemma = IRREGULAR_VERB_FORMS.get(form) or lemmatize(form, "VERB")
-            if lemma not in forms:
-                lemma = lemma.removesuffix("se")
-            if lemma in forms:
-                forms[lemma].add(form)
+            irregular = IRREGULAR_VERB_FORMS.get(form)
+            for lemma in (irregular,) if irregular else _verb_lemmas(form):
+                if lemma not in forms:
+                    lemma = lemma.removesuffix("se")
+                if lemma in forms:
+                    forms[lemma].add(form)
     ordered = [
         (phrase, words) for phrase in in_order(phrases) if (words := phrase.lower().split())
     ]

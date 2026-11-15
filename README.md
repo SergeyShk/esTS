@@ -68,7 +68,7 @@ Or with [uv](https://docs.astral.sh/uv/):
 uv add pyests
 ```
 
-The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, readability, lexical diversity, the style metrics except the verbal nouns, phonostatistics and verse statistics need no spaCy model. The morphological, syntactic, cohesion and lexical sophistication statistics of a string need one, and so do the verbal nouns, the profile of the function words, the features of a text, the comparison of corpora and parsing a `Doc` yourself:
+The distribution on PyPI is `pyests`, the package it installs is `ests`. The basic statistics, readability, lexical diversity, the morphological and lexical sophistication statistics, the style metrics, phonostatistics and verse statistics of a string need no spaCy model: the morphology comes from esMorph. The syntactic and cohesion statistics of a string need one, and so do the features of a text, the comparison of corpora and parsing a `Doc` yourself:
 
 ```bash
 python -m spacy download es_core_news_sm
@@ -447,7 +447,7 @@ How rare the words of a text are in the language, in the manner of TAALES: the m
 >>> FreqDict().download()
 >>> ls = LexicalStats("El felinólogo examinaba al minino con parsimonia")
 >>> ls.coverage, ls.p_top1000, round(ls.surprisal, 2)
-(0.8571428571428571, 0.42857142857142855, 13.71)
+(0.875, 0.5, 12.21)
 ```
 
 More in the [documentation](https://sergeyshk.github.io/esTS/stats/lexical_stats/).

@@ -506,10 +506,10 @@ def test_overlaps_with_the_next_two_sentences():
         ("Vaya si lo sé.", []),
         ("Si bien es cierto, no lo creo.", ["si bien"]),
         ("Te lo diré si me lo pides.", ["si"]),
-        # The model leaves the verb without its lemma, simplemma gives it
+        # The model leaves the verb without its lemma, lemmatize gives it
         ("Ya verás si tengo razón.", []),
         ("Decidiremos si vamos.", []),
-        # simplemma keeps the reflexive verb, the model gives its lemma with the pronoun
+        # lemmatize gives the verb of the reflexive form, the model its lemma with the pronoun
         ("Empezó a preguntarse si valía la pena.", []),
     ],
 )

@@ -36,9 +36,10 @@ def kwic(
         the period of an abbreviation, which the end of a sentence splits off
         (Sr. and Sr in "Vino el Sr." are one word). By lemma, a word matches
         by the lemma of lemmatize with its part of speech - of esMorph in the
-        context of its sentence for a string, of the model for a Doc - and a
-        word of the keyword, which has no context, by the lemmas of all its
-        analyses (vino finds vino and venir).
+        context of its sentence for a string, of the model for a Doc -, a word
+        of a Doc or a Document without the parts of speech by its first
+        analysis, and a word of the keyword, which has no context, by the
+        lemmas of all its analyses (vino finds vino and venir).
         A phrase does not run across the end of a paragraph or of a sentence -
         a sentence of the document of the text (get_document) - unless the
         keyword has one in the same place.

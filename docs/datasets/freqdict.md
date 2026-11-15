@@ -149,7 +149,7 @@ An unknown part of speech, a minimum frequency that is not a number and a `limit
 lemma_key(word, proper=False, pos='')
 ```
 
-The key by which a word is looked up in the dictionary, and by which the dictionary is built (`ests.datasets.freq_dict.lemma_key`): the word goes to lower case, so that a word at the start of a sentence finds its lemma (`Miró` - `mirar`), and then to its lemma by `ests.utils.lemmatize` - of esMorph, with the part of speech of Universal Dependencies when it is given (`vino` - `vino`, as a verb `venir`). A proper noun keeps its form in lower case (`proper=True`): `Tomás` is `tomás`, not the verb `tomar`. The dictionary is built with the lemmas of esMorph 0.3 and the parts of speech of Google.
+The key by which a word is looked up in the dictionary, and by which the dictionary is built (`ests.datasets.freq_dict.lemma_key`): the word goes to lower case, so that a word at the start of a sentence finds its lemma (`Miró` - `mirar`), and then to its lemma by `ests.utils.lemmatize` - of esMorph, with the part of speech of Universal Dependencies when it is given (`vino` - `vino`, as a verb `venir`). A verb and an auxiliary take the first analysis of either (`fue` - `ser`), as Google tags both as verbs. A proper noun keeps its form in lower case (`proper=True`): `Tomás` is `tomás`, not the verb `tomar`. The dictionary is built with the lemmas of esMorph 0.3 and the parts of speech of Google.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |

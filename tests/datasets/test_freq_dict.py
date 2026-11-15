@@ -179,6 +179,9 @@ def test_lemma_key_pos(dictionary):
     assert lemma_key("vino") == "vino"
     assert lemma_key("vino", pos="VERB") == "venir"
     assert "venir" in dictionary
+    # A verb and an auxiliary take the first analysis of either, as the dictionary does
+    assert lemma_key("fue", pos="VERB") == lemma_key("fue", pos="AUX") == "ser"
+    assert lemma_key("Fué", pos="VERB") == "ser"
 
 
 def test_lemma_key_proper(dictionary):

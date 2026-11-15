@@ -122,7 +122,7 @@ Las proporciones de las formas que marcan el registro de un texto español, cada
 
 Los cuatro primeros marcadores comparten la base de las formas personales y suman uno salvo que el modelo deje alguna forma personal sin modo o le dé varios (`Mood=Ind,Sub`, que cuenta en la proporción de cada uno; `es_core_news_sm` no los da). Los tres siguientes comparten la base de todas las formas verbales de verbos y auxiliares: un participio que el modelo anota como adjetivo (`la casa pintada`) queda fuera de la base, los de los tiempos compuestos y la pasiva (`he leído`, `fue escrito`) quedan dentro.
 
-La base de `p_ser` son solo los usos copulativos, leídos de la morfología: `ser` ante un participio y `estar` ante un gerundio, con adverbios y pronombres entre ellos, son los auxiliares de la pasiva y de la perífrasis progresiva (`fue escrito`, `es financiado`, `está cantando`) y quedan fuera, mientras que `es alta`, `está cansada` y `lo importante es que vengas` cuentan. Un texto y un `Doc` con o sin análisis sintáctico dan lo mismo.
+La base de `p_ser` son solo los usos copulativos, leídos de la morfología: `ser` ante un participio y `estar` ante un gerundio, con adverbios y pronombres entre ellos, son los auxiliares de la pasiva y de la perífrasis progresiva (`fue escrito`, `es financiado`, `está cantando`) y quedan fuera, mientras que `es alta`, `está cansada` y `lo importante es que vengas` cuentan. La regla no necesita análisis sintáctico, así que un texto y un `Doc` sin analizador también tienen el marcador; un participio que el etiquetador lee como adjetivo (`fue muy bien recibido`) deja su `ser` como cópula.
 
 === "Código"
 

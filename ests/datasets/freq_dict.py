@@ -11,7 +11,7 @@ from anyts.datasets import Dataset, check_limit, fetch_archive, to_path
 
 from ..constants import DEFAULT_DATA_DIR, USER_AGENT
 from ..exceptions import DatasetNotFoundError, ParameterError, SourceTypeError
-from ..utils import lemmatize
+from ..utils import _verb_lemmas, lemmatize
 
 NAME = "freq_dict"
 VERSION = 2
@@ -65,8 +65,10 @@ def lemma_key(word: str, proper: bool = False, pos: str = "") -> str:
     Description:
         The word goes to lower case and then to its lemma by lemmatize with the
         part of speech, so a capitalized word at the start of a sentence finds
-        its lemma; a proper noun keeps its form in lower case. The dictionary is
-        built with this function and the parts of speech of Google Books
+        its lemma; a proper noun keeps its form in lower case. A verb and an
+        auxiliary take the first analysis of either (fue - ser), as Google
+        Books tags both as verbs. The dictionary is built with this function and
+        the parts of speech of Google Books
 
     Arguments:
         word (str): Word form in any case
@@ -86,7 +88,11 @@ def lemma_key(word: str, proper: bool = False, pos: str = "") -> str:
         ('tomar', 'tomás')
     """
     form = word.lower()
-    return form if proper else lemmatize(form, pos).lower()
+    if proper:
+        return form
+    if pos in ("VERB", "AUX") and (verbs := _verb_lemmas(form)):
+        return verbs[0].lower()
+    return lemmatize(form, pos).lower()
 
 
 class FreqDict(Dataset):

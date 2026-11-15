@@ -8,8 +8,8 @@ FIRST_YEAR-LAST_YEAR, and only the forms of letters: numbers, punctuation and th
 tag X go. The forms go to their keys by lemma_key, the function by which the library
 looks a word up: lower case, then the lemma of esMorph with the part of speech of
 Google in the tags of Universal Dependencies (UD_TAGS); Google tags the auxiliaries and
-the copulas as verbs, so a verb takes the first analysis of a VERB or an AUX (fue -
-ser, not ir).
+the copulas as verbs, and lemma_key gives a verb the first analysis of a VERB or an AUX
+(fue - ser, not ir).
 
 For every lemma and part of speech the dictionary gives:
     ipm - occurrences per million words of the period (the words are all the
@@ -68,7 +68,6 @@ TAGS = {
 # Parts of speech of UD for the lemmas of esMorph: Google does not tell a coordinating
 # from a subordinating conjunction, and the first analysis of a CONJ form is taken
 UD_TAGS = {tag: "" if tag == "CONJ" else tag for tag in TAGS.values()}
-VERBAL_POS = ("VERB", "AUX")
 # A form below this count in the period is not kept: it adds less than 0.002 ipm
 MIN_FORM_COUNT = 100
 PROPER_SHARE = 0.9
@@ -193,7 +192,7 @@ def aggregate(cache: Path) -> tuple[np.ndarray, dict[tuple[str, str], list]]:
             form, tag, count, books, capitals, *years = line.rstrip("\n").split("\t")
             # A proper noun keeps its form: a lemma would read Morales as moral
             proper = tag == "NOUN" and int(capitals) >= PROPER_SHARE * int(count)
-            key = (form_key(form, tag, proper), "PROPN" if proper else tag)
+            key = (lemma_key(form, proper, UD_TAGS[tag]), "PROPN" if proper else tag)
             counts = np.array(years, dtype=np.int64)
             stored = lemmas.get(key)
             if stored is None:
@@ -203,17 +202,6 @@ def aggregate(cache: Path) -> tuple[np.ndarray, dict[tuple[str, str], list]]:
                 stored[1] = max(stored[1], int(books))
                 stored[2] = stored[2] + counts
     return totals, lemmas
-
-
-def form_key(form: str, tag: str, proper: bool) -> str:
-    """The key of a form by lemma_key; a verb of Google takes the first analysis of a VERB
-    or an AUX"""
-    if tag == "VERB" and not proper:
-        analyses = get_morph_analyzer().analyze(form)
-        lemma = next((analysis.lemma for analysis in analyses if analysis.pos in VERBAL_POS), None)
-        if lemma is not None:
-            return lemma.lower()
-    return lemma_key(form, proper, UD_TAGS[tag])
 
 
 def juilland(counts: np.ndarray, totals: np.ndarray) -> float:

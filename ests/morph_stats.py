@@ -34,8 +34,8 @@ FINITE_MOODS = {
 VERB_FORMS = {"p_infinitive": "Inf", "p_gerund": "Ger", "p_participle": "Part"}
 # Parts of speech of the verb forms: participles tagged ADJ (cansada) stay out
 VERBAL_POS = ("VERB", "AUX")
-# Parts of speech between an auxiliary and its verb form (fue muy bien recibido, se
-# está muriendo)
+# Parts of speech between an auxiliary and its verb form (fue ayer aprobada, está siempre
+# cantando)
 AUXILIARY_GAP_POS = ("ADV", "PRON", "PART")
 
 
@@ -47,10 +47,11 @@ def is_auxiliary(token: TreeWord) -> bool:
         A copula before the verb form of COPULA_AUXILIARY_FORMS in the same
         sentence: ser before a participle (fue escrito, el proyecto es
         financiado - the passive) and estar before a gerund (está cantando -
-        the progressive), with adverbs and pronouns between them (fue muy bien
-        recibido); both words are a VERB or an AUX. The rule reads the
-        morphology alone, so a string and a Doc with or without a parse give
-        the same
+        the progressive), with adverbs and pronouns between them (fue ayer
+        aprobada, está siempre cantando); both words are a VERB or an AUX. The
+        rule reads the parts of speech and the features alone and needs no
+        parse; a participle the tagger reads as an adjective (fue muy bien
+        recibido) leaves its ser a copula
 
     Arguments:
         token (TreeWord): Word of the tree
@@ -71,7 +72,9 @@ def is_auxiliary(token: TreeWord) -> bool:
     form = COPULA_AUXILIARY_FORMS.get(token.lemma or "")
     if form is None or token.upos not in VERBAL_POS:
         return False
-    for word in token.tree.words[token.index + 1 :]:
+    words = token.tree.words
+    for index in range(token.index + 1, len(words)):
+        word = words[index]
         if word.sentence != token.sentence:
             return False
         if word.upos not in AUXILIARY_GAP_POS:
