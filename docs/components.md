@@ -379,7 +379,7 @@ Raises:
 load_pipeline(model='es_core_news_sm', exclude=(), **kwargs)
 ```
 
-A spaCy model with the tokenizer `anyseg.Tokenizer.v1` and the component `anyseg_sentencizer` first, both of [anySeg](https://github.com/SergeyShk/anySeg): the tokens and the sentences of a `Doc` are those the [extractors](extractors/sentences.md) give its text, so the statistics of a `Doc` and of the string count the same words and sentences. The tags, the lemmas, the parser and the other components are the model's. A contraction (`del`, `al`) is one token, with its words in `token._.anyseg_words`. A saved pipeline with these components loads as it is: their factories are entry points of anySeg. `ests.utils.get_nlp`, which parses the strings of the morphological, syntactic, cohesion, lexical and style statistics, loads it once per process and model.
+A spaCy model with the tokenizer `anyseg.Tokenizer.v1` and the component `anyseg_sentencizer` first, both of [anySeg](https://github.com/SergeyShk/anySeg): the tokens and the sentences of a `Doc` are those the [extractors](extractors/sentences.md) give its text, so the statistics of a `Doc` and of the string count the same words and sentences. The tags, the lemmas, the parser and the other components are the model's. A contraction (`del`, `al`) is one token, with its words in `token._.anyseg_words`. A saved pipeline loads with `spacy.load(path)`, as the factories of anySeg are entry points. `ests.utils.get_nlp`, which parses the strings of the morphological, syntactic, cohesion, lexical and style statistics, loads it once per process and model.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |

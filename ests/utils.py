@@ -24,7 +24,6 @@ if TYPE_CHECKING:
 
 # The segmenter of Spanish into tokens and sentences
 SEGMENTER = Segmenter("es")
-ANYSEG_TOKENIZER = "anyseg.Tokenizer.v1"
 # A name of an installed model, as opposed to a path
 PACKAGE_NAME = re.compile(r"[\w.-]+")
 
@@ -182,16 +181,15 @@ def load_pipeline(
         anyseg_sentencizer first, so that the tokens and the sentences of a Doc are
         those of a string (iter_tokens, iter_text_sents); the tags, the lemmas, the
         parser and the other components are the model's. A contraction (del, al) is
-        one token, its words are in token._.anyseg_words. A tokenizer of anySeg
-        that config or a saved pipeline has is kept with its lists of
-        abbreviations and tokens, so a saved pipeline loads as it is
+        one token, its words are in token._.anyseg_words. A saved pipeline loads
+        with spacy.load, as the factories of anySeg are entry points
 
     Arguments:
         model (str): Name or path of a spaCy model: es_core_news_sm, es_core_news_md,
             es_core_news_lg
         exclude (str|list[str]): Components of the model not to load, e.g. ner
-        **kwargs: The other parameters of spacy.load; another tokenizer of config
-            is replaced by that of anySeg
+        **kwargs: The other parameters of spacy.load; the tokenizer of config is
+            replaced by that of anySeg
 
     Returns:
         Language: Pipeline
@@ -215,9 +213,7 @@ def load_pipeline(
 
     excluded = [exclude] if isinstance(exclude, str) else list(exclude)
     config = dict(kwargs.pop("config", {}))
-    nlp_config = dict(config.get("nlp", {}))
-    nlp_config["tokenizer"] = _tokenizer_config(model, nlp_config.get("tokenizer"))
-    config["nlp"] = nlp_config
+    config["nlp"] = {**config.get("nlp", {}), "tokenizer": {"@tokenizers": "anyseg.Tokenizer.v1"}}
     try:
         nlp = spacy.load(model, exclude=excluded, config=config, **kwargs)
     except OSError as error:
@@ -231,37 +227,6 @@ def load_pipeline(
     if "anyseg_sentencizer" not in nlp.component_names:
         nlp.add_pipe("anyseg_sentencizer", first=True)
     return nlp
-
-
-def _tokenizer_config(model: str, given: object) -> dict[str, Any]:
-    """
-    The [nlp.tokenizer] block of load_pipeline: the tokenizer of anySeg that config or
-    the config.cfg of a saved or installed pipeline gives, with its lists, or a new one
-    """
-    if isinstance(given, dict) and given.get("@tokenizers") == ANYSEG_TOKENIZER:
-        return given
-    saved = _saved_config(model)
-    if saved is not None and saved.is_file():
-        import spacy
-
-        nlp = spacy.util.load_config(saved).get("nlp", {})
-        tokenizer = dict(nlp.get("tokenizer", {}))
-        if tokenizer.get("@tokenizers") == ANYSEG_TOKENIZER:
-            return tokenizer
-    return {"@tokenizers": ANYSEG_TOKENIZER}
-
-
-def _saved_config(model: str) -> Path | None:
-    """The config.cfg of a pipeline: in its directory or in the data of its package"""
-    import spacy
-
-    if Path(model).is_dir():
-        return Path(model) / "config.cfg"
-    if not spacy.util.is_package(str(model)):
-        return None
-    package = spacy.util.get_package_path(str(model))
-    meta = spacy.util.get_model_meta(package)
-    return package / f"{meta['lang']}_{meta['name']}-{meta['version']}" / "config.cfg"
 
 
 @lru_cache(maxsize=4)
