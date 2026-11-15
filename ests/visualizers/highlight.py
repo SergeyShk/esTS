@@ -795,7 +795,7 @@ def is_anaphoric_mismo(token: TreeWord) -> bool:
         article of MISMO_ARTICLES and no other dependent but a clause after a
         comma, as an argument (se archivó el mismo, la duración del mismo,
         contra la misma, que pone fin...), but not as the subject or the
-        object after a verb of PREDICATIVE_VERBS by the lemma of the model or
+        object after a verb of PREDICATIVE_VERBS by the lemma of the pipeline or
         of lemmatize, where it means the same one (no parecía la misma,
         serás el mismo), right before que (el mismo que el año pasado) or
         before a conjunction and an adjective or a determiner that shares its
