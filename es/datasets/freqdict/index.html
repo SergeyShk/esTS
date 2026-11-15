@@ -2049,7 +2049,7 @@
 <h1 id="diccionario-de-frecuencias">Diccionario de frecuencias<a class="headerlink" href="#diccionario-de-frecuencias" title="Permanent link">&para;</a></h1>
 <div class="signature highlight"><pre><span></span><code><span class="n">FreqDict</span><span class="p">(</span><span class="n">data_dir</span><span class="o">=</span><span class="n">DEFAULT_DATASET_DIR</span><span class="p">)</span>
 </code></pre></div>
-<p>Un diccionario de frecuencias de lemas del español construido a partir de los libros en español de <a href="https://storage.googleapis.com/books/ngrams/books/datasetsv3.html">Google Books Ngram</a> (versión 20200217): 83 785 lemas (109 178 filas de un lema y una categoría gramatical) de los libros de 1980-2019, 63 000 millones de palabras. Cada fila tiene la frecuencia por millón de palabras (ipm), el rango (el número de años, de 40, en que aparece el lema), la D de Juilland por años (0-100) y el número de libros con la forma más extendida del lema. Las categorías gramaticales son las de Google, con los nombres de Universal Dependencies: <code>NOUN</code>, <code>PROPN</code>, <code>VERB</code>, <code>ADJ</code>, <code>ADV</code>, <code>PRON</code>, <code>DET</code>, <code>ADP</code>, <code>CONJ</code> (coordinantes y subordinantes juntas).</p>
+<p>Un diccionario de frecuencias de lemas del español construido a partir de los libros en español de <a href="https://storage.googleapis.com/books/ngrams/books/datasetsv3.html">Google Books Ngram</a> (versión 20200217): 86 196 lemas (107 032 filas de un lema y una categoría gramatical) de los libros de 1980-2019, 63 000 millones de palabras. Cada fila tiene la frecuencia por millón de palabras (ipm), el rango (el número de años, de 40, en que aparece el lema), la D de Juilland por años (0-100) y el número de libros con la forma más extendida del lema. Las categorías gramaticales son las de Google, con los nombres de Universal Dependencies: <code>NOUN</code>, <code>PROPN</code>, <code>VERB</code>, <code>ADJ</code>, <code>ADV</code>, <code>PRON</code>, <code>DET</code>, <code>ADP</code>, <code>CONJ</code> (coordinantes y subordinantes juntas).</p>
 <p>El diccionario lo construye <code>scripts/build_freq_dict.py</code> a partir de los 1-gramas: se cuentan solo las formas etiquetadas con una categoría gramatical y hechas de letras (se quitan los números, la puntuación y la etiqueta <code>X</code>), y cada forma pasa a su clave por <a href="#lemma_key"><code>lemma_key</code></a>. Google no tiene etiqueta para los nombres propios, así que una forma de sustantivo escrita con mayúscula en al menos el 90 % de sus apariciones es <code>PROPN</code> y conserva su forma. La decisión se toma para la forma entera: <code>dios</code>, con mayúscula en el 92 % de sus apariciones, es <code>PROPN</code> también en minúsculas, mientras que su fila <code>NOUN</code> viene sobre todo del plural <code>dioses</code>. Se dejan fuera las filas por debajo de 0,1 ipm o presentes en menos de 5 años. La dispersión se calcula sobre la frecuencia relativa de cada año; el número de libros es una cota inferior, ya que un libro con varias formas del lema se cuenta una vez.</p>
 <p>Para buscar un lema se unen sus categorías gramaticales: las frecuencias se suman, el rango, la dispersión y el número de libros son los mayores. El diccionario se lee una vez por proceso, así que un <code>FreqDict()</code> para cada texto es barato. Es la fuente de las frecuencias de <a href="../../stats/lexical_stats/"><code>LexicalStats</code></a>, y la lista integrada de las <a href="../../stats/lexical_stats/#bands">bandas de frecuencia</a> tiene sus 10 000 lemas más frecuentes, sin los nombres propios y algunos lemas que no son palabras. El tamaño del diccionario es <code>CORPUS_SIZE</code>, 63 090 618 290 palabras.</p>
 <p>El archivo (0,9 MB) se guarda en el repositorio de la biblioteca y se descarga una vez en el directorio de datos.</p>
@@ -2144,7 +2144,7 @@
 <tr>
 <td style="text-align: left;"><code>word_ipm</code></td>
 <td style="text-align: left;"><code>dict[str, float]</code></td>
-<td style="text-align: left;">Frecuencias por la clave a la que llega una forma sin categoría gramatical: las filas de los nombres propios van a <code>lemma_key</code> de sus formas (<code>roma</code> a <code>romo</code>); la referencia de <a href="../../corpus/keyness/"><code>keyness</code></a></td>
+<td style="text-align: left;">Frecuencias por la clave a la que llega una forma sin categoría gramatical: las filas de los nombres propios van a <code>lemma_key</code> de sus formas (<code>tomás</code> a <code>tomar</code>); la referencia de <a href="../../corpus/keyness/"><code>keyness</code></a></td>
 </tr>
 </tbody>
 </table>
@@ -2192,7 +2192,7 @@
 </tr>
 </tbody>
 </table>
-<p>El diccionario se recorre por sus registros como <code>get_records()</code> sin filtros: <code>for record in fd</code> pasa por las 109 178 filas de un lema y una categoría gramatical, mientras que <code>len(fd)</code> cuenta los 83 785 lemas con sus categorías unidas, tal como los ven <code>lookup</code> e <code>in</code>.</p>
+<p>El diccionario se recorre por sus registros como <code>get_records()</code> sin filtros: <code>for record in fd</code> pasa por las 107 032 filas de un lema y una categoría gramatical, mientras que <code>len(fd)</code> cuenta los 86 196 lemas con sus categorías unidas, tal como los ven <code>lookup</code> e <code>in</code>.</p>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <p><code>download(force=False)</code> descarga el archivo, verifica su suma de comprobación SHA-256 y extrae el fichero. Un archivo dañado se descarga de nuevo, un fichero que falta se extrae otra vez; después de la llamada el diccionario se vuelve a leer.</p>
 <table>
@@ -2215,7 +2215,7 @@
 </table>
 <p>Un archivo que no se puede descargar o que no pasa la suma de comprobación dos veces lanza <code>DownloadError</code>, y un archivo que no se puede extraer, <code>DataFileError</code>.</p>
 <p><code>check_data()</code> comprueba que el fichero del diccionario está en su sitio y devuelve <code>True</code>; un diccionario sin descargar lanza <code>DatasetNotFoundError</code> con las órdenes para descargarlo. Los demás métodos y los atributos de las entradas y las frecuencias lo comprueban por sí mismos.</p>
-<p><code>lookup(lemma)</code> devuelve la entrada de un lema en cualquier combinación de mayúsculas y minúsculas, <code>None</code> para un lema que no está en el diccionario; <code>ipm(lemma)</code> devuelve la frecuencia de un lema por millón de palabras, 0 para un lema que no está en el diccionario. El argumento es una clave del diccionario, no una forma: una forma se busca por su clave, <code>computadoras</code> por <code>lemma_key("computadoras")</code> (<code>computador</code>), no por <code>computadora</code>; el lema de <code>usted</code> en simplemma es <code>tú</code>, así que <code>fd.lookup("usted")</code> es <code>None</code>. Lo mismo vale para <code>in</code>; <a href="../../stats/lexical_stats/"><code>LexicalStats</code></a> y <a href="../../corpus/keyness/"><code>keyness</code></a> pasan a las claves por sí mismos.</p>
+<p><code>lookup(lemma)</code> devuelve la entrada de un lema en cualquier combinación de mayúsculas y minúsculas, <code>None</code> para un lema que no está en el diccionario; <code>ipm(lemma)</code> devuelve la frecuencia de un lema por millón de palabras, 0 para un lema que no está en el diccionario. El argumento es una clave del diccionario, no una forma: una forma se busca por su clave, <code>computadoras</code> por <code>lemma_key("computadoras")</code> (<code>computadora</code>); el lema de <code>usted</code> en esMorph es <code>tú</code>, así que <code>fd.lookup("usted")</code> es <code>None</code>. Lo mismo vale para <code>in</code>; <a href="../../stats/lexical_stats/"><code>LexicalStats</code></a> y <a href="../../corpus/keyness/"><code>keyness</code></a> pasan a las claves por sí mismos.</p>
 <table>
 <thead>
 <tr>
@@ -2243,16 +2243,16 @@
 <span class="n">fd</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">"Gato"</span><span class="p">)</span>
 <span class="n">fd</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">"dios"</span><span class="p">)</span>
 <span class="n">fd</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="s2">"usted"</span><span class="p">),</span> <span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="n">lemma_key</span><span class="p">(</span><span class="s2">"usted"</span><span class="p">))</span>
-<span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="s2">"computadora"</span><span class="p">),</span> <span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="n">lemma_key</span><span class="p">(</span><span class="s2">"computadoras"</span><span class="p">))</span>
+<span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="s2">"computador"</span><span class="p">),</span> <span class="n">fd</span><span class="o">.</span><span class="n">ipm</span><span class="p">(</span><span class="n">lemma_key</span><span class="p">(</span><span class="s2">"computadoras"</span><span class="p">))</span>
 <span class="s2">"gato"</span> <span class="ow">in</span> <span class="n">fd</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fd</span><span class="p">),</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">fd</span><span class="p">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>Entry(lemma='gato', pos=('NOUN', 'ADJ'), ipm=29.08, range=40, dispersion=95, docs=232841)
-Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.42, range=40, dispersion=98, docs=566129)
-(None, 1396.74)
-(0.0, 20.07)
-(True, 83785, 109178)
+<div class="highlight"><pre><span></span><code>Entry(lemma='gato', pos=('NOUN', 'ADJ'), ipm=25.37, range=40, dispersion=95, docs=232841)
+Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.46, range=40, dispersion=98, docs=566129)
+(None, 1463.67)
+(4.72, 15.35)
+(True, 86196, 107032)
 </code></pre></div>
 </div>
 </div>
@@ -2308,13 +2308,12 @@ Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.42, range=40, dispersi
 </div>
 <div class="admonition warning">
 <p class="admonition-title">El registro de los libros</p>
-<p>El diccionario describe la lengua escrita de los libros, buena parte de ellos académicos, y conserva lo que tienen los libros: las abreviaturas de las referencias son palabras frecuentes (<code>pp</code>, <code>cit</code>, <code>vol</code>), igual que las palabras inglesas de las bibliografías (<code>the</code>, <code>of</code>) y las grafías antiguas de las reediciones (<code>fué</code>). Los textos se reconocen a partir de escaneos y se etiquetan automáticamente, así que quedan malas lecturas y errores de etiquetado, sobre todo entre los lemas raros; el lematizador no ve el contexto, así que una forma compartida por dos lemas va a uno de ellos (<code>como</code> es siempre <code>como</code>, nunca <code>comer</code>), y una forma que no conoce se queda como está (<code>darle</code>, <code>verlo</code>).</p>
+<p>El diccionario describe la lengua escrita de los libros, buena parte de ellos académicos, y conserva lo que tienen los libros: las abreviaturas de las referencias son palabras frecuentes (<code>pp</code>, <code>cit</code>, <code>vol</code>), igual que las palabras inglesas de las bibliografías (<code>the</code>, <code>of</code>). Los textos se reconocen a partir de escaneos y se etiquetan automáticamente, así que quedan malas lecturas y errores de etiquetado, sobre todo entre los lemas raros. Una forma recibe el lema de esMorph para la categoría gramatical que le da Google, sin el contexto de su oración: <code>como</code> etiquetado como verbo es <code>comer</code>, si no, <code>como</code>, y una forma verbal de dos verbos va al primero de ellos (<code>fue</code> es <code>ser</code>, nunca <code>ir</code>).</p>
 </div>
 <h2 id="lemma_key">Clave de una palabra<a class="headerlink" href="#lemma_key" title="Permanent link">&para;</a></h2>
-<div class="signature highlight"><pre><span></span><code><span class="n">lemma_key</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">proper</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">lemma_key</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">proper</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="s1">''</span><span class="p">)</span>
 </code></pre></div>
-<p>La clave por la que se busca una palabra en el diccionario y con la que se construye el diccionario (<code>ests.datasets.freq_dict.lemma_key</code>): la palabra pasa a minúsculas, para que una palabra al principio de una oración encuentre su lema (<code>Miró</code> - <code>mirar</code>), y luego a su lema por <code>lemmatize</code>. Un nombre propio conserva su forma en minúsculas (<code>proper=True</code>): <code>París</code> es <code>parís</code>, no el verbo <code>parir</code>.</p>
-<p>Los lemas dependen de la versión de simplemma: el diccionario se construye con la 2.0.0 (la constante <code>SIMPLEMMA_VERSION</code>), y un <code>FreqDict</code> avisa una vez por proceso cuando está instalada otra versión, ya que entonces algunas palabras pueden no encontrarse en el diccionario.</p>
+<p>La clave por la que se busca una palabra en el diccionario y con la que se construye el diccionario (<code>ests.datasets.freq_dict.lemma_key</code>): la palabra pasa a minúsculas, para que una palabra al principio de una oración encuentre su lema (<code>Miró</code> - <code>mirar</code>), y luego a su lema por <code>ests.utils.lemmatize</code> - el de esMorph, con la categoría gramatical de Universal Dependencies cuando se da (<code>vino</code> - <code>vino</code>, como verbo <code>venir</code>). Un verbo y un auxiliar toman el primer análisis de cualquiera de los dos (<code>fue</code> - <code>ser</code>), porque Google etiqueta ambos como verbos. Un nombre propio conserva su forma en minúsculas (<code>proper=True</code>): <code>Tomás</code> es <code>tomás</code>, no el verbo <code>tomar</code>. El diccionario se construye con los lemas de esMorph 0.3 y las categorías gramaticales de Google.</p>
 <table>
 <thead>
 <tr>
@@ -2337,6 +2336,12 @@ Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.42, range=40, dispersi
 <td style="text-align: left;"><code>False</code></td>
 <td style="text-align: left;">La palabra es un nombre propio</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>pos</code></td>
+<td style="text-align: left;"><code>str</code></td>
+<td style="text-align: left;"><code>''</code></td>
+<td style="text-align: left;">Categoría gramatical de UD; sin ella, el primer análisis de esMorph</td>
+</tr>
 </tbody>
 </table>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
@@ -2345,12 +2350,14 @@ Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.42, range=40, dispersi
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.datasets.freq_dict</span><span class="w"> </span><span class="kn">import</span> <span class="n">lemma_key</span>
 
 <span class="n">lemma_key</span><span class="p">(</span><span class="s2">"Miró"</span><span class="p">),</span> <span class="n">lemma_key</span><span class="p">(</span><span class="s2">"computadoras"</span><span class="p">),</span> <span class="n">lemma_key</span><span class="p">(</span><span class="s2">"fue"</span><span class="p">)</span>
-<span class="n">lemma_key</span><span class="p">(</span><span class="s2">"París"</span><span class="p">),</span> <span class="n">lemma_key</span><span class="p">(</span><span class="s2">"París"</span><span class="p">,</span> <span class="n">proper</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">lemma_key</span><span class="p">(</span><span class="s2">"vino"</span><span class="p">),</span> <span class="n">lemma_key</span><span class="p">(</span><span class="s2">"vino"</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="s2">"VERB"</span><span class="p">)</span>
+<span class="n">lemma_key</span><span class="p">(</span><span class="s2">"Tomás"</span><span class="p">),</span> <span class="n">lemma_key</span><span class="p">(</span><span class="s2">"Tomás"</span><span class="p">,</span> <span class="n">proper</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>('mirar', 'computador', 'ser')
-('parir', 'parís')
+<div class="highlight"><pre><span></span><code>('mirar', 'computadora', 'ser')
+('vino', 'venir')
+('tomar', 'tomás')
 </code></pre></div>
 </div>
 </div>

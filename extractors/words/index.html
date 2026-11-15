@@ -2026,7 +2026,7 @@
 </tr>
 <tr>
 <td style="text-align: left;"><code>lemmatize(word)</code></td>
-<td style="text-align: left;">the lemmas of simplemma, <code>ests.utils.lemmatize</code></td>
+<td style="text-align: left;">the lemmas of esMorph, <code>ests.utils.lemmatize</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>number_pattern</code></td>
@@ -2040,7 +2040,7 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><a href="https://github.com/adbar/simplemma">simplemma</a> works from a dictionary without a trained model: a known form is mapped to its lower-case lemma (<code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>), an unknown form is returned unchanged (<code>Madrid</code>, <code>dámelo</code>).</p>
+<p><a href="https://github.com/SergeyShk/esMorph">esMorph</a> works from a dictionary of Wiktionary without a trained model of spaCy. The extractor takes every word apart, without its sentence, and gives it the lemma of its first analysis: <code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>, a verb with clitics is the verb (<code>dámelo</code> - <code>dar</code>), and a proper noun keeps its form (<code>Madrid</code>).</p>
 </div>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Code</label><label for="__tabbed_1_2">Result</label></div>
 <div class="tabbed-content">

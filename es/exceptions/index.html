@@ -2059,7 +2059,7 @@
 <p>Las clases están disponibles desde <code>ests</code> y desde <code>ests.exceptions</code>. Son las clases del núcleo <a href="https://sergeyshk.github.io/anyTS/exceptions/">anyTS</a> con los mismos nombres, y <code>EstsError</code> es su <code>anyts.exceptions.AnyTSError</code>: alias, no subclases, así que <code>except EstsError</code> captura también los errores que lanza el código del núcleo, y una traza muestra <code>anyts.exceptions.SourceTypeError</code>.</p>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p><code>DatasetNotFoundError</code> suele ser el primer error con el que se topa un usuario nuevo: <code>MorphStats("El gato duerme")</code> sin el modelo <code>es_core_news_sm</code> la lanza con el comando de descarga. También la lanzan <code>SpanishLiterature().get_texts()</code> antes de <code>download()</code> y las estadísticas de <code>LexicalStats</code> según el diccionario de frecuencias.</p>
+<p><code>DatasetNotFoundError</code> suele ser el primer error con el que se topa un usuario nuevo: <code>SyntaxStats("El gato duerme")</code> sin el modelo <code>es_core_news_sm</code> la lanza con el comando de descarga. También la lanzan <code>SpanishLiterature().get_texts()</code> antes de <code>download()</code> y las estadísticas de <code>LexicalStats</code> según el diccionario de frecuencias.</p>
 </div>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>
 <div class="tabbed-content">

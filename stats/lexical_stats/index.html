@@ -2147,7 +2147,7 @@
 
 
 <h1 id="lexical-sophistication-statistics">Lexical sophistication statistics<a class="headerlink" href="#lexical-sophistication-statistics" title="Permanent link">&para;</a></h1>
-<div class="signature highlight"><pre><span></span><code><span class="n">LexicalStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">freq_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">LexicalStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">freq_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Lexical sophistication in the manner of TAALES (Kyle, Crossley and Berger, 2018) - how rare the words of a text are: statistics by a frequency dictionary and its unigram model, the shares of the frequency bands of a list of the most frequent lemmas and the lexical density. The statistics by the dictionary are computed when first read, so the bands and the lexical density need no dictionary data. The data source is a text, a <code>Doc</code> object of <a href="https://github.com/explosion/spaCy">spaCy</a> or a <code>Document</code> of <a href="https://github.com/SergeyShk/anySeg">anySeg</a>, read through its <a href="https://sergeyshk.github.io/anyTS/document/">document</a>: by default its words of Universal Dependencies without numbers, with their lemmas and parts of speech.</p>
 <p>Raises:</p>
@@ -2155,10 +2155,9 @@
 <li><code>SourceTypeError</code> - a source that is neither a string, a <code>Doc</code> nor a <code>Document</code>, a <code>parse</code> that returns no <code>Document</code>, a dictionary of another class than that of the library or, without <code>freq_dict_class</code>, one without <code>lookup</code> and <code>ipm</code> or none at all; an <code>analyze</code> that does not give <code>LexicalWord</code> objects;</li>
 <li><code>SourceError</code> - words without parts of speech, a source without words.</li>
 </ul>
-<p>In esTS a source that is neither a string, a <code>Doc</code> nor a <code>Document</code> and a pipeline in <code>nlp</code> that is not a spaCy <code>Language</code> raise <code>SourceTypeError</code> too; a source without the parts of speech and a string longer than the <code>max_length</code> of the pipeline <code>SourceError</code>; and the metrics by the dictionary without the dictionary downloaded <code>DatasetNotFoundError</code>.</p>
+<p>In esTS a source that is neither a string, a <code>Doc</code> nor a <code>Document</code> raises <code>SourceTypeError</code> too; a <code>Doc</code> without the parts of speech <code>SourceError</code>; and the metrics by the dictionary without the dictionary downloaded <code>DatasetNotFoundError</code>.</p>
 <p>Unlike the <a href="../diversity_stats/">lexical diversity metrics</a>, which compare the words of a text with each other, here the words are compared with the frequencies of the language (<a href="https://doi.org/10.3758/s13428-017-0924-4">TAALES</a>). The data source is a text or a <code>Doc</code> object of the <a href="https://github.com/explosion/spaCy">spaCy</a> library.</p>
-<p>The class extends the <code>LexicalStats</code> of the <a href="https://sergeyshk.github.io/anyTS/stats/lexical_stats/">anyTS</a> core with the Spanish layer: the dictionary is the Google Books Ngram <a href="../../datasets/freqdict/"><code>FreqDict</code></a> (<code>freq_dict_class</code>), and the ranks of the lemmas and the size of the list (<code>rank</code>, <code>top_size</code>) come from the embedded list of its 10,000 most frequent lemmas (<a href="#bands"><code>get_rank</code></a>). Whether a word is a proper noun, and whether it is a content word, comes from the annotation, so the source has to be annotated: a string is parsed with <a href="../../installation/#model"><code>es_core_news_sm</code></a> or with the pipeline passed in <code>nlp</code>, without the parser, the lemmatizer and the named entities, and a <code>Doc</code> must carry the parts of speech (a <code>morphologizer</code>, or a <code>tagger</code> with an <code>attribute_ruler</code>). Numbers (<code>2020</code>, <code>5,5</code>, <code>3.º</code>) are not words. The lemmas come from <a href="../../datasets/freqdict/#lemma_key"><code>lemma_key</code></a>, the simplemma lemma in lower case, not from the model; a proper noun keeps its lower-case form. A content word is defined as in <a href="../cohesion_stats/"><code>CohesionStats</code></a>: one of <code>CONTENT_UD_POS</code> (nouns, proper nouns, adjectives, verbs, adverbs) and no demonstrative. The <code>print_stats</code> table has the descriptions of <code>LEXICAL_STATS_DESC</code> of <code>ests.constants</code>, with the range in years out of 40.</p>
-<p>The <code>max_length</code> of the pipeline is a million characters by default: split a longer text into parts, or raise <code>max_length</code> on a pipeline of your own and pass it in <code>nlp</code>.</p>
+<p>The class extends the <code>LexicalStats</code> of the <a href="https://sergeyshk.github.io/anyTS/stats/lexical_stats/">anyTS</a> core with the Spanish layer: the dictionary is the Google Books Ngram <a href="../../datasets/freqdict/"><code>FreqDict</code></a> (<code>freq_dict_class</code>), and the ranks of the lemmas and the size of the list (<code>rank</code>, <code>top_size</code>) come from the embedded list of its 10,000 most frequent lemmas (<a href="#bands"><code>get_rank</code></a>). Whether a word is a proper noun, and whether it is a content word, comes from the annotation, so the source has to be annotated: a string gets the analyses of <a href="https://github.com/SergeyShk/esMorph">esMorph</a> in the context of its sentences, without spaCy, and a <code>Doc</code> must carry the parts of speech (a <code>morphologizer</code>, or a <code>tagger</code> with an <code>attribute_ruler</code>). Numbers (<code>2020</code>, <code>5,5</code>, <code>3.º</code>) are not words. The lemmas come from <a href="../../datasets/freqdict/#lemma_key"><code>lemma_key</code></a> with the part of speech of the word, the lemma of esMorph in lower case, the lemmatizer the dictionary is built with, not from the model; a proper noun keeps its lower-case form. A content word is defined as in <a href="../cohesion_stats/"><code>CohesionStats</code></a>: one of <code>CONTENT_UD_POS</code> (nouns, proper nouns, adjectives, verbs, adverbs) and no demonstrative. The <code>print_stats</code> table has the descriptions of <code>LEXICAL_STATS_DESC</code> of <code>ests.constants</code>, with the range in years out of 40.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Code</label><label for="__tabbed_1_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2174,14 +2173,14 @@
 <div class="highlight"><pre><span></span><code>                    Statistic                    |  Value
 ------------------------------------------------------------
 Share of words found in the frequency dictionary |   1.00
-Mean frequency (ipm)                             | 34283.75
-Mean frequency of content words (ipm)            |  956.33
+Mean frequency (ipm)                             | 34471.00
+Mean frequency of content words (ipm)            |  805.65
 Mean log frequency (lg ipm)                      |   3.56
-Mean log frequency of content words              |   2.19
+Mean log frequency of content words              |   2.17
 Mean range (years out of 40)                     |  40.00
-Mean dispersion (D)                              |  97.64
-Mean surprisal (bits)                            |   8.11
-Unigram perplexity                               |  275.44
+Mean dispersion (D)                              |  97.18
+Mean surprisal (bits)                            |   8.10
+Unigram perplexity                               |  275.12
 Share of words in the top 1000                   |   0.73
 Share of words in the top 2000                   |   0.82
 Share of words in the top 5000                   |   1.00
@@ -2214,12 +2213,6 @@ Lexical density                                  |   0.45
 <td style="text-align: left;"><code>FreqDict</code></td>
 <td style="text-align: left;"><code>None</code></td>
 <td style="text-align: left;">Frequency dictionary; <code>FreqDict()</code> from the default directory by default</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>nlp</code></td>
-<td style="text-align: left;"><code>Language</code></td>
-<td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Pipeline of spaCy that parses a string; without it the model <code>es_core_news_sm</code> is loaded</td>
 </tr>
 </tbody>
 </table>
@@ -2265,7 +2258,7 @@ Lexical density                                  |   0.45
 </tr>
 </tbody>
 </table>
-<p>In esTS the dictionary is a <code>FreqDict</code>, and its entries are the named tuples <a href="../../datasets/freqdict/"><code>Entry</code></a>. The keys of the words in the dictionary (<code>keys</code>, <code>dictionary_keys</code>) are their lemmas, and a proper noun is looked up by its form when the dictionary has it (<code>París</code> as <code>parís</code>, not the verb <code>parir</code>) and by its lemma otherwise (<code>Estados</code> of <em>Estados Unidos</em> as <code>estado</code>, a sentence-initial <code>Miró</code> tagged <code>PROPN</code> as <code>mirar</code>). A word is looked up without the period of an abbreviation (<code>Sr.</code> as <code>sr</code>, <code>pág.</code> as <code>página</code>); an initial (<code>D.</code>, <code>J.</code>) keeps it and is out of the dictionary.</p>
+<p>In esTS the dictionary is a <code>FreqDict</code>, and its entries are the named tuples <a href="../../datasets/freqdict/"><code>Entry</code></a>. The keys of the words in the dictionary (<code>keys</code>, <code>dictionary_keys</code>) are their lemmas, and a proper noun is looked up by its form when the dictionary has it (<code>París</code> as <code>parís</code>) and by its lemma otherwise (<code>Estados</code> of <em>Estados Unidos</em> as <code>estado</code>). A word is looked up without the period of an abbreviation (<code>Sr.</code> as <code>sr</code>, <code>pág.</code> as <code>pág</code>); an initial (<code>D.</code>, <code>J.</code>) keeps it and is out of the dictionary.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Code</label><label for="__tabbed_2_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2275,7 +2268,7 @@ Lexical density                                  |   0.45
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>('miró', 'desde', 'parís', 'hacia', 'el', 'estados', 'unidos')
+<div class="highlight"><pre><span></span><code>('mirar', 'desde', 'parís', 'hacia', 'el', 'estados', 'unidos')
 ('mirar', 'desde', 'parís', 'hacia', 'el', 'estado', 'unidos')
 </code></pre></div>
 </div>
@@ -2366,7 +2359,7 @@ Lexical density                                  |   0.45
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><a href="../../datasets/freqdict/"><code>FreqDict</code></a> - 83,785 lemmas of Google Books Ngram (1980-2019) with ipm, range and dispersion</td>
+<td style="text-align: left;"><a href="../../datasets/freqdict/"><code>FreqDict</code></a> - 86,196 lemmas of Google Books Ngram (1980-2019) with ipm, range and dispersion</td>
 <td style="text-align: left;"><code>coverage</code>, <code>mean_ipm*</code>, <code>mean_log_ipm*</code>, <code>mean_range</code>, <code>mean_dispersion</code>, <code>surprisal</code>, <code>perplexity</code></td>
 <td style="text-align: left;">downloaded once with <code>FreqDict().download()</code></td>
 </tr>
@@ -2392,7 +2385,7 @@ Lexical density                                  |   0.45
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>(0.8571428571428571, 2.3529196195453976, 13.70650419215419, 0.4285714285714286)
+<div class="highlight"><pre><span></span><code>(0.875, 2.8003798879556743, 12.206981533297302, 0.375)
 </code></pre></div>
 </div>
 </div>
@@ -2443,7 +2436,7 @@ Lexical density                                  |   0.45
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>15.392368319318606
+<div class="highlight"><pre><span></span><code>15.554697256684591
 </code></pre></div>
 </div>
 </div>
@@ -2480,7 +2473,7 @@ Lexical density                                  |   0.45
 </table>
 <div class="signature highlight"><pre><span></span><code><span class="n">load_top_lemmas</span><span class="p">()</span>
 </code></pre></div>
-<p>The whole list from the file <code>ests/resources/google_books_top10000.txt</code>, derived from Google Books Ngram under CC BY 3.0: the rank of every lemma, starting from 1. The list holds the 10,000 most frequent lemmas of the <a href="../../datasets/freqdict/">frequency dictionary</a> by decreasing frequency, the parts of speech of a lemma summed; it leaves out the proper nouns, the single letters other than the Spanish words <code>a</code>, <code>e</code>, <code>o</code>, <code>u</code>, <code>y</code>, <code>á</code>, <code>é</code>, <code>ó</code>, and the two-letter lemmas and Roman numerals that simplemma does not know (<code>pp</code>, <code>xix</code>), while the abbreviations of the references (<code>cit</code>) and the English words of the bibliographies (<code>the</code>) stay.</p>
+<p>The whole list from the file <code>ests/resources/google_books_top10000.txt</code>, derived from Google Books Ngram under CC BY 3.0: the rank of every lemma, starting from 1. The list holds the 10,000 most frequent lemmas of the <a href="../../datasets/freqdict/">frequency dictionary</a> by decreasing frequency, the parts of speech of a lemma summed; it leaves out the proper nouns and the lemmas whose rows of proper nouns outweigh the others (<code>garcía</code>), the single letters other than the Spanish words <code>a</code>, <code>e</code>, <code>o</code>, <code>u</code>, <code>y</code>, <code>á</code>, <code>é</code>, <code>ó</code>, and the two-letter lemmas and Roman numerals that esMorph does not know or that have no vowel (<code>pp</code>, <code>km</code>, <code>xix</code>), while the abbreviations of the references (<code>cit</code>) and the English words of the bibliographies (<code>the</code>) stay.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Code</label><label for="__tabbed_5_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2491,7 +2484,7 @@ Lexical density                                  |   0.45
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>(1, 2851, None)
+<div class="highlight"><pre><span></span><code>(1, 3123, None)
 10000
 </code></pre></div>
 </div>
@@ -2534,14 +2527,14 @@ Lexical density                                  |   0.45
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>{'coverage': 1.0,
- 'mean_ipm': 34283.74818181818,
- 'mean_ipm_content': 956.3320000000001,
- 'mean_log_ipm': 3.559971676175293,
- 'mean_log_ipm_content': 2.1916598821626314,
+ 'mean_ipm': 34470.99727272727,
+ 'mean_ipm_content': 805.65,
+ 'mean_log_ipm': 3.5604802847439285,
+ 'mean_log_ipm_content': 2.172562226515112,
  'mean_range': 40.0,
- 'mean_dispersion': 97.63636363636364,
- 'surprisal': 8.105598641234213,
- 'perplexity': 275.4408334528846,
+ 'mean_dispersion': 97.18181818181819,
+ 'surprisal': 8.103909080140765,
+ 'perplexity': 275.11844950775145,
  'p_top1000': 0.7272727272727273,
  'p_top2000': 0.8181818181818182,
  'p_top5000': 1.0,

@@ -2081,7 +2081,7 @@
 
 
 <h1 id="estadisticas-morfologicas">Estadísticas morfológicas<a class="headerlink" href="#estadisticas-morfologicas" title="Permanent link">&para;</a></h1>
-<div class="signature highlight"><pre><span></span><code><span class="n">MorphStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">MorphStats</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
 </code></pre></div>
 <!-- core: stats/morph_stats.md:MorphStats e18b976 -->
 <p>Las estadísticas morfológicas de un texto: la categoría gramatical y los rasgos de <a href="https://universaldependencies.org/u/feat/">Universal Dependencies</a> de cada palabra, contados por valor o dados palabra por palabra. La fuente de datos es un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> o un <code>Document</code> de <a href="https://github.com/SergeyShk/anySeg">anySeg</a>; las palabras son las palabras de Universal Dependencies de su <a href="https://sergeyshk.github.io/anyTS/document/">documento</a> con una letra o una cifra (el español <code>del</code> da <code>de</code> y <code>el</code>), y sus categorías gramaticales y sus rasgos son sus columnas <code>upos</code> y <code>feats</code>. Una biblioteca de un idioma anota una cadena en su <code>parse</code>, o lee los rasgos en su propio <code>analyze</code>.</p>
@@ -2090,8 +2090,8 @@
 <li><code>SourceTypeError</code> - una fuente que no es ni una cadena, ni un <code>Doc</code>, ni un <code>Document</code>, un <code>parse</code> que no devuelve un <code>Document</code>, un <code>analyze</code> que no da objetos <code>MorphWord</code>;</li>
 <li><code>SourceError</code> - palabras sin categorías gramaticales, una fuente sin palabras.</li>
 </ul>
-<p>La clase extiende el <code>MorphStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/morph_stats/">anyTS</a> con la capa del español y los <a href="#markers">marcadores del español</a>; las estadísticas se calculan al crear el objeto. En esTS la fuente de datos es un texto, un <code>Doc</code> o un <code>Document</code>: un texto se analiza con <a href="../../installation/#model"><code>es_core_news_sm</code></a> o con el pipeline indicado en <code>nlp</code>, y un <code>Doc</code> debe llevar las categorías gramaticales, que vienen de un <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>), y los lemas, que vienen de un <code>lemmatizer</code>. Las palabras son las del documento con una letra o una cifra; una contracción (<code>del</code>, <code>al</code>) queda como una palabra, ya que el modelo anota su token como uno. Un texto más largo que el <code>max_length</code> del pipeline - un millón de caracteres por defecto - hay que dividirlo en partes o subir <code>max_length</code> en un pipeline propio indicado en <code>nlp</code>. Las tablas de <code>print_stats</code> y <code>print_markers</code> toman las descripciones de <code>MORPHOLOGY_STATS_DESC</code> y <code>MORPHOLOGY_MARKERS_DESC</code> de <code>ests.constants</code>.</p>
-<p>Además, en esTS una fuente que no es ni una cadena, ni un <code>Doc</code> ni un <code>Document</code> y un pipeline en <code>nlp</code> que no es un <code>Language</code> de spaCy lanzan <code>SourceTypeError</code>; un <code>Doc</code> sin los lemas (de un pipeline con el <code>lemmatizer</code> excluido), una cadena más larga que el <code>max_length</code> del pipeline lanzan <code>SourceError</code>; una cadena sin <code>nlp</code> cuando el modelo <code>es_core_news_sm</code> no está instalado lanza <code>DatasetNotFoundError</code>.</p>
+<p>La clase extiende el <code>MorphStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/morph_stats/">anyTS</a> con la capa del español y los <a href="#markers">marcadores del español</a>; las estadísticas se calculan al crear el objeto. En esTS la fuente de datos es un texto, un <code>Doc</code> o un <code>Document</code>: un texto recibe los análisis de <a href="https://github.com/SergeyShk/esMorph">esMorph</a> en el contexto de sus oraciones, sin spaCy, y un <code>Doc</code> debe llevar las categorías gramaticales, que vienen de un <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>), y los lemas, que vienen de un <code>lemmatizer</code>. Las palabras son las del documento con una letra o una cifra: en un texto las palabras de una contracción y de un verbo con clíticos son palabras aparte (<code>del</code> - <code>de</code> + <code>el</code>, <code>dámelo</code> - <code>da</code> + <code>me</code> + <code>lo</code>), mientras que un <code>Doc</code> conserva entero el token del modelo. Las tablas de <code>print_stats</code> y <code>print_markers</code> toman las descripciones de <code>MORPHOLOGY_STATS_DESC</code> y <code>MORPHOLOGY_MARKERS_DESC</code> de <code>ests.constants</code>.</p>
+<p>Además, en esTS una fuente que no es ni una cadena, ni un <code>Doc</code> ni un <code>Document</code> lanza <code>SourceTypeError</code>, y un <code>Doc</code> sin los lemas (de un pipeline con el <code>lemmatizer</code> excluido) lanza <code>SourceError</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2137,12 +2137,6 @@ Indicative                    |    1
 <td style="text-align: left;">-</td>
 <td style="text-align: left;">Fuente de datos</td>
 </tr>
-<tr>
-<td style="text-align: left;"><code>nlp</code></td>
-<td style="text-align: left;"><code>Language</code></td>
-<td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Pipeline de spaCy que analiza una cadena; sin él se carga el modelo <code>es_core_news_sm</code></td>
-</tr>
 </tbody>
 </table>
 <h2 id="atributos">Atributos<a class="headerlink" href="#atributos" title="Permanent link">&para;</a></h2>
@@ -2178,7 +2172,7 @@ Indicative                    |    1
 </tr>
 </tbody>
 </table>
-<p>En esTS las estadísticas son <code>case</code>, ..., <code>verb_form</code> de la <a href="#statistics">tabla de abajo</a>; <code>animacy</code>, <code>aspect</code> y <code>voice</code> del núcleo no están entre ellas. esTS tiene además el atributo <code>lemmas</code> (<code>tuple[str]</code>): los lemas de las palabras que da el modelo.</p>
+<p>En esTS las estadísticas son <code>case</code>, ..., <code>verb_form</code> de la <a href="#statistics">tabla de abajo</a>; <code>animacy</code>, <code>aspect</code> y <code>voice</code> del núcleo no están entre ellas. esTS tiene además el atributo <code>lemmas</code> (<code>tuple[str]</code>): los lemas de las palabras, de esMorph para un texto y del pipeline para un <code>Doc</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Código</label><label for="__tabbed_2_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2286,10 +2280,10 @@ Indicative                    |    1
 </tr>
 </tbody>
 </table>
-<p>Un rasgo con varios valores conserva la forma de CoNLL-U: <code>qué</code>, <code>quién</code>, <code>cuál</code> tienen <code>pron_type</code> igual a <code>Int,Rel</code>, y <code>usted</code> tiene <code>case</code> igual a <code>Acc,Nom</code>. <code>print_stats</code> nombra los valores según <code>MORPHOLOGY_STATS_DESC</code> de <code>ests.constants</code>, y un valor así, con los nombres de sus partes unidos por una barra: «Interrogative / Relative», «Accusative / Nominative».</p>
+<p>Un rasgo con varios valores conserva la forma de CoNLL-U: <code>usted</code> tiene <code>case</code> igual a <code>Acc,Nom</code>, y en un <code>Doc</code> de <code>es_core_news_sm</code> <code>qué</code>, <code>quién</code>, <code>cuál</code> tienen <code>pron_type</code> igual a <code>Int,Rel</code>. <code>print_stats</code> nombra los valores según <code>MORPHOLOGY_STATS_DESC</code> de <code>ests.constants</code>, y un valor así, con los nombres de sus partes unidos por una barra: «Interrogative / Relative», «Accusative / Nominative».</p>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
-<p>Las estadísticas valen lo que vale la anotación del modelo. <code>es_core_news_sm</code> analiza mal los verbos con pronombres enclíticos (<code>dámelo</code>, <code>cuéntamelo</code> salen como sustantivos con lemas inventados) y etiqueta los imperativos de <code>tú</code> como indicativo (<code>Abre la ventana</code> recibe <code>Mood=Ind</code>), de modo que <code>p_imperative</code> se queda corto y <code>p_indicative</code> absorbe las órdenes: en el diálogo del corpus de literatura encuentra alrededor de un imperativo de cada diez. <code>es_core_news_lg</code> apenas mejora (15 %); el modelo de transformadores <code>es_dep_news_trf</code> indicado en <code>nlp</code> encuentra el 87 %, y en el teatro <code>p_imperative</code> sube del 1,6 % al 7,5 %, a costa de cerca de 1 GB con PyTorch y cinco veces más tiempo en una CPU, y necesita antes unir los saltos de línea simples de un texto con líneas cortadas.</p>
+<p>Las estadísticas valen lo que vale la anotación. esMorph analiza un verbo con clíticos como el verbo (<code>dámelo</code> - el imperativo de <code>dar</code>), pero, como los modelos, lee como indicativo el imperativo de <code>tú</code> que tiene la forma del indicativo (<code>Abre la ventana</code>). En un <code>Doc</code>, <code>es_core_news_sm</code> analiza mal los verbos con pronombres enclíticos (<code>dámelo</code>, <code>cuéntamelo</code> salen como sustantivos con lemas inventados) y etiqueta los imperativos de <code>tú</code> como indicativo (<code>Abre la ventana</code> recibe <code>Mood=Ind</code>), de modo que <code>p_imperative</code> se queda corto y <code>p_indicative</code> absorbe las órdenes: en el diálogo del corpus de literatura encuentra alrededor de un imperativo de cada diez. <code>es_core_news_lg</code> apenas mejora (15 %); el modelo de transformadores <code>es_dep_news_trf</code>, que construye el <code>Doc</code>, encuentra el 87 %, y en el teatro <code>p_imperative</code> sube del 1,6 % al 7,5 %, a costa de cerca de 1 GB con PyTorch y cinco veces más tiempo en una CPU, y necesita antes unir los saltos de línea simples de un texto con líneas cortadas.</p>
 </div>
 <div class="metric-card">
 <h3 id="markers">Marcadores del español<a class="headerlink" href="#markers" title="Permanent link">&para;</a></h3>
@@ -2327,7 +2321,7 @@ Indicative                    |    1
 </tbody>
 </table>
 <p>Los cuatro primeros marcadores comparten la base de las formas personales y suman uno salvo que el modelo deje alguna forma personal sin modo o le dé varios (<code>Mood=Ind,Sub</code>, que cuenta en la proporción de cada uno; <code>es_core_news_sm</code> no los da). Los tres siguientes comparten la base de todas las formas verbales de verbos y auxiliares: un participio que el modelo anota como adjetivo (<code>la casa pintada</code>) queda fuera de la base, los de los tiempos compuestos y la pasiva (<code>he leído</code>, <code>fue escrito</code>) quedan dentro.</p>
-<p>La base de <code>p_ser</code> son solo los usos copulativos, leídos del análisis sintáctico: los auxiliares de la pasiva y de la perífrasis progresiva (<code>fue escrito</code>, <code>es financiado</code>, <code>está cantando</code>) quedan fuera, mientras que <code>es alta</code>, <code>está cansada</code> y <code>lo importante es que vengas</code> cuentan. Para un <code>Doc</code> sin análisis sintáctico el marcador es <code>nan</code>.</p>
+<p>La base de <code>p_ser</code> son solo los usos copulativos, leídos de la morfología: <code>ser</code> ante un participio y <code>estar</code> ante un gerundio, con adverbios y pronombres entre ellos, son los auxiliares de la pasiva y de la perífrasis progresiva (<code>fue escrito</code>, <code>es financiado</code>, <code>está cantando</code>) y quedan fuera, mientras que <code>es alta</code>, <code>está cansada</code> y <code>lo importante es que vengas</code> cuentan. La regla no necesita análisis sintáctico, así que un texto y un <code>Doc</code> sin analizador también tienen el marcador; un participio que el etiquetador lee como adjetivo (<code>fue muy bien recibido</code>) deja su <code>ser</code> como cópula.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2367,7 +2361,7 @@ Indicative                    |    1
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>{'pos': {'SCONJ': 1, 'VERB': 3, 'NOUN': 2, 'DET': 1, 'PRON': 2, 'ADV': 1},
  'mood': {'Sub': 1, 'Cnd': 1, 'Ind': 1},
- 'tense': {'Imp': 1, 'Pres': 1}}
+ 'tense': {'Imp': 1, 'Past': 1}}
 (('Si', {'pos': 'SCONJ'}),
  ('tuviera', {'pos': 'VERB', 'mood': 'Sub', 'tense': 'Imp'}),
  ('tiempo', {'pos': 'NOUN'}),
@@ -2376,7 +2370,7 @@ Indicative                    |    1
  ('libro', {'pos': 'NOUN'}),
  ('que', {'pos': 'PRON'}),
  ('me', {'pos': 'PRON'}),
- ('recomendaste', {'pos': 'VERB', 'mood': 'Ind', 'tense': 'Pres'}),
+ ('recomendaste', {'pos': 'VERB', 'mood': 'Ind', 'tense': 'Past'}),
  ('ayer', {'pos': 'ADV'}))
 </code></pre></div>
 </div>

@@ -2257,7 +2257,7 @@
 
 
 <h1 id="style-metrics">Style metrics<a class="headerlink" href="#style-metrics" title="Permanent link">&para;</a></h1>
-<div class="signature highlight"><pre><span></span><code><span class="n">StyleStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cliches</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nausea_stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">StyleStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cliches</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nausea_stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>The style metrics of a text: the SEO metrics of Advego and Text.ru and the markers of the officialese style. The services publish no formulas, so the common definitions are taken. The data source is a text, a <code>Doc</code> object of <a href="https://github.com/explosion/spaCy">spaCy</a> or a <code>Document</code> of <a href="https://github.com/SergeyShk/anySeg">anySeg</a>.</p>
 <p>The SEO metrics are counted on the words of the <a href="https://sergeyshk.github.io/anyTS/document/">document</a> of the source in lower case (<code>doc_words</code>), or on those of an extractor passed explicitly, used on the text. The markers are counted on the words of the document (<code>forms</code>), whatever the extractor.</p>
@@ -2267,8 +2267,8 @@
 <li><code>SourceError</code> - a source without words;</li>
 <li><code>ParameterError</code> - a <code>top_n</code> that is not an integer of at least one.</li>
 </ul>
-<p>The class extends the <code>StyleStats</code> of the <a href="https://sergeyshk.github.io/anyTS/stats/style_stats/">anyTS</a> core with the hooks of Spanish, given in the cards of the metrics: the stopwords, the compound prepositions, parenthetical expressions and clichés that the Spanish-language guides to plain language warn about, found with their contractions and the forms of their verbs, and the nouns derived from a verb among the nouns of the spaCy model. The words of a string are extracted by the Spanish <a href="../../extractors/words/"><code>WordsExtractor</code></a> and are not lemmatized, so the forms of one word count as different words, as in Advego; to compute by lemmas, pass a <code>WordsExtractor</code> with <code>use_lexemes=True</code> and <code>lowercase=True</code>. The <code>print_stats</code> table takes the descriptions of <code>ests.constants.STYLE_STATS_DESC</code>.</p>
-<p>The verbal nouns need the parts of speech and the lemmas: a <code>Doc</code> gives its own annotation, also when an extractor takes its text, and a string is parsed with <a href="../../installation/#model"><code>es_core_news_sm</code></a> or with the pipeline passed in <code>nlp</code> the first time <code>verbal_nouns</code> or <a href="#methods"><code>markers()</code></a> is read - the other metrics of a string need no model. A string longer than the <code>max_length</code> of the pipeline is parsed in parts of whole sentences. Besides the errors above, a pipeline that is not a spaCy <code>Language</code> raises <code>SourceTypeError</code>; reading <code>verbal_nouns</code> or <code>markers()</code> raises <code>SourceError</code> for a <code>Doc</code> without the parts of speech or the lemmas and for a string with a sentence longer than the <code>max_length</code> of the pipeline.</p>
+<p>The class extends the <code>StyleStats</code> of the <a href="https://sergeyshk.github.io/anyTS/stats/style_stats/">anyTS</a> core with the hooks of Spanish, given in the cards of the metrics: the stopwords, the compound prepositions, parenthetical expressions and clichés that the Spanish-language guides to plain language warn about, found with their contractions and the forms of their verbs, and the nouns derived from a verb among the nouns. The words of a string are extracted by the Spanish <a href="../../extractors/words/"><code>WordsExtractor</code></a> and are not lemmatized, so the forms of one word count as different words, as in Advego; to compute by lemmas, pass a <code>WordsExtractor</code> with <code>use_lexemes=True</code> and <code>lowercase=True</code>. The <code>print_stats</code> table takes the descriptions of <code>ests.constants.STYLE_STATS_DESC</code>.</p>
+<p>The verbal nouns need the parts of speech and the lemmas: a <code>Doc</code> gives its own annotation, also when an extractor takes its text, and a string gets those of <a href="https://github.com/SergeyShk/esMorph">esMorph</a> in the context of its sentences the first time <code>verbal_nouns</code> or <a href="#methods"><code>markers()</code></a> is read - the other metrics of a string need no analysis. Besides the errors above, reading <code>verbal_nouns</code> or <code>markers()</code> raises <code>SourceError</code> for a <code>Doc</code> without the parts of speech or the lemmas.</p>
 <p>The examples of this page take a notice written in the administrative style:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Code</label><label for="__tabbed_1_2">Result</label></div>
 <div class="tabbed-content">
@@ -2293,7 +2293,7 @@ Academic nausea (%)                       |  17.86
 Water content (%)                         |  57.14
 Spam score (%)                            |  37.50
 Naturalness by Zipf's law (%)             |  53.57
-Verbal nouns (% of nouns)                 |  47.06
+Verbal nouns (% of nouns)                 |  50.00
 Compound prepositions (per 100 words)     |   5.36
 Parenthetical expressions (per 100 words) |   1.79
 Officialese clichés (per 100 words)       |   8.93
@@ -2343,12 +2343,6 @@ Officialese clichés (per 100 words)       |   8.93
 <td style="text-align: left;">Clichés; <code>OFFICIALESE_CLICHES</code> if not given</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>nlp</code></td>
-<td style="text-align: left;"><code>Language</code></td>
-<td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">spaCy pipeline that parses a string for the verbal nouns; the model <code>es_core_news_sm</code> of <code>ests.utils.get_nlp</code> if not given</td>
-</tr>
-<tr>
 <td style="text-align: left;"><code>nausea_stopwords</code></td>
 <td style="text-align: left;"><code>list[str]</code> / <code>set[str]</code></td>
 <td style="text-align: left;"><code>None</code></td>
@@ -2383,7 +2377,6 @@ Officialese clichés (per 100 words)       |   8.93
 </tbody>
 </table>
 <p>The metrics are properties computed on each access.</p>
-<p>The pipeline of the parameter <code>nlp</code> is kept in the attribute <code>nlp</code>, <code>None</code> if not given.</p>
 <h2 id="metrics">Metrics<a class="headerlink" href="#metrics" title="Permanent link">&para;</a></h2>
 <p><code>get_stats</code> gives all the metrics. A metric is computed by the function of its card on <code>words</code> or <code>forms</code> with the hooks of the class.</p>
 <table>
@@ -2714,7 +2707,7 @@ Officialese clichés (per 100 words)       |   8.93
 </ul>
 <div class="signature highlight"><pre><span></span><code><span class="n">noun_lemmas</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 </code></pre></div>
-<p>The lemmas of the tokens of a <code>Doc</code> tagged <code>NOUN</code>. <code>StyleStats</code> takes the nouns of a <code>Doc</code> the same way, and those of a string from its parse by the pipeline of <code>nlp</code> or <code>get_nlp</code>, run without the parser and the named entities.</p>
+<p>The lemmas of the tokens of a <code>Doc</code> tagged <code>NOUN</code>. <code>StyleStats</code> takes the nouns of a <code>Doc</code> the same way, and those of a string from the analyses of esMorph in the context of its sentences.</p>
 <table>
 <thead>
 <tr>
@@ -2796,7 +2789,7 @@ Officialese clichés (per 100 words)       |   8.93
 </ul>
 <div class="signature highlight"><pre><span></span><code><span class="n">expand_phrases</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">phrases</span><span class="p">)</span>
 </code></pre></div>
-<p>The phrases spelled out in the forms of a text, each with the phrase of the list it spells out. A phrase ending in <code>a</code> or <code>de</code> also takes the contraction with the article (<code>a efectos del</code>, <code>conforme al</code>), and a phrase whose first word is an infinitive takes the forms of the text with that lemma (<code>proceder a</code> - <code>procedió a</code>, <code>ser de aplicación</code> - <code>es de aplicación</code>). The lemma is the one of simplemma, and a pronominal lemma counts for its verb (<code>llévese</code> - <code>llevar</code>); the forms simplemma does not lemmatize - some participles (<code>ha dado</code>, <code>ha hecho</code>) and the imperative <code>dese</code> - are given by <code>IRREGULAR_VERB_FORMS</code>. The words after the verb rule out the readings as a noun (<code>el hecho</code>, <code>el puesto</code>). When two phrases spell out the same words, a phrase written so wins over the forms of another (<code>a efectos del</code> stays itself next to <code>a efectos de</code>), and then the first phrase of a list, or of a set in sorted order.</p>
+<p>The phrases spelled out in the forms of a text, each with the phrase of the list it spells out. A phrase ending in <code>a</code> or <code>de</code> also takes the contraction with the article (<code>a efectos del</code>, <code>conforme al</code>), and a phrase whose first word is an infinitive takes the forms of the text with that lemma (<code>proceder a</code> - <code>procedió a</code>, <code>ser de aplicación</code> - <code>es de aplicación</code>). The lemma is any lemma of the form as a verb or an auxiliary in esMorph (<code>ha dado</code> - <code>dar</code>, <code>ha hecho</code> - <code>hacer</code>, <code>fue de aplicación</code> - <code>ser</code>), and a pronominal lemma counts for its verb (<code>llévese</code> - <code>llevar</code>); the imperative of <code>dar</code> with <code>se</code> written without an accent (<code>dese</code>, <code>dense</code>), which esMorph does not read as the verb, is given by <code>IRREGULAR_VERB_FORMS</code>. The words after the verb rule out the readings as a noun (<code>el hecho</code>, <code>el puesto</code>). When two phrases spell out the same words, a phrase written so wins over the forms of another (<code>a efectos del</code> stays itself next to <code>a efectos de</code>), and then the first phrase of a list, or of a set in sorted order.</p>
 <table>
 <thead>
 <tr>
@@ -3069,7 +3062,7 @@ True
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <p><code>keyword_density(*keywords)</code> gives the density of keywords and phrases in percent (<code>calc_keyword_density</code> with <code>normalize</code> of the class), <code>nausea_words()</code> the most frequent significant words of the academic nausea with their occurrences (<code>find_nausea_words</code>).</p>
 <p><code>markers()</code> returns the markers of the officialese found by metric - <code>verbal_nouns</code>, <code>compound_prepositions</code>, <code>parentheticals</code>, <code>cliches</code> - as the forms write them, in the order of the text.</p>
-<p>A phrase is found with its contractions and the forms of its verb (<a href="#phrase_density"><code>expand_phrases</code></a>). The verbal nouns need the parts of speech and the lemmas, as their metric does, so a string is parsed by the model and a <code>Doc</code> without them raises <code>SourceError</code>.</p>
+<p>A phrase is found with its contractions and the forms of its verb (<a href="#phrase_density"><code>expand_phrases</code></a>). The verbal nouns need the parts of speech and the lemmas, as their metric does, so a string gets those of esMorph and a <code>Doc</code> without them raises <code>SourceError</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Code</label><label for="__tabbed_7_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

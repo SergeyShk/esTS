@@ -2027,7 +2027,7 @@
 </tr>
 <tr>
 <td style="text-align: left;"><code>lemmatize(word)</code></td>
-<td style="text-align: left;">los lemas de simplemma, <code>ests.utils.lemmatize</code></td>
+<td style="text-align: left;">los lemas de esMorph, <code>ests.utils.lemmatize</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>number_pattern</code></td>
@@ -2041,7 +2041,7 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Nota</p>
-<p><a href="https://github.com/adbar/simplemma">simplemma</a> trabaja con un diccionario sin modelo entrenado: una forma conocida se convierte en su lema en minúsculas (<code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>), una forma desconocida se devuelve sin cambios (<code>Madrid</code>, <code>dámelo</code>).</p>
+<p><a href="https://github.com/SergeyShk/esMorph">esMorph</a> trabaja con un diccionario de Wiktionary sin modelo entrenado de spaCy. El extractor toma cada palabra por separado, sin su oración, y le da el lema de su primer análisis: <code>Tienes</code> - <code>tener</code>, <code>NIÑOS</code> - <code>niño</code>, un verbo con clíticos es el verbo (<code>dámelo</code> - <code>dar</code>), y un nombre propio conserva su forma (<code>Madrid</code>).</p>
 </div>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>
 <div class="tabbed-content">

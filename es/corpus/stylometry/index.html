@@ -2671,10 +2671,10 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 </div>
 </div>
 <h2 id="function_words_profile">Perfil de las palabras funcionales<a class="headerlink" href="#function_words_profile" title="Permanent link">&para;</a></h2>
-<div class="signature highlight"><pre><span></span><code><span class="n">function_words_profile</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">function_words_profile</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
 </code></pre></div>
 <p>Las proporciones de las adposiciones, las conjunciones coordinantes y subordinantes, las partículas, los pronombres, los determinantes y las interjecciones (<code>ests.constants.FUNCTION_UD_POS</code>: <code>ADP</code>, <code>CCONJ</code>, <code>SCONJ</code>, <code>PART</code>, <code>PRON</code>, <code>DET</code>, <code>INTJ</code>) entre las palabras del texto. Las palabras funcionales no dependen del tema, así que su perfil es un rasgo clásico de autoría desde Mosteller y Wallace (1964).</p>
-<p>Las categorías gramaticales son las de la anotación de un <code>Doc</code> que las lleva. Las palabras de una lista o de un <code>Doc</code> sin categorías gramaticales las etiqueta el modelo en su contexto, así que han de pasarse en el orden del texto; la puntuación de la lista ayuda al etiquetado y no se cuenta. El pipeline es el modelo <a href="../../installation/#model"><code>es_core_news_sm</code></a> o el que se pasa en <code>nlp</code>, sin el analizador sintáctico, el lematizador ni el reconocedor de entidades. En las Universal Dependencies del español la negación <em>no</em> es un adverbio y no una partícula, así que <code>PART</code> es rara.</p>
+<p>Las categorías gramaticales son las de la anotación de un <code>Doc</code> que las lleva. Las palabras de una lista o de un <code>Doc</code> sin categorías gramaticales reciben las de <a href="https://github.com/SergeyShk/esMorph">esMorph</a> en su contexto, así que han de pasarse en el orden del texto; la puntuación de la lista ayuda al análisis y no se cuenta, y una palabra para la que esMorph no tiene análisis es <code>X</code>. En las Universal Dependencies del español la negación <em>no</em> es un adverbio y no una partícula, así que <code>PART</code> es rara.</p>
 <table>
 <thead>
 <tr>
@@ -2691,19 +2691,12 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 <td style="text-align: left;">-</td>
 <td style="text-align: left;">Palabras del texto u objeto Doc</td>
 </tr>
-<tr>
-<td style="text-align: left;"><code>nlp</code></td>
-<td style="text-align: left;"><code>Language</code></td>
-<td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Pipeline para una lista de palabras; <code>None</code> - el modelo por defecto</td>
-</tr>
 </tbody>
 </table>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - unas palabras que no son una lista de cadenas, un pipeline que no es un <code>Language</code> de spaCy;</li>
-<li><code>SourceError</code> - una fuente sin palabras, un pipeline que no etiqueta las categorías gramaticales (<code>spacy.blank("es")</code>);</li>
-<li><code>DatasetNotFoundError</code> - el modelo por defecto no está instalado.</li>
+<li><code>SourceTypeError</code> - unas palabras que no son una lista de cadenas;</li>
+<li><code>SourceError</code> - una fuente sin palabras.</li>
 </ul>
 <div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
 <div class="tabbed-content">

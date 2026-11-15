@@ -2147,7 +2147,7 @@
 
 
 <h1 id="estadisticas-de-complejidad-lexica">Estadísticas de complejidad léxica<a class="headerlink" href="#estadisticas-de-complejidad-lexica" title="Permanent link">&para;</a></h1>
-<div class="signature highlight"><pre><span></span><code><span class="n">LexicalStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">freq_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">LexicalStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">freq_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <!-- core: stats/lexical_stats.md:LexicalStats 5286466 -->
 <p>Complejidad léxica a la manera de TAALES (Kyle, Crossley y Berger, 2018) - cuán raras son las palabras de un texto: estadísticas según un diccionario de frecuencias y su modelo de unigramas, las proporciones de las bandas de frecuencia de una lista de los lemas más frecuentes y la densidad léxica. Las estadísticas según el diccionario se calculan la primera vez que se leen, así que las bandas y la densidad léxica no necesitan los datos del diccionario. La fuente de datos es un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> o un <code>Document</code> de <a href="https://github.com/SergeyShk/anySeg">anySeg</a>, que se lee a través de su <a href="https://sergeyshk.github.io/anyTS/document/">documento</a>: por defecto, sus palabras de Universal Dependencies sin los números, con sus lemas y sus categorías gramaticales.</p>
@@ -2156,10 +2156,9 @@
 <li><code>SourceTypeError</code> - una fuente que no es ni una cadena, ni un <code>Doc</code>, ni un <code>Document</code>, un <code>parse</code> que no devuelve un <code>Document</code>, un diccionario de otra clase que la de la biblioteca o, sin <code>freq_dict_class</code>, uno sin <code>lookup</code> e <code>ipm</code> o ninguno; un <code>analyze</code> que no da objetos <code>LexicalWord</code>;</li>
 <li><code>SourceError</code> - palabras sin categorías gramaticales, una fuente sin palabras.</li>
 </ul>
-<p>En esTS una fuente que no es ni una cadena, ni un <code>Doc</code> ni un <code>Document</code> y un pipeline en <code>nlp</code> que no es un <code>Language</code> de spaCy también lanzan <code>SourceTypeError</code>; una fuente sin las categorías gramaticales y una cadena más larga que el <code>max_length</code> del pipeline, <code>SourceError</code>; y las métricas según el diccionario sin el diccionario descargado, <code>DatasetNotFoundError</code>.</p>
+<p>En esTS una fuente que no es ni una cadena, ni un <code>Doc</code> ni un <code>Document</code> también lanza <code>SourceTypeError</code>; un <code>Doc</code> sin las categorías gramaticales, <code>SourceError</code>; y las métricas según el diccionario sin el diccionario descargado, <code>DatasetNotFoundError</code>.</p>
 <p>A diferencia de las <a href="../diversity_stats/">métricas de diversidad léxica</a>, que comparan las palabras de un texto entre sí, aquí las palabras se comparan con las frecuencias de la lengua (<a href="https://doi.org/10.3758/s13428-017-0924-4">TAALES</a>). La fuente de datos es un texto o un objeto <code>Doc</code> de la biblioteca <a href="https://github.com/explosion/spaCy">spaCy</a>.</p>
-<p>La clase extiende el <code>LexicalStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/lexical_stats/">anyTS</a> con la capa del español: el diccionario es el <a href="../../datasets/freqdict/"><code>FreqDict</code></a> de Google Books Ngram (<code>freq_dict_class</code>), y las posiciones de los lemas y el tamaño de la lista (<code>rank</code>, <code>top_size</code>) salen de la lista integrada de sus 10 000 lemas más frecuentes (<a href="#bands"><code>get_rank</code></a>). Si una palabra es un nombre propio, y si es una palabra con contenido, sale de la anotación, así que la fuente tiene que estar anotada: una cadena se analiza con <a href="../../installation/#model"><code>es_core_news_sm</code></a> o con el pipeline pasado en <code>nlp</code>, sin el parser, el lematizador ni las entidades nombradas, y un <code>Doc</code> debe llevar las categorías gramaticales (un <code>morphologizer</code>, o un <code>tagger</code> con un <code>attribute_ruler</code>). Los números (<code>2020</code>, <code>5,5</code>, <code>3.º</code>) no son palabras. Los lemas salen de <a href="../../datasets/freqdict/#lemma_key"><code>lemma_key</code></a>, el lema de simplemma en minúsculas, no del modelo; un nombre propio conserva su forma en minúsculas. Una palabra con contenido se define como en <a href="../cohesion_stats/"><code>CohesionStats</code></a>: una de <code>CONTENT_UD_POS</code> (sustantivos, nombres propios, adjetivos, verbos, adverbios) y no demostrativa. La tabla de <code>print_stats</code> lleva las descripciones de <code>LEXICAL_STATS_DESC</code> de <code>ests.constants</code>, con el rango en años de 40.</p>
-<p>El <code>max_length</code> del pipeline es de un millón de caracteres por defecto: divida un texto más largo en partes, o suba <code>max_length</code> en un pipeline propio y páselo en <code>nlp</code>.</p>
+<p>La clase extiende el <code>LexicalStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/lexical_stats/">anyTS</a> con la capa del español: el diccionario es el <a href="../../datasets/freqdict/"><code>FreqDict</code></a> de Google Books Ngram (<code>freq_dict_class</code>), y las posiciones de los lemas y el tamaño de la lista (<code>rank</code>, <code>top_size</code>) salen de la lista integrada de sus 10 000 lemas más frecuentes (<a href="#bands"><code>get_rank</code></a>). Si una palabra es un nombre propio, y si es una palabra con contenido, sale de la anotación, así que la fuente tiene que estar anotada: una cadena recibe los análisis de <a href="https://github.com/SergeyShk/esMorph">esMorph</a> en el contexto de sus oraciones, sin spaCy, y un <code>Doc</code> debe llevar las categorías gramaticales (un <code>morphologizer</code>, o un <code>tagger</code> con un <code>attribute_ruler</code>). Los números (<code>2020</code>, <code>5,5</code>, <code>3.º</code>) no son palabras. Los lemas salen de <a href="../../datasets/freqdict/#lemma_key"><code>lemma_key</code></a> con la categoría gramatical de la palabra, el lema de esMorph en minúsculas, el lematizador con el que se construye el diccionario, no del modelo; un nombre propio conserva su forma en minúsculas. Una palabra con contenido se define como en <a href="../cohesion_stats/"><code>CohesionStats</code></a>: una de <code>CONTENT_UD_POS</code> (sustantivos, nombres propios, adjetivos, verbos, adverbios) y no demostrativa. La tabla de <code>print_stats</code> lleva las descripciones de <code>LEXICAL_STATS_DESC</code> de <code>ests.constants</code>, con el rango en años de 40.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2175,14 +2174,14 @@
 <div class="highlight"><pre><span></span><code>                    Statistic                    |  Value
 ------------------------------------------------------------
 Share of words found in the frequency dictionary |   1.00
-Mean frequency (ipm)                             | 34283.75
-Mean frequency of content words (ipm)            |  956.33
+Mean frequency (ipm)                             | 34471.00
+Mean frequency of content words (ipm)            |  805.65
 Mean log frequency (lg ipm)                      |   3.56
-Mean log frequency of content words              |   2.19
+Mean log frequency of content words              |   2.17
 Mean range (years out of 40)                     |  40.00
-Mean dispersion (D)                              |  97.64
-Mean surprisal (bits)                            |   8.11
-Unigram perplexity                               |  275.44
+Mean dispersion (D)                              |  97.18
+Mean surprisal (bits)                            |   8.10
+Unigram perplexity                               |  275.12
 Share of words in the top 1000                   |   0.73
 Share of words in the top 2000                   |   0.82
 Share of words in the top 5000                   |   1.00
@@ -2215,12 +2214,6 @@ Lexical density                                  |   0.45
 <td style="text-align: left;"><code>FreqDict</code></td>
 <td style="text-align: left;"><code>None</code></td>
 <td style="text-align: left;">Diccionario de frecuencias; <code>FreqDict()</code> del directorio por defecto si no se indica</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>nlp</code></td>
-<td style="text-align: left;"><code>Language</code></td>
-<td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Pipeline de spaCy que analiza una cadena; sin él se carga el modelo <code>es_core_news_sm</code></td>
 </tr>
 </tbody>
 </table>
@@ -2267,7 +2260,7 @@ Lexical density                                  |   0.45
 </tr>
 </tbody>
 </table>
-<p>En esTS el diccionario es un <code>FreqDict</code>, y sus entradas son las tuplas con nombre <a href="../../datasets/freqdict/"><code>Entry</code></a>. Las claves de las palabras en el diccionario (<code>keys</code>, <code>dictionary_keys</code>) son sus lemas, y un nombre propio se busca por su forma cuando el diccionario la tiene (<code>París</code> como <code>parís</code>, no como el verbo <code>parir</code>) y por su lema si no (<code>Estados</code> de <em>Estados Unidos</em> como <code>estado</code>, un <code>Miró</code> a principio de oración etiquetado <code>PROPN</code> como <code>mirar</code>). Una palabra se busca sin el punto de una abreviatura (<code>Sr.</code> como <code>sr</code>, <code>pág.</code> como <code>página</code>); una inicial (<code>D.</code>, <code>J.</code>) lo conserva y queda fuera del diccionario.</p>
+<p>En esTS el diccionario es un <code>FreqDict</code>, y sus entradas son las tuplas con nombre <a href="../../datasets/freqdict/"><code>Entry</code></a>. Las claves de las palabras en el diccionario (<code>keys</code>, <code>dictionary_keys</code>) son sus lemas, y un nombre propio se busca por su forma cuando el diccionario la tiene (<code>París</code> como <code>parís</code>) y por su lema si no (<code>Estados</code> de <em>Estados Unidos</em> como <code>estado</code>). Una palabra se busca sin el punto de una abreviatura (<code>Sr.</code> como <code>sr</code>, <code>pág.</code> como <code>pág</code>); una inicial (<code>D.</code>, <code>J.</code>) lo conserva y queda fuera del diccionario.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Código</label><label for="__tabbed_2_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2277,7 +2270,7 @@ Lexical density                                  |   0.45
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>('miró', 'desde', 'parís', 'hacia', 'el', 'estados', 'unidos')
+<div class="highlight"><pre><span></span><code>('mirar', 'desde', 'parís', 'hacia', 'el', 'estados', 'unidos')
 ('mirar', 'desde', 'parís', 'hacia', 'el', 'estado', 'unidos')
 </code></pre></div>
 </div>
@@ -2369,7 +2362,7 @@ Lexical density                                  |   0.45
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><a href="../../datasets/freqdict/"><code>FreqDict</code></a> - 83 785 lemas de Google Books Ngram (1980-2019) con ipm, rango y dispersión</td>
+<td style="text-align: left;"><a href="../../datasets/freqdict/"><code>FreqDict</code></a> - 86 196 lemas de Google Books Ngram (1980-2019) con ipm, rango y dispersión</td>
 <td style="text-align: left;"><code>coverage</code>, <code>mean_ipm*</code>, <code>mean_log_ipm*</code>, <code>mean_range</code>, <code>mean_dispersion</code>, <code>surprisal</code>, <code>perplexity</code></td>
 <td style="text-align: left;">se descarga una vez con <code>FreqDict().download()</code></td>
 </tr>
@@ -2395,7 +2388,7 @@ Lexical density                                  |   0.45
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>(0.8571428571428571, 2.3529196195453976, 13.70650419215419, 0.4285714285714286)
+<div class="highlight"><pre><span></span><code>(0.875, 2.8003798879556743, 12.206981533297302, 0.375)
 </code></pre></div>
 </div>
 </div>
@@ -2447,7 +2440,7 @@ Lexical density                                  |   0.45
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>15.392368319318606
+<div class="highlight"><pre><span></span><code>15.554697256684591
 </code></pre></div>
 </div>
 </div>
@@ -2485,7 +2478,7 @@ Lexical density                                  |   0.45
 </table>
 <div class="signature highlight"><pre><span></span><code><span class="n">load_top_lemmas</span><span class="p">()</span>
 </code></pre></div>
-<p>La lista entera del fichero <code>ests/resources/google_books_top10000.txt</code>, derivado de Google Books Ngram con licencia CC BY 3.0: la posición de cada lema, empezando por 1. La lista recoge los 10 000 lemas más frecuentes del <a href="../../datasets/freqdict/">diccionario de frecuencias</a> por frecuencia decreciente, con las categorías gramaticales de un lema sumadas; deja fuera los nombres propios, las letras sueltas salvo las palabras del español <code>a</code>, <code>e</code>, <code>o</code>, <code>u</code>, <code>y</code>, <code>á</code>, <code>é</code>, <code>ó</code>, y los lemas de dos letras y los números romanos que simplemma no conoce (<code>pp</code>, <code>xix</code>), mientras que las abreviaturas de las referencias (<code>cit</code>) y las palabras inglesas de las bibliografías (<code>the</code>) se quedan.</p>
+<p>La lista entera del fichero <code>ests/resources/google_books_top10000.txt</code>, derivado de Google Books Ngram con licencia CC BY 3.0: la posición de cada lema, empezando por 1. La lista recoge los 10 000 lemas más frecuentes del <a href="../../datasets/freqdict/">diccionario de frecuencias</a> por frecuencia decreciente, con las categorías gramaticales de un lema sumadas; deja fuera los nombres propios y los lemas cuyas filas de nombres propios pesan más que las demás (<code>garcía</code>), las letras sueltas salvo las palabras del español <code>a</code>, <code>e</code>, <code>o</code>, <code>u</code>, <code>y</code>, <code>á</code>, <code>é</code>, <code>ó</code>, y los lemas de dos letras y los números romanos que esMorph no conoce o que no tienen vocal (<code>pp</code>, <code>km</code>, <code>xix</code>), mientras que las abreviaturas de las referencias (<code>cit</code>) y las palabras inglesas de las bibliografías (<code>the</code>) se quedan.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2496,7 +2489,7 @@ Lexical density                                  |   0.45
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>(1, 2851, None)
+<div class="highlight"><pre><span></span><code>(1, 3123, None)
 10000
 </code></pre></div>
 </div>
@@ -2540,14 +2533,14 @@ Lexical density                                  |   0.45
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>{'coverage': 1.0,
- 'mean_ipm': 34283.74818181818,
- 'mean_ipm_content': 956.3320000000001,
- 'mean_log_ipm': 3.559971676175293,
- 'mean_log_ipm_content': 2.1916598821626314,
+ 'mean_ipm': 34470.99727272727,
+ 'mean_ipm_content': 805.65,
+ 'mean_log_ipm': 3.5604802847439285,
+ 'mean_log_ipm_content': 2.172562226515112,
  'mean_range': 40.0,
- 'mean_dispersion': 97.63636363636364,
- 'surprisal': 8.105598641234213,
- 'perplexity': 275.4408334528846,
+ 'mean_dispersion': 97.18181818181819,
+ 'surprisal': 8.103909080140765,
+ 'perplexity': 275.11844950775145,
  'p_top1000': 0.7272727272727273,
  'p_top2000': 0.8181818181818182,
  'p_top5000': 1.0,

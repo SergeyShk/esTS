@@ -2257,7 +2257,7 @@
 
 
 <h1 id="metricas-de-estilo">Métricas de estilo<a class="headerlink" href="#metricas-de-estilo" title="Permanent link">&para;</a></h1>
-<div class="signature highlight"><pre><span></span><code><span class="n">StyleStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cliches</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nausea_stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">StyleStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cliches</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nausea_stopwords</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <!-- core: stats/style_stats.md:StyleStats 8cd38b0 -->
 <p>Las métricas de estilo de un texto: las métricas SEO de Advego y Text.ru y los marcadores del estilo burocrático. Los servicios no publican sus fórmulas, así que se toman las definiciones comunes. La fuente de datos es un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> o un <code>Document</code> de <a href="https://github.com/SergeyShk/anySeg">anySeg</a>.</p>
@@ -2268,8 +2268,8 @@
 <li><code>SourceError</code> - una fuente sin palabras;</li>
 <li><code>ParameterError</code> - un <code>top_n</code> que no es un entero de al menos uno.</li>
 </ul>
-<p>La clase extiende el <code>StyleStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/style_stats/">anyTS</a> con los ganchos del español, descritos en las tarjetas de las métricas: las palabras vacías, las locuciones prepositivas, las expresiones parentéticas y los clichés contra los que advierten las guías de lenguaje claro en español, que se encuentran con sus contracciones y las formas de sus verbos, y los sustantivos derivados de un verbo entre los sustantivos del modelo de spaCy. Las palabras de una cadena las extrae el <a href="../../extractors/words/"><code>WordsExtractor</code></a> del español y no se lematizan, así que las formas de una palabra cuentan como palabras distintas, como en Advego; para calcular por lemas, pase un <code>WordsExtractor</code> con <code>use_lexemes=True</code> y <code>lowercase=True</code>. La tabla de <code>print_stats</code> toma las descripciones de <code>ests.constants.STYLE_STATS_DESC</code>.</p>
-<p>Los sustantivos deverbales necesitan las categorías gramaticales y los lemas: un <code>Doc</code> da su propia anotación, también cuando un extractor toma su texto, y una cadena se analiza con <a href="../../installation/#model"><code>es_core_news_sm</code></a> o con el pipeline pasado en <code>nlp</code> la primera vez que se lee <code>verbal_nouns</code> o <a href="#methods"><code>markers()</code></a>; las demás métricas de una cadena no necesitan modelo. Una cadena más larga que el <code>max_length</code> del pipeline se analiza en partes de oraciones enteras. Además de las excepciones anteriores, un pipeline que no es un <code>Language</code> de spaCy lanza <code>SourceTypeError</code>; leer <code>verbal_nouns</code> o <code>markers()</code> lanza <code>SourceError</code> para un <code>Doc</code> sin las categorías gramaticales o los lemas y para una cadena con una oración más larga que el <code>max_length</code> del pipeline.</p>
+<p>La clase extiende el <code>StyleStats</code> del núcleo <a href="https://sergeyshk.github.io/anyTS/stats/style_stats/">anyTS</a> con los ganchos del español, descritos en las tarjetas de las métricas: las palabras vacías, las locuciones prepositivas, las expresiones parentéticas y los clichés contra los que advierten las guías de lenguaje claro en español, que se encuentran con sus contracciones y las formas de sus verbos, y los sustantivos derivados de un verbo entre los sustantivos. Las palabras de una cadena las extrae el <a href="../../extractors/words/"><code>WordsExtractor</code></a> del español y no se lematizan, así que las formas de una palabra cuentan como palabras distintas, como en Advego; para calcular por lemas, pase un <code>WordsExtractor</code> con <code>use_lexemes=True</code> y <code>lowercase=True</code>. La tabla de <code>print_stats</code> toma las descripciones de <code>ests.constants.STYLE_STATS_DESC</code>.</p>
+<p>Los sustantivos deverbales necesitan las categorías gramaticales y los lemas: un <code>Doc</code> da su propia anotación, también cuando un extractor toma su texto, y una cadena recibe los de <a href="https://github.com/SergeyShk/esMorph">esMorph</a> en el contexto de sus oraciones la primera vez que se lee <code>verbal_nouns</code> o <a href="#methods"><code>markers()</code></a>; las demás métricas de una cadena no necesitan análisis. Además de las excepciones anteriores, leer <code>verbal_nouns</code> o <code>markers()</code> lanza <code>SourceError</code> para un <code>Doc</code> sin las categorías gramaticales o los lemas.</p>
 <p>Los ejemplos de esta página toman un aviso escrito en estilo administrativo:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Código</label><label for="__tabbed_1_2">Resultado</label></div>
 <div class="tabbed-content">
@@ -2294,7 +2294,7 @@ Academic nausea (%)                       |  17.86
 Water content (%)                         |  57.14
 Spam score (%)                            |  37.50
 Naturalness by Zipf's law (%)             |  53.57
-Verbal nouns (% of nouns)                 |  47.06
+Verbal nouns (% of nouns)                 |  50.00
 Compound prepositions (per 100 words)     |   5.36
 Parenthetical expressions (per 100 words) |   1.79
 Officialese clichés (per 100 words)       |   8.93
@@ -2344,12 +2344,6 @@ Officialese clichés (per 100 words)       |   8.93
 <td style="text-align: left;">Clichés; <code>OFFICIALESE_CLICHES</code> si no se dan</td>
 </tr>
 <tr>
-<td style="text-align: left;"><code>nlp</code></td>
-<td style="text-align: left;"><code>Language</code></td>
-<td style="text-align: left;"><code>None</code></td>
-<td style="text-align: left;">Pipeline de spaCy que analiza una cadena para los sustantivos deverbales; el modelo <code>es_core_news_sm</code> de <code>ests.utils.get_nlp</code> si no se da</td>
-</tr>
-<tr>
 <td style="text-align: left;"><code>nausea_stopwords</code></td>
 <td style="text-align: left;"><code>list[str]</code> / <code>set[str]</code></td>
 <td style="text-align: left;"><code>None</code></td>
@@ -2386,7 +2380,6 @@ Officialese clichés (per 100 words)       |   8.93
 </tbody>
 </table>
 <p>Las métricas son propiedades que se calculan en cada acceso.</p>
-<p>El pipeline del parámetro <code>nlp</code> se guarda en el atributo <code>nlp</code>, <code>None</code> si no se da.</p>
 <h2 id="metricas">Métricas<a class="headerlink" href="#metricas" title="Permanent link">&para;</a></h2>
 <!-- core: stats/style_stats.md:StyleStats-metrics 16cf262 -->
 <p><code>get_stats</code> da todas las métricas. Una métrica se calcula con la función de su tarjeta sobre <code>words</code> o <code>forms</code> con los ganchos de la clase.</p>
@@ -2721,7 +2714,7 @@ Officialese clichés (per 100 words)       |   8.93
 </ul>
 <div class="signature highlight"><pre><span></span><code><span class="n">noun_lemmas</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 </code></pre></div>
-<p>Los lemas de los tokens de un <code>Doc</code> etiquetados <code>NOUN</code>. <code>StyleStats</code> toma así los sustantivos de un <code>Doc</code>, y los de una cadena, de su análisis con el pipeline de <code>nlp</code> o de <code>get_nlp</code>, que se ejecuta sin el analizador sintáctico ni las entidades nombradas.</p>
+<p>Los lemas de los tokens de un <code>Doc</code> etiquetados <code>NOUN</code>. <code>StyleStats</code> toma así los sustantivos de un <code>Doc</code>, y los de una cadena, de los análisis de esMorph en el contexto de sus oraciones.</p>
 <table>
 <thead>
 <tr>
@@ -2803,7 +2796,7 @@ Officialese clichés (per 100 words)       |   8.93
 </ul>
 <div class="signature highlight"><pre><span></span><code><span class="n">expand_phrases</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">phrases</span><span class="p">)</span>
 </code></pre></div>
-<p>Las expresiones escritas en las formas de un texto, cada una con la expresión de la lista que escribe. Una expresión que termina en <code>a</code> o <code>de</code> también recibe la contracción con el artículo (<code>a efectos del</code>, <code>conforme al</code>), y una expresión cuya primera palabra es un infinitivo recibe las formas del texto con ese lema (<code>proceder a</code> - <code>procedió a</code>, <code>ser de aplicación</code> - <code>es de aplicación</code>). El lema es el de simplemma, y un lema pronominal vale por su verbo (<code>llévese</code> - <code>llevar</code>); las formas que simplemma no lematiza - algunos participios (<code>ha dado</code>, <code>ha hecho</code>) y el imperativo <code>dese</code> - las da <code>IRREGULAR_VERB_FORMS</code>. Las palabras que siguen al verbo descartan la lectura como sustantivo (<code>el hecho</code>, <code>el puesto</code>). Cuando dos expresiones dan las mismas palabras, una expresión escrita así gana a las formas de otra (<code>a efectos del</code> sigue siendo ella misma junto a <code>a efectos de</code>), y después la primera expresión de una lista, o de un conjunto en orden alfabético.</p>
+<p>Las expresiones escritas en las formas de un texto, cada una con la expresión de la lista que escribe. Una expresión que termina en <code>a</code> o <code>de</code> también recibe la contracción con el artículo (<code>a efectos del</code>, <code>conforme al</code>), y una expresión cuya primera palabra es un infinitivo recibe las formas del texto con ese lema (<code>proceder a</code> - <code>procedió a</code>, <code>ser de aplicación</code> - <code>es de aplicación</code>). El lema es cualquier lema de la forma como verbo o auxiliar en esMorph (<code>ha dado</code> - <code>dar</code>, <code>ha hecho</code> - <code>hacer</code>, <code>fue de aplicación</code> - <code>ser</code>), y un lema pronominal vale por su verbo (<code>llévese</code> - <code>llevar</code>); el imperativo de <code>dar</code> con <code>se</code> escrito sin tilde (<code>dese</code>, <code>dense</code>), que esMorph no lee como el verbo, lo da <code>IRREGULAR_VERB_FORMS</code>. Las palabras que siguen al verbo descartan la lectura como sustantivo (<code>el hecho</code>, <code>el puesto</code>). Cuando dos expresiones dan las mismas palabras, una expresión escrita así gana a las formas de otra (<code>a efectos del</code> sigue siendo ella misma junto a <code>a efectos de</code>), y después la primera expresión de una lista, o de un conjunto en orden alfabético.</p>
 <table>
 <thead>
 <tr>
@@ -3079,7 +3072,7 @@ True
 <p><code>keyword_density(*keywords)</code> da la densidad de las palabras y frases clave en porcentaje (<code>calc_keyword_density</code> con el <code>normalize</code> de la clase), y <code>nausea_words()</code>, las palabras significativas más frecuentes de la náusea académica con sus apariciones (<code>find_nausea_words</code>).</p>
 <!-- core: stats/style_stats.md:StyleStats-markers 18537e6 -->
 <p><code>markers()</code> devuelve los marcadores del estilo burocrático encontrados por métrica - <code>verbal_nouns</code>, <code>compound_prepositions</code>, <code>parentheticals</code>, <code>cliches</code> - tal como los escriben las formas, en el orden del texto.</p>
-<p>Una expresión se encuentra con sus contracciones y las formas de su verbo (<a href="#phrase_density"><code>expand_phrases</code></a>). Los sustantivos deverbales necesitan las categorías gramaticales y los lemas, como su métrica, así que una cadena se analiza con el modelo y un <code>Doc</code> sin ellos lanza <code>SourceError</code>.</p>
+<p>Una expresión se encuentra con sus contracciones y las formas de su verbo (<a href="#phrase_density"><code>expand_phrases</code></a>). Los sustantivos deverbales necesitan las categorías gramaticales y los lemas, como su métrica, así que una cadena recibe los de esMorph y un <code>Doc</code> sin ellos lanza <code>SourceError</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
