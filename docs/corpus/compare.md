@@ -107,7 +107,7 @@ Raises:
 text_features(text, nlp=None)
 ```
 
-Returns 164 features of a text prefixed by their source, 209 with a pipeline that has a parser; an undefined feature is `nan`.
+Returns 166 features of a text prefixed by their source, 211 with a pipeline that has a parser; an undefined feature is `nan`.
 
 | Prefix | Features | Source |
 | :----- | :------- | :----- |

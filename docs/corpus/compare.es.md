@@ -107,7 +107,7 @@ Excepciones:
 text_features(text, nlp=None)
 ```
 
-Devuelve 164 rasgos de un texto con un prefijo según su fuente, 209 con un pipeline que tiene analizador sintáctico; un rasgo indefinido es `nan`.
+Devuelve 166 rasgos de un texto con un prefijo según su fuente, 211 con un pipeline que tiene analizador sintáctico; un rasgo indefinido es `nan`.
 
 | Prefijo | Rasgos | Fuente |
 | :------ | :----- | :----- |

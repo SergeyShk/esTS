@@ -105,10 +105,13 @@ The shares of the forms that mark the register of a Spanish text, each of its ow
 | :----- | :---- | :--- |
 | `p_indicative`, `p_subjunctive`, `p_conditional`, `p_imperative` | of the indicative, subjunctive, conditional and imperative mood | finite forms |
 | `p_infinitive`, `p_gerund`, `p_participle` | of infinitives, gerunds and participles | verb forms |
+| `p_enclitics`, `p_proclitics` | of the forms with enclitic pronouns and of those after proclitic ones | verb forms |
 | `p_ser` | of `ser` | copulas `ser` and `estar` |
 | `p_mente_adverbs` | of the adverbs in `-mente` | adverbs |
 
 The first four markers share the base of the finite forms and sum to one unless the model leaves a finite form without a mood or gives it several (`Mood=Ind,Sub`, which counts in the share of each; `es_core_news_sm` gives none). The next three share the base of all the verb forms of verbs and auxiliaries: a participle that the model annotates as an adjective (`la casa pintada`) is out of the base, the ones of the compound tenses and the passive (`he leído`, `fue escrito`) are in.
+
+The clitic pronouns (`ENCLITICS`) go after the infinitive, the gerund and the imperative (`dámelo`, `escribirle`, `diciéndole`) and before the other forms (`se lo dijo`, `me ha visto`), and the old literary language puts them after a finite form too (`pasábanse`, `díjole`), so `p_enclitics` measures that register and the orders of a dialogue. A form has enclitics when its token is, by the first analysis of esMorph as a verb, a verb with pronouns after it (`ests.morph_stats.has_enclitics`); the imperfect subjunctive in `-se` (`hablase`) is one word. A form comes after proclitics when the word before it is a clitic pronoun of a token of its own (`ests.morph_stats.has_proclitics`), so in a compound tense the pronouns count for the auxiliary (`se ha ido`). In the corpus of literature the medians of `p_enclitics` are 8.7% of the verb forms in prose, 8.0% in drama, 7.7% in journalism and 3.9% in verse, those of `p_proclitics` 18%, 19%, 14% and 12%.
 
 The base of `p_ser` is the copular uses alone, read from the morphology: `ser` before a participle and `estar` before a gerund, with adverbs and pronouns between them, are the auxiliaries of the passive and of the progressive (`fue escrito`, `es financiado`, `está cantando`) and are left out, while `es alta`, `está cansada` and `lo importante es que vengas` count. The rule needs no parse, so a text and a `Doc` without a parser have the marker too; a participle that the tagger reads as an adjective (`fue muy bien recibido`) leaves its `ser` a copula.
 
@@ -128,6 +131,8 @@ The base of `p_ser` is the copular uses alone, read from the morphology: `ser` b
      'p_infinitive': 0.0,
      'p_gerund': 0.0,
      'p_participle': 0.0,
+     'p_enclitics': 0.0,
+     'p_proclitics': 0.3333333333333333,
      'p_ser': nan,
      'p_mente_adverbs': 0.0}
     ```
@@ -182,17 +187,19 @@ In esTS the markers are the [markers of Spanish](#markers).
 === "Result"
 
     ```
-                   Marker               |  Value
-    -----------------------------------------------
-    Indicative among the finite forms   |   0.33
-    Subjunctive among the finite forms  |   0.33
-    Conditional among the finite forms  |   0.33
-    Imperative among the finite forms   |   0.00
-    Infinitive among the verb forms     |   0.00
-    Gerund among the verb forms         |   0.00
-    Participle among the verb forms     |   0.00
-    ser among the copulas ser and estar |   nan
-    Adverbs in -mente among the adverbs |   0.00
+                       Marker                   |  Value
+    -------------------------------------------------------
+    Indicative among the finite forms           |   0.33
+    Subjunctive among the finite forms          |   0.33
+    Conditional among the finite forms          |   0.33
+    Imperative among the finite forms           |   0.00
+    Infinitive among the verb forms             |   0.00
+    Gerund among the verb forms                 |   0.00
+    Participle among the verb forms             |   0.00
+    Forms with enclitics among the verb forms   |   0.00
+    Forms after proclitics among the verb forms |   0.33
+    ser among the copulas ser and estar         |   nan
+    Adverbs in -mente among the adverbs         |   0.00
     ```
 
 --8<-- "stats/morph_stats.md:MorphWord"
