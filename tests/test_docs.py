@@ -162,13 +162,27 @@ def page_target(page: Path, name: str) -> object:
     return next(iter(targets.values())) if len(targets) == 1 else None
 
 
+class FloatChecker(doctest.OutputChecker):
+    """Long floats compared to ten decimals: their last digits differ between versions of numpy"""
+
+    FLOAT = re.compile(r"-?\d+\.\d{11,}")
+
+    def check_output(self, want: str, got: str, optionflags: int) -> bool:
+        def short(text: str) -> str:
+            return self.FLOAT.sub(lambda match: f"{float(match[0]):.10f}", text)
+
+        return super().check_output(short(want), short(got), optionflags)
+
+
 @pytest.mark.parametrize("readme", ["README.md", "README.es.md"])
 def test_readme_examples(readme):
     """The examples of a README print what they give; a download is left out, and a block that
     needs a dataset not downloaded is skipped"""
     text = (ROOT / readme).read_text(encoding="utf-8")
     parser = doctest.DocTestParser()
-    runner = doctest.DocTestRunner(optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS)
+    runner = doctest.DocTestRunner(
+        FloatChecker(), optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS
+    )
     globs: dict = {}
     failures = []
     for block in re.finditer(r"```python\n(.*?)```", text, re.DOTALL):
