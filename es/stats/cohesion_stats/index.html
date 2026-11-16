@@ -2303,7 +2303,7 @@
 <h1 id="estadisticas-de-cohesion">Estadísticas de cohesión<a class="headerlink" href="#estadisticas-de-cohesion" title="Permanent link">&para;</a></h1>
 <div class="signature highlight"><pre><span></span><code><span class="n">CohesionStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">connectors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">blank_lines</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
-<p>Las estadísticas de cohesión de un texto a la manera de <a href="https://doi.org/10.1017/CBO9780511894664">Coh-Metrix</a> y de su adaptación española <a href="https://aclanthology.org/L16-1745/">Coh-Metrix-Esp</a>: la repetición entre las oraciones, la información dada, la cohesión temporal y los conectores de un diccionario. Las oraciones se comparan por lemas. La fuente de datos es un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>, y tiene que estar anotada: una cadena se analiza con el pipeline de <a href="../../components/#load_pipeline"><code>load_pipeline</code></a> - <a href="../../installation/#model"><code>es_core_news_sm</code></a> con los análisis de esMorph - o con el pipeline indicado en <code>nlp</code>, sin las entidades nombradas, y un <code>Doc</code> debe llevar las categorías gramaticales y los lemas, que vienen de <code>esmorph</code> de <code>load_pipeline</code> o de un <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>) y de un <code>lemmatizer</code>. Los conectores siguen las etiquetas del <code>Doc</code>: en un pipeline propio, <code>es_core_news_sm</code> lee algunos marcadores que abren una oración como nombres propios (<code>Primeramente</code>, <code>Conque</code>), que entonces no cuentan, y da a algunos verbos ante <code>si</code> un lema que no es verbo (<code>Veamos si</code> - <code>vear</code>), de modo que <code>si</code> cuenta como condición.</p>
+<p>Las estadísticas de cohesión de un texto a la manera de <a href="https://doi.org/10.1017/CBO9780511894664">Coh-Metrix</a> y de su adaptación española <a href="https://aclanthology.org/L16-1745/">Coh-Metrix-Esp</a>: la repetición entre las oraciones, la información dada, la cohesión temporal y los conectores de un diccionario. Las oraciones se comparan por lemas. Las palabras de un conector de varias palabras (<em>por lo tanto</em>, <em>es decir</em>) cuentan solo como el conector: no son sustantivos, pronombres ni palabras con contenido, tampoco sus anáforas (<em>eso</em> de <em>por eso</em>), y no dan tiempo, modo ni aspecto. La fuente de datos es un texto o un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>, y tiene que estar anotada: una cadena se analiza con el pipeline de <a href="../../components/#load_pipeline"><code>load_pipeline</code></a> - <a href="../../installation/#model"><code>es_core_news_sm</code></a> con los análisis de esMorph - o con el pipeline indicado en <code>nlp</code>, sin las entidades nombradas, y un <code>Doc</code> debe llevar las categorías gramaticales y los lemas, que vienen de <code>esmorph</code> de <code>load_pipeline</code> o de un <code>morphologizer</code> (o de un <code>tagger</code> con un <code>attribute_ruler</code>) y de un <code>lemmatizer</code>. Los conectores siguen las etiquetas del <code>Doc</code>: en un pipeline propio, <code>es_core_news_sm</code> lee algunos marcadores que abren una oración como nombres propios (<code>Primeramente</code>, <code>Conque</code>), que entonces no cuentan, y da a algunos verbos ante <code>si</code> un lema que no es verbo (<code>Veamos si</code> - <code>vear</code>), de modo que <code>si</code> cuenta como condición.</p>
 <p>Excepciones:</p>
 <ul>
 <li><code>SourceTypeError</code> - una fuente que no es ni una cadena, ni un <code>Doc</code> ni un <code>Document</code>, un extractor de otra clase, un pipeline en <code>nlp</code> que no es un <code>Language</code> de spaCy, unos conectores que no son un diccionario de locuciones y pares de cadenas;</li>
@@ -2371,21 +2371,21 @@ Argument overlap in adjacent sentences                             |   0.33
 Argument overlap in all pairs of sentences                         |   0.50
 Content word overlap in adjacent sentences                         |   0.33
 Content word overlap in all pairs of sentences                     |   0.50
-Share of shared content words in adjacent sentences                |   0.08
-Share of shared content words in all pairs of sentences            |   0.13
-Share of the nouns of a sentence repeated in the next two          |   0.60
-Share of the arguments of a sentence repeated in the next two      |   0.60
-Share of the content words of a sentence repeated in the next two  |   0.38
+Share of shared content words in adjacent sentences                |   0.10
+Share of shared content words in all pairs of sentences            |   0.15
+Share of the nouns of a sentence repeated in the next two          |   0.75
+Share of the arguments of a sentence repeated in the next two      |   0.75
+Share of the content words of a sentence repeated in the next two  |   0.43
 Share of the nouns of a paragraph repeated in the next one         |   nan
 Share of the arguments of a paragraph repeated in the next one     |   nan
 Share of the content words of a paragraph repeated in the next one |   nan
-Share of pronouns                                                  |   0.07
-Ratio of pronouns to nouns                                         |   0.25
-Share of demonstratives                                            |   0.03
-Share of content words seen before                                 |   0.20
-Repetition of the tense in adjacent sentences                      |   0.67
+Share of pronouns                                                  |   0.00
+Ratio of pronouns to nouns                                         |   0.00
+Share of demonstratives                                            |   0.00
+Share of content words seen before                                 |   0.23
+Repetition of the tense in adjacent sentences                      |   0.00
 Repetition of the mood in adjacent sentences                       |   1.00
-Temporal cohesion                                                  |   0.83
+Temporal cohesion                                                  |   0.50
 Connectors per 1000 words                                          |  103.45
 Connectors linking a sentence to the ones before per 1000 words    |  103.45
 Connectors linking the parts of a sentence per 1000 words          |   0.00
@@ -2510,7 +2510,7 @@ Secondary connectors per 1000 words                                |  103.45
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>('sin', 'embargo', 'el', 'informe', 'no', 'resolver', 'el', 'problema')
-(8, 2, 15, 3)
+(7, 0, 13, 3)
 (Connector(sent=1, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary'),
  Connector(sent=2, start=0, end=2, text='es decir', cls='reformulative', kind='secondary'),
  Connector(sent=3, start=0, end=3, text='por lo tanto', cls='causal', kind='secondary'))
@@ -2869,7 +2869,7 @@ Secondary connectors per 1000 words                                |  103.45
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Aviso</p>
-<p>Las palabras de un marcador se cuentan como cualquier otra: el sustantivo <code>embargo</code> de <code>sin embargo</code> es un sustantivo y una palabra con contenido de su oración, así que un texto que repite un marcador gana algo de repetición por ello.</p>
+<p>Un marcador de una palabra se cuenta como cualquier otra palabra: el adverbio <code>además</code> es una palabra con contenido de su oración, así que un texto que lo repite gana algo de repetición por ello. Las palabras de un marcador de varias palabras cuentan solo como el marcador.</p>
 </div>
 </div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
@@ -2888,21 +2888,21 @@ Secondary connectors per 1000 words                                |  103.45
  'argument_overlap_all': 0.5,
  'content_overlap_adjacent': 0.3333333333333333,
  'content_overlap_all': 0.5,
- 'content_overlap_prop_adjacent': 0.08333333333333333,
- 'content_overlap_prop_all': 0.13095238095238093,
- 'noun_overlap_2_sent': 0.6,
- 'argument_overlap_2_sent': 0.6,
- 'content_overlap_2_sent': 0.375,
+ 'content_overlap_prop_adjacent': 0.09523809523809523,
+ 'content_overlap_prop_all': 0.15079365079365079,
+ 'noun_overlap_2_sent': 0.75,
+ 'argument_overlap_2_sent': 0.75,
+ 'content_overlap_2_sent': 0.42857142857142855,
  'noun_overlap_para': nan,
  'argument_overlap_para': nan,
  'content_overlap_para': nan,
- 'p_pronouns': 0.06896551724137931,
- 'pronoun_noun_ratio': 0.25,
- 'p_demonstratives': 0.034482758620689655,
- 'p_given': 0.2,
- 'tense_repetition': 0.6666666666666666,
+ 'p_pronouns': 0.0,
+ 'pronoun_noun_ratio': 0.0,
+ 'p_demonstratives': 0.0,
+ 'p_given': 0.23076923076923078,
+ 'tense_repetition': 0.0,
  'mood_repetition': 1.0,
- 'temporal_cohesion': 0.8333333333333333,
+ 'temporal_cohesion': 0.5,
  'connectors': 103.44827586206898,
  'connectors_inter': 103.44827586206898,
  'connectors_intra': 0.0,
