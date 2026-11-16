@@ -4,7 +4,7 @@
 CohesionStats(source, sents_extractor=None, connectors=None, nlp=None, blank_lines=False)
 ```
 
-The cohesion statistics of a text in the manner of [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) and of its Spanish adaptation [Coh-Metrix-Esp](https://aclanthology.org/L16-1745/): the overlap of the sentences, the givenness, the temporal cohesion and the connectors of a dictionary. The sentences are compared by lemmas. The data source is a text or a `Doc` object of [spaCy](https://github.com/explosion/spaCy), and it has to be annotated: a string is parsed with the pipeline of [`load_pipeline`](../components.md#load_pipeline) - [`es_core_news_sm`](../installation.md#model) with the analyses of esMorph - or with the pipeline passed in `nlp`, without the named entities, and a `Doc` must carry the parts of speech and the lemmas, which come from `esmorph` of `load_pipeline` or from a `morphologizer` (or a `tagger` with an `attribute_ruler`) and a `lemmatizer`. The connectors follow the tags of the `Doc`: in a pipeline of one's own, `es_core_news_sm` reads some markers opening a sentence as proper nouns (`Primeramente`, `Conque`), which then do not count, and gives some verbs before `si` a lemma of no verb (`Veamos si` - `vear`), so that `si` counts as a condition.
+The cohesion statistics of a text in the manner of [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) and of its Spanish adaptation [Coh-Metrix-Esp](https://aclanthology.org/L16-1745/): the overlap of the sentences, the givenness, the temporal cohesion and the connectors of a dictionary. The sentences are compared by lemmas. The words of a connector of several words (*por lo tanto*, *es decir*) count as the connector alone: they are no nouns, pronouns or content words, its anaphors included (*eso* of *por eso*), and give no tense, mood or aspect. The data source is a text or a `Doc` object of [spaCy](https://github.com/explosion/spaCy), and it has to be annotated: a string is parsed with the pipeline of [`load_pipeline`](../components.md#load_pipeline) - [`es_core_news_sm`](../installation.md#model) with the analyses of esMorph - or with the pipeline passed in `nlp`, without the named entities, and a `Doc` must carry the parts of speech and the lemmas, which come from `esmorph` of `load_pipeline` or from a `morphologizer` (or a `tagger` with an `attribute_ruler`) and a `lemmatizer`. The connectors follow the tags of the `Doc`: in a pipeline of one's own, `es_core_news_sm` reads some markers opening a sentence as proper nouns (`Primeramente`, `Conque`), which then do not count, and gives some verbs before `si` a lemma of no verb (`Veamos si` - `vear`), so that `si` counts as a condition.
 
 Raises:
 
@@ -53,21 +53,21 @@ The words are classified by the Universal Dependencies annotation:
     Argument overlap in all pairs of sentences                         |   0.50
     Content word overlap in adjacent sentences                         |   0.33
     Content word overlap in all pairs of sentences                     |   0.50
-    Share of shared content words in adjacent sentences                |   0.08
-    Share of shared content words in all pairs of sentences            |   0.13
-    Share of the nouns of a sentence repeated in the next two          |   0.60
-    Share of the arguments of a sentence repeated in the next two      |   0.60
-    Share of the content words of a sentence repeated in the next two  |   0.38
+    Share of shared content words in adjacent sentences                |   0.10
+    Share of shared content words in all pairs of sentences            |   0.15
+    Share of the nouns of a sentence repeated in the next two          |   0.75
+    Share of the arguments of a sentence repeated in the next two      |   0.75
+    Share of the content words of a sentence repeated in the next two  |   0.43
     Share of the nouns of a paragraph repeated in the next one         |   nan
     Share of the arguments of a paragraph repeated in the next one     |   nan
     Share of the content words of a paragraph repeated in the next one |   nan
-    Share of pronouns                                                  |   0.07
-    Ratio of pronouns to nouns                                         |   0.25
-    Share of demonstratives                                            |   0.03
-    Share of content words seen before                                 |   0.20
-    Repetition of the tense in adjacent sentences                      |   0.67
+    Share of pronouns                                                  |   0.00
+    Ratio of pronouns to nouns                                         |   0.00
+    Share of demonstratives                                            |   0.00
+    Share of content words seen before                                 |   0.23
+    Repetition of the tense in adjacent sentences                      |   0.00
     Repetition of the mood in adjacent sentences                       |   1.00
-    Temporal cohesion                                                  |   0.83
+    Temporal cohesion                                                  |   0.50
     Connectors per 1000 words                                          |  103.45
     Connectors linking a sentence to the ones before per 1000 words    |  103.45
     Connectors linking the parts of a sentence per 1000 words          |   0.00
@@ -111,7 +111,7 @@ The extractor given is kept in the attribute `sents_extractor`, `None` without i
 
     ```
     ('sin', 'embargo', 'el', 'informe', 'no', 'resolver', 'el', 'problema')
-    (8, 2, 15, 3)
+    (7, 0, 13, 3)
     (Connector(sent=1, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary'),
      Connector(sent=2, start=0, end=2, text='es decir', cls='reformulative', kind='secondary'),
      Connector(sent=3, start=0, end=3, text='por lo tanto', cls='causal', kind='secondary'))
@@ -333,21 +333,21 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
      'argument_overlap_all': 0.5,
      'content_overlap_adjacent': 0.3333333333333333,
      'content_overlap_all': 0.5,
-     'content_overlap_prop_adjacent': 0.08333333333333333,
-     'content_overlap_prop_all': 0.13095238095238093,
-     'noun_overlap_2_sent': 0.6,
-     'argument_overlap_2_sent': 0.6,
-     'content_overlap_2_sent': 0.375,
+     'content_overlap_prop_adjacent': 0.09523809523809523,
+     'content_overlap_prop_all': 0.15079365079365079,
+     'noun_overlap_2_sent': 0.75,
+     'argument_overlap_2_sent': 0.75,
+     'content_overlap_2_sent': 0.42857142857142855,
      'noun_overlap_para': nan,
      'argument_overlap_para': nan,
      'content_overlap_para': nan,
-     'p_pronouns': 0.06896551724137931,
-     'pronoun_noun_ratio': 0.25,
-     'p_demonstratives': 0.034482758620689655,
-     'p_given': 0.2,
-     'tense_repetition': 0.6666666666666666,
+     'p_pronouns': 0.0,
+     'pronoun_noun_ratio': 0.0,
+     'p_demonstratives': 0.0,
+     'p_given': 0.23076923076923078,
+     'tense_repetition': 0.0,
      'mood_repetition': 1.0,
-     'temporal_cohesion': 0.8333333333333333,
+     'temporal_cohesion': 0.5,
      'connectors': 103.44827586206898,
      'connectors_inter': 103.44827586206898,
      'connectors_intra': 0.0,

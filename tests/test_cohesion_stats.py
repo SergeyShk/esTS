@@ -48,8 +48,9 @@ def test_words_and_lemmas(cs):
 def test_counts(cs):
     assert cs.n_sents == 3
     assert cs.n_words == sum(len(sent) for sent in cs.words)
-    assert cs.n_nouns == 6
-    assert cs.n_content_words == 9
+    # embargo of the connector Sin embargo is no noun
+    assert cs.n_nouns == 5
+    assert cs.n_content_words == 8
 
 
 def test_get_stats(cs):
