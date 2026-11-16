@@ -418,7 +418,7 @@ La cohesión referencial a la manera de Coh-Metrix y de su adaptación española
 (3, 23)
 
 >>> cs.noun_overlap_adjacent, round(cs.p_given, 3)
-(0.5, 0.182)
+(0.5, 0.2)
 
 >>> cs.c_connectors
 {'por lo tanto': 1, 'sin embargo': 1}

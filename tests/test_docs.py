@@ -8,6 +8,7 @@ the SHA-1 of the section it was translated from, so a changed section fails the 
 until its translation is brought up to date
 """
 
+import doctest
 import hashlib
 import importlib
 import inspect
@@ -22,7 +23,8 @@ import pytest
 import ests
 import ests.constants
 
-DOCS = Path(__file__).parent.parent / "docs"
+ROOT = Path(__file__).parent.parent
+DOCS = ROOT / "docs"
 CORE = DOCS / "core"
 PAGES = sorted(
     path
@@ -158,6 +160,29 @@ def page_target(page: Path, name: str) -> object:
         return vars(module)[name]
     targets = {id(vars(m)[name]): vars(m)[name] for m in MODULES if name in vars(m)}
     return next(iter(targets.values())) if len(targets) == 1 else None
+
+
+@pytest.mark.parametrize("readme", ["README.md", "README.es.md"])
+def test_readme_examples(readme):
+    """The examples of a README print what they give; a download is left out, and a block that
+    needs a dataset not downloaded is skipped"""
+    text = (ROOT / readme).read_text(encoding="utf-8")
+    parser = doctest.DocTestParser()
+    runner = doctest.DocTestRunner(optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS)
+    globs: dict = {}
+    failures = []
+    for block in re.finditer(r"```python\n(.*?)```", text, re.DOTALL):
+        line = text.count("\n", 0, block.start(1))
+        test = parser.get_doctest(block[1], globs, readme, readme, line)
+        test.examples = [
+            example for example in test.examples if ".download(" not in example.source
+        ]
+        report: list[str] = []
+        if runner.run(test, out=report.append, clear_globs=False).failed and not any(
+            "DatasetNotFoundError" in line for line in report
+        ):
+            failures.append("".join(report))
+    assert not failures, "\n".join(failures)
 
 
 def test_signatures_match_the_code():
