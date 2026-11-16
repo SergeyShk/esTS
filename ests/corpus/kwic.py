@@ -9,7 +9,6 @@ from anyts.corpus.kwic import (
     format_kwic as format_kwic,
     print_kwic as print_kwic,
 )
-from anyts.utils import check_bool
 
 from ..utils import _annotate_text, get_morph_analyzer, iter_text_sents, iter_text_words, lemmatize
 
@@ -70,7 +69,6 @@ def kwic(
         >>> [line.keyword for line in kwic(text, "gato", by_lemma=True)]
         ['gato', 'gatos']
     """
-    check_bool(ignore_case, "folding of the case")
     if by_lemma is True and isinstance(source, str):
         source = _annotate_text(source)
     return anyts.corpus.kwic(
@@ -78,32 +76,19 @@ def kwic(
         keyword,
         window,
         by_lemma,
-        True,
+        ignore_case,
         tokenize=iter_text_words,
         lemmatize=_lemmas,
-        fold=_fold if ignore_case or by_lemma else _strip_period,
         sentenize=iter_text_sents,
     )
 
 
-def _strip_period(word: str) -> str:
-    """A word without the period of an abbreviation"""
-    return word.removesuffix(".")
-
-
-def _fold(word: str) -> str:
-    """A word in lower case without the period of an abbreviation"""
-    return word.lower().removesuffix(".")
-
-
 def _lemmas(word: str, words: Sequence[Word]) -> str | tuple[str, ...]:
     """
-    Lemmas of a word without the period of an abbreviation: lemmatize with the part of
-    speech of a token of one word, and the lemmas of all the analyses for a word of the
-    keyword
+    Lemmas of a word: lemmatize with the part of speech of a token of one word, and the
+    lemmas of all the analyses for a word of the keyword
     """
-    form = word.removesuffix(".")
     if not words:
-        analyses = get_morph_analyzer().analyze(form)
-        return tuple(dict.fromkeys(analysis.lemma for analysis in analyses)) or (form,)
-    return lemmatize(form, (words[0].upos or "") if len(words) == 1 else "")
+        analyses = get_morph_analyzer().analyze(word)
+        return tuple(dict.fromkeys(analysis.lemma for analysis in analyses)) or (word,)
+    return lemmatize(word, (words[0].upos or "") if len(words) == 1 else "")

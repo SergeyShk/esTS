@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.11"
 resolution-markers = [
     "python_full_version >= '3.15' and sys_platform == 'win32'",
@@ -81,7 +81,7 @@ wheels = [
 
 [[package]]
 name = "anyts"
-version = "0.5.0"
+version = "0.5.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyseg" },
@@ -94,9 +94,9 @@ dependencies = [
     { name = "scipy", version = "1.18.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "spacy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/5f/26/75c42e025b568eb149affa02186cc6f79c0892a41daaff932be09fca24bf/anyts-0.5.0.tar.gz", hash = "sha256:7b942defdcca3a473f992a555c87496acf2a58d63ff7ae248409667c3c99f568", size = 193525, upload-time = "2026-11-15T04:48:08.5Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/bc/3a/04468638d56676262e0efc258f01e84b542b524486ea5bd4575ba8a42bd5/anyts-0.5.1.tar.gz", hash = "sha256:07b0b795d71fac6a5133f405d5e65d29e2a8676bf057223113b04477bafc4fdf", size = 194018, upload-time = "2026-11-15T23:46:41.725Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c0/61/a7f8c2b6153831e4dfa5e35258cdeaa70fa613e76936f68bbaedcf48ccc0/anyts-0.5.0-py3-none-any.whl", hash = "sha256:abc182cb90c4164f018b6531d39866a86ea61c2cdcc2f2a924f72dc4fb3e2436", size = 216859, upload-time = "2026-11-15T04:48:07.238Z" },
+    { url = "https://files.pythonhosted.org/packages/ab/82/30bf92cc43448656da0642e1caac261a36cca809b3d1874c2d947806f098/anyts-0.5.1-py3-none-any.whl", hash = "sha256:6016e87bb9f675b945de3b05cd98a731be1241748e59bbfab347c1e343adfd41", size = 217393, upload-time = "2026-11-15T23:46:40.279Z" },
 ]
 
 [[package]]
@@ -718,7 +718,7 @@ resolution-markers = [
     "python_full_version < '3.12' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 dependencies = [
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" } },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/58/01/1253e6698a07380cd31a736d248a3f2a50a7c88779a1813da27503cadc2a/contourpy-1.3.3.tar.gz", hash = "sha256:083e12155b210502d0bca491432bb04d56dc3432f95a979b429f2848c3dbe880", size = 13466174, upload-time = "2025-07-26T12:03:12.549Z" }
 wheels = [
@@ -811,7 +811,7 @@ resolution-markers = [
     "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 dependencies = [
-    { name = "numpy", version = "2.5.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "numpy", version = "2.5.3", source = { registry = "https://pypi.org/simple" } },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/83/5a/a55177dd22553a277388e8a1b3220e92de91bacb28356cdc73caa240121d/contourpy-1.4.0.tar.gz", hash = "sha256:20156f5a1ac4f8ce02656e39a61e82164a3d359796dc8026f75b062783d500e1", size = 13323726, upload-time = "2026-09-11T19:05:05.808Z" }
 wheels = [
@@ -2805,7 +2805,7 @@ name = "pexpect"
 version = "4.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "ptyprocess", marker = "sys_platform != 'emscripten' and sys_platform != 'win32'" },
+    { name = "ptyprocess" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/42/92/cc564bf6381ff43ce1f4d06852fc19a2f11d180f23dc32d9588bee2f149d/pexpect-4.9.0.tar.gz", hash = "sha256:ee7d41123f3c9911050ea2c2dac107568dc43b2d3b0c7557a33212c398ead30f", size = 166450, upload-time = "2023-11-25T09:07:26.339Z" }
 wheels = [
@@ -3228,7 +3228,7 @@ wheels = [
 
 [[package]]
 name = "pyests"
-version = "0.10.0.dev6"
+version = "0.10.0.dev7"
 source = { editable = "." }
 dependencies = [
     { name = "anyseg" },
@@ -3282,7 +3282,7 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "anyseg", specifier = ">=0.3,<0.4" },
-    { name = "anyts", specifier = ">=0.5,<0.6" },
+    { name = "anyts", specifier = ">=0.5.1,<0.6" },
     { name = "esmorph", specifier = ">=0.3,<0.4" },
     { name = "graphviz", specifier = ">=0.20.3" },
     { name = "matplotlib", specifier = ">=3.8" },
@@ -3805,7 +3805,7 @@ resolution-markers = [
     "python_full_version < '3.12' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 dependencies = [
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" } },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/7a/97/5a3609c4f8d58b039179648e62dd220f89864f56f7357f5d4f45c29eb2cc/scipy-1.17.1.tar.gz", hash = "sha256:95d8e012d8cb8816c226aef832200b1d45109ed4464303e997c5b13122b297c0", size = 30573822, upload-time = "2026-02-23T00:26:24.851Z" }
 wheels = [
@@ -3887,7 +3887,7 @@ resolution-markers = [
     "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 dependencies = [
-    { name = "numpy", version = "2.5.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "numpy", version = "2.5.3", source = { registry = "https://pypi.org/simple" } },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/7e/74/66de6258867beb2ef08f35f9f2ac017a52cacd5081714d239ff1a442d458/scipy-1.18.1.tar.gz", hash = "sha256:52c4b7422442aba924d03ad4019852b08a92e64ea187b933135687bfe2747307", size = 30781235, upload-time = "2026-08-21T23:28:50.599Z" }
 wheels = [
