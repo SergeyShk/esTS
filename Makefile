@@ -96,7 +96,7 @@ notebooks: uv ## Run the notebooks of examples/ and write their output into the 
 	uv run nbstripout --keep-output --keep-count --extra-keys metadata.language_info.version $(EXAMPLES_PATH)/*.ipynb
 
 demo: deps ## Run the demo locally
-	uv run --with "gradio>=6.28,<7" python $(DEMO_PATH)/app.py
+	uv run --with "gradio>=6.31,<7" python $(DEMO_PATH)/app.py
 
 demo-login: uv ## Log in to Hugging Face to upload the demo
 	uvx --from huggingface_hub hf auth login

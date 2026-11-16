@@ -138,7 +138,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    Componentes de un pipeline de spaCy, de modo que el texto se anote y se mida en una sola pasada y las estadísticas viajen con el `Doc`
+    Componentes de un pipeline de spaCy, de modo que el texto se anote y se mida en una sola pasada y las estadísticas viajen con el `Doc`; `load_pipeline` da a un `Doc` los tokens, las oraciones y la morfología de su cadena
 
     [:octicons-arrow-right-24: Componentes de spaCy](components.md)
 

@@ -49,7 +49,7 @@ In `ests_lexical` a document of numbers alone passes untouched as well, and in `
 
 --8<-- "components.md:StatsComponent-serialization"
 
-A component reads the `Doc` of its pipeline as it is and leaves its tokenizer alone: the words and the sentences of the string API come with the pipeline of [`load_pipeline`](#load_pipeline), where `sí--dijo` is two words and a dash and a blank line ends a sentence.
+A component reads the `Doc` of its pipeline as it is and leaves its tokenizer alone: the words and the sentences of the string API come with the pipeline of [`load_pipeline`](#load_pipeline), where `sí--dijo` is two words and a dash, and a blank line ends a sentence.
 
 ## Components of the classes of statistics { #class-components }
 
@@ -379,7 +379,7 @@ Raises:
 load_pipeline(model='es_core_news_sm', exclude=(), **kwargs)
 ```
 
-A spaCy model with the tokenizer `anyseg.Tokenizer.v1` and the component `anyseg_sentencizer` first, both of [anySeg](https://github.com/SergeyShk/anySeg): the tokens and the sentences of a `Doc` are those the [extractors](extractors/sentences.md) give its text, so the statistics of a `Doc` and of the string count the same words and sentences. The component `esmorph` of [esMorph](https://github.com/SergeyShk/esMorph) comes after it in place of the `morphologizer` and the `lemmatizer` of the model: the parts of speech, the features and the lemmas of a `Doc` are those of a string, chosen in the context of the sentence, while the parser, whose trees do not depend on the parts of speech, and the other components are the model's. A contraction (`del`, `al`) or a verb with clitics (`dámelo`) is one token with the analysis of its first word (`de`, `dar`), its words in `token._.anyseg_words`; a string counts them as words of their own, so the morphological and lexical statistics of a `Doc` and of its string differ a little. A saved pipeline loads with `spacy.load(path)`, as the factories of anySeg and esMorph are entry points. `ests.utils.get_nlp`, which parses the strings of the syntactic and cohesion statistics and of `text_features`, loads it once per process and model.
+A spaCy model with the tokenizer `anyseg.Tokenizer.v1` and the component `anyseg_sentencizer` first, both of [anySeg](https://github.com/SergeyShk/anySeg): the tokens and the sentences of a `Doc` are those the [extractors](extractors/sentences.md) give its text, so the statistics of a `Doc` and of the string count the same words and sentences. The component `esmorph` of [esMorph](https://github.com/SergeyShk/esMorph) comes after it in place of the `morphologizer` and the `lemmatizer` of the model: the parts of speech, the features and the lemmas of a `Doc` are those of a string, chosen in the context of the sentence, while the parser, whose trees do not depend on the parts of speech, and the other components are the model's. A contraction (`del`, `al`) or a verb with clitics (`dámelo`) is one token with the analysis of its first word (`de`, `dar`), its words in `token._.anyseg_words`; a string counts them as words of their own, so the morphological and lexical statistics of a `Doc` and of its string differ, as a string reads each clitic as a pronoun and the article of `del` and `al` as a determiner of their own: on fragments of prose the median difference is 20-30 % for `Case=Acc`, `Case=Dat` and `Reflex`, 12 % for the pronouns, 9 % for the determiners and the perplexity, 5 % for the mean frequency. `text_features` reads the morphology of a `Doc`. A saved pipeline loads with `spacy.load(path)`, as the factories of anySeg and esMorph are entry points. `ests.utils.get_nlp`, which parses the strings of the syntactic and cohesion statistics and of `text_features`, loads it once per process and model.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
@@ -389,7 +389,7 @@ A spaCy model with the tokenizer `anyseg.Tokenizer.v1` and the component `anyseg
 
 Raises:
 
-- `DatasetNotFoundError` - a model that is not installed.
+- `DatasetNotFoundError` - a model that is not installed, or a path without a pipeline.
 
 A pipeline of one's own, such as `spacy.load("es_core_news_sm")`, keeps the tokenizer of spaCy: `sí--dijo` is one token there, and the parser joins a paragraph without a final mark to the next sentence across a blank line, so the statistics of its `Doc` differ from those of the string.
 

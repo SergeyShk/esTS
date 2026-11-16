@@ -68,19 +68,19 @@ Galdós frente a Unamuno, tres novelas de cada uno del [corpus de literatura](..
     diversity_msttr           0.819           0.769   0.047    0.059    2.927        0.979  0.989     0.0
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
     basic_letters_per_word          4.441           4.130   0.243    0.358    1.695        0.784  0.892     0.0
-    readability_lix                38.321          29.758   7.140   11.170    1.091        0.698  0.849     0.0
-    morph_p_gerund                  0.069           0.037   0.031    0.033    1.504        0.725  0.862     0.0
+    readability_lix                38.482          29.858   7.094   11.170    1.093        0.696  0.848     0.0
+    morph_p_gerund                  0.069           0.037   0.031    0.033    1.505        0.725  0.862     0.0
     morph_polarity_Neg              0.019           0.029  -0.011   -0.009   -1.136       -0.564  0.218     0.0
-    sents_mean                     16.393          11.494   3.105    6.818    0.843        0.616  0.808     0.0
+    sents_mean                     16.393          11.494   3.321    6.688    0.845        0.615  0.808     0.0
     punct_dash                     19.000          46.000 -39.000  -14.000   -1.287       -0.605  0.197     0.0
     punct_exclamation               9.000          24.000 -23.000   -2.000   -1.251       -0.637  0.181     0.0
     diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.675       -0.351  0.325     0.0
     {'n_Galdós': 155, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0.35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones. La cohesión también los distingue (`result.filter(like="cohesion_", axis=0)`): por cada 1000 palabras Unamuno abre con un conector más del triple de oraciones (`cohesion_connectors_inter`, 20 frente a 6) - unas 2.3 veces más por oración, ya que sus oraciones son más cortas - y repite más palabras con contenido de una oración en las dos siguientes (0.126 frente a 0.073). Parte de la cohesión sigue la longitud de las oraciones: la ρ de Spearman con `sents_mean` por ventanas es de 0.75 en Galdós y 0.74 en Unamuno para `cohesion_content_overlap_all`, la repetición binaria en todos los pares de oraciones, y de -0.49 y -0.61 para los conectores que abren una oración, mientras que la proporción de palabras con contenido repetidas en las dos oraciones siguientes no depende de ella (-0.05 y -0.09).
+Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0.35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones. La cohesión también los distingue (`result.filter(like="cohesion_", axis=0)`): por cada 1000 palabras Unamuno abre con un conector más del triple de oraciones (`cohesion_connectors_inter`, 20 frente a 6) - unas 2.3 veces más por oración, ya que sus oraciones son más cortas - y repite más palabras con contenido de una oración en las dos siguientes (0.125 frente a 0.072). Parte de la cohesión sigue la longitud de las oraciones: la ρ de Spearman con `sents_mean` por ventanas es de 0.75 en Galdós y 0.73 en Unamuno para `cohesion_content_overlap_all`, la repetición binaria en todos los pares de oraciones, y de -0.50 y -0.61 para los conectores que abren una oración, mientras que la proporción de palabras con contenido repetidas en las dos oraciones siguientes no depende de ella (-0.06 y -0.12).
 
-Los valores p toman las 272 ventanas de seis novelas por independientes (véase el [aviso](#statistics) de abajo), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 54 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.1 a 6.8 palabras, donde las ventanas solas darían de 4.0 a 6.2.
+Los valores p toman las 272 ventanas de seis novelas por independientes (véase el [aviso](#statistics) de abajo), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 56 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.3 a 6.7 palabras, donde las ventanas solas darían de 4.1 a 6.2.
 
 ## Parámetros
 
@@ -122,9 +122,9 @@ Devuelve 166 rasgos de un texto con un prefijo según su fuente, 211 con un pipe
 
 Se dejan fuera el tiempo de lectura, que solo sigue el número de palabras de una ventana, y los rasgos que repiten otros: la proporción de palabras únicas de `BasicStats`, que repite `diversity_ttr`, sus palabras por oración, que repiten `sents_mean`, y los marcadores de los modos de `get_markers`, que repiten `morph_mood_*`.
 
-Las categorías gramaticales y los rasgos de un solo valor - polaridad, cortesía, posesivo, reflexivo - son proporciones de todas las palabras (`morph_polarity_Neg` es la proporción de las negaciones), los demás rasgos, proporciones de las palabras que los llevan (`morph_mood_Sub` es el subjuntivo entre los modos). Un valor que no aparece en una ventana da 0; un rasgo ausente de la ventana por completo (sin verbos no hay tiempo) da `nan`. Un valor de varios valores (`PronType=Int,Rel` de *que*) se reparte a partes iguales entre sus partes, así que las proporciones de un rasgo siguen sumando uno.
+Las categorías gramaticales y los rasgos de un solo valor - polaridad, cortesía, posesivo, reflexivo - son proporciones de todas las palabras (`morph_polarity_Neg` es la proporción de las negaciones), los demás rasgos, proporciones de las palabras que los llevan (`morph_mood_Sub` es el subjuntivo entre los modos). Un valor que no aparece en una ventana da 0; un rasgo ausente de la ventana por completo (sin verbos no hay tiempo) da `nan`. Un valor de varios valores (`Case=Acc,Nom` de *usted*) se reparte a partes iguales entre sus partes, así que las proporciones de un rasgo siguen sumando uno.
 
-La morfología y la cohesión las analiza el pipeline de [`load_pipeline`](../components.md#load_pipeline) - [`es_core_news_sm`](../installation.md#model) con los análisis de esMorph - sin su analizador sintáctico, así que el grupo `syntax_` se deja fuera; un pipeline pasado en `nlp` se ejecuta entero salvo el reconocedor de entidades, así que `functools.partial(text_features, nlp=get_nlp())` incorpora el analizador sintáctico y la sintaxis, y otro modelo entra en la comparación del mismo modo. El pipeline de [`load_pipeline`](../components.md#load_pipeline), el de por defecto, divide el texto en las oraciones del grupo `sents_`, así que la cohesión y la sintaxis cuentan las mismas oraciones que el ritmo; un pipeline propio da sus propias oraciones. Una novela se compara por ventanas y no entera, ya que el pipeline admite como mucho `max_length` caracteres.
+La morfología y la cohesión las analiza el pipeline de [`load_pipeline`](../components.md#load_pipeline) - [`es_core_news_sm`](../installation.md#model) con los análisis de esMorph - sin su analizador sintáctico, así que el grupo `syntax_` se deja fuera; un pipeline pasado en `nlp` se ejecuta entero salvo el reconocedor de entidades, así que `functools.partial(text_features, nlp=get_nlp())` incorpora el analizador sintáctico y la sintaxis, y otro modelo entra en la comparación del mismo modo. El pipeline de [`load_pipeline`](../components.md#load_pipeline), el de por defecto, divide el texto en las oraciones del grupo `sents_`, así que la cohesión y la sintaxis cuentan las mismas oraciones que el ritmo; un pipeline propio da sus propias oraciones. Una novela se compara por ventanas y no entera, ya que el pipeline admite como mucho `max_length` caracteres. El grupo `morph_` lee el `Doc`, donde una contracción o un verbo con clíticos es una sola palabra, así que sus proporciones difieren de las de `MorphStats` sobre la cadena ([`load_pipeline`](../components.md#load_pipeline)).
 
 Las proporciones de espacios, letras y signos de puntuación (`basic_p_spaces`, `basic_p_letters`, `basic_p_punctuations`) cuentan los caracteres tal cual: las sangrías, los espacios dobles y los de no separación de los archivos reflejan la composición de una edición y no el texto. En un corpus de fuentes distintas conviene colapsarlos antes, por ejemplo, con `re.sub(r"[^\S\n]+", " ", text)`.
 
@@ -180,11 +180,11 @@ Los rasgos sintácticos llegan con un pipeline que tiene analizador sintáctico,
 
     ```
                                         median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    syntax_gerund_clauses_per_sent              0.148           0.048   0.079    0.118    1.453        0.848  0.924     0.0
-    syntax_complex_nominals_per_clause          0.766           0.520   0.216    0.304    1.132        0.669  0.835     0.0
-    syntax_tree_depth                           3.763           2.888   0.594    1.062    1.078        0.664  0.832     0.0
-    syntax_subtrees_per_sent                    6.800           4.534   1.567    2.917    0.942        0.661  0.830     0.0
-    syntax_t_units_per_sent                     1.074           1.008   0.029    0.150    1.372        0.650  0.825     0.0
+    syntax_gerund_clauses_per_sent              0.148           0.048   0.080    0.118    1.454        0.848  0.924     0.0
+    syntax_complex_nominals_per_clause          0.767           0.520   0.212    0.305    1.133        0.668  0.834     0.0
+    syntax_tree_depth                           3.780           2.888   0.597    1.062    1.083        0.666  0.833     0.0
+    syntax_subtrees_per_sent                    6.833           4.563   1.574    2.894    0.944        0.659  0.830     0.0
+    syntax_t_units_per_sent                     1.075           1.008   0.028    0.150    1.367        0.649  0.825     0.0
     ```
 
 ## Comparación de tablas de rasgos { #compare_features }
@@ -216,7 +216,7 @@ Comprueba los parámetros de `compare_features` antes de procesar los textos: la
 
 ## Estadísticas { #statistics }
 
-<!-- core: corpus/compare.md:compare_features-statistics 99869be -->
+<!-- core: corpus/compare.md:compare_features-statistics b8d6165 -->
 Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_{n_B}$ en el corpus B (sin los valores indefinidos e infinitos; con menos de dos valores en un lado, `nan`):
 
 | Columna | Descripción |
@@ -226,8 +226,8 @@ Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_
 | `cohen_d` | $d = (\bar{x} - \bar{y}) / s$, $s$ - la desviación típica combinada; 0.2 - un efecto pequeño, 0.5 - mediano, 0.8 - grande (`calc_cohen_d`) |
 | `cliff_delta` | $\delta = P(x > y) - P(x < y)$ de −1 a 1; $\lvert\delta\rvert$ < 0.147 - un efecto despreciable, < 0.33 - pequeño, < 0.474 - mediano, grande en otro caso (Romano et al. 2006; `calc_cliff_delta`) |
 | `auc` | el rasgo como clasificador: la proporción de pares de ventanas con el valor en A mayor que en B, con los empates a la mitad; $\delta = 2 \cdot AUC - 1$, 0.5 - el rasgo no distingue los corpus |
-| `u`, `p_value` | el estadístico U de Mann-Whitney y el valor p bilateral (`scipy.stats.mannwhitneyu`) |
-| `p_holm` | el valor p con la corrección de Holm por el número de rasgos (`holm_correction`) |
+| `u`, `p_value` | el estadístico U de Mann-Whitney y el valor p bilateral (`scipy.stats.mannwhitneyu`); con todos los valores de ambos corpus iguales no hay prueba, y el valor p es `nan` |
+| `p_holm` | el valor p con la corrección de Holm por el número de rasgos con valor p (`holm_correction`) |
 | `n_A`, `n_B` | número de ventanas con un valor definido |
 | `n_texts_A`, `n_texts_B` | número de textos detrás de esas ventanas |
 

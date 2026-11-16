@@ -305,16 +305,16 @@ Excepciones:
 noun_lemmas(doc)
 ```
 
-Los lemas de los tokens de un `Doc` etiquetados `NOUN`. `StyleStats` toma así los sustantivos de un `Doc`, y los de una cadena, de los análisis de esMorph en el contexto de sus oraciones.
+Los lemas de las palabras de un `Doc` o un `Document` etiquetadas `NOUN`. `StyleStats` toma así los sustantivos de un `Doc`, y los de una cadena, de los análisis de esMorph en el contexto de sus oraciones.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `doc` | `Doc` | - | Objeto Doc |
+| `doc` | `Doc` / `Document` | - | Objeto Doc o Document |
 
 Excepciones:
 
-- `SourceTypeError` - una fuente que no es un `Doc`;
-- `SourceError` - un `Doc` sin las categorías gramaticales o los lemas.
+- `SourceTypeError` - una fuente que no es ni un `Doc` ni un `Document`;
+- `SourceError` - una fuente sin las categorías gramaticales o los lemas.
 
 === "Código"
 

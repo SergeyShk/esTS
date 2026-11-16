@@ -51,8 +51,7 @@ class BasicStatsComponent(anyts.components.BasicStatsComponent):
     Examples:
     Adding the component to a pipeline:
         >>> import ests
-        >>> import spacy
-        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp = ests.load_pipeline()
         >>> nlp.add_pipe("ests_basic", name="basic", last=True)
         <ests.components.BasicStatsComponent object at 0x...>
 
@@ -78,8 +77,7 @@ class ReadabilityStatsComponent(anyts.components.ReadabilityStatsComponent):
 
     Adding the component to a pipeline:
         >>> import ests
-        >>> import spacy
-        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp = ests.load_pipeline()
         >>> nlp.add_pipe("ests_readability", name="readability", last=True)
         <ests.components.ReadabilityStatsComponent object at 0x...>
 
@@ -135,8 +133,7 @@ class UnadaptedReadabilityStatsComponent(anyts.components.UnadaptedReadabilitySt
 
     Adding the component to a pipeline:
         >>> import ests
-        >>> import spacy
-        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp = ests.load_pipeline()
         >>> nlp.add_pipe("ests_unadapted_readability", name="unadapted", last=True)
         <ests.components.UnadaptedReadabilityStatsComponent object at 0x...>
 
@@ -169,8 +166,7 @@ class DiversityStatsComponent(anyts.components.DiversityStatsComponent):
 
     Adding the component to a pipeline:
         >>> import ests
-        >>> import spacy
-        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp = ests.load_pipeline()
         >>> nlp.add_pipe("ests_diversity", name="diversity", last=True)
         <ests.components.DiversityStatsComponent object at 0x...>
 
@@ -216,8 +212,7 @@ class MorphStatsComponent(anyts.components.MorphStatsComponent):
 
     Adding the component to a pipeline:
         >>> import ests
-        >>> import spacy
-        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp = ests.load_pipeline()
         >>> nlp.add_pipe("ests_morph", name="morph", last=True)
         <ests.components.MorphStatsComponent object at 0x...>
 
@@ -248,8 +243,7 @@ class SyntaxStatsComponent(anyts.components.SyntaxStatsComponent):
 
     Adding the component to a pipeline:
         >>> import ests
-        >>> import spacy
-        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp = ests.load_pipeline()
         >>> nlp.add_pipe("ests_syntax", name="syntax", last=True)
         <ests.components.SyntaxStatsComponent object at 0x...>
 
@@ -280,8 +274,7 @@ class CohesionStatsComponent(anyts.components.CohesionStatsComponent):
 
     Adding the component to a pipeline:
         >>> import ests
-        >>> import spacy
-        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp = ests.load_pipeline()
         >>> nlp.add_pipe("ests_cohesion", name="cohesion", last=True)
         <ests.components.CohesionStatsComponent object at 0x...>
 
@@ -322,8 +315,7 @@ class LexicalStatsComponent(anyts.components.LexicalStatsComponent):
 
     Adding the component to a pipeline:
         >>> import ests
-        >>> import spacy
-        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp = ests.load_pipeline()
         >>> nlp.add_pipe("ests_lexical", name="lexical", last=True)
         <ests.components.LexicalStatsComponent object at 0x...>
 
@@ -374,8 +366,7 @@ class StyleStatsComponent(anyts.components.StyleStatsComponent):
 
     Adding the component to a pipeline:
         >>> import ests
-        >>> import spacy
-        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp = ests.load_pipeline()
         >>> nlp.add_pipe("ests_style", name="style", last=True)
         <ests.components.StyleStatsComponent object at 0x...>
 
@@ -425,8 +416,7 @@ class PhonStatsComponent(anyts.components.PhonStatsComponent):
 
     Adding the component to a pipeline:
         >>> import ests
-        >>> import spacy
-        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp = ests.load_pipeline()
         >>> nlp.add_pipe("ests_phon", name="phon", last=True)
         <ests.components.PhonStatsComponent object at 0x...>
 
@@ -462,8 +452,7 @@ class VerseStatsComponent(StatsComponent):
 
     Adding the component to a pipeline:
         >>> import ests
-        >>> import spacy
-        >>> nlp = spacy.load("es_core_news_sm")
+        >>> nlp = ests.load_pipeline()
         >>> nlp.add_pipe("ests_verse", name="verse", last=True)
         <ests.components.VerseStatsComponent object at 0x...>
 

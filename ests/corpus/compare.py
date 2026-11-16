@@ -122,12 +122,15 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         from the window (no verbs - no tense) nan. The parts of speech and the
         features of a single value (polarity, polite, poss, reflex) are shares
         of all the words, the other features shares of the words that carry
-        them; a value of several values (PronType=Int,Rel) is shared equally
+        them; a value of several values (Case=Acc,Nom of usted) is shared equally
         among its parts. The default model runs without its parser; a
         pipeline passed in nlp runs whole except the entity recognizer, and
         with a parser it adds the group syntax_
         The shares of spaces, letters and marks count the characters as they
-        are: in a corpus from different editions collapse the whitespace beforehand
+        are: in a corpus from different editions collapse the whitespace beforehand.
+        The group morph_ reads the Doc, where a contraction or a verb with
+        clitics is one word, so its shares differ from those of MorphStats on
+        the string
 
     Arguments:
         text (str): Text string

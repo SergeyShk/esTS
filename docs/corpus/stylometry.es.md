@@ -337,11 +337,11 @@ function_words_profile(source)
 
 Las proporciones de las adposiciones, las conjunciones coordinantes y subordinantes, las partículas, los pronombres, los determinantes y las interjecciones (`ests.constants.FUNCTION_UD_POS`: `ADP`, `CCONJ`, `SCONJ`, `PART`, `PRON`, `DET`, `INTJ`) entre las palabras del texto. Las palabras funcionales no dependen del tema, así que su perfil es un rasgo clásico de autoría desde Mosteller y Wallace (1964).
 
-Las categorías gramaticales son las de la anotación de un `Doc` que las lleva. Las palabras de una lista o de un `Doc` sin categorías gramaticales reciben las de [esMorph](https://github.com/SergeyShk/esMorph) en su contexto, así que han de pasarse en el orden del texto; la puntuación de la lista ayuda al análisis y no se cuenta, y una palabra para la que esMorph no tiene análisis es `X`. En las Universal Dependencies del español la negación *no* es un adverbio y no una partícula, así que `PART` es rara.
+Las categorías gramaticales son las de la anotación de un `Doc` o un `Document` que las lleva. Las palabras de una lista o de un `Doc` o un `Document` sin categorías gramaticales reciben las de [esMorph](https://github.com/SergeyShk/esMorph) en su contexto, así que han de pasarse en el orden del texto; la puntuación de la lista ayuda al análisis y no se cuenta, y una palabra para la que esMorph no tiene análisis es `X`. En las Universal Dependencies del español la negación *no* es un adverbio y no una partícula, así que `PART` es rara.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `source` | `list[str]` / `Doc` | - | Palabras del texto u objeto Doc |
+| `source` | `list[str]` / `Doc` / `Document` | - | Palabras del texto, objeto Doc o Document |
 
 Excepciones:
 

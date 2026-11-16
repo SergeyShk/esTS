@@ -67,6 +67,12 @@ def test_kwic_abbreviation_by_lemma():
     assert [line.keyword for line in kwic(text, "Sr. García", by_lemma=True)] == ["Sr. García"]
 
 
+def test_kwic_by_lemma_of_a_verb_with_clitics():
+    """A token of several words is found by the lemma of its first word, as a verb"""
+    for source in ("Dime la verdad.", get_nlp()("Dime la verdad.")):
+        assert [line.keyword for line in kwic(source, "decir", by_lemma=True)] == ["Dime"]
+
+
 def test_kwic_by_lemma():
     assert [line.keyword for line in kwic(text, "gato", by_lemma=True)] == [
         "gato",

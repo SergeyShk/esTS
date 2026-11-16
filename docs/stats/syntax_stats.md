@@ -4,7 +4,7 @@
 SyntaxStats(source, nlp=None)
 ```
 
-The syntactic statistics of a text by its dependency tree ([Ivanov, Solnyshkina and Solovyev 2018](https://dialogue-conf.org/media/4302/ivanovvv.pdf)): the measures of the tree and of the syntactic constructions. The data source is a text or a `Doc` object of [spaCy](https://github.com/explosion/spaCy), and it has to be parsed: a string is parsed with the pipeline of [`load_pipeline`](../components.md#load_pipeline) - [`es_core_news_sm`](../installation.md#model) with the analyses of esMorph - or with the pipeline passed in `nlp`, without the named entities, and a `Doc` must carry the dependencies, which come from a `parser`, and the parts of speech and the lemmas, which come from `esmorph` of `load_pipeline` or from a `morphologizer` (or a `tagger` with an `attribute_ruler`) and a `lemmatizer`. Punctuation marks, symbols (`%`, `€`, `+`) and whitespace are no nodes of the tree, and the distances are counted in positions of words.
+The syntactic statistics of a text by its dependency tree ([Ivanov, Solnyshkina and Solovyev 2018](https://dialogue-conf.org/media/4302/ivanovvv.pdf)): the measures of the tree and of the syntactic constructions. The data source is a text, a `Doc` object of [spaCy](https://github.com/explosion/spaCy) or a `Document` of [anySeg](https://github.com/SergeyShk/anySeg), and it has to be parsed: a string is parsed with the pipeline of [`load_pipeline`](../components.md#load_pipeline) - [`es_core_news_sm`](../installation.md#model) with the analyses of esMorph - or with the pipeline passed in `nlp`, without the named entities, and a `Doc` or a `Document` must carry the dependencies, which come from a `parser`, and the parts of speech and the lemmas, which come from `esmorph` of `load_pipeline` or from a `morphologizer` (or a `tagger` with an `attribute_ruler`) and a `lemmatizer`. Punctuation marks, symbols (`%`, `€`, `+`) and whitespace are no nodes of the tree, and the distances are counted in positions of words.
 
 Raises:
 
@@ -792,7 +792,7 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
     (None, None)
     ```
 
-The functions work with the words of the tree of a document (`TreeWord`, `get_tree` of the [anyTS](https://sergeyshk.github.io/anyTS/document/) core): the `calc_*` and `find_*` functions and `dependency_triples` take a list of them, the `is_*`, `has_*` and `count_*` functions a single word, and `calc_edit_distance` and `calc_multiset_similarity` lists of the items of sentences; the words of a list are those with a letter or a digit (`get_words`). The functions of the dependency tree come from the core, those of the Spanish constructions are esTS's own.
+The functions work with the words of the tree of a document (`TreeWord`, `get_tree` of the [anyTS](https://sergeyshk.github.io/anyTS/document/) core): the `calc_*` and `find_*` functions and `dependency_triples` take a list of them, the `is_*`, `has_*` and `count_*` functions a single word, and `calc_edit_distance` and `calc_multiset_similarity` lists of the items of sentences; the words of a list are those with a letter or a digit (`get_words`). The functions of the dependency tree come from the core, those of the Spanish constructions are esTS's own. The words of a `Doc` are `get_tree(get_document(doc)).words` (`ests.utils.get_document`); code written for spaCy tokens moves as the [migration page](https://sergeyshk.github.io/anyTS/migration/#tree-words) of anyTS says.
 
 ## Words of a sequence { #get_words }
 

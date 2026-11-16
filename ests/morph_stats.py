@@ -176,7 +176,7 @@ class MorphStats(anyts.morph_stats.MorphStats):
         the features. The statistics are the parts of speech
         and the features of MORPHOLOGY_FEATURES in the tags of Universal
         Dependencies (NOUN, VERB; Ind, Sub; Pres, Past); a feature with
-        several values keeps the form of CoNLL-U (PronType=Int,Rel), and tags
+        several values keeps the form of CoNLL-U (Case=Acc,Nom of usted), and tags
         holds the whole annotation of every word. Punctuation marks and
         symbols are not words
 

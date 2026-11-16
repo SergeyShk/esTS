@@ -43,11 +43,10 @@ The class extends the `HighlightedText` of the [anyTS](https://sergeyshk.github.
 === "Code"
 
     ``` python
-    import spacy
-
+    import ests
     from ests.visualizers import highlight
 
-    nlp = spacy.load("es_core_news_sm")
+    nlp = ests.load_pipeline()
     text = (
         "El proyecto, elaborado durante el verano, fue aprobado por el consejo sin debate. "
         "El aumento de la eficiencia del uso de los recursos públicos se analizó, siguiendo "
@@ -80,7 +79,7 @@ The class extends the `HighlightedText` of the [anyTS](https://sergeyshk.github.
      'complex_words': 16,
      'rare_words': 1,
      'passive': 2,
-     'participle_clauses': 2,
+     'participle_clauses': 3,
      'gerund_clauses': 1,
      'de_chains': 3,
      'split_predicates': 2,

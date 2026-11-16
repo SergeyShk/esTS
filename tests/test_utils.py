@@ -472,9 +472,12 @@ def test_load_pipeline():
     assert custom.config["nlp"]["tokenizer"] == {"@tokenizers": "anyseg.Tokenizer.v1"}
 
 
-def test_load_pipeline_not_installed():
+def test_load_pipeline_not_installed(tmp_path):
     with pytest.raises(DatasetNotFoundError, match="spacy download es_core_news_xxl"):
         load_pipeline("es_core_news_xxl")
+    # A path is a saved pipeline, not a model to download
+    with pytest.raises(DatasetNotFoundError, match=r"^No spaCy pipeline at .*my_pipeline: "):
+        load_pipeline(str(tmp_path / "my_pipeline"))
 
 
 def test_get_nlp_not_installed():

@@ -4,7 +4,6 @@ try:
 except ImportError:
     spaces = None
 
-import re
 import threading
 from collections import Counter
 from collections.abc import Callable
@@ -57,8 +56,6 @@ from ests.visualizers import highlight, sentence_lengths_plot, zipf
 matplotlib.use("Agg")
 
 MAX_CHARS = 20_000
-MAX_MARK_RUN = 10
-MARK_RUN = re.compile(rf"(?:[^\w\s]|_){{{MAX_MARK_RUN + 1},}}")
 ZIPF_WORDS = 100
 SENTENCES_MIN = 5
 SENTENCES_WINDOW = 5
@@ -357,8 +354,7 @@ def render_highlight(text: str, layers: list[str]) -> str:
 
 
 def compute(text: str, layers: list[str]) -> dict:
-    # A long run of marks makes the tokenizer of spaCy quadratic
-    text = MARK_RUN.sub(lambda match: match[0][:MAX_MARK_RUN], text.strip()[:MAX_CHARS])
+    text = text.strip()[:MAX_CHARS]
     if not text:
         raise ValueError("Paste a text to analyze")
     doc = parse(text)
@@ -451,7 +447,8 @@ highlighting of the fragments these numbers come from.
 [PyPI](https://pypi.org/project/pyests/)
 """
 FOOTER = (
-    f"esTS {version('pyests')} · anyTS {version('anyts')} · spaCy {spacy.__version__} · "
+    f"esTS {version('pyests')} · anyTS {version('anyts')} · anySeg {version('anyseg')} · "
+    f"esMorph {version('esmorph')} · spaCy {spacy.__version__} · "
     f"es_core_news_sm {nlp.meta['version']}"
 )
 CSS = """

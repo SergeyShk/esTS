@@ -185,14 +185,14 @@ def noun_lemmas(doc: Doc | Document) -> list[str]:
         doc (Doc|Document): Doc object or Document
 
     Returns:
-        list[str]: Lemmas of the tokens tagged NOUN
+        list[str]: Lemmas of the words tagged NOUN
 
     Raises:
         SourceTypeError: If the source is neither a Doc nor a Document
         SourceError: If the source lacks the parts of speech or the lemmas
     """
     if not (is_doc(doc) or is_document(doc)):
-        raise SourceTypeError(f"A Doc is expected, not {type(doc).__name__}")
+        raise SourceTypeError(f"A Doc or a Document is expected, not {type(doc).__name__}")
     return [lemma for _, lemma in _doc_nouns(doc)]
 
 

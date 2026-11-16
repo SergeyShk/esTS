@@ -229,16 +229,16 @@ Raises:
 noun_lemmas(doc)
 ```
 
-The lemmas of the tokens of a `Doc` tagged `NOUN`. `StyleStats` takes the nouns of a `Doc` the same way, and those of a string from the analyses of esMorph in the context of its sentences.
+The lemmas of the words of a `Doc` or a `Document` tagged `NOUN`. `StyleStats` takes the nouns of a `Doc` the same way, and those of a string from the analyses of esMorph in the context of its sentences.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `doc` | `Doc` | - | Doc object |
+| `doc` | `Doc` / `Document` | - | Doc object or Document |
 
 Raises:
 
-- `SourceTypeError` - a source that is not a `Doc`;
-- `SourceError` - a `Doc` without the parts of speech or the lemmas.
+- `SourceTypeError` - a source that is neither a `Doc` nor a `Document`;
+- `SourceError` - a source without the parts of speech or the lemmas.
 
 === "Code"
 
