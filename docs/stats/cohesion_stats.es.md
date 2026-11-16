@@ -4,7 +4,7 @@
 CohesionStats(source, sents_extractor=None, connectors=None, nlp=None, blank_lines=False)
 ```
 
-Las estadísticas de cohesión de un texto a la manera de [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) y de su adaptación española [Coh-Metrix-Esp](https://aclanthology.org/L16-1745/): la repetición entre las oraciones, la información dada, la cohesión temporal y los conectores de un diccionario. Las oraciones se comparan por lemas. La fuente de datos es un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy), y tiene que estar anotada: una cadena se analiza con el pipeline de [`load_pipeline`](../components.md#load_pipeline) - [`es_core_news_sm`](../installation.md#model) con los análisis de esMorph - o con el pipeline indicado en `nlp`, sin las entidades nombradas, y un `Doc` debe llevar las categorías gramaticales y los lemas, que vienen de `esmorph` de `load_pipeline` o de un `morphologizer` (o de un `tagger` con un `attribute_ruler`) y de un `lemmatizer`. Los conectores siguen las etiquetas del `Doc`: en un pipeline propio, `es_core_news_sm` lee algunos marcadores que abren una oración como nombres propios (`Primeramente`, `Conque`), que entonces no cuentan, y da a algunos verbos ante `si` un lema que no es verbo (`Veamos si` - `vear`), de modo que `si` cuenta como condición.
+Las estadísticas de cohesión de un texto a la manera de [Coh-Metrix](https://doi.org/10.1017/CBO9780511894664) y de su adaptación española [Coh-Metrix-Esp](https://aclanthology.org/L16-1745/): la repetición entre las oraciones, la información dada, la cohesión temporal y los conectores de un diccionario. Las oraciones se comparan por lemas. Las palabras de un conector de varias palabras (*por lo tanto*, *es decir*) cuentan solo como el conector: no son sustantivos, pronombres ni palabras con contenido, tampoco sus anáforas (*eso* de *por eso*), y no dan tiempo, modo ni aspecto. La fuente de datos es un texto o un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy), y tiene que estar anotada: una cadena se analiza con el pipeline de [`load_pipeline`](../components.md#load_pipeline) - [`es_core_news_sm`](../installation.md#model) con los análisis de esMorph - o con el pipeline indicado en `nlp`, sin las entidades nombradas, y un `Doc` debe llevar las categorías gramaticales y los lemas, que vienen de `esmorph` de `load_pipeline` o de un `morphologizer` (o de un `tagger` con un `attribute_ruler`) y de un `lemmatizer`. Los conectores siguen las etiquetas del `Doc`: en un pipeline propio, `es_core_news_sm` lee algunos marcadores que abren una oración como nombres propios (`Primeramente`, `Conque`), que entonces no cuentan, y da a algunos verbos ante `si` un lema que no es verbo (`Veamos si` - `vear`), de modo que `si` cuenta como condición.
 
 Excepciones:
 
@@ -53,21 +53,21 @@ Las palabras se clasifican por la anotación de Universal Dependencies:
     Argument overlap in all pairs of sentences                         |   0.50
     Content word overlap in adjacent sentences                         |   0.33
     Content word overlap in all pairs of sentences                     |   0.50
-    Share of shared content words in adjacent sentences                |   0.08
-    Share of shared content words in all pairs of sentences            |   0.13
-    Share of the nouns of a sentence repeated in the next two          |   0.60
-    Share of the arguments of a sentence repeated in the next two      |   0.60
-    Share of the content words of a sentence repeated in the next two  |   0.38
+    Share of shared content words in adjacent sentences                |   0.10
+    Share of shared content words in all pairs of sentences            |   0.15
+    Share of the nouns of a sentence repeated in the next two          |   0.75
+    Share of the arguments of a sentence repeated in the next two      |   0.75
+    Share of the content words of a sentence repeated in the next two  |   0.43
     Share of the nouns of a paragraph repeated in the next one         |   nan
     Share of the arguments of a paragraph repeated in the next one     |   nan
     Share of the content words of a paragraph repeated in the next one |   nan
-    Share of pronouns                                                  |   0.07
-    Ratio of pronouns to nouns                                         |   0.25
-    Share of demonstratives                                            |   0.03
-    Share of content words seen before                                 |   0.20
-    Repetition of the tense in adjacent sentences                      |   0.67
+    Share of pronouns                                                  |   0.00
+    Ratio of pronouns to nouns                                         |   0.00
+    Share of demonstratives                                            |   0.00
+    Share of content words seen before                                 |   0.23
+    Repetition of the tense in adjacent sentences                      |   0.00
     Repetition of the mood in adjacent sentences                       |   1.00
-    Temporal cohesion                                                  |   0.83
+    Temporal cohesion                                                  |   0.50
     Connectors per 1000 words                                          |  103.45
     Connectors linking a sentence to the ones before per 1000 words    |  103.45
     Connectors linking the parts of a sentence per 1000 words          |   0.00
@@ -121,7 +121,7 @@ El extractor indicado se guarda en el atributo `sents_extractor`, `None` sin él
 
     ```
     ('sin', 'embargo', 'el', 'informe', 'no', 'resolver', 'el', 'problema')
-    (8, 2, 15, 3)
+    (7, 0, 13, 3)
     (Connector(sent=1, start=0, end=2, text='sin embargo', cls='adversative', kind='secondary'),
      Connector(sent=2, start=0, end=2, text='es decir', cls='reformulative', kind='secondary'),
      Connector(sent=3, start=0, end=3, text='por lo tanto', cls='causal', kind='secondary'))
@@ -346,7 +346,7 @@ Los conectores primarios (`primary`) son conjunciones, locuciones conjuntivas y 
     ```
 
 !!! warning "Aviso"
-    Las palabras de un marcador se cuentan como cualquier otra: el sustantivo `embargo` de `sin embargo` es un sustantivo y una palabra con contenido de su oración, así que un texto que repite un marcador gana algo de repetición por ello.
+    Un marcador de una palabra se cuenta como cualquier otra palabra: el adverbio `además` es una palabra con contenido de su oración, así que un texto que lo repite gana algo de repetición por ello. Las palabras de un marcador de varias palabras cuentan solo como el marcador.
 
 </div>
 
@@ -370,21 +370,21 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
      'argument_overlap_all': 0.5,
      'content_overlap_adjacent': 0.3333333333333333,
      'content_overlap_all': 0.5,
-     'content_overlap_prop_adjacent': 0.08333333333333333,
-     'content_overlap_prop_all': 0.13095238095238093,
-     'noun_overlap_2_sent': 0.6,
-     'argument_overlap_2_sent': 0.6,
-     'content_overlap_2_sent': 0.375,
+     'content_overlap_prop_adjacent': 0.09523809523809523,
+     'content_overlap_prop_all': 0.15079365079365079,
+     'noun_overlap_2_sent': 0.75,
+     'argument_overlap_2_sent': 0.75,
+     'content_overlap_2_sent': 0.42857142857142855,
      'noun_overlap_para': nan,
      'argument_overlap_para': nan,
      'content_overlap_para': nan,
-     'p_pronouns': 0.06896551724137931,
-     'pronoun_noun_ratio': 0.25,
-     'p_demonstratives': 0.034482758620689655,
-     'p_given': 0.2,
-     'tense_repetition': 0.6666666666666666,
+     'p_pronouns': 0.0,
+     'pronoun_noun_ratio': 0.0,
+     'p_demonstratives': 0.0,
+     'p_given': 0.23076923076923078,
+     'tense_repetition': 0.0,
      'mood_repetition': 1.0,
-     'temporal_cohesion': 0.8333333333333333,
+     'temporal_cohesion': 0.5,
      'connectors': 103.44827586206898,
      'connectors_inter': 103.44827586206898,
      'connectors_intra': 0.0,
