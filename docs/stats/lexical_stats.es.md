@@ -12,7 +12,7 @@ Excepciones:
 - `SourceTypeError` - una fuente que no es ni una cadena, ni un `Doc`, ni un `Document`, un `parse` que no devuelve un `Document`, un diccionario de otra clase que la de la biblioteca o, sin `freq_dict_class`, uno sin `lookup` e `ipm` o ninguno; un `analyze` que no da objetos `LexicalWord`;
 - `SourceError` - palabras sin categorías gramaticales, una fuente sin palabras.
 
-En esTS las métricas según el diccionario sin el diccionario descargado lanzan `DatasetNotFoundError`.
+En esTS las métricas según el diccionario sin el diccionario descargado lanzan `DatasetNotFoundError`. Un `Doc` conserva una contracción o un verbo con clíticos como una sola palabra, que una cadena divide, así que la perplejidad y la frecuencia media de un `Doc` y de su cadena difieren en un 5-10 % ([`load_pipeline`](../components.md#load_pipeline)).
 
 A diferencia de las [métricas de diversidad léxica](diversity_stats.md), que comparan las palabras de un texto entre sí, aquí las palabras se comparan con las frecuencias de la lengua ([TAALES](https://doi.org/10.3758/s13428-017-0924-4)).
 

@@ -6,7 +6,7 @@ LexicalStats(source, freq_dict=None)
 
 --8<-- "stats/lexical_stats.md:LexicalStats"
 
-In esTS the metrics by the dictionary without the dictionary downloaded raise `DatasetNotFoundError`.
+In esTS the metrics by the dictionary without the dictionary downloaded raise `DatasetNotFoundError`. A `Doc` keeps a contraction or a verb with clitics as one word, which a string splits, so the perplexity and the mean frequency of a `Doc` and of its string differ by 5-10 % ([`load_pipeline`](../components.md#load_pipeline)).
 
 Unlike the [lexical diversity metrics](diversity_stats.md), which compare the words of a text with each other, here the words are compared with the frequencies of the language ([TAALES](https://doi.org/10.3758/s13428-017-0924-4)).
 

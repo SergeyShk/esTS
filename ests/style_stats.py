@@ -185,7 +185,7 @@ def noun_lemmas(doc: Doc | Document) -> list[str]:
         doc (Doc|Document): Doc object or Document
 
     Returns:
-        list[str]: Lemmas of the tokens tagged NOUN
+        list[str]: Lemmas of the words tagged NOUN
 
     Raises:
         SourceTypeError: If the source is neither a Doc nor a Document

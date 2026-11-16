@@ -127,7 +127,10 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         pipeline passed in nlp runs whole except the entity recognizer, and
         with a parser it adds the group syntax_
         The shares of spaces, letters and marks count the characters as they
-        are: in a corpus from different editions collapse the whitespace beforehand
+        are: in a corpus from different editions collapse the whitespace beforehand.
+        The group morph_ reads the Doc, where a contraction or a verb with
+        clitics is one word, so its shares differ from those of MorphStats on
+        the string
 
     Arguments:
         text (str): Text string

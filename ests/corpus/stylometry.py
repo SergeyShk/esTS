@@ -37,8 +37,9 @@ def function_words_profile(source: Sequence[str] | Doc | Document) -> dict[str, 
         The shares of the parts of speech of FUNCTION_UD_POS among the words
         of the text. A Doc or a Document keeps its own tags; the words of a list
         or of an untagged Doc or Document get the parts of speech of esMorph in
-        context, so they go in the order of the text; punctuation helps the analysis and is not
-        counted. The negation no is an adverb in Spanish UD, so PART is rare
+        context, so they go in the order of the text; punctuation helps the
+        analysis and is not counted. The negation no is an adverb in Spanish UD,
+        so PART is rare
 
     Arguments:
         source (list[str]|Doc|Document): Words of the text, Doc object or Document

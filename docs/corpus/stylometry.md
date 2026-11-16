@@ -189,7 +189,7 @@ function_words_profile(source)
 
 The shares of the adpositions, the coordinating and subordinating conjunctions, the particles, the pronouns, the determiners and the interjections (`ests.constants.FUNCTION_UD_POS`: `ADP`, `CCONJ`, `SCONJ`, `PART`, `PRON`, `DET`, `INTJ`) among the words of the text. Function words do not depend on the topic, so their profile is a classic feature of authorship since Mosteller and Wallace (1964).
 
-The parts of speech are those of the annotation of a `Doc` that carries them. The words of a list or of a `Doc` without parts of speech get those of [esMorph](https://github.com/SergeyShk/esMorph) in their context, so they are to be passed in the order of the text; the punctuation of the list helps the analysis and is not counted, and a word esMorph has no analysis for is `X`. In Spanish Universal Dependencies the negation *no* is an adverb and not a particle, so `PART` is rare.
+The parts of speech are those of the annotation of a `Doc` or a `Document` that carries them. The words of a list or of a `Doc` or a `Document` without parts of speech get those of [esMorph](https://github.com/SergeyShk/esMorph) in their context, so they are to be passed in the order of the text; the punctuation of the list helps the analysis and is not counted, and a word esMorph has no analysis for is `X`. In Spanish Universal Dependencies the negation *no* is an adverb and not a particle, so `PART` is rare.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
