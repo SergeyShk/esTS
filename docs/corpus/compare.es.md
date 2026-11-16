@@ -216,7 +216,7 @@ Comprueba los parámetros de `compare_features` antes de procesar los textos: la
 
 ## Estadísticas { #statistics }
 
-<!-- core: corpus/compare.md:compare_features-statistics 99869be -->
+<!-- core: corpus/compare.md:compare_features-statistics b8d6165 -->
 Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_{n_B}$ en el corpus B (sin los valores indefinidos e infinitos; con menos de dos valores en un lado, `nan`):
 
 | Columna | Descripción |
@@ -226,8 +226,8 @@ Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_
 | `cohen_d` | $d = (\bar{x} - \bar{y}) / s$, $s$ - la desviación típica combinada; 0.2 - un efecto pequeño, 0.5 - mediano, 0.8 - grande (`calc_cohen_d`) |
 | `cliff_delta` | $\delta = P(x > y) - P(x < y)$ de −1 a 1; $\lvert\delta\rvert$ < 0.147 - un efecto despreciable, < 0.33 - pequeño, < 0.474 - mediano, grande en otro caso (Romano et al. 2006; `calc_cliff_delta`) |
 | `auc` | el rasgo como clasificador: la proporción de pares de ventanas con el valor en A mayor que en B, con los empates a la mitad; $\delta = 2 \cdot AUC - 1$, 0.5 - el rasgo no distingue los corpus |
-| `u`, `p_value` | el estadístico U de Mann-Whitney y el valor p bilateral (`scipy.stats.mannwhitneyu`) |
-| `p_holm` | el valor p con la corrección de Holm por el número de rasgos (`holm_correction`) |
+| `u`, `p_value` | el estadístico U de Mann-Whitney y el valor p bilateral (`scipy.stats.mannwhitneyu`); con todos los valores de ambos corpus iguales no hay prueba, y el valor p es `nan` |
+| `p_holm` | el valor p con la corrección de Holm por el número de rasgos con valor p (`holm_correction`) |
 | `n_A`, `n_B` | número de ventanas con un valor definido |
 | `n_texts_A`, `n_texts_B` | número de textos detrás de esas ventanas |
 

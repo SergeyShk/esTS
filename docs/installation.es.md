@@ -4,8 +4,8 @@
 
 *   `python` 3.11 o superior
 *   `spaCy` 3.8.17 o superior dentro de 3
-*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.5.1 o superior dentro de 0.5, el núcleo independiente del idioma: los extractores, las estadísticas básicas y las fórmulas comunes de legibilidad, las métricas de diversidad léxica, las medidas de corpus, los gráficos y el mecanismo del resaltado vienen de él con el tokenizador, el lematizador, el segmentador de oraciones y las sílabas del español
-*   [`anyseg`](https://github.com/SergeyShk/anySeg) 0.3 o superior dentro de 0.3, el segmentador en tokens y oraciones
+*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.5.2 o superior dentro de 0.5, el núcleo independiente del idioma: los extractores, las estadísticas básicas y las fórmulas comunes de legibilidad, las métricas de diversidad léxica, las medidas de corpus, los gráficos y el mecanismo del resaltado vienen de él con el tokenizador, el lematizador, el segmentador de oraciones y las sílabas del español
+*   [`anyseg`](https://github.com/SergeyShk/anySeg) 0.3.1 o superior dentro de 0.3, el segmentador en tokens y oraciones
 *   [`esmorph`](https://github.com/SergeyShk/esMorph) 0.3 o superior dentro de 0.3, el analizador morfológico: los lemas, las categorías gramaticales y los rasgos de un texto; su diccionario, construido a partir de las entradas en español del Wiktionary inglés con el modelo de contexto de los treebanks de UD AnCora y GSD, se distribuye con la licencia [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 *   `numpy`, `scipy`, `pandas`
 *   `matplotlib` y `graphviz` para las [visualizaciones](visualizers/zipf.md)
