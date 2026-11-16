@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable, Iterator
 from functools import lru_cache
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import esmorph
@@ -269,7 +270,7 @@ def load_pipeline(
         Language: Pipeline
 
     Raises:
-        DatasetNotFoundError: If the model is not installed
+        DatasetNotFoundError: If the model is not installed or there is no pipeline at the path
 
     Example:
         >>> from ests import load_pipeline
@@ -290,6 +291,9 @@ def load_pipeline(
     try:
         nlp = spacy.load(model, exclude=[*excluded, *MORPH_COMPONENTS], config=config, **kwargs)
     except OSError as error:
+        # A path names a saved pipeline, which no download gives
+        if Path(model).exists() or any(sep in str(model) for sep in ("/", "\\")):
+            raise DatasetNotFoundError(f"No spaCy pipeline at {model}: {error}") from error
         raise DatasetNotFoundError(
             f"The spaCy model {model} is not installed: python -m spacy download {model}"
         ) from error
