@@ -2363,11 +2363,10 @@
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Code</label><label for="__tabbed_1_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">spacy</span>
-
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">ests</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ests.visualizers</span><span class="w"> </span><span class="kn">import</span> <span class="n">highlight</span>
 
-<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"es_core_news_sm"</span><span class="p">)</span>
+<span class="n">nlp</span> <span class="o">=</span> <span class="n">ests</span><span class="o">.</span><span class="n">load_pipeline</span><span class="p">()</span>
 <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
     <span class="s2">"El proyecto, elaborado durante el verano, fue aprobado por el consejo sin debate. "</span>
     <span class="s2">"El aumento de la eficiencia del uso de los recursos públicos se analizó, siguiendo "</span>
@@ -2398,7 +2397,7 @@
  'complex_words': 16,
  'rare_words': 1,
  'passive': 2,
- 'participle_clauses': 2,
+ 'participle_clauses': 3,
  'gerund_clauses': 1,
  'de_chains': 3,
  'split_predicates': 2,

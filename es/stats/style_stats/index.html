@@ -2714,7 +2714,7 @@ Officialese clichés (per 100 words)       |   8.93
 </ul>
 <div class="signature highlight"><pre><span></span><code><span class="n">noun_lemmas</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 </code></pre></div>
-<p>Los lemas de los tokens de un <code>Doc</code> etiquetados <code>NOUN</code>. <code>StyleStats</code> toma así los sustantivos de un <code>Doc</code>, y los de una cadena, de los análisis de esMorph en el contexto de sus oraciones.</p>
+<p>Los lemas de las palabras de un <code>Doc</code> o un <code>Document</code> etiquetadas <code>NOUN</code>. <code>StyleStats</code> toma así los sustantivos de un <code>Doc</code>, y los de una cadena, de los análisis de esMorph en el contexto de sus oraciones.</p>
 <table>
 <thead>
 <tr>
@@ -2727,16 +2727,16 @@ Officialese clichés (per 100 words)       |   8.93
 <tbody>
 <tr>
 <td style="text-align: left;"><code>doc</code></td>
-<td style="text-align: left;"><code>Doc</code></td>
+<td style="text-align: left;"><code>Doc</code> / <code>Document</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Objeto Doc</td>
+<td style="text-align: left;">Objeto Doc o Document</td>
 </tr>
 </tbody>
 </table>
 <p>Excepciones:</p>
 <ul>
-<li><code>SourceTypeError</code> - una fuente que no es un <code>Doc</code>;</li>
-<li><code>SourceError</code> - un <code>Doc</code> sin las categorías gramaticales o los lemas.</li>
+<li><code>SourceTypeError</code> - una fuente que no es ni un <code>Doc</code> ni un <code>Document</code>;</li>
+<li><code>SourceError</code> - una fuente sin las categorías gramaticales o los lemas.</li>
 </ul>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
 <div class="tabbed-content">

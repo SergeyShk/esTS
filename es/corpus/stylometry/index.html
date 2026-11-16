@@ -2674,7 +2674,7 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 <div class="signature highlight"><pre><span></span><code><span class="n">function_words_profile</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
 </code></pre></div>
 <p>Las proporciones de las adposiciones, las conjunciones coordinantes y subordinantes, las partículas, los pronombres, los determinantes y las interjecciones (<code>ests.constants.FUNCTION_UD_POS</code>: <code>ADP</code>, <code>CCONJ</code>, <code>SCONJ</code>, <code>PART</code>, <code>PRON</code>, <code>DET</code>, <code>INTJ</code>) entre las palabras del texto. Las palabras funcionales no dependen del tema, así que su perfil es un rasgo clásico de autoría desde Mosteller y Wallace (1964).</p>
-<p>Las categorías gramaticales son las de la anotación de un <code>Doc</code> que las lleva. Las palabras de una lista o de un <code>Doc</code> sin categorías gramaticales reciben las de <a href="https://github.com/SergeyShk/esMorph">esMorph</a> en su contexto, así que han de pasarse en el orden del texto; la puntuación de la lista ayuda al análisis y no se cuenta, y una palabra para la que esMorph no tiene análisis es <code>X</code>. En las Universal Dependencies del español la negación <em>no</em> es un adverbio y no una partícula, así que <code>PART</code> es rara.</p>
+<p>Las categorías gramaticales son las de la anotación de un <code>Doc</code> o un <code>Document</code> que las lleva. Las palabras de una lista o de un <code>Doc</code> o un <code>Document</code> sin categorías gramaticales reciben las de <a href="https://github.com/SergeyShk/esMorph">esMorph</a> en su contexto, así que han de pasarse en el orden del texto; la puntuación de la lista ayuda al análisis y no se cuenta, y una palabra para la que esMorph no tiene análisis es <code>X</code>. En las Universal Dependencies del español la negación <em>no</em> es un adverbio y no una partícula, así que <code>PART</code> es rara.</p>
 <table>
 <thead>
 <tr>
@@ -2687,9 +2687,9 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 <tbody>
 <tr>
 <td style="text-align: left;"><code>source</code></td>
-<td style="text-align: left;"><code>list[str]</code> / <code>Doc</code></td>
+<td style="text-align: left;"><code>list[str]</code> / <code>Doc</code> / <code>Document</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Palabras del texto u objeto Doc</td>
+<td style="text-align: left;">Palabras del texto, objeto Doc o Document</td>
 </tr>
 </tbody>
 </table>

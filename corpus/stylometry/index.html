@@ -2663,7 +2663,7 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 <div class="signature highlight"><pre><span></span><code><span class="n">function_words_profile</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
 </code></pre></div>
 <p>The shares of the adpositions, the coordinating and subordinating conjunctions, the particles, the pronouns, the determiners and the interjections (<code>ests.constants.FUNCTION_UD_POS</code>: <code>ADP</code>, <code>CCONJ</code>, <code>SCONJ</code>, <code>PART</code>, <code>PRON</code>, <code>DET</code>, <code>INTJ</code>) among the words of the text. Function words do not depend on the topic, so their profile is a classic feature of authorship since Mosteller and Wallace (1964).</p>
-<p>The parts of speech are those of the annotation of a <code>Doc</code> that carries them. The words of a list or of a <code>Doc</code> without parts of speech get those of <a href="https://github.com/SergeyShk/esMorph">esMorph</a> in their context, so they are to be passed in the order of the text; the punctuation of the list helps the analysis and is not counted, and a word esMorph has no analysis for is <code>X</code>. In Spanish Universal Dependencies the negation <em>no</em> is an adverb and not a particle, so <code>PART</code> is rare.</p>
+<p>The parts of speech are those of the annotation of a <code>Doc</code> or a <code>Document</code> that carries them. The words of a list or of a <code>Doc</code> or a <code>Document</code> without parts of speech get those of <a href="https://github.com/SergeyShk/esMorph">esMorph</a> in their context, so they are to be passed in the order of the text; the punctuation of the list helps the analysis and is not counted, and a word esMorph has no analysis for is <code>X</code>. In Spanish Universal Dependencies the negation <em>no</em> is an adverb and not a particle, so <code>PART</code> is rare.</p>
 <table>
 <thead>
 <tr>
@@ -2676,9 +2676,9 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 <tbody>
 <tr>
 <td style="text-align: left;"><code>source</code></td>
-<td style="text-align: left;"><code>list[str]</code> / <code>Doc</code></td>
+<td style="text-align: left;"><code>list[str]</code> / <code>Doc</code> / <code>Document</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Words of the text or Doc object</td>
+<td style="text-align: left;">Words of the text, Doc object or Document</td>
 </tr>
 </tbody>
 </table>

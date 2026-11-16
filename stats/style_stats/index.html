@@ -2707,7 +2707,7 @@ Officialese clichés (per 100 words)       |   8.93
 </ul>
 <div class="signature highlight"><pre><span></span><code><span class="n">noun_lemmas</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
 </code></pre></div>
-<p>The lemmas of the tokens of a <code>Doc</code> tagged <code>NOUN</code>. <code>StyleStats</code> takes the nouns of a <code>Doc</code> the same way, and those of a string from the analyses of esMorph in the context of its sentences.</p>
+<p>The lemmas of the words of a <code>Doc</code> or a <code>Document</code> tagged <code>NOUN</code>. <code>StyleStats</code> takes the nouns of a <code>Doc</code> the same way, and those of a string from the analyses of esMorph in the context of its sentences.</p>
 <table>
 <thead>
 <tr>
@@ -2720,16 +2720,16 @@ Officialese clichés (per 100 words)       |   8.93
 <tbody>
 <tr>
 <td style="text-align: left;"><code>doc</code></td>
-<td style="text-align: left;"><code>Doc</code></td>
+<td style="text-align: left;"><code>Doc</code> / <code>Document</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Doc object</td>
+<td style="text-align: left;">Doc object or Document</td>
 </tr>
 </tbody>
 </table>
 <p>Raises:</p>
 <ul>
-<li><code>SourceTypeError</code> - a source that is not a <code>Doc</code>;</li>
-<li><code>SourceError</code> - a <code>Doc</code> without the parts of speech or the lemmas.</li>
+<li><code>SourceTypeError</code> - a source that is neither a <code>Doc</code> nor a <code>Document</code>;</li>
+<li><code>SourceError</code> - a source without the parts of speech or the lemmas.</li>
 </ul>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Code</label><label for="__tabbed_3_2">Result</label></div>
 <div class="tabbed-content">
