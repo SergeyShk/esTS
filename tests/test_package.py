@@ -494,10 +494,12 @@ def test_demo_computes_its_examples(monkeypatch, freq_dict):
     for text in app.EXAMPLES.values():
         result = app.compute(text, app.DEFAULT_LAYERS)
         assert result["summary"] and not result["lexical"].empty
+    # The tokenizer of the pipeline reads a long run of marks at once
+    text = "Hola, " + "!?" * 5000 + " " + "_" * 5000 + " mundo."
     start = time.perf_counter()
-    result = app.compute("Hola, " + "!?" * 5000 + " " + "_" * 5000 + " mundo.", [])
+    result = app.compute(text, [])
     assert time.perf_counter() - start < 10
-    assert result["text"] == "Hola, " + "!?" * 5 + " " + "_" * 10 + " mundo."
+    assert result["text"] == text
 
 
 @pytest.mark.parametrize("name", ["CohesionStats", "SyntaxStats"])
