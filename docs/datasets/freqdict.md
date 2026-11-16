@@ -99,7 +99,7 @@ A lemma that is not a string raises `SourceTypeError`.
     fd.lookup("Gato")
     fd.lookup("dios")
     fd.lookup("usted"), fd.ipm(lemma_key("usted"))
-    fd.ipm("computador"), fd.ipm(lemma_key("computadoras"))
+    fd.ipm("computadoras"), fd.ipm(lemma_key("computadoras"))
     "gato" in fd, len(fd), sum(1 for _ in fd)
     ```
 
@@ -109,7 +109,7 @@ A lemma that is not a string raises `SourceTypeError`.
     Entry(lemma='gato', pos=('NOUN', 'ADJ'), ipm=25.37, range=40, dispersion=95, docs=232841)
     Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.46, range=40, dispersion=98, docs=566129)
     (None, 1463.67)
-    (4.72, 15.35)
+    (0.0, 15.35)
     (True, 86196, 107032)
     ```
 

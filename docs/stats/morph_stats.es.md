@@ -14,7 +14,7 @@ Excepciones:
 
 La clase extiende el `MorphStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/morph_stats/) con la capa del español y los [marcadores del español](#markers); las estadísticas se calculan al crear el objeto. En esTS la fuente de datos es un texto, un `Doc` o un `Document`: un texto recibe los análisis de [esMorph](https://github.com/SergeyShk/esMorph) en el contexto de sus oraciones, sin spaCy, y un `Doc` debe llevar las categorías gramaticales y los lemas: el pipeline de [`load_pipeline`](../components.md#load_pipeline) le da los mismos análisis de esMorph, un pipeline propio los de un `morphologizer` (o de un `tagger` con un `attribute_ruler`) y de un `lemmatizer`. Las palabras son las del documento con una letra o una cifra: en un texto las palabras de una contracción y de un verbo con clíticos son palabras aparte (`del` - `de` + `el`, `dámelo` - `da` + `me` + `lo`), mientras que un `Doc` conserva entero el token con el análisis de su primera palabra. Las tablas de `print_stats` y `print_markers` toman las descripciones de `MORPHOLOGY_STATS_DESC` y `MORPHOLOGY_MARKERS_DESC` de `ests.constants`.
 
-Además, en esTS una fuente que no es ni una cadena, ni un `Doc` ni un `Document` lanza `SourceTypeError`, y un `Doc` sin los lemas (de un pipeline propio sin `lemmatizer`) lanza `SourceError`.
+Además, en esTS un `Doc` sin los lemas (de un pipeline propio sin `lemmatizer`) lanza `SourceError`.
 
 === "Código"
 
@@ -78,7 +78,7 @@ En esTS las estadísticas son `case`, ..., `verb_form` de la [tabla de abajo](#s
 
 ## Estadísticas { #statistics }
 
-Cada estadística es un atributo del objeto, una tupla de los valores de un rasgo por palabra (`None` para una palabra a la que el modelo no da ningún valor del rasgo), y `get_stats` devuelve las distribuciones de sus valores. Los valores se leen de `token.pos_` y `token.morph` del análisis, es decir, por el contexto. Las estadísticas son la categoría gramatical y los quince rasgos de `MORPHOLOGY_FEATURES`; el valor `Unknown` de las tablas impresas significa que el modelo no dio a la palabra ningún valor del rasgo. Los demás rasgos que anotan los modelos (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`, `PunctSide`, `PunctType`) no se cuentan, pero quedan en `tags`.
+Cada estadística es un atributo del objeto, una tupla de los valores de un rasgo por palabra (`None` para una palabra a la que el análisis no da ningún valor del rasgo), y `get_stats` devuelve las distribuciones de sus valores. Los valores son las columnas `upos` y `feats` del documento: los análisis de esMorph en el contexto de la oración para una cadena, la anotación del pipeline para un `Doc`. Las estadísticas son la categoría gramatical y los quince rasgos de `MORPHOLOGY_FEATURES`; el valor `Unknown` de las tablas impresas significa que el análisis no dio a la palabra ningún valor del rasgo. Los demás rasgos que anotan los modelos (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`, `PunctSide`, `PunctType`) no se cuentan, pero quedan en `tags`.
 
 | Estadística | Rasgo | Valores |
 | :---------- | :---- | :------ |

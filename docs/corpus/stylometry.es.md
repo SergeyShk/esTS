@@ -341,7 +341,7 @@ Las categorías gramaticales son las de la anotación de un `Doc` que las lleva.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
-| `source` | `list[str]` / `Doc` | - | Palabras del texto u objeto Doc |
+| `source` | `list[str]` / `Doc` / `Document` | - | Palabras del texto, objeto Doc o Document |
 
 Excepciones:
 

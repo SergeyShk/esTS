@@ -193,7 +193,7 @@ The parts of speech are those of the annotation of a `Doc` that carries them. Th
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
-| `source` | `list[str]` / `Doc` | - | Words of the text or Doc object |
+| `source` | `list[str]` / `Doc` / `Document` | - | Words of the text, Doc object or Document |
 
 Raises:
 

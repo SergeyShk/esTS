@@ -8,7 +8,7 @@ MorphStats(source)
 
 The class extends the `MorphStats` of the [anyTS](https://sergeyshk.github.io/anyTS/stats/morph_stats/) core with the Spanish layer and the [markers of Spanish](#markers); the statistics are computed when the object is created. In esTS the data source is a text, a `Doc` or a `Document`: a text gets the analyses of [esMorph](https://github.com/SergeyShk/esMorph) in the context of its sentences, without spaCy, and a `Doc` must carry the parts of speech and the lemmas: the pipeline of [`load_pipeline`](../components.md#load_pipeline) gives it the same analyses of esMorph, a pipeline of one's own those of a `morphologizer` (or a `tagger` with an `attribute_ruler`) and a `lemmatizer`. The words are those of the document with a letter or a digit: in a text the words of a contraction and of a verb with clitics are words of their own (`del` - `de` + `el`, `dámelo` - `da` + `me` + `lo`), while a `Doc` keeps the token whole with the analysis of its first word. The `print_stats` and `print_markers` tables take the descriptions of `MORPHOLOGY_STATS_DESC` and `MORPHOLOGY_MARKERS_DESC` of `ests.constants`.
 
-Besides, in esTS a source that is neither a string, a `Doc` nor a `Document` raises `SourceTypeError`, and a `Doc` without the lemmas (of a pipeline of one's own without a `lemmatizer`) raises `SourceError`.
+Besides, in esTS a `Doc` without the lemmas (of a pipeline of one's own without a `lemmatizer`) raises `SourceError`.
 
 === "Code"
 
@@ -66,7 +66,7 @@ In esTS the statistics are `case`, ..., `verb_form` of the [table below](#statis
 
 ## Statistics { #statistics }
 
-Every statistic is an attribute of the object, a tuple of the values of a feature by word (`None` for a word the model gives no value of the feature), and `get_stats` gives the distributions of their values. The values are read from `token.pos_` and `token.morph` of the parse, that is, by context. The statistics are the part of speech and the fifteen features of `MORPHOLOGY_FEATURES`; the value `Unknown` in the printed tables means that the model gave the word no value of the feature. The other features the models annotate (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`, `PunctSide`, `PunctType`) are not counted but stay in `tags`.
+Every statistic is an attribute of the object, a tuple of the values of a feature by word (`None` for a word the analysis gives no value of the feature), and `get_stats` gives the distributions of their values. The values are the columns `upos` and `feats` of the document: the analyses of esMorph in the context of the sentence for a string, the annotation of the pipeline for a `Doc`. The statistics are the part of speech and the fifteen features of `MORPHOLOGY_FEATURES`; the value `Unknown` in the printed tables means that the analysis gave the word no value of the feature. The other features the models annotate (`AdvType`, `Foreign`, `NumForm`, `Number[psor]`, `PrepCase`, `Typo`, `PunctSide`, `PunctType`) are not counted but stay in `tags`.
 
 | Statistic | Feature | Values |
 | :-------- | :------ | :----- |

@@ -4,16 +4,16 @@
 
 *   `python` 3.11 or newer
 *   `spaCy` 3.8.17 or newer within 3
-*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.5.2 or newer within 0.5, the language-independent core: the extractors, the basic statistics and the common readability formulas, the lexical diversity metrics, the corpus measures, the plots and the machinery of the highlighting come from it with the tokenizer, the lemmatizer, the sentence splitter and the syllables of Spanish
+*   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.5.2 or newer within 0.5, the language-independent core: the extractors, the basic statistics and the common readability formulas, the lexical diversity metrics, the corpus measures, the plots and the machinery of the highlighting come from it with the hooks of Spanish: the tokens and sentences of anySeg, the lemmas of esMorph, the syllables of esTS
 *   [`anyseg`](https://github.com/SergeyShk/anySeg) 0.3.1 or newer within 0.3, the segmenter into tokens and sentences
 *   [`esmorph`](https://github.com/SergeyShk/esMorph) 0.3 or newer within 0.3, the morphological analyzer: the lemmas, the parts of speech and the features of a text; its dictionary, built from the Spanish entries of the English Wiktionary with the context model of the UD treebanks AnCora and GSD, is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 *   `numpy`, `scipy`, `pandas`
 *   `matplotlib` and `graphviz` for the [visualizers](visualizers/zipf.md)
 
-The dependencies are installed with the package. `import ests` loads neither spaCy nor matplotlib nor pandas, and the statistics of a string leave spaCy out, the morphology and the lexicon included: it comes with the first statistics that read the parse of its model - the syntax and the cohesion -, and the plots and the corpus functions on first use.
+The dependencies are installed with the package. anySeg and esMorph are written in Rust and come as wheels for Linux, macOS and Windows on x86-64 and arm64; elsewhere pip builds them from the source, which needs [Rust](https://rustup.rs/). `import ests` loads neither spaCy nor matplotlib nor pandas, and the statistics of a string leave spaCy out, the morphology and the lexicon included: it comes with the first statistics that read the parse of its model - the syntax and the cohesion -, and the plots and the corpus functions on first use.
 
 !!! warning "Graphviz"
-    The `graphviz` package among the dependencies is only a wrapper: rendering the [word tree](visualizers/word_tree.md) and the [network of collocations](visualizers/corpus.md#collocation_network) requires the executables of [Graphviz](https://graphviz.org/download/), installed separately (`brew install graphviz`, `apt install graphviz`, `conda install graphviz`), otherwise `render()` and displaying the graph in Jupyter fail with `ExecutableNotFound`. Nothing else needs them.
+    The `graphviz` package among the dependencies is only a wrapper: rendering the [word tree](visualizers/word_tree.md) and the [network of collocations](visualizers/corpus.md#collocation_network) requires the executables of [Graphviz](https://graphviz.org/download/), installed separately (`brew install graphviz`, `apt install graphviz`, `conda install graphviz`), otherwise `render()` and displaying the graph in Jupyter fail with `ExecutableNotFound`. The network of collocations uses the layout engine `neato`, which newer Ubuntu ships apart (`apt install libgvplugin-neato-layout8`). Nothing else needs them.
 
 ## From PyPI
 
