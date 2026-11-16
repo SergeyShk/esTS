@@ -85,10 +85,12 @@ def kwic(
 
 def _lemmas(word: str, words: Sequence[Word]) -> str | tuple[str, ...]:
     """
-    Lemmas of a word: lemmatize with the part of speech of a token of one word, and the
-    lemmas of all the analyses for a word of the keyword
+    Lemmas of a word without the period of an abbreviation, which the end of a sentence
+    splits off, so that Sr. has the lemmas of Sr anywhere: lemmatize with the part of speech
+    of a token of one word, and the lemmas of all the analyses for a word of the keyword
     """
+    form = word.removesuffix(".")
     if not words:
-        analyses = get_morph_analyzer().analyze(word)
-        return tuple(dict.fromkeys(analysis.lemma for analysis in analyses)) or (word,)
-    return lemmatize(word, (words[0].upos or "") if len(words) == 1 else "")
+        analyses = get_morph_analyzer().analyze(form)
+        return tuple(dict.fromkeys(analysis.lemma for analysis in analyses)) or (form,)
+    return lemmatize(form, (words[0].upos or "") if len(words) == 1 else "")

@@ -62,6 +62,9 @@ def test_kwic_abbreviation_by_lemma():
         found = kwic(source, "etc.", by_lemma=True)
         assert [line.keyword.removesuffix(".") for line in found] == ["etc", "etc"]
         assert [line.keyword for line in kwic(source, "pág.", by_lemma=True)] == ["pág."]
+    # Inside the keyword and at its end an abbreviation has the same lemmas
+    text = "Llegó el señor García. Vio al Sr. García."
+    assert [line.keyword for line in kwic(text, "Sr. García", by_lemma=True)] == ["Sr. García"]
 
 
 def test_kwic_by_lemma():

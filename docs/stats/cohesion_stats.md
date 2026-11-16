@@ -309,7 +309,7 @@ The primary connectors (`primary`) are conjunctions, conjunctive locutions and a
     ```
 
 !!! warning "Warning"
-    The words of a marker are counted as words like any other: the noun `embargo` of `sin embargo` is a noun and a content word of its sentence, so a text that repeats a marker gains a little overlap from it.
+    A marker of one word is counted as a word like any other: the adverb `además` is a content word of its sentence, so a text that repeats it gains a little overlap from it. The words of a marker of several words count as the marker alone.
 
 </div>
 

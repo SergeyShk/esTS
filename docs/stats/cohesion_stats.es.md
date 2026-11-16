@@ -346,7 +346,7 @@ Los conectores primarios (`primary`) son conjunciones, locuciones conjuntivas y 
     ```
 
 !!! warning "Aviso"
-    Las palabras de un marcador se cuentan como cualquier otra: el sustantivo `embargo` de `sin embargo` es un sustantivo y una palabra con contenido de su oración, así que un texto que repite un marcador gana algo de repetición por ello.
+    Un marcador de una palabra se cuenta como cualquier otra palabra: el adverbio `además` es una palabra con contenido de su oración, así que un texto que lo repite gana algo de repetición por ello. Las palabras de un marcador de varias palabras cuentan solo como el marcador.
 
 </div>
 
