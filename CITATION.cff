@@ -10,8 +10,8 @@ repository-code: "https://github.com/SergeyShk/esTS"
 url: "https://sergeyshk.github.io/esTS/"
 doi: 10.5281/zenodo.22924655
 license: MIT
-version: 0.10.0.dev8
-date-released: 2026-10-30
+version: 0.10.0
+date-released: 2026-11-16
 keywords:
   - spanish
   - nlp
