@@ -18,11 +18,12 @@ jobs:
         uses: astral-sh/setup-uv@v10.3.3
         with:
           enable-cache: true
-          python-version: "3.13"
       - name: Install Graphviz
+        # Newer Ubuntu ships the layout engine neato of the network of collocations apart
         run: |
           sudo apt-get update
           sudo apt-get install -y graphviz
+          echo "graph {}" | dot -Kneato -Tsvg > /dev/null || sudo apt-get install -y libgvplugin-neato-layout8
       - name: Install dependencies
         run: uv sync --locked --all-groups
       - name: Run notebooks
