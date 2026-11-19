@@ -184,6 +184,7 @@ testpaths = ["tests", "ests"]
 doctest_optionflags = ["NORMALIZE_WHITESPACE", "ELLIPSIS"]
 markers = [
     "network: test downloads data from the network; disable with -m 'not network'",
+    "core_sync: test checks the pages or the messages against the released core; the libraries job of anyTS skips it",
 ]
 
 [tool.coverage.run]
