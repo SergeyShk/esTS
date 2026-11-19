@@ -1,8 +1,8 @@
 # Dispersión de las palabras
 
-<!-- core: corpus/dispersion.md:dispersion 29fca84 -->
+<!-- core: corpus/dispersion.md:dispersion f58d196 -->
 ``` {.python .signature}
-dispersion(words, parts=10, word=None, min_freq=1)
+dispersion(words, parts=10, word=None, min_freq=1, *, messages=None)
 ```
 
 La dispersión de una palabra es lo uniformemente que se reparte por las partes de un texto o de un corpus. La frecuencia no distingue una palabra que aparece una vez en cada capítulo de otra reunida en un solo capítulo; las medidas de dispersión ([Gries 2008](https://www.stgries.info/research/2008_STG_Dispersion_IJCL.pdf), [2020](https://www.stgries.info/research/2020_STG_Dispersion_PHCL.pdf)) la complementan.
@@ -67,13 +67,14 @@ Los párrafos de un texto los da [`split_paragraphs`](../extractors/sentences.md
 
 ## Parámetros
 
-<!-- core: corpus/dispersion.md:dispersion-parameters 2fdf192 -->
+<!-- core: corpus/dispersion.md:dispersion-parameters 815cffd -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `words` | `list[str]` | - | Palabras del texto en orden |
 | `parts` | `int` / `list[int]` | `10` | Número de partes (de 2 al número de palabras) o tamaños de las partes |
 | `word` | `str` | `None` | Palabra cuya dispersión se busca; `None` - todas las palabras |
 | `min_freq` | `int` | `1` | Frecuencia mínima de una palabra |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Unas palabras que no son una lista de cadenas lanzan `SourceTypeError`, y la falta de palabras, `SourceError`. Un `parts` que no es ni un entero de 2 al número de palabras ni dos o más enteros positivos que lo sumen, un `word` que no es una cadena y un `min_freq` que no es un entero lanzan `ParameterError`.
 

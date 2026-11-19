@@ -1,7 +1,7 @@
 # Basic statistics
 
 ``` {.python .signature}
-BasicStats(source, sents_extractor=None, words_extractor=None, normalize=False, complex_syl_factor=3, long_word_letter_factor=7)
+BasicStats(source, sents_extractor=None, words_extractor=None, normalize=False, complex_syl_factor=3, long_word_letter_factor=7, filter_nums=False)
 ```
 
 --8<-- "stats/basic_stats.md:BasicStats"

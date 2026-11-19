@@ -1,7 +1,7 @@
 # Palabras clave
 
 ``` {.python .signature}
-keyness(target, reference, measure='log_likelihood', min_freq=1, positive=True, top_n=None, n=1)
+keyness(target, reference, measure='log_likelihood', min_freq=1, positive=True, top_n=None, n=1, *, messages=None)
 ```
 
 <!-- core: corpus/keyness.md:keyness 4394918 -->
@@ -42,7 +42,7 @@ La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/a
 
 ## Parámetros
 
-<!-- core: corpus/keyness.md:keyness-parameters a26b20f -->
+<!-- core: corpus/keyness.md:keyness-parameters 927fc84 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `target` | `list[str]` / `list[list[str]]` / `dict[str, int]` | - | Palabras del corpus objetivo - un texto o una lista de textos - o sus frecuencias |
@@ -52,14 +52,15 @@ La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/a
 | `positive` | `bool` | `True` | Palabras clave positivas (más frecuentes en el corpus objetivo) o negativas (más frecuentes en la referencia) |
 | `top_n` | `int` | `None` | Número de palabras clave; `None` - todas |
 | `n` | `int` | `1` | Longitud de los N-gramas de las palabras de cada texto; `1` - las palabras |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Los parámetros y el corpus objetivo los comprueba `check_keyness_params`; un `n` mayor que 1 con frecuencias o con una `FrequencyReference` lanza `ParameterError`. Una referencia que no es una lista de cadenas, una lista de tales listas, un contador ni una `FrequencyReference` lanza `SourceTypeError`, y una frecuencia negativa, `nan` o infinita de un contador y un corpus sin palabras, o de menos de `n` palabras, lanzan `SourceError`.
 
 `reference` también puede ser `FreqDict`, frente al cual `target` son formas. Un diccionario de frecuencias que no está descargado lanza `DatasetNotFoundError`. `keyness` comprueba sus parámetros y el corpus objetivo con `check_keyness_params` antes de leer `FreqDict`, así que un argumento erróneo falla antes de cargar el diccionario; el diccionario guarda palabras, así que un `n` mayor que 1 con él también lanza `ParameterError` antes de leerlo.
 
-<!-- core: corpus/keyness.md:check_keyness_params 9e9c4da -->
+<!-- core: corpus/keyness.md:check_keyness_params 5873366 -->
 ``` {.python .signature}
-check_keyness_params(measure='log_likelihood', min_freq=1, top_n=None, target=None, n=1, positive=True)
+check_keyness_params(measure='log_likelihood', min_freq=1, top_n=None, target=None, n=1, positive=True, *, messages=None)
 ```
 
 Comprueba los parámetros de `keyness` antes de leer un diccionario de frecuencias: lanza `ParameterError` salvo que la medida sea una de `KEYNESS_MEASURES`, la frecuencia mínima un entero, el número de palabras clave `None` o un entero de al menos uno, la longitud de los N-gramas `n` un entero de al menos uno y `positive` un `bool`. Con `target` lanza además `SourceTypeError` salvo que el corpus objetivo sea una lista de cadenas, una lista de tales listas o un mapeo de cadenas a frecuencias enteras, y `SourceError` para una frecuencia negativa, nan o infinita.

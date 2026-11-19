@@ -140,6 +140,12 @@ def test_keyness_errors(kwargs, error):
         keyness(target, reference, **kwargs)
 
 
+def test_keyness_messages():
+    messages = {"keyness_measure": "Medida desconocida: {measure}"}
+    with pytest.raises(ParameterError, match="Medida desconocida: mi"):
+        keyness(target, reference, measure="mi", messages=messages)
+
+
 def test_keyness_ngrams():
     """The n-grams of the words of every text, not across two texts"""
     texts = [["el", "gato", "duerme", "en", "casa"], ["el", "gato", "come", "en", "casa"]]
