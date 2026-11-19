@@ -66,6 +66,7 @@ def digest(ref: str) -> str:
     return hashlib.sha1(core_section(ref).encode()).hexdigest()[:7]
 
 
+@pytest.mark.core_sync
 @pytest.mark.parametrize("page", PAGES, ids=[str(page.relative_to(DOCS)) for page in PAGES])
 def test_spanish_page(page):
     spanish = page.with_name(page.name[:-3] + ".es.md")
@@ -78,6 +79,7 @@ def test_spanish_page(page):
     assert english_text.count("\n## ") == spanish_text.count("\n## ")
 
 
+@pytest.mark.core_sync
 @pytest.mark.parametrize("page", PAGES, ids=[str(page.relative_to(DOCS)) for page in PAGES])
 def test_core_translations(page):
     spanish = page.with_name(page.name[:-3] + ".es.md")
@@ -199,6 +201,7 @@ def test_readme_examples(readme):
     assert not failures, "\n".join(failures)
 
 
+@pytest.mark.core_sync
 def test_signatures_match_the_code():
     found = 0
     for page in sorted(path for path in DOCS.rglob("*.md") if not path.is_relative_to(CORE)):
