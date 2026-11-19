@@ -31,6 +31,8 @@ def keyness(
     positive: bool = True,
     top_n: int | None = None,
     n: int = 1,
+    *,
+    messages: Mapping[str, str] | None = None,
 ) -> list[Keyword]:
     """
     Finding the keywords of a target corpus against a reference one
@@ -76,6 +78,8 @@ def keyness(
         top_n (int): Number of keywords; None - all of them
         n (int): Length of the n-grams of the words of every text, joined by
             underscores as the n-grams of WordsExtractor; 1 - the words
+        messages (dict[str, str]): Messages of the errors by key; None - MESSAGES of
+            the core
 
     Returns:
         list[Keyword]: Keywords by descending keyness, then by descending
@@ -97,14 +101,16 @@ def keyness(
         [('gato', 2.77)]
     """
     if isinstance(reference, FreqDict):
-        check_keyness_params(measure, min_freq, top_n, target, n, positive)
+        check_keyness_params(measure, min_freq, top_n, target, n, positive, messages=messages)
         if n > 1:
             raise ParameterError(
                 "The frequency dictionary holds words: the n-grams need the words of both "
                 f"corpora, not n={n}"
             )
         reference = _frequency_reference(reference)
-    return anyts.corpus.keyness(target, reference, measure, min_freq, positive, top_n, n)
+    return anyts.corpus.keyness(
+        target, reference, measure, min_freq, positive, top_n, n, messages=messages
+    )
 
 
 def _frequency_reference(freq_dict: FreqDict) -> FrequencyReference:

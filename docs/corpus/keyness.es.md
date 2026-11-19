@@ -1,7 +1,7 @@
 # Palabras clave
 
 ``` {.python .signature}
-keyness(target, reference, measure='log_likelihood', min_freq=1, positive=True, top_n=None, n=1)
+keyness(target, reference, measure='log_likelihood', min_freq=1, positive=True, top_n=None, n=1, *, messages=None)
 ```
 
 <!-- core: corpus/keyness.md:keyness 4394918 -->
