@@ -88,13 +88,13 @@ BasicStatsComponent(nlp, name)
 ReadabilityStatsComponent(nlp, name, preset=None, basic=None)
 ```
 
-<!-- core: components.md:ReadabilityStatsComponent 58263af -->
+<!-- core: components.md:ReadabilityStatsComponent cc3af3b -->
 `ReadabilityStatsComponent` pone en la extensión las métricas de legibilidad, calculadas sobre el documento o, con `basic`, sobre las estadísticas básicas que otro componente puso en él. Una biblioteca fija `basic_factory`, la fábrica de su componente de las estadísticas básicas, que el error nombra cuando esa extensión no las tiene.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
 | `preset` | `str` | `None` | Preajuste de los coeficientes, uno de los preajustes de la clase; el de la clase por defecto si es `None` |
-| `basic` | `str` | `None` | Extensión de un componente de las estadísticas básicas que se reutilizan en lugar de calcularlas otra vez |
+| `basic` | `str` | `None` | Extensión de un componente de las estadísticas básicas que se reutilizan en lugar de calcularlas otra vez; sus palabras se toman tal como son, con los números |
 
 Con `preset` en `None` la configuración de un pipeline guardado no lleva preajuste, y el pipeline toma el de la clase por defecto al cargarse; una biblioteca que quiere su valor por defecto escrito en la configuración lo da en la firma de su subclase.
 
@@ -130,12 +130,12 @@ Los [preajustes](stats/readability_stats.md#presets) de esTS son `general` y `cl
 UnadaptedReadabilityStatsComponent(nlp, name, basic=None)
 ```
 
-<!-- core: components.md:UnadaptedReadabilityStatsComponent b7871a2 -->
+<!-- core: components.md:UnadaptedReadabilityStatsComponent 62f6947 -->
 `UnadaptedReadabilityStatsComponent` pone en la extensión las fórmulas de legibilidad de otros idiomas, calculadas sobre el documento o, con `basic`, sobre las estadísticas básicas que otro componente puso en él. Una biblioteca fija `basic_factory`, como para `ReadabilityStatsComponent`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
-| `basic` | `str` | `None` | Extensión de un componente de las estadísticas básicas que se reutilizan en lugar de calcularlas otra vez |
+| `basic` | `str` | `None` | Extensión de un componente de las estadísticas básicas que se reutilizan en lugar de calcularlas otra vez; sus palabras se toman tal como son, con los números |
 
 Excepciones:
 

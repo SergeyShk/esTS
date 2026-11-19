@@ -189,14 +189,14 @@ Los rasgos sintácticos llegan con un pipeline que tiene analizador sintáctico,
 
 ## Comparación de tablas de rasgos { #compare_features }
 
-<!-- core: corpus/compare.md:compare_features e0c139a -->
+<!-- core: corpus/compare.md:compare_features 7ae32fb -->
 ``` {.python .signature}
-compare_features(table_a, table_b, labels=('A', 'B'), n_bootstrap=1000, seed=0)
+compare_features(table_a, table_b, labels=('A', 'B'), n_bootstrap=1000, seed=0, *, messages=None)
 ```
 
 Compara dos corpus rasgo por rasgo. Cada corpus es una tabla de los rasgos de sus ventanas, partes de los textos de un tamaño parecido, así que los rasgos no dependen de la longitud de los textos. El resultado tiene una fila por columna, por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel `text` del índice; sin él cada fila es un texto aparte. Cada rasgo tiene un generador propio, a partir de la semilla y del nombre del rasgo, así que su intervalo no cambia con las demás columnas. Una columna que falta en una de las tablas da `nan`.
 
-<!-- core: corpus/compare.md:compare_features-parameters 2ed21c1 -->
+<!-- core: corpus/compare.md:compare_features-parameters ded2441 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `table_a` | `DataFrame` | - | Rasgos de las ventanas del primer corpus, una fila por ventana |
@@ -204,12 +204,13 @@ Compara dos corpus rasgo por rasgo. Cada corpus es una tabla de los rasgos de su
 | `labels` | `tuple[str, str]` | `('A', 'B')` | Nombres de los corpus para las columnas, dos cadenas que den columnas distintas |
 | `n_bootstrap` | `int` | `1000` | Número de remuestras bootstrap |
 | `seed` | `int` / `Generator` | `0` | Semilla del generador de números aleatorios, un entero no negativo, o un `Generator` de numpy; `None` - una aleatoria |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Una tabla que no es un `DataFrame`, que repite el nombre de una columna o que tiene una columna no numérica lanza `SourceTypeError`; los demás parámetros los comprueba `check_comparison_params`.
 
-<!-- core: corpus/compare.md:check_comparison_params a56a706 -->
+<!-- core: corpus/compare.md:check_comparison_params 0e3a98a -->
 ``` {.python .signature}
-check_comparison_params(labels=('A', 'B'), n_bootstrap=1000, seed=0)
+check_comparison_params(labels=('A', 'B'), n_bootstrap=1000, seed=0, *, messages=None)
 ```
 
 Comprueba los parámetros de `compare_features` antes de procesar los textos: lanza `ParameterError` salvo que las etiquetas sean dos cadenas que den columnas distintas (`("diff", "B")` repetiría `median_diff`), el número de remuestras bootstrap sea un entero de al menos uno y la semilla sea `None`, un entero no negativo o un `Generator` de numpy.
@@ -240,9 +241,9 @@ Las columnas son `anyts.corpus.COMPARISON_COLUMNS` con los sufijos `a` y `b` sus
 
 Las estadísticas de una fila están disponibles una a una desde `ests.corpus`:
 
-<!-- core: corpus/compare.md:calc_cohen_d 8318830 -->
+<!-- core: corpus/compare.md:calc_cohen_d 9fb4883 -->
 ``` {.python .signature}
-calc_cohen_d(values_a, values_b)
+calc_cohen_d(values_a, values_b, *, messages=None)
 ```
 
 La d de Cohen con las varianzas muestrales combinadas (ddof=1); `nan` con menos de dos valores en un lado o sin dispersión.
@@ -251,12 +252,13 @@ La d de Cohen con las varianzas muestrales combinadas (ddof=1); `nan` con menos 
 | :-------- | :--- | :------ | :---------- |
 | `values_a` | `list[float]` | - | Valores en el primer corpus |
 | `values_b` | `list[float]` | - | Valores en el segundo corpus |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Un valor que no es ni un número ni un valor ausente (`None`, `NA`) y unos valores que no son una lista plana lanzan `SourceTypeError`.
 
-<!-- core: corpus/compare.md:calc_cliff_delta 46d8def -->
+<!-- core: corpus/compare.md:calc_cliff_delta b906f6f -->
 ``` {.python .signature}
-calc_cliff_delta(values_a, values_b)
+calc_cliff_delta(values_a, values_b, *, messages=None)
 ```
 
 La delta de Cliff, la proporción de pares en que el primer valor es mayor menos la proporción en que es menor; `nan` para un conjunto vacío o un valor indefinido. Se calcula por ordenación, en tiempo $O((n_A + n_B) \log n_B)$ y memoria lineal.
@@ -265,12 +267,13 @@ La delta de Cliff, la proporción de pares en que el primer valor es mayor menos
 | :-------- | :--- | :------ | :---------- |
 | `values_a` | `list[float]` | - | Valores en el primer corpus |
 | `values_b` | `list[float]` | - | Valores en el segundo corpus |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Un valor que no es ni un número ni un valor ausente (`None`, `NA`) y unos valores que no son una lista plana lanzan `SourceTypeError`.
 
-<!-- core: corpus/compare.md:bootstrap_median_diff eef19f3 -->
+<!-- core: corpus/compare.md:bootstrap_median_diff 63c1515 -->
 ``` {.python .signature}
-bootstrap_median_diff(values_a, values_b, n_bootstrap=1000, rng=None, confidence=0.95, texts_a=None, texts_b=None)
+bootstrap_median_diff(values_a, values_b, n_bootstrap=1000, rng=None, confidence=0.95, texts_a=None, texts_b=None, *, messages=None)
 ```
 
 El intervalo bootstrap de percentiles de la diferencia de las medianas. Con `texts_a` y `texts_b` se remuestrean textos enteros, y la mediana de una extracción se toma sobre los valores de sus textos; con menos de dos textos en un lado el intervalo es `nan`.
@@ -284,12 +287,13 @@ El intervalo bootstrap de percentiles de la diferencia de las medianas. Con `tex
 | `confidence` | `float` | `0.95` | Nivel de confianza |
 | `texts_a` | `list` | `None` | Textos de los valores en el primer corpus; `None` - cada valor se remuestrea por separado |
 | `texts_b` | `list` | `None` | Textos de los valores en el segundo corpus |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Un valor que no es ni un número ni un valor ausente, unos valores que no son una lista plana y unos textos que no son etiquetas de un mismo tipo lanzan `SourceTypeError`; un `n_bootstrap` que no es un entero de al menos uno, un `confidence` que no es un número en (0, 1), unos textos que no son tantos como los valores y un `rng` que no es un `Generator` de numpy lanzan `ParameterError`.
 
-<!-- core: corpus/compare.md:holm_correction e837116 -->
+<!-- core: corpus/compare.md:holm_correction 8dab7a9 -->
 ``` {.python .signature}
-holm_correction(p_values)
+holm_correction(p_values, *, messages=None)
 ```
 
 La corrección de Holm para comparaciones múltiples: los valores p se ordenan de menor a mayor, el i-ésimo se multiplica por (m − i + 1), donde m es el número de valores definidos, luego se toma el máximo acumulado y se limita a uno; `nan` sigue siendo `nan`.
@@ -297,6 +301,7 @@ La corrección de Holm para comparaciones múltiples: los valores p se ordenan d
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `p_values` | `list[float]` | - | Valores p |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Un valor p que no es ni un número ni un valor ausente y unos valores p que no son una lista plana lanzan `SourceTypeError`, y un valor p fuera de [0, 1], `ParameterError`.
 
@@ -360,16 +365,16 @@ Excepciones:
 ## Ritmo de las oraciones { #sentence_rhythm }
 
 ``` {.python .signature}
-sentence_rhythm(lengths, *, messages=MESSAGES)
+sentence_rhythm(lengths, *, messages=None)
 ```
 
-<!-- core: corpus/compare.md:sentence_rhythm 9e57614 -->
+<!-- core: corpus/compare.md:sentence_rhythm 5b11f36 -->
 Da el ritmo de las oraciones a partir de sus longitudes en palabras: la media `sents_mean`, la desviación típica `sents_std`, el coeficiente de variación `sents_cv` y la autocorrelación de retardo 1 de las longitudes vecinas `sents_autocorr` (Yule, 1939). La desviación necesita dos oraciones, la autocorrelación tres de longitudes desiguales y el coeficiente de variación una media mayor que cero; si no, y sin oraciones, un rasgo es `nan`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
 | `lengths` | `list[int]` | - | Longitudes de las oraciones en palabras |
-| `messages` | `dict[str, str]` | `MESSAGES` | Mensajes de los errores por clave |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Unas longitudes que no son una lista de enteros lanzan `SourceTypeError`, y una longitud negativa, `ParameterError`.
 

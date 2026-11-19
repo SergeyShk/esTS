@@ -1,7 +1,7 @@
 # Estadísticas básicas
 
 ``` {.python .signature}
-BasicStats(source, sents_extractor=None, words_extractor=None, normalize=False, complex_syl_factor=3, long_word_letter_factor=7)
+BasicStats(source, sents_extractor=None, words_extractor=None, normalize=False, complex_syl_factor=3, long_word_letter_factor=7, filter_nums=False)
 ```
 
 <!-- core: stats/basic_stats.md:BasicStats 259a268 -->
@@ -51,7 +51,7 @@ La clase extiende el `BasicStats` del núcleo [anyTS](https://sergeyshk.github.i
 
 ## Parámetros
 
-<!-- core: stats/basic_stats.md:BasicStats-parameters 2d8e54b -->
+<!-- core: stats/basic_stats.md:BasicStats-parameters 831bb3f -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `source` | `str` / `Doc` / `Document` | - | Fuente de datos |
@@ -60,8 +60,9 @@ La clase extiende el `BasicStats` del núcleo [anyTS](https://sergeyshk.github.i
 | `normalize` | `bool` | `False` | Calcular las estadísticas normalizadas |
 | `complex_syl_factor` | `int` | `COMPLEX_SYL_FACTOR` | Número mínimo de sílabas de una palabra compleja |
 | `long_word_letter_factor` | `int` | `LONG_WORD_LETTER_FACTOR` | Número mínimo de letras de una palabra larga |
+| `filter_nums` | `bool` | `False` | Dejar fuera los números (`number_pattern`) entre las palabras |
 
-El objeto guarda `normalize`, `complex_syl_factor` y `long_word_letter_factor` con sus nombres.
+El objeto guarda `normalize`, `complex_syl_factor`, `long_word_letter_factor` y `filter_nums` con sus nombres, y los números que dejó fuera, en `n_numbers`.
 
 En esTS los umbrales son los del núcleo y de las fórmulas de legibilidad: una palabra compleja tiene tres o más sílabas, como en SMOG, y una palabra larga siete o más letras, como en LIX y RIX (`COMPLEX_SYL_FACTOR = 3` y `LONG_WORD_LETTER_FACTOR = 7` de `anyts.constants`).
 

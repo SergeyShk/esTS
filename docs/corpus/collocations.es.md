@@ -1,8 +1,8 @@
 # Colocaciones
 
-<!-- core: corpus/collocations.md:collocations a019591 -->
+<!-- core: corpus/collocations.md:collocations d886046 -->
 ``` {.python .signature}
-collocations(words, window=5, measure='logdice', min_freq=2, node=None, top_n=None, side=None)
+collocations(words, window=5, measure='logdice', min_freq=2, node=None, top_n=None, side=None, *, messages=None)
 ```
 
 Extracción de colocaciones: pares de palabras que aparecen juntas más a menudo de lo que daría la independencia - expresiones fijas, terminología, la combinatoria de una palabra. Las medidas de asociación son las de [Sketch Engine](https://www.sketchengine.eu/wp-content/uploads/ske-statistics.pdf) y de [`nltk.metrics.association`](https://www.nltk.org/api/nltk.metrics.association.html).
@@ -40,7 +40,7 @@ Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematizaci�
 
 ## Parámetros
 
-<!-- core: corpus/collocations.md:collocations-parameters 09ebaf3 -->
+<!-- core: corpus/collocations.md:collocations-parameters bae1d7c -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `words` | `list[str]` | - | Palabras del texto en orden |
@@ -50,6 +50,7 @@ Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematizaci�
 | `node` | `str` | `None` | Palabra cuya combinatoria se busca; `None` - todos los pares |
 | `top_n` | `int` | `None` | Número de colocaciones; `None` - todas |
 | `side` | `str` | `None` | Con un nodo, el lado de sus colocativos: `"left"` o `"right"`; `None` - los dos |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Unas palabras que no son una lista de cadenas lanzan `SourceTypeError`, y la falta de palabras, `SourceError`. Una medida desconocida, un `window` o un `top_n` que no es un entero de al menos uno, un `min_freq` que no es un entero, un `node` que no es una cadena y un `side` distinto de `"left"` y `"right"` o sin un nodo lanzan `ParameterError`.
 

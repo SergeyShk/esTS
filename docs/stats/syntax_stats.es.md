@@ -967,7 +967,7 @@ has_auxiliary(token)
 
 ## Predicado de una cláusula { #is_predicate }
 
-<!-- core: stats/syntax_stats.md:is_predicate c2f06e2 -->
+<!-- core: stats/syntax_stats.md:is_predicate c753c13 -->
 ``` {.python .signature}
 is_predicate(word)
 ```
@@ -977,8 +977,6 @@ Comprueba si una palabra puede ser el predicado de su cláusula: un verbo (`VERB
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
 | `word` | `TreeWord` | - | Palabra del árbol |
-
-Un valor que no es un `TreeWord` lanza `SourceTypeError`.
 
 ## Cadenas de modificadores { #calc_modifier_chains }
 
@@ -998,7 +996,7 @@ Una comprobación que no es invocable lanza `SourceTypeError`.
 
 ## Complementos con preposición { #is_prep_complement }
 
-<!-- core: stats/syntax_stats.md:is_prep_complement eb56245 -->
+<!-- core: stats/syntax_stats.md:is_prep_complement dbd41f7 -->
 ``` {.python .signature}
 is_prep_complement(word)
 ```
@@ -1008,8 +1006,6 @@ Comprueba si una palabra es un complemento con preposición: una palabra con la 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
 | `word` | `TreeWord` | - | Palabra del árbol |
-
-Un valor que no es un `TreeWord` lanza `SourceTypeError`.
 
 ## Ternas de dependencias { #dependency_triples }
 

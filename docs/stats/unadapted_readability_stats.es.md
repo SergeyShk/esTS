@@ -1,7 +1,7 @@
 # Fórmulas de otros idiomas
 
 ``` {.python .signature}
-UnadaptedReadabilityStats(source, sents_extractor=None, words_extractor=None)
+UnadaptedReadabilityStats(source, sents_extractor=None, words_extractor=None, filter_nums=None)
 ```
 
 <!-- core: stats/unadapted_readability_stats.md:UnadaptedReadabilityStats 966a27a -->
@@ -54,12 +54,13 @@ En español las palabras sin sílabas son los números, las abreviaturas sin voc
 
 ## Parámetros
 
-<!-- core: stats/unadapted_readability_stats.md:UnadaptedReadabilityStats-parameters 5e63df9 -->
+<!-- core: stats/unadapted_readability_stats.md:UnadaptedReadabilityStats-parameters 4597d80 -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `source` | `str` / `Doc` / `Document` / `BasicStats` | - | Fuente de datos (una cadena, un objeto Doc o Document, o unas estadísticas básicas ya calculadas) |
 | `sents_extractor` | `SentsExtractor` | `None` | Herramienta de extracción de oraciones, que no se usa con unas estadísticas básicas ya calculadas |
 | `words_extractor` | `WordsExtractor` | `None` | Herramienta de extracción de palabras, que no se usa con unas estadísticas básicas ya calculadas |
+| `filter_nums` | `bool` | `None` | Dejar fuera los números entre las palabras; `None` - el atributo de clase `filter_nums`, con unas estadísticas básicas ya calculadas - como en ellas; un valor distinto del suyo lanza `ParameterError` |
 
 ## Atributos
 

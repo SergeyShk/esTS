@@ -271,7 +271,7 @@ Raises:
 ## Rhythm of the sentences { #sentence_rhythm }
 
 ``` {.python .signature}
-sentence_rhythm(lengths, *, messages=MESSAGES)
+sentence_rhythm(lengths, *, messages=None)
 ```
 
 --8<-- "corpus/compare.md:sentence_rhythm"

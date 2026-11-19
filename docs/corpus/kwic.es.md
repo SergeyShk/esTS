@@ -71,9 +71,9 @@ Una lista de tuplas con nombre `Concordance` en el orden del texto.
 
 ## Líneas alineadas { #format_kwic }
 
-<!-- core: corpus/kwic.md:format_kwic 4de69b2 -->
+<!-- core: corpus/kwic.md:format_kwic 2be15d3 -->
 ``` {.python .signature}
-format_kwic(concordances, width=40)
+format_kwic(concordances, width=40, *, messages=None)
 ```
 
 Alinea las líneas en la palabra clave en un texto, una línea por aparición: el contexto de la izquierda se recorta por la izquierda y se alinea a la derecha, el de la derecha se recorta por la derecha. Las líneas pueden venir de cualquier iterable y se toman en la forma compuesta de Unicode (NFC), así que las anchuras cuentan los caracteres tal como se ven.
@@ -82,12 +82,13 @@ Alinea las líneas en la palabra clave en un texto, una línea por aparición: e
 | :-------- | :--- | :------ | :---------- |
 | `concordances` | `list[Concordance]` | - | Líneas de una concordancia |
 | `width` | `int` | `40` | Anchura de un contexto en caracteres |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
-Unas líneas que son una cadena o que no se pueden iterar lanzan `SourceTypeError`, y un `width` que no es un entero de al menos uno, `ParameterError`.
+Unas líneas que son una cadena, que no se pueden iterar o que no son concordancias lanzan `SourceTypeError`, y un `width` que no es un entero de al menos uno, `ParameterError`.
 
-<!-- core: corpus/kwic.md:print_kwic 3ead3e5 -->
+<!-- core: corpus/kwic.md:print_kwic ec934d7 -->
 ``` {.python .signature}
-print_kwic(concordances, width=40)
+print_kwic(concordances, width=40, *, messages=None)
 ```
 
 Imprime el resultado de `format_kwic`.

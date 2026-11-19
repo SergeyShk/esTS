@@ -7,9 +7,9 @@ Las funciones son las del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corp
 
 ## Delta de Burrows { #delta }
 
-<!-- core: corpus/stylometry.md:frequency_table 1b6144d -->
+<!-- core: corpus/stylometry.md:frequency_table c4445f8 -->
 ``` {.python .signature}
-frequency_table(corpus, n_mfw=100, culling=0.0)
+frequency_table(corpus, n_mfw=100, culling=0.0, *, messages=None)
 ```
 
 Construye la tabla de frecuencias relativas de un corpus, un diccionario «nombre de un texto → unidades»: las filas son los textos, las columnas las `n_mfw` unidades más frecuentes por frecuencia relativa media descendente (alfabéticamente si empatan); `culling` conserva las unidades que aparecen al menos en la proporción de textos dada, como en stylo.
@@ -19,23 +19,25 @@ Construye la tabla de frecuencias relativas de un corpus, un diccionario «nombr
 | `corpus` | `dict[str, list[str]]` | - | Unidades de los textos por los nombres de los textos |
 | `n_mfw` | `int` | `100` | Número de las unidades más frecuentes; `None` - todas |
 | `culling` | `float` | `0.0` | Menor proporción de textos en la que aparece una unidad |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Un corpus que no es un mapeo de listas de cadenas lanza `SourceTypeError`; un corpus vacío, un texto sin unidades y un filtrado que no deja ninguna unidad lanzan `SourceError`, y un `n_mfw` que no es un entero de al menos uno y un `culling` que no es un número dentro de [0, 1], `ParameterError`.
 
-<!-- core: corpus/stylometry.md:z_scores d9b43d3 -->
+<!-- core: corpus/stylometry.md:z_scores e85221e -->
 ``` {.python .signature}
-z_scores(table)
+z_scores(table, *, messages=None)
 ```
 
-Estandariza las columnas de una tabla de frecuencias con la desviación típica muestral, como `scale()` de R; una columna con la misma frecuencia en todos los textos da ceros.
+Estandariza las columnas de una tabla de frecuencias con la desviación típica muestral, como `scale()` de R; una columna con la misma frecuencia en todos los textos da ceros. Una tabla que no es un `DataFrame` lanza `SourceTypeError`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
-| `table` | `DataFrame` | - | Tabla de frecuencias relativas |
+| `table` | `DataFrame` | - | Tabla de frecuencias relativas (`frequency_table`) |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
-<!-- core: corpus/stylometry.md:delta 07de161 -->
+<!-- core: corpus/stylometry.md:delta 5b85ad4 -->
 ``` {.python .signature}
-delta(corpus, n_mfw=100, variant='burrows', culling=0.0)
+delta(corpus, n_mfw=100, variant='burrows', culling=0.0, *, messages=None)
 ```
 
 Calcula a partir de las puntuaciones z una matriz simétrica de distancias (un `DataFrame` con los nombres de los textos); hacen falta al menos tres textos: con dos, las puntuaciones z degeneran en ±1/√2 y las distancias no dependen de las frecuencias.
@@ -57,12 +59,13 @@ La Delta coseno es la que mejor agrupa los textos por autor en los experimentos 
 | `n_mfw` | `int` | `100` | Número de las unidades más frecuentes; `None` - todas |
 | `variant` | `str` | `'burrows'` | Variante de Delta de `anyts.constants.DELTA_VARIANTS` |
 | `culling` | `float` | `0.0` | Menor proporción de textos en la que aparece una unidad |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 El corpus, `n_mfw` y `culling` lanzan los errores de `frequency_table`; menos de tres textos lanzan `SourceError`, y una variante desconocida, `ParameterError`.
 
-<!-- core: corpus/stylometry.md:delta_profiles 1c5b7e6 -->
+<!-- core: corpus/stylometry.md:delta_profiles 46d29ab -->
 ``` {.python .signature}
-delta_profiles(reference, samples, n_mfw=100, variant='burrows', culling=0.0, statistics=None)
+delta_profiles(reference, samples, n_mfw=100, variant='burrows', culling=0.0, statistics=None, *, messages=None)
 ```
 
 Distancias de Delta para la atribución de autoría. Las unidades más frecuentes, el filtrado y las estadísticas de las puntuaciones z se toman de los textos de referencia (los perfiles de los autores) o de un conjunto aparte `statistics`, como las ventanas de entrenamiento cuando los perfiles son demasiado pocos para estimar la dispersión de las frecuencias; los textos a examinar `samples` reciben las mismas unidades y el mismo escalado. El resultado son las distancias de los textos examinados (filas) a los de referencia (columnas); la referencia más cercana es el autor presunto. A diferencia de `delta`, un texto examinado no influye ni en las unidades ni en el escalado, así que su resultado no depende de los demás textos examinados.
@@ -75,6 +78,7 @@ Distancias de Delta para la atribución de autoría. Las unidades más frecuente
 | `variant` | `str` | `'burrows'` | Variante de Delta de `anyts.constants.DELTA_VARIANTS` |
 | `culling` | `float` | `0.0` | Menor proporción de textos en la que aparece una unidad |
 | `statistics` | `dict[str, list[str]]` | `None` | Textos de las unidades y de las estadísticas del escalado; `None` - los textos de referencia |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Los corpus, `n_mfw` y `culling` lanzan los errores de `frequency_table`; menos de tres textos para las estadísticas lanzan `SourceError`, y una variante desconocida, `ParameterError`.
 
@@ -127,9 +131,9 @@ Los corpus, `n_mfw` y `culling` lanzan los errores de `frequency_table`; menos d
 
 ## Delta móvil { #rolling_delta }
 
-<!-- core: corpus/stylometry.md:rolling_delta c80e9bf -->
+<!-- core: corpus/stylometry.md:rolling_delta ba4892e -->
 ``` {.python .signature}
-rolling_delta(reference, text, window=5000, step=1000, n_mfw=100, variant='burrows', culling=0.0, statistics=None)
+rolling_delta(reference, text, window=5000, step=1000, n_mfw=100, variant='burrows', culling=0.0, statistics=None, *, messages=None)
 ```
 
 La Delta a lo largo de un texto, a la manera de `rolling.delta` de stylo: los textos de referencia y el texto a examinar se cortan en ventanas de `window` unidades cada `step` unidades, y el resto más corto que una ventana se descarta. Las unidades más frecuentes, el filtrado y las estadísticas de las puntuaciones z se toman de las ventanas de los textos de referencia o de un conjunto aparte `statistics`, y cada ventana del texto se compara por la variante de Delta con el centroide de las ventanas de cada texto de referencia. El resultado son las distancias de las ventanas (filas, por la posición de su centro en unidades) a las referencias (columnas); donde la referencia más cercana cambia a lo largo del texto, cambia también el estilo: otro autor de una parte de un texto escrito en colaboración, un pasaje tomado de otro texto. A diferencia de stylo, que suma las diferencias de las frecuencias brutas, las distancias son las de `delta_profiles` sobre puntuaciones z.
@@ -146,6 +150,7 @@ Escalados por sus propias ventanas, los centroides de las referencias se equilib
 | `variant` | `str` | `'burrows'` | Variante de Delta de `anyts.constants.DELTA_VARIANTS` |
 | `culling` | `float` | `0.0` | Menor proporción de ventanas en la que aparece una unidad |
 | `statistics` | `dict[str, list[str]]` | `None` | Textos cuyas ventanas dan las unidades y las estadísticas del escalado; `None` - los textos de referencia |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Un corpus que no es un mapeo de listas de cadenas y unas unidades del texto que no son una lista de cadenas lanzan `SourceTypeError`. La falta de textos de referencia, menos de dos sin `statistics`, un texto sin unidades o más corto que una ventana, menos de tres ventanas de las estadísticas y un filtrado que no deja ninguna unidad lanzan `SourceError`. Una variante desconocida, un `window`, un `step` o un `n_mfw` que no es un entero de al menos uno, un `step` mayor que la ventana y un `culling` que no es un número dentro de [0, 1] lanzan `ParameterError`.
 
@@ -177,9 +182,9 @@ Un corpus que no es un mapeo de listas de cadenas y unas unidades del texto que 
 
 ## Zeta { #zeta }
 
-<!-- core: corpus/stylometry.md:zeta 1b7460b -->
+<!-- core: corpus/stylometry.md:zeta f12bd98 -->
 ``` {.python .signature}
-zeta(target, comparison, segment_size=2000, top_n=None)
+zeta(target, comparison, segment_size=2000, top_n=None, *, messages=None)
 ```
 
 Marcadores de palabras preferidas y evitadas según Burrows (2007) y Craig y Kinney (2009). Cada texto de ambos corpus se divide en segmentos de unas `segment_size` palabras (la longitud dividida por el tamaño, redondeada al entero más próximo con las mitades hacia arriba, al menos un segmento); $DP$ es la proporción de segmentos de un corpus con la palabra. Zeta es $DP_{target} - DP_{comparison}$, de −1 a 1 (`zeta.craig` en stylo; la Zeta clásica de Craig, $DP_{target} + (1 - DP_{comparison})$, es mayor en uno); la Zeta logarítmica es $\log_2 \frac{DP_{target}}{DP_{comparison}}$ ([Schöch et al. 2018](https://zeta-project.eu/en/keyness-measures/burrows-zeta-logarithmic-zeta/)), con una proporción nula sustituida por medio segmento. La lista va de las palabras que prefiere el corpus objetivo a las que evita.
@@ -190,6 +195,7 @@ Marcadores de palabras preferidas y evitadas según Burrows (2007) y Craig y Kin
 | `comparison` | `list[str]` / `list[list[str]]` | - | Palabras del corpus de comparación |
 | `segment_size` | `int` | `2000` | Tamaño de un segmento en palabras |
 | `top_n` | `int` | `None` | Número de palabras desde el principio de la lista; `None` - todas |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 El resultado es una lista de tuplas con nombre `ZetaScore(word, dp_target, dp_comparison, zeta, log_zeta)` por Zeta descendente, por Zeta logarítmica descendente y alfabéticamente si empatan. Un corpus que no es ni una lista de cadenas ni una lista de tales listas lanza `SourceTypeError`, y un corpus sin palabras, `SourceError`; un `segment_size` o un `top_n` que no es un entero de al menos uno lanza `ParameterError`.
 
@@ -209,9 +215,9 @@ El resultado es una lista de tuplas con nombre `ZetaScore(word, dp_target, dp_co
     ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2.0)
     ```
 
-<!-- core: corpus/stylometry.md:zeta_segments 89aea5c -->
+<!-- core: corpus/stylometry.md:zeta_segments 33ac85a -->
 ``` {.python .signature}
-zeta_segments(corpora, preferred, avoided, segment_size=2000)
+zeta_segments(corpora, preferred, avoided, segment_size=2000, *, messages=None)
 ```
 
 Las proporciones de los marcadores de Zeta en los segmentos de los corpus, tal como `oppose` de stylo sitúa los segmentos: cada texto se divide en segmentos como en `zeta`, y un segmento recibe las proporciones de las palabras de las listas `preferred` y `avoided` presentes en él. Con los marcadores de un corpus objetivo frente a un corpus de comparación, los segmentos del objetivo quedan arriba a la izquierda del plano de las dos proporciones y los de la comparación abajo a la derecha; los segmentos de un texto de autoría disputada muestran a qué grupo se acerca (`zeta_scatter_plot`).
@@ -222,6 +228,7 @@ Las proporciones de los marcadores de Zeta en los segmentos de los corpus, tal c
 | `preferred` | `Collection[str]` | - | Palabras que prefiere el corpus objetivo - el principio de la lista de `zeta` |
 | `avoided` | `Collection[str]` | - | Palabras que evita el corpus objetivo - el final de la lista |
 | `segment_size` | `int` | `2000` | Tamaño de un segmento en palabras |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 El resultado es un `DataFrame` de los segmentos en el orden de los corpus y de sus textos, con las columnas `corpus` (el nombre del corpus), `preferred` y `avoided` (las proporciones de las listas). Unos corpus que no son un mapeo y un corpus o una lista de marcadores que no es una lista de cadenas lanzan `SourceTypeError`; la falta de corpus, una lista de marcadores vacía y un corpus sin palabras, `SourceError`, y un `segment_size` que no es un entero de al menos uno, `ParameterError`.
 
@@ -255,9 +262,9 @@ El resultado es un `DataFrame` de los segmentos en el orden de los corpus y de s
 
 ## Ji cuadrado de Kilgarriff { #kilgarriff_chi2 }
 
-<!-- core: corpus/stylometry.md:kilgarriff_chi2 33184e9 -->
+<!-- core: corpus/stylometry.md:kilgarriff_chi2 83f2fa3 -->
 ``` {.python .signature}
-kilgarriff_chi2(words_a, words_b, n_mfw=500)
+kilgarriff_chi2(words_a, words_b, n_mfw=500, *, messages=None)
 ```
 
 La distancia entre dos corpus según [Kilgarriff (2001)](https://www.sketchengine.eu/wp-content/uploads/comparing_corpora_2001.pdf): para las `n_mfw` palabras más frecuentes del corpus conjunto las frecuencias esperadas en los corpus son proporcionales a sus tamaños, $\chi^2 = \sum (O - E)^2 / E$ sobre las palabras y ambos corpus. Cuanto mayor es el valor, más difieren los corpus; crece con el tamaño de los corpus, así que solo son comparables los pares de tamaños iguales.
@@ -267,6 +274,7 @@ La distancia entre dos corpus según [Kilgarriff (2001)](https://www.sketchengin
 | `words_a` | `list[str]` | - | Palabras del primer corpus |
 | `words_b` | `list[str]` | - | Palabras del segundo corpus |
 | `n_mfw` | `int` | `500` | Número de las palabras más frecuentes del corpus conjunto |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Unas palabras que no son una lista de cadenas lanzan `SourceTypeError`, un corpus sin palabras, `SourceError`, y un `n_mfw` que no es un entero de al menos uno, `ParameterError`.
 
@@ -286,9 +294,9 @@ Unas palabras que no son una lista de cadenas lanzan `SourceTypeError`, un corpu
 
 ## Curva de Mendenhall { #mendenhall }
 
-<!-- core: corpus/stylometry.md:mendenhall_curve be1fbeb -->
+<!-- core: corpus/stylometry.md:mendenhall_curve 9458e86 -->
 ``` {.python .signature}
-mendenhall_curve(words)
+mendenhall_curve(words, *, messages=None)
 ```
 
 Las proporciones de las palabras de cada longitud en caracteres por longitud ascendente (Mendenhall 1887), un perfil del autor comparable entre textos sea cual sea su tamaño.
@@ -296,12 +304,13 @@ Las proporciones de las palabras de cada longitud en caracteres por longitud asc
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `words` | `list[str]` | - | Palabras del texto |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Unas palabras que no son una lista de cadenas lanzan `SourceTypeError`, y la falta de palabras, `SourceError`.
 
-<!-- core: corpus/stylometry.md:mendenhall_distance 187c51f -->
+<!-- core: corpus/stylometry.md:mendenhall_distance 8dea589 -->
 ``` {.python .signature}
-mendenhall_distance(words_a, words_b)
+mendenhall_distance(words_a, words_b, *, messages=None)
 ```
 
 La distancia de Jensen-Shannon con base 2 entre las curvas de Mendenhall de dos textos, de 0 (las distribuciones coinciden) a 1.
@@ -310,6 +319,7 @@ La distancia de Jensen-Shannon con base 2 entre las curvas de Mendenhall de dos 
 | :-------- | :--- | :------ | :---------- |
 | `words_a` | `list[str]` | - | Palabras del primer texto |
 | `words_b` | `list[str]` | - | Palabras del segundo texto |
+| `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
 Unas palabras que no son una lista de cadenas lanzan `SourceTypeError`, y un texto sin palabras, `SourceError`.
 
