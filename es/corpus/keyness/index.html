@@ -2213,7 +2213,7 @@
 
 
 <h1 id="palabras-clave">Palabras clave<a class="headerlink" href="#palabras-clave" title="Permanent link">&para;</a></h1>
-<div class="signature highlight"><pre><span></span><code><span class="n">keyness</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="s1">'log_likelihood'</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">keyness</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="s1">'log_likelihood'</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <!-- core: corpus/keyness.md:keyness 4394918 -->
 <p>Extracción de palabras clave (keyness) de un corpus objetivo frente a uno de referencia: las palabras que aparecen significativamente más a menudo en el corpus objetivo que en el de referencia.</p>
@@ -2248,7 +2248,7 @@
 </div>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/keyness.md:keyness-parameters a26b20f -->
+<!-- core: corpus/keyness.md:keyness-parameters 927fc84 -->
 <table>
 <thead>
 <tr>
@@ -2301,12 +2301,18 @@
 <td style="text-align: left;"><code>1</code></td>
 <td style="text-align: left;">Longitud de los N-gramas de las palabras de cada texto; <code>1</code> - las palabras</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
+</tr>
 </tbody>
 </table>
 <p>Los parámetros y el corpus objetivo los comprueba <code>check_keyness_params</code>; un <code>n</code> mayor que 1 con frecuencias o con una <code>FrequencyReference</code> lanza <code>ParameterError</code>. Una referencia que no es una lista de cadenas, una lista de tales listas, un contador ni una <code>FrequencyReference</code> lanza <code>SourceTypeError</code>, y una frecuencia negativa, <code>nan</code> o infinita de un contador y un corpus sin palabras, o de menos de <code>n</code> palabras, lanzan <code>SourceError</code>.</p>
 <p><code>reference</code> también puede ser <code>FreqDict</code>, frente al cual <code>target</code> son formas. Un diccionario de frecuencias que no está descargado lanza <code>DatasetNotFoundError</code>. <code>keyness</code> comprueba sus parámetros y el corpus objetivo con <code>check_keyness_params</code> antes de leer <code>FreqDict</code>, así que un argumento erróneo falla antes de cargar el diccionario; el diccionario guarda palabras, así que un <code>n</code> mayor que 1 con él también lanza <code>ParameterError</code> antes de leerlo.</p>
-<!-- core: corpus/keyness.md:check_keyness_params 9e9c4da -->
-<div class="signature highlight"><pre><span></span><code><span class="n">check_keyness_params</span><span class="p">(</span><span class="n">measure</span><span class="o">=</span><span class="s1">'log_likelihood'</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<!-- core: corpus/keyness.md:check_keyness_params 5873366 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">check_keyness_params</span><span class="p">(</span><span class="n">measure</span><span class="o">=</span><span class="s1">'log_likelihood'</span><span class="p">,</span> <span class="n">min_freq</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">positive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Comprueba los parámetros de <code>keyness</code> antes de leer un diccionario de frecuencias: lanza <code>ParameterError</code> salvo que la medida sea una de <code>KEYNESS_MEASURES</code>, la frecuencia mínima un entero, el número de palabras clave <code>None</code> o un entero de al menos uno, la longitud de los N-gramas <code>n</code> un entero de al menos uno y <code>positive</code> un <code>bool</code>. Con <code>target</code> lanza además <code>SourceTypeError</code> salvo que el corpus objetivo sea una lista de cadenas, una lista de tales listas o un mapeo de cadenas a frecuencias enteras, y <code>SourceError</code> para una frecuencia negativa, nan o infinita.</p>
 <h2 id="referencia-por-frecuencias">Referencia por frecuencias<a class="headerlink" href="#referencia-por-frecuencias" title="Permanent link">&para;</a></h2>

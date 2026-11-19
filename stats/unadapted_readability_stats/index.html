@@ -2301,7 +2301,7 @@
 
 
 <h1 id="formulas-of-other-languages">Formulas of other languages<a class="headerlink" href="#formulas-of-other-languages" title="Permanent link">&para;</a></h1>
-<div class="signature highlight"><pre><span></span><code><span class="n">UnadaptedReadabilityStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">UnadaptedReadabilityStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Readability formulas made for English, German or Italian, computed from the basic statistics of a text with the coefficients they were published with (Linsear Write in the form of textstat), without a calibration for its language. Their values compare texts of one language with each other; they are no grade levels of another language. A word without syllables (a number, a preposition of one consonant) counts as monosyllabic in FORCAST and the Wiener Sachtextformeln and as easy in Linsear Write, as in textstat. The data source is a text, a <code>Doc</code> object of <a href="https://github.com/explosion/spaCy">spaCy</a>, a <code>Document</code> of <a href="https://github.com/SergeyShk/anySeg">anySeg</a> or a ready <code>BasicStats</code> object, as for <code>ReadabilityStats</code>.</p>
 <p>Raises:</p>
@@ -2374,6 +2374,12 @@ Wheeler-Smith index          |  120.00
 <td style="text-align: left;"><code>WordsExtractor</code></td>
 <td style="text-align: left;"><code>None</code></td>
 <td style="text-align: left;">Word extraction tool, not used for ready basic statistics</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>filter_nums</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Leave out the numbers among the words; <code>None</code> - the class attribute <code>filter_nums</code>, for ready basic statistics - as in them; a value that differs from theirs raises <code>ParameterError</code></td>
 </tr>
 </tbody>
 </table>

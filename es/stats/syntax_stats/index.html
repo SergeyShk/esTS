@@ -4021,7 +4021,7 @@ Ratio of nouns to verbs                                    |   2.67
 </div>
 </div>
 <h2 id="is_predicate">Predicado de una cláusula<a class="headerlink" href="#is_predicate" title="Permanent link">&para;</a></h2>
-<!-- core: stats/syntax_stats.md:is_predicate c2f06e2 -->
+<!-- core: stats/syntax_stats.md:is_predicate c753c13 -->
 <div class="signature highlight"><pre><span></span><code><span class="n">is_predicate</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
 </code></pre></div>
 <p>Comprueba si una palabra puede ser el predicado de su cláusula: un verbo (<code>VERB</code>, <code>AUX</code>), una palabra con sujeto propio (<code>nsubj</code>, <code>csubj</code> y sus subtipos, <code>anyts.constants.SUBJECT_DEPS</code>) o con cópula (<code>cop</code>), de modo que el predicado nominal de <code>he is tall</code> y de una lengua que omite el sujeto pasa y una palabra parentética no.</p>
@@ -4043,7 +4043,6 @@ Ratio of nouns to verbs                                    |   2.67
 </tr>
 </tbody>
 </table>
-<p>Un valor que no es un <code>TreeWord</code> lanza <code>SourceTypeError</code>.</p>
 <h2 id="calc_modifier_chains">Cadenas de modificadores<a class="headerlink" href="#calc_modifier_chains" title="Permanent link">&para;</a></h2>
 <!-- core: stats/syntax_stats.md:calc_modifier_chains a9096ac -->
 <div class="signature highlight"><pre><span></span><code><span class="n">calc_modifier_chains</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="n">is_modifier</span><span class="p">)</span>
@@ -4075,7 +4074,7 @@ Ratio of nouns to verbs                                    |   2.67
 </table>
 <p>Una comprobación que no es invocable lanza <code>SourceTypeError</code>.</p>
 <h2 id="is_prep_complement">Complementos con preposición<a class="headerlink" href="#is_prep_complement" title="Permanent link">&para;</a></h2>
-<!-- core: stats/syntax_stats.md:is_prep_complement eb56245 -->
+<!-- core: stats/syntax_stats.md:is_prep_complement dbd41f7 -->
 <div class="signature highlight"><pre><span></span><code><span class="n">is_prep_complement</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
 </code></pre></div>
 <p>Comprueba si una palabra es un complemento con preposición: una palabra con la relación <code>nmod</code> u <code>obl</code> o un subtipo de ellas (<code>anyts.constants.PREP_COMPLEMENT_DEPS</code>), o un predicado con cópula o con sujeto propio fuera de una oración de relativo (<code>acl</code>), como un predicado nominal de una lengua que omite la cópula en presente, que tiene una dependiente de la relación <code>case</code> que es una adposición (<code>ADP</code>) o empieza una de varias palabras (<code>fixed</code>: <em>in front of</em>). Un sustantivo en un caso sin preposición y un marcador posesivo no lo son.</p>
@@ -4097,7 +4096,6 @@ Ratio of nouns to verbs                                    |   2.67
 </tr>
 </tbody>
 </table>
-<p>Un valor que no es un <code>TreeWord</code> lanza <code>SourceTypeError</code>.</p>
 <h2 id="dependency_triples">Ternas de dependencias<a class="headerlink" href="#dependency_triples" title="Permanent link">&para;</a></h2>
 <!-- core: stats/syntax_stats.md:dependency_triples 2cc48fb -->
 <div class="signature highlight"><pre><span></span><code><span class="n">dependency_triples</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>

@@ -2095,8 +2095,8 @@
 <p>Medidas de estilometría y de atribución de autoría: distancias entre textos por las frecuencias de las palabras más frecuentes (la Delta de Burrows y sus variantes, como en <a href="https://github.com/computationalstylistics/stylo">stylo</a>) y a lo largo de un texto por sus ventanas (la Delta móvil), marcadores de palabras preferidas y evitadas (Zeta) y sus proporciones en los segmentos de los corpus, la distancia ji cuadrado de Kilgarriff entre corpus y la curva de Mendenhall. Las funciones trabajan con listas de unidades de un texto: formas de palabra en minúsculas (la elección habitual para Delta), lemas o N-gramas de caracteres; las mayúsculas y minúsculas y la lematización corresponden a los extractores.</p>
 <p>Las funciones son las del núcleo <a href="https://sergeyshk.github.io/anyTS/corpus/stylometry/">anyTS</a>, con el <a href="#function_words_profile">perfil de las palabras funcionales</a> del español añadido como rasgo de un autor. Las unidades de un texto las dan <a href="../../extractors/words/"><code>WordsExtractor</code></a> - formas de palabra y lemas - y <a href="../../extractors/char_ngrams/"><code>CharNgramsExtractor</code></a>.</p>
 <h2 id="delta">Delta de Burrows<a class="headerlink" href="#delta" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/stylometry.md:frequency_table 1b6144d -->
-<div class="signature highlight"><pre><span></span><code><span class="n">frequency_table</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">n_mfw</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">culling</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<!-- core: corpus/stylometry.md:frequency_table c4445f8 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">frequency_table</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">n_mfw</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">culling</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Construye la tabla de frecuencias relativas de un corpus, un diccionario «nombre de un texto → unidades»: las filas son los textos, las columnas las <code>n_mfw</code> unidades más frecuentes por frecuencia relativa media descendente (alfabéticamente si empatan); <code>culling</code> conserva las unidades que aparecen al menos en la proporción de textos dada, como en stylo.</p>
 <table>
@@ -2127,13 +2127,19 @@
 <td style="text-align: left;"><code>0.0</code></td>
 <td style="text-align: left;">Menor proporción de textos en la que aparece una unidad</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
+</tr>
 </tbody>
 </table>
 <p>Un corpus que no es un mapeo de listas de cadenas lanza <code>SourceTypeError</code>; un corpus vacío, un texto sin unidades y un filtrado que no deja ninguna unidad lanzan <code>SourceError</code>, y un <code>n_mfw</code> que no es un entero de al menos uno y un <code>culling</code> que no es un número dentro de [0, 1], <code>ParameterError</code>.</p>
-<!-- core: corpus/stylometry.md:z_scores d9b43d3 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">z_scores</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+<!-- core: corpus/stylometry.md:z_scores e85221e -->
+<div class="signature highlight"><pre><span></span><code><span class="n">z_scores</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>Estandariza las columnas de una tabla de frecuencias con la desviación típica muestral, como <code>scale()</code> de R; una columna con la misma frecuencia en todos los textos da ceros.</p>
+<p>Estandariza las columnas de una tabla de frecuencias con la desviación típica muestral, como <code>scale()</code> de R; una columna con la misma frecuencia en todos los textos da ceros. Una tabla que no es un <code>DataFrame</code> lanza <code>SourceTypeError</code>.</p>
 <table>
 <thead>
 <tr>
@@ -2148,12 +2154,18 @@
 <td style="text-align: left;"><code>table</code></td>
 <td style="text-align: left;"><code>DataFrame</code></td>
 <td style="text-align: left;">-</td>
-<td style="text-align: left;">Tabla de frecuencias relativas</td>
+<td style="text-align: left;">Tabla de frecuencias relativas (<code>frequency_table</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
 </tr>
 </tbody>
 </table>
-<!-- core: corpus/stylometry.md:delta 07de161 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">delta</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">n_mfw</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="s1">'burrows'</span><span class="p">,</span> <span class="n">culling</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<!-- core: corpus/stylometry.md:delta 5b85ad4 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">delta</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">n_mfw</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="s1">'burrows'</span><span class="p">,</span> <span class="n">culling</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Calcula a partir de las puntuaciones z una matriz simétrica de distancias (un <code>DataFrame</code> con los nombres de los textos); hacen falta al menos tres textos: con dos, las puntuaciones z degeneran en ±1/√2 y las distancias no dependen de las frecuencias.</p>
 <p>Las variantes (<code>anyts.constants.DELTA_VARIANTS</code>), con las fórmulas de las fuentes de stylo; <span class="arithmatex">\(n\)</span> es el número de unidades, <span class="arithmatex">\(z_A\)</span> y <span class="arithmatex">\(z_B\)</span> los vectores de puntuaciones z de los textos:</p>
@@ -2228,11 +2240,17 @@
 <td style="text-align: left;"><code>0.0</code></td>
 <td style="text-align: left;">Menor proporción de textos en la que aparece una unidad</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
+</tr>
 </tbody>
 </table>
 <p>El corpus, <code>n_mfw</code> y <code>culling</code> lanzan los errores de <code>frequency_table</code>; menos de tres textos lanzan <code>SourceError</code>, y una variante desconocida, <code>ParameterError</code>.</p>
-<!-- core: corpus/stylometry.md:delta_profiles 1c5b7e6 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">delta_profiles</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">n_mfw</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="s1">'burrows'</span><span class="p">,</span> <span class="n">culling</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<!-- core: corpus/stylometry.md:delta_profiles 46d29ab -->
+<div class="signature highlight"><pre><span></span><code><span class="n">delta_profiles</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">samples</span><span class="p">,</span> <span class="n">n_mfw</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="s1">'burrows'</span><span class="p">,</span> <span class="n">culling</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Distancias de Delta para la atribución de autoría. Las unidades más frecuentes, el filtrado y las estadísticas de las puntuaciones z se toman de los textos de referencia (los perfiles de los autores) o de un conjunto aparte <code>statistics</code>, como las ventanas de entrenamiento cuando los perfiles son demasiado pocos para estimar la dispersión de las frecuencias; los textos a examinar <code>samples</code> reciben las mismas unidades y el mismo escalado. El resultado son las distancias de los textos examinados (filas) a los de referencia (columnas); la referencia más cercana es el autor presunto. A diferencia de <code>delta</code>, un texto examinado no influye ni en las unidades ni en el escalado, así que su resultado no depende de los demás textos examinados.</p>
 <table>
@@ -2280,6 +2298,12 @@
 <td style="text-align: left;"><code>dict[str, list[str]]</code></td>
 <td style="text-align: left;"><code>None</code></td>
 <td style="text-align: left;">Textos de las unidades y de las estadísticas del escalado; <code>None</code> - los textos de referencia</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
 </tr>
 </tbody>
 </table>
@@ -2332,8 +2356,8 @@ C  1.241  1.594  0.000
 </div>
 </div>
 <h2 id="rolling_delta">Delta móvil<a class="headerlink" href="#rolling_delta" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/stylometry.md:rolling_delta c80e9bf -->
-<div class="signature highlight"><pre><span></span><code><span class="n">rolling_delta</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_mfw</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="s1">'burrows'</span><span class="p">,</span> <span class="n">culling</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<!-- core: corpus/stylometry.md:rolling_delta ba4892e -->
+<div class="signature highlight"><pre><span></span><code><span class="n">rolling_delta</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_mfw</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="s1">'burrows'</span><span class="p">,</span> <span class="n">culling</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>La Delta a lo largo de un texto, a la manera de <code>rolling.delta</code> de stylo: los textos de referencia y el texto a examinar se cortan en ventanas de <code>window</code> unidades cada <code>step</code> unidades, y el resto más corto que una ventana se descarta. Las unidades más frecuentes, el filtrado y las estadísticas de las puntuaciones z se toman de las ventanas de los textos de referencia o de un conjunto aparte <code>statistics</code>, y cada ventana del texto se compara por la variante de Delta con el centroide de las ventanas de cada texto de referencia. El resultado son las distancias de las ventanas (filas, por la posición de su centro en unidades) a las referencias (columnas); donde la referencia más cercana cambia a lo largo del texto, cambia también el estilo: otro autor de una parte de un texto escrito en colaboración, un pasaje tomado de otro texto. A diferencia de stylo, que suma las diferencias de las frecuencias brutas, las distancias son las de <code>delta_profiles</code> sobre puntuaciones z.</p>
 <p>Escalados por sus propias ventanas, los centroides de las referencias se equilibran entre sí, y la Delta coseno pierde su sentido: las distancias coseno de una ventana a las referencias promedian 1 (ponderadas por sus ventanas y las longitudes de sus centroides); con dos referencias suman 2 y las líneas son simétricas entre sí, así que un pasaje de un tercer autor parece a medio camino entre ellas. Con pocas referencias, la Delta coseno necesita unas <code>statistics</code> de más textos - otros autores, otras obras; las Deltas de Burrows y de Eder no tienen esa limitación. Con <code>statistics</code> basta una sola referencia.</p>
@@ -2395,6 +2419,12 @@ C  1.241  1.594  0.000
 <td style="text-align: left;"><code>None</code></td>
 <td style="text-align: left;">Textos cuyas ventanas dan las unidades y las estadísticas del escalado; <code>None</code> - los textos de referencia</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
+</tr>
 </tbody>
 </table>
 <p>Un corpus que no es un mapeo de listas de cadenas y unas unidades del texto que no son una lista de cadenas lanzan <code>SourceTypeError</code>. La falta de textos de referencia, menos de dos sin <code>statistics</code>, un texto sin unidades o más corto que una ventana, menos de tres ventanas de las estadísticas y un filtrado que no deja ninguna unidad lanzan <code>SourceError</code>. Una variante desconocida, un <code>window</code>, un <code>step</code> o un <code>n_mfw</code> que no es un entero de al menos uno, un <code>step</code> mayor que la ventana y un <code>culling</code> que no es un número dentro de [0, 1] lanzan <code>ParameterError</code>.</p>
@@ -2425,8 +2455,8 @@ C  1.241  1.594  0.000
 </div>
 </div>
 <h2 id="zeta">Zeta<a class="headerlink" href="#zeta" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/stylometry.md:zeta 1b7460b -->
-<div class="signature highlight"><pre><span></span><code><span class="n">zeta</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">comparison</span><span class="p">,</span> <span class="n">segment_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<!-- core: corpus/stylometry.md:zeta f12bd98 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">zeta</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">comparison</span><span class="p">,</span> <span class="n">segment_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Marcadores de palabras preferidas y evitadas según Burrows (2007) y Craig y Kinney (2009). Cada texto de ambos corpus se divide en segmentos de unas <code>segment_size</code> palabras (la longitud dividida por el tamaño, redondeada al entero más próximo con las mitades hacia arriba, al menos un segmento); <span class="arithmatex">\(DP\)</span> es la proporción de segmentos de un corpus con la palabra. Zeta es <span class="arithmatex">\(DP_{target} - DP_{comparison}\)</span>, de −1 a 1 (<code>zeta.craig</code> en stylo; la Zeta clásica de Craig, <span class="arithmatex">\(DP_{target} + (1 - DP_{comparison})\)</span>, es mayor en uno); la Zeta logarítmica es <span class="arithmatex">\(\log_2 \frac{DP_{target}}{DP_{comparison}}\)</span> (<a href="https://zeta-project.eu/en/keyness-measures/burrows-zeta-logarithmic-zeta/">Schöch et al. 2018</a>), con una proporción nula sustituida por medio segmento. La lista va de las palabras que prefiere el corpus objetivo a las que evita.</p>
 <table>
@@ -2463,6 +2493,12 @@ C  1.241  1.594  0.000
 <td style="text-align: left;"><code>None</code></td>
 <td style="text-align: left;">Número de palabras desde el principio de la lista; <code>None</code> - todas</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
+</tr>
 </tbody>
 </table>
 <p>El resultado es una lista de tuplas con nombre <code>ZetaScore(word, dp_target, dp_comparison, zeta, log_zeta)</code> por Zeta descendente, por Zeta logarítmica descendente y alfabéticamente si empatan. Un corpus que no es ni una lista de cadenas ni una lista de tales listas lanza <code>SourceTypeError</code>, y un corpus sin palabras, <code>SourceError</code>; un <code>segment_size</code> o un <code>top_n</code> que no es un entero de al menos uno lanza <code>ParameterError</code>.</p>
@@ -2482,8 +2518,8 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 </div>
 </div>
 </div>
-<!-- core: corpus/stylometry.md:zeta_segments 89aea5c -->
-<div class="signature highlight"><pre><span></span><code><span class="n">zeta_segments</span><span class="p">(</span><span class="n">corpora</span><span class="p">,</span> <span class="n">preferred</span><span class="p">,</span> <span class="n">avoided</span><span class="p">,</span> <span class="n">segment_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+<!-- core: corpus/stylometry.md:zeta_segments 33ac85a -->
+<div class="signature highlight"><pre><span></span><code><span class="n">zeta_segments</span><span class="p">(</span><span class="n">corpora</span><span class="p">,</span> <span class="n">preferred</span><span class="p">,</span> <span class="n">avoided</span><span class="p">,</span> <span class="n">segment_size</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Las proporciones de los marcadores de Zeta en los segmentos de los corpus, tal como <code>oppose</code> de stylo sitúa los segmentos: cada texto se divide en segmentos como en <code>zeta</code>, y un segmento recibe las proporciones de las palabras de las listas <code>preferred</code> y <code>avoided</code> presentes en él. Con los marcadores de un corpus objetivo frente a un corpus de comparación, los segmentos del objetivo quedan arriba a la izquierda del plano de las dos proporciones y los de la comparación abajo a la derecha; los segmentos de un texto de autoría disputada muestran a qué grupo se acerca (<code>zeta_scatter_plot</code>).</p>
 <table>
@@ -2520,6 +2556,12 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 <td style="text-align: left;"><code>2000</code></td>
 <td style="text-align: left;">Tamaño de un segmento en palabras</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
+</tr>
 </tbody>
 </table>
 <p>El resultado es un <code>DataFrame</code> de los segmentos en el orden de los corpus y de sus textos, con las columnas <code>corpus</code> (el nombre del corpus), <code>preferred</code> y <code>avoided</code> (las proporciones de las listas). Unos corpus que no son un mapeo y un corpus o una lista de marcadores que no es una lista de cadenas lanzan <code>SourceTypeError</code>; la falta de corpus, una lista de marcadores vacía y un corpus sin palabras, <code>SourceError</code>, y un <code>segment_size</code> que no es un entero de al menos uno, <code>ParameterError</code>.</p>
@@ -2552,8 +2594,8 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 </div>
 </div>
 <h2 id="kilgarriff_chi2">Ji cuadrado de Kilgarriff<a class="headerlink" href="#kilgarriff_chi2" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/stylometry.md:kilgarriff_chi2 33184e9 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">kilgarriff_chi2</span><span class="p">(</span><span class="n">words_a</span><span class="p">,</span> <span class="n">words_b</span><span class="p">,</span> <span class="n">n_mfw</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<!-- core: corpus/stylometry.md:kilgarriff_chi2 83f2fa3 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">kilgarriff_chi2</span><span class="p">(</span><span class="n">words_a</span><span class="p">,</span> <span class="n">words_b</span><span class="p">,</span> <span class="n">n_mfw</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>La distancia entre dos corpus según <a href="https://www.sketchengine.eu/wp-content/uploads/comparing_corpora_2001.pdf">Kilgarriff (2001)</a>: para las <code>n_mfw</code> palabras más frecuentes del corpus conjunto las frecuencias esperadas en los corpus son proporcionales a sus tamaños, <span class="arithmatex">\(\chi^2 = \sum (O - E)^2 / E\)</span> sobre las palabras y ambos corpus. Cuanto mayor es el valor, más difieren los corpus; crece con el tamaño de los corpus, así que solo son comparables los pares de tamaños iguales.</p>
 <table>
@@ -2584,6 +2626,12 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 <td style="text-align: left;"><code>500</code></td>
 <td style="text-align: left;">Número de las palabras más frecuentes del corpus conjunto</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
+</tr>
 </tbody>
 </table>
 <p>Unas palabras que no son una lista de cadenas lanzan <code>SourceTypeError</code>, un corpus sin palabras, <code>SourceError</code>, y un <code>n_mfw</code> que no es un entero de al menos uno, <code>ParameterError</code>.</p>
@@ -2602,8 +2650,8 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 </div>
 </div>
 <h2 id="mendenhall">Curva de Mendenhall<a class="headerlink" href="#mendenhall" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/stylometry.md:mendenhall_curve be1fbeb -->
-<div class="signature highlight"><pre><span></span><code><span class="n">mendenhall_curve</span><span class="p">(</span><span class="n">words</span><span class="p">)</span>
+<!-- core: corpus/stylometry.md:mendenhall_curve 9458e86 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">mendenhall_curve</span><span class="p">(</span><span class="n">words</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Las proporciones de las palabras de cada longitud en caracteres por longitud ascendente (Mendenhall 1887), un perfil del autor comparable entre textos sea cual sea su tamaño.</p>
 <table>
@@ -2622,11 +2670,17 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 <td style="text-align: left;">-</td>
 <td style="text-align: left;">Palabras del texto</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
+</tr>
 </tbody>
 </table>
 <p>Unas palabras que no son una lista de cadenas lanzan <code>SourceTypeError</code>, y la falta de palabras, <code>SourceError</code>.</p>
-<!-- core: corpus/stylometry.md:mendenhall_distance 187c51f -->
-<div class="signature highlight"><pre><span></span><code><span class="n">mendenhall_distance</span><span class="p">(</span><span class="n">words_a</span><span class="p">,</span> <span class="n">words_b</span><span class="p">)</span>
+<!-- core: corpus/stylometry.md:mendenhall_distance 8dea589 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">mendenhall_distance</span><span class="p">(</span><span class="n">words_a</span><span class="p">,</span> <span class="n">words_b</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>La distancia de Jensen-Shannon con base 2 entre las curvas de Mendenhall de dos textos, de 0 (las distribuciones coinciden) a 1.</p>
 <table>
@@ -2650,6 +2704,12 @@ ZetaScore(word='suelo', dp_target=0.0, dp_comparison=0.5, zeta=-0.5, log_zeta=-2
 <td style="text-align: left;"><code>list[str]</code></td>
 <td style="text-align: left;">-</td>
 <td style="text-align: left;">Palabras del segundo texto</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
 </tr>
 </tbody>
 </table>

@@ -2301,7 +2301,7 @@
 
 
 <h1 id="formulas-de-otros-idiomas">Fórmulas de otros idiomas<a class="headerlink" href="#formulas-de-otros-idiomas" title="Permanent link">&para;</a></h1>
-<div class="signature highlight"><pre><span></span><code><span class="n">UnadaptedReadabilityStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">UnadaptedReadabilityStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <!-- core: stats/unadapted_readability_stats.md:UnadaptedReadabilityStats 966a27a -->
 <p>Fórmulas de legibilidad creadas para el inglés, el alemán o el italiano, calculadas a partir de las estadísticas básicas de un texto con los coeficientes con que se publicaron (Linsear Write en la forma de textstat), sin calibración para su idioma. Sus valores comparan entre sí los textos de un mismo idioma; no son grados escolares de otro idioma. Una palabra sin sílabas (un número, una preposición de una sola consonante) cuenta como monosílaba en FORCAST y en las Wiener Sachtextformeln y como fácil en Linsear Write, como en textstat. La fuente de datos es un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>, un <code>Document</code> de <a href="https://github.com/SergeyShk/anySeg">anySeg</a> o un objeto <code>BasicStats</code> ya calculado, como para <code>ReadabilityStats</code>.</p>
@@ -2348,7 +2348,7 @@ Wheeler-Smith index          |  120.00
 </div>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: stats/unadapted_readability_stats.md:UnadaptedReadabilityStats-parameters 5e63df9 -->
+<!-- core: stats/unadapted_readability_stats.md:UnadaptedReadabilityStats-parameters 4597d80 -->
 <table>
 <thead>
 <tr>
@@ -2376,6 +2376,12 @@ Wheeler-Smith index          |  120.00
 <td style="text-align: left;"><code>WordsExtractor</code></td>
 <td style="text-align: left;"><code>None</code></td>
 <td style="text-align: left;">Herramienta de extracción de palabras, que no se usa con unas estadísticas básicas ya calculadas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>filter_nums</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Dejar fuera los números entre las palabras; <code>None</code> - el atributo de clase <code>filter_nums</code>, con unas estadísticas básicas ya calculadas - como en ellas; un valor distinto del suyo lanza <code>ParameterError</code></td>
 </tr>
 </tbody>
 </table>

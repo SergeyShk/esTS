@@ -2145,8 +2145,8 @@
 </tbody>
 </table>
 <h2 id="format_kwic">Líneas alineadas<a class="headerlink" href="#format_kwic" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/kwic.md:format_kwic 4de69b2 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">format_kwic</span><span class="p">(</span><span class="n">concordances</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<!-- core: corpus/kwic.md:format_kwic 2be15d3 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">format_kwic</span><span class="p">(</span><span class="n">concordances</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Alinea las líneas en la palabra clave en un texto, una línea por aparición: el contexto de la izquierda se recorta por la izquierda y se alinea a la derecha, el de la derecha se recorta por la derecha. Las líneas pueden venir de cualquier iterable y se toman en la forma compuesta de Unicode (NFC), así que las anchuras cuentan los caracteres tal como se ven.</p>
 <table>
@@ -2171,11 +2171,17 @@
 <td style="text-align: left;"><code>40</code></td>
 <td style="text-align: left;">Anchura de un contexto en caracteres</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
+</tr>
 </tbody>
 </table>
-<p>Unas líneas que son una cadena o que no se pueden iterar lanzan <code>SourceTypeError</code>, y un <code>width</code> que no es un entero de al menos uno, <code>ParameterError</code>.</p>
-<!-- core: corpus/kwic.md:print_kwic 3ead3e5 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">print_kwic</span><span class="p">(</span><span class="n">concordances</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<p>Unas líneas que son una cadena, que no se pueden iterar o que no son concordancias lanzan <code>SourceTypeError</code>, y un <code>width</code> que no es un entero de al menos uno, <code>ParameterError</code>.</p>
+<!-- core: corpus/kwic.md:print_kwic ec934d7 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">print_kwic</span><span class="p">(</span><span class="n">concordances</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Imprime el resultado de <code>format_kwic</code>.</p>
 

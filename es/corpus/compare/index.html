@@ -2402,11 +2402,11 @@ syntax_t_units_per_sent                     1.075           1.008   0.028    0.1
 </div>
 </div>
 <h2 id="compare_features">Comparación de tablas de rasgos<a class="headerlink" href="#compare_features" title="Permanent link">&para;</a></h2>
-<!-- core: corpus/compare.md:compare_features e0c139a -->
-<div class="signature highlight"><pre><span></span><code><span class="n">compare_features</span><span class="p">(</span><span class="n">table_a</span><span class="p">,</span> <span class="n">table_b</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s1">'A'</span><span class="p">,</span> <span class="s1">'B'</span><span class="p">),</span> <span class="n">n_bootstrap</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<!-- core: corpus/compare.md:compare_features 7ae32fb -->
+<div class="signature highlight"><pre><span></span><code><span class="n">compare_features</span><span class="p">(</span><span class="n">table_a</span><span class="p">,</span> <span class="n">table_b</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s1">'A'</span><span class="p">,</span> <span class="s1">'B'</span><span class="p">),</span> <span class="n">n_bootstrap</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Compara dos corpus rasgo por rasgo. Cada corpus es una tabla de los rasgos de sus ventanas, partes de los textos de un tamaño parecido, así que los rasgos no dependen de la longitud de los textos. El resultado tiene una fila por columna, por el valor absoluto descendente de la delta de Cliff, con los rasgos sin estadísticas al final. El bootstrap remuestrea textos enteros según el nivel <code>text</code> del índice; sin él cada fila es un texto aparte. Cada rasgo tiene un generador propio, a partir de la semilla y del nombre del rasgo, así que su intervalo no cambia con las demás columnas. Una columna que falta en una de las tablas da <code>nan</code>.</p>
-<!-- core: corpus/compare.md:compare_features-parameters 2ed21c1 -->
+<!-- core: corpus/compare.md:compare_features-parameters ded2441 -->
 <table>
 <thead>
 <tr>
@@ -2447,11 +2447,17 @@ syntax_t_units_per_sent                     1.075           1.008   0.028    0.1
 <td style="text-align: left;"><code>0</code></td>
 <td style="text-align: left;">Semilla del generador de números aleatorios, un entero no negativo, o un <code>Generator</code> de numpy; <code>None</code> - una aleatoria</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
+</tr>
 </tbody>
 </table>
 <p>Una tabla que no es un <code>DataFrame</code>, que repite el nombre de una columna o que tiene una columna no numérica lanza <code>SourceTypeError</code>; los demás parámetros los comprueba <code>check_comparison_params</code>.</p>
-<!-- core: corpus/compare.md:check_comparison_params a56a706 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">check_comparison_params</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s1">'A'</span><span class="p">,</span> <span class="s1">'B'</span><span class="p">),</span> <span class="n">n_bootstrap</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<!-- core: corpus/compare.md:check_comparison_params 0e3a98a -->
+<div class="signature highlight"><pre><span></span><code><span class="n">check_comparison_params</span><span class="p">(</span><span class="n">labels</span><span class="o">=</span><span class="p">(</span><span class="s1">'A'</span><span class="p">,</span> <span class="s1">'B'</span><span class="p">),</span> <span class="n">n_bootstrap</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Comprueba los parámetros de <code>compare_features</code> antes de procesar los textos: lanza <code>ParameterError</code> salvo que las etiquetas sean dos cadenas que den columnas distintas (<code>("diff", "B")</code> repetiría <code>median_diff</code>), el número de remuestras bootstrap sea un entero de al menos uno y la semilla sea <code>None</code>, un entero no negativo o un <code>Generator</code> de numpy.</p>
 <h2 id="statistics">Estadísticas<a class="headerlink" href="#statistics" title="Permanent link">&para;</a></h2>
@@ -2510,8 +2516,8 @@ syntax_t_units_per_sent                     1.075           1.008   0.028    0.1
 </div>
 <h2 id="funciones-de-las-estadisticas">Funciones de las estadísticas<a class="headerlink" href="#funciones-de-las-estadisticas" title="Permanent link">&para;</a></h2>
 <p>Las estadísticas de una fila están disponibles una a una desde <code>ests.corpus</code>:</p>
-<!-- core: corpus/compare.md:calc_cohen_d 8318830 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">calc_cohen_d</span><span class="p">(</span><span class="n">values_a</span><span class="p">,</span> <span class="n">values_b</span><span class="p">)</span>
+<!-- core: corpus/compare.md:calc_cohen_d 9fb4883 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_cohen_d</span><span class="p">(</span><span class="n">values_a</span><span class="p">,</span> <span class="n">values_b</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>La d de Cohen con las varianzas muestrales combinadas (ddof=1); <code>nan</code> con menos de dos valores en un lado o sin dispersión.</p>
 <table>
@@ -2536,11 +2542,17 @@ syntax_t_units_per_sent                     1.075           1.008   0.028    0.1
 <td style="text-align: left;">-</td>
 <td style="text-align: left;">Valores en el segundo corpus</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
+</tr>
 </tbody>
 </table>
 <p>Un valor que no es ni un número ni un valor ausente (<code>None</code>, <code>NA</code>) y unos valores que no son una lista plana lanzan <code>SourceTypeError</code>.</p>
-<!-- core: corpus/compare.md:calc_cliff_delta 46d8def -->
-<div class="signature highlight"><pre><span></span><code><span class="n">calc_cliff_delta</span><span class="p">(</span><span class="n">values_a</span><span class="p">,</span> <span class="n">values_b</span><span class="p">)</span>
+<!-- core: corpus/compare.md:calc_cliff_delta b906f6f -->
+<div class="signature highlight"><pre><span></span><code><span class="n">calc_cliff_delta</span><span class="p">(</span><span class="n">values_a</span><span class="p">,</span> <span class="n">values_b</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>La delta de Cliff, la proporción de pares en que el primer valor es mayor menos la proporción en que es menor; <code>nan</code> para un conjunto vacío o un valor indefinido. Se calcula por ordenación, en tiempo <span class="arithmatex">\(O((n_A + n_B) \log n_B)\)</span> y memoria lineal.</p>
 <table>
@@ -2565,11 +2577,17 @@ syntax_t_units_per_sent                     1.075           1.008   0.028    0.1
 <td style="text-align: left;">-</td>
 <td style="text-align: left;">Valores en el segundo corpus</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
+</tr>
 </tbody>
 </table>
 <p>Un valor que no es ni un número ni un valor ausente (<code>None</code>, <code>NA</code>) y unos valores que no son una lista plana lanzan <code>SourceTypeError</code>.</p>
-<!-- core: corpus/compare.md:bootstrap_median_diff eef19f3 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">bootstrap_median_diff</span><span class="p">(</span><span class="n">values_a</span><span class="p">,</span> <span class="n">values_b</span><span class="p">,</span> <span class="n">n_bootstrap</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">texts_a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">texts_b</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<!-- core: corpus/compare.md:bootstrap_median_diff 63c1515 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">bootstrap_median_diff</span><span class="p">(</span><span class="n">values_a</span><span class="p">,</span> <span class="n">values_b</span><span class="p">,</span> <span class="n">n_bootstrap</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">confidence</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">texts_a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">texts_b</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>El intervalo bootstrap de percentiles de la diferencia de las medianas. Con <code>texts_a</code> y <code>texts_b</code> se remuestrean textos enteros, y la mediana de una extracción se toma sobre los valores de sus textos; con menos de dos textos en un lado el intervalo es <code>nan</code>.</p>
 <table>
@@ -2624,11 +2642,17 @@ syntax_t_units_per_sent                     1.075           1.008   0.028    0.1
 <td style="text-align: left;"><code>None</code></td>
 <td style="text-align: left;">Textos de los valores en el segundo corpus</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
+</tr>
 </tbody>
 </table>
 <p>Un valor que no es ni un número ni un valor ausente, unos valores que no son una lista plana y unos textos que no son etiquetas de un mismo tipo lanzan <code>SourceTypeError</code>; un <code>n_bootstrap</code> que no es un entero de al menos uno, un <code>confidence</code> que no es un número en (0, 1), unos textos que no son tantos como los valores y un <code>rng</code> que no es un <code>Generator</code> de numpy lanzan <code>ParameterError</code>.</p>
-<!-- core: corpus/compare.md:holm_correction e837116 -->
-<div class="signature highlight"><pre><span></span><code><span class="n">holm_correction</span><span class="p">(</span><span class="n">p_values</span><span class="p">)</span>
+<!-- core: corpus/compare.md:holm_correction 8dab7a9 -->
+<div class="signature highlight"><pre><span></span><code><span class="n">holm_correction</span><span class="p">(</span><span class="n">p_values</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>La corrección de Holm para comparaciones múltiples: los valores p se ordenan de menor a mayor, el i-ésimo se multiplica por (m − i + 1), donde m es el número de valores definidos, luego se toma el máximo acumulado y se limita a uno; <code>nan</code> sigue siendo <code>nan</code>.</p>
 <table>
@@ -2646,6 +2670,12 @@ syntax_t_units_per_sent                     1.075           1.008   0.028    0.1
 <td style="text-align: left;"><code>list[float]</code></td>
 <td style="text-align: left;">-</td>
 <td style="text-align: left;">Valores p</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>messages</code></td>
+<td style="text-align: left;"><code>dict[str, str]</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
 </tr>
 </tbody>
 </table>
@@ -2727,9 +2757,9 @@ syntax_t_units_per_sent                     1.075           1.008   0.028    0.1
 </div>
 </div>
 <h2 id="sentence_rhythm">Ritmo de las oraciones<a class="headerlink" href="#sentence_rhythm" title="Permanent link">&para;</a></h2>
-<div class="signature highlight"><pre><span></span><code><span class="n">sentence_rhythm</span><span class="p">(</span><span class="n">lengths</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">MESSAGES</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">sentence_rhythm</span><span class="p">(</span><span class="n">lengths</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: corpus/compare.md:sentence_rhythm 9e57614 -->
+<!-- core: corpus/compare.md:sentence_rhythm 5b11f36 -->
 <p>Da el ritmo de las oraciones a partir de sus longitudes en palabras: la media <code>sents_mean</code>, la desviación típica <code>sents_std</code>, el coeficiente de variación <code>sents_cv</code> y la autocorrelación de retardo 1 de las longitudes vecinas <code>sents_autocorr</code> (Yule, 1939). La desviación necesita dos oraciones, la autocorrelación tres de longitudes desiguales y el coeficiente de variación una media mayor que cero; si no, y sin oraciones, un rasgo es <code>nan</code>.</p>
 <table>
 <thead>
@@ -2750,8 +2780,8 @@ syntax_t_units_per_sent                     1.075           1.008   0.028    0.1
 <tr>
 <td style="text-align: left;"><code>messages</code></td>
 <td style="text-align: left;"><code>dict[str, str]</code></td>
-<td style="text-align: left;"><code>MESSAGES</code></td>
-<td style="text-align: left;">Mensajes de los errores por clave</td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Mensajes de los errores por clave, en lugar de los de la biblioteca</td>
 </tr>
 </tbody>
 </table>

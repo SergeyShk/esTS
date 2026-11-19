@@ -2069,7 +2069,7 @@
 
 
 <h1 id="estadisticas-basicas">Estadísticas básicas<a class="headerlink" href="#estadisticas-basicas" title="Permanent link">&para;</a></h1>
-<div class="signature highlight"><pre><span></span><code><span class="n">BasicStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">complex_syl_factor</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">long_word_letter_factor</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">BasicStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">complex_syl_factor</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">long_word_letter_factor</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
 <!-- core: stats/basic_stats.md:BasicStats 259a268 -->
 <p>Las estadísticas básicas de un texto: el número de sus oraciones, palabras, caracteres, sílabas y signos de puntuación y las distribuciones de sus palabras. La fuente de datos es un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> o un <code>Document</code> de <a href="https://github.com/SergeyShk/anySeg">anySeg</a>. Las letras se cuentan con <code>str.isalpha</code>, así que las cifras, los guiones y los signos dentro de una palabra no son letras.</p>
@@ -2114,7 +2114,7 @@ Entropy of the word lengths in syllables (bits) |   1.72
 </div>
 </div>
 <h2 id="parametros">Parámetros<a class="headerlink" href="#parametros" title="Permanent link">&para;</a></h2>
-<!-- core: stats/basic_stats.md:BasicStats-parameters 2d8e54b -->
+<!-- core: stats/basic_stats.md:BasicStats-parameters 831bb3f -->
 <table>
 <thead>
 <tr>
@@ -2161,9 +2161,15 @@ Entropy of the word lengths in syllables (bits) |   1.72
 <td style="text-align: left;"><code>LONG_WORD_LETTER_FACTOR</code></td>
 <td style="text-align: left;">Número mínimo de letras de una palabra larga</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>filter_nums</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>False</code></td>
+<td style="text-align: left;">Dejar fuera los números (<code>number_pattern</code>) entre las palabras</td>
+</tr>
 </tbody>
 </table>
-<p>El objeto guarda <code>normalize</code>, <code>complex_syl_factor</code> y <code>long_word_letter_factor</code> con sus nombres.</p>
+<p>El objeto guarda <code>normalize</code>, <code>complex_syl_factor</code>, <code>long_word_letter_factor</code> y <code>filter_nums</code> con sus nombres, y los números que dejó fuera, en <code>n_numbers</code>.</p>
 <p>En esTS los umbrales son los del núcleo y de las fórmulas de legibilidad: una palabra compleja tiene tres o más sílabas, como en SMOG, y una palabra larga siete o más letras, como en LIX y RIX (<code>COMPLEX_SYL_FACTOR = 3</code> y <code>LONG_WORD_LETTER_FACTOR = 7</code> de <code>anyts.constants</code>).</p>
 <h2 id="estadisticas">Estadísticas<a class="headerlink" href="#estadisticas" title="Permanent link">&para;</a></h2>
 <!-- core: stats/basic_stats.md:BasicStats-attributes ba0510d -->
