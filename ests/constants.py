@@ -995,9 +995,6 @@ OFFICIALESE_CLICHES = (
     "tomar un acuerdo",
     "y para que así conste",
 )
-# Forms of the verbs of the clichés that esMorph does not read as the verb: the
-# imperative of dar with se, written without an accent (dese traslado)
-IRREGULAR_VERB_FORMS = {"dese": "dar", "dense": "dar"}
 # Parenthetical expressions, set off by commas or standing at the edge of a sentence,
 # as the corpus of literature mostly sets them off
 PARENTHETICALS = (
