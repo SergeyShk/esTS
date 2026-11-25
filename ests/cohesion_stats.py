@@ -411,7 +411,8 @@ def is_connector_blocked(token: TreeWord) -> bool:
         tengo tiempo, la solicitud se valorará si cumple); and after an opening
         ¡ (¡Si ya te lo dije!); a si after como or vaya is dropped by the
         matcher itself (CONNECTOR_BLOCKED_BEFORE). The verb is a VERB or AUX
-        by its lemma
+        by its lemma, or a word the tagger reads as a proper or a common noun
+        (Confírmenos, Indícanos) by the lemma of lemmatize
 
     Arguments:
         token (TreeWord): Word of the tree
@@ -432,9 +433,13 @@ def is_connector_blocked(token: TreeWord) -> bool:
     previous = token.tree.words[token.index - 1]
     if previous.form == "¡":
         return True
-    if previous.upos not in ("VERB", "AUX"):
+    if previous.upos in ("VERB", "AUX"):
+        lemmas = {(previous.lemma or "").lower()}
+    elif previous.upos in ("PROPN", "NOUN"):
+        lemmas = {lemmatize(previous.form.lower())}
+    else:
         return False
-    lemmas = {(previous.lemma or "").lower()} & CONNECTOR_QUESTION_VERBS
+    lemmas &= CONNECTOR_QUESTION_VERBS
     return bool(lemmas) and not _has_question_complement(previous, lemmas, token.index)
 
 
