@@ -45,6 +45,15 @@ def test_not_downloaded(tmp_path):
         list(dictionary.get_records())
 
 
+def test_not_downloaded_with_another_version(tmp_path):
+    old = tmp_path / f"{module.NAME}_v{module.VERSION - 1}"
+    old.mkdir()
+    (old / "freq_dict.tsv").write_text("lemma\n", encoding="utf-8")
+    message = f"has freq_dict_v{module.VERSION - 1}, but this version of esTS reads freq_dict_v"
+    with pytest.raises(DatasetNotFoundError, match=message):
+        FreqDict(data_dir=tmp_path).check_data()
+
+
 def test_bundled_archive_checksum():
     with BUNDLED_ARCHIVE.open("rb") as file:
         assert hashlib.file_digest(file, "sha256").hexdigest() == module.ARCHIVE_SHA256
@@ -57,7 +66,7 @@ def test_download(tmp_path):
     assert dictionary.filepath == str(
         tmp_path / f"{module.NAME}_v{module.VERSION}" / "freq_dict.tsv"
     )
-    assert len(dictionary) == 86196
+    assert len(dictionary) == 86091
 
 
 def test_download_extracts_again(tmp_path):
@@ -108,7 +117,7 @@ def test_word_ipm(dictionary, records):
 
 
 def test_entries(dictionary, records):
-    assert len(dictionary) == 86196
+    assert len(dictionary) == 86091
     assert dictionary.min_ipm == 0.1
     rows = [record for record in records if record["lemma"] == "ser"]
     entry = dictionary.lookup("ser")
@@ -118,11 +127,11 @@ def test_entries(dictionary, records):
 
 
 def test_records(records):
-    assert len(records) == 107032
+    assert len(records) == 106909
     assert records[0] == {
         "lemma": "el",
         "pos": "DET",
-        "ipm": 96989.4,
+        "ipm": 96989.49,
         "range": 40,
         "dispersion": 99,
         "docs": 905361,

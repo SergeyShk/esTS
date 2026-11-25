@@ -29,7 +29,7 @@ def test_words_and_lemmas(ls):
     assert ls.n_content_words == 5
     assert ls.lexical_density == pytest.approx(5 / 11)
     assert ls.ranks == tuple(get_rank(lemma) for lemma in LEMMAS)
-    assert ls.ranks[:2] == (1, 3123)
+    assert ls.ranks[:2] == (1, 3122)
 
 
 def test_frequency(ls, freq_dict):

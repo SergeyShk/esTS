@@ -14,7 +14,7 @@ from ..exceptions import DatasetNotFoundError, ParameterError, SourceTypeError
 from ..utils import _verb_lemmas, lemmatize
 
 NAME = "freq_dict"
-VERSION = 2
+VERSION = 3
 META = {
     "url": "https://storage.googleapis.com/books/ngrams/books/datasetsv3.html",
     "description": "Frequency dictionary of Spanish lemmas by Google Books Ngram",
@@ -28,7 +28,7 @@ META = {
 }
 ARCHIVE = f"{NAME}_v{VERSION}.tar.xz"
 DOWNLOAD_URL = f"https://github.com/SergeyShk/esTS/raw/master/ests/datasets/data/{ARCHIVE}"
-ARCHIVE_SHA256 = "db0a5420cb9b824fb378012af86eb3334719969a4b4f9d10268f976119ab8f44"
+ARCHIVE_SHA256 = "0756e3b8fdcb6726abf0378ddbaec05b8f22a2688ac30a96c29cc41b188851cb"
 FILENAME = "freq_dict.tsv"
 CORPUS_SIZE = 63_090_618_290
 POS_TAGS = ("NOUN", "PROPN", "VERB", "ADJ", "ADV", "PRON", "DET", "ADP", "CONJ")
@@ -100,7 +100,7 @@ class FreqDict(Dataset):
     Frequency dictionary of Spanish lemmas by Google Books Ngram
 
     Description:
-        86,196 lemmas (107,032 rows of a lemma and a part of speech) of the
+        86,091 lemmas (106,909 rows of a lemma and a part of speech) of the
         Spanish books of Google Books Ngram of 1980-2019, 63 billion words, with
         the frequency per million words, the range (the number of years out of
         40 in which the lemma occurs), Juilland's D over the years and the
@@ -180,6 +180,10 @@ class FreqDict(Dataset):
         """
         Checking that the file of the dictionary is in place
 
+        Description:
+            A dictionary of another version in the directory is not read: the
+            message names it and asks to download the version of the library
+
         Returns:
             bool: Result of the check
 
@@ -187,8 +191,17 @@ class FreqDict(Dataset):
             DatasetNotFoundError: If the dictionary is not found
         """
         if not self._filepath.is_file():
+            other = sorted(
+                path.parent.name for path in self.data_dir.glob(f"{NAME}_v*/{FILENAME}")
+            )
+            found = (
+                f"The directory has {', '.join(other)}, but this version of esTS reads "
+                f"{NAME}_v{VERSION}\n"
+                if other
+                else ""
+            )
             msg = (
-                f"The dataset {NAME} is not found\n"
+                f"The dataset {NAME} is not found\n{found}"
                 "Download it with the commands:\n"
                 ">>> fd = FreqDict()\n"
                 ">>> fd.download()"

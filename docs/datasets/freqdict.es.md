@@ -4,13 +4,13 @@
 FreqDict(data_dir=DEFAULT_DATASET_DIR)
 ```
 
-Un diccionario de frecuencias de lemas del español construido a partir de los libros en español de [Google Books Ngram](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html) (versión 20200217): 86 196 lemas (107 032 filas de un lema y una categoría gramatical) de los libros de 1980-2019, 63 000 millones de palabras. Cada fila tiene la frecuencia por millón de palabras (ipm), el rango (el número de años, de 40, en que aparece el lema), la D de Juilland por años (0-100) y el número de libros con la forma más extendida del lema. Las categorías gramaticales son las de Google, con los nombres de Universal Dependencies: `NOUN`, `PROPN`, `VERB`, `ADJ`, `ADV`, `PRON`, `DET`, `ADP`, `CONJ` (coordinantes y subordinantes juntas).
+Un diccionario de frecuencias de lemas del español construido a partir de los libros en español de [Google Books Ngram](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html) (versión 20200217): 86 091 lemas (106 909 filas de un lema y una categoría gramatical) de los libros de 1980-2019, 63 000 millones de palabras. Cada fila tiene la frecuencia por millón de palabras (ipm), el rango (el número de años, de 40, en que aparece el lema), la D de Juilland por años (0-100) y el número de libros con la forma más extendida del lema. Las categorías gramaticales son las de Google, con los nombres de Universal Dependencies: `NOUN`, `PROPN`, `VERB`, `ADJ`, `ADV`, `PRON`, `DET`, `ADP`, `CONJ` (coordinantes y subordinantes juntas).
 
 El diccionario lo construye `scripts/build_freq_dict.py` a partir de los 1-gramas: se cuentan solo las formas etiquetadas con una categoría gramatical y hechas de letras (se quitan los números, la puntuación y la etiqueta `X`), y cada forma pasa a su clave por [`lemma_key`](#lemma_key). Google no tiene etiqueta para los nombres propios, así que una forma de sustantivo escrita con mayúscula en al menos el 90 % de sus apariciones es `PROPN` y conserva su forma. La decisión se toma para la forma entera: `dios`, con mayúscula en el 92 % de sus apariciones, es `PROPN` también en minúsculas, mientras que su fila `NOUN` viene sobre todo del plural `dioses`. Se dejan fuera las filas por debajo de 0,1 ipm o presentes en menos de 5 años. La dispersión se calcula sobre la frecuencia relativa de cada año; el número de libros es una cota inferior, ya que un libro con varias formas del lema se cuenta una vez.
 
 Para buscar un lema se unen sus categorías gramaticales: las frecuencias se suman, el rango, la dispersión y el número de libros son los mayores. El diccionario se lee una vez por proceso, así que un `FreqDict()` para cada texto es barato. Es la fuente de las frecuencias de [`LexicalStats`](../stats/lexical_stats.md), y la lista integrada de las [bandas de frecuencia](../stats/lexical_stats.md#bands) tiene sus 10 000 lemas más frecuentes, sin los nombres propios y algunos lemas que no son palabras. El tamaño del diccionario es `CORPUS_SIZE`, 63 090 618 290 palabras.
 
-El archivo (0,9 MB) se guarda en el repositorio de la biblioteca y se descarga una vez en el directorio de datos.
+El archivo (0,8 MB) se guarda en el repositorio de la biblioteca y se descarga una vez en el directorio de datos.
 
 !!! quote "Licencia y atribución"
     El diccionario deriva de Google Books Ngram, que se publica con la [licencia Creative Commons Reconocimiento 3.0 No adaptada](https://creativecommons.org/licenses/by/3.0/), y se distribuye con la misma licencia; el archivo lleva un `README.txt` con la fuente y los cambios. Cite la fuente así: Michel J.-B. et al. Quantitative analysis of culture using millions of digitized books. Science 331 (6014), 2011.
@@ -69,7 +69,7 @@ Una entrada del diccionario: una tupla con nombre.
 | `dispersion` | `int` | D de Juilland por años, de 0 a 100 |
 | `docs` | `int` | Número de libros con la forma más extendida del lema |
 
-El diccionario se recorre por sus registros como `get_records()` sin filtros: `for record in fd` pasa por las 107 032 filas de un lema y una categoría gramatical, mientras que `len(fd)` cuenta los 86 196 lemas con sus categorías unidas, tal como los ven `lookup` e `in`.
+El diccionario se recorre por sus registros como `get_records()` sin filtros: `for record in fd` pasa por las 106 909 filas de un lema y una categoría gramatical, mientras que `len(fd)` cuenta los 86 091 lemas con sus categorías unidas, tal como los ven `lookup` e `in`.
 
 ## Métodos
 
@@ -81,7 +81,7 @@ El diccionario se recorre por sus registros como `get_records()` sin filtros: `f
 
 Un archivo que no se puede descargar o que no pasa la suma de comprobación dos veces lanza `DownloadError`, y un archivo que no se puede extraer, `DataFileError`.
 
-`check_data()` comprueba que el fichero del diccionario está en su sitio y devuelve `True`; un diccionario sin descargar lanza `DatasetNotFoundError` con las órdenes para descargarlo. Los demás métodos y los atributos de las entradas y las frecuencias lo comprueban por sí mismos.
+`check_data()` comprueba que el fichero del diccionario está en su sitio y devuelve `True`; un diccionario sin descargar lanza `DatasetNotFoundError` con las órdenes para descargarlo y nombra un diccionario de otra versión en el directorio, que esta versión de esTS no lee (`freq_dict_v2` de esTS 0.10). Los demás métodos y los atributos de las entradas y las frecuencias lo comprueban por sí mismos.
 
 `lookup(lemma)` devuelve la entrada de un lema en cualquier combinación de mayúsculas y minúsculas, `None` para un lema que no está en el diccionario; `ipm(lemma)` devuelve la frecuencia de un lema por millón de palabras, 0 para un lema que no está en el diccionario. El argumento es una clave del diccionario, no una forma: una forma se busca por su clave, `computadoras` por `lemma_key("computadoras")` (`computadora`); el lema de `usted` en esMorph es `tú`, así que `fd.lookup("usted")` es `None`. Lo mismo vale para `in`; [`LexicalStats`](../stats/lexical_stats.md) y [`keyness`](../corpus/keyness.md) pasan a las claves por sí mismos.
 
@@ -110,7 +110,7 @@ Un lema que no es una cadena lanza `SourceTypeError`.
     Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.46, range=40, dispersion=98, docs=566129)
     (None, 1463.67)
     (0.0, 15.35)
-    (True, 86196, 107032)
+    (True, 86091, 106909)
     ```
 
 `get_records(pos=None, min_ipm=None, limit=None)` devuelve los registros del diccionario - una fila por lema y categoría gramatical, por frecuencia - filtrados por la categoría gramatical y la frecuencia mínima; `get_texts` con los mismos parámetros devuelve los lemas.
@@ -149,7 +149,7 @@ Una categoría desconocida, una frecuencia mínima que no es un número y un `li
 lemma_key(word, proper=False, pos='')
 ```
 
-La clave por la que se busca una palabra en el diccionario y con la que se construye el diccionario (`ests.datasets.freq_dict.lemma_key`): la palabra pasa a minúsculas, para que una palabra al principio de una oración encuentre su lema (`Miró` - `mirar`), y luego a su lema por `ests.utils.lemmatize` - el de esMorph, con la categoría gramatical de Universal Dependencies cuando se da (`vino` - `vino`, como verbo `venir`). Un verbo y un auxiliar toman el primer análisis de cualquiera de los dos (`fue` - `ser`), porque Google etiqueta ambos como verbos. Un nombre propio conserva su forma en minúsculas (`proper=True`): `Tomás` es `tomás`, no el verbo `tomar`. El diccionario se construye con los lemas de esMorph 0.3 y las categorías gramaticales de Google.
+La clave por la que se busca una palabra en el diccionario y con la que se construye el diccionario (`ests.datasets.freq_dict.lemma_key`): la palabra pasa a minúsculas, para que una palabra al principio de una oración encuentre su lema (`Miró` - `mirar`), y luego a su lema por `ests.utils.lemmatize` - el de esMorph, con la categoría gramatical de Universal Dependencies cuando se da (`vino` - `vino`, como verbo `venir`). Un verbo y un auxiliar toman el primer análisis de cualquiera de los dos (`fue` - `ser`), porque Google etiqueta ambos como verbos. Un nombre propio conserva su forma en minúsculas (`proper=True`): `Tomás` es `tomás`, no el verbo `tomar`. El diccionario se construye con los lemas de esMorph 0.4 y las categorías gramaticales de Google.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
