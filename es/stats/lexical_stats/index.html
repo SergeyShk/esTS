@@ -2174,14 +2174,14 @@
 <div class="highlight"><pre><span></span><code>                    Statistic                    |  Value
 ------------------------------------------------------------
 Share of words found in the frequency dictionary |   1.00
-Mean frequency (ipm)                             | 34471.00
-Mean frequency of content words (ipm)            |  805.65
+Mean frequency (ipm)                             | 34473.85
+Mean frequency of content words (ipm)            |  806.61
 Mean log frequency (lg ipm)                      |   3.56
 Mean log frequency of content words              |   2.17
 Mean range (years out of 40)                     |  40.00
 Mean dispersion (D)                              |  97.18
 Mean surprisal (bits)                            |   8.10
-Unigram perplexity                               |  275.12
+Unigram perplexity                               |  275.08
 Share of words in the top 1000                   |   0.73
 Share of words in the top 2000                   |   0.82
 Share of words in the top 5000                   |   1.00
@@ -2362,7 +2362,7 @@ Lexical density                                  |   0.45
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><a href="../../datasets/freqdict/"><code>FreqDict</code></a> - 86 196 lemas de Google Books Ngram (1980-2019) con ipm, rango y dispersión</td>
+<td style="text-align: left;"><a href="../../datasets/freqdict/"><code>FreqDict</code></a> - 86 091 lemas de Google Books Ngram (1980-2019) con ipm, rango y dispersión</td>
 <td style="text-align: left;"><code>coverage</code>, <code>mean_ipm*</code>, <code>mean_log_ipm*</code>, <code>mean_range</code>, <code>mean_dispersion</code>, <code>surprisal</code>, <code>perplexity</code></td>
 <td style="text-align: left;">se descarga una vez con <code>FreqDict().download()</code></td>
 </tr>
@@ -2376,7 +2376,7 @@ Lexical density                                  |   0.45
 <div class="metric-card">
 <h3 id="frequency">Frecuencia según el diccionario<a class="headerlink" href="#frequency" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>coverage</code> · <code>mean_ipm</code> · <code>mean_ipm_content</code> · <code>mean_log_ipm</code> · <code>mean_log_ipm_content</code> · <code>mean_range</code> · <code>mean_dispersion</code> · <a href="https://storage.googleapis.com/books/ngrams/books/datasetsv3.html">Google Books Ngram</a></p>
-<p>Las métricas se calculan a partir de las entradas del <code>FreqDict</code> para las claves de las palabras (<code>keys</code>, <code>entries</code>): las medias se toman sobre las palabras encontradas en el diccionario, sobre todas ellas o solo sobre las palabras con contenido. El rango es el número de años, de 40 (1980-2019), en que el lema aparece en los libros, y la dispersión es la D de Juilland sobre los años, de 0 a 100. La frecuencia media en ipm es sensible a las palabras funcionales (<code>el</code> - 98 000 ipm, <code>de</code> - 71 000), así que para comparar textos conviene más la frecuencia logarítmica o la media sobre las palabras con contenido.</p>
+<p>Las métricas se calculan a partir de las entradas del <code>FreqDict</code> para las claves de las palabras (<code>keys</code>, <code>entries</code>): las medias se toman sobre las palabras encontradas en el diccionario, sobre todas ellas o solo sobre las palabras con contenido. El rango es el número de años, de 40 (1980-2019), en que el lema aparece en los libros, y la dispersión es la D de Juilland sobre los años, de 0 a 100. La frecuencia media en ipm es sensible a las palabras funcionales (<code>el</code> - 97 000 ipm, <code>de</code> - 84 000), así que para comparar textos conviene más la frecuencia logarítmica o la media sobre las palabras con contenido.</p>
 <p>Las palabras raras bajan la cobertura y la frecuencia logarítmica y suben la sorpresa y la proporción fuera del top 10000:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
 <div class="tabbed-content">
@@ -2388,7 +2388,7 @@ Lexical density                                  |   0.45
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>(0.875, 2.8003798879556743, 12.206981533297302, 0.375)
+<div class="highlight"><pre><span></span><code>(0.875, 2.8003912324040754, 12.20694855853567, 0.375)
 </code></pre></div>
 </div>
 </div>
@@ -2440,7 +2440,7 @@ Lexical density                                  |   0.45
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>15.554697256684591
+<div class="highlight"><pre><span></span><code>15.554044709914342
 </code></pre></div>
 </div>
 </div>
@@ -2489,7 +2489,7 @@ Lexical density                                  |   0.45
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>(1, 3123, None)
+<div class="highlight"><pre><span></span><code>(1, 3122, None)
 10000
 </code></pre></div>
 </div>
@@ -2533,14 +2533,14 @@ Lexical density                                  |   0.45
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>{'coverage': 1.0,
- 'mean_ipm': 34470.99727272727,
- 'mean_ipm_content': 805.65,
- 'mean_log_ipm': 3.5604802847439285,
- 'mean_log_ipm_content': 2.172562226515112,
+ 'mean_ipm': 34473.85272727273,
+ 'mean_ipm_content': 806.61,
+ 'mean_log_ipm': 3.5605446870314252,
+ 'mean_log_ipm_content': 2.1726800882059627,
  'mean_range': 40.0,
  'mean_dispersion': 97.18181818181819,
- 'surprisal': 8.103909080140765,
- 'perplexity': 275.11844950775145,
+ 'surprisal': 8.103695140372553,
+ 'perplexity': 275.0776547370405,
  'p_top1000': 0.7272727272727273,
  'p_top2000': 0.8181818181818182,
  'p_top5000': 1.0,
