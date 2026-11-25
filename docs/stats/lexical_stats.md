@@ -91,7 +91,7 @@ The metrics rely on two resources; always read the means by the dictionary next 
 `coverage` · `mean_ipm` · `mean_ipm_content` · `mean_log_ipm` · `mean_log_ipm_content` · `mean_range` · `mean_dispersion` · [Google Books Ngram](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html)
 { .metric-meta }
 
-The metrics are computed from the `FreqDict` entries for the keys of the words (`keys`, `entries`): the means are taken over the words found in the dictionary, over all of them or only over the content words. The range is the number of years out of 40 (1980-2019) in which the lemma occurs in the books, and the dispersion is Juilland's D over the years, from 0 to 100. The mean frequency in ipm is sensitive to function words (`el` - 98,000 ipm, `de` - 71,000), so for comparing texts the log frequency or the mean over the content words is more convenient.
+The metrics are computed from the `FreqDict` entries for the keys of the words (`keys`, `entries`): the means are taken over the words found in the dictionary, over all of them or only over the content words. The range is the number of years out of 40 (1980-2019) in which the lemma occurs in the books, and the dispersion is Juilland's D over the years, from 0 to 100. The mean frequency in ipm is sensitive to function words (`el` - 97,000 ipm, `de` - 84,000), so for comparing texts the log frequency or the mean over the content words is more convenient.
 
 Rare words lower the coverage and the log frequency and raise the surprisal and the share beyond the top 10000:
 

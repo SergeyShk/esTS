@@ -119,7 +119,7 @@ Las métricas se apoyan en dos recursos; lea siempre las medias según el diccio
 `coverage` · `mean_ipm` · `mean_ipm_content` · `mean_log_ipm` · `mean_log_ipm_content` · `mean_range` · `mean_dispersion` · [Google Books Ngram](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html)
 { .metric-meta }
 
-Las métricas se calculan a partir de las entradas del `FreqDict` para las claves de las palabras (`keys`, `entries`): las medias se toman sobre las palabras encontradas en el diccionario, sobre todas ellas o solo sobre las palabras con contenido. El rango es el número de años, de 40 (1980-2019), en que el lema aparece en los libros, y la dispersión es la D de Juilland sobre los años, de 0 a 100. La frecuencia media en ipm es sensible a las palabras funcionales (`el` - 98 000 ipm, `de` - 71 000), así que para comparar textos conviene más la frecuencia logarítmica o la media sobre las palabras con contenido.
+Las métricas se calculan a partir de las entradas del `FreqDict` para las claves de las palabras (`keys`, `entries`): las medias se toman sobre las palabras encontradas en el diccionario, sobre todas ellas o solo sobre las palabras con contenido. El rango es el número de años, de 40 (1980-2019), en que el lema aparece en los libros, y la dispersión es la D de Juilland sobre los años, de 0 a 100. La frecuencia media en ipm es sensible a las palabras funcionales (`el` - 97 000 ipm, `de` - 84 000), así que para comparar textos conviene más la frecuencia logarítmica o la media sobre las palabras con contenido.
 
 Las palabras raras bajan la cobertura y la frecuencia logarítmica y suben la sorpresa y la proporción fuera del top 10000:
 

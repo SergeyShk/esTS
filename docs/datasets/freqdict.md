@@ -10,7 +10,7 @@ The dictionary is built by `scripts/build_freq_dict.py` from the 1-grams: only t
 
 For a lookup the parts of speech of a lemma are merged: the frequencies are summed, the range, the dispersion and the number of books are the greatest ones. The dictionary is read once per process, so a `FreqDict()` for every text is cheap. It is the source of the frequencies of [`LexicalStats`](../stats/lexical_stats.md), and the embedded list of the [frequency bands](../stats/lexical_stats.md#bands) holds its 10,000 most frequent lemmas, without the proper nouns and some lemmas that are not words. The dictionary size is `CORPUS_SIZE`, 63,090,618,290 words.
 
-The archive (0.9 MB) is kept in the repository of the library and downloaded once into the data directory.
+The archive (0.8 MB) is kept in the repository of the library and downloaded once into the data directory.
 
 !!! quote "Licence and attribution"
     The dictionary is derived from Google Books Ngram, which is licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/), and is distributed under the same licence; the archive carries a `README.txt` with the source and the changes. Cite the source as: Michel J.-B. et al. Quantitative analysis of culture using millions of digitized books. Science 331 (6014), 2011.
@@ -149,7 +149,7 @@ An unknown part of speech, a minimum frequency that is not a number and a `limit
 lemma_key(word, proper=False, pos='')
 ```
 
-The key by which a word is looked up in the dictionary, and by which the dictionary is built (`ests.datasets.freq_dict.lemma_key`): the word goes to lower case, so that a word at the start of a sentence finds its lemma (`Miró` - `mirar`), and then to its lemma by `ests.utils.lemmatize` - of esMorph, with the part of speech of Universal Dependencies when it is given (`vino` - `vino`, as a verb `venir`). A verb and an auxiliary take the first analysis of either (`fue` - `ser`), as Google tags both as verbs. A proper noun keeps its form in lower case (`proper=True`): `Tomás` is `tomás`, not the verb `tomar`. The dictionary is built with the lemmas of esMorph 0.3 and the parts of speech of Google.
+The key by which a word is looked up in the dictionary, and by which the dictionary is built (`ests.datasets.freq_dict.lemma_key`): the word goes to lower case, so that a word at the start of a sentence finds its lemma (`Miró` - `mirar`), and then to its lemma by `ests.utils.lemmatize` - of esMorph, with the part of speech of Universal Dependencies when it is given (`vino` - `vino`, as a verb `venir`). A verb and an auxiliary take the first analysis of either (`fue` - `ser`), as Google tags both as verbs. A proper noun keeps its form in lower case (`proper=True`): `Tomás` is `tomás`, not the verb `tomar`. The dictionary is built with the lemmas of esMorph 0.4 and the parts of speech of Google.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
