@@ -583,8 +583,9 @@ def is_gerund_clause(token: TreeWord) -> bool:
         A predicate in the form of a gerund (predicate_form: llegando tarde,
         habiendo llegado tarde) with a valency above 0, its auxiliaries left
         out (calc_valency), outside a periphrasis: está cantando is finite,
-        and a gerund after a verb of GERUND_PERIPHRASIS_VERBS that heads it
-        (sigue trabajando, se fue alejando) is none
+        and a gerund after a verb of GERUND_PERIPHRASIS_VERBS that heads
+        it, with no punctuation between them (sigue trabajando), is none, while
+        Llegando tarde, se fue and Se fue, dejando la puerta abierta head clauses
 
     Arguments:
         token (TreeWord): TreeWord
@@ -594,11 +595,15 @@ def is_gerund_clause(token: TreeWord) -> bool:
     """
     if predicate_form(token) != "Ger" or is_root(token):
         return False
+    head = token.head
     if (
         token.deprel in PERIPHRASIS_DEPS
-        and token.head is not None
-        and token.head.index < token.index
-        and (token.head.lemma or "").lower() in GERUND_PERIPHRASIS_VERBS
+        and head is not None
+        and head.index < token.index
+        and (head.lemma or "").lower() in GERUND_PERIPHRASIS_VERBS
+        and not any(
+            is_punctuation(word.form) for word in token.tree.words[head.index + 1 : token.index]
+        )
     ):
         return False
     return _valency(token) > 0
