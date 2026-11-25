@@ -90,7 +90,7 @@ def test_get_stats_values(ss):
     assert stats["tree_depth"] == 4
     assert stats["clauses_per_sent"] == 2
     assert stats["p_complex_sents"] == 0.5
-    assert stats["noun_verb_ratio"] == 0.75
+    assert stats["noun_verb_ratio"] == 0.6
 
 
 def test_print_stats(ss, capsys):

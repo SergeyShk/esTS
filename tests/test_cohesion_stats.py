@@ -50,7 +50,8 @@ def test_counts(cs):
     assert cs.n_words == sum(len(sent) for sent in cs.words)
     # embargo of the connector Sin embargo is no noun
     assert cs.n_nouns == 5
-    assert cs.n_content_words == 8
+    # fueron of se fueron is ir, a content word
+    assert cs.n_content_words == 9
 
 
 def test_get_stats(cs):
