@@ -4,7 +4,7 @@
 FreqDict(data_dir=DEFAULT_DATASET_DIR)
 ```
 
-A frequency dictionary of Spanish lemmas built from the Spanish books of [Google Books Ngram](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html) (version 20200217): 86,196 lemmas (107,032 rows of a lemma and a part of speech) of the books of 1980-2019, 63 billion words. Every row has the frequency per million words (ipm), the range (the number of years out of 40 in which the lemma occurs), Juilland's D over the years (0-100) and the number of books with the most widespread form of the lemma. The parts of speech are those of Google, with the names of Universal Dependencies: `NOUN`, `PROPN`, `VERB`, `ADJ`, `ADV`, `PRON`, `DET`, `ADP`, `CONJ` (coordinating and subordinating together).
+A frequency dictionary of Spanish lemmas built from the Spanish books of [Google Books Ngram](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html) (version 20200217): 86,091 lemmas (106,909 rows of a lemma and a part of speech) of the books of 1980-2019, 63 billion words. Every row has the frequency per million words (ipm), the range (the number of years out of 40 in which the lemma occurs), Juilland's D over the years (0-100) and the number of books with the most widespread form of the lemma. The parts of speech are those of Google, with the names of Universal Dependencies: `NOUN`, `PROPN`, `VERB`, `ADJ`, `ADV`, `PRON`, `DET`, `ADP`, `CONJ` (coordinating and subordinating together).
 
 The dictionary is built by `scripts/build_freq_dict.py` from the 1-grams: only the forms tagged with a part of speech and made of letters are counted (numbers, punctuation and the tag `X` are dropped), and every form goes to its key by [`lemma_key`](#lemma_key). Google has no tag for proper nouns, so a noun form capitalized in at least 90% of its occurrences is `PROPN` and keeps its form. The decision is taken for the whole form: `dios`, capitalized in 92% of its occurrences, is `PROPN` in lower case too, while its `NOUN` row comes mostly from the plural `dioses`. The rows below 0.1 ipm or found in fewer than 5 years are left out. The dispersion is computed on the relative frequency of every year; the number of books is a lower bound, as a book with several forms of the lemma is counted once.
 
@@ -69,7 +69,7 @@ An entry of the dictionary: a named tuple.
 | `dispersion` | `int` | Juilland's D over the years, from 0 to 100 |
 | `docs` | `int` | Number of books with the most widespread form of the lemma |
 
-The dictionary iterates over its records as `get_records()` without filters: `for record in fd` goes over the 107,032 rows of a lemma and a part of speech, while `len(fd)` counts the 86,196 lemmas with their parts of speech merged, as `lookup` and `in` see them.
+The dictionary iterates over its records as `get_records()` without filters: `for record in fd` goes over the 106,909 rows of a lemma and a part of speech, while `len(fd)` counts the 86,091 lemmas with their parts of speech merged, as `lookup` and `in` see them.
 
 ## Methods
 
@@ -81,7 +81,7 @@ The dictionary iterates over its records as `get_records()` without filters: `fo
 
 An archive that cannot be downloaded or fails the checksum twice raises `DownloadError`, an archive that cannot be extracted `DataFileError`.
 
-`check_data()` checks that the file of the dictionary is in place and returns `True`; a dictionary that is not downloaded raises `DatasetNotFoundError` with the commands to download it. The other methods and the attributes of the entries and frequencies check it themselves.
+`check_data()` checks that the file of the dictionary is in place and returns `True`; a dictionary that is not downloaded raises `DatasetNotFoundError` with the commands to download it, and names a dictionary of another version in the directory, which this version of esTS does not read (`freq_dict_v2` of esTS 0.10). The other methods and the attributes of the entries and frequencies check it themselves.
 
 `lookup(lemma)` returns the entry of a lemma in any case, `None` for a lemma out of the dictionary; `ipm(lemma)` returns the frequency of a lemma per million words, 0 for a lemma out of the dictionary. The argument is a key of the dictionary, not a word form: a word form is looked up by its key, `computadoras` by `lemma_key("computadoras")` (`computadora`); the lemma of `usted` in esMorph is `tú`, so `fd.lookup("usted")` is `None`. The same holds for `in`; [`LexicalStats`](../stats/lexical_stats.md) and [`keyness`](../corpus/keyness.md) go to the keys themselves.
 
@@ -110,7 +110,7 @@ A lemma that is not a string raises `SourceTypeError`.
     Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.46, range=40, dispersion=98, docs=566129)
     (None, 1463.67)
     (0.0, 15.35)
-    (True, 86196, 107032)
+    (True, 86091, 106909)
     ```
 
 `get_records(pos=None, min_ipm=None, limit=None)` returns the records of the dictionary - a row for every lemma and part of speech, by frequency - filtered by the part of speech and the minimum frequency; `get_texts` with the same parameters returns the lemmas.

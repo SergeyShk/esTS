@@ -4,7 +4,7 @@
 FreqDict(data_dir=DEFAULT_DATASET_DIR)
 ```
 
-Un diccionario de frecuencias de lemas del español construido a partir de los libros en español de [Google Books Ngram](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html) (versión 20200217): 86 196 lemas (107 032 filas de un lema y una categoría gramatical) de los libros de 1980-2019, 63 000 millones de palabras. Cada fila tiene la frecuencia por millón de palabras (ipm), el rango (el número de años, de 40, en que aparece el lema), la D de Juilland por años (0-100) y el número de libros con la forma más extendida del lema. Las categorías gramaticales son las de Google, con los nombres de Universal Dependencies: `NOUN`, `PROPN`, `VERB`, `ADJ`, `ADV`, `PRON`, `DET`, `ADP`, `CONJ` (coordinantes y subordinantes juntas).
+Un diccionario de frecuencias de lemas del español construido a partir de los libros en español de [Google Books Ngram](https://storage.googleapis.com/books/ngrams/books/datasetsv3.html) (versión 20200217): 86 091 lemas (106 909 filas de un lema y una categoría gramatical) de los libros de 1980-2019, 63 000 millones de palabras. Cada fila tiene la frecuencia por millón de palabras (ipm), el rango (el número de años, de 40, en que aparece el lema), la D de Juilland por años (0-100) y el número de libros con la forma más extendida del lema. Las categorías gramaticales son las de Google, con los nombres de Universal Dependencies: `NOUN`, `PROPN`, `VERB`, `ADJ`, `ADV`, `PRON`, `DET`, `ADP`, `CONJ` (coordinantes y subordinantes juntas).
 
 El diccionario lo construye `scripts/build_freq_dict.py` a partir de los 1-gramas: se cuentan solo las formas etiquetadas con una categoría gramatical y hechas de letras (se quitan los números, la puntuación y la etiqueta `X`), y cada forma pasa a su clave por [`lemma_key`](#lemma_key). Google no tiene etiqueta para los nombres propios, así que una forma de sustantivo escrita con mayúscula en al menos el 90 % de sus apariciones es `PROPN` y conserva su forma. La decisión se toma para la forma entera: `dios`, con mayúscula en el 92 % de sus apariciones, es `PROPN` también en minúsculas, mientras que su fila `NOUN` viene sobre todo del plural `dioses`. Se dejan fuera las filas por debajo de 0,1 ipm o presentes en menos de 5 años. La dispersión se calcula sobre la frecuencia relativa de cada año; el número de libros es una cota inferior, ya que un libro con varias formas del lema se cuenta una vez.
 
@@ -69,7 +69,7 @@ Una entrada del diccionario: una tupla con nombre.
 | `dispersion` | `int` | D de Juilland por años, de 0 a 100 |
 | `docs` | `int` | Número de libros con la forma más extendida del lema |
 
-El diccionario se recorre por sus registros como `get_records()` sin filtros: `for record in fd` pasa por las 107 032 filas de un lema y una categoría gramatical, mientras que `len(fd)` cuenta los 86 196 lemas con sus categorías unidas, tal como los ven `lookup` e `in`.
+El diccionario se recorre por sus registros como `get_records()` sin filtros: `for record in fd` pasa por las 106 909 filas de un lema y una categoría gramatical, mientras que `len(fd)` cuenta los 86 091 lemas con sus categorías unidas, tal como los ven `lookup` e `in`.
 
 ## Métodos
 
@@ -81,7 +81,7 @@ El diccionario se recorre por sus registros como `get_records()` sin filtros: `f
 
 Un archivo que no se puede descargar o que no pasa la suma de comprobación dos veces lanza `DownloadError`, y un archivo que no se puede extraer, `DataFileError`.
 
-`check_data()` comprueba que el fichero del diccionario está en su sitio y devuelve `True`; un diccionario sin descargar lanza `DatasetNotFoundError` con las órdenes para descargarlo. Los demás métodos y los atributos de las entradas y las frecuencias lo comprueban por sí mismos.
+`check_data()` comprueba que el fichero del diccionario está en su sitio y devuelve `True`; un diccionario sin descargar lanza `DatasetNotFoundError` con las órdenes para descargarlo y nombra un diccionario de otra versión en el directorio, que esta versión de esTS no lee (`freq_dict_v2` de esTS 0.10). Los demás métodos y los atributos de las entradas y las frecuencias lo comprueban por sí mismos.
 
 `lookup(lemma)` devuelve la entrada de un lema en cualquier combinación de mayúsculas y minúsculas, `None` para un lema que no está en el diccionario; `ipm(lemma)` devuelve la frecuencia de un lema por millón de palabras, 0 para un lema que no está en el diccionario. El argumento es una clave del diccionario, no una forma: una forma se busca por su clave, `computadoras` por `lemma_key("computadoras")` (`computadora`); el lema de `usted` en esMorph es `tú`, así que `fd.lookup("usted")` es `None`. Lo mismo vale para `in`; [`LexicalStats`](../stats/lexical_stats.md) y [`keyness`](../corpus/keyness.md) pasan a las claves por sí mismos.
 
@@ -110,7 +110,7 @@ Un lema que no es una cadena lanza `SourceTypeError`.
     Entry(lemma='dios', pos=('PROPN', 'NOUN', 'ADJ'), ipm=444.46, range=40, dispersion=98, docs=566129)
     (None, 1463.67)
     (0.0, 15.35)
-    (True, 86196, 107032)
+    (True, 86091, 106909)
     ```
 
 `get_records(pos=None, min_ipm=None, limit=None)` devuelve los registros del diccionario - una fila por lema y categoría gramatical, por frecuencia - filtrados por la categoría gramatical y la frecuencia mínima; `get_texts` con los mismos parámetros devuelve los lemas.

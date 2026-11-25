@@ -241,7 +241,7 @@ def get_rank(lemma: str) -> int | None:
     Example:
         >>> from ests.lexical_stats import get_rank
         >>> get_rank("el"), get_rank("gato"), get_rank("gatuno")
-        (1, 3123, None)
+        (1, 3122, None)
     """
     return load_top_lemmas().get(lemma.lower())
 

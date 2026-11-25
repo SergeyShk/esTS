@@ -29,14 +29,14 @@ The class extends the `LexicalStats` of the [anyTS](https://sergeyshk.github.io/
                         Statistic                    |  Value
     ------------------------------------------------------------
     Share of words found in the frequency dictionary |   1.00
-    Mean frequency (ipm)                             | 34471.00
-    Mean frequency of content words (ipm)            |  805.65
+    Mean frequency (ipm)                             | 34473.85
+    Mean frequency of content words (ipm)            |  806.61
     Mean log frequency (lg ipm)                      |   3.56
     Mean log frequency of content words              |   2.17
     Mean range (years out of 40)                     |  40.00
     Mean dispersion (D)                              |  97.18
     Mean surprisal (bits)                            |   8.10
-    Unigram perplexity                               |  275.12
+    Unigram perplexity                               |  275.08
     Share of words in the top 1000                   |   0.73
     Share of words in the top 2000                   |   0.82
     Share of words in the top 5000                   |   1.00
@@ -81,7 +81,7 @@ The metrics rely on two resources; always read the means by the dictionary next 
 
 | Resource | Metrics | Availability |
 | :------- | :------ | :----------- |
-| [`FreqDict`](../datasets/freqdict.md) - 86,196 lemmas of Google Books Ngram (1980-2019) with ipm, range and dispersion | `coverage`, `mean_ipm*`, `mean_log_ipm*`, `mean_range`, `mean_dispersion`, `surprisal`, `perplexity` | downloaded once with `FreqDict().download()` |
+| [`FreqDict`](../datasets/freqdict.md) - 86,091 lemmas of Google Books Ngram (1980-2019) with ipm, range and dispersion | `coverage`, `mean_ipm*`, `mean_log_ipm*`, `mean_range`, `mean_dispersion`, `surprisal`, `perplexity` | downloaded once with `FreqDict().download()` |
 | The embedded list of the 10,000 most frequent lemmas of the same dictionary (`ests/resources/google_books_top10000.txt`, CC BY 3.0) | `p_top1000`, `p_top2000`, `p_top5000`, `p_top10000`, `p_beyond_top10000`, `band_coverage` | always |
 
 <div class="metric-card" markdown>
@@ -107,7 +107,7 @@ Rare words lower the coverage and the log frequency and raise the surprisal and 
 === "Result"
 
     ```
-    (0.875, 2.8003798879556743, 12.206981533297302, 0.375)
+    (0.875, 2.8003912324040754, 12.20694855853567, 0.375)
     ```
 
 </div>
@@ -135,7 +135,7 @@ In esTS the dictionary is a `FreqDict` with the lowest frequency of 0.1 ipm: a d
 === "Result"
 
     ```
-    15.554697256684591
+    15.554044709914342
     ```
 
 </div>
@@ -179,7 +179,7 @@ The whole list from the file `ests/resources/google_books_top10000.txt`, derived
 === "Result"
 
     ```
-    (1, 3123, None)
+    (1, 3122, None)
     10000
     ```
 
@@ -233,14 +233,14 @@ The other methods - `get_stats`, `to_dataframe`, `print_stats` and `describe` - 
 
     ```
     {'coverage': 1.0,
-     'mean_ipm': 34470.99727272727,
-     'mean_ipm_content': 805.65,
-     'mean_log_ipm': 3.5604802847439285,
-     'mean_log_ipm_content': 2.172562226515112,
+     'mean_ipm': 34473.85272727273,
+     'mean_ipm_content': 806.61,
+     'mean_log_ipm': 3.5605446870314252,
+     'mean_log_ipm_content': 2.1726800882059627,
      'mean_range': 40.0,
      'mean_dispersion': 97.18181818181819,
-     'surprisal': 8.103909080140765,
-     'perplexity': 275.11844950775145,
+     'surprisal': 8.103695140372553,
+     'perplexity': 275.0776547370405,
      'p_top1000': 0.7272727272727273,
      'p_top2000': 0.8181818181818182,
      'p_top5000': 1.0,
