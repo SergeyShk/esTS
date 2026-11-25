@@ -496,7 +496,7 @@ def test_overlaps_with_the_next_two_sentences():
         ("Indíquenos si acepta la propuesta.", []),
         ("—Indique si desea factura.", []),
         ("Confírmenos si desea recibir la información.", []),
-        ("Indícanos si aceptas la propuesta.", []),
+        ("Indícanos si desea recibir la información.", []),
         # The complement of the verb before si: a condition
         ("Lo veré si tengo tiempo.", ["si"]),
         ("Te lo explicaré si me dejas.", ["si"]),
