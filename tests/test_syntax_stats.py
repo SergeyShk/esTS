@@ -90,7 +90,7 @@ def test_get_stats_values(ss):
     assert stats["tree_depth"] == 4
     assert stats["clauses_per_sent"] == 2
     assert stats["p_complex_sents"] == 0.5
-    assert stats["noun_verb_ratio"] == 0.75
+    assert stats["noun_verb_ratio"] == 0.6
 
 
 def test_print_stats(ss, capsys):
@@ -342,9 +342,16 @@ def test_participle_of_a_compound_tense_is_not_a_clause(nlp):
     assert [token.form for token in tokens if is_participle_clause(token)] == []
 
 
-def test_gerund_clause(nlp):
-    tokens = words(nlp, "Hablando en voz alta, entró en la sala")
-    assert [token.form for token in tokens if is_gerund_clause(token)] == ["Hablando"]
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("Hablando en voz alta, entró en la sala", ["Hablando"]),
+        # A verb of a periphrasis before a comma: ir of se fue
+        ("Se fue, dejando la puerta abierta", ["dejando"]),
+    ],
+)
+def test_gerund_clause(nlp, text, expected):
+    assert [token.form for token in words(nlp, text) if is_gerund_clause(token)] == expected
 
 
 @pytest.mark.parametrize(

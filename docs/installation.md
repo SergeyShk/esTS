@@ -6,7 +6,7 @@
 *   `spaCy` 3.8.17 or newer within 3
 *   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.5.7 or newer within 0.5, the language-independent core: the extractors, the basic statistics and the common readability formulas, the lexical diversity metrics, the corpus measures, the plots and the machinery of the highlighting come from it with the hooks of Spanish: the tokens and sentences of anySeg, the lemmas of esMorph, the syllables of esTS
 *   [`anyseg`](https://github.com/SergeyShk/anySeg) 0.3.1 or newer within 0.3, the segmenter into tokens and sentences
-*   [`esmorph`](https://github.com/SergeyShk/esMorph) 0.3 or newer within 0.3, the morphological analyzer: the lemmas, the parts of speech and the features of a text; its dictionary, built from the Spanish entries of the English Wiktionary with the context model of the UD treebanks AnCora and GSD, is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+*   [`esmorph`](https://github.com/SergeyShk/esMorph) 0.4 or newer within 0.4, the morphological analyzer: the lemmas, the parts of speech and the features of a text; its dictionary, built from the Spanish entries of the English Wiktionary with the context model of the UD treebanks AnCora and GSD, is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 *   `numpy`, `scipy`, `pandas`
 *   `matplotlib` and `graphviz` for the [visualizers](visualizers/zipf.md)
 

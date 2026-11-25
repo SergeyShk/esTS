@@ -18,7 +18,6 @@ from anyts.utils import check_words, in_order, is_doc, is_document, is_punctuati
 
 from .constants import (
     COMPOUND_PREPOSITIONS,
-    IRREGULAR_VERB_FORMS,
     OFFICIALESE_CLICHES,
     PARENTHETICALS,
     STOPWORDS,
@@ -296,10 +295,10 @@ def expand_phrases(text: Sequence[str], phrases: Collection[str]) -> dict[str, s
         whose first word is an infinitive (dar cumplimiento) takes the forms of
         the text with that lemma (dio cumplimiento, ha dado cumplimiento, fue de
         aplicación): any lemma of the form as a verb or an auxiliary in esMorph,
-        a pronominal one counting for its verb (llevarse - llevar), or of
-        IRREGULAR_VERB_FORMS (dese). When phrases spell out the
-        same words, a phrase written so wins over the forms of another, then
-        the first phrase of a list or of a set in sorted order
+        a pronominal one counting for its verb (llevarse - llevar, dese - dar).
+        When phrases spell out the same words, a phrase written so wins over
+        the forms of another, then the first phrase of a list or of a set in
+        sorted order
 
     Arguments:
         text (list[str]): List of words
@@ -333,8 +332,7 @@ def expand_phrases(text: Sequence[str], phrases: Collection[str]) -> dict[str, s
     forms: dict[str, set[str]] = {head: {head} for head in heads}
     if heads:
         for form in {word.lower() for word in text}:
-            irregular = IRREGULAR_VERB_FORMS.get(form)
-            for lemma in (irregular,) if irregular else _verb_lemmas(form):
+            for lemma in _verb_lemmas(form):
                 if lemma not in forms:
                     lemma = lemma.removesuffix("se")
                 if lemma in forms:

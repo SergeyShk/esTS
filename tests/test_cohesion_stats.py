@@ -50,7 +50,8 @@ def test_counts(cs):
     assert cs.n_words == sum(len(sent) for sent in cs.words)
     # embargo of the connector Sin embargo is no noun
     assert cs.n_nouns == 5
-    assert cs.n_content_words == 8
+    # fueron of se fueron is ir, a content word
+    assert cs.n_content_words == 9
 
 
 def test_get_stats(cs):
@@ -494,6 +495,8 @@ def test_overlaps_with_the_next_two_sentences():
         ("Indique si desea recibir notificaciones.", []),
         ("Indíquenos si acepta la propuesta.", []),
         ("—Indique si desea factura.", []),
+        ("Confírmenos si desea recibir la información.", []),
+        ("Indícanos si desea recibir la información.", []),
         # The complement of the verb before si: a condition
         ("Lo veré si tengo tiempo.", ["si"]),
         ("Te lo explicaré si me dejas.", ["si"]),

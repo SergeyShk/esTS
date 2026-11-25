@@ -412,7 +412,7 @@ def is_connector_blocked(token: TreeWord) -> bool:
         ¡ (¡Si ya te lo dije!); a si after como or vaya is dropped by the
         matcher itself (CONNECTOR_BLOCKED_BEFORE). The verb is a VERB or AUX
         by its lemma, or a word the tagger reads as a proper or a common noun
-        (Indique, Indíquenos) by the lemma of lemmatize
+        (Confírmenos, Indícanos) by the lemma of lemmatize
 
     Arguments:
         token (TreeWord): Word of the tree
