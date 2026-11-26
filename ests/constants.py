@@ -810,6 +810,8 @@ LEXICAL_STATS_DESC = {
     "p_top10000": "Share of words in the top 10000",
     "p_beyond_top10000": "Share of words beyond the top 10000",
     "lexical_density": "Lexical density",
+    "p_proper_nouns": "Share of proper nouns",
+    "p_abbreviations": "Share of abbreviations",
 }
 
 

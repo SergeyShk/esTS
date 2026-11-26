@@ -44,11 +44,11 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Métricas de diversidad léxica](https://sergeyshk.github.io/esTS/es/stats/diversity_stats/)** - TTR y sus variantes, MATTR, MSTTR, MTLD y MAMTLD, HD-D, índices de Simpson y de Yule, entropía, la Z de Orlov, las ráfagas de los lexemas, leyes de Zipf y de Heaps
 * **[Estadísticas morfológicas](https://sergeyshk.github.io/esTS/es/stats/morph_stats/)** - categorías gramaticales y quince rasgos morfológicos de Universal Dependencies, con los marcadores del español: los modos, las formas no personales, los pronombres clíticos, `ser` frente a `estar`, los adverbios en `-mente`
 * **[Medidas de corpus](https://sergeyshk.github.io/esTS/es/corpus/keyness/)** - palabras clave frente a un corpus de referencia, colocaciones, la dispersión de una palabra por las partes de un texto, una concordancia KWIC y la estilometría de autoría: la Delta de Burrows con sus variantes, Zeta, la curva de Mendenhall, el perfil de las palabras funcionales; la comparación de dos corpus por 164 rasgos de un texto con tamaños del efecto
-* **[Visualizaciones](https://sergeyshk.github.io/esTS/es/visualizers/zipf/)** - ley de Zipf, huella literaria, árbol de palabras, dispersión léxica y palabras clave, red de colocaciones, dendrograma, PCA y MDS por la Delta, las distancias dentro de los autores y entre ellos, la Delta móvil y Zeta, crecimiento del vocabulario, longitudes de las oraciones y el resaltado de los fragmentos que cuentan las estadísticas, como las oraciones largas y las pasivas
+* **[Visualizaciones](https://sergeyshk.github.io/esTS/es/visualizers/zipf/)** - ley de Zipf, huella literaria, árbol de palabras, dispersión léxica y palabras clave, red de colocaciones, dendrograma, PCA y MDS por la Delta, las distancias dentro de los autores y entre ellos, la Delta móvil y Zeta, crecimiento del vocabulario, longitudes de las oraciones, el ritmo de los versos y el resaltado de los fragmentos que cuentan las estadísticas, como las oraciones largas y las pasivas
 * **[Conjuntos de datos](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/)** - literatura en español de dominio público: 150 obras de 33 autores en cuatro géneros; 4259 sonetos de los siglos XV-XX con el patrón métrico y la rima de cada verso; un diccionario de frecuencias de 86 091 lemas según Google Books Ngram
 * **[Componentes de spaCy](https://sergeyshk.github.io/esTS/es/components/)** - cada clase de estadísticas como componente de un pipeline, con las estadísticas puestas en el `Doc` en una sola pasada; `ests.load_pipeline()` da a un `Doc` los tokens, las oraciones y la morfología de su cadena
 * **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, la repetición en las oraciones siguientes y entre párrafos de TAACO, con la densidad de 273 marcadores del discurso españoles por clase y por lugar
-* **[Estadísticas de complejidad léxica](https://sergeyshk.github.io/esTS/es/stats/lexical_stats/)** - cuán raras son las palabras de un texto en la lengua: la frecuencia, el rango y la dispersión de los lemas según un diccionario de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la sorpresa, la perplejidad y la densidad léxica
+* **[Estadísticas de complejidad léxica](https://sergeyshk.github.io/esTS/es/stats/lexical_stats/)** - cuán raras son las palabras de un texto en la lengua: la frecuencia, el rango y la dispersión de los lemas según un diccionario de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la sorpresa, la perplejidad, la densidad léxica y las proporciones de los nombres propios y de las abreviaturas
 * **[Métricas de estilo](https://sergeyshk.github.io/esTS/es/stats/style_stats/)** - los indicadores SEO de Advego y Text.ru (náusea, contenido de agua, índice de spam, naturalidad según Zipf, densidad de palabras clave) y los marcadores del estilo burocrático según las guías de lenguaje claro en español: sustantivos deverbales, locuciones prepositivas, expresiones parentéticas y clichés
 * **[Fonoestadística](https://sergeyshk.github.io/esTS/es/stats/phon_stats/)** - proporciones de las clases de sonidos, grupos consonánticos, hiatos, sílabas abiertas, dureza e índices de aliteración y de asonancia, sobre los sonidos de una transcripción por reglas
 * **[Estadísticas del verso](https://sergeyshk.github.io/esTS/es/stats/verse_stats/)** - la escansión del verso español por su metro silábico: las sílabas métricas, el metro de un poema, el perfil acentual y los tipos del endecasílabo, la rima consonante y asonante con su esquema, las estrofas y la forma de un poema
@@ -446,7 +446,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/stats/cohesion_s
 
 <br>
 
-Cuán raras son las palabras de un texto en la lengua, a la manera de TAALES: la frecuencia media, el rango y la dispersión de los lemas según el diccionario de frecuencias de Google Books Ngram, las proporciones de las bandas de frecuencia top-1000, 2000, 5000 y 10000, la sorpresa y la perplejidad, la densidad léxica. Las estadísticas según el diccionario lo necesitan descargado una vez.
+Cuán raras son las palabras de un texto en la lengua, a la manera de TAALES: la frecuencia media, el rango y la dispersión de los lemas según el diccionario de frecuencias de Google Books Ngram, las proporciones de las bandas de frecuencia top-1000, 2000, 5000 y 10000, la sorpresa y la perplejidad, la densidad léxica, las proporciones de los nombres propios y de las abreviaturas. Las estadísticas según el diccionario lo necesitan descargado una vez.
 
 ```python
 >>> from ests import LexicalStats
@@ -642,7 +642,7 @@ Más en la [documentación](https://sergeyshk.github.io/esTS/es/datasets/spanish
 *   [Árbol de palabras](https://sergeyshk.github.io/esTS/es/visualizers/word_tree/)
 *   [Gráficos de corpus](https://sergeyshk.github.io/esTS/es/visualizers/corpus/): dispersión léxica, un diagrama de palabras clave, una red de colocaciones
 *   [Gráficos estilométricos](https://sergeyshk.github.io/esTS/es/visualizers/stylometry/): un dendrograma, las componentes principales y el escalamiento multidimensional por la Delta, los histogramas de las distancias dentro de un autor y entre autores, la Delta móvil, los segmentos por los marcadores de Zeta, las curvas de Mendenhall
-*   [Crecimiento del vocabulario y espectro de frecuencias](https://sergeyshk.github.io/esTS/es/visualizers/vocabulary/), [longitudes de las oraciones](https://sergeyshk.github.io/esTS/es/visualizers/sentences/) con una media móvil
+*   [Crecimiento del vocabulario y espectro de frecuencias](https://sergeyshk.github.io/esTS/es/visualizers/vocabulary/), [longitudes de las oraciones](https://sergeyshk.github.io/esTS/es/visualizers/sentences/) con una media móvil, el [ritmo de los versos](https://sergeyshk.github.io/esTS/es/visualizers/verse/) de un poema
 
 Los gráficos de matplotlib reciben los ejes `ax` y devuelven `Axes`; la red de colocaciones y el árbol de palabras los dibujan los ejecutables de Graphviz. La Delta coseno separa tres novelas de Galdós de tres de Unamuno:
 
@@ -745,9 +745,9 @@ Los informes de errores, las ideas y los pull requests son bienvenidos en las [i
     *   verse_stats.py - estadísticas del verso
     *   syllables.py - silabificación y acento
     *   utils.py - herramientas auxiliares
-    *   visualizers - gráficos: ley de Zipf, huella literaria, árbol de palabras, gráficos de corpus y estilométricos, crecimiento del vocabulario, longitudes de las oraciones, resaltado del texto
+    *   visualizers - gráficos: ley de Zipf, huella literaria, árbol de palabras, gráficos de corpus y estilométricos, crecimiento del vocabulario, longitudes de las oraciones, ritmo de los versos, resaltado del texto
 *   **examples** - cuadernos con ejemplos
-*   **scripts** - scripts que construyen los archivos de los conjuntos de datos, traen las páginas de anyTS de la documentación y comprueban las salidas de los cuadernos
+*   **scripts** - scripts que construyen los archivos de los conjuntos de datos, traen las páginas de anyTS de la documentación, comprueban las salidas de los cuadernos y comprueban la escansión en sonetos anotados a mano
 *   **tests** - pruebas que reproducen la estructura del paquete
 
 </details>

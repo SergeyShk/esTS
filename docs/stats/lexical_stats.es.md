@@ -107,8 +107,6 @@ Cada métrica es un atributo o una propiedad del objeto, y `get_stats` las da to
 | `p_proper_nouns` | Proporción de los nombres propios | 0-1 | Más nombres de personas, lugares y organizaciones |
 | `p_abbreviations` | Proporción de las abreviaturas | 0-1 | Más abreviaturas, como en los textos oficiales y científicos |
 
-esTS todavía no cuenta `p_proper_nouns` ni `p_abbreviations`: esMorph no marca ninguna abreviatura y etiqueta tratamientos como `Sr.` y `Dra.` como nombres propios, así que `get_stats` las deja fuera.
-
 Las métricas se apoyan en dos recursos; lea siempre las medias según el diccionario junto a `coverage`.
 
 | Recurso | Métricas | Disponibilidad |
@@ -253,6 +251,37 @@ $$
 
 </div>
 
+<div class="metric-card" markdown>
+
+### Nombres propios y abreviaturas { #proper_abbreviations }
+
+`p_proper_nouns` · `p_abbreviations`
+{ .metric-meta }
+
+Las proporciones de los nombres propios y de las abreviaturas entre las palabras. Un nombre propio es una palabra que esMorph etiqueta `PROPN`, o el modelo de un `Doc`. Una abreviatura es una palabra que conserva un punto final. anySeg lo conserva en las abreviaturas que conoce (`Sr.`, `pág.`, `EE. UU.`) y en las iniciales (`J.`), así que una inicial cuenta en las dos proporciones. esMorph también etiqueta los tratamientos como nombres propios (`Sr.`, `D.`, `Ud.`); son cerca del 3% de los nombres propios del [corpus de literatura](../datasets/spanishliterature.md). Dos clases de abreviatura no se cuentan:
+
+- las siglas y los acrónimos (`ONU`, `DNI`), porque ningún signo los distingue: las palabras en mayúsculas del corpus son los nombres de los personajes de las obras de teatro, los títulos de obras y el énfasis;
+- una abreviatura al final de una oración (`etc.`), cuyo punto cierra la oración.
+
+En 300 fragmentos del corpus, de 6000 caracteres cada uno, la mediana de la proporción de los nombres propios es del 3,2%, y solo 99 fragmentos tienen una abreviatura.
+
+=== "Código"
+
+    ``` python
+    from ests import LexicalStats
+
+    ls = LexicalStats("El Sr. García y la Dra. Pérez viajaron a EE. UU. con la ONU")
+    ls.p_proper_nouns, ls.p_abbreviations
+    ```
+
+=== "Resultado"
+
+    ```
+    (0.5, 0.2857142857142857)
+    ```
+
+</div>
+
 ## Métodos
 
 <!-- core: stats/lexical_stats.md:LexicalStats-band_coverage 065e9e9 -->
@@ -300,5 +329,7 @@ Los demás métodos, `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by
      'p_top5000': 1.0,
      'p_top10000': 1.0,
      'p_beyond_top10000': 0.0,
-     'lexical_density': 0.45454545454545453}
+     'lexical_density': 0.45454545454545453,
+     'p_proper_nouns': 0.0,
+     'p_abbreviations': 0.0}
     ```

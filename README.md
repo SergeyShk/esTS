@@ -44,11 +44,11 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Lexical diversity metrics](https://sergeyshk.github.io/esTS/stats/diversity_stats/)** - TTR and its variations, MATTR, MSTTR, MTLD and MAMTLD, HD-D, Simpson's and Yule's indices, entropy, Orlov's Z, the burstiness of the lexemes, Zipf's and Heaps' laws
 * **[Morphological statistics](https://sergeyshk.github.io/esTS/stats/morph_stats/)** - parts of speech and fifteen grammatical features of Universal Dependencies, with the markers of Spanish: the moods, the non-finite forms, the clitic pronouns, `ser` against `estar`, the adverbs in `-mente`
 * **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text, a KWIC concordance and the stylometry of authorship: Burrows's Delta with its variants, Zeta, the Mendenhall curve, the profile of the function words; the comparison of two corpora by 164 features of a text with effect sizes
-* **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, the distances within and between authors, rolling Delta and Zeta, vocabulary growth, sentence lengths, and the highlighting of the fragments the statistics count, such as long sentences and passives
+* **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, the distances within and between authors, rolling Delta and Zeta, vocabulary growth, sentence lengths, the rhythm of the lines of a verse, and the highlighting of the fragments the statistics count, such as long sentences and passives
 * **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors in four genres; 4,259 sonnets of the 15th-20th centuries with the metrical pattern and the rhyme of every line; a frequency dictionary of 86,091 lemmas by Google Books Ngram
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass; `ests.load_pipeline()` gives a `Doc` the tokens, sentences and morphology of its string
 * **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, the overlap with the next sentences and paragraphs of TAACO, with the density of 273 Spanish discourse markers by class and by place
-* **[Lexical sophistication statistics](https://sergeyshk.github.io/esTS/stats/lexical_stats/)** - how rare the words of a text are in the language: the frequency, range and dispersion of the lemmas by a dictionary of Google Books Ngram, the frequency bands top-1000 to 10000, surprisal, perplexity and lexical density
+* **[Lexical sophistication statistics](https://sergeyshk.github.io/esTS/stats/lexical_stats/)** - how rare the words of a text are in the language: the frequency, range and dispersion of the lemmas by a dictionary of Google Books Ngram, the frequency bands top-1000 to 10000, surprisal, perplexity, lexical density and the shares of the proper nouns and the abbreviations
 * **[Style metrics](https://sergeyshk.github.io/esTS/stats/style_stats/)** - the SEO indicators of Advego and Text.ru (nausea, water content, spam score, naturalness by Zipf's law, keyword density) and the markers of the officialese style by the Spanish-language guides to plain language: verbal nouns, compound prepositions, parenthetical expressions and clichés
 * **[Phonostatistics](https://sergeyshk.github.io/esTS/stats/phon_stats/)** - the shares of the classes of sounds, consonant clusters, hiatuses, open syllables, hardness and the indices of alliteration and assonance, over the sounds of a rule-based transcription
 * **[Verse statistics](https://sergeyshk.github.io/esTS/stats/verse_stats/)** - the scansion of Spanish verse by its syllabic meter: the metrical syllables, the meter of a poem, the stress profile and the types of the endecasílabo, the rhyme in full and by assonance with its scheme, the strophes and the form of a poem
@@ -446,7 +446,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/stats/cohesion_stat
 
 <br>
 
-How rare the words of a text are in the language, in the manner of TAALES: the mean frequency, range and dispersion of the lemmas by the frequency dictionary of Google Books Ngram, the shares of the frequency bands top-1000, 2000, 5000 and 10000, surprisal and perplexity, the lexical density. The statistics by the dictionary need it downloaded once.
+How rare the words of a text are in the language, in the manner of TAALES: the mean frequency, range and dispersion of the lemmas by the frequency dictionary of Google Books Ngram, the shares of the frequency bands top-1000, 2000, 5000 and 10000, surprisal and perplexity, the lexical density, the shares of the proper nouns and the abbreviations. The statistics by the dictionary need it downloaded once.
 
 ```python
 >>> from ests import LexicalStats
@@ -642,7 +642,7 @@ More in the [documentation](https://sergeyshk.github.io/esTS/datasets/spanishlit
 *   [Word tree](https://sergeyshk.github.io/esTS/visualizers/word_tree/)
 *   [Corpus plots](https://sergeyshk.github.io/esTS/visualizers/corpus/): lexical dispersion, a chart of keywords, a network of collocations
 *   [Stylometric plots](https://sergeyshk.github.io/esTS/visualizers/stylometry/): a dendrogram, the principal components and the multidimensional scaling by Delta, the histograms of the distances within and between authors, rolling Delta, the segments by the markers of Zeta, the Mendenhall curves
-*   [Vocabulary growth and frequency spectrum](https://sergeyshk.github.io/esTS/visualizers/vocabulary/), [sentence lengths](https://sergeyshk.github.io/esTS/visualizers/sentences/) with a moving average
+*   [Vocabulary growth and frequency spectrum](https://sergeyshk.github.io/esTS/visualizers/vocabulary/), [sentence lengths](https://sergeyshk.github.io/esTS/visualizers/sentences/) with a moving average, the [rhythm of the lines](https://sergeyshk.github.io/esTS/visualizers/verse/) of a verse
 
 The matplotlib plots take the axes `ax` and return `Axes`; the network of collocations and the word tree are rendered by the executables of Graphviz. Cosine Delta separates three novels by Galdós from three by Unamuno:
 
@@ -745,9 +745,9 @@ Bug reports, ideas and pull requests are welcome in the [issues](https://github.
     *   verse_stats.py - verse statistics
     *   syllables.py - syllabification and stress
     *   utils.py - helper tools
-    *   visualizers - plots: Zipf's law, fingerprinting, word tree, corpus and stylometric plots, vocabulary growth, sentence lengths, text highlighting
+    *   visualizers - plots: Zipf's law, fingerprinting, word tree, corpus and stylometric plots, vocabulary growth, sentence lengths, rhythm of the lines, text highlighting
 *   **examples** - notebooks with examples
-*   **scripts** - scripts that build the archives of the datasets, fetch the anyTS pages of the documentation and check the outputs of the notebooks
+*   **scripts** - scripts that build the archives of the datasets, fetch the anyTS pages of the documentation, check the outputs of the notebooks and check the scansion on sonnets annotated by hand
 *   **tests** - tests mirroring the package structure
 
 </details>

@@ -75,7 +75,7 @@ Excepciones:
 | `form` | `str / None` | Forma del poema: `soneto`, `romance`, la estrofa de todas sus estrofas, `silva` ([estrofas](#strophes)) |
 | `c_clausulas` | `dict[str, int]` | Distribución de las terminaciones de los versos por tipo: `aguda`, `llana`, `esdrújula`, `sobresdrújula` ([terminaciones](#clausulas)) |
 
-`stresses` indexa `syllables`, y ambos coinciden con `patterns` hasta el último acento de un verso simple; en un [verso compuesto](#meter) cada hemistiquio tiene su propia medida, así que tras una aguda o una esdrújula en la cesura `patterns` y `syllables` se separan, y `caesuras` dice dónde empieza el segundo hemistiquio.
+`stresses` indexa `syllables`, y ambos coinciden con `patterns` hasta el último acento de un verso simple; en un [verso compuesto](#meter) cada hemistiquio tiene su propia medida, así que tras una aguda o una esdrújula en la cesura `patterns` y `syllables` se separan, y `caesuras` dice dónde empieza el segundo hemistiquio. [`rhythm_plot`](../visualizers/verse.md) dibuja los patrones de los versos.
 
 === "Código"
 

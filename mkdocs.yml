@@ -52,6 +52,7 @@ nav:
       - Stylometric plots: visualizers/stylometry.md
       - Vocabulary growth and frequency spectrum: visualizers/vocabulary.md
       - Sentence lengths: visualizers/sentences.md
+      - Rhythm of the lines: visualizers/verse.md
       - Text highlighting: visualizers/highlight.md
 
 theme:
@@ -149,6 +150,7 @@ plugins:
             Stylometric plots: Gráficos estilométricos
             Vocabulary growth and frequency spectrum: Crecimiento del vocabulario y espectro de frecuencias
             Sentence lengths: Longitudes de las oraciones
+            Rhythm of the lines: Ritmo de los versos
             Text highlighting: Resaltado del texto
 
 extra:

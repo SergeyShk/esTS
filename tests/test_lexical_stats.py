@@ -72,6 +72,7 @@ def test_proper_nouns(freq_dict):
     assert ls.entries[0].pos == ("PROPN",)
     assert ls.lemmas[5] == "francia"
     assert ls.n_content_words == 6
+    assert (ls.p_proper_nouns, ls.p_abbreviations) == (pytest.approx(3 / 10), 0)
 
 
 def test_proper_noun_falls_back_to_the_lemma(freq_dict):
@@ -110,8 +111,13 @@ def test_abbreviations(freq_dict):
         "etc",
     ]
     assert ls.coverage == 1.0
+    # The words that keep a final period, the number 5 being no word
+    assert ls.p_abbreviations == pytest.approx(4 / 13)
     initials = LexicalStats("Llegó D. Francisco con J. López", freq_dict)
     assert [initials.entries[initials.words.index(word)] for word in ("D.", "J.")] == [None, None]
+    # An initial is a proper noun and an abbreviation
+    assert initials.p_proper_nouns == pytest.approx(4 / 6)
+    assert initials.p_abbreviations == pytest.approx(2 / 6)
 
 
 def test_numbers_are_no_words(freq_dict):

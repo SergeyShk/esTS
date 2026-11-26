@@ -82,7 +82,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    Cuán raras son las palabras de un texto, a la manera de TAALES: frecuencia, rango, dispersión y sorpresa según un [diccionario de frecuencias](datasets/freqdict.md) de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la densidad léxica
+    Cuán raras son las palabras de un texto, a la manera de TAALES: frecuencia, rango, dispersión y sorpresa según un [diccionario de frecuencias](datasets/freqdict.md) de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la densidad léxica, las proporciones de los nombres propios y de las abreviaturas
 
     [:octicons-arrow-right-24: Estadísticas de complejidad léxica](stats/lexical_stats.md)
 
@@ -130,7 +130,7 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     ---
 
-    [Ley de Zipf](visualizers/zipf.md), [huella literaria](visualizers/fingerprinting.md), [árbol de palabras](visualizers/word_tree.md), gráficos [de corpus](visualizers/corpus.md) y [estilométricos](visualizers/stylometry.md), [crecimiento del vocabulario y espectro de frecuencias](visualizers/vocabulary.md), [longitudes de las oraciones](visualizers/sentences.md) y el [resaltado del texto](visualizers/highlight.md) por los fragmentos que cuentan las estadísticas
+    [Ley de Zipf](visualizers/zipf.md), [huella literaria](visualizers/fingerprinting.md), [árbol de palabras](visualizers/word_tree.md), gráficos [de corpus](visualizers/corpus.md) y [estilométricos](visualizers/stylometry.md), [crecimiento del vocabulario y espectro de frecuencias](visualizers/vocabulary.md), [longitudes de las oraciones](visualizers/sentences.md), el [ritmo de los versos](visualizers/verse.md) de un poema y el [resaltado del texto](visualizers/highlight.md) por los fragmentos que cuentan las estadísticas
 
     [:octicons-arrow-right-24: Visualizaciones](visualizers/zipf.md)
 
@@ -295,9 +295,10 @@ Un cuento analizado con todas las herramientas de la biblioteca está en el cuad
             *   highlight.py - resaltado del texto
             *   sentences.py - longitudes de las oraciones
             *   stylometry.py - dendrograma, componentes principales, escalamiento, distancias dentro de un autor y entre autores, Delta móvil, marcadores de Zeta, curvas de Mendenhall
+            *   verse.py - ritmo de los versos
             *   vocabulary.py - crecimiento del vocabulario y espectro de frecuencias
             *   word_tree.py - árbol de palabras
             *   zipf.py - ley de Zipf
     *   **examples** - cuadernos con ejemplos
-    *   **scripts** - scripts que construyen los archivos de los conjuntos de datos, traen las páginas de anyTS de la documentación y comprueban las salidas de los cuadernos
+    *   **scripts** - scripts que construyen los archivos de los conjuntos de datos, traen las páginas de anyTS de la documentación, comprueban las salidas de los cuadernos y comprueban la escansión en sonetos anotados a mano
     *   **tests** - pruebas que reproducen la estructura del paquete
