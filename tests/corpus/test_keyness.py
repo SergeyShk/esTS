@@ -93,6 +93,10 @@ def test_keyness_freq_dict_context(freq_dict):
     assert {k.word: k.freq_target for k in keyness(words, freq_dict)} == by_text
     # Frequencies have no context: the key of the word alone
     assert [k.word for k in keyness({"vino": 3}, freq_dict)] == ["vino"]
+    # Every text of a list is analyzed in its own context
+    texts = [["Luego", "vino", "a", "casa"], ["Bebimos", "vino", "de", "Rioja"]]
+    by_texts = {k.word: k.freq_target for k in keyness(texts, freq_dict)}
+    assert (by_texts["venir"], by_texts["vino"]) == (1, 1)
 
 
 def test_keyness_of_a_text():
