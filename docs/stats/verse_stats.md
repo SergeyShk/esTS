@@ -429,6 +429,8 @@ A line of Spanish verse is measured by its metrical syllables, which are not the
 
 On the 60,209 lines of the 4,259 sonnets of [SpanishSonnets](../datasets/spanishsonnets.md), the length of a line agrees with the automatic scansion of DISCO in 97.0% of the lines and with [rantanplan](https://github.com/linhd-postdata/rantanplan) in 97.7%, and the stress of a metrical syllable of the lines of equal length in 97.4% and 99.6%.
 
+The annotation checked by hand gives the accuracy: on the 744 sonnets of the [Corpus of Spanish Golden-Age Sonnets](https://github.com/bncolorado/CorpusSonetosSigloDeOro) of Navarro-Colorado whose metrical annotation has been checked by hand (10,479 lines; the annotation is CC BY-NC 4.0), the number of metrical syllables is right for 99.8% of the lines, the stress of the tenth syllable for 99.9%, the whole pattern for 92.5% and the stress of a metrical syllable for 98.6% of the lines of the right length (`scripts/check_scansion.py`). The 22 lines of another length mostly need a license of the poet that the fitting does not try: a dieresis where the meter asks for it (*tri-un-fa-les*, *vi-o-len-tas*) or a hiatus after a comma (*si duer-me, en ex-tre-mo*).
+
 The rhyme is described in its [card](#rhyme_scheme). Against the automatic rhyme of DISCO (RhymeTagger), 99.1% of the pairs of rhyming lines we find are its pairs, and we find 97.9% of its pairs.
 
 ## Accentuation { #accentuate }

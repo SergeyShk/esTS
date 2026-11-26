@@ -429,6 +429,8 @@ Un verso español se mide por sus sílabas métricas, que no son las sílabas de
 
 Sobre los 60 209 versos de los 4259 sonetos de [SpanishSonnets](../datasets/spanishsonnets.md), la medida de un verso coincide con la escansión automática de DISCO en el 97,0% de los versos y con la de [rantanplan](https://github.com/linhd-postdata/rantanplan) en el 97,7%, y el acento de una sílaba métrica de los versos de igual medida en el 97,4% y el 99,6%.
 
+La anotación revisada a mano da la precisión: en los 744 sonetos del [Corpus de Sonetos del Siglo de Oro](https://github.com/bncolorado/CorpusSonetosSigloDeOro) de Navarro-Colorado cuya anotación métrica se ha revisado a mano (10 479 versos; la anotación es CC BY-NC 4.0), el número de sílabas métricas es correcto en el 99,8 % de los versos, el acento de la décima sílaba en el 99,9 %, el patrón entero en el 92,5 % y el acento de una sílaba métrica en el 98,6 % de los versos de medida correcta (`scripts/check_scansion.py`). Los 22 versos de otra medida necesitan sobre todo una licencia del poeta que el ajuste no prueba: una diéresis donde el metro la pide (*tri-un-fa-les*, *vi-o-len-tas*) o un hiato tras una coma (*si duer-me, en ex-tre-mo*).
+
 La rima se describe en su [tarjeta](#rhyme_scheme). Frente a la rima automática de DISCO (RhymeTagger), el 99,1% de los pares de versos que riman que encontramos son pares suyos, y encontramos el 97,9% de sus pares.
 
 ## Acentuación { #accentuate }
