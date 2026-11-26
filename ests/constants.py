@@ -1137,8 +1137,7 @@ VERSE_STROPHES = {
     "décima": (10, (8, 8, 8, 8, 8, 8, 8, 8, 8, 8), ("abbaaccddc",), "consonante"),
 }
 # Unstressed words of the verse: articles, prepositions, conjunctions, relatives, clitics,
-# possessives before a noun, titles before a name, tan, aun and the interjections oh, ay
-# and ah, unstressed in the scansion of DISCO and rantanplan
+# possessives before a noun, titles before a name, tan and aun
 VERSE_PROCLITICS = frozenset(
     (
         "el", "la", "lo", "los", "las", "al", "del",
@@ -1151,7 +1150,7 @@ VERSE_PROCLITICS = frozenset(
         "me", "te", "se", "nos", "os", "le", "les",
         "mi", "mis", "tu", "tus", "su", "sus", "nuestro", "nuestra", "nuestros", "nuestras",
         "vuestro", "vuestra", "vuestros", "vuestras",
-        "don", "doña", "fray", "sor", "san", "tan", "aun", "oh", "ay", "ah",
+        "don", "doña", "fray", "sor", "san", "tan", "aun",
     )
 )  # fmt: skip
 
