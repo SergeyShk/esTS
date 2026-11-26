@@ -2969,7 +2969,7 @@ que a mayór mál pudiéra habér llegádo.
 <h2 id="accentuate">Accentuation<a class="headerlink" href="#accentuate" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">accentuate</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 </code></pre></div>
-<p>Marks the stresses of a text by the orthographic rules: an acute accent (U+0301) is put after the stressed vowel of every word without a written accent, both stresses of an adverb in <code>-mente</code> and of a hyphenated compound; the unstressed words of the verse (<code>VERSE_PROCLITICS</code>) stay unmarked. The text is normalized to NFC. For the lines of a poem, where the last word is always stressed, the <code>VerseStats.accentuate</code> method serves.</p>
+<p>Marks the stresses of a text by the orthographic rules: an acute accent (U+0301) is put after the stressed vowel of every word without a written accent, both stresses of an adverb in <code>-mente</code> and of a hyphenated compound; the unstressed words of the verse (<code>VERSE_PROCLITICS</code>) stay unmarked. The text is normalized to NFC. For the lines of a poem, where the last word is always stressed, the <code>VerseStats.accentuate</code> method serves. A text that is not a string raises <code>SourceTypeError</code>.</p>
 <table>
 <thead>
 <tr>
@@ -3008,7 +3008,7 @@ que a mayór mál pudiéra habér llegádo.
 <h2 id="split_stanzas">Stanzas<a class="headerlink" href="#split_stanzas" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">split_stanzas</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 </code></pre></div>
-<p>Splits a text into stanzas and lines: the stanzas are separated by blank lines, and the lines without a Spanish syllable (numbers, asterisks, other alphabets) and the roman numerals of the parts of a poem (<code>II</code>, <code>IV.</code>) are left out. The text is normalized to NFC.</p>
+<p>Splits a text into stanzas and lines: the stanzas are separated by blank lines, and the lines without a Spanish syllable (numbers, asterisks, other alphabets) and the roman numerals of the parts of a poem (<code>II</code>, <code>IV.</code>) are left out. The text is normalized to NFC. A text that is not a string raises <code>SourceTypeError</code>.</p>
 <table>
 <thead>
 <tr>
