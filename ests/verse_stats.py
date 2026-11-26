@@ -495,12 +495,22 @@ def _dieresis(syllable: str) -> int | None:
         letter, following = syllable[index], syllable[index + 1]
         if letter not in "iuü" or following not in VOWELS or following == letter:
             continue
-        if letter == "u" and index and syllable[index - 1] in "qg" and following in "eéií":
+        if _silent_u(syllable, index):
             continue
-        if index and syllable[index - 1] in VOWELS:
+        if index and syllable[index - 1] in VOWELS and not _silent_u(syllable, index - 1):
             continue
         return index + 1
     return None
+
+
+def _silent_u(syllable: str, index: int) -> bool:
+    """Whether the letter at a position is the silent u of que, qui, gue and gui"""
+    return (
+        syllable[index] == "u"
+        and index > 0
+        and syllable[index - 1] in "qg"
+        and syllable[index + 1 : index + 2] in tuple("eéií")
+    )
 
 
 def _default_joins(bounds: Sequence[int]) -> set[int]:
