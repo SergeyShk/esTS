@@ -1289,6 +1289,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#proper_abbreviations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nombres propios y abreviaturas
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2024,6 +2035,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../visualizers/verse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ritmo de los versos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../visualizers/highlight/" class="md-nav__link">
         
   
@@ -2156,6 +2195,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#proper_abbreviations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nombres propios y abreviaturas
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2234,6 +2284,8 @@ Share of words in the top 5000                   |   1.00
 Share of words in the top 10000                  |   1.00
 Share of words beyond the top 10000              |   0.00
 Lexical density                                  |   0.45
+Share of proper nouns                            |   0.00
+Share of abbreviations                           |   0.00
 </code></pre></div>
 </div>
 </div>
@@ -2409,7 +2461,6 @@ Lexical density                                  |   0.45
 </tr>
 </tbody>
 </table>
-<p>esTS todavía no cuenta <code>p_proper_nouns</code> ni <code>p_abbreviations</code>: esMorph no marca ninguna abreviatura y etiqueta tratamientos como <code>Sr.</code> y <code>Dra.</code> como nombres propios, así que <code>get_stats</code> las deja fuera.</p>
 <p>Las métricas se apoyan en dos recursos; lea siempre las medias según el diccionario junto a <code>coverage</code>.</p>
 <table>
 <thead>
@@ -2563,10 +2614,35 @@ Lexical density                                  |   0.45
 \frac{\textrm{Número de palabras con contenido}}{\textrm{Número de palabras}}
 \]</div>
 </div>
+<div class="metric-card">
+<h3 id="proper_abbreviations">Nombres propios y abreviaturas<a class="headerlink" href="#proper_abbreviations" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>p_proper_nouns</code> · <code>p_abbreviations</code></p>
+<p>Las proporciones de los nombres propios y de las abreviaturas entre las palabras. Un nombre propio es una palabra con la etiqueta <code>PROPN</code> de esMorph o del modelo de un <code>Doc</code>. Una abreviatura es una palabra que termina en un punto, o en un punto y una letra volada (<code>ABBREVIATION_ENDINGS</code> de <code>ests.constants</code>). anySeg conserva el punto en las abreviaturas que conoce (<code>Sr.</code>, <code>pág.</code>, <code>EE. UU.</code>, <code>D.ª</code>, <code>n.º</code>) y en las iniciales (<code>J.</code>), así que una inicial cuenta en las dos proporciones; una dirección o un nombre de fichero (<code>www.rae.es</code>, <code>datos.csv</code>) no es una abreviatura. esMorph también etiqueta los tratamientos como nombres propios (<code>Sr.</code>, <code>D.</code>, <code>Ud.</code>); son cerca del 3% de los nombres propios del <a href="../../datasets/spanishliterature/">corpus de literatura</a>. Dos clases de abreviatura no se cuentan:</p>
+<ul>
+<li>las siglas y los acrónimos (<code>ONU</code>, <code>DNI</code>), porque ningún signo los distingue: las palabras en mayúsculas del corpus son los nombres de los personajes de las obras de teatro, los títulos de obras y el énfasis;</li>
+<li>una abreviatura al final de una oración (<code>etc.</code>), cuyo punto cierra la oración.</li>
+</ul>
+<p>En 300 fragmentos del corpus, de 6000 caracteres cada uno, la mediana de la proporción de los nombres propios es del 3,2%, y solo 101 fragmentos tienen una abreviatura.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">LexicalStats</span>
+
+<span class="n">ls</span> <span class="o">=</span> <span class="n">LexicalStats</span><span class="p">(</span><span class="s2">"El Sr. García y la Dra. Pérez viajaron a EE. UU. con la ONU"</span><span class="p">)</span>
+<span class="n">ls</span><span class="o">.</span><span class="n">p_proper_nouns</span><span class="p">,</span> <span class="n">ls</span><span class="o">.</span><span class="n">p_abbreviations</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>(0.5, 0.2857142857142857)
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
 <!-- core: stats/lexical_stats.md:LexicalStats-band_coverage 065e9e9 -->
 <p><code>band_coverage(bands, unique)</code> da la proporción de las palabras con un lema en el top N de la lista para cada límite N de <code>bands</code> (<code>FREQUENCY_BANDS</code> por defecto), o con <code>unique=True</code> la proporción de los lemas distintos. Unos límites que no son una lista de enteros o un límite fuera de 1 y <code>top_size()</code> lanzan <code>ParameterError</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">LexicalStats</span>
@@ -2584,7 +2660,7 @@ Lexical density                                  |   0.45
 </div>
 </div>
 <p>Los demás métodos, <code>get_stats</code>, <code>to_dataframe</code>, <a href="../basic_stats/#by_parts"><code>by_parts</code></a>, <code>print_stats</code> y <code>describe</code>, son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de estadísticas</a> del núcleo anyTS; las estadísticas de complejidad léxica no tienen escalas, así que <code>describe</code> da <code>None</code> para las estadísticas de <code>get_stats</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Código</label><label for="__tabbed_8_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">ls</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
@@ -2605,7 +2681,9 @@ Lexical density                                  |   0.45
  'p_top5000': 1.0,
  'p_top10000': 1.0,
  'p_beyond_top10000': 0.0,
- 'lexical_density': 0.45454545454545453}
+ 'lexical_density': 0.45454545454545453,
+ 'p_proper_nouns': 0.0,
+ 'p_abbreviations': 0.0}
 </code></pre></div>
 </div>
 </div>

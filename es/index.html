@@ -1961,6 +1961,34 @@
   
   
     <li class="md-nav__item">
+      <a href="visualizers/verse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ritmo de los versos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="visualizers/highlight/" class="md-nav__link">
         
   
@@ -2128,7 +2156,7 @@
 <li>
 <p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17z"/></svg></span> <strong>Complejidad léxica</strong></p>
 <hr />
-<p>Cuán raras son las palabras de un texto, a la manera de TAALES: frecuencia, rango, dispersión y sorpresa según un <a href="datasets/freqdict/">diccionario de frecuencias</a> de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la densidad léxica</p>
+<p>Cuán raras son las palabras de un texto, a la manera de TAALES: frecuencia, rango, dispersión y sorpresa según un <a href="datasets/freqdict/">diccionario de frecuencias</a> de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la densidad léxica, las proporciones de los nombres propios y de las abreviaturas</p>
 <p><a href="stats/lexical_stats/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Estadísticas de complejidad léxica</a></p>
 </li>
 <li>
@@ -2164,7 +2192,7 @@
 <li>
 <p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 2h2v18h18v2H2zm7 8a3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3m4-8a3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3m5 10a3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3"/></svg></span> <strong>Visualización</strong></p>
 <hr />
-<p><a href="visualizers/zipf/">Ley de Zipf</a>, <a href="visualizers/fingerprinting/">huella literaria</a>, <a href="visualizers/word_tree/">árbol de palabras</a>, gráficos <a href="visualizers/corpus/">de corpus</a> y <a href="visualizers/stylometry/">estilométricos</a>, <a href="visualizers/vocabulary/">crecimiento del vocabulario y espectro de frecuencias</a>, <a href="visualizers/sentences/">longitudes de las oraciones</a> y el <a href="visualizers/highlight/">resaltado del texto</a> por los fragmentos que cuentan las estadísticas</p>
+<p><a href="visualizers/zipf/">Ley de Zipf</a>, <a href="visualizers/fingerprinting/">huella literaria</a>, <a href="visualizers/word_tree/">árbol de palabras</a>, gráficos <a href="visualizers/corpus/">de corpus</a> y <a href="visualizers/stylometry/">estilométricos</a>, <a href="visualizers/vocabulary/">crecimiento del vocabulario y espectro de frecuencias</a>, <a href="visualizers/sentences/">longitudes de las oraciones</a>, el <a href="visualizers/verse/">ritmo de los versos</a> de un poema y el <a href="visualizers/highlight/">resaltado del texto</a> por los fragmentos que cuentan las estadísticas</p>
 <p><a href="visualizers/zipf/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Visualizaciones</a></p>
 </li>
 <li>
@@ -2319,6 +2347,7 @@ Entropy of the word lengths in syllables (bits) |   1.72
 <li>highlight.py - resaltado del texto</li>
 <li>sentences.py - longitudes de las oraciones</li>
 <li>stylometry.py - dendrograma, componentes principales, escalamiento, distancias dentro de un autor y entre autores, Delta móvil, marcadores de Zeta, curvas de Mendenhall</li>
+<li>verse.py - ritmo de los versos</li>
 <li>vocabulary.py - crecimiento del vocabulario y espectro de frecuencias</li>
 <li>word_tree.py - árbol de palabras</li>
 <li>zipf.py - ley de Zipf</li>
@@ -2327,7 +2356,7 @@ Entropy of the word lengths in syllables (bits) |   1.72
 </ul>
 </li>
 <li><strong>examples</strong> - cuadernos con ejemplos</li>
-<li><strong>scripts</strong> - scripts que construyen los archivos de los conjuntos de datos, traen las páginas de anyTS de la documentación y comprueban las salidas de los cuadernos</li>
+<li><strong>scripts</strong> - scripts que construyen los archivos de los conjuntos de datos, traen las páginas de anyTS de la documentación, comprueban las salidas de los cuadernos y comprueban la escansión en sonetos anotados a mano</li>
 <li><strong>tests</strong> - pruebas que reproducen la estructura del paquete</li>
 </ul>
 </details>

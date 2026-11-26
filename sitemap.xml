@@ -253,6 +253,13 @@
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/stylometry/"/>
     </url>
     <url>
+        <loc>https://sergeyshk.github.io/esTS/visualizers/verse/</loc>
+        <lastmod>2026-11-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/verse/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/verse/"/>
+    </url>
+    <url>
         <loc>https://sergeyshk.github.io/esTS/visualizers/vocabulary/</loc>
         <lastmod>2026-11-26</lastmod>
         <changefreq>daily</changefreq>
@@ -524,6 +531,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/stylometry/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/stylometry/"/>
+    </url>
+    <url>
+        <loc>https://sergeyshk.github.io/esTS/es/visualizers/verse/</loc>
+        <lastmod>2026-11-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/visualizers/verse/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/visualizers/verse/"/>
     </url>
     <url>
         <loc>https://sergeyshk.github.io/esTS/es/visualizers/vocabulary/</loc>

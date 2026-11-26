@@ -1289,6 +1289,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#proper_abbreviations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Proper nouns and abbreviations
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2024,6 +2035,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../visualizers/verse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rhythm of the lines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../visualizers/highlight/" class="md-nav__link">
         
   
@@ -2156,6 +2195,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#proper_abbreviations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Proper nouns and abbreviations
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2233,6 +2283,8 @@ Share of words in the top 5000                   |   1.00
 Share of words in the top 10000                  |   1.00
 Share of words beyond the top 10000              |   0.00
 Lexical density                                  |   0.45
+Share of proper nouns                            |   0.00
+Share of abbreviations                           |   0.00
 </code></pre></div>
 </div>
 </div>
@@ -2406,7 +2458,6 @@ Lexical density                                  |   0.45
 </tr>
 </tbody>
 </table>
-<p>esTS does not count <code>p_proper_nouns</code> and <code>p_abbreviations</code> yet: esMorph marks no abbreviation and tags titles such as <code>Sr.</code> and <code>Dra.</code> as proper nouns, so <code>get_stats</code> leaves them out.</p>
 <p>The metrics rely on two resources; always read the means by the dictionary next to <code>coverage</code>.</p>
 <table>
 <thead>
@@ -2558,9 +2609,34 @@ Lexical density                                  |   0.45
 \frac{\textrm{Number of content words}}{\textrm{Number of words}}
 \]</div>
 </div>
+<div class="metric-card">
+<h3 id="proper_abbreviations">Proper nouns and abbreviations<a class="headerlink" href="#proper_abbreviations" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>p_proper_nouns</code> · <code>p_abbreviations</code></p>
+<p>The shares of the proper nouns and of the abbreviations among the words. A proper noun is a word that esMorph tags <code>PROPN</code>, or the model of a <code>Doc</code> does. An abbreviation is a word that ends with a period, or with a period and a raised letter (<code>ABBREVIATION_ENDINGS</code> of <code>ests.constants</code>). anySeg keeps the period in the abbreviations it knows (<code>Sr.</code>, <code>pág.</code>, <code>EE. UU.</code>, <code>D.ª</code>, <code>n.º</code>) and in the initials (<code>J.</code>), so an initial counts in both shares; an address or a file name (<code>www.rae.es</code>, <code>datos.csv</code>) is no abbreviation. esMorph also tags the titles as proper nouns (<code>Sr.</code>, <code>D.</code>, <code>Ud.</code>); they are about 3% of the proper nouns of the <a href="../../datasets/spanishliterature/">corpus of literature</a>. Two kinds of abbreviation are not counted:</p>
+<ul>
+<li>initialisms and acronyms (<code>ONU</code>, <code>DNI</code>), since no sign tells them apart: the words in capitals of the corpus are the names of the characters of the plays, the titles of works and emphasis;</li>
+<li>an abbreviation at the end of a sentence (<code>etc.</code>), whose period closes the sentence.</li>
+</ul>
+<p>On 300 fragments of the corpus, 6,000 characters each, the median share of the proper nouns is 3.2%, and only 101 fragments have an abbreviation.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Code</label><label for="__tabbed_6_2">Result</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">LexicalStats</span>
+
+<span class="n">ls</span> <span class="o">=</span> <span class="n">LexicalStats</span><span class="p">(</span><span class="s2">"El Sr. García y la Dra. Pérez viajaron a EE. UU. con la ONU"</span><span class="p">)</span>
+<span class="n">ls</span><span class="o">.</span><span class="n">p_proper_nouns</span><span class="p">,</span> <span class="n">ls</span><span class="o">.</span><span class="n">p_abbreviations</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>(0.5, 0.2857142857142857)
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
 <p><code>band_coverage(bands, unique)</code> gives the share of the words with a lemma in the top N of the list for every bound N of <code>bands</code> (<code>FREQUENCY_BANDS</code> by default), or with <code>unique=True</code> the share of the distinct lemmas. Bounds that are not a list of integers or a bound out of 1 and <code>top_size()</code> raise <code>ParameterError</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Code</label><label for="__tabbed_6_2">Result</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Code</label><label for="__tabbed_7_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">LexicalStats</span>
@@ -2578,7 +2654,7 @@ Lexical density                                  |   0.45
 </div>
 </div>
 <p>The other methods - <code>get_stats</code>, <code>to_dataframe</code>, <a href="../basic_stats/#by_parts"><code>by_parts</code></a>, <code>print_stats</code> and <code>describe</code> - are those of the <a href="https://sergeyshk.github.io/anyTS/stats/stats/">statistics interface</a> of the anyTS core; the lexical sophistication statistics have no scales, so <code>describe</code> gives <code>None</code> for the statistics of <code>get_stats</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Code</label><label for="__tabbed_7_2">Result</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Code</label><label for="__tabbed_8_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">ls</span><span class="o">.</span><span class="n">get_stats</span><span class="p">()</span>
@@ -2599,7 +2675,9 @@ Lexical density                                  |   0.45
  'p_top5000': 1.0,
  'p_top10000': 1.0,
  'p_beyond_top10000': 0.0,
- 'lexical_density': 0.45454545454545453}
+ 'lexical_density': 0.45454545454545453,
+ 'p_proper_nouns': 0.0,
+ 'p_abbreviations': 0.0}
 </code></pre></div>
 </div>
 </div>

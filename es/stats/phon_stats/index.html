@@ -2090,6 +2090,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../visualizers/verse/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ritmo de los versos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../visualizers/highlight/" class="md-nav__link">
         
   
@@ -2849,7 +2877,7 @@ Mean length of a syllable (sounds)                    |   2.19
 <p class="metric-meta"><code>p_junction_hiatus</code> · <code>p_junction_clusters</code></p>
 <!-- core: stats/phon_stats.md:PhonStats-junctions f350508 -->
 <p>Una juntura son dos palabras de una oración sin nada más que espacios entre ellas: un signo, como una coma, un salto de línea o el final de una oración, no forma ninguna, y tampoco una palabra solo de consonantes, como una abreviatura que se lee por sus letras, salvo la de una sola consonante. Una juntura tiene un hiato cuando el último sonido de las clases de la primera palabra y el primero de la segunda son vocales, sin que la segunda sea de <code>glides</code>, y un grupo pesado cuando las consonantes del final de la primera palabra y del principio de la segunda, si las dos palabras tienen alguna, suman <code>JUNCTION_CLUSTER_LEN</code> (4) o más. Las proporciones son las de todas las junturas del texto, por los sonidos de <code>transcribe</code>; con un extractor de palabras, las junturas siguen siendo las del documento de la fuente.</p>
-<p>En esTS ninguna vocal es de <code>glides</code>, así que dos vocales que se encuentran entre palabras forman siempre un hiato (<code>la abuela</code>, <code>vio el</code>), y la <code>x</code> son dos consonantes: <code>fénix brillar</code> junta k s y b r, cuatro.</p>
+<p>En esTS ninguna vocal es de <code>glides</code>, así que dos vocales que se encuentran entre palabras forman siempre un hiato (<code>la abuela</code>, <code>vio el</code>), también con una <code>h</code> muda entre ellas (<code>la hora</code>), y la <code>x</code> son dos consonantes: <code>fénix brillar</code> junta k s y b r, cuatro. El español lee la mayoría de estas vocales como una sola sílaba, una sinalefa (<code>la‿a-bue-la</code>): en 15 005 versos de los <a href="../../datasets/spanishsonnets/">sonetos</a>, <a href="../verse_stats/"><code>VerseStats</code></a> une el 94% de las vocales que se encuentran entre palabras. Así que <code>p_junction_hiatus</code> es la proporción de las junturas abiertas a una sinalefa, no de los hiatos que se oyen.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
