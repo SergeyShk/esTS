@@ -35,7 +35,7 @@ from .constants import (
 )
 from .exceptions import SourceError
 from .syllables import WORD_PARTS, syllabify, word_stresses
-from .utils import get_document
+from .utils import _check_text, get_document
 
 if TYPE_CHECKING:
     from anyseg import Document
@@ -380,7 +380,11 @@ def split_stanzas(text: str) -> list[list[str]]:
 
     Returns:
         list[list[str]]: Lines by stanza
+
+    Raises:
+        SourceTypeError: If the text is not a string
     """
+    _check_text(text)
     stanzas = []
     text = unicodedata.normalize("NFC", text)
     for block in re.split(r"\n\s*\n", text.strip()):
@@ -1190,7 +1194,11 @@ def accentuate(text: str) -> str:
 
     Returns:
         str: Text with the stresses
+
+    Raises:
+        SourceTypeError: If the text is not a string
     """
+    _check_text(text)
 
     def mark(match: re.Match[str]) -> str:
         word = match.group()

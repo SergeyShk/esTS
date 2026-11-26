@@ -57,7 +57,7 @@ A preset sets the coefficients `a`, `b`, `c` of the Flesch reading ease `c − a
 | `general` | Szigriszt-Pazos (1993), fórmula de perspicuidad | `206.835 − 1.0·ASL − 62.3·ASW` | INFLESZ (Barrio-Cantalejo et al., 2008) |
 | `classic` | Fernández Huerta (1959) | `206.84 − 1.02·ASL − 60·ASW` | the seven bands of the author |
 
-The formula of Fernández Huerta takes the mean sentence length, with the correction of Law (2011). The table of all coefficients is `ests.constants.READABILITY_PRESETS`, and the scale of each preset is in `PRESET_SCALES`.
+The formula of Fernández Huerta takes the mean sentence length, with the correction of Law (2011). The table of all coefficients is `ests.constants.READABILITY_PRESETS`, and the scale of each preset is in `PRESET_SCALES`. The description of `flesch_reading_easy` in `print_stats` and in the report names the formula of the preset (the class attribute `preset_reading_ease_desc`, `PRESET_READING_EASE_DESC`; a preset without one keeps the description of `stats_desc`).
 
 === "Code"
 

@@ -68,6 +68,11 @@ READABILITY_PRESETS: dict[str, dict[str, tuple[float, float, float]]] = {
 # Scale of describe_level for each preset, and the bounds of the reading ease that give
 # the years of schooling of the consensus grade
 PRESET_SCALES: dict[str, str] = {"general": "inflesz", "classic": "fernandez_huerta"}
+# Description of the reading ease of each preset in print_stats and the report
+PRESET_READING_EASE_DESC: dict[str, str] = {
+    "general": "Flesch reading ease (Szigriszt-Pazos)",
+    "classic": "Flesch reading ease (Fernández Huerta)",
+}
 READING_EASE_GRADES: dict[str, tuple[tuple[float, float], ...]] = {
     "general": ((80, 3), (65, 5), (55, 8), (40, 11)),
     "classic": ((90, 5), (80, 6), (70, 7), (60, 8.5), (50, 10), (40, 11), (30, 12)),

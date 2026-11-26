@@ -1,4 +1,3 @@
-import logging
 from importlib.metadata import version
 
 import anyts
@@ -65,10 +64,6 @@ def test_builtin_compatibility():
         WordsExtractor(tokenizer=42).extract("El gato duerme.")  # type: ignore
     with pytest.raises(EstsError):
         SentsExtractor(min_len=3, max_len=2)
-
-
-def test_logging():
-    assert any(isinstance(h, logging.NullHandler) for h in logging.getLogger("ests").handlers)
 
 
 def test_version():

@@ -124,6 +124,13 @@ def test_presets(preset, flesch_reading_easy):
     assert rs.crawford_grade == pytest.approx(7.260021276595744)
 
 
+def test_reading_ease_named_by_preset(capsys):
+    """print_stats names the formula of the reading ease of the preset"""
+    ReadabilityStats(TEXT, preset="classic").print_stats()
+    assert "Flesch reading ease (Fernández Huerta)" in capsys.readouterr().out
+    assert ReadabilityStats(TEXT).stats_desc["flesch_reading_easy"].endswith("(Szigriszt-Pazos)")
+
+
 class TestQuoteByHand:
     """The docstring example: 10 words, 1 sentence, 23 syllables, 60 letters, 5 words of
     three or more syllables and 5 words of seven or more letters, checked by hand"""
