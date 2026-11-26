@@ -172,7 +172,8 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
         filter_nums: bool | None = None,
     ):
         super().__init__(source, sents_extractor, words_extractor, preset, filter_nums)
-        if (desc := self.preset_reading_ease_desc.get(self.preset)) is not None:
+        desc = self.preset_reading_ease_desc.get(self.preset)
+        if desc is not None and "flesch_reading_easy" in self.stats_desc:
             self.stats_desc = {**self.stats_desc, "flesch_reading_easy": desc}  # type: ignore[misc]
 
     @property
