@@ -202,7 +202,7 @@ class FreqDict(Dataset):
             )
             msg = (
                 f"The dataset {NAME} is not found\n{found}"
-                "Download it with the commands:\n"
+                f"Download it with the command ests download {NAME} or in Python:\n"
                 ">>> fd = FreqDict()\n"
                 ">>> fd.download()"
             )

@@ -134,6 +134,14 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     [:octicons-arrow-right-24: Visualizers](visualizers/zipf.md)
 
+-   :material-console:{ .lg .middle } __Command line__
+
+    ---
+
+    Statistics of files as a table, JSON or CSV, by parts of a text, and an HTML report with the command `ests`
+
+    [:octicons-arrow-right-24: Command line](cli.md)
+
 -   :material-pipe:{ .lg .middle } __Components__
 
     ---
@@ -252,6 +260,7 @@ A walkthrough of one short story with every tool of the library is in the notebo
     *   **ests**:
         *   basic_stats.py - basic text statistics
         *   cohesion_stats.py - cohesion statistics
+        *   cli.py - the command ests
         *   components.py - spaCy components
         *   constants.py - constants of the Spanish language and of the metrics
         *   diversity_stats.py - lexical diversity metrics
@@ -261,6 +270,7 @@ A walkthrough of one short story with every tool of the library is in the notebo
         *   morph_stats.py - morphological statistics
         *   phon_stats.py - phonostatistics
         *   readability_stats.py - readability metrics
+        *   report.py - the HTML report of a text
         *   unadapted_readability_stats.py - readability formulas of other languages
         *   style_stats.py - style metrics
         *   syllables.py - syllabification and stress

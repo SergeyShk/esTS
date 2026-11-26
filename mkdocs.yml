@@ -19,6 +19,7 @@ nav:
       - Word extraction: extractors/words.md
       - Character N-gram extraction: extractors/char_ngrams.md
     - Syllables and stress: syllables.md
+    - Command line: cli.md
     - spaCy components: components.md
     - Statistics:
       - Basic statistics: stats/basic_stats.md
@@ -115,6 +116,7 @@ plugins:
             Word extraction: Extracción de palabras
             Character N-gram extraction: Extracción de N-gramas de caracteres
             Syllables and stress: Sílabas y acento
+            Command line: Línea de órdenes
             spaCy components: Componentes de spaCy
             Statistics: Estadísticas
             Basic statistics: Estadísticas básicas

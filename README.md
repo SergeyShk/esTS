@@ -74,7 +74,7 @@ The distribution on PyPI is `pyests`, the package it installs is `ests`. The bas
 python -m spacy download es_core_news_sm
 ```
 
-The statistics by the frequency dictionary need it downloaded once with `FreqDict().download()`. The datasets go to the directory `ests_data` next to the installed package, or to the one passed in `data_dir` or set in `ESTS_DATA_DIR` before the package is imported.
+The statistics by the frequency dictionary need it downloaded once with `ests download` or `FreqDict().download()`. The datasets go to the directory `ests_data` next to the installed package, or to the one passed in `data_dir` or set in `ESTS_DATA_DIR` before the package is imported.
 
 ## Quick start
 
@@ -111,6 +111,14 @@ The statistics by the frequency dictionary need it downloaded once with `FreqDic
 
 >>> DiversityStats(text).ttr
 0.8
+```
+
+The same statistics without Python - with the command `ests` (a table, JSON or CSV, by parts of a text) and an HTML report in one page:
+
+```bash
+ests download  # the frequency dictionary, once
+ests stats -f json texto.txt
+ests report texto.txt -o informe.html
 ```
 
 ## Features
@@ -719,6 +727,7 @@ Bug reports, ideas and pull requests are welcome in the [issues](https://github.
     *   basic_stats.py - basic text statistics of the anyTS core with the Spanish syllables
     *   cohesion_stats.py - cohesion statistics
     *   lexical_stats.py - lexical sophistication statistics
+    *   cli.py - the command ests
     *   components.py - components of a spaCy pipeline
     *   corpus - measures of corpus linguistics: keywords, collocations, dispersion, concordance, stylometry, comparison of corpora
     *   datasets - datasets: Spanish-language literature, Spanish sonnets, the frequency dictionary
@@ -728,6 +737,7 @@ Bug reports, ideas and pull requests are welcome in the [issues](https://github.
     *   extractors.py - the extractors of the anyTS core with the Spanish tokenizers, the paragraphs of a text
     *   morph_stats.py - morphological statistics
     *   readability_stats.py - readability metrics: the Spanish formulas over those of the anyTS core
+    *   report.py - the HTML report of a text
     *   unadapted_readability_stats.py - readability formulas of other languages
     *   style_stats.py - style metrics
     *   phon_stats.py - phonostatistics
