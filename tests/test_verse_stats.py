@@ -633,6 +633,12 @@ def test_accentuate():
     assert nfc(accentuate("quiso la guerra, cuida la ley")) == "quíso la guérra, cuída la léy"
 
 
+@pytest.mark.parametrize("function", [verse_stats.accentuate, verse_stats.split_stanzas])
+def test_text_functions_check_the_text(function):
+    with pytest.raises(SourceTypeError):
+        function(["Pies no tengo"])
+
+
 def test_split_stanzas():
     # the roman numerals of the parts of a poem are no lines
     assert split_stanzas("I\nuno dos\n\n(II)\nMI casa\nIV.") == [["uno dos"], ["MI casa"]]

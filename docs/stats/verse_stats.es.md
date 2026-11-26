@@ -439,7 +439,7 @@ La rima se describe en su [tarjeta](#rhyme_scheme). Frente a la rima automática
 accentuate(text)
 ```
 
-Marca los acentos de un texto por las reglas ortográficas: se pone un acento agudo (U+0301) tras la vocal acentuada de cada palabra sin tilde, los dos acentos de un adverbio en `-mente` y de un compuesto con guion; las palabras átonas del verso (`VERSE_PROCLITICS`) quedan sin marca. El texto se normaliza a NFC. Para los versos de un poema, donde la última palabra siempre es tónica, sirve el método `VerseStats.accentuate`.
+Marca los acentos de un texto por las reglas ortográficas: se pone un acento agudo (U+0301) tras la vocal acentuada de cada palabra sin tilde, los dos acentos de un adverbio en `-mente` y de un compuesto con guion; las palabras átonas del verso (`VERSE_PROCLITICS`) quedan sin marca. El texto se normaliza a NFC. Para los versos de un poema, donde la última palabra siempre es tónica, sirve el método `VerseStats.accentuate`. Un texto que no es una cadena lanza `SourceTypeError`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
@@ -468,7 +468,7 @@ Marca los acentos de un texto por las reglas ortográficas: se pone un acento ag
 split_stanzas(text)
 ```
 
-Divide un texto en estrofas y versos: las estrofas se separan por líneas en blanco, y los versos sin una sílaba española (números, asteriscos, otros alfabetos) y los números romanos de las partes de un poema (`II`, `IV.`) se omiten. El texto se normaliza a NFC.
+Divide un texto en estrofas y versos: las estrofas se separan por líneas en blanco, y los versos sin una sílaba española (números, asteriscos, otros alfabetos) y los números romanos de las partes de un poema (`II`, `IV.`) se omiten. El texto se normaliza a NFC. Un texto que no es una cadena lanza `SourceTypeError`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |

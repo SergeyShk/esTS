@@ -21,6 +21,7 @@ from .constants import (
     GRADE_AGE_LEVELS,
     MU_SCALE,
     POSTGRADUATE_LEVEL,
+    PRESET_READING_EASE_DESC,
     PRESET_SCALES,
     READABILITY_GRADE_STATS,
     READABILITY_PRESETS,
@@ -158,6 +159,7 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
         preset: (*grades, (0, 13)) for preset, grades in READING_EASE_GRADES.items()
     }
     reading_ease_grades = preset_reading_ease_grades["general"]
+    preset_reading_ease_desc: ClassVar[Mapping[str, str]] = PRESET_READING_EASE_DESC
     reading_speed = READING_SPEED_WPM
     reading_speed_norms = READING_SPEED_NORMS
 
@@ -170,6 +172,9 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
         filter_nums: bool | None = None,
     ):
         super().__init__(source, sents_extractor, words_extractor, preset, filter_nums)
+        desc = self.preset_reading_ease_desc.get(self.preset)
+        if desc is not None and "flesch_reading_easy" in self.stats_desc:
+            self.stats_desc = {**self.stats_desc, "flesch_reading_easy": desc}  # type: ignore[misc]
 
     @property
     def gutierrez_polini_index(self) -> float:

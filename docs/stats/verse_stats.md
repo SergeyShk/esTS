@@ -439,7 +439,7 @@ The rhyme is described in its [card](#rhyme_scheme). Against the automatic rhyme
 accentuate(text)
 ```
 
-Marks the stresses of a text by the orthographic rules: an acute accent (U+0301) is put after the stressed vowel of every word without a written accent, both stresses of an adverb in `-mente` and of a hyphenated compound; the unstressed words of the verse (`VERSE_PROCLITICS`) stay unmarked. The text is normalized to NFC. For the lines of a poem, where the last word is always stressed, the `VerseStats.accentuate` method serves.
+Marks the stresses of a text by the orthographic rules: an acute accent (U+0301) is put after the stressed vowel of every word without a written accent, both stresses of an adverb in `-mente` and of a hyphenated compound; the unstressed words of the verse (`VERSE_PROCLITICS`) stay unmarked. The text is normalized to NFC. For the lines of a poem, where the last word is always stressed, the `VerseStats.accentuate` method serves. A text that is not a string raises `SourceTypeError`.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
@@ -468,7 +468,7 @@ Marks the stresses of a text by the orthographic rules: an acute accent (U+0301)
 split_stanzas(text)
 ```
 
-Splits a text into stanzas and lines: the stanzas are separated by blank lines, and the lines without a Spanish syllable (numbers, asterisks, other alphabets) and the roman numerals of the parts of a poem (`II`, `IV.`) are left out. The text is normalized to NFC.
+Splits a text into stanzas and lines: the stanzas are separated by blank lines, and the lines without a Spanish syllable (numbers, asterisks, other alphabets) and the roman numerals of the parts of a poem (`II`, `IV.`) are left out. The text is normalized to NFC. A text that is not a string raises `SourceTypeError`.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |
