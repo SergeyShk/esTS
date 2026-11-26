@@ -4,7 +4,6 @@
 # Author: Sergey Shkarin <kouki.sergey@gmail.com>
 # URL: <https://github.com/SergeyShk/esTS>
 
-import logging
 import sys
 from importlib.metadata import PackageNotFoundError, version
 from typing import TYPE_CHECKING
@@ -49,8 +48,6 @@ if TYPE_CHECKING:
         UnadaptedReadabilityStatsComponent as UnadaptedReadabilityStatsComponent,
         VerseStatsComponent as VerseStatsComponent,
     )
-
-logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 # The distribution is pyests, the package it installs is ests
 try:

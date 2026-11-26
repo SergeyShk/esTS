@@ -66,7 +66,7 @@ Un preajuste fija los coeficientes `a`, `b`, `c` de la facilidad de lectura de F
 | `general` | Szigriszt-Pazos (1993), fórmula de perspicuidad | `206.835 − 1.0·ASL − 62.3·ASW` | INFLESZ (Barrio-Cantalejo et al., 2008) |
 | `classic` | Fernández Huerta (1959) | `206.84 − 1.02·ASL − 60·ASW` | los siete niveles del autor |
 
-La fórmula de Fernández Huerta toma la longitud media de la oración, con la corrección de Law (2011). La tabla de todos los coeficientes es `ests.constants.READABILITY_PRESETS`, y la escala de cada preajuste está en `PRESET_SCALES`.
+La fórmula de Fernández Huerta toma la longitud media de la oración, con la corrección de Law (2011). La tabla de todos los coeficientes es `ests.constants.READABILITY_PRESETS`, y la escala de cada preajuste está en `PRESET_SCALES`. La descripción de `flesch_reading_easy` en `print_stats` y en el informe nombra la fórmula del preajuste (el atributo de clase `preset_reading_ease_desc`, `PRESET_READING_EASE_DESC`; un preajuste sin ella, o una clase cuyo `stats_desc` deja fuera la facilidad de lectura, conserva su `stats_desc`; `preset_reading_ease_desc = {}` conserva unas descripciones propias).
 
 === "Código"
 

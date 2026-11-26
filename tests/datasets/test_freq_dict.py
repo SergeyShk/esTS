@@ -7,7 +7,7 @@ import pytest
 
 from ests.datasets import FreqDict, freq_dict as module
 from ests.datasets.freq_dict import Entry, lemma_key, load_entries, load_word_ipm
-from ests.exceptions import DatasetNotFoundError, ParameterError
+from ests.exceptions import DatasetNotFoundError, ParameterError, SourceTypeError
 
 BUNDLED_ARCHIVE = Path(__file__).parents[2] / "ests" / "datasets" / "data" / module.ARCHIVE
 
@@ -182,6 +182,11 @@ def test_lemma_key(dictionary, word, key):
     # The keys are the lemmas of esMorph, which the dictionary is built with
     assert lemma_key(word) == key
     assert key in dictionary
+
+
+def test_lemma_key_checks_the_word():
+    with pytest.raises(SourceTypeError):
+        lemma_key(5)
 
 
 def test_lemma_key_pos(dictionary):

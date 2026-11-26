@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, NamedTuple
 
 from anyts.datasets import Dataset, check_limit, fetch_archive, to_path
+from anyts.utils import check_word
 
 from ..constants import DEFAULT_DATA_DIR, USER_AGENT
 from ..exceptions import DatasetNotFoundError, ParameterError, SourceTypeError
@@ -78,6 +79,9 @@ def lemma_key(word: str, proper: bool = False, pos: str = "") -> str:
     Returns:
         str: Key of the dictionary
 
+    Raises:
+        SourceTypeError: If the word is not a string
+
     Example:
         >>> from ests.datasets.freq_dict import lemma_key
         >>> lemma_key("Miró"), lemma_key("computadoras"), lemma_key("fue")
@@ -87,6 +91,7 @@ def lemma_key(word: str, proper: bool = False, pos: str = "") -> str:
         >>> lemma_key("Tomás"), lemma_key("Tomás", proper=True)
         ('tomar', 'tomás')
     """
+    check_word(word)
     form = word.lower()
     if proper:
         return form
