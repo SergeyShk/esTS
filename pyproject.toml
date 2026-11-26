@@ -1,6 +1,6 @@
 [project]
 name = "pyests"
-version = "0.11.0.dev3"
+version = "0.11.0.dev4"
 description = "Spanish Texts Statistics"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -60,6 +60,9 @@ Issues = "https://github.com/SergeyShk/esTS/issues"
 [build-system]
 requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
+
+[project.scripts]
+ests = "ests.cli:main"
 
 [project.entry-points.spacy_factories]
 ests_basic = "ests.components:BasicStatsComponent"
@@ -194,4 +197,4 @@ branch = true
 [tool.coverage.report]
 fail_under = 100
 show_missing = true
-exclude_also = ["if TYPE_CHECKING:", "raise NotImplementedError"]
+exclude_also = ["if TYPE_CHECKING:", "raise NotImplementedError", "if __name__ == .__main__.:"]

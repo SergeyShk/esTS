@@ -74,7 +74,7 @@ La distribución en PyPI se llama `pyests` y el paquete que instala es `ests`. L
 python -m spacy download es_core_news_sm
 ```
 
-Las estadísticas según el diccionario de frecuencias lo necesitan descargado una vez con `FreqDict().download()`. Los conjuntos de datos van al directorio `ests_data` junto al paquete instalado, o al que se pasa en `data_dir` o se define en `ESTS_DATA_DIR` antes de importar el paquete.
+Las estadísticas según el diccionario de frecuencias lo necesitan descargado una vez con `ests download` o `FreqDict().download()`. Los conjuntos de datos van al directorio `ests_data` junto al paquete instalado, o al que se pasa en `data_dir` o se define en `ESTS_DATA_DIR` antes de importar el paquete.
 
 ## Primeros pasos
 
@@ -111,6 +111,14 @@ Las estadísticas según el diccionario de frecuencias lo necesitan descargado u
 
 >>> DiversityStats(text).ttr
 0.8
+```
+
+Las mismas estadísticas sin Python - con el comando `ests` (una tabla, JSON o CSV, por partes de un texto) y un informe HTML en una página:
+
+```bash
+ests download  # el diccionario de frecuencias, una vez
+ests stats -f json texto.txt
+ests report texto.txt -o informe.html
 ```
 
 ## Funcionalidad
@@ -719,6 +727,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos en las [i
     *   basic_stats.py - estadísticas básicas del texto del núcleo anyTS con las sílabas del español
     *   cohesion_stats.py - estadísticas de cohesión
     *   lexical_stats.py - estadísticas de complejidad léxica
+    *   cli.py - el comando ests
     *   components.py - componentes de un pipeline de spaCy
     *   corpus - medidas de la lingüística de corpus: palabras clave, colocaciones, dispersión, concordancia, estilometría, comparación de corpus
     *   datasets - conjuntos de datos: literatura en español, sonetos en español, diccionario de frecuencias
@@ -728,6 +737,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos en las [i
     *   extractors.py - los extractores del núcleo anyTS con los tokenizadores del español, los párrafos de un texto
     *   morph_stats.py - estadísticas morfológicas
     *   readability_stats.py - métricas de legibilidad: las fórmulas del español sobre las del núcleo anyTS
+    *   report.py - el informe HTML de un texto
     *   unadapted_readability_stats.py - fórmulas de legibilidad de otros idiomas
     *   style_stats.py - métricas de estilo
     *   phon_stats.py - fonoestadística
