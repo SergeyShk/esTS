@@ -43,6 +43,8 @@ The class extends the `LexicalStats` of the [anyTS](https://sergeyshk.github.io/
     Share of words in the top 10000                  |   1.00
     Share of words beyond the top 10000              |   0.00
     Lexical density                                  |   0.45
+    Share of proper nouns                            |   0.00
+    Share of abbreviations                           |   0.00
     ```
 
 ## Parameters
@@ -207,12 +209,12 @@ $$
 `p_proper_nouns` · `p_abbreviations`
 { .metric-meta }
 
-The shares of the proper nouns and of the abbreviations among the words. A proper noun is a word that esMorph tags `PROPN`, or the model of a `Doc` does. An abbreviation is a word that keeps a final period. anySeg keeps it in the abbreviations it knows (`Sr.`, `pág.`, `EE. UU.`) and in the initials (`J.`), so an initial counts in both shares. esMorph also tags the titles as proper nouns (`Sr.`, `D.`, `Ud.`); they are about 3% of the proper nouns of the [corpus of literature](../datasets/spanishliterature.md). Two kinds of abbreviation are not counted:
+The shares of the proper nouns and of the abbreviations among the words. A proper noun is a word that esMorph tags `PROPN`, or the model of a `Doc` does. An abbreviation is a word that keeps a period. anySeg keeps it in the abbreviations it knows (`Sr.`, `pág.`, `EE. UU.`, `D.ª`, `n.º`) and in the initials (`J.`), so an initial counts in both shares. esMorph also tags the titles as proper nouns (`Sr.`, `D.`, `Ud.`); they are about 3% of the proper nouns of the [corpus of literature](../datasets/spanishliterature.md). Two kinds of abbreviation are not counted:
 
 - initialisms and acronyms (`ONU`, `DNI`), since no sign tells them apart: the words in capitals of the corpus are the names of the characters of the plays, the titles of works and emphasis;
 - an abbreviation at the end of a sentence (`etc.`), whose period closes the sentence.
 
-On 300 fragments of the corpus, 6,000 characters each, the median share of the proper nouns is 3.2%, and only 99 fragments have an abbreviation.
+On 300 fragments of the corpus, 6,000 characters each, the median share of the proper nouns is 3.2%, and only 101 fragments have an abbreviation.
 
 === "Code"
 

@@ -118,6 +118,9 @@ def test_abbreviations(freq_dict):
     # An initial is a proper noun and an abbreviation
     assert initials.p_proper_nouns == pytest.approx(4 / 6)
     assert initials.p_abbreviations == pytest.approx(2 / 6)
+    # The period of an abbreviation may stand before a raised letter
+    raised = LexicalStats("Vino D.ª Perfecta con el n.º 5", freq_dict)
+    assert raised.p_abbreviations == pytest.approx(2 / 6)
 
 
 def test_numbers_are_no_words(freq_dict):

@@ -49,6 +49,8 @@ La clase extiende el `LexicalStats` del núcleo [anyTS](https://sergeyshk.github
     Share of words in the top 10000                  |   1.00
     Share of words beyond the top 10000              |   0.00
     Lexical density                                  |   0.45
+    Share of proper nouns                            |   0.00
+    Share of abbreviations                           |   0.00
     ```
 
 ## Parámetros
@@ -258,12 +260,12 @@ $$
 `p_proper_nouns` · `p_abbreviations`
 { .metric-meta }
 
-Las proporciones de los nombres propios y de las abreviaturas entre las palabras. Un nombre propio es una palabra que esMorph etiqueta `PROPN`, o el modelo de un `Doc`. Una abreviatura es una palabra que conserva un punto final. anySeg lo conserva en las abreviaturas que conoce (`Sr.`, `pág.`, `EE. UU.`) y en las iniciales (`J.`), así que una inicial cuenta en las dos proporciones. esMorph también etiqueta los tratamientos como nombres propios (`Sr.`, `D.`, `Ud.`); son cerca del 3% de los nombres propios del [corpus de literatura](../datasets/spanishliterature.md). Dos clases de abreviatura no se cuentan:
+Las proporciones de los nombres propios y de las abreviaturas entre las palabras. Un nombre propio es una palabra con la etiqueta `PROPN` de esMorph o del modelo de un `Doc`. Una abreviatura es una palabra que conserva un punto. anySeg lo conserva en las abreviaturas que conoce (`Sr.`, `pág.`, `EE. UU.`, `D.ª`, `n.º`) y en las iniciales (`J.`), así que una inicial cuenta en las dos proporciones. esMorph también etiqueta los tratamientos como nombres propios (`Sr.`, `D.`, `Ud.`); son cerca del 3% de los nombres propios del [corpus de literatura](../datasets/spanishliterature.md). Dos clases de abreviatura no se cuentan:
 
 - las siglas y los acrónimos (`ONU`, `DNI`), porque ningún signo los distingue: las palabras en mayúsculas del corpus son los nombres de los personajes de las obras de teatro, los títulos de obras y el énfasis;
 - una abreviatura al final de una oración (`etc.`), cuyo punto cierra la oración.
 
-En 300 fragmentos del corpus, de 6000 caracteres cada uno, la mediana de la proporción de los nombres propios es del 3,2%, y solo 99 fragmentos tienen una abreviatura.
+En 300 fragmentos del corpus, de 6000 caracteres cada uno, la mediana de la proporción de los nombres propios es del 3,2%, y solo 101 fragmentos tienen una abreviatura.
 
 === "Código"
 
