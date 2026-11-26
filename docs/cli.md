@@ -30,7 +30,7 @@ In esTS anySeg splits the text and esMorph analyzes it in the context of its sen
 | `cohesion` | [`CohesionStats`](stats/cohesion_stats.md) |
 | `verse` | [`VerseStats`](stats/verse_stats.md), only by its name in `-s` |
 
-The command has no syntactic statistics, as it parses no dependencies, and `cohesion` reads the analyses of esMorph without a parse: the [`si` that opens no condition](stats/cohesion_stats.md#is_connector_blocked) is known after an opening `¡` and after a verb that takes an indirect question, with a clitic as the only complement it sees. `ests download` downloads the [frequency dictionary](datasets/freqdict.md) `freq_dict` for `lexical`; without it the class is not counted, and its error names this command.
+The command has no syntactic statistics, as it parses no dependencies, and `cohesion` reads the analyses of esMorph without a parse: the [`si` that opens no condition](stats/cohesion_stats.md#is_connector_blocked) is known after an opening `¡` and after a verb that takes an indirect question, with a clitic joined to the verb (`indíquelo si es necesario`) as the only complement it sees. `ests download` downloads the [frequency dictionary](datasets/freqdict.md) `freq_dict` for `lexical`; without it the class is not counted, and its error names this command.
 
 ## Report { #Report }
 

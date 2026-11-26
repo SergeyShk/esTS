@@ -4,7 +4,6 @@ from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, ClassVar
 
 import anyts.report
-from anyts.report import escape as escape
 from anyts.stats import Stats
 
 from .basic_stats import BasicStats

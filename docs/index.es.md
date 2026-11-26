@@ -134,13 +134,13 @@ Se puede probar sin instalar en la [demo en Hugging Face Spaces](https://hugging
 
     [:octicons-arrow-right-24: Visualizaciones](visualizers/zipf.md)
 
--   :material-console:{ .lg .middle } __Línea de órdenes__
+-   :material-console:{ .lg .middle } __Línea de comandos__
 
     ---
 
-    Estadísticas de ficheros como tabla, JSON o CSV, por partes de un texto, y un informe HTML con la orden `ests`
+    Estadísticas de ficheros como tabla, JSON o CSV, por partes de un texto, y un informe HTML con el comando `ests`
 
-    [:octicons-arrow-right-24: Línea de órdenes](cli.md)
+    [:octicons-arrow-right-24: Línea de comandos](cli.md)
 
 -   :material-pipe:{ .lg .middle } __Componentes__
 
@@ -260,7 +260,7 @@ Un cuento analizado con todas las herramientas de la biblioteca está en el cuad
     *   **ests**:
         *   basic_stats.py - estadísticas básicas del texto
         *   cohesion_stats.py - estadísticas de cohesión
-        *   cli.py - la orden ests
+        *   cli.py - el comando ests
         *   components.py - componentes de spaCy
         *   constants.py - constantes de la lengua española y de las métricas
         *   diversity_stats.py - métricas de diversidad léxica

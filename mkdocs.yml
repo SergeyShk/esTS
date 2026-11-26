@@ -116,7 +116,7 @@ plugins:
             Word extraction: Extracción de palabras
             Character N-gram extraction: Extracción de N-gramas de caracteres
             Syllables and stress: Sílabas y acento
-            Command line: Línea de órdenes
+            Command line: Línea de comandos
             spaCy components: Componentes de spaCy
             Statistics: Estadísticas
             Basic statistics: Estadísticas básicas

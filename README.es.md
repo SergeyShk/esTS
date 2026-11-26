@@ -113,7 +113,7 @@ Las estadísticas según el diccionario de frecuencias lo necesitan descargado u
 0.8
 ```
 
-Las mismas estadísticas sin Python - con la orden `ests` (una tabla, JSON o CSV, por partes de un texto) y un informe HTML en una página:
+Las mismas estadísticas sin Python - con el comando `ests` (una tabla, JSON o CSV, por partes de un texto) y un informe HTML en una página:
 
 ```bash
 ests download  # el diccionario de frecuencias, una vez
@@ -727,7 +727,7 @@ Los informes de errores, las ideas y los pull requests son bienvenidos en las [i
     *   basic_stats.py - estadísticas básicas del texto del núcleo anyTS con las sílabas del español
     *   cohesion_stats.py - estadísticas de cohesión
     *   lexical_stats.py - estadísticas de complejidad léxica
-    *   cli.py - la orden ests
+    *   cli.py - el comando ests
     *   components.py - componentes de un pipeline de spaCy
     *   corpus - medidas de la lingüística de corpus: palabras clave, colocaciones, dispersión, concordancia, estilometría, comparación de corpus
     *   datasets - conjuntos de datos: literatura en español, sonetos en español, diccionario de frecuencias

@@ -1,6 +1,6 @@
-# Línea de órdenes
+# Línea de comandos
 
-La orden `ests` calcula las estadísticas de textos sin código de Python: las imprime como tabla, JSON o CSV, del texto entero o de sus partes, escribe un informe HTML y descarga el diccionario de frecuencias. Se instala con la biblioteca; `python -m ests` es lo mismo.
+El comando `ests` calcula las estadísticas de textos sin código de Python: las imprime como tabla, JSON o CSV, del texto entero o de sus partes, escribe un informe HTML y descarga el diccionario de frecuencias. Se instala con la biblioteca; `python -m ests` es lo mismo.
 
 ``` bash
 ests download
@@ -11,14 +11,14 @@ cat texto.txt | ests stats -f json
 ests report texto.txt -t "Mi texto" -o informe.html
 ```
 
-## Orden { #Command }
+## Comando { #Command }
 
 <!-- core: cli.md:Command 84cbecf -->
 ``` {.python .signature}
 Command()
 ```
 
-La línea de órdenes de las estadísticas de una biblioteca de un idioma. Su orden `stats` lee textos de ficheros, o de la entrada estándar sin ellos o para `-`, analiza cada texto una vez (`parse`) e imprime las estadísticas de las clases de `stats_classes`:
+La línea de comandos de las estadísticas de una biblioteca de un idioma. Su comando `stats` lee textos de ficheros, o de la entrada estándar sin ellos o para `-`, analiza cada texto una vez (`parse`) e imprime las estadísticas de las clases de `stats_classes`:
 
 | Opción | Por defecto | Descripción |
 | :----- | :---------- | :---------- |
@@ -31,11 +31,11 @@ La línea de órdenes de las estadísticas de una biblioteca de un idioma. Su or
 
 La entrada estándar se lee como un fichero, igual sus saltos de línea y su marca de orden de bytes, y una tabla se imprime a medida que se cuenta cada texto.
 
-Su orden `download`, en una biblioteca con `datasets`, descarga los conjuntos de datos que necesitan sus clases, los nombrados o todos, otra vez con `--force`, y nombra cada uno en la salida estándar.
+Su comando `download`, en una biblioteca con `datasets`, descarga los conjuntos de datos que necesitan sus clases, los nombrados o todos, otra vez con `--force`, y nombra cada uno en la salida estándar.
 
-Su orden `report` escribe el [informe HTML](https://sergeyshk.github.io/anyTS/report/) de un texto, de un fichero o de la entrada estándar, en `-o` o en la salida estándar, con las clases de `-s` y el título de `-t`, `--title`; sus estadísticas, también las de su tabla de oraciones, se cuentan como en `stats`, y una clase que no puede contar el texto queda fuera de él.
+Su comando `report` escribe el [informe HTML](https://sergeyshk.github.io/anyTS/report/) de un texto, de un fichero o de la entrada estándar, en `-o` o en la salida estándar, con las clases de `-s` y el título de `-t`, `--title`; sus estadísticas, también las de su tabla de oraciones, se cuentan como en `stats`, y una clase que no puede contar el texto queda fuera de él.
 
-`run(argv=None)` ejecuta la orden con los argumentos, por defecto los de la línea de órdenes, y devuelve el código de salida: 0; 1 cuando un fichero no puede leerse o escribirse, una clase no puede contar un texto o un conjunto de datos no puede descargarse, cuyo error va a la salida de errores mientras los demás se cuentan, y cuando el lector de la salida se detiene, como `head`, sin mensaje; 2 para argumentos erróneos, entre ellos una codificación desconocida, con la ayuda de `argparse`, y sin orden, con la ayuda de la orden; 130 al interrumpirla. `-V`, `--version` imprime las versiones de la biblioteca y del núcleo.
+`run(argv=None)` ejecuta el comando con los argumentos, por defecto los de la línea de comandos, y devuelve el código de salida: 0; 1 cuando un fichero no puede leerse o escribirse, una clase no puede contar un texto o un conjunto de datos no puede descargarse, cuyo error va a la salida de errores mientras los demás se cuentan, y cuando el lector de la salida se detiene, como `head`, sin mensaje; 2 para argumentos erróneos, entre ellos una codificación desconocida, con la ayuda de `argparse`, y sin comando, con la ayuda del comando; 130 al interrumpirla. `-V`, `--version` imprime las versiones de la biblioteca y del núcleo.
 
 Lanza `ParameterError` cuando una subclase se define con textos que `check_messages` rechaza frente a `CLI_TEXTS`, o con un `default_stats` que nombra una clase que no está en `stats_classes`.
 
@@ -54,7 +54,7 @@ En esTS anySeg divide el texto y esMorph lo analiza en el contexto de sus oracio
 | `cohesion` | [`CohesionStats`](stats/cohesion_stats.md) |
 | `verse` | [`VerseStats`](stats/verse_stats.md), solo por su nombre en `-s` |
 
-La orden no tiene estadísticas sintácticas, porque no analiza dependencias, y `cohesion` lee los análisis de esMorph sin análisis sintáctico: el [`si` que no abre ninguna condición](stats/cohesion_stats.md#is_connector_blocked) se reconoce tras un `¡` de apertura y tras un verbo que toma una interrogativa indirecta, con un clítico como el único complemento que ve. `ests download` descarga el [diccionario de frecuencias](datasets/freqdict.md) `freq_dict` para `lexical`; sin él la clase no se cuenta, y su error nombra esta orden.
+El comando no tiene estadísticas sintácticas, porque no analiza dependencias, y `cohesion` lee los análisis de esMorph sin análisis sintáctico: el [`si` que no abre ninguna condición](stats/cohesion_stats.md#is_connector_blocked) se reconoce tras un `¡` de apertura y tras un verbo que toma una interrogativa indirecta, con un clítico unido al verbo (`indíquelo si es necesario`) como el único complemento que ve. `ests download` descarga el [diccionario de frecuencias](datasets/freqdict.md) `freq_dict` para `lexical`; sin él la clase no se cuenta, y su error nombra este comando.
 
 ## Informe { #Report }
 
@@ -83,7 +83,7 @@ La página es la misma para el mismo texto, y ningún texto de la fuente o de la
 
 El objeto guarda `document`, `title`, las estadísticas de cada clase por nombre, `stats`, y los errores de las clases dejadas fuera, `errors`. `to_html()` devuelve la página, y `save(path)` la escribe en un fichero en UTF-8, la codificación que la página declara. Una fuente que una clase no puede contar lanza el error de la clase, salvo con `skip_errors`; un `skip_errors` que no es un `bool` y unos `stats_classes` que no son un diccionario de clases de estadísticas lanzan `ParameterError`.
 
-En esTS `Report` está en `ests.report`: sus clases son `STATS_CLASSES` del mismo módulo, las clases de la orden salvo `verse`; una cadena se analiza como en la orden; las columnas de las oraciones son los caracteres, las palabras, las sílabas, la facilidad de lectura de Flesch y el contenido de agua; el resaltado es [`HighlightedText`](visualizers/highlight.md) con sus capas por defecto. Los textos del informe están en inglés, como los de `print_stats`, y las lecturas conservan los nombres de las bandas de sus escalas (`bastante fácil`).
+En esTS `Report` está en `ests.report`: sus clases son `STATS_CLASSES` del mismo módulo, las clases del comando salvo `verse`; una cadena se analiza como en el comando; las columnas de las oraciones son los caracteres, las palabras, las sílabas, la facilidad de lectura de Flesch y el contenido de agua; el resaltado es [`HighlightedText`](visualizers/highlight.md) con sus capas por defecto. Los textos del informe están en inglés, como los de `print_stats`, y las lecturas conservan los nombres de las bandas de sus escalas (`bastante fácil`).
 
 === "Código"
 
