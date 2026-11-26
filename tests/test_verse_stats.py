@@ -327,8 +327,8 @@ def test_synalepha(text, syllables):
         # a synalepha is broken from the end of the line
         ("cuando hace la calor", 8, ("cuan", "do", "ha", "ce", "la", "ca", "lor")),
         ("que a mí me mira a veces", 8, ("que‿a", "mí", "me", "mi", "ra", "a", "ve", "ces")),
-        # the silent u of que is no vowel to split
-        ("que quiero", 4, ("que", "quie", "ro")),
+        # the silent u of que is no vowel: the diphthong after it splits, not the u
+        ("que quiero", 4, ("que", "qui", "e", "ro")),
         # a length out of reach leaves the plain reading
         ("el perro ladra", 10, ("el", "pe", "rro", "la", "dra")),
         ("que a mí me mira a veces", 12, ("que‿a", "mí", "me", "mi", "ra‿a", "ve", "ces")),

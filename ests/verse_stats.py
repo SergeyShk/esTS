@@ -488,16 +488,13 @@ def _dieresis(syllable: str) -> int | None:
 
     Description:
         A weak vowel (i, u, ü) before another vowel is split from it (su-a-ve,
-        ru-i-do, con-fi-a-do); the silent u of que and gui is no vowel, and a
-        weak vowel after a vowel belongs to a falling diphthong or a triphthong
+        ru-i-do, con-fi-a-do); the silent u of que and gui is no vowel (qui-en)
     """
     for index in range(len(syllable) - 1):
         letter, following = syllable[index], syllable[index + 1]
         if letter not in "iuü" or following not in VOWELS or following == letter:
             continue
         if letter == "u" and index and syllable[index - 1] in "qg" and following in "eéií":
-            continue
-        if index and syllable[index - 1] in VOWELS:
             continue
         return index + 1
     return None
