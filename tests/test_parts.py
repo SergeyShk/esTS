@@ -51,6 +51,12 @@ def sources():
     return {"str": TEXT, "Document": _annotate_text(TEXT), "Doc": get_nlp()(TEXT)}
 
 
+@pytest.fixture(scope="module")
+def params(freq_dict):
+    """The frequency dictionary of the tests for LexicalStats"""
+    return {ests.LexicalStats: {"freq_dict": freq_dict}}
+
+
 @pytest.mark.parametrize("cls", list(ADDITIVE), ids=lambda cls: cls.__name__)
 @pytest.mark.parametrize("kind", ["str", "Document", "Doc"])
 def test_parts_add_up(cls, kind, sources):
@@ -65,16 +71,16 @@ def test_parts_add_up(cls, kind, sources):
 
 
 @pytest.mark.parametrize("cls", CLASSES, ids=lambda cls: cls.__name__)
-def test_by_parts(cls, sources):
+def test_by_parts(cls, sources, params):
     """A row of the table for every part of every kind of a string, a Document and a Doc"""
     for kind, source in sources.items():
         if cls is ests.SyntaxStats and kind == "Document":
             continue
         for parts in cls.part_kinds:
-            table = cls.by_parts(source, parts)
+            table = cls.by_parts(source, parts, **params.get(cls, {}))
             assert len(table) == SIZES[parts], (kind, parts)
             assert table.index.name == parts[:-1]
-    paragraphs = cls.by_parts(TEXT, "paragraphs")
+    paragraphs = cls.by_parts(TEXT, "paragraphs", **params.get(cls, {}))
     assert list(paragraphs["start"]) == [0, len(VERSE) + 2]
 
 

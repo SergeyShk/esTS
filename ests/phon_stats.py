@@ -116,8 +116,8 @@ class PhonStats(anyts.phon_stats.PhonStats):
         consonant_vowel_ratio (float): Ratio of consonants to vowels
         p_heavy_clusters (float): Share of the clusters of 3 consonants or more
         p_hiatus (float): Hiatuses per word
-        p_junction_hiatus (float): Share of the junctions of words with a vowel on both
-            sides (trigo en)
+        p_junction_hiatus (float): Share of the junctions of words with a vowel on both sides
+            (trigo en)
         p_junction_clusters (float): Share of the junctions of words with four consonants
             or more in a row
         cv_entropy (float): Entropy of the CV patterns of the words in bits
