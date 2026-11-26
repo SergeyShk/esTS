@@ -1,5 +1,6 @@
 import pytest
 
+from ests import WordsExtractor
 from ests.corpus import Keyword, check_keyness_params, keyness
 from ests.corpus.keyness import (
     calc_log_likelihood,
@@ -82,6 +83,24 @@ def test_keyness_against_the_frequency_dictionary_proper_nouns(freq_dict):
     assert all(k.word not in ("tomás", "tomar") for k in negative)
 
 
+def test_keyness_freq_dict_context(freq_dict):
+    """The words of a text or of a list take the lemma of their part of speech in context"""
+    text = "Bebimos vino de Rioja. Luego vino a casa y vino otra vez."
+    by_text = {k.word: k.freq_target for k in keyness(text, freq_dict)}
+    assert by_text["venir"] == 2
+    assert by_text["vino"] == 1
+    words = text.replace(".", "").lower().split()
+    assert {k.word: k.freq_target for k in keyness(words, freq_dict)} == by_text
+    # Frequencies have no context: the key of the word alone
+    assert [k.word for k in keyness({"vino": 3}, freq_dict)] == ["vino"]
+
+
+def test_keyness_of_a_text():
+    """A text is split into the words of WordsExtractor"""
+    text = "El gato duerme. ¡El gato come!"
+    assert keyness(text, reference) == keyness(list(WordsExtractor().extract(text)), reference)
+
+
 def test_keyness_against_the_frequency_dictionary_alphabet(freq_dict):
     words = ["Gato", "2020", "1.º", "ciudad-real", "etc.", "o[t]ras"]
     keywords = keyness(words, freq_dict)
@@ -115,7 +134,7 @@ def test_keyness_checks_before_the_dictionary(tmp_path):
     with pytest.raises(ParameterError):
         keyness(["gato"], freq_dict, min_freq=1.5)
     with pytest.raises(SourceTypeError):
-        keyness("el gato duerme", freq_dict)
+        keyness(["el gato duerme", "ya", "ladra el perro"], freq_dict)
 
 
 def test_check_keyness_params():

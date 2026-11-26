@@ -107,13 +107,13 @@ Excepciones:
 text_features(text, nlp=None)
 ```
 
-Devuelve 166 rasgos de un texto con un prefijo según su fuente, 211 con un pipeline que tiene analizador sintáctico; un rasgo indefinido es `nan`.
+Devuelve 164 rasgos de un texto con un prefijo según su fuente, 209 con un pipeline que tiene analizador sintáctico; un rasgo indefinido es `nan`.
 
 | Prefijo | Rasgos | Fuente |
 | :------ | :----- | :----- |
 | `basic_` | proporciones de palabras largas, complejas, simples, monosílabas y polisílabas, de letras, espacios y signos de puntuación; letras y sílabas por palabra | [`BasicStats`](../stats/basic_stats.md) |
-| `readability_` | todas las fórmulas de legibilidad y el grado de consenso | [`ReadabilityStats`](../stats/readability_stats.md) |
-| `diversity_` | todas las medidas de diversidad léxica salvo la Z de Orlov, inestable en una ventana | [`DiversityStats`](../stats/diversity_stats.md) |
+| `readability_` | todas las fórmulas de legibilidad y el grado de consenso, sin los números entre las palabras (`filter_nums`) | [`ReadabilityStats`](../stats/readability_stats.md) |
+| `diversity_` | todas las medidas de diversidad léxica salvo las inestables en una ventana de mil palabras, `WINDOW_UNSTABLE_DIVERSITY`: la Z de Orlov, y MA-MTLD y MTLD-W, que promedian pocos factores completos | [`DiversityStats`](../stats/diversity_stats.md) |
 | `morph_` | proporciones de los valores de cada rasgo morfológico (`morph_pos_NOUN`, `morph_mood_Sub`, `morph_polarity_Neg`) y los marcadores del español (`morph_p_gerund`, `morph_p_mente_adverbs`) | [`MorphStats`](../stats/morph_stats.md) con el pipeline de `load_pipeline` |
 | `sents_` | longitud media de una oración en palabras, desviación típica, coeficiente de variación, autocorrelación de las longitudes vecinas ([`sentence_rhythm`](#sentence_rhythm)): el ritmo del texto | [`SentsExtractor`](../extractors/sentences.md) |
 | `punct_` | frecuencias de los signos de puntuación por tipo por cada 1000 palabras y la proporción de los signos de apertura | [`punctuation_profile`](../stats/basic_stats.md#punctuation) |

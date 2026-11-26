@@ -9,7 +9,7 @@ import anyts.visualizers.highlight
 from anyts.constants import ALLITERATION_MIN_WORD_LEN, ALLITERATION_THRESHOLD, AUXILIARY_DEPS
 from anyts.document import TreeWord, get_tree
 from anyts.syntax_stats import base_dep, get_children, get_words, is_root, subtree_len
-from anyts.utils import check_words, has_feature, in_order, is_punctuation
+from anyts.utils import check_words, has_feature, in_order, is_punctuation, unchecked
 from anyts.visualizers.highlight import (
     Highlight as Highlight,
     Sent as Sent,
@@ -56,7 +56,7 @@ from ..syntax_stats import (
     is_participle_clause,
     is_passive,
 )
-from ..utils import _annotate_text, get_document, is_verbal_noun, lemmatize
+from ..utils import _annotate_text, _takes_word, get_document, is_verbal_noun, lemmatize
 
 if TYPE_CHECKING:
     from anyseg import Document
@@ -73,6 +73,21 @@ NOMINAL_POS = frozenset({"NOUN", "PROPN", "ADJ", "NUM", "PRON"})
 # Pronoun types of a determiner that opens a noun phrase of its own, not a modifier coordinated
 # with mismo before their noun (de la misma o distinta categoría)
 NP_OPENING_PRON_TYPES = frozenset({"Art", "Prs"})
+
+# Functions of a word of the tree without its check, for the words of the trees of this module
+_base_dep = unchecked(base_dep)
+_get_children = unchecked(get_children)
+_get_words = unchecked(get_words)
+_is_root = unchecked(is_root)
+_subtree_len = unchecked(subtree_len)
+_has_feature = unchecked(has_feature)
+_is_connector_blocked = unchecked(is_connector_blocked)
+_find_split_predicates = unchecked(find_split_predicates)
+_is_agentless = unchecked(is_agentless)
+_is_de_modifier = unchecked(is_de_modifier)
+_is_gerund_clause = unchecked(is_gerund_clause)
+_is_participle_clause = unchecked(is_participle_clause)
+_is_passive = unchecked(is_passive)
 
 
 class HighlightedText(anyts.visualizers.highlight.HighlightedText):
@@ -546,7 +561,7 @@ def find_connector_highlights(
 
 def _blocked_words(doc: Document) -> Callable[[Word], bool]:
     """Whether no connector starts at a word of a document, by the position of its token"""
-    starts = frozenset(word.start for word in get_tree(doc).words if is_connector_blocked(word))
+    starts = frozenset(word.start for word in get_tree(doc).words if _is_connector_blocked(word))
     return lambda word: word.start in starts
 
 
@@ -682,19 +697,19 @@ def find_passive(doc: Document) -> list[Highlight]:
     """
     highlights = []
     for token in get_tree(doc).words:
-        if is_punctuation(token.form) or not is_passive(token):
+        if is_punctuation(token.form) or not _is_passive(token):
             continue
         se = [child for child in token.children if child.deprel == SE_PASSIVE_DEP]
         auxiliaries = [
             child
             for child in token.children
-            if base_dep(child) in AUXILIARY_DEPS and child.lemma == PASSIVE_AUX
+            if _base_dep(child) in AUXILIARY_DEPS and child.lemma == PASSIVE_AUX
         ]
         start, end = tokens_span([token, *se, *auxiliaries])
         if se:
             note = "passive with se"
         else:
-            note = "passive with ser, no agent" if is_agentless(token) else "passive with ser"
+            note = "passive with ser, no agent" if _is_agentless(token) else "passive with ser"
         highlights.append(Highlight(start, end, "passive", note))
     return highlights
 
@@ -738,9 +753,9 @@ def find_participle_clauses(doc: Document) -> list[Highlight]:
     """
     highlights = []
     for token in get_tree(doc).words:
-        if is_participle_clause(token):
+        if _is_participle_clause(token):
             start, end = tokens_span(_subtree(token))
-            n_words = subtree_len(token)
+            n_words = _subtree_len(token)
             note = f"participial clause, {plural(n_words, 'word')}"
             highlights.append(Highlight(start, end, "participle_clauses", note))
     return highlights
@@ -758,9 +773,9 @@ def find_gerund_clauses(doc: Document) -> list[Highlight]:
     """
     highlights = []
     for token in get_tree(doc).words:
-        if is_gerund_clause(token):
+        if _is_gerund_clause(token):
             start, end = tokens_span(_subtree(token))
-            n_words = subtree_len(token)
+            n_words = _subtree_len(token)
             note = f"gerund clause, {plural(n_words, 'word')}"
             highlights.append(Highlight(start, end, "gerund_clauses", note))
     return highlights
@@ -782,10 +797,11 @@ def find_split_predicate_highlights(doc: Document) -> list[Highlight]:
         list[Highlight]: Fragments of the layer split_predicates
     """
     return anyts.visualizers.highlight.find_split_predicate_highlights(
-        find_split_predicates(get_tree(doc).words)
+        _find_split_predicates(get_tree(doc).words)
     )
 
 
+@_takes_word
 def is_anaphoric_mismo(token: TreeWord) -> bool:
     """
     Checking whether a token is an anaphoric el mismo
@@ -822,21 +838,21 @@ def is_anaphoric_mismo(token: TreeWord) -> bool:
         return False
     if len(after) == 2 and after[0].upos == "CCONJ" and _is_modifier(after[1]):
         return False
-    children = get_children(token)
+    children = _get_children(token)
     if any(
-        child.form.lower() in MISMO_ARTICLES and base_dep(child) in NP_DEPS for child in children
+        child.form.lower() in MISMO_ARTICLES and _base_dep(child) in NP_DEPS for child in children
     ):
         # A clause after a comma explains the noun phrase (contra la misma, que pone fin a...)
         explained = bool(after) and after[0].form == ","
-        if base_dep(token) not in ARGUMENT_DEPS or any(
-            base_dep(child) not in NP_DEPS and not (explained and base_dep(child) == "acl")
+        if _base_dep(token) not in ARGUMENT_DEPS or any(
+            _base_dep(child) not in NP_DEPS and not (explained and _base_dep(child) == "acl")
             for child in children
         ):
             return False
         # The head of a root is itself, as in spaCy
         head = token.head or token
         return not (
-            base_dep(token) in ("nsubj", "obj")
+            _base_dep(token) in ("nsubj", "obj")
             and head.index < token.index
             and PREDICATIVE_VERBS & {head.lemma or "", lemmatize(head.form.lower())}
         )
@@ -875,7 +891,7 @@ def _is_modifier(word: TreeWord) -> bool:
     if word.upos == "ADJ":
         return True
     return word.upos == "DET" and not any(
-        has_feature(word, "PronType", value) for value in NP_OPENING_PRON_TYPES
+        _has_feature(word, "PronType", value) for value in NP_OPENING_PRON_TYPES
     )
 
 
@@ -896,7 +912,7 @@ def find_anaphoric_mismo(doc: Document) -> list[Highlight]:
     """
     highlights = []
     for token in get_tree(doc).words:
-        if not is_anaphoric_mismo(token):
+        if not _is_anaphoric_mismo(token):
             continue
         article = next(
             (child for child in token.children if child.form.lower() in MISMO_ARTICLES),
@@ -911,8 +927,8 @@ def find_anaphoric_mismo(doc: Document) -> list[Highlight]:
 def _de_chain(token: TreeWord) -> tuple[list[TreeWord], int]:
     tokens = [token]
     depth = 1
-    for child in get_children(token):
-        if is_de_modifier(child):
+    for child in _get_children(token):
+        if _is_de_modifier(child):
             child_tokens, child_depth = _de_chain(child)
             tokens += child_tokens
             depth = max(depth, child_depth + 1)
@@ -935,11 +951,11 @@ def find_de_chains(doc: Document) -> list[Highlight]:
         list[Highlight]: Fragments of the layer de_chains
     """
     highlights = []
-    for token in get_words(get_tree(doc).words):
-        if not is_de_modifier(token):
+    for token in _get_words(get_tree(doc).words):
+        if not _is_de_modifier(token):
             continue
         head = token.head or token
-        if not is_root(token) and not is_punctuation(head.form) and is_de_modifier(head):
+        if not _is_root(token) and not is_punctuation(head.form) and _is_de_modifier(head):
             continue
         chain, depth = _de_chain(token)
         if depth < 2:
@@ -959,3 +975,7 @@ SYNTAX_FINDERS: dict[str, Callable[[Document], list[Highlight]]] = {
     "split_predicates": find_split_predicate_highlights,
     "anaphoric_mismo": find_anaphoric_mismo,
 }
+
+
+# The functions of the module without the check of the word, for the words of its trees
+_is_anaphoric_mismo = unchecked(is_anaphoric_mismo)

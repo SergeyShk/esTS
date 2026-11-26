@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Collection, Mapping, Sequence
 from math import nan
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import anyts.style_stats
 from anyts.constants import MESSAGES, NAUSEA_TOP_N
@@ -96,6 +96,7 @@ class StyleStats(anyts.style_stats.StyleStats):
         describe: Reading of a metric by its scale, None for every metric
         get_stats: Getting the computed style metrics of the text
         to_dataframe: Getting the metrics as a table of one row
+        by_parts: Getting the metrics of every sentence, line or paragraph
         print_stats: Printing the computed style metrics with descriptions
 
     Raises:
@@ -138,6 +139,14 @@ class StyleStats(anyts.style_stats.StyleStats):
     def parse(self, source: str | Doc | Document) -> Document:
         """The document of anySeg (ests.utils.get_document)"""
         return get_document(source)
+
+    @classmethod
+    def parts_document(cls, source: str | Doc | Document, **params: Any) -> Document:
+        """The document of parse, a string with the analyses of esMorph in the context of its
+        sentences, so that the nouns of a part are those of the whole text"""
+        if isinstance(source, str):
+            return _annotate_text(source)
+        return super().parts_document(source, **params)
 
     def is_stopword(self, word: str) -> bool:
         """Stopword of STOPWORD_FORMS (is_stopword)"""

@@ -42,6 +42,9 @@ if TYPE_CHECKING:
     from spacy.tokens import Doc
 
 Features = Callable[[str], Mapping[str, float]]
+# Measures of lexical diversity unstable on a window of a thousand words: Orlov's Z, and
+# MA-MTLD and MTLD-W average a few completed factors
+WINDOW_UNSTABLE_DIVERSITY = frozenset({"orlov_z", "mamtld", "mtldw"})
 
 
 def split_windows(text: str, window: int | None = 1000, min_words: int | None = None) -> list[str]:
@@ -108,9 +111,10 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         complex, simple, mono- and polysyllabic words, of letters, spaces and
         punctuation marks, the mean number of letters and syllables per word
         (BasicStats); readability_ - every readability formula and the
-        consensus grade except the reading time (ReadabilityStats); diversity_ -
-        every measure of lexical diversity but Orlov's Z, unstable on a window
-        (DiversityStats); morph_ - the
+        consensus grade except the reading time, without the numbers
+        (ReadabilityStats); diversity_ - every measure of lexical diversity but
+        those unstable on a window (WINDOW_UNSTABLE_DIVERSITY; DiversityStats);
+        morph_ - the
         shares of the values of every feature of MORPHOLOGY_STATS_DESC and the
         markers of MorphStats.get_markers except the moods; sents_ - the rhythm
         of the sentences (sentence_rhythm); punct_ - punctuation_profile;
@@ -174,11 +178,13 @@ def text_features(text: str, nlp: Language | None = None) -> dict[str, float]:
         features[f"basic_{key}"] = float(getattr(basic, key))
     features["basic_letters_per_word"] = basic.n_letters / basic.n_words
     features["basic_syllables_per_word"] = basic.n_syllables / basic.n_words
-    for key, score in ReadabilityStats(basic).get_stats().items():
+    # The formulas, as ReadabilityStats, leave out the numbers, the basic features count them
+    unnumbered = BasicStats(text, sents, words, normalize=True, filter_nums=True)
+    for key, score in ReadabilityStats(unnumbered).get_stats().items():
         if key != "reading_time":
             features[f"readability_{key}"] = float(score)
     for key, score in DiversityStats(text, words_extractor=words).get_stats().items():
-        if key != "orlov_z":
+        if key not in WINDOW_UNSTABLE_DIVERSITY:
             features[f"diversity_{key}"] = float(score)
     doc = _parse(text, nlp)
     parsed = doc.has_annotation("DEP")

@@ -11,7 +11,7 @@ Cada palabra recibe dos valores que [Gabrielatos y Marchi](http://eprints.lancs.
 
 La referencia puede ser una lista de palabras, un mapeo de frecuencias (su tamaño es la suma de los recuentos) o una `FrequencyReference`. Las palabras se comparan tal cual: las mayúsculas y minúsculas, la lematización y las palabras vacías corresponden al extractor de palabras, y los dos corpus tienen que extraerse del mismo modo. Un corpus de varios textos se da como una lista de sus listas de palabras. Con `n` mayor que 1 las palabras clave son los N-gramas de las palabras de cada texto, unidos por guiones bajos como los N-gramas de `WordsExtractor` (*black_cat*), así que un N-grama nunca cruza dos textos; los recuentos y los tamaños son los de los N-gramas, y las frecuencias por millón son por millón de N-gramas. Las frecuencias de N-gramas - una suma de los `Counter` de los N-gramas de cada texto, o un diccionario de frecuencias de N-gramas - van con `n=1`: un mapeo y una `FrequencyReference` se rechazan con `n` mayor que 1.
 
-La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/keyness/) y admite además como referencia el [diccionario de frecuencias](../datasets/freqdict.md) `FreqDict`; `FrequencyReference` está en `ests.corpus` junto a ella. Las palabras se extraen con [`WordsExtractor`](../extractors/words.md).
+La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/corpus/keyness/) y admite además como referencia el [diccionario de frecuencias](../datasets/freqdict.md) `FreqDict`; `FrequencyReference` está en `ests.corpus` junto a ella. Las palabras se extraen con [`WordsExtractor`](../extractors/words.md); el objetivo también puede ser un texto, que se divide en las palabras de `WordsExtractor`, analizadas por esMorph en el contexto de sus oraciones.
 
 === "Código"
 
@@ -42,7 +42,7 @@ La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/a
 
 ## Parámetros
 
-<!-- core: corpus/keyness.md:keyness-parameters 927fc84 -->
+<!-- core: corpus/keyness.md:keyness-parameters d21f10e -->
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
 | `target` | `list[str]` / `list[list[str]]` / `dict[str, int]` | - | Palabras del corpus objetivo - un texto o una lista de textos - o sus frecuencias |
@@ -54,22 +54,22 @@ La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/a
 | `n` | `int` | `1` | Longitud de los N-gramas de las palabras de cada texto; `1` - las palabras |
 | `messages` | `dict[str, str]` | `None` | Mensajes de los errores por clave, en lugar de los de la biblioteca |
 
-Los parámetros y el corpus objetivo los comprueba `check_keyness_params`; un `n` mayor que 1 con frecuencias o con una `FrequencyReference` lanza `ParameterError`. Una referencia que no es una lista de cadenas, una lista de tales listas, un contador ni una `FrequencyReference` lanza `SourceTypeError`, y una frecuencia negativa, `nan` o infinita de un contador y un corpus sin palabras, o de menos de `n` palabras, lanzan `SourceError`.
+Los parámetros y el corpus objetivo los comprueba `check_keyness_params`; un `n` mayor que 1 con frecuencias o con una `FrequencyReference` lanza `ParameterError`. Una referencia que no es una lista de cadenas, una lista de tales listas, un contador ni una `FrequencyReference` lanza `SourceTypeError`, y también un corpus en el que la mayoría de las palabras, o de las palabras de uno de sus textos, contienen un espacio: tales palabras son textos, como las oraciones de un texto con una oración de una sola palabra entre ellas, no sus palabras, mientras que una locución de varias palabras entre ellas pasa. Una frecuencia negativa, `nan` o infinita de un contador y un corpus sin palabras, o de menos de `n` palabras, lanzan `SourceError`.
 
 `reference` también puede ser `FreqDict`, frente al cual `target` son formas. Un diccionario de frecuencias que no está descargado lanza `DatasetNotFoundError`. `keyness` comprueba sus parámetros y el corpus objetivo con `check_keyness_params` antes de leer `FreqDict`, así que un argumento erróneo falla antes de cargar el diccionario; el diccionario guarda palabras, así que un `n` mayor que 1 con él también lanza `ParameterError` antes de leerlo.
 
-<!-- core: corpus/keyness.md:check_keyness_params 5873366 -->
+<!-- core: corpus/keyness.md:check_keyness_params f41ebfd -->
 ``` {.python .signature}
 check_keyness_params(measure='log_likelihood', min_freq=1, top_n=None, target=None, n=1, positive=True, *, messages=None)
 ```
 
-Comprueba los parámetros de `keyness` antes de leer un diccionario de frecuencias: lanza `ParameterError` salvo que la medida sea una de `KEYNESS_MEASURES`, la frecuencia mínima un entero, el número de palabras clave `None` o un entero de al menos uno, la longitud de los N-gramas `n` un entero de al menos uno y `positive` un `bool`. Con `target` lanza además `SourceTypeError` salvo que el corpus objetivo sea una lista de cadenas, una lista de tales listas o un mapeo de cadenas a frecuencias enteras, y `SourceError` para una frecuencia negativa, nan o infinita.
+Comprueba los parámetros de `keyness` antes de leer un diccionario de frecuencias: lanza `ParameterError` salvo que la medida sea una de `KEYNESS_MEASURES`, la frecuencia mínima un entero, el número de palabras clave `None` o un entero de al menos uno, la longitud de los N-gramas `n` un entero de al menos uno y `positive` un `bool`. Con `target` lanza además `SourceTypeError` salvo que el corpus objetivo sea una lista de cadenas, una lista de tales listas o un mapeo de cadenas a frecuencias enteras, o si la mayoría de sus palabras o de las palabras de uno de sus textos contienen un espacio, y `SourceError` para una frecuencia negativa, nan o infinita.
 
 ## Referencia por frecuencias
 
-<!-- core: corpus/keyness.md:FrequencyReference 02046dc -->
+<!-- core: corpus/keyness.md:FrequencyReference 2825cbb -->
 ``` {.python .signature}
-FrequencyReference(counts, size, missing=0.0, key=None, keep=None)
+FrequencyReference(counts, size, missing=0.0, key=None, keep=None, keys=None)
 ```
 
 Un corpus de referencia descrito solo por sus frecuencias, como un diccionario de frecuencias construido a partir de un corpus demasiado grande para pasarlo como palabras:
@@ -81,8 +81,9 @@ Un corpus de referencia descrito solo por sus frecuencias, como un diccionario d
 | `missing` | `float` | `0.0` | Frecuencia de una clave que falta en `counts` |
 | `key` | `Callable` | `None` | Clave de una palabra del corpus objetivo en `counts`, como su lema; `None` - la propia palabra |
 | `keep` | `Callable` | `None` | Si una palabra del corpus objetivo se cuenta; `None` - todas las palabras |
+| `keys` | `Callable` | `None` | Claves de las palabras de un texto del corpus objetivo, dadas sus palabras en su orden, como sus lemas en contexto; `None` - las de `key` |
 
-Solo se cuentan las palabras del objetivo que `keep` deja pasar, bajo su `key`, tanto en las frecuencias como en el tamaño. Una clave que falta en `counts` tiene la frecuencia `missing`, como la frecuencia mínima de un diccionario: una cota superior, así que su palabra puede ser palabra clave positiva pero nunca negativa. Las palabras clave negativas salen solo de las claves de `counts` que `keep` deja pasar. Una frecuencia se comprueba al leerla, así que para las palabras clave positivas no se recorre un diccionario grande: una que no es un número lanza `SourceTypeError`, y una negativa, `nan` o infinita, `SourceError`. Un `size` o un `missing` que no es un número finito o es negativo lanza `ParameterError`, y un `key` o un `keep` que no se puede invocar, `SourceTypeError`.
+Solo se cuentan las palabras del objetivo que `keep` deja pasar, bajo su clave, tanto en las frecuencias como en el tamaño. Las claves de una lista de palabras salen de `keys` cuando se da: recibe las palabras de cada texto en su orden y devuelve una clave para cada una, así que un lematizador en contexto distingue los homónimos donde `key`, que ve una palabra aislada, toma un solo análisis para todas sus apariciones. Un objetivo con las palabras de cada oración como un texto propio da a `keys` los límites de las oraciones, que un lematizador en contexto lee; las frecuencias de palabras son las mismas, ya que una `FrequencyReference` cuenta palabras sueltas. `key` da las claves de un objetivo dado por sus frecuencias y de las palabras sin `keys`. Una clave que falta en `counts` tiene la frecuencia `missing`, como la frecuencia mínima de un diccionario: una cota superior, así que su palabra puede ser palabra clave positiva pero nunca negativa. Las palabras clave negativas salen solo de las claves de `counts` que `keep` deja pasar. Una frecuencia se comprueba al leerla, así que para las palabras clave positivas no se recorre un diccionario grande: una que no es un número lanza `SourceTypeError`, y una negativa, `nan` o infinita, `SourceError`. Un `size` o un `missing` que no es un número finito o es negativo lanza `ParameterError`, y un `key`, un `keep` o un `keys` que no se puede invocar, `SourceTypeError`, igual que unas claves que no son una cadena para cada palabra de un texto.
 
 El diccionario de frecuencias `FreqDict` de Google Books Ngram pasado como `reference` se convierte en una referencia así:
 
@@ -93,21 +94,20 @@ El diccionario de frecuencias `FreqDict` de Google Books Ngram pasado como `refe
 | `missing` | la frecuencia mínima del diccionario `FreqDict.min_ipm`, 0,1 ipm (unas 6300 apariciones) |
 | `key` | [`lemma_key`](../datasets/freqdict.md#lemma_key): una palabra clave puede llevar la etiqueta de otro lema, *Roma* se cuenta bajo `romo` |
 | `keep` | las formas hechas de las letras de `WORD_PATTERN`; los números y las palabras con guion o con punto quedan fuera |
+| `keys` | la clave de `lemma_key` según la categoría gramatical de esMorph en el contexto del texto, o de cada lista de palabras: *vino de Rioja* - `vino`, *vino a casa* - `venir`; un nombre propio recibe la clave de la palabra sola, bajo la que `word_ipm` cuenta las filas de los nombres propios. Las frecuencias de un objetivo no tienen contexto y reciben `key` |
 
-El corpus objetivo tiene que contarse como se contó el diccionario: formas con las palabras vacías, no lemas - `lemma_key` no es idempotente (`estado` - `estar`), así que `WordsExtractor(use_lexemes=True)` no sirve. El diccionario describe el registro de los libros, así que las palabras clave negativas de un texto son las de la prosa académica (`de`, `social`, `país`).
+El corpus objetivo tiene que contarse como se contó el diccionario: formas en su caja con las palabras vacías, no lemas: `lemma_key` no es idempotente (`estado` - `estar`), así que `WordsExtractor(use_lexemes=True)` no sirve, y un nombre en minúsculas puede leerse en contexto como otra palabra (`carolina` - `carolino`). El diccionario describe el registro de los libros, así que las palabras clave negativas de un texto son las de la prosa académica (`de`, `social`, `país`).
 
-Frente al diccionario las palabras de una comedia de Lope de Vega del [corpus de literatura](../datasets/spanishliterature.md) dan sus personajes:
+Frente al diccionario el texto de una comedia de Lope de Vega del [corpus de literatura](../datasets/spanishliterature.md) dan sus personajes:
 
 === "Código"
 
     ``` python
-    from ests import WordsExtractor
     from ests.corpus import keyness
     from ests.datasets import FreqDict, SpanishLiterature
 
     text = next(SpanishLiterature().get_texts(author="lope", genre="drama"))
-    words = WordsExtractor(lowercase=True).extract(text)
-    for k in keyness(words, FreqDict(), top_n=5):
+    for k in keyness(text, FreqDict(), top_n=5):
         print(k.word, k.freq_target, round(k.ipm_reference, 2), round(k.g2, 1), round(k.log_ratio, 2))
     ```
 

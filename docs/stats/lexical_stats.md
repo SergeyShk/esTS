@@ -77,6 +77,8 @@ In esTS the dictionary is a `FreqDict`, and its entries are the named tuples [`E
 
 --8<-- "stats/lexical_stats.md:LexicalStats-metrics"
 
+esTS does not count `p_proper_nouns` and `p_abbreviations` yet: esMorph marks no abbreviation and tags titles such as `Sr.` and `Dra.` as proper nouns, so `get_stats` leaves them out.
+
 The metrics rely on two resources; always read the means by the dictionary next to `coverage`.
 
 | Resource | Metrics | Availability |
@@ -221,7 +223,7 @@ $$
     {100: 0.6363636363636364, 500: 0.7272727272727273}
     ```
 
-The other methods - `get_stats`, `to_dataframe`, `print_stats` and `describe` - are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the lexical sophistication statistics have no scales, so `describe` gives `None` for the statistics of `get_stats`.
+The other methods - `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_parts), `print_stats` and `describe` - are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the lexical sophistication statistics have no scales, so `describe` gives `None` for the statistics of `get_stats`.
 
 === "Code"
 

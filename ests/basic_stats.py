@@ -7,7 +7,7 @@ from anyts.basic_stats import count_punctuations as count_punctuations
 from anyts.utils import check_integer
 
 from .exceptions import ParameterError
-from .extractors import WordsExtractor
+from .extractors import NUMBER_PATTERN, WordsExtractor
 from .syllables import count_syllables
 from .utils import get_document
 
@@ -67,8 +67,11 @@ class BasicStats(anyts.basic_stats.BasicStats):
         normalize (bool): Compute the normalized statistics
         complex_syl_factor (int): Minimum number of syllables in a complex word
         long_word_letter_factor (int): Minimum number of letters in a long word
+        filter_nums (bool): Leave out the numbers of NUMBER_PATTERN among the words (1900,
+            3,5, 3.º, 2.ª)
 
     Attributes:
+        n_numbers (int): Numbers left out of the words
         c_letters (dict[int, int]): Distribution of words by number of letters
         c_syllables (dict[int, int]): Distribution of words by number of syllables
         n_sents (int): Number of sentences containing words
@@ -105,15 +108,18 @@ class BasicStats(anyts.basic_stats.BasicStats):
         count_words_by_syllables: Number of words with at least the given number of syllables
         count_words_by_letters: Number of words with at least the given number of letters
         get_stats: Getting the computed statistics of the text
+        by_parts: Getting the statistics of every sentence, line or paragraph
         print_stats: Printing the computed statistics of the text with descriptions
 
     Raises:
         SourceTypeError: If the source is neither a string, a Doc nor a Document, or an
             extractor is of another type
         SourceError: If the source has no words
-        ParameterError: If a factor is not an integer or is below one, or normalize is not
-            a bool
+        ParameterError: If a factor is not an integer or is below one, or normalize or
+            filter_nums is not a bool
     """
+
+    number_pattern = NUMBER_PATTERN
 
     def parse(self, source: str | Doc | Document) -> Document:
         """The document of anySeg (ests.utils.get_document)"""

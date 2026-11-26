@@ -1,8 +1,13 @@
+import importlib
+import inspect
+import pkgutil
+
 import pytest
 import spacy
 from anyts.document import document_words
 from anyts.utils import has_words, is_punctuation
 
+import ests
 from ests import BasicStats, CohesionStats, load_pipeline
 from ests.exceptions import DatasetNotFoundError, SourceTypeError
 from ests.utils import (
@@ -518,3 +523,38 @@ def test_lone_surrogate():
     text = "Hola \ud800 mundo. Otra."
     assert split_tokens(text) == ["Hola", "\ud800", "mundo", ".", "Otra", "."]
     assert list(iter_text_sents(text)) == [(0, 13, "Hola \ud800 mundo."), (14, 19, "Otra.")]
+
+
+def _word_functions():
+    """Public functions of the package whose first parameter is a word of the tree or words"""
+    found = []
+    for info in pkgutil.walk_packages(ests.__path__, "ests."):
+        if info.name.endswith("__main__"):
+            continue
+        module = importlib.import_module(info.name)
+        for name, function in vars(module).items():
+            if name.startswith("_") or not inspect.isfunction(function):
+                continue
+            params = list(inspect.signature(function).parameters.values())
+            if (
+                function.__module__ == module.__name__
+                and params
+                and "TreeWord" in str(params[0].annotation)
+            ):
+                found.append(function)
+    return found
+
+
+@pytest.mark.parametrize(
+    "function",
+    _word_functions(),
+    ids=lambda function: f"{function.__module__}.{function.__name__}",
+)
+def test_word_functions_check_the_word(function):
+    """A function of a word of the tree refuses a spaCy Token and a string"""
+    params = list(inspect.signature(function).parameters.values())
+    many = "Iterable" in str(params[0].annotation)
+    for value in (get_nlp()("El libro fue escrito por él.")[2], "libro"):
+        others = [value] * (len(params) - 1)
+        with pytest.raises(SourceTypeError):
+            function([value] if many else value, *others)

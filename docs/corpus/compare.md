@@ -107,13 +107,13 @@ Raises:
 text_features(text, nlp=None)
 ```
 
-Returns 166 features of a text prefixed by their source, 211 with a pipeline that has a parser; an undefined feature is `nan`.
+Returns 164 features of a text prefixed by their source, 209 with a pipeline that has a parser; an undefined feature is `nan`.
 
 | Prefix | Features | Source |
 | :----- | :------- | :----- |
 | `basic_` | shares of long, complex, simple, mono- and polysyllabic words, of letters, spaces and punctuation marks; letters and syllables per word | [`BasicStats`](../stats/basic_stats.md) |
-| `readability_` | every readability formula and the consensus grade | [`ReadabilityStats`](../stats/readability_stats.md) |
-| `diversity_` | every measure of lexical diversity but Orlov's Z, unstable on a window | [`DiversityStats`](../stats/diversity_stats.md) |
+| `readability_` | every readability formula and the consensus grade, without the numbers among the words (`filter_nums`) | [`ReadabilityStats`](../stats/readability_stats.md) |
+| `diversity_` | every measure of lexical diversity but those unstable on a window of a thousand words, `WINDOW_UNSTABLE_DIVERSITY`: Orlov's Z, and MA-MTLD and MTLD-W, which average a few completed factors | [`DiversityStats`](../stats/diversity_stats.md) |
 | `morph_` | shares of the values of every morphological feature (`morph_pos_NOUN`, `morph_mood_Sub`, `morph_polarity_Neg`) and the markers of Spanish (`morph_p_gerund`, `morph_p_mente_adverbs`) | [`MorphStats`](../stats/morph_stats.md) by the pipeline of `load_pipeline` |
 | `sents_` | mean length of a sentence in words, standard deviation, coefficient of variation, autocorrelation of neighbouring lengths ([`sentence_rhythm`](#sentence_rhythm)) - the rhythm of the text | [`SentsExtractor`](../extractors/sentences.md) |
 | `punct_` | frequencies of the punctuation marks by type per 1000 words and the share of the inverted marks | [`punctuation_profile`](../stats/basic_stats.md#punctuation) |

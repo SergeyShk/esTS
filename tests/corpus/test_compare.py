@@ -122,7 +122,7 @@ def test_text_features():
     features = text_features(text)
     prefixes = {key.split("_", 1)[0] for key in features}
     assert prefixes == {"basic", "readability", "diversity", "morph", "sents", "punct", "cohesion"}
-    assert len(features) == 166
+    assert len(features) == 164
     # The cohesion but the overlaps between paragraphs, which the windows cut
     assert sum(1 for key in features if key.startswith("cohesion_")) == 30
     assert not any(key.endswith("_para") for key in features)

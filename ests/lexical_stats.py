@@ -12,7 +12,7 @@ from anyts.document import get_tree
 from anyts.lexical_stats import LexicalWord
 from anyts.utils import has_words, is_number
 
-from .cohesion_stats import token_info
+from .cohesion_stats import _token_info
 from .constants import LEXICAL_STATS_DESC
 from .datasets.freq_dict import FreqDict, lemma_key
 from .exceptions import SourceError, SourceTypeError
@@ -104,6 +104,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         describe: Reading of a statistic by its scale, None for every statistic
         get_stats: Getting the computed lexical sophistication statistics
         to_dataframe: Getting the statistics as a table of one row
+        by_parts: Getting the statistics of every sentence, line or paragraph
         print_stats: Printing the computed statistics with descriptions
 
     Raises:
@@ -176,7 +177,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
             LexicalWord(
                 word.form,
                 lemma_key(_without_period(word.form), proper, word.upos or ""),
-                token_info(word).content,
+                _token_info(word).content,
             )
             for word, proper in zip(words, self._found_proper, strict=True)
         ]

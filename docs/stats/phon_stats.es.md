@@ -43,21 +43,23 @@ La clase extiende el `PhonStats` del núcleo [anyTS](https://sergeyshk.github.io
 === "Resultado"
 
     ```
-                     Statistic                 |  Value
-    ------------------------------------------------------
-    Share of vowels                            |   0.46
-    Share of sonorant consonants               |   0.19
-    Share of voiced obstruents                 |   0.10
-    Share of voiceless obstruents              |   0.25
-    Ratio of consonants to vowels              |   1.19
-    Share of clusters of 3 consonants or more  |   0.01
-    Hiatuses per word                          |   0.00
-    Entropy of the CV patterns of words (bits) |   3.55
-    Hardness                                   |   0.39
-    Alliteration index                         |   0.87
-    Assonance index                            |   0.87
-    Share of open syllables                    |   0.74
-    Mean length of a syllable (sounds)         |   2.19
+                      Statistic                       |  Value
+    -----------------------------------------------------------------
+    Share of vowels                                       |   0.46
+    Share of sonorant consonants                          |   0.19
+    Share of voiced obstruents                            |   0.10
+    Share of voiceless obstruents                         |   0.25
+    Ratio of consonants to vowels                         |   1.19
+    Share of clusters of 3 consonants or more             |   0.01
+    Hiatuses per word                                     |   0.00
+    Share of junctions of words with a hiatus             |   0.27
+    Share of junctions of words with 4 consonants or more |   0.00
+    Entropy of the CV patterns of words (bits)            |   3.55
+    Hardness                                              |   0.39
+    Alliteration index                                    |   0.87
+    Assonance index                                       |   0.87
+    Share of open syllables                               |   0.74
+    Mean length of a syllable (sounds)                    |   2.19
     ```
 
 ## Parámetros
@@ -163,7 +165,7 @@ Excepciones:
 
 ## Métricas
 
-<!-- core: stats/phon_stats.md:PhonStats-metrics 83c97d6 -->
+<!-- core: stats/phon_stats.md:PhonStats-metrics e7c1f06 -->
 Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` las da todas.
 
 | Métrica | Qué mide | Rango | Un valor mayor indica |
@@ -175,6 +177,8 @@ Cada métrica es un atributo del objeto, calculado al crearlo, y `get_stats` las
 | [`consonant_vowel_ratio`](#consonant_vowel_ratio) | Razón de las consonantes a las vocales | 0 o más, `nan` sin vocales | Consonantes más densas |
 | [`p_heavy_clusters`](#consonant_clusters) | Proporción de los grupos de tres consonantes o más | 0-1, `nan` sin grupos | Grupos más pesados |
 | [`p_hiatus`](#hiatus) | Hiatos de `word_hiatus` por palabra | 0 o más, `nan` sin sonidos | Más vocales seguidas |
+| [`p_junction_hiatus`](#junctions) | Proporción de las junturas de palabras con una vocal a cada lado | 0-1, `nan` sin junturas | Más vocales que se encuentran entre las palabras |
+| [`p_junction_clusters`](#junctions) | Proporción de las junturas de palabras con `JUNCTION_CLUSTER_LEN` (4) consonantes o más seguidas | 0-1, `nan` sin junturas | Más consonantes que se encuentran entre las palabras |
 | [`cv_entropy`](#cv_entropy) | Entropía de Shannon de los patrones CV de las palabras, en bits | 0 o más, `nan` sin sonidos | Formas de las palabras más variadas |
 | [`hardness`](#hardness) | Obstruyentes sordas frente a las vocales y las sonantes | 0 o más, `nan` sin vocales ni sonantes | Un sonido más duro |
 | [`alliteration`](#repetition_index) | Índice de repetición de las consonantes en ventanas de `window_len` palabras | 0 o más, `nan` para un texto más corto que la ventana o sin ninguna consonante que compartan dos palabras | Consonantes repetidas más cerca |
@@ -290,6 +294,35 @@ Excepciones:
 
     ```
     4
+    ```
+
+</div>
+
+<div class="metric-card" markdown>
+
+### Junturas de palabras { #junctions }
+
+`p_junction_hiatus` · `p_junction_clusters`
+{ .metric-meta }
+
+<!-- core: stats/phon_stats.md:PhonStats-junctions f350508 -->
+Una juntura son dos palabras de una oración sin nada más que espacios entre ellas: un signo, como una coma, un salto de línea o el final de una oración, no forma ninguna, y tampoco una palabra solo de consonantes, como una abreviatura que se lee por sus letras, salvo la de una sola consonante. Una juntura tiene un hiato cuando el último sonido de las clases de la primera palabra y el primero de la segunda son vocales, sin que la segunda sea de `glides`, y un grupo pesado cuando las consonantes del final de la primera palabra y del principio de la segunda, si las dos palabras tienen alguna, suman `JUNCTION_CLUSTER_LEN` (4) o más. Las proporciones son las de todas las junturas del texto, por los sonidos de `transcribe`; con un extractor de palabras, las junturas siguen siendo las del documento de la fuente.
+
+En esTS ninguna vocal es de `glides`, así que dos vocales que se encuentran entre palabras forman siempre un hiato (`la abuela`, `vio el`), y la `x` son dos consonantes: `fénix brillar` junta k s y b r, cuatro.
+
+=== "Código"
+
+    ``` python
+    from ests import PhonStats
+
+    ps = PhonStats("La abuela vio el fénix brillar en el cielo")
+    ps.p_junction_hiatus, ps.p_junction_clusters
+    ```
+
+=== "Resultado"
+
+    ```
+    (0.25, 0.125)
     ```
 
 </div>
@@ -478,7 +511,7 @@ Excepciones:
 
 ## Métodos
 
-Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; la fonoestadística no tiene escalas, así que `describe` da `None` para las estadísticas de `get_stats`.
+Los métodos `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_parts), `print_stats` y `describe` son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; la fonoestadística no tiene escalas, así que `describe` da `None` para las estadísticas de `get_stats`.
 
 === "Código"
 
@@ -498,6 +531,8 @@ Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de 
      'consonant_vowel_ratio': 1.8571428571428572,
      'p_heavy_clusters': 0.0,
      'p_hiatus': 0.0,
+     'p_junction_hiatus': 0.14285714285714285,
+     'p_junction_clusters': 0.0,
      'cv_entropy': 2.75,
      'hardness': 0.4583333333333333,
      'alliteration': 0.9333333333333333,

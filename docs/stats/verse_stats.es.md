@@ -394,7 +394,7 @@ El tipo de la terminación (cláusula) de un verso por las sílabas tras su últ
     que a mayór mál pudiéra habér llegádo.
     ```
 
-Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de la [interfaz de las estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS: `get_stats()` devuelve las métricas como un diccionario, y `print_stats()` las muestra como una tabla con sus descripciones (`VERSE_STATS_DESC`), como en el ejemplo del principio de la página. Las estadísticas del verso no tienen escalas, así que `describe` da `None` para las estadísticas de `get_stats`.
+Los métodos `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_parts) (solo por estrofas - los bloques entre líneas en blanco), `print_stats` y `describe` son los de la [interfaz de las estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS: `get_stats()` devuelve las métricas como un diccionario, y `print_stats()` las muestra como una tabla con sus descripciones (`VERSE_STATS_DESC`), como en el ejemplo del principio de la página. Las estadísticas del verso no tienen escalas, así que `describe` da `None` para las estadísticas de `get_stats`.
 
 === "Código"
 

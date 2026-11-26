@@ -4,8 +4,8 @@
 LexicalStats(source, freq_dict=None)
 ```
 
-<!-- core: stats/lexical_stats.md:LexicalStats 5286466 -->
-Complejidad léxica a la manera de TAALES (Kyle, Crossley y Berger, 2018) - cuán raras son las palabras de un texto: estadísticas según un diccionario de frecuencias y su modelo de unigramas, las proporciones de las bandas de frecuencia de una lista de los lemas más frecuentes y la densidad léxica. Las estadísticas según el diccionario se calculan la primera vez que se leen, así que las bandas y la densidad léxica no necesitan los datos del diccionario. La fuente de datos es un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) o un `Document` de [anySeg](https://github.com/SergeyShk/anySeg), que se lee a través de su [documento](https://sergeyshk.github.io/anyTS/document/): por defecto, sus palabras de Universal Dependencies sin los números, con sus lemas y sus categorías gramaticales.
+<!-- core: stats/lexical_stats.md:LexicalStats dfdfd1b -->
+Complejidad léxica a la manera de TAALES (Kyle, Crossley y Berger, 2018) - cuán raras son las palabras de un texto: estadísticas según un diccionario de frecuencias y su modelo de unigramas, las proporciones de las bandas de frecuencia de una lista de los lemas más frecuentes, la densidad léxica y las proporciones de los nombres propios y de las abreviaturas. Las estadísticas según el diccionario se calculan la primera vez que se leen, así que las bandas y las proporciones no necesitan los datos del diccionario. La fuente de datos es un texto, un objeto `Doc` de [spaCy](https://github.com/explosion/spaCy) o un `Document` de [anySeg](https://github.com/SergeyShk/anySeg), que se lee a través de su [documento](https://sergeyshk.github.io/anyTS/document/): por defecto, sus palabras de Universal Dependencies sin los números, con sus lemas, sus categorías gramaticales y sus rasgos.
 
 Excepciones:
 
@@ -89,7 +89,7 @@ En esTS el diccionario es un `FreqDict`, y sus entradas son las tuplas con nombr
 
 ## Métricas
 
-<!-- core: stats/lexical_stats.md:LexicalStats-metrics aa10b9c -->
+<!-- core: stats/lexical_stats.md:LexicalStats-metrics 72e0b6e -->
 Cada métrica es un atributo o una propiedad del objeto, y `get_stats` las da todas. Una media se toma sobre las palabras encontradas en el diccionario, y sin ellas es `nan`.
 
 | Métrica | Qué mide | Rango | Un valor mayor indica |
@@ -104,6 +104,10 @@ Cada métrica es un atributo o una propiedad del objeto, y `get_stats` las da to
 | [`p_top1000`](#bands), [`p_top2000`](#bands), [`p_top5000`](#bands), [`p_top10000`](#bands) | Proporción de las palabras con un lema en el top 1000, 2000, 5000 y 10000 de la lista | 0-1, `nan` para una banda más allá de `top_size` | Palabras más frecuentes |
 | [`p_beyond_top10000`](#bands) | Proporción de las palabras con un lema fuera del top 10000 | 0-1, `nan` para una lista de menos de 10000 | Palabras más raras |
 | `lexical_density` | Proporción de las palabras con contenido | 0-1 | Más palabras con contenido |
+| `p_proper_nouns` | Proporción de los nombres propios | 0-1 | Más nombres de personas, lugares y organizaciones |
+| `p_abbreviations` | Proporción de las abreviaturas | 0-1 | Más abreviaturas, como en los textos oficiales y científicos |
+
+esTS todavía no cuenta `p_proper_nouns` ni `p_abbreviations`: esMorph no marca ninguna abreviatura y etiqueta tratamientos como `Sr.` y `Dra.` como nombres propios, así que `get_stats` las deja fuera.
 
 Las métricas se apoyan en dos recursos; lea siempre las medias según el diccionario junto a `coverage`.
 
@@ -271,7 +275,7 @@ $$
     {100: 0.6363636363636364, 500: 0.7272727272727273}
     ```
 
-Los demás métodos, `get_stats`, `to_dataframe`, `print_stats` y `describe`, son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las estadísticas de complejidad léxica no tienen escalas, así que `describe` da `None` para las estadísticas de `get_stats`.
+Los demás métodos, `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_parts), `print_stats` y `describe`, son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las estadísticas de complejidad léxica no tienen escalas, así que `describe` da `None` para las estadísticas de `get_stats`.
 
 === "Código"
 

@@ -162,7 +162,7 @@ La base de `p_ser` son solo los usos copulativos, leídos de la morfología: `se
 <!-- core: stats/morph_stats.md:MorphStats-print_stats a935578 -->
 `print_stats(*stats, filter_none=False)` muestra una tabla para cada estadística elegida: las descripciones de sus valores desde el más frecuente, con el número de las palabras. Un valor de varios une las descripciones de sus partes con una barra. Una estadística desconocida lanza `UnknownStatError`.
 
-El ejemplo del principio de la página muestra dos de las tablas. `to_dataframe` y `describe` son los de la [interfaz de las estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las estadísticas morfológicas no tienen escalas, así que `describe` da `None`.
+El ejemplo del principio de la página muestra dos de las tablas. `to_dataframe`, [`by_parts`](basic_stats.md#by_parts) y `describe` son los de la [interfaz de las estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las estadísticas morfológicas no tienen escalas, así que `describe` da `None`.
 
 === "Código"
 

@@ -42,6 +42,8 @@ class UnadaptedReadabilityStats(anyts.unadapted_readability_stats.UnadaptedReada
             basic statistics
         words_extractor (WordsExtractor): Word extraction tool; not used for ready basic
             statistics
+        filter_nums (bool): Leave out the numbers among the words; None - the class
+            attribute filter_nums (False), for ready basic statistics - as in them
 
     Attributes:
         bs (BasicStats): Basic statistics of the text
@@ -64,12 +66,15 @@ class UnadaptedReadabilityStats(anyts.unadapted_readability_stats.UnadaptedReada
         describe: Reading of a formula by its scale, None for every formula
         get_stats: Getting the computed formulas
         to_dataframe: Getting the formulas as a table of one row
+        by_parts: Getting the formulas of every sentence, line or paragraph
         print_stats: Printing the computed formulas with descriptions
 
     Raises:
         SourceTypeError: If the source is neither a string, a Doc, a Document nor a
             BasicStats object, the basic statistics are not those of esTS, or an extractor is of another type
         SourceError: If the source has no words or no sentences
+        ParameterError: If filter_nums is not a bool or differs from the ready basic
+            statistics
     """
 
     basic_stats_class = BasicStats

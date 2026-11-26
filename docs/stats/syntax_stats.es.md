@@ -810,7 +810,7 @@ $$
 
 ## Métodos
 
-Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las estadísticas sintácticas no tienen escalas, así que `describe` da `None` para las estadísticas de `get_stats`.
+Los métodos `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_parts), `print_stats` y `describe` son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las estadísticas sintácticas no tienen escalas, así que `describe` da `None` para las estadísticas de `get_stats`.
 
 === "Código"
 

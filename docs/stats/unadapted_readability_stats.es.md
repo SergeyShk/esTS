@@ -434,7 +434,7 @@ Un recuento que no es un entero no negativo lanza `ParameterError`.
 
 ## Métodos
 
-Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las fórmulas no tienen escalas, y `describe` da `None` para cualquiera de ellas.
+Los métodos `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_parts), `print_stats` y `describe` son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las fórmulas no tienen escalas, y `describe` da `None` para cualquiera de ellas.
 
 === "Código"
 

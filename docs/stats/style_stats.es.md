@@ -565,7 +565,7 @@ Una expresión se encuentra con sus contracciones y las formas de su verbo ([`ex
 
 El aviso de 56 palabras tiene tres locuciones prepositivas, cinco clichés y una expresión parentética, y casi la mitad de sus sustantivos son deverbales. El anafórico `de la misma`, que las guías también desaconsejan, no se cuenta.
 
-Los demás métodos - `get_stats`, `to_dataframe`, `print_stats` y `describe` - son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las métricas de estilo de esTS no tienen escalas, así que `describe` da `None` para las métricas de `get_stats`. El mismo aviso en lenguaje claro:
+Los demás métodos - `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_parts), `print_stats` y `describe` - son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las métricas de estilo de esTS no tienen escalas, así que `describe` da `None` para las métricas de `get_stats`. El mismo aviso en lenguaje claro:
 
 === "Código"
 
