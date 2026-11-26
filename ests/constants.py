@@ -792,6 +792,10 @@ COHESION_STATS_DESC = {
     "connectors_secondary": "Secondary connectors per 1000 words",
 }
 
+# Endings of an abbreviation: the period, or the period and a raised letter (D.ª, n.º;
+# ° is often written for º)
+ABBREVIATION_ENDINGS = (".", ".ª", ".º", ".°")
+
 # Lexical sophistication: the statistics by the frequency dictionary and by the list
 # of the most frequent lemmas, in the manner of TAALES
 LEXICAL_STATS_DESC = {

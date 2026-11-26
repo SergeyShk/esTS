@@ -209,7 +209,7 @@ $$
 `p_proper_nouns` · `p_abbreviations`
 { .metric-meta }
 
-The shares of the proper nouns and of the abbreviations among the words. A proper noun is a word that esMorph tags `PROPN`, or the model of a `Doc` does. An abbreviation is a word that keeps a period. anySeg keeps it in the abbreviations it knows (`Sr.`, `pág.`, `EE. UU.`, `D.ª`, `n.º`) and in the initials (`J.`), so an initial counts in both shares. esMorph also tags the titles as proper nouns (`Sr.`, `D.`, `Ud.`); they are about 3% of the proper nouns of the [corpus of literature](../datasets/spanishliterature.md). Two kinds of abbreviation are not counted:
+The shares of the proper nouns and of the abbreviations among the words. A proper noun is a word that esMorph tags `PROPN`, or the model of a `Doc` does. An abbreviation is a word that ends with a period, or with a period and a raised letter (`ABBREVIATION_ENDINGS` of `ests.constants`). anySeg keeps the period in the abbreviations it knows (`Sr.`, `pág.`, `EE. UU.`, `D.ª`, `n.º`) and in the initials (`J.`), so an initial counts in both shares; an address or a file name (`www.rae.es`, `datos.csv`) is no abbreviation. esMorph also tags the titles as proper nouns (`Sr.`, `D.`, `Ud.`); they are about 3% of the proper nouns of the [corpus of literature](../datasets/spanishliterature.md). Two kinds of abbreviation are not counted:
 
 - initialisms and acronyms (`ONU`, `DNI`), since no sign tells them apart: the words in capitals of the corpus are the names of the characters of the plays, the titles of works and emphasis;
 - an abbreviation at the end of a sentence (`etc.`), whose period closes the sentence.

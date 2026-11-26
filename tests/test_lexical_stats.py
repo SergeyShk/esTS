@@ -121,6 +121,9 @@ def test_abbreviations(freq_dict):
     # The period of an abbreviation may stand before a raised letter
     raised = LexicalStats("Vino D.ª Perfecta con el n.º 5", freq_dict)
     assert raised.p_abbreviations == pytest.approx(2 / 6)
+    # An address or a file name is no abbreviation
+    web = LexicalStats("Visite www.rae.es o escriba a juan.perez@gmail.com", freq_dict)
+    assert web.p_abbreviations == 0
 
 
 def test_numbers_are_no_words(freq_dict):

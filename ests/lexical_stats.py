@@ -13,7 +13,7 @@ from anyts.lexical_stats import LexicalWord
 from anyts.utils import has_words, is_number
 
 from .cohesion_stats import _token_info
-from .constants import LEXICAL_STATS_DESC
+from .constants import ABBREVIATION_ENDINGS, LEXICAL_STATS_DESC
 from .datasets.freq_dict import FreqDict, lemma_key
 from .exceptions import SourceError, SourceTypeError
 from .extractors import NUMBER_PATTERN
@@ -99,8 +99,8 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         p_beyond_top10000 (float): Share of words with a lemma beyond the top 10000
         lexical_density (float): Share of content words
         p_proper_nouns (float): Share of proper nouns
-        p_abbreviations (float): Share of abbreviations - the words that keep a
-            period: Sr., D.ª, n.º, the initials
+        p_abbreviations (float): Share of abbreviations - the words that end with a
+            period or a period and a raised letter: Sr., D.ª, n.º, the initials
 
     Methods:
         band_coverage: Shares of the words or of the lemmas by frequency bands
@@ -152,7 +152,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
             digit, without the numbers of NUMBER_PATTERN; the lemma of lemma_key by the
             part of speech of the word, a proper noun in lower case, the content
             words of token_info, the proper nouns by PROPN, and as abbreviations the
-            words that keep a period (Sr., D.ª, n.º, the initial J.)
+            words with an ending of ABBREVIATION_ENDINGS (Sr., D.ª, n.º, the initial J.)
 
         Arguments:
             source (str|Doc|Document): Data source
@@ -178,7 +178,7 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
                 lemma_key(_without_period(word.form), word.upos == "PROPN", word.upos or ""),
                 _token_info(word).content,
                 word.upos == "PROPN",
-                "." in word.form,
+                word.form.endswith(ABBREVIATION_ENDINGS),
             )
             for word in words
         ]
