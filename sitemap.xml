@@ -15,6 +15,13 @@
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/authors/"/>
     </url>
     <url>
+        <loc>https://sergeyshk.github.io/esTS/cli/</loc>
+        <lastmod>2026-11-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/cli/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/cli/"/>
+    </url>
+    <url>
         <loc>https://sergeyshk.github.io/esTS/components/</loc>
         <lastmod>2026-11-26</lastmod>
         <changefreq>daily</changefreq>
@@ -279,6 +286,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/authors/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/authors/"/>
+    </url>
+    <url>
+        <loc>https://sergeyshk.github.io/esTS/es/cli/</loc>
+        <lastmod>2026-11-26</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://sergeyshk.github.io/esTS/es/cli/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sergeyshk.github.io/esTS/cli/"/>
     </url>
     <url>
         <loc>https://sergeyshk.github.io/esTS/es/components/</loc>
