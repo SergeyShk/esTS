@@ -56,7 +56,7 @@ La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/a
 
 Los parámetros y el corpus objetivo los comprueba `check_keyness_params`; un `n` mayor que 1 con frecuencias o con una `FrequencyReference` lanza `ParameterError`. Una referencia que no es una lista de cadenas, una lista de tales listas, un contador ni una `FrequencyReference` lanza `SourceTypeError`, y también un corpus en el que la mayoría de las palabras, o de las palabras de uno de sus textos, contienen un espacio: tales palabras son textos, como las oraciones de un texto con una oración de una sola palabra entre ellas, no sus palabras, mientras que una locución de varias palabras entre ellas pasa. Una frecuencia negativa, `nan` o infinita de un contador y un corpus sin palabras, o de menos de `n` palabras, lanzan `SourceError`.
 
-`reference` también puede ser `FreqDict`, frente al cual `target` son formas. Un diccionario de frecuencias que no está descargado lanza `DatasetNotFoundError`. `keyness` comprueba sus parámetros y el corpus objetivo con `check_keyness_params` antes de leer `FreqDict`, así que un argumento erróneo falla antes de cargar el diccionario; el diccionario guarda palabras, así que un `n` mayor que 1 con él también lanza `ParameterError` antes de leerlo.
+`target` también puede ser un texto, que se divide en las palabras de `WordsExtractor`. `reference` también puede ser `FreqDict`, frente al cual `target` son formas. Un diccionario de frecuencias que no está descargado lanza `DatasetNotFoundError`. `keyness` comprueba sus parámetros y el corpus objetivo con `check_keyness_params` antes de leer `FreqDict`, así que un argumento erróneo falla antes de cargar el diccionario; el diccionario guarda palabras, así que un `n` mayor que 1 con él también lanza `ParameterError` antes de leerlo.
 
 <!-- core: corpus/keyness.md:check_keyness_params f41ebfd -->
 ``` {.python .signature}
@@ -98,7 +98,7 @@ El diccionario de frecuencias `FreqDict` de Google Books Ngram pasado como `refe
 
 El corpus objetivo tiene que contarse como se contó el diccionario: formas en su caja con las palabras vacías, no lemas: `lemma_key` no es idempotente (`estado` - `estar`), así que `WordsExtractor(use_lexemes=True)` no sirve, y un nombre en minúsculas puede leerse en contexto como otra palabra (`carolina` - `carolino`). El diccionario describe el registro de los libros, así que las palabras clave negativas de un texto son las de la prosa académica (`de`, `social`, `país`).
 
-Frente al diccionario el texto de una comedia de Lope de Vega del [corpus de literatura](../datasets/spanishliterature.md) dan sus personajes:
+Frente al diccionario el texto de una comedia de Lope de Vega del [corpus de literatura](../datasets/spanishliterature.md) da sus personajes:
 
 === "Código"
 

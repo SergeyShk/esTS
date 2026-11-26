@@ -69,7 +69,7 @@ En español las palabras sin sílabas son los números, las abreviaturas sin voc
 | :-------- | :--- | :---------- |
 | `bs` | `BasicStats` | Estadísticas básicas del texto |
 
-Las estadísticas básicas ya calculadas pueden tomarse de un objeto [`ReadabilityStats`](readability_stats.md), para no calcularlas otra vez:
+Las estadísticas básicas ya calculadas pueden tomarse de un objeto [`ReadabilityStats`](readability_stats.md), para no calcularlas otra vez. Dejan fuera los números, como `ReadabilityStats`, así que en un texto con números las fórmulas son las de `UnadaptedReadabilityStats(text, filter_nums=True)`, no las de `UnadaptedReadabilityStats(text)`:
 
 === "Código"
 

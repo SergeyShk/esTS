@@ -39,7 +39,7 @@ The function wraps `keyness` of the [anyTS](https://sergeyshk.github.io/anyTS/co
 
 --8<-- "corpus/keyness.md:keyness-parameters"
 
-`reference` may also be `FreqDict`, against which `target` is word forms. A frequency dictionary that is not downloaded raises `DatasetNotFoundError`. `keyness` checks its parameters and the target with `check_keyness_params` before it reads `FreqDict`, so a wrong argument fails before the dictionary is loaded; the dictionary holds words, so `n` above 1 with it raises `ParameterError` before it is read too.
+`target` may also be a text, split into the words of `WordsExtractor`. `reference` may also be `FreqDict`, against which `target` is word forms. A frequency dictionary that is not downloaded raises `DatasetNotFoundError`. `keyness` checks its parameters and the target with `check_keyness_params` before it reads `FreqDict`, so a wrong argument fails before the dictionary is loaded; the dictionary holds words, so `n` above 1 with it raises `ParameterError` before it is read too.
 
 --8<-- "corpus/keyness.md:check_keyness_params"
 
@@ -60,7 +60,7 @@ The frequency dictionary `FreqDict` of Google Books Ngram passed as `reference` 
 
 The target has to be counted the way the dictionary was: word forms in their case with the stop words kept, not lemmas: `lemma_key` is not idempotent (`estado` - `estar`), so `WordsExtractor(use_lexemes=True)` does not fit, and a name in lower case may be read as another word in context (`carolina` - `carolino`). The dictionary describes the register of the books, so the negative keywords of a text are the words of scholarly prose (`de`, `social`, `país`).
 
-Against the dictionary the text of a play of Lope de Vega from the [corpus of literature](../datasets/spanishliterature.md) give its characters:
+Against the dictionary the text of a play of Lope de Vega from the [corpus of literature](../datasets/spanishliterature.md) gives its characters:
 
 === "Code"
 

@@ -54,7 +54,7 @@ In Spanish the words without syllables are the numbers, the abbreviations withou
 
 --8<-- "stats/unadapted_readability_stats.md:UnadaptedReadabilityStats-attributes"
 
-Ready basic statistics can be taken from a [`ReadabilityStats`](readability_stats.md) object, so as not to compute them again:
+Ready basic statistics can be taken from a [`ReadabilityStats`](readability_stats.md) object, so as not to compute them again. They leave the numbers out, as `ReadabilityStats` does, so on a text with numbers the formulas are those of `UnadaptedReadabilityStats(text, filter_nums=True)`, not of `UnadaptedReadabilityStats(text)`:
 
 === "Code"
 

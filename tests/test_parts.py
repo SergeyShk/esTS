@@ -1,10 +1,11 @@
 """Statistics by the parts of a document (by_parts of the core)"""
 
 import pytest
+import spacy
 from anyts.document import document_part
 
 import ests
-from ests.exceptions import ParameterError, SourceTypeError
+from ests.exceptions import ParameterError, SourceError, SourceTypeError
 from ests.style_stats import _doc_nouns
 from ests.utils import _annotate_text, get_nlp
 
@@ -96,9 +97,11 @@ def test_style_parts_analyzed_as_whole():
 
 @pytest.mark.parametrize("cls", [ests.SyntaxStats, ests.CohesionStats], ids=lambda c: c.__name__)
 def test_by_parts_with_a_pipeline(cls):
-    """The parts of a string are parsed by the pipeline passed in nlp"""
-    nlp = get_nlp()
-    assert cls.by_parts(TEXT, "paragraphs", nlp=nlp).equals(cls.by_parts(TEXT, "paragraphs"))
+    """The parts of a string are parsed by the pipeline passed in nlp: a blank one has no
+    annotation"""
+    assert cls.by_parts(TEXT, "paragraphs", nlp=get_nlp()).equals(cls.by_parts(TEXT, "paragraphs"))
+    with pytest.raises(SourceError):
+        cls.by_parts(TEXT, "paragraphs", nlp=spacy.blank("es"))
     with pytest.raises(SourceTypeError):
         cls.by_parts(TEXT, "paragraphs", nlp="es_core_news_sm")
 
