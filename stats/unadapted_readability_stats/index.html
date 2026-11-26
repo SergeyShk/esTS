@@ -2400,7 +2400,7 @@ Wheeler-Smith index          |  120.00
 </tr>
 </tbody>
 </table>
-<p>Ready basic statistics can be taken from a <a href="../readability_stats/"><code>ReadabilityStats</code></a> object, so as not to compute them again:</p>
+<p>Ready basic statistics can be taken from a <a href="../readability_stats/"><code>ReadabilityStats</code></a> object, so as not to compute them again. They leave the numbers out, as <code>ReadabilityStats</code> does, so on a text with numbers the formulas are those of <code>UnadaptedReadabilityStats(text, filter_nums=True)</code>, not of <code>UnadaptedReadabilityStats(text)</code>:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Code</label><label for="__tabbed_2_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2966,7 +2966,7 @@ r = \frac{\textrm{Easy words} + 3 \times \textrm{Hard words}}{\textrm{Sentences}
 <p>A count that is not an integer or is negative raises <code>ParameterError</code>.</p>
 </div>
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">&para;</a></h2>
-<p>The methods <code>get_stats</code>, <code>to_dataframe</code>, <code>print_stats</code> and <code>describe</code> are those of the <a href="https://sergeyshk.github.io/anyTS/stats/stats/">statistics interface</a> of the anyTS core; the formulas have no scales, and <code>describe</code> gives <code>None</code> for any of them.</p>
+<p>The methods <code>get_stats</code>, <code>to_dataframe</code>, <a href="../basic_stats/#by_parts"><code>by_parts</code></a>, <code>print_stats</code> and <code>describe</code> are those of the <a href="https://sergeyshk.github.io/anyTS/stats/stats/">statistics interface</a> of the anyTS core; the formulas have no scales, and <code>describe</code> gives <code>None</code> for any of them.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Code</label><label for="__tabbed_4_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

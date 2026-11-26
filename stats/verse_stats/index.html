@@ -2887,7 +2887,7 @@ que a mayór mál pudiéra habér llegádo.
 </div>
 </div>
 </div>
-<p>The methods <code>get_stats</code>, <code>to_dataframe</code>, <code>print_stats</code> and <code>describe</code> are those of the <a href="https://sergeyshk.github.io/anyTS/stats/stats/">statistics interface</a> of the anyTS core: <code>get_stats()</code> returns the metrics as a dictionary, and <code>print_stats()</code> prints them as a table with their descriptions (<code>VERSE_STATS_DESC</code>), as in the example at the top of the page. The verse statistics have no scales, so <code>describe</code> gives <code>None</code> for the statistics of <code>get_stats</code>.</p>
+<p>The methods <code>get_stats</code>, <code>to_dataframe</code>, <a href="../basic_stats/#by_parts"><code>by_parts</code></a> (by stanzas only - the blocks between blank lines), <code>print_stats</code> and <code>describe</code> are those of the <a href="https://sergeyshk.github.io/anyTS/stats/stats/">statistics interface</a> of the anyTS core: <code>get_stats()</code> returns the metrics as a dictionary, and <code>print_stats()</code> prints them as a table with their descriptions (<code>VERSE_STATS_DESC</code>), as in the example at the top of the page. The verse statistics have no scales, so <code>describe</code> gives <code>None</code> for the statistics of <code>get_stats</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Code</label><label for="__tabbed_10_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

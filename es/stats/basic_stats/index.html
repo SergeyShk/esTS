@@ -1003,6 +1003,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#by_parts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partes de un texto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#count_punctuations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2027,6 +2038,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#by_parts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partes de un texto
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#count_punctuations" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2170,7 +2192,7 @@ Entropy of the word lengths in syllables (bits) |   1.72
 </tbody>
 </table>
 <p>El objeto guarda <code>normalize</code>, <code>complex_syl_factor</code>, <code>long_word_letter_factor</code> y <code>filter_nums</code> con sus nombres, y los números que dejó fuera, en <code>n_numbers</code>.</p>
-<p>En esTS los umbrales son los del núcleo y de las fórmulas de legibilidad: una palabra compleja tiene tres o más sílabas, como en SMOG, y una palabra larga siete o más letras, como en LIX y RIX (<code>COMPLEX_SYL_FACTOR = 3</code> y <code>LONG_WORD_LETTER_FACTOR = 7</code> de <code>anyts.constants</code>).</p>
+<p>En esTS un número es uno de <code>NUMBER_PATTERN</code> de los extractores, incluidos los ordinales españoles (<code>3.º</code>, <code>2.ª</code>). Los umbrales son los del núcleo y de las fórmulas de legibilidad: una palabra compleja tiene tres o más sílabas, como en SMOG, y una palabra larga siete o más letras, como en LIX y RIX (<code>COMPLEX_SYL_FACTOR = 3</code> y <code>LONG_WORD_LETTER_FACTOR = 7</code> de <code>anyts.constants</code>).</p>
 <h2 id="estadisticas">Estadísticas<a class="headerlink" href="#estadisticas" title="Permanent link">&para;</a></h2>
 <!-- core: stats/basic_stats.md:BasicStats-attributes ba0510d -->
 <table>
@@ -2303,8 +2325,8 @@ Entropy of the word lengths in syllables (bits) |   1.72
 <!-- core: stats/basic_stats.md:BasicStats-print_stats 129bbf6 -->
 <p><code>print_stats()</code> muestra una tabla con las estadísticas de <code>stats_desc</code>, sus descripciones y los encabezados de <code>stats_headers</code>.</p>
 <p>Las estadísticas normalizadas <code>p_*</code> no están en la tabla.</p>
-<!-- core: stats/stats.md:Stats-to_dataframe fb70c9b -->
-<p><code>to_dataframe()</code> devuelve las estadísticas planas, <code>get_stats(flat=True)</code>, como un <code>DataFrame</code> de <a href="https://pandas.pydata.org/">pandas</a> de una fila con una columna por cada clave. Una estadística de diccionario da columnas solo para las claves que tiene el texto, así que en los marcos de varios textos unidos con <code>pandas.concat</code> un recuento que le falta a un texto es <code>NaN</code>. Solo estas columnas pueden rellenarse con 0: en las demás <code>NaN</code> es un valor no definido.</p>
+<!-- core: stats/stats.md:Stats-to_dataframe 735e73d -->
+<p><code>to_dataframe()</code> devuelve las estadísticas planas, <code>get_stats(flat=True)</code>, como un <code>DataFrame</code> de <a href="https://pandas.pydata.org/">pandas</a> de una fila con una columna por cada clave. Una estadística de diccionario da columnas solo para las claves que tiene el texto; la tabla de varios textos, con 0 para un recuento que le falta a un texto, es la de <a href="https://sergeyshk.github.io/anyTS/stats/stats/#stats_dataframe"><code>stats_dataframe</code></a>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Código</label><label for="__tabbed_2_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2357,7 +2379,35 @@ Entropy of the word lengths in syllables (bits) |   1.72
 </div>
 </div>
 </div>
-<p>El método <code>describe</code> es el de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de estadísticas</a> del núcleo anyTS; las estadísticas básicas no tienen escalas, así que da <code>None</code> para las estadísticas de <code>get_stats</code>.</p>
+<p>Los métodos <a href="#by_parts"><code>by_parts</code></a> y <code>describe</code> son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de estadísticas</a> del núcleo anyTS; las estadísticas básicas no tienen escalas, así que <code>describe</code> da <code>None</code> para las estadísticas de <code>get_stats</code>.</p>
+<h2 id="by_parts">Partes de un texto<a class="headerlink" href="#by_parts" title="Permanent link">&para;</a></h2>
+<!-- core: stats/stats.md:Stats-by_parts 6309e97 -->
+<p><code>by_parts(source, parts=None, **params)</code>, un método de clase, devuelve las estadísticas de cada oración (<code>parts="sentences"</code>), línea (<code>"lines"</code>) o párrafo (<code>"paragraphs"</code>) de una fuente de datos, por defecto del primero de los <code>part_kinds</code> de la clase, como un <code>DataFrame</code>: una fila por parte, indexada por su número, con su inicio <code>start</code> y su fin <code>end</code> en el texto y sus estadísticas planas, unidas por <code>stats_dataframe</code>. Una línea son las oraciones entre saltos de línea y un párrafo las que hay entre líneas en blanco, así que un texto con un párrafo en cada línea tiene un solo párrafo; una oración que pasa de un salto de línea, como en un verso, se queda en una sola línea. La fuente se analiza una vez, y la clase con los parámetros <code>params</code> cuenta cada parte. Una parte sin palabras, como una línea de asteriscos, o una que la clase no puede contar conserva su fila sin estadísticas; una fuente sin ninguna parte que la clase pueda contar lanza el error de la clase. Los números de palabras y de oraciones de las partes suman los del texto entero, mientras que las palabras únicas, las proporciones y las medias son las de cada parte, y una estadística que compara las oraciones de un texto no está definida en una parte de una sola oración.</p>
+<p>Las partes de una clase son sus <code>part_kinds</code>: <code>CohesionStats</code>, cuyos enlaces van entre oraciones, cuenta líneas, sus párrafos por defecto, y párrafos, y <code>DiversityStats</code>, que recibe palabras, ninguna parte. Otras partes y una clase sin partes lanzan <code>ParameterError</code>; la fuente y una parte lanzan los errores de la clase.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">BasicStats</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="s2">"El gato duerme en la ventana. Un perro ladra fuerte en el patio.</span><span class="se">\n\n</span><span class="s2">Un pájaro canta."</span>
+<span class="n">BasicStats</span><span class="o">.</span><span class="n">by_parts</span><span class="p">(</span><span class="n">text</span><span class="p">)[[</span><span class="s2">"start"</span><span class="p">,</span> <span class="s2">"end"</span><span class="p">,</span> <span class="s2">"n_words"</span><span class="p">,</span> <span class="s2">"n_syllables"</span><span class="p">]]</span>
+<span class="n">BasicStats</span><span class="o">.</span><span class="n">by_parts</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s2">"paragraphs"</span><span class="p">)[[</span><span class="s2">"start"</span><span class="p">,</span> <span class="s2">"end"</span><span class="p">,</span> <span class="s2">"n_sents"</span><span class="p">,</span> <span class="s2">"n_words"</span><span class="p">]]</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>          start  end  n_words  n_syllables
+sentence
+0             0   29        6           10
+1            30   64        7           11
+2            66   82        3            6
+           start  end  n_sents  n_words
+paragraph
+0              0   64        2       13
+1             66   82        1        3
+</code></pre></div>
+</div>
+</div>
+</div>
 <h2 id="count_punctuations">Signos de puntuación<a class="headerlink" href="#count_punctuations" title="Permanent link">&para;</a></h2>
 <!-- core: stats/basic_stats.md:count_punctuations b982de2 -->
 <div class="signature highlight"><pre><span></span><code><span class="n">count_punctuations</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">marks</span><span class="o">=</span><span class="n">PUNCTUATION_MARKS</span><span class="p">,</span> <span class="n">dash_pattern</span><span class="o">=</span><span class="n">DASH_PATTERN</span><span class="p">)</span>
@@ -2395,7 +2445,7 @@ Entropy of the word lengths in syllables (bits) |   1.72
 </table>
 <p>Un signo de <code>marks</code> que no es un solo carácter o tiene un tipo desconocido lanza <code>ParameterError</code>; un texto que no es una cadena, unos <code>marks</code> que no son un mapeo y un <code>dash_pattern</code> que no es una expresión regular compilada lanzan <code>SourceTypeError</code>.</p>
 <p>esTS cuenta con los signos y el patrón de rayas del núcleo, <code>PUNCTUATION_MARKS</code> y <code>DASH_PATTERN</code> de <code>anyts.basic_stats</code>, que siguen la ortografía española: los signos de apertura <code>¿</code> y <code>¡</code> son de interrogación y de exclamación (<code>¿Qué?</code> lleva dos signos de interrogación), <code>—</code>, <code>–</code> y la barra horizontal <code>―</code> son rayas, y también la raya escrita con guiones - una serie de dos o más guiones, un guion tras espacio, al principio de línea o tras un signo de cierre, ante un espacio o entre una letra y un signo de apertura o de cierre (<code>--Hola --dijo Juan</code>, <code>- Se fueron - dijo</code>, <code>cuatro.-¿Cinco?</code>); un guion dentro de una palabra, ante una cifra o al final de línea dentro de una palabra es un guion (<code>teórico-práctico</code>, <code>-5</code>), <code>«»</code> son comillas latinas y <code>"“”‘’</code> las comillas de los tres niveles de la ortografía. Los signos combinantes y los caracteres invisibles de formato (Unicode M y Cf) se descartan de las palabras, pero no se cuentan como signos.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Código</label><label for="__tabbed_3_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.basic_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">count_punctuations</span>
@@ -2451,7 +2501,7 @@ Entropy of the word lengths in syllables (bits) |   1.72
 <li><code>ParameterError</code> - un número de palabras que no es un entero no negativo.</li>
 </ul>
 <p>El perfil depende del formato del texto (comillas y rayas tipográficas, signos de apertura), así que conviene leerlo aparte de los rasgos lingüísticos.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Código</label><label for="__tabbed_5_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.basic_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">punctuation_profile</span>

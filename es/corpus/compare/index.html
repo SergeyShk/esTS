@@ -2242,7 +2242,7 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.675 
 <h2 id="text_features">Rasgos<a class="headerlink" href="#text_features" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">text_features</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>Devuelve 166 rasgos de un texto con un prefijo según su fuente, 211 con un pipeline que tiene analizador sintáctico; un rasgo indefinido es <code>nan</code>.</p>
+<p>Devuelve 164 rasgos de un texto con un prefijo según su fuente, 209 con un pipeline que tiene analizador sintáctico; un rasgo indefinido es <code>nan</code>.</p>
 <table>
 <thead>
 <tr>
@@ -2259,12 +2259,12 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.675 
 </tr>
 <tr>
 <td style="text-align: left;"><code>readability_</code></td>
-<td style="text-align: left;">todas las fórmulas de legibilidad y el grado de consenso</td>
+<td style="text-align: left;">todas las fórmulas de legibilidad y el grado de consenso, sin los números entre las palabras (<code>filter_nums</code>)</td>
 <td style="text-align: left;"><a href="../../stats/readability_stats/"><code>ReadabilityStats</code></a></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>diversity_</code></td>
-<td style="text-align: left;">todas las medidas de diversidad léxica salvo la Z de Orlov, inestable en una ventana</td>
+<td style="text-align: left;">todas las medidas de diversidad léxica salvo las inestables en una ventana de mil palabras, <code>WINDOW_UNSTABLE_DIVERSITY</code>: la Z de Orlov, y MA-MTLD y MTLD-W, que promedian pocos factores completos</td>
 <td style="text-align: left;"><a href="../../stats/diversity_stats/"><code>DiversityStats</code></a></td>
 </tr>
 <tr>

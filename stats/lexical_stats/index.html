@@ -2149,7 +2149,7 @@
 <h1 id="lexical-sophistication-statistics">Lexical sophistication statistics<a class="headerlink" href="#lexical-sophistication-statistics" title="Permanent link">&para;</a></h1>
 <div class="signature highlight"><pre><span></span><code><span class="n">LexicalStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">freq_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>Lexical sophistication in the manner of TAALES (Kyle, Crossley and Berger, 2018) - how rare the words of a text are: statistics by a frequency dictionary and its unigram model, the shares of the frequency bands of a list of the most frequent lemmas and the lexical density. The statistics by the dictionary are computed when first read, so the bands and the lexical density need no dictionary data. The data source is a text, a <code>Doc</code> object of <a href="https://github.com/explosion/spaCy">spaCy</a> or a <code>Document</code> of <a href="https://github.com/SergeyShk/anySeg">anySeg</a>, read through its <a href="https://sergeyshk.github.io/anyTS/document/">document</a>: by default its words of Universal Dependencies without numbers, with their lemmas and parts of speech.</p>
+<p>Lexical sophistication in the manner of TAALES (Kyle, Crossley and Berger, 2018) - how rare the words of a text are: statistics by a frequency dictionary and its unigram model, the shares of the frequency bands of a list of the most frequent lemmas, the lexical density and the shares of the proper nouns and of the abbreviations. The statistics by the dictionary are computed when first read, so the bands and the shares need no dictionary data. The data source is a text, a <code>Doc</code> object of <a href="https://github.com/explosion/spaCy">spaCy</a> or a <code>Document</code> of <a href="https://github.com/SergeyShk/anySeg">anySeg</a>, read through its <a href="https://sergeyshk.github.io/anyTS/document/">document</a>: by default its words of Universal Dependencies without numbers, with their lemmas, parts of speech and features.</p>
 <p>Raises:</p>
 <ul>
 <li><code>SourceTypeError</code> - a source that is neither a string, a <code>Doc</code> nor a <code>Document</code>, a <code>parse</code> that returns no <code>Document</code>, a dictionary of another class than that of the library or, without <code>freq_dict_class</code>, one without <code>lookup</code> and <code>ipm</code> or none at all; an <code>analyze</code> that does not give <code>LexicalWord</code> objects;</li>
@@ -2346,8 +2346,21 @@ Lexical density                                  |   0.45
 <td style="text-align: left;">0-1</td>
 <td style="text-align: left;">More content words</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>p_proper_nouns</code></td>
+<td style="text-align: left;">Share of the proper nouns</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">More names of persons, places and organizations</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>p_abbreviations</code></td>
+<td style="text-align: left;">Share of the abbreviations</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">More abbreviations, as in official and scientific texts</td>
+</tr>
 </tbody>
 </table>
+<p>esTS does not count <code>p_proper_nouns</code> and <code>p_abbreviations</code> yet: esMorph marks no abbreviation and tags titles such as <code>Sr.</code> and <code>Dra.</code> as proper nouns, so <code>get_stats</code> leaves them out.</p>
 <p>The metrics rely on two resources; always read the means by the dictionary next to <code>coverage</code>.</p>
 <table>
 <thead>
@@ -2518,7 +2531,7 @@ Lexical density                                  |   0.45
 </div>
 </div>
 </div>
-<p>The other methods - <code>get_stats</code>, <code>to_dataframe</code>, <code>print_stats</code> and <code>describe</code> - are those of the <a href="https://sergeyshk.github.io/anyTS/stats/stats/">statistics interface</a> of the anyTS core; the lexical sophistication statistics have no scales, so <code>describe</code> gives <code>None</code> for the statistics of <code>get_stats</code>.</p>
+<p>The other methods - <code>get_stats</code>, <code>to_dataframe</code>, <a href="../basic_stats/#by_parts"><code>by_parts</code></a>, <code>print_stats</code> and <code>describe</code> - are those of the <a href="https://sergeyshk.github.io/anyTS/stats/stats/">statistics interface</a> of the anyTS core; the lexical sophistication statistics have no scales, so <code>describe</code> gives <code>None</code> for the statistics of <code>get_stats</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Code</label><label for="__tabbed_7_2">Result</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

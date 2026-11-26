@@ -2357,7 +2357,7 @@
 
 
 <h1 id="readability-metrics">Readability metrics<a class="headerlink" href="#readability-metrics" title="Permanent link">&para;</a></h1>
-<div class="signature highlight"><pre><span></span><code><span class="n">ReadabilityStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">preset</span><span class="o">=</span><span class="s1">'general'</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">ReadabilityStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">preset</span><span class="o">=</span><span class="s1">'general'</span><span class="p">,</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>The <a href="https://en.wikipedia.org/wiki/Readability">readability</a> metrics of a text from its basic statistics: the mean sentence length in words, the mean word length in syllables or letters, the share of polysyllabic and of long words and the variability of word length. The data source is a text, a <code>Doc</code> object of <a href="https://github.com/explosion/spaCy">spaCy</a>, a <code>Document</code> of <a href="https://github.com/SergeyShk/anySeg">anySeg</a> or ready basic statistics, which are reused as they are; the extractors are passed on to the basic statistics of the other sources. The formulas count only the letters of the counted words, so a word extractor that drops words does not lengthen the mean word.</p>
 <p>The metrics are properties computed on each access, so a change of the <code>coefficients</code> of an object applies at once.</p>
@@ -2430,9 +2430,15 @@ Reading time (min)                    |   0.04
 <td style="text-align: left;"><code>'general'</code></td>
 <td style="text-align: left;">Coefficient preset: <code>general</code> or <code>classic</code></td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>filter_nums</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Leave out the numbers among the words; <code>None</code> - the class attribute <code>filter_nums</code>, <code>True</code> in esTS, for ready <code>BasicStats</code> - as in them; a value that differs from theirs raises <code>ParameterError</code></td>
+</tr>
 </tbody>
 </table>
-<p>The object keeps the basic statistics of the text in <code>bs</code>, the name of the preset in <code>preset</code>, read-only, and the coefficients of the preset by formula in <code>coefficients</code>, a copy that can be changed for one object. An object of another preset can reuse the basic statistics: <code>ReadabilityStats(rs.bs, preset="classic")</code>.</p>
+<p>The object keeps the basic statistics of the text in <code>bs</code>, the name of the preset in <code>preset</code>, read-only, and the coefficients of the preset by formula in <code>coefficients</code>, a copy that can be changed for one object. An object of another preset can reuse the basic statistics: <code>ReadabilityStats(rs.bs, preset="classic")</code>. A ready <code>BasicStats(text)</code> counts the numbers as words; the formulas of <code>ReadabilityStats(text)</code> come from <code>BasicStats(text, filter_nums=True)</code>, as a number has no syllables.</p>
 <h2 id="presets">Coefficient presets<a class="headerlink" href="#presets" title="Permanent link">&para;</a></h2>
 <p>A preset sets the coefficients <code>a</code>, <code>b</code>, <code>c</code> of the Flesch reading ease <code>c − a·ASL − b·ASW</code>, where ASL is the mean number of words per sentence and ASW the mean number of syllables per word, and the scale by which <code>describe_level</code>, <code>describe</code> and the consensus grade read it. The other formulas do not depend on the preset.</p>
 <table>
@@ -3497,7 +3503,7 @@ a \cdot \sqrt{b \cdot \frac{\textrm{Number of polysyllabic words}}{\textrm{Numbe
 </div>
 </div>
 </div>
-<p>The <code>to_dataframe</code> method is that of the <a href="https://sergeyshk.github.io/anyTS/stats/stats/">statistics interface</a> of the anyTS core.</p>
+<p>The methods <code>to_dataframe</code> and <a href="../basic_stats/#by_parts"><code>by_parts</code></a> are those of the <a href="https://sergeyshk.github.io/anyTS/stats/stats/">statistics interface</a> of the anyTS core.</p>
 <h2 id="scales">Scales<a class="headerlink" href="#scales" title="Permanent link">&para;</a></h2>
 <p>The <code>describe_level</code> method reads the reading ease, Legibilidad µ and LIX by the scales of bands of their cards, and <code>describe</code> reads any metric: these three by the same scales, the grade formulas, the consensus grade and RIX by the school stages of <a href="#grade_to_age"><code>grade_to_age</code></a>; for a metric without a scale it gives <code>None</code>.</p>
 <h3 id="grade_to_age">School stage and age<a class="headerlink" href="#grade_to_age" title="Permanent link">&para;</a></h3>

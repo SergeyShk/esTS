@@ -2403,7 +2403,7 @@ Wheeler-Smith index          |  120.00
 </tr>
 </tbody>
 </table>
-<p>Las estadísticas básicas ya calculadas pueden tomarse de un objeto <a href="../readability_stats/"><code>ReadabilityStats</code></a>, para no calcularlas otra vez:</p>
+<p>Las estadísticas básicas ya calculadas pueden tomarse de un objeto <a href="../readability_stats/"><code>ReadabilityStats</code></a>, para no calcularlas otra vez. Dejan fuera los números, como <code>ReadabilityStats</code>, así que en un texto con números las fórmulas son las de <code>UnadaptedReadabilityStats(text, filter_nums=True)</code>, no las de <code>UnadaptedReadabilityStats(text)</code>:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Código</label><label for="__tabbed_2_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2981,7 +2981,7 @@ r = \frac{\textrm{Palabras fáciles} + 3 \times \textrm{Palabras difíciles}}{\t
 <p>Un recuento que no es un entero no negativo lanza <code>ParameterError</code>.</p>
 </div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
-<p>Los métodos <code>get_stats</code>, <code>to_dataframe</code>, <code>print_stats</code> y <code>describe</code> son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de estadísticas</a> del núcleo anyTS; las fórmulas no tienen escalas, y <code>describe</code> da <code>None</code> para cualquiera de ellas.</p>
+<p>Los métodos <code>get_stats</code>, <code>to_dataframe</code>, <a href="../basic_stats/#by_parts"><code>by_parts</code></a>, <code>print_stats</code> y <code>describe</code> son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de estadísticas</a> del núcleo anyTS; las fórmulas no tienen escalas, y <code>describe</code> da <code>None</code> para cualquiera de ellas.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Código</label><label for="__tabbed_4_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

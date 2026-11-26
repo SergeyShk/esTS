@@ -2149,8 +2149,8 @@
 <h1 id="estadisticas-de-complejidad-lexica">Estadísticas de complejidad léxica<a class="headerlink" href="#estadisticas-de-complejidad-lexica" title="Permanent link">&para;</a></h1>
 <div class="signature highlight"><pre><span></span><code><span class="n">LexicalStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">freq_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<!-- core: stats/lexical_stats.md:LexicalStats 5286466 -->
-<p>Complejidad léxica a la manera de TAALES (Kyle, Crossley y Berger, 2018) - cuán raras son las palabras de un texto: estadísticas según un diccionario de frecuencias y su modelo de unigramas, las proporciones de las bandas de frecuencia de una lista de los lemas más frecuentes y la densidad léxica. Las estadísticas según el diccionario se calculan la primera vez que se leen, así que las bandas y la densidad léxica no necesitan los datos del diccionario. La fuente de datos es un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> o un <code>Document</code> de <a href="https://github.com/SergeyShk/anySeg">anySeg</a>, que se lee a través de su <a href="https://sergeyshk.github.io/anyTS/document/">documento</a>: por defecto, sus palabras de Universal Dependencies sin los números, con sus lemas y sus categorías gramaticales.</p>
+<!-- core: stats/lexical_stats.md:LexicalStats dfdfd1b -->
+<p>Complejidad léxica a la manera de TAALES (Kyle, Crossley y Berger, 2018) - cuán raras son las palabras de un texto: estadísticas según un diccionario de frecuencias y su modelo de unigramas, las proporciones de las bandas de frecuencia de una lista de los lemas más frecuentes, la densidad léxica y las proporciones de los nombres propios y de las abreviaturas. Las estadísticas según el diccionario se calculan la primera vez que se leen, así que las bandas y las proporciones no necesitan los datos del diccionario. La fuente de datos es un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a> o un <code>Document</code> de <a href="https://github.com/SergeyShk/anySeg">anySeg</a>, que se lee a través de su <a href="https://sergeyshk.github.io/anyTS/document/">documento</a>: por defecto, sus palabras de Universal Dependencies sin los números, con sus lemas, sus categorías gramaticales y sus rasgos.</p>
 <p>Excepciones:</p>
 <ul>
 <li><code>SourceTypeError</code> - una fuente que no es ni una cadena, ni un <code>Doc</code>, ni un <code>Document</code>, un <code>parse</code> que no devuelve un <code>Document</code>, un diccionario de otra clase que la de la biblioteca o, sin <code>freq_dict_class</code>, uno sin <code>lookup</code> e <code>ipm</code> o ninguno; un <code>analyze</code> que no da objetos <code>LexicalWord</code>;</li>
@@ -2277,7 +2277,7 @@ Lexical density                                  |   0.45
 </div>
 </div>
 <h2 id="metricas">Métricas<a class="headerlink" href="#metricas" title="Permanent link">&para;</a></h2>
-<!-- core: stats/lexical_stats.md:LexicalStats-metrics aa10b9c -->
+<!-- core: stats/lexical_stats.md:LexicalStats-metrics 72e0b6e -->
 <p>Cada métrica es un atributo o una propiedad del objeto, y <code>get_stats</code> las da todas. Una media se toma sobre las palabras encontradas en el diccionario, y sin ellas es <code>nan</code>.</p>
 <table>
 <thead>
@@ -2349,8 +2349,21 @@ Lexical density                                  |   0.45
 <td style="text-align: left;">0-1</td>
 <td style="text-align: left;">Más palabras con contenido</td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>p_proper_nouns</code></td>
+<td style="text-align: left;">Proporción de los nombres propios</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">Más nombres de personas, lugares y organizaciones</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>p_abbreviations</code></td>
+<td style="text-align: left;">Proporción de las abreviaturas</td>
+<td style="text-align: left;">0-1</td>
+<td style="text-align: left;">Más abreviaturas, como en los textos oficiales y científicos</td>
+</tr>
 </tbody>
 </table>
+<p>esTS todavía no cuenta <code>p_proper_nouns</code> ni <code>p_abbreviations</code>: esMorph no marca ninguna abreviatura y etiqueta tratamientos como <code>Sr.</code> y <code>Dra.</code> como nombres propios, así que <code>get_stats</code> las deja fuera.</p>
 <p>Las métricas se apoyan en dos recursos; lea siempre las medias según el diccionario junto a <code>coverage</code>.</p>
 <table>
 <thead>
@@ -2524,7 +2537,7 @@ Lexical density                                  |   0.45
 </div>
 </div>
 </div>
-<p>Los demás métodos, <code>get_stats</code>, <code>to_dataframe</code>, <code>print_stats</code> y <code>describe</code>, son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de estadísticas</a> del núcleo anyTS; las estadísticas de complejidad léxica no tienen escalas, así que <code>describe</code> da <code>None</code> para las estadísticas de <code>get_stats</code>.</p>
+<p>Los demás métodos, <code>get_stats</code>, <code>to_dataframe</code>, <a href="../basic_stats/#by_parts"><code>by_parts</code></a>, <code>print_stats</code> y <code>describe</code>, son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de estadísticas</a> del núcleo anyTS; las estadísticas de complejidad léxica no tienen escalas, así que <code>describe</code> da <code>None</code> para las estadísticas de <code>get_stats</code>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

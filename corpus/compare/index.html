@@ -2242,7 +2242,7 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.675 
 <h2 id="text_features">Features<a class="headerlink" href="#text_features" title="Permanent link">&para;</a></h2>
 <div class="signature highlight"><pre><span></span><code><span class="n">text_features</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">nlp</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>Returns 166 features of a text prefixed by their source, 211 with a pipeline that has a parser; an undefined feature is <code>nan</code>.</p>
+<p>Returns 164 features of a text prefixed by their source, 209 with a pipeline that has a parser; an undefined feature is <code>nan</code>.</p>
 <table>
 <thead>
 <tr>
@@ -2259,12 +2259,12 @@ diversity_yule_k              103.620         112.500 -17.620   -2.660   -0.675 
 </tr>
 <tr>
 <td style="text-align: left;"><code>readability_</code></td>
-<td style="text-align: left;">every readability formula and the consensus grade</td>
+<td style="text-align: left;">every readability formula and the consensus grade, without the numbers among the words (<code>filter_nums</code>)</td>
 <td style="text-align: left;"><a href="../../stats/readability_stats/"><code>ReadabilityStats</code></a></td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>diversity_</code></td>
-<td style="text-align: left;">every measure of lexical diversity but Orlov's Z, unstable on a window</td>
+<td style="text-align: left;">every measure of lexical diversity but those unstable on a window of a thousand words, <code>WINDOW_UNSTABLE_DIVERSITY</code>: Orlov's Z, and MA-MTLD and MTLD-W, which average a few completed factors</td>
 <td style="text-align: left;"><a href="../../stats/diversity_stats/"><code>DiversityStats</code></a></td>
 </tr>
 <tr>

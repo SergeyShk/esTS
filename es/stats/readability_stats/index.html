@@ -2357,7 +2357,7 @@
 
 
 <h1 id="metricas-de-legibilidad">Métricas de legibilidad<a class="headerlink" href="#metricas-de-legibilidad" title="Permanent link">&para;</a></h1>
-<div class="signature highlight"><pre><span></span><code><span class="n">ReadabilityStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">preset</span><span class="o">=</span><span class="s1">'general'</span><span class="p">)</span>
+<div class="signature highlight"><pre><span></span><code><span class="n">ReadabilityStats</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">sents_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">words_extractor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">preset</span><span class="o">=</span><span class="s1">'general'</span><span class="p">,</span> <span class="n">filter_nums</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <!-- core: stats/readability_stats.md:ReadabilityStats 7a36eb3 -->
 <p>Las métricas de <a href="https://es.wikipedia.org/wiki/Legibilidad">legibilidad</a> de un texto a partir de sus estadísticas básicas: la longitud media de la oración en palabras, la longitud media de la palabra en sílabas o en letras, la proporción de palabras polisílabas y de palabras largas y la variabilidad de la longitud de las palabras. La fuente de datos es un texto, un objeto <code>Doc</code> de <a href="https://github.com/explosion/spaCy">spaCy</a>, un <code>Document</code> de <a href="https://github.com/SergeyShk/anySeg">anySeg</a> o unas estadísticas básicas ya calculadas, que se reutilizan tal cual; los extractores se pasan a las estadísticas básicas de las demás fuentes. Las fórmulas solo cuentan las letras de las palabras contadas, así que un extractor de palabras que descarta palabras no alarga la palabra media.</p>
@@ -2431,9 +2431,15 @@ Reading time (min)                    |   0.04
 <td style="text-align: left;"><code>'general'</code></td>
 <td style="text-align: left;">Preajuste de coeficientes: <code>general</code> o <code>classic</code></td>
 </tr>
+<tr>
+<td style="text-align: left;"><code>filter_nums</code></td>
+<td style="text-align: left;"><code>bool</code></td>
+<td style="text-align: left;"><code>None</code></td>
+<td style="text-align: left;">Dejar fuera los números entre las palabras; <code>None</code> - el atributo de clase <code>filter_nums</code>, <code>True</code> en esTS, para un <code>BasicStats</code> ya calculado - como en él; un valor distinto del suyo lanza <code>ParameterError</code></td>
+</tr>
 </tbody>
 </table>
-<p>El objeto guarda las estadísticas básicas del texto en <code>bs</code>, el nombre del preajuste en <code>preset</code>, de solo lectura, y los coeficientes del preajuste por fórmula en <code>coefficients</code>, una copia que se puede cambiar para un objeto. Un objeto de otro preajuste puede reutilizar las estadísticas básicas: <code>ReadabilityStats(rs.bs, preset="classic")</code>.</p>
+<p>El objeto guarda las estadísticas básicas del texto en <code>bs</code>, el nombre del preajuste en <code>preset</code>, de solo lectura, y los coeficientes del preajuste por fórmula en <code>coefficients</code>, una copia que se puede cambiar para un objeto. Un objeto de otro preajuste puede reutilizar las estadísticas básicas: <code>ReadabilityStats(rs.bs, preset="classic")</code>. Un <code>BasicStats(text)</code> ya calculado cuenta los números como palabras; las fórmulas de <code>ReadabilityStats(text)</code> salen de <code>BasicStats(text, filter_nums=True)</code>, porque un número no tiene sílabas.</p>
 <h2 id="presets">Preajustes de coeficientes<a class="headerlink" href="#presets" title="Permanent link">&para;</a></h2>
 <p>Un preajuste fija los coeficientes <code>a</code>, <code>b</code>, <code>c</code> de la facilidad de lectura de Flesch <code>c − a·ASL − b·ASW</code>, donde ASL es el número medio de palabras por oración y ASW el número medio de sílabas por palabra, y la escala con que la leen <code>describe_level</code>, <code>describe</code> y el grado de consenso. Las demás fórmulas no dependen del preajuste.</p>
 <table>
@@ -3512,7 +3518,7 @@ a \cdot \sqrt{b \cdot \frac{\textrm{Número de palabras polisílabas}}{\textrm{N
 </div>
 </div>
 </div>
-<p>El método <code>to_dataframe</code> es el de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de estadísticas</a> del núcleo anyTS.</p>
+<p>Los métodos <code>to_dataframe</code> y <a href="../basic_stats/#by_parts"><code>by_parts</code></a> son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de estadísticas</a> del núcleo anyTS.</p>
 <h2 id="scales">Escalas<a class="headerlink" href="#scales" title="Permanent link">&para;</a></h2>
 <p>El método <code>describe_level</code> lee la facilidad de lectura, la Legibilidad µ y LIX con las escalas de niveles de sus tarjetas, y <code>describe</code> lee cualquier métrica: estas tres con las mismas escalas, y las fórmulas de grado, el grado de consenso y RIX con las etapas escolares de <a href="#grade_to_age"><code>grade_to_age</code></a>; para una métrica sin escala da <code>None</code>.</p>
 <h3 id="grade_to_age">Etapa escolar y edad<a class="headerlink" href="#grade_to_age" title="Permanent link">&para;</a></h3>

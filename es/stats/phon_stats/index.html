@@ -1311,6 +1311,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#junctions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Junturas de palabras
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cv_entropy" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2177,6 +2188,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#junctions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Junturas de palabras
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cv_entropy" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2318,21 +2340,23 @@
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>                 Statistic                 |  Value
-------------------------------------------------------
-Share of vowels                            |   0.46
-Share of sonorant consonants               |   0.19
-Share of voiced obstruents                 |   0.10
-Share of voiceless obstruents              |   0.25
-Ratio of consonants to vowels              |   1.19
-Share of clusters of 3 consonants or more  |   0.01
-Hiatuses per word                          |   0.00
-Entropy of the CV patterns of words (bits) |   3.55
-Hardness                                   |   0.39
-Alliteration index                         |   0.87
-Assonance index                            |   0.87
-Share of open syllables                    |   0.74
-Mean length of a syllable (sounds)         |   2.19
+<div class="highlight"><pre><span></span><code>                  Statistic                       |  Value
+-----------------------------------------------------------------
+Share of vowels                                       |   0.46
+Share of sonorant consonants                          |   0.19
+Share of voiced obstruents                            |   0.10
+Share of voiceless obstruents                         |   0.25
+Ratio of consonants to vowels                         |   1.19
+Share of clusters of 3 consonants or more             |   0.01
+Hiatuses per word                                     |   0.00
+Share of junctions of words with a hiatus             |   0.27
+Share of junctions of words with 4 consonants or more |   0.00
+Entropy of the CV patterns of words (bits)            |   3.55
+Hardness                                              |   0.39
+Alliteration index                                    |   0.87
+Assonance index                                       |   0.87
+Share of open syllables                               |   0.74
+Mean length of a syllable (sounds)                    |   2.19
 </code></pre></div>
 </div>
 </div>
@@ -2562,7 +2586,7 @@ Mean length of a syllable (sounds)         |   2.19
 </div>
 </div>
 <h2 id="metricas">Métricas<a class="headerlink" href="#metricas" title="Permanent link">&para;</a></h2>
-<!-- core: stats/phon_stats.md:PhonStats-metrics 83c97d6 -->
+<!-- core: stats/phon_stats.md:PhonStats-metrics e7c1f06 -->
 <p>Cada métrica es un atributo del objeto, calculado al crearlo, y <code>get_stats</code> las da todas.</p>
 <table>
 <thead>
@@ -2615,6 +2639,18 @@ Mean length of a syllable (sounds)         |   2.19
 <td style="text-align: left;">Hiatos de <code>word_hiatus</code> por palabra</td>
 <td style="text-align: left;">0 o más, <code>nan</code> sin sonidos</td>
 <td style="text-align: left;">Más vocales seguidas</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#junctions"><code>p_junction_hiatus</code></a></td>
+<td style="text-align: left;">Proporción de las junturas de palabras con una vocal a cada lado</td>
+<td style="text-align: left;">0-1, <code>nan</code> sin junturas</td>
+<td style="text-align: left;">Más vocales que se encuentran entre las palabras</td>
+</tr>
+<tr>
+<td style="text-align: left;"><a href="#junctions"><code>p_junction_clusters</code></a></td>
+<td style="text-align: left;">Proporción de las junturas de palabras con <code>JUNCTION_CLUSTER_LEN</code> (4) consonantes o más seguidas</td>
+<td style="text-align: left;">0-1, <code>nan</code> sin junturas</td>
+<td style="text-align: left;">Más consonantes que se encuentran entre las palabras</td>
 </tr>
 <tr>
 <td style="text-align: left;"><a href="#cv_entropy"><code>cv_entropy</code></a></td>
@@ -2763,6 +2799,28 @@ Mean length of a syllable (sounds)         |   2.19
 </div>
 </div>
 <div class="metric-card">
+<h3 id="junctions">Junturas de palabras<a class="headerlink" href="#junctions" title="Permanent link">&para;</a></h3>
+<p class="metric-meta"><code>p_junction_hiatus</code> · <code>p_junction_clusters</code></p>
+<!-- core: stats/phon_stats.md:PhonStats-junctions f350508 -->
+<p>Una juntura son dos palabras de una oración sin nada más que espacios entre ellas: un signo, como una coma, un salto de línea o el final de una oración, no forma ninguna, y tampoco una palabra solo de consonantes, como una abreviatura que se lee por sus letras, salvo la de una sola consonante. Una juntura tiene un hiato cuando el último sonido de las clases de la primera palabra y el primero de la segunda son vocales, sin que la segunda sea de <code>glides</code>, y un grupo pesado cuando las consonantes del final de la primera palabra y del principio de la segunda, si las dos palabras tienen alguna, suman <code>JUNCTION_CLUSTER_LEN</code> (4) o más. Las proporciones son las de todas las junturas del texto, por los sonidos de <code>transcribe</code>; con un extractor de palabras, las junturas siguen siendo las del documento de la fuente.</p>
+<p>En esTS ninguna vocal es de <code>glides</code>, así que dos vocales que se encuentran entre palabras forman siempre un hiato (<code>la abuela</code>, <code>vio el</code>), y la <code>x</code> son dos consonantes: <code>fénix brillar</code> junta k s y b r, cuatro.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhonStats</span>
+
+<span class="n">ps</span> <span class="o">=</span> <span class="n">PhonStats</span><span class="p">(</span><span class="s2">"La abuela vio el fénix brillar en el cielo"</span><span class="p">)</span>
+<span class="n">ps</span><span class="o">.</span><span class="n">p_junction_hiatus</span><span class="p">,</span> <span class="n">ps</span><span class="o">.</span><span class="n">p_junction_clusters</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>(0.25, 0.125)
+</code></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="metric-card">
 <h3 id="cv_entropy">Entropía de los patrones CV<a class="headerlink" href="#cv_entropy" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>cv_entropy</code></p>
 <!-- core: stats/phon_stats.md:PhonStats-cv_entropy 8ca17ec -->
@@ -2804,7 +2862,7 @@ Mean length of a syllable (sounds)         |   2.19
 <ul>
 <li><code>SourceTypeError</code> - unas palabras que no son una lista de cadenas (<code>calc_cv_entropy</code>), una palabra que no es una cadena (<code>cv_pattern</code>).</li>
 </ul>
-<div class="tabbed-set tabbed-alternate" data-tabs="6:2"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><input id="__tabbed_6_2" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Código</label><label for="__tabbed_6_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.phon_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_cv_entropy</span><span class="p">,</span> <span class="n">cv_pattern</span>
@@ -2909,7 +2967,7 @@ P = 1 - \frac{\binom{N-K}{w} + K \binom{N-K}{w-1}}{\binom{N}{w}}
 </table>
 <p>Unas palabras que no son una lista de cadenas o de colecciones de cadenas y unos rasgos que no son una colección de cadenas lanzan <code>SourceTypeError</code>, y un <code>window_len</code> que no es un entero de al menos 2, <code>ParameterError</code>.</p>
 <p>Con las palabras en orden aleatorio los índices valen 1 de media: los 150 libros del <a href="../../datasets/spanishliterature/">corpus de literatura</a> con sus palabras barajadas dan de 0,98 a 1,02. En los libros tal como están escritos el índice de aliteración queda algo por debajo de 1 tanto en verso como en prosa, de 0,90 a 0,99 con una mediana de 0,95, y el de asonancia cerca de 1, de 0,99 a 1,01: en un libro entero las palabras vecinas comparten una consonante algo menos a menudo que al azar. Los 4259 <a href="../../datasets/spanishsonnets/">sonetos</a> dan medianas de 0,92 y 0,98, con gran dispersión en textos tan cortos (de 0,59 a 1,30 la aliteración). Las repeticiones de un poema son locales, y los lugares donde se agrupan los muestra la capa <code>alliteration</code> del <a href="../../visualizers/highlight/">resaltado</a>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Código</label><label for="__tabbed_7_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Código</label><label for="__tabbed_8_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.phon_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_alliteration</span><span class="p">,</span> <span class="n">calc_assonance</span>
@@ -2957,7 +3015,7 @@ P = 1 - \frac{\binom{N-K}{w} + K \binom{N-K}{w-1}}{\binom{N}{w}}
 <ul>
 <li><code>SourceTypeError</code> - una sílaba que no es una cadena.</li>
 </ul>
-<div class="tabbed-set tabbed-alternate" data-tabs="8:2"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><input id="__tabbed_8_2" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Código</label><label for="__tabbed_8_2">Resultado</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Código</label><label for="__tabbed_9_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests.phon_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_open_syllable</span>
@@ -2973,8 +3031,8 @@ P = 1 - \frac{\binom{N-K}{w} + K \binom{N-K}{w-1}}{\binom{N}{w}}
 </div>
 </div>
 <h2 id="metodos">Métodos<a class="headerlink" href="#metodos" title="Permanent link">&para;</a></h2>
-<p>Los métodos <code>get_stats</code>, <code>to_dataframe</code>, <code>print_stats</code> y <code>describe</code> son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de estadísticas</a> del núcleo anyTS; la fonoestadística no tiene escalas, así que <code>describe</code> da <code>None</code> para las estadísticas de <code>get_stats</code>.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="9:2"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><input id="__tabbed_9_2" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Código</label><label for="__tabbed_9_2">Resultado</label></div>
+<p>Los métodos <code>get_stats</code>, <code>to_dataframe</code>, <a href="../basic_stats/#by_parts"><code>by_parts</code></a>, <code>print_stats</code> y <code>describe</code> son los de la <a href="https://sergeyshk.github.io/anyTS/stats/stats/">interfaz de estadísticas</a> del núcleo anyTS; la fonoestadística no tiene escalas, así que <code>describe</code> da <code>None</code> para las estadísticas de <code>get_stats</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Código</label><label for="__tabbed_10_2">Resultado</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">ests</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhonStats</span>
@@ -2990,6 +3048,8 @@ P = 1 - \frac{\binom{N-K}{w} + K \binom{N-K}{w-1}}{\binom{N}{w}}
  'consonant_vowel_ratio': 1.8571428571428572,
  'p_heavy_clusters': 0.0,
  'p_hiatus': 0.0,
+ 'p_junction_hiatus': 0.14285714285714285,
+ 'p_junction_clusters': 0.0,
  'cv_entropy': 2.75,
  'hardness': 0.4583333333333333,
  'alliteration': 0.9333333333333333,
