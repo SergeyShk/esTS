@@ -29,9 +29,7 @@ from ests.visualizers import rhythm_plot
 ss = SpanishSonnets()
 ss.download()
 sonnet = next(
-    record["text"]
-    for record in ss.get_records(author="darío")
-    if record["title"] == "CAUPOLICÁN"
+    record["text"] for record in ss.get_records(author="darío") if record["title"] == "CAUPOLICÁN"
 )
 vs = VerseStats(sonnet)
 rhythm_plot(vs.patterns, PATTERN_STRESSED)
