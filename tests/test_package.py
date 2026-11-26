@@ -63,6 +63,7 @@ CORE_MODULES = {
     "ests.visualizers.highlight": "anyts.visualizers.highlight",
     "ests.visualizers.sentences": "anyts.visualizers.sentences",
     "ests.visualizers.stylometry": "anyts.visualizers.stylometry",
+    "ests.visualizers.verse": "anyts.visualizers.verse",
     "ests.visualizers.vocabulary": "anyts.visualizers.vocabulary",
     "ests.visualizers.word_tree": "anyts.visualizers.word_tree",
     "ests.visualizers.zipf": "anyts.visualizers.zipf",

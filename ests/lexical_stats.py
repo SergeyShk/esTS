@@ -13,7 +13,7 @@ from anyts.lexical_stats import LexicalWord
 from anyts.utils import has_words, is_number
 
 from .cohesion_stats import _token_info
-from .constants import LEXICAL_STATS_DESC
+from .constants import ABBREVIATION_ENDINGS, LEXICAL_STATS_DESC
 from .datasets.freq_dict import FreqDict, lemma_key
 from .exceptions import SourceError, SourceTypeError
 from .extractors import NUMBER_PATTERN
@@ -98,6 +98,9 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         p_top10000 (float): Share of words with a lemma of the top 10000
         p_beyond_top10000 (float): Share of words with a lemma beyond the top 10000
         lexical_density (float): Share of content words
+        p_proper_nouns (float): Share of proper nouns
+        p_abbreviations (float): Share of abbreviations - the words that end with a
+            period or a period and a raised letter: Sr., D.ª, n.º, the initials
 
     Methods:
         band_coverage: Shares of the words or of the lemmas by frequency bands
@@ -118,11 +121,6 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
     freq_dict: FreqDict
     freq_dict_class = FreqDict
     stats_desc = LEXICAL_STATS_DESC
-
-    def __init__(self, source: str | Doc | Document, freq_dict: FreqDict | None = None):
-        super().__init__(source, freq_dict)
-        # analyze can be called again on the object; the keys read the words of the source
-        self._proper = self._found_proper
 
     def parse(self, source: str | Doc | Document) -> Document:
         """
@@ -152,14 +150,16 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         Description:
             The words of the tree of the document of parse with a letter or a
             digit, without the numbers of NUMBER_PATTERN; the lemma of lemma_key by the
-            part of speech of the word, a proper noun in lower case, and the content
-            words of token_info
+            part of speech of the word, a proper noun in lower case, the content
+            words of token_info, the proper nouns by PROPN, and as abbreviations the
+            words with an ending of ABBREVIATION_ENDINGS (Sr., D.ª, n.º, the initial J.)
 
         Arguments:
             source (str|Doc|Document): Data source
 
         Returns:
-            list[LexicalWord]: Word, lemma and whether it is a content word
+            list[LexicalWord]: Word, lemma and whether it is a content word, a proper
+                noun and an abbreviation
 
         Raises:
             SourceTypeError: If the source is neither a string, a Doc nor a Document
@@ -172,14 +172,15 @@ class LexicalStats(anyts.lexical_stats.LexicalStats):
         ]
         if words and not any(word.upos for word in words):
             raise SourceError(self.messages["no_pos"])
-        self._found_proper = tuple(word.upos == "PROPN" for word in words)
         return [
             LexicalWord(
                 word.form,
-                lemma_key(_without_period(word.form), proper, word.upos or ""),
+                lemma_key(_without_period(word.form), word.upos == "PROPN", word.upos or ""),
                 _token_info(word).content,
+                word.upos == "PROPN",
+                word.form.endswith(ABBREVIATION_ENDINGS),
             )
-            for word, proper in zip(words, self._found_proper, strict=True)
+            for word in words
         ]
 
     def dictionary_keys(self) -> tuple[str, ...]:

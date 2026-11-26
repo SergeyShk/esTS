@@ -75,7 +75,7 @@ Raises:
 | `form` | `str / None` | Form of the poem: `soneto`, `romance`, the strophe of all its stanzas, `silva` ([strophes](#strophes)) |
 | `c_clausulas` | `dict[str, int]` | Distribution of the endings of the lines by type: `aguda`, `llana`, `esdrújula`, `sobresdrújula` ([endings](#clausulas)) |
 
-`stresses` indexes `syllables`, and the two agree with `patterns` up to the last stress of a simple verse; in a [compound verse](#meter) each hemistich takes its own length, so after an aguda or an esdrújula at the caesura `patterns` and `syllables` part, and `caesuras` tells where the second hemistich begins.
+`stresses` indexes `syllables`, and the two agree with `patterns` up to the last stress of a simple verse; in a [compound verse](#meter) each hemistich takes its own length, so after an aguda or an esdrújula at the caesura `patterns` and `syllables` part, and `caesuras` tells where the second hemistich begins. [`rhythm_plot`](../visualizers/verse.md) draws the patterns of the lines.
 
 === "Code"
 

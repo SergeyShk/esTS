@@ -43,6 +43,8 @@ The class extends the `LexicalStats` of the [anyTS](https://sergeyshk.github.io/
     Share of words in the top 10000                  |   1.00
     Share of words beyond the top 10000              |   0.00
     Lexical density                                  |   0.45
+    Share of proper nouns                            |   0.00
+    Share of abbreviations                           |   0.00
     ```
 
 ## Parameters
@@ -76,8 +78,6 @@ In esTS the dictionary is a `FreqDict`, and its entries are the named tuples [`E
 ## Metrics
 
 --8<-- "stats/lexical_stats.md:LexicalStats-metrics"
-
-esTS does not count `p_proper_nouns` and `p_abbreviations` yet: esMorph marks no abbreviation and tags titles such as `Sr.` and `Dra.` as proper nouns, so `get_stats` leaves them out.
 
 The metrics rely on two resources; always read the means by the dictionary next to `coverage`.
 
@@ -202,6 +202,37 @@ $$
 
 </div>
 
+<div class="metric-card" markdown>
+
+### Proper nouns and abbreviations { #proper_abbreviations }
+
+`p_proper_nouns` · `p_abbreviations`
+{ .metric-meta }
+
+The shares of the proper nouns and of the abbreviations among the words. A proper noun is a word that esMorph tags `PROPN`, or the model of a `Doc` does. An abbreviation is a word that ends with a period, or with a period and a raised letter (`ABBREVIATION_ENDINGS` of `ests.constants`). anySeg keeps the period in the abbreviations it knows (`Sr.`, `pág.`, `EE. UU.`, `D.ª`, `n.º`) and in the initials (`J.`), so an initial counts in both shares; an address or a file name (`www.rae.es`, `datos.csv`) is no abbreviation. esMorph also tags the titles as proper nouns (`Sr.`, `D.`, `Ud.`); they are about 3% of the proper nouns of the [corpus of literature](../datasets/spanishliterature.md). Two kinds of abbreviation are not counted:
+
+- initialisms and acronyms (`ONU`, `DNI`), since no sign tells them apart: the words in capitals of the corpus are the names of the characters of the plays, the titles of works and emphasis;
+- an abbreviation at the end of a sentence (`etc.`), whose period closes the sentence.
+
+On 300 fragments of the corpus, 6,000 characters each, the median share of the proper nouns is 3.2%, and only 101 fragments have an abbreviation.
+
+=== "Code"
+
+    ``` python
+    from ests import LexicalStats
+
+    ls = LexicalStats("El Sr. García y la Dra. Pérez viajaron a EE. UU. con la ONU")
+    ls.p_proper_nouns, ls.p_abbreviations
+    ```
+
+=== "Result"
+
+    ```
+    (0.5, 0.2857142857142857)
+    ```
+
+</div>
+
 ## Methods
 
 --8<-- "stats/lexical_stats.md:LexicalStats-band_coverage"
@@ -248,5 +279,7 @@ The other methods - `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_
      'p_top5000': 1.0,
      'p_top10000': 1.0,
      'p_beyond_top10000': 0.0,
-     'lexical_density': 0.45454545454545453}
+     'lexical_density': 0.45454545454545453,
+     'p_proper_nouns': 0.0,
+     'p_abbreviations': 0.0}
     ```

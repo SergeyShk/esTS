@@ -308,7 +308,7 @@ Excepciones:
 <!-- core: stats/phon_stats.md:PhonStats-junctions f350508 -->
 Una juntura son dos palabras de una oración sin nada más que espacios entre ellas: un signo, como una coma, un salto de línea o el final de una oración, no forma ninguna, y tampoco una palabra solo de consonantes, como una abreviatura que se lee por sus letras, salvo la de una sola consonante. Una juntura tiene un hiato cuando el último sonido de las clases de la primera palabra y el primero de la segunda son vocales, sin que la segunda sea de `glides`, y un grupo pesado cuando las consonantes del final de la primera palabra y del principio de la segunda, si las dos palabras tienen alguna, suman `JUNCTION_CLUSTER_LEN` (4) o más. Las proporciones son las de todas las junturas del texto, por los sonidos de `transcribe`; con un extractor de palabras, las junturas siguen siendo las del documento de la fuente.
 
-En esTS ninguna vocal es de `glides`, así que dos vocales que se encuentran entre palabras forman siempre un hiato (`la abuela`, `vio el`), y la `x` son dos consonantes: `fénix brillar` junta k s y b r, cuatro.
+En esTS ninguna vocal es de `glides`, así que dos vocales que se encuentran entre palabras forman siempre un hiato (`la abuela`, `vio el`), también con una `h` muda entre ellas (`la hora`), y la `x` son dos consonantes: `fénix brillar` junta k s y b r, cuatro. El español lee la mayoría de estas vocales como una sola sílaba, una sinalefa (`la‿a-bue-la`): en 15 005 versos de los [sonetos](../datasets/spanishsonnets.md), [`VerseStats`](verse_stats.md) une el 94% de las vocales que se encuentran entre palabras. Así que `p_junction_hiatus` es la proporción de las junturas abiertas a una sinalefa, no de los hiatos que se oyen.
 
 === "Código"
 

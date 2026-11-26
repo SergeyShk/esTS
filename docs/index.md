@@ -82,7 +82,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    How rare the words of a text are, in the manner of TAALES: frequency, range, dispersion and surprisal by a [frequency dictionary](datasets/freqdict.md) of Google Books Ngram, the frequency bands top-1000 to 10000, lexical density
+    How rare the words of a text are, in the manner of TAALES: frequency, range, dispersion and surprisal by a [frequency dictionary](datasets/freqdict.md) of Google Books Ngram, the frequency bands top-1000 to 10000, lexical density, the shares of the proper nouns and the abbreviations
 
     [:octicons-arrow-right-24: Lexical sophistication statistics](stats/lexical_stats.md)
 
@@ -130,7 +130,7 @@ Try it without installing in the [demo on Hugging Face Spaces](https://huggingfa
 
     ---
 
-    [Zipf's law](visualizers/zipf.md), [literature fingerprinting](visualizers/fingerprinting.md), [word tree](visualizers/word_tree.md), [corpus](visualizers/corpus.md) and [stylometric](visualizers/stylometry.md) plots, [vocabulary growth and frequency spectrum](visualizers/vocabulary.md), [sentence lengths](visualizers/sentences.md) and the [highlighting of a text](visualizers/highlight.md) by the fragments the statistics count
+    [Zipf's law](visualizers/zipf.md), [literature fingerprinting](visualizers/fingerprinting.md), [word tree](visualizers/word_tree.md), [corpus](visualizers/corpus.md) and [stylometric](visualizers/stylometry.md) plots, [vocabulary growth and frequency spectrum](visualizers/vocabulary.md), [sentence lengths](visualizers/sentences.md), the [rhythm of the lines](visualizers/verse.md) of a verse and the [highlighting of a text](visualizers/highlight.md) by the fragments the statistics count
 
     [:octicons-arrow-right-24: Visualizers](visualizers/zipf.md)
 
@@ -295,9 +295,10 @@ A walkthrough of one short story with every tool of the library is in the notebo
             *   highlight.py - text highlighting
             *   sentences.py - sentence lengths
             *   stylometry.py - dendrogram, principal components, scaling, distances within and between authors, rolling Delta, Zeta markers, Mendenhall curves
+            *   verse.py - rhythm of the lines
             *   vocabulary.py - vocabulary growth and frequency spectrum
             *   word_tree.py - word tree
             *   zipf.py - Zipf's law
     *   **examples** - notebooks with examples
-    *   **scripts** - scripts that build the archives of the datasets, fetch the anyTS pages of the documentation and check the outputs of the notebooks
+    *   **scripts** - scripts that build the archives of the datasets, fetch the anyTS pages of the documentation, check the outputs of the notebooks and check the scansion on sonnets annotated by hand
     *   **tests** - tests mirroring the package structure
