@@ -54,7 +54,7 @@ In Spanish the words without syllables are the numbers, the abbreviations withou
 
 --8<-- "stats/unadapted_readability_stats.md:UnadaptedReadabilityStats-attributes"
 
-Ready basic statistics can be taken from a [`ReadabilityStats`](readability_stats.md) object, so as not to compute them again:
+Ready basic statistics can be taken from a [`ReadabilityStats`](readability_stats.md) object, so as not to compute them again. They leave the numbers out, as `ReadabilityStats` does, so on a text with numbers the formulas are those of `UnadaptedReadabilityStats(text, filter_nums=True)`, not of `UnadaptedReadabilityStats(text)`:
 
 === "Code"
 
@@ -217,7 +217,7 @@ Here ASL is the mean number of words per sentence, ASW the mean number of syllab
 
 ## Methods
 
-The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the formulas have no scales, and `describe` gives `None` for any of them.
+The methods `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_parts), `print_stats` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the formulas have no scales, and `describe` gives `None` for any of them.
 
 === "Code"
 

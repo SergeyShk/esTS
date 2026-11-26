@@ -394,7 +394,7 @@ The type of the ending (cláusula) of a line by the syllables after its last str
     que a mayór mál pudiéra habér llegádo.
     ```
 
-The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core: `get_stats()` returns the metrics as a dictionary, and `print_stats()` prints them as a table with their descriptions (`VERSE_STATS_DESC`), as in the example at the top of the page. The verse statistics have no scales, so `describe` gives `None` for the statistics of `get_stats`.
+The methods `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_parts) (by stanzas only - the blocks between blank lines), `print_stats` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core: `get_stats()` returns the metrics as a dictionary, and `print_stats()` prints them as a table with their descriptions (`VERSE_STATS_DESC`), as in the example at the top of the page. The verse statistics have no scales, so `describe` gives `None` for the statistics of `get_stats`.
 
 === "Code"
 

@@ -476,7 +476,7 @@ A phrase is found with its contractions and the forms of its verb ([`expand_phra
 
 The notice of 56 words has three compound prepositions, five clichés and one parenthetical expression, and almost half of its nouns are derived from a verb. The anaphoric `de la misma`, which the guides also advise against, is not counted.
 
-The other methods - `get_stats`, `to_dataframe`, `print_stats` and `describe` - are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the style metrics of esTS have no scales, so `describe` gives `None` for the metrics of `get_stats`. The same notice in plain language:
+The other methods - `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_parts), `print_stats` and `describe` - are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the style metrics of esTS have no scales, so `describe` gives `None` for the metrics of `get_stats`. The same notice in plain language:
 
 === "Code"
 

@@ -93,6 +93,8 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
         sents_extractor (SentsExtractor): Sentence extraction tool
         words_extractor (WordsExtractor): Word extraction tool
         preset (str): Coefficient preset (general, classic)
+        filter_nums (bool): Leave out the numbers among the words; None - the class
+            attribute filter_nums (True), for ready basic statistics - as in them
 
     Attributes:
         bs (BasicStats): Basic statistics of the text
@@ -123,16 +125,19 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
         reading_time_by_speed: Reading time at a given speed
         reading_time_by_norm: Reading time aloud and silently by a norm of READING_SPEED_NORMS
         get_stats: Getting the computed readability metrics of the text
+        by_parts: Getting the metrics of every sentence, line or paragraph
         print_stats: Printing the computed readability metrics with descriptions
 
     Raises:
         SourceTypeError: If the source is neither a string, a Doc, a Document nor a
             BasicStats object, the basic statistics are not those of esTS, or an extractor is of another type
         SourceError: If the source has no words or no sentences
-        ParameterError: If the coefficient preset is not a string or is unknown
+        ParameterError: If the coefficient preset is not a string or is unknown, or
+            filter_nums is not a bool or differs from the ready basic statistics
     """
 
     basic_stats_class = BasicStats
+    filter_nums = True
     presets = READABILITY_PRESETS
     grade_stats = READABILITY_GRADE_STATS
     stats_desc = READABILITY_STATS_DESC
@@ -162,8 +167,9 @@ class ReadabilityStats(anyts.readability_stats.ReadabilityStats):
         sents_extractor: anyts.SentsExtractor | None = None,
         words_extractor: anyts.WordsExtractor | None = None,
         preset: str = "general",
+        filter_nums: bool | None = None,
     ):
-        super().__init__(source, sents_extractor, words_extractor, preset)
+        super().__init__(source, sents_extractor, words_extractor, preset, filter_nums)
 
     @property
     def gutierrez_polini_index(self) -> float:

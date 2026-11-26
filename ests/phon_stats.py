@@ -80,6 +80,8 @@ class PhonStats(anyts.phon_stats.PhonStats):
         'consonant_vowel_ratio': 1.857...,
         'p_heavy_clusters': 0.0,
         'p_hiatus': 0.0,
+        'p_junction_hiatus': 0.142...,
+        'p_junction_clusters': 0.0,
         'cv_entropy': 2.75,
         'hardness': 0.458...,
         'alliteration': 0.933...,
@@ -114,6 +116,10 @@ class PhonStats(anyts.phon_stats.PhonStats):
         consonant_vowel_ratio (float): Ratio of consonants to vowels
         p_heavy_clusters (float): Share of the clusters of 3 consonants or more
         p_hiatus (float): Hiatuses per word
+        p_junction_hiatus (float): Share of the junctions of words with a vowel on both sides
+            (trigo en)
+        p_junction_clusters (float): Share of the junctions of words with four consonants
+            or more in a row
         cv_entropy (float): Entropy of the CV patterns of the words in bits
         hardness (float): Hardness - ratio of the voiceless obstruents to the
             vowels and the sonorants
@@ -126,6 +132,7 @@ class PhonStats(anyts.phon_stats.PhonStats):
         describe: Reading of a statistic by its scale, None for every statistic
         get_stats: Getting the computed phonostatistics of the text
         to_dataframe: Getting the statistics as a table of one row
+        by_parts: Getting the statistics of every sentence, line or paragraph
         print_stats: Printing the computed phonostatistics with descriptions
 
     Raises:

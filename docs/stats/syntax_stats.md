@@ -731,7 +731,7 @@ Spanish puts the subject after the verb more often than English does (`llegó el
 
 ## Methods
 
-The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the syntactic statistics have no scales, so `describe` gives `None` for the statistics of `get_stats`.
+The methods `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_parts), `print_stats` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the syntactic statistics have no scales, so `describe` gives `None` for the statistics of `get_stats`.
 
 === "Code"
 
@@ -792,7 +792,7 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
     (None, None)
     ```
 
-The functions work with the words of the tree of a document (`TreeWord`, `get_tree` of the [anyTS](https://sergeyshk.github.io/anyTS/document/) core): the `calc_*` and `find_*` functions and `dependency_triples` take a list of them, the `is_*`, `has_*` and `count_*` functions a single word, and `calc_edit_distance` and `calc_multiset_similarity` lists of the items of sentences; the words of a list are those with a letter or a digit (`get_words`). The functions of the dependency tree come from the core, those of the Spanish constructions are esTS's own. The words of a `Doc` are `get_tree(get_document(doc)).words` (`ests.utils.get_document`); code written for spaCy tokens moves as the [migration page](https://sergeyshk.github.io/anyTS/migration/#tree-words) of anyTS says.
+The functions work with the words of the tree of a document (`TreeWord`, `get_tree` of the [anyTS](https://sergeyshk.github.io/anyTS/document/) core): the `calc_*` and `find_*` functions and `dependency_triples` take a list of them, the `is_*`, `has_*` and `count_*` functions a single word, and `calc_edit_distance` and `calc_multiset_similarity` lists of the items of sentences; the words of a list are those with a letter or a digit (`get_words`). The functions of the dependency tree come from the core, those of the Spanish constructions are esTS's own. A value that is no `TreeWord`, such as a spaCy `Token`, or a sequence with one raises `SourceTypeError` in all of them but `calc_edit_distance` and `calc_multiset_similarity`, which take any items, and so it does in the functions of a word of the morphology (`is_auxiliary`, `has_enclitics`, `has_proclitics`), of the cohesion (`is_connector_blocked`, `token_info`) and of the highlighting (`is_anaphoric_mismo`). The words of a `Doc` are `get_tree(get_document(doc)).words` (`ests.utils.get_document`); code written for spaCy tokens moves as the [migration page](https://sergeyshk.github.io/anyTS/migration/#tree-words) of anyTS says.
 
 ## Words of a sequence { #get_words }
 

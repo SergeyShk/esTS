@@ -1,15 +1,17 @@
 from __future__ import annotations
 
-from collections.abc import Iterable, Iterator
+import functools
+from collections.abc import Callable, Iterable, Iterator
 from functools import lru_cache
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 import esmorph
 from anyseg import Segmenter
 from anyts.constants import MESSAGES
 from anyts.document import to_document
 from anyts.utils import (
+    check_tree_word,
     count_words_by_spans as count_words_by_spans,
     find_phrases as find_phrases,
     is_language,
@@ -26,6 +28,38 @@ if TYPE_CHECKING:
 
 # The segmenter of Spanish into tokens and sentences
 SEGMENTER = Segmenter("es")
+
+F = TypeVar("F", bound=Callable[..., Any])
+
+
+def _takes_word(function: F) -> F:
+    """A function of a word of the tree: a value that is not a TreeWord raises SourceTypeError;
+    the package calls the version without the check (unchecked of the core)"""
+
+    @functools.wraps(function)
+    def checked(word: object, *args: Any, **kwargs: Any) -> Any:
+        check_tree_word(word)
+        return function(word, *args, **kwargs)
+
+    checked.__unchecked__ = function  # type: ignore[attr-defined]
+    return cast(F, checked)
+
+
+def _takes_words(function: F) -> F:
+    """A function of a sequence of words of the tree: every word is checked, an iterator is
+    read once"""
+
+    @functools.wraps(function)
+    def checked(words: Iterable[object], *args: Any, **kwargs: Any) -> Any:
+        words = list(words)
+        for word in words:
+            check_tree_word(word)
+        return function(words, *args, **kwargs)
+
+    checked.__unchecked__ = function  # type: ignore[attr-defined]
+    return cast(F, checked)
+
+
 # Components of a model that the component esmorph replaces in load_pipeline
 MORPH_COMPONENTS = ("morphologizer", "lemmatizer")
 

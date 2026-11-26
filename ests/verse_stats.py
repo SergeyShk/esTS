@@ -35,6 +35,7 @@ from .constants import (
 )
 from .exceptions import SourceError
 from .syllables import WORD_PARTS, syllabify, word_stresses
+from .utils import get_document
 
 if TYPE_CHECKING:
     from anyseg import Document
@@ -221,6 +222,7 @@ class VerseStats(Stats):
         get_stats: Getting the computed verse statistics
         to_dataframe: Getting the statistics as a table of one row
         print_stats: Printing the computed verse statistics with descriptions
+        by_parts: Getting the statistics of every stanza
         accentuate: Getting the text with the stresses marked
 
     Raises:
@@ -230,6 +232,9 @@ class VerseStats(Stats):
     """
 
     stats_desc = VERSE_STATS_DESC
+    # The sentences and the lines of a document are not the lines of the verse: a stanza
+    # is a paragraph
+    part_kinds = ("paragraphs",)
 
     def __init__(self, source: str | Doc | Document, seseo: bool = False):
         check_bool(seseo, "seseo")
@@ -336,6 +341,10 @@ class VerseStats(Stats):
         self.c_rhymes = {kind: rhymes[kind] for kind in VERSE_RHYMES if rhymes[kind]}
         self.p_rhymed = safe_divide(sum(rhymes.values()), len(lines), nan)
         self.form = _form(self, labels, kinds)
+
+    def parse(self, source: str | Doc | Document) -> Document:
+        """The document of anySeg (ests.utils.get_document)"""
+        return get_document(source)
 
     def accentuate(self) -> str:
         """

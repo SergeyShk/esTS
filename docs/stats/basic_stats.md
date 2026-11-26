@@ -44,7 +44,7 @@ The class extends the `BasicStats` of the [anyTS](https://sergeyshk.github.io/an
 
 --8<-- "stats/basic_stats.md:BasicStats-parameters"
 
-In esTS the thresholds are those of the core and of the readability formulas: a complex word has three or more syllables, as in SMOG, and a long word seven or more letters, as in LIX and RIX (`COMPLEX_SYL_FACTOR = 3` and `LONG_WORD_LETTER_FACTOR = 7` of `anyts.constants`).
+In esTS a number is one of `NUMBER_PATTERN` of the extractors, the Spanish ordinals included (`3.º`, `2.ª`). The thresholds are those of the core and of the readability formulas: a complex word has three or more syllables, as in SMOG, and a long word seven or more letters, as in LIX and RIX (`COMPLEX_SYL_FACTOR = 3` and `LONG_WORD_LETTER_FACTOR = 7` of `anyts.constants`).
 
 ## Statistics
 
@@ -116,7 +116,35 @@ The normalized statistics `p_*` are not in the table.
      'p_punctuations': 0.028169014084507043}
     ```
 
-The `describe` method is that of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the basic statistics have no scales, so it gives `None` for the statistics of `get_stats`.
+The methods [`by_parts`](#by_parts) and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the basic statistics have no scales, so `describe` gives `None` for the statistics of `get_stats`.
+
+## Parts of a text { #by_parts }
+
+--8<-- "stats/stats.md:Stats-by_parts"
+
+=== "Code"
+
+    ``` python
+    from ests import BasicStats
+
+    text = "El gato duerme en la ventana. Un perro ladra fuerte en el patio.\n\nUn pájaro canta."
+    BasicStats.by_parts(text)[["start", "end", "n_words", "n_syllables"]]
+    BasicStats.by_parts(text, "paragraphs")[["start", "end", "n_sents", "n_words"]]
+    ```
+
+=== "Result"
+
+    ```
+              start  end  n_words  n_syllables
+    sentence
+    0             0   29        6           10
+    1            30   64        7           11
+    2            66   82        3            6
+               start  end  n_sents  n_words
+    paragraph
+    0              0   64        2       13
+    1             66   82        1        3
+    ```
 
 ## Punctuation marks { #count_punctuations }
 

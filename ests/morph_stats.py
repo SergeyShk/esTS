@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, ClassVar
 import anyts.morph_stats
 from anyts.document import get_tree
 from anyts.morph_stats import MorphWord as MorphWord
-from anyts.utils import has_words, safe_divide
+from anyts.utils import has_words, safe_divide, unchecked
 
 from .constants import (
     COPULA_AUXILIARY_FORMS,
@@ -20,7 +20,7 @@ from .constants import (
     MORPHOLOGY_STATS_DESC,
 )
 from .exceptions import SourceError
-from .utils import SEGMENTER, _annotate_text, get_document, get_morph_analyzer
+from .utils import SEGMENTER, _annotate_text, _takes_word, get_document, get_morph_analyzer
 
 if TYPE_CHECKING:
     from anyseg import Document
@@ -41,6 +41,7 @@ VERBAL_POS = ("VERB", "AUX")
 AUXILIARY_GAP_POS = ("ADV", "PRON", "PART")
 
 
+@_takes_word
 def is_auxiliary(token: TreeWord) -> bool:
     """
     Checking whether a word of the tree is an auxiliary and not a copula
@@ -84,6 +85,7 @@ def is_auxiliary(token: TreeWord) -> bool:
     return False
 
 
+@_takes_word
 def has_enclitics(token: TreeWord) -> bool:
     """
     Checking whether a verb form of the tree carries enclitic pronouns
@@ -126,6 +128,7 @@ def _verb_with_pronouns(text: str) -> bool:
     return next((len(a.words) > 1 for a in analyses if a.pos in VERBAL_POS), False)
 
 
+@_takes_word
 def has_proclitics(token: TreeWord) -> bool:
     """
     Checking whether a verb form of the tree comes after proclitic pronouns
@@ -222,6 +225,7 @@ class MorphStats(anyts.morph_stats.MorphStats):
         describe: Reading of a statistic by its scale, None for every statistic
         get_stats: Getting the computed morphological statistics of the text
         to_dataframe: Getting the statistics as a table of one row
+        by_parts: Getting the statistics of every sentence, line or paragraph
         get_markers: Getting the markers of Spanish computed from the features
         explain_text: Parsing the text by the morphological statistics
         print_stats: Printing the computed morphological statistics with descriptions
@@ -297,9 +301,9 @@ class MorphStats(anyts.morph_stats.MorphStats):
         found = [word for word in get_tree(document).words if has_words(word.form)]
         self._found = (
             tuple(word.lemma or "" for word in found),
-            tuple(is_auxiliary(word) for word in found),
-            tuple(has_enclitics(word) for word in found),
-            tuple(has_proclitics(word) for word in found),
+            tuple(_is_auxiliary(word) for word in found),
+            tuple(_has_enclitics(word) for word in found),
+            tuple(_has_proclitics(word) for word in found),
         )
         return words
 
@@ -362,3 +366,9 @@ class MorphStats(anyts.morph_stats.MorphStats):
 def _values(value: str | None) -> list[str]:
     """Values of a feature of several values joined by commas, none without the feature"""
     return value.split(",") if value else []
+
+
+# The functions of the module without the check of the word, for the words of its trees
+_is_auxiliary = unchecked(is_auxiliary)
+_has_enclitics = unchecked(has_enclitics)
+_has_proclitics = unchecked(has_proclitics)

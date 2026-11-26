@@ -1,7 +1,7 @@
 # Readability metrics
 
 ``` {.python .signature}
-ReadabilityStats(source, sents_extractor=None, words_extractor=None, preset='general')
+ReadabilityStats(source, sents_extractor=None, words_extractor=None, preset='general', filter_nums=None)
 ```
 
 --8<-- "stats/readability_stats.md:ReadabilityStats"
@@ -44,8 +44,9 @@ The class extends the `ReadabilityStats` of the [anyTS](https://sergeyshk.github
 | `sents_extractor` | `SentsExtractor` | `None` | Sentence extraction tool |
 | `words_extractor` | `WordsExtractor` | `None` | Word extraction tool |
 | `preset` | `str` | `'general'` | Coefficient preset: `general` or `classic` |
+| `filter_nums` | `bool` | `None` | Leave out the numbers among the words; `None` - the class attribute `filter_nums`, `True` in esTS, for ready `BasicStats` - as in them; a value that differs from theirs raises `ParameterError` |
 
-The object keeps the basic statistics of the text in `bs`, the name of the preset in `preset`, read-only, and the coefficients of the preset by formula in `coefficients`, a copy that can be changed for one object. An object of another preset can reuse the basic statistics: `ReadabilityStats(rs.bs, preset="classic")`.
+The object keeps the basic statistics of the text in `bs`, the name of the preset in `preset`, read-only, and the coefficients of the preset by formula in `coefficients`, a copy that can be changed for one object. An object of another preset can reuse the basic statistics: `ReadabilityStats(rs.bs, preset="classic")`. A ready `BasicStats(text)` counts the numbers as words; the formulas of `ReadabilityStats(text)` come from `BasicStats(text, filter_nums=True)`, as a number has no syllables.
 
 ## Coefficient presets { #presets }
 
@@ -576,7 +577,7 @@ The norms of esTS give the speeds aloud and silently, so the method returns the 
      'reading_time': 0.03597122302158273}
     ```
 
-The `to_dataframe` method is that of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core.
+The methods `to_dataframe` and [`by_parts`](basic_stats.md#by_parts) are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core.
 
 ## Scales { #scales }
 

@@ -36,21 +36,23 @@ The class extends the `PhonStats` of the [anyTS](https://sergeyshk.github.io/any
 === "Result"
 
     ```
-                     Statistic                 |  Value
-    ------------------------------------------------------
-    Share of vowels                            |   0.46
-    Share of sonorant consonants               |   0.19
-    Share of voiced obstruents                 |   0.10
-    Share of voiceless obstruents              |   0.25
-    Ratio of consonants to vowels              |   1.19
-    Share of clusters of 3 consonants or more  |   0.01
-    Hiatuses per word                          |   0.00
-    Entropy of the CV patterns of words (bits) |   3.55
-    Hardness                                   |   0.39
-    Alliteration index                         |   0.87
-    Assonance index                            |   0.87
-    Share of open syllables                    |   0.74
-    Mean length of a syllable (sounds)         |   2.19
+                      Statistic                       |  Value
+    -----------------------------------------------------------------
+    Share of vowels                                       |   0.46
+    Share of sonorant consonants                          |   0.19
+    Share of voiced obstruents                            |   0.10
+    Share of voiceless obstruents                         |   0.25
+    Ratio of consonants to vowels                         |   1.19
+    Share of clusters of 3 consonants or more             |   0.01
+    Hiatuses per word                                     |   0.00
+    Share of junctions of words with a hiatus             |   0.27
+    Share of junctions of words with 4 consonants or more |   0.00
+    Entropy of the CV patterns of words (bits)            |   3.55
+    Hardness                                              |   0.39
+    Alliteration index                                    |   0.87
+    Assonance index                                       |   0.87
+    Share of open syllables                               |   0.74
+    Mean length of a syllable (sounds)                    |   2.19
     ```
 
 ## Parameters
@@ -244,6 +246,34 @@ Raises:
 
 <div class="metric-card" markdown>
 
+### Junctions of words { #junctions }
+
+`p_junction_hiatus` · `p_junction_clusters`
+{ .metric-meta }
+
+--8<-- "stats/phon_stats.md:PhonStats-junctions"
+
+In esTS no vowel is one of `glides`, so two vowels meeting between words always make a hiatus (`la abuela`, `vio el`), and `x` is two consonants: `fénix brillar` meets k s and b r, four.
+
+=== "Code"
+
+    ``` python
+    from ests import PhonStats
+
+    ps = PhonStats("La abuela vio el fénix brillar en el cielo")
+    ps.p_junction_hiatus, ps.p_junction_clusters
+    ```
+
+=== "Result"
+
+    ```
+    (0.25, 0.125)
+    ```
+
+</div>
+
+<div class="metric-card" markdown>
+
 ### Entropy of the CV patterns { #cv_entropy }
 
 `cv_entropy`
@@ -397,7 +427,7 @@ Raises:
 
 ## Methods
 
-The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the phonostatistics have no scales, so `describe` gives `None` for the statistics of `get_stats`.
+The methods `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_parts), `print_stats` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the phonostatistics have no scales, so `describe` gives `None` for the statistics of `get_stats`.
 
 === "Code"
 
@@ -417,6 +447,8 @@ The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those 
      'consonant_vowel_ratio': 1.8571428571428572,
      'p_heavy_clusters': 0.0,
      'p_hiatus': 0.0,
+     'p_junction_hiatus': 0.14285714285714285,
+     'p_junction_clusters': 0.0,
      'cv_entropy': 2.75,
      'hardness': 0.4583333333333333,
      'alliteration': 0.9333333333333333,

@@ -6,7 +6,7 @@ keyness(target, reference, measure='log_likelihood', min_freq=1, positive=True, 
 
 --8<-- "corpus/keyness.md:keyness"
 
-The function wraps `keyness` of the [anyTS](https://sergeyshk.github.io/anyTS/corpus/keyness/) core and also takes the [frequency dictionary](../datasets/freqdict.md) `FreqDict` as the reference; `FrequencyReference` is in `ests.corpus` next to it. Words are extracted with [`WordsExtractor`](../extractors/words.md).
+The function wraps `keyness` of the [anyTS](https://sergeyshk.github.io/anyTS/corpus/keyness/) core and also takes the [frequency dictionary](../datasets/freqdict.md) `FreqDict` as the reference; `FrequencyReference` is in `ests.corpus` next to it. Words are extracted with [`WordsExtractor`](../extractors/words.md); a target may also be a text, which is split into the words of `WordsExtractor`, analyzed by esMorph in the context of its sentences.
 
 === "Code"
 
@@ -39,7 +39,7 @@ The function wraps `keyness` of the [anyTS](https://sergeyshk.github.io/anyTS/co
 
 --8<-- "corpus/keyness.md:keyness-parameters"
 
-`reference` may also be `FreqDict`, against which `target` is word forms. A frequency dictionary that is not downloaded raises `DatasetNotFoundError`. `keyness` checks its parameters and the target with `check_keyness_params` before it reads `FreqDict`, so a wrong argument fails before the dictionary is loaded; the dictionary holds words, so `n` above 1 with it raises `ParameterError` before it is read too.
+`target` may also be a text, split into the words of `WordsExtractor`. `reference` may also be `FreqDict`, against which `target` is word forms. A frequency dictionary that is not downloaded raises `DatasetNotFoundError`. `keyness` checks its parameters and the target with `check_keyness_params` before it reads `FreqDict`, so a wrong argument fails before the dictionary is loaded; the dictionary holds words, so `n` above 1 with it raises `ParameterError` before it is read too.
 
 --8<-- "corpus/keyness.md:check_keyness_params"
 
@@ -56,21 +56,20 @@ The frequency dictionary `FreqDict` of Google Books Ngram passed as `reference` 
 | `missing` | the least frequency of the dictionary `FreqDict.min_ipm`, 0.1 ipm (about 6300 occurrences) |
 | `key` | [`lemma_key`](../datasets/freqdict.md#lemma_key): a keyword may carry the label of another lemma, *Roma* is counted under `romo` |
 | `keep` | the forms made of the letters of `WORD_PATTERN`; numbers and words with a hyphen or a dot are left out |
+| `keys` | the key of `lemma_key` by the part of speech of esMorph in the context of the text, or of every list of words: *vino de Rioja* - `vino`, *vino a casa* - `venir`; a proper noun takes the key of the word alone, under which `word_ipm` counts the rows of the proper nouns. The frequencies of a target have no context and take `key` |
 
-The target has to be counted the way the dictionary was: word forms with the stop words kept, not lemmas - `lemma_key` is not idempotent (`estado` - `estar`), so `WordsExtractor(use_lexemes=True)` does not fit. The dictionary describes the register of the books, so the negative keywords of a text are the words of scholarly prose (`de`, `social`, `país`).
+The target has to be counted the way the dictionary was: word forms in their case with the stop words kept, not lemmas: `lemma_key` is not idempotent (`estado` - `estar`), so `WordsExtractor(use_lexemes=True)` does not fit, and a name in lower case may be read as another word in context (`carolina` - `carolino`). The dictionary describes the register of the books, so the negative keywords of a text are the words of scholarly prose (`de`, `social`, `país`).
 
-Against the dictionary the words of a play of Lope de Vega from the [corpus of literature](../datasets/spanishliterature.md) give its characters:
+Against the dictionary the text of a play of Lope de Vega from the [corpus of literature](../datasets/spanishliterature.md) gives its characters:
 
 === "Code"
 
     ``` python
-    from ests import WordsExtractor
     from ests.corpus import keyness
     from ests.datasets import FreqDict, SpanishLiterature
 
     text = next(SpanishLiterature().get_texts(author="lope", genre="drama"))
-    words = WordsExtractor(lowercase=True).extract(text)
-    for k in keyness(words, FreqDict(), top_n=5):
+    for k in keyness(text, FreqDict(), top_n=5):
         print(k.word, k.freq_target, round(k.ipm_reference, 2), round(k.g2, 1), round(k.log_ratio, 2))
     ```
 

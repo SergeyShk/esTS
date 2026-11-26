@@ -64,7 +64,7 @@ La clase extiende el `BasicStats` del núcleo [anyTS](https://sergeyshk.github.i
 
 El objeto guarda `normalize`, `complex_syl_factor`, `long_word_letter_factor` y `filter_nums` con sus nombres, y los números que dejó fuera, en `n_numbers`.
 
-En esTS los umbrales son los del núcleo y de las fórmulas de legibilidad: una palabra compleja tiene tres o más sílabas, como en SMOG, y una palabra larga siete o más letras, como en LIX y RIX (`COMPLEX_SYL_FACTOR = 3` y `LONG_WORD_LETTER_FACTOR = 7` de `anyts.constants`).
+En esTS un número es uno de `NUMBER_PATTERN` de los extractores, incluidos los ordinales españoles (`3.º`, `2.ª`). Los umbrales son los del núcleo y de las fórmulas de legibilidad: una palabra compleja tiene tres o más sílabas, como en SMOG, y una palabra larga siete o más letras, como en LIX y RIX (`COMPLEX_SYL_FACTOR = 3` y `LONG_WORD_LETTER_FACTOR = 7` de `anyts.constants`).
 
 ## Estadísticas
 
@@ -107,8 +107,8 @@ Los métodos vuelven a contar las palabras complejas y largas con un umbral dist
 
 Las estadísticas normalizadas `p_*` no están en la tabla.
 
-<!-- core: stats/stats.md:Stats-to_dataframe fb70c9b -->
-`to_dataframe()` devuelve las estadísticas planas, `get_stats(flat=True)`, como un `DataFrame` de [pandas](https://pandas.pydata.org/) de una fila con una columna por cada clave. Una estadística de diccionario da columnas solo para las claves que tiene el texto, así que en los marcos de varios textos unidos con `pandas.concat` un recuento que le falta a un texto es `NaN`. Solo estas columnas pueden rellenarse con 0: en las demás `NaN` es un valor no definido.
+<!-- core: stats/stats.md:Stats-to_dataframe 735e73d -->
+`to_dataframe()` devuelve las estadísticas planas, `get_stats(flat=True)`, como un `DataFrame` de [pandas](https://pandas.pydata.org/) de una fila con una columna por cada clave. Una estadística de diccionario da columnas solo para las claves que tiene el texto; la tabla de varios textos, con 0 para un recuento que le falta a un texto, es la de [`stats_dataframe`](https://sergeyshk.github.io/anyTS/stats/stats/#stats_dataframe).
 
 === "Código"
 
@@ -162,7 +162,38 @@ Las estadísticas normalizadas `p_*` no están en la tabla.
      'p_punctuations': 0.028169014084507043}
     ```
 
-El método `describe` es el de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las estadísticas básicas no tienen escalas, así que da `None` para las estadísticas de `get_stats`.
+Los métodos [`by_parts`](#by_parts) y `describe` son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las estadísticas básicas no tienen escalas, así que `describe` da `None` para las estadísticas de `get_stats`.
+
+## Partes de un texto { #by_parts }
+
+<!-- core: stats/stats.md:Stats-by_parts 6309e97 -->
+`by_parts(source, parts=None, **params)`, un método de clase, devuelve las estadísticas de cada oración (`parts="sentences"`), línea (`"lines"`) o párrafo (`"paragraphs"`) de una fuente de datos, por defecto del primero de los `part_kinds` de la clase, como un `DataFrame`: una fila por parte, indexada por su número, con su inicio `start` y su fin `end` en el texto y sus estadísticas planas, unidas por `stats_dataframe`. Una línea son las oraciones entre saltos de línea y un párrafo las que hay entre líneas en blanco, así que un texto con un párrafo en cada línea tiene un solo párrafo; una oración que pasa de un salto de línea, como en un verso, se queda en una sola línea. La fuente se analiza una vez, y la clase con los parámetros `params` cuenta cada parte. Una parte sin palabras, como una línea de asteriscos, o una que la clase no puede contar conserva su fila sin estadísticas; una fuente sin ninguna parte que la clase pueda contar lanza el error de la clase. Los números de palabras y de oraciones de las partes suman los del texto entero, mientras que las palabras únicas, las proporciones y las medias son las de cada parte, y una estadística que compara las oraciones de un texto no está definida en una parte de una sola oración.
+
+Las partes de una clase son sus `part_kinds`: `CohesionStats`, cuyos enlaces van entre oraciones, cuenta líneas, sus párrafos por defecto, y párrafos, y `DiversityStats`, que recibe palabras, ninguna parte. Otras partes y una clase sin partes lanzan `ParameterError`; la fuente y una parte lanzan los errores de la clase.
+
+=== "Código"
+
+    ``` python
+    from ests import BasicStats
+
+    text = "El gato duerme en la ventana. Un perro ladra fuerte en el patio.\n\nUn pájaro canta."
+    BasicStats.by_parts(text)[["start", "end", "n_words", "n_syllables"]]
+    BasicStats.by_parts(text, "paragraphs")[["start", "end", "n_sents", "n_words"]]
+    ```
+
+=== "Resultado"
+
+    ```
+              start  end  n_words  n_syllables
+    sentence
+    0             0   29        6           10
+    1            30   64        7           11
+    2            66   82        3            6
+               start  end  n_sents  n_words
+    paragraph
+    0              0   64        2       13
+    1             66   82        1        3
+    ```
 
 ## Signos de puntuación { #count_punctuations }
 

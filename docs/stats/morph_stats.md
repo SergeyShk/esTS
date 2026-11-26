@@ -147,7 +147,7 @@ The base of `p_ser` is the copular uses alone, read from the morphology: `ser` b
 
 --8<-- "stats/morph_stats.md:MorphStats-print_stats"
 
-The example at the top of the page prints two of the tables. `to_dataframe` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the morphological statistics have no scales, so `describe` gives `None`.
+The example at the top of the page prints two of the tables. `to_dataframe`, [`by_parts`](basic_stats.md#by_parts) and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the morphological statistics have no scales, so `describe` gives `None`.
 
 === "Code"
 

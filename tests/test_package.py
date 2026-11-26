@@ -126,7 +126,7 @@ SPANISH = {
     "ests.corpus.keyness": {"keyness"},
     "ests.corpus.compare": {"OPENING_MARKS", "SYMMETRIC_MARKS", "split_windows"},
     "ests.corpus.kwic": {"kwic"},
-    "ests.basic_stats": {*EXTRACTORS, "BasicStats"},
+    "ests.basic_stats": {*EXTRACTORS, "BasicStats", "NUMBER_PATTERN"},
     "ests.readability_stats": {*EXTRACTORS, *READABILITY, "BasicStats"},
     "ests.unadapted_readability_stats": {"BasicStats", "UnadaptedReadabilityStats"},
     "ests.components": {

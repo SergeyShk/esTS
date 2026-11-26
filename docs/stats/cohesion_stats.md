@@ -315,7 +315,7 @@ The primary connectors (`primary`) are conjunctions, conjunctive locutions and a
 
 ## Methods
 
-The methods `get_stats`, `to_dataframe`, `print_stats` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the cohesion statistics have no scales, so `describe` gives `None` for the statistics of `get_stats`.
+The methods `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_parts) (by lines and paragraphs only), `print_stats` and `describe` are those of the [statistics interface](https://sergeyshk.github.io/anyTS/stats/stats/) of the anyTS core; the cohesion statistics have no scales, so `describe` gives `None` for the statistics of `get_stats`.
 
 === "Code"
 

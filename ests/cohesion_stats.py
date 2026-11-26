@@ -14,6 +14,7 @@ from anyts.cohesion_stats import (
     calc_forward_overlap as calc_forward_overlap,
 )
 from anyts.constants import CONTENT_UD_POS
+from anyts.utils import unchecked
 
 from .constants import (
     COHESION_STATS_DESC,
@@ -31,7 +32,7 @@ from .constants import (
     CONNECTOR_SPLIT_BY_MARKS,
     CONNECTOR_SUBORDINATORS,
 )
-from .utils import _check_nlp, _parse_text, get_document, lemmatize
+from .utils import _check_nlp, _parse_text, _takes_word, get_document, lemmatize
 
 if TYPE_CHECKING:
     from anyseg import Document
@@ -233,6 +234,7 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
         describe: Reading of a statistic by its scale, None for every statistic
         get_stats: Getting the computed cohesion statistics of the text
         to_dataframe: Getting the statistics as a table of one row
+        by_parts: Getting the statistics of every line or paragraph
         print_stats: Printing the computed cohesion statistics with descriptions
 
     Raises:
@@ -262,6 +264,16 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
         _check_nlp(nlp)
         self._nlp = nlp
         super().__init__(source, sents_extractor, connectors, blank_lines)
+
+    @classmethod
+    def parts_document(
+        cls, source: str | Doc | Document, nlp: Language | None = None, **params: Any
+    ) -> Document:
+        """The document of parse, a string parsed by the pipeline nlp of the parameters"""
+        _check_nlp(nlp)
+        stats = cls.__new__(cls)
+        stats._nlp = nlp
+        return stats.parse(source)
 
     def __getstate__(self) -> dict[str, Any]:
         """State for pickle and copy without the pipeline, which is no part of the statistics"""
@@ -312,7 +324,7 @@ class CohesionStats(anyts.cohesion_stats.CohesionStats):
             CohesionWord: Word with its features
         """
         info = super().word_info(word)
-        if is_connector_blocked(word):
+        if _is_connector_blocked(word):
             return info._replace(connector_blocked=True)
         return info
 
@@ -398,6 +410,7 @@ def find_connectors(
     return matcher.find(words, sent_index, pos, breaks, blocked)
 
 
+@_takes_word
 def is_connector_blocked(token: TreeWord) -> bool:
     """
     Checking whether no connector starts at a word of the tree by the words before it
@@ -488,6 +501,7 @@ def _without_accent(word: str) -> str:
     return word.translate(UNACCENTED)
 
 
+@_takes_word
 def token_info(token: TreeWord) -> WordInfo:
     """
     Getting the features of a token by the annotation of Universal Dependencies
@@ -529,3 +543,8 @@ def _is_pronominal_det(token: TreeWord, pron_type: list[str]) -> bool:
     if "Yes" in token.feats.get("Poss", "").split(","):
         return True
     return bool({"Dem", "Prs"} & set(pron_type))
+
+
+# The functions of the module without the check of the word, for the words of its trees
+_is_connector_blocked = unchecked(is_connector_blocked)
+_token_info = unchecked(token_info)

@@ -69,7 +69,7 @@ En español las palabras sin sílabas son los números, las abreviaturas sin voc
 | :-------- | :--- | :---------- |
 | `bs` | `BasicStats` | Estadísticas básicas del texto |
 
-Las estadísticas básicas ya calculadas pueden tomarse de un objeto [`ReadabilityStats`](readability_stats.md), para no calcularlas otra vez:
+Las estadísticas básicas ya calculadas pueden tomarse de un objeto [`ReadabilityStats`](readability_stats.md), para no calcularlas otra vez. Dejan fuera los números, como `ReadabilityStats`, así que en un texto con números las fórmulas son las de `UnadaptedReadabilityStats(text, filter_nums=True)`, no las de `UnadaptedReadabilityStats(text)`:
 
 === "Código"
 
@@ -434,7 +434,7 @@ Un recuento que no es un entero no negativo lanza `ParameterError`.
 
 ## Métodos
 
-Los métodos `get_stats`, `to_dataframe`, `print_stats` y `describe` son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las fórmulas no tienen escalas, y `describe` da `None` para cualquiera de ellas.
+Los métodos `get_stats`, `to_dataframe`, [`by_parts`](basic_stats.md#by_parts), `print_stats` y `describe` son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS; las fórmulas no tienen escalas, y `describe` da `None` para cualquiera de ellas.
 
 === "Código"
 

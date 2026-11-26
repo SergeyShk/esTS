@@ -76,12 +76,12 @@ Un texto que no es una cadena y un tokenizador que no es invocable o no devuelve
 
 ## Párrafos { #split_paragraphs }
 
-<!-- core: extractors/sentences.md:split_paragraphs db688fc -->
+<!-- core: extractors/sentences.md:split_paragraphs fff39ca -->
 ``` {.python .signature}
 split_paragraphs(text)
 ```
 
-Los párrafos de un texto: sus partes entre líneas en blanco, sin los espacios, los caracteres de control y los separadores invisibles (el guion blando, los caracteres de anchura cero, la marca de orden de bytes) de sus extremos; una parte sin nada más no es un párrafo. Una línea en blanco (`BLANK_LINE`) son dos saltos de línea - `\n`, `\r\n`, `\r`, la tabulación vertical, el salto de página, U+0085 o U+2028 - sin nada más que esos caracteres entre ellos, o un separador de párrafo U+2029: un salto de párrafo de anySeg, así que estos son también los párrafos de un [documento](https://sergeyshk.github.io/anyTS/document/); también termina las oraciones de `SentsExtractor` y los párrafos de `CohesionStats` con `blank_lines`. Las palabras de los párrafos dan los tamaños de las partes de `dispersion` por párrafo; un párrafo sin palabras, como una separación de escenas con asteriscos, sigue siendo un párrafo. Un texto que no es una cadena lanza `SourceTypeError`.
+Los párrafos de un texto: sus partes entre líneas en blanco, sin los espacios, los caracteres de control y los separadores invisibles (el guion blando, los caracteres de anchura cero, la marca de orden de bytes, las marcas de la dirección del texto) de sus extremos; una parte sin nada más no es un párrafo. Una línea en blanco (`BLANK_LINE`) son dos saltos de línea - `\n`, `\r\n`, `\r`, la tabulación vertical, el salto de página, U+0085 o U+2028 - sin nada más que esos caracteres entre ellos, o un separador de párrafo U+2029: un salto de párrafo de anySeg, así que estos son también los párrafos de un [documento](https://sergeyshk.github.io/anyTS/document/); también termina las oraciones de `SentsExtractor` y los párrafos de `CohesionStats` con `blank_lines`. Las palabras de los párrafos dan los tamaños de las partes de `dispersion` por párrafo; un párrafo sin palabras, como una separación de escenas con asteriscos, sigue siendo un párrafo. Un texto que no es una cadena lanza `SourceTypeError`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |

@@ -1,7 +1,7 @@
 # Métricas de legibilidad
 
 ``` {.python .signature}
-ReadabilityStats(source, sents_extractor=None, words_extractor=None, preset='general')
+ReadabilityStats(source, sents_extractor=None, words_extractor=None, preset='general', filter_nums=None)
 ```
 
 <!-- core: stats/readability_stats.md:ReadabilityStats 7a36eb3 -->
@@ -53,8 +53,9 @@ La clase extiende el `ReadabilityStats` del núcleo [anyTS](https://sergeyshk.gi
 | `sents_extractor` | `SentsExtractor` | `None` | Herramienta de extracción de oraciones |
 | `words_extractor` | `WordsExtractor` | `None` | Herramienta de extracción de palabras |
 | `preset` | `str` | `'general'` | Preajuste de coeficientes: `general` o `classic` |
+| `filter_nums` | `bool` | `None` | Dejar fuera los números entre las palabras; `None` - el atributo de clase `filter_nums`, `True` en esTS, para un `BasicStats` ya calculado - como en él; un valor distinto del suyo lanza `ParameterError` |
 
-El objeto guarda las estadísticas básicas del texto en `bs`, el nombre del preajuste en `preset`, de solo lectura, y los coeficientes del preajuste por fórmula en `coefficients`, una copia que se puede cambiar para un objeto. Un objeto de otro preajuste puede reutilizar las estadísticas básicas: `ReadabilityStats(rs.bs, preset="classic")`.
+El objeto guarda las estadísticas básicas del texto en `bs`, el nombre del preajuste en `preset`, de solo lectura, y los coeficientes del preajuste por fórmula en `coefficients`, una copia que se puede cambiar para un objeto. Un objeto de otro preajuste puede reutilizar las estadísticas básicas: `ReadabilityStats(rs.bs, preset="classic")`. Un `BasicStats(text)` ya calculado cuenta los números como palabras; las fórmulas de `ReadabilityStats(text)` salen de `BasicStats(text, filter_nums=True)`, porque un número no tiene sílabas.
 
 ## Preajustes de coeficientes { #presets }
 
@@ -682,7 +683,7 @@ Las normas de esTS dan las velocidades en voz alta y en silencio, así que el m�
      'reading_time': 0.03597122302158273}
     ```
 
-El método `to_dataframe` es el de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS.
+Los métodos `to_dataframe` y [`by_parts`](basic_stats.md#by_parts) son los de la [interfaz de estadísticas](https://sergeyshk.github.io/anyTS/stats/stats/) del núcleo anyTS.
 
 ## Escalas { #scales }
 
