@@ -10,7 +10,7 @@ import anyts.lexical_stats
 from anyts.constants import FREQUENCY_BANDS as FREQUENCY_BANDS
 from anyts.document import get_tree
 from anyts.lexical_stats import LexicalWord
-from anyts.utils import has_words, is_number
+from anyts.utils import check_word, has_words, is_number
 
 from .cohesion_stats import _token_info
 from .constants import ABBREVIATION_ENDINGS, LEXICAL_STATS_DESC
@@ -240,11 +240,15 @@ def get_rank(lemma: str) -> int | None:
     Returns:
         int|None: Rank from 1 to 10000, None if the lemma is not in the list
 
+    Raises:
+        SourceTypeError: If the lemma is not a string
+
     Example:
         >>> from ests.lexical_stats import get_rank
         >>> get_rank("el"), get_rank("gato"), get_rank("gatuno")
         (1, 3122, None)
     """
+    check_word(lemma, "lemma")
     return load_top_lemmas().get(lemma.lower())
 
 

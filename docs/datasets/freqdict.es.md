@@ -10,7 +10,7 @@ El diccionario lo construye `scripts/build_freq_dict.py` a partir de los 1-grama
 
 Para buscar un lema se unen sus categorías gramaticales: las frecuencias se suman, el rango, la dispersión y el número de libros son los mayores. El diccionario se lee una vez por proceso, así que un `FreqDict()` para cada texto es barato. Es la fuente de las frecuencias de [`LexicalStats`](../stats/lexical_stats.md), y la lista integrada de las [bandas de frecuencia](../stats/lexical_stats.md#bands) tiene sus 10 000 lemas más frecuentes, sin los nombres propios y algunos lemas que no son palabras. El tamaño del diccionario es `CORPUS_SIZE`, 63 090 618 290 palabras.
 
-El archivo (0,8 MB) se guarda en el repositorio de la biblioteca y se descarga una vez en el directorio de datos.
+El archivo (0,8 MB) se guarda en el repositorio de la biblioteca y se descarga una vez en el directorio de datos, con `download()` o con el comando [`ests download`](../cli.md).
 
 !!! quote "Licencia y atribución"
     El diccionario deriva de Google Books Ngram, que se publica con la [licencia Creative Commons Reconocimiento 3.0 No adaptada](https://creativecommons.org/licenses/by/3.0/), y se distribuye con la misma licencia; el archivo lleva un `README.txt` con la fuente y los cambios. Cite la fuente así: Michel J.-B. et al. Quantitative analysis of culture using millions of digitized books. Science 331 (6014), 2011.

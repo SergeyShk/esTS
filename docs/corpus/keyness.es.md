@@ -56,7 +56,7 @@ La función envuelve `keyness` del núcleo [anyTS](https://sergeyshk.github.io/a
 
 Los parámetros y el corpus objetivo los comprueba `check_keyness_params`; un `n` mayor que 1 con frecuencias o con una `FrequencyReference` lanza `ParameterError`. Una referencia que no es una lista de cadenas, una lista de tales listas, un contador ni una `FrequencyReference` lanza `SourceTypeError`, y también un corpus en el que la mayoría de las palabras, o de las palabras de uno de sus textos, contienen un espacio: tales palabras son textos, como las oraciones de un texto con una oración de una sola palabra entre ellas, no sus palabras, mientras que una locución de varias palabras entre ellas pasa. Una frecuencia negativa, `nan` o infinita de un contador y un corpus sin palabras, o de menos de `n` palabras, lanzan `SourceError`.
 
-`target` también puede ser un texto, que se divide en las palabras de `WordsExtractor`. `reference` también puede ser `FreqDict`, frente al cual `target` son formas. Un diccionario de frecuencias que no está descargado lanza `DatasetNotFoundError`. `keyness` comprueba sus parámetros y el corpus objetivo con `check_keyness_params` antes de leer `FreqDict`, así que un argumento erróneo falla antes de cargar el diccionario; el diccionario guarda palabras, así que un `n` mayor que 1 con él también lanza `ParameterError` antes de leerlo.
+`target` también puede ser un texto, que se divide en las palabras de `WordsExtractor`; `reference` no, así que un texto de referencia se pasa como sus palabras (`WordsExtractor().extract(text)`). `reference` también puede ser `FreqDict`, frente al cual `target` son formas. Un diccionario de frecuencias que no está descargado lanza `DatasetNotFoundError`. `keyness` comprueba sus parámetros y el corpus objetivo con `check_keyness_params` antes de leer `FreqDict`, así que un argumento erróneo falla antes de cargar el diccionario; el diccionario guarda palabras, así que un `n` mayor que 1 con él también lanza `ParameterError` antes de leerlo.
 
 <!-- core: corpus/keyness.md:check_keyness_params f41ebfd -->
 ``` {.python .signature}
@@ -166,7 +166,7 @@ Cada medida es una función del módulo `anyts.corpus.keyness` de las frecuencia
 | `c` | `float` | - | Tamaño del corpus objetivo |
 | `d` | `float` | - | Tamaño del corpus de referencia |
 
-Una frecuencia nula en uno de los corpus se sustituye por 0.5 para %DIFF, Log Ratio y la razón de momios (Hardie 2014).
+Una frecuencia nula en uno de los corpus se sustituye por 0,5 para %DIFF, Log Ratio y la razón de momios (Hardie 2014).
 
 El módulo `ests.corpus.keyness` reexporta las funciones de las medidas (`from ests.corpus.keyness import calc_log_likelihood`).
 
@@ -182,7 +182,7 @@ El módulo `ests.corpus.keyness` reexporta las funciones de las medidas (`from e
 calc_log_likelihood(a, b, c, d)
 ```
 
-La razón de verosimilitud de las frecuencias de la palabra frente a las esperadas $E_1$ y $E_2$; un término de frecuencia nula es cero. Los valores críticos son `anyts.constants.G2_CRITICAL_VALUES`: 3.84 para p < 0.05, 6.63 para p < 0.01, 10.83 para p < 0.001, 15.13 para p < 0.0001. El signo es negativo cuando la palabra es más frecuente en la referencia.
+La razón de verosimilitud de las frecuencias de la palabra frente a las esperadas $E_1$ y $E_2$; un término de frecuencia nula es cero. Los valores críticos son `anyts.constants.G2_CRITICAL_VALUES`: 3,84 para p < 0,05, 6,63 para p < 0,01, 10,83 para p < 0,001, 15,13 para p < 0,0001. El signo es negativo cuando la palabra es más frecuente en la referencia.
 
 $$
 G^2 = 2 \left(a \ln \frac{a}{E_1} + b \ln \frac{b}{E_2}\right), \quad E_1 = \frac{c\,(a+b)}{N}, \quad E_2 = \frac{d\,(a+b)}{N}

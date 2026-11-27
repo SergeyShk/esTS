@@ -12,6 +12,7 @@ from anyts.constants import MESSAGES
 from anyts.document import to_document
 from anyts.utils import (
     check_tree_word,
+    check_word,
     count_words_by_spans as count_words_by_spans,
     find_phrases as find_phrases,
     is_language,
@@ -380,10 +381,14 @@ def is_verbal_noun(lemma: str) -> bool:
     Returns:
         bool: Result of the check
 
+    Raises:
+        SourceTypeError: If the lemma is not a string
+
     Example:
         >>> from ests.utils import is_verbal_noun
         >>> is_verbal_noun("revisión"), is_verbal_noun("uso"), is_verbal_noun("casa")
         (True, True, False)
     """
+    check_word(lemma, "lemma")
     lemma = lemma.lower()
     return lemma.endswith(VERBAL_NOUN_SUFFIXES) or lemma in VERBAL_NOUN_LEMMAS

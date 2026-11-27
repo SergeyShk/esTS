@@ -61,15 +61,15 @@ Galdós frente a Unamuno, tres novelas de cada uno del [corpus de literatura](..
 
     ```
                       median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    diversity_mtldw         105.455          66.179  37.104   43.799    3.260        0.988  0.994     0.0
-    diversity_mamtld        103.316          64.997  35.107   45.657    3.084        0.981  0.990     0.0
-    diversity_mtld          103.655          64.594  37.536   47.169    3.107        0.981  0.990     0.0
-    diversity_mattr           0.817           0.769   0.046    0.057    2.951        0.979  0.990     0.0
-    diversity_msttr           0.819           0.769   0.047    0.059    2.927        0.979  0.989     0.0
+    diversity_mtld         103.655          64.594  37.536   47.169    3.107        0.981  0.990     0.0
+    diversity_mattr          0.817           0.769   0.046    0.057    2.951        0.979  0.990     0.0
+    diversity_msttr          0.819           0.769   0.047    0.059    2.927        0.979  0.989     0.0
+    diversity_ttr            0.479           0.399   0.068    0.087    3.118        0.970  0.985     0.0
+    diversity_rttr          15.147          12.617   2.150    2.690    3.118        0.970  0.985     0.0
                             median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
     basic_letters_per_word          4.441           4.130   0.243    0.358    1.695        0.784  0.892     0.0
-    readability_lix                38.482          29.858   7.094   11.170    1.093        0.696  0.848     0.0
-    morph_p_gerund                  0.069           0.037   0.031    0.033    1.505        0.725  0.862     0.0
+    readability_lix                38.482          29.858   7.094   11.176    1.093        0.696  0.848     0.0
+    morph_p_gerund                  0.069           0.037   0.031    0.033    1.509        0.726  0.863     0.0
     morph_polarity_Neg              0.019           0.029  -0.011   -0.009   -1.136       -0.564  0.218     0.0
     sents_mean                     16.393          11.494   3.321    6.688    0.845        0.615  0.808     0.0
     punct_dash                     19.000          46.000 -39.000  -14.000   -1.287       -0.605  0.197     0.0
@@ -78,9 +78,9 @@ Galdós frente a Unamuno, tres novelas de cada uno del [corpus de literatura](..
     {'n_Galdós': 155, 'n_Unamuno': 117, 'n_texts_Galdós': 3, 'n_texts_Unamuno': 3}
     ```
 
-Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0.9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0.35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones. La cohesión también los distingue (`result.filter(like="cohesion_", axis=0)`): por cada 1000 palabras Unamuno abre con un conector más del triple de oraciones (`cohesion_connectors_inter`, 20 frente a 6) - unas 2.3 veces más por oración, ya que sus oraciones son más cortas - y repite más palabras con contenido de una oración en las dos siguientes (0.125 frente a 0.072). Parte de la cohesión sigue la longitud de las oraciones: la ρ de Spearman con `sents_mean` por ventanas es de 0.75 en Galdós y 0.73 en Unamuno para `cohesion_content_overlap_all`, la repetición binaria en todos los pares de oraciones, y de -0.50 y -0.61 para los conectores que abren una oración, mientras que la proporción de palabras con contenido repetidas en las dos oraciones siguientes no depende de ella (-0.06 y -0.12).
+Galdós tiene el vocabulario más rico: las medidas basadas en el número de palabras distintas - el TTR y sus transformaciones, MATTR, MTLD, los hápax - distinguen a los autores con una delta cercana a 0,9 o mayor, mientras que la K de Yule, que pondera las palabras frecuentes, da un efecto mediano (0,35), así que la diferencia está sobre todo en el vocabulario raro. Sus palabras y oraciones son más largas, con casi el doble de gerundios entre las formas verbales. Unamuno escribe en diálogo: dos veces y media más rayas y signos de exclamación por cada 1000 palabras, y más negaciones. La cohesión también los distingue (`result.filter(like="cohesion_", axis=0)`): por cada 1000 palabras Unamuno abre con un conector más del triple de oraciones (`cohesion_connectors_inter`, 20 frente a 6) - unas 2,3 veces más por oración, ya que sus oraciones son más cortas - y repite más palabras con contenido de una oración en las dos siguientes (0,125 frente a 0,072). Parte de la cohesión sigue la longitud de las oraciones: la ρ de Spearman con `sents_mean` por ventanas es de 0,75 en Galdós y 0,73 en Unamuno para `cohesion_content_overlap_all`, la repetición binaria en todos los pares de oraciones, y de -0,50 y -0,61 para los conectores que abren una oración, mientras que la proporción de palabras con contenido repetidas en las dos oraciones siguientes no depende de ella (-0,06 y -0,12).
 
-Los valores p toman las 272 ventanas de seis novelas por independientes (véase el [aviso](#statistics) de abajo), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 56 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3.3 a 6.7 palabras, donde las ventanas solas darían de 4.1 a 6.2.
+Los valores p toman las 272 ventanas de seis novelas por independientes (véase el [aviso](#statistics) de abajo), y según la misma prueba dos novelas de Galdós, *Marianela* y *Misericordia*, difieren en 56 rasgos. El intervalo de la diferencia de las medianas remuestrea novelas enteras y es la guía más segura: para la longitud de una oración va de 3,3 a 6,7 palabras, donde las ventanas solas darían de 4,1 a 6,2.
 
 ## Parámetros
 
@@ -113,7 +113,7 @@ Devuelve 164 rasgos de un texto con un prefijo según su fuente, 209 con un pipe
 | :------ | :----- | :----- |
 | `basic_` | proporciones de palabras largas, complejas, simples, monosílabas y polisílabas, de letras, espacios y signos de puntuación; letras y sílabas por palabra | [`BasicStats`](../stats/basic_stats.md) |
 | `readability_` | todas las fórmulas de legibilidad y el grado de consenso, sin los números entre las palabras (`filter_nums`) | [`ReadabilityStats`](../stats/readability_stats.md) |
-| `diversity_` | todas las medidas de diversidad léxica salvo las inestables en una ventana de mil palabras, `WINDOW_UNSTABLE_DIVERSITY`: la Z de Orlov, y MA-MTLD y MTLD-W, que promedian pocos factores completos | [`DiversityStats`](../stats/diversity_stats.md) |
+| `diversity_` | todas las medidas de diversidad léxica salvo las inestables en una ventana de mil palabras, `WINDOW_UNSTABLE_DIVERSITY` de `ests.corpus.compare`: la Z de Orlov, y MA-MTLD y MTLD-W, que promedian pocos factores completos | [`DiversityStats`](../stats/diversity_stats.md) |
 | `morph_` | proporciones de los valores de cada rasgo morfológico (`morph_pos_NOUN`, `morph_mood_Sub`, `morph_polarity_Neg`) y los marcadores del español (`morph_p_gerund`, `morph_p_mente_adverbs`) | [`MorphStats`](../stats/morph_stats.md) con el pipeline de `load_pipeline` |
 | `sents_` | longitud media de una oración en palabras, desviación típica, coeficiente de variación, autocorrelación de las longitudes vecinas ([`sentence_rhythm`](#sentence_rhythm)): el ritmo del texto | [`SentsExtractor`](../extractors/sentences.md) |
 | `punct_` | frecuencias de los signos de puntuación por tipo por cada 1000 palabras y la proporción de los signos de apertura | [`punctuation_profile`](../stats/basic_stats.md#punctuation) |
@@ -180,11 +180,11 @@ Los rasgos sintácticos llegan con un pipeline que tiene analizador sintáctico,
 
     ```
                                         median_Galdós  median_Unamuno  ci_low  ci_high  cohen_d  cliff_delta    auc  p_holm
-    syntax_gerund_clauses_per_sent              0.148           0.048   0.080    0.118    1.454        0.848  0.924     0.0
-    syntax_complex_nominals_per_clause          0.767           0.520   0.212    0.305    1.133        0.668  0.834     0.0
+    syntax_gerund_clauses_per_sent              0.151           0.049   0.081    0.117    1.481        0.859  0.929     0.0
+    syntax_complex_nominals_per_clause          0.768           0.520   0.211    0.305    1.134        0.668  0.834     0.0
     syntax_tree_depth                           3.780           2.888   0.597    1.062    1.083        0.666  0.833     0.0
     syntax_subtrees_per_sent                    6.833           4.563   1.574    2.894    0.944        0.659  0.830     0.0
-    syntax_t_units_per_sent                     1.075           1.008   0.028    0.150    1.367        0.649  0.825     0.0
+    syntax_t_units_per_sent                     1.075           1.008   0.028    0.150    1.361        0.646  0.823     0.0
     ```
 
 ## Comparación de tablas de rasgos { #compare_features }
@@ -224,9 +224,9 @@ Para un rasgo con los valores $x_1 \dots x_{n_A}$ en el corpus A y $y_1 \dots y_
 | :------ | :---------- |
 | `mean_A`, `mean_B`, `median_A`, `median_B` | medias y medianas |
 | `median_diff`, `ci_low`, `ci_high` | la diferencia de las medianas y su intervalo bootstrap de percentiles al 95%: ambos conjuntos se remuestrean `n_bootstrap` veces (`bootstrap_median_diff`) |
-| `cohen_d` | $d = (\bar{x} - \bar{y}) / s$, $s$ - la desviación típica combinada; 0.2 - un efecto pequeño, 0.5 - mediano, 0.8 - grande (`calc_cohen_d`) |
-| `cliff_delta` | $\delta = P(x > y) - P(x < y)$ de −1 a 1; $\lvert\delta\rvert$ < 0.147 - un efecto despreciable, < 0.33 - pequeño, < 0.474 - mediano, grande en otro caso (Romano et al. 2006; `calc_cliff_delta`) |
-| `auc` | el rasgo como clasificador: la proporción de pares de ventanas con el valor en A mayor que en B, con los empates a la mitad; $\delta = 2 \cdot AUC - 1$, 0.5 - el rasgo no distingue los corpus |
+| `cohen_d` | $d = (\bar{x} - \bar{y}) / s$, $s$ - la desviación típica combinada; 0,2 - un efecto pequeño, 0,5 - mediano, 0,8 - grande (`calc_cohen_d`) |
+| `cliff_delta` | $\delta = P(x > y) - P(x < y)$ de −1 a 1; $\lvert\delta\rvert$ < 0,147 - un efecto despreciable, < 0,33 - pequeño, < 0,474 - mediano, grande en otro caso (Romano et al. 2006; `calc_cliff_delta`) |
+| `auc` | el rasgo como clasificador: la proporción de pares de ventanas con el valor en A mayor que en B, con los empates a la mitad; $\delta = 2 \cdot AUC - 1$, 0,5 - el rasgo no distingue los corpus |
 | `u`, `p_value` | el estadístico U de Mann-Whitney y el valor p bilateral (`scipy.stats.mannwhitneyu`); con todos los valores de ambos corpus iguales no hay prueba, y el valor p es `nan` |
 | `p_holm` | el valor p con la corrección de Holm por el número de rasgos con valor p (`holm_correction`) |
 | `n_A`, `n_B` | número de ventanas con un valor definido |

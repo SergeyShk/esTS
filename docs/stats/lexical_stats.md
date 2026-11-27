@@ -83,7 +83,7 @@ The metrics rely on two resources; always read the means by the dictionary next 
 
 | Resource | Metrics | Availability |
 | :------- | :------ | :----------- |
-| [`FreqDict`](../datasets/freqdict.md) - 86,091 lemmas of Google Books Ngram (1980-2019) with ipm, range and dispersion | `coverage`, `mean_ipm*`, `mean_log_ipm*`, `mean_range`, `mean_dispersion`, `surprisal`, `perplexity` | downloaded once with `FreqDict().download()` |
+| [`FreqDict`](../datasets/freqdict.md) - 86,091 lemmas of Google Books Ngram (1980-2019) with ipm, range and dispersion | `coverage`, `mean_ipm*`, `mean_log_ipm*`, `mean_range`, `mean_dispersion`, `surprisal`, `perplexity` | downloaded once with `FreqDict().download()` or `ests download` |
 | The embedded list of the 10,000 most frequent lemmas of the same dictionary (`ests/resources/google_books_top10000.txt`, CC BY 3.0) | `p_top1000`, `p_top2000`, `p_top5000`, `p_top10000`, `p_beyond_top10000`, `band_coverage` | always |
 
 <div class="metric-card" markdown>
@@ -157,7 +157,7 @@ This builds a frequency band profile in the manner of the Lexical Frequency Prof
 get_rank(lemma)
 ```
 
-The rank of a lemma by the embedded list, `None` for a lemma outside the list; the lemma may be in any case.
+The rank of a lemma by the embedded list, `None` for a lemma outside the list; the lemma may be in any case. A lemma that is not a string, such as a spaCy `Token` in place of its `lemma_`, raises `SourceTypeError`.
 
 | Parameter | Type | Default | Description |
 | :-------- | :--- | :------ | :---------- |

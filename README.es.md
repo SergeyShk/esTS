@@ -46,6 +46,7 @@ La biblioteca trabaja tanto con cadenas como con objetos `Doc` de [spaCy](https:
 * **[Medidas de corpus](https://sergeyshk.github.io/esTS/es/corpus/keyness/)** - palabras clave frente a un corpus de referencia, colocaciones, la dispersión de una palabra por las partes de un texto, una concordancia KWIC y la estilometría de autoría: la Delta de Burrows con sus variantes, Zeta, la curva de Mendenhall, el perfil de las palabras funcionales; la comparación de dos corpus por 164 rasgos de un texto con tamaños del efecto
 * **[Visualizaciones](https://sergeyshk.github.io/esTS/es/visualizers/zipf/)** - ley de Zipf, huella literaria, árbol de palabras, dispersión léxica y palabras clave, red de colocaciones, dendrograma, PCA y MDS por la Delta, las distancias dentro de los autores y entre ellos, la Delta móvil y Zeta, crecimiento del vocabulario, longitudes de las oraciones, el ritmo de los versos y el resaltado de los fragmentos que cuentan las estadísticas, como las oraciones largas y las pasivas
 * **[Conjuntos de datos](https://sergeyshk.github.io/esTS/es/datasets/spanishliterature/)** - literatura en español de dominio público: 150 obras de 33 autores en cuatro géneros; 4259 sonetos de los siglos XV-XX con el patrón métrico y la rima de cada verso; un diccionario de frecuencias de 86 091 lemas según Google Books Ngram
+* **[Línea de comandos](https://sergeyshk.github.io/esTS/es/cli/)** - el comando `ests`: las estadísticas de ficheros de texto como tabla, JSON o CSV, del texto entero o por oraciones, líneas y párrafos, un informe HTML de un texto en una página y la descarga del diccionario de frecuencias
 * **[Componentes de spaCy](https://sergeyshk.github.io/esTS/es/components/)** - cada clase de estadísticas como componente de un pipeline, con las estadísticas puestas en el `Doc` en una sola pasada; `ests.load_pipeline()` da a un `Doc` los tokens, las oraciones y la morfología de su cadena
 * **[Estadísticas de cohesión](https://sergeyshk.github.io/esTS/es/stats/cohesion_stats/)** - la repetición de sustantivos, argumentos y palabras con contenido entre oraciones, la información dada y la cohesión temporal a la manera de Coh-Metrix, la repetición en las oraciones siguientes y entre párrafos de TAACO, con la densidad de 273 marcadores del discurso españoles por clase y por lugar
 * **[Estadísticas de complejidad léxica](https://sergeyshk.github.io/esTS/es/stats/lexical_stats/)** - cuán raras son las palabras de un texto en la lengua: la frecuencia, el rango y la dispersión de los lemas según un diccionario de Google Books Ngram, las bandas de frecuencia del top-1000 al 10000, la sorpresa, la perplejidad, la densidad léxica y las proporciones de los nombres propios y de las abreviaturas
@@ -120,6 +121,8 @@ ests download  # el diccionario de frecuencias, una vez
 ests stats -f json texto.txt
 ests report texto.txt -o informe.html
 ```
+
+Más en la [documentación](https://sergeyshk.github.io/esTS/es/cli/).
 
 ## Funcionalidad
 

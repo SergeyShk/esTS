@@ -90,7 +90,7 @@ Una fórmula se calcula con la función de su tarjeta sobre los recuentos de `bs
 | Métrica | Qué mide | Rango | Un valor mayor indica |
 | :------ | :------- | :---- | :-------------------- |
 | [`flesch_reading_easy`](#flesch_reading_easy) | Facilidad de lectura según la longitud de la oración y las sílabas por palabra | En principio 0-100, por encima de 100 para los textos más simples y por debajo de 0 para los más difíciles | Un texto más fácil |
-| [`gutierrez_polini_index`](#gutierrez_polini_index) | Comprensibilidad según las letras por palabra y la longitud de la oración | Por debajo de 95.2, la prosa corriente 30-50 | Un texto más fácil |
+| [`gutierrez_polini_index`](#gutierrez_polini_index) | Comprensibilidad según las letras por palabra y la longitud de la oración | Por debajo de 95,2, la prosa corriente 30-50 | Un texto más fácil |
 | [`crawford_grade`](#crawford_grade) | Grado según las oraciones y las sílabas por cada 100 palabras | Años de escolaridad, por debajo de 0 para los textos más simples; fórmula ajustada con los cursos 1-6 | Un texto más difícil |
 | [`mu_index`](#mu_index) | Longitud media de la palabra en letras frente a su varianza | Por encima de 0, `nan` con menos de dos palabras o sin variabilidad | Un texto más fácil |
 | [`sol_grade`](#sol_grade) | Grado según las palabras polisílabas por oración, SMOG convertido al español | Años de escolaridad, algo por debajo de 0 para los textos más simples | Un texto más difícil |
@@ -503,7 +503,7 @@ Conversión de la facilidad de lectura de Flesch en años de escolaridad para el
 | `[40, 55)` | 11 | libros de texto de secundaria, bachillerato |
 | `(−∞, 40)` | 13 | textos científicos, universidad |
 
-Con el preajuste `classic`, a través de la tabla de interpretación de Flesch que conservó Fernández Huerta: `90-100` - 5, `80-90` - 6, `70-80` - 7, `60-70` - 8.5, `50-60` - 10, `40-50` - 11, `30-40` - 12, por debajo de `30` - 13.
+Con el preajuste `classic`, a través de la tabla de interpretación de Flesch que conservó Fernández Huerta: `90-100` - 5, `80-90` - 6, `70-80` - 7, `60-70` - 8,5, `50-60` - 10, `40-50` - 11, `30-40` - 12, por debajo de `30` - 13.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
