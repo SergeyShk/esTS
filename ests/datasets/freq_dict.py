@@ -7,7 +7,7 @@ from numbers import Real
 from pathlib import Path
 from typing import Any, NamedTuple
 
-from anyts.datasets import Dataset, check_limit, fetch_archive, to_path
+from anyts.datasets import Dataset, check_limit, fetch_archive, other_versions, to_path
 from anyts.utils import check_word
 
 from ..constants import DEFAULT_DATA_DIR, USER_AGENT
@@ -196,9 +196,7 @@ class FreqDict(Dataset):
             DatasetNotFoundError: If the dictionary is not found
         """
         if not self._filepath.is_file():
-            other = sorted(
-                path.parent.name for path in self.data_dir.glob(f"{NAME}_v*/{FILENAME}")
-            )
+            other = other_versions(self.data_dir, NAME, VERSION, FILENAME)
             found = (
                 f"The directory has {', '.join(other)}, but this version of esTS reads "
                 f"{NAME}_v{VERSION}\n"
