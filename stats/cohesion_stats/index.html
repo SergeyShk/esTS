@@ -2387,6 +2387,7 @@
 </ul>
 <p>The class extends the <code>CohesionStats</code> of the <a href="https://sergeyshk.github.io/anyTS/stats/cohesion_stats/">anyTS</a> core with the Spanish layer. A <code>Doc</code> without sentence boundaries - from a pipeline without a parser - is split into sentences by the Spanish <a href="../../extractors/sentences/"><code>SentsExtractor</code></a>. The features of the words come from the <a href="https://universaldependencies.org/u/feat/">Universal Dependencies</a> annotation, the temporal cohesion compares the tense and the mood of the verbs, and the connectors are found by <a href="#ConnectorMatcher"><code>SpanishConnectorMatcher</code></a> over the dictionary of <a href="#connectors"><code>load_connectors</code></a>. The <code>print_stats</code> table takes the descriptions of <code>COHESION_STATS_DESC</code> of <code>ests.constants</code>.</p>
 <p>The <code>max_length</code> of the pipeline is a million characters by default: split a longer text into parts, or raise <code>max_length</code> on a pipeline of your own and pass it in <code>nlp</code>.</p>
+<p>The <a href="../../cli/#Command">command <code>ests</code></a> and its report read a string without spaCy, by the words of anySeg and esMorph, so their cohesion differs from that of a string here; the command line page gives by how much.</p>
 <p>The words are classified by the Universal Dependencies annotation:</p>
 <table>
 <thead>
