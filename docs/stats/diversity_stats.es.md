@@ -108,7 +108,7 @@ Según Zenker y Kyle (2021), MATTR, MTLD y HD-D son estables en textos de 50-200
 
 ## Métricas
 
-<!-- core: stats/diversity_stats.md:DiversityStats-metrics 07cb8f8 -->
+<!-- core: stats/diversity_stats.md:DiversityStats-metrics a7cdc53 -->
 Cada métrica es una propiedad del objeto, calculada en cada acceso por la función de su tarjeta con los parámetros del objeto, y `get_stats` las da todas.
 
 | Métrica | Qué mide | Rango | Un valor mayor indica |
@@ -138,7 +138,7 @@ Cada métrica es una propiedad del objeto, calculada en cada acceso por la funci
 | [`brunet_w`](#brunet_w) | Palabras frente a los lexemas | De 1 al número de palabras | Un vocabulario más pobre |
 | [`dugast_k`](#dugast_k) | Lexemas frente a las palabras en logaritmos | 0 o más, `nan` en un texto no más largo que la base | Un vocabulario más rico |
 | [`baayen_p`](#baayen_p) | Proporción de hápax entre las palabras | 0-1 | Un vocabulario que crece más deprisa |
-| [`orlov_z`](#orlov_z) | Longitud del texto en palabras con la que la ley de Zipf mejor se ajusta al vocabulario | Más de 0, `nan` sin solución, `inf` más allá de los float | Un vocabulario más rico |
+| [`orlov_z`](#orlov_z) | Longitud del texto en palabras con la que la ley de Zipf mejor se ajusta al vocabulario | Más de 0, `nan` sin solución o cuando el vocabulario no la determina | Un vocabulario más rico |
 | [`hapax_ratio`](#hapax_ratio) | Proporción de hápax entre los lexemas | 0-1 | Más lexemas usados una sola vez |
 | [`alpha2`](#alpha2) | Forma de la parte baja del espectro de frecuencias | 1 o menos, `nan` sin hápax | Más hápax frente a dis legomena |
 | [`entropy`](#entropy) | Información por palabra en bits | 0 o más | Un vocabulario más rico |
@@ -792,12 +792,12 @@ $$
 `orlov_z` · [Tweedie y Baayen 1998](https://doi.org/10.1023/A:1001749303137)
 { .metric-meta }
 
-<!-- core: stats/diversity_stats.md:calc_orlov_z 45a9bb7 -->
+<!-- core: stats/diversity_stats.md:calc_orlov_z b613f6c -->
 ``` {.python .signature}
 calc_orlov_z(text)
 ```
 
-La longitud del texto con la que la ley de Zipf mejor se ajusta al vocabulario (Orlov 1983): la solución $Z$ para $N$ palabras, $V$ lexemas y la proporción $p$ del lexema más frecuente. El lado derecho, como función de $Z$, tiene un mínimo, y $Z$ es la solución por encima de él; es `nan` cuando $V$ queda en ese mínimo o por debajo o cuando cada palabra es un lexema propio, e `inf` cuando $V$ se acerca tanto a $N$ que $Z$ desborda un float. Junto con la K de Yule, Z fue la que mejor separó a los autores entre las medidas que compararon Tweedie y Baayen. En un texto de menos de unas diez mil palabras Z es inestable y crece con la longitud, y sus valores abarcan órdenes de magnitud: se comparan textos de igual longitud, o por el logaritmo de Z.
+La longitud del texto con la que la ley de Zipf mejor se ajusta al vocabulario (Orlov 1983): la solución $Z$ para $N$ palabras, $V$ lexemas y la proporción $p$ del lexema más frecuente. El lado derecho, como función de $Z$, tiene un mínimo, y $Z$ es la solución por encima de él; es `nan` cuando $V$ queda en ese mínimo o por debajo, cuando cada palabra es un lexema propio o cuando una $Z$ diez veces mayor añadiría menos de un lexema: el vocabulario no determina $Z$, como en un texto corto de palabras casi todas nuevas. Junto con la K de Yule, Z fue la que mejor separó a los autores entre las medidas que compararon Tweedie y Baayen. En un texto de menos de unas diez mil palabras Z es inestable y crece con la longitud, y sus valores abarcan órdenes de magnitud: se comparan textos de igual longitud, o por el logaritmo de Z.
 
 $$
 V = \frac{Z}{\ln(pZ)} \cdot \frac{N}{N - Z} \cdot \ln \frac{N}{Z}

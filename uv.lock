@@ -81,7 +81,7 @@ wheels = [
 
 [[package]]
 name = "anyts"
-version = "0.6.4"
+version = "0.6.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyseg" },
@@ -94,9 +94,9 @@ dependencies = [
     { name = "scipy", version = "1.18.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "spacy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c5/a3/0c72f3f4bc7b9e0452fbbfc2122fb3fc2b11a15092d638db0d718ee95193/anyts-0.6.4.tar.gz", hash = "sha256:e244e223e35d3eba53f5730fcbbf1cad1a3594fe9894e0d617056f04a7c6215b", size = 222818, upload-time = "2026-11-23T18:37:38.829Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3a/d8/ebe04ae945338a24b1105ed7c028f7dfca2e67e60b032e0d005d2b821807/anyts-0.6.5.tar.gz", hash = "sha256:68e407a4936d8250da723e6b16c1222df9b26e15e09bd5a1a50d170ca15fe417", size = 223442, upload-time = "2026-11-27T01:57:53.196Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9c/4f/b3da76c9d9d6635474572dc6f3b133af003df4e869aee5155219733558ee/anyts-0.6.4-py3-none-any.whl", hash = "sha256:f36238f169aa9920c80fb7311167354279f928a9fae8cf574b636236d86e3356", size = 248821, upload-time = "2026-11-23T18:37:37.715Z" },
+    { url = "https://files.pythonhosted.org/packages/04/b3/8e7f617112ebb731fe717cc18fa967b12ba303bc57640c8f591b0926fe82/anyts-0.6.5-py3-none-any.whl", hash = "sha256:89597afc3ab7bce12b6754ab2253faf9ba3d6a5b84ccc22db4e839c58e787e65", size = 249346, upload-time = "2026-11-27T01:57:51.996Z" },
 ]
 
 [[package]]
@@ -3236,7 +3236,7 @@ wheels = [
 
 [[package]]
 name = "pyests"
-version = "0.11.0.dev8"
+version = "0.11.0.dev9"
 source = { editable = "." }
 dependencies = [
     { name = "anyseg" },
@@ -3290,7 +3290,7 @@ test = [
 [package.metadata]
 requires-dist = [
     { name = "anyseg", specifier = ">=0.4,<0.5" },
-    { name = "anyts", specifier = ">=0.6.4,<0.7" },
+    { name = "anyts", specifier = ">=0.6.5,<0.7" },
     { name = "esmorph", specifier = ">=0.4,<0.5" },
     { name = "graphviz", specifier = ">=0.20.3" },
     { name = "matplotlib", specifier = ">=3.8" },
