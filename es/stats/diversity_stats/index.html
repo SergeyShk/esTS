@@ -3117,7 +3117,7 @@ Burstiness of the frequent lexemes                                     |   nan
 </table>
 <p>Según Zenker y Kyle (2021), MATTR, MTLD y HD-D son estables en textos de 50-200 palabras o más, MTLD-W, MA-MTLD y Maas son inestables en textos cortos, y la familia de TTR nunca se estabiliza. Los textos de distinta longitud se comparan mediante el <a href="#windowed">cálculo por ventanas</a> con intervalos de confianza.</p>
 <h2 id="metricas">Métricas<a class="headerlink" href="#metricas" title="Permanent link">&para;</a></h2>
-<!-- core: stats/diversity_stats.md:DiversityStats-metrics 07cb8f8 -->
+<!-- core: stats/diversity_stats.md:DiversityStats-metrics a7cdc53 -->
 <p>Cada métrica es una propiedad del objeto, calculada en cada acceso por la función de su tarjeta con los parámetros del objeto, y <code>get_stats</code> las da todas.</p>
 <table>
 <thead>
@@ -3282,7 +3282,7 @@ Burstiness of the frequent lexemes                                     |   nan
 <tr>
 <td style="text-align: left;"><a href="#orlov_z"><code>orlov_z</code></a></td>
 <td style="text-align: left;">Longitud del texto en palabras con la que la ley de Zipf mejor se ajusta al vocabulario</td>
-<td style="text-align: left;">Más de 0, <code>nan</code> sin solución, <code>inf</code> más allá de los float</td>
+<td style="text-align: left;">Más de 0, <code>nan</code> sin solución o cuando el vocabulario no la determina</td>
 <td style="text-align: left;">Un vocabulario más rico</td>
 </tr>
 <tr>
@@ -4174,10 +4174,10 @@ P = \frac{V_1}{N}
 <div class="metric-card">
 <h3 id="orlov_z">Z de Orlov<a class="headerlink" href="#orlov_z" title="Permanent link">&para;</a></h3>
 <p class="metric-meta"><code>orlov_z</code> · <a href="https://doi.org/10.1023/A:1001749303137">Tweedie y Baayen 1998</a></p>
-<!-- core: stats/diversity_stats.md:calc_orlov_z 45a9bb7 -->
+<!-- core: stats/diversity_stats.md:calc_orlov_z b613f6c -->
 <div class="signature highlight"><pre><span></span><code><span class="n">calc_orlov_z</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 </code></pre></div>
-<p>La longitud del texto con la que la ley de Zipf mejor se ajusta al vocabulario (Orlov 1983): la solución <span class="arithmatex">\(Z\)</span> para <span class="arithmatex">\(N\)</span> palabras, <span class="arithmatex">\(V\)</span> lexemas y la proporción <span class="arithmatex">\(p\)</span> del lexema más frecuente. El lado derecho, como función de <span class="arithmatex">\(Z\)</span>, tiene un mínimo, y <span class="arithmatex">\(Z\)</span> es la solución por encima de él; es <code>nan</code> cuando <span class="arithmatex">\(V\)</span> queda en ese mínimo o por debajo o cuando cada palabra es un lexema propio, e <code>inf</code> cuando <span class="arithmatex">\(V\)</span> se acerca tanto a <span class="arithmatex">\(N\)</span> que <span class="arithmatex">\(Z\)</span> desborda un float. Junto con la K de Yule, Z fue la que mejor separó a los autores entre las medidas que compararon Tweedie y Baayen. En un texto de menos de unas diez mil palabras Z es inestable y crece con la longitud, y sus valores abarcan órdenes de magnitud: se comparan textos de igual longitud, o por el logaritmo de Z.</p>
+<p>La longitud del texto con la que la ley de Zipf mejor se ajusta al vocabulario (Orlov 1983): la solución <span class="arithmatex">\(Z\)</span> para <span class="arithmatex">\(N\)</span> palabras, <span class="arithmatex">\(V\)</span> lexemas y la proporción <span class="arithmatex">\(p\)</span> del lexema más frecuente. El lado derecho, como función de <span class="arithmatex">\(Z\)</span>, tiene un mínimo, y <span class="arithmatex">\(Z\)</span> es la solución por encima de él; es <code>nan</code> cuando <span class="arithmatex">\(V\)</span> queda en ese mínimo o por debajo, cuando cada palabra es un lexema propio o cuando una <span class="arithmatex">\(Z\)</span> diez veces mayor añadiría menos de un lexema: el vocabulario no determina <span class="arithmatex">\(Z\)</span>, como en un texto corto de palabras casi todas nuevas. Junto con la K de Yule, Z fue la que mejor separó a los autores entre las medidas que compararon Tweedie y Baayen. En un texto de menos de unas diez mil palabras Z es inestable y crece con la longitud, y sus valores abarcan órdenes de magnitud: se comparan textos de igual longitud, o por el logaritmo de Z.</p>
 <div class="arithmatex">\[
 V = \frac{Z}{\ln(pZ)} \cdot \frac{N}{N - Z} \cdot \ln \frac{N}{Z}
 \]</div>
