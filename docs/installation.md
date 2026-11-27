@@ -6,7 +6,7 @@
 *   `spaCy` 3.8.17 or newer within 3
 *   [`anyts`](https://sergeyshk.github.io/anyTS/) 0.6.5 or newer within 0.6, the language-independent core: the extractors, the basic statistics and the common readability formulas, the lexical diversity metrics, the corpus measures, the plots and the machinery of the highlighting come from it with the hooks of Spanish: the tokens and sentences of anySeg, the lemmas of esMorph, the syllables of esTS
 *   [`anyseg`](https://github.com/SergeyShk/anySeg) 0.4 or newer within 0.4, the segmenter into tokens and sentences
-*   [`esmorph`](https://github.com/SergeyShk/esMorph) 0.4 or newer within 0.4, the morphological analyzer: the lemmas, the parts of speech and the features of a text; its dictionary, built from the Spanish entries of the English Wiktionary with the context model of the UD treebanks AnCora and GSD, is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+*   [`esmorph`](https://github.com/SergeyShk/esMorph) 0.4 or newer within 0.4, the morphological analyzer: the lemmas, the parts of speech and the features of a text; its dictionary, built from the English and the Spanish Wiktionary with the context model of the UD treebanks AnCora and GSD, is licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 *   `numpy`, `scipy`, `pandas`
 *   `matplotlib` and `graphviz` for the [visualizers](visualizers/zipf.md)
 
@@ -41,7 +41,7 @@ python -m spacy download es_core_news_sm
 
 ## Datasets { #datasets }
 
-The [corpus of literature](datasets/spanishliterature.md), the [sonnets](datasets/spanishsonnets.md) and the [frequency dictionary](datasets/freqdict.md) are downloaded once by their `download()` method; the statistics of [`LexicalStats`](stats/lexical_stats.md) by the dictionary and [`keyness`](corpus/keyness.md) against it need `FreqDict().download()`. The archives go to the directory `ests_data` next to the installed package (`ests.constants.DEFAULT_DATA_DIR`), `dicts` for the dictionary and `texts` for the corpus and the sonnets. Where that directory cannot be written, pass another one in `data_dir` (`FreqDict(data_dir="...")`) or set the environment variable `ESTS_DATA_DIR` before the package is imported:
+The [corpus of literature](datasets/spanishliterature.md), the [sonnets](datasets/spanishsonnets.md) and the [frequency dictionary](datasets/freqdict.md) are downloaded once by their `download()` method; the statistics of [`LexicalStats`](stats/lexical_stats.md) by the dictionary and [`keyness`](corpus/keyness.md) against it need `FreqDict().download()` or the command [`ests download`](cli.md). The archives go to the directory `ests_data` next to the installed package (`ests.constants.DEFAULT_DATA_DIR`), `dicts` for the dictionary and `texts` for the corpus and the sonnets. Where that directory cannot be written, pass another one in `data_dir` (`FreqDict(data_dir="...")`) or set the environment variable `ESTS_DATA_DIR` before the package is imported:
 
 ``` bash
 export ESTS_DATA_DIR=~/ests_data

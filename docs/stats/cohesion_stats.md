@@ -17,6 +17,8 @@ The class extends the `CohesionStats` of the [anyTS](https://sergeyshk.github.io
 
 The `max_length` of the pipeline is a million characters by default: split a longer text into parts, or raise `max_length` on a pipeline of your own and pass it in `nlp`.
 
+The [command `ests`](../cli.md#Command) and its report read a string without spaCy, by the words of anySeg and esMorph, so their cohesion differs from that of a string here; the command line page gives by how much.
+
 The words are classified by the Universal Dependencies annotation:
 
 | Notion | Universal Dependencies |

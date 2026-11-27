@@ -80,8 +80,9 @@ def keyness(
             corpus, its words - one text or a list of texts - or their frequencies;
             word forms against the frequency dictionary
         reference (list[str]|list[list[str]]|dict[str, float]|FreqDict|FrequencyReference):
-            Words of the reference corpus - one text or a list of texts, their
-            frequencies, the frequency dictionary or a reference by frequencies
+            Words of the reference corpus - one text or a list of texts, not a
+            string - their frequencies, the frequency dictionary or a reference by
+            frequencies
         measure (str): Measure of KEYNESS_MEASURES for score and the sorting
         min_freq (int): Minimum frequency of a keyword in its own corpus
         positive (bool): Positive keywords (True) or negative ones (False)

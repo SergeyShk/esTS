@@ -10,9 +10,11 @@ from anyts.utils import has_words, is_punctuation
 import ests
 from ests import BasicStats, CohesionStats, load_pipeline
 from ests.exceptions import DatasetNotFoundError, SourceTypeError
+from ests.lexical_stats import get_rank
 from ests.utils import (
     get_document,
     get_nlp,
+    is_verbal_noun,
     iter_text_sents,
     iter_text_words,
     iter_tokens,
@@ -558,3 +560,10 @@ def test_word_functions_check_the_word(function):
         others = [value] * (len(params) - 1)
         with pytest.raises(SourceTypeError):
             function([value] if many else value, *others)
+
+
+@pytest.mark.parametrize("function", [get_rank, is_verbal_noun])
+def test_lemma_functions_check_the_lemma(function):
+    """A function of a lemma refuses a spaCy Token, whose lemma is token.lemma_"""
+    with pytest.raises(SourceTypeError):
+        function(get_nlp()("El libro")[1])

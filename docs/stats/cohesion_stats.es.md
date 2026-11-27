@@ -17,6 +17,8 @@ La clase extiende el `CohesionStats` del núcleo [anyTS](https://sergeyshk.githu
 
 El `max_length` del pipeline es de un millón de caracteres por defecto: divida un texto más largo en partes o suba `max_length` en un pipeline propio y páselo en `nlp`.
 
+El [comando `ests`](../cli.md#Command) y su informe leen una cadena sin spaCy, con las palabras de anySeg y esMorph, así que su cohesión difiere de la que da aquí una cadena; la página de la línea de comandos dice cuánto.
+
 Las palabras se clasifican por la anotación de Universal Dependencies:
 
 | Noción | Universal Dependencies |

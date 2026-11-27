@@ -99,8 +99,8 @@ Algunas métricas dependen de convenciones que difieren entre bibliotecas. Todas
 | :-------- | :------ | :-------------- |
 | Base del logaritmo para Summer, Maas, U de Dugast y k de Dugast | `10` | LexicalRichness, textcomplexity y zipfR: natural |
 | Ventana de MATTR y segmento de MSTTR | `50` | quanteda y koRpus: 100 |
-| Umbral de TTR para MTLD | `0.72` | 0.66-0.75 en la bibliografía |
-| Comparación con el umbral de MTLD | un factor se cierra con TTR ≤ 0.72 (McCarthy & Jarvis, 2010) | lexical-diversity y TAALED: `<` estricto; los valores difieren cuando el TTR da exactamente el umbral |
+| Umbral de TTR para MTLD | `0.72` | 0,66-0,75 en la bibliografía |
+| Comparación con el umbral de MTLD | un factor se cierra con TTR ≤ 0,72 (McCarthy & Jarvis, 2010) | lexical-diversity y TAALED: `<` estricto; los valores difieren cuando el TTR da exactamente el umbral |
 | Longitud mínima del factor de MTLD | `10` | koRpus: solo en MTLD-MA, descartando los factores más cortos en lugar de extenderlos; LexicalRichness y textcomplexity: no se aplica |
 | Tamaño de la muestra de HD-D | `42` | 35-50 en la bibliografía |
 
@@ -1020,7 +1020,7 @@ El visualizador de la [ley de Zipf](../visualizers/zipf.md) dibuja este ajuste c
 calc_heaps_beta(text)
 ```
 
-El exponente $\beta$ de la ley de Heaps $V(N) = K \cdot N^{\beta}$ del crecimiento del vocabulario con la longitud del texto, estimado por regresión lineal del logaritmo del tamaño del vocabulario sobre el logaritmo de la longitud del texto a lo largo de la curva de crecimiento. En corpus de millones de palabras $\beta$ está entre 0.4 y 0.6, en un solo texto entre 0.6 y 0.9, así que los valores solo son comparables entre textos de longitud parecida. El valor depende del orden de las palabras y necesita varios cientos de palabras o más. En los textos de menos de dos palabras el valor es `nan`.
+El exponente $\beta$ de la ley de Heaps $V(N) = K \cdot N^{\beta}$ del crecimiento del vocabulario con la longitud del texto, estimado por regresión lineal del logaritmo del tamaño del vocabulario sobre el logaritmo de la longitud del texto a lo largo de la curva de crecimiento. En corpus de millones de palabras $\beta$ está entre 0,4 y 0,6, en un solo texto entre 0,6 y 0,9, así que los valores solo son comparables entre textos de longitud parecida. El valor depende del orden de las palabras y necesita varios cientos de palabras o más. En los textos de menos de dos palabras el valor es `nan`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :------ | :---------- |
@@ -1056,7 +1056,7 @@ El gráfico de la [ley de Heaps](../visualizers/vocabulary.md) se construye a pa
 calc_burstiness(text, min_freq=5)
 ```
 
-En qué medida un lexema aparece en ráfagas en lugar de repartido por el texto, según el índice de ráfagas (burstiness) de Kim y Jo, que corrige el de Goh y Barabási para un número finito $n$ de eventos, promediado sobre los lexemas de `min_freq` apariciones o más (`BURSTINESS_MIN_FREQ`). Para las $n$ apariciones de un lexema, $r$ es el coeficiente de variación de sus $n$ intervalos, incluido el que va de la última a la primera dando la vuelta al final del texto. El valor es −1 para apariciones a intervalos iguales, incluido el que da la vuelta al final (*a x a x a x a x a x* da −1, *a x a x a x a x a* alrededor de −0.69), cerca de 0 para un lexema raro en lugares aleatorios y hasta 1 para apariciones en ráfagas; `nan` sin tales lexemas. En un texto corto o en una ventana los lexemas de `min_freq` apariciones son sobre todo palabras funcionales, y el valor crece con la longitud del texto.
+En qué medida un lexema aparece en ráfagas en lugar de repartido por el texto, según el índice de ráfagas (burstiness) de Kim y Jo, que corrige el de Goh y Barabási para un número finito $n$ de eventos, promediado sobre los lexemas de `min_freq` apariciones o más (`BURSTINESS_MIN_FREQ`). Para las $n$ apariciones de un lexema, $r$ es el coeficiente de variación de sus $n$ intervalos, incluido el que va de la última a la primera dando la vuelta al final del texto. El valor es −1 para apariciones a intervalos iguales, incluido el que da la vuelta al final (*a x a x a x a x a x* da −1, *a x a x a x a x a* alrededor de −0,69), cerca de 0 para un lexema raro en lugares aleatorios y hasta 1 para apariciones en ráfagas; `nan` sin tales lexemas. En un texto corto o en una ventana los lexemas de `min_freq` apariciones son sobre todo palabras funcionales, y el valor crece con la longitud del texto.
 
 $$
 A_n = \frac{\sqrt{n + 1} \cdot r - \sqrt{n - 1}}{(\sqrt{n + 1} - 2) \cdot r + \sqrt{n - 1}}

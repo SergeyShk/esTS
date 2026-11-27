@@ -431,7 +431,7 @@ On the 60,209 lines of the 4,259 sonnets of [SpanishSonnets](../datasets/spanish
 
 The annotation checked by hand gives the accuracy: on the 748 sonnets of the [Corpus of Spanish Golden-Age Sonnets](https://github.com/bncolorado/CorpusSonetosSigloDeOro) of Navarro-Colorado whose metrical annotation has been checked by hand (10,535 lines; the annotation is CC BY-NC 4.0), the number of metrical syllables is right for 99.8% of the lines, the stress of the tenth syllable for 99.9% and the whole pattern for 93.0%, and in the lines of the right length 98.6% of the metrical syllables have the stress of the annotation (`scripts/check_scansion.py`). Most of the 21 lines of another length need a license that the fitting does not try - a dieresis of an unstressed syllable or of a falling diphthong (*vi-o-len-tas*, *cru-el-dad*), *re-hu-sa* - or belong to a poem left without a meter, as more than a tenth of its lines are off it (`VERSE_MAX_DEVIATIONS`); the others have 10 or 12 syllables in the annotation or a gap in the text, or are the heptasyllable of an estrambote, which keeps its plain reading in a sonnet of hendecasyllables.
 
-The rhyme is described in its [card](#rhyme_scheme). Against the automatic rhyme of DISCO (RhymeTagger), 99.1% of the pairs of rhyming lines we find are its pairs, and we find 97.9% of its pairs.
+The rhyme is described in its [card](#rhyme_scheme). Against the automatic rhyme of DISCO (RhymeTagger), on the 4,233 sonnets whose lines all carry a label, 99.3% of the pairs of rhyming lines we find are its pairs, and we find 97.9% of its pairs.
 
 ## Accentuation { #accentuate }
 

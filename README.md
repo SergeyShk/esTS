@@ -46,6 +46,7 @@ The library works both with raw strings and with `Doc` objects of [spaCy](https:
 * **[Corpus measures](https://sergeyshk.github.io/esTS/corpus/keyness/)** - keywords against a reference corpus, collocations, the dispersion of a word over the parts of a text, a KWIC concordance and the stylometry of authorship: Burrows's Delta with its variants, Zeta, the Mendenhall curve, the profile of the function words; the comparison of two corpora by 164 features of a text with effect sizes
 * **[Visualizers](https://sergeyshk.github.io/esTS/visualizers/zipf/)** - Zipf's law, literature fingerprinting, a word tree, lexical dispersion and keywords, a network of collocations, a dendrogram, PCA and MDS by Delta, the distances within and between authors, rolling Delta and Zeta, vocabulary growth, sentence lengths, the rhythm of the lines of a verse, and the highlighting of the fragments the statistics count, such as long sentences and passives
 * **[Datasets](https://sergeyshk.github.io/esTS/datasets/spanishliterature/)** - Spanish-language literature in the public domain: 150 works by 33 authors in four genres; 4,259 sonnets of the 15th-20th centuries with the metrical pattern and the rhyme of every line; a frequency dictionary of 86,091 lemmas by Google Books Ngram
+* **[Command line](https://sergeyshk.github.io/esTS/cli/)** - the command `ests`: the statistics of text files as a table, JSON or CSV, for the whole text or by sentences, lines and paragraphs, an HTML report of a text in one page and the download of the frequency dictionary
 * **[spaCy components](https://sergeyshk.github.io/esTS/components/)** - every statistics class as a component of a pipeline, the statistics attached to the `Doc` in one pass; `ests.load_pipeline()` gives a `Doc` the tokens, sentences and morphology of its string
 * **[Cohesion statistics](https://sergeyshk.github.io/esTS/stats/cohesion_stats/)** - the overlap of nouns, arguments and content words between sentences, givenness and temporal cohesion in the manner of Coh-Metrix, the overlap with the next sentences and paragraphs of TAACO, with the density of 273 Spanish discourse markers by class and by place
 * **[Lexical sophistication statistics](https://sergeyshk.github.io/esTS/stats/lexical_stats/)** - how rare the words of a text are in the language: the frequency, range and dispersion of the lemmas by a dictionary of Google Books Ngram, the frequency bands top-1000 to 10000, surprisal, perplexity, lexical density and the shares of the proper nouns and the abbreviations
@@ -120,6 +121,8 @@ ests download  # the frequency dictionary, once
 ests stats -f json texto.txt
 ests report texto.txt -o informe.html
 ```
+
+More in the [documentation](https://sergeyshk.github.io/esTS/cli/).
 
 ## Features
 

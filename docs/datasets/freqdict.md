@@ -10,7 +10,7 @@ The dictionary is built by `scripts/build_freq_dict.py` from the 1-grams: only t
 
 For a lookup the parts of speech of a lemma are merged: the frequencies are summed, the range, the dispersion and the number of books are the greatest ones. The dictionary is read once per process, so a `FreqDict()` for every text is cheap. It is the source of the frequencies of [`LexicalStats`](../stats/lexical_stats.md), and the embedded list of the [frequency bands](../stats/lexical_stats.md#bands) holds its 10,000 most frequent lemmas, without the proper nouns and some lemmas that are not words. The dictionary size is `CORPUS_SIZE`, 63,090,618,290 words.
 
-The archive (0.8 MB) is kept in the repository of the library and downloaded once into the data directory.
+The archive (0.8 MB) is kept in the repository of the library and downloaded once into the data directory, by `download()` or by the command [`ests download`](../cli.md).
 
 !!! quote "Licence and attribution"
     The dictionary is derived from Google Books Ngram, which is licensed under the [Creative Commons Attribution 3.0 Unported License](https://creativecommons.org/licenses/by/3.0/), and is distributed under the same licence; the archive carries a `README.txt` with the source and the changes. Cite the source as: Michel J.-B. et al. Quantitative analysis of culture using millions of digitized books. Science 331 (6014), 2011.

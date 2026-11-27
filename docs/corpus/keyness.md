@@ -39,7 +39,7 @@ The function wraps `keyness` of the [anyTS](https://sergeyshk.github.io/anyTS/co
 
 --8<-- "corpus/keyness.md:keyness-parameters"
 
-`target` may also be a text, split into the words of `WordsExtractor`. `reference` may also be `FreqDict`, against which `target` is word forms. A frequency dictionary that is not downloaded raises `DatasetNotFoundError`. `keyness` checks its parameters and the target with `check_keyness_params` before it reads `FreqDict`, so a wrong argument fails before the dictionary is loaded; the dictionary holds words, so `n` above 1 with it raises `ParameterError` before it is read too.
+`target` may also be a text, split into the words of `WordsExtractor`; `reference` is not, so a reference text is passed as its words (`WordsExtractor().extract(text)`). `reference` may also be `FreqDict`, against which `target` is word forms. A frequency dictionary that is not downloaded raises `DatasetNotFoundError`. `keyness` checks its parameters and the target with `check_keyness_params` before it reads `FreqDict`, so a wrong argument fails before the dictionary is loaded; the dictionary holds words, so `n` above 1 with it raises `ParameterError` before it is read too.
 
 --8<-- "corpus/keyness.md:check_keyness_params"
 

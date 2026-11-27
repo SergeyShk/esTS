@@ -253,7 +253,7 @@ Raises:
 
 --8<-- "stats/phon_stats.md:PhonStats-junctions"
 
-In esTS no vowel is one of `glides`, so two vowels meeting between words always make a hiatus (`la abuela`, `vio el`), a silent `h` between them too (`la hora`), and `x` is two consonants: `fénix brillar` meets k s and b r, four. Spanish reads most of these vowels as one syllable, a synalepha (`la‿a-bue-la`): in 15,005 lines of the [sonnets](../datasets/spanishsonnets.md), [`VerseStats`](verse_stats.md) joins 94% of the vowels that meet between words. So `p_junction_hiatus` is the share of the junctions open to a synalepha, not of the hiatuses heard.
+In esTS no vowel is one of `glides`, so two vowels meeting between words always make a hiatus (`la abuela`, `vio el`), a silent `h` between them too (`la hora`), and `x` is two consonants: `fénix brillar` meets k s and b r, four. Spanish reads most of these vowels as one syllable, a synalepha (`la‿a-bue-la`): in 15,005 lines of the [sonnets](../datasets/spanishsonnets.md), [`VerseStats`](verse_stats.md) joins 94% of the vowels that meet between words. So `p_junction_hiatus` is the share of the junctions open to a synalepha, not of the hiatuses heard. A junction of four consonants or more is rare in Spanish: on 300 fragments of the corpus of literature `p_junction_clusters` is above 0 in 29, so texts differ mostly by `p_junction_hiatus` (median 0.198).
 
 === "Code"
 

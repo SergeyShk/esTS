@@ -14,7 +14,7 @@ Excepciones:
 
 La clase extiende el `UnadaptedReadabilityStats` del núcleo [anyTS](https://sergeyshk.github.io/anyTS/stats/unadapted_readability_stats/) con las [estadísticas básicas](basic_stats.md) de esTS, que cuentan las sílabas y las letras de las palabras españolas y toman por defecto los [`SentsExtractor`](../extractors/sentences.md) y [`WordsExtractor`](../extractors/words.md) del español. La tabla de `print_stats` lleva las descripciones inglesas del núcleo, `anyts.constants.UNADAPTED_READABILITY_STATS_DESC`.
 
-Las fórmulas no están calibradas para el español. Sus valores sirven para comparar textos españoles entre sí y con los resultados de estas fórmulas en otras herramientas, pero no dan un grado español: una palabra española tiene más sílabas que las inglesas con que se ajustaron las fórmulas, así que las fórmulas que cuentan sílabas leen un texto español como más difícil - en 60 ventanas de 1000 palabras de la prosa del [corpus de literatura](../datasets/spanishliterature.md), con 1.96 sílabas por palabra, la mediana de FORCAST es 13.2 y la de Linsear Write 13.7, frente a un [grado de consenso](readability_stats.md#consensus_grade) de 5.0 de las fórmulas españolas. Por eso estas fórmulas no tienen escalas de lectura, `describe` da `None` para ellas y no entran en el grado de consenso. Las fórmulas con coeficientes para el español están en [`ReadabilityStats`](readability_stats.md).
+Las fórmulas no están calibradas para el español. Sus valores sirven para comparar textos españoles entre sí y con los resultados de estas fórmulas en otras herramientas, pero no dan un grado español: una palabra española tiene más sílabas que las inglesas con que se ajustaron las fórmulas, así que las fórmulas que cuentan sílabas leen un texto español como más difícil - en 60 ventanas de 1000 palabras de la prosa del [corpus de literatura](../datasets/spanishliterature.md), con 1,96 sílabas por palabra, la mediana de FORCAST es 13,2 y la de Linsear Write 13,7, frente a un [grado de consenso](readability_stats.md#consensus_grade) de 5,0 de las fórmulas españolas. Por eso estas fórmulas no tienen escalas de lectura, `describe` da `None` para ellas y no entran en el grado de consenso. Las fórmulas con coeficientes para el español están en [`ReadabilityStats`](readability_stats.md).
 
 En español las palabras sin sílabas son los números, las abreviaturas sin vocal (`D.`, `Sr.`, `km`) y las interjecciones sin vocal (`pst`, `sh`); las conjunciones `y` y `e`, así como la preposición `a`, tienen una sílaba.
 
@@ -362,7 +362,7 @@ Un recuento que no es un entero no negativo lanza `ParameterError`.
 calc_strain_index(n_syllables, n_sents)
 ```
 
-El índice de Nathaniel (2009): las sílabas de tres oraciones divididas entre 10, aquí las de tres oraciones de media en todo el texto, con lo que es 0.3 veces el índice de Fucks; `nan` sin oraciones.
+El índice de Nathaniel (2009): las sílabas de tres oraciones divididas entre 10, aquí las de tres oraciones de media en todo el texto, con lo que es 0,3 veces el índice de Fucks; `nan` sin oraciones.
 
 $$
 \textrm{Strain} = \frac{3 \times \textrm{Sílabas}}{10 \times \textrm{Oraciones}}

@@ -31,7 +31,7 @@ jobs:
         run: uv build
       - name: Check distribution
         run: |
-          uv tool run twine check dist/*
+          uv tool run twine check --strict dist/*
           ls -l dist
       - name: Publish distribution (test)
         if: github.event_name == 'push'

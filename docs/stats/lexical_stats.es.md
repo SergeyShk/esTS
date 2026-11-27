@@ -113,7 +113,7 @@ Las métricas se apoyan en dos recursos; lea siempre las medias según el diccio
 
 | Recurso | Métricas | Disponibilidad |
 | :------ | :------- | :------------- |
-| [`FreqDict`](../datasets/freqdict.md) - 86 091 lemas de Google Books Ngram (1980-2019) con ipm, rango y dispersión | `coverage`, `mean_ipm*`, `mean_log_ipm*`, `mean_range`, `mean_dispersion`, `surprisal`, `perplexity` | se descarga una vez con `FreqDict().download()` |
+| [`FreqDict`](../datasets/freqdict.md) - 86 091 lemas de Google Books Ngram (1980-2019) con ipm, rango y dispersión | `coverage`, `mean_ipm*`, `mean_log_ipm*`, `mean_range`, `mean_dispersion`, `surprisal`, `perplexity` | se descarga una vez con `FreqDict().download()` o `ests download` |
 | La lista integrada de los 10 000 lemas más frecuentes del mismo diccionario (`ests/resources/google_books_top10000.txt`, CC BY 3.0) | `p_top1000`, `p_top2000`, `p_top5000`, `p_top10000`, `p_beyond_top10000`, `band_coverage` | siempre |
 
 <div class="metric-card" markdown>
@@ -208,7 +208,7 @@ Así se construye un perfil de bandas de frecuencia a la manera del Lexical Freq
 get_rank(lemma)
 ```
 
-La posición de un lema según la lista integrada, `None` para un lema fuera de la lista; el lema puede ir en cualquier caja.
+La posición de un lema según la lista integrada, `None` para un lema fuera de la lista; el lema puede ir en cualquier caja. Un lema que no es una cadena, como un `Token` de spaCy en lugar de su `lemma_`, lanza `SourceTypeError`.
 
 | Parámetro | Tipo | Por defecto | Descripción |
 | :-------- | :--- | :---------- | :---------- |
