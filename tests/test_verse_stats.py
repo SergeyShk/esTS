@@ -362,6 +362,8 @@ def test_final_stress(text, length, tail):
 def test_unstressed_words():
     assert scan("la casa de mi padre").stresses == (1, 5)
     assert scan("fácilmente").stresses == (0, 2)
+    # An interjection is stressed, as in the annotation checked by hand
+    assert scan("ay de mí").stresses == (0, 2)
 
 
 def test_no_meter():
